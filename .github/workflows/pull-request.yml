@@ -209,12 +209,12 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/code_coverage_disable_check.py 
+          python .github/workflows/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }} 
 
   Test-Application:
     name: Test Application
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Check-ESlint-Disable]
+    needs: [Code-Quality-Checks, Check-ESlint-Disable,Check-Code-Coverage-Disable]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
