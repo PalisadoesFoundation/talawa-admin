@@ -14,7 +14,7 @@ export default defineConfig({
     svgrPlugin(),
   ],
   test: {
-    include: ['src/components/LeftDrawerOrg/*.spec.{js,jsx,ts,tsx}'],
+    include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
