@@ -1014,7 +1014,7 @@ hr {
   box-shadow: 0 2px 2px #e8e5e5;
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: #eaebef;
+  background-color: var(--bs-primary);
   width: 100%;
   font-size: 16px;
   color: white;
@@ -1024,7 +1024,6 @@ hr {
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  width: 100%;
   flex: 1;
 }
 
