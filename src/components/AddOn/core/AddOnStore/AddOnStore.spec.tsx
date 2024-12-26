@@ -1,5 +1,4 @@
 import React, { act } from 'react';
-import 'jest-location-mock';
 import { fireEvent, render, screen } from '@testing-library/react';
 import {
   ApolloClient,
@@ -20,6 +19,7 @@ import { ORGANIZATIONS_LIST, PLUGIN_GET } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { MockedProvider } from '@apollo/react-testing';
+import { vi, describe, test, expect } from 'vitest';
 
 const { getItem } = useLocalStorage();
 interface InterfacePlugin {
@@ -27,10 +27,10 @@ interface InterfacePlugin {
   pluginName: string;
   component: string;
 }
-jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
+vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
-  default: jest.fn().mockImplementation(() => ({
-    fetchStore: jest.fn().mockResolvedValue([
+  default: vi.fn().mockImplementation(() => ({
+    fetchStore: vi.fn().mockResolvedValue([
       {
         _id: '1',
         pluginName: 'Plugin 1',
@@ -47,7 +47,7 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
       },
       // Add more mock data as needed
     ]),
-    fetchInstalled: jest.fn().mockResolvedValue([
+    fetchInstalled: vi.fn().mockResolvedValue([
       {
         _id: '1',
         pluginName: 'Installed Plugin 1',
@@ -64,18 +64,16 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
       },
       // Add more mock data as needed
     ]),
-    generateLinks: jest
-      .fn()
-      .mockImplementation((plugins: InterfacePlugin[]) => {
-        return plugins
-          .filter((plugin) => plugin.enabled)
-          .map((installedPlugin) => {
-            return {
-              name: installedPlugin.pluginName,
-              url: `/plugin/${installedPlugin.component.toLowerCase()}`,
-            };
-          });
-      }),
+    generateLinks: vi.fn().mockImplementation((plugins: InterfacePlugin[]) => {
+      return plugins
+        .filter((plugin) => plugin.enabled)
+        .map((installedPlugin) => {
+          return {
+            name: installedPlugin.pluginName,
+            url: `/plugin/${installedPlugin.component.toLowerCase()}`,
+          };
+        });
+    }),
   })),
 }));
 
@@ -99,11 +97,11 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: ApolloLink.from([httpLink]),
 });
 
-jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
+vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
-  default: jest.fn().mockImplementation(() => ({
-    fetchInstalled: jest.fn().mockResolvedValue([]),
-    fetchStore: jest.fn().mockResolvedValue([]),
+  default: vi.fn().mockImplementation(() => ({
+    fetchInstalled: vi.fn().mockResolvedValue([]),
+    fetchStore: vi.fn().mockResolvedValue([]),
   })),
 }));
 
@@ -168,10 +166,15 @@ const PLUGIN_LOADING_MOCK = {
     loading: true,
   },
 };
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: 'undefined' }),
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actualModule = await vi.importActual('react-router-dom');
+  return {
+    ...actualModule,
+    useParams: () => ({ orgId: 'undefined' }),
+  };
+});
+
 const ORGANIZATIONS_LIST_MOCK = {
   request: {
     query: ORGANIZATIONS_LIST,
