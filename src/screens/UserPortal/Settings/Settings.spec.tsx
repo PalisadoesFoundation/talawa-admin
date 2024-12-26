@@ -410,3 +410,36 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
   });
 });
+
+it('prevents selecting future dates for birth date', async () => {
+  await act(async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  });
+
+  const birthDateInput = screen.getByLabelText(
+    'Birth Date',
+  ) as HTMLInputElement;
+  const today = new Date().toISOString().split('T')[0];
+  const futureDate = new Date();
+  futureDate.setFullYear(futureDate.getFullYear() + 100);
+  const futureDateString = futureDate.toISOString().split('T')[0];
+
+  // Trying future date
+  fireEvent.change(birthDateInput, { target: { value: futureDateString } });
+  // Checking if value is not updated to future date
+  expect(birthDateInput.value).not.toBe(futureDateString);
+
+  // Checking if value set correctly
+  fireEvent.change(birthDateInput, { target: { value: today } });
+  expect(birthDateInput.value).toBe(today);
+});
