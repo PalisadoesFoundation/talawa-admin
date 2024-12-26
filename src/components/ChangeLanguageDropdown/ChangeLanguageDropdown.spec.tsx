@@ -11,6 +11,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
+import { describe, expect, it } from 'vitest';
 // import { Provider } from 'react-redux';
 // import { store } from 'state/store';
 const { setItem } = useLocalStorage();
@@ -52,7 +53,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 describe('Testing Change Language Dropdown', () => {
-  test('Component Should be rendered properly', async () => {
+  it('Component Should be rendered properly', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -81,7 +82,7 @@ describe('Testing Change Language Dropdown', () => {
     });
   });
 
-  test('Component Should accept props properly', async () => {
+  it('Component Should accept props properly', async () => {
     const props = {
       parentContainerStyle: 'parentContainerStyle',
       btnStyle: 'btnStyle',
@@ -103,7 +104,7 @@ describe('Testing Change Language Dropdown', () => {
     getByTestId('dropdown-btn-0').className.includes(props.btnTextStyle);
   });
 
-  test('Testing when language cookie is not set', async () => {
+  it('Testing when language cookie is not set', async () => {
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: 'i18next=',
@@ -121,7 +122,7 @@ describe('Testing Change Language Dropdown', () => {
     expect(cookies.get('i18next')).toBe('');
   });
 
-  test('Testing change language functionality', async () => {
+  it('Testing change language functionality', async () => {
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: 'i18next=sp',
