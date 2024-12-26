@@ -2427,7 +2427,6 @@ button[data-testid='createPostBtn'] {
   font-size: 1rem;
   color: var(--bs-success, #21d015);
 }
-
 .rightCard {
   display: flex;
   gap: 7px;
