@@ -1895,7 +1895,7 @@ input[type='radio']:checked + label:hover {
 
 .memberfontcreatedbtn {
   border-radius: 7px;
-  border-color: #31bb6b;
+  border-color: #e8e5e5;
   background-color: #eaebef;
   color: white;
   box-shadow: none;
