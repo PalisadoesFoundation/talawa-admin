@@ -53,12 +53,13 @@ const translations = {
 };
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const actual = await vi.importActual('@mui/x-date-pickers/DesktopDateTimePicker');
+  const actual = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
   return {
     DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
-
 
 vi.mock('react-toastify', () => ({
   toast: {
