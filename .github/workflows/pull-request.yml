@@ -204,6 +204,8 @@ jobs:
           # Initialize an empty string to store the nearest directories
           nearest_dirs=""
 
+          repo_root=$(pwd)
+
           # Loop through each changed file to extract the nearest directory
           for file in ${{ steps.changed-files.outputs.all_changed_files }}
           do
