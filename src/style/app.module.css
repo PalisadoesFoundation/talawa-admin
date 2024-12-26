@@ -8,6 +8,7 @@
 
 .noOutline input {
   outline: none;
+}
 :root {
   --brown-color: #555555;
   --dropdown-hover-color: #eff1f7;
