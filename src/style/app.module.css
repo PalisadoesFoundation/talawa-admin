@@ -992,6 +992,174 @@ hr {
   background: #afffe8 !important;
 }
 
+.organizationFundCampaignContainer {
+  margin: 0.5rem 0;
+}
+
+.rowBackgroundOrganizationFundCampaign {
+  background-color: var(--bs-white);
+  max-height: 120px;
+}
+
+.campaignModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
+.greenregbtnOrganizationFundCampaign {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid var(--bs-gray-300);
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #31bb6b;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+  flex: 1;
+}
+
+.goalButtonOrganizationFundCampaign {
+  border: 1px solid #31bb6b !important;
+  color: #31bb6b !important;
+  width: 75%;
+  padding: 10px;
+  border-radius: 8px;
+  display: block;
+  margin: auto;
+  box-shadow: 5px 5px 4px 0px rgba(49, 187, 107, 0.12);
+}
+
+.redregbtn {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+  flex: 1;
+}
+
+.campaignNameInfo {
+  font-size: medium;
+  cursor: pointer;
+}
+.campaignNameInfo:hover {
+  color: blue;
+  transform: translateY(-2px);
+}
+
+.inputFieldOrganizationFundCampaign {
+  background-color: white;
+  box-shadow: 0 1px 1px #31bb6b;
+}
+
+.dropdownOrganizationFundCampaign {
+  background-color: white;
+  border: 1px solid #31bb6b;
+  position: relative;
+  display: inline-block;
+  color: #31bb6b;
+}
+
+.btnsContainerOrganizationFundCampaign {
+  display: flex;
+  margin: 2rem 0 2rem 0;
+  gap: 0.8rem;
+}
+
+.btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+  display: flex;
+  margin-left: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainerOrganizationFundCampaign .inputOrganizationFundCampaign {
+  flex: 1;
+  position: relative;
+}
+
+.btnsContainerOrganizationFundCampaign input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainerOrganizationFundCampaign .inputOrganizationFundCampaign button {
+  width: 52px;
+}
+
+
+
+@media (max-width: 1020px) {
+  .btnsContainerOrganizationFundCampaign {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+    margin: 0;
+  }
+
+  .createFundBtn {
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: 575.5px) {
+  .mainpageright {
+    width: 98%;
+  }
+}
+
+/* For mobile devices  */
+
+@media (max-width: 520px) {
+  .btnsContainerOrganizationFundCampaign {
+    margin-bottom: 0;
+  }
+
+  .btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
 @media (max-width: 1024px) {
   .pageNotFound h1.head {
     font-size: 200px;
