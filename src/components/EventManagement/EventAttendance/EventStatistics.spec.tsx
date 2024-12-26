@@ -5,21 +5,26 @@ import { MockedProvider } from '@apollo/client/testing';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
 import { exportToCSV } from 'utils/chartToPdf';
+import { vi, describe, expect, it } from 'vitest';
+import type { Mock } from 'vitest';
 
 // Mock chart.js to avoid canvas errors
-jest.mock('react-chartjs-2', () => ({
+vi.mock('react-chartjs-2', async () => ({
+  ...(await vi.importActual('react-chartjs-2')),
   Line: () => null,
   Bar: () => null,
 }));
 // Mock react-router-dom
-jest.mock('react-router-dom', () => ({
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useParams: () => ({
     orgId: 'org123',
     eventId: 'event123',
   }),
 }));
-jest.mock('utils/chartToPdf', () => ({
-  exportToCSV: jest.fn(),
+vi.mock('utils/chartToPdf', async () => ({
+  ...(await vi.importActual('utils/chartToPdf')),
+  exportToCSV: vi.fn(),
 }));
 const mocks = [
   {
@@ -139,7 +144,7 @@ const mockStatistics = {
 };
 
 describe('AttendanceStatisticsModal', () => {
-  test('renders modal with correct initial state', async () => {
+  it('renders modal with correct initial state', async () => {
     render(
       <MockedProvider mocks={mocks}>
         <AttendanceStatisticsModal
@@ -159,7 +164,7 @@ describe('AttendanceStatisticsModal', () => {
     });
   });
 
-  test('switches between gender and age demographics', async () => {
+  it('switches between gender and age demographics', async () => {
     render(
       <MockedProvider mocks={mocks}>
         <AttendanceStatisticsModal
@@ -186,9 +191,9 @@ describe('AttendanceStatisticsModal', () => {
     });
   });
 
-  test('handles data demographics export functionality', async () => {
-    const mockExportToCSV = jest.fn();
-    (exportToCSV as jest.Mock).mockImplementation(mockExportToCSV);
+  it('handles data demographics export functionality', async () => {
+    const mockExportToCSV = vi.fn();
+    (exportToCSV as Mock).mockImplementation(mockExportToCSV);
 
     render(
       <MockedProvider mocks={mocks}>
@@ -220,9 +225,9 @@ describe('AttendanceStatisticsModal', () => {
 
     expect(mockExportToCSV).toHaveBeenCalled();
   });
-  test('handles data trends export functionality', async () => {
-    const mockExportToCSV = jest.fn();
-    (exportToCSV as jest.Mock).mockImplementation(mockExportToCSV);
+  it('handles data trends export functionality', async () => {
+    const mockExportToCSV = vi.fn();
+    (exportToCSV as Mock).mockImplementation(mockExportToCSV);
 
     render(
       <MockedProvider mocks={mocks}>
@@ -255,7 +260,7 @@ describe('AttendanceStatisticsModal', () => {
     expect(mockExportToCSV).toHaveBeenCalled();
   });
 
-  test('displays recurring event data correctly', async () => {
+  it('displays recurring event data correctly', async () => {
     render(
       <MockedProvider mocks={mocks}>
         <AttendanceStatisticsModal
@@ -272,7 +277,7 @@ describe('AttendanceStatisticsModal', () => {
       expect(screen.getByTestId('today-button')).toBeInTheDocument();
     });
   });
-  test('handles pagination and today button correctly', async () => {
+  it('handles pagination and today button correctly', async () => {
     render(
       <MockedProvider mocks={mocks}>
         <AttendanceStatisticsModal
@@ -313,7 +318,7 @@ describe('AttendanceStatisticsModal', () => {
     expect(screen.getByTestId('today-button')).toBeInTheDocument();
   });
 
-  test('handles pagination in recurring events view', async () => {
+  it('handles pagination in recurring events view', async () => {
     render(
       <MockedProvider mocks={mocks}>
         <AttendanceStatisticsModal
@@ -335,8 +340,8 @@ describe('AttendanceStatisticsModal', () => {
     });
   });
 
-  test('closes modal correctly', async () => {
-    const handleClose = jest.fn();
+  it('closes modal correctly', async () => {
+    const handleClose = vi.fn();
     render(
       <MockedProvider mocks={mocks}>
         <AttendanceStatisticsModal

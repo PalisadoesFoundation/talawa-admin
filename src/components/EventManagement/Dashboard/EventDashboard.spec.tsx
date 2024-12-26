@@ -13,6 +13,7 @@ import type { ApolloLink, DefaultOptions } from '@apollo/client';
 
 import { MOCKS_WITHOUT_TIME, MOCKS_WITH_TIME } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { vi, expect, it, describe } from 'vitest';
 
 const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
 const mockWithoutTime = new StaticMockLink(MOCKS_WITHOUT_TIME, true);
@@ -38,9 +39,8 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const mockID = 'event123';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ eventId: mockID }),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
 }));
 
 const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
@@ -63,7 +63,7 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
-  test('The page should display event details correctly and also show the time if provided', async () => {
+  it('The page should display event details correctly and also show the time if provided', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
 
     await wait();
@@ -84,7 +84,7 @@ describe('Testing Event Dashboard Screen', () => {
     fireEvent.click(closeButton);
   });
 
-  test('The page should display event details correctly and should not show the time if it is null', async () => {
+  it('The page should display event details correctly and should not show the time if it is null', async () => {
     const { getByTestId } = renderEventDashboard(mockWithoutTime);
     await wait();
 
@@ -92,7 +92,7 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('event-time')).toBeInTheDocument();
   });
 
-  test('Should show loader while data is being fetched', async () => {
+  it('Should show loader while data is being fetched', async () => {
     const { getByTestId, queryByTestId } = renderEventDashboard(mockWithTime);
     expect(getByTestId('spinner')).toBeInTheDocument();
     // Wait for loading to complete
