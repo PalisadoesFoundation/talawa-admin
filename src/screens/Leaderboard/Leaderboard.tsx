@@ -14,7 +14,7 @@ import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
-import styles from '../OrganizationActionItems/OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -200,7 +200,7 @@ function leaderboard(): JSX.Element {
                   <Avatar
                     key={_id + '1'}
                     containerStyle={styles.imageContainer}
-                    avatarStyle={styles.TableImage}
+                    avatarStyle={styles.TableImageSmall}
                     name={firstName + ' ' + lastName}
                     alt={firstName + ' ' + lastName}
                   />
