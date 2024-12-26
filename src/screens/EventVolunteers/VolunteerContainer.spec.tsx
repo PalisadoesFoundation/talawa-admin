@@ -19,7 +19,7 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
  *
  * The tests ensure the `VolunteerContainer` component renders correctly with various routes and URL parameters.
  * Mocked dependencies are used to isolate the component and verify its behavior.
- * all tests are covered
+ * All tests are covered.
  */
 
 const link1 = new StaticMockLink(MOCKS);
@@ -34,12 +34,10 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-const renderVolunteerContainer = (
-  initialPath = '/event/orgId/eventId',
-): RenderResult => {
+const renderVolunteerContainer = (): RenderResult => {
   return render(
     <MockedProvider addTypename={false} link={link1}>
-      <MemoryRouter initialEntries={[initialPath]}>
+      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider>
             <I18nextProvider i18n={i18n}>
@@ -69,7 +67,7 @@ describe('Testing Volunteer Container', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     mockedUseParams.mockReturnValue({});
 
-    renderVolunteerContainer('/');
+    renderVolunteerContainer();
 
     await waitFor(() => {
       expect(screen.getByTestId('paramsError')).toBeInTheDocument();
@@ -77,6 +75,24 @@ describe('Testing Volunteer Container', () => {
   });
 
   it('Testing Volunteer Container Screen -> Toggle screens', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <MemoryRouter initialEntries={['/event/']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route path="/event/" element={<VolunteerContainer />} />
+                <Route
+                  path="/"
+                  element={<div data-testid="paramsError"></div>}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
     mockedUseParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
 
     renderVolunteerContainer();
@@ -93,6 +109,10 @@ describe('Testing Volunteer Container', () => {
       await userEvent.click(groupRadio);
       await userEvent.click(requestsRadio);
       await userEvent.click(individualRadio);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
     });
   });
 });
