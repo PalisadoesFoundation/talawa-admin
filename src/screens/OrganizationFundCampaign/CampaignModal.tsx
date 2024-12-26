@@ -5,7 +5,7 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
-import styles from './OrganizationFundCampaign.module.css';
+import styles from '../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -301,7 +301,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             {/* Button to create the campaign */}
             <Button
               type="submit"
-              className={styles.greenregbtn}
+              className={styles.greenregbtnOrganizationFundCampaign}
               data-testid="submitCampaignBtn"
             >
               {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}

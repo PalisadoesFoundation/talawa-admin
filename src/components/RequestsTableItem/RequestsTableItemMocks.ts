@@ -8,13 +8,13 @@ export const MOCKS = [
     request: {
       query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
       variables: {
-        id: '1',
+        id: '123',
       },
     },
     result: {
       data: {
         acceptMembershipRequest: {
-          _id: '1',
+          _id: '123',
         },
       },
     },
@@ -23,13 +23,13 @@ export const MOCKS = [
     request: {
       query: REJECT_ORGANIZATION_REQUEST_MUTATION,
       variables: {
-        id: '1',
+        id: '123',
       },
     },
     result: {
       data: {
         rejectMembershipRequest: {
-          _id: '1',
+          _id: '123',
         },
       },
     },

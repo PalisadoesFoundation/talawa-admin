@@ -772,6 +772,17 @@
     "loading": "Loading...",
     "noAttendees": "Attendees not Found"
   },
+  "eventRegistrant": {
+    "sort": "Sort",
+    "allRegistrants": "All Registrants",
+    "eventRegistrantsTable": "Event Registrants Table",
+    "serialNumber": "Serial Number",
+    "registrant": "Registrant",
+    "registeredAt": "Registered At",
+    "createdAt": "Created At",
+    "addRegistrant": "Add Registrant",
+    "noRegistrantsFound": "No Registrants Found."
+  },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
     "enterFirstName": "Enter First Name",
@@ -923,7 +934,7 @@
     "register": "register"
   },
   "addOnStore": {
-    "title": "Add On Store",
+    "title": "Plugin Store",
     "searchName": "Ex: Donations",
     "search": "Search",
     "enable": "Enabled",
@@ -1227,7 +1238,7 @@
     "RstartDate": "Select Start Date",
     "RendDate": "Select End Date",
     "RClose": "Close the window",
-    "addNew": "Create new advertisement",
+    "addNew": "Create",
     "EXname": "Ex. Cookie Shop",
     "EXlink": "Ex. http://yourwebsite.com/photo",
     "createAdvertisement": "Create Advertisement",
@@ -1404,6 +1415,9 @@
   },
   "userPledges": {
     "title": "My Pledges"
+  },
+  "leaveOrganization": {
+    "title": "Leave Organization"
   },
   "eventVolunteers": {
     "volunteers": "Volunteers",
