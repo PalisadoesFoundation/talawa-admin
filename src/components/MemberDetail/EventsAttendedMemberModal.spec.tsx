@@ -3,15 +3,24 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
 import EventsAttendedMemberModal from './EventsAttendedMemberModal';
+import { vi } from 'vitest';
 
-jest.mock('react-i18next', () => ({
+/**
+ * Mock the `react-i18next` module to provide translation functionality.
+ */
+
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
     i18n: { changeLanguage: () => Promise.resolve() },
   }),
 }));
 
-jest.mock('./customTableCell', () => ({
+/**
+ * Mock the `CustomTableCell` component for testing.
+ */
+
+vi.mock('./customTableCell', () => ({
   CustomTableCell: ({ eventId }: { eventId: string }) => (
     <tr data-testid="event-row">
       <td>{`Event ${eventId}`}</td>
@@ -33,12 +42,12 @@ const mockEvents = Array.from({ length: 6 }, (_, index) => ({
 describe('EventsAttendedMemberModal', () => {
   const defaultProps = {
     eventsAttended: mockEvents,
-    setShow: jest.fn(),
+    setShow: vi.fn(),
     show: true,
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders modal with correct title when show is true', () => {
@@ -95,7 +104,7 @@ describe('EventsAttendedMemberModal', () => {
   });
 
   test('closes modal when close button is clicked', () => {
-    const mockSetShow = jest.fn();
+    const mockSetShow = vi.fn();
     render(
       <MockedProvider>
         <BrowserRouter>

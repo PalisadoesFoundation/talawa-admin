@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import EventAttendedCard from './EventsAttendedCardItem';
+import { vi } from 'vitest';
 
 interface InterfaceEventAttendedCardProps {
   type: 'Event';
@@ -33,7 +34,7 @@ describe('EventAttendedCard', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders event details correctly', () => {
