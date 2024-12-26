@@ -5,7 +5,7 @@ import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import UserIcon from 'assets/svgs/user.svg?react';
 import dayjs from 'dayjs';
-import styles from './CardItem.module.css';
+import styles from '../../style/app.module.css';
 import { PersonAddAlt1Rounded } from '@mui/icons-material';
 
 /**
@@ -17,7 +17,13 @@ export interface InterfaceCardItem {
   time?: string;
   startdate?: string;
   enddate?: string;
-  creator?: any;
+  creator?: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    __typename: string;
+    _id: string;
+  };
   location?: string;
 }
 
