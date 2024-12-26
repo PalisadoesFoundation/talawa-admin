@@ -17,13 +17,7 @@ export interface InterfaceCardItem {
   time?: string;
   startdate?: string;
   enddate?: string;
-  creator?: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    __typename: string;
-    _id: string;
-  };
+  creator?: any;
   location?: string;
 }
 
