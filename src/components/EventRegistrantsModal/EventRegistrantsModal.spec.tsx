@@ -15,6 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { describe, test, expect, vi } from 'vitest';
 
 const queryMockWithoutRegistrant = [
   {
@@ -160,7 +161,7 @@ describe('Testing Event Registrants Modal', () => {
     show: true,
     eventId: 'event123',
     orgId: 'org123',
-    handleClose: jest.fn(),
+    handleClose: vi.fn(),
   };
 
   test('The modal should be rendered, correct text must be displayed when there are no attendees and add attendee mutation must function properly', async () => {

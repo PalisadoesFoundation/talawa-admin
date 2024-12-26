@@ -11,23 +11,27 @@ import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import i18nForTest from '../../utils/i18nForTest';
+import { describe, expect, vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
 const mockProps = {
   show: true,
-  handleClose: jest.fn(),
-  reloadMembers: jest.fn(),
+  handleClose: vi.fn(),
+  reloadMembers: vi.fn(),
 };
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ eventId: '123', orgId: '123' }),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ eventId: '123', orgId: '123' }),
+  };
+});
 
 const MOCKS = [
   {
@@ -80,7 +84,7 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 
 describe('AddOnSpotAttendee Component', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders the component with all form fields', async () => {
