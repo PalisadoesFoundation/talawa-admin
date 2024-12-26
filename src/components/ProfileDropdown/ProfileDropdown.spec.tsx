@@ -1,17 +1,29 @@
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';
-import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
+import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
+
+const mockNavigate = vi.fn();
+
+// Mock useNavigate hook
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 const MOCKS = [
   {
     request: {
@@ -38,13 +50,13 @@ const MOCKS = [
   },
 ];
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
-  clear: jest.fn(),
+  clear: vi.fn(),
 }));
 
 beforeEach(() => {
@@ -60,11 +72,11 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   localStorage.clear();
 });
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   localStorage.clear();
 });
 
@@ -130,19 +142,124 @@ describe('ProfileDropdown Component', () => {
 
   describe('Member screen routing testing', () => {
     test('member screen', async () => {
+      setItem('SuperAdmin', false);
+      setItem('AdminFor', []);
+
       render(
         <MockedProvider mocks={MOCKS} addTypename={false}>
           <BrowserRouter>
-            <ProfileDropdown />
+            <I18nextProvider i18n={i18nForTest}>
+              <ProfileDropdown />
+            </I18nextProvider>
           </BrowserRouter>
         </MockedProvider>,
       );
+
       await act(async () => {
         userEvent.click(screen.getByTestId('togDrop'));
       });
 
-      userEvent.click(screen.getByTestId('profileBtn'));
-      expect(global.window.location.pathname).toBe('/user/settings');
+      await act(async () => {
+        userEvent.click(screen.getByTestId('profileBtn'));
+      });
+
+      expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
     });
+  });
+
+  test('handles error when revoking refresh token during logout', async () => {
+    // Mock the revokeRefreshToken mutation to throw an error
+    const MOCKS_WITH_ERROR = [
+      {
+        request: {
+          query: REVOKE_REFRESH_TOKEN,
+        },
+        error: new Error('Failed to revoke refresh token'),
+      },
+    ];
+
+    const consoleErrorMock = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <MockedProvider mocks={MOCKS_WITH_ERROR} addTypename={false}>
+        <BrowserRouter>
+          <ProfileDropdown />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Open the dropdown
+    await act(async () => {
+      userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    // Click the logout button
+    await act(async () => {
+      userEvent.click(screen.getByTestId('logoutBtn'));
+    });
+
+    // Wait for any pending promises
+    await waitFor(() => {
+      // Assert that console.error was called
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Error revoking refresh token:',
+        expect.any(Error),
+      );
+    });
+
+    // Cleanup mock
+    consoleErrorMock.mockRestore();
+  });
+
+  test('navigates to /user/settings for a user', async () => {
+    setItem('SuperAdmin', false);
+    setItem('AdminFor', []);
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
+  });
+
+  test('navigates to /member/:userID for non-user roles', async () => {
+    setItem('SuperAdmin', true); // Set as admin
+    setItem('id', '123');
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/member/123');
   });
 });
