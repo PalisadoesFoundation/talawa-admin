@@ -70,7 +70,9 @@ const { setItem } = useLocalStorage();
  *
  * @returns  The rendered routes and components of the application.
  */
+// eslint-disable
 
+// istanbul ignore next
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,

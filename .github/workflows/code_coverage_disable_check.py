@@ -140,6 +140,8 @@ def main():
         SystemExit: If an error occurs during execution.
     """
     args = arg_parser_resolver()
+    
+    print(args.directory)
 
     # Check code coverage in the specified directory
     code_coverage_found = check_code_coverage(args.directory)
