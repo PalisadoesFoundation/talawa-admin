@@ -2367,16 +2367,23 @@ button[data-testid='createPostBtn'] {
   font-size: 1rem;
   flex: 1;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap; /* Fallback for browsers that don't support line-clamp */
   margin-left: 3px;
 }
-
+/* Modern browsers - enable line clamping */
+@supports (-webkit-line-clamp: 1) {
+  .cardItem .title,
+  .cardItem .location,
+  .cardItem .time {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    white-space: initial;
+  }
+}
 .cardItem .location {
   font-size: 0.9rem;
   color: var(--bs-primary);
