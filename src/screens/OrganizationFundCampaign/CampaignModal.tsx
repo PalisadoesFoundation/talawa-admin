@@ -5,7 +5,7 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
-import styles from './OrganizationFundCampaign.module.css';
+import styles from '../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
