@@ -9,7 +9,6 @@ import {
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from '../../screens/OrganizationEvents/OrganizationEvents';
@@ -23,6 +22,7 @@ import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MOCKS } from '../../screens/OrganizationEvents/OrganizationEventsMocks';
+import { describe, test, expect, vi } from 'vitest';
 
 const theme = createTheme({
   palette: {
@@ -52,19 +52,19 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+  const actual = await vi.importActual('@mui/x-date-pickers/DesktopDateTimePicker');
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
 
-jest.mock('react-toastify', () => ({
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warning: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
