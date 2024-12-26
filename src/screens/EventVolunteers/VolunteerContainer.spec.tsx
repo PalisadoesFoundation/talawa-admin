@@ -19,6 +19,7 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
  *
  * The tests ensure the `VolunteerContainer` component renders correctly with various routes and URL parameters.
  * Mocked dependencies are used to isolate the component and verify its behavior.
+ * all tests are covered
  *
  */
 
