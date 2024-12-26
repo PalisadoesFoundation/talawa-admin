@@ -200,44 +200,44 @@ jobs:
 
       - name: Identify nearest changed directories
         id: nearest_dirs
-      run: |
-        # Initialize an empty string to store the nearest directories
-        nearest_dirs=""
+        run: |
+          # Initialize an empty string to store the nearest directories
+          nearest_dirs=""
 
-        # Loop through each changed file to extract the nearest directory
-        for file in ${{ steps.changed-files.outputs.files }}
-        do
-          # Get the directory from the file path
-          folder=$(dirname "$file")
+          # Loop through each changed file to extract the nearest directory
+          for file in ${{ steps.changed-files.outputs.files }}
+          do
+            # Get the directory from the file path
+            folder=$(dirname "$file")
 
-          # Get the first level directory (top-level folder)
-          first_folder=$(echo $folder | cut -d'/' -f1)
+            # Get the first level directory (top-level folder)
+            first_folder=$(echo $folder | cut -d'/' -f1)
 
-          # Add the folder to the nearest_dirs string if not already present
-          if [[ ! " $nearest_dirs " =~ " $first_folder " ]]; then
-            if [ -z "$nearest_dirs" ]; then
-              nearest_dirs="$first_folder"
-            else
-              nearest_dirs="$nearest_dirs,$first_folder"
+            # Add the folder to the nearest_dirs string if not already present
+            if [[ ! " $nearest_dirs " =~ " $first_folder " ]]; then
+              if [ -z "$nearest_dirs" ]; then
+                nearest_dirs="$first_folder"
+              else
+                nearest_dirs="$nearest_dirs,$first_folder"
+              fi
             fi
-          fi
-        done
-        
-        # Output the nearest changed directories
-        echo "Nearest changed directories: $nearest_dirs"
+          done
+          
+          # Output the nearest changed directories
+          echo "Nearest changed directories: $nearest_dirs"
 
-        # Set the nearest directories as a GitHub environment variable
-        echo "NEAREST_DIRS=$nearest_dirs" >> $GITHUB_ENV
+          # Set the nearest directories as a GitHub environment variable
+          echo "NEAREST_DIRS=$nearest_dirs" >> $GITHUB_ENV
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.9
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
 
-    - name: Run Python script
-      run: |
-        # Access the nearest_dirs environment variable
-        python .github/workflows/code_coverage_disable_check.py --directory $NEAREST_DIRS
+      - name: Run Python script
+        run: |
+          # Access the nearest_dirs environment variable
+          python .github/workflows/code_coverage_disable_check.py --directory $NEAREST_DIRS
 
   Test-Application:
     name: Test Application
