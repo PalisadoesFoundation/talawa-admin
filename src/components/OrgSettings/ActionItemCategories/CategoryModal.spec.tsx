@@ -14,11 +14,23 @@ import { MOCKS, MOCKS_ERROR } from './OrgActionItemCategoryMocks';
 import type { InterfaceActionItemCategoryModal } from './CategoryModal';
 import CategoryModal from './CategoryModal';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
+/**
+ * This file contains unit tests for the `CategoryModal` component.
+ *
+ * The tests cover:
+ * - Proper rendering of the component in various scenarios, including `create` and `edit` modes, mock data, and error states.
+ * - Handling user interactions with form fields, such as updating the category name and toggling the `isDisabled` switch.
+ * - Ensuring form submissions trigger appropriate callbacks (e.g., `refetchCategories` and `hide`) and display correct toast notifications.
+ * - Simulating GraphQL query and mutation operations with mocked data to validate behavior in success and error cases.
+ * - Testing edge cases, such as submitting without changes, invalid inputs, and handling API errors gracefully.
+ * - Verifying proper integration of internationalization, Redux state, routing, and toast notifications for success and error feedback.
+ */
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -37,8 +49,8 @@ const translations = {
 const categoryProps: InterfaceActionItemCategoryModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
-    refetchCategories: jest.fn(),
+    hide: vi.fn(),
+    refetchCategories: vi.fn(),
     orgId: 'orgId',
     mode: 'create',
     category: {
@@ -51,8 +63,8 @@ const categoryProps: InterfaceActionItemCategoryModal[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
-    refetchCategories: jest.fn(),
+    hide: vi.fn(),
+    refetchCategories: vi.fn(),
     orgId: 'orgId',
     mode: 'edit',
     category: {

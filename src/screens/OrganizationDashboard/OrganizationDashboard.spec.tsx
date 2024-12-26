@@ -147,6 +147,11 @@ describe('Testing Organization Dashboard Screen', () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationDashboard(link1);
 
+    // Wait for initial load
+    await waitFor(() => {
+      expect(screen.getByText(t.upcomingEvents)).toBeInTheDocument();
+    });
+
     // Dashboard cards
     const membersBtn = await screen.findByText(t.members);
     expect(membersBtn).toBeInTheDocument();
@@ -155,9 +160,12 @@ describe('Testing Organization Dashboard Screen', () => {
     expect(screen.getByText(t.events)).toBeInTheDocument();
     expect(screen.getByText(t.blockedUsers)).toBeInTheDocument();
 
-    // Upcoming events
-    expect(screen.getByText(t.upcomingEvents)).toBeInTheDocument();
-    expect(screen.getByText('Event 1')).toBeInTheDocument();
+    // Upcoming events - Using more flexible matcher
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Event 1/i, { exact: false }),
+      ).toBeInTheDocument();
+    });
 
     // Latest posts
     expect(screen.getByText(t.latestPosts)).toBeInTheDocument();

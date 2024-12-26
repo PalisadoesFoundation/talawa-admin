@@ -12,19 +12,36 @@ import i18n from 'utils/i18nForTest';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './OrgActionItemCategoryMocks';
 import OrgActionItemCategories from './OrgActionItemCategories';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+/**
+ * This file contains unit tests for the `OrgActionItemCategories` component.
+ *
+ * The tests cover:
+ * - Proper rendering of the component under different conditions, including scenarios with populated categories, empty categories, and API errors.
+ * - User interactions such as searching, filtering, sorting categories, and opening/closing modals for creating or editing categories.
+ * - Verification of GraphQL query and mutation behaviors using mock data, ensuring correct functionality in both success and error cases.
+ * - Handling edge cases like no input, invalid input, and form resets.
+ * - Integration tests for Redux state, routing, internationalization, and toast notifications.
+ * - Ensuring sorting functionality reflects the `createdAt` property both in ascending and descending order.
+ * - Testing the modal interactions for creating and editing categories, ensuring proper lifecycle (open/close) and state updates.
+ * - Checking the rendering of error messages and placeholders when no data is available or an error occurs.
+ * - Validation of search functionality for categories by name, including clearing the search input and using keyboard shortcuts like `Enter`.
+ */
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+  const dateTimePickerModule = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: dateTimePickerModule.DesktopDateTimePicker,
   };
 });
 

@@ -17,6 +17,7 @@ import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from './Attendance.mocks';
+import { vi, describe, beforeEach, afterEach, expect, it } from 'vitest';
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -25,7 +26,7 @@ async function wait(): Promise<void> {
     return Promise.resolve();
   });
 }
-jest.mock('react-chartjs-2', () => ({
+vi.mock('react-chartjs-2', () => ({
   Line: () => null,
   Bar: () => null,
   Pie: () => null,
@@ -47,18 +48,17 @@ const renderEventAttendance = (): RenderResult => {
 
 describe('Event Attendance Component', () => {
   beforeEach(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
     }));
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
-  test('Component loads correctly with table headers', async () => {
+  it('Component loads correctly with table headers', async () => {
     renderEventAttendance();
 
     await wait();
@@ -70,7 +70,7 @@ describe('Event Attendance Component', () => {
     });
   });
 
-  test('Renders attendee data correctly', async () => {
+  it('Renders attendee data correctly', async () => {
     renderEventAttendance();
 
     await wait();
@@ -83,7 +83,7 @@ describe('Event Attendance Component', () => {
     });
   });
 
-  test('Search filters attendees by name correctly', async () => {
+  it('Search filters attendees by name correctly', async () => {
     renderEventAttendance();
 
     await wait();
@@ -97,7 +97,7 @@ describe('Event Attendance Component', () => {
     });
   });
 
-  test('Sort functionality changes attendee order', async () => {
+  it('Sort functionality changes attendee order', async () => {
     renderEventAttendance();
 
     await wait();
@@ -112,7 +112,7 @@ describe('Event Attendance Component', () => {
     });
   });
 
-  test('Date filter shows correct number of attendees', async () => {
+  it('Date filter shows correct number of attendees', async () => {
     renderEventAttendance();
 
     await wait();
@@ -124,7 +124,7 @@ describe('Event Attendance Component', () => {
       expect(screen.getByText('Attendees not Found')).toBeInTheDocument();
     });
   });
-  test('Statistics modal opens and closes correctly', async () => {
+  it('Statistics modal opens and closes correctly', async () => {
     renderEventAttendance();
     await wait();
 

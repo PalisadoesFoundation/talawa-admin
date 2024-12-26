@@ -9,7 +9,7 @@ import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticMockLink } from 'utils/StaticMockLink';
-
+import { describe, test, expect, vi } from 'vitest';
 const MOCKS = [
   {
     request: {
@@ -41,7 +41,7 @@ describe('Testing Organization People List Card', () => {
     toggleRemoveModal: () => true,
     id: '1',
   };
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
   test('should render props and text elements test for the page component', async () => {
     global.confirm = (): boolean => true;
