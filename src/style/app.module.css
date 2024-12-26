@@ -1555,7 +1555,6 @@ input[type='radio']:checked + label:hover {
 .listBoxOrgList .itemCardOrgList {
   width: 50%;
 }
-
 .notFound {
   flex: 1;
   display: flex;
@@ -1618,7 +1617,7 @@ input[type='radio']:checked + label:hover {
   margin-top: 60px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
+  border-bottom: 3px solid #eaebef;
   width: 60%;
 }
 
@@ -1645,7 +1644,7 @@ input[type='radio']:checked + label:hover {
   font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
+  border-bottom: 3px solid #eaebef;
   width: 30%;
 }
 
@@ -1656,7 +1655,7 @@ input[type='radio']:checked + label:hover {
   margin-top: 50px;
   margin-bottom: 40px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
+  border-bottom: 3px solid #eaebef;
   width: 60%;
 }
 
@@ -1714,7 +1713,7 @@ input[type='radio']:checked + label:hover {
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  background-color: #31bb6b;
+  background-color: #eaebef;
   margin-right: 13px;
 }
 
@@ -1756,7 +1755,7 @@ input[type='radio']:checked + label:hover {
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
+  border-bottom: 3px solid #eaebef;
   width: 65%;
 }
 
@@ -1792,7 +1791,7 @@ input[type='radio']:checked + label:hover {
   box-shadow: 0 2px 2px #e8e5e5;
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: #31bb6b;
+  background-color: #eaebef;
   font-size: 16px;
   color: white;
   outline: none;
@@ -1807,12 +1806,12 @@ input[type='radio']:checked + label:hover {
   margin: 1rem 0 0;
   margin-right: 2px;
   margin-top: 10px;
-  border: 1px solid #31bb6b;
+  border: 1px solid #eaebef;
   padding: 10px 10px;
   border-radius: 5px;
   background-color: white;
   font-size: 16px;
-  color: #31bb6b;
+  color: #707070;
   outline: none;
   font-weight: 600;
   cursor: pointer;
@@ -1897,7 +1896,7 @@ input[type='radio']:checked + label:hover {
 .memberfontcreatedbtn {
   border-radius: 7px;
   border-color: #31bb6b;
-  background-color: #31bb6b;
+  background-color: #eaebef;
   color: white;
   box-shadow: none;
   height: 2.5rem;
@@ -1926,7 +1925,7 @@ input[type='radio']:checked + label:hover {
   display: flex;
   color: #fff;
   border: 1px solid #000;
-  background-color: #31bb6b;
+  background-color: #eaebef;
   transition: 0.5s;
 }
 
@@ -1939,7 +1938,7 @@ input[type='radio']:checked + label:hover {
 .inactiveBtn {
   width: 100%;
   display: flex;
-  color: #31bb6b;
+  color: #707070;
   border: 1px solid #31bb6a60;
   background-color: #fff;
   transition: 0.5s;
@@ -1947,7 +1946,7 @@ input[type='radio']:checked + label:hover {
 
 .inactiveBtn:hover {
   color: #fff;
-  background: #31bb6b;
+  background: #eaebef;
   transition: 0.5s;
 }
 
@@ -1977,11 +1976,11 @@ input[type='radio']:checked + label:hover {
 }
 
 .activeBtn i {
-  color: #31bb6b;
+  color: #707070;
 }
 
 .inactiveBtn .bgFill {
-  background-color: #31bb6b;
+  background-color: #eaebef;
 }
 
 .inactiveBtn:hover .bgFill {
@@ -1993,7 +1992,7 @@ input[type='radio']:checked + label:hover {
 }
 
 .inactiveBtn:hover i {
-  color: #31bb6b;
+  color: #707070;
 }
 
 .topRadius {
