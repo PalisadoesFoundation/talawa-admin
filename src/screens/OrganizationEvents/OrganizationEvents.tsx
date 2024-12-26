@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
 import { TimePicker, DatePicker } from '@mui/x-date-pickers';
-import styles from './OrganizationEvents.module.css';
+import styles from '../../style/app.module.css';
 import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
   ORGANIZATIONS_LIST,
