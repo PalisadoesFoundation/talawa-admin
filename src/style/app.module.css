@@ -18,8 +18,8 @@
   --table-head-bg: var(--bs-primary, blue);
   --table-head-bg: var(
     --bs-primary,
-    blue --loader-size: 10em; --loader-border-width: 1.1em; --loader-color:
-      #febc59;
+    blue --loader-size: 10em; --loader-border-width: 1.1em;
+      --loader-color: #febc59;
   ); /* Assuming var(--bs-primary) is defined elsewhere */
 
   --table-head-color: white;
@@ -1092,7 +1092,10 @@ hr {
   gap: 0.8rem;
 }
 
-.btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+.btnsContainerOrganizationFundCampaign
+  .btnsBlockOrganizationFundCampaign
+  div
+  button {
   display: flex;
   margin-left: 1rem;
   justify-content: center;
@@ -1112,8 +1115,6 @@ hr {
   width: 52px;
 }
 
-
-
 @media (max-width: 1020px) {
   .btnsContainerOrganizationFundCampaign {
     flex-direction: column;
@@ -1125,7 +1126,10 @@ hr {
     justify-content: space-between;
   }
 
-  .btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+  .btnsContainerOrganizationFundCampaign
+    .btnsBlockOrganizationFundCampaign
+    div
+    button {
     margin: 0;
   }
 
@@ -1153,7 +1157,10 @@ hr {
     margin-right: 0;
   }
 
-  .btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+  .btnsContainerOrganizationFundCampaign
+    .btnsBlockOrganizationFundCampaign
+    div
+    button {
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
