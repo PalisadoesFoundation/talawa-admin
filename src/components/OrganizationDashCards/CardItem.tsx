@@ -17,7 +17,12 @@ export interface InterfaceCardItem {
   time?: string;
   startdate?: string;
   enddate?: string;
-  creator?: any;
+  creator?: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
   location?: string;
 }
 
@@ -27,7 +32,7 @@ export interface InterfaceCardItem {
  * @param props - Props for the CardItem component.
  * @returns JSX element representing the card item.
  */
-const cardItem = (props: InterfaceCardItem): JSX.Element => {
+const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, time, enddate, location } = props;
   return (
     <>
@@ -120,4 +125,4 @@ const cardItem = (props: InterfaceCardItem): JSX.Element => {
   );
 };
 
-export default cardItem;
+export default CardItem;
