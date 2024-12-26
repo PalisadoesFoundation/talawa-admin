@@ -88,6 +88,11 @@ def check_code_coverage(files_or_dirs):
             if (
                 item.endswith(".tsx")
                 or item.endswith(".ts")
+                and not file_name.endswith(".test.tsx")
+                and not file_name.endswith(".test.ts")
+                and not file_name.endswith(".spec.tsx")
+                and not file_name.endswith(".spec.ts")
+
             ) :
                 if has_code_coverage_disable(item):
                     print(f"File {item} contains code coverage disable statement.")
