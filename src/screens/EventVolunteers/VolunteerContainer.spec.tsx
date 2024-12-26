@@ -12,8 +12,27 @@ import userEvent from '@testing-library/user-event';
 import { MOCKS } from './Volunteers/Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
+
+/**
+ * Unit tests for the `VolunteerContainer` component.
+ *
+ * The tests ensure the `VolunteerContainer` component renders correctly with various routes and URL parameters.
+ * Mocked dependencies are used to isolate the component and verify its behavior.
+ * All tests are covered.
+ */
 
 const link1 = new StaticMockLink(MOCKS);
+
+const mockedUseParams = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => mockedUseParams(),
+  };
+});
 
 const renderVolunteerContainer = (): RenderResult => {
   return render(
@@ -41,18 +60,21 @@ const renderVolunteerContainer = (): RenderResult => {
 };
 
 describe('Testing Volunteer Container', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
-    }));
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    mockedUseParams.mockReturnValue({});
+
+    renderVolunteerContainer();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
+  });
+
+  it('Testing Volunteer Container Screen -> Toggle screens', async () => {
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
@@ -71,24 +93,26 @@ describe('Testing Volunteer Container', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
-  });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
 
-  test('Testing Volunteer Container Screen -> Toggle screens', async () => {
     renderVolunteerContainer();
 
     const groupRadio = await screen.findByTestId('groupsRadio');
-    expect(groupRadio).toBeInTheDocument();
-    userEvent.click(groupRadio);
-
     const requestsRadio = await screen.findByTestId('requestsRadio');
-    expect(requestsRadio).toBeInTheDocument();
-    userEvent.click(requestsRadio);
-
     const individualRadio = await screen.findByTestId('individualRadio');
+
+    expect(groupRadio).toBeInTheDocument();
+    expect(requestsRadio).toBeInTheDocument();
     expect(individualRadio).toBeInTheDocument();
-    userEvent.click(individualRadio);
+
+    await waitFor(async () => {
+      await userEvent.click(groupRadio);
+      await userEvent.click(requestsRadio);
+      await userEvent.click(individualRadio);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
   });
 });
