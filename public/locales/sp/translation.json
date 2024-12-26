@@ -1084,6 +1084,18 @@
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes"
   },
+
+  "eventRegistrant": {
+    "sort": "Ordenar",
+    "allRegistrants": "Todos los registrados",
+    "eventRegistrantsTable": "Tabla de registrados del evento",
+    "serialNumber": "Número de serie",
+    "registrant": "Registrado",
+    "registeredAt": "Registrado en",
+    "createdAt": "Creado en",
+    "addRegistrant": "Agregar registrado",
+    "noRegistrantsFound": "No se encontraron registrados"
+  },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",
     "enterFirstName": "Ingrese el nombre",

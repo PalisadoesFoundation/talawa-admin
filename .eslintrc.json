@@ -143,5 +143,11 @@
       "version": "detect"
     }
   },
-  "ignorePatterns": ["**/*.css", "**/*.scss", "**/*.less", "**/*.json"]
+  "ignorePatterns": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.less",
+    "**/*.json",
+    "**/*.svg"
+  ]
 }
