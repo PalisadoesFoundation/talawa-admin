@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './Settings.module.css';
+import styles from '../../../style/app.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';

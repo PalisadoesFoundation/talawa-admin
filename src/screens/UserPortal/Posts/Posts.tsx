@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Posts.module.css';
+import styles from '../../../style/app.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';

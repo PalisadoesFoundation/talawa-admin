@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Form, Button, ProgressBar } from 'react-bootstrap';
-import styles from './Campaigns.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Circle, Search, Sort, WarningAmberRounded } from '@mui/icons-material';
@@ -127,7 +127,7 @@ const Campaigns = (): JSX.Element => {
   // Renders the campaign list and UI elements for searching, sorting, and adding pledges
   return (
     <>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div className={`${styles.btnsContainers} gap-4 flex-wrap`}>
         {/* Search input field and button */}
         <div className={`${styles.input} mb-1`}>
           <Form.Control

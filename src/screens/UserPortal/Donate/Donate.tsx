@@ -13,7 +13,7 @@ import {
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import styles from './Donate.module.css';
+import styles from '../../../style/app.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
@@ -172,9 +172,9 @@ export default function donate(): JSX.Element {
   return (
     <>
       <div className={`d-flex flex-row mt-4`}>
-        <div className={`${styles.mainContainer} me-4`}>
+        <div className={`${styles.mainContainerDonate} me-4`}>
           <div className={styles.inputContainer}>
-            <div className={styles.input}>
+            <div className={styles.inputForDonate}>
               <Form.Control
                 type="name"
                 id="searchUsers"

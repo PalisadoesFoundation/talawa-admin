@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Events.module.css';
+import styles from '../../../style/app.module.css';
 
 /**
  * Converts a time string to a Dayjs object.
