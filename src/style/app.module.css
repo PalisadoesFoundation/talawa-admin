@@ -2371,6 +2371,9 @@ button[data-testid='createPostBtn'] {
   -webkit-line-clamp: 1;
   line-clamp: 1;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Fallback for browsers that don't support line-clamp */
   margin-left: 3px;
 }
 
@@ -2391,7 +2394,7 @@ button[data-testid='createPostBtn'] {
 
 .cardItem .creator {
   font-size: 1rem;
-  color: rgb(33, 208, 21);
+  color: var(--bs-success, #21d015);
 }
 
 .rightCard {
@@ -2403,30 +2406,31 @@ button[data-testid='createPostBtn'] {
   margin-left: 10px;
   overflow-x: hidden;
   width: 210px;
-@-webkit-keyframes zoomIn {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
+  @-webkit-keyframes zoomIn {
+    0% {
+      opacity: 0;
+      -webkit-transform: scale(0.5);
+      transform: scale(0.5);
+    }
+
+    100% {
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
   }
 
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
+  @keyframes zoomIn {
+    0% {
+      opacity: 0;
+      -webkit-transform: scale(0.5);
+      transform: scale(0.5);
+    }
 
-@keyframes zoomIn {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
+    100% {
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
   }
 }
