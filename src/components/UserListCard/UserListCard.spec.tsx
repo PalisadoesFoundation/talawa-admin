@@ -1,5 +1,5 @@
-import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -9,6 +9,7 @@ import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { vi, describe, it, beforeEach } from 'vitest';
 
 const MOCKS = [
   {
@@ -30,17 +31,15 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
+  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
 describe('Testing User List Card', () => {
-  global.alert = jest.fn();
+  beforeEach(() => {
+    vi.spyOn(global, 'alert').mockImplementation(() => {});
+  });
 
-  test('Should render props and text elements test for the page component', async () => {
+  it('Should render props and text elements test for the page component', async () => {
     const props = {
       id: '456',
     };
@@ -56,11 +55,10 @@ describe('Testing User List Card', () => {
     );
 
     await wait();
-
     userEvent.click(screen.getByText(/Add Admin/i));
   });
 
-  test('Should render text elements when props value is not passed', async () => {
+  it('Should render text elements when props value is not passed', async () => {
     const props = {
       id: '456',
     };
