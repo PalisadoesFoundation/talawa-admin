@@ -1014,7 +1014,7 @@ hr {
   box-shadow: 0 2px 2px #e8e5e5;
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: #31bb6b;
+  background-color: #eaebef;
   width: 100%;
   font-size: 16px;
   color: white;
@@ -1029,8 +1029,8 @@ hr {
 }
 
 .goalButtonOrganizationFundCampaign {
-  border: 1px solid #31bb6b !important;
-  color: #31bb6b !important;
+  border: 1px solid #e8e5e5 !important;
+  color: #707070 !important;
   width: 75%;
   padding: 10px;
   border-radius: 8px;
@@ -1070,15 +1070,15 @@ hr {
 
 .inputFieldOrganizationFundCampaign {
   background-color: white;
-  box-shadow: 0 1px 1px #31bb6b;
+  box-shadow: 0 1px 1px var(--search-button-bg);
 }
 
 .dropdownOrganizationFundCampaign {
   background-color: white;
-  border: 1px solid #31bb6b;
+  border: 1px solid #e8e5e5;
   position: relative;
   display: inline-block;
-  color: #31bb6b;
+  color: #707070;
 }
 
 .btnsContainerOrganizationFundCampaign {
