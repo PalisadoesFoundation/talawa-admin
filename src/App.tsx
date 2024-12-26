@@ -50,6 +50,7 @@ import EventDashboardScreen from 'components/EventDashboardScreen/EventDashboard
 import Campaigns from 'screens/UserPortal/Campaigns/Campaigns';
 import Pledges from 'screens/UserPortal/Pledges/Pledges';
 import VolunteerManagement from 'screens/UserPortal/Volunteer/VolunteerManagement';
+import LeaveOrganization from 'screens/UserPortal/LeaveOrganization/LeaveOrganization';
 
 const { setItem } = useLocalStorage();
 
@@ -199,6 +200,10 @@ function app(): JSX.Element {
             <Route path="/user/chat/:orgId" element={<Chat />} />
             <Route path="/user/campaigns/:orgId" element={<Campaigns />} />
             <Route path="/user/pledges/:orgId" element={<Pledges />} />
+            <Route
+              path="/user/leaveOrg/:orgId"
+              element={<LeaveOrganization />}
+            />
             <Route
               path="/user/volunteer/:orgId"
               element={<VolunteerManagement />}

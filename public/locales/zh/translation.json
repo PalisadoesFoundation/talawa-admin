@@ -1084,6 +1084,17 @@
     "loading": "加载中...",
     "noAttendees": "未找到参与者"
   },
+  "eventRegistrant": {
+    "sort": "排序",
+    "allRegistrants": "所有注册者",
+    "eventRegistrantsTable": "活动注册者表",
+    "serialNumber": "序列号",
+    "registrant": "注册者",
+    "registeredAt": "注册时间",
+    "createdAt": "创建时间",
+    "addRegistrant": "添加注册者",
+    "noRegistrantsFound": "未找到注册者"
+  },
   "onSpotAttendee": {
     "title": "现场参与者",
     "enterFirstName": "输入名字",
@@ -1415,6 +1426,9 @@
   },
   "userPledges": {
     "title": "我的承诺"
+  },
+  "leaveOrganization": {
+    "title": "离开组织"
   },
   "eventVolunteers": {
     "volunteers": "志愿者",

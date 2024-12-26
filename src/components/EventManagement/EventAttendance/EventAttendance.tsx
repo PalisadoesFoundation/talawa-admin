@@ -16,7 +16,7 @@ import {
   Table,
   FormControl,
 } from 'react-bootstrap';
-import styles from './EventsAttendance.module.css';
+import styles from '../../../style/app.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { useParams, Link } from 'react-router-dom';
