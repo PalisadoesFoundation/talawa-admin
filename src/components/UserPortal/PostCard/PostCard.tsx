@@ -33,7 +33,7 @@ import {
 import CommentCard from '../CommentCard/CommentCard';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './PostCard.module.css';
+import styles from './../../../style/app.module.css';
 import UserDefault from '../../../assets/images/defaultImg.png';
 
 interface InterfaceCommentCardProps {
@@ -272,7 +272,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   return (
     <Col key={props.id} className="d-flex justify-content-center my-2">
       <Card className={`${styles.cardStyles}`}>
-        <Card.Header className={`${styles.cardHeader}`}>
+        <Card.Header className={`${styles.cardHeaderPostCard}`}>
           <div className={`${styles.creator}`}>
             <AccountCircleIcon className="my-2" />
             <p>{postCreator}</p>
@@ -316,7 +316,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           }
         />
         <Card.Body className="pb-0">
-          <Card.Title className={`${styles.cardTitle}`}>
+          <Card.Title className={`${styles.cardTitlePostCard}`}>
             {props.title}
           </Card.Title>
           <Card.Subtitle style={{ color: '#808080' }}>
@@ -355,7 +355,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </div>
           <div className="w-50 p-2 position-relative">
             <div className="d-flex justify-content-between align-items-center">
-              <div className={`${styles.cardHeader} p-0`}>
+              <div className={`${styles.cardHeaderPostCard} p-0`}>
                 <AccountCircleIcon className="my-2" />
                 <p>{postCreator}</p>
               </div>
