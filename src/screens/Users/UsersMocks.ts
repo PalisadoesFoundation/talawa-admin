@@ -478,7 +478,6 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: USER_LIST,
-
       variables: {
         first: 12,
         skip: 0,
