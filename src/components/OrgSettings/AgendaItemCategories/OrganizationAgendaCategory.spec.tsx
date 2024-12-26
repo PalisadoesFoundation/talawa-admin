@@ -7,9 +7,7 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/client/testing';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -22,23 +20,38 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 import OrganizationAgendaCategory from './OrganizationAgendaCategory';
-import {
-  MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY,
-  MOCKS_ERROR_MUTATION,
-} from './OrganizationAgendaCategoryErrorMocks';
+import { MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY } from './OrganizationAgendaCategoryErrorMocks';
 import { MOCKS } from './OrganizationAgendaCategoryMocks';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+/**
+ * Unit Tests for `OrganizationAgendaCategory` Component
+ *
+ * - **Load Component**: Verifies successful rendering of key elements like `createAgendaCategory`.
+ * - **Error Handling**: Confirms error view appears when agenda category list query fails.
+ * - **Modal Functionality**:
+ *   - Opens and closes the create agenda category modal.
+ *   - Ensures `createAgendaCategoryModalCloseBtn` disappears on close.
+ * - **Create Agenda Category**:
+ *   - Simulates filling the form and submission.
+ *   - Verifies success toast on successful creation (`agendaCategoryCreated`).
+ * - **Integration**: Validates compatibility with Redux, Apollo, i18n, and MUI date-picker.
+ */
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: '123' }),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: '123' }),
+  };
+});
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -53,8 +66,6 @@ const link2 = new StaticMockLink(
   MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY,
   true,
 );
-const link3 = new StaticMockLink(MOCKS_ERROR_MUTATION, true);
-
 const translations = {
   ...JSON.parse(
     JSON.stringify(
@@ -70,7 +81,7 @@ describe('Testing Agenda Categories Component', () => {
     description: 'Test Description',
     createdBy: 'Test User',
   };
-  test('Component loads correctly', async () => {
+  it('Component loads correctly', async () => {
     const { getByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -90,7 +101,7 @@ describe('Testing Agenda Categories Component', () => {
     });
   });
 
-  test('render error component on unsuccessful agenda category list query', async () => {
+  it('render error component on unsuccessful agenda category list query', async () => {
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link2}>
         <Provider store={store}>
@@ -112,7 +123,7 @@ describe('Testing Agenda Categories Component', () => {
     });
   });
 
-  test('opens and closes the create agenda category modal', async () => {
+  it('opens and closes the create agenda category modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -145,7 +156,7 @@ describe('Testing Agenda Categories Component', () => {
       screen.queryByTestId('createAgendaCategoryModalCloseBtn'),
     );
   });
-  test('creates new agenda cagtegory', async () => {
+  it('creates new agenda cagtegory', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
