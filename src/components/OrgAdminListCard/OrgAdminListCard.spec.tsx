@@ -9,6 +9,7 @@ import OrgAdminListCard from './OrgAdminListCard';
 import i18nForTest from 'utils/i18nForTest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
 const MOCKS = [
   {
@@ -57,27 +58,28 @@ const renderOrgAdminListCard = (props: {
     </MockedProvider>,
   );
 };
-jest.mock('i18next-browser-languagedetector', () => ({
-  init: jest.fn(),
+vi.mock('i18next-browser-languagedetector', async () => ({
+  ...(await vi.importActual('i18next-browser-languagedetector')),
+  init: vi.fn(),
   type: 'languageDetector',
-  detect: jest.fn(() => 'en'),
-  cacheUserLanguage: jest.fn(),
+  detect: vi.fn(() => 'en'),
+  cacheUserLanguage: vi.fn(),
 }));
 describe('Testing Organization Admin List Card', () => {
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
   beforeEach(() => {
     Object.defineProperty(window, 'location', {
       writable: true,
-      value: { reload: jest.fn() },
+      value: { reload: vi.fn() },
     });
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
-  test('should render props and text elements test for the page component', async () => {
+  it('should render props and text elements test for the page component', async () => {
     const props = {
       toggleRemoveModal: () => true,
       id: '456',
@@ -92,7 +94,7 @@ describe('Testing Organization Admin List Card', () => {
     await wait(2000);
   });
 
-  test('Should not render text elements when props value is not passed', async () => {
+  it('Should not render text elements when props value is not passed', async () => {
     const props = {
       toggleRemoveModal: () => true,
       id: undefined,
