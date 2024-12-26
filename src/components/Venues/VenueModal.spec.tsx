@@ -4,7 +4,6 @@ import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import type { InterfaceVenueModalProps } from './VenueModal';
@@ -19,6 +18,8 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import type { ApolloLink } from '@apollo/client';
+import { vi } from 'vitest';
+import type * as RouterTypes from 'react-router-dom';
 
 const MOCKS = [
   {
@@ -65,10 +66,16 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 const mockId = 'orgId';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockId }),
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actual = (await vi.importActual(
+    'react-router-dom',
+  )) as typeof RouterTypes;
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockId }),
+  };
+});
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -78,26 +85,26 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warning: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
 const props: InterfaceVenueModalProps[] = [
   {
     show: true,
-    onHide: jest.fn(),
+    onHide: vi.fn(),
     edit: false,
     venueData: null,
-    refetchVenues: jest.fn(),
+    refetchVenues: vi.fn(),
     orgId: 'orgId',
   },
   {
     show: true,
-    onHide: jest.fn(),
+    onHide: vi.fn(),
     edit: true,
     venueData: {
       _id: 'venue1',
@@ -106,7 +113,7 @@ const props: InterfaceVenueModalProps[] = [
       image: 'image1',
       capacity: '100',
     },
-    refetchVenues: jest.fn(),
+    refetchVenues: vi.fn(),
     orgId: 'orgId',
   },
 ];
@@ -129,7 +136,7 @@ const renderVenueModal = (
 };
 
 describe('VenueModal', () => {
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
   test('renders correctly when show is true', async () => {
     renderVenueModal(props[0], link);
