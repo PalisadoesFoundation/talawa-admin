@@ -209,13 +209,13 @@ jobs:
           do
             # Get the full directory from the file path
             folder=$(dirname "$file")
-
+            full_path="$repo_root/$folder"
             # Add the folder to the nearest_dirs string if not already present
-            if [[ ! " $nearest_dirs " =~ " $folder " ]]; then
+            if [[ ! " $nearest_dirs " =~ " $full_path " ]]; then
               if [ -z "$nearest_dirs" ]; then
-                nearest_dirs="$folder"
+                nearest_dirs="$full_path"
               else
-                nearest_dirs="$nearest_dirs,$folder"
+                nearest_dirs="$nearest_dirs,$full_path"
               fi
             fi
           done
