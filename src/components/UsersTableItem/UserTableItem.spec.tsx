@@ -13,11 +13,9 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 import useLocalStorage from 'utils/useLocalstorage';
-import {
-  REMOVE_ADMIN_MUTATION,
-  REMOVE_MEMBER_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
+import type * as RouterTypes from 'react-router-dom';
 
 const { setItem } = useLocalStorage();
 
@@ -28,29 +26,34 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = jest.fn();
+const resetAndRefetchMock = vi.fn();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
-    warning: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
 Object.defineProperty(window, 'location', {
   value: {
-    replace: jest.fn(),
+    replace: vi.fn(),
   },
   writable: true,
 });
 
-const mockNavgatePush = jest.fn();
+const mockNavgatePush = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavgatePush,
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = (await vi.importActual(
+    'react-router-dom',
+  )) as typeof RouterTypes;
+  return {
+    ...actual,
+    useNavigate: () => mockNavgatePush,
+  };
+});
 
 beforeEach(() => {
   setItem('SuperAdmin', true);
@@ -59,11 +62,11 @@ beforeEach(() => {
 
 afterEach(() => {
   localStorage.clear();
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Testing User Table Item', () => {
-  console.error = jest.fn((message) => {
+  console.error = vi.fn((message) => {
     if (message.includes('validateDOMNesting')) {
       return;
     }
@@ -1182,25 +1185,6 @@ describe('Testing User Table Item', () => {
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
     };
-
-    const mocks = [
-      {
-        request: {
-          query: REMOVE_MEMBER_MUTATION,
-          variables: {
-            userId: '123',
-            orgId: 'xyz',
-          },
-        },
-        result: {
-          errors: [
-            {
-              message: 'User does not exist',
-            },
-          ],
-        },
-      },
-    ];
 
     render(
       <MockedProvider addTypename={false} link={link2}>
