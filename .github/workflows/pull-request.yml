@@ -207,18 +207,15 @@ jobs:
           # Loop through each changed file to extract the nearest directory
           for file in ${{ steps.changed-files.outputs.all_changed_files }}
           do
-            # Get the directory from the file path
+            # Get the full directory from the file path
             folder=$(dirname "$file")
 
-            # Get the first level directory (top-level folder)
-            first_folder=$(echo $folder | cut -d'/' -f1)
-
             # Add the folder to the nearest_dirs string if not already present
-            if [[ ! " $nearest_dirs " =~ " $first_folder " ]]; then
+            if [[ ! " $nearest_dirs " =~ " $folder " ]]; then
               if [ -z "$nearest_dirs" ]; then
-                nearest_dirs="$first_folder"
+                nearest_dirs="$folder"
               else
-                nearest_dirs="$nearest_dirs,$first_folder"
+                nearest_dirs="$nearest_dirs,$folder"
               fi
             fi
           done
