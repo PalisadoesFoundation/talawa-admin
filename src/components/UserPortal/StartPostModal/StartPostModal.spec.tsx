@@ -12,12 +12,26 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import StartPostModal from './StartPostModal';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+/**
+ * Unit tests for StartPostModal component:
+ *
+ * 1. **Rendering StartPostModal**: Verifies that the modal renders correctly when the `show` prop is set to `true`.
+ * 2. **Invalid post submission**: Ensures that when the post body is empty, an error toast is shown with the appropriate message ("Can't create a post with an empty body").
+ * 3. **Valid post submission**: Checks that a post with valid text triggers an info toast, and simulates the creation of a post with the message "Processing your post. Please wait."
+ * 4. **User image null**: Confirms that when the user image is null, a default image is displayed instead.
+ * 5. **User image not null**: Verifies that when the user image is provided, the correct user image is shown.
+ *
+ * Mocked GraphQL mutation (`CREATE_POST_MUTATION`) and toast notifications are used to simulate the post creation process.
+ * The `renderStartPostModal` function is used to render the modal with different user states and input values.
+ */
+
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
-    info: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
@@ -62,8 +76,8 @@ const renderStartPostModal = (
 ): RenderResult => {
   const cardProps = {
     show: visibility,
-    onHide: jest.fn(),
-    fetchPosts: jest.fn(),
+    onHide: vi.fn(),
+    fetchPosts: vi.fn(),
     userData: {
       user: {
         __typename: 'User',
@@ -113,18 +127,18 @@ const renderStartPostModal = (
 
 describe('Testing StartPostModal Component: User Portal', () => {
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  test('Check if StartPostModal renders properly', async () => {
+  it('Check if StartPostModal renders properly', async () => {
     renderStartPostModal(true, null);
 
     const modal = await screen.findByTestId('startPostModal');
     expect(modal).toBeInTheDocument();
   });
 
-  test('On invalid post submission with empty body Error toast should be shown', async () => {
-    const toastSpy = jest.spyOn(toast, 'error');
+  it('On invalid post submission with empty body Error toast should be shown', async () => {
+    const toastSpy = vi.spyOn(toast, 'error');
     renderStartPostModal(true, null);
     await wait();
 
@@ -134,7 +148,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     );
   });
 
-  test('On valid post submission Info toast should be shown', async () => {
+  it('On valid post submission Info toast should be shown', async () => {
     renderStartPostModal(true, null);
     await wait();
 
@@ -154,7 +168,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     // );
   });
 
-  test('If user image is null then default image should be shown', async () => {
+  it('If user image is null then default image should be shown', async () => {
     renderStartPostModal(true, null);
     await wait();
 
@@ -165,7 +179,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     );
   });
 
-  test('If user image is not null then user image should be shown', async () => {
+  it('If user image is not null then user image should be shown', async () => {
     renderStartPostModal(true, 'image.png');
     await wait();
 

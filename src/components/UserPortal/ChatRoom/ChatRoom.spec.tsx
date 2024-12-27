@@ -1,324 +1,45 @@
 import React from 'react';
+
 import {
   act,
-  fireEvent,
   render,
   screen,
+  fireEvent,
   waitFor,
 } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockSubscriptionLink, MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import Chat from '../../../screens/UserPortal/Chat/Chat';
-import {
-  CREATE_CHAT,
-  MESSAGE_SENT_TO_CHAT,
-} from 'GraphQl/Mutations/OrganizationMutations';
 import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
-import useLocalStorage from 'utils/useLocalstorage';
+import {
+  MESSAGE_SENT_TO_CHAT,
+  SEND_MESSAGE_TO_CHAT,
+} from 'GraphQl/Mutations/OrganizationMutations';
+import ChatRoom from './ChatRoom';
+import { useLocalStorage } from 'utils/useLocalstorage';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for the ChatRoom component
+ *
+ * Tests cover component rendering, message functionality (sending/replying),
+ * user interactions, GraphQL integration, and provider integrations
+ * (Router, Redux, i18n) for both direct and group chats.
+ */
 
 const { setItem } = useLocalStorage();
 
-const UserConnectionListMock = [
-  {
-    request: {
-      query: USERS_CONNECTION_LIST,
-      variables: {
-        firstName_contains: '',
-        lastName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              firstName: 'Deanne',
-              lastName: 'Marks',
-              image: null,
-              _id: '6589389d2caa9d8d69087487',
-              email: 'testuser8@example.com',
-              createdAt: '2023-04-13T04:53:17.742Z',
-              organizationsBlockedBy: [],
-              joinedOrganizations: [
-                {
-                  _id: '6537904485008f171cf29924',
-                  name: 'Unity Foundation',
-                  image: null,
-                  address: {
-                    city: 'Queens',
-                    countryCode: 'US',
-                    dependentLocality: 'Some Dependent Locality',
-                    line1: '123 Coffee Street',
-                    line2: 'Apartment 501',
-                    postalCode: '11427',
-                    sortingCode: 'ABC-133',
-                    state: 'NYC',
-                    __typename: 'Address',
-                  },
-                  createdAt: '2023-04-13T05:16:52.827Z',
-                  creator: {
-                    _id: '64378abd85008f171cf2990d',
-                    firstName: 'Wilt',
-                    lastName: 'Shepherd',
-                    image: null,
-                    email: 'testsuperadmin@example.com',
-                    createdAt: '2023-04-13T04:53:17.742Z',
-                    __typename: 'User',
-                  },
-                  __typename: 'Organization',
-                },
-                {
-                  _id: '6637904485008f171cf29924',
-                  name: 'Unity Foundation',
-                  image: null,
-                  address: {
-                    city: 'Staten Island',
-                    countryCode: 'US',
-                    dependentLocality: 'Some Dependent Locality',
-                    line1: '123 church Street',
-                    line2: 'Apartment 499',
-                    postalCode: '10301',
-                    sortingCode: 'ABC-122',
-                    state: 'NYC',
-                    __typename: 'Address',
-                  },
-                  createdAt: '2023-04-13T05:16:52.827Z',
-                  creator: {
-                    _id: '64378abd85008f171cf2990d',
-                    firstName: 'Wilt',
-                    lastName: 'Shepherd',
-                    image: null,
-                    email: 'testsuperadmin@example.com',
-                    createdAt: '2023-04-13T04:53:17.742Z',
-                    __typename: 'User',
-                  },
-                  __typename: 'Organization',
-                },
-                {
-                  _id: '6737904485008f171cf29924',
-                  name: 'Unity Foundation',
-                  image: null,
-                  address: {
-                    city: 'Brooklyn',
-                    countryCode: 'US',
-                    dependentLocality: 'Sample Dependent Locality',
-                    line1: '123 Main Street',
-                    line2: 'Apt 456',
-                    postalCode: '10004',
-                    sortingCode: 'ABC-789',
-                    state: 'NY',
-                    __typename: 'Address',
-                  },
-                  createdAt: '2023-04-13T05:16:52.827Z',
-                  creator: {
-                    _id: '64378abd85008f171cf2990d',
-                    firstName: 'Wilt',
-                    lastName: 'Shepherd',
-                    image: null,
-                    email: 'testsuperadmin@example.com',
-                    createdAt: '2023-04-13T04:53:17.742Z',
-                    __typename: 'User',
-                  },
-                  __typename: 'Organization',
-                },
-                {
-                  _id: '6437904485008f171cf29924',
-                  name: 'Unity Foundation',
-                  image: null,
-                  address: {
-                    city: 'Bronx',
-                    countryCode: 'US',
-                    dependentLocality: 'Some Dependent Locality',
-                    line1: '123 Random Street',
-                    line2: 'Apartment 456',
-                    postalCode: '10451',
-                    sortingCode: 'ABC-123',
-                    state: 'NYC',
-                    __typename: 'Address',
-                  },
-                  createdAt: '2023-04-13T05:16:52.827Z',
-                  creator: {
-                    _id: '64378abd85008f171cf2990d',
-                    firstName: 'Wilt',
-                    lastName: 'Shepherd',
-                    image: null,
-                    email: 'testsuperadmin@example.com',
-                    createdAt: '2023-04-13T04:53:17.742Z',
-                    __typename: 'User',
-                  },
-                  __typename: 'Organization',
-                },
-              ],
-              __typename: 'User',
-            },
-            appUserProfile: {
-              _id: '64378abd85308f171cf2993d',
-              adminFor: [],
-              isSuperAdmin: false,
-              createdOrganizations: [],
-              createdEvents: [],
-              eventAdmin: [],
-              __typename: 'AppUserProfile',
-            },
-            __typename: 'UserData',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USERS_CONNECTION_LIST,
-      variables: {
-        firstName_contains: 'Disha',
-        lastName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              firstName: 'Deanne',
-              lastName: 'Marks',
-              image: null,
-              _id: '6589389d2caa9d8d69087487',
-              email: 'testuser8@example.com',
-              createdAt: '2023-04-13T04:53:17.742Z',
-              organizationsBlockedBy: [],
-              joinedOrganizations: [
-                {
-                  _id: '6537904485008f171cf29924',
-                  name: 'Unity Foundation',
-                  image: null,
-                  address: {
-                    city: 'Queens',
-                    countryCode: 'US',
-                    dependentLocality: 'Some Dependent Locality',
-                    line1: '123 Coffee Street',
-                    line2: 'Apartment 501',
-                    postalCode: '11427',
-                    sortingCode: 'ABC-133',
-                    state: 'NYC',
-                    __typename: 'Address',
-                  },
-                  createdAt: '2023-04-13T05:16:52.827Z',
-                  creator: {
-                    _id: '64378abd85008f171cf2990d',
-                    firstName: 'Wilt',
-                    lastName: 'Shepherd',
-                    image: null,
-                    email: 'testsuperadmin@example.com',
-                    createdAt: '2023-04-13T04:53:17.742Z',
-                    __typename: 'User',
-                  },
-                  __typename: 'Organization',
-                },
-                {
-                  _id: '6637904485008f171cf29924',
-                  name: 'Unity Foundation',
-                  image: null,
-                  address: {
-                    city: 'Staten Island',
-                    countryCode: 'US',
-                    dependentLocality: 'Some Dependent Locality',
-                    line1: '123 church Street',
-                    line2: 'Apartment 499',
-                    postalCode: '10301',
-                    sortingCode: 'ABC-122',
-                    state: 'NYC',
-                    __typename: 'Address',
-                  },
-                  createdAt: '2023-04-13T05:16:52.827Z',
-                  creator: {
-                    _id: '64378abd85008f171cf2990d',
-                    firstName: 'Wilt',
-                    lastName: 'Shepherd',
-                    image: null,
-                    email: 'testsuperadmin@example.com',
-                    createdAt: '2023-04-13T04:53:17.742Z',
-                    __typename: 'User',
-                  },
-                  __typename: 'Organization',
-                },
-                {
-                  _id: '6737904485008f171cf29924',
-                  name: 'Unity Foundation',
-                  image: null,
-                  address: {
-                    city: 'Brooklyn',
-                    countryCode: 'US',
-                    dependentLocality: 'Sample Dependent Locality',
-                    line1: '123 Main Street',
-                    line2: 'Apt 456',
-                    postalCode: '10004',
-                    sortingCode: 'ABC-789',
-                    state: 'NY',
-                    __typename: 'Address',
-                  },
-                  createdAt: '2023-04-13T05:16:52.827Z',
-                  creator: {
-                    _id: '64378abd85008f171cf2990d',
-                    firstName: 'Wilt',
-                    lastName: 'Shepherd',
-                    image: null,
-                    email: 'testsuperadmin@example.com',
-                    createdAt: '2023-04-13T04:53:17.742Z',
-                    __typename: 'User',
-                  },
-                  __typename: 'Organization',
-                },
-                {
-                  _id: '6437904485008f171cf29924',
-                  name: 'Unity Foundation',
-                  image: null,
-                  address: {
-                    city: 'Bronx',
-                    countryCode: 'US',
-                    dependentLocality: 'Some Dependent Locality',
-                    line1: '123 Random Street',
-                    line2: 'Apartment 456',
-                    postalCode: '10451',
-                    sortingCode: 'ABC-123',
-                    state: 'NYC',
-                    __typename: 'Address',
-                  },
-                  createdAt: '2023-04-13T05:16:52.827Z',
-                  creator: {
-                    _id: '64378abd85008f171cf2990d',
-                    firstName: 'Wilt',
-                    lastName: 'Shepherd',
-                    image: null,
-                    email: 'testsuperadmin@example.com',
-                    createdAt: '2023-04-13T04:53:17.742Z',
-                    __typename: 'User',
-                  },
-                  __typename: 'Organization',
-                },
-              ],
-              __typename: 'User',
-            },
-            appUserProfile: {
-              _id: '64378abd85308f171cf2993d',
-              adminFor: [],
-              isSuperAdmin: false,
-              createdOrganizations: [],
-              createdEvents: [],
-              eventAdmin: [],
-              __typename: 'AppUserProfile',
-            },
-            __typename: 'UserData',
-          },
-        ],
-      },
-    },
-  },
-];
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 const MESSAGE_SENT_TO_CHAT_MOCK = [
   {
@@ -333,8 +54,10 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
         messageSentToChat: {
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
+          chatMessageBelongsTo: {
+            _id: '1',
+          },
           messageContent: 'Test ',
-          type: 'STRING',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -360,8 +83,10 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
           _id: '668ec1f1df364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          chatMessageBelongsTo: {
+            _id: '1',
+          },
           replyTo: null,
-          type: 'STRING',
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -386,8 +111,10 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
           _id: '668ec1f13603ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          chatMessageBelongsTo: {
+            _id: '1',
+          },
           replyTo: null,
-          type: 'STRING',
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -428,11 +155,10 @@ const CHAT_BY_ID_QUERY_MOCK = [
           name: '',
           messages: [
             {
-              _id: '345678',
+              _id: '4',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -488,11 +214,10 @@ const CHAT_BY_ID_QUERY_MOCK = [
           createdAt: '2345678903456',
           messages: [
             {
-              _id: '345678',
+              _id: '4',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -548,11 +273,10 @@ const CHAT_BY_ID_QUERY_MOCK = [
           createdAt: '2345678903456',
           messages: [
             {
-              _id: '345678',
+              _id: '4',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -619,7 +343,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -691,7 +414,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -777,7 +499,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -849,7 +570,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -935,7 +655,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -1007,165 +726,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
-                sender: {
-                  _id: '2',
-                  firstName: 'Test',
-                  lastName: 'User',
-                  email: 'test@example.com',
-                  image: '',
-                },
-              },
-            ],
-            users: [
-              {
-                _id: '1',
-                firstName: 'Disha',
-                lastName: 'Talreja',
-                email: 'disha@example.com',
-                image: '',
-              },
-              {
-                _id: '2',
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@example.com',
-                image: '',
-              },
-              {
-                _id: '3',
-                firstName: 'Test',
-                lastName: 'User1',
-                email: 'test1@example.com',
-                image: '',
-              },
-              {
-                _id: '4',
-                firstName: 'Test',
-                lastName: 'User2',
-                email: 'test2@example.com',
-                image: '',
-              },
-              {
-                _id: '5',
-                firstName: 'Test',
-                lastName: 'User4',
-                email: 'test4@example.com',
-                image: '',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: CHATS_LIST,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        chatsByUserId: [
-          {
-            _id: '65844efc814dhjmkdftyd4003db811c4',
-            isGroup: true,
-            creator: {
-              _id: '64378abd85008f171cf2990d',
-              firstName: 'Wilt',
-              lastName: 'Shepherd',
-              image: null,
-              email: 'testsuperadmin@example.com',
-              createdAt: '2023-04-13T04:53:17.742Z',
-              __typename: 'User',
-            },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
-            createdAt: '2345678903456',
-            name: 'Test Group Chat',
-            messages: [
-              {
-                _id: '345678',
-                createdAt: '345678908765',
-                messageContent: 'Hello',
-                replyTo: null,
-                type: 'STRING',
-                sender: {
-                  _id: '2',
-                  firstName: 'Test',
-                  lastName: 'User',
-                  email: 'test@example.com',
-                  image: '',
-                },
-              },
-            ],
-            users: [
-              {
-                _id: '1',
-                firstName: 'Disha',
-                lastName: 'Talreja',
-                email: 'disha@example.com',
-                image: '',
-              },
-              {
-                _id: '2',
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@example.com',
-                image: '',
-              },
-              {
-                _id: '3',
-                firstName: 'Test',
-                lastName: 'User1',
-                email: 'test1@example.com',
-                image: '',
-              },
-              {
-                _id: '4',
-                firstName: 'Test',
-                lastName: 'User2',
-                email: 'test2@example.com',
-                image: '',
-              },
-              {
-                _id: '5',
-                firstName: 'Test',
-                lastName: 'User4',
-                email: 'test4@example.com',
-                image: '',
-              },
-            ],
-          },
-          {
-            _id: '65844ewsedrffc814dd4003db811c4',
-            isGroup: true,
-            creator: {
-              _id: '64378abd85008f171cf2990d',
-              firstName: 'Wilt',
-              lastName: 'Shepherd',
-              image: null,
-              email: 'testsuperadmin@example.com',
-              createdAt: '2023-04-13T04:53:17.742Z',
-              __typename: 'User',
-            },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
-            createdAt: '2345678903456',
-            name: 'Test Group Chat',
-            messages: [
-              {
-                _id: '345678',
-                createdAt: '345678908765',
-                messageContent: 'Hello',
-                replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -1249,11 +809,176 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
           name: 'Test Group Chat',
           messages: [
             {
-              _id: '345678',
+              _id: '2',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+            {
+              _id: '3',
+              firstName: 'Test',
+              lastName: 'User1',
+              email: 'test1@example.com',
+              image: '',
+            },
+            {
+              _id: '4',
+              firstName: 'Test',
+              lastName: 'User2',
+              email: 'test2@example.com',
+              image: '',
+            },
+            {
+              _id: '5',
+              firstName: 'Test',
+              lastName: 'User4',
+              email: 'test4@example.com',
+              image: '',
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CHAT_BY_ID,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        chatById: {
+          _id: '65844efc814dd4003db811c4',
+          isGroup: true,
+          creator: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: null,
+            email: 'testsuperadmin@example.com',
+            createdAt: '2023-04-13T04:53:17.742Z',
+            __typename: 'User',
+          },
+          organization: {
+            _id: 'pw3ertyuiophgfre45678',
+            name: 'rtyu',
+          },
+          createdAt: '2345678903456',
+          name: 'Test Group Chat',
+          messages: [
+            {
+              _id: '1',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              replyTo: null,
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+            {
+              _id: '3',
+              firstName: 'Test',
+              lastName: 'User1',
+              email: 'test1@example.com',
+              image: '',
+            },
+            {
+              _id: '4',
+              firstName: 'Test',
+              lastName: 'User2',
+              email: 'test2@example.com',
+              image: '',
+            },
+            {
+              _id: '5',
+              firstName: 'Test',
+              lastName: 'User4',
+              email: 'test4@example.com',
+              image: '',
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CHAT_BY_ID,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        chatById: {
+          _id: '65844efc814dd4003db811c4',
+          isGroup: true,
+          creator: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: null,
+            email: 'testsuperadmin@example.com',
+            createdAt: '2023-04-13T04:53:17.742Z',
+            __typename: 'User',
+          },
+          organization: {
+            _id: 'pw3ertyuiophgfre45678',
+            name: 'rtyu',
+          },
+          createdAt: '2345678903456',
+          name: 'Test Group Chat',
+          messages: [
+            {
+              _id: '1',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -1306,191 +1031,565 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
   },
 ];
 
-const CREATE_CHAT_MUTATION_MOCK = [
+const SEND_MESSAGE_TO_CHAT_MOCK = [
   {
     request: {
-      query: CREATE_CHAT,
+      query: SEND_MESSAGE_TO_CHAT,
       variables: {
-        organizationId: undefined,
-        userIds: ['1', '6589389d2caa9d8d69087487'],
-        isGroup: false,
+        chatId: '1',
+        replyTo: '4',
+        messageContent: 'Test reply message',
       },
     },
     result: {
       data: {
-        createChat: {
-          _id: '1',
-          createdAt: '2345678903456',
-          isGroup: false,
-          creator: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
             lastName: 'Shepherd',
-            image: null,
-            email: 'testsuperadmin@example.com',
-            createdAt: '2023-04-13T04:53:17.742Z',
-            __typename: 'User',
+            image: '',
           },
-          organization: null,
-          name: '',
-          messages: [
-            {
-              _id: '345678',
-              createdAt: '345678908765',
-              messageContent: 'Hello',
-              replyTo: null,
-              type: 'STRING',
-              sender: {
-                _id: '2',
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@example.com',
-                image: '',
-              },
-            },
-          ],
-          users: [
-            {
-              _id: '1',
-              firstName: 'Disha',
-              lastName: 'Talreja',
-              email: 'disha@example.com',
-              image: '',
-            },
-            {
-              _id: '2',
-              firstName: 'Test',
-              lastName: 'User',
-              email: 'test@example.com',
-              image: '',
-            },
-          ],
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: '4',
+        messageContent: 'Test reply message',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: '1',
+        messageContent: 'Test reply message',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: undefined,
+        messageContent: 'Hello',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: '345678',
+        messageContent: 'Test reply message',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: undefined,
+        messageContent: 'Test message',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
         },
       },
     },
   },
 ];
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+describe('Testing Chatroom Component [User Portal]', () => {
+  window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
-describe('Testing Create Direct Chat Modal [User Portal]', () => {
-  window.HTMLElement.prototype.scrollIntoView = jest.fn();
-
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
-  });
-
-  test('Open and close create new direct chat modal', async () => {
-    const mock = [
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+  it('Chat room should display fallback content if no chat is active', async () => {
+    const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHATS_LIST_MOCK,
       ...CHAT_BY_ID_QUERY_MOCK,
-      ...CREATE_CHAT_MUTATION_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
     ];
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Chat />
+              <ChatRoom selectedContact="" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
+    expect(await screen.findByTestId('noChatSelected')).toBeInTheDocument();
+  });
 
+  it('Selected contact is direct chat', async () => {
+    const link = new MockSubscriptionLink();
+    const mocks = [
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mocks} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+  });
+
+  it('send message direct chat', async () => {
+    setItem('userId', '2');
+    const mocks = [
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
+    ];
+    const link2 = new StaticMockLink(mocks, true);
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
     await wait();
 
-    const dropdown = await screen.findByTestId('dropdown');
-    expect(dropdown).toBeInTheDocument();
-    fireEvent.click(dropdown);
-    const newDirectChatBtn = await screen.findByTestId('newDirectChat');
-    expect(newDirectChatBtn).toBeInTheDocument();
-    fireEvent.click(newDirectChatBtn);
-
-    const submitBtn = await screen.findByTestId('submitBtn');
-    expect(submitBtn).toBeInTheDocument();
-
-    const searchInput = (await screen.findByTestId(
-      'searchUser',
+    const input = (await screen.findByTestId(
+      'messageInput',
     )) as HTMLInputElement;
-    expect(searchInput).toBeInTheDocument();
 
-    fireEvent.change(searchInput, { target: { value: 'Disha' } });
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Hello' } });
+    });
+    expect(input.value).toBe('Hello');
 
-    expect(searchInput.value).toBe('Disha');
+    const sendBtn = await screen.findByTestId('sendMessage');
 
-    fireEvent.click(submitBtn);
+    expect(sendBtn).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
+    });
 
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    expect(closeButton).toBeInTheDocument();
+    const messages = await screen.findAllByTestId('message');
 
-    fireEvent.click(closeButton);
+    console.log('MESSAGES', messages);
+
+    expect(messages.length).not.toBe(0);
+
+    act(() => {
+      fireEvent.mouseOver(messages[0]);
+    });
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
+    });
+
+    const moreOptionsBtn = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(moreOptionsBtn);
+    });
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+
+    await waitFor(() => {
+      expect(replyMsg).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test reply message' } });
+    });
+    expect(input.value).toBe('Test reply message');
+
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+
+    await wait(400);
   });
 
-  test('create new direct chat', async () => {
-    setItem('userId', '1');
-    const mock = [
+  it('send message direct chat when userId is different', async () => {
+    setItem('userId', '8');
+    const mocks = [
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHATS_LIST_MOCK,
       ...CHAT_BY_ID_QUERY_MOCK,
-      ...CREATE_CHAT_MUTATION_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
     ];
+    const link2 = new StaticMockLink(mocks, true);
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Chat />
+              <ChatRoom selectedContact="1" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
 
-    const dropdown = await screen.findByTestId('dropdown');
-    expect(dropdown).toBeInTheDocument();
-    fireEvent.click(dropdown);
-    const newDirectChatBtn = await screen.findByTestId('newDirectChat');
-    expect(newDirectChatBtn).toBeInTheDocument();
-    fireEvent.click(newDirectChatBtn);
+    const input = (await screen.findByTestId(
+      'messageInput',
+    )) as HTMLInputElement;
 
-    const addBtn = await screen.findAllByTestId('addBtn');
-    waitFor(() => {
-      expect(addBtn[0]).toBeInTheDocument();
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Hello' } });
+    });
+    expect(input.value).toBe('Hello');
+
+    const sendBtn = await screen.findByTestId('sendMessage');
+
+    expect(sendBtn).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
     });
 
-    fireEvent.click(addBtn[0]);
+    const messages = await screen.findAllByTestId('message');
 
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    expect(closeButton).toBeInTheDocument();
+    console.log('MESSAGES', messages);
 
-    fireEvent.click(closeButton);
+    expect(messages.length).not.toBe(0);
 
-    await new Promise(process.nextTick);
+    act(() => {
+      fireEvent.mouseOver(messages[0]);
+    });
 
+    await waitFor(async () => {
+      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
+    });
+
+    const moreOptionsBtn = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(moreOptionsBtn);
+    });
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+
+    await waitFor(() => {
+      expect(replyMsg).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test reply message' } });
+    });
+    expect(input.value).toBe('Test reply message');
+
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+
+    await wait(400);
+  });
+
+  it('Selected contact is group chat', async () => {
+    const mocks = [
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
     await wait();
+  });
+
+  it('send message group chat', async () => {
+    const mocks = [
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const input = (await screen.findByTestId(
+      'messageInput',
+    )) as HTMLInputElement;
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test message' } });
+    });
+    expect(input.value).toBe('Test message');
+
+    const sendBtn = await screen.findByTestId('sendMessage');
+
+    expect(sendBtn).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
+    });
+
+    const messages = await screen.findAllByTestId('message');
+
+    expect(messages.length).not.toBe(0);
+
+    act(() => {
+      fireEvent.mouseOver(messages[0]);
+    });
+
+    expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
+
+    const moreOptionsBtn = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(moreOptionsBtn);
+    });
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+
+    await waitFor(() => {
+      expect(replyMsg).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test reply message' } });
+    });
+    expect(input.value).toBe('Test reply message');
+
+    const closeReplyBtn = await screen.findByTestId('closeReply');
+
+    expect(closeReplyBtn).toBeInTheDocument();
+
+    fireEvent.click(closeReplyBtn);
+
+    await wait(500);
+  });
+
+  it('reply to message', async () => {
+    const mocks = [
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
+    ];
+    const link2 = new StaticMockLink(mocks, true);
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const input = (await screen.findByTestId(
+      'messageInput',
+    )) as HTMLInputElement;
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test message' } });
+    });
+    expect(input.value).toBe('Test message');
+
+    const sendBtn = await screen.findByTestId('sendMessage');
+
+    expect(sendBtn).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
+    });
+
+    const messages = await screen.findAllByTestId('message');
+
+    expect(messages.length).not.toBe(0);
+
+    act(() => {
+      fireEvent.mouseOver(messages[0]);
+    });
+
+    expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
+
+    const moreOptionsBtn = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(moreOptionsBtn);
+    });
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+
+    await waitFor(() => {
+      expect(replyMsg).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test reply message' } });
+    });
+    expect(input.value).toBe('Test reply message');
+
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+
+    await wait(400);
   });
 });
