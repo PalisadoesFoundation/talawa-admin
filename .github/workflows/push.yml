@@ -9,7 +9,7 @@
 ##############################################################################
 ##############################################################################
 
-name: push workflow
+name: PUSH Workflow - All Branches
 
 on:
   push:
@@ -57,6 +57,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+          gcov_ignore: 'docs/'
           fail_ci_if_error: false
           name: '${{env.CODECOV_UNIQUE_NAME}}'
-
