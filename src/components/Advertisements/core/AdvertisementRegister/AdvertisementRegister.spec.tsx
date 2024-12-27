@@ -25,14 +25,24 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
+import { vi } from 'vitest';
 
 const { getItem } = useLocalStorage();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: '1' }),
+    useNavigate: vi.fn(),
+  };
+});
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -120,10 +130,21 @@ const httpLink = new HttpLink({
   },
 });
 
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: vi.fn().mockReturnValue('token'),
+  }),
+}));
+
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
+
+// const client: ApolloClient<any> = new ApolloClient({
+//   cache: new InMemoryCache(),
+//   link,
+// });
 
 const translations = {
   ...JSON.parse(
@@ -135,10 +156,6 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: '1' }),
-}));
 describe('Testing Advertisement Register Component', () => {
   test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(
@@ -153,7 +170,7 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Advert1"
                 orgIdEdit="1"
                 advertisementMediaEdit=""
-                setAfter={jest.fn()}
+                setAfter={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -166,8 +183,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('create advertisement', async () => {
-    jest.useFakeTimers();
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
 
     await act(async () => {
       render(
@@ -182,7 +198,7 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Ad1"
                   orgIdEdit="1"
                   advertisementMediaEdit=""
-                  setAfter={jest.fn()}
+                  setAfter={vi.fn()}
                 />
               </I18nextProvider>
             </BrowserRouter>
@@ -254,12 +270,11 @@ describe('Testing Advertisement Register Component', () => {
       );
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('update advertisement', async () => {
-    jest.useFakeTimers();
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
 
     await act(async () => {
       render(
@@ -274,7 +289,7 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Ad1"
                   orgIdEdit="1"
                   advertisementMediaEdit=""
-                  setAfter={jest.fn()}
+                  setAfter={vi.fn()}
                   formStatus="edit"
                 />
               </I18nextProvider>
@@ -346,13 +361,12 @@ describe('Testing Advertisement Register Component', () => {
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
 
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
-    jest.useFakeTimers();
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
-    const toastErrorSpy = jest.spyOn(toast, 'error');
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+    const toastErrorSpy = vi.spyOn(toast, 'error');
 
     await act(async () => {
       render(
@@ -367,7 +381,7 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Ad1"
                   orgIdEdit="1"
                   advertisementMediaEdit=""
-                  setAfter={jest.fn()}
+                  setAfter={vi.fn()}
                 />
               </I18nextProvider>
             </BrowserRouter>
@@ -397,12 +411,11 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(setTimeoutSpy).toHaveBeenCalled();
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('Throws error when the end date is less than the start date', async () => {
-    jest.useFakeTimers();
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const { getByText, queryByText, getByLabelText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -415,7 +428,7 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Ad1"
                 orgIdEdit="1"
                 advertisementMediaEdit=""
-                setAfter={jest.fn()}
+                setAfter={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -469,11 +482,10 @@ describe('Testing Advertisement Register Component', () => {
       'End Date should be greater than or equal to Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('AdvertismentRegister component loads correctly in edit mode', async () => {
-    jest.useFakeTimers();
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -487,7 +499,7 @@ describe('Testing Advertisement Register Component', () => {
                 orgIdEdit="1"
                 advertisementMediaEdit="google.com"
                 formStatus="edit"
-                setAfter={jest.fn()}
+                setAfter={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -497,11 +509,10 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('editBtn')).toBeInTheDocument();
     });
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('Opens and closes modals on button click', async () => {
-    jest.useFakeTimers();
     const { getByText, queryByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -514,7 +525,7 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Advert1"
                 orgIdEdit="1"
                 advertisementMediaEdit=""
-                setAfter={jest.fn()}
+                setAfter={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -529,11 +540,10 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       expect(queryByText(translations.close)).not.toBeInTheDocument();
     });
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
-    jest.useFakeTimers();
     const { getByText, getByLabelText, queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -548,7 +558,7 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Advert1"
                   orgIdEdit="1"
                   advertisementMediaEdit="google.com"
-                  setAfter={jest.fn()}
+                  setAfter={vi.fn()}
                 />
               }
             </I18nextProvider>
@@ -596,11 +606,10 @@ describe('Testing Advertisement Register Component', () => {
         'End Date should be greater than or equal to Start Date',
       );
     });
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('Media preview renders correctly', async () => {
-    jest.useFakeTimers();
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -613,7 +622,7 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Advert1"
                 orgIdEdit="1"
                 advertisementMediaEdit="test.mp4"
-                setAfter={jest.fn()}
+                setAfter={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -637,5 +646,47 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(closeButton);
     expect(mediaPreview).not.toBeInTheDocument();
   });
-  jest.useRealTimers();
+  vi.useRealTimers();
+
+  test('shows success toast on successful update', async () => {
+    const setAfterMock = vi.fn();
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <AdvertisementRegister
+                formStatus="edit"
+                idEdit="123"
+                nameEdit="Test Ad"
+                typeEdit="BANNER"
+                startDateEdit={new Date('2024-01-01')}
+                endDateEdit={new Date('2024-12-31')}
+                orgIdEdit="1"
+                advertisementMediaEdit=""
+                setAfter={setAfterMock}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const editButton = screen.getByTestId('editBtn');
+    fireEvent.click(editButton);
+
+    const nameInput = screen.getByLabelText('Enter name of Advertisement');
+    fireEvent.change(nameInput, { target: { value: 'Updated Ad' } });
+
+    const saveButton = screen.getByTestId('addonupdate');
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      // Verify success toast was shown
+      expect(toast.success).toHaveBeenCalledWith(
+        'Advertisement created successfully.',
+      );
+    });
+  });
 });

@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Pagination from './Pagination';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
+import { describe, it } from 'vitest';
 
 describe('Testing Pagination component', () => {
   const props = {
@@ -17,7 +18,7 @@ describe('Testing Pagination component', () => {
     },
   };
 
-  test('Component should be rendered properly on rtl', async () => {
+  it('Component should be rendered properly on rtl', async () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
@@ -42,7 +43,7 @@ const props = {
   theme: { direction: 'rtl' },
 };
 
-test('Component should be rendered properly', async () => {
+it('Component should be rendered properly', async () => {
   const theme = createTheme({
     direction: 'rtl',
   });

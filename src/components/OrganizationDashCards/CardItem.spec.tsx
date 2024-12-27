@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import CardItem from './CardItem';
 import type { InterfaceCardItem } from './CardItem';
 import dayjs from 'dayjs';
+import React from 'react';
 
 describe('Testing the Organization Card', () => {
   test('Should render props and text elements For event card', () => {
@@ -36,7 +36,6 @@ describe('Testing the Organization Card', () => {
         email: 'johndoe@example.com',
         firstName: 'John',
         lastName: 'Doe',
-        __typename: 'User',
         _id: '1',
       },
     };
