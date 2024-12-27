@@ -75,6 +75,7 @@ jobs:
         with:
           node-version: 22
           cache: yarn
+          cache-dependency-path: 'docs/'
       - uses: webfactory/ssh-agent@v0.5.0
         with:
           ssh-private-key: ${{ secrets.DEPLOY_GITHUB_PAGES }}
