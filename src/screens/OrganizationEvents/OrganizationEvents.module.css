@@ -193,6 +193,7 @@
   flex-direction: row;
   margin-bottom: 15px;
 }
+
 .datebox {
   width: 90%;
   border-radius: 7px;
@@ -206,6 +207,7 @@
   margin-right: 5px;
   margin-left: 5px;
 }
+
 .checkboxdiv > label {
   margin-right: 50px;
 }

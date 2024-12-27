@@ -23,11 +23,13 @@
   font-size: 1.2rem;
   font-weight: 600;
 }
+
 .scrollableCardBody {
   max-height: min(220px, 50vh);
   overflow-y: auto;
   scroll-behavior: smooth;
 }
+
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
@@ -93,6 +95,7 @@
   opacity: 1;
   color: black !important;
 }
+
 .opendrawer {
   position: fixed;
   display: flex;
@@ -114,9 +117,16 @@
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
 }
+
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
+}
+
+.textField {
+  font-size: 14px;
+  background-color: rgba(245, 245, 245);
+  border: 1px solid var(--bs-border-color);
 }
 
 @media (max-width: 1120px) {

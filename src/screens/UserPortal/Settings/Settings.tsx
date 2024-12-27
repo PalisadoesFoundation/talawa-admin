@@ -8,7 +8,11 @@ import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { DatePicker } from '@mui/x-date-pickers';
 import useLocalStorage from 'utils/useLocalstorage';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   educationGradeEnum,
   employmentStatusEnum,
@@ -23,7 +27,6 @@ import Avatar from 'components/Avatar/Avatar';
 import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
 import { EventsAttendedByUser } from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
-
 /**
  * The Settings component allows users to view and update their profile settings.
  * It includes functionality to handle image uploads, reset changes, and save updated user details.
@@ -124,7 +127,7 @@ export default function settings(): JSX.Element {
    * @param fieldName - The name of the field to be updated.
    * @param value - The new value for the field.
    */
-  const handleFieldChange = (fieldName: string, value: string): void => {
+  const handleFieldChange = (fieldName: string, value: Date | string): void => {
     setisUpdated(true);
     setUserDetails((prevState) => ({
       ...prevState,
@@ -141,7 +144,6 @@ export default function settings(): JSX.Element {
       (fileInputRef.current as HTMLInputElement).click();
     }
   };
-
   /**
    * Resets the user details to the values fetched from the server.
    */
@@ -440,15 +442,26 @@ export default function settings(): JSX.Element {
                       >
                         {t('birthDate')}
                       </Form.Label>
-                      <Form.Control
-                        type="date"
-                        id="birthDate"
-                        value={userDetails.birthDate}
-                        onChange={(e) =>
-                          handleFieldChange('birthDate', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                      />
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          value={dayjs(userDetails.birthDate)}
+                          className={`${styles.textField}`}
+                          onChange={(date) => {
+                            if (date) {
+                              console.log(date.toISOString());
+                              handleFieldChange(
+                                'birthDate',
+                                date.toISOString(),
+                              );
+                            }
+                          }}
+                          slotProps={{
+                            textField: {
+                              error: false,
+                            },
+                          }}
+                        />
+                      </LocalizationProvider>
                     </Col>
                   </Row>
                   <Row className="mb-1">

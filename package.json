@@ -72,6 +72,7 @@
   "scripts": {
     "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts",
     "build": "tsc && vite build --config config/vite.config.ts",
+    "start": "node setup.ts",
     "preview": "vite preview --config config/vite.config.ts",
     "test": "cross-env NODE_ENV=test jest --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
