@@ -28,6 +28,23 @@ import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for the Create Group Chat Modal functionality in the User Portal
+ *
+ * These tests cover the following scenarios:
+ * 1. Opening and closing the create new group chat modal, ensuring proper UI elements
+ *    like the dropdown, new group chat button, and close button are displayed and functional.
+ * 2. Creating a new group chat by interacting with the group name input field, organization
+ *    selection, and submission process. It also ensures that the create button is properly
+ *    triggered after filling out the required fields.
+ * 3. Adding and removing users from the group chat, testing the interactions with the add
+ *    and remove buttons, and verifying the submit button and search functionality for user selection.
+ *
+ * GraphQL mocks are used to simulate chat-related queries and mutations. The tests ensure that
+ * the modal behaves correctly in various user interaction scenarios, including handling of form
+ * fields, user management, and modal navigation.
+ */
+
 const { setItem } = useLocalStorage();
 
 const USER_JOINED_ORG_MOCK = [
@@ -2229,7 +2246,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     })),
   });
 
-  test('open and close create new direct chat modal', async () => {
+  it('open and close create new direct chat modal', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -2267,7 +2284,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('create new group chat', async () => {
+  it('create new group chat', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -2367,7 +2384,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     // });
   }, 3000);
 
-  test('add and remove user', async () => {
+  it('add and remove user', async () => {
     setItem('userId', '1');
     const mock = [
       ...USER_JOINED_ORG_MOCK,
