@@ -14,7 +14,7 @@ name: push workflow
 on:
   push:
     branches:
-      - develop-postgres   
+      - 'develop-postgres'   
       
 env:
     CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
