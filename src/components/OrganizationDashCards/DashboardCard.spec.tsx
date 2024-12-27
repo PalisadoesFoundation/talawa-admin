@@ -1,7 +1,6 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import DashboardCard from './DashboardCard';
-
+import React from 'react';
 describe('Testing the Dashboard Card', () => {
   test('should render props and text elements For event card', () => {
     const props = {

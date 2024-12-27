@@ -2334,6 +2334,66 @@ input::file-selector-button {
     width: 100%;
   }
 }
+@media (max-width: 600px) {
+  .cardBody {
+    min-height: 120px;
+  }
+
+  .cardBody .iconWrapper {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .cardBody .textWrapper {
+    margin-top: calc(0.5rem + 36px);
+    text-align: right;
+  }
+
+  .cardBody .textWrapper .primaryText {
+    font-size: 1.5rem;
+  }
+
+  .cardBody .textWrapper .secondaryText {
+    font-size: 1rem;
+  }
+}
+
+.cardBody {
+  padding: 1.25rem 1.5rem;
+}
+
+.cardBody .iconWrapper {
+  position: relative;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardBody .iconWrapper .themeOverlay {
+  background: var(--bs-primary);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.12;
+  border-radius: 50%;
+}
+
+.cardBody .textWrapper .primaryText {
+  font-size: 24px;
+  font-weight: bold;
+  display: block;
+}
+
+.cardBody .textWrapper .secondaryText {
+  font-size: 14px;
+  display: block;
+  color: var(--bs-secondary);
+}
 
 /* Loading OrgList CSS */
 
@@ -2987,14 +3047,20 @@ button[data-testid='createPostBtn'] {
     top: 45%;
   }
 }
-
+.cardItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--bs-gray-200);
+  border-radius: 8px;
+  margin-top: 20px;
+}
 @-webkit-keyframes zoomIn {
   0% {
     opacity: 0;
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
   }
-
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
@@ -3008,7 +3074,6 @@ button[data-testid='createPostBtn'] {
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
   }
-
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
@@ -3016,29 +3081,106 @@ button[data-testid='createPostBtn'] {
   }
 }
 
-/* AddOnEntry.tsx */
-
-.entrytoggle {
-  margin: 24px 24px 0 auto;
-  width: fit-content;
-}
-
-.entryaction {
-  margin-left: auto;
-  display: flex !important;
+.cardItem .iconWrapper {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  background-color: transparent;
-  color: #31bb6b;
-}
-.cardAddOnEntry {
-  border: 4px solid green;
-}
-.entryaction i {
-  margin-right: 8px;
 }
 
-.entryaction .spinner-grow {
-  height: 1rem;
-  width: 1rem;
-  margin-right: 8px;
+.cardItem .iconWrapper .themeOverlay {
+  background: var(--bs-primary);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.12;
+  border-radius: 50%;
+}
+
+.cardItem .title {
+  font-size: 1rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Fallback for browsers that don't support line-clamp */
+  margin-left: 3px;
+}
+/* Modern browsers - enable line clamping */
+@supports (-webkit-line-clamp: 1) {
+  .cardItem .title,
+  .cardItem .location,
+  .cardItem .time {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    white-space: initial;
+  }
+}
+.cardItem .location {
+  font-size: 0.9rem;
+  color: var(--bs-primary);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.cardItem .time {
+  font-size: 0.9rem;
+  color: var(--bs-secondary);
+}
+
+.cardItem .creator {
+  font-size: 1rem;
+  color: var(--bs-success, #21d015);
+}
+.rightCard {
+  display: flex;
+  gap: 7px;
+  min-width: 170px;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 10px;
+  overflow-x: hidden;
+  width: 210px;
+
+  @keyframes zoomIn {
+    0% {
+      opacity: 0;
+      -webkit-transform: scale(0.5);
+      transform: scale(0.5);
+    }
+
+    100% {
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
+
+  /* AddOnEntry.tsx */
+
+  .entrytoggle {
+    margin: 24px 24px 0 auto;
+    width: fit-content;
+  }
+
+  .entryaction {
+    margin-left: auto;
+    display: flex !important;
+    align-items: center;
+    background-color: transparent;
+    color: #31bb6b;
+  }
+
+  .entryaction .spinner-grow {
+    height: 1rem;
+    width: 1rem;
+    margin-right: 8px;
+  }
 }

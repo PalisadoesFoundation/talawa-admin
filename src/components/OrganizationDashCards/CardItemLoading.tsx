@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from './CardItem.module.css';
+import styles from '../../style/app.module.css';
 
 /**
  * CardItemLoading component is a loading state for the card item. It is used when the data is being fetched.
  * @returns JSX.Element
  */
-const cardItemLoading = (): JSX.Element => {
+const CardItemLoading = (): JSX.Element => {
   return (
     <>
       <div
@@ -28,4 +28,4 @@ const cardItemLoading = (): JSX.Element => {
   );
 };
 
-export default cardItemLoading;
+export default CardItemLoading;
