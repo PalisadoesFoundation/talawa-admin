@@ -17,7 +17,8 @@ on:
       - 'develop-postgres'   
       
 env:
-    CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
+  CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
+  ssh-private-key: ${{ secrets.DEPLOY_GITHUB_PAGES }}
   
 jobs:
   Deploy-Docusaurus:
