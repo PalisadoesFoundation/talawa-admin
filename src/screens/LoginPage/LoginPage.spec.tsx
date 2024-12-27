@@ -1,12 +1,16 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  within,
+  waitFor,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import 'jest-localstorage-mock';
-import 'jest-location-mock';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import LoginPage from './LoginPage';
 import {
@@ -19,7 +23,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import { debug } from 'jest-preview';
+import { vi, beforeEach, expect, it, describe } from 'vitest';
 
 const MOCKS = [
   {
@@ -208,28 +212,29 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('Constant/constant.ts', () => ({
-  ...jest.requireActual('Constant/constant.ts'),
+vi.mock('Constant/constant.ts', async () => ({
+  ...(await vi.importActual('Constant/constant.ts')),
   REACT_APP_USE_RECAPTCHA: 'yes',
   RECAPTCHA_SITE_KEY: 'xxx',
 }));
 
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
 }));
 
-jest.mock('react-google-recaptcha', () => {
-  const react = jest.requireActual('react');
+const resetReCAPTCHA = vi.fn();
+vi.mock('react-google-recaptcha', async () => {
+  const react = await vi.importActual<typeof React>('react');
   const recaptcha = react.forwardRef(
     (
       props: {
@@ -238,6 +243,12 @@ jest.mock('react-google-recaptcha', () => {
       ref: React.LegacyRef<HTMLInputElement> | undefined,
     ): JSX.Element => {
       const { onChange, ...otherProps } = props;
+
+      Object.defineProperty(ref, 'current', {
+        value: {
+          reset: resetReCAPTCHA,
+        },
+      });
 
       const handleChange = (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -260,12 +271,23 @@ jest.mock('react-google-recaptcha', () => {
       );
     },
   );
-  return recaptcha;
+  return {
+    __esModule: true,
+    default: recaptcha,
+  };
 });
 
 describe('Testing Login Page Screen', () => {
-  test('Component Should be rendered properly', async () => {
-    window.location.assign('/orglist');
+  it('Component Should be rendered properly', async () => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/orglist',
+        origin: 'https://localhost:4321',
+        pathname: '/orglist',
+      },
+    });
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -284,10 +306,10 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(adminLink);
     await wait();
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
-    expect(window.location).toBeAt('/orglist');
+    expect(window.location.pathname).toBe('/orglist');
   });
 
-  test('There should be default values of pre-login data when queried result is null', async () => {
+  it('There should be default values of pre-login data when queried result is null', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -311,7 +333,7 @@ describe('Testing Login Page Screen', () => {
     expect(screen.queryAllByTestId('preLoginSocialMedia')[0]).toBeUndefined();
   });
 
-  test('There should be a different values of pre-login data if the queried result is not null', async () => {
+  it('There should be a different values of pre-login data if the queried result is not null', async () => {
     render(
       <MockedProvider addTypename={true} link={link2}>
         <BrowserRouter>
@@ -332,7 +354,7 @@ describe('Testing Login Page Screen', () => {
     expect(screen.queryAllByTestId('PalisadoesSocialMedia')[0]).toBeUndefined();
   });
 
-  test('Testing registration functionality', async () => {
+  it('Testing registration functionality', async () => {
     const formData = {
       firstName: 'John',
       lastName: 'Doe',
@@ -377,7 +399,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
-  test('Testing registration functionality when all inputs are invalid', async () => {
+  it('Testing registration functionality when all inputs are invalid', async () => {
     const formData = {
       firstName: '1234',
       lastName: '8890',
@@ -421,7 +443,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
-  test('Testing registration functionality, when password and confirm password is not same', async () => {
+  it('Testing registration functionality, when password and confirm password is not same', async () => {
     const formData = {
       firstName: 'John',
       lastName: 'Doe',
@@ -464,7 +486,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
-  test('Testing registration functionality, when input is not filled correctly', async () => {
+  it('Testing registration functionality, when input is not filled correctly', async () => {
     const formData = {
       firstName: 'J',
       lastName: 'D',
@@ -507,7 +529,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
-  test('switches to login tab on successful registration', async () => {
+  it('switches to login tab on successful registration', async () => {
     const formData = {
       firstName: 'John',
       lastName: 'Doe',
@@ -555,7 +577,7 @@ describe('Testing Login Page Screen', () => {
     expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
   });
 
-  test('Testing toggle login register portion', async () => {
+  it('Testing toggle login register portion', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -577,7 +599,7 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
-  test('Testing login functionality', async () => {
+  it('Testing login functionality', async () => {
     const formData = {
       email: 'johndoe@gmail.com',
       password: 'johndoe',
@@ -608,7 +630,87 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
-  test('Testing password preview feature for login', async () => {
+  it('Testing ReCaptcha functionality, it should refresh on unsuccessful SignUp, using duplicate email', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'johnDoe@1',
+      confirmPassword: 'johnDoe@1',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName,
+    );
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword,
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+
+    await waitFor(() => {
+      expect(resetReCAPTCHA).toBeCalled();
+    });
+  });
+
+  it('Testing ReCaptcha functionality, it should refresh on unsuccessful login', async () => {
+    const formData = {
+      email: 'wrong_email@gmail.com',
+      password: 'wrong_password',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      formData.password,
+    );
+
+    userEvent.click(screen.getByTestId('loginBtn'));
+
+    await waitFor(() => {
+      expect(resetReCAPTCHA).toBeCalled();
+    });
+  });
+
+  it('Testing password preview feature for login', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -637,7 +739,7 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
-  test('Testing password preview feature for register', async () => {
+  it('Testing password preview feature for register', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -668,7 +770,7 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
-  test('Testing confirm password preview feature', async () => {
+  it('Testing confirm password preview feature', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -699,7 +801,7 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
-  test('Testing for the password error warning when user firsts lands on a page', async () => {
+  it('Testing for the password error warning when user firsts lands on a page', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -716,7 +818,7 @@ describe('Testing Login Page Screen', () => {
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
 
-  test('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
+  it('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
     const password = {
       password: '7',
     };
@@ -745,7 +847,7 @@ describe('Testing Login Page Screen', () => {
     expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
   });
 
-  test('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
+  it('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
     const password = {
       password: '12345678',
     };
@@ -774,7 +876,7 @@ describe('Testing Login Page Screen', () => {
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
 
-  test('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
+  it('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
     const password = {
       password: '7',
     };
@@ -803,7 +905,7 @@ describe('Testing Login Page Screen', () => {
     expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
   });
 
-  test('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
+  it('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
     const password = {
       password: '12345678',
     };
@@ -834,8 +936,16 @@ describe('Testing Login Page Screen', () => {
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
 
-  test('Component Should be rendered properly for user login', async () => {
-    window.location.assign('/user/organizations');
+  it('Component Should be rendered properly for user login', async () => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/user/organizations',
+        origin: 'https://localhost:4321',
+        pathname: '/user/organizations',
+      },
+    });
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -854,10 +964,10 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(userLink);
     await wait();
     expect(screen.getByText(/User Login/i)).toBeInTheDocument();
-    expect(window.location).toBeAt('/user/organizations');
+    expect(window.location.pathname).toBe('/user/organizations');
   });
 
-  test('on value change of ReCAPTCHA onChange event should be triggered in both the captcha', async () => {
+  it('on value change of ReCAPTCHA onChange event should be triggered in both the captcha', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -890,7 +1000,7 @@ describe('Testing Login Page Screen', () => {
 });
 
 describe('Testing redirect if already logged in', () => {
-  test('Logged in as USER', async () => {
+  it('Logged in as USER', async () => {
     const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
     setItem('userId', 'id');
@@ -908,7 +1018,7 @@ describe('Testing redirect if already logged in', () => {
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
   });
-  test('Logged in as Admin or SuperAdmin', async () => {
+  it('Logged in as Admin or SuperAdmin', async () => {
     const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
     setItem('userId', null);
@@ -927,7 +1037,7 @@ describe('Testing redirect if already logged in', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
   });
 });
-test('Render the Select Organization list and change the option', async () => {
+it('Render the Select Organization list and change the option', async () => {
   render(
     <MockedProvider addTypename={false} link={link3}>
       <BrowserRouter>
@@ -951,17 +1061,15 @@ test('Render the Select Organization list and change the option', async () => {
   fireEvent.change(input, { target: { value: 'a' } });
   fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
   fireEvent.keyDown(autocomplete, { key: 'Enter' });
-
-  debug();
 });
 
 describe('Talawa-API server fetch check', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  test('Checks if Talawa-API resource is loaded successfully', async () => {
-    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
+  it('Checks if Talawa-API resource is loaded successfully', async () => {
+    global.fetch = vi.fn(() => Promise.resolve({} as unknown as Response));
 
     await act(async () => {
       render(
@@ -980,9 +1088,9 @@ describe('Talawa-API server fetch check', () => {
     expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
   });
 
-  test('displays warning message when resource loading fails', async () => {
+  it('displays warning message when resource loading fails', async () => {
     const mockError = new Error('Network error');
-    global.fetch = jest.fn(() => Promise.reject(mockError));
+    global.fetch = vi.fn(() => Promise.reject(mockError));
 
     await act(async () => {
       render(
