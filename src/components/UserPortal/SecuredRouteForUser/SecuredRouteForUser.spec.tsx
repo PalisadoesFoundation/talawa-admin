@@ -4,6 +4,16 @@ import { render, screen, waitFor } from '@testing-library/react';
 import SecuredRouteForUser from './SecuredRouteForUser';
 import useLocalStorage from 'utils/useLocalstorage';
 
+/**
+ * Unit tests for SecuredRouteForUser component:
+ *
+ * 1. **Logged-in user**: Verifies that the route renders when 'IsLoggedIn' is set to 'TRUE'.
+ * 2. **Not logged-in user**: Ensures redirection to the login page when 'IsLoggedIn' is 'FALSE'.
+ * 3. **Logged-in user with admin access**: Checks that the route renders for a logged-in user with 'AdminFor' set (i.e., admin of an organization).
+ *
+ * LocalStorage values like 'IsLoggedIn' and 'AdminFor' are set to simulate different user states.
+ */
+
 const { setItem } = useLocalStorage();
 
 describe('SecuredRouteForUser', () => {

@@ -23,6 +23,24 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for the PostCard component in the User Portal.
+ *
+ * These tests ensure the PostCard component behaves as expected:
+ *
+ * 1. **Component rendering**: Verifies correct rendering with props like title, text, and creator info.
+ * 2. **Dropdown functionality**: Tests the dropdown for editing and deleting posts.
+ * 3. **Edit post**: Ensures the post can be edited with a success message.
+ * 4. **Delete post**: Verifies post deletion works with a success message.
+ * 5. **Like/unlike post**: Ensures the UI updates when a user likes or unlikes a post.
+ * 6. **Post image**: Verifies post image rendering.
+ * 7. **Create comment**: Ensures a comment is created successfully.
+ * 8. **Like/unlike comment**: Tests liking/unliking comments.
+ * 9. **Comment modal**: Verifies the comment modal appears when clicked.
+ *
+ * Mocked GraphQL data is used for simulating backend behavior.
+ */
+
 const { setItem, getItem } = useLocalStorage();
 
 vi.mock('react-toastify', () => ({

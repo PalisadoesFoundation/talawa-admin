@@ -10,6 +10,18 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import PromotedPost from './PromotedPost';
 
+/**
+ * Unit tests for the PromotedPost component.
+ *
+ * 1. **Render check**: Verifies the component renders correctly with props like title and image.
+ * 2. **Image prop check**: Tests if the component renders correctly with an image.
+ * 3. **Icon display**: Ensures the icon (StarPurple500Icon) is displayed.
+ * 4. **Text display**: Checks that the post title is displayed correctly.
+ * 5. **Image display**: Verifies the correct image is displayed when the image prop is set.
+ *
+ * GraphQL data is mocked for backend simulation.
+ */
+
 const link = new StaticMockLink([], true);
 
 async function wait(ms = 100): Promise<void> {
