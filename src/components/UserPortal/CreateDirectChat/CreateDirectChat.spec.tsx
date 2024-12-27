@@ -23,6 +23,21 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 const { setItem } = useLocalStorage();
 
+/**
+ * Unit tests for the Create Direct Chat Modal functionality in the User Portal
+ *
+ * These tests cover the following scenarios:
+ * 1. Opening and closing the create new direct chat modal, ensuring proper UI elements
+ *    like dropdown, search input, and submit button are displayed and functional.
+ * 2. Creating a new direct chat, which includes testing the interaction with the add button,
+ *    submitting the chat, and closing the modal.
+ *
+ * Tests involve interacting with the modal's UI elements, performing actions like
+ * opening the dropdown, searching for users, clicking on the submit button, and closing
+ * the modal. GraphQL mocks are used for testing chat-related queries and mutations,
+ * ensuring that the modal behaves as expected when interacting with the GraphQL API.
+ */
+
 const UserConnectionListMock = [
   {
     request: {
@@ -1396,7 +1411,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     })),
   });
 
-  test('Open and close create new direct chat modal', async () => {
+  it('Open and close create new direct chat modal', async () => {
     const mock = [
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...MESSAGE_SENT_TO_CHAT_MOCK,
@@ -1446,7 +1461,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('create new direct chat', async () => {
+  it('create new direct chat', async () => {
     setItem('userId', '1');
     const mock = [
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
