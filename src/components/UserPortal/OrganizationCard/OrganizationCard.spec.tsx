@@ -18,15 +18,17 @@ import useLocalStorage from 'utils/useLocalstorage';
 import {
   SEND_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
+  CANCEL_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
 
 const { getItem } = useLocalStorage();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -146,6 +148,21 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: CANCEL_MEMBERSHIP_REQUEST,
+      variables: {
+        membershipRequestId: '56gheqyr7deyfuiwfewifruy8',
+      },
+    },
+    result: {
+      data: {
+        cancelMembershipRequest: {
+          _id: '56gheqyr7deyfuiwfewifruy8',
+        },
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
@@ -189,7 +206,7 @@ let props = {
 };
 
 describe('Testing OrganizationCard Component [User Portal]', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -205,7 +222,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Component should be rendered properly if organization Image is not undefined', async () => {
+  it('Component should be rendered properly if organization Image is not undefined', async () => {
     props = {
       ...props,
       image: 'organizationImage',
@@ -226,7 +243,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Visit organization', async () => {
+  it('Visit organization', async () => {
     const cardProps = {
       ...props,
       id: '3',
@@ -258,7 +275,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     expect(window.location.pathname).toBe(`/user/organization/${cardProps.id}`);
   });
 
-  test('Send membership request', async () => {
+  it('Send membership request', async () => {
     props = {
       ...props,
       image: 'organizationImage',
@@ -286,7 +303,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
   });
 
-  test('send membership request to public org', async () => {
+  it('send membership request to public org', async () => {
     const cardProps = {
       ...props,
       id: '2',
@@ -316,13 +333,21 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledTimes(2);
   });
 
-  test('withdraw membership request', async () => {
+  it('withdraw membership request', async () => {
     const cardProps = {
       ...props,
       id: '3',
       image: 'organizationImage',
       userRegistrationRequired: true,
       membershipRequestStatus: 'pending',
+      membershipRequests: [
+        {
+          _id: '56gheqyr7deyfuiwfewifruy8',
+          user: {
+            _id: getItem('userId'),
+          },
+        },
+      ],
     };
 
     render(

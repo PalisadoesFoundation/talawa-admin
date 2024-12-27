@@ -27,7 +27,7 @@ let props = {
 };
 
 describe('Testing PromotedPost Test', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -43,7 +43,7 @@ describe('Testing PromotedPost Test', () => {
     await wait();
   });
 
-  test('Component should be rendered properly if prop image is not undefined', async () => {
+  it('Component should be rendered properly if prop image is not undefined', async () => {
     props = {
       ...props,
       image: 'promotedPostImage',
@@ -65,7 +65,7 @@ describe('Testing PromotedPost Test', () => {
   });
 });
 
-test('Component should display the icon correctly', async () => {
+it('Component should display the icon correctly', async () => {
   const { queryByTestId } = render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
@@ -84,7 +84,7 @@ test('Component should display the icon correctly', async () => {
   });
 });
 
-test('Component should display the text correctly', async () => {
+it('Component should display the text correctly', async () => {
   const { queryAllByText } = render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
@@ -103,7 +103,7 @@ test('Component should display the text correctly', async () => {
   });
 });
 
-test('Component should display the image correctly', async () => {
+it('Component should display the image correctly', async () => {
   props = {
     ...props,
     image: 'promotedPostImage',

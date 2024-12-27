@@ -1,6 +1,5 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import 'jest-localstorage-mock';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -17,6 +16,7 @@ import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 
 import { createMemoryHistory } from 'history';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
 const { setItem, removeItem } = useLocalStorage();
 
@@ -167,23 +167,26 @@ const navbarProps = {
   currentPage: 'home',
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: organizationId }),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: organizationId }),
+  };
+});
 
 describe('Testing OrganizationNavbar Component [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
+      addListener: vi.fn(), // Deprecated
+      removeListener: vi.fn(), // Deprecated
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
     })),
   });
 
@@ -193,7 +196,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     });
   });
 
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -217,7 +220,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     // expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
-  test('should navigate correctly on clicking a plugin', async () => {
+  it('should navigate correctly on clicking a plugin', async () => {
     const history = createMemoryHistory();
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -240,7 +243,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(history.location.pathname).toBe(`/user/people/${organizationId}`);
   });
 
-  test('The language is switched to English', async () => {
+  it('The language is switched to English', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -270,7 +273,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     // expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
-  test('The language is switched to fr', async () => {
+  it('The language is switched to fr', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -294,7 +297,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('fr');
   });
 
-  test('The language is switched to hi', async () => {
+  it('The language is switched to hi', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -318,7 +321,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('hi');
   });
 
-  test('The language is switched to sp', async () => {
+  it('The language is switched to sp', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -342,7 +345,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('sp');
   });
 
-  test('The language is switched to zh', async () => {
+  it('The language is switched to zh', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -366,7 +369,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('zh');
   });
 
-  test('Component should be rendered properly if plugins are present in localStorage', async () => {
+  it('Component should be rendered properly if plugins are present in localStorage', async () => {
     setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
@@ -390,7 +393,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     removeItem('talawaPlugins');
   });
 
-  test('should remove plugin if uninstalledOrgs contains organizationId', async () => {
+  it('should remove plugin if uninstalledOrgs contains organizationId', async () => {
     setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
@@ -412,7 +415,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     });
   });
 
-  test('should render plugin if uninstalledOrgs does not contain organizationId', async () => {
+  it('should render plugin if uninstalledOrgs does not contain organizationId', async () => {
     setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
@@ -434,7 +437,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     });
   });
 
-  test('should do nothing if pluginName is not found in the rendered plugins', async () => {
+  it('should do nothing if pluginName is not found in the rendered plugins', async () => {
     render(
       <MockedProvider addTypename={false} link={link4}>
         <BrowserRouter>

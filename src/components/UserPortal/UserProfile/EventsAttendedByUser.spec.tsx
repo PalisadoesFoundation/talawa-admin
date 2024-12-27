@@ -96,7 +96,7 @@ describe('EventsAttendedByUser Component', () => {
     t: mockT,
   };
 
-  test('renders the component with events', () => {
+  it('renders the component with events', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <EventsAttendedByUser {...mockUserWithEvents} />
@@ -107,7 +107,7 @@ describe('EventsAttendedByUser Component', () => {
     expect(screen.getAllByTestId('usereventsCard')).toHaveLength(2);
   });
 
-  test('renders no events message when user has no events', () => {
+  it('renders no events message when user has no events', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <EventsAttendedByUser {...mockUserWithoutEvents} />

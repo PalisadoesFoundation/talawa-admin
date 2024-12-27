@@ -20,7 +20,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import { vi } from 'vitest';
 const { setItem } = useLocalStorage();
 
 const UserConnectionListMock = [
@@ -1380,19 +1380,19 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Create Direct Chat Modal [User Portal]', () => {
-  window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
+      addListener: vi.fn(), // Deprecated
+      removeListener: vi.fn(), // Deprecated
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
     })),
   });
 

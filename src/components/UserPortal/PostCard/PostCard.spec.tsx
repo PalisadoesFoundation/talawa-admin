@@ -21,14 +21,15 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
 const { setItem, getItem } = useLocalStorage();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
-    info: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
@@ -218,7 +219,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -263,7 +264,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -312,7 +313,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -368,7 +369,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -421,7 +422,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -471,7 +472,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -524,7 +525,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -574,7 +575,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -617,7 +618,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -701,7 +702,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
@@ -788,7 +789,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
     const beforeUserId = getItem('userId');
     setItem('userId', '1');
@@ -840,7 +841,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(

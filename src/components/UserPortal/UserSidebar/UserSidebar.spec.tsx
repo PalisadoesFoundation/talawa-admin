@@ -15,6 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import UserSidebar from './UserSidebar';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -27,7 +28,7 @@ const resizeWindow = (width: number): void => {
 
 const props = {
   hideDrawer: true,
-  setHideDrawer: jest.fn(),
+  setHideDrawer: vi.fn(),
 };
 
 const MOCKS = [
@@ -365,7 +366,7 @@ const renderUserSidebar = (
 
 describe('UserSidebar Component Tests in User Portal', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('UserSidebar component renders correctly with user data present', async () => {
@@ -471,7 +472,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
 
   describe('UserSidebar Drawer Visibility Tests on Smaller Screens', () => {
     beforeEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('Clicking a link closes the drawer when window width is 820px or less', () => {

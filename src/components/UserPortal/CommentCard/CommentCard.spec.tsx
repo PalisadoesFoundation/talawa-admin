@@ -7,12 +7,23 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-
 import CommentCard from './CommentCard';
 import userEvent from '@testing-library/user-event';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
+/**
+ * Unit tests for the CommentCard component.
+ *
+ * These tests ensure the CommentCard component renders and behaves as expected
+ * under different scenarios. They cover various functionalities like:
+ *  - Initial rendering with comment liked/not liked by user
+ *  - User liking a comment
+ *  - User unliking a comment
+ * Mocked dependencies like `useLocalStorage` and Apollo Client mocks are used
+ * to isolate the component and test its behavior independently.
+ */
 const { getItem, setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
@@ -56,8 +67,8 @@ const MOCKS = [
   },
 ];
 
-const handleLikeComment = jest.fn();
-const handleDislikeComment = jest.fn();
+const handleLikeComment = vi.fn();
+const handleDislikeComment = vi.fn();
 const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing CommentCard Component [User Portal]', () => {

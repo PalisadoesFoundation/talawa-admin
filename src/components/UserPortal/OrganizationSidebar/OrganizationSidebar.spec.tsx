@@ -13,6 +13,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationSidebar from './OrganizationSidebar';
+import { vi } from 'vitest';
 
 const MOCKS = [
   {
@@ -94,13 +95,17 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 let mockId = '';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockId }),
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockId }),
+  };
+});
 
 describe('Testing OrganizationSidebar Component [User Portal]', () => {
-  test('Component should be rendered properly when members and events list is empty', async () => {
+  it('Component should be rendered properly when members and events list is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -119,7 +124,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
   });
 
-  test('Component should be rendered properly when events list is not empty', async () => {
+  it('Component should be rendered properly when events list is not empty', async () => {
     mockId = 'events';
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -139,7 +144,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     expect(screen.queryByText('Event')).toBeInTheDocument();
   });
 
-  test('Component should be rendered properly when members list is not empty', async () => {
+  it('Component should be rendered properly when members list is not empty', async () => {
     mockId = 'members';
     render(
       <MockedProvider addTypename={false} link={link}>

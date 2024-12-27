@@ -12,6 +12,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Register from './Register';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
 
 const MOCKS = [
   {
@@ -56,15 +57,15 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-const setCurrentMode: React.Dispatch<SetStateAction<string>> = jest.fn();
+const setCurrentMode: React.Dispatch<SetStateAction<string>> = vi.fn();
 
 const props = {
   setCurrentMode,

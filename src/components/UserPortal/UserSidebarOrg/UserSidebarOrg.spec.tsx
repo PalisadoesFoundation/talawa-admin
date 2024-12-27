@@ -1,10 +1,8 @@
 import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceUserSidebarOrgProps } from './UserSidebarOrg';
 import UserSidebarOrg from './UserSidebarOrg';
@@ -15,6 +13,7 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -47,7 +46,7 @@ const props: InterfaceUserSidebarOrgProps = {
     },
   ],
   hideDrawer: false,
-  setHideDrawer: jest.fn(),
+  setHideDrawer: vi.fn(),
 };
 
 const MOCKS = [
@@ -213,11 +212,11 @@ const defaultScreens = [
   'All Organizations',
 ];
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -244,7 +243,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   localStorage.clear();
 });
 

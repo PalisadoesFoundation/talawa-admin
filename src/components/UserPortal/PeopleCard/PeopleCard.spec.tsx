@@ -30,7 +30,7 @@ let props = {
 };
 
 describe('Testing PeopleCard Component [User Portal]', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -46,7 +46,7 @@ describe('Testing PeopleCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Component should be rendered properly if person image is not undefined', async () => {
+  it('Component should be rendered properly if person image is not undefined', async () => {
     props = {
       ...props,
       image: 'personImage',

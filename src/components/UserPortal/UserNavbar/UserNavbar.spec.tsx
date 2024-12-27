@@ -39,7 +39,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     });
   });
 
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -55,7 +55,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await wait();
   });
 
-  test('The language is switched to English', async () => {
+  it('The language is switched to English', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -79,7 +79,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('en');
   });
 
-  test('The language is switched to fr', async () => {
+  it('The language is switched to fr', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -103,7 +103,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('fr');
   });
 
-  test('The language is switched to hi', async () => {
+  it('The language is switched to hi', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -127,7 +127,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('hi');
   });
 
-  test('The language is switched to sp', async () => {
+  it('The language is switched to sp', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -151,7 +151,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('sp');
   });
 
-  test('The language is switched to zh', async () => {
+  it('The language is switched to zh', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -175,7 +175,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('zh');
   });
 
-  test('User can see and interact with the dropdown menu', async () => {
+  it('User can see and interact with the dropdown menu', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -195,7 +195,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(screen.getByTestId('logoutBtn')).toBeInTheDocument();
   });
 
-  test('User can navigate to the "Settings" page', async () => {
+  it('User can navigate to the "Settings" page', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

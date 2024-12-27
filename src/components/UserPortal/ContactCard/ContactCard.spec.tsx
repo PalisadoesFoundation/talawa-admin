@@ -10,7 +10,19 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import ContactCard from './ContactCard';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
+/**
+ * Unit tests for the ContactCard component.
+ *
+ * These tests ensure the ContactCard component renders and behaves as expected
+ * under different scenarios. They cover various functionalities like:
+ *  - Rendering the contact card with and without a profile image
+ *  - Selecting a contact by clicking on the card
+ *  - Applying a grey background color to the selected contact card (for groups)
+ * Mocked dependencies like StaticMockLink are used
+ * to isolate the component and test its behavior independently.
+ */
 const link = new StaticMockLink([], true);
 
 async function wait(ms = 100): Promise<void> {
@@ -30,8 +42,8 @@ let props = {
   image: '',
   selectedContact: '',
   type: '',
-  setSelectedContact: jest.fn(),
-  setSelectedChatType: jest.fn(),
+  setSelectedContact: vi.fn(),
+  setSelectedChatType: vi.fn(),
 };
 
 describe('Testing ContactCard Component [User Portal]', () => {
