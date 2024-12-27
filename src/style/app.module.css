@@ -72,7 +72,7 @@
 }
 
 .capacityLabel {
-  background-color: #286fe0 !important;
+  background-color: var(--bs-primary);
   color: white;
   height: 22.19px;
   font-size: 12px;
