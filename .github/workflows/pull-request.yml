@@ -110,6 +110,7 @@ jobs:
             .eslintignore
             .prettierrc
             .prettierignore
+            .nojekyll
             vite.config.ts
             docker-compose.yaml
             Dockerfile

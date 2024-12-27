@@ -13,6 +13,22 @@ import UserNavbar from './UserNavbar';
 import userEvent from '@testing-library/user-event';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
+/**
+ * Unit tests for UserNavbar component [User Portal]:
+ *
+ * 1. **Rendering UserNavbar**: Verifies that the `UserNavbar` component renders correctly.
+ * 2. **Switching language to English**: Ensures that clicking the language dropdown and selecting 'English' updates the language cookie to 'en'.
+ * 3. **Switching language to French**: Verifies that selecting 'French' updates the language cookie to 'fr'.
+ * 4. **Switching language to Hindi**: Confirms that choosing 'Hindi' updates the language cookie to 'hi'.
+ * 5. **Switching language to Spanish**: Ensures that selecting 'Spanish' sets the language cookie to 'sp'.
+ * 6. **Switching language to Chinese**: Verifies that selecting 'Chinese' changes the language cookie to 'zh'.
+ * 7. **Interacting with the dropdown menu**: Ensures the user can open the dropdown and see available options like 'Settings' and 'Logout'.
+ * 8. **Navigating to the 'Settings' page**: Confirms that clicking 'Settings' in the dropdown correctly navigates the user to the "/user/settings" page.
+ *
+ * The tests simulate interactions with the language dropdown and the user dropdown menu to ensure proper functionality of language switching and navigation.
+ * Mocked GraphQL mutation (`REVOKE_REFRESH_TOKEN`) and mock store are used to test the component in an isolated environment.
+ */
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -39,7 +55,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     });
   });
 
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -55,7 +71,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await wait();
   });
 
-  test('The language is switched to English', async () => {
+  it('The language is switched to English', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -79,7 +95,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('en');
   });
 
-  test('The language is switched to fr', async () => {
+  it('The language is switched to fr', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -103,7 +119,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('fr');
   });
 
-  test('The language is switched to hi', async () => {
+  it('The language is switched to hi', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -127,7 +143,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('hi');
   });
 
-  test('The language is switched to sp', async () => {
+  it('The language is switched to sp', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -151,7 +167,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('sp');
   });
 
-  test('The language is switched to zh', async () => {
+  it('The language is switched to zh', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -175,7 +191,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('zh');
   });
 
-  test('User can see and interact with the dropdown menu', async () => {
+  it('User can see and interact with the dropdown menu', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -195,7 +211,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(screen.getByTestId('logoutBtn')).toBeInTheDocument();
   });
 
-  test('User can navigate to the "Settings" page', async () => {
+  it('User can navigate to the "Settings" page', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

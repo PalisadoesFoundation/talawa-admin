@@ -10,6 +10,18 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import PeopleCard from './PeopleCard';
 
+/**
+ * Unit tests for the PeopleCard component in the User Portal.
+ *
+ * These tests ensure that the PeopleCard component renders correctly with and without an image,
+ * validating that all information (name, role, email, etc.) is displayed as expected.
+ *
+ * 1. **Component renders properly**: Verifies that the component renders correctly with the given props (name, email, role, etc.).
+ * 2. **Component renders properly if the person image is provided**: Ensures the component correctly displays the image when a valid image URL is passed in the props.
+ *
+ * Mocked GraphQL queries are used to simulate backend behavior, though no queries are required for these tests.
+ */
+
 const link = new StaticMockLink([], true);
 
 async function wait(ms = 100): Promise<void> {
@@ -30,7 +42,7 @@ let props = {
 };
 
 describe('Testing PeopleCard Component [User Portal]', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -46,7 +58,7 @@ describe('Testing PeopleCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Component should be rendered properly if person image is not undefined', async () => {
+  it('Component should be rendered properly if person image is not undefined', async () => {
     props = {
       ...props,
       image: 'personImage',

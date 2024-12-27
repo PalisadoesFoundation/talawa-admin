@@ -13,6 +13,20 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationSidebar from './OrganizationSidebar';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for the OrganizationSidebar component in the User Portal.
+ *
+ * These tests validate the rendering and behavior of the OrganizationSidebar component,
+ * ensuring that it displays correct content based on the availability of members and events.
+ *
+ * 1. **Component renders properly when members and events lists are empty**: Verifies the correct display of "No Members to show" and "No Events to show" when both lists are empty.
+ * 2. **Component renders properly when events list is not empty**: Tests that the events section is rendered correctly when events are available, and "No Events to show" is not displayed.
+ * 3. **Component renders properly when members list is not empty**: Verifies the correct display of members when available, ensuring "No Members to show" is not displayed.
+ *
+ * Mocked GraphQL queries simulate backend responses for members and events lists.
+ */
 
 const MOCKS = [
   {
@@ -94,13 +108,17 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 let mockId = '';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockId }),
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockId }),
+  };
+});
 
 describe('Testing OrganizationSidebar Component [User Portal]', () => {
-  test('Component should be rendered properly when members and events list is empty', async () => {
+  it('Component should be rendered properly when members and events list is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -119,7 +137,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
   });
 
-  test('Component should be rendered properly when events list is not empty', async () => {
+  it('Component should be rendered properly when events list is not empty', async () => {
     mockId = 'events';
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -139,7 +157,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     expect(screen.queryByText('Event')).toBeInTheDocument();
   });
 
-  test('Component should be rendered properly when members list is not empty', async () => {
+  it('Component should be rendered properly when members list is not empty', async () => {
     mockId = 'members';
     render(
       <MockedProvider addTypename={false} link={link}>
