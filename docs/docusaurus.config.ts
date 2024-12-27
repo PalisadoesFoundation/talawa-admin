@@ -14,7 +14,7 @@ const config: Config = {
   deploymentBranch: 'gh-pages',
 
   organizationName: 'PalisadoesFoundation', // GitHub org
-  projectName: 'docs-admin', // repo name
+  projectName: 'talawa-admin', // repo name
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
