@@ -4,6 +4,18 @@ import { EventsAttendedByUser } from './EventsAttendedByUser';
 import { MockedProvider } from '@apollo/client/testing';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 
+/**
+ * Unit tests for EventsAttendedByUser component:
+ *
+ * 1. **Rendering with events**: Verifies that the component renders properly when the user has attended events.
+ *    - It checks for the presence of a title ('eventAttended') and ensures the correct number of event cards are rendered (2 events in this case).
+ * 2. **Rendering without events**: Ensures that when the user has not attended any events, a message indicating no events attended is displayed.
+ *    - It checks for the presence of a 'noeventsAttended' message and ensures no event cards are rendered.
+ *
+ * Mock GraphQL queries (using `MockedProvider`) simulate the fetching of event details.
+ * The tests check the proper handling of different user event attendance scenarios.
+ */
+
 const mockT = (key: string, params?: Record<string, string>): string => {
   if (params) {
     return Object.entries(params).reduce(

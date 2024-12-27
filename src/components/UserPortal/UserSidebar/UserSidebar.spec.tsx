@@ -17,6 +17,24 @@ import UserSidebar from './UserSidebar';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for UserSidebar component:
+ *
+ * 1. **Rendering with user data**: Verifies correct rendering when user data is fetched.
+ * 2. **Logo and title**: Ensures logo, title, and left drawer are visible.
+ * 3. **Empty organizations list**: Tests rendering when the user has no joined organizations.
+ * 4. **Organization image rendering**: Verifies rendering when organizations have an image.
+ * 5. **User profile and links**: Ensures user details and links like 'My Organizations' and 'Settings' are visible.
+ * 6. **Responsive rendering**: Tests correct rendering and drawer toggle on smaller screens.
+ * 7. **Active button style**: Verifies button style changes when clicked.
+ * 8. **Translation display**: Ensures translated text is shown.
+ * 9. **Sidebar closure on mobile**: Verifies sidebar closes when a link is clicked on mobile view.
+ * 10. **Drawer visibility on small screens**: Tests drawer visibility toggle based on `hideDrawer` prop.
+ * 11. **Drawer state change**: Verifies drawer visibility changes when `hideDrawer` prop changes.
+ *
+ * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
+ */
+
 const { setItem } = useLocalStorage();
 
 const resizeWindow = (width: number): void => {
@@ -369,7 +387,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     vi.clearAllMocks();
   });
 
-  test('UserSidebar component renders correctly with user data present', async () => {
+  it('UserSidebar component renders correctly with user data present', async () => {
     await act(async () => {
       renderUserSidebar('properId', link);
       await wait();
@@ -377,7 +395,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
   });
 
-  test('Displays the logo and title text of the User Portal', async () => {
+  it('Displays the logo and title text of the User Portal', async () => {
     await act(async () => {
       renderUserSidebar('properId', link);
       await wait();
@@ -386,7 +404,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     expect(screen.getByTestId('leftDrawerContainer')).toBeVisible();
   });
 
-  test('UserSidebar renders correctly when joinedOrganizations list is empty', async () => {
+  it('UserSidebar renders correctly when joinedOrganizations list is empty', async () => {
     await act(async () => {
       renderUserSidebar('orgEmpty', link);
       await wait();
@@ -394,7 +412,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
   });
 
-  test('Renders UserSidebar component with organization image when present', async () => {
+  it('Renders UserSidebar component with organization image when present', async () => {
     await act(async () => {
       renderUserSidebar('imagePresent', link);
       await wait();
@@ -402,7 +420,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     expect(screen.getByText('Settings')).toBeInTheDocument();
   });
 
-  test('User profile data renders with all expected navigation links visible', async () => {
+  it('User profile data renders with all expected navigation links visible', async () => {
     await act(async () => {
       renderUserSidebar('properId', link);
       await wait();
@@ -414,7 +432,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     });
   });
 
-  test('UserSidebar renders correctly on smaller screens and toggles drawer visibility', async () => {
+  it('UserSidebar renders correctly on smaller screens and toggles drawer visibility', async () => {
     await act(async () => {
       resizeWindow(800);
       render(
@@ -434,7 +452,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     expect(props.setHideDrawer).toHaveBeenCalledWith(true);
   });
 
-  test('Active route button style changes correctly upon click', async () => {
+  it('Active route button style changes correctly upon click', async () => {
     await act(async () => {
       renderUserSidebar('properId', link);
       await wait();
@@ -449,7 +467,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     expect(settingsBtn).toHaveClass('text-white btn btn-success');
   });
 
-  test('Translation hook displays expected text in UserSidebar', async () => {
+  it('Translation hook displays expected text in UserSidebar', async () => {
     await act(async () => {
       renderUserSidebar('properId', link);
       await wait();
@@ -459,7 +477,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     ).toBeInTheDocument();
   });
 
-  test('handleLinkClick function closes the sidebar on mobile view when a link is clicked', async () => {
+  it('handleLinkClick function closes the sidebar on mobile view when a link is clicked', async () => {
     resizeWindow(800);
     await act(async () => {
       renderUserSidebar('properId', link);
@@ -475,7 +493,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
       vi.clearAllMocks();
     });
 
-    test('Clicking a link closes the drawer when window width is 820px or less', () => {
+    it('Clicking a link closes the drawer when window width is 820px or less', () => {
       act(() => {
         window.innerWidth = 820;
         window.dispatchEvent(new Event('resize'));
@@ -500,7 +518,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     });
 
     describe('UserSidebar Drawer State Tests', () => {
-      test('Drawer visibility changes based on hideDrawer prop', () => {
+      it('Drawer visibility changes based on hideDrawer prop', () => {
         const { rerender } = render(
           <MockedProvider addTypename={false}>
             <BrowserRouter>

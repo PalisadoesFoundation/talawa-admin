@@ -4,6 +4,18 @@ import { UserAddressFields } from './UserAddressFields';
 import { countryOptions } from 'utils/formEnumFields';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for UserAddressFields component:
+ *
+ * 1. **Rendering form fields**: Ensures address, state, and country fields are rendered.
+ * 2. **Displaying translated labels**: Verifies correct translations for labels.
+ * 3. **Handling input changes**: Tests if `handleFieldChange` is called with correct values for address, state, and country.
+ * 4. **Rendering country options**: Checks if all country options are displayed.
+ * 5. **Displaying initial values**: Ensures initial values (address, state, country) are correctly shown.
+ *
+ * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
+ */
+
 describe('UserAddressFields', () => {
   const mockProps = {
     tCommon: (key: string) => `translated_${key}`,

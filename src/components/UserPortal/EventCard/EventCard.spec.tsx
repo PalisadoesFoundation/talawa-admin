@@ -65,7 +65,7 @@ describe('Testing Event Card In User portal', () => {
     ],
   };
 
-  test('The card should be rendered properly, and all the details should be displayed correct', async () => {
+  it('The card should be rendered properly, and all the details should be displayed correct', async () => {
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -103,7 +103,7 @@ describe('Testing Event Card In User portal', () => {
     await waitFor(() => expect(queryByText('Register')).toBeInTheDocument());
   });
 
-  test('When the user is already registered', async () => {
+  it('When the user is already registered', async () => {
     setItem('userId', '234');
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
@@ -122,7 +122,7 @@ describe('Testing Event Card In User portal', () => {
     );
   });
 
-  test('Handle register should work properly', async () => {
+  it('Handle register should work properly', async () => {
     setItem('userId', '456');
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
@@ -171,7 +171,7 @@ describe('Event card when start and end time are not given', () => {
     ],
   };
 
-  test('Card is rendered correctly', async () => {
+  it('Card is rendered correctly', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

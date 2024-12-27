@@ -14,6 +14,19 @@ import i18nForTest from 'utils/i18nForTest';
 import StartPostModal from './StartPostModal';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for StartPostModal component:
+ *
+ * 1. **Rendering StartPostModal**: Verifies that the modal renders correctly when the `show` prop is set to `true`.
+ * 2. **Invalid post submission**: Ensures that when the post body is empty, an error toast is shown with the appropriate message ("Can't create a post with an empty body").
+ * 3. **Valid post submission**: Checks that a post with valid text triggers an info toast, and simulates the creation of a post with the message "Processing your post. Please wait."
+ * 4. **User image null**: Confirms that when the user image is null, a default image is displayed instead.
+ * 5. **User image not null**: Verifies that when the user image is provided, the correct user image is shown.
+ *
+ * Mocked GraphQL mutation (`CREATE_POST_MUTATION`) and toast notifications are used to simulate the post creation process.
+ * The `renderStartPostModal` function is used to render the modal with different user states and input values.
+ */
+
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),

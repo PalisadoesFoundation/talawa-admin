@@ -47,7 +47,7 @@ let props = {
 };
 
 describe('Testing ContactCard Component [User Portal]', () => {
-  test('Component should be rendered properly  if person image is undefined', async () => {
+  it('Component should be rendered properly  if person image is undefined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -63,7 +63,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Component should be rendered properly if person image is not undefined', async () => {
+  it('Component should be rendered properly if person image is not undefined', async () => {
     props = {
       ...props,
       image: 'personImage',
@@ -84,7 +84,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Contact gets selectected when component is clicked', async () => {
+  it('Contact gets selectected when component is clicked', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -104,7 +104,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Component is rendered with background color grey if the contact is selected', async () => {
+  it('Component is rendered with background color grey if the contact is selected', async () => {
     props = {
       ...props,
       selectedContact: '1',

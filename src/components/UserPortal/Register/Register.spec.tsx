@@ -87,7 +87,7 @@ const props = {
 };
 
 describe('Testing Register Component [User Portal]', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -103,7 +103,7 @@ describe('Testing Register Component [User Portal]', () => {
     await wait();
   });
 
-  test('Expect the mode to be changed to Login', async () => {
+  it('Expect the mode to be changed to Login', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -123,7 +123,7 @@ describe('Testing Register Component [User Portal]', () => {
     expect(setCurrentMode).toHaveBeenCalledWith('login');
   });
 
-  test('Expect toast.error to be called if email input is empty', async () => {
+  it('Expect toast.error to be called if email input is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -143,7 +143,7 @@ describe('Testing Register Component [User Portal]', () => {
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
-  test('Expect toast.error to be called if password input is empty', async () => {
+  it('Expect toast.error to be called if password input is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -164,7 +164,7 @@ describe('Testing Register Component [User Portal]', () => {
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
-  test('Expect toast.error to be called if first name input is empty', async () => {
+  it('Expect toast.error to be called if first name input is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -188,7 +188,7 @@ describe('Testing Register Component [User Portal]', () => {
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
-  test('Expect toast.error to be called if last name input is empty', async () => {
+  it('Expect toast.error to be called if last name input is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -244,7 +244,7 @@ describe('Testing Register Component [User Portal]', () => {
     );
   });
 
-  test('Expect toast.success to be called if valid credentials are entered.', async () => {
+  it('Expect toast.success to be called if valid credentials are entered.', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

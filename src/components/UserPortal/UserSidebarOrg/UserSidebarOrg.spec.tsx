@@ -15,6 +15,22 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for UserSidebarOrg component:
+ *
+ * 1. **Rendering with organization data**: Verifies correct rendering when data is fetched.
+ * 2. **Profile Page & Modal**: Ensures profile button and organization details modal appear.
+ * 3. **Menu Navigation**: Tests correct navigation when menu buttons like 'People' are clicked.
+ * 4. **Responsive Design**: Verifies sidebar behavior on screens.
+ * 5. **Organization Image**: Ensures correct rendering of organization image.
+ * 6. **Empty Organizations**: Verifies error message when no organizations exist.
+ * 7. **Drawer Visibility**: Tests drawer visibility with `hideDrawer` prop values.
+ * 8. **User Profile Rendering**: Confirms user details are displayed.
+ * 9. **Translation Display**: Ensures proper translation of UI text.
+ * 10. **Toast Notifications Mocking**: Mocks toast notifications during tests.
+ *
+ * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
+ */
 const { setItem } = useLocalStorage();
 
 const props: InterfaceUserSidebarOrgProps = {
@@ -252,7 +268,7 @@ const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
@@ -274,7 +290,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     });
   });
 
-  test('Testing Profile Page & Organization Detail Modal', async () => {
+  it('Testing Profile Page & Organization Detail Modal', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
@@ -294,7 +310,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
   });
 
-  test('Testing Menu Buttons', async () => {
+  it('Testing Menu Buttons', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
@@ -315,7 +331,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(global.window.location.pathname).toContain('/user/people/123');
   });
 
-  test('Testing when screen size is less than 820px', async () => {
+  it('Testing when screen size is less than 820px', async () => {
     setItem('SuperAdmin', true);
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -338,7 +354,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(window.location.pathname).toContain('user/people/123');
   });
 
-  test('Testing when image is present for Organization', async () => {
+  it('Testing when image is present for Organization', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
@@ -357,7 +373,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     await wait();
   });
 
-  test('Testing when Organization does not exists', async () => {
+  it('Testing when Organization does not exists', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
@@ -379,7 +395,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     ).toBeInTheDocument();
   });
 
-  test('Testing Drawer when hideDrawer is null', () => {
+  it('Testing Drawer when hideDrawer is null', () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
@@ -397,7 +413,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
   });
 
-  test('Testing Drawer when hideDrawer is true', () => {
+  it('Testing Drawer when hideDrawer is true', () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');

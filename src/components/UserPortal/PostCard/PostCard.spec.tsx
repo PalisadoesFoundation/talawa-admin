@@ -183,7 +183,7 @@ async function wait(ms = 100): Promise<void> {
 const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing PostCard Component [User Portal]', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
@@ -255,7 +255,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Dropdown component should be rendered properly', async () => {
+  it('Dropdown component should be rendered properly', async () => {
     setItem('userId', '2');
 
     const cardProps = {
@@ -304,7 +304,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     expect(screen.getByText('Delete')).toBeInTheDocument();
   });
 
-  test('Edit post should work properly', async () => {
+  it('Edit post should work properly', async () => {
     setItem('userId', '2');
 
     const cardProps = {
@@ -360,7 +360,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledWith('Post updated Successfully');
   });
 
-  test('Delete post should work properly', async () => {
+  it('Delete post should work properly', async () => {
     setItem('userId', '2');
 
     const cardProps = {
@@ -412,7 +412,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     );
   });
 
-  test('Component should be rendered properly if user has liked the post', async () => {
+  it('Component should be rendered properly if user has liked the post', async () => {
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
 
@@ -462,7 +462,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     }
   });
 
-  test('Component should be rendered properly if user unlikes a post', async () => {
+  it('Component should be rendered properly if user unlikes a post', async () => {
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
 
@@ -515,7 +515,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     }
   });
 
-  test('Component should be rendered properly if user likes a post', async () => {
+  it('Component should be rendered properly if user likes a post', async () => {
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
 
@@ -568,7 +568,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     }
   });
 
-  test('Component should be rendered properly if post image is defined', async () => {
+  it('Component should be rendered properly if post image is defined', async () => {
     const cardProps = {
       id: '',
       userImage: 'image.png',
@@ -611,7 +611,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Comment is created successfully after create comment button is clicked.', async () => {
+  it('Comment is created successfully after create comment button is clicked.', async () => {
     const cardProps = {
       id: '1',
       userImage: 'image.png',
@@ -834,7 +834,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       setItem('userId', beforeUserId);
     }
   });
-  test('Comment modal pops when show comments button is clicked.', async () => {
+  it('Comment modal pops when show comments button is clicked.', async () => {
     const cardProps = {
       id: '',
       userImage: 'image.png',

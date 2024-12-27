@@ -78,7 +78,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     });
   });
 
-  test('Component should be rendered properly if comment is already liked by the user.', async () => {
+  it('Component should be rendered properly if comment is already liked by the user.', async () => {
     const cardProps = {
       id: '1',
       creator: {
@@ -119,7 +119,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     }
   });
 
-  test('Component should be rendered properly if comment is not already liked by the user.', async () => {
+  it('Component should be rendered properly if comment is not already liked by the user.', async () => {
     const cardProps = {
       id: '1',
       creator: {
@@ -160,7 +160,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     }
   });
 
-  test('Component renders as expected if user likes the comment.', async () => {
+  it('Component renders as expected if user likes the comment.', async () => {
     const cardProps = {
       id: '1',
       creator: {
@@ -206,7 +206,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     }
   });
 
-  test('Component renders as expected if user unlikes the comment.', async () => {
+  it('Component renders as expected if user unlikes the comment.', async () => {
     const cardProps = {
       id: '1',
       creator: {
