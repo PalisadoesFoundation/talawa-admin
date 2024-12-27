@@ -630,6 +630,53 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
+  it('Testing ReCaptcha functionality, it should refresh on unsuccessful SignUp, using duplicate email', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'johnDoe@1',
+      confirmPassword: 'johnDoe@1',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName,
+    );
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword,
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+
+    await waitFor(() => {
+      expect(resetReCAPTCHA).toBeCalled();
+    });
+  });
+
   it('Testing ReCaptcha functionality, it should refresh on unsuccessful login', async () => {
     const formData = {
       email: 'wrong_email@gmail.com',

@@ -332,7 +332,6 @@ const loginPage = (): JSX.Element => {
         startSession();
       } else {
         toast.warn(tErrors('notFound') as string);
-        loginRecaptchaRef.current?.reset();
       }
     } catch (error) {
       errorHandler(t, error);
