@@ -3106,8 +3106,6 @@ button[data-testid='createPostBtn'] {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   white-space: nowrap; /* Fallback for browsers that don't support line-clamp */
   margin-left: 3px;
 }
@@ -3178,12 +3176,6 @@ button[data-testid='createPostBtn'] {
     align-items: center;
     background-color: transparent;
     color: #31bb6b;
-  }
-  .cardAddOnEntry {
-    border: 4px solid green;
-  }
-  .entryaction i {
-    margin-right: 8px;
   }
 
   .entryaction .spinner-grow {
