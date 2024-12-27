@@ -15,6 +15,19 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationSidebar from './OrganizationSidebar';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for the OrganizationSidebar component in the User Portal.
+ *
+ * These tests validate the rendering and behavior of the OrganizationSidebar component,
+ * ensuring that it displays correct content based on the availability of members and events.
+ *
+ * 1. **Component renders properly when members and events lists are empty**: Verifies the correct display of "No Members to show" and "No Events to show" when both lists are empty.
+ * 2. **Component renders properly when events list is not empty**: Tests that the events section is rendered correctly when events are available, and "No Events to show" is not displayed.
+ * 3. **Component renders properly when members list is not empty**: Verifies the correct display of members when available, ensuring "No Members to show" is not displayed.
+ *
+ * Mocked GraphQL queries simulate backend responses for members and events lists.
+ */
+
 const MOCKS = [
   {
     request: {

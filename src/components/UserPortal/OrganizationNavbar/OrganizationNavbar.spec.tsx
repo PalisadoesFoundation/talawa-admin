@@ -18,6 +18,27 @@ import { createMemoryHistory } from 'history';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for the OrganizationNavbar component.
+ *
+ * These tests validate the rendering and behavior of the component, ensuring it renders correctly,
+ * handles user interactions, and manages language and plugin updates.
+ *
+ * 1. **Component rendering**: Verifies correct rendering with provided props and organization details.
+ * 2. **Navigation on plugin click**: Simulates navigation when a plugin link is clicked.
+ * 3. **Language switch to English**: Tests if the language changes to English.
+ * 4. **Language switch to French**: Tests if the language changes to French.
+ * 5. **Language switch to Hindi**: Tests if the language changes to Hindi.
+ * 6. **Language switch to Spanish**: Tests if the language changes to Spanish.
+ * 7. **Language switch to Chinese**: Tests if the language changes to Chinese.
+ * 8. **Rendering plugins from localStorage**: Verifies correct rendering of plugins from localStorage.
+ * 9. **Plugin removal on uninstallation**: Ensures plugins are removed when uninstalled for the organization.
+ * 10. **Rendering plugins when not uninstalled**: Ensures plugins render if not uninstalled.
+ * 11. **No changes for unmatched plugin**: Ensures no changes when an unrecognized plugin update occurs.
+ *
+ * Mocked GraphQL queries and subscriptions simulate backend behavior.
+ */
+
 const { setItem, removeItem } = useLocalStorage();
 
 const organizationId = 'org1234';

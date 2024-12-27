@@ -23,6 +23,22 @@ import {
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for the OrganizationCard component in the User Portal
+ *
+ * These tests validate the behavior and rendering of the OrganizationCard component.
+ * The tests ensure the component displays properly with various states and that interactions
+ * such as sending membership requests and visiting organizations work as expected.
+ *
+ * 1. **Component should be rendered properly**: Tests if the component renders correctly with the provided props.
+ * 2. **Component should render properly with an image**: Verifies the component's behavior when an organization image is available.
+ * 3. **Visit organization**: Simulates a click on the "manage" button and verifies that the user is redirected to the correct organization page.
+ * 4. **Send membership request**: Tests if the membership request is successfully sent and verifies the success toast message.
+ * 5. **Send membership request to a public organization**: Validates sending a membership request to a public organization and verifies multiple success toast messages.
+ * 6. **Withdraw membership request**: Simulates withdrawing a membership request and verifies that the button works as expected.
+ *
+ * Mocked GraphQL queries and mutations are used to simulate the backend behavior for testing.
+ */
 const { getItem } = useLocalStorage();
 
 vi.mock('react-toastify', () => ({
