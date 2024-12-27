@@ -59,9 +59,7 @@ function orgPeopleListCard(
       /* istanbul ignore next */
       if (data) {
         toast.success(t('memberRemoved') as string);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        props.toggleRemoveModal();
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
