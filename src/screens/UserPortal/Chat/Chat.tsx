@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
+import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
@@ -20,21 +22,6 @@ interface InterfaceContactCardProps {
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
   isGroup: boolean;
 }
-
-interface InterfaceChat {
-  _id: string;
-  isGroup: boolean;
-  name: string;
-  users: InterfaceUser[];
-}
-
-interface InterfaceUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  image: string;
-}
-
 /**
  * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
  * It features a contact list with search functionality and displays the chat room for the selected contact.
@@ -59,11 +46,16 @@ interface InterfaceUser {
  * - Renders a chat room component for the selected contact.
  * - Displays a loading indicator while contact data is being fetched.
  *
- * @returns The rendered `chat` component.
+ * @returns  The rendered `chat` component.
  */
 export default function chat(): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'chat',
+  });
+  const { t: tCommon } = useTranslation('common');
+
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const [chats, setChats] = useState<InterfaceChat[]>([]);
+  const [chats, setChats] = useState<any>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
@@ -113,11 +105,28 @@ export default function chat(): JSX.Element {
     },
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (chatsListData) {
       setChats(chatsListData.chatsByUserId);
     }
   }, [chatsListData]);
+
+  // const handleSearch = (value: string): void => {
+  //   setFilterName(value);
+
+  //   contactRefetch();
+  // };
+  // const handleSearchByEnter = (e: any): void => {
+  //   if (e.key === 'Enter') {
+  //     const { value } = e.target;
+  //     handleSearch(value);
+  //   }
+  // };
+  // const handleSearchByBtnClick = (): void => {
+  //   const value =
+  //     (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
+  //   handleSearch(value);
+  // };
 
   return (
     <>
@@ -187,7 +196,7 @@ export default function chat(): JSX.Element {
                   className={styles.contactCardContainer}
                 >
                   {!!chats.length &&
-                    chats.map((chat) => {
+                    chats.map((chat: any) => {
                       const cardProps: InterfaceContactCardProps = {
                         id: chat._id,
                         title: !chat.isGroup
@@ -196,8 +205,10 @@ export default function chat(): JSX.Element {
                             : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
                           : chat.name,
                         image: chat.isGroup
-                          ? chat.users[1]?.image
-                          : chat.users[0]?.image,
+                          ? userId
+                            ? chat.users[1]?.image
+                            : chat.users[0]?.image
+                          : chat.image,
                         setSelectedContact,
                         selectedContact,
                         isGroup: chat.isGroup,
