@@ -1,53 +1,3 @@
-##########################################################
-# VsCode editor
-##########################################################
-
-.vscode
-
-##########################################################
-# Vim editor
-##########################################################
-
-# Swap
-[._]*.s[a-v][a-z]
-!*.svg  # comment out if you don't need vector files
-[._]*.sw[a-p]
-[._]s[a-rt-v][a-z]
-[._]ss[a-gi-z]
-[._]sw[a-p]
-
-# Session
-Session.vim
-Sessionx.vim
-
-# Temporary
-.netrwhist
-*~
-# Auto-generated tag files
-tags
-
-# Persistent undo
-[._]*.un~
-
-##########################################################
-# Python
-##########################################################
-
-__pycache__/
-*.py[cod]
-*$py.class
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-##########################################################
-# Docusaurus
-##########################################################
-
 # Dependencies
 /node_modules
 
@@ -57,8 +7,6 @@ venv.bak/
 # Generated files
 .docusaurus
 .cache-loader
-.package-lock.json
-package-lock.json
 
 # Misc
 .DS_Store
@@ -66,7 +14,6 @@ package-lock.json
 .env.development.local
 .env.test.local
 .env.production.local
-.idea
 
 npm-debug.log*
 yarn-debug.log*

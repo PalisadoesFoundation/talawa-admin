@@ -61,14 +61,17 @@ jobs:
           name: '${{env.CODECOV_UNIQUE_NAME}}'
 
   Deploy-Docusaurus:
-    name: Deploy https://admin-docs.talawa.io website
+    name: Deploy https://docs-admin.talawa.io website
     runs-on: ubuntu-latest
     needs: [Code-Coverage]
-    # Run only if the develop-postgres branch and not dependabot    
+    # Run only if the develop-postgres branch and not dependabot
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop-postgres' }}
+    environment:
+      name: github-pages
+      url: https://admin-docs.talawa.io
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: yarn
