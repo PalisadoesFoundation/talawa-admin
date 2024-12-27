@@ -23,7 +23,7 @@ jobs:
   Deploy-Docusaurus:
     name: Deploy https://docs-admin.talawa.io website
     runs-on: ubuntu-latest
-    needs: [Code-Coverage]
+    # needs: [Code-Coverage]
     # Run only if the develop-postgres branch and not dependabot
     if: ${{ github.actor != 'dependabot[bot]' }}
     environment:
