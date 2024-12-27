@@ -220,10 +220,11 @@
   justify-content: space-between;
   align-items: flex-start;
   flex-direction: column;
+  row-gap: 10px;
 }
 
 .password_check_element {
-  margin-top: -10px;
+  margin-top: -20px;
 }
 
 .password_check_element_top {
