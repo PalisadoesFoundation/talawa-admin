@@ -153,7 +153,7 @@
   outline: none !important;
 }
 
-.closeButton {
+.closeButtonOrganizationEvents {
   margin-bottom: 10px;
   color: var(--delete-button-color);
   margin-right: 5px;
@@ -161,7 +161,7 @@
   border: white;
 }
 
-.closeButton:hover {
+.closeButtonOrganizationEvents:hover {
   color: var(--delete-button-bg) !important;
   background-color: var(--delete-button-color) !important;
   border: white;
@@ -881,6 +881,100 @@ hr {
 .ctacards span {
   color: rgb(181, 181, 181);
   font-size: small;
+}
+
+.justifyspOrganizationEvents {
+  display: block;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.titlemodalOrganizationEvents {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #eaebef;
+  width: 65%;
+}
+
+.closeButton {
+  color: var(--delete-button-color);
+  margin-right: 5px;
+  background-color: var(--delete-button-bg);
+  border: white;
+}
+
+.closeButton:hover {
+  color: var(--delete-button-bg) !important;
+  background-color: var(--delete-button-color) !important;
+  border: white;
+}
+
+.datedivOrganizationEvents {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+
+.dateboxOrganizationEvents {
+  width: 90%;
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.dispflexOrganizationEvents {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dispflexOrganizationEvents > input {
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+.checkboxdiv {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.checkboxdiv > div {
+  width: 50%;
+}
+
+.createButtonOrganizationEvents {
+  background-color: #a8c7fa !important;
+  color: black !important;
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  padding: 10px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+  border: 1px solid var(--dropdown-border-color);
+}
+
+.createButtonOrganizationEvents:hover {
+  background-color: #286fe0 !important;
+  color: black !important;
+  border: 1px solid var(--dropdown-border-color) !important;
 }
 
 .time {
