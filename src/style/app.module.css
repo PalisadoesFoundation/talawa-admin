@@ -7,11 +7,12 @@
 }
 
 .noOutline input {
-  outline: none;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
-  outline: none !important;
+  outline: 2px solid var(--bs-primary) !important;
 }
 
 .closeButton {
@@ -2596,19 +2597,7 @@ form > input {
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
   }
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-  .collapseSidebarButton {
-    width: 250px;
-  }
 
-    .opendrawer {
-      width: 30px;
-    }
-  }
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
@@ -2616,6 +2605,15 @@ form > input {
   }
 }
 
+@media (max-width: 1120px) {
+  .collapseSidebarButton {
+    width: 250px;
+  }
+
+  .opendrawer {
+    width: 30px;
+  }
+}
 .cardItem .iconWrapper {
   position: relative;
   height: 40px;
