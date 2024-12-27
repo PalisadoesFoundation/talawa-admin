@@ -57,6 +57,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+          gcov_ignore: 'docs/'
           fail_ci_if_error: false
           name: '${{env.CODECOV_UNIQUE_NAME}}'
 
@@ -68,7 +69,7 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop-postgres' }}
     environment:
       name: github-pages
-      url: https://admin-docs.talawa.io
+      url: https://docs-admin.talawa.io
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
