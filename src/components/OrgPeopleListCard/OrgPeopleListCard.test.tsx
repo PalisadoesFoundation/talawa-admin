@@ -1,81 +1,143 @@
-import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
-
+import React from 'react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { MockedProvider } from '@apollo/client/testing';
 import OrgPeopleListCard from './OrgPeopleListCard';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import i18nForTest from 'utils/i18nForTest';
-import { BrowserRouter } from 'react-router-dom';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
 
-const MOCKS = [
-  {
-    request: {
-      query: REMOVE_MEMBER_MUTATION,
-      variable: { userid: '123', orgid: '456' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    orgId: '12345',
+  }),
+}));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string): string => key,
+  }),
+}));
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+  },
+}));
+
+jest.mock('utils/errorHandler', () => ({
+  errorHandler: jest.fn(),
+}));
+
+describe('orgPeopleListCard Component', () => {
+  const toggleRemoveModalMock = jest.fn();
+
+  const mocks = [
+    {
+      request: {
+        query: REMOVE_MEMBER_MUTATION,
+        variables: {
+          userid: '1',
+          orgid: '12345',
+        },
+      },
+      result: {
+        data: {
+          removeMember: {
+            _id: 12,
           },
-        ],
+        },
       },
     },
-  },
-];
-const link = new StaticMockLink(MOCKS, true);
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
+  ];
+
+  const props = {
+    id: '1',
+    toggleRemoveModal: toggleRemoveModalMock,
+  };
+
+  it('should render the modal and successfully remove the member', async () => {
+    const { getByText, getByTestId } = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/org/12345']}>
+          <Routes>
+            <Route
+              path="/org/:orgId"
+              element={<OrgPeopleListCard {...props} />}
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    expect(getByText('removeMember')).toBeInTheDocument();
+    expect(getByText('removeMemberMsg')).toBeInTheDocument();
+
+    fireEvent.click(getByTestId('removeMemberBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('memberRemoved');
+      expect(toggleRemoveModalMock).toHaveBeenCalled();
     });
   });
-}
 
-describe('Testing Organization People List Card', () => {
-  const props = {
-    toggleRemoveModal: () => true,
-    id: '1',
-  };
-  global.alert = jest.fn();
+  it('should handle errors correctly when mutation fails', async () => {
+    const errorMocks = [
+      {
+        request: {
+          query: REMOVE_MEMBER_MUTATION,
+          variables: {
+            userid: '1',
+            orgid: '12345',
+          },
+        },
+        error: new Error('An error occurred'),
+      },
+    ];
 
-  test('should render props and text elements test for the page component', async () => {
-    global.confirm = (): boolean => true;
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleListCard {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
+    const { getByTestId } = render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/org/12345']}>
+          <Routes>
+            <Route
+              path="/org/:orgId"
+              element={<OrgPeopleListCard {...props} />}
+            />
+          </Routes>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
-    await wait();
+    fireEvent.click(getByTestId('removeMemberBtn'));
 
-    userEvent.click(screen.getByTestId(/removeMemberBtn/i));
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalled();
+    });
   });
 
-  test('Should not render modal when id is undefined', async () => {
-    global.confirm = (): boolean => false;
+  it('should not render modal when id is undefined', () => {
+    const propsWithUndefinedId = {
+      id: undefined,
+      toggleRemoveModal: toggleRemoveModalMock,
+    };
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleListCard id={undefined} toggleRemoveModal={() => true} />
-          </I18nextProvider>
-        </BrowserRouter>
+    const { queryByText } = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/orglist']}>
+          {' '}
+          {/* Change this to '/orglist' */}
+          <Routes>
+            <Route
+              path="/orglist"
+              element={<OrgPeopleListCard {...propsWithUndefinedId} />}
+            />
+          </Routes>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
-    await wait();
-
-    expect(window.location.pathname).toEqual('/orglist');
+    expect(queryByText('removeMember')).not.toBeInTheDocument();
+    expect(queryByText('removeMemberMsg')).not.toBeInTheDocument();
   });
 });
