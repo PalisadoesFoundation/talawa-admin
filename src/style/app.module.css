@@ -3541,10 +3541,12 @@ button[data-testid='createPostBtn'] {
 
 .mainContainer {
   margin-top: 2rem;
-  width: 50%;
+  width: 100%;
+  max-width: 800px;
   flex-grow: 3;
-  max-height: 100%;
+  max-height: 90vh;
   overflow: auto;
+  padding: 0 1rem;
 }
 
 .selectType {
@@ -3557,19 +3559,19 @@ button[data-testid='createPostBtn'] {
 }
 
 .gap {
-  gap: 20px;
+  gap: var(--spacing-lg, 1.25rem);
 }
 
 .paddingY {
-  padding: 30px 0px;
+  padding: var(--spacing-xl, 1.875rem) 0;
 }
 
 .eventActionsContainer {
   display: flex;
   flex-direction: row;
   gap: 15px;
+  flex-wrap: wrap;
 }
-
 .datePicker {
   border-radius: 10px;
   height: 40px;
