@@ -12,6 +12,22 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Register from './Register';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for the Register component.
+ *
+ * 1. **Render test**: Verifies proper rendering of the Register component.
+ * 2. **Mode switch to Login**: Ensures that clicking the "setLoginBtn" changes mode to 'login'.
+ * 3. **Empty email validation**: Checks if toast.error is triggered for empty email.
+ * 4. **Empty password validation**: Ensures toast.error is called for empty password.
+ * 5. **Empty first name validation**: Ensures toast.error is called if first name is missing.
+ * 6. **Empty last name validation**: Verifies toast.error is triggered if last name is missing.
+ * 7. **Password mismatch validation**: Verifies toast.error is shown if confirm password doesn't match.
+ * 8. **Successful registration**: Confirms that toast.success is called when valid credentials are entered.
+ *
+ * GraphQL mock data is used for testing user registration functionality.
+ */
 
 const MOCKS = [
   {
@@ -56,22 +72,22 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-const setCurrentMode: React.Dispatch<SetStateAction<string>> = jest.fn();
+const setCurrentMode: React.Dispatch<SetStateAction<string>> = vi.fn();
 
 const props = {
   setCurrentMode,
 };
 
 describe('Testing Register Component [User Portal]', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -87,7 +103,7 @@ describe('Testing Register Component [User Portal]', () => {
     await wait();
   });
 
-  test('Expect the mode to be changed to Login', async () => {
+  it('Expect the mode to be changed to Login', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -107,7 +123,7 @@ describe('Testing Register Component [User Portal]', () => {
     expect(setCurrentMode).toHaveBeenCalledWith('login');
   });
 
-  test('Expect toast.error to be called if email input is empty', async () => {
+  it('Expect toast.error to be called if email input is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -127,7 +143,7 @@ describe('Testing Register Component [User Portal]', () => {
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
-  test('Expect toast.error to be called if password input is empty', async () => {
+  it('Expect toast.error to be called if password input is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -148,7 +164,7 @@ describe('Testing Register Component [User Portal]', () => {
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
-  test('Expect toast.error to be called if first name input is empty', async () => {
+  it('Expect toast.error to be called if first name input is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -172,7 +188,7 @@ describe('Testing Register Component [User Portal]', () => {
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
-  test('Expect toast.error to be called if last name input is empty', async () => {
+  it('Expect toast.error to be called if last name input is empty', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -228,7 +244,7 @@ describe('Testing Register Component [User Portal]', () => {
     );
   });
 
-  test('Expect toast.success to be called if valid credentials are entered.', async () => {
+  it('Expect toast.success to be called if valid credentials are entered.', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

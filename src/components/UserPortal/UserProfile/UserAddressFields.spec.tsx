@@ -2,12 +2,25 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { UserAddressFields } from './UserAddressFields';
 import { countryOptions } from 'utils/formEnumFields';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for UserAddressFields component:
+ *
+ * 1. **Rendering form fields**: Ensures address, state, and country fields are rendered.
+ * 2. **Displaying translated labels**: Verifies correct translations for labels.
+ * 3. **Handling input changes**: Tests if `handleFieldChange` is called with correct values for address, state, and country.
+ * 4. **Rendering country options**: Checks if all country options are displayed.
+ * 5. **Displaying initial values**: Ensures initial values (address, state, country) are correctly shown.
+ *
+ * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
+ */
 
 describe('UserAddressFields', () => {
   const mockProps = {
     tCommon: (key: string) => `translated_${key}`,
     t: (key: string) => `translated_${key}`,
-    handleFieldChange: jest.fn(),
+    handleFieldChange: vi.fn(),
     userDetails: {
       address: '123 Test Street',
       state: 'Test State',
@@ -16,10 +29,10 @@ describe('UserAddressFields', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  test('renders all form fields correctly', () => {
+  it('renders all form fields correctly', () => {
     render(<UserAddressFields {...mockProps} />);
 
     expect(screen.getByTestId('inputAddress')).toBeInTheDocument();
@@ -27,7 +40,7 @@ describe('UserAddressFields', () => {
     expect(screen.getByTestId('inputCountry')).toBeInTheDocument();
   });
 
-  test('displays correct labels with translations', () => {
+  it('displays correct labels with translations', () => {
     render(<UserAddressFields {...mockProps} />);
 
     expect(screen.getByText('translated_address')).toBeInTheDocument();
@@ -35,7 +48,7 @@ describe('UserAddressFields', () => {
     expect(screen.getByText('translated_country')).toBeInTheDocument();
   });
 
-  test('handles address input change', () => {
+  it('handles address input change', () => {
     render(<UserAddressFields {...mockProps} />);
 
     const addressInput = screen.getByTestId('inputAddress');
@@ -47,7 +60,7 @@ describe('UserAddressFields', () => {
     );
   });
 
-  test('handles state input change', () => {
+  it('handles state input change', () => {
     render(<UserAddressFields {...mockProps} />);
 
     const stateInput = screen.getByTestId('inputState');
@@ -59,7 +72,7 @@ describe('UserAddressFields', () => {
     );
   });
 
-  test('handles country selection change', () => {
+  it('handles country selection change', () => {
     render(<UserAddressFields {...mockProps} />);
 
     const countrySelect = screen.getByTestId('inputCountry');
@@ -68,7 +81,7 @@ describe('UserAddressFields', () => {
     expect(mockProps.handleFieldChange).toHaveBeenCalledWith('country', 'CA');
   });
 
-  test('renders all country options', () => {
+  it('renders all country options', () => {
     render(<UserAddressFields {...mockProps} />);
 
     const countrySelect = screen.getByTestId('inputCountry');
@@ -77,7 +90,7 @@ describe('UserAddressFields', () => {
     expect(options.length).toBe(countryOptions.length + 1); // +1 for disabled option
   });
 
-  test('displays initial values correctly', () => {
+  it('displays initial values correctly', () => {
     render(<UserAddressFields {...mockProps} />);
 
     expect(screen.getByTestId('inputAddress')).toHaveValue('123 Test Street');

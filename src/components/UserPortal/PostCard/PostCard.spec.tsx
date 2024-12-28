@@ -21,14 +21,33 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for the PostCard component in the User Portal.
+ *
+ * These tests ensure the PostCard component behaves as expected:
+ *
+ * 1. **Component rendering**: Verifies correct rendering with props like title, text, and creator info.
+ * 2. **Dropdown functionality**: Tests the dropdown for editing and deleting posts.
+ * 3. **Edit post**: Ensures the post can be edited with a success message.
+ * 4. **Delete post**: Verifies post deletion works with a success message.
+ * 5. **Like/unlike post**: Ensures the UI updates when a user likes or unlikes a post.
+ * 6. **Post image**: Verifies post image rendering.
+ * 7. **Create comment**: Ensures a comment is created successfully.
+ * 8. **Like/unlike comment**: Tests liking/unliking comments.
+ * 9. **Comment modal**: Verifies the comment modal appears when clicked.
+ *
+ * Mocked GraphQL data is used for simulating backend behavior.
+ */
 
 const { setItem, getItem } = useLocalStorage();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
-    info: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
@@ -164,7 +183,7 @@ async function wait(ms = 100): Promise<void> {
 const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing PostCard Component [User Portal]', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
@@ -218,7 +237,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -236,7 +255,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Dropdown component should be rendered properly', async () => {
+  it('Dropdown component should be rendered properly', async () => {
     setItem('userId', '2');
 
     const cardProps = {
@@ -263,7 +282,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -285,7 +304,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     expect(screen.getByText('Delete')).toBeInTheDocument();
   });
 
-  test('Edit post should work properly', async () => {
+  it('Edit post should work properly', async () => {
     setItem('userId', '2');
 
     const cardProps = {
@@ -312,7 +331,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -341,7 +360,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledWith('Post updated Successfully');
   });
 
-  test('Delete post should work properly', async () => {
+  it('Delete post should work properly', async () => {
     setItem('userId', '2');
 
     const cardProps = {
@@ -368,7 +387,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -393,7 +412,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     );
   });
 
-  test('Component should be rendered properly if user has liked the post', async () => {
+  it('Component should be rendered properly if user has liked the post', async () => {
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
 
@@ -421,7 +440,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -443,7 +462,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     }
   });
 
-  test('Component should be rendered properly if user unlikes a post', async () => {
+  it('Component should be rendered properly if user unlikes a post', async () => {
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
 
@@ -471,7 +490,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -496,7 +515,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     }
   });
 
-  test('Component should be rendered properly if user likes a post', async () => {
+  it('Component should be rendered properly if user likes a post', async () => {
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
 
@@ -524,7 +543,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -549,7 +568,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     }
   });
 
-  test('Component should be rendered properly if post image is defined', async () => {
+  it('Component should be rendered properly if post image is defined', async () => {
     const cardProps = {
       id: '',
       userImage: 'image.png',
@@ -574,7 +593,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -592,7 +611,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('Comment is created successfully after create comment button is clicked.', async () => {
+  it('Comment is created successfully after create comment button is clicked.', async () => {
     const cardProps = {
       id: '1',
       userImage: 'image.png',
@@ -617,7 +636,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -701,7 +720,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
@@ -788,7 +807,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
     const beforeUserId = getItem('userId');
     setItem('userId', '1');
@@ -815,7 +834,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       setItem('userId', beforeUserId);
     }
   });
-  test('Comment modal pops when show comments button is clicked.', async () => {
+  it('Comment modal pops when show comments button is clicked.', async () => {
     const cardProps = {
       id: '',
       userImage: 'image.png',
@@ -840,7 +859,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
-      fetchPosts: jest.fn(),
+      fetchPosts: vi.fn(),
     };
 
     render(

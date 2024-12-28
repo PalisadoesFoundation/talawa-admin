@@ -10,6 +10,18 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import PromotedPost from './PromotedPost';
 
+/**
+ * Unit tests for the PromotedPost component.
+ *
+ * 1. **Render check**: Verifies the component renders correctly with props like title and image.
+ * 2. **Image prop check**: Tests if the component renders correctly with an image.
+ * 3. **Icon display**: Ensures the icon (StarPurple500Icon) is displayed.
+ * 4. **Text display**: Checks that the post title is displayed correctly.
+ * 5. **Image display**: Verifies the correct image is displayed when the image prop is set.
+ *
+ * GraphQL data is mocked for backend simulation.
+ */
+
 const link = new StaticMockLink([], true);
 
 async function wait(ms = 100): Promise<void> {
@@ -27,7 +39,7 @@ let props = {
 };
 
 describe('Testing PromotedPost Test', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -43,7 +55,7 @@ describe('Testing PromotedPost Test', () => {
     await wait();
   });
 
-  test('Component should be rendered properly if prop image is not undefined', async () => {
+  it('Component should be rendered properly if prop image is not undefined', async () => {
     props = {
       ...props,
       image: 'promotedPostImage',
@@ -65,7 +77,7 @@ describe('Testing PromotedPost Test', () => {
   });
 });
 
-test('Component should display the icon correctly', async () => {
+it('Component should display the icon correctly', async () => {
   const { queryByTestId } = render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
@@ -84,7 +96,7 @@ test('Component should display the icon correctly', async () => {
   });
 });
 
-test('Component should display the text correctly', async () => {
+it('Component should display the text correctly', async () => {
   const { queryAllByText } = render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
@@ -103,7 +115,7 @@ test('Component should display the text correctly', async () => {
   });
 });
 
-test('Component should display the image correctly', async () => {
+it('Component should display the image correctly', async () => {
   props = {
     ...props,
     image: 'promotedPostImage',

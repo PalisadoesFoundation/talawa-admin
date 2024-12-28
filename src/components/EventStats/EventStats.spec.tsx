@@ -4,13 +4,15 @@ import { MockedProvider } from '@apollo/react-testing';
 import { EventStats } from './EventStats';
 import { BrowserRouter } from 'react-router-dom';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+import { vi, describe, expect, it } from 'vitest';
 
-// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
+// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Vitest)
 // These modules are used by the Feedback component
-jest.mock('@mui/x-charts/PieChart', () => ({
-  pieArcLabelClasses: jest.fn(),
-  PieChart: jest.fn().mockImplementation(() => <>Test</>),
-  pieArcClasses: jest.fn(),
+vi.mock('@mui/x-charts/PieChart', async () => ({
+  ...(await vi.importActual('@mui/x-charts/PieChart')),
+  pieArcLabelClasses: vi.fn(),
+  PieChart: vi.fn().mockImplementation(() => <>Test</>),
+  pieArcClasses: vi.fn(),
 }));
 
 const mockData = [
@@ -43,10 +45,10 @@ describe('Testing Event Stats', () => {
   const props = {
     eventId: 'eventStats123',
     show: true,
-    handleClose: jest.fn(),
+    handleClose: vi.fn(),
   };
 
-  test('The stats should be rendered properly', async () => {
+  it('The stats should be rendered properly', async () => {
     const { queryByText } = render(
       <MockedProvider mocks={mockData} addTypename={false}>
         <BrowserRouter>
