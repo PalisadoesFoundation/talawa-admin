@@ -8,7 +8,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { FilterAltOutlined, SearchOutlined } from '@mui/icons-material';
-import styles from './People.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router-dom';
@@ -159,11 +159,11 @@ export default function people(): JSX.Element {
   return (
     <>
       <div className={`d-flex flex-row`}>
-        <div className={`${styles.mainContainer}`}>
+        <div className={`${styles.mainContainerPeople}`}>
           <div
             className={`mt-4 d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
           >
-            <InputGroup className={`${styles.maxWidth} ${styles.shadow}`}>
+            <InputGroup className={`${styles.maxWidthPeople} ${styles.shadow}`}>
               <Form.Control
                 placeholder={t('searchUsers')}
                 id="searchPeople"
@@ -205,9 +205,9 @@ export default function people(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          <div className={`d-flex flex-column ${styles.content}`}>
+          <div className={`d-flex flex-column ${styles.contentPeople}`}>
             <div
-              className={`d-flex border py-3 px-4 mt-4 bg-white ${styles.topRadius}`}
+              className={`d-flex border py-3 px-4 mt-4 bg-white ${styles.topRadiusPeople}`}
             >
               <span style={{ flex: '1' }} className="d-flex">
                 <span style={{ flex: '1' }}>S.No</span>

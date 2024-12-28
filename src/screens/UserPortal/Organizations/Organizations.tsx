@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Organizations.module.css';
+import styles from '../../../style/app.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const { getItem } = useLocalStorage();
@@ -300,7 +300,7 @@ export default function organizations(): JSX.Element {
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${styles.containerHeight} ${
+        className={`${styles.containerHeightOrg} ${
           hideDrawer === null
             ? ''
             : hideDrawer
@@ -361,7 +361,7 @@ export default function organizations(): JSX.Element {
           </div>
 
           <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
+            className={`d-flex flex-column justify-content-between ${styles.contentOrg}`}
           >
             <div
               className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}

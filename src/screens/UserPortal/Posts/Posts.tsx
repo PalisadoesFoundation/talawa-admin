@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Posts.module.css';
+import styles from '../../../style/app.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -273,13 +273,13 @@ export default function home(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+      <div className={`d-flex flex-row ${styles.containerHeightPosts}`}>
+        <div className={`${styles.colorLight} ${styles.mainContainerPosts}`}>
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>
               <Row className="d-flex gap-1">
-                <Col className={styles.maxWidth}>
+                <Col className={styles.maxWidthPosts}>
                   <Form.Control
                     type="file"
                     accept="image/*"

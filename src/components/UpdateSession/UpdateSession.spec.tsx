@@ -104,7 +104,7 @@ describe('Testing UpdateTimeout Component', () => {
     // Simulate dragging to minimum value
     userEvent.click(slider, {
       // Simulate clicking on the slider to focus
-      clientX: -999, // Adjust the clientX to simulate different slider positions
+      // clientX: -999, // Adjust the clientX to simulate different slider positions
     });
 
     expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
@@ -124,7 +124,7 @@ describe('Testing UpdateTimeout Component', () => {
     // Simulate dragging to maximum value
     userEvent.click(slider, {
       // Simulate clicking on the slider to focus
-      clientX: 999, // Adjust the clientX to simulate different slider positions
+      // clientX: 999, // Adjust the clientX to simulate different slider positions
     });
 
     expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
@@ -144,7 +144,7 @@ describe('Testing UpdateTimeout Component', () => {
     // Simulate invalid value handling
     userEvent.click(slider, {
       // Simulate clicking on the slider to focus
-      clientX: 0, // Adjust the clientX to simulate different slider positions
+      // clientX: 0, // Adjust the clientX to simulate different slider positions
     });
 
     // Ensure onValueChange is not called with invalid values
