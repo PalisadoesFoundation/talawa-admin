@@ -3526,7 +3526,8 @@ button[data-testid='createPostBtn'] {
 /* PostCard.tsx */
 
 .cardStyles {
-  width: 20rem;
+  width: 100%;
+  max-width: 20rem;
   background-color: var(--bs-white);
   padding: 0;
   border: none !important;
@@ -3559,8 +3560,8 @@ button[data-testid='createPostBtn'] {
   font-weight: 500;
 }
 .creator svg {
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .customToggle {
@@ -3611,11 +3612,10 @@ button[data-testid='createPostBtn'] {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: var(--max-lines);
-
   padding-top: 0;
   font-weight: 300;
   margin-top: 0.7rem !important;
-  text-align: justify;
+  text-align: left;
 }
 
 .viewBtn {
@@ -3639,7 +3639,7 @@ button[data-testid='createPostBtn'] {
   padding: 0;
   border: none;
   color: black;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .cardActionBtn:hover,
@@ -3699,7 +3699,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .postImage {
-  height: 300px;
+  width: 100%;
+  aspect-ratio: 16/9;
   object-fit: cover;
 }
 
