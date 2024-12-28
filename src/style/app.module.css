@@ -31,6 +31,8 @@
   --row-background: var(--bs-white, white);
   --font-size-header: 16px;
   --input-area-color: #f1f3f6;
+  --date-picker-background: #f2f2f2;
+  --grey-bg-color-dark: #707070;
 }
 .fonts {
   color: #707070;
@@ -3703,4 +3705,157 @@ button[data-testid='createPostBtn'] {
 .postImage {
   height: 300px;
   object-fit: cover;
+}
+
+/* Events.tsx */
+
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: var(--bs-white);
+}
+
+.backgroundWhite {
+  background-color: var(--bs-white);
+}
+
+.maxWidth {
+  max-width: 800px;
+}
+
+.mainContainer {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 800px;
+  flex-grow: 3;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 0 1rem;
+}
+
+.selectType {
+  border-radius: 10px;
+}
+.dropdown__item {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.gap {
+  gap: var(--spacing-lg, 1.25rem);
+}
+
+.paddingY {
+  padding: var(--spacing-xl, 1.875rem) 0;
+}
+
+.eventActionsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.datePicker {
+  border-radius: 10px;
+  height: 2.5rem;
+  text-align: center;
+  background-color: var(--date-picker-background);
+  border: none;
+  width: 100%;
+}
+
+.modalBodyEvents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.switchContainer {
+  display: flex;
+  align-items: center;
+}
+
+.switches {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.titlemodalEvents {
+  color: var(--grey-bg-color-dark);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--subtle-blue-grey);
+  width: 65%;
+}
+
+.datedivEvents {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+
+.dateboxEvents {
+  width: 90%;
+  border-radius: 7px;
+  border-color: var(--grey-border-box-color);
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.checkboxdivEvents > label {
+  margin-right: 50px;
+}
+.checkboxdivEvents > label > input {
+  margin-left: 10px;
+}
+
+.checkboxdivEvents {
+  display: flex;
+}
+.checkboxdivEvents > div {
+  width: 50%;
+}
+
+.dispflexEvents {
+  display: flex;
+  align-items: center;
+}
+.dispflexEvents > input {
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+.blueregbtnEvents {
+  margin-top: var(--spacing-lg, 1.25rem);
+  border: 1px solid var(--grey-border-box-color);
+  box-shadow: 0 2px 2px var(--grey-border-box-color);
+  padding: var(--spacing-md, 0.625rem);
+  border-radius: 5px;
+  background-color: var(--subtle-blue-grey);
+  width: 100%;
+  font-size: 16px;
+  color: var(--bs-white);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px var(--grey-border-box-color);
+  }
 }
