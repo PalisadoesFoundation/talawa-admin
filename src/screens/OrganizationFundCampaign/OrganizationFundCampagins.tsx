@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import CampaignModal from './CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import styles from './OrganizationFundCampaign.module.css';
+import styles from '../../style/app.module.css';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfaceCampaignInfo,
@@ -339,14 +339,14 @@ const orgFundCampaign = (): JSX.Element => {
         <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
-      <div className={styles.btnsContainer}>
-        <div className={styles.input}>
+      <div className={styles.btnsContainerOrganizationFundCampaign}>
+        <div className={styles.inputOrganizationFundCampaign}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchByName')}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles.inputFieldOrganizationFundCampaign}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchFullName"
@@ -358,13 +358,13 @@ const orgFundCampaign = (): JSX.Element => {
             <Search />
           </Button>
         </div>
-        <div className={styles.btnsBlock}>
+        <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}>
           <div className="d-flex justify-space-between">
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
                 id="dropdown-basic"
-                className={styles.dropdown}
+                className={styles.dropdownOrganizationFundCampaign}
                 data-testid="filter"
               >
                 <Sort className={'me-1'} />
@@ -426,7 +426,9 @@ const orgFundCampaign = (): JSX.Element => {
           ),
         }}
         sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowClassName={() =>
+          `${styles.rowBackgroundOrganizationFundCampaign}`
+        }
         autoHeight
         rowHeight={65}
         rows={campaigns.map((campaign, index) => ({

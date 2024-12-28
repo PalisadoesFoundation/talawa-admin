@@ -301,7 +301,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               <hr />
               <span className={styles.orText}>{tCommon('OR')}</span>
             </div>
-            {(adminFor.length > 0 || superAdmin) && (
+            {((adminFor && adminFor.length > 0) || superAdmin) && (
               <div className={styles.sampleOrgSection}>
                 <Button
                   className={styles.sampleOrgCreationBtn}

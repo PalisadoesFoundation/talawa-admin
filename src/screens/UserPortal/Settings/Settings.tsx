@@ -126,6 +126,19 @@ export default function settings(): JSX.Element {
    * @param value - The new value for the field.
    */
   const handleFieldChange = (fieldName: string, value: string): void => {
+    // If the field is 'birthDate', validate the date
+    if (fieldName === 'birthDate') {
+      const today = new Date();
+      const selectedDate = new Date(value);
+
+      // Prevent updating the state if the selected date is in the future
+      if (selectedDate > today) {
+        console.error('Future dates are not allowed for the birth date.');
+        return; // Exit without updating the state
+      }
+    }
+
+    // Update state if the value passes validation
     setisUpdated(true);
     setUserDetails((prevState) => ({
       ...prevState,
@@ -449,6 +462,7 @@ export default function settings(): JSX.Element {
                           handleFieldChange('birthDate', e.target.value)
                         }
                         className={`${styles.cardControl}`}
+                        max={new Date().toISOString().split('T')[0]}
                       />
                     </Col>
                   </Row>
