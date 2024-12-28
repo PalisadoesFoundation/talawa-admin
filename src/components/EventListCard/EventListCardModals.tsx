@@ -292,7 +292,6 @@ function EventListCardModals({
         }
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -362,7 +361,6 @@ function EventListCardModals({
           hideViewModal();
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
@@ -491,9 +489,7 @@ function EventListCardModals({
                           recurrenceStartDate: date?.toDate(),
                           weekDays: [Days[date?.toDate().getDay()]],
                           weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                            ? /* istanbul ignore next */ getWeekDayOccurenceInMonth(
-                                date?.toDate(),
-                              )
+                            ? getWeekDayOccurenceInMonth(date?.toDate())
                             : undefined,
                         });
                       }
@@ -531,8 +527,7 @@ function EventListCardModals({
                           endTime:
                             timeToDayJs(formState.endTime) < time
                               ? time?.format('HH:mm:ss')
-                              : /* istanbul ignore next */
-                                formState.endTime,
+                              : formState.endTime,
                         });
                       }
                     }}

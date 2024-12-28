@@ -6,7 +6,12 @@ export const MOCKS = [
   {
     request: {
       query: AGENDA_ITEM_CATEGORY_LIST,
-      variables: { organizationId: '123' },
+      variables: {
+        organizationId: '123',
+        where: {
+          name_contains: '',
+        },
+      },
     },
     result: {
       data: {

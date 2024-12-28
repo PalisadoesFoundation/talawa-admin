@@ -16,7 +16,7 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './ForgotPassword.module.css';
+import styles from 'style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 /**
@@ -162,7 +162,7 @@ const ForgotPassword = (): JSX.Element => {
       <div className={styles.pageWrapper}>
         <div className="row container-fluid d-flex justify-content-center items-center">
           <div className="col-12 col-lg-4 px-0">
-            <div className={styles.cardBody}>
+            <div className={styles.cardTemplate}>
               <div className={styles.keyWrapper}>
                 <div className={styles.themeOverlay} />
                 <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />

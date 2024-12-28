@@ -1082,6 +1082,17 @@
     "loading": "लोड हो रहा है",
     "noAttendees": "कोई प्रतिभागी नहीं मिला"
   },
+  "eventRegistrant": {
+    "sort": "छांटें",
+    "allRegistrants": "सभी पंजीकृत व्यक्ति",
+    "eventRegistrantsTable": "इवेंट पंजीकृत व्यक्ति तालिका",
+    "serialNumber": "सिरियल नंबर",
+    "registrant": "पंजीकृत व्यक्ति",
+    "registeredAt": "पंजीकरण तिथि",
+    "createdAt": "निर्माण तिथि",
+    "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
+    "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला"
+  },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",
     "enterFirstName": "प्रथम नाम दर्ज करें",

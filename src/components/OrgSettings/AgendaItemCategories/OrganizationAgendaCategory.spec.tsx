@@ -53,7 +53,6 @@ const link2 = new StaticMockLink(
   true,
 );
 const link3 = new StaticMockLink(MOCKS_ERROR_MUTATION, true);
-
 const translations = {
   ...JSON.parse(
     JSON.stringify(
@@ -69,7 +68,7 @@ describe('Testing Agenda Categories Component', () => {
     description: 'Test Description',
     createdBy: 'Test User',
   };
-  test('Component loads correctly', async () => {
+  it('Component loads correctly', async () => {
     const { getByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -104,7 +103,7 @@ describe('Testing Agenda Categories Component', () => {
     expect(getByTestId('spinner-wrapper')).toBeInTheDocument();
   });
 
-  test('render error component on unsuccessful agenda category list query', async () => {
+  it('render error component on unsuccessful agenda category list query', async () => {
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link2}>
         <Provider store={store}>
@@ -126,7 +125,7 @@ describe('Testing Agenda Categories Component', () => {
     });
   });
 
-  test('opens and closes the create agenda category modal', async () => {
+  it('opens and closes the create agenda category modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -159,7 +158,7 @@ describe('Testing Agenda Categories Component', () => {
       screen.queryByTestId('createAgendaCategoryModalCloseBtn'),
     );
   });
-  test('creates new agenda cagtegory', async () => {
+  it('creates new agenda cagtegory', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
