@@ -3527,7 +3527,7 @@ button[data-testid='createPostBtn'] {
 
 .cardStyles {
   width: 20rem;
-  background-color: white;
+  background-color: var(--bs-white);
   padding: 0;
   border: none !important;
   outline: none !important;
@@ -3541,8 +3541,8 @@ button[data-testid='createPostBtn'] {
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
-  background-color: white;
-  border-bottom: 1px solid #dddddd;
+  background-color: var(--bs-white);
+  border-bottom: 1px solid var(--input-shadow-color);
 }
 
 .creator {
