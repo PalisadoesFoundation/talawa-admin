@@ -133,7 +133,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    * @param e - The form submission event.
    * @returns A promise that resolves when the pledge is successfully updated.
    */
-  /*istanbul ignore next*/
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
@@ -209,7 +208,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
-        /*istanbul ignore next*/
         toast.error((error as Error).message);
       }
     },
