@@ -29,6 +29,7 @@
   --tablerow-bg-color: #eff1f7;
   --row-background: var(--bs-white, white);
   --font-size-header: 16px;
+  --input-area-color: #f1f3f6;
 }
 .fonts {
   color: #707070;
@@ -2480,8 +2481,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .colorPrimary {
-  background: #7c9beb;
-  color: white;
+  background: var(--subtle-blue-grey);
+  color: var(--bs-white);
   cursor: pointer;
 }
 
@@ -2492,18 +2493,18 @@ button[data-testid='createPostBtn'] {
 }
 
 .modalFooter {
-  background-color: white;
+  background-color: var(--bs-white);
   width: 100%;
   padding-block: 0.5rem;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid var(--input-shadow-color);
 }
 
 .inputArea {
   border: none;
   outline: none;
-  background-color: #f1f3f6;
+  background-color: var(--input-area-color);
 }
 
 .postImage {
