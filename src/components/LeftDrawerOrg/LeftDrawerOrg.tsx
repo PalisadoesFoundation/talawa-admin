@@ -68,13 +68,13 @@ const leftDrawerOrg = ({
     variables: { id: orgId },
   });
 
-    // Get the ID from the current path
+  // Get the ID from the current path
 
   const pathId = useMemo(
     () => getIdFromPath(location.pathname),
     [location.pathname],
   );
-    // Check if the current page is admin profile page
+  // Check if the current page is admin profile page
 
   useEffect(() => {
     // if param id is equal to userId, then it is a profile page
