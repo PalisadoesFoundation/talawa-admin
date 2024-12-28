@@ -78,8 +78,8 @@ def check_code_coverage(files_or_dirs):
                     continue
                 for file_name in files:
                     if (
-                        item.endswith(".tsx")
-                        or item.endswith(".ts")
+                        file_name.endswith(".tsx")
+                        or file_name.endswith(".ts")
                         and not file_name.endswith(".test.tsx")
                         and not file_name.endswith(".test.ts")
                         and not file_name.endswith(".spec.tsx")
