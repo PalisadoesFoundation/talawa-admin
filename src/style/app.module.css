@@ -3488,12 +3488,12 @@ button[data-testid='createPostBtn'] {
 /* CustomRecurrenceModal.tsx */
 
 .titlemodalCustomRecurrenceModal {
-  color: #707070;
+  color: var(--grey-bg-color-dark);
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #7c9beb;
+  border-bottom: 3px solid var(--subtle-blue-grey);
   width: 65%;
 }
 
