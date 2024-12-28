@@ -146,7 +146,7 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                           className={styles.TableImage}
                         />
                       ) : (
-                        <div className={styles.avatarContainer}>
+                        <div className={styles.TableImage}>
                           <Avatar
                             key={assigner._id + '1'}
                             containerStyle={styles.imageContainer}
