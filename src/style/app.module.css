@@ -30,6 +30,8 @@
   --tablerow-bg-color: #eff1f7;
   --row-background: var(--bs-white, white);
   --font-size-header: 16px;
+  --bg-date-picker: #f2f2f2;
+  --grey-bg-color-dark: #707070;
 }
 .fonts {
   color: #707070;
@@ -3489,11 +3491,11 @@ button[data-testid='createPostBtn'] {
 }
 
 .colorWhite {
-  color: white;
+  color: var(--bs-white);
 }
 
 .backgroundWhite {
-  background-color: white;
+  background-color: var(--bs-white);
 }
 
 .maxWidth {
@@ -3535,7 +3537,7 @@ button[data-testid='createPostBtn'] {
   border-radius: 10px;
   height: 40px;
   text-align: center;
-  background-color: #f2f2f2;
+  background-color: var(--bg-date-picker);
   border: none;
   width: 100%;
 }
@@ -3559,12 +3561,12 @@ button[data-testid='createPostBtn'] {
   margin-top: 20px;
 }
 .titlemodalEvents {
-  color: #707070;
+  color: var(--grey-bg-color-dark);
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #7c9beb;
+  border-bottom: 3px solid var(--subtle-blue-grey);
   width: 65%;
 }
 
@@ -3577,7 +3579,7 @@ button[data-testid='createPostBtn'] {
 .dateboxEvents {
   width: 90%;
   border-radius: 7px;
-  border-color: #e8e5e5;
+  border-color: var(--grey-border-box-color);
   outline: none;
   box-shadow: none;
   padding-top: 2px;
@@ -3615,14 +3617,14 @@ button[data-testid='createPostBtn'] {
 .blueregbtnEvents {
   margin: 1rem 0 0;
   margin-top: 15px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
+  border: 1px solid var(--grey-border-box-color);
+  box-shadow: 0 2px 2px var(--grey-border-box-color);
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: #7c9beb;
+  background-color: var(--subtle-blue-grey);
   width: 100%;
   font-size: 16px;
-  color: white;
+  color: var(--bs-white);
   outline: none;
   font-weight: 600;
   cursor: pointer;
