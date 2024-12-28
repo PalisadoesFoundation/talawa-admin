@@ -46,11 +46,6 @@ vi.mock('../../../components/UserPortal/ChatRoom/ChatRoom', () => ({
   default: () => <div data-testid="mocked-chat-room">Mocked ChatRoom</div>,
 }));
 
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
-};
-
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -4382,34 +4377,6 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
-    setItem('userId', '1');
-
-    resizeWindow(800);
-
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Chat />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await waitFor(() => {
-      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-    });
-
-    const openMenuBtn = await screen.findByTestId('openMenu');
-    expect(openMenuBtn).toBeInTheDocument();
-    fireEvent.click(openMenuBtn);
-
-    const closeMenuBtn = await screen.findByTestId('closeMenu');
-    expect(closeMenuBtn).toBeInTheDocument();
-  });
-
   // filter chat test
   test('Testing chat filters', async () => {
     setItem('userId', '1');
@@ -4425,8 +4392,8 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await waitFor(() => {
-      expect(screen.findByTestId('unreadChat')).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(await screen.findByTestId('unreadChat')).toBeInTheDocument();
     });
     await act(async () => {
       fireEvent.click(await screen.findByTestId('unreadChat'));

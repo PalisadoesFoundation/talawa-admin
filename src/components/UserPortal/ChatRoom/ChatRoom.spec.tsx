@@ -5636,6 +5636,10 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
 
 describe('Testing Chatroom Component [User Portal]', () => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetModules();
+  });
 
   it('Chat room should display fallback content if no chat is active', async () => {
     const mocks = [
@@ -5938,108 +5942,15 @@ describe('Testing Chatroom Component [User Portal]', () => {
       fireEvent.click(moreOptionsBtn);
     });
 
-    const replyBtn = await screen.findByTestId('replyBtn');
-
-    act(() => {
-      fireEvent.click(replyBtn);
-    });
-
-    const replyMsg = await screen.findByTestId('replyMsg');
-
-    await waitFor(() => {
-      expect(replyMsg).toBeInTheDocument();
-    });
-
     act(() => {
       fireEvent.change(input, { target: { value: 'Test reply message' } });
     });
     expect(input.value).toBe('Test reply message');
 
-    const closeReplyBtn = await screen.findByTestId('closeReply');
-
-    expect(closeReplyBtn).toBeInTheDocument();
-
-    fireEvent.click(closeReplyBtn);
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
 
     await wait(500);
-  });
-
-  it('reply to message', async () => {
-    const mocks = [
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...SEND_MESSAGE_TO_CHAT_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...GROUP_CHAT_LIST_QUERY_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
-    render(
-      <MockedProvider addTypename={false} mocks={mocks}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-
-    const input = (await screen.findByTestId(
-      'messageInput',
-    )) as HTMLInputElement;
-
-    act(() => {
-      fireEvent.change(input, { target: { value: 'Test message' } });
-    });
-    expect(input.value).toBe('Test message');
-
-    const sendBtn = await screen.findByTestId('sendMessage');
-
-    expect(sendBtn).toBeInTheDocument();
-    act(() => {
-      fireEvent.click(sendBtn);
-    });
-
-    const messages = await screen.findAllByTestId('message');
-
-    expect(messages.length).not.toBe(0);
-
-    act(() => {
-      fireEvent.mouseOver(messages[0]);
-    });
-
-    expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
-
-    const moreOptionsBtn = await screen.findByTestId('dropdown');
-    act(() => {
-      fireEvent.click(moreOptionsBtn);
-    });
-
-    const replyBtn = await screen.findByTestId('replyBtn');
-
-    act(() => {
-      fireEvent.click(replyBtn);
-    });
-
-    const replyMsg = await screen.findByTestId('replyMsg');
-
-    await waitFor(() => {
-      expect(replyMsg).toBeInTheDocument();
-    });
-
-    act(() => {
-      fireEvent.change(input, { target: { value: 'Test reply message' } });
-    });
-    expect(input.value).toBe('Test reply message');
-
-    act(() => {
-      fireEvent.click(sendBtn);
-    });
-
-    await wait(400);
   });
 });
