@@ -14,7 +14,6 @@ Welcome to our documentation guide. Here are some useful tips you need to know!
 ## Where to find our documentation
 
 Our documentation can be found in ONLY TWO PLACES:
-this is a test commit 
 
 1. ***Inline within the repository's code files***: We have automated processes to extract this information and place it in our Talawa documentation site [docs.talawa.io](https://docs.talawa.io/). 
 1. ***In our `talawa-docs` repository***: Our [Talawa-Docs](https://github.com/PalisadoesFoundation/talawa-docs) repository contains user edited markdown files that are automatically integrated into our Talawa documentation site [docs.talawa.io](https://docs.talawa.io/) using the [Docusaurus](https://docusaurus.io/) package.
