@@ -42,6 +42,8 @@ let props = {
   image: '',
   selectedContact: '',
   type: '',
+  unseenMessages: 2,
+  lastMessage: '',
   setSelectedContact: vi.fn(),
   setSelectedChatType: vi.fn(),
 };

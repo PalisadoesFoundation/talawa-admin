@@ -17,6 +17,7 @@ import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
@@ -27,7 +28,7 @@ interface InterfaceCreateDirectChatProps {
           id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<string>>;
+  ) => Promise<ApolloQueryResult<unknown>>;
 }
 
 /**
@@ -61,6 +62,9 @@ export default function createDirectChatModal({
   createDirectChatModalisOpen,
   chatsListRefetch,
 }: InterfaceCreateDirectChatProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChat',
+  });
   const { orgId: organizationId } = useParams();
 
   const userId: string | null = getItem('userId');
@@ -187,7 +191,7 @@ export default function createDirectChatModal({
                                 }}
                                 data-testid="addBtn"
                               >
-                                Add
+                                {t('add')}
                               </Button>
                             </StyledTableCell>
                           </StyledTableRow>

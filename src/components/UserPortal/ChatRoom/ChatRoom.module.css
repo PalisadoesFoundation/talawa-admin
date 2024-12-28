@@ -4,8 +4,9 @@
   /* background-color: rgba(196, 255, 211, 0.3); */
 }
 
-.backgroundWhite {
+.sendMessageInput {
   background-color: white;
+  border-radius: 12px 0px 0px 12px;
 }
 
 .grey {
@@ -152,7 +153,8 @@
 }
 
 .contactImage {
-  height: fit-content;
+  height: 45px !important;
+  border-radius: 100%;
 }
 
 .senderInfo {
@@ -233,6 +235,38 @@
   scroll-margin-top: 100px;
   animation-name: test;
   animation-duration: 1s;
+}
+
+.attachment {
+  padding: 10px;
+  background-color: rgb(219, 219, 219);
+  height: 200px;
+  display: flex;
+  align-items: flex-start;
+  border-radius: 10px;
+}
+
+.attachment img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.messageAttachment {
+  height: 300px;
+  width: 300px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin: 10px 0px 10px 10px;
+}
+
+.addAttachmentBtn {
+  border: none;
+  outline: none;
+  margin: 0 10px;
+  background-color: white;
+  font-size: 20px;
 }
 
 @keyframes test {
