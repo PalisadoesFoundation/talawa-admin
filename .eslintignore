@@ -1,11 +1,10 @@
-
-# Contains the PDF file of the Tag as JSON string, thus does not need to be linted
-src/components/CheckIn/tagTemplate.ts
-package.json
+node_modules/
+dist/
+build/
+docs/
+talawa-admin-docs/
 package-lock.json
 tsconfig.json
-
-# Ignore the Docusaurus website subdirectory
-docs/**
 *.md
-talawa-admin-docs/**
+*.log
+*.tsbuildinfo
