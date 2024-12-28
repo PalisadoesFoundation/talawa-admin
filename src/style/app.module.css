@@ -30,6 +30,7 @@
   --tablerow-bg-color: #eff1f7;
   --row-background: var(--bs-white, white);
   --font-size-header: 16px;
+  --primary-border-green: 1px solid #31bb6b;
 }
 .fonts {
   color: #707070;

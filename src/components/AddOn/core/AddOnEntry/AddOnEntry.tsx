@@ -104,19 +104,8 @@ function addOnEntry({
     <>
       <Card
         data-testid="AddOnEntry"
-        style={{ border: '1px solid #31BB6B', borderRadius: '10px' }}
+        style={{ border: 'var(--primary-border-green)', borderRadius: '10px' }}
       >
-        {/* {uninstalledOrgs.includes(currentOrg) && (
-          <Form.Check
-            type="switch"
-            id="custom-switch"
-            label={t('enable')}
-            className={styles.entrytoggle}
-            onChange={(): void => {}}
-            disabled={switchInProgress}
-            checked={enabled}
-          />
-        )} */}
         <Card.Body>
           <Card.Title style={{ fontWeight: '800' }}>{title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted author">
