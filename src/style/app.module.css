@@ -3481,3 +3481,153 @@ button[data-testid='createPostBtn'] {
     opacity: 1;
   }
 }
+
+/* Events.tsx */
+
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.backgroundWhite {
+  background-color: white;
+}
+
+.maxWidth {
+  max-width: 800px;
+}
+
+.mainContainer {
+  margin-top: 2rem;
+  width: 50%;
+  flex-grow: 3;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.selectType {
+  border-radius: 10px;
+}
+.dropdown__item {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.gap {
+  gap: 20px;
+}
+
+.paddingY {
+  padding: 30px 0px;
+}
+
+.eventActionsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.datePicker {
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+  background-color: #f2f2f2;
+  border: none;
+  width: 100%;
+}
+
+.modalBodyEvents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.switchContainer {
+  display: flex;
+  align-items: center;
+}
+
+.switches {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.titlemodalEvents {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #7c9beb;
+  width: 65%;
+}
+
+.datedivEvents {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+
+.dateboxEvents {
+  width: 90%;
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.checkboxdivEvents > label {
+  margin-right: 50px;
+}
+.checkboxdivEvents > label > input {
+  margin-left: 10px;
+}
+
+.checkboxdivEvents {
+  display: flex;
+}
+.checkboxdivEvents > div {
+  width: 50%;
+}
+
+.dispflexEvents {
+  display: flex;
+  align-items: center;
+}
+.dispflexEvents > input {
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+.blueregbtnEvents {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #7c9beb;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+}

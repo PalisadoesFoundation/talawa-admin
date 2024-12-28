@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Events.module.css';
+import styles from './../../../style/app.module.css';
 
 /**
  * Converts a time string to a Dayjs object.
@@ -236,7 +236,7 @@ export default function events(): JSX.Element {
           </div>
           <Modal show={createEventModal} onHide={toggleCreateEventModal}>
             <Modal.Header>
-              <p className={styles.titlemodal}>{t('eventDetails')}</p>
+              <p className={styles.titlemodalEvents}>{t('eventDetails')}</p>
               <Button
                 variant="danger"
                 onClick={toggleCreateEventModal}
@@ -280,11 +280,11 @@ export default function events(): JSX.Element {
                   onChange={handleEventLocationChange}
                   data-testid="eventLocationInput"
                 />
-                <div className={styles.datediv}>
+                <div className={styles.datedivEvents}>
                   <div>
                     <DatePicker
                       label={tCommon('startDate')}
-                      className={styles.datebox}
+                      className={styles.dateboxEvents}
                       value={dayjs(startDate)}
                       onChange={(date: Dayjs | null): void => {
                         if (date) {
@@ -298,7 +298,7 @@ export default function events(): JSX.Element {
                   <div>
                     <DatePicker
                       label={tCommon('endDate')}
-                      className={styles.datebox}
+                      className={styles.dateboxEvents}
                       value={dayjs(endDate)}
                       onChange={(date: Dayjs | null): void => {
                         if (date) {
@@ -314,7 +314,7 @@ export default function events(): JSX.Element {
                   <div className="mr-3">
                     <TimePicker
                       label={tCommon('startTime')}
-                      className={styles.datebox}
+                      className={styles.dateboxEvents}
                       timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                       value={timeToDayJs(startTime)}
                       onChange={(time): void => {
@@ -329,7 +329,7 @@ export default function events(): JSX.Element {
                   <div>
                     <TimePicker
                       label={tCommon('endTime')}
-                      className={styles.datebox}
+                      className={styles.dateboxEvents}
                       timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                       value={timeToDayJs(endTime)}
                       onChange={(time): void => {
@@ -342,8 +342,8 @@ export default function events(): JSX.Element {
                     />
                   </div>
                 </div>
-                <div className={styles.checkboxdiv}>
-                  <div className={styles.dispflex}>
+                <div className={styles.checkboxdivEvents}>
+                  <div className={styles.dispflexEvents}>
                     <label htmlFor="allday">{t('allDay')}?</label>
                     <Form.Switch
                       className="ms-2 mt-3"
@@ -354,7 +354,7 @@ export default function events(): JSX.Element {
                       onChange={(): void => setIsAllDay(!isAllDay)}
                     />
                   </div>
-                  <div className={styles.dispflex}>
+                  <div className={styles.dispflexEvents}>
                     <label htmlFor="recurring">{t('recurring')}:</label>
                     <Form.Switch
                       className="ms-2 mt-3"
@@ -366,8 +366,8 @@ export default function events(): JSX.Element {
                     />
                   </div>
                 </div>
-                <div className={styles.checkboxdiv}>
-                  <div className={styles.dispflex}>
+                <div className={styles.checkboxdivEvents}>
+                  <div className={styles.dispflexEvents}>
                     <label htmlFor="ispublic">{t('publicEvent')}?</label>
                     <Form.Switch
                       className="ms-2 mt-3"
@@ -378,7 +378,7 @@ export default function events(): JSX.Element {
                       onChange={(): void => setIsPublic(!isPublic)}
                     />
                   </div>
-                  <div className={styles.dispflex}>
+                  <div className={styles.dispflexEvents}>
                     <label htmlFor="registrable">{t('registerable')}?</label>
                     <Form.Switch
                       className="ms-2 mt-3"
@@ -392,7 +392,7 @@ export default function events(): JSX.Element {
                 </div>
                 <Button
                   type="submit"
-                  className={styles.greenregbtn}
+                  className={styles.blueregbtnEvents}
                   value="createevent"
                   data-testid="createEventBtn"
                 >
