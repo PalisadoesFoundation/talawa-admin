@@ -204,7 +204,7 @@ export default function chat(): JSX.Element {
   return (
     <>
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div data-testid="chat" className={`${styles.mainContainerChart}`}>
+        <div data-testid="chat" className={`${styles.mainContainerChat}`}>
           <div className={styles.contactContainer}>
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}

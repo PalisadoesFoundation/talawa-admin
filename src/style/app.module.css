@@ -3756,7 +3756,7 @@ button[data-testid='createPostBtn'] {
   height: 88vh;
 }
 
-.mainContainerChart {
+.mainContainerChat {
   width: 50%;
   margin-left: 20px;
   flex-grow: 3;
