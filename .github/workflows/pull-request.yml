@@ -104,6 +104,7 @@ jobs:
             src/style/** 
             schema.graphql
             package.json
+            package-lock.json
             tsconfig.json
             .gitignore
             .eslintrc.json
