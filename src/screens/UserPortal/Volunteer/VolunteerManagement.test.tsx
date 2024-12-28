@@ -1,6 +1,7 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { screen, waitFor, render } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/dom';
+import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
