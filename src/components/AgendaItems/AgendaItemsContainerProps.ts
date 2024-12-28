@@ -1,4 +1,5 @@
 type AgendaItemConnectionType = 'Event';
+import { vi } from 'vitest';
 
 export const props = {
   agendaItemConnection: 'Event' as AgendaItemConnectionType,
@@ -68,7 +69,7 @@ export const props = {
       },
     },
   ],
-  agendaItemRefetch: jest.fn(),
+  agendaItemRefetch: vi.fn(),
   agendaItemCategories: [
     {
       _id: 'agendaCategory1',
@@ -96,6 +97,6 @@ export const props = {
 export const props2 = {
   agendaItemConnection: 'Event' as AgendaItemConnectionType,
   agendaItemData: [],
-  agendaItemRefetch: jest.fn(),
+  agendaItemRefetch: vi.fn(),
   agendaItemCategories: [],
 };

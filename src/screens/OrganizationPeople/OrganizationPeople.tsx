@@ -393,21 +393,21 @@ function organizationPeople(): JSX.Element {
               ),
             }}
             sx={{
-              borderRadius: '20px',
-              backgroundColor: '#EAEBEF',
+              borderRadius: 'var(--table-head-radius)',
+              backgroundColor: 'var(--grey-bg-color)',
               '& .MuiDataGrid-row': {
-                backgroundColor: '#eff1f7',
+                backgroundColor: 'var(--tablerow-bg-color)',
                 '&:focus-within': {
                   outline: '2px solid #000',
                   outlineOffset: '-2px',
                 },
               },
               '& .MuiDataGrid-row:hover': {
-                backgroundColor: '#EAEBEF',
+                backgroundColor: 'var(--grey-bg-color)',
                 boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
               },
               '& .MuiDataGrid-row.Mui-hovered': {
-                backgroundColor: '#EAEBEF',
+                backgroundColor: 'var(--grey-bg-color)',
                 boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
               },
               '& .MuiDataGrid-cell:focus': {
