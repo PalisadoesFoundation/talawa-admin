@@ -121,13 +121,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             postId: props.id,
           },
         });
-        /* istanbul ignore next */
+
         if (data) {
           setLikes((likes) => likes - 1);
           setIsLikedByUser(false);
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         toast.error(error as string);
       }
     } else {
@@ -137,13 +136,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             postId: props.id,
           },
         });
-        /* istanbul ignore next */
+
         if (data) {
           setLikes((likes) => likes + 1);
           setIsLikedByUser(true);
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         toast.error(error as string);
       }
     }
@@ -205,7 +203,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (createEventData) {
         setCommentInput('');
         setNumComments((numComments) => numComments + 1);
@@ -228,7 +225,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setComments([...comments, newComment]);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -247,7 +243,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       toggleEditPost();
       toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -264,7 +259,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       props.fetchPosts(); // Refresh the posts
       toast.success('Successfully deleted the Post.');
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
