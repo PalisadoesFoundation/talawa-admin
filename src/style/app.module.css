@@ -3516,6 +3516,13 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   margin-right: 0.5rem;
   border-radius: 50%;
+  position: relative;
+  outline: none;
+}
+
+.recurrenceDayButton:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
 }
 
 .recurrenceDayButton:hover {
