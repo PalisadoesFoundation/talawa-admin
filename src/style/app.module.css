@@ -30,6 +30,7 @@
   --tablerow-bg-color: #eff1f7;
   --row-background: var(--bs-white, white);
   --font-size-header: 16px;
+  --bg-blue: #afffe8;
 }
 .fonts {
   color: #707070;
@@ -117,7 +118,7 @@
   font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
+  border-bottom: 3px solid var(--bg-blue);
   width: 15%;
 }
 
@@ -127,7 +128,7 @@
   font-size: 18px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
+  border-bottom: 3px solid var(--bg-blue);
   width: 60%;
 }
 
@@ -610,7 +611,7 @@ hr {
 .pageNotFound h1.head {
   font-size: 250px;
   font-weight: 900;
-  color: #31bb6b;
+  color: var(--bg-blue);
   letter-spacing: 25px;
   margin: 10px 0 0 0;
 }
@@ -690,7 +691,7 @@ hr {
 
 .inputFieldPledge {
   background-color: var(--bs-white);
-  box-shadow: 0 1px 1px #31bb6b;
+  box-shadow: 0 1px 1px var(--bg-blue);
 }
 
 .dropdownPledge {
@@ -856,7 +857,7 @@ hr {
 }
 
 .toggleBtnPledge:hover {
-  color: #31bb6b !important;
+  color: var(--bg-blue) !important;
 }
 
 .card {
@@ -1007,7 +1008,7 @@ hr {
 }
 
 .customcell {
-  background-color: #31bb6b !important;
+  background-color: var(--bg-blue) !important;
   color: var(--bs-white) !important;
   font-size: medium !important;
   font-weight: 500 !important;
@@ -1033,7 +1034,7 @@ hr {
 }
 
 .table-body > .table-row:nth-child(2n) {
-  background: #afffe8 !important;
+  background: var(--bg-blue) !important;
 }
 
 .organizationFundCampaignContainer {
@@ -1469,7 +1470,7 @@ hr {
 }
 
 .toggleBtn:hover {
-  color: #31bb6b !important;
+  color: var(--bg-blue) !important;
 }
 
 input[type='radio']:checked + label {
@@ -1580,10 +1581,10 @@ input[type='radio']:checked + label:hover {
 
 .dropdowns {
   background-color: var(--bs-white);
-  border: 1px solid #31bb6b;
+  border: 1px solid var(--dropdown-border-color);
   position: relative;
   display: inline-block;
-  color: #31bb6b;
+  color: black;
 }
 
 .chipIcon {
@@ -1682,6 +1683,7 @@ input[type='radio']:checked + label:hover {
   border: 0.5px solid var(--brown-color);
 }
 .searchButtonOrgList {
+  background-color: var(--bg-blue);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -3219,7 +3221,7 @@ button[data-testid='createPostBtn'] {
     display: flex !important;
     align-items: center;
     background-color: transparent;
-    color: #31bb6b;
+    color: var(--bg-blue);
   }
 
   .entryaction .spinner-grow {
