@@ -1,4 +1,4 @@
-node_modules/
+src/components/CheckIn/tagTemplate.tsnode_modules/
 dist/
 build/
 docs/
