@@ -18,6 +18,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import Chat from './Chat';
+import styles from './Chat.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { MESSAGE_SENT_TO_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
@@ -1692,4 +1693,64 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(screen.getByTestId('openMenu'));
     expect(await screen.findByTestId('closeMenu')).toBeInTheDocument();
   });
+  
+  test('Testing dynamic className change for div(with data-test id:conditional-rendering) based on hideDrawer', async () => {
+    setItem('userId', '1');
+    const mock = [
+      ...USER_JOINED_ORG_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...UserConnectionListMock,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...UserConnectionListMock,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Chat />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const divElement = screen.getByTestId('conditional-rendering');
+    expect(divElement).toHaveClass(
+      'd-flex',
+      'flex-row',
+      styles.containerHeight,
+    );
+    expect(divElement).not.toHaveClass(styles.expand, styles.contract);
+
+    const openMenuButton = await screen.findByTestId('openMenu');
+    fireEvent.click(openMenuButton);
+
+    expect(await screen.findByTestId('closeMenu')).toBeInTheDocument();
+    expect(divElement).toHaveClass(
+      'd-flex',
+      'flex-row',
+      styles.containerHeight,
+      styles.expand,
+    );
+    expect(divElement).not.toHaveClass(styles.contract);
+
+    const closeMenuButton = await screen.findByTestId('closeMenu');
+    fireEvent.click(closeMenuButton);
+
+    expect(await screen.findByTestId('openMenu')).toBeInTheDocument();
+    expect(divElement).toHaveClass(
+      'd-flex',
+      'flex-row',
+      styles.containerHeight,
+      styles.contract,
+    );
+    expect(divElement).not.toHaveClass(styles.expand);
+  });
+
 });
