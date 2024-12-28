@@ -3567,10 +3567,9 @@ button[data-testid='createPostBtn'] {
   background: none;
   border: none;
   margin-right: 1rem;
-  --bs-btn-active-bg: none;
 }
 .customToggle svg {
-  color: black;
+  color: var(--bs-black);
 }
 
 .customToggle::after {
@@ -3582,10 +3581,6 @@ button[data-testid='createPostBtn'] {
   background: none;
   border: none;
 }
-.customToggle svg {
-  color: black;
-}
-
 .cardBodyPostCard div {
   padding: 0.5rem;
 }
