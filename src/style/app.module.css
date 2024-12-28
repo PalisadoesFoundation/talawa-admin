@@ -6,7 +6,8 @@
   --subtle-blue-grey: #7c9beb;
   --subtle-blue-grey-hover: #5f7e91;
   --modal-width: 670px;
-  --modal-max-width: 680px;background-color: #f6f8fc; 
+  --modal-max-width: 680px;
+  background-color: #f6f8fc;
   --input-shadow-color: #dddddd;
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
@@ -3532,7 +3533,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .bg-danger {
-  background-color: var(--delete-button-color); 
+  background-color: var(--delete-button-color);
 }
 
 .text-start {
@@ -3574,7 +3575,7 @@ button[data-testid='createPostBtn'] {
 
 /* Button specific styles */
 .activeButton {
-  background-color: var(--grey-bg-color);  /* Changed from #eaebef */
+  background-color: var(--grey-bg-color); /* Changed from #eaebef */
   color: black;
 }
 
