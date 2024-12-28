@@ -1,4 +1,5 @@
 import { Template } from '@pdfme/common';
+import styles from '../../style/app.module.css';
 
 export const tagTemplate: Template = {
   schemas: [
@@ -6,15 +7,7 @@ export const tagTemplate: Template = {
       {
         name: 'name',
         type: 'text',
-        position: { x: 14.91, y: 27.03 },
-        width: 58.55,
-        height: 5.67,
-        alignment: 'center',
-        fontSize: 16,
-        characterSpacing: 0,
-        lineHeight: 1,
-        fontName: 'Roboto',
-        fontColor: '#08780b',
+        className: `${styles['tag-template-name']}`,
       } ,
     ],
   ] as any,
