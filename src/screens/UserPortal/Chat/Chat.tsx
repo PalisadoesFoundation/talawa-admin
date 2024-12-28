@@ -152,7 +152,15 @@ export default function chat(): JSX.Element {
         </Button>
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
+      <div
+        className={`d-flex flex-row ${styles.containerHeight} ${
+          hideDrawer === null
+            ? ''
+            : hideDrawer
+              ? styles.expand
+              : styles.contract
+        }`}
+      >
         <div data-testid="chat" className={`${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
             <div
