@@ -153,20 +153,6 @@
   outline: none !important;
 }
 
-.closeButtonOrganizationEvents {
-  margin-bottom: 10px;
-  color: var(--delete-button-color);
-  margin-right: 5px;
-  background-color: var(--delete-button-bg);
-  border: white;
-}
-
-.closeButtonOrganizationEvents:hover {
-  color: var(--delete-button-bg) !important;
-  background-color: var(--delete-button-color) !important;
-  border: white;
-}
-
 .modalContent {
   width: var(--modal-width);
   max-width: var(--modal-max-width);
@@ -954,10 +940,9 @@ hr {
 }
 
 .createButtonOrganizationEvents {
-  background-color: #a8c7fa !important;
+  background-color: var(--search-button-bg) !important;
   color: black !important;
-  margin: 1rem 0 0;
-  margin-top: 15px;
+  margin: 15px 0 0;
   padding: 10px 10px;
   border-radius: 5px;
   font-size: 16px;
@@ -968,13 +953,13 @@ hr {
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
-  border: 1px solid var(--dropdown-border-color);
+  border: 1px solid var(--search-button-border);
 }
 
 .createButtonOrganizationEvents:hover {
-  background-color: #286fe0 !important;
-  color: black !important;
-  border: 1px solid var(--dropdown-border-color) !important;
+  background-color: var(--bs-primary) !important;
+  color: white !important;
+  border: 1px solid var(--search-button-border) !important;
 }
 
 .time {
