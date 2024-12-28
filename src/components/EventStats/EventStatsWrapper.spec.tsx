@@ -4,12 +4,15 @@ import { MockedProvider } from '@apollo/react-testing';
 import { EventStatsWrapper } from './EventStatsWrapper';
 import { BrowserRouter } from 'react-router-dom';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+import { vi, describe, expect, it } from 'vitest';
 
-// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
-jest.mock('@mui/x-charts/PieChart', () => ({
-  pieArcLabelClasses: jest.fn(),
-  PieChart: jest.fn().mockImplementation(() => <>Test</>),
-  pieArcClasses: jest.fn(),
+// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Vitest)
+// These modules are used by the Feedback component
+vi.mock('@mui/x-charts/PieChart', async () => ({
+  ...(await vi.importActual('@mui/x-charts/PieChart')),
+  pieArcLabelClasses: vi.fn(),
+  PieChart: vi.fn().mockImplementation(() => <>Test</>),
+  pieArcClasses: vi.fn(),
 }));
 
 const mockData = [
@@ -38,20 +41,12 @@ const mockData = [
   },
 ];
 
-// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
-// These modules are used by the Feedback component
-jest.mock('@mui/x-charts/PieChart', () => ({
-  pieArcLabelClasses: jest.fn(),
-  PieChart: jest.fn().mockImplementation(() => <>Test</>),
-  pieArcClasses: jest.fn(),
-}));
-
 describe('Testing Event Stats Wrapper', () => {
   const props = {
     eventId: 'eventStats123',
   };
 
-  test('The button to open and close the modal should work properly', async () => {
+  it('The button to open and close the modal should work properly', async () => {
     const { queryByText, queryByRole } = render(
       <MockedProvider mocks={mockData} addTypename={false}>
         <BrowserRouter>

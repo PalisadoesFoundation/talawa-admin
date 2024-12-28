@@ -7,6 +7,7 @@ import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
+import { describe, expect, it } from 'vitest';
 
 const props = {
   data: {
@@ -35,7 +36,7 @@ const props = {
 };
 
 describe('Testing Average Rating Card', () => {
-  test('The component should be rendered and the Score should be shown', async () => {
+  it('The component should be rendered and the Score should be shown', async () => {
     const { queryByText } = render(
       <BrowserRouter>
         <Provider store={store}>

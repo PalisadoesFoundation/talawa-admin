@@ -3482,3 +3482,40 @@ button[data-testid='createPostBtn'] {
     opacity: 1;
   }
 }
+
+.attendance-modal .borderRightGreen {
+  border-right: 1px solid green;
+}
+.attendance-modal .positionedTopRight {
+  top: 10px;
+  right: 15px;
+  z-index: 1;
+}
+.attendance-modal .topRightCorner {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-bottom-left-radius: 8px;
+}
+.attendance-modal .bottomRightCorner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-top-left-radius: 12px;
+}
+.attendance-modal .topLeftCorner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-bottom-right-radius: 8px;
+}
+.attendance-modal .largeBoldText {
+  font-size: 80px;
+  font-weight: 400;
+}
+.attendance-modal .paddingBottom30 {
+  padding-bottom: 30px;
+}
+.attendance-modal .paddingBottom2Rem {
+  padding-bottom: 2rem;
+}
