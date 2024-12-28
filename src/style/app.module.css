@@ -33,6 +33,7 @@
   --font-size-header: 16px;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
+  --blue-bg-color: #286fe0;
 }
 .fonts {
   color: #707070;
@@ -3673,4 +3674,34 @@ button[data-testid='createPostBtn'] {
     transform: translateY(-1px);
     box-shadow: 0 4px 6px var(--grey-border-box-color);
   }
+}
+
+.justifyspEvents {
+  display: block;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.CreateButtonEvents {
+  background-color: var(--search-button-bg) !important;
+  color: black !important;
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  padding: 10px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+  border: 1px solid var(--dropdown-border-color);
+}
+
+.CreateButtonEvents:hover {
+  background-color: var(--blue-bg-color) !important;
+  color: black !important;
+  border: 1px solid var(--dropdown-border-color) !important;
 }
