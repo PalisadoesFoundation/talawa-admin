@@ -44,11 +44,11 @@ async function wait(ms = 100): Promise<void> {
 afterEach(() => {
   localStorage.clear();
   cleanup();
+  jest.clearAllMocks();
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
   setItem('id', '123');
-
   const link = new StaticMockLink(MOCKS, true);
   const link2 = new StaticMockLink(MOCKS_EMPTY, true);
   const link3 = new StaticMockLink(MOCKS_WITH_ERROR, true);
@@ -475,7 +475,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
 describe('Organisations Page testing as Admin', () => {
   const link = new StaticMockLink(MOCKS_ADMIN, true);
-
   test('Create organization modal should not be present in the page for Admin', async () => {
     setItem('id', '123');
     setItem('SuperAdmin', false);
@@ -501,35 +500,47 @@ describe('Organisations Page testing as Admin', () => {
     setItem('SuperAdmin', false);
     setItem('AdminFor', [{ name: 'adi', _id: 'a0', image: '' }]);
 
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrgList />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-      await wait();
-    });
-    const sortDropdown = await waitFor(() => screen.getByTestId('sort'));
+    await wait();
+
+    const sortDropdown = screen.getByTestId('sort');
     expect(sortDropdown).toBeInTheDocument();
 
     const sortToggle = screen.getByTestId('sortOrgs');
 
-    fireEvent.click(sortToggle);
-    const latestOption = await waitFor(() => screen.getByTestId('latest'));
+    await act(async () => {
+      fireEvent.click(sortToggle);
+    });
 
-    fireEvent.click(latestOption);
+    const latestOption = screen.getByTestId('latest');
+
+    await act(async () => {
+      fireEvent.click(latestOption);
+    });
 
     expect(sortDropdown).toBeInTheDocument();
-    fireEvent.click(sortToggle);
+
+    await act(async () => {
+      fireEvent.click(sortToggle);
+    });
+
     const oldestOption = await waitFor(() => screen.getByTestId('oldest'));
-    fireEvent.click(oldestOption);
+
+    await act(async () => {
+      fireEvent.click(oldestOption);
+    });
+
     expect(sortDropdown).toBeInTheDocument();
   });
 });

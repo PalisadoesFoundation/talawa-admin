@@ -1,15 +1,15 @@
 import React from 'react';
 import { Card, Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
-import styles from './Dashboardcard.module.css';
+import styles from '../../style/app.module.css';
 
 /**
  * Dashboard card loading component is a loading state for the dashboard card. It is used when the data is being fetched.
  * @returns JSX.Element
  */
-const dashBoardCardLoading = (): JSX.Element => {
+const DashBoardCardLoading = (): JSX.Element => {
   return (
-    <Card className="rounded-4" border="0">
+    <Card className="rounded-4" border="0" data-testid="Card">
       <Card.Body className={styles.cardBody}>
         <Row className="align-items-center">
           <Col sm={4}>
@@ -37,4 +37,4 @@ const dashBoardCardLoading = (): JSX.Element => {
   );
 };
 
-export default dashBoardCardLoading;
+export default DashBoardCardLoading;
