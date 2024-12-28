@@ -6,7 +6,7 @@
   --subtle-blue-grey: #7c9beb;
   --subtle-blue-grey-hover: #5f7e91;
   --modal-width: 670px;
-  --modal-max-width: 680px;
+  --modal-max-width: 680px;background-color: #f6f8fc; 
   --input-shadow-color: #dddddd;
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
@@ -3483,8 +3483,11 @@ button[data-testid='createPostBtn'] {
 }
 /* LeftDrawer general styles */
 .leftDrawer {
-  /* Add the necessary styles for the drawer container */
+  height: 100vh; /* Ensure it spans the full height */
+  overflow-y: auto; /* Enable vertical scrolling */
   transition: transform 0.3s ease;
+  position: fixed; /* Ensure it's positioned properly */
+  padding-bottom: 1rem; /* Prevent last item clipping */
 }
 
 .hideElemByDefault {
@@ -3529,7 +3532,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .bg-danger {
-  background-color: red; /* Example, make sure this matches the desired red */
+  background-color: var(--delete-button-color); 
 }
 
 .text-start {
@@ -3537,7 +3540,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .text-white {
-  color: white;
+  color: var(--bs-white);
 }
 
 .imageContainer img {
@@ -3556,7 +3559,7 @@ button[data-testid='createPostBtn'] {
 
 .secondaryText {
   font-size: 0.9rem;
-  color: gray;
+  color: var(--grey-bg-color);
 }
 
 /* Dropdown and options list */
@@ -3571,7 +3574,7 @@ button[data-testid='createPostBtn'] {
 
 /* Button specific styles */
 .activeButton {
-  background-color: #eaebef;
+  background-color: var(--grey-bg-color);  /* Changed from #eaebef */
   color: black;
 }
 
