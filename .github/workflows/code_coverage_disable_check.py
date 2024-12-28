@@ -77,7 +77,14 @@ def check_code_coverage(files_or_dirs):
                 if "node_modules" in root:
                     continue
                 for file_name in files:
-                    if file_name.endswith(".tsx") or file_name.endswith(".ts"):
+                    if (
+                        item.endswith(".tsx")
+                        or item.endswith(".ts")
+                        and not file_name.endswith(".test.tsx")
+                        and not file_name.endswith(".test.ts")
+                        and not file_name.endswith(".spec.tsx")
+                        and not file_name.endswith(".spec.ts")
+                    ):
                         file_path = os.path.join(root, file_name)
                         if has_code_coverage_disable(file_path):
                             print(
@@ -90,14 +97,16 @@ def check_code_coverage(files_or_dirs):
             if (
                 item.endswith(".tsx")
                 or item.endswith(".ts")
-                and not file_name.endswith(".test.tsx")
-                and not file_name.endswith(".test.ts")
-                and not file_name.endswith(".spec.tsx")
-                and not file_name.endswith(".spec.ts")
+                and not item.endswith(".test.tsx")
+                and not item.endswith(".test.ts")
+                and not item.endswith(".spec.tsx")
+                and not item.endswith(".spec.ts")
             ):
                 if has_code_coverage_disable(item):
-                    print(f"""File {item} contains code coverage disable
-                          statement.""")
+                    print(
+                        f"""File {item} contains code coverage disable
+                          statement."""
+                    )
                     code_coverage_found = True
 
     return code_coverage_found
