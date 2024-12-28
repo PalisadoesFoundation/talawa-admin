@@ -117,6 +117,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.7",
     "@babel/preset-typescript": "^7.26.0",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^12.1.10",
