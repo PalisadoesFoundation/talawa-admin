@@ -5229,6 +5229,35 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
       },
     },
   },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: undefined,
+        messageContent: 'Test reply message',
+        media: '',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          media: null,
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
 ];
 
 const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
