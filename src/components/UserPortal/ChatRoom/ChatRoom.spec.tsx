@@ -110,6 +110,35 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
     request: {
       query: MESSAGE_SENT_TO_CHAT,
       variables: {
+        userId: '8',
+      },
+    },
+    result: {
+      data: {
+        messageSentToChat: {
+          _id: '668ec1f1df364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          media: null,
+          chatMessageBelongsTo: {
+            _id: '1',
+          },
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MESSAGE_SENT_TO_CHAT,
+      variables: {
         userId: '1',
       },
     },
@@ -795,6 +824,204 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
       query: UNREAD_CHAT_LIST,
       variables: {
         id: null,
+      },
+    },
+    result: {
+      data: {
+        getUnreadChatsByUserId: {
+          _id: '1',
+          createdAt: '2345678903456',
+          isGroup: false,
+          creator: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: null,
+            email: 'testsuperadmin@example.com',
+            createdAt: '2023-04-13T04:53:17.742Z',
+            __typename: 'User',
+          },
+          organization: null,
+          name: '',
+          messages: [
+            {
+              _id: '345678',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              media: null,
+              replyTo: null,
+              type: 'STRING',
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+          ],
+          admins: [],
+          unseenMessagesByUsers: JSON.stringify({
+            '1': 0,
+            '2': 0,
+          }),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UNREAD_CHAT_LIST,
+      variables: {
+        id: '8',
+      },
+    },
+    result: {
+      data: {
+        getUnreadChatsByUserId: {
+          _id: '1',
+          createdAt: '2345678903456',
+          isGroup: false,
+          creator: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: null,
+            email: 'testsuperadmin@example.com',
+            createdAt: '2023-04-13T04:53:17.742Z',
+            __typename: 'User',
+          },
+          organization: null,
+          name: '',
+          messages: [
+            {
+              _id: '345678',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              media: null,
+              replyTo: null,
+              type: 'STRING',
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+          ],
+          admins: [],
+          unseenMessagesByUsers: JSON.stringify({
+            '1': 0,
+            '2': 0,
+          }),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UNREAD_CHAT_LIST,
+      variables: {
+        id: '8',
+      },
+    },
+    result: {
+      data: {
+        getUnreadChatsByUserId: {
+          _id: '1',
+          createdAt: '2345678903456',
+          isGroup: false,
+          creator: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: null,
+            email: 'testsuperadmin@example.com',
+            createdAt: '2023-04-13T04:53:17.742Z',
+            __typename: 'User',
+          },
+          organization: null,
+          name: '',
+          messages: [
+            {
+              _id: '345678',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              media: null,
+              replyTo: null,
+              type: 'STRING',
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+          ],
+          admins: [],
+          unseenMessagesByUsers: JSON.stringify({
+            '1': 0,
+            '2': 0,
+          }),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UNREAD_CHAT_LIST,
+      variables: {
+        id: '8',
       },
     },
     result: {
@@ -5426,7 +5653,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="" chatListRefetch={jest.fn()} />
+              <ChatRoom selectedContact="" chatListRefetch={vi.fn()} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5453,7 +5680,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={jest.fn()} />
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5480,7 +5707,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={jest.fn()} />
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5565,7 +5792,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={jest.fn()} />
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5647,7 +5874,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={jest.fn()} />
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5672,7 +5899,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={jest.fn()} />
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5753,7 +5980,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={jest.fn()} />
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
