@@ -462,3 +462,24 @@ jobs:
         run: |
           echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
           exit 1
+
+  CodeRabbit-Approval:
+    name: Validate CodeRabbit.ai Approval
+    needs: [Code-Quality-Checks, Docker-Start-Check, Start-App-Without-Docker, Test-Application]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check CodeRabbit.ai Approval
+        run: |
+          reviews=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews)
+
+          approval_count=$(echo "$reviews" | jq '[.[] | select(.state == "APPROVED" and .user.login == "coderabbitai")] | length')
+
+          if [[ $approval_count -eq 0 ]]; then
+            echo "Error: PR is not approved by CodeRabbit.ai"
+            exit 1
+          else
+            echo "Success: PR approved by CodeRabbit.ai"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
