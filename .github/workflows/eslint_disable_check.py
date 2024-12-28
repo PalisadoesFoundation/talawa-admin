@@ -75,7 +75,7 @@ def check_eslint(files_or_directories):
             # If it's a file, directly check it
             if item.endswith(".ts") or item.endswith(".tsx"):
                 if has_eslint_disable(item):
-                    print(f"File {item} contains eslint-disable statement.")
+                    print(f"File {item} contains eslint-disable statement. Please remove them and ensure the code adheres to the specified ESLint rules.")
                     eslint_found = True
         elif os.path.isdir(item):
             # If it's a directory, walk through it and check all
