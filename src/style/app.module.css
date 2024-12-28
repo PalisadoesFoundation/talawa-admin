@@ -460,6 +460,20 @@
   }
 }
 
+.tag-template-name {
+  position: absolute;
+  left: 14.91px;
+  top: 27.03px;
+  width: 58.55px;
+  height: 5.67px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 1;
+  color: #08780b;
+}
+
 .subTagsLink i {
   visibility: hidden;
 }
