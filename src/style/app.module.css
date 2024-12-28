@@ -2448,7 +2448,6 @@ button[data-testid='createPostBtn'] {
 }
 
 .cardActionBtn {
-.cardActionBtn {
   background-color: rgba(0, 0, 0, 0);
   padding: 0;
   border: none;
