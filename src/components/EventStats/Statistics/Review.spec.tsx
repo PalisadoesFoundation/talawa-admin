@@ -1,21 +1,15 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import { FeedbackStats } from './Feedback';
+import { ReviewStats } from './Review';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
+import { describe, expect, it } from 'vitest';
 
-// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
-jest.mock('@mui/x-charts/PieChart', () => ({
-  pieArcLabelClasses: jest.fn(),
-  PieChart: jest.fn().mockImplementation(() => <>Test</>),
-  pieArcClasses: jest.fn(),
-}));
-
-const nonEmptyProps = {
+const nonEmptyReviewProps = {
   data: {
     event: {
       _id: '123',
@@ -41,63 +35,61 @@ const nonEmptyProps = {
   },
 };
 
-const emptyProps = {
+const emptyReviewProps = {
   data: {
     event: {
       _id: '123',
-      feedback: [],
+      feedback: [
+        {
+          _id: 'feedback3',
+          review: null,
+          rating: 5,
+        },
+      ],
       averageFeedbackScore: 5,
     },
   },
 };
 
-describe('Testing Feedback Statistics Card', () => {
-  test('The component should be rendered and the feedback should be shown if present', async () => {
+describe('Testing Review Statistics Card', () => {
+  it('The component should be rendered and the reviews should be shown if present', async () => {
     const { queryByText } = render(
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <ToastContainer />
-            <FeedbackStats {...nonEmptyProps} />
+            <ReviewStats {...nonEmptyReviewProps} />
           </I18nextProvider>
         </Provider>
       </BrowserRouter>,
     );
 
-    await waitFor(() =>
-      expect(queryByText('Feedback Analysis')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(queryByText('Reviews')).toBeInTheDocument());
 
     await waitFor(() =>
-      expect(
-        queryByText('3 people have filled feedback for this event.'),
-      ).toBeInTheDocument(),
+      expect(queryByText('Filled by 2 people.')).toBeInTheDocument(),
     );
 
-    await waitFor(() => {
-      expect(queryByText('Test')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(queryByText('review2')).toBeInTheDocument());
   });
 
-  test('The component should be rendered and message should be shown if no feedback is present', async () => {
+  it('The component should be rendered and message should be shown if no review is present', async () => {
     const { queryByText } = render(
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <ToastContainer />
-            <FeedbackStats {...emptyProps} />
+            <ReviewStats {...emptyReviewProps} />
           </I18nextProvider>
         </Provider>
       </BrowserRouter>,
     );
 
-    await waitFor(() =>
-      expect(queryByText('Feedback Analysis')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(queryByText('Reviews')).toBeInTheDocument());
 
     await waitFor(() =>
       expect(
-        queryByText('Please ask attendees to submit feedback for insights!'),
+        queryByText('Waiting for people to talk about the event...'),
       ).toBeInTheDocument(),
     );
   });
