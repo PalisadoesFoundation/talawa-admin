@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from '@apollo/client';
 import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -30,7 +30,7 @@ import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
-import styles from './LoginPage.module.css';
+import styles from 'style/app.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
@@ -61,6 +61,8 @@ const loginPage = (): JSX.Element => {
     specialChar: boolean;
   };
 
+  const loginRecaptchaRef = useRef<ReCAPTCHA>(null);
+  const SignupRecaptchaRef = useRef<ReCAPTCHA>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [role, setRole] = useState<'admin' | 'user'>('admin');
@@ -254,9 +256,11 @@ const loginPage = (): JSX.Element => {
               cPassword: '',
               signOrg: '',
             });
+            SignupRecaptchaRef.current?.reset();
           }
         } catch (error) {
           errorHandler(t, error);
+          SignupRecaptchaRef.current?.reset();
         }
       } else {
         toast.warn(t('passwordMismatches') as string);
@@ -331,6 +335,7 @@ const loginPage = (): JSX.Element => {
       }
     } catch (error) {
       errorHandler(t, error);
+      loginRecaptchaRef.current?.reset();
     }
   };
 
@@ -485,6 +490,7 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
+                        ref={loginRecaptchaRef}
                         className="mt-2"
                         sitekey={
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
@@ -827,6 +833,7 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
+                        ref={SignupRecaptchaRef}
                         sitekey={
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }

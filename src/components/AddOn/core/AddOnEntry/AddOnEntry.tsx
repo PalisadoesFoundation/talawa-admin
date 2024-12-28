@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './AddOnEntry.module.css';
+import styles from './../../../../style/app.module.css';
 import { Button, Card, Spinner } from 'react-bootstrap';
 import { UPDATE_INSTALL_STATUS_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';

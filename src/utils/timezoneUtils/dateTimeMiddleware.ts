@@ -14,6 +14,13 @@ const combineDateTime = (date: string, time: string): string => {
 
 const splitDateTime = (dateTimeStr: string): { date: string; time: string } => {
   const dateTime = dayjs.utc(dateTimeStr);
+  if (!dateTime.isValid()) {
+    const [date, time] = dateTimeStr.split('T');
+    return {
+      date: date,
+      time: time,
+    };
+  }
   return {
     date: dateTime.format('YYYY-MM-DD'),
     time: dateTime.format('HH:mm:ss.SSS[Z]'),
@@ -21,18 +28,17 @@ const splitDateTime = (dateTimeStr: string): { date: string; time: string } => {
 };
 
 const convertUTCToLocal = (dateStr: string): string => {
-  if (dayjs(dateStr).isValid()) {
-    return dayjs.utc(dateStr).local().format('YYYY-MM-DDTHH:mm:ss.SSS');
+  if (!dayjs(dateStr).isValid()) {
+    return dateStr;
   }
-  return dateStr;
+  return dayjs.utc(dateStr).local().format('YYYY-MM-DDTHH:mm:ss.SSS');
 };
 
 const convertLocalToUTC = (dateStr: string): string => {
-  if (dayjs(dateStr).isValid()) {
-    const result = dayjs(dateStr).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-    return result;
+  if (!dayjs(dateStr).isValid()) {
+    return dateStr; // Leave the invalid value unchanged
   }
-  return dateStr;
+  return dayjs(dateStr).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 };
 
 const traverseAndConvertDates = (

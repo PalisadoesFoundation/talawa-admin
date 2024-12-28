@@ -159,17 +159,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       userId: userId,
     },
     onData: (messageSubscriptionData) => {
-      if (
-        messageSubscriptionData?.data.data.messageSentToChat &&
-        messageSubscriptionData?.data.data.messageSentToChat
-          .chatMessageBelongsTo['_id'] == props.selectedContact
-      ) {
+      const chatMessage = messageSubscriptionData.data?.data?.messageSentToChat;
+      const chatId = chatMessage?.chatMessageBelongsTo?._id;
+
+      if (!chatId) return;
+      if (chatId === props.selectedContact) {
         chatRefetch();
       } else {
-        chatRefetch({
-          id: messageSubscriptionData?.data.data.messageSentToChat
-            .chatMessageBelongsTo['_id'],
-        });
+        chatRefetch({ id: chatId });
       }
     },
   });
