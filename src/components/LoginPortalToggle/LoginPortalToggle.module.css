@@ -24,11 +24,11 @@
 .activeLink {
   color: white;
   border: 1px solid var(--bs-primary);
-  background-color: #1e4e8c;
+  background-color: var(--toggle-button-bg);
 }
 
 .activeLink:hover {
   color: var(--bs-white);
-  background-color: #1e4e8c;
+  background-color: var(--toggle-button-bg);
   border: 1px solid var(--bs-primary);
 }

@@ -16,6 +16,7 @@
   --table-image-small-size: 25px;
   --bs-primary: #0056b3;
   --bs-white: #fff;
+  --toggle-button-bg: #1e4e8c;
   --table-head-bg: var(
     --bs-primary,
     blue
