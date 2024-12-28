@@ -1693,7 +1693,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(screen.getByTestId('openMenu'));
     expect(await screen.findByTestId('closeMenu')).toBeInTheDocument();
   });
-  
+
   test('Testing dynamic className change for div(with data-test id:conditional-rendering) based on hideDrawer', async () => {
     setItem('userId', '1');
     const mock = [
@@ -1752,5 +1752,4 @@ describe('Testing Chat Screen [User Portal]', () => {
     );
     expect(divElement).not.toHaveClass(styles.expand);
   });
-
 });

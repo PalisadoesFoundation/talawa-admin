@@ -159,7 +159,7 @@ export default function chat(): JSX.Element {
             : hideDrawer
               ? styles.expand
               : styles.contract
-          }`}
+        }`}
         data-testid="conditional-rendering"
       >
         <div data-testid="chat" className={`${styles.mainContainer}`}>
