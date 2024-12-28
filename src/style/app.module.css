@@ -2448,16 +2448,21 @@ button[data-testid='createPostBtn'] {
 }
 
 .cardActionBtn {
+.cardActionBtn {
   background-color: rgba(0, 0, 0, 0);
   padding: 0;
   border: none;
   color: black;
+  transition: background-color 0.2s ease;
 }
 
-.cardActionBtn:hover {
+.cardActionBtn:hover,
+.cardActionBtn:focus {
   background-color: ghostwhite;
   border: none;
   color: black !important;
+  outline: 2px solid var(--subtle-blue-grey);
+  outline-offset: 2px;
 }
 
 .creatorNameModal {
