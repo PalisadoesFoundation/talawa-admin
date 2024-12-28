@@ -8,8 +8,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import 'jest-location-mock';
+import { BrowserRouter, Params } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from './OrganizationEvents';
@@ -23,12 +22,30 @@ import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MOCKS } from './OrganizationEventsMocks';
+import { describe, test, expect, vi } from 'vitest';
 
 const theme = createTheme({
   palette: {
     primary: {
       main: '#31bb6b',
     },
+  },
+});
+Object.defineProperty(window, 'location', {
+  value: {
+    href: 'http://localhost/',
+    assign: vi.fn((url) => {
+      const urlObj = new URL(url, 'http://localhost');
+      window.location.href = urlObj.href;
+      window.location.pathname = urlObj.pathname;
+      window.location.search = urlObj.search;
+      window.location.hash = urlObj.hash;
+    }),
+    reload: vi.fn(),
+    pathname: '/',
+    search: '',
+    hash: '',
+    origin: 'http://localhost',
   },
 });
 
@@ -42,6 +59,15 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+const linkURL = 'orgid';
+
+vi.mock('react-router-dom', async () => {
+  const actualDom = await vi.importActual('react-router-dom');
+  return {
+    ...actualDom,
+    useParams: (): Readonly<Params<string>> => ({ orgId: linkURL }),
+  };
+});
 
 const translations = {
   ...JSON.parse(
@@ -53,19 +79,19 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
+  const actual = vi.importActual('@mui/x-date-pickers');
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    ...actual,
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warning: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -80,7 +106,7 @@ describe('Organisation Events Page', () => {
     endTime: '05:00 PM',
   };
 
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
   test('It is necessary to query the correct mock data.', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.eventsByOrganizationConnection;
