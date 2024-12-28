@@ -32,6 +32,33 @@ export const MOCKS = [
   },
   {
     request: {
+      query: AGENDA_ITEM_CATEGORY_LIST,
+      variables: {
+        organizationId: '123',
+        where: {
+          name_contains: 'Category',
+        },
+      },
+    },
+    result: {
+      data: {
+        agendaItemCategoriesByOrganization: [
+          {
+            _id: 'agendaItemCategory1',
+            name: 'Category',
+            description: 'Test Description',
+            createdBy: {
+              _id: 'user1',
+              firstName: 'Harve',
+              lastName: 'Lance',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
       query: CREATE_AGENDA_ITEM_CATEGORY_MUTATION,
       variables: {
         input: {

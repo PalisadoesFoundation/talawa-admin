@@ -247,4 +247,93 @@ describe('Testing Agenda Categories Component', () => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
   });
+  test('allow user to type in the search field', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationAgendaCategory orgId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    const searchInput = await screen.findByTestId('searchByName');
+    expect(searchInput).toBeInTheDocument();
+
+    userEvent.type(searchInput, 'Category 1');
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('Category 1');
+    });
+  });
+  test('triggers search on pressing Enter key', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationAgendaCategory orgId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    const searchInput = await screen.findByTestId('searchByName');
+    expect(searchInput).toBeInTheDocument();
+
+    userEvent.type(searchInput, 'Category');
+    await waitFor(() => {
+      expect(screen.getAllByText('Category').length).toBe(2);
+    });
+  });
+  test('triggers search on clicking search button', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationAgendaCategory orgId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    const searchInput = await screen.findByTestId('searchByName');
+    expect(searchInput).toBeInTheDocument();
+    userEvent.type(searchInput, 'Category');
+
+    const searchButton = await screen.findByTestId('searchBtn');
+    userEvent.click(searchButton);
+    await waitFor(() => {
+      expect(screen.getAllByText('Category').length).toBe(2);
+    });
+  });
+  test('Search categories by name and clear the input by backspace', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationAgendaCategory orgId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    const searchInput = await screen.findByTestId('searchByName');
+    expect(searchInput).toBeInTheDocument();
+    userEvent.type(searchInput, 'A{backspace}');
+    await waitFor(() => {
+      expect(screen.getAllByText('Category').length).toBe(2);
+    });
+  });
 });
