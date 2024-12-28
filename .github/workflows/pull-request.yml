@@ -465,6 +465,7 @@ jobs:
 
   CodeRabbit-Approval:
     name: Validate CodeRabbit.ai Approval
+    needs: [Code-Quality-Checks, Docker-Start-Check, Start-App-Without-Docker, Test-Application]
     runs-on: ubuntu-latest
     steps:
       - name: Check CodeRabbit.ai Approval
@@ -481,7 +482,7 @@ jobs:
             echo "Error: Invalid JSON response from GitHub API"
             exit 1
           fi
-
+          
           approval_count=$(echo "$reviews" | jq '[.[] | select(.state == "APPROVED" and .user.login == "coderabbitai")] | length')
 
           if [[ ! "$approval_count" =~ ^[0-9]+$ ]]; then
