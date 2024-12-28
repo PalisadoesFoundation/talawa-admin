@@ -439,7 +439,8 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "talawaApiUnavailable": "API Talawa indisponible",
-    "done": "Fait"
+    "done": "Fait",
+    "createChat": "Créer une discussion"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -579,7 +580,8 @@
     "registerEvent": "Inscrire à l'événement",
     "close": "Fermer",
     "talawaApiUnavailable": "API Talawa non disponible",
-    "done": "Terminé"
+    "done": "Terminé",
+    "createChat": "Créer une discussion"
   },
   "funds": {
     "title": "Fonds",
@@ -1215,7 +1217,8 @@
     "eventDescription": "Description de l'événement",
     "eventLocation": "Lieu de l'événement",
     "startDate": "Date de début",
-    "endDate": "Date de fin"
+    "endDate": "Date de fin",
+    "createChat": "Créer une discussion"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1259,14 +1262,22 @@
     "endOfResults": "Fin des résultats"
   },
   "userChat": {
+    "add": "Ajouter",
     "chat": "Chat",
     "contacts": "Contacts",
     "search": "rechercher",
-    "messages": "messages"
+    "messages": "messages",
+    "create": "créer",
+    "newChat": "nouvelle discussion",
+    "newGroupChat": "Nouvelle discussion de groupe",
+    "groupInfo": "Informations sur le groupe",
+    "members": "Membres",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
-    "sendMessage": "Envoyer le message"
+    "sendMessage": "Envoyer le message",
+    "reply": "répondre"
   },
   "orgProfileField": {
     "loading": "Chargement...",
