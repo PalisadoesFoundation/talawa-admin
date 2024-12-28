@@ -3481,3 +3481,115 @@ button[data-testid='createPostBtn'] {
     opacity: 1;
   }
 }
+/* LeftDrawer general styles */
+.leftDrawer {
+  /* Add the necessary styles for the drawer container */
+  transition: transform 0.3s ease;
+}
+
+.hideElemByDefault {
+  display: none;
+}
+
+.inactiveDrawer {
+  transform: translateX(-100%);
+}
+
+.activeDrawer {
+  transform: translateX(0);
+}
+
+/* Branding Section */
+.brandingContainer {
+  /* Style for the branding container */
+}
+
+.talawaLogo {
+  /* Styling for the logo */
+}
+
+.talawaText {
+  /* Styling for the Talawa text */
+}
+
+/* Organization Section */
+.organizationContainer {
+  padding-right: 3rem;
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.shimmer {
+  /* Add shimmer animation styles */
+}
+
+.bg-danger {
+  background-color: red; /* Example, make sure this matches the desired red */
+}
+
+.text-start {
+  text-align: start;
+}
+
+.text-white {
+  color: white;
+}
+
+.imageContainer img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.profileText {
+  margin-left: 1rem;
+}
+
+.primaryText {
+  font-weight: bold;
+}
+
+.secondaryText {
+  font-size: 0.9rem;
+  color: gray;
+}
+
+/* Dropdown and options list */
+.optionList {
+  /* Add necessary styles */
+}
+
+.titleHeader {
+  font-size: 1.2rem;
+  color: var(--bs-secondary);
+}
+
+/* Button specific styles */
+.activeButton {
+  background-color: #eaebef;
+  color: black;
+}
+
+.inactiveButton {
+  background-color: transparent;
+  color: var(--bs-secondary);
+}
+
+.text-black {
+  color: black;
+}
+
+.text-secondary {
+  color: var(--bs-secondary);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
