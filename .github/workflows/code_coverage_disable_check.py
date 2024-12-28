@@ -2,7 +2,8 @@
 
 Methodology:
 
-    Recursively analyzes TypeScript files in the specified directories or checks specific files
+    Recursively analyzes TypeScript files in the specified directories or
+    checks specific files
     to ensure they do not contain code coverage disable statements.
 
     This script enforces proper code coverage practices in the project.
@@ -37,7 +38,8 @@ def has_code_coverage_disable(file_path):
         otherwise.
     """
     code_coverage_disable_pattern = re.compile(
-        r"""//?\s*istanbul\s+ignore(?:\s+(?:next|-line))?[^\n]*|/\*\s*istanbul\s+ignore\s+(?:next|-line)\s*\*/""",
+        r"""//?\s*istanbul\s+ignore(?:\s+(?:next|-line))?[^\n]*|
+        /\*\s*istanbul\s+ignore\s+(?:next|-line)\s*\*/""",
         re.IGNORECASE,
     )
     try:
@@ -57,7 +59,7 @@ def has_code_coverage_disable(file_path):
 
 def check_code_coverage(files_or_dirs):
     """
-    Check TypeScript files for code coverage disable statements. 
+    Check TypeScript files for code coverage disable statements.
 
     Args:
         files_or_dirs (list): List of files or directories to check.
@@ -75,13 +77,13 @@ def check_code_coverage(files_or_dirs):
                 if "node_modules" in root:
                     continue
                 for file_name in files:
-                    if (
-                        file_name.endswith(".tsx")
-                        or file_name.endswith(".ts")
-                    ):
+                    if file_name.endswith(".tsx") or file_name.endswith(".ts"):
                         file_path = os.path.join(root, file_name)
                         if has_code_coverage_disable(file_path):
-                            print(f"File {file_path} contains code coverage disable statement.")
+                            print(
+                                f"""File {file_path} contains code coverage
+                                disable statement."""
+                            )
                             code_coverage_found = True
         elif os.path.isfile(item):
             # If it's a file, check it directly
@@ -92,10 +94,10 @@ def check_code_coverage(files_or_dirs):
                 and not file_name.endswith(".test.ts")
                 and not file_name.endswith(".spec.tsx")
                 and not file_name.endswith(".spec.ts")
-
-            ) :
+            ):
                 if has_code_coverage_disable(item):
-                    print(f"File {item} contains code coverage disable statement.")
+                    print(f"""File {item} contains code coverage disable
+                          statement.""")
                     code_coverage_found = True
 
     return code_coverage_found
@@ -143,9 +145,7 @@ def main():
         SystemExit: If an error occurs during execution.
     """
     args = arg_parser_resolver()
-    
     files_or_dirs = args.files if args.files else args.directory
-    print(files_or_dirs)
     # Check code coverage in the specified files or directories
     code_coverage_found = check_code_coverage(files_or_dirs)
 

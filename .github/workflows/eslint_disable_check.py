@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: UTF-8 -*- 
+# -*- coding: UTF-8 -*-
 """ESLint Checker Script.
 
 Methodology:
 
     Recursively analyzes TypeScript files in the specified directory
-    or checks specific files directly to ensure they do not contain eslint-disable statements.
+    or checks specific files directly to ensure they do not contain
+    eslint-disable statements.
 
     This script enforces code quality practices in the project.
 
@@ -77,7 +78,8 @@ def check_eslint(files_or_directories):
                     print(f"File {item} contains eslint-disable statement.")
                     eslint_found = True
         elif os.path.isdir(item):
-            # If it's a directory, walk through it and check all .ts and .tsx files
+            # If it's a directory, walk through it and check all
+            # .ts and .tsx files
             for root, _, files in os.walk(item):
                 if "node_modules" in root:
                     continue
@@ -85,7 +87,10 @@ def check_eslint(files_or_directories):
                     if file_name.endswith(".ts") or file_name.endswith(".tsx"):
                         file_path = os.path.join(root, file_name)
                         if has_eslint_disable(file_path):
-                            print(f"File {file_path} contains eslint-disable statement.")
+                            print(
+                                f"""File {file_path} contains eslint-disable
+                                statement."""
+                            )
                             eslint_found = True
 
     return eslint_found
@@ -136,7 +141,6 @@ def main():
 
     # Determine whether to check files or directories based on the arguments
     files_or_directories = args.files if args.files else args.directory
-    print(files_or_directories)
     # Check eslint in the specified files or directories
     eslint_found = check_eslint(files_or_directories)
 
