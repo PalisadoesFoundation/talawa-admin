@@ -8,7 +8,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Params } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from './OrganizationEvents';
@@ -59,16 +59,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const linkURL = 'orgid';
-
-vi.mock('react-router-dom', async () => {
-  const actualDom = await vi.importActual('react-router-dom');
-  return {
-    ...actualDom,
-    useParams: (): Readonly<Params<string>> => ({ orgId: linkURL }),
-  };
-});
-
 const translations = {
   ...JSON.parse(
     JSON.stringify(
@@ -174,7 +164,7 @@ describe('Organisation Events Page', () => {
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
     expect(container.textContent).toMatch('Month');
-    expect(window.location).toBeAt('/orglist');
+    expect(window.location.pathname).toBe('/orglist');
   });
 
   test('No mock data', async () => {
