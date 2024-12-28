@@ -72,6 +72,8 @@ describe('useSession Hook', () => {
     vi.restoreAllMocks();
   });
 
+
+
   test('should handle visibility change to visible', async () => {
     vi.useFakeTimers();
 
