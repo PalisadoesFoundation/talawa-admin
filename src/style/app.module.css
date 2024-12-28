@@ -1,30 +1,44 @@
 :root {
-  --dropdown-border-color: #555555;
-  --dropdown-text-color: #555555;
-  --dropdown-hover-color: #eff1f7;
-  --grey-bg-color: #eaebef;
-  --subtle-blue-grey: #7c9beb;
-  --subtle-blue-grey-hover: #5f7e91;
+  /* Base Colors */
+  --color-light-blue:#286fe0;
+  --color-blue: #1100fd;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray-dark: #555555;
+  --color-gray-light: #dddddd;
+  --color-gray-hover: #eff1f7;
+  --color-gray-bg: #eaebef;
+  --color-blue-subtle: #7c9beb;
+  --color-blue-hover: #5f7e91;
+  --color-error-bg: #f8d6dc;
+  --color-error: #ff4d4f;
+  --color-success-bg: #a8c7fa;
+
+  /* Context Variables */
+  --dropdown-border-color: var(--color-gray-dark);
+  --dropdown-text-color: var(--color-gray-dark);
+  --dropdown-hover-color: var(--color-gray-hover);
+  --grey-bg-color: var(--color-gray-bg);
+  --subtle-blue-grey: var(--color-blue-subtle);
+  --subtle-blue-grey-hover: var(--color-blue-hover);
   --modal-width: 670px;
   --modal-max-width: 680px;
-  --input-shadow-color: #dddddd;
-  --delete-button-bg: #f8d6dc;
-  --delete-button-color: #ff4d4f;
-  --search-button-bg: #a8c7fa;
-  --search-button-border: #555555;
+  --input-shadow-color: var(--color-gray-light);
+  --delete-button-bg: var(--color-error-bg);
+  --delete-button-color: var(--color-error);
+  --search-button-bg: var(--color-success-bg);
+  --search-button-border: var(--color-gray-dark);
   --table-image-size: 50px;
-  --table-head-bg: var(
-    --bs-primary,
-    blue
-  ); /* Assuming var(--bs-primary) is defined elsewhere */
-  --table-head-color: white;
-  --table-header-color: var(--bs-greyish-black, black);
+  --table-head-bg: var(--bs-primary, var(--color-blue)); /* Assuming var(--bs-primary) is defined elsewhere */
+  --table-head-color: var(--color-white);
+  --table-header-color: var(--bs-greyish-black,var(--color-black));
   --table-head-radius: 20px;
-  --table-bg-color: #eaebef;
-  --tablerow-bg-color: #eff1f7;
-  --row-background: var(--bs-white, white);
+  --table-bg-color: var(--color-gray-bg);
+  --tablerow-bg-color: var(--color-gray-hover);
+  --row-background: var(--bs-white, var(--color-white));
   --font-size-header: 16px;
 }
+
 
 .noOutline input {
   outline: none;
@@ -38,13 +52,13 @@
   color: var(--delete-button-color);
   margin-right: 5px;
   background-color: var(--delete-button-bg);
-  border: white;
+  border: var(--color-white);
 }
 
 .closeButton:hover {
   color: var(--delete-button-bg) !important;
   background-color: var(--delete-button-color) !important;
-  border: white;
+  border: var(--color-white);
 }
 
 .modalContent {
@@ -79,7 +93,7 @@
 }
 
 .dropdownItem {
-  background-color: white !important;
+  background-color: var(--color-white) !important;
   color: var(--dropdown-text-color) !important;
   border: none !important;
 }
@@ -145,7 +159,7 @@
 
 .createButton {
   background-color: var(--grey-bg-color) !important;
-  color: black !important;
+  color: var(--color-black) !important;
   margin-top: 10px;
   margin-left: 5px;
   border: 1px solid var(--dropdown-border-color);
@@ -153,7 +167,7 @@
 
 .createButton:hover {
   background-color: var(--grey-bg-color) !important;
-  color: black !important;
+  color: var(--color-black) !important;
   border: 1px solid var(--dropdown-border-color) !important;
 }
 
@@ -171,13 +185,13 @@
 .inputField {
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: white;
+  background-color: var(--color-white);
   box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
 .inputFieldModal {
   margin-bottom: 10px;
-  background-color: white;
+  background-color: var(--color-white);
   box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
@@ -203,11 +217,11 @@
   margin-bottom: 10px;
   background-color: var(--search-button-bg);
   border-color: var(--grey-bg-color);
-  color: #555555;
+  color: var(--color-gray-dark);
 }
 
 .addButton:hover {
-  background-color: #286fe0;
+  background-color: var(--color-light-blue);
   border-color: var(--search-button-border);
 }
 
@@ -229,7 +243,7 @@
 }
 
 .infoButton:hover {
-  background-color: #286fe0;
+  background-color: var(--color-light-blue);
   border-color: var(--search-button-border);
 }
 
@@ -342,7 +356,7 @@ input[type='checkbox']:checked + label {
 }
 
 input[type='radio']:checked + label:hover {
-  color: black !important;
+  color: var(--color-black) !important;
 }
 
 .actionItemsContainer {
@@ -401,7 +415,7 @@ hr {
   flex-direction: row;
   font-weight: 900;
   font-size: 16px;
-  color: rgb(80, 80, 80);
+  color: var(--color-gray-dark);
 }
 
 .rankings {
