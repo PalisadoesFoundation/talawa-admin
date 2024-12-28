@@ -885,14 +885,14 @@ hr {
   width: 65%;
 }
 
-.closeButton {
+.closeButtonOrganizationEvents {
   color: var(--delete-button-color);
   margin-right: 5px;
   background-color: var(--delete-button-bg);
   border: white;
 }
 
-.closeButton:hover {
+.closeButtonOrganizationEvents:hover {
   color: var(--delete-button-bg) !important;
   background-color: var(--delete-button-color) !important;
   border: white;
