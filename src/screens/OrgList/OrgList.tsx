@@ -233,6 +233,8 @@ function orgList(): JSX.Element {
   };
 
   if (errorList || errorUser) {
+    errorHandler(t, errorList || errorUser);
+    localStorage.clear();
     window.location.assign('/');
   }
 

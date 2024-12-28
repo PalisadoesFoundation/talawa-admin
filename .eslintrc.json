@@ -148,6 +148,10 @@
     "**/*.scss",
     "**/*.less",
     "**/*.json",
-    "**/*.svg"
+    "**/*.svg",
+    "docs/docusaurus.config.ts",
+    "docs/sidebars.ts",
+    "docs/src/**",
+    "docs/blog/**"
   ]
 }

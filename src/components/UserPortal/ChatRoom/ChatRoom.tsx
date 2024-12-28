@@ -239,11 +239,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       ) {
         await markChatMessagesAsRead();
         chatRefetch();
-      } else {
-        chatRefetch({
-          id: messageSubscriptionData?.data.data.messageSentToChat
-            .chatMessageBelongsTo['_id'],
-        });
       }
       props.chatListRefetch();
       unreadChatListRefetch();

@@ -1,5 +1,11 @@
 import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -913,6 +919,7 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
+          admins: [],
           unseenMessagesByUsers: JSON.stringify({
             '1': 1,
             '2': 1,
@@ -977,6 +984,7 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
+          admins: [],
           unseenMessagesByUsers: JSON.stringify({
             '1': 1,
           }),
@@ -1040,6 +1048,7 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
+          admins: [],
         },
       },
     },
@@ -1059,6 +1068,7 @@ const CHATS_LIST_MOCK = [
         chatsByUserId: [
           {
             _id: '65844efc814dd40sassxaasfgh03db811c4',
+            image: '',
             isGroup: true,
             creator: {
               _id: '64378abd85008f171cf2990d',
@@ -1125,6 +1135,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -1139,6 +1158,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc8q14ddgh4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1207,6 +1227,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -1232,6 +1253,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814dd40fgh03db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1297,6 +1319,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -1311,6 +1342,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814ddgh4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1379,6 +1411,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -1404,6 +1437,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814dd40fggfdh03db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1469,6 +1503,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -1483,6 +1526,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814ddgh4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1551,6 +1595,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -1576,6 +1621,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814dd40wasxfgh03db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1644,6 +1690,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -1655,6 +1702,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814ddgh4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1720,6 +1768,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -1748,6 +1805,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844ghjefc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1816,6 +1874,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -1827,6 +1886,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: 'ujhgtrdtyuiop',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1892,6 +1952,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -1920,6 +1989,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814dhjmkdftyd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -1985,6 +2055,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -1999,6 +2078,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844ewsedrffc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2067,6 +2147,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -2092,6 +2173,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814dhjmkdftyd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2157,6 +2239,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -2171,6 +2262,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844ewsedrffc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2239,6 +2331,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -2264,6 +2357,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814dhjmkdftyd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2329,6 +2423,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -2343,6 +2446,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844ewsedrffc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2411,6 +2515,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -2436,6 +2541,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844efc814dhjmkdftyd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2501,6 +2607,15 @@ const CHATS_LIST_MOCK = [
                 firstName: 'Test',
                 lastName: 'User4',
                 email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            admins: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
                 image: '',
               },
             ],
@@ -2515,6 +2630,7 @@ const CHATS_LIST_MOCK = [
           {
             _id: '65844ewsedrffc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2583,6 +2699,7 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            admins: [],
             unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
@@ -2610,6 +2727,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
         chatById: {
           _id: '65844efc814dd4003db811c4',
           isGroup: true,
+          image: '',
           creator: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -2679,6 +2797,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
+          admins: [],
           unseenMessagesByUsers: JSON.stringify({
             '1': 1,
             '2': 1,
@@ -2705,6 +2824,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2771,6 +2891,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2837,6 +2958,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2903,6 +3025,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -2971,6 +3094,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3039,6 +3163,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3107,6 +3232,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3175,6 +3301,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3243,6 +3370,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
             _id: '1',
             createdAt: '2345678903456',
             isGroup: false,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3311,6 +3439,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
           {
             _id: '65844efc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3412,6 +3541,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
           {
             _id: '65844efc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3513,6 +3643,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
           {
             _id: '65844efc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3614,6 +3745,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
           {
             _id: '65844efc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3715,6 +3847,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
           {
             _id: '65844efc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3816,6 +3949,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
           {
             _id: '65844efc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -3917,6 +4051,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
           {
             _id: '65844efc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -4018,6 +4153,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
           {
             _id: '65844efc814dd4003db811c4',
             isGroup: true,
+            image: '',
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
@@ -4136,19 +4272,21 @@ describe('Testing Chat Screen [User Portal]', () => {
     localStorage.clear();
   });
 
+  const mock = [
+    ...USER_JOINED_ORG_MOCK,
+    ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+    ...MESSAGE_SENT_TO_CHAT_MOCK,
+    ...MESSAGE_SENT_TO_CHAT_MOCK,
+    ...UserConnectionListMock,
+    ...CHAT_BY_ID_QUERY_MOCK,
+    ...CHATS_LIST_MOCK,
+    ...UserConnectionListMock,
+    ...UNREAD_CHAT_LIST_QUERY_MOCK,
+    ...GROUP_CHAT_LIST_QUERY_MOCK,
+    ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+  ];
+
   test('Screen should be rendered properly', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_LIST_QUERY_MOCK,
-    ];
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -4164,20 +4302,6 @@ describe('Testing Chat Screen [User Portal]', () => {
   });
 
   test('User is able to select a contact', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_LIST_QUERY_MOCK,
-    ];
-
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -4198,18 +4322,6 @@ describe('Testing Chat Screen [User Portal]', () => {
   });
 
   test('create new direct chat', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_LIST_QUERY_MOCK,
-    ];
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -4242,19 +4354,6 @@ describe('Testing Chat Screen [User Portal]', () => {
   });
 
   test('create new group chat', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_LIST_QUERY_MOCK,
-    ];
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -4285,19 +4384,7 @@ describe('Testing Chat Screen [User Portal]', () => {
 
   test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
     setItem('userId', '1');
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_LIST_QUERY_MOCK,
-    ];
+
     resizeWindow(800);
 
     render(
@@ -4311,27 +4398,22 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait(10000);
+    await waitFor(() => {
+      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    });
+
+    const openMenuBtn = await screen.findByTestId('openMenu');
+    expect(openMenuBtn).toBeInTheDocument();
+    fireEvent.click(openMenuBtn);
+
+    const closeMenuBtn = await screen.findByTestId('closeMenu');
+    expect(closeMenuBtn).toBeInTheDocument();
   });
 
   // filter chat test
   test('Testing chat filters', async () => {
     setItem('userId', '1');
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_LIST_QUERY_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -4343,7 +4425,9 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait(1000);
+    await waitFor(() => {
+      expect(screen.findByTestId('unreadChat')).toBeInTheDocument();
+    });
     await act(async () => {
       fireEvent.click(await screen.findByTestId('unreadChat'));
     });
