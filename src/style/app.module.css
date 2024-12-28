@@ -2493,15 +2493,11 @@ button[data-testid='createPostBtn'] {
 
 .modalFooter {
   background-color: white;
-  position: absolute;
-  width: calc(100% - 1rem);
+  width: 100%;
   padding-block: 0.5rem;
   display: flex;
   flex-direction: column;
   border-top: 1px solid #dddddd;
-  bottom: 0;
-  right: 0.5rem;
-  margin-left: 1rem;
 }
 
 .inputArea {
