@@ -7,4 +7,5 @@ tsconfig.json
 
 # Ignore the Docusaurus website subdirectory
 docs/**
-
+*.md
+talawa-admin-docs/**
