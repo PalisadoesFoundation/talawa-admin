@@ -255,15 +255,12 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               getOptionLabel={(member: InterfaceUserInfo): string =>
                 `${member.firstName} ${member.lastName}`
               }
-              onChange={
-                /*istanbul ignore next*/
-                (_, newPledgers): void => {
-                  setFormState({
-                    ...formState,
-                    pledgeUsers: newPledgers,
-                  });
-                }
-              }
+              onChange={(_, newPledgers): void => {
+                setFormState({
+                  ...formState,
+                  pledgeUsers: newPledgers,
+                });
+              }}
               renderInput={(params) => (
                 <TextField {...params} label="Pledgers" />
               )}
@@ -283,7 +280,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                     pledgeStartDate: date.toDate(),
                     pledgeEndDate:
                       pledgeEndDate &&
-                      /*istanbul ignore next*/
                       (pledgeEndDate < date?.toDate()
                         ? date.toDate()
                         : pledgeEndDate),
@@ -322,15 +318,12 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 value={pledgeCurrency}
                 label={t('currency')}
                 data-testid="currencySelect"
-                onChange={
-                  /*istanbul ignore next*/
-                  (e) => {
-                    setFormState({
-                      ...formState,
-                      pledgeCurrency: e.target.value,
-                    });
-                  }
-                }
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    pledgeCurrency: e.target.value,
+                  });
+                }}
               >
                 {currencyOptions.map((currency) => (
                   <MenuItem key={currency.label} value={currency.value}>
