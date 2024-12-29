@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
 """Check TypeScript files for CSS violations and embedded CSS."""
 
 import argparse
