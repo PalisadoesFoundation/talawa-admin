@@ -4056,10 +4056,7 @@ button[data-testid='createPostBtn'] {
   margin: 0.15rem 0 0 1.25rem;
 }
 
-.progress {
-  width: 100%;
-  max-width: 45rem;
-}
+
 
 .progressBar {
   margin: 0rem 0.75rem;
@@ -4565,8 +4562,9 @@ button[data-testid='createPostBtn'] {
 }
 
 .progress {
-  display: flex;
-  width: 45rem;
+   display: flex;
+   width: 100%;
+   max-width: 45rem;
 }
 
 .progressBar {
