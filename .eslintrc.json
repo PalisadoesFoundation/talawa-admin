@@ -143,5 +143,23 @@
       "version": "detect"
     }
   },
-  "ignorePatterns": ["**/*.css", "**/*.scss", "**/*.less", "**/*.json"]
+  "ignorePatterns": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.less",
+    "**/*.json",
+    "**/*.svg",
+    "docs/docusaurus.config.ts",
+    "docs/sidebars.ts",
+    "docs/src/**",
+    "docs/blog/**"
+  ],
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    }
+  ]
 }

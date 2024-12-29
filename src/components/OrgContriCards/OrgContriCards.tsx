@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 
-import styles from './OrgContriCards.module.css';
+import styles from '../../style/app.module.css';
 
 /**
  * Props for the OrgContriCards component

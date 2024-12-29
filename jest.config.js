@@ -44,6 +44,7 @@ export default {
     '\\.svg\\?react$': '<rootDir>/scripts/__mocks__/fileMock.js',
     '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js',
     '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   moduleFileExtensions: [
     'web.js',
@@ -68,7 +69,6 @@ export default {
     'src/components/AddOn/support/services/Render.helper.ts',
     'src/components/SecuredRoute/SecuredRoute.tsx',
     'src/reportWebVitals.ts',
-    'src/screens/UserPortal/Volunteer/Actions/Actions.spec.tsx',
   ],
   coverageThreshold: {
     global: {
@@ -80,7 +80,6 @@ export default {
     '<rootDir>/node_modules/',
     '<rootDir>/build/',
     '<rootDir>/public/',
-    '<rootDir>/src/screens/UserPortal/Volunteer/Actions/Actions.spec.tsx',
   ],
   coverageDirectory: './coverage/jest',
   coverageReporters: ['text', 'html', 'text-summary', 'lcov'],

@@ -160,7 +160,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return <div>{params.row.id}</div>;
@@ -174,7 +174,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -195,7 +195,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return params.row.creator.firstName + ' ' + params.row.creator.lastName;
       },
@@ -207,7 +207,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       flex: 2,
       renderCell: (params: GridCellParams) => {
         return (
@@ -225,7 +225,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return params.row.isArchived ? 'Archived' : 'Active';
       },
@@ -238,7 +238,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -266,7 +266,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <Button
@@ -292,7 +292,7 @@ const organizationFunds = (): JSX.Element => {
             placeholder={tCommon('searchByName')}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles.inputFields}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchByName"
@@ -312,7 +312,7 @@ const organizationFunds = (): JSX.Element => {
               <Dropdown.Toggle
                 variant="success"
                 id="dropdown-basic"
-                className={styles.dropdown}
+                className={styles.dropdowns}
                 data-testid="filter"
               >
                 <Sort className={'me-1'} />
@@ -362,7 +362,7 @@ const organizationFunds = (): JSX.Element => {
           ),
         }}
         sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
         rows={funds.map((fund, index) => ({
