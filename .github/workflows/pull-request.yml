@@ -469,9 +469,13 @@ jobs:
     if: github.actor != 'dependabot[bot]'
     needs: [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
       - name: Validate CodeRabbit.ai Approval
         run: |
-          chmod +x .github/workflows/scripts/validate-coderabbit.sh
-          .github/workflows/scripts/validate-coderabbit.sh
+          chmod +x $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
+          $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

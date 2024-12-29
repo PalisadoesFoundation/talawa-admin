@@ -17,8 +17,8 @@ if [ "$remaining" -lt 1 ]; then
   exit 1
 fi
 
-reviews=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-  "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews")
+reviews=$(curl -s -f -H "Authorization: token $GITHUB_TOKEN" \
+    "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews")
 
 if [ $? -ne 0 ]; then
   echo "Error: Failed to fetch PR reviews."
