@@ -1,4 +1,4 @@
-[talawa-admin](../README.md) → [Modules](../modules.md) → components/OrgUpdate/OrgUpdate
+[talawa-admin](../README.md) / [Modules](../modules.md) / components/OrgUpdate/OrgUpdate
 
 # Module: components/OrgUpdate/OrgUpdate
 
@@ -16,8 +16,8 @@
 
 #### Parameters
 
-| Name    | Type                      |
-| :------ | :------------------------ |
+| Name | Type |
+| :------ | :------ |
 | `props` | `InterfaceOrgUpdateProps` |
 
 #### Returns
