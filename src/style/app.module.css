@@ -87,6 +87,28 @@
   position: relative;
   overflow: hidden;
 }
+.capacityabel {
+  background-color: var(--bs-primary);
+  color: white;
+  height: 22.19px;
+  font-size: 12px;
+  font-weight: bolder;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.capacityLabel {
+  background-color: var(--bs-primary);
+  color: white;
+  height: 22.19px;
+  font-size: 12px;
+  font-weight: bolder;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
 
 .capacityLabel svg {
   margin-bottom: 3px;
