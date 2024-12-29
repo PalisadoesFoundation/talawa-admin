@@ -488,9 +488,11 @@ jobs:
             echo "Error: Failed to parse approval count"
             exit 1
           fi
-
+          echo "hello m $approval_count"
+          echo "$approval_count"
           if [[ "$approval_count" =~ ^[0-9]+$ ]] && [[ "$approval_count" -gt 0 ]]; then
             echo "Success: PR approved by CodeRabbit.ai."
+            echo "$approval_count"
           else
             echo "Error: PR is not approved by CodeRabbit.ai"
             exit 1
