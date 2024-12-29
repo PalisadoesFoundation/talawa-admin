@@ -124,7 +124,9 @@ export default function createDirectChatModal({
         </Modal.Header>
         <Modal.Body>
           {allUsersLoading ? (
-            <Loader />
+            <>
+              <Loader />
+            </>
           ) : (
             <>
               <div className={styles.inputContainer}>
