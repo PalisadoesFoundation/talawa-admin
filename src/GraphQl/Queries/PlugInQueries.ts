@@ -167,6 +167,7 @@ export const CHAT_BY_ID = gql`
         _id
         createdAt
         messageContent
+        media
         replyTo {
           _id
           createdAt
@@ -192,18 +193,130 @@ export const CHAT_BY_ID = gql`
         firstName
         lastName
         email
+        image
       }
+      admins {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      unseenMessagesByUsers
+    }
+  }
+`;
+
+export const GROUP_CHAT_LIST = gql`
+  query groupChatsByUserId {
+    getGroupChatsByUserId {
+      _id
+      isGroup
+      name
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      messages {
+        _id
+        createdAt
+        messageContent
+        media
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      admins {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      unseenMessagesByUsers
+    }
+  }
+`;
+
+export const UNREAD_CHAT_LIST = gql`
+  query unreadChatList {
+    getUnreadChatsByUserId {
+      _id
+      isGroup
+      name
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      messages {
+        _id
+        createdAt
+        messageContent
+        media
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      admins {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      unseenMessagesByUsers
     }
   }
 `;
 
 export const CHATS_LIST = gql`
-  query ChatsByUserId($id: ID!) {
-    chatsByUserId(id: $id) {
+  query ChatsByUserId($id: ID!, $searchString: String) {
+    chatsByUserId(
+      id: $id
+      where: {
+        name_contains: $searchString
+        user: {
+          firstName_contains: $searchString
+          lastName_contains: $searchString
+        }
+      }
+    ) {
       _id
       isGroup
       name
-
+      image
       creator {
         _id
         firstName
@@ -232,10 +345,17 @@ export const CHATS_LIST = gql`
         email
         image
       }
+      admins {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      unseenMessagesByUsers
     }
   }
 `;
-
 /**
  * GraphQL query to check if an organization is a sample organization.
  *
