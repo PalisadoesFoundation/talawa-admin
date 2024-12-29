@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+}
+.listBox {
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+}
+
+.logintitle {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 15%;
+}
+.input {
+  display: flex;
+  position: relative;
+  width: 560px;
+}
+.justifysp {
+  display: grid;
+  width: 100%;
+  margin-top: 30px;
+}
+.actioninput {
+  text-decoration: none;
+  /* margin-bottom: 50px; */
+  border-color: #e8e5e5;
+  background-color: white;
+  border-radius: 7px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+}
+
+.actionradio input {
+  width: fit-content;
+  margin: inherit;
+}

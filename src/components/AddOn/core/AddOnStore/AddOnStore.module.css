@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+}
+
+.logintitle {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 15%;
+}
+.input {
+  display: flex;
+  position: relative;
+  width: 560px;
+}
+/* .actioninput {
+  text-decoration: none;
+  margin-bottom: 50px;
+  border-color: #e8e5e5;
+  width: 80%;
+  border-radius: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+} */
+.actioninput {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0 1px 1px #31bb6b;
+}
+.inputField > button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.actionradio input {
+  width: fit-content;
+  margin: inherit;
+}
+.cardGridItem {
+  width: 38vw;
+}
+.justifysp {
+  display: grid;
+  width: 100%;
+  justify-content: space-between;
+  align-items: baseline;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+}
+
+@media screen and (max-width: 600px) {
+  .cardGridItem {
+    width: 100%;
+  }
+  .justifysp {
+    display: grid;
+    width: 100%;
+    justify-content: center;
+    align-items: start;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr;
+    grid-gap: 0.8rem 0.4rem;
+  }
+}

@@ -1,0 +1,26 @@
+.mainContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px 0px #c8c8c8;
+  overflow: hidden;
+}
+
+.eventDetails {
+  gap: 5px;
+}
+
+.personImage {
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.eventActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+}
