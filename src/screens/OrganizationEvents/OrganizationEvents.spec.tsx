@@ -23,7 +23,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MOCKS } from './OrganizationEventsMocks';
 import { describe, test, expect, vi } from 'vitest';
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -73,7 +72,7 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
   const actual = vi.importActual('@mui/x-date-pickers');
   return {
     ...actual,
-    DateTimePicker: actual.DesktopDateTimePicker,
+    DateTimePicker: actual.DateTimePicker,
   };
 });
 
