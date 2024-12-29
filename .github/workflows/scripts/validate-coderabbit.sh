@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "Step 1: Fetching all PR reviews with pagination..."
 
 page=1
