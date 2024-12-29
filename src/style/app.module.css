@@ -4284,8 +4284,6 @@ button[data-testid='createPostBtn'] {
   color: rgb(255, 255, 255);
 }
 
-/* //////  donate //////// */
-
 .mainContainerDonate {
   width: 50%;
   flex-grow: 3;
@@ -4370,8 +4368,6 @@ button[data-testid='createPostBtn'] {
   flex-grow: 1;
 }
 
-/* //// leaveorg /// */
-
 .modal-dialog {
   display: flex;
   justify-content: center;
@@ -4399,8 +4395,6 @@ button[data-testid='createPostBtn'] {
   text-align: center;
   margin-top: 30px;
 }
-
-/* //// org module ///// */
 
 .contentOrg {
   height: fit-content;
@@ -4441,8 +4435,6 @@ button[data-testid='createPostBtn'] {
     width: 30px;
   }
 }
-
-/* //// people ///// */
 
 .borderBox {
   border: 1px solid #dddddd;
@@ -4508,7 +4500,6 @@ button[data-testid='createPostBtn'] {
   color: #737373;
 }
 
-/* // pledges///  */
 .btnsContainer {
   display: flex;
   margin: 1.5rem 0;
@@ -4555,6 +4546,7 @@ button[data-testid='createPostBtn'] {
    max-width: 45rem;
 }
 
+/* Consolidated styles */
 .progressBar {
   margin: 0 0.75rem;
   width: 100%;
@@ -4570,8 +4562,6 @@ button[data-testid='createPostBtn'] {
   color: var(--bs-white);
   font-size: 1rem;
 }
-
-/* //////  posts ///// */
 
 .mainContainerPosts {
   width: 50%;
@@ -4734,8 +4724,6 @@ button[data-testid='createPostBtn'] {
   display: none;
 }
 
-/* ///  settings //// */
-
 .containerHeightSettings {
   padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
   height: 100vh;
@@ -4814,8 +4802,6 @@ button[data-testid='createPostBtn'] {
     }
   }
 }
-
-/* /// userscreen //// */
 
 .pageContainer {
   display: flex;
