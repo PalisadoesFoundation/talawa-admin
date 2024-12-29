@@ -283,6 +283,7 @@ export const CREATE_EVENT_MUTATION = gql`
     $count: PositiveInt
     $interval: PositiveInt
     $weekDayOccurenceInMonth: Int
+    $createChat: Boolean!
   ) {
     createEvent(
       data: {
@@ -298,6 +299,7 @@ export const CREATE_EVENT_MUTATION = gql`
         startTime: $startTime
         endTime: $endTime
         location: $location
+        createChat: $createChat
       }
       recurrenceRuleData: {
         recurrenceStartDate: $recurrenceStartDate

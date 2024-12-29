@@ -426,7 +426,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
       await wait();
     });
 
-    const expectedLinks = ['My Organizations', 'Settings', 'Chat'];
+    const expectedLinks = ['My Organizations', 'Settings'];
     expectedLinks.forEach((link) => {
       expect(screen.getByText(link)).toBeInTheDocument();
     });
@@ -483,8 +483,8 @@ describe('UserSidebar Component Tests in User Portal', () => {
       renderUserSidebar('properId', link);
       await wait();
     });
-    const chatBtn = screen.getByTestId('chatBtn');
-    fireEvent.click(chatBtn);
+    const settingsBtn = screen.getByTestId('settingsBtn');
+    fireEvent.click(settingsBtn);
     expect(props.setHideDrawer).toHaveBeenCalledWith(true);
   });
 
