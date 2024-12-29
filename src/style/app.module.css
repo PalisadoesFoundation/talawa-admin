@@ -3832,3 +3832,36 @@ button[data-testid='createPostBtn'] {
     box-shadow: 0 4px 6px var(--grey-border-box-color);
   }
 }
+
+/* CreateDirectChat.tsx */
+
+.modalContent {
+  width: 530px;
+}
+
+.inputContainer {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.inputFieldModal {
+  padding-right: 40px;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+}
+
+.submitBtn {
+  position: absolute;
+  z-index: 10;
+  bottom: 10px;
+  right: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tableContainer {
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
