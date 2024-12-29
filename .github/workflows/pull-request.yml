@@ -471,7 +471,7 @@ jobs:
     steps:
       - name: Validate CodeRabbit.ai Approval
         run: |
-          chmod +x .github/scripts/validate-coderabbit.sh
-          .github/scripts/validate-coderabbit.sh
+          chmod +x .github/workflows/scripts/validate-coderabbit.sh
+          .github/workflows/scripts/validate-coderabbit.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
