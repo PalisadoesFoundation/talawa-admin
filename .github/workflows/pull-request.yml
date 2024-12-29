@@ -466,6 +466,7 @@ jobs:
   Validate-Coderabbit:
     name: Validate CodeRabbit Approval
     needs : [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
+    runs-on: ubuntu-latest
     steps:
       - name: Validate CodeRabbit.ai Approval
         run: |
