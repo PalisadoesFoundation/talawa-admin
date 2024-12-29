@@ -4057,16 +4057,6 @@ button[data-testid='createPostBtn'] {
 }
 
 
-
-.progressBar {
-  margin: 0rem 0.75rem;
-  width: 100%;
-  font-size: 0.9rem;
-  height: 1.25rem;
-}
-
-/* //////  chart //// */
-
 .expand {
   padding-left: 4rem;
   animation: moveLeft 0.9s ease-in-out;
@@ -4568,10 +4558,12 @@ button[data-testid='createPostBtn'] {
 }
 
 .progressBar {
-  margin: 0rem 0.75rem;
+  margin: 0 0.75rem;
   width: 100%;
   font-size: 0.9rem;
   height: 1.25rem;
+  transition: width 0.3s ease-in-out;
+  border-radius: 0.625rem;
 }
 
 /* Data Grid Styles */
