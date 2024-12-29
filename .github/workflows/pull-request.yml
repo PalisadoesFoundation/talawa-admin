@@ -465,6 +465,7 @@ jobs:
 
   Validate-Coderabbit:
     name: Validate CodeRabbit Approval
+    needs : [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
     uses: ./.github/workflows/scripts/validate-coderabbit.yml
     with:
       github_token: ${{ secrets.GITHUB_TOKEN }}
