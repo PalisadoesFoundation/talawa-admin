@@ -42,6 +42,16 @@ if ! echo "$reviews" | jq . >/dev/null 2>&1; then
 fi
 
 echo "Parsing the latest review by each user..."
+if [ "$(echo "$reviews" | jq '. | length')" -eq 0 ]; then
+  echo "Error: No reviews found for this PR"
+  exit 1
+fi
+
+if [ "${JQ_DEBUG:-}" = "1" ]; then
+  echo "Debug: Running jq command on reviews:"
+  echo "$reviews" | jq '.'
+fi
+
 latest_reviews=$(echo "$reviews" | jq -c '[.[]] | group_by(.user.login) | map(max_by(.submitted_at))')
 
 echo "Printing all latest review user logins and states:"
