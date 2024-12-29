@@ -465,12 +465,15 @@ jobs:
 
   Validate-Coderabbit:
     name: Validate CodeRabbit Approval
-    needs : [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    needs: [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
     steps:
       - name: Validate CodeRabbit.ai Approval
         run: |
           chmod +x .github/scripts/validate-coderabbit.sh
           .github/scripts/validate-coderabbit.sh
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

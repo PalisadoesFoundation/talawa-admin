@@ -8,6 +8,15 @@ if [ -z "${GITHUB_TOKEN:-}" ]; then
 fi
 
 echo "Fetching PR reviews from GitHub API..."
+rate_limit=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+  "https://api.github.com/rate_limit")
+remaining=$(echo "$rate_limit" | jq '.rate.remaining')
+
+if [ "$remaining" -lt 1 ]; then
+  echo "Error: GitHub API rate limit exceeded. Please try again later."
+  exit 1
+fi
+
 reviews=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
   "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews")
 
