@@ -312,12 +312,12 @@ function EventAttendance(): JSX.Element {
                       componentsProps={{
                         tooltip: {
                           sx: {
-                            backgroundColor: 'white',
+                            backgroundColor: 'var(--bs-white)',
                             fontSize: '2em',
                             maxHeight: '170px',
                             overflowY: 'scroll',
                             scrollbarColor: 'white',
-                            border: '1px solid green',
+                            border: 'var(--primary-border-solid)',
                             borderRadius: '6px',
                             boxShadow: '0 0 5px rgba(0,0,0,0.1)',
                           },
