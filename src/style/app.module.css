@@ -3712,7 +3712,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .progress {
-  width: 45rem;
+  width: 100%;
+  max-width: 45rem;
 }
 
 .progressBar {
@@ -3757,7 +3758,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .mainContainerChat {
-  width: 50%;
+  width: 100%;
+  max-width: 800px;
   margin-left: 20px;
   flex-grow: 3;
   max-height: 100%;
@@ -3779,10 +3781,11 @@ button[data-testid='createPostBtn'] {
   border-radius: 24px;
   overflow-y: scroll;
   margin-left: 0px;
-}
-
-.chatContainer::-webkit-scrollbar {
-  display: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .contactContainer {
@@ -4456,28 +4459,26 @@ button[data-testid='createPostBtn'] {
   justify-content: space-evenly;
 }
 
-@media screen and (max-width: 1280px) and (min-width: 992px) {
+@media screen and (max-width: 1280px) {
   .imgContianer {
     margin: 1rem auto;
   }
   .profileContainer {
     flex-direction: column;
   }
-}
-
-@media screen and (max-width: 992px) {
-  .profileContainer {
-    align-items: center;
-    justify-content: center;
+  @media (min-width: 992px) {
+    .profileContainer {
+      align-items: center;
+      justify-content: center;
+    }
   }
-}
-
-@media screen and (max-width: 420px) {
-  .imgContianer {
-    margin: 1rem auto;
-  }
-  .profileContainer {
-    flex-direction: column;
+  @media (max-width: 991px) {
+    .imgContianer {
+      margin: 1rem auto;
+    }
+    .profileContainer {
+      flex-direction: column;
+    }
   }
 }
 
