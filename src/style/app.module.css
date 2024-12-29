@@ -3699,7 +3699,6 @@ button[data-testid='createPostBtn'] {
   margin-top: 0.7rem !important;
   text-align: left;
 }
-
 .viewBtn {
   display: flex;
   justify-content: flex-end;
@@ -3721,16 +3720,22 @@ button[data-testid='createPostBtn'] {
   padding: 0;
   border: none;
   color: black;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-in-out;
+  border-radius: 4px;
 }
 
 .cardActionBtn:hover,
-.cardActionBtn:focus {
+.cardActionBtn:focus-visible {
   background-color: ghostwhite;
   border: none;
   color: black !important;
   outline: 2px solid var(--subtle-blue-grey);
   outline-offset: 2px;
+}
+
+.cardActionBtn:active {
+  transform: scale(0.95);
+  background-color: var(--grey-bg-color);
 }
 
 .creatorNameModal {
