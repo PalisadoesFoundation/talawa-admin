@@ -3564,6 +3564,88 @@ button[data-testid='createPostBtn'] {
   }
 }
 
+/* CustomRecurrenceModal.tsx */
+
+.titlemodalCustomRecurrenceModal {
+  color: var(--grey-bg-color-dark);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--subtle-blue-grey);
+  width: 65%;
+}
+
+.recurrenceRuleNumberInput {
+  width: 70px;
+}
+
+.recurrenceRuleDateBox {
+  width: 70%;
+}
+
+.recurrenceDayButton {
+  width: 33px;
+  height: 33px;
+  border: 1px solid var(--bs-gray);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  position: relative;
+  outline: none;
+}
+
+.recurrenceDayButton:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.recurrenceDayButton:hover {
+  background-color: var(--bs-gray);
+}
+
+.recurrenceDayButton.selected {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: var(--bs-white);
+}
+
+.recurrenceDayButton span {
+  color: var(--bs-gray);
+  padding: 0.25rem;
+  text-align: center;
+}
+
+.recurrenceDayButton:hover span {
+  color: var(--bs-white);
+}
+
+.recurrenceDayButton.selected span {
+  color: var(--bs-white);
+}
+
+.recurrenceRuleSubmitBtn {
+  display: block;
+  margin-left: auto;
+  padding: 7px 15px;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.recurrenceRuleSubmitBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recurrenceRuleSubmitBtn:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
 .attendance-modal .borderRightGreen {
   border-right: 1px solid green;
 }

@@ -88,8 +88,7 @@ def check_code_coverage(files_or_dirs):
                         file_path = os.path.join(root, file_name)
                         if has_code_coverage_disable(file_path):
                             print(
-                                f"""File {file_path} contains code coverage
-                                disable statement."""
+                                f"""File {file_path} contains code coverage disable statement."""
                             )
                             code_coverage_found = True
         elif os.path.isfile(item):
@@ -104,8 +103,7 @@ def check_code_coverage(files_or_dirs):
             ):
                 if has_code_coverage_disable(item):
                     print(
-                        f"""File {item} contains code coverage disable
-                          statement."""
+                        f"""File {item} contains code coverage disable statement. Please remove it and add the appropriate tests."""
                     )
                     code_coverage_found = True
 
