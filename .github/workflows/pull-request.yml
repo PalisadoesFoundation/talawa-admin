@@ -471,26 +471,28 @@ jobs:
       - name: Check CodeRabbit.ai Approval
         run: |
           echo "Fetching PR reviews from GitHub API..."
-            reviews=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews")
-            
-          if [ $? -ne 0 ]; then
+          if ! reviews=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews"); then
             echo "Error: Failed to fetch PR reviews."
             exit 1
           fi
+
           echo "Checking if the response is valid JSON..."
           if ! echo "$reviews" | jq . >/dev/null 2>&1; then
             echo "Error: Invalid JSON response from GitHub API."
             echo "Response received: $reviews"
             exit 1
           fi
-          approval_count=$(echo "$reviews" | jq '[.[] | select(.state == "APPROVED" and .user.login == "coderabbitai[bot]")] | length')
-          if [[ "$approval_count" =~ ^[0-9]+$ ]] && [[ $approval_count -gt 0 ]]; then
-            echo "Success: PR approved by CodeRabbit.ai."
-            break
+
+          if ! approval_count=$(echo "$reviews" | jq -r '[.[] | select(.state == "APPROVED" and .user.login == "coderabbitai[bot]")] | length'); then
+            echo "Error: Failed to parse approval count"
+            exit 1
           fi
-          if [ $APPROVED -eq 0 ]; then
-            echo "Error: Timed out waiting for CodeRabbit.ai approval."
+
+          if [[ "$approval_count" =~ ^[0-9]+$ ]] && [[ "$approval_count" -gt 0 ]]; then
+            echo "Success: PR approved by CodeRabbit.ai."
+          else
+            echo "Error: PR is not approved by CodeRabbit.ai"
             exit 1
           fi
         env:
