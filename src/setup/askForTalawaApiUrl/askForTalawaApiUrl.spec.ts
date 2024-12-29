@@ -2,9 +2,16 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from './askForTalawaApiUrl';
 
-vi.mock('inquirer', () => ({
-  prompt: vi.fn(),
-}));
+// Fix the mock to correctly handle the default export of 'inquirer'
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual<typeof inquirer>('inquirer'); // Replace `import()` type annotations
+  return {
+    ...actual,
+    default: {
+      ...actual,
+    },
+  };
+});
 
 describe('askForTalawaApiUrl', () => {
   beforeEach(() => {
