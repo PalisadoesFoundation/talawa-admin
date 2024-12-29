@@ -18,6 +18,7 @@
   --bs-primary: #0056b3;
   --bs-white: #fff;
   --bs-dark: #343a40;
+  --bs-secondary-text: #6c757d;
   --toggle-button-bg: #1e4e8c;
   --table-head-bg: var(
     --bs-primary,
@@ -4086,6 +4087,11 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  /* Add focus styles for keyboard navigation */
+  &:focus-within {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
 }
 
 .bg-danger {
@@ -4104,6 +4110,11 @@ button[data-testid='createPostBtn'] {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  /* Add alt text styles */
+  &[alt] {
+    font-size: 0.875rem;
+    color: var(--bs-emphasis-color);
+  }
 }
 
 .profileText {
@@ -4112,11 +4123,14 @@ button[data-testid='createPostBtn'] {
 
 .primaryText {
   font-weight: bold;
+  /* Ensure sufficient color contrast */
+  color: var(--bs-emphasis-color, #000);
 }
 
 .secondaryText {
   font-size: 0.9rem;
-  color: var(--grey-bg-color);
+  /* Use semantic color with better contrast */
+  color: var(--bs-secondary-text);
 }
 
 /* Dropdown and options list */
