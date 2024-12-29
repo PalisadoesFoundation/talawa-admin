@@ -5,18 +5,31 @@ import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
-import { CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
+import { CHAT_BY_ID, UNREAD_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
+import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
+  EDIT_CHAT_MESSAGE,
+  MARK_CHAT_MESSAGES_AS_READ,
   MESSAGE_SENT_TO_CHAT,
   SEND_MESSAGE_TO_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
+import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
+import { GrAttachment } from 'react-icons/gr';
+import convertToBase64 from 'utils/convertToBase64';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
+  chatListRefetch: (
+    variables?:
+      | Partial<{
+          id: string;
+        }>
+      | undefined,
+  ) => Promise<ApolloQueryResult<{ chatList: Chat[] }>>;
 }
 
 /**
@@ -59,7 +72,7 @@ type DirectMessage = {
       }
     | undefined;
   messageContent: string;
-  type: string;
+  media: string;
 };
 
 type Chat = {
@@ -68,12 +81,20 @@ type Chat = {
   name?: string;
   image?: string;
   messages: DirectMessage[];
+  admins: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
   users: {
     _id: string;
     firstName: string;
     lastName: string;
     email: string;
   }[];
+  unseenMessagesByUsers: string;
+  description: string;
 };
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
@@ -93,10 +114,23 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const userId = getItem('userId');
   const [chatTitle, setChatTitle] = useState('');
   const [chatSubtitle, setChatSubtitle] = useState('');
+  const [chatImage, setChatImage] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [chat, setChat] = useState<Chat>();
   const [replyToDirectMessage, setReplyToDirectMessage] =
     useState<DirectMessage | null>(null);
+  const [editMessage, setEditMessage] = useState<DirectMessage | null>(null);
+  const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
+    useState(false);
+
+  const [attachment, setAttachment] = useState('');
+
+  const openGroupChatDetails = (): void => {
+    setGroupChatDetailsModalisOpen(true);
+  };
+
+  const toggleGroupChatDetailsModal = (): void =>
+    setGroupChatDetailsModalisOpen(!groupChatDetailsModalisOpen);
 
   /**
    * Handles changes to the new message input field.
@@ -114,7 +148,23 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       chatId: props.selectedContact,
       replyTo: replyToDirectMessage?._id,
+      media: attachment,
       messageContent: newMessage,
+    },
+  });
+
+  const [editChatMessage] = useMutation(EDIT_CHAT_MESSAGE, {
+    variables: {
+      messageId: editMessage?._id,
+      messageContent: newMessage,
+      chatId: props.selectedContact,
+    },
+  });
+
+  const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
+    variables: {
+      chatId: props.selectedContact,
+      userId: userId,
     },
   });
 
@@ -124,8 +174,23 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
+  // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
+  //   variables: {
+  //     id: userId,
+  //   },
+  // });
+
+  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHAT_LIST, {
+    variables: {
+      id: userId,
+    },
+  });
+
   useEffect(() => {
-    chatRefetch();
+    markChatMessagesAsRead().then(() => {
+      props.chatListRefetch();
+      unreadChatListRefetch();
+    });
   }, [props.selectedContact]);
 
   useEffect(() => {
@@ -135,6 +200,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       if (chat.isGroup) {
         setChatTitle(chat.name);
         setChatSubtitle(`${chat.users.length} members`);
+        setChatImage(chat.image);
       } else {
         const otherUser = chat.users.find(
           (user: { _id: string }) => user._id !== userId,
@@ -142,35 +208,40 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         if (otherUser) {
           setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);
           setChatSubtitle(otherUser.email);
+          setChatImage(otherUser.image);
         }
       }
     }
   }, [chatData]);
 
   const sendMessage = async (): Promise<void> => {
-    await sendMessageToChat();
+    if (editMessage) {
+      await editChatMessage();
+    } else {
+      await sendMessageToChat();
+    }
     await chatRefetch();
     setReplyToDirectMessage(null);
     setNewMessage('');
+    setAttachment('');
+    await props.chatListRefetch({ id: userId });
   };
 
   useSubscription(MESSAGE_SENT_TO_CHAT, {
     variables: {
       userId: userId,
     },
-    onData: (messageSubscriptionData) => {
+    onData: async (messageSubscriptionData) => {
       if (
         messageSubscriptionData?.data.data.messageSentToChat &&
         messageSubscriptionData?.data.data.messageSentToChat
           .chatMessageBelongsTo['_id'] == props.selectedContact
       ) {
+        await markChatMessagesAsRead();
         chatRefetch();
-      } else {
-        chatRefetch({
-          id: messageSubscriptionData?.data.data.messageSentToChat
-            .chatMessageBelongsTo['_id'],
-        });
       }
+      props.chatListRefetch();
+      unreadChatListRefetch();
     },
   });
 
@@ -179,6 +250,22 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       .getElementById('chat-area')
       ?.lastElementChild?.scrollIntoView({ block: 'end' });
   });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAddAttachment = (): void => {
+    fileInputRef?.current?.click();
+  };
+
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      setAttachment(base64);
+    }
+  };
 
   return (
     <div
@@ -196,12 +283,23 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         <>
           <div className={styles.header}>
             <div className={styles.userInfo}>
-              <Avatar
-                name={chatTitle}
-                alt={chatTitle}
-                avatarStyle={styles.contactImage}
-              />
-              <div className={styles.userDetails}>
+              {chatImage ? (
+                <img
+                  src={chatImage}
+                  alt={chatTitle}
+                  className={styles.contactImage}
+                />
+              ) : (
+                <Avatar
+                  name={chatTitle}
+                  alt={chatTitle}
+                  avatarStyle={styles.contactImage}
+                />
+              )}
+              <div
+                onClick={() => (chat?.isGroup ? openGroupChatDetails() : null)}
+                className={styles.userDetails}
+              >
                 <p className={styles.title}>{chatTitle}</p>
                 <p className={styles.subtitle}>{chatSubtitle}</p>
               </div>
@@ -274,6 +372,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 </div>
                               </a>
                             )}
+                            {message.media && (
+                              <img
+                                className={styles.messageAttachment}
+                                src={message.media}
+                                alt="attachment"
+                              />
+                            )}
                             {message.messageContent}
                           </span>
                           <div className={styles.messageAttributes}>
@@ -294,7 +399,16 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                   }}
                                   data-testid="replyBtn"
                                 >
-                                  Reply
+                                  {t('reply')}
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    setEditMessage(message);
+                                    setNewMessage(message.messageContent);
+                                  }}
+                                  data-testid="replyToMessage"
+                                >
+                                  Edit
                                 </Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>
@@ -317,6 +431,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
             </div>
           </div>
           <div id="messageInput">
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }} // Hide the input
+              onChange={handleImageChange}
+            />
             {!!replyToDirectMessage?._id && (
               <div data-testid="replyMsg" className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
@@ -352,14 +473,33 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 </Button>
               </div>
             )}
+            {attachment && (
+              <div className={styles.attachment}>
+                <img src={attachment as string} alt="attachment" />
+
+                <Button
+                  onClick={() => setAttachment('')}
+                  className={styles.closeBtn}
+                >
+                  <Close />
+                </Button>
+              </div>
+            )}
+
             <InputGroup>
+              <button
+                onClick={handleAddAttachment}
+                className={styles.addAttachmentBtn}
+              >
+                <GrAttachment />
+              </button>
               <Form.Control
                 placeholder={t('sendMessage')}
                 aria-label="Send Message"
                 value={newMessage}
                 data-testid="messageInput"
                 onChange={handleNewMessageChange}
-                className={styles.backgroundWhite}
+                className={styles.sendMessageInput}
               />
               <Button
                 onClick={sendMessage}
@@ -372,6 +512,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
             </InputGroup>
           </div>
         </>
+      )}
+      {groupChatDetailsModalisOpen && chat && (
+        <GroupChatDetails
+          toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
+          groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
+          chat={chat}
+          chatRefetch={chatRefetch}
+        ></GroupChatDetails>
       )}
     </div>
   );

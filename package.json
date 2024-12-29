@@ -120,6 +120,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^12.1.10",
+    "@testing-library/dom": "^10.4.0",
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^26.0.24",
     "@types/js-cookie": "^3.0.6",

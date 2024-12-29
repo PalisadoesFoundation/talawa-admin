@@ -1,4 +1,5 @@
 type AgendaCategoryConnectionType = 'Organization';
+import { vi } from 'vitest';
 
 export const props = {
   agendaCategoryConnection: 'Organization' as AgendaCategoryConnectionType,
@@ -24,11 +25,11 @@ export const props = {
       },
     },
   ],
-  agendaCategoryRefetch: jest.fn(),
+  agendaCategoryRefetch: vi.fn(),
 };
 
 export const props2 = {
   agendaCategoryConnection: 'Organization' as AgendaCategoryConnectionType,
   agendaCategoryData: [],
-  agendaCategoryRefetch: jest.fn(),
+  agendaCategoryRefetch: vi.fn(),
 };
