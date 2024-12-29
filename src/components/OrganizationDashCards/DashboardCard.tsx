@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
-import styles from './Dashboardcard.module.css';
+import styles from '../../style/app.module.css';
 
 /** Dashboard card component is used to display the card with icon, title and count.
  * @param  icon - Icon for the card
