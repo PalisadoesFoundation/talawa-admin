@@ -457,6 +457,7 @@ export default function settings(): JSX.Element {
                           }}
                           slotProps={{
                             textField: {
+                              id: "birthDate",
                               error: false,
                             },
                           }}
