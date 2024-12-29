@@ -3565,6 +3565,163 @@ button[data-testid='createPostBtn'] {
   }
 }
 
+/* LeftDrawer general styles */
+.leftDrawer {
+  height: 100vh; /* Ensure it spans the full height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  transition: transform 0.3s ease;
+  position: fixed; /* Ensure it's positioned properly */
+  padding-bottom: 1rem; /* Prevent last item clipping */
+}
+
+.hideElemByDefault {
+  display: none;
+}
+
+.inactiveDrawer {
+  transform: translateX(-100%);
+}
+
+.activeDrawer {
+  transform: translateX(0);
+}
+
+/* Organization Section */
+.organizationContainer {
+  padding-right: 3rem;
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  /* Add focus styles for keyboard navigation */
+  &:focus-within {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
+}
+
+.bg-danger {
+  background-color: var(--delete-button-color);
+}
+
+.text-start {
+  text-align: start;
+}
+
+.text-white {
+  color: var(--bs-white);
+}
+
+.imageContainer img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* Add alt text styles */
+  &[alt] {
+    font-size: 0.875rem;
+    color: var(--bs-emphasis-color);
+  }
+}
+
+.profileText {
+  margin-left: 1rem;
+}
+
+.primaryText {
+  font-weight: bold;
+  /* Ensure sufficient color contrast */
+  color: var(--bs-emphasis-color, #000);
+}
+
+.secondaryText {
+  font-size: 0.9rem;
+  /* Use semantic color with better contrast */
+  color: var(--bs-secondary-text);
+}
+
+/* Dropdown and options list */
+
+.titleHeader {
+  font-size: 1.2rem;
+  color: var(--bs-secondary);
+}
+
+/* Button specific styles */
+.activeButton {
+  background-color: var(--grey-bg-color);
+  color: black;
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--bs-primary);
+  }
+}
+
+.inactiveButton {
+  background-color: transparent;
+  color: var(--bs-emphasis-color, #000);
+  &:hover {
+    background-color: var(--grey-bg-color);
+  }
+}
+
+/* Common focus-visible styles */
+.focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+/* Applying the focus-visible class to both buttons */
+.activeButton,
+.inactiveButton {
+  &.focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
+}
+
+.text-black {
+  color: black;
+}
+
+.text-secondary {
+  color: var(--bs-secondary);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  /* Add tooltip for icon-only buttons */
+  &[aria-label]:not([aria-label='']) {
+    position: relative;
+    &::after {
+      content: attr(aria-label);
+      position: absolute;
+      left: 100%;
+      background: var(--bs-dark);
+      color: var(--bs-white);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      opacity: 0;
+      visibility: hidden;
+    }
+    &:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
 /* CustomRecurrenceModal.tsx */
 
 .titlemodalCustomRecurrenceModal {
@@ -4054,154 +4211,4 @@ button[data-testid='createPostBtn'] {
   height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
-}
-
-/* LeftDrawer general styles */
-.leftDrawer {
-  height: 100vh; /* Ensure it spans the full height */
-  overflow-y: auto; /* Enable vertical scrolling */
-  transition: transform 0.3s ease;
-  position: fixed; /* Ensure it's positioned properly */
-  padding-bottom: 1rem; /* Prevent last item clipping */
-}
-
-.hideElemByDefault {
-  display: none;
-}
-
-.inactiveDrawer {
-  transform: translateX(-100%);
-}
-
-.activeDrawer {
-  transform: translateX(0);
-}
-
-/* Organization Section */
-.organizationContainer {
-  padding-right: 3rem;
-}
-
-.profileContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  /* Add focus styles for keyboard navigation */
-  &:focus-within {
-    outline: 2px solid var(--bs-primary);
-    outline-offset: 2px;
-  }
-}
-
-.bg-danger {
-  background-color: var(--delete-button-color);
-}
-
-.text-start {
-  text-align: start;
-}
-
-.text-white {
-  color: var(--bs-white);
-}
-
-.imageContainer img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  /* Add alt text styles */
-  &[alt] {
-    font-size: 0.875rem;
-    color: var(--bs-emphasis-color);
-  }
-}
-
-.profileText {
-  margin-left: 1rem;
-}
-
-.primaryText {
-  font-weight: bold;
-  /* Ensure sufficient color contrast */
-  color: var(--bs-emphasis-color, #000);
-}
-
-.secondaryText {
-  font-size: 0.9rem;
-  /* Use semantic color with better contrast */
-  color: var(--bs-secondary-text);
-}
-
-/* Dropdown and options list */
-
-.titleHeader {
-  font-size: 1.2rem;
-  color: var(--bs-secondary);
-}
-
-/* Button specific styles */
-.activeButton {
-  background-color: var(--grey-bg-color);
-  color: black;
-  position: relative;
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background-color: var(--bs-primary);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--bs-primary);
-    outline-offset: 2px;
-  }
-}
-
-.inactiveButton {
-  background-color: transparent;
-  color: var(--bs-emphasis-color, #000);
-  &:hover {
-    background-color: var(--grey-bg-color);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--bs-primary);
-    outline-offset: 2px;
-  }
-}
-
-.text-black {
-  color: black;
-}
-
-.text-secondary {
-  color: var(--bs-secondary);
-}
-
-.iconWrapper {
-  display: flex;
-  align-items: center;
-  margin-right: 8px;
-  /* Add tooltip for icon-only buttons */
-  &[aria-label]:not([aria-label='']) {
-    position: relative;
-    &::after {
-      content: attr(aria-label);
-      position: absolute;
-      left: 100%;
-      background: var(--bs-dark);
-      color: var(--bs-white);
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      opacity: 0;
-      visibility: hidden;
-    }
-    &:hover::after {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
 }
