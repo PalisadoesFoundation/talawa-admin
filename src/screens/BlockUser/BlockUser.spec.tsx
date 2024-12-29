@@ -360,9 +360,16 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
+    userEvent.click(screen.getByTestId('userFilter'));
+    userEvent.click(screen.getByTestId('showBlockedMembers'));
+    await wait();
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
+
     userEvent.click(screen.getByTestId('userFilter'));
     userEvent.click(screen.getByTestId('showMembers'));
-
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -397,6 +404,25 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
+    userEvent.click(screen.getByTestId('userFilter'));
+    userEvent.click(screen.getByTestId('showMembers'));
+    await wait();
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Sam Smith')).toBeInTheDocument();
+
+    // Open Dropdown
+    userEvent.click(screen.getByTestId('nameFilter'));
+    // Select option and enter first name
+    userEvent.click(screen.getByTestId('searchByLastName'));
+    const firstNameInput = screen.getByPlaceholderText(/Search by Last Name/i);
+    userEvent.type(firstNameInput, 'doe{enter}');
+
+    await wait(700);
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
 
     await wait();
     const searchBar = screen.getByTestId(/searchByName/i);
