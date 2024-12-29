@@ -470,10 +470,8 @@ jobs:
     steps:
       - name: Check CodeRabbit.ai Approval
         run: |
-          reviews=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews) 
-
-          if [ $? -ne 0 ]; then
+          if ! reviews=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews); then
             echo "Error: Failed to fetch PR reviews"
             exit 1
           fi
@@ -482,7 +480,7 @@ jobs:
             echo "Error: Invalid JSON response from GitHub API"
             exit 1
           fi
-          
+
           approval_count=$(echo "$reviews" | jq '[.[] | select(.state == "APPROVED" and .user.login == "coderabbitai[bot]")] | length')
 
           if [[ ! "$approval_count" =~ ^[0-9]+$ ]]; then
