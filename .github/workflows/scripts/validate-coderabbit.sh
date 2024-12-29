@@ -1,63 +1,37 @@
-#!/bin/bash
-echo "Step 1: Checking CodeRabbit.ai approval..."
+echo "Step 1: Fetching all PR reviews with pagination..."
 
-if [ -z "${GITHUB_TOKEN:-}" ]; then
-  echo "Error: GITHUB_TOKEN environment variable is not set"
-  exit 1
-fi
+page=1
+all_reviews="[]"
 
-if [ -z "${PR_NUMBER:-}" ]; then
-  echo "Error: PR_NUMBER environment variable is not set"
-  exit 1
-fi
+while true; do
+  echo "Fetching page $page..."
+  response=$(curl -s -f -H "Authorization: token $GITHUB_TOKEN" \
+    "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews?per_page=100&page=$page")
+  
+  if [ "$(echo "$response" | jq '. | length')" -eq 0 ]; then
+    echo "No more reviews to fetch."
+    break
+  fi
 
-if [ -z "${GITHUB_REPOSITORY:-}" ]; then
-  echo "Error: GITHUB_REPOSITORY environment variable is not set"
-  exit 1
-fi
+  all_reviews=$(echo "$all_reviews" "$response" | jq -s 'add')
+  page=$((page + 1))
+done
 
-echo "Fetching PR reviews from GitHub API..."
-rate_limit=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-  "https://api.github.com/rate_limit")
-remaining=$(echo "$rate_limit" | jq '.rate.remaining')
+echo "Debug: Combined reviews from all pages:"
+echo "$all_reviews" | jq '.'
 
-if [ "$remaining" -lt 1 ]; then
-  echo "Error: GitHub API rate limit exceeded. Please try again later."
-  exit 1
-fi
+reviews="$all_reviews"
 
-reviews=$(curl -s -f -H "Authorization: token $GITHUB_TOKEN" \
-    "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews")
-
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to fetch PR reviews."
-  exit 1
-fi
-
-echo "Checking if the response is valid JSON..."
-if ! echo "$reviews" | jq . >/dev/null 2>&1; then
-  echo "Error: Invalid JSON response from GitHub API."
-  echo "Response received: $reviews"
-  exit 1
-fi
-
-echo "Parsing the latest review by each user..."
-if [ "$(echo "$reviews" | jq '. | length')" -eq 0 ]; then
-  echo "Error: No reviews found for this PR"
-  exit 1
-fi
-
-if [ "${JQ_DEBUG:-}" = "1" ]; then
-  echo "Debug: Running jq command on reviews:"
-  echo "$reviews" | jq '.'
-fi
-
+echo "Step 2: Parsing the latest review by each user..."
 latest_reviews=$(echo "$reviews" | jq -c '[.[]] | group_by(.user.login) | map(max_by(.submitted_at))')
 
-echo "Printing all latest review user logins and states:"
+echo "Debug: Grouped latest reviews:"
+echo "$latest_reviews" | jq '.'
+
+echo "Step 3: Printing all latest review user logins and states:"
 echo "$latest_reviews" | jq -r '.[] | "User: \(.user.login), State: \(.state)"'
 
-echo "Checking approval status of 'coderabbitai[bot]'..."
+echo "Step 4: Checking approval status of 'coderabbitai[bot]'..."
 approval_state=$(echo "$latest_reviews" | jq -r '[.[] | select(.user.login == "coderabbitai[bot]" and .state == "APPROVED")] | length')
 
 echo "Approval count for CodeRabbit.ai: $approval_state"
