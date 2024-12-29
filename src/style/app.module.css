@@ -937,12 +937,12 @@ hr {
 }
 
 .titlemodalOrganizationEvents {
-  color: #707070;
+  color: var(--grey-bg-color-dark);
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #eaebef;
+  border-bottom: 3px solid var(--table-bg-color);
   width: 65%;
 }
 
