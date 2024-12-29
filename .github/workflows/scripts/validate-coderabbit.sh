@@ -1,5 +1,4 @@
 #!/bin/bash
-
 echo "Step 1: Checking CodeRabbit.ai approval..."
 
 if [ -z "${GITHUB_TOKEN:-}" ]; then
