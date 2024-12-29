@@ -13,7 +13,7 @@ describe('askForTalawaApiUrl', () => {
   });
 
   test('should return the provided endpoint when user enters it', async () => {
-    (inquirer.prompt as unknown as jest.Mock).mockResolvedValueOnce({
+    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
       endpoint: 'http://example.com/graphql/',
     });
 
@@ -32,7 +32,7 @@ describe('askForTalawaApiUrl', () => {
   });
 
   test('should return the default endpoint when the user does not enter anything', async () => {
-    (inquirer.prompt as unknown as jest.Mock).mockResolvedValueOnce({
+    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
       endpoint: 'http://localhost:4000/graphql/',
     });
 
