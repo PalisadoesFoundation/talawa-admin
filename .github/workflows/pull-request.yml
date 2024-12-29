@@ -470,7 +470,7 @@ jobs:
     needs: [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Validate CodeRabbit.ai Approval
         run: |
           chmod +x $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
