@@ -17,6 +17,7 @@
   --table-image-small-size: 25px;
   --bs-primary: #0056b3;
   --bs-white: #fff;
+  --bs-dark: #343a40;
   --toggle-button-bg: #1e4e8c;
   --table-head-bg: var(
     --bs-primary,
@@ -3779,19 +3780,6 @@ button[data-testid='createPostBtn'] {
   transform: translateX(0);
 }
 
-/* Branding Section */
-.brandingContainer {
-  /* Style for the branding container */
-}
-
-.talawaLogo {
-  /* Styling for the logo */
-}
-
-.talawaText {
-  /* Styling for the Talawa text */
-}
-
 /* Organization Section */
 .organizationContainer {
   padding-right: 3rem;
@@ -3802,10 +3790,6 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-}
-
-.shimmer {
-  /* Add shimmer animation styles */
 }
 
 .bg-danger {
@@ -3840,9 +3824,6 @@ button[data-testid='createPostBtn'] {
 }
 
 /* Dropdown and options list */
-.optionList {
-  /* Add necessary styles */
-}
 
 .titleHeader {
   font-size: 1.2rem;
@@ -3851,13 +3832,34 @@ button[data-testid='createPostBtn'] {
 
 /* Button specific styles */
 .activeButton {
-  background-color: var(--grey-bg-color); /* Changed from #eaebef */
+  background-color: var(--grey-bg-color);
   color: black;
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--bs-primary);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
 }
 
 .inactiveButton {
   background-color: transparent;
-  color: var(--bs-secondary);
+  color: var(--bs-emphasis-color, #000);
+  &:hover {
+    background-color: var(--grey-bg-color);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
 }
 
 .text-black {
@@ -3872,4 +3874,24 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
   margin-right: 8px;
+  /* Add tooltip for icon-only buttons */
+  &[aria-label]:not([aria-label='']) {
+    position: relative;
+    &::after {
+      content: attr(aria-label);
+      position: absolute;
+      left: 100%;
+      background: var(--bs-dark);
+      color: var(--bs-white);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      opacity: 0;
+      visibility: hidden;
+    }
+    &:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
 }
