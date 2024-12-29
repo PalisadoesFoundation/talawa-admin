@@ -50,5 +50,5 @@ jobs:
                 echo "Error: PR is not approved by CodeRabbit.ai."
                 exit 1
             fi
-            env:
+          env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
