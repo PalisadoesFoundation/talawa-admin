@@ -6,6 +6,16 @@ if [ -z "${GITHUB_TOKEN:-}" ]; then
   exit 1
 fi
 
+if [ -z "${PR_NUMBER:-}" ]; then
+  echo "Error: PR_NUMBER environment variable is not set"
+  exit 1
+fi
+
+if [ -z "${GITHUB_REPOSITORY:-}" ]; then
+  echo "Error: GITHUB_REPOSITORY environment variable is not set"
+  exit 1
+fi
+
 echo "Fetching PR reviews from GitHub API..."
 rate_limit=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
   "https://api.github.com/rate_limit")
