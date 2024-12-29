@@ -34,7 +34,7 @@
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
-  --primary-border-green: 1px solid #31bb6b;
+  --primary-border-solid: 1px solid var(--dropdown-border-color);
 }
 .fonts {
   color: #707070;

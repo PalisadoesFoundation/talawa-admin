@@ -317,7 +317,7 @@ function EventAttendance(): JSX.Element {
                             maxHeight: '170px',
                             overflowY: 'scroll',
                             scrollbarColor: 'white',
-                            border: 'var(--primary-border-green)',
+                            border: 'var(--primary-border-solid)',
                             borderRadius: '6px',
                             boxShadow: '0 0 5px rgba(0,0,0,0.1)',
                           },

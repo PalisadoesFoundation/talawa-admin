@@ -104,7 +104,7 @@ function addOnEntry({
     <>
       <Card
         data-testid="AddOnEntry"
-        style={{ border: 'var(--primary-border-green)', borderRadius: '10px' }}
+        style={{ border: 'var(--primary-border-solid)', borderRadius: '10px' }}
       >
         <Card.Body>
           <Card.Title style={{ fontWeight: '800' }}>{title}</Card.Title>
