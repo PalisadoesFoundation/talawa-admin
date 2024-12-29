@@ -463,10 +463,10 @@ jobs:
           echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
           exit 1
 
-    needs : [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
   CodeRabbit-Approval:
     name: Validate CodeRabbit.ai Approval
     runs-on: ubuntu-latest
+    needs : [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
     steps:
       - name: Check CodeRabbit.ai Approval
         run: |

@@ -35,6 +35,43 @@
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
 }
+:root {
+  --brown-color: #555555;
+  --dropdown-hover-color: #eff1f7;
+  --grey-bg-color: #eaebef;
+  --grey-border-box-color: #e8e5e5;
+  --subtle-blue-grey: #7c9beb;
+  --subtle-blue-grey-hover: #5f7e91;
+  --modal-width: 670px;
+  --modal-max-width: 680px;
+  --input-shadow-color: #dddddd;
+  --delete-button-bg: #f8d6dc;
+  --delete-button-color: #ff4d4f;
+  --search-button-bg: #a8c7fa;
+  --search-button-border: #555555;
+  --table-image-size: 50px;
+  --table-image-small-size: 25px;
+  --bs-primary: #0056b3;
+  --bs-white: #fff;
+  --toggle-button-bg: #1e4e8c;
+  --table-head-bg: var(
+    --bs-primary,
+    blue
+  ); /* Assuming var(--bs-primary) is defined elsewhere */
+  --loader-size: 10em;
+  --loader-border-width: 1.1em;
+  --loader-color: #febc59;
+  --table-head-color: white;
+  --table-header-color: var(--bs-greyish-black, black);
+  --table-head-radius: 20px;
+  --table-bg-color: #eaebef;
+  --tablerow-bg-color: #eff1f7;
+  --row-background: var(--bs-white, white);
+  --font-size-header: 16px;
+  --input-area-color: #f1f3f6;
+  --date-picker-background: #f2f2f2;
+  --grey-bg-color-dark: #707070;
+}
 .fonts {
   color: #707070;
 }
@@ -76,28 +113,6 @@
   grid-column: auto / span 1;
 }
 
-.capacityLabel {
-  background-color: var(--bs-primary);
-  color: white;
-  height: 22.19px;
-  font-size: 12px;
-  font-weight: bolder;
-  padding: 0.1rem 0.3rem;
-  border-radius: 0.5rem;
-  position: relative;
-  overflow: hidden;
-}
-.capacityabel {
-  background-color: var(--bs-primary);
-  color: white;
-  height: 22.19px;
-  font-size: 12px;
-  font-weight: bolder;
-  padding: 0.1rem 0.3rem;
-  border-radius: 0.5rem;
-  position: relative;
-  overflow: hidden;
-}
 .capacityLabel {
   background-color: var(--bs-primary);
   color: white;
