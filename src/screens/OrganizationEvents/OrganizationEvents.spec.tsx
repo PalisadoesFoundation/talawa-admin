@@ -69,10 +69,10 @@ const translations = {
 };
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
-  const actual = vi.importActual('@mui/x-date-pickers');
   return {
-    ...actual,
-    DateTimePicker: actual.DateTimePicker,
+    DateTimePicker: vi.requireActual(
+      '@mui/x-date-pickers/DesktopDateTimePicker',
+    ).DesktopDateTimePicker,
   };
 });
 
