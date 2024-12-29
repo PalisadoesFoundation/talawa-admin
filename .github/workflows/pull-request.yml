@@ -483,7 +483,7 @@ jobs:
             exit 1
           fi
           
-          approval_count=$(echo "$reviews" | jq '[.[] | select(.state == "APPROVED" and .user.login == "coderabbitai")] | length')
+          approval_count=$(echo "$reviews" | jq '[.[] | select(.state == "APPROVED" and .user.login == "coderabbitai[bot]")] | length')
 
           if [[ ! "$approval_count" =~ ^[0-9]+$ ]]; then
             echo "Error: Failed to parse approval count"
