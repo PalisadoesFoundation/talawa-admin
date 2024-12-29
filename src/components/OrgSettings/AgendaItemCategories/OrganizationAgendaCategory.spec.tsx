@@ -5,6 +5,7 @@ import {
   waitFor,
   act,
   waitForElementToBeRemoved,
+  fireEvent,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
@@ -286,7 +287,11 @@ describe('Testing Agenda Categories Component', () => {
     const searchInput = await screen.findByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'Category[Enter]');
+    userEvent.type(searchInput, 'Category');
+    await act(async () => {
+      fireEvent.keyUp(searchInput, { key: 'Enter' });
+    });
+    screen.debug();
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
     });
