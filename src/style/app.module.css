@@ -4020,8 +4020,6 @@ button[data-testid='createPostBtn'] {
   }
 }
 
-/* /// .campaignModal ///// */
-
 .btnsContainer input {
   outline: 1px solid var(--bs-gray-400);
   background-color: white;
