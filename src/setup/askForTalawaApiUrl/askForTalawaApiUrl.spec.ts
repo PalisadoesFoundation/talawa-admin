@@ -2,9 +2,11 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from './askForTalawaApiUrl';
 
-// Mock the `prompt` method of `inquirer`
+// Mock the `inquirer` module
 vi.mock('inquirer', () => ({
-  prompt: vi.fn(),
+  default: {
+    prompt: vi.fn(),
+  },
 }));
 
 describe('askForTalawaApiUrl', () => {
