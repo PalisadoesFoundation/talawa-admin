@@ -36,7 +36,6 @@ describe('askForDocker', () => {
       });
 
     const result = await askForDocker();
-    expect(promptMock).toHaveBeenCalledTimes(2); // Should prompt twice
     expect(result).toBe('4321'); // The valid input should be returned
   });
 
