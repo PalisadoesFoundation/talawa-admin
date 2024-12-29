@@ -47,7 +47,6 @@ npm run format:check
 1. Please read our [CONTRIBUTING.md](CONTRIBUTING.md) document for details on our testing policy.
 
 ## Pull Request Processing
-
 These are key guidelines for the procedure:
 
 ### Only submit PRs against our `develop` branch, not the default `main` branch
