@@ -2,6 +2,11 @@
 
 echo "Step 1: Checking CodeRabbit.ai approval..."
 
+if [ -z "${GITHUB_TOKEN:-}" ]; then
+  echo "Error: GITHUB_TOKEN environment variable is not set"
+  exit 1
+fi
+
 echo "Fetching PR reviews from GitHub API..."
 reviews=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
   "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews")
