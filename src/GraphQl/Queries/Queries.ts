@@ -328,6 +328,16 @@ export const EVENT_ATTENDEES = gql`
   }
 `;
 
+export const EVENT_REGISTRANTS = gql`
+  query GetEventAttendeesByEventId($eventId: ID!) {
+    getEventAttendeesByEventId(eventId: $eventId) {
+      userId
+      isRegistered
+      _id
+    }
+  }
+`;
+
 export const EVENT_CHECKINS = gql`
   query eventCheckIns($id: ID!) {
     event(id: $id) {

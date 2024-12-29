@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
-import styles from './OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
@@ -146,7 +146,7 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                           className={styles.TableImage}
                         />
                       ) : (
-                        <div className={styles.avatarContainer}>
+                        <div className={styles.TableImage}>
                           <Avatar
                             key={assigner._id + '1'}
                             containerStyle={styles.imageContainer}
