@@ -17,6 +17,7 @@
   --table-image-small-size: 25px;
   --bs-primary: #0056b3;
   --bs-white: #fff;
+  --toggle-button-bg: #1e4e8c;
   --table-head-bg: var(
     --bs-primary,
     blue
@@ -31,6 +32,8 @@
   --tablerow-bg-color: #eff1f7;
   --row-background: var(--bs-white, white);
   --font-size-header: 16px;
+  --date-picker-background: #f2f2f2;
+  --grey-bg-color-dark: #707070;
 }
 .fonts {
   color: #707070;
@@ -3482,6 +3485,279 @@ button[data-testid='createPostBtn'] {
     opacity: 1;
   }
 }
+
+/* CustomRecurrenceModal.tsx */
+
+.titlemodalCustomRecurrenceModal {
+  color: var(--grey-bg-color-dark);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--subtle-blue-grey);
+  width: 65%;
+}
+
+.recurrenceRuleNumberInput {
+  width: 70px;
+}
+
+.recurrenceRuleDateBox {
+  width: 70%;
+}
+
+.recurrenceDayButton {
+  width: 33px;
+  height: 33px;
+  border: 1px solid var(--bs-gray);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  position: relative;
+  outline: none;
+}
+
+.recurrenceDayButton:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.recurrenceDayButton:hover {
+  background-color: var(--bs-gray);
+}
+
+.recurrenceDayButton.selected {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: var(--bs-white);
+}
+
+.recurrenceDayButton span {
+  color: var(--bs-gray);
+  padding: 0.25rem;
+  text-align: center;
+}
+
+.recurrenceDayButton:hover span {
+  color: var(--bs-white);
+}
+
+.recurrenceDayButton.selected span {
+  color: var(--bs-white);
+}
+
+.recurrenceRuleSubmitBtn {
+  display: block;
+  margin-left: auto;
+  padding: 7px 15px;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.recurrenceRuleSubmitBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recurrenceRuleSubmitBtn:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.attendance-modal .borderRightGreen {
+  border-right: 1px solid green;
+}
+.attendance-modal .positionedTopRight {
+  top: 10px;
+  right: 15px;
+  z-index: 1;
+}
+.attendance-modal .topRightCorner {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-bottom-left-radius: 8px;
+}
+.attendance-modal .bottomRightCorner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-top-left-radius: 12px;
+}
+.attendance-modal .topLeftCorner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-bottom-right-radius: 8px;
+}
+.attendance-modal .largeBoldText {
+  font-size: 80px;
+  font-weight: 400;
+}
+.attendance-modal .paddingBottom30 {
+  padding-bottom: 30px;
+}
+.attendance-modal .paddingBottom2Rem {
+  padding-bottom: 2rem;
+}
+
+/* Events.tsx */
+
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: var(--bs-white);
+}
+
+.backgroundWhite {
+  background-color: var(--bs-white);
+}
+
+.maxWidth {
+  max-width: 800px;
+}
+
+.mainContainer {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 800px;
+  flex-grow: 3;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 0 1rem;
+}
+
+.selectType {
+  border-radius: 10px;
+}
+.dropdown__item {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.gap {
+  gap: var(--spacing-lg, 1.25rem);
+}
+
+.paddingY {
+  padding: var(--spacing-xl, 1.875rem) 0;
+}
+
+.eventActionsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.datePicker {
+  border-radius: 10px;
+  height: 2.5rem;
+  text-align: center;
+  background-color: var(--date-picker-background);
+  border: none;
+  width: 100%;
+}
+
+.modalBodyEvents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.switchContainer {
+  display: flex;
+  align-items: center;
+}
+
+.switches {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.titlemodalEvents {
+  color: var(--grey-bg-color-dark);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--subtle-blue-grey);
+  width: 65%;
+}
+
+.datedivEvents {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+
+.dateboxEvents {
+  width: 90%;
+  border-radius: 7px;
+  border-color: var(--grey-border-box-color);
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.checkboxdivEvents > label {
+  margin-right: 50px;
+}
+.checkboxdivEvents > label > input {
+  margin-left: 10px;
+}
+
+.checkboxdivEvents {
+  display: flex;
+}
+.checkboxdivEvents > div {
+  width: 50%;
+}
+
+.dispflexEvents {
+  display: flex;
+  align-items: center;
+}
+.dispflexEvents > input {
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+.blueregbtnEvents {
+  margin-top: var(--spacing-lg, 1.25rem);
+  border: 1px solid var(--grey-border-box-color);
+  box-shadow: 0 2px 2px var(--grey-border-box-color);
+  padding: var(--spacing-md, 0.625rem);
+  border-radius: 5px;
+  background-color: var(--subtle-blue-grey);
+  width: 100%;
+  font-size: 16px;
+  color: var(--bs-white);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px var(--grey-border-box-color);
+  }
+}
+
 /* LeftDrawer general styles */
 .leftDrawer {
   height: 100vh; /* Ensure it spans the full height */
