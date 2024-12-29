@@ -286,7 +286,7 @@ describe('Testing Agenda Categories Component', () => {
     const searchInput = await screen.findByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'Category');
+    userEvent.type(searchInput, 'Category[Enter]');
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
     });
