@@ -122,6 +122,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^12.1.10",
+    "@types/eslint__eslintrc": "^2.1.2",
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^26.0.24",
     "@types/js-cookie": "^3.0.6",

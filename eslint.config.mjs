@@ -12,13 +12,18 @@ import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 
-const _filename = fileURLToPath(import.meta.url);
-const _dirname = path.dirname(_filename);
-const compat = new FlatCompat({
-  baseDirectory: _dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
+export function createESLintCompat() {
+  const _filename = fileURLToPath(import.meta.url);
+  const _dirname = path.dirname(_filename);
+
+  return new FlatCompat({
+    baseDirectory: _dirname,
+    recommendedConfig: js.configs.recommended,
+    allConfig: js.configs.all,
+  });
+}
+
+const compat = createESLintCompat();
 
 export default [
   {
