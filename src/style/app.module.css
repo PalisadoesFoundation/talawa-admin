@@ -4117,3 +4117,66 @@ button[data-testid='createPostBtn'] {
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+/* VolunteerViewModal.tsx */
+
+.modalTitle {
+  margin: 0;
+}
+
+.modalForm {
+  padding: 1rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.tableImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.statusGroup {
+  display: flex;
+  gap: 1rem;
+  margin: 0 auto;
+  margin-bottom: 0.5rem;
+}
+
+.statusIcon {
+  margin-right: 0.5rem;
+}
+
+.acceptedStatus {
+  color: green;
+  -webkit-text-fill-color: green;
+}
+
+.pendingStatus {
+  color: #ed6c02;
+  -webkit-text-fill-color: #ed6c02;
+}
+
+.hoursField {
+  width: 100%;
+}
+
+.groupsLabel {
+  font-weight: lighter;
+  margin-left: 0.5rem;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  color: grey;
+}
+
+.tableHeader {
+  font-weight: bold;
+}
+
+.tableRow:last-child td,
+.tableRow:last-child th {
+  border: 0;
+}
