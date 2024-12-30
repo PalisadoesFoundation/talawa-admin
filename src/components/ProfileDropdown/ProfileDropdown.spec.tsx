@@ -238,6 +238,34 @@ describe('ProfileDropdown Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
+  test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
+    window.history.pushState({}, 'Test page', '/orglist');
+    setItem('SuperAdmin', true); // Set as admin
+    setItem('id', '123');
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route path="/orglist" element={<ProfileDropdown />} />
+            </Routes>
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/member/');
+  });
+
   test('navigates to /member/:userID for non-user roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
     setItem('SuperAdmin', true); // Set as admin
