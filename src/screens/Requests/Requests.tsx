@@ -258,7 +258,6 @@ const Requests = (): JSX.Element => {
               tabIndex={-1}
               className={`${styles.searchButton} `}
               data-testid="searchButton"
-              // style={{ marginTop: '9px' }}
               onClick={handleSearchByBtnClick}
             >
               <Search />
