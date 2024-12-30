@@ -3644,53 +3644,66 @@ button[data-testid='createPostBtn'] {
 }
 
 /* Dropdown and options list */
-
 .titleHeader {
   font-size: 1.2rem;
   color: var(--bs-secondary);
 }
 
-/* Button specific styles */
+/* Common focus-visible styles (NEW) */
+.focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+/* Reusable indicator styles (NEW) */
+.indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--bs-primary);
+}
+
+.arrow-indicator {
+  content: '▶'; /* Arrow symbol */
+  position: absolute;
+  right: 1rem; /* Distance from the right */
+  top: 50%; /* Vertically center the arrow */
+  transform: translateY(-50%); /* Adjust for perfect centering */
+  font-size: 0.8rem; /* Set arrow size */
+}
+
+/* Active Button */
 .activeButton {
   background-color: var(--grey-bg-color);
   color: black;
   position: relative;
+
+  /* Apply left border indicator */
   &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background-color: var(--bs-primary);
+    @extend .indicator;
+  }
+
+  /* Apply arrow indicator */
+  &::after {
+    @extend .arrow-indicator;
   }
 }
 
-/* Common hover styles */
+/* Inactive Button */
 .inactiveButton {
   background-color: transparent;
   color: var(--bs-emphasis-color, #000);
   &:hover {
     background-color: var(--grey-bg-color);
   }
-}
-
-/* Common focus-visible styles */
-/* New addition */
-.focus-visible {
-  outline: 2px solid var(--bs-primary);
-  outline-offset: 2px;
-}
-
-/* Applying the focus-visible class to both buttons */
-.activeButton,
-.inactiveButton {
+  /* Apply focus-visible class */
   &.focus-visible {
-    outline: 2px solid var(--bs-primary);
-    outline-offset: 2px;
+    @extend .focus-visible;
   }
 }
 
+/* Text styles */
 .text-black {
   color: black;
 }
@@ -3699,6 +3712,7 @@ button[data-testid='createPostBtn'] {
   color: var(--bs-secondary);
 }
 
+/* Icon wrapper styles */
 .iconWrapper {
   display: flex;
   align-items: center;
@@ -3717,10 +3731,14 @@ button[data-testid='createPostBtn'] {
       font-size: 0.875rem;
       opacity: 0;
       visibility: hidden;
+      /* Improve tooltip positioning */
+      transform: translateX(8px);
+      transition: all 0.2s ease;
     }
     &:hover::after {
       opacity: 1;
       visibility: visible;
+      transform: translateX(0);
     }
   }
 }
