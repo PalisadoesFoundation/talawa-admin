@@ -8,8 +8,14 @@ import gql from 'graphql-tag';
  */
 
 export const AGENDA_ITEM_CATEGORY_LIST = gql`
-  query AgendaItemCategoriesByOrganization($organizationId: ID!) {
-    agendaItemCategoriesByOrganization(organizationId: $organizationId) {
+  query AgendaItemCategoriesByOrganization(
+    $organizationId: ID!
+    $where: AgendaItemCategoryWhereInput
+  ) {
+    agendaItemCategoriesByOrganization(
+      organizationId: $organizationId
+      where: $where
+    ) {
       _id
       name
       description
