@@ -96,6 +96,9 @@
   --grey-bg-color-dark: #707070;
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
+  --status-accepted-color: #eaebef;
+  --status-pending-color: #ed6c02;
+  --groups-label-color: grey;
 }
 .fonts {
   color: var(--grey-bg-color-dark);
@@ -4151,13 +4154,13 @@ button[data-testid='createPostBtn'] {
 }
 
 .acceptedStatus {
-  color: green;
-  -webkit-text-fill-color: green;
+  color: var(--status-accepted-color);
+  -webkit-text-fill-color: var(--status-accepted-color);
 }
 
 .pendingStatus {
-  color: #ed6c02;
-  -webkit-text-fill-color: #ed6c02;
+  color: var(--status-pending-color);
+  -webkit-text-fill-color: var(--status-pending-color);
 }
 
 .hoursField {
@@ -4169,7 +4172,7 @@ button[data-testid='createPostBtn'] {
   margin-left: 0.5rem;
   margin-bottom: 0;
   font-size: 0.8rem;
-  color: grey;
+  color: var(--groups-label-color);
 }
 
 .tableHeader {
