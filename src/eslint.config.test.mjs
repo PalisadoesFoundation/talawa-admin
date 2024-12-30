@@ -5,6 +5,7 @@ import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 
 describe('eslint.config.mjs', () => {
+
   it('should correctly resolve _filename', () => {
     const _filename = fileURLToPath(import.meta.url);
     expect(_filename).toBeDefined();
@@ -29,4 +30,5 @@ describe('eslint.config.mjs', () => {
     expect(compat).toBeDefined();
     expect(compat).toBeInstanceOf(FlatCompat);
   });
+
 });

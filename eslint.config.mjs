@@ -29,7 +29,6 @@ export default [
       '**/*.json',
       '**/*.svg',
       'docs/docusaurus.config.ts',
-
       'docs/sidebars.ts',
       'docs/src/**/*',
       'docs/blog/**/*',
