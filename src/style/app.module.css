@@ -4151,13 +4151,23 @@ button[data-testid='createPostBtn'] {
 }
 
 .acceptedStatus {
-  color: green;
-  -webkit-text-fill-color: green;
+  color: var(--bs-primary);
+  -webkit-text-fill-color: var(--bs-primary);
+  /* Add checkmark icon */
+  &::before {
+    content: '✓';
+    margin-right: 0.25rem;
+  }
 }
 
 .pendingStatus {
-  color: #ed6c02;
-  -webkit-text-fill-color: #ed6c02;
+  color: var(--status-pending-color);
+  -webkit-text-fill-color: var(--status-pending-color);
+  /* Add clock icon */
+  &::before {
+    content: '⏳';
+    margin-right: 0.25rem;
+  }
 }
 
 .hoursField {
