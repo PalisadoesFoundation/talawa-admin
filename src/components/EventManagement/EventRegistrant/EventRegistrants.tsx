@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Button, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import style from '../../../style/app.module.css';
+import styles from '../../../style/app.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES, EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
@@ -112,7 +112,7 @@ function EventRegistrants(): JSX.Element {
         )}
         <Button
           data-testid="filter-button"
-          className={`border-1 mx-4 ${style.createButton} `}
+          className={`border-1 mx-4 ${styles.createButton} `}
         >
           <img
             src="/images/svg/organization.svg"
@@ -123,13 +123,13 @@ function EventRegistrants(): JSX.Element {
           {t('allRegistrants')}
         </Button>
       </div>
-      <TableContainer component={Paper} className={`mt-3 ${style.tableHead}`}>
+      <TableContainer component={Paper} className={`mt-3 ${styles.tableHead}`}>
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>
-            <TableRow role="row" className={`${style.rowBackground}`}>
+            <TableRow role="row" className={`${styles.rowBackground}`}>
               <TableCell
                 data-testid="table-header-serial"
-                className={style.tableHeader}
+                className={styles.tableHeader}
                 role="columnheader"
                 aria-sort="none"
               >
@@ -137,25 +137,25 @@ function EventRegistrants(): JSX.Element {
               </TableCell>
               <TableCell
                 data-testid="table-header-registrant"
-                className={style.tableHeader}
+                className={styles.tableHeader}
               >
                 {t('registrant')}
               </TableCell>
               <TableCell
                 data-testid="table-header-registered-at"
-                className={style.tableHeader}
+                className={styles.tableHeader}
               >
                 {t('registeredAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-created-at"
-                className={style.tableHeader}
+                className={styles.tableHeader}
               >
                 {t('createdAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-add-registrant"
-                className={style.tableHeader}
+                className={styles.tableHeader}
               >
                 {t('addRegistrant')}
               </TableCell>
