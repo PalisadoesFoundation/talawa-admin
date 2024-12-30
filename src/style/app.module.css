@@ -4161,8 +4161,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .pendingStatus {
-  color: var(--status-pending-color);
-  -webkit-text-fill-color: var(--status-pending-color);
+  color: var(--bs-warning);
+  -webkit-text-fill-color: var(--bs-warning);
   /* Add clock icon */
   &::before {
     content: '⏳';
@@ -4179,7 +4179,7 @@ button[data-testid='createPostBtn'] {
   margin-left: 0.5rem;
   margin-bottom: 0;
   font-size: 0.8rem;
-  color: grey;
+  color: var(--bs-secondary);
 }
 
 .tableHeader {
