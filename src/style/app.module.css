@@ -3665,6 +3665,7 @@ button[data-testid='createPostBtn'] {
   }
 }
 
+/* Common hover styles */
 .inactiveButton {
   background-color: transparent;
   color: var(--bs-emphasis-color, #000);
@@ -3674,6 +3675,7 @@ button[data-testid='createPostBtn'] {
 }
 
 /* Common focus-visible styles */
+/* New addition */
 .focus-visible {
   outline: 2px solid var(--bs-primary);
   outline-offset: 2px;
