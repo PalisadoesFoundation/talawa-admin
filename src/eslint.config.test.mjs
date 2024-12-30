@@ -1,34 +1,40 @@
-import { describe, it, expect } from 'vitest';
-import { fileURLToPath } from 'node:url';
+import { ESLint } from 'eslint';
 import path from 'node:path';
-import { FlatCompat } from '@eslint/eslintrc';
-import js from '@eslint/js';
+import { fileURLToPath } from 'node:url';
 
-describe('eslint.config.mjs', () => {
+const _filename = fileURLToPath(import.meta.url);
+const _dirname = path.dirname(_filename);
 
-  it('should correctly resolve _filename', () => {
-    const _filename = fileURLToPath(import.meta.url);
-    expect(_filename).toBeDefined();
-    expect(typeof _filename).toBe('string');
-  });
+describe('ESLint Config Tests', () => {
+  let eslint;
 
-  it('should correctly resolve _dirname', () => {
-    const _filename = fileURLToPath(import.meta.url);
-    const _dirname = path.dirname(_filename);
-    expect(_dirname).toBeDefined();
-    expect(typeof _dirname).toBe('string');
-  });
-
-  it('should correctly initialize FlatCompat', () => {
-    const _filename = fileURLToPath(import.meta.url);
-    const _dirname = path.dirname(_filename);
-    const compat = new FlatCompat({
-      baseDirectory: _dirname,
-      recommendedConfig: js.configs.recommended,
-      allConfig: js.configs.all,
+  beforeAll(() => {
+    eslint = new ESLint({
+      overrideConfigFile: path.resolve(_dirname, '../eslint.config.mjs'),
     });
-    expect(compat).toBeDefined();
-    expect(compat).toBeInstanceOf(FlatCompat);
   });
 
+  test('should ignore specified file patterns', async () => {
+    const results = await eslint.lintFiles([
+      '**/*.css',
+      '**/*.scss',
+      '**/*.less',
+      '**/*.json',
+      '**/*.svg',
+      'docs/docusaurus.config.ts',
+      'docs/sidebars.ts',
+      'docs/src/**/*',
+      'docs/blog/**/*',
+      'src/components/CheckIn/tagTemplate.ts',
+      '**/package.json',
+      '**/package-lock.json',
+      '**/tsconfig.json',
+      'docs/**/*',
+    ]);
+
+    results.forEach((result) => {
+      expect(result.errorCount).toBe(0);
+      expect(result.warningCount).toBe(0);
+    });
+  });
 });
