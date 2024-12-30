@@ -18,6 +18,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import Chat from '../../../screens/UserPortal/Chat/Chat';
+import CreateGroupChat from './CreateGroupChat';
 import {
   CREATE_CHAT,
   MARK_CHAT_MESSAGES_AS_READ,
@@ -5576,22 +5577,371 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-
 describe('Testing Create Group Chat Modal [User Portal]', () => {
-  window.HTMLElement.prototype.scrollIntoView = vi.fn();
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+  });
 
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(), // Deprecated
-      removeListener: vi.fn(), // Deprecated
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
+  it('handles image upload functionality', async () => {
+    const toggleMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    const mock = [
+      ...USER_JOINED_ORG_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...UserConnectionListMock,
+      ...CREATE_CHAT_MUTATION,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+      ...UNREAD_CHAT_BY_USER_ID_QUERY_MOCK,
+      ...GROUP_CHAT_LIST_QUERY_MOCK,
+    ];
+
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleMock}
+                chatsListRefetch={refetchMock}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Test file upload
+    const fileInput = screen.getByTestId('fileInput');
+    expect(fileInput).toBeInTheDocument();
+
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [file] } });
+    });
+  });
+
+  it('handles group description input', async () => {
+    const toggleMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    const mock = [
+      ...USER_JOINED_ORG_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...UserConnectionListMock,
+      ...CREATE_CHAT_MUTATION,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+      ...UNREAD_CHAT_BY_USER_ID_QUERY_MOCK,
+      ...GROUP_CHAT_LIST_QUERY_MOCK,
+    ];
+
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleMock}
+                chatsListRefetch={refetchMock}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const descriptionInput = screen.getByTestId(
+      'groupDescriptionInput',
+    ) as HTMLInputElement;
+    expect(descriptionInput).toBeInTheDocument();
+
+    fireEvent.change(descriptionInput, {
+      target: { value: 'Test group description' },
+    });
+
+    expect(descriptionInput.value).toBe('Test group description');
+  });
+
+  it('handles user search and form submission', async () => {
+    const toggleMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    const mock = [
+      ...USER_JOINED_ORG_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...UserConnectionListMock,
+      ...CREATE_CHAT_MUTATION,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+      ...UNREAD_CHAT_BY_USER_ID_QUERY_MOCK,
+      ...GROUP_CHAT_LIST_QUERY_MOCK,
+    ];
+
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleMock}
+                chatsListRefetch={refetchMock}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Click next to go to user search screen
+    const nextBtn = screen.getByTestId('nextBtn');
+    fireEvent.click(nextBtn);
+
+    // Find and test search input
+    const searchInput = screen.getByTestId('searchUser') as HTMLInputElement;
+    expect(searchInput).toBeInTheDocument();
+
+    fireEvent.change(searchInput, { target: { value: 'John Doe' } });
+    expect(searchInput.value).toBe('John Doe');
+
+    // Find and submit the form
+    const form = searchInput.closest('form');
+    expect(form).toBeInTheDocument();
+
+    if (form) {
+      fireEvent.submit(form);
+    }
+  });
+
+  it('handles blank title and description submission', async () => {
+    const toggleMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    render(
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleMock}
+                chatsListRefetch={refetchMock}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const titleInput = screen.getByTestId('groupTitleInput');
+    const descInput = screen.getByTestId('groupDescriptionInput');
+
+    fireEvent.change(titleInput, { target: { value: '' } });
+    fireEvent.change(descInput, { target: { value: '' } });
+
+    const nextBtn = screen.getByTestId('nextBtn');
+    fireEvent.click(nextBtn);
+
+    await wait();
+
+    expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+  });
+
+  it('handles user modal toggle correctly', async () => {
+    const toggleMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    render(
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleMock}
+                chatsListRefetch={refetchMock}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const nextBtn = screen.getByTestId('nextBtn');
+    fireEvent.click(nextBtn);
+
+    await wait();
+
+    const closeBtn = screen
+      .getByTestId('pluginNotificationHeader')
+      .querySelector('.btn-close');
+    if (closeBtn) {
+      fireEvent.click(closeBtn);
+    }
+
+    await wait();
+    expect(
+      screen.queryByTestId('addExistingUserModal'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('handles null/undefined file upload', async () => {
+    const toggleMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    render(
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleMock}
+                chatsListRefetch={refetchMock}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Test with null file
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: null } });
+    });
+
+    // Test with empty FileList
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [] } });
+    });
+
+    // Should not crash and avatar should still be visible
+    expect(screen.getByTestId('editImageBtn')).toBeInTheDocument();
+  });
+
+  it('handles empty user search submission', async () => {
+    const toggleMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    render(
+      <MockedProvider
+        mocks={[...USER_JOINED_ORG_MOCK, ...UserConnectionListMock]}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleMock}
+                chatsListRefetch={refetchMock}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const nextBtn = screen.getByTestId('nextBtn');
+    fireEvent.click(nextBtn);
+
+    await wait();
+
+    const searchInput = screen.getByTestId('searchUser');
+    const searchForm = searchInput.closest('form');
+
+    // Test empty search
+    if (searchForm) {
+      fireEvent.submit(searchForm);
+    }
+
+    await wait();
+    expect(screen.getByTestId('submitBtn')).toBeInTheDocument();
+  });
+
+  it('handles user selection and deselection properly', async () => {
+    const toggleMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    render(
+      <MockedProvider
+        mocks={[...USER_JOINED_ORG_MOCK, ...UserConnectionListMock]}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleMock}
+                chatsListRefetch={refetchMock}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const nextBtn = screen.getByTestId('nextBtn');
+    fireEvent.click(nextBtn);
+
+    await wait();
+
+    // Add first user
+    const addBtns = await screen.findAllByTestId('addBtn');
+    fireEvent.click(addBtns[0]);
+
+    // Verify remove button appears
+    const removeBtn = await screen.findByTestId('removeBtn');
+    expect(removeBtn).toBeInTheDocument();
+
+    // Remove the user
+    fireEvent.click(removeBtn);
+
+    // Verify add button is back
+    await wait();
+    expect(screen.getAllByTestId('addBtn')).toHaveLength(addBtns.length);
   });
 
   it('open and close create new direct chat modal', async () => {
@@ -5797,5 +6147,181 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     fireEvent.click(closeButton[0]);
 
     await wait(500);
+  });
+});
+
+describe('CreateGroupChat Additional Tests', () => {
+  const mockToggle = vi.fn();
+  const mockRefetch = vi.fn();
+
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
+  });
+
+  it('handles invalid file upload', async () => {
+    render(
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={mockToggle}
+                chatsListRefetch={mockRefetch}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      const fileInput = screen.getByTestId('fileInput');
+      const invalidFile = new File(['test'], 'test.txt', {
+        type: 'text/plain',
+      });
+      fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+    });
+  });
+
+  it('handles loading state during user search', async () => {
+    const loadingMock = {
+      request: {
+        query: USERS_CONNECTION_LIST,
+        variables: { firstName_contains: '', lastName_contains: '' },
+      },
+      loading: true,
+      result: {
+        data: {
+          users: [],
+        },
+      },
+    };
+
+    render(
+      <MockedProvider
+        mocks={[loadingMock, ...USER_JOINED_ORG_MOCK]}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={mockToggle}
+                chatsListRefetch={mockRefetch}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const nextBtn = screen.getByTestId('nextBtn');
+    fireEvent.click(nextBtn);
+
+    // Should show Loader component when loading
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toHaveTextContent(
+        'Chat',
+      );
+    });
+  });
+
+  it('handles empty user search results', async () => {
+    const emptyResultsMock = {
+      request: {
+        query: USERS_CONNECTION_LIST,
+        variables: { firstName_contains: '', lastName_contains: '' },
+      },
+      result: {
+        data: {
+          users: [],
+        },
+      },
+    };
+
+    render(
+      <MockedProvider
+        mocks={[emptyResultsMock, ...USER_JOINED_ORG_MOCK]}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={mockToggle}
+                chatsListRefetch={mockRefetch}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      const nextBtn = screen.getByTestId('nextBtn');
+      fireEvent.click(nextBtn);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    });
+
+    // Should show empty table when no results
+    const tableRows = screen.queryAllByTestId('user');
+    expect(tableRows.length).toBe(0);
+  });
+
+  it('handles form validation', async () => {
+    render(
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={mockToggle}
+                chatsListRefetch={mockRefetch}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const nextBtn = screen.getByTestId('nextBtn');
+    fireEvent.click(nextBtn);
+
+    // Should be able to proceed even with empty title/description
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    });
+  });
+
+  it('handles image edit button click', async () => {
+    render(
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={mockToggle}
+                chatsListRefetch={mockRefetch}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const editBtn = screen.getByTestId('editImageBtn');
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Clicking edit button should trigger file input
+    fireEvent.click(editBtn);
+    expect(fileInput).toBeInTheDocument();
   });
 });
