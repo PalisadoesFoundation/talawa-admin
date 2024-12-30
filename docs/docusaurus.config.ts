@@ -6,8 +6,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Talawa-Admin Documentation',
-  tagline: 'Start your open source journey here',
-  favicon: 'img/favicon.ico',
+  tagline: 'Complete guides and references for building with Talawa',
+  favicon: 'img/favicon_palisadoes.ico',
 
   url: 'https://docs-admin.talawa.io',
   baseUrl: '/',
@@ -30,90 +30,175 @@ const config: Config = {
   presets: [
     [
       'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
       {
         docs: {
-          sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          sidebarPath: require.resolve('./sidebars.ts'),
+          editUrl: ({ docPath }) => {
+            return `https://github.com/PalisadoesFoundation/talawa-docs/edit/develop/docs/${docPath}`;
+          },
+        },
+        blog: {
+          showReadingTime: true,
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/PalisadoesFoundation/talawa-docs/tree/develop/docs',
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: [
+            require.resolve('./src/css/custom.css'),
+            require.resolve('./src/css/index.css'),
+          ],
         },
-      } satisfies Preset.Options,
+      },
     ],
   ],
 
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    docs: {
+      sidebar: {
+        hideable: false,
+      },
+    },
     navbar: {
-      title: 'My Site',
+      title: 'Talawa-docs',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Talawa Logo',
+        src: 'img/favicon_palisadoes.ico',
+        className: 'LogoAnimation',
       },
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
+          to: 'docs/',
+          activeBasePath: 'docs',
           position: 'left',
-          label: 'Tutorial',
+          label: 'General',
         },
         {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
+          to: 'docs/',
+          activeBasePath: 'docs',
+          label: 'Web Guide',
+          position: 'left',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
+          to: 'docs/',
+          activeBasePath: 'docs',
+          label: 'Admin Guide',
+          position: 'left',
+        },
+        {
+          to: 'docs/',
+          activeBasePath: 'docs',
+          label: 'API',
+          position: 'left',
+          items: [
+            {
+              label: 'General',
+              to: 'docs/',
+              activeBasePath: 'docs',
+            },
+            {
+              label: 'Talawa API',
+              to: 'docs/talawa-api-docs/modules',
+              activeBasePath: 'docs',
+            },
+            {
+              label: 'Talawa Flutter Docs',
+              to: 'docs/talawa-mobile-docs',
+              activeBasePath: 'docs',
+            },
+            {
+              label: 'Talawa Admin',
+              to: 'docs/talawa-admin-docs/modules',
+              activeBasePath: 'docs',
+            },
+          ],
+        },
+        {
+          to: 'https://github.com/PalisadoesFoundation',
           position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
+        },
+        {
+          to: 'https://www.youtube.com/@PalisadoesOrganization',
+          position: 'right',
+          className: 'header-youtube-link',
+          'aria-label': 'Palisadoes Youtube channel',
         },
       ],
+    },
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: false,
     },
     footer: {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: ' Slack',
+              to: 'https://github.com/PalisadoesFoundation',
+              className: 'footer__icon footer__slack',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: ' News',
+              to: 'https://www.palisadoes.org/news/',
+              className: 'footer__icon footer__news',
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: ' Contact Us',
+              to: 'https://www.palisadoes.org/contact/',
+              className: 'footer__icon footer__contact',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'Social Media',
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: ' Twitter',
+              to: 'https://twitter.com/palisadoesorg?lang=en',
+              className: 'footer__icon footer__twitter',
+            },
+            {
+              label: ' Facebook',
+              to: 'https://www.facebook.com/palisadoesproject/',
+              className: 'footer__icon footer__facebook',
+            },
+            {
+              label: ' Instagram',
+              to: 'https://www.instagram.com/palisadoes/?hl=en',
+              className: 'footer__icon footer__instagram',
+            },
+          ],
+        },
+        {
+          title: 'Development',
+          items: [
+            {
+              label: ' GitHub',
+              to: 'https://github.com/PalisadoesFoundation',
+              className: 'footer__icon footer__github',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} The Palisadoes Foundation, LLC. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
-  } satisfies Preset.ThemeConfig,
+  },
 };
 
 export default config;
