@@ -6,6 +6,7 @@ import TagNode from './TagNode';
 import type { InterfaceTagData } from '../../utils/interfaces';
 import type { TFunction } from 'i18next';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from './TagActionsMocks';
+import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
 
 const mockTag: InterfaceTagData = {
   _id: '1',
@@ -133,9 +134,23 @@ describe('TagNode', () => {
     });
   });
 });
+describe('TagNode with Mocks', () => {
+  it('renders parent tag name', () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <TagNode
+          tag={mockTag}
+          checkedTags={mockCheckedTags}
+          toggleTagSelection={mockToggleTagSelection}
+          t={mockT}
+        />
+      </MockedProvider>,
+    );
 
-describe('Mock Data Structure', () => {
-  it('correctly handles paginated data loading', async () => {
+    expect(screen.getByText('Parent Tag')).toBeInTheDocument();
+  });
+
+  it('fetches and displays child tags from MOCKS', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <TagNode
@@ -147,31 +162,51 @@ describe('Mock Data Structure', () => {
       </MockedProvider>,
     );
 
-    // Expand the tag
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
     fireEvent.click(expandIcon);
 
-    // Wait for initial data
+    await waitFor(() => {
+      expect(screen.getByText('subTag 1')).toBeInTheDocument();
+      expect(screen.getByText('subTag 2')).toBeInTheDocument();
+    });
+  });
+
+  it('handles pagination correctly with second MOCKS item', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <TagNode
+          tag={mockTag}
+          checkedTags={mockCheckedTags}
+          toggleTagSelection={mockToggleTagSelection}
+          t={mockT}
+        />
+      </MockedProvider>,
+    );
+
+    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
+    fireEvent.click(expandIcon);
+
+    // Verify first set of subtags
     await waitFor(() => {
       expect(screen.getByText('subTag 1')).toBeInTheDocument();
       expect(screen.getByText('subTag 2')).toBeInTheDocument();
     });
 
-    // Trigger pagination
+    // Trigger load more
     const scrollableDiv = screen.getByTestId(
       `subTagsScrollableDiv${mockTag._id}`,
     );
     fireEvent.scroll(scrollableDiv, { target: { scrollY: 100 } });
 
-    // Verify paginated data
+    // Verify paginated subtags
     await waitFor(() => {
       expect(screen.getByText('subTag 11')).toBeInTheDocument();
     });
   });
 
-  it('maintains correct state during loading', async () => {
+  it('displays error message with MOCKS_ERROR_SUBTAGS_QUERY', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY} addTypename={false}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -184,9 +219,48 @@ describe('Mock Data Structure', () => {
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
     fireEvent.click(expandIcon);
 
-    // Verify loading state
+    // Verify error message
     await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
+      expect(
+        screen.getByText('errorOccurredWhileLoadingSubTags'),
+      ).toBeInTheDocument();
     });
+  });
+});
+
+describe('MOCKS Structure Validation', () => {
+  it('validates the structure of MOCKS[0]', () => {
+    const firstMock = MOCKS1[0];
+
+    expect(firstMock.request.query).toBeDefined();
+    expect(firstMock.request.variables).toEqual({ id: '1', first: 10 });
+    expect(firstMock.result.data?.getChildTags?.childTags?.edges?.length).toBe(
+      2,
+    );
+  });
+
+  it('validates the structure of MOCKS[1] (pagination)', () => {
+    const secondMock = MOCKS1[1];
+
+    expect(secondMock.request.query).toBeDefined();
+    expect(secondMock.request.variables).toEqual({
+      id: '1',
+      first: 10,
+      after: 'subTag2',
+    });
+    expect(secondMock.result.data?.getChildTags?.childTags?.edges?.length).toBe(
+      1,
+    );
+  });
+
+  it('validates MOCKS_ERROR_SUBTAGS_QUERY structure', () => {
+    const errorMock = MOCKS_ERROR_SUBTAGS_QUERY1[0];
+
+    expect(errorMock.request.query).toBeDefined();
+    expect(errorMock.request.variables).toEqual({ id: '1', first: 10 });
+    expect(errorMock.error).toBeInstanceOf(Error);
+    expect(errorMock.error?.message).toBe(
+      'Mock GraphQL Error for fetching subtags',
+    );
   });
 });

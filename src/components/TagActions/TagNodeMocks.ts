@@ -1,6 +1,6 @@
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 
-export const MOCKS = [
+export const MOCKS1 = [
   {
     request: {
       query: USER_TAG_SUB_TAGS,
@@ -61,7 +61,7 @@ export const MOCKS = [
   },
 ];
 
-export const MOCKS_ERROR_SUBTAGS_QUERY = [
+export const MOCKS_ERROR_SUBTAGS_QUERY1 = [
   {
     request: {
       query: USER_TAG_SUB_TAGS,
