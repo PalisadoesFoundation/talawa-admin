@@ -185,7 +185,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                 className="fw-lighter ms-2 mb-0"
                 style={{
                   fontSize: '0.8rem',
-                  color: 'grey',
+                  color: 'var(--search-button-border)',
                 }}
               >
                 Volunteers

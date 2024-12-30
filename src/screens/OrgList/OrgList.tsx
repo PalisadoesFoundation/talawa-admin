@@ -27,7 +27,6 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-// import styles from '../../style/app.module.css';
 import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
 
