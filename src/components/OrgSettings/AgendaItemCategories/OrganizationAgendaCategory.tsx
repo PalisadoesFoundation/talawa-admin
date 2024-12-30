@@ -13,7 +13,7 @@ import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutation
 import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
 import AgendaCategoryCreateModal from './AgendaCategoryCreateModal';
-import styles from './OrganizationAgendaCategory.module.css';
+import styles from 'style/app.module.css';
 import Loader from 'components/Loader/Loader';
 
 interface InterfaceAgendaCategoryProps {
@@ -125,7 +125,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
 
   if (agendaCategoryError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={`${styles.container} bg-transparent rounded-4 my-3`}>
         <div className={styles.message}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
@@ -141,10 +141,10 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   }
 
   return (
-    <div className={`${styles.organizationAgendaCategoryContainer} mx-4`}>
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
-        <div className={`pt-4 mx-4`}>
-          <div className={styles.btnsContainer}>
+    <div className={`mx-4`}>
+      <div className={` bg-transparent rounded-4 my-3`}>
+        <div className={`mx-4`}>
+          <div className={`${styles.btnsContainer} my-0`}>
             <div className={`${styles.input} mb-1`}>
               <Form.Control
                 type="name"
@@ -165,8 +165,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
               />
               <Button
                 tabIndex={-1}
-                className={`position-absolute z-10 top-0 end-0 d-flex justify-content-center align-items-center`}
-                style={{ marginBottom: '10px' }}
+                className={styles.searchButton}
                 onClick={() => setSearchTerm(searchValue)}
                 data-testid="searchBtn"
               >
@@ -178,7 +177,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
               variant="success"
               onClick={showCreateModal}
               data-testid="createAgendaCategoryBtn"
-              className={styles.createAgendaCategoryButton}
+              className={styles.addButton}
             >
               <i className={'fa fa-plus me-2'} />
               {t('createAgendaCategory')}
