@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   BLOCK_USER_MUTATION,
@@ -16,7 +16,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-
+import { toast } from 'react-toastify';
 import BlockUser from './BlockUser';
 import { vi, describe, beforeEach, test, expect } from 'vitest';
 
@@ -76,6 +76,51 @@ const DATA_AFTER_MUTATION = {
     },
   },
 };
+
+const INVALID_MOCKS = [
+  {
+    request: {
+      query: BLOCK_PAGE_MEMBER_LIST,
+      variables: {
+        firstName_contains: '',
+        lastName_contains: '',
+        orgId: 'orgid',
+      },
+    },
+    result: DATA_INITIAL,
+    newData: (): typeof DATA_AFTER_MUTATION | typeof DATA_INITIAL => {
+      if (userQueryCalled) {
+        return DATA_AFTER_MUTATION;
+      } else {
+        userQueryCalled = true;
+
+        return DATA_INITIAL;
+      }
+    },
+  },
+
+  {
+    request: {
+      query: BLOCK_USER_MUTATION,
+      variables: {
+        userId: '456',
+        orgId: 'orgid',
+      },
+    },
+    error: new Error('Mocked mutation error'),
+  },
+
+  {
+    request: {
+      query: UNBLOCK_USER_MUTATION,
+      variables: {
+        userId: '123',
+        orgId: 'orgid',
+      },
+    },
+    error: new Error('Mocked mutation error'),
+  },
+];
 
 const MOCKS = [
   {
@@ -242,12 +287,20 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+const invalidLink = new StaticMockLink(INVALID_MOCKS, true);
 
 async function wait(ms = 500): Promise<void> {
   await new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
 
 vi.mock('react-router-dom', async (importOriginal) => {
   const actual = await importOriginal();
@@ -437,5 +490,34 @@ describe('Testing Block/Unblock user screen', () => {
     userEvent.clear(searchBar);
     userEvent.type(searchBar, '');
     userEvent.click(searchBtn);
+  });
+
+  test('Testing Error while mutation from server side', async () => {
+    window.history.pushState({}, 'Test page', '/blockuser/orgid');
+
+    render(
+      <MockedProvider addTypename={true} link={invalidLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    userEvent.click(screen.getByTestId('userFilter'));
+    userEvent.click(screen.getByTestId('showMembers'));
+    await wait();
+
+    userEvent.click(screen.getByTestId('blockUser456'));
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+    userEvent.click(screen.getByTestId('unBlockUser123'));
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 });
