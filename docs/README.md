@@ -1,4 +1,4 @@
-# Talawa API Documentation Website
+# Talawa Admin Documentation Website
 
 [![N|Solid](static/img/markdown/misc/logo.png)](https://github.com/PalisadoesFoundation/talawa-admin)
 
