@@ -12,10 +12,10 @@ import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 
-const fileName = fileURLToPath(import.meta.url);
-const dirName = path.dirname(fileName);
+const _filename = fileURLToPath(import.meta.url);
+const _dirname = path.dirname(_filename);
 const compat = new FlatCompat({
-  baseDirectory: dirName,
+  baseDirectory: _dirname,
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 });
