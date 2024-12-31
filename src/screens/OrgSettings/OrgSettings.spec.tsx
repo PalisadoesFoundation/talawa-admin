@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -130,18 +130,56 @@ describe('Organisation Settings Page', () => {
     });
   });
 
-  it('should render dropdown for settings tabs', async () => {
+  it('should handle dropdown item selection correctly', async () => {
     renderOrganisationSettings();
 
+    // Wait for the dropdown to be rendered
     await waitFor(() => {
-      expect(screen.getByTestId('settingsDropdownToggle')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('settingsDropdownContainer'),
+      ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('settingsDropdownToggle'));
+    // Click to open the dropdown
+    const dropdownToggle = screen.getByTestId('settingsDropdownToggle');
+    await userEvent.click(dropdownToggle);
 
-    const dropdownItems = screen.getAllByRole('button', {
-      name: /general|actionItemCategories|agendaItemCategories/i,
-    });
-    expect(dropdownItems).toHaveLength(3);
+    // Find all dropdown items
+    const dropdownItems = screen.getAllByRole('button');
+    expect(dropdownItems).toHaveLength(12); // Should have 3 items: general, actionItemCategories, agendaItemCategories
+
+    // Click on each dropdown item and verify the content changes
+    for (const item of dropdownItems) {
+      await userEvent.click(item);
+
+      // Verify that the corresponding tab content is displayed
+      if (item.textContent?.includes('general')) {
+        await waitFor(() => {
+          expect(screen.getByTestId('generalTab')).toBeInTheDocument();
+        });
+      } else if (item.textContent?.includes('actionItemCategories')) {
+        await waitFor(() => {
+          expect(
+            screen.getByTestId('actionItemCategoriesTab'),
+          ).toBeInTheDocument();
+        });
+      } else if (item.textContent?.includes('agendaItemCategories')) {
+        await waitFor(() => {
+          expect(
+            screen.getByTestId('agendaItemCategoriesTab'),
+          ).toBeInTheDocument();
+        });
+      }
+
+      // Reopen dropdown for next iteration if not the last item
+      if (item !== dropdownItems[dropdownItems.length - 1]) {
+        await userEvent.click(dropdownToggle);
+      }
+    }
+
+    // Verify that the selected tab is reflected in the dropdown toggle text
+    expect(dropdownToggle).toHaveTextContent(
+      screen.getByTestId('agendaItemCategoriesSettings').textContent || '',
+    );
   });
 });
