@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 
 /**
  * Unit tests for the CommentCard component.
@@ -32,7 +32,6 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
-
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -74,7 +73,6 @@ const MOCKS = [
     },
   },
 ];
-
 
 const defaultProps = {
   id: '1',
@@ -299,11 +297,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
-    
+
     userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
@@ -332,11 +330,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
-    
+
     userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
@@ -371,11 +369,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
-    
+
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
@@ -412,11 +410,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
-    
+
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
@@ -454,20 +452,24 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
-    
+
     userEvent.click(screen.getByTestId('likeCommentBtn'));
-    
+
     // HourglassBottomIcon should be visible during loading
-    expect(document.querySelector('[data-testid="HourglassBottomIcon"]')).toBeInTheDocument();
-    
+    expect(
+      document.querySelector('[data-testid="HourglassBottomIcon"]'),
+    ).toBeInTheDocument();
+
     await wait(150);
-    
+
     // After loading, ThumbUpIcon should be visible
-    expect(document.querySelector('[data-testid="ThumbUpIcon"]')).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-testid="ThumbUpIcon"]'),
+    ).toBeInTheDocument();
   });
 
   it('should not update state if mutation returns no data', async () => {
@@ -493,11 +495,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
-    
+
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
@@ -515,7 +517,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       },
       result: {
         data: {
-          unlikeComment: null
+          unlikeComment: null,
         },
       },
     };
@@ -532,20 +534,20 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    
+
     await wait();
-    
+
     userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     // Verify that the likes count hasn't changed
     const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     expect(updatedLikes).toBe(initialLikes);
-    
+
     // Verify that the callback wasn't called
     expect(defaultProps.handleDislikeComment).not.toHaveBeenCalled();
   });
@@ -558,7 +560,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       },
       result: {
         data: {
-          likeComment: null
+          likeComment: null,
         },
       },
     };
@@ -575,20 +577,20 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    
+
     await wait();
-    
+
     userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     // Verify that the likes count hasn't changed
     const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     expect(updatedLikes).toBe(initialLikes);
-    
+
     // Verify that the callback wasn't called
     expect(defaultProps.handleLikeComment).not.toHaveBeenCalled();
   });
