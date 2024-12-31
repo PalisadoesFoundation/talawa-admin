@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import type { InterfaceMember } from './People';
 import People from './People';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -165,6 +166,62 @@ describe('Testing People Screen [User Portal]', () => {
     await wait();
 
     expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
+  });
+
+  function compareProperties(
+    expectedProps: string[],
+    actualObject: object,
+  ): boolean {
+    const actualProps = Object.keys(actualObject);
+    return expectedProps.every((prop) => actualProps.includes(prop));
+  }
+
+  describe('InterfaceMember properties comparison', () => {
+    it('should have all required properties', () => {
+      const expectedProperties = [
+        'firstName',
+        'lastName',
+        'image',
+        '_id',
+        'email',
+        '__typename',
+      ];
+
+      const mockValidData: InterfaceMember = {
+        firstName: 'John',
+        lastName: 'Doe',
+        image: 'https://example.com/john.jpg',
+        _id: '1',
+        email: 'john.doe@example.com',
+        __typename: 'User',
+      };
+
+      const result = compareProperties(expectedProperties, mockValidData);
+      expect(result).toBe(true);
+    });
+
+    it('should fail if __typename is replaced with username', () => {
+      const expectedProperties = [
+        'firstName',
+        'lastName',
+        'image',
+        '_id',
+        'email',
+        '__typename', // Expect this property
+      ];
+
+      const mockInvalidData = {
+        firstName: 'John',
+        lastName: 'Doe',
+        image: 'https://example.com/john.jpg',
+        _id: '1',
+        email: 'john.doe@example.com',
+        username: 'Member', // Incorrect property
+      };
+
+      const result = compareProperties(expectedProperties, mockInvalidData);
+      expect(result).toBe(false);
+    });
   });
 
   it('Search works properly by pressing enter', async () => {
