@@ -214,7 +214,7 @@ export default function CreateGroupChat({
                 placeholder={'Group Description'}
                 autoComplete="off"
                 required
-                data-tsetid="groupDescriptionInput"
+                data-testid="groupDescriptionInput" //corrected spelling
                 value={description}
                 onChange={(e): void => {
                   setDescription(e.target.value);
