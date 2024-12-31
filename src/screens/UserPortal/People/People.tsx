@@ -22,7 +22,7 @@ interface InterfaceOrganizationCardProps {
   sno: string;
 }
 
-interface InterfaceMember {
+export interface InterfaceMember {
   firstName: string;
   lastName: string;
   image: string;
