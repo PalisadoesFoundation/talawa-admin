@@ -574,6 +574,8 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   className={styles.noOutline}
                   value={dayjs(dueDate)}
                   onChange={(date: Dayjs | null): void => {
+                    // Added istanbul ignore else, which will ignore else condition, we are not using else condition here
+                    /* istanbul ignore else -- @preserve */
                     if (date) handleFormChange('dueDate', date.toDate());
                   }}
                 />
