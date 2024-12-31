@@ -40,15 +40,15 @@
   --ifm-navbar-search-input-color: var(--ifm-color-content);
   --ifm-table-stripe-background: #efeff2;
   --ifm-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
-    Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --ifm-font-family-monospace: "IBM Plex Mono", SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+    Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-monospace: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 /* Dak mode css */
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --ifm-background-color: #111927;
   --ifm-background-surface-color: var(--ifm-background-color);
   --ifm-menu-color: var(--ifm-color-gray-200);
@@ -59,7 +59,7 @@ html[data-theme="dark"] {
   --ifm-table-stripe-background: #001242;
   --ifm-navbar-search-input-placeholder-color: var(--ifm-color-gray-200);
   --ifm-navbar-search-input-icon: url('data:image/svg+xml;utf8,<svg fill="%23C9C9CC" alt="Search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" height="16px" width="16px"><path d="M6.02945,10.20327a4.17382,4.17382,0,1,1,4.17382-4.17382A4.15609,4.15609,0,0,1,6.02945,10.20327Zm9.69195,4.2199L10.8989,9.59979A5.88021,5.88021,0,0,0,12.058,6.02856,6.00467,6.00467,0,1,0,9.59979,10.8989l4.82338,4.82338a.89729.89729,0,0,0,1.29912,0,.89749.89749,0,0,0-.00087-1.29909Z" /></svg>');
-  
+
   --ifm-hover-overlay: rgba(0, 0, 0, 0);
   --ifm-color-primary: #1e56e3;
   --secondary-blue-900: #c6d6ff;
@@ -134,6 +134,10 @@ h1.docTitle_node_modules-\@docusaurus-theme-classic-src-theme-DocItem- {
   height: auto;
 }
 
+.navbar__title {
+  font-size: 1.155rem;
+}
+
 .navbar__item {
   font-size: 1rem;
 }
@@ -205,33 +209,33 @@ h1.docTitle_node_modules-\@docusaurus-theme-classic-src-theme-DocItem- {
 }
 
 .header-github-link:before {
-  content: "";
+  content: '';
   width: 20px;
   height: 20px;
   display: flex;
-  background: url("/img/icons/github-dark.svg") no-repeat;
+  background: url('/img/icons/github-dark.svg') no-repeat;
   position: relative;
   right: 8px;
   top: 1.5px;
 }
 
 .header-twitter-link:before {
-  content: "";
+  content: '';
   width: 15px;
   height: 15px;
   display: flex;
-  background: url("/img/icons/twitter.svg") no-repeat 90% 100%;
+  background: url('/img/icons/twitter.svg') no-repeat 90% 100%;
   position: relative;
   right: 6px;
   top: 2px;
 }
 
 .header-youtube-link:before {
-  content: "";
+  content: '';
   width: 25px;
   height: 30px;
   display: flex;
-  background: url("/img/icons/youtube.svg") no-repeat;
+  background: url('/img/icons/youtube.svg') no-repeat;
   position: relative;
   right: 8px;
   top: 4.5px;
@@ -249,12 +253,12 @@ h1.docTitle_node_modules-\@docusaurus-theme-classic-src-theme-DocItem- {
 .footer__icon {
   margin: 0;
   padding: 2px;
-  color: #fff; 
+  color: #fff;
   font-size: 1rem;
 }
 
 .footer__icon:before {
-  content: "";
+  content: '';
   display: inline-flex;
   height: 16px;
   width: 16px;
@@ -310,10 +314,10 @@ h1.docTitle_node_modules-\@docusaurus-theme-classic-src-theme-DocItem- {
   mask-size: cover;
 }
 
-html[data-theme="dark"] .header-github-link:before {
+html[data-theme='dark'] .header-github-link:before {
   background: url(/img/icons/github.svg) no-repeat;
 }
-html[data-theme="dark"] .header-youtube-link:before {
+html[data-theme='dark'] .header-youtube-link:before {
   background: url(/img/icons/youtube-white.svg) no-repeat;
 }
 
