@@ -1,12 +1,12 @@
 import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from './askForTalawaApiUrl';
-import {vi , it , expect , beforeEach , describe} from 'vitest';
+import { vi, it, expect, beforeEach, describe } from 'vitest';
 
 vi.mock('inquirer', async (importOriginal) => {
   const actual = await importOriginal<typeof import('inquirer')>();
   return {
-    ...actual, 
-    prompt: vi.fn(), 
+    ...actual,
+    prompt: vi.fn(),
   };
 });
 
@@ -53,5 +53,3 @@ describe('askForTalawaApiUrl', () => {
     expect(result).toBe('http://localhost:4000/graphql/');
   });
 });
-
-
