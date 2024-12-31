@@ -53,7 +53,6 @@ function userNavbar(): JSX.Element {
    * Redirects to the home page after logout.
    */
   /* istanbul ignore next */
-
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
