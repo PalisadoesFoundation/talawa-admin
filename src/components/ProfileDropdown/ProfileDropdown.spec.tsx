@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -238,7 +238,8 @@ describe('ProfileDropdown Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
-  test('navigates to /member/:userID for non-user roles', async () => {
+  test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
+    window.history.pushState({}, 'Test page', '/orglist');
     setItem('SuperAdmin', true); // Set as admin
     setItem('id', '123');
 
@@ -246,7 +247,9 @@ describe('ProfileDropdown Component', () => {
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <ProfileDropdown />
+            <Routes>
+              <Route path="/orglist" element={<ProfileDropdown />} />
+            </Routes>
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -260,6 +263,34 @@ describe('ProfileDropdown Component', () => {
       userEvent.click(screen.getByTestId('profileBtn'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/member/123');
+    expect(mockNavigate).toHaveBeenCalledWith('/member/');
+  });
+
+  test('navigates to /member/:userID for non-user roles', async () => {
+    window.history.pushState({}, 'Test page', '/321');
+    setItem('SuperAdmin', true); // Set as admin
+    setItem('id', '123');
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route path="/:orgId" element={<ProfileDropdown />} />
+            </Routes>
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/member/321');
   });
 });
