@@ -133,26 +133,22 @@ describe('Organisation Settings Page', () => {
   it('should handle dropdown item selection correctly', async () => {
     renderOrganisationSettings();
 
-    // Wait for the dropdown to be rendered
     await waitFor(() => {
       expect(
         screen.getByTestId('settingsDropdownContainer'),
       ).toBeInTheDocument();
     });
 
-    // Click to open the dropdown
     const dropdownToggle = screen.getByTestId('settingsDropdownToggle');
-    await userEvent.click(dropdownToggle);
+    userEvent.click(dropdownToggle);
 
     // Find all dropdown items
     const dropdownItems = screen.getAllByRole('button');
-    expect(dropdownItems).toHaveLength(12); // Should have 3 items: general, actionItemCategories, agendaItemCategories
+    expect(dropdownItems).toHaveLength(12);
 
-    // Click on each dropdown item and verify the content changes
     for (const item of dropdownItems) {
-      await userEvent.click(item);
+      userEvent.click(item);
 
-      // Verify that the corresponding tab content is displayed
       if (item.textContent?.includes('general')) {
         await waitFor(() => {
           expect(screen.getByTestId('generalTab')).toBeInTheDocument();
@@ -171,13 +167,11 @@ describe('Organisation Settings Page', () => {
         });
       }
 
-      // Reopen dropdown for next iteration if not the last item
       if (item !== dropdownItems[dropdownItems.length - 1]) {
-        await userEvent.click(dropdownToggle);
+        userEvent.click(dropdownToggle);
       }
     }
 
-    // Verify that the selected tab is reflected in the dropdown toggle text
     expect(dropdownToggle).toHaveTextContent(
       screen.getByTestId('agendaItemCategoriesSettings').textContent || '',
     );
