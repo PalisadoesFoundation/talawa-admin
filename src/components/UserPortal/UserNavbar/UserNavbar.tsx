@@ -52,7 +52,7 @@ function userNavbar(): JSX.Element {
    * Handles user logout by revoking the refresh token and clearing local storage.
    * Redirects to the home page after logout.
    */
-   /* istanbul ignore next */
+  /* istanbul ignore next */
 
   const handleLogout = (): void => {
     revokeRefreshToken();
