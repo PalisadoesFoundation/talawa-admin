@@ -7,34 +7,7 @@ import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
 import { askForDocker } from './src/setup/askForDocker/askForDocker';
-
-// Update the .env file with new values
-const updateEnvFile = (key: string, value: string): void => {
-  const currentEnvContent = fs.readFileSync('.env', 'utf8');
-  const keyRegex = new RegExp(`^${key}=.*$`, 'm');
-  if (keyRegex.test(currentEnvContent)) {
-    const updatedEnvContent = currentEnvContent.replace(
-      keyRegex,
-      `${key}=${value}`,
-    );
-    fs.writeFileSync('.env', updatedEnvContent, 'utf8');
-  } else {
-    fs.appendFileSync('.env', `\n${key}=${value}`, 'utf8');
-  }
-};
-
-// Handle .env file creation or validation
-const handleEnvFile = (): void => {
-  if (!fs.existsSync('.env')) {
-    fs.openSync('.env', 'w');
-    const config = dotenv.parse(fs.readFileSync('.env.example'));
-    for (const key in config) {
-      fs.appendFileSync('.env', `${key}=${config[key]}\n`);
-    }
-  } else {
-    checkEnvFile();
-  }
-};
+import updateEnvFile from './src/setup/updateEnvFile/updateEnvFile';
 
 // Ask and update the custom port
 const askAndUpdatePort = async (): Promise<void> => {
@@ -171,7 +144,7 @@ export async function main(): Promise<void> {
   try {
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
-    handleEnvFile();
+    checkEnvFile();
     await askAndSetDockerOption();
     const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
     const useDocker = envConfig.USE_DOCKER === 'YES';
