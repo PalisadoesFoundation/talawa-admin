@@ -1,17 +1,22 @@
 import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from './askForTalawaApiUrl';
+import {vi , it , expect , beforeEach , describe} from 'vitest';
 
-jest.mock('inquirer', () => ({
-  prompt: jest.fn(),
-}));
+vi.mock('inquirer', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('inquirer')>();
+  return {
+    ...actual, 
+    prompt: vi.fn(), 
+  };
+});
 
 describe('askForTalawaApiUrl', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  test('should return the provided endpoint when user enters it', async () => {
-    const mockPrompt = jest.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+  it('should return the provided endpoint when user enters it', async () => {
+    const mockPrompt = vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       endpoint: 'http://example.com/graphql/',
     });
 
@@ -29,8 +34,8 @@ describe('askForTalawaApiUrl', () => {
     expect(result).toBe('http://example.com/graphql/');
   });
 
-  test('should return the default endpoint when the user does not enter anything', async () => {
-    const mockPrompt = jest.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+  it('should return the default endpoint when the user does not enter anything', async () => {
+    const mockPrompt = vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       endpoint: 'http://localhost:4000/graphql/',
     });
 
@@ -48,3 +53,5 @@ describe('askForTalawaApiUrl', () => {
     expect(result).toBe('http://localhost:4000/graphql/');
   });
 });
+
+
