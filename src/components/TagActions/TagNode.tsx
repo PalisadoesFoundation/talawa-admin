@@ -127,7 +127,6 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
-              id={`checkbox-${tag._id}`}
               aria-label={t('selectTag')}
             />
             <i className="fa fa-folder mx-2" />{' '}
