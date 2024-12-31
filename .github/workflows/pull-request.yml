@@ -80,6 +80,7 @@ jobs:
           echo "Source Branch ${{ github.event.pull_request.head.ref }}"
           echo "Target Branch ${{ github.event.pull_request.base.ref }}"
           echo "Error: Source and Target Branches are the same. Please ensure they are different."
+          echo "Error: Close this PR and try again."
           exit 1
 
   Check-Sensitive-Files:
@@ -461,4 +462,5 @@ jobs:
         if: github.event.pull_request.base.ref != 'develop-postgres'
         run: |
           echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
+          echo "Error: Close this PR and try again."
           exit 1
