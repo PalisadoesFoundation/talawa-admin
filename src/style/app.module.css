@@ -4145,6 +4145,7 @@ button[data-testid='createPostBtn'] {
   gap: 1rem;
   margin: 0 auto;
   margin-bottom: 0.5rem;
+  role: 'status';
 }
 
 .statusIcon {
@@ -4154,21 +4155,17 @@ button[data-testid='createPostBtn'] {
 .acceptedStatus {
   color: var(--bs-primary);
   -webkit-text-fill-color: var(--bs-primary);
-  /* Add checkmark icon */
-  &::before {
-    content: '✓';
-    margin-right: 0.25rem;
-  }
+  outline: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 2px 4px;
 }
 
 .pendingStatus {
   color: var(--bs-warning);
   -webkit-text-fill-color: var(--bs-warning);
-  /* Add clock icon */
-  &::before {
-    content: '⏳';
-    margin-right: 0.25rem;
-  }
+  outline: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 2px 4px;
 }
 
 .hoursField {
