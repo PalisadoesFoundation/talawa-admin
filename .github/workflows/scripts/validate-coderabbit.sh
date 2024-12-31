@@ -1,13 +1,12 @@
 #!/bin/bash
 echo "Step 1: Fetching all PR reviews with pagination..."
 
-page=1
 all_reviews="[]"
 
 while true; do
-  echo "Fetching page $page..."
+  echo "Fetching page..."
   response=$(curl -s -f -H "Authorization: token $GITHUB_TOKEN" \
-    "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews?per_page=100&page=$page") || {
+    "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews?per_page=1000") || {
     echo "Error: Failed to fetch reviews from GitHub API"
     exit 1
   }
@@ -18,7 +17,6 @@ while true; do
   fi
 
   all_reviews=$(echo "$all_reviews" "$response" | jq -s 'add')
-  page=$((page + 1))
 done
 
 echo "Debug: Combined reviews from all pages:"
