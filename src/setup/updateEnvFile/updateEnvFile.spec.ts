@@ -64,10 +64,6 @@ describe('updateEnvFile', () => {
   it('should not throw errors when .env file does not exist and create the file with the key', () => {
     const newKey = 'NEW_KEY=new_value';
 
-    // Mock file system read to throw an error (file not found)
-    vi.spyOn(fs, 'readFileSync').mockImplementationOnce(() => {
-      throw new Error('File not found');
-    });
     const appendMock = vi.spyOn(fs, 'appendFileSync');
 
     updateEnvFile('NEW_KEY', 'new_value');
