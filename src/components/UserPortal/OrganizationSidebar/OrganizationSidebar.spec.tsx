@@ -24,6 +24,9 @@ import { vi } from 'vitest';
  * 1. **Component renders properly when members and events lists are empty**: Verifies the correct display of "No Members to show" and "No Events to show" when both lists are empty.
  * 2. **Component renders properly when events list is not empty**: Tests that the events section is rendered correctly when events are available, and "No Events to show" is not displayed.
  * 3. **Component renders properly when members list is not empty**: Verifies the correct display of members when available, ensuring "No Members to show" is not displayed.
+ * 4. **Handles GraphQL errors properly**: Validates that the component properly handles GraphQL query errors by displaying appropriate fallback content ("No Members to show" and "No Events to show") when data fetching fails.
+ * 5. **Should show Loading state initially** : Checks that loading indicators are properly displayed while data is being fetched, verifying that "Loading..." text appears in both the members and events sections before data loads.
+ * 6. **Should render Member images properly** : Validates the correct rendering of member profile images, ensuring that default images are shown when no custom image is provided and that custom images are properly displayed when available.
  *
  * Mocked GraphQL queries simulate backend responses for members and events lists.
  */
@@ -174,5 +177,61 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     await wait();
     expect(screen.queryByText('No Members to show')).not.toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
+  });
+
+  it('Handles GraphQL errors properly', async () => {
+    mockId = 'error';
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationSidebar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(screen.queryByText('No Members to show')).toBeInTheDocument();
+    expect(screen.queryByText('No Events to show')).toBeInTheDocument();
+  });
+
+  it('Should show Loading state initially', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationSidebar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getAllByText('Loading...').length).toBe(2);
+  });
+
+  it('Should render Member images properly', async () => {
+    mockId = 'members';
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationSidebar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    const images = screen.getAllByRole('img');
+    expect(images).toHaveLength(2);
+    expect(images[0]).toHaveAttribute(
+      'src',
+      expect.stringContaining('defaultImg.png'),
+    );
+    expect(images[1]).toHaveAttribute('src', 'mockImage');
   });
 });
