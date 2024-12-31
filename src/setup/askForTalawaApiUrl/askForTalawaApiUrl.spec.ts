@@ -2,8 +2,8 @@ import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from './askForTalawaApiUrl';
 import { vi, it, describe, expect, beforeEach } from 'vitest';
 
-vi.mock('inquirer', async (importOriginal) => {
-  const actual = await importOriginal<typeof inquirer>(); // Adding explicit type
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual('inquirer');
   return {
     ...actual,
     prompt: vi.fn(),
