@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -9,19 +9,21 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS, MOCKS2, MOCKS_UPDATE } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
 import { BrowserRouter } from 'react-router-dom';
-import useLocalStorage from 'utils/useLocalstorage';
-import userEvent from '@testing-library/user-event';
-import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
-
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
+import useLocalStorage from 'utils/useLocalstorage';
+import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
+import type * as RouterTypes from 'react-router-dom';
 
 const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
-  await new Promise((resolve) => {
-    setTimeout(resolve, ms);
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
   });
 }
 const resetAndRefetchMock = vi.fn();
@@ -43,10 +45,15 @@ Object.defineProperty(window, 'location', {
 
 const mockNavgatePush = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavgatePush,
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = (await vi.importActual(
+    'react-router-dom',
+  )) as typeof RouterTypes;
+  return {
+    ...actual,
+    useNavigate: () => mockNavgatePush,
+  };
+});
 
 beforeEach(() => {
   setItem('SuperAdmin', true);
