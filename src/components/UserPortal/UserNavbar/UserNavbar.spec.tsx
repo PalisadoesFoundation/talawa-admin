@@ -8,7 +8,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
 import { StaticMockLink } from 'utils/StaticMockLink';
-
+import { vi } from 'vitest';
 import UserNavbar from './UserNavbar';
 import userEvent from '@testing-library/user-event';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -229,5 +229,30 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('logoutDropdown'));
     userEvent.click(screen.getByText('Settings'));
     expect(window.location.pathname).toBe('/user/settings');
+  });
+  it('Logs out the user and clears local storage', async () => {
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserNavbar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('logoutDropdown'));
+    userEvent.click(screen.getByTestId('logoutBtn'));
+
+    await wait();
+
+    expect(clearSpy).toHaveBeenCalled();
+    expect(window.location.pathname).toBe('/');
   });
 });
