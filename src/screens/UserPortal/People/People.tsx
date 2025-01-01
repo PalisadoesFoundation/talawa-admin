@@ -22,13 +22,13 @@ interface InterfaceOrganizationCardProps {
   sno: string;
 }
 
-interface InterfaceMember {
+export interface InterfaceMember {
   firstName: string;
   lastName: string;
   image: string;
   _id: string;
   email: string;
-  userType: string;
+  __typename: string;
 }
 
 /**
@@ -243,7 +243,7 @@ export default function people(): JSX.Element {
                         image: member.image,
                         id: member._id,
                         email: member.email,
-                        role: member.userType,
+                        role: member.__typename,
                         sno: (index + 1).toString(),
                       };
                       return <PeopleCard key={index} {...cardProps} />;

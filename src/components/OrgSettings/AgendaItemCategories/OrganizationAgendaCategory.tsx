@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
-import { WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded, Search } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
 import { useMutation, useQuery } from '@apollo/client';
@@ -13,7 +13,7 @@ import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutation
 import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
 import AgendaCategoryCreateModal from './AgendaCategoryCreateModal';
-import styles from './OrganizationAgendaCategory.module.css';
+import styles from 'style/app.module.css';
 import Loader from 'components/Loader/Loader';
 
 interface InterfaceAgendaCategoryProps {
@@ -34,11 +34,12 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationAgendaCategory',
   });
-
+  const { t: tCommon } = useTranslation('common');
   // State for managing modal visibility and form data
   const [agendaCategoryCreateModalIsOpen, setAgendaCategoryCreateModalIsOpen] =
     useState<boolean>(false);
-
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('');
   const [formState, setFormState] = useState({
     name: '',
     description: '',
@@ -59,7 +60,12 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     error?: unknown | undefined;
     refetch: () => void;
   } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
-    variables: { organizationId: orgId },
+    variables: {
+      organizationId: orgId,
+      where: {
+        name_contains: searchTerm,
+      },
+    },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -119,7 +125,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
 
   if (agendaCategoryError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={`${styles.container} bg-transparent rounded-4 my-3`}>
         <div className={styles.message}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
@@ -135,26 +141,43 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   }
 
   return (
-    <div className={`${styles.organizationAgendaCategoryContainer} mx-4`}>
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
-        <div className={`pt-4 mx-4`}>
-          <div className={styles.btnsContainer}>
-            <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
-              {/* <input
-                type="search"
-                className="form-control border-0 bg-light-subtle"
-                placeholder={t('searchAgendaCategories')}
-                onChange={(e) => setSearchValue(e.target.value)}
+    <div className={`mx-4`}>
+      <div className={` bg-transparent rounded-4 my-3`}>
+        <div className={`mx-4`}>
+          <div className={`${styles.btnsContainer} my-0`}>
+            <div className={`${styles.input} mb-1`}>
+              <Form.Control
+                type="name"
+                placeholder={tCommon('searchByName')}
+                autoComplete="off"
+                required
+                className={styles.inputField}
                 value={searchValue}
-                data-testid="searchAgendaCategories"
-              /> */}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') {
+                    setSearchTerm(searchValue);
+                  } else if (e.key === 'Backspace' && searchValue === '') {
+                    setSearchTerm('');
+                  }
+                }}
+                data-testid="searchByName"
+              />
+              <Button
+                tabIndex={-1}
+                className={styles.searchButton}
+                onClick={() => setSearchTerm(searchValue)}
+                data-testid="searchBtn"
+              >
+                <Search />
+              </Button>
             </div>
 
             <Button
               variant="success"
               onClick={showCreateModal}
               data-testid="createAgendaCategoryBtn"
-              className={styles.createAgendaCategoryButton}
+              className={styles.addButton}
             >
               <i className={'fa fa-plus me-2'} />
               {t('createAgendaCategory')}

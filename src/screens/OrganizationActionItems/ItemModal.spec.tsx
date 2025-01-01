@@ -543,6 +543,12 @@ describe('Testing ItemModal', () => {
     const volunteerInputField = within(volunteerSelect).getByRole('combobox');
     fireEvent.mouseDown(volunteerInputField);
 
+    // Select Invalid User with no _id
+    const invalidVolunteerOption = await screen.findByText('Invalid User');
+    expect(invalidVolunteerOption).toBeInTheDocument();
+    fireEvent.click(invalidVolunteerOption);
+
+    fireEvent.mouseDown(volunteerInputField);
     const volunteerOption = await screen.findByText('Bruce Graza');
     expect(volunteerOption).toBeInTheDocument();
     fireEvent.click(volunteerOption);
@@ -578,6 +584,12 @@ describe('Testing ItemModal', () => {
     const inputField = within(categorySelect).getByRole('combobox');
     fireEvent.mouseDown(inputField);
 
+    // Select Invalid Category with no _id
+    const invalidCategoryOption = await screen.findByText('Category 3');
+    expect(invalidCategoryOption).toBeInTheDocument();
+    fireEvent.click(invalidCategoryOption);
+
+    fireEvent.mouseDown(inputField);
     const categoryOption = await screen.findByText('Category 1');
     expect(categoryOption).toBeInTheDocument();
     fireEvent.click(categoryOption);
@@ -595,6 +607,12 @@ describe('Testing ItemModal', () => {
     const groupInputField = within(groupSelect).getByRole('combobox');
     fireEvent.mouseDown(groupInputField);
 
+    // Select Invalid Group with no _id
+    const invalidGroupOption = await screen.findByText('group3');
+    expect(invalidGroupOption).toBeInTheDocument();
+    fireEvent.click(invalidGroupOption);
+
+    fireEvent.mouseDown(groupInputField);
     const groupOption = await screen.findByText('group2');
     expect(groupOption).toBeInTheDocument();
     fireEvent.click(groupOption);
@@ -692,6 +710,12 @@ describe('Testing ItemModal', () => {
     const memberInputField = within(memberSelect).getByRole('combobox');
     fireEvent.mouseDown(memberInputField);
 
+    // Select invalid member with no _id
+    const invalidMemberOption = await screen.findByText('Invalid User');
+    expect(invalidMemberOption).toBeInTheDocument();
+    fireEvent.click(invalidMemberOption);
+
+    fireEvent.mouseDown(memberInputField);
     const memberOption = await screen.findByText('Harve Lance');
     expect(memberOption).toBeInTheDocument();
     fireEvent.click(memberOption);

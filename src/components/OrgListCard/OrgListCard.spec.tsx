@@ -1,19 +1,27 @@
-import React, { act } from 'react';
+import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { render, screen } from '@testing-library/react';
-import 'jest-location-mock';
+import userEvent from '@testing-library/user-event';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
+import { BrowserRouter } from 'react-router-dom';
+import { MockedProvider } from '@apollo/client/testing';
 
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceOrgListCardProps } from './OrgListCard';
 import OrgListCard from './OrgListCard';
-import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem, removeItem } = useLocalStorage();
+
+// Mock window.location
+const mockAssign = vi.fn();
+Object.defineProperty(window, 'location', {
+  value: { assign: mockAssign },
+  writable: true,
+});
 
 const MOCKS = [
   {
@@ -75,6 +83,10 @@ const props: InterfaceOrgListCardProps = {
 };
 
 describe('Testing the Super Dash List', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should render props and text elements test for the page component', async () => {
     removeItem('id');
     setItem('id', '123'); // Means the user is an admin
@@ -88,22 +100,24 @@ describe('Testing the Super Dash List', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
     await wait();
-    expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
-    expect(screen.getByText(/Admins:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Members:/i)).toBeInTheDocument();
-    expect(screen.getByText('Dogs Care')).toBeInTheDocument();
-    expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
-    expect(screen.getByText(/123 Sample Street/i)).toBeInTheDocument();
-    expect(screen.getByTestId(/manageBtn/i)).toBeInTheDocument();
-    expect(screen.getByTestId(/flaskIcon/i)).toBeInTheDocument();
-    userEvent.click(screen.getByTestId(/manageBtn/i));
+
+    expect(screen.getByAltText(/Dogs Care image/i)).toBeDefined();
+    expect(screen.getByText(/Admins:/i)).toBeDefined();
+    expect(screen.getByText(/Members:/i)).toBeDefined();
+    expect(screen.getByText('Dogs Care')).toBeDefined();
+    expect(screen.getByText(/Sample City/i)).toBeDefined();
+    expect(screen.getByText(/123 Sample Street/i)).toBeDefined();
+    expect(screen.getByTestId(/manageBtn/i)).toBeDefined();
+    expect(screen.getByTestId(/flaskIcon/i)).toBeDefined();
+
+    await userEvent.click(screen.getByTestId(/manageBtn/i));
     removeItem('id');
   });
 
   test('Testing if the props data is not provided', () => {
     window.location.assign('/orgdash');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -114,7 +128,7 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>,
     );
 
-    expect(window.location).toBeAt('/orgdash');
+    expect(mockAssign).toHaveBeenCalledWith('/orgdash');
   });
 
   test('Testing if component is rendered properly when image is null', () => {
@@ -122,6 +136,7 @@ describe('Testing the Super Dash List', () => {
       ...props,
       ...{ data: { ...props.data, ...{ image: null } } },
     };
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -131,10 +146,11 @@ describe('Testing the Super Dash List', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(screen.getByTestId(/emptyContainerForImage/i)).toBeInTheDocument();
+
+    expect(screen.getByTestId(/emptyContainerForImage/i)).toBeDefined();
   });
 
-  test('Testing if user is redirected to orgDash screen', () => {
+  test('Testing if user is redirected to orgDash screen', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -144,6 +160,7 @@ describe('Testing the Super Dash List', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    userEvent.click(screen.getByTestId('manageBtn'));
+
+    await userEvent.click(screen.getByTestId('manageBtn'));
   });
 });
