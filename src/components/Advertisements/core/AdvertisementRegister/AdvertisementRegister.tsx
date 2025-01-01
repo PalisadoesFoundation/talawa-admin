@@ -314,7 +314,10 @@ function advertisementRegister({
                 }}
               />
               {formState.advertisementMedia && (
-                <div className={styles.preview} data-testid="mediaPreview">
+                <div
+                  className={styles.previewAdvertisementRegister}
+                  data-testid="mediaPreview"
+                >
                   {formState.advertisementMedia.includes('video') ? (
                     <video
                       muted
@@ -332,7 +335,7 @@ function advertisementRegister({
                     <img src={formState.advertisementMedia} />
                   )}
                   <button
-                    className={styles.closeButton}
+                    className={styles.closeButtonAdvertisementRegister}
                     onClick={(e): void => {
                       e.preventDefault();
                       setFormState({
@@ -405,7 +408,7 @@ function advertisementRegister({
           <Button
             variant="secondary"
             onClick={handleClose}
-            className={styles.closeButton}
+            className={styles.closeButtonAdvertisementRegister}
             data-testid="addonclose"
           >
             {tCommon('close')}
