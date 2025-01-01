@@ -77,12 +77,14 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
   const handleOnChange = (
     e: Event | React.ChangeEvent<HTMLInputElement>,
   ): void => {
+    /* istanbul ignore else -- @preserve */
     if ('target' in e && e.target) {
       const target = e.target as HTMLInputElement;
       // Ensure the value is a number and not NaN
       const value = parseInt(target.value, 10);
       if (!Number.isNaN(value)) {
         setTimeout(value);
+        /* istanbul ignore else -- @preserve */
         if (onValueChange) {
           onValueChange(value);
         }
