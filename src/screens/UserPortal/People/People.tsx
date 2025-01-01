@@ -160,19 +160,20 @@ export default function people(): JSX.Element {
     }
   }, [data]);
 
-  let adminId;
-  if (admins[0]) {
-    adminId = admins[0]._id;
-  }
-  // console.log(adminId)
-  for (let i = 0; i < allMembers.length; i++) {
-    if (allMembers[i]._id === adminId) {
-      allMembers[i].userType = 'Admin';
-    } else {
-      allMembers[i].userType = 'Member';
+  // let adminId;
+  // if (admins[0]) {
+  //   adminId = admins[0]._id;
+  // }
+  if (admins && admins.length > 0) {
+    const adminIds = admins.map((adm) => adm._id);
+    for (let i = 0; i < allMembers.length; i++) {
+      if (adminIds.includes(allMembers[i]._id)) {
+        allMembers[i].userType = 'Admin';
+      } else {
+        allMembers[i].userType = 'Member';
+      }
     }
   }
-
   /**
    * Updates the list of members based on the selected filter mode.
    */
