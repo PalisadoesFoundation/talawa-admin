@@ -100,17 +100,18 @@ function app(): JSX.Element {
   const { data, loading } = useQuery(CHECK_AUTH);
 
   useEffect(() => {
-    if (data) {
-      setItem('name', `${data.checkAuth.firstName} ${data.checkAuth.lastName}`);
-      setItem('id', data.checkAuth._id);
-      setItem('email', data.checkAuth.email);
+    if (!loading && data?.checkAuth) {
+      const auth = data.checkAuth;
       setItem('IsLoggedIn', 'TRUE');
-      setItem('FirstName', data.checkAuth.firstName);
-      setItem('LastName', data.checkAuth.lastName);
-      setItem('UserImage', data.checkAuth.image);
-      setItem('Email', data.checkAuth.email);
+      setItem('id', auth._id);
+      setItem('name', `${auth.firstName} ${auth.lastName}`);
+      setItem('FirstName', auth.firstName);
+      setItem('LastName', auth.lastName);
+      setItem('email', auth.email);
+      setItem('Email', auth.email);
+      setItem('UserImage', auth.image);
     }
-  }, [data, loading]);
+  }, [data, loading, setItem]);
 
   const extraRoutes = Object.entries(installedPlugins).map(
     (
