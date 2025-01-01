@@ -1,27 +1,28 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
 import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from './askForTalawaApiUrl';
+import { vi, it, describe, expect, beforeEach } from 'vitest';
 
-// Mock the `inquirer` module
-vi.mock('inquirer', () => ({
-  default: {
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual('inquirer');
+  return {
+    ...actual,
     prompt: vi.fn(),
-  },
-}));
+  };
+});
 
 describe('askForTalawaApiUrl', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  test('should return the provided endpoint when user enters it', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+  it('should return the provided endpoint when user enters it', async () => {
+    const mockPrompt = vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       endpoint: 'http://example.com/graphql/',
     });
 
     const result = await askForTalawaApiUrl();
 
-    expect(inquirer.prompt).toHaveBeenCalledWith([
+    expect(mockPrompt).toHaveBeenCalledWith([
       {
         type: 'input',
         name: 'endpoint',
@@ -33,14 +34,14 @@ describe('askForTalawaApiUrl', () => {
     expect(result).toBe('http://example.com/graphql/');
   });
 
-  test('should return the default endpoint when the user does not enter anything', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+  it('should return the default endpoint when the user does not enter anything', async () => {
+    const mockPrompt = vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       endpoint: 'http://localhost:4000/graphql/',
     });
 
     const result = await askForTalawaApiUrl();
 
-    expect(inquirer.prompt).toHaveBeenCalledWith([
+    expect(mockPrompt).toHaveBeenCalledWith([
       {
         type: 'input',
         name: 'endpoint',

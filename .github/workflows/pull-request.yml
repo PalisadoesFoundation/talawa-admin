@@ -80,6 +80,7 @@ jobs:
           echo "Source Branch ${{ github.event.pull_request.head.ref }}"
           echo "Target Branch ${{ github.event.pull_request.base.ref }}"
           echo "Error: Source and Target Branches are the same. Please ensure they are different."
+          echo "Error: Close this PR and try again."
           exit 1
 
   Check-Sensitive-Files:
@@ -465,4 +466,22 @@ jobs:
         if: github.event.pull_request.base.ref != 'develop-postgres'
         run: |
           echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
+          echo "Error: Close this PR and try again."
           exit 1
+
+  Validate-Coderabbit:
+    name: Validate CodeRabbit Approval
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    needs: [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Validate CodeRabbit.ai Approval
+        run: |
+          chmod +x $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
+          $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
