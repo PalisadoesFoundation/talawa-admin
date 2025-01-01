@@ -2,13 +2,10 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-
+import { toast } from 'react-toastify';
 import { GENERATE_OTP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -16,14 +13,15 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import ForgotPassword from './ForgotPassword';
 import i18n from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
 const { setItem, removeItem } = useLocalStorage();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
   },
 }));
 
@@ -100,8 +98,8 @@ afterEach(() => {
 });
 
 describe('Testing Forgot Password screen', () => {
-  test('Component should be rendered properly', async () => {
-    window.location.assign('/orglist');
+  it('Component should be rendered properly', async () => {
+    window.history.pushState({}, 'Test page', '/orglist');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -121,10 +119,10 @@ describe('Testing Forgot Password screen', () => {
     expect(screen.getByText(/Registered Email/i)).toBeInTheDocument();
     expect(screen.getByText(/Get Otp/i)).toBeInTheDocument();
     expect(screen.getByText(/Back to Login/i)).toBeInTheDocument();
-    expect(window.location).toBeAt('/orglist');
+    expect(window.location.pathname).toBe('/orglist');
   });
 
-  test('Testing, If user is already loggedIn', async () => {
+  it('Testing, If user is already loggedIn', async () => {
     setItem('IsLoggedIn', 'TRUE');
 
     render(
@@ -142,7 +140,7 @@ describe('Testing Forgot Password screen', () => {
     await wait();
   });
 
-  test('Testing get OTP functionality', async () => {
+  it('Testing get OTP functionality', async () => {
     const formData = {
       email: 'johndoe@gmail.com',
     };
@@ -172,7 +170,7 @@ describe('Testing Forgot Password screen', () => {
     });
   });
 
-  test('Testing forgot password functionality', async () => {
+  it('Testing forgot password functionality', async () => {
     const formData = {
       userOtp: '12345',
       newPassword: 'johnDoe',
@@ -213,7 +211,7 @@ describe('Testing Forgot Password screen', () => {
     await wait();
   });
 
-  test('Testing forgot password functionality, if the otp got deleted from the local storage', async () => {
+  it('Testing forgot password functionality, if the otp got deleted from the local storage', async () => {
     const formData = {
       userOtp: '12345',
       newPassword: 'johnDoe',
@@ -254,7 +252,7 @@ describe('Testing Forgot Password screen', () => {
     await wait();
   });
 
-  test('Testing forgot password functionality, when new password and confirm password is not same', async () => {
+  it('Testing forgot password functionality, when new password and confirm password is not same', async () => {
     const formData = {
       email: 'johndoe@gmail.com',
       userOtp: '12345',
@@ -294,7 +292,7 @@ describe('Testing Forgot Password screen', () => {
     userEvent.click(screen.getByText('Change Password'));
   });
 
-  test('Testing forgot password functionality, when the user is not found', async () => {
+  it('Testing forgot password functionality, when the user is not found', async () => {
     const formData = {
       email: 'notexists@gmail.com',
     };
@@ -324,7 +322,7 @@ describe('Testing Forgot Password screen', () => {
     });
   });
 
-  test('Testing forgot password functionality, when there is an error except unregistered email and api failure', async () => {
+  it('Testing forgot password functionality, when there is an error except unregistered email and api failure', async () => {
     render(
       <MockedProvider addTypename={false} link={notWorkingLink}>
         <BrowserRouter>
@@ -342,7 +340,7 @@ describe('Testing Forgot Password screen', () => {
     });
   });
 
-  test('Testing forgot password functionality, when talawa api failed', async () => {
+  it('Testing forgot password functionality, when talawa api failed', async () => {
     const formData = {
       email: 'johndoe@gmail.com',
     };
@@ -372,7 +370,7 @@ describe('Testing Forgot Password screen', () => {
     });
   });
 
-  test('Testing forgot password functionality, when otp token is not present', async () => {
+  it('Testing forgot password functionality, when otp token is not present', async () => {
     const formData = {
       userOtp: '12345',
       newPassword: 'johnDoe',
