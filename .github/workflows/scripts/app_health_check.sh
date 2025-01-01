@@ -1,4 +1,3 @@
-# .github/workflows/scripts/app_health_check.sh
 #!/bin/bash
 
 # This script performs a health check to ensure an application is running on a specified port.
