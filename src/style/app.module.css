@@ -4464,3 +4464,151 @@ button[data-testid='createPostBtn'] {
   font-size: 16px;
   cursor: pointer;
 }
+
+/* YearlyEventCalender.tsx */
+
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: #707070;
+  height: 60px;
+}
+
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(6, 1fr);
+}
+
+.day__outside {
+  color: #89898996 !important;
+}
+
+.day__selected {
+  background-color: #007bff;
+  color: #707070;
+}
+
+.day__today {
+  background-color: #def6e1;
+  font-weight: 700;
+  text-decoration: underline;
+  color: #31bb6b;
+}
+
+.yearlyCalender {
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.closebtnYearlyEventCalender {
+  padding: 10px;
+}
+
+.yearlyCalendarHeader {
+  display: flex;
+  flex-direction: row;
+}
+
+.yearlyCalendarHeader > div {
+  font-weight: 600;
+  font-size: 2rem;
+  padding: 0 10px;
+  color: #4b4b4b;
+}
+
+.cardYearlyEventCalender {
+  padding: 16px;
+  text-align: center;
+  height: 21rem;
+}
+
+.cardHeaderYearlyEventCalender {
+  text-align: left;
+}
+
+.rowYearlyEventCalender {
+  margin: 1px -5px;
+}
+
+.rowYearlyEventCalender:after {
+  content: '';
+  display: table;
+  clear: both;
+  margin: 0 -5px;
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.weekday__yearly {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  font-weight: 600;
+}
+
+.columnYearlyEventCalender {
+  float: left;
+  width: 25%;
+  padding: 10px;
+}
+
+.btn__more {
+  border: 0px;
+  font-size: 14px;
+  background-color: initial;
+  font-weight: 600;
+  transition: all 200ms;
+  position: relative;
+  display: block;
+  margin: -9px;
+  margin-top: -28px;
+}
+
+.btn__more:hover {
+  color: #3ce080;
+}
+
+.expand_event_list {
+  display: block;
+}
+
+.expand_list_container {
+  width: 200px;
+  max-height: 250px;
+  z-index: 10;
+  position: absolute;
+  left: auto;
+  right: auto;
+  overflow: auto;
+  padding: 10px 4px 0px 4px;
+  background-color: rgb(241, 241, 241);
+  border: 1px solid rgb(201, 201, 201);
+  border-radius: 5px;
+  margin: 5px;
+}
+
+@media only screen and (max-width: 700px) {
+  .event_list {
+    display: none;
+  }
+
+  .expand_list_container {
+    width: 150px;
+    padding: 4px 4px 0px 4px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .btn__more {
+    font-size: 12px;
+  }
+
+  .columnYearlyEventCalender {
+    float: left;
+    width: 100%;
+    padding: 10px;
+  }
+}
