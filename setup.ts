@@ -5,59 +5,9 @@ import { checkConnection } from './src/setup/checkConnection/checkConnection';
 import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaApiUrl';
 import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
-import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
-import { askForDocker } from './src/setup/askForDocker/askForDocker';
+import askAndSetDockerOption from './src/setup/askAndSetDockerOption/askAndSetDockerOption';
 import updateEnvFile from './src/setup/updateEnvFile/updateEnvFile';
-
-// Ask and update the custom port
-const askAndUpdatePort = async (): Promise<void> => {
-  const { shouldSetCustomPortResponse } = await inquirer.prompt({
-    type: 'confirm',
-    name: 'shouldSetCustomPortResponse',
-    message:
-      'Would you like to set up a custom port for running Talawa Admin without Docker?',
-    default: true,
-  });
-
-  if (shouldSetCustomPortResponse) {
-    const customPort = await askForCustomPort();
-    if (customPort < 1024 || customPort > 65535) {
-      throw new Error('Port must be between 1024 and 65535');
-    }
-
-    updateEnvFile('PORT', String(customPort));
-  }
-};
-
-// Function to manage Docker setup
-const askAndSetDockerOption = async (): Promise<void> => {
-  const { useDocker } = await inquirer.prompt({
-    type: 'confirm',
-    name: 'useDocker',
-    message: 'Would you like to set up with Docker?',
-    default: false,
-  });
-
-  if (useDocker) {
-    console.log('Setting up with Docker...');
-    updateEnvFile('USE_DOCKER', 'YES');
-    const answers = await askForDocker();
-    const DOCKER_PORT_NUMBER = answers;
-    updateEnvFile('DOCKER_PORT', DOCKER_PORT_NUMBER);
-
-    const DOCKER_NAME = 'talawa-admin';
-    console.log(`
-      
-        Run the commands below after setup:-
-              1. docker build -t ${DOCKER_NAME} .
-              2. docker run -d -p ${DOCKER_PORT_NUMBER}:${DOCKER_PORT_NUMBER} ${DOCKER_NAME}
-              
-     `);
-  } else {
-    console.log('Setting up without Docker...');
-    updateEnvFile('USE_DOCKER', 'NO');
-  }
-};
+import askAndUpdatePort from './src/setup/askAndUpdatePort/askAndUpdatePort';
 
 // Ask and update the Talawa API URL
 const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
