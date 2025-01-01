@@ -1,4 +1,4 @@
-# .github/workflows/scripts/health_check.sh
+# .github/workflows/scripts/health_check_no.sh
 #!/bin/bash
 
 port="$1"
