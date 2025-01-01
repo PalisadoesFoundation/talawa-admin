@@ -5691,3 +5691,38 @@ button[data-testid='createPostBtn'] {
   color: red;
   cursor: pointer;
 }
+
+/* OrgActionItemCategories.tsx */
+
+.iconOrgActionItemCategories {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
+
+.btnsContainerOrgActionItemCategories {
+  display: flex;
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+.btnsContainerOrgActionItemCategories .input {
+  flex: 1;
+  min-width: 18rem;
+  position: relative;
+}
+
+.btnsContainerOrgActionItemCategories input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainerOrgActionItemCategories .input button {
+  width: 52px;
+}
+
+/* CategoryModal.tsx */
+
+.createModal {
+  margin-top: 20vh;
+  margin-left: 13vw;
+  max-width: 80vw;
+}
