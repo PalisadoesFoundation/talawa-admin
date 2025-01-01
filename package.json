@@ -15,7 +15,7 @@
     "@mui/base": "^5.0.0-beta.61",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
-    "@mui/private-theming": "^6.1.6",
+    "@mui/private-theming": "^6.3.0",
     "@mui/system": "^6.1.6",
     "@mui/x-charts": "^7.22.2",
     "@mui/x-data-grid": "^7.22.1",
