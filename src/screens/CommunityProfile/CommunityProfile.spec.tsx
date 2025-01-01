@@ -2,10 +2,8 @@ import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
-
+import { describe, test, expect, vi } from 'vitest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import CommunityProfile from './CommunityProfile';
 import i18n from 'utils/i18nForTest';
@@ -157,17 +155,17 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
 describe('Testing Community Profile Screen', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Components should render properly', async () => {
