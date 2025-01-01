@@ -2,10 +2,11 @@ import { describe, it, expect, vi } from 'vitest';
 import askAndUpdatePort from './askAndUpdatePort';
 import { askForCustomPort } from 'setup/askForCustomPort/askForCustomPort';
 import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
-import inquirer from 'inquirer';
+import * as inquirer from 'inquirer';
 
 // Mock dependencies
 vi.mock('inquirer', () => ({
+  ...inquirer,
   prompt: vi.fn(),
 }));
 
@@ -19,10 +20,6 @@ vi.mock('setup/updateEnvFile/updateEnvFile', () => ({
 
 describe('askAndUpdatePort', () => {
   it('should update the port when user confirms and provides a valid port', async () => {
-    // Arrange
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
-      shouldSetCustomPortResponse: true,
-    });
     vi.mocked(askForCustomPort).mockResolvedValueOnce(3000);
 
     // Act
@@ -33,11 +30,6 @@ describe('askAndUpdatePort', () => {
   });
 
   it('should not update the port when user declines', async () => {
-    // Arrange
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
-      shouldSetCustomPortResponse: false,
-    });
-
     // Act
     await askAndUpdatePort();
 
@@ -46,10 +38,6 @@ describe('askAndUpdatePort', () => {
   });
 
   it('should throw an error for an invalid port', async () => {
-    // Arrange
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
-      shouldSetCustomPortResponse: true,
-    });
     vi.mocked(askForCustomPort).mockResolvedValueOnce(800); // Invalid port
 
     // Act & Assert
