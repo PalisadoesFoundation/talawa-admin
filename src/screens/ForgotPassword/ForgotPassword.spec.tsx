@@ -6,7 +6,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { GENERATE_OTP_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  FORGOT_PASSWORD_MUTATION,
+  GENERATE_OTP_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 // import i18nForTest from 'utils/i18nForTest';
@@ -26,6 +29,22 @@ vi.mock('react-toastify', () => ({
 }));
 
 const MOCKS = [
+  {
+    request: {
+      query: FORGOT_PASSWORD_MUTATION,
+      variables: {
+        otpToken: 'lorem ipsum',
+        userOtp: '12345',
+        newPassword: 'johnDoe@12345',
+      },
+    },
+    result: {
+      data: {
+        forgotPassword: true,
+      },
+    },
+  },
+
   {
     request: {
       query: GENERATE_OTP_MUTATION,
@@ -173,8 +192,8 @@ describe('Testing Forgot Password screen', () => {
   it('Testing forgot password functionality', async () => {
     const formData = {
       userOtp: '12345',
-      newPassword: 'johnDoe',
-      confirmNewPassword: 'johnDoe',
+      newPassword: 'johnDoe@12345',
+      confirmNewPassword: 'johnDoe@12345',
       email: 'johndoe@gmail.com',
     };
 
