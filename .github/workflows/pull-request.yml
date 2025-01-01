@@ -37,8 +37,8 @@ jobs:
 
       - name: Count number of lines
         run: |
-          chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
+          chmod +x ./.github/workflows/scripts/countline.py
+          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -71,8 +71,8 @@ jobs:
 
       - name: Compare translation files
         run: |
-          chmod +x .github/workflows/compare_translations.py
-          python .github/workflows/compare_translations.py --directory public/locales
+          chmod +x .github/workflows/scripts/compare_translations.py
+          python .github/workflows/scripts/compare_translations.py --directory public/locales
 
       - name: Check if the source and target branches are different
         if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
@@ -197,7 +197,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+          python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Check-Code-Coverage-Disable:
     name: Check for code coverage disable
@@ -217,7 +217,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }} 
+          python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }} 
 
   Test-Application:
     name: Test Application
