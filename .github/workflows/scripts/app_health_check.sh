@@ -23,20 +23,51 @@ port="$1"
 timeout="${2:-120}"
 is_docker_test="${3:-false}"
 
+
+# Validate required port parameter
+if [ -z "${port}" ] || ! [[ "${port}" =~ ^[0-9]$ ]] || [ "${port}" -lt 1 ] || [ "${port}" -gt 65535 ]; then
+  echo "Error: Invalid or missing port number. Must be between 1-65535"
+  exit 1
+fi
+
+# Validate timeout parameter
+if ! [[ "${timeout}" =~ ^[0-9]$ ]] || [ "${timeout}" -lt 1 ]; then
+  echo "Error: Invalid timeout value. Must be a positive integer"
+  exit 1
+fi
+
+# Validate is_docker_test parameter
+if [ "${is_docker_test}" != "true" ] && [ "${is_docker_test}" != "false" ]; then
+  echo "Error: is_docker_test must be either 'true' or 'false'"
+  exit 1
+fi
+
 echo "Starting health check with ${timeout}s timeout"
-while ! nc -z localhost "${port}" && [ "${timeout}" -gt 0 ]; do
+while [ "${timeout}" -gt 0 ]; do
+  if nc -z localhost "${port}" 2>/dev/null; then
+    break
+  elif [ $? -ne 1 ]; then
+    echo "Error: Failed to check port ${port} (nc command failed)"
+    exit 1
+  fi
   sleep 1
   timeout=$((timeout-1))
   if [ $((timeout % 10)) -eq 0 ]; then
-    echo "Still waiting for app to start... ${timeout}s remaining"
+    echo "Waiting for app to start on port ${port}... ${timeout}s remaining"
+    # Try to get more information about the port status
+    netstat -an | grep "${port}" || true
   fi
 done
 
 if [ "${timeout}" -eq 0 ]; then
-  echo "Timeout waiting for application to start"
+  echo "Error: Timeout waiting for application to start on port ${port}"
+  echo "System port status:"
+  netstat -an | grep "${port}" || true
   if [ "${is_docker_test}" = "true" ]; then
     echo "Fetching Docker container logs..."
-    docker logs talawa-admin-app-container
+    if ! docker logs talawa-admin-app-container; then
+      echo "Error: Failed to fetch logs from container talawa-admin-app-container"
+    fi
   fi
   exit 1
 fi
