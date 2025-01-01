@@ -340,8 +340,8 @@ jobs:
           echo $! > .pidfile_prod
       - name: Check if Production App is running
         run: |
-          chmod +x .github/workflows/scripts/health_check_no.sh
-          .github/workflows/scripts/health_check_no.sh 4173 120
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4173 120
       - name: Stop Production App
         run: |
           if [ -f .pidfile_prod ]; then
@@ -353,8 +353,8 @@ jobs:
           echo $! > .pidfile_dev
       - name: Check if Development App is running
         run: |
-          chmod +x .github/workflows/scripts/health_check_no.sh
-          .github/workflows/scripts/health_check_no.sh 4321 120
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120
       - name: Stop Development App
         if: always()
         run: |
@@ -390,8 +390,8 @@ jobs:
           echo "Docker container started successfully"
       - name: Check if Talawa Admin App is running
         run: |
-          chmod +x .github/workflows/scripts/health_check_no.sh
-          .github/workflows/scripts/health_check_no.sh 4321 120 true
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
       - name: Stop Docker Container
         if: always()
         run: |
