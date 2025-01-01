@@ -97,6 +97,7 @@ jobs:
         with:
           files: |
             .env*
+            src/App.tsx
             .github/**
             env.example
             .node-version
