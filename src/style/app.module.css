@@ -5427,3 +5427,267 @@ button[data-testid='createPostBtn'] {
   box-shadow: none;
   margin-top: 5px;
 }
+
+/* OrgPostCard.tsx */
+
+.cardOrgPostCard {
+  width: 100%;
+  height: 20rem;
+  margin-bottom: 2rem;
+}
+
+.cardsOrgPostCard h2 {
+  font-size: 20px;
+}
+
+.cardsOrgPostCard > h3 {
+  font-size: 17px;
+}
+
+.cardOrgPostCard {
+  width: 100%;
+  height: 20rem;
+  margin-bottom: 2rem;
+}
+
+.cardsOrgPostCard:hover {
+  filter: brightness(0.8);
+}
+
+.cardsOrgPostCard:hover::before {
+  opacity: 0.5;
+}
+
+.postimageOrgPostCard {
+  border-radius: 0px;
+  width: 100%;
+  height: 12rem;
+  max-width: 100%;
+  max-height: 12rem;
+  object-fit: cover;
+  position: relative;
+  color: black;
+}
+
+.previewOrgPostCard {
+  display: flex;
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.previewOrgPostCard img {
+  width: 400px;
+  height: auto;
+}
+
+.previewOrgPostCard video {
+  width: 400px;
+  height: auto;
+}
+
+.nopostimage {
+  border-radius: 0px;
+  width: 100%;
+  height: 12rem;
+  max-height: 12rem;
+  object-fit: cover;
+  position: relative;
+}
+
+.menuModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+}
+
+.modalOrgPostCard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+}
+
+.modalContentOrgPostCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 800px;
+  max-height: 600px;
+  overflow: auto;
+}
+
+.modalImage {
+  flex: 1;
+  margin-right: 20px;
+  width: 25rem;
+  height: 15rem;
+}
+
+.modalImage img,
+.modalImage video {
+  border-radius: 0px;
+  width: 100%;
+  height: 25rem;
+  max-width: 25rem;
+  max-height: 15rem;
+  object-fit: cover;
+  position: relative;
+}
+
+.modalInfo {
+  flex: 1;
+}
+
+.titleOrgPostCard {
+  font-size: 16px;
+  color: #000;
+  font-weight: 600;
+}
+
+.textOrgPostCard {
+  font-size: 13px;
+  color: #000;
+  font-weight: 300;
+}
+
+.author {
+  color: #737373;
+  font-weight: 100;
+  font-size: 13px;
+}
+
+.closeButtonOrgPostCard {
+  position: relative;
+  bottom: 5rem;
+  right: 10px;
+  padding: 4px;
+  background-color: red;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.closeButtonP {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: transparent;
+  transform: scale(1.2);
+  cursor: pointer;
+  border: none;
+  color: #707070;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cardsOrgPostCard:hover::after {
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+
+.cardsOrgPostCard > p {
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 7px;
+}
+
+.cardsOrgPostCard a {
+  color: #737373;
+  font-weight: 600;
+}
+
+.cardsOrgPostCard a:hover {
+  color: black;
+}
+
+.infodiv {
+  margin-bottom: 7px;
+  width: 15rem;
+  text-align: justify;
+  word-wrap: break-word;
+}
+
+.infodiv > p {
+  margin: 0;
+}
+
+.cardsOrgPostCard:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}
+
+.cardsOrgPostCard:first-child:nth-last-child(even),
+.cardsOrgPostCard:first-child:nth-last-child(even) ~ .box {
+  grid-column: auto / span 1;
+}
+
+.toggleClickBtn {
+  color: #31bb6b;
+  cursor: pointer;
+  border: none;
+  font-size: 12px;
+  background-color: white;
+}
+
+.toggleClickBtnNone {
+  display: none;
+}
+
+.menuContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding-top: 20px;
+  max-width: 700px;
+  max-height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+
+.menuOptions {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuOptions li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-left: 100px;
+  padding-right: 100px;
+  cursor: pointer;
+}
+
+.moreOptionsButton {
+  position: relative;
+  bottom: 5rem;
+  right: 10px;
+  padding: 2px;
+  background-color: transparent;
+  color: #000;
+  border: none;
+  cursor: pointer;
+}
+
+.list {
+  color: red;
+  cursor: pointer;
+}
