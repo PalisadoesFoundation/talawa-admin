@@ -4795,3 +4795,51 @@ button[data-testid='createPostBtn'] {
     width: 100%;
   }
 }
+
+/* AddOnStore.tsx */
+
+.containerAddOnStore {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  margin: 2px;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.colAddOnStore {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inputAddOnStore {
+  display: flex;
+  position: relative;
+  width: 560px;
+}
+
+.cardGridItem {
+  width: 38vw;
+}
+
+.justifyspAddOnStore {
+  display: grid;
+  width: 100%;
+  justify-content: space-between;
+  align-items: baseline;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+}
+
+@media screen and (max-width: 600px) {
+  .cardGridItem {
+    width: 100%;
+  }
+  .justifyspAddOnStore {
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: start;
+  }
+}
