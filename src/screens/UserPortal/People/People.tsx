@@ -22,13 +22,13 @@ interface InterfaceOrganizationCardProps {
   sno: string;
 }
 
-export interface InterfaceMember {
+interface InterfaceMember {
   firstName: string;
   lastName: string;
   image: string;
   _id: string;
   email: string;
-  __typename: string;
+  userType: string;
 }
 
 /**
@@ -50,7 +50,9 @@ export default function people(): JSX.Element {
 
   // State for managing the number of rows per page in pagination
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<InterfaceMember[]>([]);
+  const [allMembers, setAllMembers] = useState<InterfaceMember[]>([]);
+  const [admins, setAdmins] = useState<InterfaceMember[]>([]);
   const [mode, setMode] = useState<number>(0);
 
   // Extracting organization ID from URL parameters
@@ -69,12 +71,10 @@ export default function people(): JSX.Element {
       },
     },
   );
-
   // Query to fetch list of admins of the organization
   const { data: data2 } = useQuery(ORGANIZATION_ADMINS_LIST, {
     variables: { id: organizationId },
   });
-
   /**
    * Handles page change in pagination.
    *
@@ -135,10 +135,43 @@ export default function people(): JSX.Element {
   };
 
   useEffect(() => {
+    if (data2) {
+      const admin = data2.organizations[0].admins[0];
+      const updatedAdmin: InterfaceMember = {
+        ...admin,
+        userType: 'Admin',
+      };
+      setAdmins([updatedAdmin]);
+    }
+  }, [data2]);
+
+  useEffect(() => {
     if (data) {
-      setMembers(data.organizationsMemberConnection.edges);
+      // Add or update the `userType` property for each member
+      const updatedAdmins = data.organizationsMemberConnection.edges.map(
+        (memberData: InterfaceMember) => ({
+          ...memberData, // Spread the existing properties
+          userType: memberData.userType === 'Admin' ? 'Admin' : 'Member', // Add or override userType
+        }),
+      );
+
+      setAllMembers(updatedAdmins);
+      setMembers(updatedAdmins);
     }
   }, [data]);
+
+  let adminId;
+  if (admins[0]) {
+    adminId = admins[0]._id;
+  }
+  // console.log(adminId)
+  for (let i = 0; i < allMembers.length; i++) {
+    if (allMembers[i]._id === adminId) {
+      allMembers[i].userType = 'Admin';
+    } else {
+      allMembers[i].userType = 'Member';
+    }
+  }
 
   /**
    * Updates the list of members based on the selected filter mode.
@@ -147,11 +180,11 @@ export default function people(): JSX.Element {
   useEffect(() => {
     if (mode == 0) {
       if (data) {
-        setMembers(data.organizationsMemberConnection.edges);
+        setMembers(allMembers);
       }
     } else if (mode == 1) {
       if (data2) {
-        setMembers(data2.organizations[0].admins);
+        setMembers(admins);
       }
     }
   }, [mode]);
@@ -243,7 +276,7 @@ export default function people(): JSX.Element {
                         image: member.image,
                         id: member._id,
                         email: member.email,
-                        role: member.__typename,
+                        role: member.userType,
                         sno: (index + 1).toString(),
                       };
                       return <PeopleCard key={index} {...cardProps} />;
