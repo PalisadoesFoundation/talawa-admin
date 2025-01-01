@@ -143,8 +143,8 @@ describe('Organisation Settings Page', () => {
     userEvent.click(dropdownToggle);
 
     // Find all dropdown items
-    const dropdownItems = screen.getAllByRole('button');
-    expect(dropdownItems).toHaveLength(12);
+    const dropdownItems = screen.getAllByRole('menuitem');
+    expect(dropdownItems).toHaveLength(3);
 
     for (const item of dropdownItems) {
       userEvent.click(item);
