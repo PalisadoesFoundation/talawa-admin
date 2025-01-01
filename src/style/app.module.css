@@ -5287,3 +5287,143 @@ button[data-testid='createPostBtn'] {
   border-radius: 10px;
   margin-left: 5px;
 }
+
+/* EventListCardModals.tsx */
+
+.dispflexEventListCardModals {
+  display: flex;
+  cursor: pointer;
+  justify-content: space-between;
+  margin: 10px 5px 5px 0px;
+}
+
+.eventtitle {
+  margin-bottom: 0px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.checkboxdivEventListCardModals > div label {
+  margin-right: 50px;
+}
+
+.checkboxdivEventListCardModals > label > input {
+  margin-left: 10px;
+}
+
+.dispflexEventListCardModals > input {
+  width: 20%;
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+.checkboxContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkboxdivEventListCardModals {
+  display: flex;
+  flex-direction: column;
+}
+
+.previewEventListCardModals {
+  display: flex;
+  flex-direction: row;
+  font-weight: 700;
+  font-size: 16px;
+  color: #000000;
+  margin: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .checkboxContainer {
+    flex-direction: column;
+  }
+
+  .datediv {
+    flex-direction: column;
+  }
+
+  .datediv > div {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
+  .datediv > div p {
+    margin-bottom: 5px;
+  }
+}
+
+.customButton {
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* EventListCard.tsx */
+
+.cardsEventListCard {
+  width: 100%;
+  background: #5cacf7 !important;
+  padding: 2px 3px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 3px 2px #e8e8e8;
+  color: #737373;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  margin-bottom: 5px;
+}
+
+.cardsEventListCard h2 {
+  font-size: 15px;
+  color: #4e4c4c;
+  font-weight: 500;
+}
+
+.cardsEventListCard > h3 {
+  font-size: 17px;
+}
+
+.cardsEventListCard > p {
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 7px;
+}
+
+.cardsEventListCard a {
+  color: var(--white-color);
+  font-weight: 600;
+}
+
+.cardsEventListCard a:hover {
+  color: var(--black-color);
+}
+
+.cardsEventListCard:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}
+
+.cardsEventListCard:first-child:nth-last-child(even),
+.cardsEventListCard:first-child:nth-last-child(even) ~ .box {
+  grid-column: auto / span 1;
+}
+
+.dispflexEventListCard {
+  display: flex;
+  cursor: pointer;
+  justify-content: space-between;
+  margin: 10px 5px 5px 0px;
+}
+
+.dispflexEventListCard > input {
+  width: 20%;
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
