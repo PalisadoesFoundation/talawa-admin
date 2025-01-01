@@ -37,15 +37,12 @@ interface InterfaceMember {
  * and paginate through the list.
  */
 export default function people(): JSX.Element {
-  // i18n translation hook for user organization related translations
   const { t } = useTranslation('translation', {
     keyPrefix: 'people',
   });
 
-  // i18n translation hook for common translations
   const { t: tCommon } = useTranslation('common');
 
-  // State for managing current page in pagination
   const [page, setPage] = useState<number>(0);
 
   // State for managing the number of rows per page in pagination
@@ -75,11 +72,7 @@ export default function people(): JSX.Element {
   const { data: data2 } = useQuery(ORGANIZATION_ADMINS_LIST, {
     variables: { id: organizationId },
   });
-  /**
-   * Handles page change in pagination.
-   *
-   */
-  /* istanbul ignore next */
+
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -87,11 +80,6 @@ export default function people(): JSX.Element {
     setPage(newPage);
   };
 
-  /**
-   * Handles change in the number of rows per page.
-   *
-   */
-  /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -101,20 +89,12 @@ export default function people(): JSX.Element {
     setPage(0);
   };
 
-  /**
-   * Searches for members based on the filter value.
-   *
-   */
   const handleSearch = (newFilter: string): void => {
     refetch({
       firstName_contains: newFilter,
     });
   };
 
-  /**
-   * Handles search operation triggered by pressing the Enter key.
-   *
-   */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -124,9 +104,6 @@ export default function people(): JSX.Element {
     }
   };
 
-  /**
-   * Handles search operation triggered by clicking the search button.
-   */
   const handleSearchByBtnClick = (): void => {
     const inputValue =
       (document.getElementById('searchPeople') as HTMLInputElement)?.value ||
@@ -147,7 +124,6 @@ export default function people(): JSX.Element {
 
   useEffect(() => {
     if (data) {
-      // Add or update the `userType` property for each member
       const updatedAdmins = data.organizationsMemberConnection.edges.map(
         (memberData: InterfaceMember) => ({
           ...memberData, // Spread the existing properties
@@ -160,10 +136,6 @@ export default function people(): JSX.Element {
     }
   }, [data]);
 
-  // let adminId;
-  // if (admins[0]) {
-  //   adminId = admins[0]._id;
-  // }
   if (admins && admins.length > 0) {
     const adminIds = admins.map((adm) => adm._id);
     for (let i = 0; i < allMembers.length; i++) {
@@ -174,10 +146,6 @@ export default function people(): JSX.Element {
       }
     }
   }
-  /**
-   * Updates the list of members based on the selected filter mode.
-   */
-  /* istanbul ignore next */
   useEffect(() => {
     if (mode == 0) {
       if (data) {
