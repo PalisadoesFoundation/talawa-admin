@@ -21,6 +21,15 @@
   --loader-color: #febc59;
 
   /* Miscellaneous */
+  --title-gray: #5e5e5e;
+  --bs-btn-bg: #212529;
+  --grey-color: #a5a5a5;
+  --light-green: #98e0b6;
+  --bs-white: #f5f5f5;
+  --bs--grey: #737373;
+  --grey-light: #31bb6b1f;
+  --bs-dark: #00000010;
+  --bg-white: #f2f7ff;
   --brown-color: #555555;
   --blue-color: #0000ff;
   --light-blue-color: #286fe0;
@@ -39,6 +48,7 @@
   --white-color: #ffffff;
   --off-white-color: #ffffff97;
   --black-color: #000000;
+  --black--color: #000;
   --black-shadow-color: #00000029;
   --white-shadow-color: #ffffff33;
   --light-dark-gray-color: #505050;
@@ -3408,7 +3418,7 @@ button[data-testid='createPostBtn'] {
   font-size: 0.9rem;
   margin-left: 0.5rem;
   font-weight: lighter;
-  color: #707070;
+  color: var(--grey-dark);
 }
 
 .chip {
@@ -3514,7 +3524,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .accordion-button:not(.collapsed) {
-  color: #212529;
+  color: var(--bs-btn-bg);
   background-color: white;
 }
 
@@ -3596,15 +3606,15 @@ button[data-testid='createPostBtn'] {
   border-radius: 14px;
   padding: 5px 10px;
   background-color: white;
-  color: #a5a5a5;
+  color: var(--grey-color);
   border: none;
-  border: 1px solid #a5a5a5;
+  border: 1px solid var(--grey-color);
 }
 
 .selectedBtn,
 .filterButton:hover {
-  border: 1px solid #98e0b6;
-  background-color: #98e0b6;
+  border: 1px solid var(--light-green);
+  background-color: var(--light-green);
   color: rgb(255, 255, 255);
 }
 
@@ -3613,7 +3623,7 @@ button[data-testid='createPostBtn'] {
   flex-grow: 3;
   display: flex;
   flex-direction: column;
-  background-color: #f2f7ff;
+  background-color: var(--bg-white);
 }
 
 .inputContainer {
@@ -3622,7 +3632,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .input {
-  box-shadow: 5px 5px 4px 0px #31bb6b1f;
+  box-shadow: 5px 5px 4px 0px var(--bg-white);
 }
 
 .box {
@@ -3630,7 +3640,7 @@ button[data-testid='createPostBtn'] {
   background-color: white;
   margin-top: 1rem;
   padding: 20px;
-  border: 1px solid #dddddd;
+  border: 1px solid var(--input-shadow-color);
   border-radius: 10px;
 }
 
@@ -3655,7 +3665,7 @@ button[data-testid='createPostBtn'] {
 .inputArea {
   border: none;
   outline: none;
-  background-color: #f1f3f6;
+  background-color: var(--input-area-color);
 }
 
 .maxWidthDonate {
@@ -3684,7 +3694,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .colorLight {
-  background-color: #f5f5f5;
+  background-color: var(--bs-white);
 }
 
 .content {
@@ -3731,7 +3741,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .colorPrimary {
-  background: #31bb6b;
+  background: var(--bs-form-valid-border-color);
 }
 
 .input {
@@ -3739,7 +3749,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .borderBox {
-  border: 1px solid #dddddd;
+  border: 1px solid var(--input-shadow-color);
 }
 
 .borderRounded5 {
@@ -3765,11 +3775,11 @@ button[data-testid='createPostBtn'] {
 }
 
 .shadow {
-  box-shadow: 5px 5px 4px 0px #31bb6b1f;
+  box-shadow: 5px 5px 4px 0px var(--grey-light);
 }
 
 .colorGreen {
-  color: #31bb6b;
+  color: var(--bs-form-valid-border-color);
 }
 
 .maxWidthPeople {
@@ -3791,7 +3801,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .greenBorder {
-  border: 1px solid #31bb6b;
+  border: 1px solid var(--bs-form-valid-border-color);
 }
 
 .semiBold {
@@ -3799,7 +3809,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .placeholderColor::placeholder {
-  color: #737373;
+  color: var(--bs--grey);
 }
 
 .btnsContainer {
@@ -3831,7 +3841,7 @@ button[data-testid='createPostBtn'] {
 .titleContainer h3 {
   font-size: 1.25rem;
   font-weight: 750;
-  color: #5e5e5e;
+  color: var(--title-gray);
   margin-top: 0.2rem;
 }
 
@@ -3839,7 +3849,7 @@ button[data-testid='createPostBtn'] {
   font-size: 0.9rem;
   margin-left: 0.5rem;
   font-weight: lighter;
-  color: #707070;
+  color: var(--grey-dark);
 }
 
 .progress {
@@ -3875,7 +3885,7 @@ button[data-testid='createPostBtn'] {
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #f2f7ff;
+  background-color: var(--bg-white);
 }
 
 .containerHeightPosts {
@@ -3933,7 +3943,7 @@ button[data-testid='createPostBtn'] {
   background-color: white;
   margin-top: 1rem;
   padding: 1rem;
-  border: 1px solid #dddddd;
+  border: 1px solid var(--input-shadow-color);
   border-radius: 10px;
 }
 
@@ -3954,7 +3964,7 @@ button[data-testid='createPostBtn'] {
   overflow: hidden;
   border-radius: 50%;
   position: relative;
-  border: 2px solid #31bb6b;
+  border: 2px solid var(--bs-form-valid-border-color);
 }
 
 .userImage img {
@@ -3973,14 +3983,14 @@ button[data-testid='createPostBtn'] {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   outline: none;
   border: none;
-  color: #000;
+  color: var(--black--color);
   font-weight: 900;
 }
 
 .startPostBtn:hover {
-  background-color: #00000010;
+  background-color: var(--bs-dark);
   border: 0;
-  color: #000 !important;
+  color: var(--black--color) !important;
 }
 
 .icons {
@@ -3988,7 +3998,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .icons svg {
-  stroke: #000;
+  stroke: var(--black--color);
 }
 
 .icons.dark {
@@ -3999,12 +4009,12 @@ button[data-testid='createPostBtn'] {
 }
 
 .icons.dark svg {
-  stroke: #000;
+  stroke: var(--black--color);
 }
 
 .iconLabel {
   margin: 0;
-  color: #000;
+  color: var(--black--color);
   font-weight: 900;
 }
 
@@ -4017,7 +4027,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .uploadLink:hover {
-  background-color: #00000010;
+  background-color: var(--bs-dark);
 }
 
 .modal {
@@ -4056,7 +4066,7 @@ button[data-testid='createPostBtn'] {
   font-weight: bold;
   padding-bottom: 1px;
   font-size: 14px;
-  color: #707070;
+  color: var(--grey-dark);
   margin-bottom: 10px;
 }
 
