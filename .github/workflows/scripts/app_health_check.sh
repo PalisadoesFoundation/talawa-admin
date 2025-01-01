@@ -25,13 +25,13 @@ is_docker_test="${3:-false}"
 
 
 # Validate required port parameter
-if [ -z "${port}" ] || ! [[ "${port}" =~ ^[0-9]$ ]] || [ "${port}" -lt 1 ] || [ "${port}" -gt 65535 ]; then
+if [ -z "${port}" ] || ! [[ "${port}" =~ ^[0-9]+$ ]] || [ "${port}" -lt 1 ] || [ "${port}" -gt 65535 ]; then
   echo "Error: Invalid or missing port number. Must be between 1-65535"
   exit 1
 fi
 
 # Validate timeout parameter
-if ! [[ "${timeout}" =~ ^[0-9]$ ]] || [ "${timeout}" -lt 1 ]; then
+if ! [[ "${timeout}" =~ ^[0-9]+$ ]] || [ "${timeout}" -lt 1 ]; then
   echo "Error: Invalid timeout value. Must be a positive integer"
   exit 1
 fi
