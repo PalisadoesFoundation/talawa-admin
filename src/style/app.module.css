@@ -21,10 +21,10 @@
   --loader-color: #febc59;
 
   /* Miscellaneous */
-  --title-gray: #5e5e5e;
+  --grey-color: #5e5e5e;
   --bs-btn-bg: #212529;
   --grey-color: #a5a5a5;
-  --light-green: #98e0b6;
+  --grey-light: #98e0b6;
   --bs-white: #f5f5f5;
   --bs--grey: #737373;
   --grey-light: #31bb6b1f;
@@ -39,7 +39,7 @@
   --dropdown-hover-color: #eff1f7;
   --grey-bg-color: #eaebef;
   --light-dark-green: #08780b;
-  --light-green: #31bb6b;
+  --grey-light: #31bb6b;
   --green-color: #21d015;
   --light-more-green: #39a440;
   --off-light-green: #31bb6a60;
@@ -48,7 +48,6 @@
   --white-color: #ffffff;
   --off-white-color: #ffffff97;
   --black-color: #000000;
-  --black--color: #000;
   --black-shadow-color: #00000029;
   --white-shadow-color: #ffffff33;
   --light-dark-gray-color: #505050;
@@ -202,7 +201,7 @@
   font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--light-green);
+  border-bottom: 3px solid var(--grey-light);
   width: 15%;
 }
 
@@ -212,7 +211,7 @@
   font-size: 18px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--light-green);
+  border-bottom: 3px solid var(--grey-light);
   width: 60%;
 }
 
@@ -689,7 +688,7 @@ hr {
 .pageNotFound h1.head {
   font-size: 250px;
   font-weight: 900;
-  color: var(--light-green);
+  color: var(--grey-light);
   letter-spacing: 25px;
   margin: 10px 0 0 0;
 }
@@ -769,7 +768,7 @@ hr {
 
 .inputFieldPledge {
   background-color: var(--bs-white);
-  box-shadow: 0 1px 1px var(--light-green);
+  box-shadow: 0 1px 1px var(--grey-light);
 }
 
 .dropdownPledge {
@@ -935,7 +934,7 @@ hr {
 }
 
 .toggleBtnPledge:hover {
-  color: var(--light-green) !important;
+  color: var(--grey-light) !important;
 }
 
 .card {
@@ -1168,7 +1167,7 @@ hr {
 }
 
 .customcell {
-  background-color: var(--light-green) !important;
+  background-color: var(--grey-light) !important;
   color: var(--bs-white) !important;
   font-size: medium !important;
   font-weight: 500 !important;
@@ -1465,7 +1464,7 @@ hr {
 }
 
 .toggleBtn:hover {
-  color: var(--light-green) !important;
+  color: var(--grey-light) !important;
 }
 
 input[type='radio']:checked + label {
@@ -1576,10 +1575,10 @@ input[type='radio']:checked + label:hover {
 
 .dropdowns {
   background-color: var(--bs-white);
-  border: 1px solid var(--light-green);
+  border: 1px solid var(--grey-light);
   position: relative;
   display: inline-block;
-  color: var(--light-green);
+  color: var(--grey-light);
 }
 
 .chipIcon {
@@ -2815,7 +2814,7 @@ button[data-testid='createPostBtn'] {
     display: flex !important;
     align-items: center;
     background-color: transparent;
-    color: var(--light-green);
+    color: var(--grey-light);
   }
 
   .entryaction .spinner-grow {
@@ -3411,7 +3410,7 @@ button[data-testid='createPostBtn'] {
     --accordion-hover-bg,
     rgba(49, 187, 106, 0.3)
   ) !important;
-  color: var(--accordion-hover-color, var(--light-green)) !important;
+  color: var(--accordion-hover-color, var(--grey-light)) !important;
 }
 
 .subContainer span {
@@ -3613,8 +3612,8 @@ button[data-testid='createPostBtn'] {
 
 .selectedBtn,
 .filterButton:hover {
-  border: 1px solid var(--light-green);
-  background-color: var(--light-green);
+  border: 1px solid var(--grey-light);
+  background-color: var(--grey-light);
   color: rgb(255, 255, 255);
 }
 
@@ -3841,7 +3840,7 @@ button[data-testid='createPostBtn'] {
 .titleContainer h3 {
   font-size: 1.25rem;
   font-weight: 750;
-  color: var(--title-gray);
+  color: var(--grey-color);
   margin-top: 0.2rem;
 }
 
@@ -3983,14 +3982,14 @@ button[data-testid='createPostBtn'] {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   outline: none;
   border: none;
-  color: var(--black--color);
+  color: var(--black-color);
   font-weight: 900;
 }
 
 .startPostBtn:hover {
   background-color: var(--bs-dark);
   border: 0;
-  color: var(--black--color) !important;
+  color: var(--black-color) !important;
 }
 
 .icons {
@@ -3998,7 +3997,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .icons svg {
-  stroke: var(--black--color);
+  stroke: var(--black-color);
 }
 
 .icons.dark {
@@ -4009,12 +4008,12 @@ button[data-testid='createPostBtn'] {
 }
 
 .icons.dark svg {
-  stroke: var(--black--color);
+  stroke: var(--black-color);
 }
 
 .iconLabel {
   margin: 0;
-  color: var(--black--color);
+  color: var(--black-color);
   font-weight: 900;
 }
 
