@@ -127,14 +127,16 @@ export default function people(): JSX.Element {
       const updatedAdmins = data.organizationsMemberConnection.edges.map(
         (memberData: InterfaceMember) => ({
           ...memberData, // Spread the existing properties
-          userType: memberData.userType === 'Admin' ? 'Admin' : 'Member', // Add or override userType
+          userType: admins?.some((admin) => admin._id === memberData._id)
+            ? 'Admin'
+            : 'Member',
         }),
       );
 
       setAllMembers(updatedAdmins);
       setMembers(updatedAdmins);
     }
-  }, [data]);
+  }, [data, admins]);
 
   if (admins && admins.length > 0) {
     const adminIds = admins.map((adm) => adm._id);
