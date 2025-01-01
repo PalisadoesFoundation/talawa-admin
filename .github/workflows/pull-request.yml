@@ -341,20 +341,8 @@ jobs:
           echo $! > .pidfile_prod
       - name: Check if Production App is running
         run: |
-          timeout=120
-          echo "Starting production health check with ${timeout}s timeout"
-          while ! nc -z localhost 4173 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for production app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for production application to start"
-            exit 1
-          fi
-          echo "Production app started successfully"
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4173 120
       - name: Stop Production App
         run: |
           if [ -f .pidfile_prod ]; then
@@ -366,20 +354,8 @@ jobs:
           echo $! > .pidfile_dev
       - name: Check if Development App is running
         run: |
-          timeout=120
-          echo "Starting development health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for development app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for development application to start"
-            exit 1
-          fi
-          echo "Development app started successfully"
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120
       - name: Stop Development App
         if: always()
         run: |
@@ -415,22 +391,8 @@ jobs:
           echo "Docker container started successfully"
       - name: Check if Talawa Admin App is running
         run: |
-          timeout="${HEALTH_CHECK_TIMEOUT:-120}"
-          echo "Starting health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for application to start"
-            echo "Container logs:"
-            docker logs talawa-admin-app-container
-            exit 1
-          fi
-          echo "Port check passed, verifying health endpoint..."
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
       - name: Stop Docker Container
         if: always()
         run: |
