@@ -336,7 +336,7 @@ function orgList(): JSX.Element {
           <Form.Control
             type="name"
             id="searchOrgname"
-            className={'bg-white'}
+            className={styles.inputField}
             placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
@@ -346,7 +346,7 @@ function orgList(): JSX.Element {
           <Button
             tabIndex={-1}
             // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-            className={styles.searchButtonOrgList}
+            className={styles.searchButton}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
@@ -366,6 +366,7 @@ function orgList(): JSX.Element {
                   sortingState.option === '' ? 'outline-success' : 'success'
                 }
                 data-testid="sortOrgs"
+                className={styles.dropdown}
               >
                 <SortIcon className={'me-1'} />
                 {sortingState.selectedOption}

@@ -97,7 +97,7 @@
   --grey-bg-color-dark: #707070;
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
-  --bg-blue: #afffe8;
+  --bg-blue: #a8c7fa;
 }
 .fonts {
   color: var(--grey-bg-color-dark);
@@ -273,7 +273,7 @@
   margin-bottom: 10px;
 }
 
-.dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
+.dropdown:is(:hover, :focus, :active, :focus-visible, .show, :disabled) {
   background-color: transparent !important;
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
@@ -282,6 +282,12 @@
 .dropdown:is(:focus, :focus-visible) {
   outline: 2px solid var(--highlight-color, var(--search-button-bg));
 }
+
+/* .dropdown:disabled {
+  background-color: transparent !important;
+  border: 1px solid var(--brown-color);
+  color: var(--brown-color) !important;
+} */
 
 .dropdownItem {
   background-color: var(--bs-white) !important;
@@ -439,6 +445,8 @@
 
 .searchButton:active {
   transform: scale(0.95);
+  background-color: var(--search-button-hover-bg, #286fe0) !important;
+  border-color: transparent !important;
 }
 
 .addButton {
@@ -447,8 +455,8 @@
   border-color: var(--grey-bg-color);
 }
 
-.addButton:hover {
-  background-color: var(--light-blue-color);
+.addButton:is(:hover, :active, :focus) {
+  background-color: #286fe0 !important;
   border-color: var(--search-button-border);
 }
 
@@ -500,6 +508,22 @@
   background-color: var(--table-head-bg);
   color: var(--table-header-color);
   font-size: var(--font-size-header);
+}
+
+.editButton {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  border-color: var(--grey-bg-color);
+}
+
+.editButton:hover {
+  background-color: var(--subtle-blue-grey);
+  border-color: var(--search-button-border);
+}
+
+.editButton:focus,
+.editButton:active {
+  background-color: var(--bs-primary) !important;
 }
 
 .errorContainer {
@@ -655,6 +679,17 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background-color: var(--search-button-bg); */
+}
+
+.switch input {
+  /* box-shadow: 0 0 0.1rem 0.2rem var(--bg-blue); */
+}
+
+.switch input:checked {
+  background-color: #286fe0;
+  border: var(--bs-primary);
+  box-shadow: 0 0 0.1rem 0.2rem var(--bg-blue);
 }
 
 .pageNotFound {
@@ -724,10 +759,11 @@ hr {
 .greenregbtnPledge {
   margin-top: 15px;
   border: 1px solid var(--bs-gray-300);
+  border-color: var(--grey-bg-color);
   box-shadow: 0 2px 2px var(--grey-border-box-color);
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--bs-primary);
+  background-color: var(--search-button-bg);
   width: 100%;
   font-size: 16px;
   color: var(--bs-white);
@@ -863,6 +899,10 @@ hr {
   gap: 0.3rem;
 }
 
+.progressBar .bg-info {
+  background-color: #286fe0 !important;
+}
+
 .endpoints {
   display: flex;
   position: relative;
@@ -924,9 +964,19 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-color: var(--grey-border-box-color);
 }
 
-.toggleBtnPledge:hover {
+.toggleBtnPledge:is(:focus, :active, :checked) + label {
+  color: black !important;
+  border-color: black !important;
+}
+
+.toggleBtnPledge:not(:checked) + label {
+  color: var(--subtle-blue-grey-hover) !important;
+}
+
+.toggleBtnPledge:is(:hover) + label {
   color: var(--bg-blue) !important;
 }
 
@@ -1215,11 +1265,12 @@ hr {
 .greenregbtnOrganizationFundCampaign {
   margin: 1rem 0 0;
   margin-top: 15px;
-  border: 1px solid var(--bs-gray-300);
+  /* border: 1px solid var(--search-button-bg); */
+  border-color: var(--grey-bg-color);
   box-shadow: 0 2px 2px var(--grey-border-box-color);
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--bs-primary);
+  background-color: var(--search-button-bg);
   width: 100%;
   font-size: 16px;
   color: var(--bs-white);
@@ -1230,6 +1281,11 @@ hr {
     transform 0.2s,
     box-shadow 0.2s;
   flex: 1;
+}
+
+.greenregbtnOrganizationFundCampaign:hover {
+  background-color: #286fe0;
+  border-color: var(--grey-bg-color);
 }
 
 .goalButtonOrganizationFundCampaign {

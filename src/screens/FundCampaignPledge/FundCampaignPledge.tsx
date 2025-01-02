@@ -356,7 +356,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={`me-2 ${styles.editButton}`}
               data-testid="editPledgeBtn"
               onClick={() =>
                 handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
@@ -429,7 +429,10 @@ const fundCampaignPledge = (): JSX.Element => {
                 name="btnradio"
                 id="pledgedRadio"
                 checked={progressIndicator === 'pledged'}
-                onChange={() => setProgressIndicator('pledged')}
+                onChange={() => {
+                  setProgressIndicator('pledged');
+                  console.log(progressIndicator);
+                }}
               />
               <label
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
@@ -440,7 +443,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
               <input
                 type="radio"
-                className={`btn-check`}
+                className={`btn-check ${styles.toggleBtnPledge}`}
                 name="btnradio"
                 id="raisedRadio"
                 onChange={() => setProgressIndicator('raised')}
@@ -462,6 +465,8 @@ const fundCampaignPledge = (): JSX.Element => {
               max={campaignInfo?.goal}
               style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
+              className={`${styles.progressBar}`}
+              // variant='info'
             />
             <div className={styles.endpoints}>
               <div className={styles.start}>$0</div>
@@ -471,20 +476,20 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       </div>
       <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
-        <div className={`${styles.inputPledge} mb-1`}>
+        <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
             placeholder={t('searchPledger')}
             autoComplete="off"
             required
-            className={styles.inputFieldPledge}
+            className={styles.inputField}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchPledger"
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${styles.searchButton}`}
             data-testid="searchBtn"
           >
             <Search />
@@ -533,7 +538,7 @@ const fundCampaignPledge = (): JSX.Element => {
           <div>
             <Button
               variant="success"
-              className={styles.orgFundCampaignButton}
+              className={styles.dropdown}
               disabled={endDate < new Date()}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"

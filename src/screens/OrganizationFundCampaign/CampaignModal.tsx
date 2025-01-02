@@ -301,7 +301,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             {/* Button to create the campaign */}
             <Button
               type="submit"
-              className={styles.greenregbtnOrganizationFundCampaign}
+              className={styles.addButton}
               data-testid="submitCampaignBtn"
             >
               {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}

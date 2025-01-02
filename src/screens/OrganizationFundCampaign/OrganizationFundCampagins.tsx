@@ -283,7 +283,7 @@ const orgFundCampaign = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={styles.editButton}
               data-testid="editCampaignBtn"
               onClick={() =>
                 handleOpenModal(
@@ -312,7 +312,7 @@ const orgFundCampaign = (): JSX.Element => {
           <Button
             variant="outline-success"
             size="sm"
-            className="rounded"
+            className={styles.editButton}
             data-testid="viewBtn"
             onClick={() => handleClick(params.row.campaign._id as string)}
           >
@@ -339,76 +339,75 @@ const orgFundCampaign = (): JSX.Element => {
         <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
-      <div className={styles.btnsContainerOrganizationFundCampaign}>
-        <div className={styles.inputOrganizationFundCampaign}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputFieldOrganizationFundCampaign}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchFullName"
-          />
-          <Button
-            className="position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center"
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}>
-          <div className="d-flex justify-space-between">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdownOrganizationFundCampaign}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('fundingGoal_ASC')}
-                  data-testid="fundingGoal_ASC"
-                >
-                  {t('lowestGoal')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('fundingGoal_DESC')}
-                  data-testid="fundingGoal_DESC"
-                >
-                  {t('highestGoal')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_DESC')}
-                  data-testid="endDate_DESC"
-                >
-                  {t('latestEndDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_ASC')}
-                  data-testid="endDate_ASC"
-                >
-                  {t('earliestEndDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div>
-            <Button
-              variant="success"
-              className={styles.orgFundCampaignButton}
-              onClick={() => handleOpenModal(null, 'create')}
-              data-testid="addCampaignBtn"
-              disabled={isArchived}
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('addCampaign')}
+      <div className={styles.head}>
+        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+          <div className={`${styles.input} mb-1`}>
+            <Form.Control
+              type="name"
+              placeholder={tCommon('searchByName')}
+              autoComplete="off"
+              required
+              className={styles.inputField}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              data-testid="searchFullName"
+            />
+            <Button className={styles.searchButton} data-testid="searchBtn">
+              <Search />
             </Button>
+          </div>
+          <div className="d-flex gap-4 mb-1">
+            <div className={'d-flex justify-space-between align-items-center'}>
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="success"
+                  id="dropdown-basic"
+                  className={styles.dropdown}
+                  data-testid="filter"
+                >
+                  <Sort className={'me-1'} />
+                  {tCommon('sort')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={() => setSortBy('fundingGoal_ASC')}
+                    data-testid="fundingGoal_ASC"
+                  >
+                    {t('lowestGoal')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => setSortBy('fundingGoal_DESC')}
+                    data-testid="fundingGoal_DESC"
+                  >
+                    {t('highestGoal')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => setSortBy('endDate_DESC')}
+                    data-testid="endDate_DESC"
+                  >
+                    {t('latestEndDate')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => setSortBy('endDate_ASC')}
+                    data-testid="endDate_ASC"
+                  >
+                    {t('earliestEndDate')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+            <div className="">
+              <Button
+                variant="success"
+                className={styles.createButton}
+                onClick={() => handleOpenModal(null, 'create')}
+                data-testid="addCampaignBtn"
+                disabled={isArchived}
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('addCampaign')}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
