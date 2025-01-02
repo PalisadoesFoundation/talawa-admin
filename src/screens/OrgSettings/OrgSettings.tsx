@@ -81,10 +81,8 @@ function OrgSettings(): JSX.Element {
               {settingtabs.map((setting, index) => (
                 <Dropdown.Item
                   key={index}
-                  onClick={
-                    /* istanbul ignore next */
-                    () => setTab(setting)
-                  }
+                  role="menuitem"
+                  onClick={() => setTab(setting)}
                   className={tab === setting ? 'text-secondary' : ''}
                 >
                   {t(setting)}
