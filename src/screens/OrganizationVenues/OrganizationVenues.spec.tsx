@@ -31,6 +31,8 @@ import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import type { ApolloLink } from '@apollo/client';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import { vi } from 'vitest';
+import { errorHandler } from 'utils/errorHandler';
+
 const MOCKS = [
   {
     request: {
@@ -502,6 +504,108 @@ describe('Organisation Venues', () => {
     waitFor(() => {
       expect(screen.getByTestId('venueRow2')).toBeInTheDocument();
       expect(screen.getByTestId('venueRow1')).toBeInTheDocument();
+    });
+  });
+});
+
+
+vi.mock('utils/errorHandler');
+
+describe('Organisation Venues Error Handling', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  test('handles venue query error correctly', async () => {
+    const mockError = new Error('Failed to fetch venues');
+    const errorLink = new StaticMockLink([
+      {
+        request: {
+          query: VENUE_LIST,
+          variables: {
+            orgId: 'orgId',
+            orderBy: 'capacity_DESC',
+            where: {
+              name_starts_with: '',
+              description_starts_with: undefined,
+            },
+          },
+        },
+        error: mockError,
+      },
+    ]);
+
+    renderOrganizationVenue(errorLink);
+
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), mockError);
+    });
+  });
+
+  test('handles venue deletion error correctly', async () => {
+    const mockError = new Error('Failed to delete venue');
+    const errorLink = new StaticMockLink([
+      {
+        request: {
+          query: VENUE_LIST,
+          variables: {
+            orgId: 'orgId',
+            orderBy: 'capacity_DESC',
+            where: {
+              name_starts_with: '',
+              description_starts_with: undefined,
+            },
+          },
+        },
+        result: {
+          data: {
+            getVenueByOrgId: [
+              {
+                _id: 'venue1',
+                name: 'Test Venue',
+                description: 'Test Description',
+                capacity: 100,
+                // ... other required fields
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: DELETE_VENUE_MUTATION,
+          variables: { id: 'venue1' },
+        },
+        error: mockError,
+      },
+    ], true);
+
+    renderOrganizationVenue(errorLink);
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteVenueBtn1')).toBeInTheDocument();
+    });
+    
+    fireEvent.click(screen.getByTestId('deleteVenueBtn1'));
+
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), mockError);
+    });
+  });
+
+  test('renders venue list correctly after loading', async () => {
+    renderOrganizationVenue(link);
+    
+    // First verify loading state
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+    
+    // Then verify venues are rendered
+    await waitFor(() => {
+      const venueList = screen.getByTestId('orgvenueslist');
+      expect(venueList).toBeInTheDocument();
+      
+      const venues = screen.getAllByTestId(/^venue-item/);
+      expect(venues).toHaveLength(3);
     });
   });
 });
