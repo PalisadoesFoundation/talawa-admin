@@ -448,7 +448,6 @@ export default function settings(): JSX.Element {
                           className={`${styles.textField}`}
                           onChange={(date) => {
                             if (date) {
-                              console.log(date.toISOString());
                               handleFieldChange(
                                 'birthDate',
                                 date.toISOString(),
@@ -457,6 +456,7 @@ export default function settings(): JSX.Element {
                           }}
                           slotProps={{
                             textField: {
+                              id: 'birthDate',
                               error: false,
                             },
                           }}
