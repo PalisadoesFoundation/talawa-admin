@@ -4457,15 +4457,12 @@ button[data-testid='createPostBtn'] {
   grid-template-columns: repeat(7, 1fr);
   background-color: var(--grey-dark);
   height: 60px;
-  role: 'row';
 }
 
 .calendar__days {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-template-rows: repeat(6, 1fr);
-  role: 'grid';
-  aria-label: 'Calendar';
 }
 
 .day__outside {
