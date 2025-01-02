@@ -18,6 +18,10 @@ vi.mock('setup/updateEnvFile/updateEnvFile', () => ({
   updateEnvFile: vi.fn(),
 }));
 
+vi.mock('askAndUpdatePort', () => ({
+  askAndUpdatePort: vi.fn(),
+}));
+
 describe('askAndUpdatePort', () => {
   it('should update the port when user confirms and provides a valid port', async () => {
     vi.mocked(askForCustomPort).mockResolvedValueOnce(3000);
