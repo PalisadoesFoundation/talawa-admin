@@ -16,7 +16,7 @@ import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_LIST, PLUGIN_GET } from 'GraphQl/Queries/Queries';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { MockedProvider } from '@apollo/react-testing';
 import { vi, describe, test, expect } from 'vitest';
@@ -259,10 +259,10 @@ describe('Testing AddOnStore Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Installed'));
+    await userEvent.click(screen.getByText('Installed'));
 
     await wait();
-    userEvent.click(screen.getByText('Available'));
+    await userEvent.click(screen.getByText('Available'));
   });
 
   test('check the working search bar when on Available tab', async () => {
@@ -283,7 +283,7 @@ describe('Testing AddOnStore Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Available'));
+    await userEvent.click(screen.getByText('Available'));
 
     await wait();
     let searchText = '';

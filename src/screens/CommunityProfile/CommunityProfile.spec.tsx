@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { describe, test, expect, vi } from 'vitest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -228,17 +228,17 @@ describe('Testing Community Profile Screen', () => {
     const saveChangesBtn = screen.getByTestId(/saveChangesBtn/i);
     const resetChangeBtn = screen.getByTestId(/resetChangesBtn/i);
 
-    userEvent.type(communityName, profileVariables.name);
-    userEvent.type(websiteLink, profileVariables.websiteLink);
-    userEvent.type(facebook, profileVariables.socialUrl);
-    userEvent.type(instagram, profileVariables.socialUrl);
-    userEvent.type(X, profileVariables.socialUrl);
-    userEvent.type(linkedIn, profileVariables.socialUrl);
-    userEvent.type(github, profileVariables.socialUrl);
-    userEvent.type(youtube, profileVariables.socialUrl);
-    userEvent.type(reddit, profileVariables.socialUrl);
-    userEvent.type(slack, profileVariables.socialUrl);
-    userEvent.upload(logo, profileVariables.logo);
+    await userEvent.type(communityName, profileVariables.name);
+    await userEvent.type(websiteLink, profileVariables.websiteLink);
+    await userEvent.type(facebook, profileVariables.socialUrl);
+    await userEvent.type(instagram, profileVariables.socialUrl);
+    await userEvent.type(X, profileVariables.socialUrl);
+    await userEvent.type(linkedIn, profileVariables.socialUrl);
+    await userEvent.type(github, profileVariables.socialUrl);
+    await userEvent.type(youtube, profileVariables.socialUrl);
+    await userEvent.type(reddit, profileVariables.socialUrl);
+    await userEvent.type(slack, profileVariables.socialUrl);
+    await userEvent.upload(logo, profileVariables.logo);
     await wait();
 
     expect(communityName).toHaveValue(profileVariables.name);
@@ -256,7 +256,7 @@ describe('Testing Community Profile Screen', () => {
     expect(resetChangeBtn).not.toBeDisabled();
     await wait();
 
-    userEvent.click(saveChangesBtn);
+    await userEvent.click(saveChangesBtn);
     await wait();
   });
 
@@ -293,7 +293,7 @@ describe('Testing Community Profile Screen', () => {
     await wait();
 
     const resetChangesBtn = screen.getByTestId('resetChangesBtn');
-    userEvent.click(resetChangesBtn);
+    await userEvent.click(resetChangesBtn);
     await wait();
 
     expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue('');

@@ -23,7 +23,7 @@ import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { MockedProvider, wait } from '@apollo/react-testing';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ADD_ON_ENTRY_MOCK } from './AddOnEntryMocks';

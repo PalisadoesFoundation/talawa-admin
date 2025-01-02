@@ -14,7 +14,7 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import { store } from 'state/store';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
@@ -154,24 +154,24 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(
         screen.getAllByTestId('clearSelectedMember')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('clearSelectedMember')[0]);
+    await userEvent.click(screen.getAllByTestId('clearSelectedMember')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('deselectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
   });
 
   test('searchs for tags where the firstName matches the provided firstName search input', async () => {
@@ -277,7 +277,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.noOneSelected);
@@ -293,19 +293,19 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[2]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[2]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[2]);
 
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

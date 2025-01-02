@@ -2,7 +2,7 @@ import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import type { RenderResult } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import OrgAdminListCard from './OrgAdminListCard';
@@ -89,7 +89,7 @@ describe('Testing Organization Admin List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
+    await userEvent.click(screen.getByTestId(/removeAdminBtn/i));
 
     await wait(2000);
   });

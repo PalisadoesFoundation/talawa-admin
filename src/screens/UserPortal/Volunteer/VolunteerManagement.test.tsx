@@ -9,7 +9,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import VolunteerManagement from './VolunteerManagement';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { MOCKS } from './UpcomingEvents/UpcomingEvents.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -98,7 +98,7 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     const backButton = await screen.findByTestId('backBtn');
-    userEvent.click(backButton);
+    await userEvent.click(backButton);
     await waitFor(() => {
       const orgHome = screen.getByTestId('orgHome');
       expect(orgHome).toBeInTheDocument();
@@ -109,19 +109,19 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     const invitationsBtn = screen.getByTestId('invitationsBtn');
-    userEvent.click(invitationsBtn);
+    await userEvent.click(invitationsBtn);
 
     const invitationsTab = screen.getByTestId('invitationsTab');
     expect(invitationsTab).toBeInTheDocument();
 
     const actionsBtn = screen.getByTestId('actionsBtn');
-    userEvent.click(actionsBtn);
+    await userEvent.click(actionsBtn);
 
     const actionsTab = screen.getByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
 
     const groupsBtn = screen.getByTestId('groupsBtn');
-    userEvent.click(groupsBtn);
+    await userEvent.click(groupsBtn);
 
     const groupsTab = screen.getByTestId('groupsTab');
     expect(groupsTab).toBeInTheDocument();

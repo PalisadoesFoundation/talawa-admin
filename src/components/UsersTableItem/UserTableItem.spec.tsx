@@ -13,7 +13,7 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 import useLocalStorage from 'utils/useLocalstorage';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
 import type * as RouterTypes from 'react-router-dom';
 
@@ -1315,9 +1315,9 @@ describe('Testing User Table Item', () => {
       `changeRoleInOrg${'abc'}`,
     ) as HTMLSelectElement;
     expect(changeRoleBtn).toBeInTheDocument();
-    userEvent.selectOptions(changeRoleBtn, 'ADMIN');
+    await userEvent.selectOptions(changeRoleBtn, 'ADMIN');
     await wait();
-    userEvent.selectOptions(changeRoleBtn, 'USER');
+    await userEvent.selectOptions(changeRoleBtn, 'USER');
     await wait();
     expect(changeRoleBtn.value).toBe(`USER?abc`);
     await wait();

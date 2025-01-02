@@ -4,7 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
@@ -254,7 +254,7 @@ describe('Testing Leaderboard Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, 'T');
+    await userEvent.type(searchInput, 'T');
     await debounceWait();
 
     await waitFor(() => {
@@ -271,7 +271,7 @@ describe('Testing Leaderboard Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     const userName = screen.getAllByTestId('userName');
-    userEvent.click(userName[0]);
+    await userEvent.click(userName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('memberScreen')).toBeInTheDocument();

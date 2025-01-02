@@ -4,7 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
@@ -221,7 +221,7 @@ describe('Testing Volunteers Screen', () => {
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'T');
+    await userEvent.type(searchInput, 'T');
     await debounceWait();
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
@@ -261,10 +261,10 @@ describe('Testing Volunteers Screen', () => {
     renderVolunteers(link1);
 
     const viewItemBtn = await screen.findAllByTestId('viewItemBtn');
-    userEvent.click(viewItemBtn[0]);
+    await userEvent.click(viewItemBtn[0]);
 
     expect(await screen.findByText(t.volunteerDetails)).toBeInTheDocument();
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and Close Volunteer Modal (Delete)', async () => {
@@ -275,10 +275,10 @@ describe('Testing Volunteers Screen', () => {
     renderVolunteers(link1);
 
     const deleteItemBtn = await screen.findAllByTestId('deleteItemBtn');
-    userEvent.click(deleteItemBtn[0]);
+    await userEvent.click(deleteItemBtn[0]);
 
     expect(await screen.findByText(t.removeVolunteer)).toBeInTheDocument();
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and close Volunteer Modal (Create)', async () => {
@@ -289,9 +289,9 @@ describe('Testing Volunteers Screen', () => {
     renderVolunteers(link1);
 
     const addVolunteerBtn = await screen.findByTestId('addVolunteerBtn');
-    userEvent.click(addVolunteerBtn);
+    await userEvent.click(addVolunteerBtn);
 
     expect(await screen.findAllByText(t.addVolunteer)).toHaveLength(2);
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 });

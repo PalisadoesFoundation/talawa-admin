@@ -10,7 +10,7 @@ import RequestsTableItem from './RequestsTableItem';
 import { BrowserRouter } from 'react-router-dom';
 const link = new StaticMockLink(MOCKS, true);
 import useLocalStorage from 'utils/useLocalstorage';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
@@ -111,7 +111,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
+    await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
   });
 
   it('Accept MembershipRequest handles error', async () => {
@@ -143,7 +143,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('acceptMembershipRequestBtn1'));
+    await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn1'));
   });
 
   it('Reject MembershipRequest Button works properly', async () => {
@@ -175,7 +175,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
+    await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
   });
 
   it('Reject MembershipRequest handles error', async () => {
@@ -207,6 +207,6 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('rejectMembershipRequestBtn1'));
+    await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn1'));
   });
 });

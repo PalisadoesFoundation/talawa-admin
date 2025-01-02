@@ -8,7 +8,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import EventManagement from './EventManagement';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -66,7 +66,7 @@ describe('Event Management', () => {
     renderEventManagement();
 
     const backButton = screen.getByTestId('backBtn');
-    userEvent.click(backButton);
+    await userEvent.click(backButton);
     await waitFor(() => {
       const eventsScreen = screen.getByTestId('eventsScreen');
       expect(eventsScreen).toBeInTheDocument();
@@ -77,34 +77,34 @@ describe('Event Management', () => {
     renderEventManagement();
 
     const registrantsButton = screen.getByTestId('registrantsBtn');
-    userEvent.click(registrantsButton);
+    await userEvent.click(registrantsButton);
 
     const registrantsTab = screen.getByTestId('eventRegistrantsTab');
     expect(registrantsTab).toBeInTheDocument();
     const eventAttendanceButton = screen.getByTestId('attendanceBtn');
-    userEvent.click(eventAttendanceButton);
+    await userEvent.click(eventAttendanceButton);
     const eventAttendanceTab = screen.getByTestId('eventAttendanceTab');
     expect(eventAttendanceTab).toBeInTheDocument();
     const eventActionsButton = screen.getByTestId('actionsBtn');
-    userEvent.click(eventActionsButton);
+    await userEvent.click(eventActionsButton);
 
     const eventActionsTab = screen.getByTestId('eventActionsTab');
     expect(eventActionsTab).toBeInTheDocument();
 
     const eventAgendasButton = screen.getByTestId('agendasBtn');
-    userEvent.click(eventAgendasButton);
+    await userEvent.click(eventAgendasButton);
 
     const eventAgendasTab = screen.getByTestId('eventAgendasTab');
     expect(eventAgendasTab).toBeInTheDocument();
 
     const eventStatsButton = screen.getByTestId('statisticsBtn');
-    userEvent.click(eventStatsButton);
+    await userEvent.click(eventStatsButton);
 
     const eventStatsTab = screen.getByTestId('eventStatsTab');
     expect(eventStatsTab).toBeInTheDocument();
 
     const volunteerButton = screen.getByTestId('volunteersBtn');
-    userEvent.click(volunteerButton);
+    await userEvent.click(volunteerButton);
 
     const eventVolunteersTab = screen.getByTestId('eventVolunteersTab');
     expect(eventVolunteersTab).toBeInTheDocument();

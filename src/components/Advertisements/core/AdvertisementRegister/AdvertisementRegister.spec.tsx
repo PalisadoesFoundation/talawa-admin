@@ -22,7 +22,7 @@ import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
@@ -580,7 +580,7 @@ describe('Testing Advertisement Register Component', () => {
       type: 'video/mp4',
     });
     const mediaInput = screen.getByTestId('advertisementMedia');
-    userEvent.upload(mediaInput, mediaFile);
+    await userEvent.upload(mediaInput, mediaFile);
 
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
@@ -637,7 +637,7 @@ describe('Testing Advertisement Register Component', () => {
       type: 'video/mp4',
     });
     const mediaInput = screen.getByTestId('advertisementMedia');
-    userEvent.upload(mediaInput, mediaFile);
+    await userEvent.upload(mediaInput, mediaFile);
 
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();

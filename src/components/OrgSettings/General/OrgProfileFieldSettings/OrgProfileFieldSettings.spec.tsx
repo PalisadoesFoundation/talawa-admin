@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import OrgProfileFieldSettings from './OrgProfileFieldSettings';
 import i18nForTest from 'utils/i18nForTest';
@@ -202,7 +202,7 @@ describe('Testing Save Button', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('saveChangesBtn'));
+    await userEvent.click(screen.getByTestId('saveChangesBtn'));
     await wait();
     expect(screen.queryByText('Field added successfully')).toBeInTheDocument();
   });
@@ -217,13 +217,13 @@ describe('Testing Save Button', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByTestId('saveChangesBtn'));
+    await userEvent.click(screen.getByTestId('saveChangesBtn'));
     await wait();
     expect(
       screen.queryByText('Failed to add custom field'),
     ).toBeInTheDocument();
     await wait();
-    userEvent.type(screen.getByTestId('customFieldInput'), 'Age{enter}');
+    await userEvent.type(screen.getByTestId('customFieldInput'), 'Age{enter}');
     await wait();
     expect(
       screen.queryByText('Failed to add custom field'),
@@ -242,7 +242,7 @@ describe('Testing Save Button', () => {
     await wait();
 
     const fieldNameInput = getByTestId('customFieldInput');
-    userEvent.type(fieldNameInput, 'Age');
+    await userEvent.type(fieldNameInput, 'Age');
   });
   it('When No Custom Data is Present', async () => {
     const { getByText } = render(
@@ -267,7 +267,7 @@ describe('Testing Save Button', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
+    await userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
     await wait();
     expect(
       screen.queryByText('Field removed successfully'),
@@ -285,7 +285,7 @@ describe('Testing Save Button', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
+    await userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
     await wait();
     expect(toastSpy).toHaveBeenCalledWith('Failed to remove custom field');
   });

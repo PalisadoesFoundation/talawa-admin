@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
@@ -368,7 +368,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByText('Dashboard'));
+    await userEvent.click(screen.getByText('Dashboard'));
     expect(global.window.location.pathname).toContain('/orgdash/123');
   });
 
@@ -391,7 +391,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
     const peopelBtn = screen.getByTestId(/People/i);
-    userEvent.click(peopelBtn);
+    await userEvent.click(peopelBtn);
     await wait();
     expect(window.location.pathname).toContain('/orgpeople/123');
   });

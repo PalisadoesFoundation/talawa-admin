@@ -9,7 +9,7 @@ import {
 import { MockedProvider } from '@apollo/react-testing';
 import OrgPostCard from './OrgPostCard';
 import { I18nextProvider } from 'react-i18next';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
@@ -216,14 +216,14 @@ describe('Testing Organization Post Card', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('editPostModalBtn'));
 
     const createOrgBtn = screen.getByTestId('modalOrganizationHeader');
     expect(createOrgBtn).toBeInTheDocument();
-    userEvent.click(createOrgBtn);
-    userEvent.click(screen.getByTestId('closeOrganizationModal'));
+    await userEvent.click(createOrgBtn);
+    await userEvent.click(screen.getByTestId('closeOrganizationModal'));
   });
   it('Should render text elements when props value is not passed', async () => {
     global.confirm = (): boolean => false;
@@ -235,7 +235,7 @@ describe('Testing Organization Post Card', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByAltText('image'));
     expect(screen.getByAltText('Post Image')).toBeInTheDocument();
   });
   it('Testing post updating after post is updated', async () => {
@@ -249,10 +249,10 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
 
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    await userEvent.click(screen.getByTestId('editPostModalBtn'));
     fireEvent.change(getByTestId('updateTitle'), {
       target: { value: 'updated title' },
     });
@@ -264,7 +264,7 @@ describe('Testing Organization Post Card', () => {
       fireEvent.change(getByTestId('postVideoUrl'), {
         target: { value: 'This is a updated video' },
       });
-      userEvent.click(screen.getByPlaceholderText(/video/i));
+      await userEvent.click(screen.getByPlaceholderText(/video/i));
       const input = getByTestId('postVideoUrl');
       const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
       Object.defineProperty(input, 'files', {
@@ -275,14 +275,14 @@ describe('Testing Organization Post Card', () => {
         convertToBase64(file);
       });
 
-      userEvent.click(screen.getByTestId('closePreview'));
+      await userEvent.click(screen.getByTestId('closePreview'));
     }
     const imageUrlInput = screen.queryByTestId('postImageUrl');
     if (imageUrlInput) {
       fireEvent.change(getByTestId('postImageUrl'), {
         target: { value: 'This is a updated image' },
       });
-      userEvent.click(screen.getByPlaceholderText(/image/i));
+      await userEvent.click(screen.getByPlaceholderText(/image/i));
       const input = getByTestId('postImageUrl');
       const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
       Object.defineProperty(input, 'files', {
@@ -298,7 +298,7 @@ describe('Testing Organization Post Card', () => {
       const clearImageButton = getByTestId('closeimage');
       fireEvent.click(clearImageButton);
     }
-    userEvent.click(screen.getByTestId('updatePostBtn'));
+    await userEvent.click(screen.getByTestId('updatePostBtn'));
 
     await waitFor(
       () => {
@@ -327,10 +327,10 @@ describe('Testing Organization Post Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
 
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    await userEvent.click(screen.getByTestId('editPostModalBtn'));
     fireEvent.change(getByTestId('updateTitle'), {
       target: { value: 'updated title' },
     });
@@ -342,7 +342,7 @@ describe('Testing Organization Post Card', () => {
       fireEvent.change(getByTestId('postVideoUrl'), {
         target: { value: 'This is a updated video' },
       });
-      userEvent.click(screen.getByPlaceholderText(/video/i));
+      await userEvent.click(screen.getByPlaceholderText(/video/i));
       const input = getByTestId('postVideoUrl');
       const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
       Object.defineProperty(input, 'files', {
@@ -353,14 +353,14 @@ describe('Testing Organization Post Card', () => {
         convertToBase64(file);
       });
 
-      userEvent.click(screen.getByTestId('closePreview'));
+      await userEvent.click(screen.getByTestId('closePreview'));
     }
     const imageUrlInput = screen.queryByTestId('postImageUrl');
     if (imageUrlInput) {
       fireEvent.change(getByTestId('postImageUrl'), {
         target: { value: 'This is a updated image' },
       });
-      userEvent.click(screen.getByPlaceholderText(/image/i));
+      await userEvent.click(screen.getByPlaceholderText(/image/i));
       const input = getByTestId('postImageUrl');
       const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
       Object.defineProperty(input, 'files', {
@@ -376,7 +376,7 @@ describe('Testing Organization Post Card', () => {
       const clearImageButton = getByTestId('closeimage');
       fireEvent.click(clearImageButton);
     }
-    userEvent.click(screen.getByTestId('updatePostBtn'));
+    await userEvent.click(screen.getByTestId('updatePostBtn'));
 
     await waitFor(
       () => {
@@ -396,9 +396,9 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-    userEvent.click(screen.getByTestId('pinpostBtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('pinpostBtn'));
 
     await waitFor(
       () => {
@@ -428,9 +428,9 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-    userEvent.click(screen.getByTestId('pinpostBtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('pinpostBtn'));
   });
   it('Testing post delete functionality', async () => {
     render(
@@ -445,10 +445,10 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
 
-    userEvent.click(screen.getByTestId('deletePostModalBtn'));
+    await userEvent.click(screen.getByTestId('deletePostModalBtn'));
     fireEvent.click(screen.getByTestId('deletePostBtn'));
 
     await waitFor(
@@ -481,10 +481,10 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
 
-    userEvent.click(screen.getByTestId('deletePostModalBtn'));
+    await userEvent.click(screen.getByTestId('deletePostModalBtn'));
     fireEvent.click(screen.getByTestId('deletePostBtn'));
   });
   it('Testing close functionality of primary modal', async () => {
@@ -498,8 +498,8 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('closeiconbtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('closeiconbtn'));
 
     //Primary Modal is closed
     expect(screen.queryByTestId('moreiconbtn')).not.toBeInTheDocument();
@@ -515,9 +515,9 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-    userEvent.click(screen.getByTestId('closebtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('closebtn'));
 
     //Secondary Modal is closed
     expect(screen.queryByTestId('deletePostModalBtn')).not.toBeInTheDocument();
@@ -619,10 +619,10 @@ describe('Testing Organization Post Card', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
 
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    await userEvent.click(screen.getByTestId('editPostModalBtn'));
 
     const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
 
@@ -630,7 +630,7 @@ describe('Testing Organization Post Card', () => {
       fireEvent.change(getByTestId('postVideoUrl'), {
         target: { value: '' },
       });
-      userEvent.click(screen.getByPlaceholderText(/video/i));
+      await userEvent.click(screen.getByPlaceholderText(/video/i));
       const input = getByTestId('postVideoUrl');
       const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
       Object.defineProperty(input, 'files', {
@@ -641,7 +641,7 @@ describe('Testing Organization Post Card', () => {
         convertToBase64(file);
       });
 
-      userEvent.click(screen.getByTestId('closePreview'));
+      await userEvent.click(screen.getByTestId('closePreview'));
     }
   });
   it('clears postimage state and resets file input value', async () => {
@@ -653,10 +653,10 @@ describe('Testing Organization Post Card', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
 
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    await userEvent.click(screen.getByTestId('editPostModalBtn'));
 
     const imageUrlInput = screen.queryByTestId('postImageUrl');
 
@@ -664,7 +664,7 @@ describe('Testing Organization Post Card', () => {
       fireEvent.change(getByTestId('postImageUrl'), {
         target: { value: '' },
       });
-      userEvent.click(screen.getByPlaceholderText(/image/i));
+      await userEvent.click(screen.getByPlaceholderText(/image/i));
       const input = getByTestId('postImageUrl');
       const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
       Object.defineProperty(input, 'files', {
@@ -692,15 +692,15 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('editPostModalBtn'));
 
     fireEvent.change(getByTestId('updateTitle'), {
       target: { value: '' },
     });
 
-    userEvent.click(screen.getByTestId('updatePostBtn')); // Should not update post
+    await userEvent.click(screen.getByTestId('updatePostBtn')); // Should not update post
 
     expect(screen.getByTestId('updateTitle')).toHaveValue('');
     expect(screen.getByTestId('closeOrganizationModal')).toBeInTheDocument();
@@ -717,15 +717,15 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    await userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('editPostModalBtn'));
 
     fireEvent.change(getByTestId('updateText'), {
       target: { value: '' },
     });
 
-    userEvent.click(screen.getByTestId('updatePostBtn')); // Should not update post
+    await userEvent.click(screen.getByTestId('updatePostBtn')); // Should not update post
 
     expect(screen.getByTestId('updateText')).toHaveValue('');
     expect(screen.getByTestId('closeOrganizationModal')).toBeInTheDocument();
@@ -743,15 +743,15 @@ describe('Testing Organization Post Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByAltText('image'));
 
-    userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
 
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    await userEvent.click(screen.getByTestId('editPostModalBtn'));
     const createOrgBtn = screen.getByTestId('modalOrganizationHeader');
     expect(createOrgBtn).toBeInTheDocument();
-    userEvent.click(createOrgBtn);
-    userEvent.click(screen.getByTestId('closeOrganizationModal'));
+    await userEvent.click(createOrgBtn);
+    await userEvent.click(screen.getByTestId('closeOrganizationModal'));
   });
   it('should toggle post pin when pin button is clicked', async () => {
     const { getByTestId } = render(
@@ -761,9 +761,9 @@ describe('Testing Organization Post Card', () => {
         </I18nextProvider>
       </MockedProvider>,
     );
-    userEvent.click(screen.getByAltText('image'));
+    await userEvent.click(screen.getByAltText('image'));
 
-    userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
     const pinButton = getByTestId('pinpostBtn');
     fireEvent.click(pinButton);
     await waitFor(() => {

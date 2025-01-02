@@ -10,7 +10,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -217,11 +217,11 @@ describe('Testing User Campaigns Screen', () => {
     const searchCampaigns = await screen.findByTestId('searchCampaigns');
     expect(searchCampaigns).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('fundingGoal_ASC')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('fundingGoal_ASC'));
+    await userEvent.click(screen.getByTestId('fundingGoal_ASC'));
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
@@ -243,11 +243,11 @@ describe('Testing User Campaigns Screen', () => {
     const searchCampaigns = await screen.findByTestId('searchCampaigns');
     expect(searchCampaigns).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('fundingGoal_DESC')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('fundingGoal_DESC'));
+    await userEvent.click(screen.getByTestId('fundingGoal_DESC'));
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
@@ -269,11 +269,11 @@ describe('Testing User Campaigns Screen', () => {
     const searchCampaigns = await screen.findByTestId('searchCampaigns');
     expect(searchCampaigns).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('endDate_ASC'));
+    await userEvent.click(screen.getByTestId('endDate_ASC'));
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
@@ -295,11 +295,11 @@ describe('Testing User Campaigns Screen', () => {
     const searchCampaigns = await screen.findByTestId('searchCampaigns');
     expect(searchCampaigns).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_DESC')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('endDate_DESC'));
+    await userEvent.click(screen.getByTestId('endDate_DESC'));
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
@@ -336,12 +336,12 @@ describe('Testing User Campaigns Screen', () => {
 
     const addPledgeBtn = await screen.findAllByTestId('addPledgeBtn');
     await waitFor(() => expect(addPledgeBtn[0]).toBeInTheDocument());
-    userEvent.click(addPledgeBtn[0]);
+    await userEvent.click(addPledgeBtn[0]);
 
     await waitFor(() =>
       expect(screen.getAllByText(pTranslations.createPledge)).toHaveLength(2),
     );
-    userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
     );
@@ -352,7 +352,7 @@ describe('Testing User Campaigns Screen', () => {
 
     const myPledgesBtn = await screen.findByText(cTranslations.myPledges);
     expect(myPledgesBtn).toBeInTheDocument();
-    userEvent.click(myPledgesBtn);
+    await userEvent.click(myPledgesBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();

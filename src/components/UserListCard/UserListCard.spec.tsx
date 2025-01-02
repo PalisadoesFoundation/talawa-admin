@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 
 import UserListCard from './UserListCard';
@@ -55,7 +55,7 @@ describe('Testing User List Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Add Admin/i));
+    await userEvent.click(screen.getByText(/Add Admin/i));
   });
 
   it('Should render text elements when props value is not passed', async () => {
@@ -74,6 +74,6 @@ describe('Testing User List Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Add Admin/i));
+    await userEvent.click(screen.getByText(/Add Admin/i));
   });
 });

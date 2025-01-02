@@ -10,7 +10,7 @@ import {
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -146,14 +146,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('addSubTagBtn'));
+    await userEvent.click(screen.getByTestId('addSubTagBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('addSubTagModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('addSubTagModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('addSubTagModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('addSubTagModalCloseBtn'),
@@ -168,7 +168,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
@@ -183,7 +183,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('tagName')[0]);
+    await userEvent.click(screen.getAllByTestId('tagName')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
@@ -198,7 +198,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('redirectToSubTags')[0]);
+    await userEvent.click(screen.getAllByTestId('redirectToSubTags')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
@@ -213,7 +213,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('allTagsBtn'));
+    await userEvent.click(screen.getByTestId('allTagsBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
@@ -228,7 +228,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('manageCurrentTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('manageCurrentTagBtn'));
+    await userEvent.click(screen.getByTestId('manageCurrentTagBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
@@ -281,12 +281,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
       expect(screen.getByTestId('oldest')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('oldest'));
+    await userEvent.click(screen.getByTestId('oldest'));
 
     // returns the tags in reverse order
     await waitFor(() => {
@@ -298,12 +298,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
       expect(screen.getByTestId('latest')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('latest'));
+    await userEvent.click(screen.getByTestId('latest'));
 
     // reverse the order again
     await waitFor(() => {
@@ -350,14 +350,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('addSubTagBtn'));
+    await userEvent.click(screen.getByTestId('addSubTagBtn'));
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'subTag 12',
     );
 
-    userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

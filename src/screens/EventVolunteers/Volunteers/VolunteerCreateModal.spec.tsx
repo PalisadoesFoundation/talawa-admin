@@ -21,7 +21,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceVolunteerCreateModal } from './VolunteerCreateModal';
 import VolunteerCreateModal from './VolunteerCreateModal';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 /**
@@ -95,7 +95,7 @@ describe('Testing VolunteerCreateModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerAdded);
@@ -120,7 +120,7 @@ describe('Testing VolunteerCreateModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

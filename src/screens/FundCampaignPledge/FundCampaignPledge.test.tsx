@@ -3,13 +3,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import {
-  cleanup,
+  // cleanup,
   fireEvent,
   render,
   screen,
   waitFor,
 } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -123,12 +123,12 @@ describe('Testing Campaign Pledge Screen', () => {
 
     const addPledgeBtn = await screen.findByTestId('addPledgeBtn');
     expect(addPledgeBtn).toBeInTheDocument();
-    userEvent.click(addPledgeBtn);
+    await userEvent.click(addPledgeBtn);
 
     await waitFor(() =>
       expect(screen.getAllByText(translations.createPledge)).toHaveLength(2),
     );
-    userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
     );
@@ -139,12 +139,12 @@ describe('Testing Campaign Pledge Screen', () => {
 
     const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
     await waitFor(() => expect(editPledgeBtn[0]).toBeInTheDocument());
-    userEvent.click(editPledgeBtn[0]);
+    await userEvent.click(editPledgeBtn[0]);
 
     await waitFor(() =>
       expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
     );
@@ -155,12 +155,12 @@ describe('Testing Campaign Pledge Screen', () => {
 
     const deletePledgeBtn = await screen.findAllByTestId('deletePledgeBtn');
     await waitFor(() => expect(deletePledgeBtn[0]).toBeInTheDocument());
-    userEvent.click(deletePledgeBtn[0]);
+    await userEvent.click(deletePledgeBtn[0]);
 
     await waitFor(() =>
       expect(screen.getByText(translations.deletePledge)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
+    await userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('deletePledgeCloseBtn')).toBeNull(),
     );
@@ -229,7 +229,7 @@ describe('Testing Campaign Pledge Screen', () => {
     expect(screen.queryByText('John Doe4')).toBeNull();
 
     const moreContainer = await screen.findAllByTestId('moreContainer');
-    userEvent.click(moreContainer[0]);
+    await userEvent.click(moreContainer[0]);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe3')).toBeInTheDocument();
@@ -242,7 +242,7 @@ describe('Testing Campaign Pledge Screen', () => {
       expect(image).toHaveAttribute('src', 'img-url3');
     });
 
-    userEvent.click(moreContainer[0]);
+    await userEvent.click(moreContainer[0]);
     await waitFor(() => {
       expect(screen.queryByText('John Doe3')).toBeNull();
       expect(screen.queryByText('John Doe4')).toBeNull();
@@ -259,14 +259,14 @@ describe('Testing Campaign Pledge Screen', () => {
     expect(pledged).toBeInTheDocument();
     expect(raised).toBeInTheDocument();
 
-    userEvent.click(raised);
+    await userEvent.click(raised);
 
     await waitFor(() => {
       expect(screen.getByTestId('progressBar')).toBeInTheDocument();
       expect(screen.getByTestId('progressBar')).toHaveTextContent('$0');
     });
 
-    userEvent.click(pledged);
+    await userEvent.click(pledged);
 
     await waitFor(() => {
       expect(screen.getByTestId('progressBar')).toBeInTheDocument();

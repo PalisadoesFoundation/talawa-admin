@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 
 import {
@@ -80,8 +80,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
@@ -110,8 +110,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();

@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import type { Params } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationPeople from './OrganizationPeople';
 import { store } from 'state/store';
@@ -764,14 +764,14 @@ describe('Organization People Page', () => {
     });
 
     const memebersDropdownItem = screen.getByTestId('members');
-    userEvent.click(memebersDropdownItem);
+    await userEvent.click(memebersDropdownItem);
     await wait();
 
     const findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
       searchData.fullNameMember,
     );
@@ -809,7 +809,7 @@ describe('Organization People Page', () => {
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
     // Only First Name
-    userEvent.type(fullNameInput, searchData.fullNameMember);
+    await userEvent.type(fullNameInput, searchData.fullNameMember);
     await wait();
 
     let findtext = screen.getByText(/Aditya Memberguy/i);
@@ -857,7 +857,7 @@ describe('Organization People Page', () => {
 
     // Click the "Admin" dropdown item
     const adminDropdownItem = screen.getByTestId('admins');
-    userEvent.click(adminDropdownItem);
+    await userEvent.click(adminDropdownItem);
 
     // Wait for any asynchronous operations to complete
     await wait();
@@ -867,7 +867,7 @@ describe('Organization People Page', () => {
     // expect(findtext).toBeInTheDocument();
 
     // Type in the full name input field
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
       searchData.fullNameAdmin,
     );
@@ -911,21 +911,21 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('role'));
+    await userEvent.click(screen.getByTestId('role'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('admins'));
+    await userEvent.click(screen.getByTestId('admins'));
     await wait();
 
     // Type the full name into the input field
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
-    userEvent.type(fullNameInput, searchData.fullNameAdmin);
+    await userEvent.type(fullNameInput, searchData.fullNameAdmin);
 
     // Wait for the results to update
     await wait();
     const btn = screen.getByTestId('searchbtn');
-    userEvent.click(btn);
+    await userEvent.click(btn);
     // remove this comment when table fecthing functionality is fixed
     // Check if the expected name is present in the results
     // let findtext = screen.getByText(/Aditya Adminguy/i);
@@ -961,13 +961,13 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     expect(screen.getByTestId('existingUser')).toBeInTheDocument();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('existingUser'));
+    await userEvent.click(screen.getByTestId('existingUser'));
     await wait();
 
     expect(
@@ -976,7 +976,7 @@ describe('Organization People Page', () => {
     await wait();
 
     const addBtn = screen.getAllByTestId('addBtn');
-    userEvent.click(addBtn[0]);
+    await userEvent.click(addBtn[0]);
   });
 
   test('Open and search existing user', async () => {
@@ -1004,11 +1004,11 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('existingUser'));
+    await userEvent.click(screen.getByTestId('existingUser'));
     await wait();
 
     expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
@@ -1043,16 +1043,16 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('newUser'));
+    await userEvent.click(screen.getByTestId('newUser'));
     await wait();
 
     expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('closeBtn'));
+    await userEvent.click(screen.getByTestId('closeBtn'));
   });
 
   test('Testing add new user modal', async () => {
@@ -1080,11 +1080,11 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('newUser'));
+    await userEvent.click(screen.getByTestId('newUser'));
     await wait();
 
     expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
@@ -1107,18 +1107,18 @@ describe('Organization People Page', () => {
     fireEvent.change(screen.getByTestId('passwordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showPassword'));
+    await userEvent.click(screen.getByTestId('showPassword'));
     expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
 
     fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    await userEvent.click(screen.getByTestId('showConfirmPassword'));
     expect(screen.getByTestId('confirmPasswordInput')).toHaveValue(
       'dishatalreja',
     );
 
-    userEvent.click(screen.getByTestId('createBtn'));
+    await userEvent.click(screen.getByTestId('createBtn'));
   });
 
   test('Throw invalid details error in add new user modal', async () => {
@@ -1146,11 +1146,11 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('newUser'));
+    await userEvent.click(screen.getByTestId('newUser'));
     await wait();
 
     expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
@@ -1173,16 +1173,16 @@ describe('Organization People Page', () => {
     fireEvent.change(screen.getByTestId('passwordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showPassword'));
+    await userEvent.click(screen.getByTestId('showPassword'));
     expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
 
     fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
       target: { value: 'disha' },
     });
-    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    await userEvent.click(screen.getByTestId('showConfirmPassword'));
     expect(screen.getByTestId('confirmPasswordInput')).toHaveValue('disha');
 
-    userEvent.click(screen.getByTestId('createBtn'));
+    await userEvent.click(screen.getByTestId('createBtn'));
   });
 
   test('Throw passwordNotMatch error in add new user modal', async () => {
@@ -1210,11 +1210,11 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('newUser'));
+    await userEvent.click(screen.getByTestId('newUser'));
     await wait();
 
     expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
@@ -1232,18 +1232,18 @@ describe('Organization People Page', () => {
     fireEvent.change(screen.getByTestId('passwordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showPassword'));
+    await userEvent.click(screen.getByTestId('showPassword'));
     expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
 
     fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    await userEvent.click(screen.getByTestId('showConfirmPassword'));
     expect(screen.getByTestId('confirmPasswordInput')).toHaveValue(
       'dishatalreja',
     );
 
-    userEvent.click(screen.getByTestId('createBtn'));
+    await userEvent.click(screen.getByTestId('createBtn'));
   });
 
   test('Testing USERS list', async () => {
@@ -1279,10 +1279,10 @@ describe('Organization People Page', () => {
     });
 
     const usersDropdownItem = screen.getByTestId('users');
-    userEvent.click(usersDropdownItem);
+    await userEvent.click(usersDropdownItem);
     await wait();
     const btn = screen.getByTestId('searchbtn');
-    userEvent.click(btn);
+    await userEvent.click(btn);
     await wait();
     expect(window.location.href).toBe(
       'http://localhost/orgpeople/6401ff65ce8e8406b8f07af1',
@@ -1315,9 +1315,9 @@ describe('Organization People Page', () => {
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
     // Only Full Name
-    userEvent.type(fullNameInput, searchData.fullNameUser);
+    await userEvent.type(fullNameInput, searchData.fullNameUser);
     const btn = screen.getByTestId('searchbtn');
-    userEvent.click(btn);
+    await userEvent.click(btn);
     await wait();
     expect(window.location.href).toBe(
       'http://localhost/orgpeople/6401ff65ce8e8406b8f07af2',
@@ -1344,12 +1344,12 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
-    userEvent.click(screen.getByTestId('existingUser'));
+    await userEvent.click(screen.getByTestId('existingUser'));
     await wait();
     const btn = screen.getByTestId('submitBtn');
-    userEvent.click(btn);
+    await userEvent.click(btn);
   });
 
   test('Datagrid renders with members data', async () => {
@@ -1367,7 +1367,7 @@ describe('Organization People Page', () => {
     const dataGrid = screen.getByRole('grid');
     expect(dataGrid).toBeInTheDocument();
     const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
-    userEvent.click(removeButtons[0]);
+    await userEvent.click(removeButtons[0]);
   });
 
   test('Datagrid renders with admin data', async () => {
@@ -1388,10 +1388,10 @@ describe('Organization People Page', () => {
       userEvent.click(dropdownToggle);
     });
     const adminDropdownItem = screen.getByTestId('admins');
-    userEvent.click(adminDropdownItem);
+    await userEvent.click(adminDropdownItem);
     await wait();
     const removeButtons = screen.getAllByTestId('removeAdminModalBtn');
-    userEvent.click(removeButtons[0]);
+    await userEvent.click(removeButtons[0]);
   });
 
   test('No Mock Data test', async () => {
@@ -1440,11 +1440,11 @@ test('Open and check if profile image is displayed for existing user', async () 
   await wait();
 
   // Click on the dropdown toggle to open the menu
-  userEvent.click(screen.getByTestId('addMembers'));
+  await userEvent.click(screen.getByTestId('addMembers'));
   await wait();
 
   // Click on the "Admins" option in the dropdown menu
-  userEvent.click(screen.getByTestId('existingUser'));
+  await userEvent.click(screen.getByTestId('existingUser'));
   await wait();
 
   expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();

@@ -4,7 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -227,7 +227,7 @@ describe('Testing Invvitations Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, '1');
+    await userEvent.type(searchInput, '1');
     await debounceWait();
 
     await waitFor(() => {
@@ -265,7 +265,7 @@ describe('Testing Invvitations Screen', () => {
     expect(acceptBtn).toHaveLength(2);
 
     // Accept Request
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.invitationAccepted);
@@ -281,7 +281,7 @@ describe('Testing Invvitations Screen', () => {
     expect(rejectBtn).toHaveLength(2);
 
     // Reject Request
-    userEvent.click(rejectBtn[0]);
+    await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.invitationRejected);
@@ -297,7 +297,7 @@ describe('Testing Invvitations Screen', () => {
     expect(acceptBtn).toHaveLength(2);
 
     // Accept Request
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

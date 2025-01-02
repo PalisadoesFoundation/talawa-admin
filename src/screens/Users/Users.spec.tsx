@@ -5,7 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -962,26 +962,26 @@ describe('Testing Users screen', () => {
     await wait();
     const searchBtn = screen.getByTestId('searchButton');
     const search1 = 'John';
-    userEvent.type(screen.getByTestId(/searchByName/i), search1);
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search1);
+    await userEvent.click(searchBtn);
     await wait();
     expect(screen.queryByText(/not found/i)).not.toBeInTheDocument();
 
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search2);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search2);
 
     const search3 =
       'John{backspace}{backspace}{backspace}{backspace}Sam{backspace}{backspace}{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search3);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search3);
 
     const search4 = 'Sam{backspace}{backspace}P{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search4);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search4);
 
     const search5 = 'Xe';
-    userEvent.type(screen.getByTestId(/searchByName/i), search5);
-    userEvent.clear(screen.getByTestId(/searchByName/i));
-    userEvent.type(screen.getByTestId(/searchByName/i), '');
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search5);
+    await userEvent.clear(screen.getByTestId(/searchByName/i));
+    await userEvent.type(screen.getByTestId(/searchByName/i), '');
+    await userEvent.click(searchBtn);
     await wait();
   });
 
@@ -1006,10 +1006,13 @@ describe('Testing Users screen', () => {
 
     await act(async () => {
       // Clear the search input
-      userEvent.clear(searchInput);
+      await userEvent.clear(searchInput);
       // Search for a name that doesn't exist
-      userEvent.type(screen.getByTestId(/searchByName/i), 'NonexistentName');
-      userEvent.click(searchBtn);
+      await userEvent.type(
+        screen.getByTestId(/searchByName/i),
+        'NonexistentName',
+      );
+      await userEvent.click(searchBtn);
     });
 
     expect(screen.queryByText(/No User Found/i)).toBeInTheDocument();
@@ -1327,10 +1330,10 @@ describe('Testing Users screen', () => {
     const searchInput = screen.getByTestId('searchByName');
 
     await act(async () => {
-      userEvent.type(searchInput, 'John');
+      await userEvent.type(searchInput, 'John');
     });
     await act(async () => {
-      userEvent.type(searchInput, '{enter}');
+      await userEvent.type(searchInput, '{enter}');
     });
   });
 
@@ -1481,8 +1484,8 @@ describe('Testing Users screen', () => {
     await wait();
     const searchBtn = screen.getByTestId('searchButton');
     const search1 = '';
-    userEvent.type(screen.getByTestId(/searchByName/i), search1);
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search1);
+    await userEvent.click(searchBtn);
     await wait();
     expect(screen.queryByText(/Jane Doe/i)).toBeInTheDocument();
     expect(screen.queryByText(/John Doe/i)).toBeInTheDocument();

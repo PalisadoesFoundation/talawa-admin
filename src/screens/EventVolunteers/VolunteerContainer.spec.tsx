@@ -8,7 +8,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import VolunteerContainer from './VolunteerContainer';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { MOCKS } from './Volunteers/Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -106,9 +106,9 @@ describe('Testing Volunteer Container', () => {
     expect(individualRadio).toBeInTheDocument();
 
     await waitFor(async () => {
-      await userEvent.click(groupRadio);
-      await userEvent.click(requestsRadio);
-      await userEvent.click(individualRadio);
+      await await userEvent.click(groupRadio);
+      await await userEvent.click(requestsRadio);
+      await await userEvent.click(individualRadio);
     });
 
     await waitFor(() => {

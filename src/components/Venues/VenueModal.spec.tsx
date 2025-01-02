@@ -10,7 +10,7 @@ import type { InterfaceVenueModalProps } from './VenueModal';
 import VenueModal from './VenueModal';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import {
@@ -177,7 +177,7 @@ describe('VenueModal', () => {
 
     const file = new File(['chad'], 'chad.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
-    userEvent.upload(fileInput, file);
+    await userEvent.upload(fileInput, file);
 
     await wait();
 
@@ -190,7 +190,7 @@ describe('VenueModal', () => {
 
     const file = new File(['chad'], 'chad.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
-    userEvent.upload(fileInput, file);
+    await userEvent.upload(fileInput, file);
 
     await wait();
 

@@ -9,7 +9,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import ContactCard from './ContactCard';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 /**
@@ -101,7 +101,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('contactContainer'));
+    await userEvent.click(screen.getByTestId('contactContainer'));
 
     await wait();
   });
@@ -126,7 +126,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('contactContainer'));
+    await userEvent.click(screen.getByTestId('contactContainer'));
 
     await wait();
   });

@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
@@ -103,13 +103,13 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     ).toBeTruthy();
 
     await act(async () => {
-      userEvent.click(rolesBtn);
+      await userEvent.click(rolesBtn);
     });
 
     expect(global.window.location.pathname).toContain('/users');
 
     await act(async () => {
-      userEvent.click(communityProfileBtn);
+      await userEvent.click(communityProfileBtn);
     });
   });
 
@@ -216,7 +216,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
 
     await act(async () => {
-      userEvent.click(orgsBtn);
+      await userEvent.click(orgsBtn);
     });
 
     expect(global.window.location.pathname).toContain('/orglist');

@@ -10,7 +10,7 @@ import cookies from 'js-cookie';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 import OrganizationNavbar from './OrganizationNavbar';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 
@@ -258,7 +258,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     const peoplePlugin = screen.getByText('People');
     expect(peoplePlugin).toBeInTheDocument();
 
-    userEvent.click(peoplePlugin);
+    await userEvent.click(peoplePlugin);
 
     await wait();
     expect(history.location.pathname).toBe(`/user/people/${organizationId}`);
@@ -279,9 +279,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn0'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn0'));
 
     await wait();
 
@@ -309,9 +309,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn1'));
 
     await wait();
 
@@ -333,9 +333,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn2'));
 
     await wait();
 
@@ -357,9 +357,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn3'));
 
     await wait();
 
@@ -381,9 +381,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn4'));
 
     await wait();
 

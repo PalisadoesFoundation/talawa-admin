@@ -15,7 +15,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceDeleteVolunteerGroupModal } from './VolunteerGroupDeleteModal';
 import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 /**
@@ -111,7 +111,7 @@ describe('Testing Group Delete Modal', () => {
 
     const yesBtn = screen.getByTestId('deleteyesbtn');
     expect(yesBtn).toBeInTheDocument();
-    userEvent.click(yesBtn);
+    await userEvent.click(yesBtn);
 
     await waitFor(() => {
       expect(itemProps[0].refetchGroups).toHaveBeenCalled();
@@ -126,7 +126,7 @@ describe('Testing Group Delete Modal', () => {
 
     const noBtn = screen.getByTestId('deletenobtn');
     expect(noBtn).toBeInTheDocument();
-    userEvent.click(noBtn);
+    await userEvent.click(noBtn);
 
     await waitFor(() => {
       expect(itemProps[0].hide).toHaveBeenCalled();
@@ -139,7 +139,7 @@ describe('Testing Group Delete Modal', () => {
 
     const yesBtn = screen.getByTestId('deleteyesbtn');
     expect(yesBtn).toBeInTheDocument();
-    userEvent.click(yesBtn);
+    await userEvent.click(yesBtn);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

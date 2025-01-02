@@ -3,7 +3,7 @@ import React, { act } from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import EditOrgCustomFieldDropDown from './EditCustomFieldDropDown';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import availableFieldTypes from 'utils/fieldTypes';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';

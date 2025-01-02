@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';
 import { MockedProvider } from '@apollo/react-testing';
@@ -132,10 +132,10 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
-    userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
 
     expect(global.window.location.pathname).toBe('/');
   });
@@ -156,11 +156,11 @@ describe('ProfileDropdown Component', () => {
       );
 
       await act(async () => {
-        userEvent.click(screen.getByTestId('togDrop'));
+        await userEvent.click(screen.getByTestId('togDrop'));
       });
 
       await act(async () => {
-        userEvent.click(screen.getByTestId('profileBtn'));
+        await userEvent.click(screen.getByTestId('profileBtn'));
       });
 
       expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -192,12 +192,12 @@ describe('ProfileDropdown Component', () => {
 
     // Open the dropdown
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     // Click the logout button
     await act(async () => {
-      userEvent.click(screen.getByTestId('logoutBtn'));
+      await userEvent.click(screen.getByTestId('logoutBtn'));
     });
 
     // Wait for any pending promises
@@ -228,11 +228,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -256,11 +256,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/');
@@ -284,11 +284,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');

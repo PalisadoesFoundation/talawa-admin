@@ -2,7 +2,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
@@ -380,13 +380,13 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
-    userEvent.type(screen.getByTestId('searchInput'), '2{enter}');
+    await userEvent.type(screen.getByTestId('searchInput'), '2{enter}');
     await wait();
 
     expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
 
-    userEvent.clear(screen.getByTestId('searchInput'));
-    userEvent.click(searchBtn);
+    await userEvent.clear(screen.getByTestId('searchInput'));
+    await userEvent.click(searchBtn);
     await wait();
   });
 
@@ -409,9 +409,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await wait();
-    userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
     expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
@@ -436,9 +436,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await wait();
-    userEvent.click(screen.getByTestId('modeBtn2'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
     await wait();
 
     expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
@@ -483,9 +483,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await wait();
-    userEvent.click(screen.getByTestId('modeBtn2'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
     await wait();
 
     expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
@@ -565,7 +565,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
     );
     await wait();
     const dropdown = screen.getByTestId('table-pagination');
-    userEvent.click(dropdown);
+    await userEvent.click(dropdown);
     expect(screen.queryByText('-1')).not.toBeInTheDocument();
     expect(screen.getByText('5')).toBeInTheDocument();
     expect(screen.getByText('10')).toBeInTheDocument();

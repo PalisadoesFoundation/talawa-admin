@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';
@@ -327,7 +327,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByText('People'));
+    await userEvent.click(screen.getByText('People'));
     expect(global.window.location.pathname).toContain('/user/people/123');
   });
 
@@ -349,7 +349,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
     const peopelBtn = screen.getByTestId(/People/i);
-    userEvent.click(peopelBtn);
+    await userEvent.click(peopelBtn);
     await wait();
     expect(window.location.pathname).toContain('user/people/123');
   });

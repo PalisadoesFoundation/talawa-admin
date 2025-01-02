@@ -13,7 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import EventAttendance from './EventAttendance';
 import { store } from 'state/store';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from './Attendance.mocks';
@@ -103,8 +103,8 @@ describe('Event Attendance Component', () => {
     await wait();
 
     const sortDropdown = screen.getByTestId('sort-dropdown');
-    userEvent.click(sortDropdown);
-    userEvent.click(screen.getByText('Sort'));
+    await userEvent.click(sortDropdown);
+    await userEvent.click(screen.getByText('Sort'));
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId('attendee-name-0');
@@ -117,8 +117,8 @@ describe('Event Attendance Component', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText('Filter: All'));
-    userEvent.click(screen.getByText('This Month'));
+    await userEvent.click(screen.getByText('Filter: All'));
+    await userEvent.click(screen.getByText('This Month'));
 
     await waitFor(() => {
       expect(screen.getByText('Attendees not Found')).toBeInTheDocument();
@@ -131,14 +131,14 @@ describe('Event Attendance Component', () => {
     expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
 
     const statsButton = screen.getByTestId('stats-modal');
-    userEvent.click(statsButton);
+    await userEvent.click(statsButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
     });
 
     const closeButton = screen.getByTestId('close-button');
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
     await waitFor(() => {
       expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();

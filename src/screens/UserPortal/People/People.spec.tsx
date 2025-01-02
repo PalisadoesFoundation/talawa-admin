@@ -13,7 +13,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 // import type { InterfaceMember } from './People';
 import People from './People';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 /**
@@ -183,7 +183,7 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
+    await userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
     await wait();
 
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
@@ -205,11 +205,11 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
-    userEvent.type(screen.getByTestId('searchInput'), '');
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId('searchInput'), '');
+    await userEvent.click(searchBtn);
     await wait();
-    userEvent.type(screen.getByTestId('searchInput'), 'j');
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId('searchInput'), 'j');
+    await userEvent.click(searchBtn);
     await wait();
 
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
@@ -231,9 +231,9 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await wait();
-    userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
     expect(screen.queryByText('Noble Admin')).toBeInTheDocument();

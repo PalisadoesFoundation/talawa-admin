@@ -10,7 +10,7 @@ import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
@@ -136,7 +136,7 @@ describe('Testing Event Card In User portal', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    userEvent.click(screen.getByText('Register'));
+    await userEvent.click(screen.getByText('Register'));
     await waitFor(() =>
       expect(
         queryByText('Successfully registered for Test Event'),

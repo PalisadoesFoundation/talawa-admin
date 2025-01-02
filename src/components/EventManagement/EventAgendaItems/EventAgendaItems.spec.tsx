@@ -6,7 +6,7 @@ import {
   act,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -147,14 +147,14 @@ describe('Testing Agenda Items Components', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaItemBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('createAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('createAgendaItemModalCloseBtn'),
@@ -180,7 +180,7 @@ describe('Testing Agenda Items Components', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaItemBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
       expect(
@@ -188,27 +188,27 @@ describe('Testing Agenda Items Components', () => {
       ).toBeInTheDocument();
     });
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.enterTitle),
       formData.title,
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.enterDescription),
       formData.description,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.enterDuration),
       formData.duration,
     );
     const categorySelect = screen.getByTestId('categorySelect');
-    userEvent.click(categorySelect);
+    await userEvent.click(categorySelect);
     await waitFor(() => {
       const categoryOption = screen.getByText('Category 1');
       userEvent.click(categoryOption);
     });
 
-    userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
       // expect(toast.success).toBeCalledWith(translations.agendaItemCreated);

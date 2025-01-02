@@ -2,7 +2,7 @@ import type { SetStateAction } from 'react';
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { BrowserRouter } from 'react-router-dom';
@@ -118,7 +118,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('setLoginBtn'));
+    await userEvent.click(screen.getByTestId('setLoginBtn'));
 
     expect(setCurrentMode).toHaveBeenCalledWith('login');
   });
@@ -138,7 +138,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -158,8 +158,8 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -179,11 +179,14 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
+    await userEvent.type(
+      screen.getByTestId('passwordInput'),
+      formData.password,
+    );
 
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -203,13 +206,19 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
+    await userEvent.type(
+      screen.getByTestId('passwordInput'),
+      formData.password,
+    );
 
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
 
-    userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
+    await userEvent.type(
+      screen.getByTestId('firstNameInput'),
+      formData.firstName,
+    );
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -229,15 +238,24 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
+    await userEvent.type(
+      screen.getByTestId('passwordInput'),
+      formData.password,
+    );
 
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
 
-    userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
+    await userEvent.type(
+      screen.getByTestId('firstNameInput'),
+      formData.firstName,
+    );
 
-    userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
+    await userEvent.type(
+      screen.getByTestId('lastNameInput'),
+      formData.lastName,
+    );
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
       "Password doesn't match. Confirm Password and try again.",
@@ -259,20 +277,29 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
+    await userEvent.type(
+      screen.getByTestId('passwordInput'),
+      formData.password,
+    );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
       formData.confirmPassword,
     );
 
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
 
-    userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
+    await userEvent.type(
+      screen.getByTestId('firstNameInput'),
+      formData.firstName,
+    );
 
-    userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
+    await userEvent.type(
+      screen.getByTestId('lastNameInput'),
+      formData.lastName,
+    );
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     await wait();
 

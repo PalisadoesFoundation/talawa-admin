@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 const MOCKS = [
   {
@@ -177,25 +177,31 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('inputFirstName'), 'Noble');
+    await userEvent.type(screen.getByTestId('inputFirstName'), 'Noble');
     await wait();
-    userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
+    await userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
+    await userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
     await wait();
-    userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
+    await userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
+    await userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Unemployed');
+    await userEvent.selectOptions(
+      screen.getByTestId('inputEmpStatus'),
+      'Unemployed',
+    );
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputMaritalStatus'), 'Single');
+    await userEvent.selectOptions(
+      screen.getByTestId('inputMaritalStatus'),
+      'Single',
+    );
     await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    await userEvent.type(screen.getByTestId('inputAddress'), 'random');
     await wait();
-    userEvent.type(screen.getByTestId('inputState'), 'random');
+    await userEvent.type(screen.getByTestId('inputState'), 'random');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputCountry'), 'IN');
+    await userEvent.selectOptions(screen.getByTestId('inputCountry'), 'IN');
     await wait();
     expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
     await wait();
@@ -206,13 +212,13 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
     const fileInp = screen.getByTestId('fileInput');
     fileInp.style.display = 'block';
-    userEvent.click(screen.getByTestId('uploadImageBtn'));
+    await userEvent.click(screen.getByTestId('uploadImageBtn'));
     await wait();
     const imageFile = new File(['(⌐□_□)'], 'profile-image.jpg', {
       type: 'image/jpeg',
     });
     const files = [imageFile];
-    userEvent.upload(fileInp, files);
+    await userEvent.upload(fileInp, files);
     await wait();
     expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
   });
@@ -233,9 +239,9 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    await userEvent.type(screen.getByTestId('inputAddress'), 'random');
     await wait();
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    await userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputFirstName')).toHaveValue('John');
     expect(screen.getByTestId('inputLastName')).toHaveValue('Doe');
@@ -266,9 +272,9 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    await userEvent.type(screen.getByTestId('inputAddress'), 'random');
     await wait();
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    await userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputFirstName')).toHaveValue('');
     expect(screen.getByTestId('inputLastName')).toHaveValue('');

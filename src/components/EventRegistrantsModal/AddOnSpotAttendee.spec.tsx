@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import AddOnSpotAttendee from './AddOnSpotAttendee';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import type { RenderResult } from '@testing-library/react';
 import { toast } from 'react-toastify';
 import { Provider } from 'react-redux';
@@ -105,9 +105,9 @@ describe('AddOnSpotAttendee Component', () => {
     const lastNameInput = screen.getByLabelText('Last Name');
     const emailInput = screen.getByLabelText('Email');
 
-    userEvent.type(firstNameInput, 'John');
-    userEvent.type(lastNameInput, 'Doe');
-    userEvent.type(emailInput, 'john@example.com');
+    await userEvent.type(firstNameInput, 'John');
+    await userEvent.type(lastNameInput, 'Doe');
+    await userEvent.type(emailInput, 'john@example.com');
 
     expect(firstNameInput).toHaveValue('John');
     expect(lastNameInput).toHaveValue('Doe');
@@ -117,10 +117,10 @@ describe('AddOnSpotAttendee Component', () => {
   it('submits form successfully and calls necessary callbacks', async () => {
     renderAddOnSpotAttendee();
 
-    userEvent.type(screen.getByLabelText('First Name'), 'John');
-    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
     const genderSelect = screen.getByLabelText('Gender');
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
@@ -170,8 +170,8 @@ describe('AddOnSpotAttendee Component', () => {
       </MockedProvider>,
     );
 
-    userEvent.type(screen.getByLabelText('First Name'), 'John');
-    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {

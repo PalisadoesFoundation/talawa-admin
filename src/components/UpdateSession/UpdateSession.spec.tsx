@@ -3,7 +3,7 @@ import React from 'react';
 
 import { MockedProvider } from '@apollo/client/testing';
 import { render, screen, act, within, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -105,9 +105,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to minimum value
-    userEvent.click(slider, {
+    await userEvent.click(slider, {
       // Simulate clicking on the slider to focus
-      clientX: -999, // Adjust the clientX to simulate different slider positions
+      // clientX: -999, // Adjust the clientX to simulate different slider positions
     });
 
     expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
@@ -125,9 +125,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to maximum value
-    userEvent.click(slider, {
+    await userEvent.click(slider, {
       // Simulate clicking on the slider to focus
-      clientX: 999, // Adjust the clientX to simulate different slider positions
+      // clientX: 999, // Adjust the clientX to simulate different slider positions
     });
 
     expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
@@ -145,9 +145,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate invalid value handling
-    userEvent.click(slider, {
+    await userEvent.click(slider, {
       // Simulate clicking on the slider to focus
-      clientX: 0, // Adjust the clientX to simulate different slider positions
+      // clientX: 0, // Adjust the clientX to simulate different slider positions
     });
 
     // Ensure onValueChange is not called with invalid values
@@ -167,7 +167,7 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate slider interaction
-    userEvent.type(slider, '45'); // Simulate typing value
+    await userEvent.type(slider, '45'); // Simulate typing value
 
     // Assert that the callback was called with the expected value
     expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number)); // Adjust as needed
@@ -221,7 +221,7 @@ describe('Testing UpdateTimeout Component', () => {
     await wait();
 
     const submitButton = screen.getByTestId('update-button');
-    userEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
     // Wait for the toast success call
 
@@ -303,7 +303,7 @@ describe('Testing UpdateTimeout Component', () => {
     await wait();
 
     const submitButton = screen.getByTestId('update-button');
-    userEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
     await wait();
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -178,12 +178,12 @@ describe('Testing Forgot Password screen', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
       formData.email,
     );
 
-    userEvent.click(screen.getByText('Get OTP'));
+    await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
     });
@@ -211,22 +211,28 @@ describe('Testing Forgot Password screen', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
       formData.email,
     );
 
-    userEvent.click(screen.getByText('Get OTP'));
+    await userEvent.click(screen.getByText('Get OTP'));
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText('e.g. 12345'), formData.userOtp);
-    userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByPlaceholderText('e.g. 12345'),
+      formData.userOtp,
+    );
+    await userEvent.type(
+      screen.getByTestId('newPassword'),
+      formData.newPassword,
+    );
+    await userEvent.type(
       screen.getByTestId('confirmNewPassword'),
       formData.confirmNewPassword,
     );
     setItem('otpToken', 'lorem ipsum');
-    userEvent.click(screen.getByText('Change Password'));
+    await userEvent.click(screen.getByText('Change Password'));
     await wait();
   });
 
@@ -252,22 +258,28 @@ describe('Testing Forgot Password screen', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
       formData.email,
     );
 
-    userEvent.click(screen.getByText('Get OTP'));
+    await userEvent.click(screen.getByText('Get OTP'));
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText('e.g. 12345'), formData.userOtp);
-    userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByPlaceholderText('e.g. 12345'),
+      formData.userOtp,
+    );
+    await userEvent.type(
+      screen.getByTestId('newPassword'),
+      formData.newPassword,
+    );
+    await userEvent.type(
       screen.getByTestId('confirmNewPassword'),
       formData.confirmNewPassword,
     );
     removeItem('otpToken');
-    userEvent.click(screen.getByText('Change Password'));
+    await userEvent.click(screen.getByText('Change Password'));
     await wait();
   });
 
@@ -293,22 +305,28 @@ describe('Testing Forgot Password screen', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
       formData.email,
     );
 
-    userEvent.click(screen.getByText('Get OTP'));
+    await userEvent.click(screen.getByText('Get OTP'));
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText('e.g. 12345'), formData.userOtp);
-    userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByPlaceholderText('e.g. 12345'),
+      formData.userOtp,
+    );
+    await userEvent.type(
+      screen.getByTestId('newPassword'),
+      formData.newPassword,
+    );
+    await userEvent.type(
       screen.getByTestId('confirmNewPassword'),
       formData.confirmNewPassword,
     );
 
-    userEvent.click(screen.getByText('Change Password'));
+    await userEvent.click(screen.getByText('Change Password'));
   });
 
   it('Testing forgot password functionality, when the user is not found', async () => {
@@ -330,12 +348,12 @@ describe('Testing Forgot Password screen', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
       formData.email,
     );
 
-    userEvent.click(screen.getByText('Get OTP'));
+    await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
       expect(toast.warn).toHaveBeenCalledWith(translations.emailNotRegistered);
     });
@@ -353,7 +371,7 @@ describe('Testing Forgot Password screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    userEvent.click(screen.getByText('Get OTP'));
+    await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.errorSendingMail);
     });
@@ -377,11 +395,11 @@ describe('Testing Forgot Password screen', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
       formData.email,
     );
-    userEvent.click(screen.getByText('Get OTP'));
+    await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
         translations.talawaApiUnavailable,
@@ -413,20 +431,26 @@ describe('Testing Forgot Password screen', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
       formData.email,
     );
 
-    userEvent.click(screen.getByText('Get OTP'));
+    await userEvent.click(screen.getByText('Get OTP'));
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText('e.g. 12345'), formData.userOtp);
-    userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByPlaceholderText('e.g. 12345'),
+      formData.userOtp,
+    );
+    await userEvent.type(
+      screen.getByTestId('newPassword'),
+      formData.newPassword,
+    );
+    await userEvent.type(
       screen.getByTestId('confirmNewPassword'),
       formData.confirmNewPassword,
     );
-    userEvent.click(screen.getByText('Change Password'));
+    await userEvent.click(screen.getByText('Change Password'));
   });
 });

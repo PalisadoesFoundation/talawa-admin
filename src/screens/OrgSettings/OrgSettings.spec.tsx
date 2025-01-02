@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -113,18 +113,18 @@ describe('Organisation Settings Page', () => {
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('generalSettings'));
+    await userEvent.click(screen.getByTestId('generalSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('generalTab')).toBeInTheDocument();
       expect(screen.getByTestId('generalTab')).toBeVisible();
     });
 
-    userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+    await userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
+    await userEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
     });
@@ -140,14 +140,14 @@ describe('Organisation Settings Page', () => {
     });
 
     const dropdownToggle = screen.getByTestId('settingsDropdownToggle');
-    userEvent.click(dropdownToggle);
+    await userEvent.click(dropdownToggle);
 
     // Find all dropdown items
     const dropdownItems = screen.getAllByRole('menuitem');
     expect(dropdownItems).toHaveLength(3);
 
     for (const item of dropdownItems) {
-      userEvent.click(item);
+      await userEvent.click(item);
 
       if (item.textContent?.includes('general')) {
         await waitFor(() => {
@@ -168,7 +168,7 @@ describe('Organisation Settings Page', () => {
       }
 
       if (item !== dropdownItems[dropdownItems.length - 1]) {
-        userEvent.click(dropdownToggle);
+        await userEvent.click(dropdownToggle);
       }
     }
 

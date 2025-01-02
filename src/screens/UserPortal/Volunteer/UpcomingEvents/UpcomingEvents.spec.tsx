@@ -4,7 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -145,13 +145,13 @@ describe('Testing Upcoming Events Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+    await userEvent.click(searchToggle);
 
     const searchByTitle = await screen.findByTestId('title');
     expect(searchByTitle).toBeInTheDocument();
-    userEvent.click(searchByTitle);
+    await userEvent.click(searchByTitle);
 
-    userEvent.type(searchInput, '1');
+    await userEvent.type(searchInput, '1');
     await debounceWait();
 
     const eventTitle = await screen.findAllByTestId('eventTitle');
@@ -165,14 +165,14 @@ describe('Testing Upcoming Events Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+    await userEvent.click(searchToggle);
 
     const searchByLocation = await screen.findByTestId('location');
     expect(searchByLocation).toBeInTheDocument();
-    userEvent.click(searchByLocation);
+    await userEvent.click(searchByLocation);
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, 'M');
+    await userEvent.type(searchInput, 'M');
     await debounceWait();
 
     const eventTitle = await screen.findAllByTestId('eventTitle');
@@ -200,7 +200,7 @@ describe('Testing Upcoming Events Screen', () => {
     renderUpcomingEvents(link1);
 
     const volunteerBtn = await screen.findAllByTestId('volunteerBtn');
-    userEvent.click(volunteerBtn[0]);
+    await userEvent.click(volunteerBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerSuccess);
@@ -212,11 +212,11 @@ describe('Testing Upcoming Events Screen', () => {
 
     const eventTitle = await screen.findAllByTestId('eventTitle');
     expect(eventTitle[0]).toHaveTextContent('Event 1');
-    userEvent.click(eventTitle[0]);
+    await userEvent.click(eventTitle[0]);
 
     const joinGroupBtn = await screen.findAllByTestId('joinBtn');
     expect(joinGroupBtn).toHaveLength(3);
-    userEvent.click(joinGroupBtn[0]);
+    await userEvent.click(joinGroupBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerSuccess);
@@ -227,7 +227,7 @@ describe('Testing Upcoming Events Screen', () => {
     renderUpcomingEvents(link4);
 
     const volunteerBtn = await screen.findAllByTestId('volunteerBtn');
-    userEvent.click(volunteerBtn[0]);
+    await userEvent.click(volunteerBtn[0]);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
