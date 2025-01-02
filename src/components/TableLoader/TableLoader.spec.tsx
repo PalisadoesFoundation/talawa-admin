@@ -1,16 +1,19 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import '@testing-library/jest-dom';
+import { vi } from 'vitest';
+import { describe, it, beforeAll, expect } from 'vitest';
 
 import type { InterfaceTableLoader } from './TableLoader';
 import TableLoader from './TableLoader';
 
 beforeAll(() => {
-  console.error = jest.fn();
+  console.error = vi.fn();
 });
 
 describe('Testing Loader component', () => {
-  test('Component should be rendered properly only headerTitles is provided', () => {
+  it('Component should be rendered properly only headerTitles is provided', () => {
     const props: InterfaceTableLoader = {
       noOfRows: 10,
       headerTitles: ['header1', 'header2', 'header3'],
@@ -38,7 +41,7 @@ describe('Testing Loader component', () => {
       }
     }
   });
-  test('Component should be rendered properly only noCols is provided', () => {
+  it('Component should be rendered properly only noCols is provided', () => {
     const props: InterfaceTableLoader = {
       noOfRows: 10,
       noOfCols: 3,
@@ -63,7 +66,7 @@ describe('Testing Loader component', () => {
       }
     }
   });
-  test('Component should be throw error when noOfCols and headerTitles are undefined', () => {
+  it('Component should be throw error when noOfCols and headerTitles are undefined', () => {
     const props = {
       noOfRows: 10,
     };
@@ -73,6 +76,6 @@ describe('Testing Loader component', () => {
           <TableLoader {...props} />
         </BrowserRouter>,
       );
-    }).toThrow();
+    }).toThrowError();
   });
 });
