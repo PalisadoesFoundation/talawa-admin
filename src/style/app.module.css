@@ -4387,9 +4387,8 @@ button[data-testid='createPostBtn'] {
 
 .dispbtnflex {
   width: 90%;
-  margin-top: 20px;
   display: flex;
-  margin: 0 30%;
+  margin: 20px 30% 0 30%;
 }
 
 .dispflexUserPasswordUpdate > div {
@@ -4951,9 +4950,8 @@ button[data-testid='createPostBtn'] {
 
 .calendar__header {
   display: flex;
-  margin-bottom: 2rem;
   align-items: center;
-  margin: 0px 10px 0px 10px;
+  margin: 2rem 10px 0px 10px;
 }
 
 .calendar__header_month {
