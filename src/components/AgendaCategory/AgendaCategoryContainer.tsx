@@ -211,9 +211,9 @@ function agendaCategoryContainer({
               <div className="ms-3">{t('name')}</div>
             </Col>
             <Col
-              className="align-self-center fw-bold d-none d-md-block"
+              className={`  align-self-center  fw-bold d-none d-md-block`}
               md={6}
-              lg={2}
+              lg={6}
             >
               {t('description')}
             </Col>
@@ -242,7 +242,7 @@ function agendaCategoryContainer({
                 </Col>
                 <Col
                   md={6}
-                  lg={2}
+                  lg={6}
                   className="p-1 d-none d-md-block align-self-center text-body-secondary"
                 >
                   {agendaCategory.description}

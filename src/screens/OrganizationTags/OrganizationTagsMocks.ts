@@ -7,7 +7,7 @@ export const MOCKS = [
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
-        id: '123',
+        id: 'orgId',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
@@ -187,7 +187,7 @@ export const MOCKS = [
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
-        id: '123',
+        id: 'orgId',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
         where: { name: { starts_with: '' } },
@@ -248,7 +248,7 @@ export const MOCKS = [
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
-        id: '123',
+        id: 'orgId',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
         sortedBy: { id: 'DESCENDING' },
@@ -322,7 +322,7 @@ export const MOCKS = [
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
-        id: '123',
+        id: 'orgId',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
         sortedBy: { id: 'ASCENDING' },
@@ -397,7 +397,7 @@ export const MOCKS = [
       query: CREATE_USER_TAG,
       variables: {
         name: 'userTag 12',
-        organizationId: '123',
+        organizationId: 'orgId',
       },
     },
     result: {
@@ -415,7 +415,7 @@ export const MOCKS_ERROR = [
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
-        id: '123',
+        id: 'orgId',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
