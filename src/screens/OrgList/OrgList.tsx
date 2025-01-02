@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import SortIcon from '@mui/icons-material/Sort';
 import {
   CREATE_ORGANIZATION_MUTATION,
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
@@ -13,7 +12,7 @@ import {
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +28,7 @@ import type {
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
+import SortingButton from 'subComponents/SortingButton';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -277,7 +277,6 @@ function orgList(): JSX.Element {
   };
 
   const loadMoreOrganizations = (): void => {
-    console.log('loadMoreOrganizations');
     setIsLoadingMore(true);
     fetchMore({
       variables: {
@@ -345,7 +344,6 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
             className={styles.searchButtonOrgList}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
@@ -354,38 +352,11 @@ function orgList(): JSX.Element {
           </Button>
         </div>
         <div className={styles.btnsBlockOrgList}>
-          <div className="d-flex">
-            <Dropdown
-              aria-expanded="false"
-              title="Sort organizations"
-              data-testid="sort"
-            >
-              <Dropdown.Toggle
-                // className={styles.dropdown}
-                variant={
-                  sortingState.option === '' ? 'outline-success' : 'success'
-                }
-                data-testid="sortOrgs"
-              >
-                <SortIcon className={'me-1'} />
-                {sortingState.selectedOption}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(): void => handleSorting('Latest')}
-                  data-testid="latest"
-                >
-                  {t('Latest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(): void => handleSorting('Earliest')}
-                  data-testid="oldest"
-                >
-                  {t('Earliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          <SortingButton
+            sortingOptions={[t('Latest'), t('Earliest')]}
+            selectedOption={sortingState.selectedOption}
+            onSortChange={handleSorting}
+          />
           {superAdmin && (
             <Button
               variant="success"
