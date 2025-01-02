@@ -39,7 +39,7 @@
   --dropdown-hover-color: #eff1f7;
   --grey-bg-color: #eaebef;
   --light-dark-green: #08780b;
-  --grey-light: #31bb6b;
+  --blue-light: #add8e6;
   --green-color: #21d015;
   --light-more-green: #39a440;
   --off-light-green: #31bb6a60;
@@ -3202,7 +3202,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .colorPrimary {
-  background: var(--subtle-blue-grey);
+  background: var(--blue-light);
   color: var(--bs-white);
   cursor: pointer;
 }
@@ -3778,7 +3778,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .colorGreen {
-  color: var(--bs-form-valid-border-color);
+  color: var(--blue-light);
 }
 
 .maxWidthPeople {
@@ -3800,7 +3800,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .greenBorder {
-  border: 1px solid var(--bs-form-valid-border-color);
+  border: 1px solid var(--blue-light);
 }
 
 .semiBold {
@@ -3963,7 +3963,7 @@ button[data-testid='createPostBtn'] {
   overflow: hidden;
   border-radius: 50%;
   position: relative;
-  border: 2px solid var(--bs-form-valid-border-color);
+  border: 2px solid var(--blue-light);
 }
 
 .userImage img {
@@ -3978,7 +3978,6 @@ button[data-testid='createPostBtn'] {
   width: 100%;
   border-radius: 25px;
   background-color: transparent;
-  /* border: 1px solid #acacac; */
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   outline: none;
   border: none;
