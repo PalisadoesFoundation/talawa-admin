@@ -1,34 +1,37 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import SortIcon from '@mui/icons-material/Sort';
+import PropTypes from 'prop-types';
 import styles from '../style/app.module.css';
 
-interface InterfaceSortingButtonProps {
-  sortingOptions: string[];
-  selectedOption: string;
-  onSortChange: (option: string) => void;
+interface InterfaceSortingOption {
+  label: string;
+  value: string;
 }
 
-/**
- * SortingButton component to display sorting options in a dropdown menu and handle the sorting change
- *  sortingOptions - list of sorting options
- *
- */
+interface InterfaceSortingButtonProps {
+  title: string;
+  sortingOptions: InterfaceSortingOption[];
+  selectedOption: string;
+  onSortChange: (value: string) => void;
+  dataTestIdPrefix: string;
+  className?: string;
+}
+
 const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
+  title,
   sortingOptions,
   selectedOption,
   onSortChange,
+  dataTestIdPrefix,
+  className = styles.dropdownToggle,
 }) => {
   return (
-    <Dropdown
-      aria-expanded="false"
-      title="Sort organizations"
-      data-testid="sort"
-    >
+    <Dropdown aria-expanded="false" title={title} data-testid="sort">
       <Dropdown.Toggle
         variant={selectedOption === '' ? 'outline-success' : 'success'}
-        data-testid="sortOrgs"
-        className={styles.dropdownToggle}
+        data-testid={`${dataTestIdPrefix}`}
+        className={className}
       >
         <SortIcon className={'me-1'} />
         {selectedOption}
@@ -36,16 +39,29 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
       <Dropdown.Menu>
         {sortingOptions.map((option) => (
           <Dropdown.Item
-            key={option}
-            onClick={() => onSortChange(option)}
-            data-testid={option}
+            key={option.value}
+            onClick={() => onSortChange(option.value)}
+            data-testid={`${option.value}`}
           >
-            {option}
+            {option.label}
           </Dropdown.Item>
         ))}
       </Dropdown.Menu>
     </Dropdown>
   );
+};
+
+SortingButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  sortingOptions: PropTypes.arrayOf(
+    PropTypes.exact({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
+  selectedOption: PropTypes.string.isRequired,
+  onSortChange: PropTypes.func.isRequired,
+  dataTestIdPrefix: PropTypes.string.isRequired,
 };
 
 export default SortingButton;

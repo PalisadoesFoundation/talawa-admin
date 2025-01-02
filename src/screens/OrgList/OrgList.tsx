@@ -48,8 +48,10 @@ function orgList(): JSX.Element {
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
+
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
+
   document.title = t('title');
 
   const perPageResult = 8;
@@ -58,6 +60,7 @@ function orgList(): JSX.Element {
     option: '',
     selectedOption: t('sort'),
   });
+
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -81,9 +84,7 @@ function orgList(): JSX.Element {
   });
 
   const toggleModal = (): void => setShowModal(!showModal);
-
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
-
   const [createSampleOrganization] = useMutation(
     CREATE_SAMPLE_ORGANIZATION_MUTATION,
   );
@@ -311,14 +312,12 @@ function orgList(): JSX.Element {
     });
   };
 
-  const handleSorting = (option: string): void => {
+  const handleSortChange = (value: string): void => {
     setSortingState({
-      option,
-      selectedOption: t(option),
+      option: value,
+      selectedOption: t(value),
     });
-
-    const orderBy = option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
-
+    const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
     refetchOrgs({
       first: perPageResult,
       skip: 0,
@@ -353,9 +352,14 @@ function orgList(): JSX.Element {
         </div>
         <div className={styles.btnsBlockOrgList}>
           <SortingButton
-            sortingOptions={[t('Latest'), t('Earliest')]}
+            title="Sort organizations"
+            sortingOptions={[
+              { label: t('Latest'), value: 'Latest' },
+              { label: t('Earliest'), value: 'Earliest' },
+            ]}
             selectedOption={sortingState.selectedOption}
-            onSortChange={handleSorting}
+            onSortChange={handleSortChange}
+            dataTestIdPrefix="sortOrgs"
           />
           {superAdmin && (
             <Button
