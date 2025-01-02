@@ -50,7 +50,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
 vi.mock('../../components/AddPeopleToTag/AddPeopleToTag', async () => {
   return await import('./ManageTagMockComponents/MockAddPeopleToTag');
 });
@@ -58,7 +57,6 @@ vi.mock('../../components/AddPeopleToTag/AddPeopleToTag', async () => {
 vi.mock('../../components/TagActions/TagActions', async () => {
   return await import('./ManageTagMockComponents/MockTagActions');
 });
-/* eslint-enable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
 
 const renderManageTag = (link: ApolloLink): RenderResult => {
   return render(
