@@ -98,6 +98,11 @@
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  /* breakpoints */
+  --breakpoint-mobile: 576px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
 }
 .fonts {
   color: var(--grey-bg-color-dark);
@@ -4291,8 +4296,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .memberimg {
-  width: 200px;
-  height: 100px;
+  width: 12.5rem;
+  height: 6.25rem;
   border-radius: 7px;
   margin-left: 20px;
 }
@@ -4310,14 +4315,14 @@ button[data-testid='createPostBtn'] {
 .singledetails_data_left {
   margin-top: 10px;
   margin-left: 10px;
-  color: #707070;
+  color: var(--grey-dark);
 }
 
 .singledetails_data_right {
   justify-content: right;
   margin-top: 10px;
   text-align: right;
-  color: #707070;
+  color: var(--grey-dark);
 }
 
 .membername {
@@ -4340,9 +4345,9 @@ button[data-testid='createPostBtn'] {
 .memberfontcreatedbtnUserListCard {
   margin-top: 33px;
   border-radius: 7px;
-  border-color: #31bb6b;
-  background-color: #31bb6b;
-  color: white;
+  border-color: var(--light-green);
+  background-color: var(--light-green);
+  color: var(--white-color);
   padding-right: 10px;
   padding-left: 10px;
   justify-content: flex-end;
@@ -4351,7 +4356,7 @@ button[data-testid='createPostBtn'] {
   box-shadow: none;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: var(--breakpoint-mobile)) {
   .singledetails {
     margin-left: 20px;
   }
@@ -4414,14 +4419,6 @@ button[data-testid='createPostBtn'] {
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-}
-
-.greenregbtnUserPasswordUpdate {
-  composes: baseBtn;
-  margin-right: 30px;
-  background-color: var(--light-green);
-  color: var(--white-color);
-  width: 20%;
 }
 
 /* VenueModal.tsx */
@@ -4578,7 +4575,7 @@ button[data-testid='createPostBtn'] {
   margin: 5px;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: var(--breakpoint-tablet)) {
   .event_list {
     display: none;
   }
@@ -4589,7 +4586,7 @@ button[data-testid='createPostBtn'] {
   }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: var(--breakpoint-mobile)) {
   .btn__more {
     font-size: 12px;
   }
@@ -5215,13 +5212,13 @@ button[data-testid='createPostBtn'] {
   transition: background-color 0.2s ease;
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: var(--breakpoint-mobile)) {
   .btn__more {
     font-size: 12px;
   }
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: var(--breakpoint-tablet)) {
   .holidayIndicator,
   .organizationIndicator {
     width: 16px;
@@ -5492,7 +5489,7 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 9999;
+  z-index: 100;
 }
 
 .modalOrgPostCard {
@@ -5505,7 +5502,7 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.9);
-  z-index: 9999;
+  z-index: 100;
 }
 
 .modalContentOrgPostCard {
