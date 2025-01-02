@@ -4417,23 +4417,11 @@ button[data-testid='createPostBtn'] {
 }
 
 .greenregbtnUserPasswordUpdate {
-  margin: 1rem 0 0;
-  margin-top: 10px;
+  composes: baseBtn;
   margin-right: 30px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
-  padding: 10px 10px;
-  border-radius: 5px;
-  background-color: #31bb6b;
+  background-color: var(--light-green);
+  color: var(--white-color);
   width: 20%;
-  font-size: 16px;
-  color: white;
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
 }
 
 /* VenueModal.tsx */
