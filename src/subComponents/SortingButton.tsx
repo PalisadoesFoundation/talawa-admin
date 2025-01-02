@@ -9,6 +9,11 @@ interface InterfaceSortingButtonProps {
   onSortChange: (option: string) => void;
 }
 
+/**
+ * SortingButton component to display sorting options in a dropdown menu and handle the sorting change
+ *  sortingOptions - list of sorting options
+ *
+ */
 const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
   sortingOptions,
   selectedOption,
