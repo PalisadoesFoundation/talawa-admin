@@ -4377,11 +4377,11 @@ button[data-testid='createPostBtn'] {
 /* UserPasswordUpdate.tsx */
 
 .userupdatediv {
-  border: 1px solid #e8e5e5;
-  box-shadow: 2px 1px #e8e5e5;
+  border: 1px solid var(--grey-border);
+  box-shadow: 2px 1px var(--grey-border);
   padding: 25px 16px;
   border-radius: 5px;
-  background: #fdfdfd;
+  background: var(--white-color);
 }
 
 .dispflexUserPasswordUpdate {
@@ -4404,14 +4404,14 @@ button[data-testid='createPostBtn'] {
 .whitebtn {
   margin: 1rem 0 0;
   margin-top: 10px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
+  border: 1px solid var(--grey-border);
+  box-shadow: 0 2px 2px var(--grey-border);
   padding: 10px 20px;
   border-radius: 5px;
   background: none;
   width: 20%;
   font-size: 16px;
-  color: #31bb6b;
+  color: var(--light-green);
   outline: none;
   font-weight: 600;
   cursor: pointer;
@@ -4444,7 +4444,7 @@ button[data-testid='createPostBtn'] {
   transform: scale(1.2);
   cursor: pointer;
   border: none;
-  color: #707070;
+  color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
@@ -4455,34 +4455,37 @@ button[data-testid='createPostBtn'] {
 .calendar__weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  background-color: #707070;
+  background-color: var(--grey-dark);
   height: 60px;
+  role: 'row';
 }
 
 .calendar__days {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-template-rows: repeat(6, 1fr);
+  role: 'grid';
+  aria-label: 'Calendar';
 }
 
 .day__outside {
-  color: #89898996 !important;
+  color: var(--grey-dark) !important;
 }
 
 .day__selected {
-  background-color: #007bff;
-  color: #707070;
+  background-color: var(--blue-primary);
+  color: var(--grey-dark);
 }
 
 .day__today {
-  background-color: #def6e1;
+  background-color: var(--light-neon-green);
   font-weight: 700;
   text-decoration: underline;
-  color: #31bb6b;
+  color: var(--light-green);
 }
 
 .yearlyCalender {
-  background-color: #ffffff;
+  background-color: var(--white-color);
   box-sizing: border-box;
 }
 
@@ -4499,7 +4502,7 @@ button[data-testid='createPostBtn'] {
   font-weight: 600;
   font-size: 2rem;
   padding: 0 10px;
-  color: #4b4b4b;
+  color: var(--grey-dark);
 }
 
 .cardYearlyEventCalender {
@@ -4530,7 +4533,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   font-weight: 600;
 }
 
@@ -4553,7 +4556,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .btn__more:hover {
-  color: #3ce080;
+  color: var(--light-green);
 }
 
 .expand_event_list {
@@ -4569,8 +4572,8 @@ button[data-testid='createPostBtn'] {
   right: auto;
   overflow: auto;
   padding: 10px 4px 0px 4px;
-  background-color: rgb(241, 241, 241);
-  border: 1px solid rgb(201, 201, 201);
+  background-color: var(--grey-bg-color);
+  border: 1px solid var(--grey-border);
   border-radius: 5px;
   margin: 5px;
 }
@@ -4670,7 +4673,7 @@ button[data-testid='createPostBtn'] {
   transform: scale(1.2);
   cursor: pointer;
   border: none;
-  color: #707070;
+  color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
@@ -4686,7 +4689,7 @@ button[data-testid='createPostBtn'] {
 .categoryChip {
   display: inline-flex;
   align-items: center;
-  background-color: #e0e0e0;
+  background-color: var(--grey-bg-color);
   border-radius: 16px;
   padding: 0 12px;
   font-size: 14px;
@@ -4720,33 +4723,33 @@ button[data-testid='createPostBtn'] {
 }
 
 .agendaItemRow {
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--grey-border);
   border-radius: 4px;
   transition: box-shadow 0.2s ease;
-  background-color: #fff;
+  background-color: var(--white-color);
 }
 
 .agendaItemRow:hover {
-  background-color: #f0f0f0;
+  background-color: var(--white-color);
 }
 
 .dragging {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px var(--grey-border-box-color);
   z-index: 1000;
-  background-color: #f0f0f0;
+  background-color: var(--grey-bg-color);
 }
 
 .droppable {
-  background-color: #f9f9f9; /* Background color of droppable area */
+  background-color: var(--grey-bg-color);
 }
 
 .droppableDraggingOver {
-  background-color: #e6f7ff; /* Background color of droppable area while dragging over */
+  background-color: var(--grey-bg-color);
 }
 
 .tableHeadAgendaItems {
-  background-color: #31bb6b !important;
-  color: white;
+  background-color: var(--light-green) !important;
+  color: var(--white);
   border-radius: 20px 20px 0px 0px !important;
   padding: 20px;
 }
@@ -4900,7 +4903,7 @@ button[data-testid='createPostBtn'] {
   background: transparent;
   cursor: pointer;
   border: none;
-  color: #707070;
+  color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 10px;
@@ -4912,8 +4915,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .editHeader {
-  background-color: #31bb6b;
-  color: white;
+  background-color: var(--light-green);
+  color: var(--white-color);
 }
 
 .link_check {
@@ -4958,7 +4961,7 @@ button[data-testid='createPostBtn'] {
 .buttonEventCalendar {
   border-radius: 100px;
   color: var(--bs-gray-600);
-  background-color: rgba(194, 247, 182, 0);
+  background-color: var(--grey-bg-color-dark);
   font-weight: bold;
   border: 0px;
   font-size: 20px;
@@ -4995,7 +4998,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  border-right: 1px solid #8d8d8d55;
+  border-right: 1px solid var(--grey-border);
   width: 40px;
 }
 
@@ -5010,7 +5013,7 @@ button[data-testid='createPostBtn'] {
 .calendar_hour_block {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid #8d8d8d55;
+  border-bottom: 1px solid var(--grey-border);
   position: relative;
   height: 50px;
   border-bottom-right-radius: 5px;
@@ -5029,7 +5032,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .btn__more:hover {
-  color: #454645;
+  color: var(--grey-dark);
 }
 
 .event_list_parent {
@@ -5038,7 +5041,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .event_list_parent_current {
-  background-color: #def6e1;
+  background-color: var(--grey-bg-color);
   position: relative;
   width: 100%;
 }
@@ -5054,32 +5057,32 @@ button[data-testid='createPostBtn'] {
   border-radius: 10px;
   margin: 5px;
   background-color: var(--white);
-  border: 1px solid #8d8d8d55;
-  color: #4b4b4b;
+  border: 1px solid var(--grey-border);
+  color: var(--grey-dark);
   font-weight: 600;
   height: 9rem;
   position: relative;
 }
 
 .day_weekends {
-  background-color: rgba(49, 187, 107, 0.2);
+  background-color: var(--grey-bg-color-dark);
 }
 
 .day__outside {
   background-color: var(--white);
-  color: #89898996;
+  color: var(--grey-dark);
 }
 
 .day__selected {
   background-color: var(--blue-primary);
-  color: #707070;
+  color: var(--grey-dark);
 }
 
 .day__today {
-  background-color: #def6e1;
+  background-color: var(--grey-bg-color);
   font-weight: 700;
   text-decoration: underline;
-  color: #31bb6b;
+  color: var(--light-green);
 }
 
 .day__events {
@@ -5104,8 +5107,8 @@ button[data-testid='createPostBtn'] {
   right: auto;
   overflow: auto;
   padding: 10px 4px 0px 4px;
-  background-color: rgb(241, 241, 241);
-  border: 1px solid rgb(201, 201, 201);
+  background-color: var(--grey-bg-color);
+  border: 1px solid var(--grey-border);
   border-radius: 5px;
   margin: 5px;
 }
@@ -5138,7 +5141,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .holidayIndicator {
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: var(--grey-bg-color-dark);
 }
 
 .organizationIndicator {
@@ -5193,7 +5196,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .events_card {
-  background-color: white;
+  background-color: var(--white-color);
 }
 
 .legend {
@@ -5317,7 +5320,7 @@ button[data-testid='createPostBtn'] {
   flex-direction: row;
   font-weight: 700;
   font-size: 16px;
-  color: #000000;
+  color: var(--black-color);
   margin: 0;
 }
 
@@ -5350,12 +5353,12 @@ button[data-testid='createPostBtn'] {
 
 .cardsEventListCard {
   width: 100%;
-  background: #5cacf7 !important;
+  background: var(--subtle-blue-grey) !important;
   padding: 2px 3px;
   border-radius: 5px;
-  border: 1px solid #e8e8e8;
-  box-shadow: 0 3px 2px #e8e8e8;
-  color: #737373;
+  border: 1px solid var(--grey-border);
+  box-shadow: 0 3px 2px var(--grey-border-box-color);
+  color: var(--grey-dark);
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
@@ -5365,7 +5368,7 @@ button[data-testid='createPostBtn'] {
 
 .cardsEventListCard h2 {
   font-size: 15px;
-  color: #4e4c4c;
+  color: var(--grey-dark);
   font-weight: 500;
 }
 
@@ -5449,7 +5452,7 @@ button[data-testid='createPostBtn'] {
   max-height: 12rem;
   object-fit: cover;
   position: relative;
-  color: black;
+  color: var(--black-color);
 }
 
 .previewOrgPostCard {
@@ -5488,7 +5491,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: var(--grey-bg-color-dark);
   z-index: 100;
 }
 
@@ -5501,7 +5504,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: var(--grey-bg-color-dark);
   z-index: 100;
 }
 
@@ -5509,7 +5512,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+  background-color: var(--white);
   padding: 20px;
   max-width: 800px;
   max-height: 600px;
@@ -5540,18 +5543,18 @@ button[data-testid='createPostBtn'] {
 
 .titleOrgPostCard {
   font-size: 16px;
-  color: #000;
+  color: var(--black-color);
   font-weight: 600;
 }
 
 .textOrgPostCard {
   font-size: 13px;
-  color: #000;
+  color: var(--black-color);
   font-weight: 300;
 }
 
 .author {
-  color: #737373;
+  color: var(--grey-dark);
   font-weight: 100;
   font-size: 13px;
 }
@@ -5561,8 +5564,8 @@ button[data-testid='createPostBtn'] {
   bottom: 5rem;
   right: 10px;
   padding: 4px;
-  background-color: red;
-  color: #fff;
+  background-color: var(--red-delete-bg);
+  color: var(--white-color);
   border: none;
   cursor: pointer;
 }
@@ -5575,7 +5578,7 @@ button[data-testid='createPostBtn'] {
   transform: scale(1.2);
   cursor: pointer;
   border: none;
-  color: #707070;
+  color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
@@ -5593,12 +5596,12 @@ button[data-testid='createPostBtn'] {
 }
 
 .cardsOrgPostCard a {
-  color: #737373;
+  color: var(--grey-dark);
   font-weight: 600;
 }
 
 .cardsOrgPostCard a:hover {
-  color: black;
+  color: var(--black-color);
 }
 
 .infodiv {
@@ -5622,11 +5625,11 @@ button[data-testid='createPostBtn'] {
 }
 
 .toggleClickBtn {
-  color: #31bb6b;
+  color: var(--light-green);
   cursor: pointer;
   border: none;
   font-size: 12px;
-  background-color: white;
+  background-color: var(--white-color);
 }
 
 .toggleClickBtnNone {
@@ -5637,7 +5640,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+  background-color: var(--white-color);
   padding-top: 20px;
   max-width: 700px;
   max-height: 500px;
@@ -5653,7 +5656,7 @@ button[data-testid='createPostBtn'] {
 
 .menuOptions li {
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--grey-border);
   padding-left: 100px;
   padding-right: 100px;
   cursor: pointer;
@@ -5665,13 +5668,13 @@ button[data-testid='createPostBtn'] {
   right: 10px;
   padding: 2px;
   background-color: transparent;
-  color: #000;
+  color: var(--black-color);
   border: none;
   cursor: pointer;
 }
 
 .list {
-  color: red;
+  color: var(--red-delete-text);
   cursor: pointer;
 }
 
