@@ -933,10 +933,6 @@ describe('Organization People Page', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
-      console.log(
-        'addnewusermodelcount',
-        screen.getAllByTestId('addNewUserModal'),
-      );
       expect(screen.getByTestId('createUser')).toBeInTheDocument();
     });
 
@@ -997,10 +993,6 @@ describe('Organization People Page', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
-      console.log(
-        'addnewusermodelcount',
-        screen.getAllByTestId('addNewUserModal'),
-      );
       expect(screen.getByTestId('createUser')).toBeInTheDocument();
     });
 
@@ -1080,10 +1072,6 @@ describe('Organization People Page', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
-      console.log(
-        'addnewusermodelcount',
-        screen.getAllByTestId('addNewUserModal'),
-      );
       expect(screen.getByTestId('createUser')).toBeInTheDocument();
     });
 
