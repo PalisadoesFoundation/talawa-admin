@@ -2,28 +2,22 @@ import { describe, it, expect, vi } from 'vitest';
 import askAndUpdatePort from './askAndUpdatePort';
 import { askForCustomPort } from 'setup/askForCustomPort/askForCustomPort';
 import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
-import * as inquirer from 'inquirer';
+import inquirer from 'inquirer';
 
-// Mock dependencies
-vi.mock('inquirer', () => ({
-  ...inquirer,
-  prompt: vi.fn(),
-}));
-
-vi.mock('setup/askForCustomPort/askForCustomPort', () => ({
-  askForCustomPort: vi.fn(),
-}));
-
-vi.mock('setup/updateEnvFile/updateEnvFile', () => ({
-  updateEnvFile: vi.fn(),
-}));
-
-vi.mock('askAndUpdatePort', () => ({
-  askAndUpdatePort: vi.fn(),
-}));
+vi.mock('setup/askForCustomPort/askForCustomPort');
+vi.mock('setup/updateEnvFile/updateEnvFile');
+vi.mock('inquirer');
 
 describe('askAndUpdatePort', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should update the port when user confirms and provides a valid port', async () => {
+    // Mock user confirmation and valid port
+    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+      shouldSetCustomPortResponse: true,
+    });
     vi.mocked(askForCustomPort).mockResolvedValueOnce(3000);
 
     // Act
@@ -34,6 +28,11 @@ describe('askAndUpdatePort', () => {
   });
 
   it('should not update the port when user declines', async () => {
+    // Mock user declining by returning false
+    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+      shouldSetCustomPortResponse: false,
+    });
+
     // Act
     await askAndUpdatePort();
 
@@ -42,10 +41,14 @@ describe('askAndUpdatePort', () => {
   });
 
   it('should throw an error for an invalid port', async () => {
-    vi.mocked(askForCustomPort).mockResolvedValueOnce(800); // Invalid port
+    // Mock user confirmation and invalid port
+    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+      shouldSetCustomPortResponse: true,
+    });
+    vi.mocked(askForCustomPort).mockResolvedValueOnce(800);
 
     // Act & Assert
-    await expect(askAndUpdatePort()).rejects.toThrow(
+    await expect(askAndUpdatePort()).rejects.toThrowError(
       'Port must be between 1024 and 65535',
     );
   });
