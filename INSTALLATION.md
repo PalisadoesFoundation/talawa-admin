@@ -17,7 +17,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Prerequisites](#prerequisites-1)
     - [Development Setup](#development-setup)
 - [Talawa-Admin Service Setup Guide](#talawa-admin-service-setup-guide)
-    - [Prerequisites](#prerequisites-2)
+  - [Prerequisites](#prerequisites-2)
     - [Service Configuration](#service-configuration)
       - [1. **Copy the `talawa_admin.service` file**](#1-copy-the-talawa_adminservice-file)
       - [2. **Verify the CODEROOT Path**](#2-verify-the-coderoot-path)
@@ -395,7 +395,7 @@ If you don't want this hook to run, you can manually opt out of this using the `
 
 This guide outlines the steps to set up and manage the Talawa-Admin service on a Linux server using `systemd`.
 
-### Prerequisites
+## Prerequisites
 
 - Firstly, You should have locally setup the Talawa-Admin repo using [Setting up this repository](#setting-up-this-repository)
 - Ensure **Node.js** and **npm** are correctly installed and available for the specified user and group.
@@ -406,6 +406,11 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
    sudo useradd -r -s /bin/false talawa_admin
    sudo groupadd -r talawa_admin
    sudo usermod -a -G talawa_admin talawa_admin
+   # Set proper directory permissions
+   sudo chown -R talawa_admin:talawa_admin /path/to/talawa-admin
+   sudo chmod 750 /path/to/talawa-admin
+   sudo find /path/to/talawa-admin -type f -exec chmod 640 {} \
+   sudo chmod 600 /path/to/talawa-admin/.env
    ```
 
 ---
