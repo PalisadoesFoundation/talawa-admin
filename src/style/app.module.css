@@ -3628,104 +3628,6 @@ button[data-testid='createPostBtn'] {
   }
 }
 
-/* General reusable styles (NEW) */
-.reusable-text-ellipsis {
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.reusable-indicator {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: var(--bs-primary);
-  transition: opacity 0.2s ease;
-  opacity: 0.8;
-}
-
-.reusable-arrow-indicator {
-  content: '▶';
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.8rem;
-  color: var(--bs-emphasis-color, #000);
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.reusable-focus-visible {
-  outline: 2px solid var(--bs-primary);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reusable-arrow-indicator {
-    transition: none;
-  }
-}
-
-/* RTL support (NEW) */
-[dir='rtl'] {
-  .iconWrapper {
-    --transform-direction: -8px;
-  }
-}
-
-/* General reusable styles (NEW) */
-.reusable-text-ellipsis {
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.reusable-indicator {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: var(--bs-primary);
-  transition: opacity 0.2s ease;
-  opacity: 0.8;
-}
-
-.reusable-arrow-indicator {
-  content: '▶';
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.8rem;
-  color: var(--bs-emphasis-color, #000);
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.reusable-focus-visible {
-  outline: 2px solid var(--bs-primary);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reusable-arrow-indicator {
-    transition: none;
-  }
-}
-
-/* RTL support (NEW) */
-[dir='rtl'] {
-  .iconWrapper {
-    --transform-direction: -8px;
-  }
-}
-
 /* LeftDrawer general styles */
 .leftDrawer {
   height: 100vh; /* Ensure it spans the full height */
@@ -3777,7 +3679,7 @@ button[data-testid='createPostBtn'] {
   width: 100%;
   /* Add focus styles for keyboard navigation */
   &:focus-within {
-    @extend .reusable-focus-visible;
+    @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
   }
 }
 
@@ -3811,13 +3713,13 @@ button[data-testid='createPostBtn'] {
 .primaryText {
   font-weight: bold;
   color: var(--bs-emphasis-color, #000);
-  @extend .reusable-text-ellipsis; /* NEW */
+  @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
 }
 
 .secondaryText {
   font-size: 0.9rem;
   color: var(--bs-secondary-text);
-  @extend .reusable-text-ellipsis; /* NEW */
+  @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
 }
 
 /* Dropdown and options list */
@@ -3839,7 +3741,7 @@ button[data-testid='createPostBtn'] {
   }
 
   &.focus-visible {
-    @extend .reusable-focus-visible;
+    @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
   }
 }
 
@@ -3848,11 +3750,11 @@ button[data-testid='createPostBtn'] {
   color: black;
 
   &::before {
-    @extend .reusable-indicator; /* NEW */
+    @extend .reusable-indicator; /* Referencing the reusable class from the general section */
   }
 
   &::after {
-    @extend .reusable-arrow-indicator; /* NEW */
+    @extend .reusable-arrow-indicator; /* Referencing the reusable class from the general section */
   }
 }
 
