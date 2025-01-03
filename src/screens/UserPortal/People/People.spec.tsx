@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+// import type { InterfaceMember } from './People';
 import People from './People';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import styles from './OrganizationAgendaCategory.module.css';
+import styles from 'style/app.module.css';
 
 /**
  * InterfaceAgendaCategoryDeleteModalProps is an object containing the props for AgendaCategoryDeleteModal component
@@ -35,7 +35,7 @@ const AgendaCategoryDeleteModal: React.FC<
     <Modal
       size="sm"
       id={`deleteAgendaCategoryModal`}
-      className={styles.agendaCategoryModal}
+      className={styles.campaignModal}
       show={agendaCategoryDeleteModalIsOpen}
       onHide={toggleDeleteModal}
       backdrop="static"

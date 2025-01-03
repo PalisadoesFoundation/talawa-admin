@@ -130,18 +130,50 @@ describe('Organisation Settings Page', () => {
     });
   });
 
-  it('should render dropdown for settings tabs', async () => {
+  it('should handle dropdown item selection correctly', async () => {
     renderOrganisationSettings();
 
     await waitFor(() => {
-      expect(screen.getByTestId('settingsDropdownToggle')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('settingsDropdownContainer'),
+      ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('settingsDropdownToggle'));
+    const dropdownToggle = screen.getByTestId('settingsDropdownToggle');
+    userEvent.click(dropdownToggle);
 
-    const dropdownItems = screen.getAllByRole('button', {
-      name: /general|actionItemCategories|agendaItemCategories/i,
-    });
+    // Find all dropdown items
+    const dropdownItems = screen.getAllByRole('menuitem');
     expect(dropdownItems).toHaveLength(3);
+
+    for (const item of dropdownItems) {
+      userEvent.click(item);
+
+      if (item.textContent?.includes('general')) {
+        await waitFor(() => {
+          expect(screen.getByTestId('generalTab')).toBeInTheDocument();
+        });
+      } else if (item.textContent?.includes('actionItemCategories')) {
+        await waitFor(() => {
+          expect(
+            screen.getByTestId('actionItemCategoriesTab'),
+          ).toBeInTheDocument();
+        });
+      } else if (item.textContent?.includes('agendaItemCategories')) {
+        await waitFor(() => {
+          expect(
+            screen.getByTestId('agendaItemCategoriesTab'),
+          ).toBeInTheDocument();
+        });
+      }
+
+      if (item !== dropdownItems[dropdownItems.length - 1]) {
+        userEvent.click(dropdownToggle);
+      }
+    }
+
+    expect(dropdownToggle).toHaveTextContent(
+      screen.getByTestId('agendaItemCategoriesSettings').textContent || '',
+    );
   });
 });

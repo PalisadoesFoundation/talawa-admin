@@ -75,7 +75,6 @@
   /* Modal Dimensions */
   --modal-width: 670px;
   --modal-max-width: 680px;
-  background-color: #f6f8fc;
 
   /* Additional Variables */
   --input-shadow-color: #dddddd;
@@ -84,9 +83,8 @@
   --search-button-bg: #a8c7fa;
   --search-button-border: var(--brown-color);
   --bs-primary: #0056b3;
+  --bs-warning: #ffc107;
   --bs-white: #fff;
-  --bs-dark: #343a40;
-  --bs-secondary-text: #6c757d;
   --bs-gray-600: #4b5563;
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
@@ -3736,20 +3734,35 @@ button[data-testid='createPostBtn'] {
   will-change: transform; /* NEW */
   position: fixed; /* Ensure it's positioned properly */
   padding-bottom: 1rem; /* Prevent last item clipping */
+  overscroll-behavior: contain;
+  /* Improve scroll performance */
+  -webkit-overflow-scrolling: touch;
 }
 
 .hideElemByDefault {
   display: none;
 }
 
+[data-hidden='true'] {
+  visibility: hidden;
+}
+
+[data-hidden='false'] {
+  visibility: visible;
+}
+
 .inactiveDrawer {
   transform: translateX(-100%);
-  aria-hidden: true; /* NEW */
+  &[data-hidden='true'] {
+    /* Specific styles for inactive drawers if needed */
+  }
 }
 
 .activeDrawer {
   transform: translateX(0);
-  aria-hidden: false; /* NEW */
+  &[data-hidden='false'] {
+    /* Specific styles for active drawers if needed */
+  }
 }
 
 /* Organization Section */
@@ -4379,4 +4392,74 @@ button[data-testid='createPostBtn'] {
   height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+/* VolunteerViewModal.tsx */
+
+.modalTitle {
+  margin: 0;
+}
+
+.modalForm {
+  padding: 1rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.tableImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.statusGroup {
+  display: flex;
+  gap: 1rem;
+  margin: 0 auto;
+  margin-bottom: 0.5rem;
+  role: 'status';
+}
+
+.statusIcon {
+  margin-right: 0.5rem;
+}
+
+.acceptedStatus {
+  color: var(--bs-primary);
+  -webkit-text-fill-color: var(--bs-primary);
+  outline: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.pendingStatus {
+  color: var(--bs-warning);
+  -webkit-text-fill-color: var(--bs-warning);
+  outline: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.hoursField {
+  width: 100%;
+}
+
+.groupsLabel {
+  font-weight: lighter;
+  margin-left: 0.5rem;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  color: var(--bs-secondary);
+}
+
+.tableHeader {
+  font-weight: bold;
+}
+
+.tableRow:last-child td,
+.tableRow:last-child th {
+  border: 0;
 }
