@@ -22,8 +22,9 @@ const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
     if (shouldSetTalawaApiUrlResponse) {
       let endpoint = '';
       let isConnected = false;
-
-      while (!isConnected) {
+      let retryCount = 0;
+      const MAX_RETRIES = 3;
+      while (!isConnected && retryCount < MAX_RETRIES) {
         try {
           endpoint = await askForTalawaApiUrl();
           const url = new URL(endpoint);
@@ -31,10 +32,21 @@ const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
             throw new Error('Invalid URL protocol. Must be http or https');
           }
           isConnected = await checkConnection(url.origin);
+          if (!isConnected) {
+            console.log(
+              `Connection attempt ${retryCount + 1}/${MAX_RETRIES} failed`,
+            );
+          }
         } catch (error) {
           console.error('Error checking connection:', error);
           isConnected = false;
         }
+        retryCount++;
+      }
+      if (!isConnected) {
+        throw new Error(
+          'Failed to establish connection after maximum retry attempts',
+        );
       }
       updateEnvFile('REACT_APP_TALAWA_URL', endpoint);
       const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
@@ -44,12 +56,20 @@ const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
           throw new Error('Invalid WebSocket protocol');
         }
         updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', websocketUrl);
-      } catch (error) {
-        throw new Error(`Invalid WebSocket URL generated: ${error}`);
+      } catch {
+        throw new Error('Invalid WebSocket URL generated: ');
       }
 
       if (endpoint.includes('localhost')) {
         const dockerUrl = endpoint.replace('localhost', 'host.docker.internal');
+        try {
+          const url = new URL(dockerUrl);
+          if (!['http:', 'https:'].includes(url.protocol)) {
+            throw new Error('Invalid Docker URL protocol');
+          }
+        } catch {
+          throw new Error('Invalid Docker URL generated');
+        }
         updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
       }
     }
