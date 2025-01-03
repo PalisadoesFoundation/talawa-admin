@@ -400,6 +400,13 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
 - Firstly, You should have locally setup the Talawa-Admin repo using [Setting up this repository](#setting-up-this-repository)
 - Ensure **Node.js** and **npm** are correctly installed and available for the specified user and group.
 - It’s recommended to use **nvm** (Node Version Manager) for better management of different Node.js versions.
+- Ensure you have root or sudo access to configure systemd services.
+- Create a dedicated service user:
+   ```bash
+   sudo useradd -r -s /bin/false talawa_admin
+   sudo groupadd -r talawa_admin
+   sudo usermod -a -G talawa_admin talawa_admin
+   ```
 
 ---
 
@@ -426,6 +433,7 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
       User=<your-linux-username>
       Group=<your-linux-username>
       ```
+
 ---
 
 ### Steps to Enable and Manage the Service

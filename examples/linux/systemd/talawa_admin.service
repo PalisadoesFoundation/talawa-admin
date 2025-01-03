@@ -24,9 +24,10 @@ Description=Talawa-Admin Service
 After=network.target
 
 [Service]
-User=<your-linux-username>
-Group=<your-linux-username>
+User=talawa_admin
+Group=talawa_admin
 Environment=CODEROOT=path/to/your/talawa-admin
+Environment=NODE_ENV=production
 
 # Absolute path is needed for working directory
 WorkingDirectory=/path/to/your/talawa-admin
@@ -40,8 +41,13 @@ EnvironmentFile=/path/to/your/talawa-admin/.env
 ExecStart=/bin/bash -c "source /path/to/your/.nvm/nvm.sh && nvm use default && npm run serve"
 Restart=on-failure
 RemainAfterExit=yes
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateTmp=true
 Type=simple
 RuntimeDirectory=talawa-admin
 
+
 [Install]
 WantedBy=multi-user.target
+
