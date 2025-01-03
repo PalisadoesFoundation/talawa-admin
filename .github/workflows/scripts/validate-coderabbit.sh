@@ -33,5 +33,6 @@ else
   echo "   statement below to restart a review"
   echo ""
   echo "@coderabbitai full review"
+  echo ""  
   exit 1
 fi
