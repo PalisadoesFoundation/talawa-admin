@@ -1,0 +1,47 @@
+
+################################################################################
+#
+# READ ALL STEPS BEFORE PROCEEDING
+#
+# 0) Ensure that Node.js and npm are correctly installed and available for the 
+#    specified user and group.
+#    Use nvm for better interaction with different node versions.
+# 1) Place this file in the appropriate systemd directory based on your Linux
+#    distribution, e.g., /etc/systemd/system/.
+# 2) Verify the CODEROOT path matches the Talawa-Admin code directory.
+# 3) Always add the absolute path of talawa-admin directory to WorkingDirectory don't use $CODEROOT. 
+# 4) Ensure the EnvironmentFile path points to a valid .env file for the service.
+# 5) Adjust the User and Group to match the user account intended to run the service.
+# 6) Run the command "sudo systemctl daemon-reload" after saving changes.
+# 7) Use "sudo systemctl start talawa_admin.service" to start the service.
+# 8) Use "sudo systemctl stop talawa_admin.service" to stop the service.
+# 9) Use "sudo systemctl enable talawa_admin.service" to start the service on boot.
+#
+################################################################################
+
+[Unit]
+Description=Talawa-Admin Service
+After=network.target
+
+[Service]
+User=talawa
+Group=talawa
+Environment=CODEROOT=path/to/your/talawa-admin
+
+# Absolute path is needed for working directory
+WorkingDirectory=/path/to/your/talawa-admin
+
+EnvironmentFile=/path/to/your/talawa-admin/.env
+
+################################################################################
+# No need to edit anything below here
+################################################################################
+
+ExecStart=/bin/bash -c "source /path/to/your/.nvm/nvm.sh && nvm use default && npm run serve"
+Restart=on-failure
+RemainAfterExit=yes
+Type=simple
+RuntimeDirectory=talawa-admin
+
+[Install]
+WantedBy=multi-user.target
