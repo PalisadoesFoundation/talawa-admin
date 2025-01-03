@@ -120,7 +120,7 @@ describe('Organisation Tags Page', () => {
       const actual = await vi.importActual('react-router-dom'); // Import the actual module
       return {
         ...actual,
-        useParams: () => ({ orgId: 'orgId' }), // Mock `useParams` to return a custom object
+        useParams: () => ({ orgId: '1', tagId: '1' }), // Mock `useParams` to return a custom object
       };
     });
 
