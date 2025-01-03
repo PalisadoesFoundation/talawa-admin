@@ -149,9 +149,11 @@
     "**/*.less",
     "**/*.json",
     "**/*.svg",
-    "docs/docusaurus.config.ts",
-    "docs/sidebars.ts",
-    "docs/src/**",
-    "docs/blog/**"
+    "src/components/CheckIn/tagTemplate.ts",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "docs/**",
+    "examples/**"
   ]
 }
