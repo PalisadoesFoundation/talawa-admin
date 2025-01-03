@@ -437,7 +437,7 @@ jobs:
     name: Validate CodeRabbit Approval
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'
-    needs: [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
+    needs: [Test-Docusaurus-Deployment]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
