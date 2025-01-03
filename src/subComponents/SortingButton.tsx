@@ -16,6 +16,7 @@ interface InterfaceSortingButtonProps {
   onSortChange: (value: string) => void;
   dataTestIdPrefix: string;
   className?: string;
+  buttonLabel?: string; // Optional prop for custom button label
 }
 
 const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
@@ -25,16 +26,18 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
   onSortChange,
   dataTestIdPrefix,
   className = styles.dropdownToggle,
+  buttonLabel, // Destructure the optional buttonLabel prop
 }) => {
   return (
-    <Dropdown aria-expanded="false" title={title} data-testid="sort">
+    <Dropdown aria-expanded="false" title={title}>
       <Dropdown.Toggle
         variant={selectedOption === '' ? 'outline-success' : 'success'}
         data-testid={`${dataTestIdPrefix}`}
         className={className}
       >
         <SortIcon className={'me-1'} />
-        {selectedOption}
+        {buttonLabel || selectedOption}
+        {/* Use buttonLabel if provided, otherwise use selectedOption */}
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {sortingOptions.map((option) => (
@@ -62,6 +65,7 @@ SortingButton.propTypes = {
   selectedOption: PropTypes.string.isRequired,
   onSortChange: PropTypes.func.isRequired,
   dataTestIdPrefix: PropTypes.string.isRequired,
+  buttonLabel: PropTypes.string, // Optional prop for custom button label
 };
 
 export default SortingButton;
