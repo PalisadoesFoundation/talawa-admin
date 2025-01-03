@@ -428,11 +428,6 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
       
 #### 5. **Adjust User and Group**
    - Modify the `User` and `Group` settings to match the user account intended to run the service.
-   - Add your-linux-username in `talawa_admin.service` file here;
-      ```
-      User=<your-linux-username>
-      Group=<your-linux-username>
-      ```
 
 ---
 
