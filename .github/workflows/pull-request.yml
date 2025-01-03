@@ -97,6 +97,7 @@ jobs:
         with:
           files: |
             .env*
+            vitest.config.js
             src/App.tsx
             .github/**
             env.example
