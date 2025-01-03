@@ -112,7 +112,7 @@ jobs:
             .prettierrc
             .prettierignore
             .nojekyll
-            vitest.config.ts
+            vite.config.ts
             docker-compose.yaml
             Dockerfile
             CODEOWNERS

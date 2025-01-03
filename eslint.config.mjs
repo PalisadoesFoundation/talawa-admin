@@ -12,7 +12,8 @@ import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 
-export function createESLintCompat() {
+
+export function createESLintCompat(){
   const _filename = fileURLToPath(import.meta.url);
   const _dirname = path.dirname(_filename);
 
@@ -24,7 +25,6 @@ export function createESLintCompat() {
 }
 
 const compat = createESLintCompat();
-
 export default [
   {
     ignores: [
@@ -42,6 +42,7 @@ export default [
       '**/package-lock.json',
       '**/tsconfig.json',
       'docs/**/*',
+      // 'eslint.config.mjs',
     ],
   },
   ...compat.extends(
