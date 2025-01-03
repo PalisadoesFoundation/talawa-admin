@@ -24,6 +24,15 @@ approval_state=$(echo "$latest_reviews" | jq -r '[.[] | select(.user.login == "c
 if [[ "$approval_state" =~ ^[0-9]+$ ]] && [[ $approval_state -gt 0 ]]; then
   echo "Success: PR approved by CodeRabbit.ai."
 else
-  echo "Error: PR is not approved by CodeRabbit.ai."
+  echo ""
+  echo "ERROR:"
+  echo ""
+  echo "1) This PR is not approved by CodeRabbit.ai."
+  echo "2) In the 'Add a comment' section at the bottom"
+  echo "   of the PR web page, add a comment with the"
+  echo "   statement below to restart a review"
+  echo ""
+  echo "   @coderabbitai full review"
+  echo ""  
   exit 1
 fi

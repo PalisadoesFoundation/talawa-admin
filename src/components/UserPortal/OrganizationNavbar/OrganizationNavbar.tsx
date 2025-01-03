@@ -62,7 +62,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   });
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
-    /* istanbul ignore next */
     cookies.get('i18next') || 'en',
   );
 
@@ -71,7 +70,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   /**
    * Handles user logout by clearing local storage and redirecting to the home page.
    */
-  /* istanbul ignore next */
   const handleLogout = (): void => {
     localStorage.clear();
     window.location.replace('/');
@@ -142,6 +140,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
         console.log(`Plugin ${pluginName} is not present.`);
       }
     } else {
+      /* istanbul ignore else -- @preserve */
       if (pluginIndexToRemove != -1) {
         plugins[pluginIndexToRemove].view = true;
         setItem('talawaPlugins', JSON.stringify(plugins));
@@ -174,10 +173,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
             <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
               <Nav.Link
                 active={props.currentPage === 'home'}
-                onClick={
-                  /* istanbul ignore next */
-                  (): void => navigate(homeLink)
-                }
+                onClick={(): void => navigate(homeLink)}
               >
                 {t('home')}
               </Nav.Link>

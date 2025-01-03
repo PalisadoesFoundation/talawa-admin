@@ -4622,7 +4622,202 @@ button[data-testid='createPostBtn'] {
   }
 }
 
-/* For mobile devices  */
+/* LeftDrawer general styles */
+.leftDrawer {
+  height: 100vh; /* Ensure it spans the full height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  transition: transform 0.3s ease;
+  will-change: transform; /* NEW */
+  position: fixed; /* Ensure it's positioned properly */
+  padding-bottom: 1rem; /* Prevent last item clipping */
+  overscroll-behavior: contain;
+  /* Improve scroll performance */
+  -webkit-overflow-scrolling: touch;
+}
+
+.hideElemByDefault {
+  display: none;
+}
+
+[data-hidden='true'] {
+  visibility: hidden;
+}
+
+[data-hidden='false'] {
+  visibility: visible;
+}
+
+.inactiveDrawer {
+  transform: translateX(-100%);
+  &[data-hidden='true'] {
+    /* Specific styles for inactive drawers if needed */
+  }
+}
+
+.activeDrawer {
+  transform: translateX(0);
+  &[data-hidden='false'] {
+    /* Specific styles for active drawers if needed */
+  }
+}
+
+/* Organization Section */
+.organizationContainer {
+  padding-right: 3rem;
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  /* Add focus styles for keyboard navigation */
+  &:focus-within {
+    @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
+  }
+}
+
+.bg-danger {
+  background-color: var(--delete-button-color);
+}
+
+.text-start {
+  text-align: start;
+}
+
+.text-white {
+  color: var(--bs-white);
+}
+
+.imageContainer img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* Add alt text styles */
+  &[alt] {
+    font-size: 0.875rem;
+    color: var(--bs-emphasis-color);
+  }
+}
+
+.profileText {
+  margin-left: 1rem;
+}
+
+.primaryText {
+  font-weight: bold;
+  color: var(--bs-emphasis-color, #000);
+  @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
+}
+
+.secondaryText {
+  font-size: 0.9rem;
+  color: var(--bs-secondary-text);
+  @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
+}
+
+/* Dropdown and options list */
+.titleHeader {
+  font-size: 1.2rem;
+  color: var(--bs-secondary);
+  line-height: 1.5; /* NEW */
+  margin: var(--spacing-md, 1rem) 0; /* NEW */
+}
+
+/* Active and inactive buttons */
+.activeButton,
+.inactiveButton {
+  position: relative;
+  transition: all 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.focus-visible {
+    @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
+  }
+}
+
+.activeButton {
+  background-color: var(--grey-bg-color);
+  color: black;
+
+  &::before {
+    @extend .reusable-indicator; /* Referencing the reusable class from the general section */
+  }
+
+  &::after {
+    @extend .reusable-arrow-indicator; /* Referencing the reusable class from the general section */
+  }
+}
+
+.activeButton:hover .arrow-indicator {
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+.inactiveButton {
+  background-color: transparent;
+  color: var(--bs-emphasis-color, #000);
+
+  &:hover {
+    background-color: var(--grey-bg-color);
+  }
+}
+
+/* Icon wrapper styles */
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  margin-inline-end: 8px;
+  margin-inline-start: 0;
+
+  &[aria-label]:not([aria-label='']) {
+    position: relative;
+
+    &::after {
+      content: attr(aria-label);
+      position: absolute;
+      inset-inline-start: 100%;
+      background: var(--bs-dark);
+      color: var(--bs-white);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(var(--transform-direction, 8px));
+      transition: all 0.2s ease;
+    }
+
+    &:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+    }
+  }
+}
+
+/* CustomRecurrenceModal.tsx */
+
+.titlemodalCustomRecurrenceModal {
+  color: var(--grey-bg-color-dark);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--subtle-blue-grey);
+  width: 65%;
+}
+
+.recurrenceRuleNumberInput {
+  width: 70px;
+}
+
+.recurrenceRuleDateBox {
+  width: 70%;
+}
 
 @media (max-width: 520px) {
   .btnsContainerOrgPost {
