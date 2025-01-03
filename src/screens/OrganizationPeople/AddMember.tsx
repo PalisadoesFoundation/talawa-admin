@@ -32,7 +32,6 @@ import type {
 } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import Avatar from 'components/Avatar/Avatar';
-import { t } from 'i18next';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -111,7 +110,7 @@ function AddMember(): JSX.Element {
         orgId: currentUrl,
       });
     } catch (error: unknown) {
-      errorHandler(t, error);
+      errorHandler(tCommon, error);
     }
   };
 
