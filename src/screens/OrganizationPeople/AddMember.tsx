@@ -32,6 +32,7 @@ import type {
 } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import { t } from 'i18next';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -110,10 +111,7 @@ function AddMember(): JSX.Element {
         orgId: currentUrl,
       });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -388,7 +386,7 @@ function AddMember(): JSX.Element {
                             >
                               {userDetails.user.image ? (
                                 <img
-                                  src={userDetails.user.image ?? undefined}
+                                  src={userDetails.user.image}
                                   alt="avatar"
                                   className={styles.TableImage}
                                 />
@@ -443,7 +441,10 @@ function AddMember(): JSX.Element {
         show={createNewUserModalisOpen}
         onHide={toggleCreateNewUserModal}
       >
-        <Modal.Header className={styles.createUserModalHeader}>
+        <Modal.Header
+          className={styles.createUserModalHeader}
+          data-testid="createUser"
+        >
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>

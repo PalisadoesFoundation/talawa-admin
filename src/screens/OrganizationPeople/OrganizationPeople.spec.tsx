@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import type { Params } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -14,7 +14,6 @@ import {
   USERS_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-// import 'jest-location-mock';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import {
@@ -23,10 +22,19 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import type { TestMock } from './MockDataTypes';
 import { vi } from 'vitest';
+import { toast } from 'react-toastify';
 
 /**
  * Mock window.location for testing redirection behavior.
  */
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    error: vi.fn(),
+    info: vi.fn(),
+    success: vi.fn(),
+  },
+}));
 
 Object.defineProperty(window, 'location', {
   value: {
@@ -634,6 +642,67 @@ vi.mock('react-router-dom', async () => {
 console.error = vi.fn();
 
 describe('Organization People Page', () => {
+  const mockMemberError = new Error('Member query failed');
+  const mockAdminError = new Error('Admin query failed');
+  const mockUserError = new Error('User query failed');
+
+  const successfulMemberResponse = {
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: {
+        firstName_contains: '',
+        lastName_contains: '',
+        orgId: 'orgid',
+      },
+    },
+    result: {
+      data: {
+        organizationsMemberConnection: {
+          edges: [],
+          __typename: 'OrganizationMemberConnection',
+        },
+      },
+    },
+  };
+
+  const successfulAdminResponse = {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: {
+        id: 'orgid',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            admins: [],
+            __typename: 'Organization',
+          },
+        ],
+      },
+    },
+  };
+
+  const successfulUserResponse = {
+    request: {
+      query: USER_LIST_FOR_TABLE,
+      variables: {
+        firstName_contains: '',
+        lastName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        users: [],
+      },
+    },
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    window.location.assign('/orgpeople/orgid');
+  });
   const searchData = {
     fullNameMember: 'Aditya Memberguy',
     fullNameAdmin: 'Aditya Adminguy',
@@ -784,6 +853,264 @@ describe('Organization People Page', () => {
     expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
   });
 
+  const mockSignupResponse2 = {
+    data: {
+      signUp: {
+        user: {
+          _id: 'id',
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+      },
+    },
+  };
+
+  const mockCreateMemberResponse2 = {
+    data: {
+      addUserToOrganization: {
+        _id: 'id',
+      },
+    },
+  };
+
+  const defaultMocks2 = [
+    {
+      request: {
+        query: SIGNUP_MUTATION,
+        variables: {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          password: 'password123',
+          orgId: linkURL,
+        },
+      },
+      result: mockSignupResponse2,
+    },
+    {
+      request: {
+        query: ADD_MEMBER_MUTATION,
+        variables: {
+          userid: 'test-user-id',
+          orgid: linkURL,
+        },
+      },
+      result: mockCreateMemberResponse2,
+    },
+  ];
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('successfully creates user and adds them as member', async () => {
+    window.location.assign('/orgpeople/orgid');
+    render(
+      <MockedProvider
+        mocks={defaultMocks2}
+        addTypename={false}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitFor(() => {
+      const addmembersBtn = screen.getByTestId('addMembers');
+      expect(addmembersBtn).toBeInTheDocument();
+      userEvent.click(addmembersBtn);
+    });
+
+    await waitFor(() => {
+      const newUserBtn = screen.getByTestId('newUser');
+      expect(newUserBtn).toBeInTheDocument();
+      userEvent.click(newUserBtn);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+      console.log(
+        'addnewusermodelcount',
+        screen.getAllByTestId('addNewUserModal'),
+      );
+      expect(screen.getByTestId('createUser')).toBeInTheDocument();
+    });
+
+    // Fill in the form
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
+    await userEvent.type(screen.getByTestId('emailInput'), 'john@example.com');
+    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
+    await userEvent.type(
+      screen.getByTestId('confirmPasswordInput'),
+      'password123',
+    );
+    const createButton = screen.getByTestId('createBtn');
+    await userEvent.click(createButton);
+  });
+
+  test('handles signup error gracefully', async () => {
+    window.location.assign('/orgpeople/orgid');
+    const errorMocks = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@example.com',
+            password: 'password123',
+            orgId: linkURL,
+          },
+        },
+        error: new Error('Failed to create user'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const addmembersBtn = screen.getByTestId('addMembers');
+      expect(addmembersBtn).toBeInTheDocument();
+      userEvent.click(addmembersBtn);
+    });
+
+    await waitFor(() => {
+      const newUserBtn = screen.getByTestId('newUser');
+      expect(newUserBtn).toBeInTheDocument();
+      userEvent.click(newUserBtn);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+      console.log(
+        'addnewusermodelcount',
+        screen.getAllByTestId('addNewUserModal'),
+      );
+      expect(screen.getByTestId('createUser')).toBeInTheDocument();
+    });
+
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
+    await userEvent.type(screen.getByTestId('emailInput'), 'john@example.com');
+    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
+    await userEvent.type(
+      screen.getByTestId('confirmPasswordInput'),
+      'password123',
+    );
+
+    const createButton = screen.getByTestId('createBtn');
+    await userEvent.click(createButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to create user');
+    });
+
+    expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+    expect(screen.getByTestId('firstNameInput')).toHaveValue('John');
+    expect(screen.getByTestId('lastNameInput')).toHaveValue('Doe');
+    expect(screen.getByTestId('emailInput')).toHaveValue('john@example.com');
+  });
+
+  test('handles null createdUserId gracefully', async () => {
+    window.location.assign('/orgpeople/orgid');
+    const nullUserIdMocks = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@example.com',
+            password: 'password123',
+            orgId: linkURL,
+          },
+        },
+        result: {
+          data: {
+            signUp: {
+              user: {
+                _id: null,
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={nullUserIdMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Open modal and fill form
+    await waitFor(() => {
+      const addmembersBtn = screen.getByTestId('addMembers');
+      expect(addmembersBtn).toBeInTheDocument();
+      userEvent.click(addmembersBtn);
+    });
+
+    await waitFor(() => {
+      const newUserBtn = screen.getByTestId('newUser');
+      expect(newUserBtn).toBeInTheDocument();
+      userEvent.click(newUserBtn);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+      console.log(
+        'addnewusermodelcount',
+        screen.getAllByTestId('addNewUserModal'),
+      );
+      expect(screen.getByTestId('createUser')).toBeInTheDocument();
+    });
+
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
+    await userEvent.type(screen.getByTestId('emailInput'), 'john@example.com');
+    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
+    await userEvent.type(
+      screen.getByTestId('confirmPasswordInput'),
+      'password123',
+    );
+
+    // Submit form
+    const createButton = screen.getByTestId('createBtn');
+    await userEvent.click(createButton);
+
+    // Verify error handling
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
   test('Testing MEMBERS list with filters', async () => {
     window.location.assign('/orgpeople/orgid');
     render(
@@ -858,15 +1185,8 @@ describe('Organization People Page', () => {
     // Click the "Admin" dropdown item
     const adminDropdownItem = screen.getByTestId('admins');
     userEvent.click(adminDropdownItem);
-
-    // Wait for any asynchronous operations to complete
     await wait();
-    // remove this comment when table fecthing functionality is fixed
-    // Assert that the "Aditya Adminguy" text is present
-    // const findtext = screen.getByText('Aditya Adminguy');
-    // expect(findtext).toBeInTheDocument();
 
-    // Type in the full name input field
     userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
       searchData.fullNameAdmin,
@@ -1413,6 +1733,151 @@ describe('Organization People Page', () => {
     expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
     expect(screen.queryByText(/Nothing Found !!/i)).toBeInTheDocument();
   });
+  test('should show toast error when member query fails', async () => {
+    const memberErrorMock = {
+      ...successfulMemberResponse,
+      error: mockMemberError,
+    };
+
+    render(
+      <MockedProvider
+        mocks={[
+          memberErrorMock,
+          successfulAdminResponse,
+          successfulUserResponse,
+        ]}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(toast.error).toHaveBeenCalledWith('Member query failed');
+  });
+
+  test('should show toast error when admin query fails', async () => {
+    const setState = vi.fn();
+    const useStateMock = vi.spyOn(React, 'useState');
+    useStateMock.mockReturnValueOnce([1, setState]);
+
+    const mocks = [
+      {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: { id: 'orgid' },
+        },
+        error: mockAdminError,
+      },
+      {
+        request: {
+          query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+          variables: {
+            firstName_contains: '',
+            lastName_contains: '',
+            orgId: 'orgid',
+          },
+        },
+        result: {
+          data: {
+            organizationsMemberConnection: {
+              edges: [],
+              __typename: 'OrganizationMemberConnection',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const dropdownButton = screen.getByTestId('role');
+    await userEvent.click(dropdownButton);
+    const adminsOption = screen.getByTestId('admins');
+    await userEvent.click(adminsOption);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    expect(toast.error).toHaveBeenCalled();
+  });
+
+  test('should show toast error when user query fails', async () => {
+    const setState = vi.fn();
+    const useStateMock = vi.spyOn(React, 'useState');
+    useStateMock.mockReturnValueOnce([2, setState]);
+
+    const mocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_TABLE,
+          variables: {
+            firstName_contains: '',
+            lastName_contains: '',
+          },
+        },
+        error: mockUserError,
+      },
+      {
+        request: {
+          query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+          variables: {
+            firstName_contains: '',
+            lastName_contains: '',
+            orgId: 'orgid',
+          },
+        },
+        result: {
+          data: {
+            organizationsMemberConnection: {
+              edges: [],
+              __typename: 'OrganizationMemberConnection',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const dropdownButton = screen.getByTestId('role');
+    await userEvent.click(dropdownButton);
+    const usersOption = screen.getByTestId('users');
+    await userEvent.click(usersOption);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    expect(toast.error).toHaveBeenCalled();
+  });
 });
 
 test('Open and check if profile image is displayed for existing user', async () => {
@@ -1464,4 +1929,278 @@ test('Open and check if profile image is displayed for existing user', async () 
   const avatarImages = await screen.findAllByAltText('Dummy Avatar');
   expect(avatarImages.length).toBeGreaterThan(0);
   await wait();
+});
+
+test('opening add user modal', async () => {
+  window.location.assign('/orgpeople/orgid');
+  render(
+    <MockedProvider
+      addTypename={true}
+      link={link}
+      defaultOptions={{
+        watchQuery: { fetchPolicy: 'no-cache' },
+        query: { fetchPolicy: 'no-cache' },
+      }}
+    >
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+  await wait();
+
+  const addmemberBtn = screen.getByTestId('addMembers');
+  userEvent.click(addmemberBtn);
+
+  const existUserBtn = screen.getByTestId('existingUser');
+  userEvent.click(existUserBtn);
+
+  expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+  expect(screen.getByTestId('pluginNotificationHeader')).toBeInTheDocument();
+
+  const closeButton = screen.getByLabelText('Close');
+  userEvent.click(closeButton);
+  await wait();
+  expect(screen.queryByTestId('addExistingUserModal')).not.toBeInTheDocument();
+});
+
+test('modal state management - open, close, and toggle', async () => {
+  window.location.assign('/orgpeople/orgid');
+  render(
+    <MockedProvider
+      addTypename={true}
+      link={link}
+      defaultOptions={{
+        watchQuery: { fetchPolicy: 'no-cache' },
+        query: { fetchPolicy: 'no-cache' },
+      }}
+    >
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await wait();
+
+  expect(screen.queryByTestId('addNewUserModal')).not.toBeInTheDocument();
+
+  await waitFor(() => {
+    const addmembersBtn = screen.getByTestId('addMembers');
+    userEvent.click(addmembersBtn);
+  });
+
+  await waitFor(() => {
+    const newUserBtn = screen.getByTestId('newUser');
+    expect(screen.getByTestId('newUser')).toBeInTheDocument();
+    userEvent.click(newUserBtn);
+  });
+
+  expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+  const modalHeader = screen.getByTestId('createUser');
+  userEvent.click(modalHeader);
+
+  expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+  const closeBtn = screen.getByTestId('closeBtn');
+  userEvent.click(closeBtn);
+
+  await waitFor(() => {
+    expect(screen.queryByTestId('addNewUserModal')).not.toBeInTheDocument();
+  });
+
+  await waitFor(() => {
+    const newUserBtn = screen.getByTestId('newUser');
+    userEvent.click(newUserBtn);
+  });
+
+  expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+  const modal = screen.getByTestId('addNewUserModal');
+  fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
+
+  await waitFor(() => {
+    const newUserBtn = screen.getByTestId('newUser');
+    userEvent.click(newUserBtn);
+  });
+
+  const firstNameInput = screen.getByTestId('firstNameInput');
+  userEvent.type(firstNameInput, 'John');
+
+  fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
+});
+
+test('testing out toast errors', async () => {
+  window.location.assign('/orgpeople/orgid');
+  render(
+    <MockedProvider
+      addTypename={true}
+      link={link}
+      defaultOptions={{
+        watchQuery: { fetchPolicy: 'no-cache' },
+        query: { fetchPolicy: 'no-cache' },
+      }}
+    >
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    const addmembersBtn = screen.getByTestId('addMembers');
+    userEvent.click(addmembersBtn);
+  });
+
+  await waitFor(() => {
+    const newUserBtn = screen.getByTestId('newUser');
+    expect(screen.getByTestId('newUser')).toBeInTheDocument();
+    userEvent.click(newUserBtn);
+  });
+
+  expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+  const modalHeader = screen.getByTestId('createUser');
+  userEvent.click(modalHeader);
+
+  const createBtn = screen.getByTestId('createBtn');
+  expect(createBtn).toBeInTheDocument();
+  userEvent.click(createBtn);
+
+  await waitFor(() => {
+    expect(toast.error).toHaveBeenCalled();
+  });
+});
+
+test('handles GraphQL error when adding member', async () => {
+  const ERRORMOCK = [
+    {
+      request: {
+        query: ADD_MEMBER_MUTATION,
+        variables: {
+          firstName: 'Disha',
+          lastName: 'Talreja',
+          email: 'test@gmail.com',
+          password: 'dishatalreja',
+          orgId: 'orgid',
+        },
+      },
+      error: new Error('Please enter valid details.'),
+    },
+  ];
+
+  const link5 = new StaticMockLink(ERRORMOCK, true);
+
+  render(
+    <MockedProvider link={link5} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await wait();
+
+  await waitFor(() => {
+    const addmembersBtn = screen.getByTestId('addMembers');
+    userEvent.click(addmembersBtn);
+  });
+
+  await waitFor(() => {
+    const newUserBtn = screen.getByTestId('newUser');
+    expect(screen.getByTestId('newUser')).toBeInTheDocument();
+    userEvent.click(newUserBtn);
+  });
+
+  expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+  const modalHeader = screen.getByTestId('createUser');
+  userEvent.click(modalHeader);
+
+  const firstNameInput = screen.getByTestId('firstNameInput');
+  const lastNameInput = screen.getByTestId('lastNameInput');
+  const emailInput = screen.getByTestId('emailInput');
+  const passwordInput = screen.getByTestId('passwordInput');
+
+  userEvent.type(firstNameInput, 'Abhishek');
+  userEvent.type(lastNameInput, 'Raj');
+  userEvent.type(emailInput, 'test@gmail.com');
+  userEvent.type(passwordInput, 'abhishek');
+
+  const createBtn = screen.getByTestId('createBtn');
+  expect(createBtn).toBeInTheDocument();
+  userEvent.click(createBtn);
+
+  await waitFor(() => {
+    expect(toast.error).toHaveBeenCalled();
+  });
+  vi.clearAllMocks();
+});
+
+test('createMember handles error and shows toast notification', async () => {
+  // Setup
+  window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af2');
+
+  const mockMemberRefetch = vi.fn();
+
+  const mocks = [
+    {
+      request: {
+        query: ADD_MEMBER_MUTATION,
+        variables: {
+          userid: 'testUserId',
+          orgid: 'testOrgId',
+        },
+      },
+      error: new Error('Failed to add member'),
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    const addmembersBtn = screen.getByTestId('addMembers');
+    userEvent.click(addmembersBtn);
+  });
+
+  await waitFor(() => {
+    const newUserBtn = screen.getByTestId('newUser');
+    expect(screen.getByTestId('newUser')).toBeInTheDocument();
+    userEvent.click(newUserBtn);
+  });
+
+  expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+  const addBtn = screen.getAllByTestId('createBtn');
+  await userEvent.click(addBtn[0]);
+
+  expect(toast.error).toHaveBeenCalled();
+  expect(mockMemberRefetch).not.toHaveBeenCalled();
 });
