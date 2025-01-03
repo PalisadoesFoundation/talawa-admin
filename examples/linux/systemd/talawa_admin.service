@@ -24,8 +24,8 @@ Description=Talawa-Admin Service
 After=network.target
 
 [Service]
-User=talawa
-Group=talawa
+User=<your-linux-username>
+Group=<your-linux-username>
 Environment=CODEROOT=path/to/your/talawa-admin
 
 # Absolute path is needed for working directory

@@ -23,8 +23,7 @@ This document provides instructions on how to set up and start a running instanc
       - [2. **Verify the CODEROOT Path**](#2-verify-the-coderoot-path)
       - [3. **Set the Correct Working Directory**](#3-set-the-correct-working-directory)
       - [4. **Ensure the `.env` File Exists**](#4-ensure-the-env-file-exists)
-      - [5. **Critical Configuration Validation Steps**](#5-critical-configuration-validation-steps)
-      - [6. **Adjust User and Group**](#6-adjust-user-and-group)
+      - [5. **Adjust User and Group**](#5-adjust-user-and-group)
     - [Steps to Enable and Manage the Service](#steps-to-enable-and-manage-the-service)
     - [Troubleshooting](#troubleshooting)
 
@@ -419,37 +418,14 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
 
 #### 4. **Ensure the `.env` File Exists**
    - Verify that the path in the `EnvironmentFile` line points to a valid `.env` file located in the root directory of the Talawa-Admin repository.
-
-#### 5. **Critical Configuration Validation Steps**
-   - The service configuration section should include steps to validate the configuration before starting the service.
-      1. Verify file permissions:
-         ```bash
-         sudo chmod 644 /etc/systemd/system/talawa_admin.service
-         sudo chown root:root /etc/systemd/system/talawa_admin.service
-         ```
-
-      2. Validate service file syntax:
-         ```bash
-         sudo systemd-analyze verify talawa_admin.service
-         ```
       
-      3. Test environment file loading:
-         ```bash
-         sudo systemctl show-environment
-         ```
-
-#### 6. **Adjust User and Group**
+#### 5. **Adjust User and Group**
    - Modify the `User` and `Group` settings to match the user account intended to run the service.
-      1. Create a dedicated service user:
-         ```bash
-         sudo useradd -r -s /bin/false talawa
-         ```
-
-      2. Set proper directory permissions:
-         ```bash
-         sudo chown -R talawa:talawa /path/to/talawa-admin
-         ```
-
+   - Add your-linux-username in `talawa_admin.service` file here;
+      ```
+      User=<your-linux-username>
+      Group=<your-linux-username>
+      ```
 ---
 
 ### Steps to Enable and Manage the Service
