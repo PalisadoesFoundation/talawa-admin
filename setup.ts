@@ -11,38 +11,50 @@ import askAndUpdatePort from './src/setup/askAndUpdatePort/askAndUpdatePort';
 
 // Ask and update the Talawa API URL
 const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
-  const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt({
-    type: 'confirm',
-    name: 'shouldSetTalawaApiUrlResponse',
-    message: 'Would you like to set up Talawa API endpoint?',
-    default: true,
-  });
+  try {
+    const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldSetTalawaApiUrlResponse',
+      message: 'Would you like to set up Talawa API endpoint?',
+      default: true,
+    });
 
-  if (shouldSetTalawaApiUrlResponse) {
-    let endpoint = '';
-    let isConnected = false;
+    if (shouldSetTalawaApiUrlResponse) {
+      let endpoint = '';
+      let isConnected = false;
 
-    while (!isConnected) {
-      endpoint = await askForTalawaApiUrl();
-      const url = new URL(endpoint);
-      if (!['http:', 'https:'].includes(url.protocol)) {
-        throw new Error('Invalid URL protocol. Must be http or https');
+      while (!isConnected) {
+        try {
+          endpoint = await askForTalawaApiUrl();
+          const url = new URL(endpoint);
+          if (!['http:', 'https:'].includes(url.protocol)) {
+            throw new Error('Invalid URL protocol. Must be http or https');
+          }
+          isConnected = await checkConnection(url.origin);
+        } catch (error) {
+          console.error('Error checking connection:', error);
+          isConnected = false;
+        }
       }
-      isConnected = await checkConnection(url.origin);
-    }
+      updateEnvFile('REACT_APP_TALAWA_URL', endpoint);
+      const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
+      try {
+        const wsUrl = new URL(websocketUrl);
+        if (!['ws:', 'wss:'].includes(wsUrl.protocol)) {
+          throw new Error('Invalid WebSocket protocol');
+        }
+        updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', websocketUrl);
+      } catch (error) {
+        throw new Error(`Invalid WebSocket URL generated: ${error}`);
+      }
 
-    updateEnvFile('REACT_APP_TALAWA_URL', endpoint);
-    const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
-    try {
-      new URL(websocketUrl);
-    } catch {
-      throw new Error('Invalid WebSocket URL generated');
+      if (endpoint.includes('localhost')) {
+        const dockerUrl = endpoint.replace('localhost', 'host.docker.internal');
+        updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
+      }
     }
-    updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', websocketUrl);
-    if (endpoint.includes('localhost')) {
-      const dockerUrl = endpoint.replace('localhost', 'host.docker.internal');
-      updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
-    }
+  } catch (error) {
+    console.error('Error setting up Talawa API URL:', error);
   }
 };
 
