@@ -898,11 +898,6 @@ describe('Organization People Page', () => {
       result: mockCreateMemberResponse2,
     },
   ];
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   test('successfully creates user and adds them as member', async () => {
     window.location.assign('/orgpeople/orgid');
     render(
