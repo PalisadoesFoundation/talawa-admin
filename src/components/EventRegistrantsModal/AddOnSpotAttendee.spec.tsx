@@ -98,20 +98,86 @@ describe('AddOnSpotAttendee Component', () => {
     expect(screen.getByLabelText('Gender')).toBeInTheDocument();
   });
 
-  it('handles form input changes correctly', async () => {
-    renderAddOnSpotAttendee();
+  it('handles case where signUp response is undefined', async () => {
+    const mockWithoutSignUp = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@example.com',
+            phoneNo: '1234567890',
+            gender: 'Male',
+            password: '123456',
+            orgId: '123',
+          },
+        },
+        result: {
+          data: {}, // No signUp property
+        },
+      },
+    ];
 
-    const firstNameInput = screen.getByLabelText('First Name');
-    const lastNameInput = screen.getByLabelText('Last Name');
-    const emailInput = screen.getByLabelText('Email');
+    render(
+      <MockedProvider mocks={mockWithoutSignUp} addTypename={false}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <BrowserRouter>
+              <AddOnSpotAttendee {...mockProps} />
+            </BrowserRouter>
+          </I18nextProvider>
+        </Provider>
+      </MockedProvider>,
+    );
 
-    userEvent.type(firstNameInput, 'John');
-    userEvent.type(lastNameInput, 'Doe');
-    userEvent.type(emailInput, 'john@example.com');
+    userEvent.type(screen.getByLabelText('First Name'), 'John');
+    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    const genderSelect = screen.getByLabelText('Gender');
+    fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
-    expect(firstNameInput).toHaveValue('John');
-    expect(lastNameInput).toHaveValue('Doe');
-    expect(emailInput).toHaveValue('john@example.com');
+    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+
+    await waitFor(() => {
+      expect(toast.success).not.toHaveBeenCalled(); // Ensure success toast is not shown
+      expect(toast.error).not.toHaveBeenCalled(); // Ensure no unexpected error toast
+      expect(mockProps.reloadMembers).not.toHaveBeenCalled(); // Reload should not be triggered
+      expect(mockProps.handleClose).not.toHaveBeenCalled(); // Modal should not close
+    });
+  });
+
+  it('handles error during form submission', async () => {
+    render(
+      <MockedProvider mocks={ERROR_MOCKS} addTypename={false}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <BrowserRouter>
+              <AddOnSpotAttendee {...mockProps} />
+            </BrowserRouter>
+          </I18nextProvider>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Fill the form
+    userEvent.type(screen.getByLabelText('First Name'), 'John');
+    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    const genderSelect = screen.getByLabelText('Gender');
+    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+
+    // Submit the form
+    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+
+    // Wait for the error to be handled
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to add attendee'),
+      );
+    });
   });
 
   it('submits form successfully and calls necessary callbacks', async () => {
