@@ -453,6 +453,8 @@ jobs:
   Merge-Conflict-Check:
     name: Check for Merge Conflicts
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    needs: [Code-Quality-Checks]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
