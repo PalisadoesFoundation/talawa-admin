@@ -460,16 +460,36 @@ jobs:
       - name: Check Mergeable Status via API
         run: |  
           PR_NUMBER=${{ github.event.pull_request.number }}
-          response=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER)
-          mergeable=$(echo "$response" | jq -r '.mergeable')
-          if [ "$mergeable" == "true" ]; then
-            echo "No Conflicts.";
-          elif [ "$mergeable" == "false" ]; then
-            echo "Merge conflicts detected.";
-            exit 1;
-          else
-            echo "Mergeable status unknown. Exiting.";
-            exit 1;
-          fi
-        shell: bash
+          max_retries=3
+          retry_delay=5
+          
+          for ((i=1; i<=max_retries; i++)); do
+            echo "Attempt $i of $max_retries"
+            
+            response=$(curl -s -f -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER")
+            
+            if [ $? -ne 0 ]; then
+              echo "Failed to call GitHub API"
+              if [ $i -eq $max_retries ]; then
+                exit 1
+              fi
+              sleep $retry_delay
+              continue
+            fi
+            
+            mergeable=$(echo "$response" | jq -r '.mergeable')
+            if [ "$mergeable" == "true" ]; then
+              echo "No conflicts detected."
+              exit 0
+            elif [ "$mergeable" == "false" ]; then
+              echo "Merge conflicts detected."
+              exit 1
+            else
+              echo "Mergeable status unknown."
+              if [ $i -eq $max_retries ]; then
+                exit 1
+              fi
+              sleep $retry_delay
+            fi
+          done
