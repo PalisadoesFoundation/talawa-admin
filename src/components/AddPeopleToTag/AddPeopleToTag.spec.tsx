@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi, expect, describe, it } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -10,7 +11,7 @@ import {
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import 'jest-location-mock';
+
 import { I18nextProvider } from 'react-i18next';
 
 import { store } from 'state/store';
@@ -34,10 +35,10 @@ async function wait(): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -114,19 +115,25 @@ const renderAddPeopleToTagModal = (
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
-    cache.reset();
+    // Mocking `react-router-dom` to return the actual module and override `useParams`
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom'); // Import the actual module
+      return {
+        ...actual,
+        useParams: () => ({ orgId: '1', tagId: '1' }), // Mock `useParams` to return a custom object
+      };
+    });
+
+    // Reset any necessary cache or mocks
+    vi.clearAllMocks(); // Clear all mocks to ensure a clean state before each test
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
-  test('Component loads correctly', async () => {
+  it('Component loads correctly', async () => {
     const { getByText } = renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -136,7 +143,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Renders error component when when query is unsuccessful', async () => {
+  it('Renders error component when when query is unsuccessful', async () => {
     const { queryByText } = renderAddPeopleToTagModal(props, link2);
 
     await wait();
@@ -146,7 +153,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Selects and deselects members to assign to', async () => {
+  it('Selects and deselects members to assign to', async () => {
     renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -174,7 +181,7 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
   });
 
-  test('searchs for tags where the firstName matches the provided firstName search input', async () => {
+  it('searchs for tags where the firstName matches the provided firstName search input', async () => {
     renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -207,7 +214,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('searchs for tags where the lastName matches the provided lastName search input', async () => {
+  it('searchs for tags where the lastName matches the provided lastName search input', async () => {
     renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -240,7 +247,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Renders more members with infinite scroll', async () => {
+  it('Renders more members with infinite scroll', async () => {
     const { getByText } = renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -269,7 +276,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Toasts error when no one is selected while assigning', async () => {
+  it('Toasts error when no one is selected while assigning', async () => {
     renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -284,7 +291,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Assigns tag to multiple people', async () => {
+  it('Assigns tag to multiple people', async () => {
     renderAddPeopleToTagModal(props, link);
 
     await wait();
