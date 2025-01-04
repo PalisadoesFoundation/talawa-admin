@@ -10,7 +10,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
-import {vi , it , describe , beforeEach , afterEach , expect } from 'vitest';
+import { vi, it, describe, beforeEach, afterEach, expect } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
