@@ -4,7 +4,7 @@ import type { ChangeEvent } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
+import convertToBase64 from '../../utils/convertToBase64';
 
 import styles from './AgendaItemsContainer.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';

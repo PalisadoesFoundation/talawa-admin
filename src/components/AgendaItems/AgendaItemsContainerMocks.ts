@@ -1,7 +1,7 @@
 import {
   UPDATE_AGENDA_ITEM_MUTATION,
   DELETE_AGENDA_ITEM_MUTATION,
-} from 'GraphQl/Mutations/AgendaItemMutations';
+} from '../../GraphQl/Mutations/AgendaItemMutations';
 
 export const MOCKS = [
   {

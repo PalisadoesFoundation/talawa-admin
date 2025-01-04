@@ -7,19 +7,19 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
+import '@testing-library/jest-dom';
+import { vi, test, expect, describe } from 'vitest';
 import { MockedProvider } from '@apollo/client/testing';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import i18nForTest from 'utils/i18nForTest';
+import i18nForTest from '../../utils/i18nForTest';
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import { store } from '../../state/store';
+import { StaticMockLink } from '../../utils/StaticMockLink';
 
 import { props, props2 } from './AgendaItemsContainerProps';
 import { MOCKS, MOCKS_ERROR } from './AgendaItemsContainerMocks';
@@ -28,16 +28,16 @@ import AgendaItemsContainer from './AgendaItemsContainer';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-//temporarily fixes react-beautiful-dnd droppable method's depreciation error
-//needs to be fixed in React 19
-jest.spyOn(console, 'error').mockImplementation((message) => {
+// Temporarily fixes react-beautiful-dnd droppable method's depreciation error
+// Needs to be fixed in React 19
+vi.spyOn(console, 'error').mockImplementation((message) => {
   if (message.includes('Support for defaultProps will be removed')) {
     return;
   }
@@ -423,6 +423,5 @@ describe('Testing Agenda Items components', () => {
       expect(toast.error).toHaveBeenCalled();
     });
   });
-
   // write test case for drag and drop line:- 172-202
 });

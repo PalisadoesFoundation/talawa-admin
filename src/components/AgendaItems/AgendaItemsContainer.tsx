@@ -10,16 +10,16 @@ import type { DropResult } from 'react-beautiful-dnd';
 import {
   DELETE_AGENDA_ITEM_MUTATION,
   UPDATE_AGENDA_ITEM_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+} from '../../GraphQl/Mutations/mutations';
 import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaItemCategoryInfo,
 } from 'utils/interfaces';
 import styles from './AgendaItemsContainer.module.css';
 
-import AgendaItemsPreviewModal from 'components/AgendaItems/AgendaItemsPreviewModal';
-import AgendaItemsDeleteModal from 'components/AgendaItems/AgendaItemsDeleteModal';
-import AgendaItemsUpdateModal from 'components/AgendaItems/AgendaItemsUpdateModal';
+import AgendaItemsPreviewModal from '../../components/AgendaItems/AgendaItemsPreviewModal';
+import AgendaItemsDeleteModal from '../../components/AgendaItems/AgendaItemsDeleteModal';
+import AgendaItemsUpdateModal from '../../components/AgendaItems/AgendaItemsUpdateModal';
 
 /**
  * Component for displaying and managing agenda items.
