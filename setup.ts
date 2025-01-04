@@ -1,108 +1,43 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
 import inquirer from 'inquirer';
-import { checkConnection } from './src/setup/checkConnection/checkConnection';
-import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaApiUrl';
 import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import askAndSetDockerOption from './src/setup/askAndSetDockerOption/askAndSetDockerOption';
 import updateEnvFile from './src/setup/updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './src/setup/askAndUpdatePort/askAndUpdatePort';
-
-// Ask and update the Talawa API URL
-const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
-  try {
-    const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt({
-      type: 'confirm',
-      name: 'shouldSetTalawaApiUrlResponse',
-      message: 'Would you like to set up Talawa API endpoint?',
-      default: true,
-    });
-
-    if (shouldSetTalawaApiUrlResponse) {
-      let endpoint = '';
-      let isConnected = false;
-      let retryCount = 0;
-      const MAX_RETRIES = 3;
-      while (!isConnected && retryCount < MAX_RETRIES) {
-        try {
-          endpoint = await askForTalawaApiUrl();
-          const url = new URL(endpoint);
-          if (!['http:', 'https:'].includes(url.protocol)) {
-            throw new Error('Invalid URL protocol. Must be http or https');
-          }
-          isConnected = await checkConnection(url.origin);
-          if (!isConnected) {
-            console.log(
-              `Connection attempt ${retryCount + 1}/${MAX_RETRIES} failed`,
-            );
-          }
-        } catch (error) {
-          console.error('Error checking connection:', error);
-          isConnected = false;
-        }
-        retryCount++;
-      }
-      if (!isConnected) {
-        throw new Error(
-          'Failed to establish connection after maximum retry attempts',
-        );
-      }
-      updateEnvFile('REACT_APP_TALAWA_URL', endpoint);
-      const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
-      try {
-        const wsUrl = new URL(websocketUrl);
-        if (!['ws:', 'wss:'].includes(wsUrl.protocol)) {
-          throw new Error('Invalid WebSocket protocol');
-        }
-        updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', websocketUrl);
-      } catch {
-        throw new Error('Invalid WebSocket URL generated: ');
-      }
-
-      if (endpoint.includes('localhost')) {
-        const dockerUrl = endpoint.replace('localhost', 'host.docker.internal');
-        try {
-          const url = new URL(dockerUrl);
-          if (!['http:', 'https:'].includes(url.protocol)) {
-            throw new Error('Invalid Docker URL protocol');
-          }
-        } catch {
-          throw new Error('Invalid Docker URL generated');
-        }
-        updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
-      }
-    }
-  } catch (error) {
-    console.error('Error setting up Talawa API URL:', error);
-  }
-};
+import { askAndUpdateTalawaApiUrl } from './src/setup/askForDocker/askForDocker';
 
 // Ask and set up reCAPTCHA
 const askAndSetRecaptcha = async (): Promise<void> => {
-  const { shouldUseRecaptcha } = await inquirer.prompt({
-    type: 'confirm',
-    name: 'shouldUseRecaptcha',
-    message: 'Would you like to set up reCAPTCHA?',
-    default: true,
-  });
+  try {
+    const { shouldUseRecaptcha } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldUseRecaptcha',
+      message: 'Would you like to set up reCAPTCHA?',
+      default: true,
+    });
 
-  if (shouldUseRecaptcha) {
-    const { recaptchaSiteKeyInput } = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'recaptchaSiteKeyInput',
-        message: 'Enter your reCAPTCHA site key:',
-        validate: (input: string): boolean | string => {
-          return (
-            validateRecaptcha(input) ||
-            'Invalid reCAPTCHA site key. Please try again.'
-          );
+    if (shouldUseRecaptcha) {
+      const { recaptchaSiteKeyInput } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'recaptchaSiteKeyInput',
+          message: 'Enter your reCAPTCHA site key:',
+          validate: (input: string): boolean | string => {
+            return (
+              validateRecaptcha(input) ||
+              'Invalid reCAPTCHA site key. Please try again.'
+            );
+          },
         },
-      },
-    ]);
+      ]);
 
-    updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
+      updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
+    }
+  } catch (error) {
+    console.error('Error setting up reCAPTCHA:', error);
+    throw new Error('Failed to set up reCAPTCHA');
   }
 };
 
