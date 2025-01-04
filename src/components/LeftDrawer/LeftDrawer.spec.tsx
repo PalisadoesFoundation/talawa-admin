@@ -1,10 +1,8 @@
 import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceLeftDrawerProps } from './LeftDrawer';
 import LeftDrawer from './LeftDrawer';
@@ -12,12 +10,13 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
+import {vi , it , describe , beforeEach , afterEach , expect } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
 const props = {
   hideDrawer: true,
-  setHideDrawer: jest.fn(),
+  setHideDrawer: vi.fn(),
 };
 
 const resizeWindow = (width: number): void => {
@@ -40,11 +39,11 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -58,12 +57,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   localStorage.clear();
 });
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
@@ -113,7 +112,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     });
   });
 
-  test('Testing Drawer when hideDrawer is null', async () => {
+  it('Testing Drawer when hideDrawer is null', async () => {
     const tempProps: InterfaceLeftDrawerProps = {
       ...props,
       hideDrawer: false,
@@ -132,7 +131,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     });
   });
 
-  test('Testing Drawer when hideDrawer is false', async () => {
+  it('Testing Drawer when hideDrawer is false', async () => {
     const tempProps: InterfaceLeftDrawerProps = {
       ...props,
       hideDrawer: false,
@@ -151,7 +150,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     });
   });
 
-  test('Testing Drawer when the screen size is less than or equal to 820px', async () => {
+  it('Testing Drawer when the screen size is less than or equal to 820px', async () => {
     const tempProps: InterfaceLeftDrawerProps = {
       ...props,
       hideDrawer: false,
@@ -184,7 +183,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 });
 
 describe('Testing Left Drawer component for ADMIN', () => {
-  test('Components should be rendered properly', async () => {
+  it('Components should be rendered properly', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
