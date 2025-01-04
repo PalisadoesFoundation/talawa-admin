@@ -456,10 +456,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          # Use the appropriate ref based on the event type
-          ref: ${{ github.event.pull_request.head.ref }}
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check Mergeable Status via API
         run: |  
