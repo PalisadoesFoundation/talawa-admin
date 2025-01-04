@@ -15,6 +15,14 @@ on:
   pull_request:
     branches:
       - '**'
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+  pull_request_target:
+    types:
+      - synchronize
 
 env:
   CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
