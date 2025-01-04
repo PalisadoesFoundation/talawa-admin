@@ -1,7 +1,6 @@
 import inquirer from 'inquirer';
-import { askForDocker, askAndUpdateTalawaApiUrl } from './askForDocker';
+import { askForDocker } from './askForDocker';
 import { describe, test, expect, vi } from 'vitest';
-import updateEnvFile from '../updateEnvFile/updateEnvFile';
 
 vi.mock('inquirer');
 
@@ -66,31 +65,5 @@ describe('askForDocker', () => {
 
     const result = await askForDocker();
     expect(result).toBe('1024');
-  });
-});
-
-const mockCheckConnection = vi.fn();
-
-describe('askAndUpdateTalawaApiUrl', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-  test('should set Talawa API URL and WebSocket URL in env file', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      dockerAppPort: '4321',
-    });
-    mockCheckConnection.mockResolvedValueOnce(true);
-    await askAndUpdateTalawaApiUrl();
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_TALAWA_URL',
-      'http://localhost:4321',
-    );
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      'ws://localhost:4321',
-    );
   });
 });
