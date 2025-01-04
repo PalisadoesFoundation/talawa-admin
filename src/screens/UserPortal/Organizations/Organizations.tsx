@@ -372,7 +372,7 @@ export default function organizations(): JSX.Element {
                 </div>
               ) : (
                 <>
-                  {' '}
+                  {''}
                   {organizations && organizations.length > 0 ? (
                     (rowsPerPage > 0
                       ? organizations.slice(
