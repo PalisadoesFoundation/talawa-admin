@@ -544,35 +544,29 @@ function AddMember(): JSX.Element {
               />
             </InputGroup>
           </div>
+        </Modal.Body>
+        <Modal.Footer>
           <div className={styles.createUserActionBtns}>
             <Button
-              className={`${styles.borderNone}`}
+              className={`${styles.removeButton}`}
               variant="danger"
               onClick={closeCreateNewUserModal}
               data-testid="closeBtn"
-              style={{
-                backgroundColor: 'var(--delete-button-bg)',
-                color: 'var(--delete-button-color)',
-              }}
             >
               <Close className={styles.closeButton} />
               {translateOrgPeople('cancel')}
             </Button>
             <Button
-              className={`${styles.colorPrimary} ${styles.borderNone}`}
+              className={`${styles.addButton}`}
               variant="success"
               onClick={handleCreateUser}
               data-testid="createBtn"
-              style={{
-                backgroundColor: 'var(--search-button-bg)',
-                border: '1px solid var(--dropdown-border-color)',
-              }}
             >
               <Check className={styles.searchIcon} />
               {translateOrgPeople('create')}
             </Button>
           </div>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
     </>
   );

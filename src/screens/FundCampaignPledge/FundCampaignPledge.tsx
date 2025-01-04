@@ -431,7 +431,6 @@ const fundCampaignPledge = (): JSX.Element => {
                 checked={progressIndicator === 'pledged'}
                 onChange={() => {
                   setProgressIndicator('pledged');
-                  console.log(progressIndicator);
                 }}
               />
               <label
@@ -466,7 +465,6 @@ const fundCampaignPledge = (): JSX.Element => {
               style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
               className={`${styles.progressBar}`}
-              // variant='info'
             />
             <div className={styles.endpoints}>
               <div className={styles.start}>$0</div>
