@@ -2,6 +2,15 @@ import React, { type FC } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * A modal component that confirms a post delete operation.
+ *
+ * @param show - Whether the modal is visible.
+ * @param onHide - Callback invoked when the modal is dismissed.
+ * @param onDelete - Callback invoked to actually delete the post.
+ * @returns A rendered React Bootstrap Modal for post deletion.
+ */
+
 interface InterfaceDeletePostModalProps {
   show: boolean;
   onHide: () => void;
