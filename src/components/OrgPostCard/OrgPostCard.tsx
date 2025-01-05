@@ -15,6 +15,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfacePostForm } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
+import DeletePostModal from './DeletePostModal';
 interface InterfaceOrgPostCardProps {
   postID: string;
   id: string;
@@ -57,11 +58,7 @@ export default function OrgPostCard(
   const [toggle] = useMutation(TOGGLE_PINNED_POST);
   const togglePostPin = async (id: string, pinned: boolean): Promise<void> => {
     try {
-      const { data } = await toggle({
-        variables: {
-          id,
-        },
-      });
+      const { data } = await toggle({ variables: { id } });
       if (data) {
         setModalVisible(false);
         setMenuVisible(false);
@@ -72,7 +69,6 @@ export default function OrgPostCard(
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
@@ -106,10 +102,7 @@ export default function OrgPostCard(
     setMenuVisible(true);
   };
   const clearImageInput = (): void => {
-    setPostFormState({
-      ...postformState,
-      postphoto: '',
-    });
+    setPostFormState({ ...postformState, postphoto: '' });
     setPostPhotoUpdated(true);
     const fileInput = document.getElementById(
       'postImageUrl',
@@ -172,9 +165,7 @@ export default function OrgPostCard(
   const deletePost = async (): Promise<void> => {
     try {
       const { data } = await deletePostMutation({
-        variables: {
-          id,
-        },
+        variables: { id },
       });
       if (data) {
         toast.success(t('postDeleted') as string);
@@ -441,28 +432,11 @@ export default function OrgPostCard(
           </div>
         )}
       </div>
-      <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
-        <Modal.Header>
-          <h5>{t('deletePost')}</h5>
-          <Button variant="danger" onClick={toggleShowDeleteModal}>
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>{t('deletePostMsg')}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={toggleShowDeleteModal}>
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className="btn btn-success"
-            onClick={deletePost}
-            data-testid="deletePostBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeletePostModal
+        show={showDeleteModal}
+        onHide={toggleShowDeleteModal}
+        onDelete={() => deletePost()}
+      />
       <Modal
         show={showEditModal}
         onHide={toggleShowEditModal}
