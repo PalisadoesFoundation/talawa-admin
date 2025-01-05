@@ -225,7 +225,15 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setComments([...comments, newComment]);
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      // Check if the error is an instance of Error
+      if (error instanceof Error) {
+        const errorMessage = error.message
+          .replace(/^Comment validation failed:\s*/, '')
+          .replace(/^text:\s*/, '');
+        toast.error(errorMessage);
+      } else {
+        errorHandler(t, error);
+      }
     }
   };
 
