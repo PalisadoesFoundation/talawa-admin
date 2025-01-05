@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import styles from './UserListCard.module.css';
+import styles from '../../style/app.module.css';
 import { useParams } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -60,7 +60,10 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
 
   return (
     <>
-      <Button className={styles.memberfontcreatedbtn} onClick={addAdmin}>
+      <Button
+        className={styles.memberfontcreatedbtnUserListCard}
+        onClick={addAdmin}
+      >
         {t('addAdmin')}
       </Button>
     </>
