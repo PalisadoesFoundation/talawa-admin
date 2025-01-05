@@ -23,7 +23,6 @@ export function createESLintCompat() {
   });
 }
 
-const compat = createESLintCompat();
 export default [
   {
     ignores: [
@@ -40,8 +39,7 @@ export default [
       '**/package.json',
       '**/package-lock.json',
       '**/tsconfig.json',
-      'docs/**/*',
-      // 'eslint.config.mjs'
+      'docs/**/*'
     ],
   },
   ...compat.extends(
