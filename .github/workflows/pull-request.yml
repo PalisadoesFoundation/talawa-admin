@@ -504,7 +504,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Required for getting full git history
-          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -582,7 +581,7 @@ jobs:
             git commit -m "docs: update auto-generated documentation [skip ci]"
             
             # Push changes
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+            git push
           else
             echo "No changes to commit"
           fi
