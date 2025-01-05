@@ -5774,8 +5774,8 @@ describe('Testing Chatroom Component [User Portal]', () => {
       fireEvent.mouseOver(messages[0]);
     });
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('moreOptions')).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
     });
 
     const moreOptionsBtn = await screen.findByTestId('dropdown');

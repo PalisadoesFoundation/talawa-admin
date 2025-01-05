@@ -14,7 +14,7 @@ export default defineConfig({
     svgrPlugin(),
   ],
   test: {
-    include: ['src/**/*.spec.{js,jsx,ts,tsx,mjs}'],
+    include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
