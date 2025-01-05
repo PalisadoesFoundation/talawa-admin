@@ -94,12 +94,6 @@
     "setup": "tsx setup.ts",
     "check-localstorage": "node scripts/githooks/check-localstorage-usage.js"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
