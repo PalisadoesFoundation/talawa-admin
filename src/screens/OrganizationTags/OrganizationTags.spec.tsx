@@ -331,9 +331,5 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
     });
-
-    const orgUserTagsScrollableDiv = screen.getByTestId(
-      'orgUserTagsScrollableDiv',
-    );
   });
 });

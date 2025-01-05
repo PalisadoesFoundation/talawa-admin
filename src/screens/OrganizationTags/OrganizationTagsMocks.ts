@@ -1,4 +1,3 @@
-import { error } from 'console';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
