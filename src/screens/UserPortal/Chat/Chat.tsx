@@ -137,7 +137,7 @@ export default function chat(): JSX.Element {
     setCreateDirectChatModalisOpen(true);
   }
 
-  const toggleCreateDirectChatModal = /* istanbul ignore next */ (): void =>
+  const toggleCreateDirectChatModal = (): void =>
     setCreateDirectChatModalisOpen(!createDirectChatModalisOpen);
 
   const [createGroupChatModalisOpen, setCreateGroupChatModalisOpen] =
@@ -147,7 +147,7 @@ export default function chat(): JSX.Element {
     setCreateGroupChatModalisOpen(true);
   }
 
-  const toggleCreateGroupChatModal = /* istanbul ignore next */ (): void => {
+  const toggleCreateGroupChatModal = (): void => {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
   };
 

@@ -4281,269 +4281,34 @@ describe('Testing Chat Screen [User Portal]', () => {
     ...GROUP_CHAT_LIST_QUERY_MOCK,
     ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
   ];
-
-  const mockChatsData = {
-    chatsByUserId: [
-      {
-        _id: '1',
-        isGroup: false,
-        users: [{ _id: '1', firstName: 'John', lastName: 'Doe' }],
-        messages: [],
-        unseenMessagesByUsers: '{}',
-      },
-    ],
-  };
-
-  const mockUnreadChatsData = {
-    getUnreadChatsByUserId: [
-      {
-        _id: '2',
-        isGroup: false,
-        users: [{ _id: '2', firstName: 'Jane', lastName: 'Doe' }],
-        messages: [],
-        unseenMessagesByUsers: '{"1": 1}',
-      },
-    ],
-  };
-
-  const mockGroupChatsData = {
-    getGroupChatsByUserId: [
-      {
-        _id: '3',
-        isGroup: true,
-        name: 'Test Group',
-        users: [],
-        messages: [],
-        unseenMessagesByUsers: '{}',
-      },
-    ],
-  };
-
-  const mocks = [
-    {
-      request: {
-        query: CHATS_LIST,
-        variables: { id: '1' },
-      },
-      result: {
-        data: mockChatsData,
-      },
-    },
-    {
-      request: {
-        query: UNREAD_CHAT_LIST,
-      },
-      result: {
-        data: mockUnreadChatsData,
-      },
-    },
-    {
-      request: {
-        query: GROUP_CHAT_LIST,
-      },
-      result: {
-        data: mockGroupChatsData,
-      },
-    },
-  ];
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  // it('should fetch and set unread chats when filterType is "unread"', async () => {
-  //   setItem('userId', '1');
-
-  //   // Mock data for unread chats
-  //   const mockUnreadChatsData = {
-  //     getUnreadChatsByUserId: [
-  //       {
-  //         _id: '1',
-  //         isGroup: false,
-  //         users: [{ _id: '1', firstName: 'John', lastName: 'Doe' }],
-  //         messages: [],
-  //         unseenMessagesByUsers: '{"1": 3}', // Example: 3 unread messages for user 1
-  //       },
-  //     ],
-  //   };
-
-  //   // Add mocks for both regular chats and unread chats queries
-  //   const mocks = [
-  //     {
-  //       request: {
-  //         query: CHATS_LIST,
-  //         variables: { id: '1' },
-  //       },
-  //       result: {
-  //         data: {
-  //           chatsByUserId: [],
-  //         },
-  //       },
-  //     },
-  //     {
-  //       request: {
-  //         query: UNREAD_CHAT_LIST, // Make sure this matches your actual query name
-  //         variables: { id: '1' },
-  //       },
-  //       result: {
-  //         data: mockUnreadChatsData,
-  //       },
-  //     },
-  //     {
-  //       request: {
-  //         query: MARK_CHAT_MESSAGES_AS_READ,
-  //         variables: { chatId: '', userId: '1' },
-  //       },
-  //       result: {
-  //         data: {
-  //           markChatMessagesAsRead: {
-  //             _id: '1',
-  //           },
-  //         },
-  //       },
-  //     },
-  //   ];
-
-  //   render(
-  //     <MockedProvider mocks={mocks} addTypename={false}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <Chat />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-
-  //   const unreadButton = await screen.findByTestId('unreadChat');
-
-  //   await act(async () => {
-  //     fireEvent.click(unreadButton);
-  //   });
-
-  //   // Wait for the data to be loaded and state to be updated
-  //   await act(async () => {
-  //     await new Promise((resolve) => setTimeout(resolve, 0));
-  //   });
-
-  //   const contactCards = await screen.findAllByTestId('contactContainer');
-  //   expect(contactCards).toHaveLength(
-  //     mockUnreadChatsData.getUnreadChatsByUserId.length,
-  //   );
-
-  //   // Optional: Verify the content of the unread chats
-  //   const contactName = await screen.findByText('John Doe');
-  //   expect(contactName).toBeInTheDocument();
-  // });
-  // it('should fetch and set unread chats when filterType is "unread"', async () => {
-  //   setItem('userId', '1');
-
-  //   // Define mock data for unread chats
-  //   const mockUnreadChatsData = {
-  //     getUnreadChatsByUserId: [
-  //       {
-  //         _id: '1',
-  //         isGroup: false,
-  //         users: [{ _id: '1', firstName: 'John', lastName: 'Doe' }],
-  //         messages: [],
-  //         unseenMessagesByUsers: '{"1": 3}',
-  //       },
-  //     ],
-  //   };
-
-  //   // Setup all required mocks including both initial and unread queries
-  //   const mocks = [
-  //     // Initial chats query mock
-  //     {
-  //       request: {
-  //         query: CHATS_LIST,
-  //         variables: { id: '1' },
-  //       },
-  //       result: {
-  //         data: {
-  //           chatsByUserId: [],
-  //         },
-  //       },
-  //     },
-  //     // Unread chats query mock
-  //     {
-  //       request: {
-  //         query: UNREAD_CHAT_LIST, // Make sure this matches your actual query name
-  //         variables: { id: '1' },
-  //       },
-  //       result: {
-  //         data: mockUnreadChatsData,
-  //       },
-  //     },
-  //   ];
-
-  //   render(
-  //     <MockedProvider mocks={mocks} addTypename={false}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <Chat />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-
-  //   // Wait for initial render
-  //   await screen.findByTestId('unreadChat');
-
-  //   // Click the unread chat button
-  //   const unreadChatButton = screen.getByTestId('unreadChat');
-  //   await userEvent.click(unreadChatButton);
-
-  //   // Wait for the data to be loaded and verify the contacts are rendered
-  //   await waitFor(() => {
-  //     // First verify the container exists
-  //     const container = screen.getByTestId('contactCardContainer');
-  //     expect(container).toBeInTheDocument();
-  //   });
-
-  //   // Then verify the contacts are rendered inside it
-  //   await waitFor(() => {
-  //     const contactCards = screen.getAllByTestId('contactContainer');
-  //     expect(contactCards).toHaveLength(
-  //       mockUnreadChatsData.getUnreadChatsByUserId.length,
-  //     );
-  //   });
-  // });
-  // it('should fetch and set group chats when filterType is "group"', async () => {
-  //   setItem('userId', '1');
-  //   render(
-  //     <MockedProvider mocks={mocks} addTypename={false}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <Chat />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-
-  //   const groupChatButton = await screen.findByTestId('groupChat');
-
-  //   await act(async () => {
-  //     fireEvent.click(groupChatButton);
-  //   });
-
-  //   // Wait for the data to be loaded and state to be updated
-  //   await act(async () => {
-  //     await new Promise((resolve) => setTimeout(resolve, 0));
-  //   });
-
-  //   const contactCards = await screen.findAllByTestId('contactContainer');
-  //   expect(contactCards).toHaveLength(
-  //     mockGroupChatsData.getGroupChatsByUserId.length,
-  //   );
-  // });
-
   it('should handle filter changes in sequence', async () => {
+    const mockChatsData = {
+      chatsByUserId: [
+        {
+          _id: '1',
+          isGroup: false,
+          users: [{ _id: '1', firstName: 'John', lastName: 'Doe' }],
+          messages: [],
+          unseenMessagesByUsers: '{}',
+        },
+      ],
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: CHATS_LIST,
+          variables: { id: '1' },
+        },
+        result: {
+          data: mockChatsData,
+        },
+      },
+    ];
     setItem('userId', '1');
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -4557,12 +4322,10 @@ describe('Testing Chat Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    // Test sequence of filter changes
     const allChatButton = await screen.findByTestId('allChat');
     const unreadChatButton = await screen.findByTestId('unreadChat');
     const groupChatButton = await screen.findByTestId('groupChat');
 
-    // Change to unread
     await act(async () => {
       fireEvent.click(unreadChatButton);
     });
@@ -4570,7 +4333,6 @@ describe('Testing Chat Screen [User Portal]', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    // Change to group
     await act(async () => {
       fireEvent.click(groupChatButton);
     });
@@ -4578,7 +4340,6 @@ describe('Testing Chat Screen [User Portal]', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    // Change back to all
     await act(async () => {
       fireEvent.click(allChatButton);
     });
@@ -4586,12 +4347,34 @@ describe('Testing Chat Screen [User Portal]', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    // Verify final state shows all chats
     const contactCards = await screen.findAllByTestId('contactContainer');
     expect(contactCards).toHaveLength(mockChatsData.chatsByUserId.length);
   });
   it('should fetch and set all chats when filterType is "all"', async () => {
     setItem('userId', '1');
+    const mockChatsData = {
+      chatsByUserId: [
+        {
+          _id: '1',
+          isGroup: false,
+          users: [{ _id: '1', firstName: 'John', lastName: 'Doe' }],
+          messages: [],
+          unseenMessagesByUsers: '{}',
+        },
+      ],
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: CHATS_LIST,
+          variables: { id: '1' },
+        },
+        result: {
+          data: mockChatsData,
+        },
+      },
+    ];
 
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -4611,12 +4394,10 @@ describe('Testing Chat Screen [User Portal]', () => {
       fireEvent.click(allChatButton);
     });
 
-    // Wait for the data to be loaded and state to be updated
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    // Use getAllByTestId to get all chat contact cards
     const contactCards = await screen.findAllByTestId('contactContainer');
     expect(contactCards).toHaveLength(mockChatsData.chatsByUserId.length);
   });
@@ -4716,7 +4497,6 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  // filter chat test
   test('Testing chat filters', async () => {
     setItem('userId', '1');
 
@@ -4738,8 +4518,6 @@ describe('Testing Chat Screen [User Portal]', () => {
       fireEvent.click(await screen.findByTestId('unreadChat'));
     });
 
-    await wait(1000);
-
     await act(async () => {
       fireEvent.click(await screen.findByTestId('groupChat'));
     });
@@ -4749,5 +4527,86 @@ describe('Testing Chat Screen [User Portal]', () => {
     await act(async () => {
       fireEvent.click(await screen.findByTestId('allChat'));
     });
+  });
+  it('should fetch and set group chats when filterType is "group"', async () => {
+    setItem('userId', '1');
+    const mockGroupChatsData = {
+      getGroupChatsByUserId: [
+        {
+          _id: '1',
+          isGroup: true,
+          name: 'Test Group',
+          users: [
+            { _id: '1', firstName: 'John', lastName: 'Doe', image: 'test.jpg' },
+            {
+              _id: '2',
+              firstName: 'Jane',
+              lastName: 'Smith',
+              image: 'test.jpg',
+            },
+          ],
+          messages: [],
+          unseenMessagesByUsers: '{"1": 0}',
+          image: 'group.jpg',
+        },
+        {
+          _id: '2',
+          isGroup: true,
+          name: 'Another Group',
+          users: [
+            { _id: '1', firstName: 'John', lastName: 'Doe', image: 'test.jpg' },
+            {
+              _id: '3',
+              firstName: 'Alice',
+              lastName: 'Johnson',
+              image: 'test.jpg',
+            },
+          ],
+          messages: [],
+          unseenMessagesByUsers: '{"1": 2}',
+          image: 'group2.jpg',
+        },
+      ],
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: GROUP_CHAT_LIST,
+        },
+        result: {
+          data: mockGroupChatsData,
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Chat />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const groupChatButton = await screen.findByTestId('groupChat');
+
+    await act(async () => {
+      fireEvent.click(groupChatButton);
+    });
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    const contactCards = await screen.findAllByTestId('contactContainer');
+    expect(contactCards).toHaveLength(
+      mockGroupChatsData.getGroupChatsByUserId.length,
+    );
+
+    expect(screen.getByText('Test Group')).toBeInTheDocument();
+    expect(screen.getByText('Another Group')).toBeInTheDocument();
   });
 });
