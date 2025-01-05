@@ -94,12 +94,6 @@
     "setup": "tsx setup.ts",
     "check-localstorage": "node scripts/githooks/check-localstorage-usage.js"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -117,10 +111,12 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.7",
     "@babel/preset-typescript": "^7.26.0",
+    "@eslint/compat": "^1.2.4",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^12.1.10",
-    "@testing-library/dom": "^10.4.0",
+    "@types/eslint__eslintrc": "^2.1.2",
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^26.0.24",
     "@types/js-cookie": "^3.0.6",
@@ -140,13 +136,14 @@
     "@vitest/coverage-istanbul": "^2.1.5",
     "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.49.0",
+    "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jest": "^28.10.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-tsdoc": "^0.3.0",
+    "globals": "^15.14.0",
     "husky": "^9.1.6",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.5",
