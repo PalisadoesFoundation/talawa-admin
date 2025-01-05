@@ -409,7 +409,7 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
    # Set proper directory permissions
    sudo chown -R talawa_admin:talawa_admin /path/to/talawa-admin
    sudo chmod 750 /path/to/talawa-admin
-   sudo find /path/to/talawa-admin -type f -exec chmod 640 {} \
+   sudo find /path/to/talawa-admin -type f -exec chmod 640 {}
    sudo chmod 600 /path/to/talawa-admin/.env
    ```
 
