@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styles from './OrgActionItemCategories.module.css';
 import { useTranslation } from 'react-i18next';
 
@@ -8,13 +8,7 @@ import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
-import {
-  Circle,
-  Search,
-  Sort,
-  WarningAmberRounded,
-  FilterAltOutlined,
-} from '@mui/icons-material';
+import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
 import {
   DataGrid,
   type GridCellParams,
@@ -23,6 +17,7 @@ import {
 import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
 import CategoryModal from './CategoryModal';
+import SortingButton from 'subComponents/SortingButton';
 
 enum ModalState {
   SAME = 'same',
@@ -307,63 +302,47 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
         </div>
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-4">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_DESC')}
-                  data-testid="createdAt_DESC"
-                >
-                  {tCommon('createdLatest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_ASC')}
-                  data-testid="createdAt_ASC"
-                >
-                  {tCommon('createdEarliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <FilterAltOutlined className={'me-1'} />
-                {t('status')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setStatus(null)}
-                  data-testid="statusAll"
-                >
-                  {tCommon('all')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(CategoryStatus.Active)}
-                  data-testid="statusActive"
-                >
-                  {tCommon('active')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(CategoryStatus.Disabled)}
-                  data-testid="statusDisabled"
-                >
-                  {tCommon('disabled')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              title={tCommon('sort')}
+              sortingOptions={[
+                { label: tCommon('createdLatest'), value: 'createdAt_DESC' },
+                { label: tCommon('createdEarliest'), value: 'createdAt_ASC' },
+              ]}
+              selectedOption={
+                sortBy === 'createdAt_DESC'
+                  ? tCommon('createdLatest')
+                  : tCommon('createdEarliest')
+              }
+              onSortChange={(value) =>
+                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+              className={styles.dropdown}
+            />
+            <SortingButton
+              title={t('status')}
+              sortingOptions={[
+                { label: tCommon('all'), value: 'all' },
+                { label: tCommon('active'), value: CategoryStatus.Active },
+                { label: tCommon('disabled'), value: CategoryStatus.Disabled },
+              ]}
+              selectedOption={
+                status === null
+                  ? tCommon('all')
+                  : status === CategoryStatus.Active
+                    ? tCommon('active')
+                    : tCommon('disabled')
+              }
+              onSortChange={(value) =>
+                setStatus(value === 'all' ? null : (value as CategoryStatus))
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={t('status')}
+              className={styles.dropdown}
+            />
           </div>
+
           <div>
             <Button
               variant="success"
