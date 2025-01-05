@@ -125,7 +125,6 @@ function organizationPeople(): JSX.Element {
     }
   }, [state, adminData]);
 
-  /* istanbul ignore next */
   if (memberError || usersError || adminError) {
     const error = memberError ?? usersError ?? adminError;
     toast.error(error?.message);
