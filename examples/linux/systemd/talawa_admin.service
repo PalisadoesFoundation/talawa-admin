@@ -37,7 +37,20 @@ WorkingDirectory=/path/to/your/talawa-admin
 ################################################################################
 
 EnvironmentFile=$CODEROOT/.env
-ExecStart=/bin/bash -c "source /path/to/your/.nvm/nvm.sh && nvm use default && npm run serve"
+ExecStart=/bin/bash -c '\
+  if [ -f "$HOME/.nvm/nvm.sh" ]; then \
+    . "$HOME/.nvm/nvm.sh" && \
+    if nvm use default; then \
+      exec npm run serve \
+    else \
+      echo "Failed to set Node.js version" >&2; \
+      exit 1; \
+    fi \
+  else \
+    echo "NVM not found" >&2; \
+    exit 1; \
+  fi'
+  
 Restart=on-failure
 RemainAfterExit=yes
 ProtectSystem=full
