@@ -72,15 +72,12 @@ export const TableRow = ({
       }
       inputs.push({ name: data.name.trim() });
       const pdf = await generate({ template: tagTemplate, inputs });
-      // istanbul ignore next
+
       // Convert ArrayBuffer to Uint8Array before creating Blob
       const uint8Array = new Uint8Array(pdf.buffer);
       const blob = new Blob([uint8Array], { type: 'application/pdf' });
-      // istanbul ignore next
       const url = URL.createObjectURL(blob);
-      // istanbul ignore next
       window.open(url);
-      // istanbul ignore next
       toast.success('PDF generated successfully!');
     } catch (error: unknown) {
       const errorMessage =
