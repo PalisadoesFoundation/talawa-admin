@@ -503,3 +503,95 @@ jobs:
               sleep $retry_delay
             fi
           done
+  
+  generate-docs:
+    name: Generate Auto Documentation
+    runs-on: ubuntu-latest
+    needs: [Code-Quality-Checks, Test-Application, Start-App-Without-Docker, Docker-Start-Check]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for getting full git history
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install -g typedoc typedoc-plugin-markdown
+
+      - name: Create documentation directory
+        run: |
+          mkdir -p docs/docs/auto-docs
+          mkdir -p docs/docs/user-guide
+          mkdir -p docs/docs/developer-guide/reference
+
+      - name: Generate Documentation
+        run: |
+          # Generate the documentation
+          typedoc \
+            --out docs/docs/auto-docs \
+            --plugin typedoc-plugin-markdown \
+            --theme markdown \
+            --tsconfig tsconfig.json \
+            --excludePrivate \
+            --excludeProtected \
+            --excludeExternals \
+            --hideGenerator \
+            --gitRevision ${{ github.head_ref }} \
+            --categorizeByGroup true \
+            --entryPointStrategy expand \
+            --entryPoints "src/**/*.ts" "src/**/*.tsx" \
+            --exclude "**/*.{test,spec,stories}.{ts,tsx}" \
+            --exclude "**/__tests__/**" \
+            --exclude "**/__mocks__/**" \
+            --exclude "**/node_modules/**" \
+            --cleanOutputDir true
+
+      - name: Create placeholder documentation
+        run: |
+          # Create User Guide placeholder
+          echo "# User Guide
+          
+          This section contains the user guide for Talawa Admin.
+          " > docs/docs/user-guide/intro.md
+
+          # Create Developer Guide placeholder
+          echo "# Developer Guide
+          
+          This section contains the developer guide for Talawa Admin.
+          " > docs/docs/developer-guide/intro.md
+
+          # Create Reference placeholder
+          echo "# API Reference
+          
+          This section contains the auto-generated API documentation for Talawa Admin.
+          " > docs/docs/developer-guide/reference/README.md
+
+      - name: Setup Git Config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Check and Commit Documentation
+        run: |
+          # Check if there are any changes
+          if [[ -n "$(git status --porcelain)" ]]; then
+            # Add all changes
+            git add docs/docs/auto-docs
+            git add docs/docs/user-guide
+            git add docs/docs/developer-guide
+            
+            # Commit changes
+            git commit -m "docs: update auto-generated documentation [skip ci]"
+            
+            # Push changes
+            git push origin ${{ github.head_ref }}
+          else
+            echo "No changes to commit"
+          fi
