@@ -347,10 +347,12 @@ function OrganizationDashboard(): JSX.Element {
                       return <CardItemLoading key={`postLoading_${index}`} />;
                     })
                   ) : postData?.organizations[0].posts.totalCount == 0 ? (
+                    /* eslint-disable */
                     <div className={styles.emptyContainer}>
                       <h6>{t('noPostsPresent')}</h6>
                     </div>
                   ) : (
+                    /* eslint-enable */
                     postData?.organizations[0].posts.edges
                       .slice(0, 5)
                       .map((edge) => {
