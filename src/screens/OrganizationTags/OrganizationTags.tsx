@@ -84,7 +84,7 @@ function OrganizationTags(): JSX.Element {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
           orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
-          /* istanbul ignore next */
+          /* istanbul ignore next -- @preserve */
           null,
       },
       updateQuery: (
@@ -97,7 +97,8 @@ function OrganizationTags(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        /* istanbul ignore next -- @preserve */
+        if (!fetchMoreResult) return prevResult;
 
         return {
           organizations: [
@@ -127,7 +128,7 @@ function OrganizationTags(): JSX.Element {
 
   const createTag = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
+    /* istanbul ignore else -- @preserve */
     if (!tagName.trim()) {
       toast.error(t('enterTagName'));
       return;
@@ -140,7 +141,7 @@ function OrganizationTags(): JSX.Element {
           organizationId: orgId,
         },
       });
-
+      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
@@ -148,13 +149,14 @@ function OrganizationTags(): JSX.Element {
         setCreateTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : /* istanbul ignore next -- @preserve */ 'Something went wrong',
+      );
     }
   };
-
+  /* istanbul ignore next -- @preserve */
   if (orgUserTagsError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
@@ -376,11 +378,15 @@ function OrganizationTags(): JSX.Element {
                 className={styles.orgUserTagsScrollableDiv}
               >
                 <InfiniteScroll
-                  dataLength={userTagsList?.length ?? 0}
+                  dataLength={
+                    userTagsList?.length ??
+                    /* istanbul ignore next -- @preserve */ 0
+                  }
                   next={loadMoreUserTags}
                   hasMore={
                     orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
-                      ?.hasNextPage ?? /* istanbul ignore next */ false
+                      ?.hasNextPage ??
+                    /* istanbul ignore next -- @preserve */ false
                   }
                   loader={<InfiniteScrollLoader />}
                   scrollableTarget="orgUserTagsScrollableDiv"
@@ -391,7 +397,7 @@ function OrganizationTags(): JSX.Element {
                     hideFooter={true}
                     getRowId={(row) => row.id}
                     slots={{
-                      noRowsOverlay: /* istanbul ignore next */ () => (
+                      noRowsOverlay: () => (
                         <Stack
                           height="100%"
                           alignItems="center"

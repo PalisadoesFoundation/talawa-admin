@@ -20,7 +20,12 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import OrganizationTags from './OrganizationTags';
-import { MOCKS, MOCKS_ERROR } from './OrganizationTagsMocks';
+import {
+  MOCKS,
+  MOCKS_ERROR,
+  MOCKS_ERROR_ERROR_TAG,
+  MOCKS_EMPTY,
+} from './OrganizationTagsMocks';
 import type { ApolloLink } from '@apollo/client';
 
 const translations = {
@@ -35,6 +40,8 @@ const translations = {
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
+const link3 = new StaticMockLink([...MOCKS, ...MOCKS_ERROR_ERROR_TAG], true);
+const link4 = new StaticMockLink(MOCKS_EMPTY, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -297,5 +304,36 @@ describe('Organisation Tags Page', () => {
         translations.tagCreationSuccess,
       );
     });
+  });
+
+  test('creates a new user tag with error', async () => {
+    renderOrganizationTags(link3);
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createTagBtn'));
+
+    userEvent.type(
+      screen.getByPlaceholderText(translations.tagNamePlaceholder),
+      'userTagE',
+    );
+
+    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+    });
+  });
+
+  test('No tags are available', async () => {
+    renderOrganizationTags(link4);
+    await wait();
+    await waitFor(() => {
+      expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
+    });
+
+    const orgUserTagsScrollableDiv = screen.getByTestId(
+      'orgUserTagsScrollableDiv',
+    );
   });
 });

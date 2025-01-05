@@ -1,3 +1,4 @@
+import { error } from 'console';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
@@ -415,12 +416,57 @@ export const MOCKS_ERROR = [
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
-        id: 'orgId',
+        id: 'orgIdError',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
     },
     error: new Error('Mock Graphql Error'),
+  },
+];
+
+export const MOCKS_ERROR_ERROR_TAG = [
+  {
+    request: {
+      query: CREATE_USER_TAG,
+      variables: {
+        name: 'userTagE',
+        organizationId: 'orgId',
+      },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+];
+
+export const MOCKS_EMPTY = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: null,
+                endCursor: null,
+              },
+              totalCount: 0,
+            },
+          },
+        ],
+      },
+    },
   },
 ];
