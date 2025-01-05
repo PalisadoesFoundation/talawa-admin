@@ -69,6 +69,7 @@ function eventHeader({
                 id="dropdown-basic"
                 className={styles.dropdown}
                 data-testid="selectViewType"
+                style={{ width: '100%' }}
               >
                 {viewType}
               </Dropdown.Toggle>
@@ -97,6 +98,7 @@ function eventHeader({
                 id="dropdown-basic"
                 className={styles.dropdown}
                 data-testid="eventType"
+                style={{ width: '100%' }}
               >
                 {t('eventType')}
               </Dropdown.Toggle>

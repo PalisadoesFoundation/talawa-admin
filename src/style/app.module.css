@@ -89,15 +89,18 @@
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
-  --table-head-bg: var(--bs-primary, var(--blue-color));
+
+  --table-head-bg: var(--blue-subtle, var(--blue-color));
   --table-head-color: var(--bs-white, var(--white-color));
-  --table-header-color: var(--bs-greyish-black, var(--black-color));
+
+  --table-header-color: var(--bs-white, var(--bs-gray-300));
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
 }
+
 .fonts {
   color: var(--grey-bg-color-dark);
 }
@@ -998,7 +1001,7 @@ hr {
 }
 
 .justifyspOrganizationEvents {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   margin-top: 20px;
 }
@@ -1442,6 +1445,7 @@ hr {
     flex-direction: column;
     justify-content: center;
   }
+
   .btnsContainer .btnsBlock {
     display: block;
     margin-top: 1rem;
@@ -1479,13 +1483,27 @@ hr {
     margin: 1.5rem 0;
   }
 
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .btnsContainer > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
   .btnsContainer .btnsBlock {
+    display: block;
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
   .btnsContainer .btnsBlock button {
-    margin: 0;
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
   }
 
   .btnsContainer .btnsBlock div button {
@@ -1556,6 +1574,12 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer .btnsBlock button {
+    margin-left: 0;
+  }
 }
 
 .errorMessage {

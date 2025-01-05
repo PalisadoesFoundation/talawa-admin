@@ -14,6 +14,34 @@
   margin: 0px 10px 0px 10px;
 }
 
+@media (max-width: 520px) {
+  .calendar__header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .space {
+    display: block !important;
+    text-align: center;
+  }
+
+  .space > * {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* .input {
+    width: 100%; 
+  }
+
+  .createButton {
+    margin: 0 auto;
+    width: 100%; 
+  } */
+}
+
 .input {
   flex: 1;
   position: relative;
@@ -305,7 +333,7 @@
 }
 
 .flex_grow {
-  flex-grow: 1;
+  flex-grow: 0.5;
 }
 
 @media only screen and (max-width: var(--mobile-breakpoint)) {
