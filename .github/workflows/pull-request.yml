@@ -512,7 +512,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Required for getting full git history
-          ref: ${{ github.head_ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -543,7 +542,6 @@ jobs:
             --excludeProtected \
             --excludeExternals \
             --hideGenerator \
-            --gitRevision ${{ github.head_ref }} \
             --categorizeByGroup true \
             --entryPointStrategy expand \
             --entryPoints "src/**/*.ts" "src/**/*.tsx" \
@@ -591,7 +589,7 @@ jobs:
             git commit -m "docs: update auto-generated documentation [skip ci]"
             
             # Push changes
-            git push origin ${{ github.head_ref }}
+            git push
           else
             echo "No changes to commit"
           fi
