@@ -23,6 +23,8 @@ export function createESLintCompat() {
   });
 }
 
+const compat = createESLintCompat();
+
 export default [
   {
     ignores: [
