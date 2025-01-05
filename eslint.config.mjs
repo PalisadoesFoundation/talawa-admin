@@ -41,7 +41,7 @@ export default [
       '**/package.json',
       '**/package-lock.json',
       '**/tsconfig.json',
-      'docs/**/*'
+      'docs/**/*',
     ],
   },
   ...compat.extends(
