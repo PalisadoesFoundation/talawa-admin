@@ -8,7 +8,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfo,
 } from 'utils/interfaces';
-import styles from './Campaigns.module.css';
+import styles from '../../../style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';

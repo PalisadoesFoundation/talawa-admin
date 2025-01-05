@@ -8,7 +8,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { FilterAltOutlined, SearchOutlined } from '@mui/icons-material';
-import styles from './People.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router-dom';

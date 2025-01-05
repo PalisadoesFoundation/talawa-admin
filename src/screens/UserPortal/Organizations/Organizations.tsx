@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Organizations.module.css';
+import styles from '../../../style/app.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const { getItem } = useLocalStorage();

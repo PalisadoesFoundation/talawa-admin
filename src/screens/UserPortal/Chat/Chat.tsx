@@ -7,7 +7,7 @@ import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from './Chat.module.css';
+import styles from '../../../style/app.module.css';
 import {
   CHATS_LIST,
   GROUP_CHAT_LIST,
