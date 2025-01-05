@@ -302,13 +302,7 @@ export default function chat(): JSX.Element {
                             chat.messages[chat.messages.length - 1]
                               ?.messageContent,
                         };
-                        return (
-                          <ContactCard
-                            data-testid="chatContact"
-                            {...cardProps}
-                            key={chat._id}
-                          />
-                        );
+                        return <ContactCard {...cardProps} key={chat._id} />;
                       })}
                   </div>
                 </>

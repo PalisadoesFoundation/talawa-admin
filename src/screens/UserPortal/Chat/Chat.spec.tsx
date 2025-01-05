@@ -4281,9 +4281,6 @@ describe('Testing Chat Screen [User Portal]', () => {
     ...GROUP_CHAT_LIST_QUERY_MOCK,
     ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
   ];
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   it('should handle filter changes in sequence', async () => {
     const mockChatsData = {
@@ -4347,7 +4344,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    const contactCards = await screen.findAllByTestId('contactContainer');
+    const contactCards = await screen.findAllByTestId('contactCardContainer');
     expect(contactCards).toHaveLength(mockChatsData.chatsByUserId.length);
   });
   it('should fetch and set all chats when filterType is "all"', async () => {
@@ -4398,7 +4395,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    const contactCards = await screen.findAllByTestId('contactContainer');
+    const contactCards = await screen.findAllByTestId('contactCardContainer');
     expect(contactCards).toHaveLength(mockChatsData.chatsByUserId.length);
   });
   test('Screen should be rendered properly', async () => {
@@ -4601,11 +4598,14 @@ describe('Testing Chat Screen [User Portal]', () => {
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
-    const contactCards = await screen.findAllByTestId('contactContainer');
-    expect(contactCards).toHaveLength(
+
+    const container = await screen.findByTestId('contactCardContainer');
+    expect(container).toBeInTheDocument();
+
+    const chatContacts = await screen.findAllByTestId('contactContainer');
+    expect(chatContacts).toHaveLength(
       mockGroupChatsData.getGroupChatsByUserId.length,
     );
-
     expect(screen.getByText('Test Group')).toBeInTheDocument();
     expect(screen.getByText('Another Group')).toBeInTheDocument();
   });
