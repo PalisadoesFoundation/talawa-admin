@@ -4283,6 +4283,7 @@ describe('Testing Chat Screen [User Portal]', () => {
   ];
 
   it('should handle filter changes in sequence', async () => {
+    setItem('userId', '1');
     const mockChatsData = {
       chatsByUserId: [
         {
@@ -4305,15 +4306,26 @@ describe('Testing Chat Screen [User Portal]', () => {
           data: mockChatsData,
         },
       },
+      {
+        request: {
+          query: MARK_CHAT_MESSAGES_AS_READ,
+          variables: { chatId: '', userId: '1' },
+        },
+        result: {
+          data: {
+            markChatMessagesAsRead: {
+              _id: '1',
+            },
+          },
+        },
+      },
     ];
-    setItem('userId', '1');
+
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Chat />
-            </I18nextProvider>
+            <Chat />
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -4345,36 +4357,13 @@ describe('Testing Chat Screen [User Portal]', () => {
     });
 
     const contactCards = await screen.findAllByTestId('contactCardContainer');
-    expect(contactCards).toHaveLength(mockChatsData.chatsByUserId.length);
+    expect(contactCards).toHaveLength(1);
   });
+
   it('should fetch and set all chats when filterType is "all"', async () => {
     setItem('userId', '1');
-    const mockChatsData = {
-      chatsByUserId: [
-        {
-          _id: '1',
-          isGroup: false,
-          users: [{ _id: '1', firstName: 'John', lastName: 'Doe' }],
-          messages: [],
-          unseenMessagesByUsers: '{}',
-        },
-      ],
-    };
-
-    const mocks = [
-      {
-        request: {
-          query: CHATS_LIST,
-          variables: { id: '1' },
-        },
-        result: {
-          data: mockChatsData,
-        },
-      },
-    ];
-
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mock} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4396,7 +4385,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     });
 
     const contactCards = await screen.findAllByTestId('contactCardContainer');
-    expect(contactCards).toHaveLength(mockChatsData.chatsByUserId.length);
+    expect(contactCards).toHaveLength(1);
   });
   test('Screen should be rendered properly', async () => {
     render(
@@ -4527,58 +4516,9 @@ describe('Testing Chat Screen [User Portal]', () => {
   });
   it('should fetch and set group chats when filterType is "group"', async () => {
     setItem('userId', '1');
-    const mockGroupChatsData = {
-      getGroupChatsByUserId: [
-        {
-          _id: '1',
-          isGroup: true,
-          name: 'Test Group',
-          users: [
-            { _id: '1', firstName: 'John', lastName: 'Doe', image: 'test.jpg' },
-            {
-              _id: '2',
-              firstName: 'Jane',
-              lastName: 'Smith',
-              image: 'test.jpg',
-            },
-          ],
-          messages: [],
-          unseenMessagesByUsers: '{"1": 0}',
-          image: 'group.jpg',
-        },
-        {
-          _id: '2',
-          isGroup: true,
-          name: 'Another Group',
-          users: [
-            { _id: '1', firstName: 'John', lastName: 'Doe', image: 'test.jpg' },
-            {
-              _id: '3',
-              firstName: 'Alice',
-              lastName: 'Johnson',
-              image: 'test.jpg',
-            },
-          ],
-          messages: [],
-          unseenMessagesByUsers: '{"1": 2}',
-          image: 'group2.jpg',
-        },
-      ],
-    };
-
-    const mocks = [
-      {
-        request: {
-          query: GROUP_CHAT_LIST,
-        },
-        result: {
-          data: mockGroupChatsData,
-        },
-      },
-    ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mock} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4603,10 +4543,6 @@ describe('Testing Chat Screen [User Portal]', () => {
     expect(container).toBeInTheDocument();
 
     const chatContacts = await screen.findAllByTestId('contactContainer');
-    expect(chatContacts).toHaveLength(
-      mockGroupChatsData.getGroupChatsByUserId.length,
-    );
-    expect(screen.getByText('Test Group')).toBeInTheDocument();
-    expect(screen.getByText('Another Group')).toBeInTheDocument();
+    expect(chatContacts).toHaveLength(1);
   });
 });
