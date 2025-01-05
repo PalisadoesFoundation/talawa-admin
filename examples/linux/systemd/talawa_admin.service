@@ -32,12 +32,11 @@ Environment=NODE_ENV=production
 # Absolute path is needed for working directory
 WorkingDirectory=/path/to/your/talawa-admin
 
-EnvironmentFile=/path/to/your/talawa-admin/.env
-
 ################################################################################
 # No need to edit anything below here
 ################################################################################
 
+EnvironmentFile=$CODEROOT/.env
 ExecStart=/bin/bash -c "source /path/to/your/.nvm/nvm.sh && nvm use default && npm run serve"
 Restart=on-failure
 RemainAfterExit=yes
