@@ -37,7 +37,7 @@ const askAndSetRecaptcha = async (): Promise<void> => {
     }
   } catch (error) {
     console.error('Error setting up reCAPTCHA:', error);
-    throw new Error('Failed to set up reCAPTCHA');
+    throw new Error(`Failed to set up reCAPTCHA: ${(error as Error).message}`);
   }
 };
 
@@ -67,10 +67,7 @@ export async function main(): Promise<void> {
     const useDocker = envConfig.USE_DOCKER === 'YES';
 
     // Only run these commands if Docker is NOT used
-    if (useDocker) {
-      console.log(' ');
-    } else {
-      console.log('Setting up Talawa Admin without Docker...');
+    if (!useDocker) {
       await askAndUpdatePort();
       await askAndUpdateTalawaApiUrl();
     }

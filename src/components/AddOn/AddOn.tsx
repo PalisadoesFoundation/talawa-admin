@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 interface InterfaceAddOnProps {
-  extras?: string;
-  name?: string;
   children?: React.ReactNode;
 }
 
@@ -13,8 +11,6 @@ interface InterfaceAddOnProps {
  * extensibility and custom naming.
  *
  * @param props - The props for the AddOn component.
- * @param extras - Additional properties for the AddOn component.
- * @param name - The name for the AddOn component.
  * @param children - The child elements to be rendered within the AddOn component.
  *
  * @returns The JSX element representing the AddOn component.
