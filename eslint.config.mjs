@@ -11,8 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
-
-
+ 
 export function createESLintCompat(){
   const _filename = fileURLToPath(import.meta.url);
   const _dirname = path.dirname(_filename);
@@ -42,7 +41,7 @@ export default [
       '**/package-lock.json',
       '**/tsconfig.json',
       'docs/**/*',
-      // 'eslint.config.mjs',
+      'eslint.config.mjs'
     ],
   },
   ...compat.extends(
