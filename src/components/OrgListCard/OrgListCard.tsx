@@ -96,11 +96,11 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
               <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
             </Tooltip>
             {/* Description of the organization */}
-            <h6 className={`${styles.orgdesc} fw-semibold`}>
+            <div className={`${styles.orgdesc} fw-semibold`}>
               <TruncatedText
                 text={userData?.organizations[0]?.description || ''}
               />
-            </h6>
+            </div>
 
             {/* Display the organization address if available */}
             {address?.city && (
