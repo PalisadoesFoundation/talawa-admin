@@ -285,7 +285,7 @@ function OrganizationTags(): JSX.Element {
             variant="outline-primary"
             onClick={() => redirectToManageTag(params.row._id)}
             data-testid="manageTagBtn"
-            className={styles.addButton}
+            className={styles.editButton}
           >
             {t('manageTag')}
           </Button>
@@ -407,6 +407,7 @@ function OrganizationTags(): JSX.Element {
                       '& .MuiDataGrid-row': {
                         backgroundColor: 'var(--tablerow-bg-color)',
                         '&:focus-within': {
+                          outline: '2px solid #000',
                           outlineOffset: '-2px',
                         },
                       },
@@ -419,6 +420,7 @@ function OrganizationTags(): JSX.Element {
                         boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
                       },
                       '& .MuiDataGrid-cell:focus': {
+                        outline: '2px solid #000',
                         outlineOffset: '-2px',
                       },
                     }}
@@ -460,7 +462,7 @@ function OrganizationTags(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('tagNamePlaceholder')}
               data-testid="tagNameInput"
               autoComplete="off"
@@ -477,7 +479,7 @@ function OrganizationTags(): JSX.Element {
               variant="secondary"
               onClick={(): void => hideCreateTagModal()}
               data-testid="closeCreateTagModal"
-              className={styles.closeButton}
+              className={styles.removeButton}
             >
               {tCommon('cancel')}
             </Button>

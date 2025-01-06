@@ -266,9 +266,9 @@ function SubTags(): JSX.Element {
         return (
           <Button
             size="sm"
-            variant="outline-primary"
             onClick={() => redirectToManageTag(params.row._id)}
             data-testid="manageTagBtn"
+            className={styles.editButton}
           >
             {t('manageTag')}
           </Button>
@@ -445,7 +445,7 @@ function SubTags(): JSX.Element {
         centered
       >
         <Modal.Header
-          className={styles.tableHeader}
+          className={styles.modalHeader}
           data-testid="tagHeader"
           closeButton
         >
@@ -457,7 +457,7 @@ function SubTags(): JSX.Element {
             <Form.Control
               type="name"
               id="tagname"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('tagNamePlaceholder')}
               data-testid="modalTitle"
               autoComplete="off"
@@ -474,7 +474,7 @@ function SubTags(): JSX.Element {
               variant="secondary"
               onClick={(): void => hideAddSubTagModal()}
               data-testid="addSubTagModalCloseBtn"
-              className={styles.closeButton}
+              className={styles.removeButton}
             >
               {tCommon('cancel')}
             </Button>

@@ -7,7 +7,7 @@ import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from './TagActions.module.css';
+import styles from '../../style/app.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
@@ -270,7 +270,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={styles.modalHeader}
           data-testid="modalOrganizationHeader"
           closeButton
         >
@@ -312,7 +312,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               <Form.Control
                 type="text"
                 id="userName"
-                className="bg-light"
+                className={styles.inputField}
                 placeholder={tCommon('searchByName')}
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
                 data-testid="searchByName"
@@ -388,13 +388,18 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
           <Modal.Footer>
             <Button
-              variant="secondary"
+              className={`btn btn-danger ${styles.removeButton}`}
               onClick={(): void => hideTagActionsModal()}
               data-testid="closeTagActionsModalBtn"
             >
               {tCommon('cancel')}
             </Button>
-            <Button type="submit" value="add" data-testid="tagActionSubmitBtn">
+            <Button
+              type="submit"
+              value="add"
+              data-testid="tagActionSubmitBtn"
+              className={`btn ${styles.addButton}`}
+            >
               {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
             </Button>
           </Modal.Footer>

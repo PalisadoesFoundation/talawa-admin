@@ -491,6 +491,11 @@
   border-color: var(--search-button-border);
 }
 
+.addButton:not(:hover, :active, :focus) {
+  background-color: #286fe0 !important;
+  border-color: var(--search-button-border);
+}
+
 .removeButton {
   margin-bottom: 10px;
   background-color: var(--delete-button-bg);
@@ -556,6 +561,37 @@
   background-color: var(--row-background);
   max-height: 120px;
   overflow-y: auto;
+}
+
+.scrollContainer {
+  height: 100px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.memberBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
+}
+
+.loadingDiv {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tagBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
 }
 
 .tableHeader {
@@ -630,6 +666,7 @@
   scrollbar-color: var(--bs-gray-400) var(--bs-white);
   max-height: calc(100vh - 18rem);
   overflow: auto;
+  margin-top: 20px !important;
 }
 
 .tagsBreadCrumbs:hover {
@@ -737,7 +774,7 @@ hr {
 }
 
 .switch input {
-  /* box-shadow: 0 0 0.1rem 0.2rem var(--bg-blue); */
+  box-shadow: 0 0 0.1rem 0.2rem var(--bg-blue);
 }
 
 .switch input:checked {
@@ -1650,6 +1687,8 @@ hr {
 .modalHeader {
   border: none;
   padding-bottom: 0;
+  background-color: var(--bs-primary) !important;
+  padding: 1rem 1rem;
 }
 
 .label {

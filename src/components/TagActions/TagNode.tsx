@@ -7,7 +7,7 @@ import type {
 } from 'utils/interfaces';
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import styles from './TagActions.module.css';
+import styles from '../../style/app.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';

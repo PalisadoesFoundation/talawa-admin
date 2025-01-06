@@ -292,7 +292,7 @@ function ManageTag(): JSX.Element {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return <div>{params.row.id}</div>;
@@ -304,7 +304,7 @@ function ManageTag(): JSX.Element {
       flex: 2,
       minWidth: 100,
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="memberName">
@@ -321,7 +321,7 @@ function ManageTag(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div>
@@ -330,7 +330,9 @@ function ManageTag(): JSX.Element {
               state={{ id: params.row._id }}
               data-testid="viewProfileBtn"
             >
-              <div className="btn btn-sm btn-primary me-3">
+              <div
+                className={`btn btn-sm btn-primary me-3 ${styles.editButton}`}
+              >
                 {t('viewProfile')}
               </div>
             </Link>
@@ -519,7 +521,7 @@ function ManageTag(): JSX.Element {
                       setTagActionType('assignToTags');
                       showTagActionsModal();
                     }}
-                    className="my-2 btn btn-primary btn-sm w-75"
+                    className={`my-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="assignToTags"
                   >
                     {t('assignToTags')}
@@ -543,7 +545,7 @@ function ManageTag(): JSX.Element {
                   />
                   <div
                     onClick={showEditUserTagModal}
-                    className="mt-1 mb-2 btn btn-primary btn-sm w-75"
+                    className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="editUserTag"
                   >
                     {tCommon('edit')}

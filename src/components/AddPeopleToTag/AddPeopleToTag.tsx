@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
-import styles from './AddPeopleToTag.module.css';
+import styles from '../../style/app.module.css';
 import type { InterfaceTagUsersToAssignToQuery } from 'utils/organizationTagsUtils';
 import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
@@ -244,7 +244,10 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             data-testid={
               isToBeAssigned ? 'deselectMemberBtn' : 'selectMemberBtn'
             }
-            variant={!isToBeAssigned ? 'primary' : 'danger'}
+            // variant={!isToBeAssigned ? 'primary' : 'danger'}
+            className={
+              !isToBeAssigned ? styles.editButton : `btn btn-danger btn-sm`
+            }
           >
             {isToBeAssigned ? 'x' : '+'}
           </Button>
@@ -263,7 +266,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={`bg-primary ${styles.modalHeader}`}
           data-testid="modalOrganizationHeader"
           closeButton
         >
@@ -301,7 +304,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <Form.Control
                   type="text"
                   id="firstName"
-                  className="bg-light"
+                  className={`bg-light ${styles.inputField}`}
                   placeholder={tCommon('firstName')}
                   onChange={(e) =>
                     setMemberToAssignToSearchFirstName(e.target.value.trim())
@@ -315,7 +318,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <Form.Control
                   type="text"
                   id="lastName"
-                  className="bg-light"
+                  className={`bg-light ${styles.inputField}`}
                   placeholder={tCommon('lastName')}
                   onChange={(e) =>
                     setMemberToAssignToSearchLastName(e.target.value.trim())
@@ -396,16 +399,17 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           <Modal.Footer>
             <Button
               onClick={hideAddPeopleToTagModal}
-              variant="outline-secondary"
+              variant="outline-danger"
               data-testid="closeAddPeopleToTagModal"
+              className={styles.removeButton}
             >
               {tCommon('cancel')}
             </Button>
             <Button
               type="submit"
               disabled={addPeopleToTagLoading}
-              variant="primary"
               data-testid="assignPeopleBtn"
+              className={styles.addButton}
             >
               {t('assign')}
             </Button>
