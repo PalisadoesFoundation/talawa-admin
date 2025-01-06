@@ -33,8 +33,24 @@
     "jest",
     "import",
     "eslint-plugin-tsdoc",
-    "prettier"
+    "prettier",
+    "markdown"
   ],
+
+  "overrides": [
+    {
+      "files": ["**/*.md"],
+      "processor": "markdown/markdown"
+    },
+    {
+      "files": ["**/*.md/*.js"],
+      "rules": {
+        "no-unused-vars": "off",
+        "no-undef": "off"
+      }
+    }
+  ],
+
   "rules": {
     "react/destructuring-assignment": "error",
     "@typescript-eslint/explicit-module-boundary-types": "error",
