@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import useDebounce from './useDebounce';
 
 /**
  * Props for the `TruncatedText` component.
@@ -31,36 +32,43 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   text,
   maxWidthOverride,
 }) => {
-  const [truncatedText, setTruncatedText] = useState<string>(''); // State to store the truncated text
-  const textRef = useRef<HTMLHeadingElement>(null); // Ref to measure the width of the text container
+  const [truncatedText, setTruncatedText] = useState<string>('');
+  const textRef = useRef<HTMLHeadingElement>(null);
+
+  const { debouncedCallback, cancel } = useDebounce(() => {
+    truncateText();
+  }, 100);
+
+  /**
+   * Truncate the text based on the available width or the `maxWidthOverride` value.
+   */
+  const truncateText = (): void => {
+    const element = textRef.current;
+    if (element) {
+      const maxWidth = maxWidthOverride || element.offsetWidth;
+      const fullText = text;
+
+      const computedStyle = getComputedStyle(element);
+      const fontSize = parseFloat(computedStyle.fontSize);
+      const charPerPx = 0.065 + fontSize * 0.002;
+      const maxChars = Math.floor(maxWidth * charPerPx);
+
+      setTruncatedText(
+        fullText.length > maxChars
+          ? `${fullText.slice(0, maxChars - 3)}...`
+          : fullText,
+      );
+    }
+  };
 
   useEffect(() => {
-    /**
-     * Truncate the text based on the available width or the `maxWidthOverride` value.
-     */
-    const truncateText = (): void => {
-      const element = textRef.current;
-      if (element) {
-        const maxWidth = maxWidthOverride || element.offsetWidth;
-        const fullText = text;
-
-        const computedStyle = getComputedStyle(element);
-        const fontSize = parseFloat(computedStyle.fontSize);
-        const charPerPx = 0.065 + fontSize * 0.002;
-        const maxChars = Math.floor(maxWidth * charPerPx);
-
-        setTruncatedText(
-          fullText.length > maxChars
-            ? `${fullText.slice(0, maxChars - 3)}...`
-            : fullText,
-        );
-      }
-    };
-
     truncateText();
-    window.addEventListener('resize', truncateText);
-    return () => window.removeEventListener('resize', truncateText);
-  }, [text, maxWidthOverride]);
+    window.addEventListener('resize', debouncedCallback);
+    return () => {
+      cancel();
+      window.removeEventListener('resize', debouncedCallback);
+    };
+  }, [text, maxWidthOverride, debouncedCallback, cancel]);
 
   return (
     <h6 ref={textRef} className="text-secondary">
