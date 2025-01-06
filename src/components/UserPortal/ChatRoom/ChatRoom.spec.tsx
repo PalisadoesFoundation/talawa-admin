@@ -5963,7 +5963,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     act(() => {
       fireEvent.mouseOver(messages[0]);
     });
-
+    await wait();
     expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
 
     const moreOptionsBtn = await screen.findByTestId('dropdown');

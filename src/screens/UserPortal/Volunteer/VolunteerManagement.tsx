@@ -151,10 +151,7 @@ const VolunteerManagement = (): JSX.Element => {
               {volunteerDashboardTabs.map(({ value, icon }, index) => (
                 <Dropdown.Item
                   key={index}
-                  onClick={
-                    /* istanbul ignore next */
-                    () => setTab(value)
-                  }
+                  onClick={() => setTab(value)}
                   className={`d-flex gap-2 ${tab === value && 'text-secondary'}`}
                 >
                   {icon} {t(value)}

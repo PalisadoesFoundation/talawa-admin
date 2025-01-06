@@ -2,7 +2,7 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from './EventCalendar.module.css';
+import styles from '../../style/app.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../HolidayCards/HolidayCard';
@@ -521,7 +521,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         <div className={styles.calendar__header}>
           <Button
             variant="outlined"
-            className={styles.button}
+            className={styles.buttonEventCalendar}
             onClick={
               viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
             }
@@ -539,7 +539,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </div>
           <Button
             variant="outlined"
-            className={styles.button}
+            className={styles.buttonEventCalendar}
             onClick={
               viewType == ViewType.DAY ? handleNextDate : handleNextMonth
             }
