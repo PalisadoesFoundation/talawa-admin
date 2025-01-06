@@ -300,7 +300,7 @@ const organizationFunds = (): JSX.Element => {
           <Button
             tabIndex={-1}
             className={`${styles.searchButton} `}
-            style={{ marginBottom: '9px' }}
+            style={{ marginBottom: '0px' }}
             data-testid="searchBtn"
           >
             <Search className={styles.searchIcon} />
@@ -339,7 +339,7 @@ const organizationFunds = (): JSX.Element => {
               variant="success"
               onClick={() => handleOpenModal(null, 'create')}
               className={styles.createButton}
-              style={{ marginTop: '11px' }}
+              style={{ marginTop: '0px' }}
               data-testid="createFundBtn"
             >
               <i className={'fa fa-plus me-2'} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './Advertisements.module.css';
+import styles from '../../style/app.module.css';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { Button, Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
@@ -79,29 +79,20 @@ export default function advertisements(): JSX.Element {
   return (
     <>
       <Row data-testid="advertisements">
-        <Col col={8} style={{ backgroundColor: 'white', borderRadius: '20px' }}>
-          <div className={styles.justifysp}>
-            <Col
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '10px',
-              }}
-            >
-              <div className={styles.input}>
+        <Col col={8} className={styles.containerAdvertisements}>
+          <div className={styles.justifyspAdvertisements}>
+            <Col className={styles.colAdvertisements}>
+              <div className={styles.inputAdvertisements}>
                 <Form.Control
                   type="name"
                   id="searchname"
-                  className={styles.actioninput}
+                  className={styles.inputField}
                   placeholder={'Search..'}
                   autoComplete="off"
                   required
                   // onChange={(e): void => setSearchText("search")}
                 />
-                <Button
-                  className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center `}
-                >
+                <Button className={styles.searchButton}>
                   <Search />
                 </Button>
               </div>
@@ -145,7 +136,7 @@ export default function advertisements(): JSX.Element {
                     orgAdvertisementListData?.organizations[0].advertisements
                       .pageInfo.hasNextPage ?? false
                   }
-                  className={styles.listBox}
+                  className={styles.listBoxAdvertisements}
                   data-testid="organizations-list"
                   endMessage={
                     advertisements.filter(
@@ -221,7 +212,7 @@ export default function advertisements(): JSX.Element {
                     orgAdvertisementListData?.organizations[0].advertisements
                       .pageInfo.hasNextPage ?? false
                   }
-                  className={styles.listBox}
+                  className={styles.listBoxAdvertisements}
                   data-testid="organizations-list"
                   endMessage={
                     advertisements.filter(

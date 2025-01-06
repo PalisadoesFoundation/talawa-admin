@@ -17,32 +17,37 @@ import {
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
-  toast: { success: jest.fn() }, // Mock toast function
+vi.mock('react-toastify', () => ({
+  toast: { success: vi.fn() }, // Mock toast function
 }));
 
 Object.defineProperty(window, 'localStorage', {
   value: {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
+    getItem: vi.fn(),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
   },
   writable: true,
 });
 
 // Mock useParams to return a test organization ID
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
-  useNavigate: jest.fn(),
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actualDom = await vi.importActual('react-router-dom');
+  return {
+    ...actualDom,
+    useParams: vi.fn(),
+    useNavigate: vi.fn(),
+  };
+});
 
 // Mock the custom hook
-jest.mock('utils/useLocalstorage', () => {
+vi.mock('utils/useLocalstorage', () => {
   return {
-    getItem: jest.fn((prefix: string, key: string) => {
+    getItem: vi.fn((prefix: string, key: string) => {
       if (prefix === 'Talawa-admin' && key === 'email')
         return 'test@example.com';
       if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
@@ -235,8 +240,10 @@ const errorMocks = [
 
 beforeEach(() => {
   localStorage.clear();
-  jest.clearAllMocks(); // Clear mocks before each test
-  (useParams as jest.Mock).mockReturnValue({ orgId: 'test-org-id' });
+  vi.clearAllMocks();
+  (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    orgId: 'test-org-id',
+  });
 });
 
 describe('LeaveOrganization Component', () => {
@@ -309,7 +316,9 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('logs an error when unable to access localStorage', () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const userEmail = (() => {
       try {
         return getItem('Talawa-admin-error', 'user-email-error') ?? '';
@@ -336,9 +345,11 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('navigates and shows toast when email matches', async () => {
-    const mockNavigate = jest.fn();
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-    const toastSuccessMock = jest.fn();
+    const mockNavigate = vi.fn();
+    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+      mockNavigate,
+    );
+    const toastSuccessMock = vi.fn();
     toast.success = toastSuccessMock;
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -485,8 +496,10 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('closes modal and resets state when Esc key is pressed', async () => {
-    const mockNavigate = jest.fn();
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+    const mockNavigate = vi.fn();
+    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+      mockNavigate,
+    );
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>

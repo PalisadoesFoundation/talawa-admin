@@ -4,9 +4,10 @@ import { BrowserRouter } from 'react-router-dom';
 
 import type { InterfaceTableLoader } from './TableLoader';
 import TableLoader from './TableLoader';
+import { vi } from 'vitest';
 
 beforeAll(() => {
-  console.error = jest.fn();
+  console.error = vi.fn();
 });
 
 describe('Testing Loader component', () => {
