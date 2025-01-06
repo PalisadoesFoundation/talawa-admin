@@ -75,9 +75,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     <>
       <div
         className={styles.cardsEventListCard}
-        style={{
-          backgroundColor: '#d9d9d9',
-        }}
         onClick={showViewModal}
         data-testid="card"
       >
@@ -98,5 +95,5 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     </>
   );
 }
-export {};
+
 export default eventListCard;
