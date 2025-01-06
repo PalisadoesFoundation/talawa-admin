@@ -90,7 +90,7 @@ const startPostModal = ({
           file: img,
         },
       });
-      /* istanbul ignore next */
+
       if (data) {
         toast.dismiss();
         toast.success(t('postNowVisibleInFeed') as string);
@@ -98,7 +98,6 @@ const startPostModal = ({
         handleHide();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };

@@ -536,7 +536,7 @@ function ManageTag(): JSX.Element {
                   </div>
                   <hr
                     style={{
-                      borderColor: 'lightgray',
+                      borderColor: 'var(--grey-border-box-color)',
                       borderWidth: '2px',
                       width: '85%',
                     }}

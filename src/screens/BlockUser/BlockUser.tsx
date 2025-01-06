@@ -104,13 +104,11 @@ const Requests = (): JSX.Element => {
             orgId: currentUrl,
           },
         });
-        /* istanbul ignore next */
         if (data) {
           toast.success(t('blockedSuccessfully') as string);
           memberRefetch();
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     },
@@ -127,13 +125,11 @@ const Requests = (): JSX.Element => {
             orgId: currentUrl,
           },
         });
-        /* istanbul ignore next */
         if (data) {
           toast.success(t('Un-BlockedSuccessfully') as string);
           memberRefetch();
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     },

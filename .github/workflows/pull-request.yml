@@ -37,8 +37,8 @@ jobs:
 
       - name: Count number of lines
         run: |
-          chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
+          chmod +x ./.github/workflows/scripts/countline.py
+          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -71,8 +71,8 @@ jobs:
 
       - name: Compare translation files
         run: |
-          chmod +x .github/workflows/compare_translations.py
-          python .github/workflows/compare_translations.py --directory public/locales
+          chmod +x .github/workflows/scripts/compare_translations.py
+          python .github/workflows/scripts/compare_translations.py --directory public/locales
 
       - name: Check if the source and target branches are different
         if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
@@ -97,6 +97,8 @@ jobs:
         with:
           files: |
             .env*
+            vitest.config.js
+            src/App.tsx
             .github/**
             env.example
             .node-version
@@ -112,7 +114,6 @@ jobs:
             .eslintignore
             .prettierrc
             .prettierignore
-            .nojekyll
             vite.config.ts
             docker-compose.yaml
             Dockerfile
@@ -134,6 +135,11 @@ jobs:
             *.password
             *.secret
             *.credentials
+            .nojekyll
+            yarn.lock
+            docs/docusaurus.config.ts
+            docs/sidebar*
+            CNAME
             
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
@@ -193,7 +199,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+          python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Check-Code-Coverage-Disable:
     name: Check for code coverage disable
@@ -213,7 +219,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }} 
+          python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }} 
 
   Test-Application:
     name: Test Application
@@ -336,20 +342,8 @@ jobs:
           echo $! > .pidfile_prod
       - name: Check if Production App is running
         run: |
-          timeout=120
-          echo "Starting production health check with ${timeout}s timeout"
-          while ! nc -z localhost 4173 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for production app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for production application to start"
-            exit 1
-          fi
-          echo "Production app started successfully"
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4173 120
       - name: Stop Production App
         run: |
           if [ -f .pidfile_prod ]; then
@@ -361,20 +355,8 @@ jobs:
           echo $! > .pidfile_dev
       - name: Check if Development App is running
         run: |
-          timeout=120
-          echo "Starting development health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for development app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for development application to start"
-            exit 1
-          fi
-          echo "Development app started successfully"
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120
       - name: Stop Development App
         if: always()
         run: |
@@ -410,22 +392,8 @@ jobs:
           echo "Docker container started successfully"
       - name: Check if Talawa Admin App is running
         run: |
-          timeout="${HEALTH_CHECK_TIMEOUT:-120}"
-          echo "Starting health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for application to start"
-            echo "Container logs:"
-            docker logs talawa-admin-app-container
-            exit 1
-          fi
-          echo "Port check passed, verifying health endpoint..."
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
       - name: Stop Docker Container
         if: always()
         run: |
@@ -464,3 +432,20 @@ jobs:
           echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
           echo "Error: Close this PR and try again."
           exit 1
+
+  Validate-Coderabbit:
+    name: Validate CodeRabbit Approval
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    needs: [Test-Docusaurus-Deployment]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Validate CodeRabbit.ai Approval
+        run: |
+          chmod +x $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
+          $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
