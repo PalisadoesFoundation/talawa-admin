@@ -13,6 +13,23 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgPost from './OrgPost';
+import { jest } from '@jest/globals';
+
+interface InterfacePageInfo {
+  endCursor: string;
+  startCursor: string;
+}
+
+interface InterfaceOrgPostListData {
+  organizations: [
+    {
+      posts: {
+        pageInfo: InterfacePageInfo;
+      };
+    },
+  ];
+}
+
 const MOCKS = [
   {
     request: {
@@ -685,5 +702,148 @@ describe('Organisation Post Page', () => {
     expect(sortedPosts[2]).toHaveTextContent(
       'posttwoTis is the post two Aditya Shelke',
     );
+  });
+});
+
+describe('Pagination Handlers', () => {
+  // Mock setState functions
+  const setAfter = jest.fn();
+  const setBefore = jest.fn();
+  const setFirst = jest.fn();
+  const setLast = jest.fn();
+
+  // Mock data
+  const mockOrgPostListData: InterfaceOrgPostListData = {
+    organizations: [
+      {
+        posts: {
+          pageInfo: {
+            endCursor: 'mock-end-cursor',
+            startCursor: 'mock-start-cursor',
+          },
+        },
+      },
+    ],
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('handleNextPage', () => {
+    it('should set correct values when called with valid data', () => {
+      const handleNextPage = (): void => {
+        setAfter(
+          mockOrgPostListData?.organizations[0].posts.pageInfo.endCursor,
+        );
+        setBefore(null);
+        setFirst(6);
+        setLast(null);
+      };
+
+      handleNextPage();
+
+      expect(setAfter).toHaveBeenCalledWith('mock-end-cursor');
+      expect(setBefore).toHaveBeenCalledWith(null);
+      expect(setFirst).toHaveBeenCalledWith(6);
+      expect(setLast).toHaveBeenCalledWith(null);
+    });
+  });
+
+  describe('handlePreviousPage', () => {
+    it('should set correct values when called with valid data', () => {
+      const handlePreviousPage = (): void => {
+        setBefore(
+          mockOrgPostListData?.organizations[0].posts.pageInfo.startCursor,
+        );
+        setAfter(null);
+        setFirst(null);
+        setLast(6);
+      };
+
+      handlePreviousPage();
+
+      expect(setBefore).toHaveBeenCalledWith('mock-start-cursor');
+      expect(setAfter).toHaveBeenCalledWith(null);
+      expect(setFirst).toHaveBeenCalledWith(null);
+      expect(setLast).toHaveBeenCalledWith(6);
+    });
+  });
+
+  // Test edge cases for both handlers
+  describe('edge cases', () => {
+    it('should handle undefined orgPostListData in handleNextPage', () => {
+      const nullOrgPostListData: InterfaceOrgPostListData | null | undefined =
+        null;
+
+      const handleNextPageWithUndefined = (): void => {
+        // Using type assertion to handle the undefined case
+        const data = nullOrgPostListData as
+          | InterfaceOrgPostListData
+          | null
+          | undefined;
+        setAfter(data?.organizations?.[0]?.posts?.pageInfo?.endCursor ?? null);
+        setBefore(null);
+        setFirst(6);
+        setLast(null);
+      };
+
+      handleNextPageWithUndefined();
+
+      expect(setAfter).toHaveBeenCalledWith(null);
+      expect(setBefore).toHaveBeenCalledWith(null);
+      expect(setFirst).toHaveBeenCalledWith(6);
+      expect(setLast).toHaveBeenCalledWith(null);
+    });
+
+    it('should handle undefined orgPostListData in handlePreviousPage', () => {
+      const nullOrgPostListData: InterfaceOrgPostListData | null | undefined =
+        null;
+
+      const handlePreviousPageWithUndefined = (): void => {
+        // Using type assertion to handle the undefined case
+        const data = nullOrgPostListData as
+          | InterfaceOrgPostListData
+          | null
+          | undefined;
+        setBefore(
+          data?.organizations?.[0]?.posts?.pageInfo?.startCursor ?? null,
+        );
+        setAfter(null);
+        setFirst(null);
+        setLast(6);
+      };
+
+      handlePreviousPageWithUndefined();
+
+      expect(setBefore).toHaveBeenCalledWith(null);
+      expect(setAfter).toHaveBeenCalledWith(null);
+      expect(setFirst).toHaveBeenCalledWith(null);
+      expect(setLast).toHaveBeenCalledWith(6);
+    });
+
+    it('should handle null orgPostListData in both handlers', () => {
+      const handleNextPageWithNull = (): void => {
+        setAfter(null);
+        setBefore(null);
+        setFirst(6);
+        setLast(null);
+      };
+
+      const handlePreviousPageWithNull = (): void => {
+        setBefore(null);
+        setAfter(null);
+        setFirst(null);
+        setLast(6);
+      };
+
+      handleNextPageWithNull();
+      expect(setAfter).toHaveBeenCalledWith(null);
+
+      jest.clearAllMocks();
+
+      handlePreviousPageWithNull();
+      expect(setBefore).toHaveBeenCalledWith(null);
+    });
   });
 });

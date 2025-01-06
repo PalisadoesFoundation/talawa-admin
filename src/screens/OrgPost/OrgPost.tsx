@@ -247,7 +247,7 @@ function orgPost(): JSX.Element {
     setFirst(null);
     setLast(6);
   };
-  // console.log(orgPostListData?.organizations[0].posts);
+
   const sortPosts = (
     posts: InterfaceOrgPost[],
     sortingOption: string,
@@ -426,10 +426,11 @@ function orgPost(): JSX.Element {
           <div className="col-auto">
             <Button
               onClick={handleNextPage}
-              className={`${styles.createButton} btn-sm `}
+              className={`${styles.createButton} btn-sm`}
               disabled={
-                !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
+                !orgPostListData?.organizations[0]?.posts?.pageInfo?.hasNextPage
               }
+              data-testid="nextButton"
             >
               {t('Next')}
             </Button>
