@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Contains the PDF file of the Tag as JSON string, thus does not need to be linted
 
 src/components/CheckIn/tagTemplate.ts
@@ -8,3 +9,15 @@ tsconfig.json
 # Ignore the Docusaurus website subdirectory
 
 docs/\*\*
+=======
+# Contains the PDF file of the Tag as JSON string, thus does not need to be linted
+
+src/components/CheckIn/tagTemplate.ts
+package.json
+package-lock.json
+tsconfig.json
+
+# Ignore the Docusaurus website subdirectory
+
+docs/\*\*
+>>>>>>> 69546038a267cd26629193c911dfe3497ef9439e
