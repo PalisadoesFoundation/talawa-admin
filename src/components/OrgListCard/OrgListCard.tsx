@@ -97,8 +97,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             </Tooltip>
             {/* Description of the organization */}
             <h6 className={`${styles.orgdesc} fw-semibold`}>
-              {/* <TruncatedText text={userData?.organizations[0].description || ''} /> */}
-              <span>{userData?.organizations[0].description}</span>
+              <TruncatedText text={userData?.organizations[0]?.description || ''} />
             </h6>
 
             {/* Display the organization address if available */}
