@@ -58,9 +58,7 @@ function orgPeopleListCard(
       // If the mutation is successful, show a success message and reload the page
       if (data) {
         toast.success(t('memberRemoved') as string);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        props.toggleRemoveModal();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
