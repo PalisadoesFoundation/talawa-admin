@@ -90,9 +90,11 @@
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
-  --table-head-bg: var(--bs-primary, var(--blue-color));
+
+  --table-head-bg: var(--blue-subtle, var(--blue-color));
   --table-head-color: var(--bs-white, var(--white-color));
-  --table-header-color: var(--bs-greyish-black, var(--black-color));
+
+  --table-header-color: var(--bs-white, var(--bs-gray-300));
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
@@ -105,6 +107,7 @@
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1024px;
 }
+
 .fonts {
   color: var(--grey-bg-color-dark);
 }
@@ -1005,7 +1008,7 @@ hr {
 }
 
 .justifyspOrganizationEvents {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   margin-top: 20px;
 }
@@ -1449,6 +1452,7 @@ hr {
     flex-direction: column;
     justify-content: center;
   }
+
   .btnsContainer .btnsBlock {
     display: block;
     margin-top: 1rem;
@@ -1486,13 +1490,27 @@ hr {
     margin: 1.5rem 0;
   }
 
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .btnsContainer > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
   .btnsContainer .btnsBlock {
+    display: block;
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
   .btnsContainer .btnsBlock button {
-    margin: 0;
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
   }
 
   .btnsContainer .btnsBlock div button {
@@ -1563,6 +1581,12 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer .btnsBlock button {
+    margin-left: 0;
+  }
 }
 
 .errorMessage {
@@ -5419,7 +5443,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .flex_grow {
-  flex-grow: 1;
+  flex-grow: 0.5;
 }
 
 .space {
@@ -5446,6 +5470,34 @@ button[data-testid='createPostBtn'] {
 .selectTypeEventHeader {
   border-radius: 10px;
   margin-left: 5px;
+}
+
+@media (max-width: 520px) {
+  .calendar__header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .space {
+    display: block !important;
+    text-align: center;
+  }
+
+  .space > * {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* .input {
+    width: 100%; 
+  }
+
+  .createButton {
+    margin: 0 auto;
+    width: 100%; 
+  } */
 }
 
 /* EventListCardModals.tsx */

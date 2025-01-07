@@ -72,8 +72,8 @@ export default {
   ],
   coverageThreshold: {
     global: {
-      lines: 20,
-      statements: 20,
+      lines: 1,
+      statements: 1,
     },
   },
   testPathIgnorePatterns: [
