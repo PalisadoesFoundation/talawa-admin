@@ -33,7 +33,7 @@ type FeedbackType = {
 export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
   return (
     <>
-      <Card className={styles.cardContainer} >
+      <Card className={styles.cardContainer}>
         <Card.Body>
           <Card.Title>
             <h4>Average Review Score</h4>
