@@ -292,3 +292,88 @@ describe('VenueModal', () => {
     );
   });
 });
+
+describe('VenueModal with error scenarios', () => {
+  test('displays error toast when creating a venue fails', async () => {
+    const errorMocks = [
+      {
+        request: {
+          query: CREATE_VENUE_MUTATION,
+          variables: {
+            name: 'Error Venue',
+            description: 'This should fail',
+            capacity: 50,
+            organizationId: 'orgId',
+            file: '',
+          },
+        },
+        error: new Error('Failed to create venue'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(errorMocks, true);
+    renderVenueModal(props[0], errorLink);
+
+    const nameInput = screen.getByPlaceholderText('Enter Venue Name');
+    fireEvent.change(nameInput, { target: { value: 'Error Venue' } });
+
+    const descriptionInput = screen.getByPlaceholderText(
+      'Enter Venue Description',
+    );
+    fireEvent.change(descriptionInput, {
+      target: { value: 'This should fail' },
+    });
+
+    const capacityInput = screen.getByPlaceholderText('Enter Venue Capacity');
+    fireEvent.change(capacityInput, { target: { value: 50 } });
+
+    const submitButton = screen.getByTestId('createVenueBtn');
+    fireEvent.click(submitButton);
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith('Failed to create venue');
+  });
+
+  test('displays error toast when updating a venue fails', async () => {
+    const errorMocks = [
+      {
+        request: {
+          query: UPDATE_VENUE_MUTATION,
+          variables: {
+            capacity: 150,
+            description: 'Failed update description',
+            file: 'image1',
+            id: 'venue1',
+            name: 'Failed Update Venue',
+            organizationId: 'orgId',
+          },
+        },
+        error: new Error('Failed to update venue'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(errorMocks, true);
+    renderVenueModal(props[1], errorLink);
+
+    const nameInput = screen.getByDisplayValue('Venue 1');
+    fireEvent.change(nameInput, { target: { value: 'Failed Update Venue' } });
+
+    const descriptionInput = screen.getByDisplayValue(
+      'Updated description for venue 1',
+    );
+    fireEvent.change(descriptionInput, {
+      target: { value: 'Failed update description' },
+    });
+
+    const capacityInput = screen.getByDisplayValue('100');
+    fireEvent.change(capacityInput, { target: { value: 150 } });
+
+    const submitButton = screen.getByTestId('updateVenueBtn');
+    fireEvent.click(submitButton);
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith('Failed to update venue');
+  });
+});
