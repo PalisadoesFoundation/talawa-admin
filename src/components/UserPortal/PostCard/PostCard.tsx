@@ -230,9 +230,9 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           .replace(/^Comment validation failed:\s*/, '')
           .replace(/Path `text` is required\./, '')
           .trim();
-        toast.error('Please enter a comment before submitting.');
+        toast.error(t('comment.notFound'));
       } else {
-        toast.error('An unexpected error occurred. Please try again.');
+        //toast.error(t('An unexpected error occurred. Please try again.'));
         errorHandler(t, error);
       }
     }

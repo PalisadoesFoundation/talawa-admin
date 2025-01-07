@@ -1050,6 +1050,7 @@
   "postCard": {
     "likes": "Aime",
     "comments": "commentaires",
+    "comment.notFound": "Veuillez entrer ce commentaire avant de soumettre",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
     "postedOn": "Publié le {{date}}"

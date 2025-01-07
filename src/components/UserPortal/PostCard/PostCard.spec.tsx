@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -659,6 +659,57 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('createCommentBtn'));
 
     await wait();
+  });
+
+  test('shows error when creating an empty comment and displays the error toast message', async () => {
+    console.log('running empty comment test case');
+    const cardProps = {
+      id: '1',
+      userImage: 'image.png',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      postedAt: '',
+      image: 'testImage',
+      video: '',
+      text: 'This is post test text',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 0,
+      comments: [],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '1',
+        },
+      ],
+      fetchPosts: vi.fn(),
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const randomComment = '';
+    userEvent.click(screen.getByTestId('viewPostBtn'));
+    userEvent.type(screen.getByTestId('commentInput'), randomComment);
+    userEvent.click(screen.getByTestId('createCommentBtn'));
+    await waitFor(() => {
+      expect(
+        screen.getByText(i18nForTest.t('comment.notFound')),
+      ).toBeInTheDocument();
+    });
   });
 
   test(`Comment should be liked when like button is clicked`, async () => {
