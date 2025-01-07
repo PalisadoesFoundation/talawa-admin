@@ -398,7 +398,9 @@ function orgList(): JSX.Element {
           )}
         </div>
       </div>
+
       {/* Text Infos for list */}
+
       {!isLoading &&
       (!orgsData?.organizationsConnection ||
         orgsData.organizationsConnection.length === 0) &&
@@ -485,6 +487,7 @@ function orgList(): JSX.Element {
                       <div
                         className={`${styles.orgImgContainer} shimmer`}
                       ></div>
+
                       <div className={styles.content}>
                         <h5 className="shimmer" title="Org name"></h5>
                         <h6 className="shimmer" title="Location"></h6>

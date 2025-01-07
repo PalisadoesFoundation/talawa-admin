@@ -184,18 +184,52 @@ function organizationPeople(): JSX.Element {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
+
       renderCell: (params: GridCellParams) => {
-        return params.row?.image ? (
-          <img
-            src={params.row?.image}
-            alt="avatar"
-            className={styles.TableImage}
-          />
-        ) : (
-          <Avatar
-            avatarStyle={styles.TableImage}
-            name={`${params.row.firstName} ${params.row.lastName}`}
-          />
+        // Fallback to a fixed width if computedWidth is unavailable
+        const columnWidth = params.colDef.computedWidth || 150;
+        const imageSize = Math.min(columnWidth * 0.6, 60); // Max size 40px, responsive scaling
+
+        return (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+          >
+            {params.row?.image ? (
+              <img
+                src={params.row?.image}
+                alt="avatar"
+                style={{
+                  width: `${imageSize}px`,
+                  height: `${imageSize}px`,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: `${imageSize}px`,
+                  height: `${imageSize}px`,
+                  fontSize: `${imageSize * 0.4}px`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '50%',
+                  backgroundColor: '#ccc',
+                }}
+              >
+                <Avatar
+                  name={`${params.row.firstName} ${params.row.lastName}`}
+                />
+              </div>
+            )}
+          </div>
         );
       },
     },
