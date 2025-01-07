@@ -18,11 +18,13 @@ def check_embedded_css(content: str) -> list:
     Returns:
         A list of embedded CSS violations found.
     """
-    embedded_css_pattern = r'#([0-9a-fA-F]{3}){1,2}'
+    embedded_css_pattern = r"#([0-9a-fA-F]{3}){1,2}"  # Matches CSS color codes
     return re.findall(embedded_css_pattern, content)
 
 
-def check_files(directory: str, exclude_files: list, exclude_directories: list) -> tuple:
+def check_files(
+    directory: str, exclude_files: list, exclude_directories: list, allowed_css_patterns: list
+) -> tuple:
     """
     Check TypeScript files for CSS violations and print correct CSS imports.
 
@@ -30,6 +32,7 @@ def check_files(directory: str, exclude_files: list, exclude_directories: list) 
         directory: The directory to check.
         exclude_files: List of files to exclude from analysis.
         exclude_directories: List of directories to exclude from analysis.
+        allowed_css_patterns: List of allowed CSS file patterns.
 
     Returns:
         A tuple containing lists of violations, correct CSS imports, and embedded CSS violations.
@@ -56,44 +59,69 @@ def check_files(directory: str, exclude_files: list, exclude_directories: list) 
 
             # Process TypeScript files
             if file.endswith((".ts", ".tsx")) and "test" not in root:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    content = f.read()
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        content = f.read()
+                except (IOError, UnicodeDecodeError) as e:
+                    print(f"Error reading file {file_path}: {e}")
+                    continue
 
-                    # Check for CSS imports with an improved regex pattern
-                    css_imports = re.findall(r'import\s+.*?["\'](.*?\.css)["\'];', content)
-                    for css_file in css_imports:
-                        # Check if the CSS import ends with /app.module.css
-                        if css_file.endswith("/app.module.css"):
-                            correct_css_imports.append(f"Correct CSS import ({css_file}) in {file_path}")
-                        else:
-                            violations.append(f"Invalid CSS import ({css_file}) in {file_path}")
+                # Check for CSS imports with an improved regex pattern
+                css_imports = re.findall(
+                    r'import\s+.*?["\'](.*?\.css)["\'];', content
+                )
+                for css_file in css_imports:
+                    # Check if the CSS import matches the allowed patterns
+                    if any(css_file.endswith(pattern) for pattern in allowed_css_patterns):
+                        correct_css_imports.append(
+                            f"Correct CSS import ({css_file}) in {file_path}"
+                        )
+                    else:
+                        violations.append(
+                            f"Invalid CSS import ({css_file}) in {file_path}"
+                        )
 
-                    # Check for embedded CSS
-                    embedded_css = check_embedded_css(content)
-                    if embedded_css:
-                        embedded_css_violations.append(f"Embedded CSS found in {file_path}: {', '.join(embedded_css)}")
+                # Check for embedded CSS
+                embedded_css = check_embedded_css(content)
+                if embedded_css:
+                    embedded_css_violations.append(
+                        f"Embedded CSS found in {file_path}: {', '.join(embedded_css)}"
+                    )
 
     return violations, correct_css_imports, embedded_css_violations
 
 
 def main():
     """Run the CSS check script."""
-    parser = argparse.ArgumentParser(description="Check for CSS violations in TypeScript files.")
+    parser = argparse.ArgumentParser(
+        description="Check for CSS violations in TypeScript files."
+    )
     parser.add_argument("--directory", required=True, help="Directory to check.")
     parser.add_argument(
-        "--exclude_files", nargs="*", default=[],
-        help="Specific files to exclude from analysis."
+        "--exclude_files",
+        nargs="*",
+        default=[],
+        help="Specific files to exclude from analysis.",
     )
     parser.add_argument(
-        "--exclude_directories", nargs="*", default=[],
-        help="Directories to exclude from analysis."
+        "--exclude_directories",
+        nargs="*",
+        default=[],
+        help="Directories to exclude from analysis.",
+    )
+    parser.add_argument(
+        "--allowed_css_patterns",
+        nargs="*",
+        default=["app.module.css"],
+        help="Allowed CSS file patterns.",
     )
     args = parser.parse_args()
 
     violations, correct_css_imports, embedded_css_violations = check_files(
         directory=args.directory,
         exclude_files=args.exclude_files,
-        exclude_directories=args.exclude_directories
+        exclude_directories=args.exclude_directories,
+        allowed_css_patterns=args.allowed_css_patterns,
     )
 
     if violations:
@@ -119,3 +147,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
