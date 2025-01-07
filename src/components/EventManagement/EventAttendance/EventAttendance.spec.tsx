@@ -103,11 +103,14 @@ describe('Event Attendance Component', () => {
     await wait();
 
     const sortDropdown = screen.getByTestId('sort-dropdown');
-    userEvent.click(sortDropdown);
-    userEvent.click(screen.getByText('Sort'));
+    userEvent.click(sortDropdown); // Open the sort dropdown
+
+    const sortOption = screen.getByText('Ascending'); // Assuming 'Ascending' is the option you choose for sorting
+    userEvent.click(sortOption);
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId('attendee-name-0');
+      // Check if the first attendee is 'Bruce Garza' after sorting
       expect(attendees[0]).toHaveTextContent('Bruce Garza');
     });
   });
@@ -117,10 +120,14 @@ describe('Event Attendance Component', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText('Filter: All'));
-    userEvent.click(screen.getByText('This Month'));
+    const filterDropdown = screen.getByTestId('filter-dropdown');
+    userEvent.click(filterDropdown); // Open the filter dropdown
+
+    const filterOption = screen.getByText('This Month'); // Assuming 'This Month' is the option you choose for filtering
+    userEvent.click(filterOption);
 
     await waitFor(() => {
+      // Check if the message 'Attendees not Found' is displayed
       expect(screen.getByText('Attendees not Found')).toBeInTheDocument();
     });
   });

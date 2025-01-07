@@ -27,7 +27,7 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
   onSortChange,
   dataTestIdPrefix,
   dropdownTestId,
-  className = styles.dropdownToggle,
+  className = styles.dropdown,
   buttonLabel, // Destructure the optional buttonLabel prop
 }) => {
   return (
