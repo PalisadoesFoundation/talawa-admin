@@ -1,0 +1,26 @@
+diff --git a/node_modules/psl/dist/psl.js b/node_modules/psl/dist/psl.js
+index 2e967df..f6766de 100644
+--- a/node_modules/psl/dist/psl.js
++++ b/node_modules/psl/dist/psl.js
+@@ -9380,7 +9380,7 @@ module.exports=[
+ 'use strict';
+ 
+ 
+-var Punycode = require('punycode');
++var Punycode = require('punycode/');
+ 
+ 
+ var internals = {};
+diff --git a/node_modules/psl/index.js b/node_modules/psl/index.js
+index da7bc12..f2dc899 100644
+--- a/node_modules/psl/index.js
++++ b/node_modules/psl/index.js
+@@ -2,7 +2,7 @@
+ 'use strict';
+ 
+ 
+-var Punycode = require('punycode');
++var Punycode = require('punycode/');
+ 
+ 
+ var internals = {};

@@ -43,6 +43,7 @@
     "js-cookie": "^3.0.1",
     "lcov-result-merger": "^5.0.1",
     "markdown-toc": "^1.2.0",
+    "patch-package": "^8.0.0",
     "prettier": "^3.3.3",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
@@ -92,7 +93,8 @@
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx setup.ts",
-    "check-localstorage": "node scripts/githooks/check-localstorage-usage.js"
+    "check-localstorage": "node scripts/githooks/check-localstorage-usage.js",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": [
@@ -117,10 +119,10 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.7",
     "@babel/preset-typescript": "^7.26.0",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^12.1.10",
-    "@testing-library/dom": "^10.4.0",
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^26.0.24",
     "@types/js-cookie": "^3.0.6",
