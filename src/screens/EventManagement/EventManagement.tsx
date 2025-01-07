@@ -100,7 +100,6 @@ const EventManagement = (): JSX.Element => {
   // Determine user role based on local storage
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
-  /*istanbul ignore next*/
   const userRole = superAdmin
     ? 'SUPERADMIN'
     : adminFor?.length > 0
@@ -109,7 +108,6 @@ const EventManagement = (): JSX.Element => {
 
   // Extract event and organization IDs from URL parameters
   const { eventId, orgId } = useParams();
-  /*istanbul ignore next*/
   if (!eventId || !orgId) {
     // Redirect if event ID or organization ID is missing
     return <Navigate to={'/orglist'} />;
@@ -159,7 +157,6 @@ const EventManagement = (): JSX.Element => {
   };
 
   const handleBack = (): void => {
-    /*istanbul ignore next*/
     if (userRole === 'USER') {
       navigate(`/user/events/${orgId}`);
     } else {
@@ -203,11 +200,9 @@ const EventManagement = (): JSX.Element => {
               {eventDashboardTabs.map(({ value, icon }, index) => (
                 <Dropdown.Item
                   key={index}
-                  onClick={
-                    /* istanbul ignore next */
-                    () => setTab(value)
-                  }
+                  onClick={() => setTab(value)}
                   className={`d-flex gap-2 ${tab === value ? 'text-secondary' : ''}`}
+                  data-testid={`${value}DropdownItem`}
                 >
                   {icon} {t(value)}
                 </Dropdown.Item>
@@ -272,10 +267,9 @@ const EventManagement = (): JSX.Element => {
                 <h2>Statistics</h2>
               </div>
             );
-          /*istanbul ignore next*/
-          default:
-            /*istanbul ignore next*/
-            return null;
+          // no use of default here as the default tab is the dashboard selected in useState
+          // default:
+          //   return null;
         }
       })()}
     </div>
