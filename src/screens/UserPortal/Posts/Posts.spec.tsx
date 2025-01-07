@@ -16,16 +16,28 @@ import i18nForTest from 'utils/i18nForTest';
 import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import { expect, describe, test, vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
-    info: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    success: vi.fn(),
   },
 }));
+
+const mockUseParams = vi.fn().mockReturnValue({ orgId: 'orgId' });
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => mockUseParams(),
+    useNavigate: () => vi.fn(),
+  };
+});
 
 const MOCKS = [
   {
@@ -262,28 +274,24 @@ const renderHomeScreen = (): RenderResult =>
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(), // Deprecated
-    removeListener: jest.fn(), // Deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addListener: vi.fn(), // Deprecated
+    removeListener: vi.fn(), // Deprecated
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
   })),
 });
 
 describe('Testing Home Screen: User Portal', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+  beforeEach(() => {
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
   });
-
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Check if HomeScreen renders properly', async () => {
@@ -325,7 +333,6 @@ describe('Testing Home Screen: User Portal', () => {
 
     userEvent.type(screen.getByTestId('postInput'), 'some content');
 
-    // Check that the content and image have been added
     expect(screen.getByTestId('postInput')).toHaveValue('some content');
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
@@ -371,11 +378,15 @@ describe('Testing Home Screen: User Portal', () => {
 });
 
 describe('HomeScreen with invalid orgId', () => {
+  beforeEach(() => {
+    mockUseParams.mockReturnValue({ orgId: undefined });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('Redirect to /user when organizationId is falsy', async () => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: undefined }),
-    }));
     render(
       <MockedProvider addTypename={false} link={link}>
         <MemoryRouter initialEntries={['/user/organization/']}>
