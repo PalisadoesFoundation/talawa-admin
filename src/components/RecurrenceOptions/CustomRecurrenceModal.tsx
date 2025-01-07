@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, FormControl, Modal } from 'react-bootstrap';
-import styles from './CustomRecurrenceModal.module.css';
+import styles from '../../style/app.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
   Days,
@@ -153,7 +153,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         centered
       >
         <Modal.Header>
-          <p className={styles.titlemodal}>{t('customRecurrence')}</p>
+          <p className={styles.titlemodalCustomRecurrenceModal}>
+            {t('customRecurrence')}
+          </p>
           <Button
             variant="danger"
             onClick={hideCustomRecurrenceModal}

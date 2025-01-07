@@ -3,6 +3,6 @@ src/components/CheckIn/tagTemplate.ts
 package.json
 package-lock.json
 tsconfig.json
-docker-compose.yml
-Dockerfile
-nginx.conf
+
+# Ignore the Docusaurus website subdirectory
+docs/**

@@ -76,6 +76,9 @@ function AddMember(): JSX.Element {
   function openAddUserModal(): void {
     setAddUserModalIsOpen(true);
   }
+  useEffect(() => {
+    setUserName('');
+  }, [addUserModalisOpen]);
 
   const toggleDialogModal = (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
@@ -107,10 +110,7 @@ function AddMember(): JSX.Element {
         orgId: currentUrl,
       });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
+      errorHandler(tCommon, error);
     }
   };
 
@@ -385,7 +385,7 @@ function AddMember(): JSX.Element {
                             >
                               {userDetails.user.image ? (
                                 <img
-                                  src={userDetails.user.image ?? undefined}
+                                  src={userDetails.user.image}
                                   alt="avatar"
                                   className={styles.TableImage}
                                 />
@@ -440,7 +440,10 @@ function AddMember(): JSX.Element {
         show={createNewUserModalisOpen}
         onHide={toggleCreateNewUserModal}
       >
-        <Modal.Header className={styles.createUserModalHeader}>
+        <Modal.Header
+          className={styles.createUserModalHeader}
+          data-testid="createUser"
+        >
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>

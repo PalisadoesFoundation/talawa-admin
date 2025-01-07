@@ -33,7 +33,7 @@ import {
 import CommentCard from '../CommentCard/CommentCard';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './PostCard.module.css';
+import styles from './../../../style/app.module.css';
 import UserDefault from '../../../assets/images/defaultImg.png';
 
 interface InterfaceCommentCardProps {
@@ -121,13 +121,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             postId: props.id,
           },
         });
-        /* istanbul ignore next */
+
         if (data) {
           setLikes((likes) => likes - 1);
           setIsLikedByUser(false);
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         toast.error(error as string);
       }
     } else {
@@ -137,13 +136,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             postId: props.id,
           },
         });
-        /* istanbul ignore next */
+
         if (data) {
           setLikes((likes) => likes + 1);
           setIsLikedByUser(true);
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         toast.error(error as string);
       }
     }
@@ -205,7 +203,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (createEventData) {
         setCommentInput('');
         setNumComments((numComments) => numComments + 1);
@@ -228,7 +225,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setComments([...comments, newComment]);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -247,7 +243,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       toggleEditPost();
       toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -264,7 +259,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       props.fetchPosts(); // Refresh the posts
       toast.success('Successfully deleted the Post.');
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -272,7 +266,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   return (
     <Col key={props.id} className="d-flex justify-content-center my-2">
       <Card className={`${styles.cardStyles}`}>
-        <Card.Header className={`${styles.cardHeader}`}>
+        <Card.Header className={`${styles.cardHeaderPostCard}`}>
           <div className={`${styles.creator}`}>
             <AccountCircleIcon className="my-2" />
             <p>{postCreator}</p>
@@ -316,7 +310,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           }
         />
         <Card.Body className="pb-0">
-          <Card.Title className={`${styles.cardTitle}`}>
+          <Card.Title className={`${styles.cardTitlePostCard}`}>
             {props.title}
           </Card.Title>
           <Card.Subtitle style={{ color: '#808080' }}>
@@ -355,7 +349,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </div>
           <div className="w-50 p-2 position-relative">
             <div className="d-flex justify-content-between align-items-center">
-              <div className={`${styles.cardHeader} p-0`}>
+              <div className={`${styles.cardHeaderPostCard} p-0`}>
                 <AccountCircleIcon className="my-2" />
                 <p>{postCreator}</p>
               </div>

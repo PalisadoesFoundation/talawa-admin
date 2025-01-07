@@ -8,7 +8,6 @@ import Avatar from './Avatar';
  * Unit tests for the `Avatar` component.
  *
  * The tests ensure the `Avatar` component renders correctly with various props.
- *
  * Mocked dependencies are used to isolate the component and verify its behavior.
  *
  */

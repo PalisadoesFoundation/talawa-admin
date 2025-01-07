@@ -246,7 +246,7 @@ const VenueModal = ({
             }}
           />
           {venueImage && (
-            <div className={styles.preview}>
+            <div className={styles.previewVenueModal}>
               <img src={imageURL} alt="Venue Image Preview" />
               <button
                 className={styles.closeButtonP}

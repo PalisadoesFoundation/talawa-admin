@@ -38,7 +38,6 @@ function orgList(): JSX.Element {
 
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
-    // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
   }
 
@@ -233,6 +232,8 @@ function orgList(): JSX.Element {
   };
 
   if (errorList || errorUser) {
+    errorHandler(t, errorList || errorUser);
+    localStorage.clear();
     window.location.assign('/');
   }
 
@@ -330,7 +331,7 @@ function orgList(): JSX.Element {
   return (
     <>
       {/* Buttons Container */}
-      <div className={styles.btnsContainer}>
+      <div className={styles.btnsContainerOrgList}>
         <div className={styles.input}>
           <Form.Control
             type="name"
@@ -344,14 +345,15 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={styles.search}
+            // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            className={styles.searchButtonOrgList}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className={styles.btnsBlock}>
+        <div className={styles.btnsBlockOrgList}>
           <div className="d-flex">
             <Dropdown
               aria-expanded="false"
@@ -359,7 +361,7 @@ function orgList(): JSX.Element {
               data-testid="sort"
             >
               <Dropdown.Toggle
-                className={styles.dropdown}
+                // className={styles.dropdown}
                 variant={
                   sortingState.option === '' ? 'outline-success' : 'success'
                 }
@@ -422,7 +424,7 @@ function orgList(): JSX.Element {
             loader={
               <>
                 {[...Array(perPageResult)].map((_, index) => (
-                  <div key={index} className={styles.itemCard}>
+                  <div key={index} className={styles.itemCardOrgList}>
                     <div className={styles.loadingWrapper}>
                       <div className={styles.innerContainer}>
                         <div
@@ -442,7 +444,7 @@ function orgList(): JSX.Element {
               </>
             }
             hasMore={hasMore}
-            className={styles.listBox}
+            className={styles.listBoxOrgList}
             data-testid="organizations-list"
             endMessage={
               <div className={'w-100 text-center my-4'}>
@@ -454,7 +456,7 @@ function orgList(): JSX.Element {
               ? orgsData?.organizationsConnection.map(
                   (item: InterfaceOrgConnectionInfoType) => {
                     return (
-                      <div key={item._id} className={styles.itemCard}>
+                      <div key={item._id} className={styles.itemCardOrgList}>
                         <OrgListCard data={item} />
                       </div>
                     );
@@ -466,7 +468,7 @@ function orgList(): JSX.Element {
                   (item: InterfaceOrgConnectionInfoType) => {
                     if (isAdminForCurrentOrg(item)) {
                       return (
-                        <div key={item._id} className={styles.itemCard}>
+                        <div key={item._id} className={styles.itemCardOrgList}>
                           <OrgListCard data={item} />
                         </div>
                       );
@@ -477,7 +479,7 @@ function orgList(): JSX.Element {
           {isLoading && (
             <>
               {[...Array(perPageResult)].map((_, index) => (
-                <div key={index} className={styles.itemCard}>
+                <div key={index} className={styles.itemCardOrgList}>
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
                       <div
@@ -526,7 +528,7 @@ function orgList(): JSX.Element {
       {/* Plugin Notification Modal after Org is Created */}
       <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
-          className={styles.createButton}
+          className={`bg-primary`}
           closeButton
           data-testid="pluginNotificationHeader"
         >
@@ -543,7 +545,7 @@ function orgList(): JSX.Element {
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link
-                  className={`btn  ${styles.pluginStoreBtn}`}
+                  className={`btn  btn-primary ${styles.pluginStoreBtn}`}
                   data-testid="goToStore"
                   to={`orgstore/id=${dialogRedirectOrgId}`}
                 >

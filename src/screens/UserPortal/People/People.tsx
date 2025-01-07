@@ -37,20 +37,19 @@ interface InterfaceMember {
  * and paginate through the list.
  */
 export default function people(): JSX.Element {
-  // i18n translation hook for user organization related translations
   const { t } = useTranslation('translation', {
     keyPrefix: 'people',
   });
 
-  // i18n translation hook for common translations
   const { t: tCommon } = useTranslation('common');
 
-  // State for managing current page in pagination
   const [page, setPage] = useState<number>(0);
 
   // State for managing the number of rows per page in pagination
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<InterfaceMember[]>([]);
+  const [allMembers, setAllMembers] = useState<InterfaceMember[]>([]);
+  const [admins, setAdmins] = useState<InterfaceMember[]>([]);
   const [mode, setMode] = useState<number>(0);
 
   // Extracting organization ID from URL parameters
@@ -69,17 +68,11 @@ export default function people(): JSX.Element {
       },
     },
   );
-
   // Query to fetch list of admins of the organization
   const { data: data2 } = useQuery(ORGANIZATION_ADMINS_LIST, {
     variables: { id: organizationId },
   });
 
-  /**
-   * Handles page change in pagination.
-   *
-   */
-  /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -87,11 +80,6 @@ export default function people(): JSX.Element {
     setPage(newPage);
   };
 
-  /**
-   * Handles change in the number of rows per page.
-   *
-   */
-  /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -101,20 +89,12 @@ export default function people(): JSX.Element {
     setPage(0);
   };
 
-  /**
-   * Searches for members based on the filter value.
-   *
-   */
   const handleSearch = (newFilter: string): void => {
     refetch({
       firstName_contains: newFilter,
     });
   };
 
-  /**
-   * Handles search operation triggered by pressing the Enter key.
-   *
-   */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -124,9 +104,6 @@ export default function people(): JSX.Element {
     }
   };
 
-  /**
-   * Handles search operation triggered by clicking the search button.
-   */
   const handleSearchByBtnClick = (): void => {
     const inputValue =
       (document.getElementById('searchPeople') as HTMLInputElement)?.value ||
@@ -135,23 +112,50 @@ export default function people(): JSX.Element {
   };
 
   useEffect(() => {
-    if (data) {
-      setMembers(data.organizationsMemberConnection.edges);
+    if (data2) {
+      const admin = data2.organizations[0].admins[0];
+      const updatedAdmin: InterfaceMember = {
+        ...admin,
+        userType: 'Admin',
+      };
+      setAdmins([updatedAdmin]);
     }
-  }, [data]);
+  }, [data2]);
 
-  /**
-   * Updates the list of members based on the selected filter mode.
-   */
-  /* istanbul ignore next */
+  useEffect(() => {
+    if (data) {
+      const updatedAdmins = data.organizationsMemberConnection.edges.map(
+        (memberData: InterfaceMember) => ({
+          ...memberData, // Spread the existing properties
+          userType: admins?.some((admin) => admin._id === memberData._id)
+            ? 'Admin'
+            : 'Member',
+        }),
+      );
+
+      setAllMembers(updatedAdmins);
+      setMembers(updatedAdmins);
+    }
+  }, [data, admins]);
+
+  if (admins && admins.length > 0) {
+    const adminIds = admins.map((adm) => adm._id);
+    for (let i = 0; i < allMembers.length; i++) {
+      if (adminIds.includes(allMembers[i]._id)) {
+        allMembers[i].userType = 'Admin';
+      } else {
+        allMembers[i].userType = 'Member';
+      }
+    }
+  }
   useEffect(() => {
     if (mode == 0) {
       if (data) {
-        setMembers(data.organizationsMemberConnection.edges);
+        setMembers(allMembers);
       }
     } else if (mode == 1) {
       if (data2) {
-        setMembers(data2.organizations[0].admins);
+        setMembers(admins);
       }
     }
   }, [mode]);

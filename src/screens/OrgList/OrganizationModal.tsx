@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
-import styles from './OrgList.module.css';
+import styles from '../../style/app.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -301,7 +301,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               <hr />
               <span className={styles.orText}>{tCommon('OR')}</span>
             </div>
-            {(adminFor.length > 0 || superAdmin) && (
+            {((adminFor && adminFor.length > 0) || superAdmin) && (
               <div className={styles.sampleOrgSection}>
                 <Button
                   className={styles.sampleOrgCreationBtn}

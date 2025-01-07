@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { CheckInModal } from './CheckInModal';
 import { Button } from 'react-bootstrap';
-import IconComponent from 'components/IconComponent/IconComponent';
-import styles from './CheckInWrapper.module.css';
+import style from '../../style/app.module.css';
 
 type PropType = {
   eventId: string;
@@ -21,19 +20,19 @@ export const CheckInWrapper = ({ eventId }: PropType): JSX.Element => {
   return (
     <>
       <Button
-        variant="light"
-        className="text-secondary"
+        data-testid="stats-modal"
+        className={`border-1 bg-white text-success ${style.createButton} `}
         aria-label="checkInRegistrants"
         onClick={(): void => {
           setShowModal(true);
         }}
       >
-        <div className={styles.iconWrapper}>
-          <IconComponent
-            name="Check In Registrants"
-            fill="var(--bs-secondary)"
-          />
-        </div>
+        <img
+          src="/images/svg/options-outline.svg"
+          width={30.63}
+          height={30.63}
+          alt="Sort"
+        />
         Check In Registrants
       </Button>
       {showModal && (

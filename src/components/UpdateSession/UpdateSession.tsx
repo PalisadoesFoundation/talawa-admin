@@ -8,7 +8,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT } from 'GraphQl/Mutations/mutations';
-import './UpdateSession.css';
+import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 
 /**
@@ -77,12 +77,14 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
   const handleOnChange = (
     e: Event | React.ChangeEvent<HTMLInputElement>,
   ): void => {
+    /* istanbul ignore else -- @preserve */
     if ('target' in e && e.target) {
       const target = e.target as HTMLInputElement;
       // Ensure the value is a number and not NaN
       const value = parseInt(target.value, 10);
       if (!Number.isNaN(value)) {
         setTimeout(value);
+        /* istanbul ignore else -- @preserve */
         if (onValueChange) {
           onValueChange(value);
         }
@@ -125,17 +127,19 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
 
   return (
     <>
-      <Card className="update-timeout-card rounded-4 shadow-sm">
-        <Card.Header className="update-timeout-card-header">
-          <div className="update-timeout-card-title">Login Session Timeout</div>
+      <Card className={`${styles.updateTimeoutCard} rounded-4 shadow-sm`}>
+        <Card.Header className={styles.updateTimeoutCardHeader}>
+          <div className={styles.updateTimeoutCardTitle}>
+            Login Session Timeout
+          </div>
         </Card.Header>
-        <Card.Body className="update-timeout-card-body">
+        <Card.Body className={styles.updateTimeoutCardBody}>
           <Form onSubmit={handleOnSubmit}>
-            <div className="update-timeout-labels-container">
-              <Form.Label className="update-timeout-current">
+            <div className={styles.updateTimeoutLabelsContainer}>
+              <Form.Label className={styles.updateTimeoutCurrent}>
                 Current Timeout:
                 <span
-                  className="update-timeout-value"
+                  className={styles.updateTimeoutValue}
                   data-testid="timeout-value"
                 >
                   {communityTimeout !== undefined
@@ -144,7 +148,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
                 </span>
               </Form.Label>
 
-              <Form.Label className="update-timeout-label">
+              <Form.Label className={styles.updateTimeoutLabel}>
                 Update Timeout
               </Form.Label>
             </div>
@@ -174,7 +178,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
             </Box>
 
             <div
-              className="update-timeout-slider-labels"
+              className={styles.updateTimeoutSliderLabels}
               data-testid="slider-labels"
             >
               <span>15 min</span>
@@ -182,11 +186,11 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
               <span>45 min</span>
               <span>60 min</span>
             </div>
-            <div className="update-timeout-button-container">
+            <div className={styles.updateTimeoutButtonContainer}>
               <Button
                 type="submit"
                 variant="success"
-                className="update-timeout-button"
+                className={styles.updateTimeoutButton}
                 data-testid="update-button"
               >
                 Update

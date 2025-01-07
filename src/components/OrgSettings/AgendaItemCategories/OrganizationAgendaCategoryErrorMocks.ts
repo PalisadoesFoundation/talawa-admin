@@ -6,7 +6,12 @@ export const MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY = [
   {
     request: {
       query: AGENDA_ITEM_CATEGORY_LIST,
-      variables: { organizationId: '123' },
+      variables: {
+        organizationId: '123',
+        where: {
+          name_contains: '',
+        },
+      },
     },
     error: new Error('Mock Graphql Error'),
   },
@@ -16,7 +21,12 @@ export const MOCKS_ERROR_MUTATION = [
   {
     request: {
       query: AGENDA_ITEM_CATEGORY_LIST,
-      variables: { organizationId: '123' },
+      variables: {
+        organizationId: '123',
+        where: {
+          name_contains: '',
+        },
+      },
     },
     result: {
       data: {

@@ -1,6 +1,6 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -52,22 +52,22 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
   const { user, hasAccepted, hoursVolunteered, groups } = volunteer;
 
   return (
-    <Modal className={styles.volunteerCreateModal} onHide={hide} show={isOpen}>
+    <Modal className={styles.volunteerViewModal} onHide={hide} show={isOpen}>
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('volunteerDetails')}</p>
+        <p className={styles.modalTitle}>{t('volunteerDetails')}</p>
         <Button
           variant="danger"
           onClick={hide}
-          className={styles.modalCloseBtn}
+          className={styles.modalCloseButton}
           data-testid="modalCloseBtn"
         >
           <i className="fa fa-times"></i>
         </Button>
       </Modal.Header>
       <Modal.Body>
-        <Form className="p-3">
+        <Form className={styles.modalForm}>
           {/* Volunteer Name & Avatar */}
-          <Form.Group className="mb-3">
+          <Form.Group className={styles.formGroup}>
             <FormControl fullWidth>
               <TextField
                 label={t('volunteer')}
@@ -83,14 +83,14 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                           src={user.image}
                           alt="Volunteer"
                           data-testid="volunteer_image"
-                          className={styles.TableImage}
+                          className={styles.tableImage}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
                             key={user._id + '1'}
                             containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
+                            avatarStyle={styles.tableImage}
                             dataTestId="volunteer_avatar"
                             name={user.firstName + ' ' + user.lastName}
                             alt={user.firstName + ' ' + user.lastName}
@@ -104,7 +104,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
             </FormControl>
           </Form.Group>
           {/* Status and hours volunteered */}
-          <Form.Group className="d-flex gap-3 mx-auto mb-2">
+          <Form.Group className={styles.statusGroup}>
             <TextField
               label={t('status')}
               fullWidth
@@ -113,20 +113,18 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                 startAdornment: (
                   <>
                     {hasAccepted ? (
-                      <TaskAlt color="success" className="me-2" />
+                      <TaskAlt color="success" className={styles.statusIcon} />
                     ) : (
-                      <HistoryToggleOff color="warning" className="me-2" />
+                      <HistoryToggleOff
+                        color="warning"
+                        className={styles.statusIcon}
+                      />
                     )}
                   </>
                 ),
-                style: {
-                  color: hasAccepted ? 'green' : '#ed6c02',
-                },
-              }}
-              inputProps={{
-                style: {
-                  WebkitTextFillColor: hasAccepted ? 'green' : '#ed6c02',
-                },
+                className: hasAccepted
+                  ? styles.acceptedStatus
+                  : styles.pendingStatus,
               }}
               disabled
             />
@@ -134,7 +132,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
             <TextField
               label={t('hoursVolunteered')}
               variant="outlined"
-              className={`${styles.noOutline} w-100`}
+              className={`${styles.noOutline} ${styles.hoursField}`}
               value={hoursVolunteered ?? '-'}
               disabled
             />
@@ -142,13 +140,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
           {/* Table for Associated Volunteer Groups */}
           {groups && groups.length > 0 && (
             <Form.Group>
-              <Form.Label
-                className="fw-lighter ms-2 mb-0"
-                style={{
-                  fontSize: '0.8rem',
-                  color: 'grey',
-                }}
-              >
+              <Form.Label className={styles.groupsLabel}>
                 Volunteer Groups Joined
               </Form.Label>
 
@@ -160,9 +152,13 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                 <Table aria-label="group table">
                   <TableHead>
                     <TableRow>
-                      <TableCell className="fw-bold">Sr. No.</TableCell>
-                      <TableCell className="fw-bold">Group Name</TableCell>
-                      <TableCell className="fw-bold" align="center">
+                      <TableCell className={styles.tableHeader}>
+                        Sr. No.
+                      </TableCell>
+                      <TableCell className={styles.tableHeader}>
+                        Group Name
+                      </TableCell>
+                      <TableCell className={styles.tableHeader} align="center">
                         No. of Members
                       </TableCell>
                     </TableRow>
@@ -171,12 +167,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                     {groups.map((group, index) => {
                       const { _id, name, volunteers } = group;
                       return (
-                        <TableRow
-                          key={_id}
-                          sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
-                        >
+                        <TableRow key={_id} className={styles.tableRow}>
                           <TableCell component="th" scope="row">
                             {index + 1}
                           </TableCell>
@@ -199,4 +190,5 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
     </Modal>
   );
 };
+
 export default VolunteerViewModal;

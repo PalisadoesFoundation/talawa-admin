@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
-import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
 import styles from './Chat.module.css';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import { CHATS_LIST } from 'GraphQl/Queries/PlugInQueries';
+import {
+  CHATS_LIST,
+  GROUP_CHAT_LIST,
+  UNREAD_CHAT_LIST,
+} from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
+import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 
 interface InterfaceContactCardProps {
   id: string;
@@ -21,6 +24,8 @@ interface InterfaceContactCardProps {
   selectedContact: string;
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
   isGroup: boolean;
+  unseenMessages: number;
+  lastMessage: string;
 }
 /**
  * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
@@ -48,31 +53,82 @@ interface InterfaceContactCardProps {
  *
  * @returns  The rendered `chat` component.
  */
+
+type DirectMessage = {
+  _id: string;
+  createdAt: Date;
+  sender: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+  };
+  replyTo:
+    | {
+        _id: string;
+        createdAt: Date;
+        sender: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          image: string;
+        };
+        messageContent: string;
+        receiver: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+        };
+      }
+    | undefined;
+  messageContent: string;
+};
+
+type Chat = {
+  _id: string;
+  isGroup: boolean;
+  name: string;
+  image: string;
+  messages: DirectMessage[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    image: string;
+  }[];
+  unseenMessagesByUsers: string;
+};
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'chat',
+    keyPrefix: 'userChat',
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const [chats, setChats] = useState<any>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
+  const [filterType, setFilterType] = useState('all');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
-  const handleResize = (): void => {
-    if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+  React.useEffect(() => {
+    if (filterType === 'all') {
+      chatsListRefetch();
+      if (chatsListData && chatsListData.chatsByUserId) {
+        setChats(chatsListData.chatsByUserId);
+      }
+    } else if (filterType === 'unread') {
+      unreadChatListRefetch();
+      if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
+        setChats(unreadChatListData.getUnreadChatsByUserId);
+      }
+    } else if (filterType === 'group') {
+      groupChatListRefetch();
+      if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
+        setChats(groupChatListData.getGroupChatsByUserId);
+      }
     }
-  };
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  }, [filterType]);
 
   const [createDirectChatModalisOpen, setCreateDirectChatModalisOpen] =
     useState(false);
@@ -81,7 +137,7 @@ export default function chat(): JSX.Element {
     setCreateDirectChatModalisOpen(true);
   }
 
-  const toggleCreateDirectChatModal = /* istanbul ignore next */ (): void =>
+  const toggleCreateDirectChatModal = (): void =>
     setCreateDirectChatModalisOpen(!createDirectChatModalisOpen);
 
   const [createGroupChatModalisOpen, setCreateGroupChatModalisOpen] =
@@ -91,7 +147,7 @@ export default function chat(): JSX.Element {
     setCreateGroupChatModalisOpen(true);
   }
 
-  const toggleCreateGroupChatModal = /* istanbul ignore next */ (): void => {
+  const toggleCreateGroupChatModal = (): void => {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
   };
 
@@ -105,60 +161,40 @@ export default function chat(): JSX.Element {
     },
   });
 
+  const { data: groupChatListData, refetch: groupChatListRefetch } =
+    useQuery(GROUP_CHAT_LIST);
+
+  const { data: unreadChatListData, refetch: unreadChatListRefetch } =
+    useQuery(UNREAD_CHAT_LIST);
+
+  const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
+    variables: {
+      chatId: selectedContact,
+      userId: userId,
+    },
+  });
+
+  useEffect(() => {
+    markChatMessagesAsRead().then(() => {
+      chatsListRefetch({ id: userId });
+    });
+  }, [selectedContact]);
+
   React.useEffect(() => {
-    if (chatsListData) {
+    if (chatsListData && chatsListData?.chatsByUserId.length) {
       setChats(chatsListData.chatsByUserId);
     }
   }, [chatsListData]);
 
-  // const handleSearch = (value: string): void => {
-  //   setFilterName(value);
-
-  //   contactRefetch();
-  // };
-  // const handleSearchByEnter = (e: any): void => {
-  //   if (e.key === 'Enter') {
-  //     const { value } = e.target;
-  //     handleSearch(value);
-  //   }
-  // };
-  // const handleSearchByBtnClick = (): void => {
-  //   const value =
-  //     (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
-  //   handleSearch(value);
-  // };
-
   return (
     <>
-      {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )}
-      <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div data-testid="chat" className={`${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4>Messages</h4>
+              <h4>{t('messages')}</h4>
               <Dropdown style={{ cursor: 'pointer' }}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
@@ -171,13 +207,13 @@ export default function chat(): JSX.Element {
                     onClick={openCreateDirectChatModal}
                     data-testid="newDirectChat"
                   >
-                    New Chat
+                    {t('newChat')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={openCreateGroupChatModal}
                     data-testid="newGroupChat"
                   >
-                    New Group Chat
+                    {t('newGroupChat')}
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
                     Starred Messages
@@ -188,45 +224,96 @@ export default function chat(): JSX.Element {
             <div className={styles.contactListContainer}>
               {chatsListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
+                  <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
                 </div>
               ) : (
-                <div
-                  data-testid="contactCardContainer"
-                  className={styles.contactCardContainer}
-                >
-                  {!!chats.length &&
-                    chats.map((chat: any) => {
-                      const cardProps: InterfaceContactCardProps = {
-                        id: chat._id,
-                        title: !chat.isGroup
-                          ? chat.users[0]?._id === userId
-                            ? `${chat.users[1]?.firstName} ${chat.users[1]?.lastName}`
-                            : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
-                          : chat.name,
-                        image: chat.isGroup
-                          ? userId
-                            ? chat.users[1]?.image
-                            : chat.users[0]?.image
-                          : chat.image,
-                        setSelectedContact,
-                        selectedContact,
-                        isGroup: chat.isGroup,
-                      };
-                      return (
-                        <ContactCard
-                          data-testid="chatContact"
-                          {...cardProps}
-                          key={chat._id}
-                        />
-                      );
-                    })}
-                </div>
+                <>
+                  <div className={styles.filters}>
+                    {/* three buttons to filter unread, all and group chats. All selected by default. */}
+                    <Button
+                      onClick={() => {
+                        setFilterType('all');
+                      }}
+                      data-testid="allChat"
+                      className={[
+                        styles.filterButton,
+                        filterType === 'all' && styles.selectedBtn,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      All
+                    </Button>
+                    <Button
+                      data-testid="unreadChat"
+                      onClick={() => {
+                        setFilterType('unread');
+                      }}
+                      className={[
+                        styles.filterButton,
+                        filterType === 'unread' && styles.selectedBtn,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      Unread
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setFilterType('group');
+                      }}
+                      data-testid="groupChat"
+                      className={[
+                        styles.filterButton,
+                        filterType === 'group' && styles.selectedBtn,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      Groups
+                    </Button>
+                  </div>
+
+                  <div
+                    data-testid="contactCardContainer"
+                    className={styles.contactCardContainer}
+                  >
+                    {!!chats.length &&
+                      chats.map((chat: Chat) => {
+                        const cardProps: InterfaceContactCardProps = {
+                          id: chat._id,
+                          title: !chat.isGroup
+                            ? chat.users[0]?._id === userId
+                              ? `${chat.users[1]?.firstName} ${chat.users[1]?.lastName}`
+                              : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
+                            : chat.name,
+                          image: chat.isGroup
+                            ? chat.image
+                            : userId
+                              ? chat.users[1]?.image
+                              : chat.users[0]?.image,
+                          setSelectedContact,
+                          selectedContact,
+                          isGroup: chat.isGroup,
+                          unseenMessages: JSON.parse(
+                            chat.unseenMessagesByUsers,
+                          )[userId],
+                          lastMessage:
+                            chat.messages[chat.messages.length - 1]
+                              ?.messageContent,
+                        };
+                        return <ContactCard {...cardProps} key={chat._id} />;
+                      })}
+                  </div>
+                </>
               )}
             </div>
           </div>
           <div className={styles.chatContainer} id="chat-container">
-            <ChatRoom selectedContact={selectedContact} />
+            <ChatRoom
+              chatListRefetch={chatsListRefetch}
+              selectedContact={selectedContact}
+            />
           </div>
         </div>
       </div>

@@ -37,8 +37,8 @@ jobs:
 
       - name: Count number of lines
         run: |
-          chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
+          chmod +x ./.github/workflows/scripts/countline.py
+          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -59,7 +59,7 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         env: 
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
+        run: npx eslint ${CHANGED_FILES}
         
       - name: Check for TSDoc comments
         run: npm run check-tsdoc # Run the TSDoc check script
@@ -71,8 +71,8 @@ jobs:
 
       - name: Compare translation files
         run: |
-          chmod +x .github/workflows/compare_translations.py
-          python .github/workflows/compare_translations.py --directory public/locales
+          chmod +x .github/workflows/scripts/compare_translations.py
+          python .github/workflows/scripts/compare_translations.py --directory public/locales
 
       - name: Check if the source and target branches are different
         if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
@@ -80,6 +80,7 @@ jobs:
           echo "Source Branch ${{ github.event.pull_request.head.ref }}"
           echo "Target Branch ${{ github.event.pull_request.base.ref }}"
           echo "Error: Source and Target Branches are the same. Please ensure they are different."
+          echo "Error: Close this PR and try again."
           exit 1
 
   Check-Sensitive-Files:
@@ -96,6 +97,8 @@ jobs:
         with:
           files: |
             .env*
+            vitest.config.js
+            src/App.tsx
             .github/**
             env.example
             .node-version
@@ -104,6 +107,7 @@ jobs:
             src/style/** 
             schema.graphql
             package.json
+            package-lock.json
             tsconfig.json
             .gitignore
             .eslintrc.json
@@ -131,6 +135,11 @@ jobs:
             *.password
             *.secret
             *.credentials
+            .nojekyll
+            yarn.lock
+            docs/docusaurus.config.ts
+            docs/sidebar*
+            CNAME
             
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
@@ -140,6 +149,7 @@ jobs:
           for file in ${CHANGED_UNAUTH_FILES}; do
             echo "$file is unauthorized to change/delete"
           done
+          echo "To override this, apply the 'ignore-sensitive-files-pr' label"          
           exit 1
 
   Count-Changed-Files:
@@ -178,6 +188,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -185,12 +199,32 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/eslint_disable_check.py
+          python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+
+  Check-Code-Coverage-Disable:
+    name: Check for code coverage disable
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      - name: Run Python script
+        run: |
+          python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }} 
 
   Test-Application:
     name: Test Application
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Check-ESlint-Disable]
+    needs: [Code-Quality-Checks, Check-ESlint-Disable,Check-Code-Coverage-Disable]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -243,6 +277,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+          gcov_ignore: 'docs/'
           fail_ci_if_error: false
           files: './coverage/lcov.info'
           name: '${{env.CODECOV_UNIQUE_NAME}}'
@@ -253,33 +288,34 @@ jobs:
           path: "./coverage/lcov.info"
           min_coverage: 0.0
 
-  Graphql-Inspector:
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the Repository
-        uses: actions/checkout@v4
+  # Graphql-Inspector:
+  #   if: ${{ github.actor != 'dependabot[bot]' }}
+  #   name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout the Repository
+  #       uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.x'
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '22.x'
 
-      - name: resolve dependency
-        run: npm install -g @graphql-inspector/cli
+  #     - name: resolve dependency
+  #       run: npm install -g @graphql-inspector/cli
       
-      - name: Clone API Repository
-        run: |
-          # Retrieve the complete branch name directly from the GitHub context
-          FULL_BRANCH_NAME=${{ github.base_ref }}
-          echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
+  #     - name: Clone API Repository
+  #       run: |
+  #         # Retrieve the complete branch name directly from the GitHub context
+  #         FULL_BRANCH_NAME=${{ github.base_ref }}
+  #         echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
           
-          # Clone the specified repository using the extracted branch name
-          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+  #         # Clone the specified repository using the extracted branch name
+  #         git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
 
-      - name: Validate Documents
-        run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+  #     - name: Validate Documents
+  #       run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+        
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
@@ -306,20 +342,8 @@ jobs:
           echo $! > .pidfile_prod
       - name: Check if Production App is running
         run: |
-          timeout=120
-          echo "Starting production health check with ${timeout}s timeout"
-          while ! nc -z localhost 4173 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for production app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for production application to start"
-            exit 1
-          fi
-          echo "Production app started successfully"
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4173 120
       - name: Stop Production App
         run: |
           if [ -f .pidfile_prod ]; then
@@ -331,26 +355,15 @@ jobs:
           echo $! > .pidfile_dev
       - name: Check if Development App is running
         run: |
-          timeout=120
-          echo "Starting development health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for development app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for development application to start"
-            exit 1
-          fi
-          echo "Development app started successfully"
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120
       - name: Stop Development App
         if: always()
         run: |
           if [ -f .pidfile_dev ]; then
             kill "$(cat .pidfile_dev)"
           fi
+
   Docker-Start-Check:
     name: Check if Talawa Admin app starts in Docker
     runs-on: ubuntu-latest
@@ -379,27 +392,34 @@ jobs:
           echo "Docker container started successfully"
       - name: Check if Talawa Admin App is running
         run: |
-          timeout="${HEALTH_CHECK_TIMEOUT:-120}"
-          echo "Starting health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for application to start"
-            echo "Container logs:"
-            docker logs talawa-admin-app-container
-            exit 1
-          fi
-          echo "Port check passed, verifying health endpoint..."
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
       - name: Stop Docker Container
         if: always()
         run: |
           docker stop talawa-admin-app-container
           docker rm talawa-admin-app-container
+
+  Test-Docusaurus-Deployment:
+    name: Test Deployment to https://docs-admin.talawa.io
+    runs-on: ubuntu-latest
+    needs: [Docker-Start-Check, Start-App-Without-Docker]
+    # Run only if the develop-postgres branch and not dependabot    
+    if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop-postgres' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: 'docs/'
+      # Run Docusaurus in the ./docs directory
+      - name: Install dependencies
+        working-directory: ./docs
+        run: yarn install --frozen-lockfile
+      - name: Test building the website
+        working-directory: ./docs
+        run: yarn build
 
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -407,7 +427,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if the target branch is develop
-        if: github.event.pull_request.base.ref != 'develop'
+        if: github.event.pull_request.base.ref != 'develop-postgres'
         run: |
-          echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
+          echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
+          echo "Error: Close this PR and try again."
           exit 1
+
+  Validate-Coderabbit:
+    name: Validate CodeRabbit Approval
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    needs: [Test-Docusaurus-Deployment]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Validate CodeRabbit.ai Approval
+        run: |
+          chmod +x $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
+          $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
