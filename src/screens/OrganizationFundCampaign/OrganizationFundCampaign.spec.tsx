@@ -78,7 +78,7 @@ const renderFundCampaign = (link: ApolloLink): RenderResult => {
 };
 
 describe('FundCampaigns Screen', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     vi.mock('react-router-dom', async () => {
       const actualDom = await vi.importActual('react-router-dom');
       return {
@@ -88,7 +88,7 @@ describe('FundCampaigns Screen', () => {
     });
   });
 
-  afterAll(() => {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
