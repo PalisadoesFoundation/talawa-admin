@@ -580,6 +580,17 @@ hr {
   min-height: 100vh;
   margin: 2.5rem 1rem;
 }
+.cardContainer {
+  width: 300px;
+}
+
+.ratingFilled {
+  color: #ff6d75; /* Color for filled stars */
+}
+
+.ratingHover {
+  color: #ff3d47; /* Color for star on hover */
+}
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
