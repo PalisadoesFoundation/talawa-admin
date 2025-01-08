@@ -12,7 +12,6 @@ const link = new StaticMockLink(MOCKS, true);
 import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-
 const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
@@ -23,7 +22,6 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 const resetAndRefetchMock = vi.fn();
-
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
