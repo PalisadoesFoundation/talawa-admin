@@ -372,9 +372,9 @@ describe('Manage Tag Page', () => {
     userEvent.click(screen.getByTestId('sortPeople'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+      expect(screen.getByTestId('ASCENDING')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('oldest'));
+    userEvent.click(screen.getByTestId('ASCENDING'));
 
     // returns the tags in reverse order
     await waitFor(() => {
@@ -389,9 +389,9 @@ describe('Manage Tag Page', () => {
     userEvent.click(screen.getByTestId('sortPeople'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
+      expect(screen.getByTestId('DESCENDING')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('latest'));
+    userEvent.click(screen.getByTestId('DESCENDING'));
 
     // reverse the order again
     await waitFor(() => {
