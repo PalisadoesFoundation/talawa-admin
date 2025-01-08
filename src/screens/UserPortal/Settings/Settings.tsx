@@ -92,7 +92,6 @@ export default function settings(): JSX.Element {
    * and reloads the page on success.
    */
 
-  /*istanbul ignore next*/
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
       let updatedUserDetails = { ...userDetails };
@@ -102,7 +101,6 @@ export default function settings(): JSX.Element {
       const { data } = await updateUserDetails({
         variables: updatedUserDetails,
       });
-      /* istanbul ignore next */
       if (data) {
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
@@ -114,7 +112,6 @@ export default function settings(): JSX.Element {
         setItem('name', userFullName);
       }
     } catch (error: unknown) {
-      /*istanbul ignore next*/
       errorHandler(t, error);
     }
   };
