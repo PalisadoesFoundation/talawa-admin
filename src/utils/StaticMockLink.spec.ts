@@ -108,16 +108,11 @@ describe('StaticMockLink', () => {
       observable?.subscribe({
         next: (response) => {
           const elapsedTime = Date.now() - startTime;
-          // Add buffer of 5ms to account for timing variations
-          expect(elapsedTime).toBeGreaterThanOrEqual(delay - 5);
+          expect(elapsedTime).toBeGreaterThanOrEqual(delay);
           expect(response).toEqual(sampleResponse);
         },
         complete: () => {
           resolve();
-        },
-        error: (error) => {
-          console.error('Test error:', error);
-          throw error;
         },
       });
     });
