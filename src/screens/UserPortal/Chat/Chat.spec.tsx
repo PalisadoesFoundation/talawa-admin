@@ -29,6 +29,7 @@ import {
   UNREAD_CHAT_LIST,
 } from 'GraphQl/Queries/PlugInQueries';
 import useLocalStorage from 'utils/useLocalstorage';
+// import userEvent from '@testing-library/user-event';
 
 /**
  * Unit tests for the ChatScreen component.
@@ -4281,6 +4282,111 @@ describe('Testing Chat Screen [User Portal]', () => {
     ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
   ];
 
+  it('should handle filter changes in sequence', async () => {
+    setItem('userId', '1');
+    const mockChatsData = {
+      chatsByUserId: [
+        {
+          _id: '1',
+          isGroup: false,
+          users: [{ _id: '1', firstName: 'John', lastName: 'Doe' }],
+          messages: [],
+          unseenMessagesByUsers: '{}',
+        },
+      ],
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: CHATS_LIST,
+          variables: { id: '1' },
+        },
+        result: {
+          data: mockChatsData,
+        },
+      },
+      {
+        request: {
+          query: MARK_CHAT_MESSAGES_AS_READ,
+          variables: { chatId: '', userId: '1' },
+        },
+        result: {
+          data: {
+            markChatMessagesAsRead: {
+              _id: '1',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Chat />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const allChatButton = await screen.findByTestId('allChat');
+    const unreadChatButton = await screen.findByTestId('unreadChat');
+    const groupChatButton = await screen.findByTestId('groupChat');
+
+    await act(async () => {
+      fireEvent.click(unreadChatButton);
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    await act(async () => {
+      fireEvent.click(groupChatButton);
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    await act(async () => {
+      fireEvent.click(allChatButton);
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    const contactCards = await screen.findAllByTestId('contactCardContainer');
+    expect(contactCards).toHaveLength(1);
+  });
+
+  it('should fetch and set all chats when filterType is "all"', async () => {
+    setItem('userId', '1');
+    render(
+      <MockedProvider mocks={mock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Chat />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const allChatButton = await screen.findByTestId('allChat');
+
+    await act(async () => {
+      fireEvent.click(allChatButton);
+    });
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    const contactCards = await screen.findAllByTestId('contactCardContainer');
+    expect(contactCards).toHaveLength(1);
+  });
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} mocks={mock}>
@@ -4377,7 +4483,6 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  // filter chat test
   test('Testing chat filters', async () => {
     setItem('userId', '1');
 
@@ -4399,8 +4504,6 @@ describe('Testing Chat Screen [User Portal]', () => {
       fireEvent.click(await screen.findByTestId('unreadChat'));
     });
 
-    await wait(1000);
-
     await act(async () => {
       fireEvent.click(await screen.findByTestId('groupChat'));
     });
@@ -4410,5 +4513,36 @@ describe('Testing Chat Screen [User Portal]', () => {
     await act(async () => {
       fireEvent.click(await screen.findByTestId('allChat'));
     });
+  });
+  it('should fetch and set group chats when filterType is "group"', async () => {
+    setItem('userId', '1');
+
+    render(
+      <MockedProvider mocks={mock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Chat />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const groupChatButton = await screen.findByTestId('groupChat');
+
+    await act(async () => {
+      fireEvent.click(groupChatButton);
+    });
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    const container = await screen.findByTestId('contactCardContainer');
+    expect(container).toBeInTheDocument();
+
+    const chatContacts = await screen.findAllByTestId('contactContainer');
+    expect(chatContacts).toHaveLength(1);
   });
 });

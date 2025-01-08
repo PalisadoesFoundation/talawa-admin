@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './AddOnStore.module.css';
+import styles from '../../../../style/app.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import { useQuery } from '@apollo/client';
 import { PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
@@ -122,36 +122,19 @@ function addOnStore(): JSX.Element {
 
   return (
     <>
-      <Row
-        className=""
-        style={{
-          backgroundColor: 'white',
-          margin: '2px',
-          padding: '10px',
-          borderRadius: '20px',
-        }}
-      >
-        <Col
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div className={styles.input}>
+      <Row className={styles.containerAddOnStore}>
+        <Col className={styles.colAddOnStore}>
+          <div className={styles.inputAddOnStore}>
             <Form.Control
               type="name"
               id="searchname"
-              className={styles.actioninput}
+              className={styles.inputField}
               placeholder={t('searchName')}
               autoComplete="off"
               required
               onChange={(e): void => setSearchText(e.target.value)}
             />
-            <Button
-              className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center `}
-              style={{ marginBottom: '10px' }}
-            >
+            <Button className={styles.searchButton}>
               <Search />
             </Button>
           </div>
@@ -199,7 +182,7 @@ function addOnStore(): JSX.Element {
               title={t('available')}
               style={{ backgroundColor: 'white' }}
             >
-              <div className={styles.justifysp}>
+              <div className={styles.justifyspAddOnStore}>
                 {(() => {
                   const filteredPlugins = filterPlugins(
                     data?.getPlugins || [],
@@ -211,7 +194,7 @@ function addOnStore(): JSX.Element {
                   }
 
                   return (
-                    <div className={styles.justifysp}>
+                    <div className={styles.justifyspAddOnStore}>
                       {filteredPlugins.map((plug, i) => (
                         <div className={styles.cardGridItem} key={i}>
                           <AddOnEntry
@@ -236,7 +219,7 @@ function addOnStore(): JSX.Element {
               title={t('install')}
               data-testid="installed-tab"
             >
-              <div className={styles.justifysp}>
+              <div className={styles.justifyspAddOnStore}>
                 {(() => {
                   const installedPlugins = (data?.getPlugins || []).filter(
                     (plugin) => !plugin.uninstalledOrgs.includes(orgId ?? ''),
