@@ -705,7 +705,7 @@ hr {
   top: 50%;
   width: 50%;
   height: 1px;
-  background: #fff;
+  background: var(--white);
   content: '';
 }
 .pageNotFound h1.head span:before {
@@ -3743,7 +3743,7 @@ button[data-testid='createPostBtn'] {
 
 .primaryText {
   font-weight: bold;
-  color: var(--bs-emphasis-color, #000);
+  color: var(--bs-emphasis-color, var(--black-color));
   @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
 }
 
@@ -3796,7 +3796,7 @@ button[data-testid='createPostBtn'] {
 
 .inactiveButton {
   background-color: transparent;
-  color: var(--bs-emphasis-color, #000);
+  color: var(--bs-emphasis-color, var(--black-color));
 
   &:hover {
     background-color: var(--grey-bg-color);
@@ -5937,4 +5937,73 @@ button[data-testid='createPostBtn'] {
   margin-top: 20vh;
   margin-left: 13vw;
   max-width: 80vw;
+}
+
+.btnsContainer .input {
+  width: 70%;
+}
+
+.btnsContainer .inputContainer button {
+  width: 52px;
+}
+
+.largeBtnsWrapper {
+  display: flex;
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btnsContainer .input {
+    width: 100%;
+  }
+
+  .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
+  }
+}
+
+/* For mobile devices  */
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .largeBtnsWrapper {
+    flex-direction: column;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
 }
