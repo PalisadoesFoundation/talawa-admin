@@ -1,4 +1,3 @@
-#!/usr/bin/env sh
 
 npm run format:fix
 # npm run lint:fix
