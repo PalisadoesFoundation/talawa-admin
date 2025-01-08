@@ -2,9 +2,7 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { StaticMockLink, mockSingleLink } from './StaticMockLink';
 import type { Observer } from '@apollo/client';
 import { gql, Observable } from '@apollo/client';
-import { print } from 'graphql';
 import type { FetchResult } from '@apollo/client/link/core';
-import { equal } from '@wry/equality';
 class TestableStaticMockLink extends StaticMockLink {
   public setErrorHandler(
     handler: (error: unknown, observer?: Observer<FetchResult>) => false | void,
@@ -336,28 +334,17 @@ describe('mockSingleLink', () => {
       variables: { id: '999' },
     };
 
-    const key = JSON.stringify({
-      query: link.addTypename
-        ? print(mockQuery) // Add typename if necessary
-        : print(mockQuery),
+    const observable = link.request(operation);
+    return new Promise<void>((resolve) => {
+      observable?.subscribe({
+        next: () => {
+          throw new Error('Should not emit any value');
+        },
+        error: (error) => {
+          expect(error.message).toContain('No more mocked responses');
+          resolve();
+        },
+      });
     });
-
-    const mockedResponsesByKey = link['_mockedResponsesByKey'][key];
-
-    // Emulate the internal logic
-    let responseIndex = -1;
-    const response = (mockedResponsesByKey || []).find((res, index) => {
-      const requestVariables = operation.variables || {};
-      const mockedResponseVariables = res.request.variables || {};
-      if (equal(requestVariables, mockedResponseVariables)) {
-        responseIndex = index;
-        return true;
-      }
-      return false;
-    });
-
-    // Assertions
-    expect(response).toBeUndefined();
-    expect(responseIndex).toBe(-1);
   });
 });
