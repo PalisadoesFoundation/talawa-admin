@@ -267,7 +267,7 @@ const EventManagement = (): JSX.Element => {
                 <h2>Statistics</h2>
               </div>
             );
-          // no use of default here as the default tab is the dashboard selected in useState
+          // no use of default here as the default tab is the dashboard selected in useState code wont reach here
           // default:
           //   return null;
         }

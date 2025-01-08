@@ -67,6 +67,7 @@ describe('Event Management', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
   });
 
   describe('Navigation Tests', () => {
@@ -161,7 +162,7 @@ describe('Event Management', () => {
       }
     });
 
-    it('returns null for an invalid tab', async () => {
+    it('returns dashboard tab for an invalid tab selection', async () => {
       const setTab = vi.fn();
       const useStateSpy = vi.spyOn(React, 'useState');
       useStateSpy.mockReturnValueOnce(['invalid', setTab]);
