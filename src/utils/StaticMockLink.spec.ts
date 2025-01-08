@@ -65,7 +65,7 @@ describe('StaticMockLink', () => {
     };
 
     mockLink.addMockedResponse(mockedResponse);
-
+    // This is Mocked Response
     return new Promise<void>((resolve) => {
       const observable = mockLink.request({
         query: sampleQuery,
