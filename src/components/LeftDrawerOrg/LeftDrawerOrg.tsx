@@ -11,7 +11,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './LeftDrawerOrg.module.css';
+import styles from './../../style/app.module.css'; // Import the global CSS file
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -31,6 +31,7 @@ export interface InterfaceLeftDrawerProps {
  * @param setHideDrawer - Function to update the visibility state of the drawer.
  * @returns JSX element for the left navigation drawer with organization details.
  */
+
 const leftDrawerOrg = ({
   targets,
   orgId,
@@ -45,7 +46,9 @@ const leftDrawerOrg = ({
   const getIdFromPath = (pathname: string): string => {
     if (!pathname) return '';
     const segments = pathname.split('/');
+
     // Index 2 (third segment) represents the ID in paths like /member/{userId}
+
     return segments.length > 2 ? segments[2] : '';
   };
   const [isProfilePage, setIsProfilePage] = useState(false);
@@ -66,11 +69,13 @@ const leftDrawerOrg = ({
   });
 
   // Get the ID from the current path
+
   const pathId = useMemo(
     () => getIdFromPath(location.pathname),
     [location.pathname],
   );
   // Check if the current page is admin profile page
+
   useEffect(() => {
     // if param id is equal to userId, then it is a profile page
     setIsProfilePage(pathId === userId);
@@ -88,7 +93,6 @@ const leftDrawerOrg = ({
       isMounted = false;
     };
   }, [data]);
-
   /**
    * Handles link click to hide the drawer on smaller screens.
    */
@@ -121,16 +125,14 @@ const leftDrawerOrg = ({
         {/* Organization Section */}
         <div className={`${styles.organizationContainer} pe-3`}>
           {loading ? (
-            <>
-              <button
-                className={`${styles.profileContainer} shimmer`}
-                data-testid="orgBtn"
-              />
-            </>
+            <button
+              className={`${styles.profileContainer} shimmer`}
+              data-testid="orgBtn"
+            />
           ) : organization == undefined ? (
             !isProfilePage && (
               <button
-                className={`${styles.profileContainer} bg-danger text-start text-white`}
+                className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
                 disabled
               >
                 <div className="px-3">
@@ -174,21 +176,16 @@ const leftDrawerOrg = ({
                 {({ isActive }) => (
                   <Button
                     key={name}
-                    variant={isActive === true ? 'success' : ''}
-                    style={{
-                      backgroundColor: isActive === true ? '#EAEBEF' : '',
-                    }}
-                    className={`${
-                      isActive === true ? 'text-black' : 'text-secondary'
-                    }`}
+                    variant={isActive ? 'success' : ''}
+                    className={
+                      isActive ? styles.activeButton : styles.inactiveButton
+                    }
                   >
                     <div className={styles.iconWrapper}>
                       <IconComponent
                         name={name == 'Membership Requests' ? 'Requests' : name}
                         fill={
-                          isActive === true
-                            ? 'var(--bs-black)'
-                            : 'var(--bs-secondary)'
+                          isActive ? 'var(--bs-black)' : 'var(--bs-secondary)'
                         }
                       />
                     </div>

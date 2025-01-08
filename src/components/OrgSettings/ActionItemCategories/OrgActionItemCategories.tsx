@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Dropdown, Form } from 'react-bootstrap';
-import styles from './OrgActionItemCategories.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 
 import { useQuery } from '@apollo/client';
@@ -148,7 +148,10 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   if (catError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded
+          className={styles.iconOrgActionItemCategories}
+          fontSize="large"
+        />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Action Item Categories' })}
           <br />
@@ -276,7 +279,9 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   return (
     <div className="mx-4">
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div
+        className={`${styles.btnsContainerOrgActionItemCategories} gap-4 flex-wrap`}
+      >
         <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
@@ -297,8 +302,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
+            className={styles.searchButton}
             onClick={() => setSearchTerm(searchValue)}
             data-testid="searchBtn"
           >

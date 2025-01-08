@@ -1,4 +1,6 @@
 import React from 'react';
+import TruncatedText from './TruncatedText';
+// import {useState} from 'react';
 import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
@@ -94,17 +96,18 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
               <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
             </Tooltip>
             {/* Description of the organization */}
-            <h6 className={`${styles.orgdesc} fw-semibold`}>
-              <span>{userData?.organizations[0].description}</span>
-            </h6>
+            <div className={`${styles.orgdesc} fw-semibold`}>
+              <TruncatedText
+                text={userData?.organizations[0]?.description || ''}
+              />
+            </div>
+
             {/* Display the organization address if available */}
-            {address && address.city && (
+            {address?.city && (
               <div className={styles.address}>
-                <h6 className="text-secondary">
-                  <span className="address-line">{address.line1}, </span>
-                  <span className="address-line">{address.city}, </span>
-                  <span className="address-line">{address.countryCode}</span>
-                </h6>
+                <TruncatedText
+                  text={`${address?.line1}, ${address?.city}, ${address?.countryCode}`}
+                />
               </div>
             )}
             {/* Display the number of admins and members */}

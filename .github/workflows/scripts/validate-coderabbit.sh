@@ -32,6 +32,7 @@ else
   echo "   of the PR web page, add a comment with the"
   echo "   statement below to restart a review"
   echo ""
-  echo "@coderabbitai full review"
+  echo "   @coderabbitai full review"
+  echo ""  
   exit 1
 fi
