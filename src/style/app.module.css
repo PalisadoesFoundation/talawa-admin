@@ -4629,26 +4629,39 @@ button[data-testid='createPostBtn'] {
   display: flex;
   position: relative;
   width: 100%;
-  margin-top: 10px;
+  overflow: hidden; /* Ensures content doesn't overflow the card */
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .previewVenueModal img {
   width: 400px;
   height: auto;
+  object-fit: cover; /* Ensures the image stays within the boundaries */
 }
 
 .closeButtonP {
   position: absolute;
   top: 0px;
   right: 0px;
+  width: 32px; /* Make the button circular */
+  height: 32px; /* Make the button circular */
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
+  border-radius: 50%;
   border: none;
   color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.closeButtonP:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
 
 /* YearlyEventCalender.tsx */
@@ -5084,12 +5097,15 @@ button[data-testid='createPostBtn'] {
   position: relative;
   width: 100%;
   margin-top: 10px;
+  overflow: hidden; /* Ensures content doesn't overflow the card */
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .previewAdvertisementRegister img {
   width: 400px;
   height: auto;
+  object-fit: cover; /* Ensures the image stays within the boundaries */
 }
 
 .previewAdvertisementRegister video {
@@ -5098,14 +5114,27 @@ button[data-testid='createPostBtn'] {
 }
 
 .closeButtonAdvertisementRegister {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 32px; /* Make the button circular */
+  height: 32px; /* Make the button circular */
   background: transparent;
+  transform: scale(1.2);
   cursor: pointer;
+  border-radius: 50%;
   border: none;
   color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
-  margin-bottom: 10px;
-  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.closeButtonAdvertisementRegister:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
 
 .buttonAdvertisementRegister {
