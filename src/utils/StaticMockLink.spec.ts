@@ -1,6 +1,7 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { StaticMockLink, mockSingleLink } from './StaticMockLink';
 import type { Observer } from '@apollo/client';
+import type { MockedResponse } from '@apollo/react-testing';
 import { gql, Observable } from '@apollo/client';
 import { print } from 'graphql';
 import type { FetchResult } from '@apollo/client/link/core';
@@ -13,6 +14,14 @@ class TestableStaticMockLink extends StaticMockLink {
   }
 }
 
+const TEST_QUERY = gql`
+  query TestQuery($id: ID!) {
+    item(id: $id) {
+      id
+      name
+    }
+  }
+`;
 const mockQuery = gql`
   query TestQuery {
     test {
@@ -101,6 +110,7 @@ describe('StaticMockLink', () => {
   });
 
   test('should handle delayed responses', () => {
+    vi.useFakeTimers(); // Start using fake timers
     const delay = 100;
     const mockedResponse = {
       request: {
@@ -113,7 +123,7 @@ describe('StaticMockLink', () => {
 
     mockLink.addMockedResponse(mockedResponse);
 
-    const startTime = Date.now();
+    let completed = false;
 
     return new Promise<void>((resolve) => {
       const observable = mockLink.request({
@@ -123,19 +133,21 @@ describe('StaticMockLink', () => {
 
       observable?.subscribe({
         next: (response) => {
-          const elapsedTime = Date.now() - startTime;
-          // Add buffer of 5ms to account for timing variations
-          expect(elapsedTime).toBeGreaterThanOrEqual(delay - 5);
           expect(response).toEqual(sampleResponse);
+          completed = true;
         },
         complete: () => {
+          expect(completed).toBe(true);
           resolve();
         },
         error: (error) => {
-          console.error('Test error:', error);
           throw error;
         },
       });
+
+      vi.advanceTimersByTime(delay); // Advance time by the delay
+    }).finally(() => {
+      vi.useRealTimers(); // Restore real timers
     });
   });
 
@@ -434,5 +446,280 @@ describe('mockSingleLink', () => {
     // Assertions
     expect(response).toBeUndefined();
     expect(responseIndex).toBe(-1);
+  });
+
+  test('should initialize with empty mocked responses array', () => {
+    // Test with null/undefined
+    const mockLinkNull = new StaticMockLink(
+      null as unknown as readonly MockedResponse[],
+    );
+    expect(mockLinkNull).toBeInstanceOf(StaticMockLink);
+
+    // Test with defined responses
+    const mockResponses: readonly MockedResponse[] = [
+      {
+        request: {
+          query: sampleQuery,
+          variables: { id: '1' },
+        },
+        result: {
+          data: {
+            user: {
+              id: '1',
+              name: 'Test User',
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: sampleQuery,
+          variables: { id: '2' },
+        },
+        result: {
+          data: {
+            user: {
+              id: '2',
+              name: 'Test User 2',
+              __typename: 'User',
+            },
+          },
+        },
+      },
+    ];
+
+    const mockLink = new StaticMockLink(mockResponses, true);
+
+    // Verify responses were added via constructor
+    const observable1 = mockLink.request({
+      query: sampleQuery,
+      variables: { id: '1' },
+    });
+
+    const observable2 = mockLink.request({
+      query: sampleQuery,
+      variables: { id: '2' },
+    });
+
+    return Promise.all([
+      new Promise<void>((resolve) => {
+        observable1?.subscribe({
+          next: (response) => {
+            expect(response?.data?.user?.id).toBe('1');
+            resolve();
+          },
+        });
+      }),
+      new Promise<void>((resolve) => {
+        observable2?.subscribe({
+          next: (response) => {
+            expect(response?.data?.user?.id).toBe('2');
+            resolve();
+          },
+        });
+      }),
+    ]);
+  });
+
+  test('should handle undefined operation variables', () => {
+    const mockLink = new StaticMockLink([]);
+    const mockedResponse: MockedResponse = {
+      request: {
+        query: sampleQuery,
+      },
+      result: {
+        data: {
+          user: {
+            id: '1',
+            name: 'Test User',
+            __typename: 'User',
+          },
+        },
+      },
+    };
+
+    mockLink.addMockedResponse(mockedResponse);
+
+    const observable = mockLink.request({
+      query: sampleQuery,
+      // Intentionally omitting variables
+    });
+
+    return new Promise<void>((resolve) => {
+      observable?.subscribe({
+        next: (response) => {
+          expect(response?.data?.user?.id).toBe('1');
+          resolve();
+        },
+      });
+    });
+  });
+
+  test('should handle response with direct result value', async () => {
+    const mockResponse: MockedResponse = {
+      request: {
+        query: TEST_QUERY,
+        variables: { id: '1' },
+      },
+      result: {
+        data: {
+          item: {
+            id: '1',
+            name: 'Test Item',
+            __typename: 'Item',
+          },
+        },
+      },
+    };
+
+    const link = new StaticMockLink([mockResponse]);
+
+    return new Promise<void>((resolve, reject) => {
+      const observable = link.request({
+        query: TEST_QUERY,
+        variables: { id: '1' },
+      });
+
+      if (!observable) {
+        reject(new Error('Observable is null'));
+        return;
+      }
+
+      observable.subscribe({
+        next(response) {
+          expect(response).toEqual(mockResponse.result);
+          resolve();
+        },
+        error: reject,
+      });
+    });
+  });
+
+  test('should handle response with result function', async () => {
+    const mockResponse: MockedResponse = {
+      request: {
+        query: TEST_QUERY,
+        variables: { id: '1' },
+      },
+      result: (variables: { id: string }) => ({
+        data: {
+          item: {
+            id: variables.id,
+            name: `Test Item ${variables.id}`,
+            __typename: 'Item',
+          },
+        },
+      }),
+    };
+
+    const link = new StaticMockLink([mockResponse]);
+
+    return new Promise<void>((resolve, reject) => {
+      const observable = link.request({
+        query: TEST_QUERY,
+        variables: { id: '1' },
+      });
+
+      if (!observable) {
+        reject(new Error('Observable is null'));
+        return;
+      }
+
+      observable.subscribe({
+        next(response) {
+          expect(response).toEqual({
+            data: {
+              item: {
+                id: '1',
+                name: 'Test Item 1',
+                __typename: 'Item',
+              },
+            },
+          });
+          resolve();
+        },
+        error: reject,
+      });
+    });
+  });
+
+  test('should handle response with error', async () => {
+    const testError = new Error('Test error');
+    const mockResponse: MockedResponse = {
+      request: {
+        query: TEST_QUERY,
+        variables: { id: '1' },
+      },
+      error: testError,
+    };
+
+    const link = new StaticMockLink([mockResponse]);
+
+    return new Promise<void>((resolve, reject) => {
+      const observable = link.request({
+        query: TEST_QUERY,
+        variables: { id: '1' },
+      });
+
+      if (!observable) {
+        reject(new Error('Observable is null'));
+        return;
+      }
+
+      observable.subscribe({
+        next() {
+          reject(new Error('Should not have called next'));
+        },
+        error(error) {
+          expect(error).toBe(testError);
+          resolve();
+        },
+      });
+    });
+  });
+
+  test('should respect response delay', async () => {
+    const mockResponse: MockedResponse = {
+      request: {
+        query: TEST_QUERY,
+        variables: { id: '1' },
+      },
+      result: {
+        data: {
+          item: {
+            id: '1',
+            name: 'Test Item',
+            __typename: 'Item',
+          },
+        },
+      },
+      delay: 50,
+    };
+
+    const link = new StaticMockLink([mockResponse]);
+    const startTime = Date.now();
+
+    return new Promise<void>((resolve, reject) => {
+      const observable = link.request({
+        query: TEST_QUERY,
+        variables: { id: '1' },
+      });
+
+      if (!observable) {
+        reject(new Error('Observable is null'));
+        return;
+      }
+
+      observable.subscribe({
+        next(response) {
+          const elapsed = Date.now() - startTime;
+          expect(elapsed).toBeGreaterThanOrEqual(50);
+          expect(response).toEqual(mockResponse.result);
+          resolve();
+        },
+        error: reject,
+      });
+    });
   });
 });
