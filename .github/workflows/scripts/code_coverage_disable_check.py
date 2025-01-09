@@ -37,11 +37,12 @@ def has_code_coverage_disable(file_path):
         bool: True if code coverage disable statement is found, False
         otherwise.
     """
-    code_coverage_disable_pattern = re.compile(
-        r"""//?\s*istanbul\s+ignore(?:\s+(?:next|-line)(?:\s*--\s*\S*)?)?[^\n]*|
-    /\*\s*istanbul\s+ignore\s+(?:next|-line)(?:\s*--\s*\S*)?\s*\*/""",
+   code_coverage_disable_pattern = re.compile(
+    r"""//?\s*istanbul\s+ignore(?:\s+(?:next|line)(?:\s*--\s*\S*)?)?[^\n]*|
+    /\*\s*istanbul\s+ignore(?:\s+(?:next|line)(?:\s*--\s*\S*)?)?\s*\*/""",
     re.IGNORECASE,
 )
+
     try:
         with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
