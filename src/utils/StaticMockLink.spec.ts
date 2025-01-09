@@ -21,7 +21,24 @@ const mockQuery = gql`
     }
   }
 `;
+const sampleQuery = gql`
+  query SampleQuery($id: ID!) {
+    user(id: $id) {
+      id
+      name
+    }
+  }
+`;
 
+const sampleResponse = {
+  data: {
+    user: {
+      id: '1',
+      name: 'Test User',
+      __typename: 'User',
+    },
+  },
+};
 describe('StaticMockLink', () => {
   const sampleQuery = gql`
     query SampleQuery($id: ID!) {
@@ -249,6 +266,60 @@ describe('mockSingleLink', () => {
 
     const link = mockSingleLink(mockedResponse, false);
     expect((link as StaticMockLink).addTypename).toBe(false);
+  });
+
+  test('should handle non-matching variables between request and mocked response', () => {
+    const mockLink = new StaticMockLink([]);
+    const mockedResponse = {
+      request: {
+        query: sampleQuery,
+        variables: { id: '1' },
+      },
+      result: sampleResponse,
+    };
+
+    mockLink.addMockedResponse(mockedResponse);
+
+    return new Promise<void>((resolve) => {
+      const observable = mockLink.request({
+        query: sampleQuery,
+        variables: { id: '2' }, // Different variables
+      });
+
+      observable?.subscribe({
+        error: (error) => {
+          expect(error.message).toContain('No more mocked responses');
+          resolve();
+        },
+      });
+    });
+  });
+
+  test('should handle matching query but mismatched variable structure', () => {
+    const mockLink = new StaticMockLink([]);
+    const mockedResponse = {
+      request: {
+        query: sampleQuery,
+        variables: { id: '1', extra: 'field' },
+      },
+      result: sampleResponse,
+    };
+
+    mockLink.addMockedResponse(mockedResponse);
+
+    return new Promise<void>((resolve) => {
+      const observable = mockLink.request({
+        query: sampleQuery,
+        variables: { id: '1' }, // Missing extra field
+      });
+
+      observable?.subscribe({
+        error: (error) => {
+          expect(error.message).toContain('No more mocked responses');
+          resolve();
+        },
+      });
+    });
   });
 
   test('should handle onError behavior correctly', async () => {
