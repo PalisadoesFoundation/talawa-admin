@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './EventListCard.module.css';
+import styles from '../../style/app.module.css';
 import { Navigate, useParams } from 'react-router-dom';
 import EventListCardModals from './EventListCardModals';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
@@ -74,14 +74,11 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   return (
     <>
       <div
-        className={styles.cards}
-        style={{
-          backgroundColor: '#d9d9d9',
-        }}
+        className={styles.cardsEventListCard}
         onClick={showViewModal}
         data-testid="card"
       >
-        <div className={styles.dispflex}>
+        <div className={styles.dispflexEventListCard}>
           <h2 className={styles.eventtitle}>
             {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}
           </h2>
@@ -98,5 +95,5 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     </>
   );
 }
-export {};
+
 export default eventListCard;

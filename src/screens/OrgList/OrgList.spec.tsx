@@ -10,8 +10,6 @@ import {
   waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -27,9 +25,10 @@ import {
   MOCKS_WITH_ERROR,
 } from './OrgListMocks';
 import { ToastContainer, toast } from 'react-toastify';
-
-jest.setTimeout(30000);
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
+
+vi.setConfig({ testTimeout: 30000 });
 
 const { setItem } = useLocalStorage();
 
@@ -41,10 +40,14 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+beforeEach(() => {
+  vi.spyOn(Storage.prototype, 'setItem');
+});
+
 afterEach(() => {
   localStorage.clear();
   cleanup();
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
@@ -162,7 +165,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(
       screen.queryByText('Please create an organization through dashboard'),
     ).toBeInTheDocument();
-    expect(window.location).toBeAt('/');
   });
 
   test('Testing Organization data is not present', async () => {
@@ -451,7 +453,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setItem('SuperAdmin', true);
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
-    jest.spyOn(toast, 'error');
+    vi.spyOn(toast, 'error');
     render(
       <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>

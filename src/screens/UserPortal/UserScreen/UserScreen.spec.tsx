@@ -130,6 +130,25 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     expect(titleElement).toHaveTextContent('People');
   });
 
+  it('renders the correct title for chat', () => {
+    mockLocation = '/user/chat/123';
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const titleElement = screen.getByRole('heading', { level: 1 });
+    expect(titleElement).toHaveTextContent('Chats');
+  });
+
   it('toggles LeftDrawer correctly based on window size and user interaction', () => {
     render(
       <MockedProvider addTypename={false} link={link}>

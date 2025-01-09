@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Search } from '@mui/icons-material';
-import styles from './EventCalendar.module.css';
+import styles from '../../style/app.module.css';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
 import SortingButton from 'subComponents/SortingButton';
@@ -35,7 +35,7 @@ function eventHeader({
   });
 
   return (
-    <div className={styles.calendar}>
+    <div className={styles.calendarEventHeader}>
       <div className={styles.calendar__header}>
         <div className={styles.input}>
           <Form.Control
@@ -56,7 +56,7 @@ function eventHeader({
             onChange={(e) => setEventName(e.target.value)}
           />
           <Button
-            className={styles.searchbutton}
+            className={styles.searchButton}
             style={{ marginBottom: '10px' }}
           >
             <Search />
@@ -90,7 +90,7 @@ function eventHeader({
           />
           <Button
             variant="success"
-            className={styles.createButton}
+            className={styles.createButtonEventHeader}
             onClick={showInviteModal}
             data-testid="createEventModalBtn"
           >

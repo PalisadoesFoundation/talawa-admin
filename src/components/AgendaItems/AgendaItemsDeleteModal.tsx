@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import styles from './AgendaItemsContainer.module.css';
+import styles from '../../style/app.module.css';
 
 interface InterfaceAgendaItemsDeleteModalProps {
   agendaItemDeleteModalIsOpen: boolean;
