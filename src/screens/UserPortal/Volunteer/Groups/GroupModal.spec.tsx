@@ -16,11 +16,12 @@ import { toast } from 'react-toastify';
 import type { InterfaceGroupModal } from './GroupModal';
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -39,9 +40,9 @@ const t = {
 const itemProps: InterfaceGroupModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     eventId: 'eventId',
-    refetchGroups: jest.fn(),
+    refetchGroups: vi.fn(),
     group: {
       _id: 'groupId',
       name: 'Group 1',
@@ -79,9 +80,9 @@ const itemProps: InterfaceGroupModal[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     eventId: 'eventId',
-    refetchGroups: jest.fn(),
+    refetchGroups: vi.fn(),
     group: {
       _id: 'groupId',
       name: 'Group 1',
