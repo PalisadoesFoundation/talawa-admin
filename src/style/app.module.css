@@ -1738,14 +1738,6 @@ input[type='radio']:checked + label:hover {
   box-shadow: 0 1px 1px var(--brand-primary);
 }
 
-.dropdowns {
-  background-color: var(--bs-white);
-  border: 1px solid var(--light-green);
-  position: relative;
-  display: inline-block;
-  color: var(--light-green);
-}
-
 .chipIcon {
   height: 0.9rem !important;
 }

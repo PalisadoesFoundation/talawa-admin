@@ -323,7 +323,6 @@ const organizationFunds = (): JSX.Element => {
               setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
             }
             dataTestIdPrefix="filter"
-            className={styles.dropdowns}
             buttonLabel={tCommon('sort')}
           />
           <div>
