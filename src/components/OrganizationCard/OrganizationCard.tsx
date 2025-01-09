@@ -125,9 +125,9 @@ function OrganizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       /* istanbul ignore next */
       if (error instanceof Error) {
         const apolloError = error as ApolloError;
-         const errorCode = apolloError.graphQLErrors[0]?.extensions?.code;
-        
-         if (errorCode === 'ALREADY_MEMBER') {
+        const errorCode = apolloError.graphQLErrors[0]?.extensions?.code;
+
+        if (errorCode === 'ALREADY_MEMBER') {
           toast.error(t('AlreadyJoined') as string);
         } else {
           toast.error(t('errorOccured') as string);
@@ -144,21 +144,21 @@ function OrganizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       (request) => request.user._id === userId,
     );
     try {
-    if (!membershipRequest) {
-      toast.error(t('MembershipRequestNotFound') as string);
-      return;
+      if (!membershipRequest) {
+        toast.error(t('MembershipRequestNotFound') as string);
+        return;
+      }
+
+      await cancelMembershipRequest({
+        variables: {
+          membershipRequestId: membershipRequest._id,
+        },
+      });
+
+      toast.success(t('MembershipRequestWithdrawn') as string);
+    } catch (error) {
+      toast.error(t('errorOccured') as string);
     }
-
-    await cancelMembershipRequest({
-      variables: {
-        membershipRequestId: membershipRequest._id,
-      },
-    });
-
-    toast.success(t('MembershipRequestWithdrawn') as string);
-} catch (error) {
-    toast.error(t('errorOccured') as string);
-  }
   }
 
   return (
@@ -236,8 +236,7 @@ function OrganizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
           </Button>
         )}
       </div>
-    </>
-  );
+    </>  );
 }
 
 export default OrganizationCard;
