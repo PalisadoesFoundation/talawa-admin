@@ -39,9 +39,10 @@ def has_code_coverage_disable(file_path):
     """
     code_coverage_disable_pattern = re.compile(
     r"""//?\s*istanbul\s+ignore(?:\s+(?:next|line)(?:\s*--\s*\S*)?)?[^\n]*|
-    /\*\s*istanbul\s+ignore(?:\s+(?:next|line)(?:\s*--\s*\S*)?)?\s*\*/""",
+    /\*.*istanbul\s+ignore(?:\s+(?:next|line)(?:\s*--\s*\S*)?)?.*\*/""",
     re.IGNORECASE,
 )
+
 
     try:
         with open(file_path, "r", encoding="utf-8") as file:
