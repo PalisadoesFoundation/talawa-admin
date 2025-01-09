@@ -251,7 +251,11 @@ export default function organizations(): JSX.Element {
               )
             )
               membershipRequestStatus = 'pending';
-            return { ...organization, membershipRequestStatus };
+            return {
+              ...organization,
+              membershipRequestStatus,
+              isJoined: false,
+            };
           },
         );
         setOrganizations(organizations);
@@ -259,7 +263,13 @@ export default function organizations(): JSX.Element {
     } else if (mode === 1) {
       if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
         const organizations =
-          joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
+          joinedOrganizationsData.users[0]?.user?.joinedOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
         setOrganizations(organizations);
       }
     } else if (mode === 2) {
@@ -268,8 +278,13 @@ export default function organizations(): JSX.Element {
         createdOrganizationsData.users.length > 0
       ) {
         const organizations =
-          createdOrganizationsData.users[0]?.appUserProfile
-            ?.createdOrganizations || [];
+          createdOrganizationsData.users[0]?.appUserProfile?.createdOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
         setOrganizations(organizations);
       }
     }
