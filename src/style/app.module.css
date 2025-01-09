@@ -263,9 +263,9 @@
 }
 
 .dropdown {
-  background-color: var(--bs-white);
+  background-color: var(--bs-white) !important;
   border: 1px solid var(--brown-color);
-  color: var(--brown-color);
+  color: var(--brown-color) !important;
   position: relative;
   display: inline-block;
   /* margin-top: 10px;
