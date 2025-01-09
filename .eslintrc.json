@@ -183,13 +183,5 @@
         "@typescript-eslint/explicit-function-return-type": "off"
       }
     }
-=======
-    "src/components/CheckIn/tagTemplate.ts",
-    "package.json",
-    "package-lock.json",
-    "tsconfig.json",
-    "docs/**",
-    "examples/**"
->>>>>>> 325ec7de (.eslintignore deleted and INSTALLATION.md updated)
   ]
 }
