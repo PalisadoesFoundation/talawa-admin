@@ -171,7 +171,7 @@ describe('Testing Invvitations Screen', () => {
     expect(filter).toBeInTheDocument();
 
     fireEvent.click(filter);
-    const filterAll = await screen.findByTestId('filterAll');
+    const filterAll = await screen.findByTestId('all');
     expect(filterAll).toBeInTheDocument();
 
     fireEvent.click(filterAll);
@@ -189,7 +189,7 @@ describe('Testing Invvitations Screen', () => {
     expect(filter).toBeInTheDocument();
 
     fireEvent.click(filter);
-    const filterGroup = await screen.findByTestId('filterGroup');
+    const filterGroup = await screen.findByTestId('group');
     expect(filterGroup).toBeInTheDocument();
 
     fireEvent.click(filterGroup);
@@ -210,7 +210,7 @@ describe('Testing Invvitations Screen', () => {
     expect(filter).toBeInTheDocument();
 
     fireEvent.click(filter);
-    const filterIndividual = await screen.findByTestId('filterIndividual');
+    const filterIndividual = await screen.findByTestId('individual');
     expect(filterIndividual).toBeInTheDocument();
 
     fireEvent.click(filterIndividual);

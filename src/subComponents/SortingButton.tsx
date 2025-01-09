@@ -13,7 +13,7 @@ interface InterfaceSortingOption {
 interface InterfaceSortingButtonProps {
   title?: string;
   sortingOptions: InterfaceSortingOption[];
-  selectedOption: string;
+  selectedOption?: string;
   onSortChange: (value: string) => void;
   dataTestIdPrefix: string;
   dropdownTestId?: string;
@@ -71,7 +71,7 @@ SortingButton.propTypes = {
       value: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
-  selectedOption: PropTypes.string.isRequired,
+  selectedOption: PropTypes.string,
   onSortChange: PropTypes.func.isRequired,
   dataTestIdPrefix: PropTypes.string.isRequired,
   dropdownTestId: PropTypes.string,
