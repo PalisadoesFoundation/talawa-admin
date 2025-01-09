@@ -1090,10 +1090,10 @@
   "postCard": {
     "likes": "Likes",
     "comments": "Comments",
-    "comment.notFound": "Please enter a comment before submitting",
     "viewPost": "View Post",
     "editPost": "Edit Post",
-    "postedOn": "Posted on {{date}}"
+    "postedOn": "Posted on {{date}}",
+    "emptyCommentError": "Please enter a comment before submitting."
   },
   "home": {
     "posts": "Posts",

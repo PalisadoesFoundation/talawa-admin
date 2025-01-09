@@ -661,8 +661,9 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
   });
 
-  test('shows error when creating an empty comment and displays the error toast message', async () => {
-    console.log('running empty comment test case');
+  test('Comment validation displays an error toast when an empty comment is submitted', async () => {
+    console.log('Starting empty comment validation test');
+
     const cardProps = {
       id: '1',
       userImage: 'image.png',
@@ -690,6 +691,8 @@ describe('Testing PostCard Component [User Portal]', () => {
       fetchPosts: vi.fn(),
     };
 
+    expect(toast.error).toBeDefined();
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -701,14 +704,15 @@ describe('Testing PostCard Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    const randomComment = '';
-    userEvent.click(screen.getByTestId('viewPostBtn'));
-    userEvent.type(screen.getByTestId('commentInput'), randomComment);
+
+    userEvent.click(screen.getByTestId('viewPostBtn')); // Open the post view
+    userEvent.type(screen.getByTestId('commentInput'), ''); // Type an empty comment
     userEvent.click(screen.getByTestId('createCommentBtn'));
+
     await waitFor(() => {
-      expect(
-        screen.getByText(i18nForTest.t('comment.notFound')),
-      ).toBeInTheDocument();
+      expect(toast.error).toHaveBeenCalledWith(
+        i18nForTest.t('postCard.emptyCommentError'),
+      );
     });
   });
 

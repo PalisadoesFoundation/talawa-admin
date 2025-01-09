@@ -1050,10 +1050,10 @@
   "postCard": {
     "likes": "喜欢",
     "comments": "评论",
-    "comment.notFound": "提交前请输入评论",
     "viewPost": "查看帖子",
     "editPost": "编辑帖子",
-    "postedOn": "发布于 {{date}}"
+    "postedOn": "发布于 {{date}}",
+    "emptyCommentError": "请在提交前输入评论。"
   },
   "home": {
     "title": "帖子",

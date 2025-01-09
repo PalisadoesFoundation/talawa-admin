@@ -1050,10 +1050,10 @@
   "postCard": {
     "likes": "Aime",
     "comments": "commentaires",
-    "comment.notFound": "Veuillez entrer ce commentaire avant de soumettre",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
-    "postedOn": "Publié le {{date}}"
+    "postedOn": "Publié le {{date}}",
+    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
   },
   "home": {
     "posts": "Des postes",
