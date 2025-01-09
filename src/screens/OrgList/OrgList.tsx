@@ -360,6 +360,7 @@ function orgList(): JSX.Element {
             selectedOption={sortingState.selectedOption}
             onSortChange={handleSortChange}
             dataTestIdPrefix="sortOrgs"
+            dropdownTestId="sort"
           />
           {superAdmin && (
             <Button
