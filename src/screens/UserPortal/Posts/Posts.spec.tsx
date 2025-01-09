@@ -16,7 +16,7 @@ import i18nForTest from 'utils/i18nForTest';
 import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { expect, describe, test, vi } from 'vitest';
+import { expect, describe, it, vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -294,7 +294,7 @@ describe('Testing Home Screen: User Portal', () => {
     vi.clearAllMocks();
   });
 
-  test('Check if HomeScreen renders properly', async () => {
+  it('Check if HomeScreen renders properly', async () => {
     renderHomeScreen();
 
     await wait();
@@ -302,7 +302,7 @@ describe('Testing Home Screen: User Portal', () => {
     expect(startPostBtn).toBeInTheDocument();
   });
 
-  test('StartPostModal should render on click of StartPost btn', async () => {
+  it('StartPostModal should render on click of StartPost btn', async () => {
     renderHomeScreen();
 
     await wait();
@@ -314,7 +314,7 @@ describe('Testing Home Screen: User Portal', () => {
     expect(startPostModal).toBeInTheDocument();
   });
 
-  test('StartPostModal should close on clicking the close button', async () => {
+  it('StartPostModal should close on clicking the close button', async () => {
     renderHomeScreen();
 
     await wait();
@@ -349,7 +349,7 @@ describe('Testing Home Screen: User Portal', () => {
     expect(screen.getByTestId('postImageInput')).toHaveValue('');
   });
 
-  test('Check whether Posts render in PostCard', async () => {
+  it('Check whether Posts render in PostCard', async () => {
     setItem('userId', '640d98d9eb6a743d75341067');
     renderHomeScreen();
     await wait();
@@ -366,7 +366,7 @@ describe('Testing Home Screen: User Portal', () => {
     expect(screen.queryByText('This is the post two')).toBeInTheDocument();
   });
 
-  test('Checking if refetch works after deleting this post', async () => {
+  it('Checking if refetch works after deleting this post', async () => {
     setItem('userId', '640d98d9eb6a743d75341067');
     renderHomeScreen();
     expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
@@ -386,7 +386,7 @@ describe('HomeScreen with invalid orgId', () => {
     vi.clearAllMocks();
   });
 
-  test('Redirect to /user when organizationId is falsy', async () => {
+  it('Redirect to /user when organizationId is falsy', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <MemoryRouter initialEntries={['/user/organization/']}>
