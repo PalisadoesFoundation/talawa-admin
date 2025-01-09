@@ -48,7 +48,8 @@
   --subtle-blue-grey-hover: #5f7e91;
   --white: #fff;
   --black: black;
-
+  --rating-star-filled: #ff6d75;
+  --rating-star-hover: #ff3d47;
   /* Background and Border */
   --table-bg: #eaebef;
   --tablerow-bg: #eff1f7;
@@ -942,7 +943,17 @@ hr {
 .card {
   width: fit-content;
 }
+.cardContainer {
+  width: 300px;
+}
 
+.ratingFilled {
+  color: var(--rating-star-filled); /* Color for filled stars */
+}
+
+.ratingHover {
+  color: var(--rating-star-hover); /* Color for star on hover */
+}
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
