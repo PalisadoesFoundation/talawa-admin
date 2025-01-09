@@ -43,6 +43,7 @@ def has_code_coverage_disable(file_path):
     re.IGNORECASE,
 )
 
+
     try:
         with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
