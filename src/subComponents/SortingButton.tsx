@@ -53,6 +53,7 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
             key={option.value}
             onClick={() => onSortChange(option.value)}
             data-testid={`${option.value}`}
+            className={styles.dropdownItem}
           >
             {option.label}
           </Dropdown.Item>
