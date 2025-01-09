@@ -1,15 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import {
-  Circle,
-  FilterAltOutlined,
-  Search,
-  Sort,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -26,6 +20,7 @@ import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './VolunteerCreateModal';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import VolunteerViewModal from './VolunteerViewModal';
+import SortingButton from 'subComponents/SortingButton';
 
 enum VolunteerStatus {
   All = 'all',
@@ -61,7 +56,7 @@ const dataGridStyle = {
 };
 
 /**
- * Component for managing and displaying event volunteers realted to an event.
+ * Component for managing and displaying event volunteers related to an event.
  *
  * This component allows users to view, filter, sort, and create volunteers. It also handles fetching and displaying related data such as volunteer acceptance status, etc.
  *
@@ -338,60 +333,39 @@ function volunteers(): JSX.Element {
         </div>
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdowns}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('hoursVolunteered_DESC')}
-                  data-testid="hoursVolunteered_DESC"
-                >
-                  {t('mostHoursVolunteered')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('hoursVolunteered_ASC')}
-                  data-testid="hoursVolunteered_ASC"
-                >
-                  {t('leastHoursVolunteered')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdowns}
-                data-testid="filter"
-              >
-                <FilterAltOutlined className={'me-1'} />
-                {t('status')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setStatus(VolunteerStatus.All)}
-                  data-testid="statusAll"
-                >
-                  {tCommon('all')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(VolunteerStatus.Pending)}
-                  data-testid="statusPending"
-                >
-                  {tCommon('pending')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(VolunteerStatus.Accepted)}
-                  data-testid="statusAccepted"
-                >
-                  {t('accepted')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                {
+                  label: t('mostHoursVolunteered'),
+                  value: 'hoursVolunteered_DESC',
+                },
+                {
+                  label: t('leastHoursVolunteered'),
+                  value: 'hoursVolunteered_ASC',
+                },
+              ]}
+              selectedOption={sortBy ?? ''}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
+                )
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+            />
+
+            <SortingButton
+              type="filter"
+              sortingOptions={[
+                { label: tCommon('all'), value: VolunteerStatus.All },
+                { label: tCommon('pending'), value: VolunteerStatus.Pending },
+                { label: t('accepted'), value: VolunteerStatus.Accepted },
+              ]}
+              selectedOption={status}
+              onSortChange={(value) => setStatus(value as VolunteerStatus)}
+              dataTestIdPrefix="filter"
+              buttonLabel={t('status')}
+            />
           </div>
           <div>
             <Button
