@@ -254,7 +254,7 @@ export default function organizations(): JSX.Element {
             return {
               ...organization,
               membershipRequestStatus,
-              isJoined: false,
+              isJoined: membershipRequestStatus === 'accepted',
             };
           },
         );
