@@ -170,7 +170,7 @@
     "package-lock.json",
     "tsconfig.json",
     "docs/**",
-    "examples/**"
+    "examples/**",
     "docs/docusaurus.config.ts",
     "docs/sidebars.ts",
     "docs/src/**",
