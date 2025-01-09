@@ -5938,3 +5938,76 @@ button[data-testid='createPostBtn'] {
   margin-left: 13vw;
   max-width: 80vw;
 }
+
+/* Organisation Settings CSS */
+
+/* Delete Component */
+.settingsBody {
+  margin: 2.5rem 0;
+}
+
+.deleteOrgCardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deleteOrgCardHeader .cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.deleteOrgCardBody {
+  min-height: 180px;
+}
+
+.deleteOrgCardBody .textBox {
+  margin: 0 0 3rem 0;
+  color: var(--bs-secondary);
+}
+
+/* OrgProfileFieldSettings.module.css */
+
+.customDataTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.customDataTable th,
+.customDataTable td {
+  padding: 8px;
+  text-align: left;
+}
+
+.customDataTable th {
+  background-color: #f2f2f2;
+}
+
+/* form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+} */
+
+.saveButton {
+  width: 10em;
+  align-self: self-end;
+}
+
+/* OrgUpdate */
+
+.orgUpdateMessage {
+  height: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.orgUpdateIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}

@@ -9,7 +9,7 @@ import {
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
-import styles from './DeleteOrg.module.css';
+import styles from '../../../../style/app.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -96,10 +96,10 @@ function deleteOrg(): JSX.Element {
     <>
       {canDelete && (
         <Card className="rounded-4 shadow-sm mb-4 border border-light-subtle">
-          <div className={styles.cardHeader}>
+          <div className={styles.deleteOrgCardHeader}>
             <div className={styles.cardTitle}>{t('deleteOrganization')}</div>
           </div>
-          <Card.Body className={styles.cardBody}>
+          <Card.Body className={styles.deleteOrgCardBody}>
             <div className={styles.textBox}>{t('longDelOrgMsg')}</div>
             <Button
               variant="danger"

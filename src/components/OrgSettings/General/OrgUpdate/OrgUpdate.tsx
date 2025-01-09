@@ -12,7 +12,7 @@ import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './OrgUpdate.module.css';
+import styles from '../../../../style/app.module.css';
 import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceAddress,
@@ -152,13 +152,16 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   };
 
   if (loading) {
-    return <Loader styles={styles.message} size="lg" />;
+    return <Loader styles={styles.orgUpdateMessage} size="lg" />;
   }
 
   if (error) {
     return (
-      <div className={styles.message}>
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+      <div className={styles.orgUpdateMessage}>
+        <WarningAmberRounded
+          className={styles.orgUpdateIcon}
+          fontSize="large"
+        />
         <h6 className="fw-bold text-danger text-center">
           Error occured while loading Organization Data
           <br />
