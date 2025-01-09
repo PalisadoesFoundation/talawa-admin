@@ -38,10 +38,10 @@ def has_code_coverage_disable(file_path):
         otherwise.
     """
     code_coverage_disable_pattern = re.compile(
-        r"""//?\s*istanbul\s+ignore(?:\s+(?:next|-line))?[^\n]*|
-        /\*\s*istanbul\s+ignore\s+(?:next|-line)\s*\*/""",
-        re.IGNORECASE,
-    )
+        r"""//?\s*istanbul\s+ignore(?:\s+(?:next|-line)(?:\s*--\s*\S*)?)?[^\n]*|
+    /\*\s*istanbul\s+ignore\s+(?:next|-line)(?:\s*--\s*\S*)?\s*\*/""",
+    re.IGNORECASE,
+)
     try:
         with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
