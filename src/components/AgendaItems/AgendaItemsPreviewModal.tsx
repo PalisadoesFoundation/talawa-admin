@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import styles from './AgendaItemsContainer.module.css';
+import styles from '../../style/app.module.css';
 import { FaLink } from 'react-icons/fa';
 
 interface InterfaceFormStateType {
@@ -101,7 +101,7 @@ const AgendaItemsPreviewModal: React.FC<
       onHide={hidePreviewModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('agendaItemDetails')}</p>
+        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
         <Button
           onClick={hidePreviewModal}
           data-testid="previewAgendaItemModalCloseBtn"

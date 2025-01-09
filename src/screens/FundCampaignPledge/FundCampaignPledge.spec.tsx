@@ -2,13 +2,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -24,18 +18,19 @@ import {
 } from './PledgesMocks';
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: vi
+      .importActual('@mui/x-date-pickers/DesktopDateTimePicker')
+      .then((module) => module.DesktopDateTimePicker),
   };
 });
 
@@ -45,6 +40,11 @@ const link3 = new StaticMockLink(EMPTY_MOCKS);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
+
+const mockParamsState = {
+  orgId: 'orgId',
+  fundCampaignId: 'fundCampaignId',
+};
 
 const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
   return render(
@@ -74,18 +74,30 @@ const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Campaign Pledge Screen', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId', fundCampaignId: 'fundCampaignId' }),
-    }));
+  const mockNavigate = vi.fn();
+
+  vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+      ...actual,
+      useParams: () => ({ ...mockParamsState }),
+      useNavigate: () => mockNavigate,
+    };
+  });
+
+  beforeEach(() => {
+    mockParamsState.orgId = 'orgId';
+    mockParamsState.fundCampaignId = 'fundCampaignId';
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    mockParamsState.orgId = '';
+    mockParamsState.fundCampaignId = '';
+
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/fundCampaignPledge/']}>

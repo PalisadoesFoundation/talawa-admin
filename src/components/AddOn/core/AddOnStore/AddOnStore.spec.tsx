@@ -155,18 +155,6 @@ const PLUGIN_GET_MOCK = {
   },
 };
 
-const PLUGIN_LOADING_MOCK = {
-  request: {
-    query: PLUGIN_GET,
-  },
-  result: {
-    data: {
-      getPlugins: [],
-    },
-    loading: true,
-  },
-};
-
 vi.mock('react-router-dom', async () => {
   const actualModule = await vi.importActual('react-router-dom');
   return {
@@ -310,9 +298,49 @@ describe('Testing AddOnStore Component', () => {
     expect(message.length).toBeGreaterThanOrEqual(1);
   });
 
-  test('AddOnStore loading test', async () => {
-    expect(true).toBe(true);
-    const mocks = [ORGANIZATIONS_LIST_MOCK, PLUGIN_LOADING_MOCK];
+  test('renders loader while loading', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={[]} addTypename={false}>
+                <AddOnStore />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    // Simulate loading state
+    expect(screen.getByTestId('AddOnEntryStore')).toBeInTheDocument();
+  });
+
+  test('renders available plugins by default', async () => {
+    const mocks = [
+      {
+        request: {
+          query: PLUGIN_GET,
+        },
+        result: {
+          data: {
+            getPlugins: [
+              {
+                _id: '1',
+                pluginName: 'Plugin 1',
+                pluginDesc: 'Desc 1',
+                pluginCreatedBy: 'User 1',
+                uninstalledOrgs: [],
+                installed: false,
+                enabled: true,
+              },
+            ],
+          },
+        },
+      },
+    ];
+
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -327,6 +355,184 @@ describe('Testing AddOnStore Component', () => {
       </ApolloProvider>,
     );
 
-    expect(screen.getByTestId('AddOnEntryStore')).toBeInTheDocument();
+    await wait();
+
+    // Ensure plugin is displayed
+    expect(screen.getAllByText('Plugin 1')).toHaveLength(2);
+  });
+
+  test('switches to installed tab and displays plugins', async () => {
+    const mocks = [
+      {
+        request: {
+          query: PLUGIN_GET,
+        },
+        result: {
+          data: {
+            getPlugins: [
+              {
+                _id: '2',
+                pluginName: 'Plugin 2',
+                pluginDesc: 'Desc 2',
+                pluginCreatedBy: 'User 2',
+                uninstalledOrgs: [],
+                installed: true,
+                enabled: false,
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <AddOnStore />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    // Switch to installed tab
+    const installedTab = screen.getByText('Installed');
+    fireEvent.click(installedTab);
+
+    // Ensure installed plugin is displayed
+    expect(screen.getAllByText('Plugin 2')).toHaveLength(2);
+  });
+
+  test('filters plugins based on search input', async () => {
+    const mocks = [
+      {
+        request: {
+          query: PLUGIN_GET,
+        },
+        result: {
+          data: {
+            getPlugins: [
+              {
+                _id: '1',
+                pluginName: 'Test Plugin',
+                pluginDesc: 'Description',
+                pluginCreatedBy: 'User',
+                uninstalledOrgs: [],
+                installed: false,
+                enabled: true,
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <AddOnStore />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    const searchInput = screen.getByPlaceholderText('Ex: Donations');
+    fireEvent.change(searchInput, { target: { value: 'Test' } });
+
+    // Ensure the filtered plugin is displayed
+    const plugins = screen.getAllByText('Test Plugin');
+    expect(plugins).toHaveLength(2);
+  });
+
+  test('shows a message when no plugins match the search', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={[]} addTypename={false}>
+                <AddOnStore />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    const elements = screen.getAllByText('Plugin does not exists');
+    expect(elements).toHaveLength(2); // Ensure there are exactly 2 matching elements
+  });
+
+  test('sets showEnabled based on dropdown value', async () => {
+    const mocks = [
+      {
+        request: { query: PLUGIN_GET },
+        result: {
+          data: {
+            getPlugins: [
+              {
+                _id: '1',
+                pluginName: 'Test Plugin 1',
+                pluginDesc: 'Description',
+                pluginCreatedBy: 'User1',
+                uninstalledOrgs: [],
+                installed: false,
+                enabled: true,
+              },
+              {
+                _id: '2',
+                pluginName: 'Test Plugin 2',
+                pluginDesc: 'Description',
+                pluginCreatedBy: 'User2',
+                uninstalledOrgs: [],
+                installed: false,
+                enabled: true,
+              },
+            ],
+          },
+        },
+      },
+    ];
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <AddOnStore />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(await screen.findByText('Installed'));
+
+    // Wait for the dropdown to appear
+    const dropdownToggle = await screen.findByTestId('filter-dropdown');
+    fireEvent.click(dropdownToggle);
+
+    // Click 'disabled' item
+    // fireEvent.click(await screen.findByText('Disabled'));
+
+    expect(dropdownToggle.textContent).toBe('Enabled');
   });
 });

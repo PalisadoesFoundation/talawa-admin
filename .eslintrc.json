@@ -171,5 +171,17 @@
     "tsconfig.json",
     "docs/**",
     "examples/**"
+    "docs/docusaurus.config.ts",
+    "docs/sidebars.ts",
+    "docs/src/**",
+    "docs/blog/**"
+  ],
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    }
   ]
 }

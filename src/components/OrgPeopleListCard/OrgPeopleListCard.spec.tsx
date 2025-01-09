@@ -83,6 +83,45 @@ describe('Testing Organization People List Card', () => {
     });
   });
 
+  const NULL_DATA_MOCKS = [
+    {
+      request: {
+        query: REMOVE_MEMBER_MUTATION,
+        variables: {
+          userid: '1',
+          orgid: '456',
+        },
+      },
+      result: {
+        data: null,
+      },
+    },
+  ];
+
+  test('should handle null data response from mutation', async () => {
+    const link = new StaticMockLink(NULL_DATA_MOCKS, true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPeopleListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Click remove button
+    const removeButton = screen.getByTestId('removeMemberBtn');
+    await userEvent.click(removeButton);
+
+    // Verify that success toast and toggleRemoveModal were not called
+    await waitFor(() => {
+      expect(toast.success).not.toHaveBeenCalled();
+      expect(props.toggleRemoveModal).not.toHaveBeenCalled();
+    });
+  });
+
   test('should render modal and handle successful member removal', async () => {
     const link = new StaticMockLink(MOCKS, true);
 
@@ -123,14 +162,7 @@ describe('Testing Organization People List Card', () => {
     await waitFor(
       () => {
         expect(toast.success).toHaveBeenCalled();
-      },
-      { timeout: 3000 },
-    );
-
-    // Check if page reload is triggered after delay
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
+        expect(props.toggleRemoveModal).toHaveBeenCalled();
       },
       { timeout: 3000 },
     );

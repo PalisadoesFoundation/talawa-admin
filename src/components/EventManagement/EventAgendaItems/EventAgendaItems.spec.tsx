@@ -18,8 +18,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import EventAgendaItems from './EventAgendaItems';
-import { vi, describe, expect, it, beforeEach } from 'vitest';
-
+import { vi } from 'vitest';
 import {
   MOCKS,
   MOCKS_ERROR_QUERY,
@@ -97,9 +96,6 @@ describe('Testing Agenda Items Components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
-
     await waitFor(() => {
       expect(getByText(translations.createAgendaItem)).toBeInTheDocument();
     });
@@ -117,9 +113,6 @@ describe('Testing Agenda Items Components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
-
     await waitFor(() => {
       expect(
         queryByText(translations.createAgendaItem),
@@ -142,8 +135,6 @@ describe('Testing Agenda Items Components', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
     });
@@ -160,6 +151,7 @@ describe('Testing Agenda Items Components', () => {
       screen.queryByTestId('createAgendaItemModalCloseBtn'),
     );
   });
+
   it('creates new agenda item', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
