@@ -268,8 +268,8 @@
   color: var(--brown-color);
   position: relative;
   display: inline-block;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  /* margin-top: 10px;
+  margin-bottom: 10px; */
 }
 
 .dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
