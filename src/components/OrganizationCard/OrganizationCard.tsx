@@ -101,7 +101,7 @@ function OrganizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
 
   /**
    * Handles joining the organization. Sends a membership request if registration is required,
-   * otherwise joins the public organization directly. Displays success or error messages.
+   * otherwise joins the public organization directly. Displays success or error messages .
    */
   async function joinOrganization(): Promise<void> {
     try {
