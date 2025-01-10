@@ -1,14 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Dropdown, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import styles from '../VolunteerManagement.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
-import {
-  FilterAltOutlined,
-  Search,
-  Sort,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaUserGroup } from 'react-icons/fa6';
 import { debounce, Stack } from '@mui/material';
@@ -21,6 +16,7 @@ import Loader from 'components/Loader/Loader';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
+import SortingButton from 'subComponents/SortingButton';
 
 enum ItemFilter {
   Group = 'group',
@@ -120,7 +116,7 @@ const Invitations = (): JSX.Element => {
   // loads the invitations when the component mounts
   if (invitationLoading) return <Loader size="xl" />;
   if (invitationError) {
-    // Displays an error message if there is an issue loading the invvitations
+    // Displays an error message if there is an issue loading the invitations
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
@@ -162,63 +158,30 @@ const Invitations = (): JSX.Element => {
         </div>
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex gap-3 justify-space-between">
-            {/* Dropdown menu for sorting invitations */}
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdown}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_DESC')}
-                  data-testid="createdAt_DESC"
-                >
-                  {t('receivedLatest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_ASC')}
-                  data-testid="createdAt_ASC"
-                >
-                  {t('receivedEarliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <FilterAltOutlined className={'me-1'} />
-                {t('filter')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setFilter(null)}
-                  data-testid="filterAll"
-                >
-                  {tCommon('all')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setFilter(ItemFilter.Group)}
-                  data-testid="filterGroup"
-                >
-                  {t('groupInvite')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setFilter(ItemFilter.Individual)}
-                  data-testid="filterIndividual"
-                >
-                  {t('individualInvite')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('receivedLatest'), value: 'createdAt_DESC' },
+                { label: t('receivedEarliest'), value: 'createdAt_ASC' },
+              ]}
+              onSortChange={(value) =>
+                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+            />
+            <SortingButton
+              sortingOptions={[
+                { label: tCommon('all'), value: 'all' },
+                { label: t('groupInvite'), value: 'group' },
+                { label: t('individualInvite'), value: 'individual' },
+              ]}
+              onSortChange={(value) =>
+                setFilter(value === 'all' ? null : (value as ItemFilter))
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={t('filter')}
+              type="filter"
+            />
           </div>
         </div>
       </div>

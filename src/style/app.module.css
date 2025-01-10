@@ -48,7 +48,8 @@
   --subtle-blue-grey-hover: #5f7e91;
   --white: #fff;
   --black: black;
-
+  --rating-star-filled: #ff6d75;
+  --rating-star-hover: #ff3d47;
   /* Background and Border */
   --table-bg: #eaebef;
   --tablerow-bg: #eff1f7;
@@ -273,13 +274,13 @@
 }
 
 .dropdown {
-  background-color: var(--bs-white);
+  background-color: var(--bs-white) !important;
   border: 1px solid var(--brown-color);
-  color: var(--brown-color);
+  color: var(--brown-color) !important;
   position: relative;
   display: inline-block;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  /* margin-top: 10px;
+  margin-bottom: 10px; */
 }
 
 .dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
@@ -388,8 +389,8 @@
 .createButton {
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
-  margin-top: 10px;
-  margin-left: 5px;
+  /* margin-top: 10px; */
+  /* margin-left: 5px; */
   border: 1px solid var(--brown-color);
 }
 
@@ -942,7 +943,17 @@ hr {
 .card {
   width: fit-content;
 }
+.cardContainer {
+  width: 300px;
+}
 
+.ratingFilled {
+  color: var(--rating-star-filled); /* Color for filled stars */
+}
+
+.ratingHover {
+  color: var(--rating-star-hover); /* Color for star on hover */
+}
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
@@ -1767,14 +1778,6 @@ input[type='radio']:checked + label:hover {
 
 .inputFields {
   box-shadow: 0 1px 1px var(--brand-primary);
-}
-
-.dropdowns {
-  background-color: var(--bs-white);
-  border: 1px solid var(--light-green);
-  position: relative;
-  display: inline-block;
-  color: var(--light-green);
 }
 
 .chipIcon {
@@ -4629,26 +4632,39 @@ button[data-testid='createPostBtn'] {
   display: flex;
   position: relative;
   width: 100%;
-  margin-top: 10px;
+  overflow: hidden; /* Ensures content doesn't overflow the card */
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .previewVenueModal img {
   width: 400px;
   height: auto;
+  object-fit: cover; /* Ensures the image stays within the boundaries */
 }
 
 .closeButtonP {
   position: absolute;
   top: 0px;
   right: 0px;
+  width: 32px; /* Make the button circular */
+  height: 32px; /* Make the button circular */
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
+  border-radius: 50%;
   border: none;
   color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.closeButtonP:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
 
 /* YearlyEventCalender.tsx */
@@ -5084,12 +5100,15 @@ button[data-testid='createPostBtn'] {
   position: relative;
   width: 100%;
   margin-top: 10px;
+  overflow: hidden; /* Ensures content doesn't overflow the card */
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .previewAdvertisementRegister img {
   width: 400px;
   height: auto;
+  object-fit: cover; /* Ensures the image stays within the boundaries */
 }
 
 .previewAdvertisementRegister video {
@@ -5098,14 +5117,27 @@ button[data-testid='createPostBtn'] {
 }
 
 .closeButtonAdvertisementRegister {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 32px; /* Make the button circular */
+  height: 32px; /* Make the button circular */
   background: transparent;
+  transform: scale(1.2);
   cursor: pointer;
+  border-radius: 50%;
   border: none;
   color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
-  margin-bottom: 10px;
-  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.closeButtonAdvertisementRegister:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
 
 .buttonAdvertisementRegister {

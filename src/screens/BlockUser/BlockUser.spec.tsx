@@ -353,7 +353,7 @@ describe('Testing Block/Unblock user screen', () => {
     );
 
     userEvent.click(screen.getByTestId('userFilter'));
-    userEvent.click(screen.getByTestId('showMembers'));
+    userEvent.click(screen.getByTestId('allMembers'));
     await wait();
 
     expect(screen.getByTestId('unBlockUser123')).toBeInTheDocument();
@@ -383,7 +383,7 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('userFilter'));
-    userEvent.click(screen.getByTestId('showMembers'));
+    userEvent.click(screen.getByTestId('allMembers'));
 
     await wait();
 
@@ -415,14 +415,14 @@ describe('Testing Block/Unblock user screen', () => {
     );
 
     userEvent.click(screen.getByTestId('userFilter'));
-    userEvent.click(screen.getByTestId('showBlockedMembers'));
+    userEvent.click(screen.getByTestId('blockedUsers'));
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
 
     userEvent.click(screen.getByTestId('userFilter'));
-    userEvent.click(screen.getByTestId('showMembers'));
+    userEvent.click(screen.getByTestId('allMembers'));
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -459,7 +459,7 @@ describe('Testing Block/Unblock user screen', () => {
     );
 
     userEvent.click(screen.getByTestId('userFilter'));
-    userEvent.click(screen.getByTestId('showMembers'));
+    userEvent.click(screen.getByTestId('allMembers'));
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -508,7 +508,7 @@ describe('Testing Block/Unblock user screen', () => {
     );
 
     userEvent.click(screen.getByTestId('userFilter'));
-    userEvent.click(screen.getByTestId('showMembers'));
+    userEvent.click(screen.getByTestId('allMembers'));
     await wait();
 
     userEvent.click(screen.getByTestId('blockUser456'));

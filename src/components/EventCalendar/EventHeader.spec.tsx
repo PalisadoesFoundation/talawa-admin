@@ -69,7 +69,7 @@ describe('EventHeader Component', () => {
     fireEvent.click(getByTestId('eventType'));
 
     await act(async () => {
-      fireEvent.click(getByTestId('events'));
+      fireEvent.click(getByTestId('Events'));
     });
 
     expect(handleChangeView).toHaveBeenCalledTimes(1);

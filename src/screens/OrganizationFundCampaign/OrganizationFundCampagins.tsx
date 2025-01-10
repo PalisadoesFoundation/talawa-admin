@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -20,6 +20,7 @@ import type {
   InterfaceCampaignInfo,
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
+import SortingButton from 'subComponents/SortingButton';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -360,43 +361,25 @@ const orgFundCampaign = (): JSX.Element => {
         </div>
         <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}>
           <div className="d-flex justify-space-between">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdownOrganizationFundCampaign}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('fundingGoal_ASC')}
-                  data-testid="fundingGoal_ASC"
-                >
-                  {t('lowestGoal')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('fundingGoal_DESC')}
-                  data-testid="fundingGoal_DESC"
-                >
-                  {t('highestGoal')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_DESC')}
-                  data-testid="endDate_DESC"
-                >
-                  {t('latestEndDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_ASC')}
-                  data-testid="endDate_ASC"
-                >
-                  {t('earliestEndDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
+                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'fundingGoal_ASC'
+                    | 'fundingGoal_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
           <div>
             <Button

@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
-import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router-dom';
@@ -8,7 +7,6 @@ import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +28,7 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import SortingButton from 'subComponents/SortingButton';
 
 /**
  * Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
@@ -301,37 +300,16 @@ function SubTags(): JSX.Element {
               </Button>
             </div>
 
-            <Dropdown
-              title="Sort Tag"
-              // className={styles.dropdown}
-              // className="ms-4 mb-4"
-              data-testid="sort"
-            >
-              <Dropdown.Toggle
-                data-testid="sortTags"
-                // className="color-red"
-                className={styles.dropdown}
-              >
-                <SortIcon className={'me-1'} />
-                {tagSortOrder === 'DESCENDING'
-                  ? tCommon('Latest')
-                  : tCommon('Oldest')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  data-testid="latest"
-                  onClick={() => setTagSortOrder('DESCENDING')}
-                >
-                  {tCommon('Latest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  data-testid="oldest"
-                  onClick={() => setTagSortOrder('ASCENDING')}
-                >
-                  {tCommon('Oldest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: tCommon('Latest'), value: 'DESCENDING' },
+                { label: tCommon('Oldest'), value: 'ASCENDING' },
+              ]}
+              selectedOption={tagSortOrder}
+              onSortChange={(value) => setTagSortOrder(value as SortedByType)}
+              dataTestIdPrefix="sortTags"
+              buttonLabel={tCommon('sort')}
+            />
 
             <Button
               onClick={() => redirectToManageTag(parentTagId as string)}

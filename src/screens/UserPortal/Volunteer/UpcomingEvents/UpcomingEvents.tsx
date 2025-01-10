@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Dropdown, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import styles from '../VolunteerManagement.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
@@ -19,7 +19,7 @@ import {
   Stack,
   debounce,
 } from '@mui/material';
-import { Circle, Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
 
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -31,6 +31,7 @@ import { USER_EVENTS_VOLUNTEER } from 'GraphQl/Queries/PlugInQueries';
 import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
 import { FaCheck } from 'react-icons/fa';
+import SortingButton from 'subComponents/SortingButton';
 
 /**
  * The `UpcomingEvents` component displays list of upcoming events for the user to volunteer.
@@ -90,7 +91,7 @@ const UpcomingEvents = (): JSX.Element => {
     }
   };
 
-  // Fetches upcomin events based on the organization ID, search term, and sorting order
+  // Fetches upcoming events based on the organization ID, search term, and sorting order
   const {
     data: eventsData,
     loading: eventsLoading,
@@ -169,31 +170,18 @@ const UpcomingEvents = (): JSX.Element => {
         </div>
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="searchByToggle"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('searchBy', { item: '' })}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('title')}
-                  data-testid="title"
-                >
-                  {t('name')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('location')}
-                  data-testid="location"
-                >
-                  {tCommon('location')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('name'), value: 'title' },
+                { label: tCommon('location'), value: 'location' },
+              ]}
+              selectedOption={searchBy}
+              onSortChange={(value) =>
+                setSearchBy(value as 'title' | 'location')
+              }
+              dataTestIdPrefix="searchByToggle"
+              buttonLabel={tCommon('searchBy', { item: '' })}
+            />
           </div>
         </div>
       </div>
