@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
@@ -16,6 +17,7 @@ import { vi } from 'vitest'; // Import vi from vitest instead of jest
  * These tests utilize the React Testing Library for rendering and querying DOM elements.
  */
 
+<<<<<<< HEAD
 const mockNavigate = vi.fn(); // Use vitest.fn() instead of jest.fn()
 
 vi.mock('react-router-dom', async () => {
@@ -23,6 +25,13 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     BrowserRouter: ({ children }: { children: React.ReactNode }) => children,
+=======
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => {
+  const actual = jest.requireActual('react-router-dom') as object;
+  return {
+    ...actual,
+>>>>>>> 480a62d786891fb0043eeb06d3a4e47ecc00626b
     useNavigate: () => mockNavigate,
   };
 });
