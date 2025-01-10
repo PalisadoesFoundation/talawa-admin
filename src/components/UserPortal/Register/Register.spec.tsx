@@ -14,21 +14,7 @@ import Register from './Register';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 
-/**
- * Unit tests for the Register component.
- *
- * 1. **Render test**: Verifies proper rendering of the Register component.
- * 2. **Mode switch to Login**: Ensures that clicking the "setLoginBtn" changes mode to 'login'.
- * 3. **Empty email validation**: Checks if toast.error is triggered for empty email.
- * 4. **Empty password validation**: Ensures toast.error is called for empty password.
- * 5. **Empty first name validation**: Ensures toast.error is called if first name is missing.
- * 6. **Empty last name validation**: Verifies toast.error is triggered if last name is missing.
- * 7. **Password mismatch validation**: Verifies toast.error is shown if confirm password doesn't match.
- * 8. **Successful registration**: Confirms that toast.success is called when valid credentials are entered.
- *
- * GraphQL mock data is used for testing user registration functionality.
- */
-
+// GraphQL Mock Data
 const MOCKS = [
   {
     request: {
@@ -54,6 +40,7 @@ const MOCKS = [
   },
 ];
 
+// Form Data
 const formData = {
   firstName: 'John',
   lastName: 'Doe',
@@ -62,16 +49,10 @@ const formData = {
   confirmPassword: 'johnDoe',
 };
 
+// Static Mock Link
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
+// Mock toast
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -80,11 +61,17 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+// Mock setCurrentMode function
 const setCurrentMode: React.Dispatch<SetStateAction<string>> = vi.fn();
 
+// Test setup props
 const props = {
   setCurrentMode,
 };
+
+async function waitForAsync(): Promise<void> {
+  await act(() => new Promise((resolve) => setTimeout(resolve, 100)));
+}
 
 describe('Testing Register Component [User Portal]', () => {
   it('Component should be rendered properly', async () => {
@@ -100,7 +87,7 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
   });
 
   it('Expect the mode to be changed to Login', async () => {
@@ -116,7 +103,7 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.click(screen.getByTestId('setLoginBtn'));
 
@@ -136,7 +123,7 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.click(screen.getByTestId('registerBtn'));
 
@@ -156,7 +143,7 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
     userEvent.click(screen.getByTestId('registerBtn'));
@@ -177,12 +164,10 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
-
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
@@ -201,20 +186,17 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
-
     userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
-  test("Expect toast.error to be called if confirmPassword doesn't match with password", async () => {
+  it("Expect toast.error to be called if confirmPassword doesn't match with password", async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -227,16 +209,12 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
-
     userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-
     userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
-
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
@@ -257,24 +235,19 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-
     userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
       formData.confirmPassword,
     );
-
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
-
     userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-
     userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
-
     userEvent.click(screen.getByTestId('registerBtn'));
 
-    await wait();
+    await waitForAsync();
 
     expect(toast.success).toHaveBeenCalledWith(
       'Successfully registered. Please wait for admin to approve your request.',
