@@ -1,8 +1,0 @@
-{
-  "labelsSynonyms": {
-    "dependencies": ["dependabot", "dependency", "dependencies"],
-    "security": ["security"],
-    "ui/ux": ["layout", "screen", "design", "figma"]
-  },
-  "defaultLabels": ["unapproved"],
-}
