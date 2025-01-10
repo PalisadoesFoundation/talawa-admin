@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
@@ -17,10 +18,13 @@ import i18nForTest from 'utils/i18nForTest';
  */
 
 const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
+jest.mock('react-router-dom', () => {
+  const actual = jest.requireActual('react-router-dom') as object;
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 const defaultProps = {
   id: '123',
