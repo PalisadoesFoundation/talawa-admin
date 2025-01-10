@@ -27,6 +27,11 @@ vi.mock('react-toastify', () => ({
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(UPDATE_ERROR_MOCKS);
+
+/**
+ * Translations for test cases
+ */
+
 const t = {
   ...JSON.parse(
     JSON.stringify(
@@ -36,6 +41,10 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
+
+/**
+ * Props for `GroupModal` component used in tests
+ */
 
 const itemProps: InterfaceGroupModal[] = [
   {
