@@ -252,11 +252,11 @@ describe('Testing Organization Action Items Screen', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('statusAll')).toBeInTheDocument();
+      expect(screen.getByTestId('all')).toBeInTheDocument();
     });
 
     await act(() => {
-      fireEvent.click(screen.getByTestId('statusAll'));
+      fireEvent.click(screen.getByTestId('all'));
     });
 
     await waitFor(() => {
@@ -269,11 +269,11 @@ describe('Testing Organization Action Items Screen', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('statusPending')).toBeInTheDocument();
+      expect(screen.getByTestId('pending')).toBeInTheDocument();
     });
 
     await act(() => {
-      fireEvent.click(screen.getByTestId('statusPending'));
+      fireEvent.click(screen.getByTestId('pending'));
     });
 
     await waitFor(() => {
@@ -314,11 +314,11 @@ describe('Testing Organization Action Items Screen', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('statusCompleted')).toBeInTheDocument();
+      expect(screen.getByTestId('completed')).toBeInTheDocument();
     });
 
     await act(() => {
-      fireEvent.click(screen.getByTestId('statusCompleted'));
+      fireEvent.click(screen.getByTestId('completed'));
     });
 
     await waitFor(() => {

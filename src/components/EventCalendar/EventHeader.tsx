@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Search } from '@mui/icons-material';
 import styles from '../../style/app.module.css';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
+import SortingButton from 'subComponents/SortingButton';
 
 /**
  * Props for the EventHeader component.
@@ -63,56 +64,30 @@ function eventHeader({
         </div>
         <div className={styles.flex_grow}></div>
         <div className={styles.space}>
-          <div>
-            <Dropdown
-              onSelect={handleChangeView}
-              className={styles.selectTypeEventHeader}
-            >
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="selectViewType"
-              >
-                {viewType}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  eventKey={ViewType.MONTH}
-                  data-testid="selectMonth"
-                >
-                  {ViewType.MONTH}
-                </Dropdown.Item>
-                <Dropdown.Item eventKey={ViewType.DAY} data-testid="selectDay">
-                  {ViewType.DAY}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey={ViewType.YEAR}
-                  data-testid="selectYear"
-                >
-                  {ViewType.YEAR}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div>
-            <Dropdown className={styles.selectTypeEventHeader}>
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="eventType"
-              >
-                {t('eventType')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item eventKey="Events" data-testid="events">
-                  Events
-                </Dropdown.Item>
-                <Dropdown.Item eventKey="Workshops" data-testid="workshop">
-                  Workshops
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          <SortingButton
+            title={t('viewType')}
+            sortingOptions={[
+              { label: ViewType.MONTH, value: 'selectMonth' },
+              { label: ViewType.DAY, value: 'selectDay' },
+              { label: ViewType.YEAR, value: 'selectYear' },
+            ]}
+            selectedOption={viewType}
+            onSortChange={handleChangeView}
+            dataTestIdPrefix="selectViewType"
+            className={styles.dropdown}
+          />
+          <SortingButton
+            title={t('eventType')}
+            sortingOptions={[
+              { label: 'Events', value: 'Events' },
+              { label: 'Workshops', value: 'Workshops' },
+            ]}
+            selectedOption={t('eventType')}
+            onSortChange={(value) => console.log(`Selected: ${value}`)}
+            dataTestIdPrefix="eventType"
+            className={styles.dropdown}
+            buttonLabel={t('eventType')}
+          />
           <Button
             variant="success"
             className={styles.createButtonEventHeader}
