@@ -236,7 +236,8 @@ function OrganizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
           </Button>
         )}
       </div>
-    </>  );
+    </>
+  );
 }
 
 export default OrganizationCard;
