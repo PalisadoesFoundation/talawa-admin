@@ -16,16 +16,22 @@ import { toast } from 'react-toastify';
 import type { InterfaceGroupModal } from './GroupModal';
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(UPDATE_ERROR_MOCKS);
+
+/**
+ * Translations for test cases
+ */
+
 const t = {
   ...JSON.parse(
     JSON.stringify(
@@ -36,12 +42,16 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
+/**
+ * Props for `GroupModal` component used in tests
+ */
+
 const itemProps: InterfaceGroupModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     eventId: 'eventId',
-    refetchGroups: jest.fn(),
+    refetchGroups: vi.fn(),
     group: {
       _id: 'groupId',
       name: 'Group 1',
@@ -79,9 +89,9 @@ const itemProps: InterfaceGroupModal[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     eventId: 'eventId',
-    refetchGroups: jest.fn(),
+    refetchGroups: vi.fn(),
     group: {
       _id: 'groupId',
       name: 'Group 1',
