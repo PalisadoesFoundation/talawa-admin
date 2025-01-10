@@ -9,7 +9,6 @@ import UserListCard from './UserListCard';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { BrowserRouter } from 'react-router-dom';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, describe, beforeEach, afterEach } from 'vitest';
 
 // Mock modules
@@ -58,22 +57,17 @@ const ERROR_MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
-const errorLink = new StaticMockLink(ERROR_MOCKS, true);
-
 describe('Testing User List Card', () => {
+  const mockReload = vi.fn();
+
   beforeEach(() => {
     vi.spyOn(global, 'alert').mockImplementation(() => {});
-    vi.spyOn(window, 'location', 'get').mockReturnValue({
-      ...window.location,
-      reload: vi.fn(),
-    });
+    // Update the window.location mock
     Object.defineProperty(window, 'location', {
-      writable: true,
       value: {
-        ...window.location,
-        reload: vi.fn(), // Mock the reload function
+        reload: mockReload,
       },
+      writable: true,
     });
   });
 
@@ -87,7 +81,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />
@@ -98,11 +92,18 @@ describe('Testing User List Card', () => {
 
     const button = screen.getByText(/Add Admin/i);
     await userEvent.click(button);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(toast.success).toHaveBeenCalled();
 
-    await new Promise((resolve) => setTimeout(resolve, 2100));
-    expect(window.location.reload).toHaveBeenCalled();
+    // Wait for the success toast
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('User is added as admin.');
+    });
+
+    await waitFor(
+      () => {
+        expect(mockReload).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('Should show error toast when mutation fails', async () => {
@@ -111,7 +112,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider addTypename={false} mocks={ERROR_MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />
@@ -123,8 +124,9 @@ describe('Testing User List Card', () => {
     const button = screen.getByText(/Add Admin/i);
     await userEvent.click(button);
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(toast.error).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 
   test('Should render button with correct styling', () => {
@@ -154,7 +156,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />
@@ -167,39 +169,9 @@ describe('Testing User List Card', () => {
     expect(button).toBeInTheDocument();
 
     await userEvent.click(button);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(toast.success).toHaveBeenCalled();
-  });
 
-  test('Should display success toast and reload page after successful mutation', async () => {
-    const props = {
-      id: '456',
-    };
-
-    render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <UserListCard key={123} {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const button = screen.getByText(/Add Admin/i);
-    await userEvent.click(button);
-
-    // Wait for the toast success to be called
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('User is added as admin.');
+      expect(toast.success).toHaveBeenCalled();
     });
-
-    // Wait for the page reload to be triggered
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
-      },
-      { timeout: 5000 },
-    );
   });
 });
