@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from './VenueModal.module.css';
+import styles from '../../style/app.module.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -98,7 +98,6 @@ const VenueModal = ({
           ...(edit && { id: venueData?._id }),
         },
       });
-      /* istanbul ignore next */
       if (data) {
         toast.success(
           edit ? (t('venueUpdated') as string) : (t('venueAdded') as string),
@@ -114,7 +113,6 @@ const VenueModal = ({
         setVenueImage(false);
       }
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   }, [
@@ -136,7 +134,6 @@ const VenueModal = ({
   const clearImageInput = useCallback(() => {
     setFormState((prevState) => ({ ...prevState, imageURL: '' }));
     setVenueImage(false);
-    /* istanbul ignore next */
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -162,8 +159,7 @@ const VenueModal = ({
         <Button
           variant="danger"
           onClick={onHide}
-          className="p-3 d-flex justify-content-center align-items-center"
-          style={{ width: '40px', height: '40px' }}
+          className={styles.closeButton}
           data-testid="createVenueModalCloseBtn"
         >
           <i className="fa fa-times" />
@@ -237,7 +233,6 @@ const VenueModal = ({
               }));
               setVenueImage(true);
               const file = e.target.files?.[0];
-              /* istanbul ignore next */
               if (file) {
                 setFormState({
                   ...formState,
@@ -247,7 +242,7 @@ const VenueModal = ({
             }}
           />
           {venueImage && (
-            <div className={styles.preview}>
+            <div className={styles.previewVenueModal}>
               <img src={imageURL} alt="Venue Image Preview" />
               <button
                 className={styles.closeButtonP}
@@ -261,7 +256,7 @@ const VenueModal = ({
 
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.addButton}
             value={edit ? 'editVenue' : 'createVenue'}
             data-testid={edit ? 'updateVenueBtn' : 'createVenueBtn'}
             onClick={handleSubmit}

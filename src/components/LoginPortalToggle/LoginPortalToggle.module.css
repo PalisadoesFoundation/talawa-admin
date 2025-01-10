@@ -22,13 +22,13 @@
 }
 
 .activeLink {
-  color: var(--bs-white);
+  color: white;
   border: 1px solid var(--bs-primary);
-  background-color: var(--bs-primary);
+  background-color: var(--toggle-button-bg);
 }
 
 .activeLink:hover {
   color: var(--bs-white);
-  background-color: var(--bs-primary);
+  background-color: var(--toggle-button-bg);
   border: 1px solid var(--bs-primary);
 }

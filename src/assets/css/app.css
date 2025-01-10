@@ -134,6 +134,29 @@
   --bs-form-valid-border-color: #31bb6b;
   --bs-form-invalid-color: #dc3545;
   --bs-form-invalid-border-color: #dc3545;
+  --dropdown-border-color: #555555;
+  --dropdown-text-color: #555555;
+  --dropdown-hover-color: #eff1f7;
+  --grey-bg-color: #eaebef;
+  --subtle-blue-grey: #7c9beb;
+  --subtle-blue-grey-hover: #5f7e91;
+  --modal-width: 670px;
+  --modal-max-width: 680px;
+  --input-shadow-color: #dddddd;
+  --delete-button-bg: #f8d6dc;
+  --delete-button-color: #ff4d4f;
+  --search-button-bg: #a8c7fa;
+  --search-button-border: #555555;
+  --table-image-size: 50px;
+  --table-head-bg: var(--bs-primary, blue);
+  /* Assuming var(--bs-primary) is defined elsewhere */
+  --table-head-color: white;
+  --table-header-color: var(--bs-greyish-black, black);
+  --table-head-radius: 20px;
+  --table-bg-color: #eaebef;
+  --tablerow-bg-color: #eff1f7;
+  --row-background: var(--bs-white, white);
+  --font-size-header: 16px;
 }
 
 [data-bs-theme='dark'] {
@@ -3419,6 +3442,7 @@ textarea.form-control.is-invalid {
   }
 }
 
+/* To remove the green and replace by greyish hover , make changes here */
 .btn:hover {
   color: var(--bs-btn-hover-color);
   background-color: var(--bs-btn-hover-bg);
@@ -14043,6 +14067,7 @@ fieldset:disabled .btn {
 .btn-warning,
 .btn-info {
   color: #fff;
+  /* isolation: isolate; */
 }
 
 .btn-primary:hover,
@@ -14056,7 +14081,26 @@ fieldset:disabled .btn {
 .btn-info:hover,
 .btn-info:active {
   color: #fff !important;
+  box-shadow: inset 50px 50px 40px rgba(0, 0, 0, 0.5);
+  background-blend-mode: multiply;
+  /* background-color: #6c757d ; */
+  /* filter: brightness(0.85); */
 }
+
+/* .btn-primary{
+  --hover-bg: #6c757d !important; 
+}
+
+
+.btn-primary:hover,
+.btn-primary:active{
+  --hover-bg: hsl(var(--button-hue, 0), 100%, 60%) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:active{
+  --hover-bg: hsl(var(--button-hue, 0), 100%, 0%) !important;
+} */
 
 .btn-outline-primary:hover,
 .btn-outline-primary:active,

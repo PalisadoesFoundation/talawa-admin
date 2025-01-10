@@ -439,7 +439,8 @@
     "startDate": "开始日期",
     "endDate": "结束日期",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "done": "完成"
+    "done": "完成",
+    "createChat": "创建聊天"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -579,7 +580,8 @@
     "registerEvent": "注册活动",
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "done": "完成"
+    "done": "完成",
+    "createChat": "创建聊天"
   },
   "funds": {
     "title": "基金",
@@ -1082,6 +1084,17 @@
     "loading": "加载中...",
     "noAttendees": "未找到参与者"
   },
+  "eventRegistrant": {
+    "sort": "排序",
+    "allRegistrants": "所有注册者",
+    "eventRegistrantsTable": "活动注册者表",
+    "serialNumber": "序列号",
+    "registrant": "注册者",
+    "registeredAt": "注册时间",
+    "createdAt": "创建时间",
+    "addRegistrant": "添加注册者",
+    "noRegistrantsFound": "未找到注册者"
+  },
   "onSpotAttendee": {
     "title": "现场参与者",
     "enterFirstName": "输入名字",
@@ -1204,7 +1217,8 @@
     "eventDescription": "活动描述",
     "eventLocation": "活动位置",
     "startDate": "开始日期",
-    "endDate": "结束日期"
+    "endDate": "结束日期",
+    "createChat": "创建聊天"
   },
   "userEventCard": {
     "starts": "开始",
@@ -1248,14 +1262,23 @@
     "endOfResults": "结果结束"
   },
   "userChat": {
+    "title": "聊天",
+    "add": "添加",
     "chat": "聊天",
     "contacts": "联系方式",
     "search": "搜索",
-    "messages": "消息"
+    "messages": "消息",
+    "create": "创造",
+    "newChat": "新聊天",
+    "newGroupChat": "新群聊",
+    "groupInfo": "集团信息",
+    "members": "会员",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
-    "sendMessage": "发信息"
+    "sendMessage": "发信息",
+    "reply": "回复"
   },
   "orgProfileField": {
     "loading": "加载中...",
@@ -1404,6 +1427,9 @@
   },
   "userPledges": {
     "title": "我的承诺"
+  },
+  "leaveOrganization": {
+    "title": "离开组织"
   },
   "eventVolunteers": {
     "volunteers": "志愿者",

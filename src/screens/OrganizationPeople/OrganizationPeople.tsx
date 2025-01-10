@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client';
-import { Delete, Search, Sort } from '@mui/icons-material';
+import { Delete, Search } from '@mui/icons-material';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -10,7 +10,7 @@ import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -21,7 +21,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-
+import SortingButton from 'subComponents/SortingButton';
 /**
  * OrganizationPeople component is used to display the list of members, admins and users of the organization.
  * It also provides the functionality to search the members, admins and users by their full name.
@@ -57,6 +57,7 @@ function organizationPeople(): JSX.Element {
   const [selectedMemId, setSelectedMemId] = React.useState<
     string | undefined
   >();
+
   const toggleRemoveModal = (): void => {
     setShowRemoveModal((prev) => !prev);
   };
@@ -125,7 +126,6 @@ function organizationPeople(): JSX.Element {
     }
   }, [state, adminData]);
 
-  /* istanbul ignore next */
   if (memberError || usersError || adminError) {
     const error = memberError ?? usersError ?? adminError;
     toast.error(error?.message);
@@ -140,7 +140,6 @@ function organizationPeople(): JSX.Element {
 
   const handleFullNameSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    /* istanbul ignore next */
     const [firstName, lastName] = userName.split(' ');
     const newFilterData = {
       firstName_contains: firstName || '',
@@ -185,18 +184,52 @@ function organizationPeople(): JSX.Element {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
+
       renderCell: (params: GridCellParams) => {
-        return params.row?.image ? (
-          <img
-            src={params.row?.image}
-            alt="avatar"
-            className={styles.TableImage}
-          />
-        ) : (
-          <Avatar
-            avatarStyle={styles.TableImage}
-            name={`${params.row.firstName} ${params.row.lastName}`}
-          />
+        // Fallback to a fixed width if computedWidth is unavailable
+        const columnWidth = params.colDef.computedWidth || 150;
+        const imageSize = Math.min(columnWidth * 0.6, 60); // Max size 40px, responsive scaling
+
+        return (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+          >
+            {params.row?.image ? (
+              <img
+                src={params.row?.image}
+                alt="avatar"
+                style={{
+                  width: `${imageSize}px`,
+                  height: `${imageSize}px`,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: `${imageSize}px`,
+                  height: `${imageSize}px`,
+                  fontSize: `${imageSize * 0.4}px`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '50%',
+                  backgroundColor: '#ccc',
+                }}
+              >
+                <Avatar
+                  name={`${params.row.firstName} ${params.row.lastName}`}
+                />
+              </div>
+            )}
+          </div>
         );
       },
     },
@@ -276,6 +309,11 @@ function organizationPeople(): JSX.Element {
       },
     },
   ];
+
+  const handleSortChange = (value: string): void => {
+    setState(value === 'users' ? 2 : value === 'members' ? 0 : 1);
+  };
+
   return (
     <>
       <Row className={styles.head}>
@@ -296,7 +334,7 @@ function organizationPeople(): JSX.Element {
                 />
                 <Button
                   type="submit"
-                  className={`${styles.searchButton} `}
+                  className={`${styles.searchButton}`}
                   data-testid={'searchbtn'}
                 >
                   <Search className={styles.searchIcon} />
@@ -304,70 +342,27 @@ function organizationPeople(): JSX.Element {
               </Form>
             </div>
             <div className={styles.btnsBlock}>
-              <Dropdown>
-                <Dropdown.Toggle
-                  variant="success"
-                  id="dropdown-basic"
-                  className={styles.dropdown}
-                  data-testid="role"
-                >
-                  <Sort />
-                  {t('sort')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    d-inline
-                    id="userslist"
-                    data-value="userslist"
-                    className={styles.dropdownItem}
-                    data-name="displaylist"
-                    data-testid="users"
-                    defaultChecked={state == 2 ? true : false}
-                    onClick={(): void => {
-                      setState(2);
-                    }}
-                  >
-                    <Form.Label htmlFor="userslist">
-                      {tCommon('users')}
-                    </Form.Label>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    d-inline
-                    id="memberslist"
-                    data-value="memberslist"
-                    className={styles.dropdownItem}
-                    data-name="displaylist"
-                    data-testid="members"
-                    defaultChecked={state == 0 ? true : false}
-                    onClick={(): void => {
-                      setState(0);
-                    }}
-                  >
-                    <Form.Label htmlFor="memberslist">
-                      {tCommon('members')}
-                    </Form.Label>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    d-inline
-                    id="adminslist"
-                    data-value="adminslist"
-                    data-name="displaylist"
-                    className={styles.dropdownItem}
-                    data-testid="admins"
-                    defaultChecked={state == 1 ? true : false}
-                    onClick={(): void => {
-                      setState(1);
-                    }}
-                  >
-                    <Form.Label htmlFor="adminslist">
-                      {tCommon('admins')}
-                    </Form.Label>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <SortingButton
+                className={styles.dropdown}
+                title={tCommon('sort')}
+                sortingOptions={[
+                  { label: tCommon('users'), value: 'users' },
+                  { label: tCommon('members'), value: 'members' },
+                  { label: tCommon('admins'), value: 'admins' },
+                ]}
+                selectedOption={
+                  state === 2
+                    ? tCommon('users')
+                    : state === 0
+                      ? tCommon('members')
+                      : tCommon('admins')
+                }
+                onSortChange={handleSortChange}
+                dataTestIdPrefix="role"
+              />
             </div>
             <div className={styles.btnsBlock}>
-              <AddMember></AddMember>
+              <AddMember />
             </div>
           </div>
         </div>
@@ -393,21 +388,21 @@ function organizationPeople(): JSX.Element {
               ),
             }}
             sx={{
-              borderRadius: '20px',
-              backgroundColor: '#EAEBEF',
+              borderRadius: 'var(--table-head-radius)',
+              backgroundColor: 'var(--grey-bg-color)',
               '& .MuiDataGrid-row': {
-                backgroundColor: '#eff1f7',
+                backgroundColor: 'var(--tablerow-bg-color)',
                 '&:focus-within': {
                   outline: '2px solid #000',
                   outlineOffset: '-2px',
                 },
               },
               '& .MuiDataGrid-row:hover': {
-                backgroundColor: '#EAEBEF',
+                backgroundColor: 'var(--grey-bg-color)',
                 boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
               },
               '& .MuiDataGrid-row.Mui-hovered': {
-                backgroundColor: '#EAEBEF',
+                backgroundColor: 'var(--grey-bg-color)',
                 boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
               },
               '& .MuiDataGrid-cell:focus': {

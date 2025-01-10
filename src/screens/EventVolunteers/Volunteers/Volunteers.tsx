@@ -1,15 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import {
-  Circle,
-  FilterAltOutlined,
-  Search,
-  Sort,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -20,12 +14,13 @@ import {
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './VolunteerCreateModal';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import VolunteerViewModal from './VolunteerViewModal';
+import SortingButton from 'subComponents/SortingButton';
 
 enum VolunteerStatus {
   All = 'all',
@@ -61,7 +56,7 @@ const dataGridStyle = {
 };
 
 /**
- * Component for managing and displaying event volunteers realted to an event.
+ * Component for managing and displaying event volunteers related to an event.
  *
  * This component allows users to view, filter, sort, and create volunteers. It also handles fetching and displaying related data such as volunteer acceptance status, etc.
  *
@@ -179,7 +174,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.user;
         return (
@@ -192,7 +187,7 @@ function volunteers(): JSX.Element {
                 src={image}
                 alt="volunteer"
                 data-testid="volunteer_image"
-                className={styles.TableImage}
+                className={styles.TableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
@@ -200,7 +195,7 @@ function volunteers(): JSX.Element {
                   key={_id + '1'}
                   dataTestId="volunteer_avatar"
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
+                  avatarStyle={styles.TableImages}
                   name={firstName + ' ' + lastName}
                   alt={firstName + ' ' + lastName}
                 />
@@ -219,7 +214,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <Chip
@@ -239,7 +234,7 @@ function volunteers(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -257,7 +252,7 @@ function volunteers(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
@@ -278,7 +273,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -310,7 +305,7 @@ function volunteers(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
@@ -319,7 +314,7 @@ function volunteers(): JSX.Element {
             })}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles.inputFields}
             value={searchValue}
             onChange={(e) => {
               setSearchValue(e.target.value);
@@ -338,60 +333,39 @@ function volunteers(): JSX.Element {
         </div>
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdown}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('hoursVolunteered_DESC')}
-                  data-testid="hoursVolunteered_DESC"
-                >
-                  {t('mostHoursVolunteered')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('hoursVolunteered_ASC')}
-                  data-testid="hoursVolunteered_ASC"
-                >
-                  {t('leastHoursVolunteered')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <FilterAltOutlined className={'me-1'} />
-                {t('status')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setStatus(VolunteerStatus.All)}
-                  data-testid="statusAll"
-                >
-                  {tCommon('all')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(VolunteerStatus.Pending)}
-                  data-testid="statusPending"
-                >
-                  {tCommon('pending')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(VolunteerStatus.Accepted)}
-                  data-testid="statusAccepted"
-                >
-                  {t('accepted')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                {
+                  label: t('mostHoursVolunteered'),
+                  value: 'hoursVolunteered_DESC',
+                },
+                {
+                  label: t('leastHoursVolunteered'),
+                  value: 'hoursVolunteered_ASC',
+                },
+              ]}
+              selectedOption={sortBy ?? ''}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
+                )
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+            />
+
+            <SortingButton
+              type="filter"
+              sortingOptions={[
+                { label: tCommon('all'), value: VolunteerStatus.All },
+                { label: tCommon('pending'), value: VolunteerStatus.Pending },
+                { label: t('accepted'), value: VolunteerStatus.Accepted },
+              ]}
+              selectedOption={status}
+              onSortChange={(value) => setStatus(value as VolunteerStatus)}
+              dataTestIdPrefix="filter"
+              buttonLabel={t('status')}
+            />
           </div>
           <div>
             <Button
@@ -421,7 +395,7 @@ function volunteers(): JSX.Element {
           ),
         }}
         sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
         rows={volunteers.map((volunteer, index) => ({

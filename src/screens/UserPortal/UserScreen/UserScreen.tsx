@@ -17,9 +17,11 @@ const map: InterfaceMapType = {
   people: 'people',
   events: 'userEvents',
   donate: 'donate',
+  chat: 'userChat',
   campaigns: 'userCampaigns',
   pledges: 'userPledges',
   volunteer: 'userVolunteer',
+  leaveorg: 'leaveOrganization',
 };
 
 /**

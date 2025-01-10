@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import SortIcon from '@mui/icons-material/Sort';
 import {
   CREATE_ORGANIZATION_MUTATION,
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
@@ -13,7 +12,7 @@ import {
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
@@ -27,8 +26,9 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './OrgList.module.css';
+import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
+import SortingButton from 'subComponents/SortingButton';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -38,7 +38,6 @@ function orgList(): JSX.Element {
 
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
-    // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
   }
 
@@ -49,8 +48,10 @@ function orgList(): JSX.Element {
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
-  const toggleDialogModal = /* istanbul ignore next */ (): void =>
+
+  const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
+
   document.title = t('title');
 
   const perPageResult = 8;
@@ -59,6 +60,7 @@ function orgList(): JSX.Element {
     option: '',
     selectedOption: t('sort'),
   });
+
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -82,9 +84,7 @@ function orgList(): JSX.Element {
   });
 
   const toggleModal = (): void => setShowModal(!showModal);
-
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
-
   const [createSampleOrganization] = useMutation(
     CREATE_SAMPLE_ORGANIZATION_MUTATION,
   );
@@ -148,7 +148,6 @@ function orgList(): JSX.Element {
     setIsLoading(loading && isLoadingMore);
   }, [loading]);
 
-  /* istanbul ignore next */
   const isAdminForCurrentOrg = (
     currentOrg: InterfaceOrgConnectionInfoType,
   ): boolean => {
@@ -205,7 +204,6 @@ function orgList(): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success('Congratulation the Organization is created');
         refetchOrgs();
@@ -230,17 +228,16 @@ function orgList(): JSX.Element {
         toggleModal();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
-  /* istanbul ignore next */
   if (errorList || errorUser) {
+    errorHandler(t, errorList || errorUser);
+    localStorage.clear();
     window.location.assign('/');
   }
 
-  /* istanbul ignore next */
   const resetAllParams = (): void => {
     refetchOrgs({
       filter: '',
@@ -252,7 +249,6 @@ function orgList(): JSX.Element {
     sethasMore(true);
   };
 
-  /* istanbul ignore next */
   const handleSearch = (value: string): void => {
     setSearchByName(value);
     if (value === '') {
@@ -280,9 +276,8 @@ function orgList(): JSX.Element {
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
   };
-  /* istanbul ignore next */
+
   const loadMoreOrganizations = (): void => {
-    console.log('loadMoreOrganizations');
     setIsLoadingMore(true);
     fetchMore({
       variables: {
@@ -317,14 +312,12 @@ function orgList(): JSX.Element {
     });
   };
 
-  const handleSorting = (option: string): void => {
+  const handleSortChange = (value: string): void => {
     setSortingState({
-      option,
-      selectedOption: t(option),
+      option: value,
+      selectedOption: t(value),
     });
-
-    const orderBy = option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
-
+    const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
     refetchOrgs({
       first: perPageResult,
       skip: 0,
@@ -336,12 +329,12 @@ function orgList(): JSX.Element {
   return (
     <>
       {/* Buttons Container */}
-      <div className={styles.btnsContainer}>
+      <div className={styles.btnsContainerOrgList}>
         <div className={styles.input}>
           <Form.Control
             type="name"
             id="searchOrgname"
-            className="bg-white"
+            className={'bg-white'}
             placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
@@ -350,45 +343,25 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            className={styles.searchButtonOrgList}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className={styles.btnsBlock}>
-          <div className="d-flex">
-            <Dropdown
-              aria-expanded="false"
-              title="Sort organizations"
-              data-testid="sort"
-            >
-              <Dropdown.Toggle
-                variant={
-                  sortingState.option === '' ? 'outline-success' : 'success'
-                }
-                data-testid="sortOrgs"
-              >
-                <SortIcon className={'me-1'} />
-                {sortingState.selectedOption}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(): void => handleSorting('Latest')}
-                  data-testid="latest"
-                >
-                  {t('Latest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(): void => handleSorting('Earliest')}
-                  data-testid="oldest"
-                >
-                  {t('Earliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+        <div className={styles.btnsBlockOrgList}>
+          <SortingButton
+            title="Sort organizations"
+            sortingOptions={[
+              { label: t('Latest'), value: 'Latest' },
+              { label: t('Earliest'), value: 'Earliest' },
+            ]}
+            selectedOption={sortingState.selectedOption}
+            onSortChange={handleSortChange}
+            dataTestIdPrefix="sortOrgs"
+            dropdownTestId="sort"
+          />
           {superAdmin && (
             <Button
               variant="success"
@@ -401,7 +374,9 @@ function orgList(): JSX.Element {
           )}
         </div>
       </div>
+
       {/* Text Infos for list */}
+
       {!isLoading &&
       (!orgsData?.organizationsConnection ||
         orgsData.organizationsConnection.length === 0) &&
@@ -413,9 +388,7 @@ function orgList(): JSX.Element {
         </div>
       ) : !isLoading &&
         orgsData?.organizationsConnection.length == 0 &&
-        /* istanbul ignore next */
         searchByName.length > 0 ? (
-        /* istanbul ignore next */
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
@@ -429,7 +402,7 @@ function orgList(): JSX.Element {
             loader={
               <>
                 {[...Array(perPageResult)].map((_, index) => (
-                  <div key={index} className={styles.itemCard}>
+                  <div key={index} className={styles.itemCardOrgList}>
                     <div className={styles.loadingWrapper}>
                       <div className={styles.innerContainer}>
                         <div
@@ -449,7 +422,7 @@ function orgList(): JSX.Element {
               </>
             }
             hasMore={hasMore}
-            className={styles.listBox}
+            className={styles.listBoxOrgList}
             data-testid="organizations-list"
             endMessage={
               <div className={'w-100 text-center my-4'}>
@@ -461,7 +434,7 @@ function orgList(): JSX.Element {
               ? orgsData?.organizationsConnection.map(
                   (item: InterfaceOrgConnectionInfoType) => {
                     return (
-                      <div key={item._id} className={styles.itemCard}>
+                      <div key={item._id} className={styles.itemCardOrgList}>
                         <OrgListCard data={item} />
                       </div>
                     );
@@ -473,7 +446,7 @@ function orgList(): JSX.Element {
                   (item: InterfaceOrgConnectionInfoType) => {
                     if (isAdminForCurrentOrg(item)) {
                       return (
-                        <div key={item._id} className={styles.itemCard}>
+                        <div key={item._id} className={styles.itemCardOrgList}>
                           <OrgListCard data={item} />
                         </div>
                       );
@@ -484,12 +457,13 @@ function orgList(): JSX.Element {
           {isLoading && (
             <>
               {[...Array(perPageResult)].map((_, index) => (
-                <div key={index} className={styles.itemCard}>
+                <div key={index} className={styles.itemCardOrgList}>
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
                       <div
                         className={`${styles.orgImgContainer} shimmer`}
                       ></div>
+
                       <div className={styles.content}>
                         <h5 className="shimmer" title="Org name"></h5>
                         <h6 className="shimmer" title="Location"></h6>
@@ -533,7 +507,7 @@ function orgList(): JSX.Element {
       {/* Plugin Notification Modal after Org is Created */}
       <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
-          className="bg-primary"
+          className={`bg-primary`}
           closeButton
           data-testid="pluginNotificationHeader"
         >
@@ -550,7 +524,7 @@ function orgList(): JSX.Element {
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link
-                  className={`btn btn-primary ${styles.pluginStoreBtn}`}
+                  className={`btn  btn-primary ${styles.pluginStoreBtn}`}
                   data-testid="goToStore"
                   to={`orgstore/id=${dialogRedirectOrgId}`}
                 >

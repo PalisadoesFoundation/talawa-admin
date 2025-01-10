@@ -439,7 +439,8 @@
     "on": "En",
     "after": "Después de",
     "occurences": "ocurrencias",
-    "done": "Hecho"
+    "done": "Hecho",
+    "createChat": "Crear chat"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -579,7 +580,8 @@
     "on": "En",
     "after": "Después de",
     "occurences": "ocurrencias",
-    "done": "Hecho"
+    "done": "Hecho",
+    "createChat": "Crear chat"
   },
   "funds": {
     "title": "Fondos",
@@ -1084,6 +1086,18 @@
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes"
   },
+
+  "eventRegistrant": {
+    "sort": "Ordenar",
+    "allRegistrants": "Todos los registrados",
+    "eventRegistrantsTable": "Tabla de registrados del evento",
+    "serialNumber": "Número de serie",
+    "registrant": "Registrado",
+    "registeredAt": "Registrado en",
+    "createdAt": "Creado en",
+    "addRegistrant": "Agregar registrado",
+    "noRegistrantsFound": "No se encontraron registrados"
+  },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",
     "enterFirstName": "Ingrese el nombre",
@@ -1206,7 +1220,8 @@
     "publicEvent": "Es público",
     "registerable": "Es registrable",
     "monthlyCalendarView": "Calendario mensual",
-    "yearlyCalendarView": "Calendario anual"
+    "yearlyCalendarView": "Calendario anual",
+    "createChat": "Crear chat"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -1250,14 +1265,23 @@
     "createAdvertisement": "Crear publicidad"
   },
   "userChat": {
+    "title": "Chats",
+    "add": "Agregar",
     "chat": "Charlar",
     "search": "Buscar",
     "contacts": "Contactos",
-    "messages": "Mensajes"
+    "messages": "Mensajes",
+    "create": "crear",
+    "newChat": "nueva charla",
+    "newGroupChat": "Nuevo chat grupal",
+    "groupInfo": "Información del grupo",
+    "members": "Miembros",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
-    "sendMessage": "Enviar mensaje"
+    "sendMessage": "Enviar mensaje",
+    "reply": "responder"
   },
   "orgProfileField": {
     "loading": "Cargando..",
@@ -1406,6 +1430,9 @@
   },
   "userPledges": {
     "title": "Mis Promesas"
+  },
+  "leaveOrganization": {
+    "title": "Dejar la organización"
   },
   "eventVolunteers": {
     "volunteers": "Voluntarios",

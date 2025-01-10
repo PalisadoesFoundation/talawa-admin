@@ -1,15 +1,15 @@
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
-import styles from './FundCampaignPledge.module.css';
+import styles from '../../style/app.module.css';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeModal from './PledgeModal';
 import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
@@ -22,6 +22,8 @@ import type {
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+
+import SortingButton from 'subComponents/SortingButton';
 
 interface InterfaceCampaignInfo {
   name: string;
@@ -56,6 +58,7 @@ const dataGridStyle = {
     borderRadius: '0.5rem',
   },
 };
+
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
@@ -233,14 +236,14 @@ const fundCampaignPledge = (): JSX.Element => {
                       src={user.image}
                       alt="pledge"
                       data-testid={`image${index + 1}`}
-                      className={styles.TableImage}
+                      className={styles.TableImagePledge}
                     />
                   ) : (
                     <div className={styles.avatarContainer}>
                       <Avatar
                         key={user._id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
+                        containerStyle={styles.imageContainerPledge}
+                        avatarStyle={styles.TableImagePledge}
                         name={user.firstName + ' ' + user.lastName}
                         alt={user.firstName + ' ' + user.lastName}
                       />
@@ -425,14 +428,14 @@ const fundCampaignPledge = (): JSX.Element => {
             >
               <input
                 type="radio"
-                className={`btn-check ${styles.toggleBtn}`}
+                className={`btn-check ${styles.toggleBtnPledge}`}
                 name="btnradio"
                 id="pledgedRadio"
                 checked={progressIndicator === 'pledged'}
                 onChange={() => setProgressIndicator('pledged')}
               />
               <label
-                className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
                 {t('pledgedAmount')}
@@ -447,7 +450,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 checked={progressIndicator === 'raised'}
               />
               <label
-                className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
                 {t('raisedAmount')}
@@ -470,14 +473,14 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
+        <div className={`${styles.inputPledge} mb-1`}>
           <Form.Control
             type="name"
             placeholder={t('searchPledger')}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles.inputFieldPledge}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchPledger"
@@ -492,43 +495,26 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('amount_ASC')}
-                  data-testid="amount_ASC"
-                >
-                  {t('lowestAmount')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('amount_DESC')}
-                  data-testid="amount_DESC"
-                >
-                  {t('highestAmount')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_DESC')}
-                  data-testid="endDate_DESC"
-                >
-                  {t('latestEndDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_ASC')}
-                  data-testid="endDate_ASC"
-                >
-                  {t('earliestEndDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestAmount'), value: 'amount_ASC' },
+                { label: t('highestAmount'), value: 'amount_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              selectedOption={sortBy ?? ''}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'amount_ASC'
+                    | 'amount_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
           <div>
             <Button
@@ -557,7 +543,7 @@ const fundCampaignPledge = (): JSX.Element => {
           ),
         }}
         sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowClassName={() => `${styles.rowBackgroundPledge}`}
         autoHeight
         rowHeight={65}
         rows={pledges.map((pledge) => ({
@@ -607,14 +593,14 @@ const fundCampaignPledge = (): JSX.Element => {
                 src={user.image}
                 alt="pledger"
                 data-testid={`extraImage${index + 1}`}
-                className={styles.TableImage}
+                className={styles.TableImagePledge}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={user._id + '1'}
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
+                  containerStyle={styles.imageContainerPledge}
+                  avatarStyle={styles.TableImagePledge}
                   name={user.firstName + ' ' + user.lastName}
                   alt={user.firstName + ' ' + user.lastName}
                   dataTestId={`extraAvatar${index + 1}`}

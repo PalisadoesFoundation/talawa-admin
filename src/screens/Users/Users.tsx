@@ -1,13 +1,11 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Form, Table } from 'react-bootstrap';
+import { Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 import { Search } from '@mui/icons-material';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import SortIcon from '@mui/icons-material/Sort';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
@@ -16,9 +14,11 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from './Users.module.css';
+import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
+import SortingButton from 'subComponents/SortingButton';
+
 /**
  * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
  * It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL
@@ -70,29 +70,42 @@ const Users = (): JSX.Element => {
   const { getItem } = useLocalStorage();
 
   const perPageResult = 12;
+  const tableLoaderRowLength = 4;
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
+  const [loadUnqUsers, setLoadUnqUsers] = useState(0);
   const userType = getItem('SuperAdmin')
     ? 'SUPERADMIN'
     : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
   const loggedInUserId = getItem('id');
+  const [usersData, setUsersData] = useState<
+    { users: InterfaceQueryUserListItem[] } | undefined
+  >(undefined);
 
   const {
-    data: usersData,
+    data,
     loading: loading,
     fetchMore,
     refetch: refetchUsers,
   }: {
     data?: { users: InterfaceQueryUserListItem[] };
     loading: boolean;
-    fetchMore: any;
-    refetch: any;
+    fetchMore: (options: {
+      variables: Record<string, unknown>;
+      updateQuery: (
+        previousQueryResult: { users: InterfaceQueryUserListItem[] },
+        options: {
+          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
+        },
+      ) => { users: InterfaceQueryUserListItem[] };
+    }) => void;
+    refetch: (variables?: Record<string, unknown>) => void;
     error?: ApolloError;
   } = useQuery(USER_LIST, {
     variables: {
@@ -105,6 +118,12 @@ const Users = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
+  useEffect(() => {
+    if (data) {
+      setUsersData(data);
+    }
+  }, [data, isLoading]);
+
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
   const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
 
@@ -113,14 +132,13 @@ const Users = (): JSX.Element => {
     if (!usersData) {
       return;
     }
+
     if (usersData.users.length < perPageResult) {
       setHasMore(false);
     }
-    if (usersData && usersData.users) {
-      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
-      newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
-      setDisplayedUsers(newDisplayedUsers);
-    }
+    let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+    newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
+    setDisplayedUsers(newDisplayedUsers);
   }, [usersData, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
@@ -157,6 +175,12 @@ const Users = (): JSX.Element => {
     }
   }, [loading]);
 
+  useEffect(() => {
+    if (loadUnqUsers > 0) {
+      loadMoreUsers(displayedUsers.length, loadUnqUsers);
+    }
+  }, [displayedUsers]);
+
   const handleSearch = (value: string): void => {
     setSearchByName(value);
     if (value === '') {
@@ -171,9 +195,11 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.target as HTMLInputElement;
       handleSearch(value);
     }
   };
@@ -197,12 +223,12 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
   /* istanbul ignore next */
-  const loadMoreUsers = (): void => {
+  const loadMoreUsers = (skipValue: number, limitVal: number): void => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: usersData?.users.length || 0,
-        userType: 'ADMIN',
+        first: limitVal + perPageResult || perPageResult,
+        skip: skipValue - perPageResult >= 0 ? skipValue - perPageResult : 0,
         filter: searchByName,
         order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
       },
@@ -211,23 +237,37 @@ const Users = (): JSX.Element => {
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
         },
-      ): { users: InterfaceQueryUserListItem[] } | undefined => {
+      ) => {
         setIsLoadingMore(false);
-        if (!fetchMoreResult) return prev;
-        if (fetchMoreResult.users.length < perPageResult) {
-          setHasMore(false);
+        if (!fetchMoreResult) return prev || { users: [] };
+
+        const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
+
+        const uniqueUsers = Array.from(
+          new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
+        );
+        if (uniqueUsers.length < mergedUsers.length) {
+          setLoadUnqUsers(mergedUsers.length - uniqueUsers.length);
+        } else setLoadUnqUsers(0);
+
+        // Load more users will always run after the initial request, hence prev is not going to be undefined
+        if (prev?.users) {
+          if (uniqueUsers.length - prev?.users.length < perPageResult) {
+            setHasMore(false);
+          }
         }
-        return {
-          users: [...(prev?.users || []), ...(fetchMoreResult.users || [])],
-        };
+
+        return { users: uniqueUsers };
       },
     });
   };
 
   const handleSorting = (option: string): void => {
-    setDisplayedUsers([]);
+    if (option === sortingOption) {
+      return;
+    }
     setHasMore(true);
     setSortingOption(option);
   };
@@ -245,19 +285,21 @@ const Users = (): JSX.Element => {
           new Date(a.user.createdAt).getTime(),
       );
       return sortedUsers;
-    } else {
-      sortedUsers.sort(
-        (a, b) =>
-          new Date(a.user.createdAt).getTime() -
-          new Date(b.user.createdAt).getTime(),
-      );
-      return sortedUsers;
     }
+    sortedUsers.sort(
+      (a, b) =>
+        new Date(a.user.createdAt).getTime() -
+        new Date(b.user.createdAt).getTime(),
+    );
+    return sortedUsers;
   };
 
   const handleFiltering = (option: string): void => {
-    setDisplayedUsers([]);
+    if (option === filteringOption) {
+      return;
+    }
     setFilteringOption(option);
+    setHasMore(true);
   };
 
   const filterUsers = (
@@ -330,70 +372,29 @@ const Users = (): JSX.Element => {
         </div>
         <div className={styles.btnsBlock}>
           <div className="d-flex">
-            <Dropdown
-              aria-expanded="false"
-              title="Sort Users"
-              data-testid="sort"
-            >
-              <Dropdown.Toggle variant="success" data-testid="sortUsers">
-                <SortIcon className={'me-1'} />
-                {sortingOption === 'newest' ? t('Newest') : t('Oldest')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(): void => handleSorting('newest')}
-                  data-testid="newest"
-                >
-                  {t('Newest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(): void => handleSorting('oldest')}
-                  data-testid="oldest"
-                >
-                  {t('Oldest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown
-              aria-expanded="false"
-              title="Filter organizations"
-              data-testid="filter"
-            >
-              <Dropdown.Toggle
-                variant="outline-success"
-                data-testid="filterUsers"
-              >
-                <FilterListIcon className={'me-1'} />
-                {tCommon('filter')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  data-testid="admin"
-                  onClick={(): void => handleFiltering('admin')}
-                >
-                  {tCommon('admin')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  data-testid="superAdmin"
-                  onClick={(): void => handleFiltering('superAdmin')}
-                >
-                  {tCommon('superAdmin')}
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  data-testid="user"
-                  onClick={(): void => handleFiltering('user')}
-                >
-                  {tCommon('user')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  data-testid="cancel"
-                  onClick={(): void => handleFiltering('cancel')}
-                >
-                  {tCommon('cancel')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('Newest'), value: 'newest' },
+                { label: t('Oldest'), value: 'oldest' },
+              ]}
+              selectedOption={sortingOption}
+              onSortChange={handleSorting}
+              dataTestIdPrefix="sortUsers"
+            />
+            <SortingButton
+              sortingOptions={[
+                { label: tCommon('admin'), value: 'admin' },
+                { label: tCommon('superAdmin'), value: 'superAdmin' },
+                { label: tCommon('user'), value: 'user' },
+                { label: tCommon('cancel'), value: 'cancel' },
+              ]}
+              selectedOption={filteringOption}
+              onSortChange={handleFiltering}
+              dataTestIdPrefix="filterUsers"
+              buttonLabel={tCommon('filter')}
+              type="filter"
+              dropdownTestId="filter"
+            />
           </div>
         </div>
       </div>
@@ -401,80 +402,89 @@ const Users = (): JSX.Element => {
       usersData &&
       displayedUsers.length === 0 &&
       searchByName.length > 0 ? (
-        <div className={styles.notFound}>
+        <section
+          className={styles.notFound}
+          role="alert"
+          aria-label="No results found"
+        >
           <h4>
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
-        </div>
+        </section>
       ) : isLoading == false &&
         usersData === undefined &&
         displayedUsers.length === 0 ? (
-        <div className={styles.notFound}>
+        <div
+          className={styles.notFound}
+          role="alert"
+          aria-label="No results found"
+        >
           <h4>{t('noUserFound')}</h4>
         </div>
       ) : (
         <div className={styles.listBox}>
-          {isLoading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
-          ) : (
-            <InfiniteScroll
-              dataLength={
-                /* istanbul ignore next */
-                displayedUsers.length ?? 0
-              }
-              next={loadMoreUsers}
-              loader={
-                <TableLoader
-                  noOfCols={headerTitles.length}
-                  noOfRows={perPageResult}
-                />
-              }
-              hasMore={hasMore}
-              className={styles.listBox}
-              data-testid="users-list"
-              endMessage={
-                <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                </div>
-              }
-            >
-              <Table className="mb-0" responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {usersData &&
-                    displayedUsers.map(
-                      (user: InterfaceQueryUserListItem, index: number) => {
-                        return (
-                          <UsersTableItem
-                            key={user.user._id}
-                            index={index}
-                            resetAndRefetch={resetAndRefetch}
-                            user={user}
-                            loggedInUserId={
-                              loggedInUserId ? loggedInUserId : ''
-                            }
-                          />
-                        );
-                      },
-                    )}
-                </tbody>
-              </Table>
-            </InfiniteScroll>
+          {isLoading && (
+            <TableLoader
+              noOfCols={headerTitles.length}
+              noOfRows={perPageResult}
+            />
           )}
+          <InfiniteScroll
+            dataLength={
+              /* istanbul ignore next */
+              displayedUsers.length ?? 0
+            }
+            next={() => {
+              loadMoreUsers(displayedUsers.length, perPageResult);
+            }}
+            loader={
+              <TableLoader
+                noOfCols={headerTitles.length}
+                noOfRows={tableLoaderRowLength}
+              />
+            }
+            hasMore={hasMore}
+            className={styles.listBox}
+            data-testid="users-list"
+            endMessage={
+              <div className={'w-100 text-center my-4'}>
+                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+              </div>
+            }
+          >
+            <Table className="mb-0" responsive>
+              <thead>
+                <tr>
+                  {headerTitles.map((title: string, index: number) => {
+                    return (
+                      <th key={index} scope="col">
+                        {title}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {usersData &&
+                  displayedUsers.map(
+                    (user: InterfaceQueryUserListItem, index: number) => {
+                      return (
+                        <UsersTableItem
+                          key={user.user._id}
+                          index={index}
+                          resetAndRefetch={resetAndRefetch}
+                          user={user}
+                          loggedInUserId={loggedInUserId ? loggedInUserId : ''}
+                        />
+                      );
+                    },
+                  )}
+              </tbody>
+            </Table>
+          </InfiniteScroll>
         </div>
       )}
     </>
   );
 };
-
 export default Users;

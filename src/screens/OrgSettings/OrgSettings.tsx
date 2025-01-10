@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Dropdown, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from './OrgSettings.module.css';
+import styles from 'style/app.module.css';
 import OrgActionItemCategories from 'components/OrgSettings/ActionItemCategories/OrgActionItemCategories';
 import OrganizationAgendaCategory from 'components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
 import { Navigate, useParams } from 'react-router-dom';
@@ -26,7 +26,7 @@ const settingtabs: SettingType[] = [
  *
  * @returns The rendered component displaying the organization settings.
  */
-function orgSettings(): JSX.Element {
+function OrgSettings(): JSX.Element {
   // Translation hook for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgSettings',
@@ -62,36 +62,6 @@ function orgSettings(): JSX.Element {
               </Button>
             ))}
           </div>
-
-          {/* Dropdown menu for selecting settings category */}
-          <Dropdown
-            className={styles.settingsDropdown}
-            data-testid="settingsDropdownContainer"
-            drop="down"
-          >
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              data-testid="settingsDropdownToggle"
-            >
-              <span className="me-1">{t(tab)}</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {/* Render dropdown items for each settings category */}
-              {settingtabs.map((setting, index) => (
-                <Dropdown.Item
-                  key={index}
-                  onClick={
-                    /* istanbul ignore next */
-                    () => setTab(setting)
-                  }
-                  className={tab === setting ? 'text-secondary' : ''}
-                >
-                  {t(setting)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
         </Col>
 
         <Row className="mt-3">
@@ -126,4 +96,4 @@ function orgSettings(): JSX.Element {
   );
 }
 
-export default orgSettings;
+export default OrgSettings;

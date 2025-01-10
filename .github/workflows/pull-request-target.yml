@@ -19,18 +19,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Add the PR Review Policy
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@v3
         with:
-          comment_tag: pr_review_policy
+          comment-tag: pr_review_policy
           message: |
             ## Our Pull Request Approval Process
             
             Thanks for contributing! 
             
             ### Testing Your Code
-            
             Remember, your PRs won't be reviewed until these criteria are met:
-            
+
             1. We don't merge PRs with poor code quality. 
                 1. Follow coding best practices such that CodeRabbit.ai approves your PR.
             1. We don't merge PRs with failed tests. 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styles from './AdvertisementRegister.module.css';
+import styles from '../../../../style/app.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
   ADD_ADVERTISEMENT_MUTATION,
@@ -263,7 +263,7 @@ function advertisementRegister({
         </div>
       )}
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton className={styles.editHeader}>
+        <Modal.Header closeButton>
           {formStatus === 'register' ? (
             <Modal.Title> {t('addNew')}</Modal.Title>
           ) : (
@@ -314,7 +314,10 @@ function advertisementRegister({
                 }}
               />
               {formState.advertisementMedia && (
-                <div className={styles.preview} data-testid="mediaPreview">
+                <div
+                  className={styles.previewAdvertisementRegister}
+                  data-testid="mediaPreview"
+                >
                   {formState.advertisementMedia.includes('video') ? (
                     <video
                       muted
@@ -332,7 +335,7 @@ function advertisementRegister({
                     <img src={formState.advertisementMedia} />
                   )}
                   <button
-                    className={styles.closeButton}
+                    className={styles.closeButtonAdvertisementRegister}
                     onClick={(e): void => {
                       e.preventDefault();
                       setFormState({
@@ -405,6 +408,7 @@ function advertisementRegister({
           <Button
             variant="secondary"
             onClick={handleClose}
+            className={styles.closeButtonAdvertisementRegister}
             data-testid="addonclose"
           >
             {tCommon('close')}
@@ -414,6 +418,7 @@ function advertisementRegister({
               variant="primary"
               onClick={handleRegister}
               data-testid="addonregister"
+              className={styles.addButton}
             >
               {tCommon('register')}
             </Button>

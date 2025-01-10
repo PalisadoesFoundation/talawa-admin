@@ -13,7 +13,7 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import RequestsTableItem from 'components/RequestsTableItem/RequestsTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryMembershipRequestsListItem } from 'utils/interfaces';
-import styles from './Requests.module.css';
+import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router-dom';
 
@@ -231,10 +231,12 @@ const Requests = (): JSX.Element => {
   return (
     <>
       {/* Buttons Container */}
-      <div className={styles.btnsContainer} data-testid="testComp">
-        <div className={styles.inputContainer}>
+      <div
+        className={`${styles.btnsContainer} gap-4 flex-wrap`}
+        data-testid="testComp"
+      >
+        <div className={`${styles.input} mb-1`}>
           <div
-            className={styles.input}
             style={{
               display:
                 userRole === 'ADMIN' || userRole === 'SUPERADMIN'
@@ -245,7 +247,7 @@ const Requests = (): JSX.Element => {
             <Form.Control
               type="name"
               id="searchRequests"
-              className="bg-white"
+              className={styles.inputField}
               placeholder={t('searchRequests')}
               data-testid="searchByName"
               autoComplete="off"
@@ -254,7 +256,7 @@ const Requests = (): JSX.Element => {
             />
             <Button
               tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              className={`${styles.searchButton} `}
               data-testid="searchButton"
               onClick={handleSearchByBtnClick}
             >

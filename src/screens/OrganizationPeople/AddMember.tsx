@@ -21,7 +21,7 @@ import {
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
+import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -32,6 +32,7 @@ import type {
 } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import SortingButton from 'subComponents/SortingButton';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -76,6 +77,9 @@ function AddMember(): JSX.Element {
   function openAddUserModal(): void {
     setAddUserModalIsOpen(true);
   }
+  useEffect(() => {
+    setUserName('');
+  }, [addUserModalisOpen]);
 
   const toggleDialogModal = (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
@@ -107,10 +111,7 @@ function AddMember(): JSX.Element {
         orgId: currentUrl,
       });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
+      errorHandler(tCommon, error);
     }
   };
 
@@ -270,44 +271,27 @@ function AddMember(): JSX.Element {
     });
   };
 
+  const handleSortChange = (value: string): void => {
+    if (value === 'existingUser') {
+      openAddUserModal();
+    } else if (value === 'newUser') {
+      openCreateNewUserModal();
+    }
+  };
+
   return (
     <>
-      <Dropdown>
-        <Dropdown.Toggle
-          variant="success"
-          id="dropdown-basic"
-          className={styles.dropdown}
-          data-testid="addMembers"
-        >
-          {translateOrgPeople('addMembers')}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item
-            id="existingUser"
-            data-value="existingUser"
-            data-name="existingUser"
-            data-testid="existingUser"
-            onClick={(): void => {
-              openAddUserModal();
-            }}
-          >
-            <Form.Label htmlFor="existingUser">
-              {translateOrgPeople('existingUser')}
-            </Form.Label>
-          </Dropdown.Item>
-          <Dropdown.Item
-            id="newUser"
-            data-value="newUser"
-            data-name="newUser"
-            data-testid="newUser"
-            onClick={(): void => {
-              openCreateNewUserModal();
-            }}
-          >
-            <label htmlFor="memberslist">{translateOrgPeople('newUser')}</label>
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <SortingButton
+        title={translateOrgPeople('addMembers')}
+        sortingOptions={[
+          { label: translateOrgPeople('existingUser'), value: 'existingUser' },
+          { label: translateOrgPeople('newUser'), value: 'newUser' },
+        ]}
+        selectedOption={translateOrgPeople('addMembers')}
+        onSortChange={handleSortChange}
+        dataTestIdPrefix="addMembers"
+        className={styles.dropdown}
+      />
 
       {/* Existing User Modal */}
       <Modal
@@ -385,7 +369,7 @@ function AddMember(): JSX.Element {
                             >
                               {userDetails.user.image ? (
                                 <img
-                                  src={userDetails.user.image ?? undefined}
+                                  src={userDetails.user.image}
                                   alt="avatar"
                                   className={styles.TableImage}
                                 />
@@ -440,7 +424,10 @@ function AddMember(): JSX.Element {
         show={createNewUserModalisOpen}
         onHide={toggleCreateNewUserModal}
       >
-        <Modal.Header className={styles.createUserModalHeader}>
+        <Modal.Header
+          className={styles.createUserModalHeader}
+          data-testid="createUser"
+        >
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>

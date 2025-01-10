@@ -9,14 +9,8 @@ import {
   TableRow,
   Tooltip,
 } from '@mui/material';
-import {
-  Button,
-  Dropdown,
-  DropdownButton,
-  Table,
-  FormControl,
-} from 'react-bootstrap';
-import styles from './EventsAttendance.module.css';
+import { Button, Table, FormControl } from 'react-bootstrap';
+import styles from '../../../style/app.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { useParams, Link } from 'react-router-dom';
@@ -24,11 +18,14 @@ import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from './EventStatistics';
 import AttendedEventList from './AttendedEventList';
 import type { InterfaceMember } from './InterfaceEvents';
+import SortingButton from 'subComponents/SortingButton';
+
 enum FilterPeriod {
   ThisMonth = 'This Month',
   ThisYear = 'This Year',
   All = 'All',
 }
+
 /**
  * Component to manage and display event attendance information
  * Includes filtering and sorting functionality for attendees
@@ -153,18 +150,16 @@ function EventAttendance(): JSX.Element {
         memberData={filteredAttendees}
         t={t}
       />
-      <div className="d-flex justify-content-between">
-        <div className="d-flex w-100">
-          <Button
-            className={`border-1 bg-white text-success ${styles.actionBtn}`}
-            onClick={showModal}
-            data-testid="stats-modal"
-          >
-            {t('historical_statistics')}
-          </Button>
-        </div>
-        <div className="d-flex justify-content-between align-items-end w-100 ">
-          <div className={styles.input}>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <Button
+          className={`border-1 bg-white text-success ${styles.actionBtn}`}
+          onClick={showModal}
+          data-testid="stats-modal"
+        >
+          {t('historical_statistics')}
+        </Button>
+        <div className="d-flex align-items-center">
+          <div className={`${styles.input} me-3`}>
             <FormControl
               type="text"
               id="posttitle"
@@ -182,54 +177,37 @@ function EventAttendance(): JSX.Element {
               <Search size={20} />
             </Button>
           </div>
-
-          <DropdownButton
-            data-testid="filter-dropdown"
-            className={`border-1 mx-4`}
-            title={
-              <>
-                <img
-                  src="/images/svg/up-down.svg"
-                  width={20}
-                  height={20}
-                  alt="Sort"
-                  className={styles.sortImg}
-                />
-                <span className="ms-2">Filter: {filteringBy}</span>
-              </>
+          <SortingButton
+            title="Filter"
+            sortingOptions={[
+              {
+                label: FilterPeriod.ThisMonth,
+                value: FilterPeriod.ThisMonth,
+              },
+              { label: FilterPeriod.ThisYear, value: FilterPeriod.ThisYear },
+              { label: FilterPeriod.All, value: 'Filter: All' },
+            ]}
+            selectedOption={filteringBy}
+            onSortChange={(value) => setFilteringBy(value as FilterPeriod)}
+            dataTestIdPrefix="filter-dropdown"
+            className={`${styles.dropdown} mx-4`}
+            buttonLabel="Filter"
+          />
+          <SortingButton
+            title="Sort"
+            sortingOptions={[
+              { label: 'Ascending', value: 'ascending' },
+              { label: 'Descending', value: 'descending' },
+            ]}
+            selectedOption={sortOrder}
+            onSortChange={(value) =>
+              setSortOrder(value as 'ascending' | 'descending')
             }
-            onSelect={(eventKey) => setFilteringBy(eventKey as FilterPeriod)}
-          >
-            <Dropdown.Item eventKey="This Month">This Month</Dropdown.Item>
-            <Dropdown.Item eventKey="This Year">This Year</Dropdown.Item>
-            <Dropdown.Item eventKey="All">All</Dropdown.Item>
-          </DropdownButton>
-          <DropdownButton
-            data-testid="sort-dropdown"
-            className={`border-1 `}
-            title={
-              <>
-                <img
-                  src="/images/svg/up-down.svg"
-                  width={20}
-                  height={20}
-                  alt="Sort"
-                  className={styles.sortImg}
-                />
-                <span className="ms-2">Sort</span>
-              </>
-            }
-            onSelect={
-              /*istanbul ignore next*/
-              (eventKey) => setSortOrder(eventKey as 'ascending' | 'descending')
-            }
-          >
-            <Dropdown.Item eventKey="ascending">Ascending</Dropdown.Item>
-            <Dropdown.Item eventKey="descending">Descending</Dropdown.Item>
-          </DropdownButton>
+            dataTestIdPrefix="sort-dropdown"
+            buttonLabel="Sort"
+          />
         </div>
       </div>
-      {/* <h3>{totalMembers}</h3> */}
       <TableContainer component={Paper} className="mt-3">
         <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
@@ -312,12 +290,12 @@ function EventAttendance(): JSX.Element {
                       componentsProps={{
                         tooltip: {
                           sx: {
-                            backgroundColor: 'white',
+                            backgroundColor: 'var(--bs-white)',
                             fontSize: '2em',
                             maxHeight: '170px',
                             overflowY: 'scroll',
                             scrollbarColor: 'white',
-                            border: '1px solid green',
+                            border: 'var(--primary-border-solid)',
                             borderRadius: '6px',
                             boxShadow: '0 0 5px rgba(0,0,0,0.1)',
                           },
