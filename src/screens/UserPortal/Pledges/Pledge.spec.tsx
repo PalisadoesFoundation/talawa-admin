@@ -99,14 +99,6 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
-  it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
-    setItem('userId', null);
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
-  });
-
   // This test works:
   it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
     setItem('userId', null);
