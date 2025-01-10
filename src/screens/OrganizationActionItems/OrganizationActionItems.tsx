@@ -186,7 +186,7 @@ function organizationActionItems(): JSX.Element {
                       className={styles.TableImage}
                     />
                   ) : (
-                    <div className={styles.avatarContainer}>
+                    <div className={styles.TableImage}>
                       <Avatar
                         key={_id + '1'}
                         containerStyle={styles.imageContainer}
@@ -387,7 +387,7 @@ function organizationActionItems(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 mb-1">
+        <div className="d-flex gap-3">
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[
