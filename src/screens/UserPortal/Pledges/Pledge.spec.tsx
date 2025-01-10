@@ -39,7 +39,7 @@ vi.mock('react-toastify', () => ({
 }));
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actualModule = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker'
+    '@mui/x-date-pickers/DesktopDateTimePicker',
   );
   return {
     DateTimePicker: actualModule.DesktopDateTimePicker,
@@ -82,8 +82,6 @@ describe('Testing User Pledge Screen', () => {
     setItem('userId', 'userId');
   });
 
-  
-
   afterAll(() => {
     vi.clearAllMocks();
   });
@@ -110,38 +108,38 @@ describe('Testing User Pledge Screen', () => {
   });
 
   // This test works:
-it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
-  setItem('userId', null);
-  
-  renderMyPledges(link1);
-  await waitFor(() => {
-    expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-  });
-});
+  it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
+    setItem('userId', null);
 
-// So let's structure our failing test similarly:
-it('should redirect to fallback URL if URL params are undefined', async () => {
-  const customRender = render(
-      <MockedProvider addTypename={false} link={link1}>
-          <MemoryRouter initialEntries={['/']}>
-              <Provider store={store}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <I18nextProvider i18n={i18nForTest}>
-                          <Routes>
-                              <Route path="/user/pledges/:orgId" element={<Pledges />} />
-                              <Route path="/" element={<div data-testid="paramsError" />} />
-                          </Routes>
-                      </I18nextProvider>
-                  </LocalizationProvider>
-              </Provider>
-          </MemoryRouter>
-      </MockedProvider>
-  );
-
-  await waitFor(() => {
+    renderMyPledges(link1);
+    await waitFor(() => {
       expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
   });
-});
+
+  // So let's structure our failing test similarly:
+  it('should redirect to fallback URL if URL params are undefined', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <MemoryRouter initialEntries={['/']}>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Routes>
+                  <Route path="/user/pledges/:orgId" element={<Pledges />} />
+                  <Route path="/" element={<div data-testid="paramsError" />} />
+                </Routes>
+              </I18nextProvider>
+            </LocalizationProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
+  });
 
   it('check if user image renders', async () => {
     renderMyPledges(link1);
