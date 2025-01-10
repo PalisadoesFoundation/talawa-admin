@@ -74,7 +74,9 @@ export default function Organizations(): JSX.Element {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [organizations, setOrganizations] = useState<InterfaceOrganization[]>([]);
+  const [organizations, setOrganizations] = useState<InterfaceOrganization[]>(
+    [],
+  );
   const [filterName, setFilterName] = useState('');
   const [mode, setMode] = useState(0);
 
@@ -94,13 +96,19 @@ export default function Organizations(): JSX.Element {
     variables: { filter: filterName },
   });
 
-  const { data: joinedOrganizationsData } = useQuery(USER_JOINED_ORGANIZATIONS, {
-    variables: { id: userId },
-  });
+  const { data: joinedOrganizationsData } = useQuery(
+    USER_JOINED_ORGANIZATIONS,
+    {
+      variables: { id: userId },
+    },
+  );
 
-  const { data: createdOrganizationsData } = useQuery(USER_CREATED_ORGANIZATIONS, {
-    variables: { id: userId },
-  });
+  const { data: createdOrganizationsData } = useQuery(
+    USER_CREATED_ORGANIZATIONS,
+    {
+      variables: { id: userId },
+    },
+  );
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
@@ -149,8 +157,8 @@ export default function Organizations(): JSX.Element {
 
   const handleSearchByBtnClick = (): void => {
     const value =
-      (document.getElementById('searchOrganizations') as HTMLInputElement)?.value ||
-      '';
+      (document.getElementById('searchOrganizations') as HTMLInputElement)
+        ?.value || '';
     handleSearch(value);
   };
 
@@ -253,8 +261,8 @@ export default function Organizations(): JSX.Element {
           hideDrawer === null
             ? ''
             : hideDrawer
-            ? styles.expand
-            : styles.contract
+              ? styles.expand
+              : styles.contract
         }`}
       >
         <div className={styles.mainContainer}>
@@ -307,8 +315,12 @@ export default function Organizations(): JSX.Element {
             </Dropdown>
           </div>
 
-          <div className={`d-flex flex-column justify-content-between ${styles.content}`}>
-            <div className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}>
+          <div
+            className={`d-flex flex-column justify-content-between ${styles.content}`}
+          >
+            <div
+              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+            >
               {loadingOrganizations ? (
                 <div className="d-flex flex-row justify-content-center">
                   <HourglassBottomIcon /> <span>Loading...</span>
@@ -329,8 +341,10 @@ export default function Organizations(): JSX.Element {
                     admins: organization.admins,
                     members: organization.members,
                     address: organization.address,
-                    membershipRequestStatus: organization.membershipRequestStatus,
-                    userRegistrationRequired: organization.userRegistrationRequired,
+                    membershipRequestStatus:
+                      organization.membershipRequestStatus,
+                    userRegistrationRequired:
+                      organization.userRegistrationRequired,
                     membershipRequests: organization.membershipRequests,
                   };
                   return <OrganizationCard key={index} {...cardProps} />;
