@@ -11,6 +11,13 @@ import i18nForTest from 'utils/i18nForTest';
 import { BrowserRouter } from 'react-router-dom';
 import { vi, describe, beforeEach, afterEach } from 'vitest';
 
+// Test constants
+const TEST_USER_ID = '456';
+const TEST_ORG_ID = '554';
+const TEST_SUCCESS_MESSAGE = 'User is added as admin.';
+const TEST_ERROR_MESSAGE = 'An error occurred';
+const DEFAULT_TIMEOUT = 2000;
+
 // Mock modules
 vi.mock('react-toastify', () => ({
   toast: {
@@ -24,7 +31,7 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useParams: () => ({
-      orgId: '554',
+      orgId: TEST_ORG_ID,
     }),
   };
 });
@@ -33,7 +40,7 @@ const MOCKS = [
   {
     request: {
       query: ADD_ADMIN_MUTATION,
-      variables: { userid: '456', orgid: '554' },
+      variables: { userid: TEST_USER_ID, orgid: TEST_ORG_ID },
     },
     result: {
       data: {
@@ -51,9 +58,9 @@ const ERROR_MOCKS = [
   {
     request: {
       query: ADD_ADMIN_MUTATION,
-      variables: { userid: '456', orgid: '554' },
+      variables: { userid: TEST_USER_ID, orgid: TEST_ORG_ID },
     },
-    error: new Error('An error occurred'),
+    error: new Error(TEST_ERROR_MESSAGE),
   },
 ];
 
@@ -62,7 +69,6 @@ describe('Testing User List Card', () => {
 
   beforeEach(() => {
     vi.spyOn(global, 'alert').mockImplementation(() => {});
-    // Update the window.location mock
     Object.defineProperty(window, 'location', {
       value: {
         reload: mockReload,
@@ -77,7 +83,7 @@ describe('Testing User List Card', () => {
 
   test('Should show success toast and reload page after successful mutation', async () => {
     const props = {
-      id: '456',
+      id: TEST_USER_ID,
     };
 
     render(
@@ -93,22 +99,24 @@ describe('Testing User List Card', () => {
     const button = screen.getByText(/Add Admin/i);
     await userEvent.click(button);
 
-    // Wait for the success toast
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('User is added as admin.');
-    });
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalledWith(TEST_SUCCESS_MESSAGE);
+      },
+      { timeout: DEFAULT_TIMEOUT },
+    );
 
     await waitFor(
       () => {
         expect(mockReload).toHaveBeenCalled();
       },
-      { timeout: 3000 },
+      { timeout: DEFAULT_TIMEOUT },
     );
   });
 
   test('Should show error toast when mutation fails', async () => {
     const props = {
-      id: '456',
+      id: TEST_USER_ID,
     };
 
     render(
@@ -124,14 +132,17 @@ describe('Testing User List Card', () => {
     const button = screen.getByText(/Add Admin/i);
     await userEvent.click(button);
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(toast.error).toHaveBeenCalled();
+      },
+      { timeout: DEFAULT_TIMEOUT },
+    );
   });
 
   test('Should render button with correct styling', () => {
     const props = {
-      id: '456',
+      id: TEST_USER_ID,
       key: 1,
     };
 
@@ -152,7 +163,7 @@ describe('Testing User List Card', () => {
 
   test('Should handle translations and URL parameters correctly', async () => {
     const props = {
-      id: '456',
+      id: TEST_USER_ID,
     };
 
     render(
@@ -170,8 +181,11 @@ describe('Testing User List Card', () => {
 
     await userEvent.click(button);
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalled();
+      },
+      { timeout: DEFAULT_TIMEOUT },
+    );
   });
 });
