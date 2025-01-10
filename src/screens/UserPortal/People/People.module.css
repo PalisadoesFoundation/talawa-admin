@@ -1,0 +1,78 @@
+.borderNone {
+  border: none;
+}
+.borderBox {
+  border: 1px solid #dddddd;
+}
+
+.borderRounded5 {
+  border-radius: 5px;
+}
+
+.borderRounded8 {
+  border-radius: 8px;
+}
+
+.borderRounded24 {
+  border-radius: 24px;
+}
+
+.topRadius {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+}
+
+.bottomRadius {
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.shadow {
+  box-shadow: 5px 5px 4px 0px #31bb6b1f;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.colorGreen {
+  color: #31bb6b;
+}
+
+.backgroundWhite {
+  background-color: white;
+}
+
+.maxWidth {
+  max-width: 600px;
+}
+
+.mainContainer {
+  width: 50%;
+  flex-grow: 3;
+}
+
+.content {
+  height: fit-content;
+  min-height: calc(100% - 40px);
+}
+
+.gap {
+  gap: 20px;
+}
+
+.colorPrimary {
+  background: #31bb6b;
+}
+
+.greenBorder {
+  border: 1px solid #31bb6b;
+}
+
+.semiBold {
+  font-weight: 500;
+}
+
+.placeholderColor::placeholder {
+  color: #737373;
+}

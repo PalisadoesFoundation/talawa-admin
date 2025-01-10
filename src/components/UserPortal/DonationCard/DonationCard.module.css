@@ -1,0 +1,41 @@
+.mainContainer {
+  width: 49%;
+  height: 8rem;
+  min-width: max-content;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.img {
+  height: 100%;
+  aspect-ratio: 1/1;
+  background-color: rgba(49, 187, 107, 12%);
+}
+
+.btn {
+  display: flex;
+  align-items: flex-end;
+}
+
+.btn button {
+  padding-inline: 2rem !important;
+  border-radius: 5px;
+}
+
+.personDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: max-content;
+}
+
+.personImage {
+  border-radius: 50%;
+  margin-right: 20px;
+}
