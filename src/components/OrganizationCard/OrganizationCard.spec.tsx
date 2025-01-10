@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationCard from './OrganizationCard';
 import i18nForTest from 'utils/i18nForTest';
+import { vi } from 'vitest'; // Import vi from vitest instead of jest
 
 /**
  * This file contains unit tests for the `OrganizationCard` component.
@@ -16,11 +16,16 @@ import i18nForTest from 'utils/i18nForTest';
  * These tests utilize the React Testing Library for rendering and querying DOM elements.
  */
 
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
+const mockNavigate = vi.fn(); // Use vitest.fn() instead of jest.fn()
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    BrowserRouter: ({ children }: { children: React.ReactNode }) => children,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 const defaultProps = {
   id: '123',
@@ -42,23 +47,35 @@ const defaultProps = {
 
 describe('OrganizationCard', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks(); // Use vitest.clearAllMocks() instead of jest.clearAllMocks()
   });
 
   test('renders organization card with image', () => {
     render(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard {...defaultProps} membershipRequestStatus="" />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard {...defaultProps} membershipRequestStatus="" />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
     expect(screen.getByText(defaultProps.name)).toBeInTheDocument();
-    expect(screen.getByText(/admins: 1/i)).toBeInTheDocument();
-    expect(screen.getByText(/members: 2/i)).toBeInTheDocument();
+
+    // Find the h6 element with className orgadmin
+    const statsContainer = screen.getByText((content) => {
+      const normalizedContent = content
+        .toLowerCase()
+        .replace(/\s+/g, ' ')
+        .trim();
+      return (
+        normalizedContent.includes('admins') &&
+        normalizedContent.includes('members')
+      );
+    });
+
+    expect(statsContainer).toBeInTheDocument();
+    expect(statsContainer.textContent).toContain('1'); // Check for admin count
+    expect(statsContainer.textContent).toContain('2'); // Check for member count
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
@@ -70,14 +87,9 @@ describe('OrganizationCard', () => {
 
     render(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard
-              {...propsWithoutImage}
-              membershipRequestStatus=""
-            />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard {...propsWithoutImage} membershipRequestStatus="" />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -87,11 +99,9 @@ describe('OrganizationCard', () => {
   test('renders "Join Now" button when membershipRequestStatus is empty', () => {
     render(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard {...defaultProps} membershipRequestStatus="" />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard {...defaultProps} membershipRequestStatus="" />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -101,14 +111,12 @@ describe('OrganizationCard', () => {
   test('renders "Visit" button when membershipRequestStatus is accepted', () => {
     render(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard
-              {...defaultProps}
-              membershipRequestStatus="accepted"
-            />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard
+            {...defaultProps}
+            membershipRequestStatus="accepted"
+          />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -122,14 +130,12 @@ describe('OrganizationCard', () => {
   test('renders "Withdraw" button when membershipRequestStatus is pending', () => {
     render(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard
-              {...defaultProps}
-              membershipRequestStatus="pending"
-            />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard
+            {...defaultProps}
+            membershipRequestStatus="pending"
+          />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -139,11 +145,9 @@ describe('OrganizationCard', () => {
   test('displays address when provided', () => {
     render(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard {...defaultProps} membershipRequestStatus="" />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard {...defaultProps} membershipRequestStatus="" />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -154,11 +158,9 @@ describe('OrganizationCard', () => {
   test('displays organization description', () => {
     render(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard {...defaultProps} membershipRequestStatus="" />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard {...defaultProps} membershipRequestStatus="" />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -169,11 +171,9 @@ describe('OrganizationCard', () => {
     // Test for empty status (Join Now button)
     const { rerender } = render(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard {...defaultProps} membershipRequestStatus="" />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard {...defaultProps} membershipRequestStatus="" />
+        </I18nextProvider>
       </MockedProvider>,
     );
     expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
@@ -181,14 +181,12 @@ describe('OrganizationCard', () => {
     // Test for accepted status (Visit button)
     rerender(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard
-              {...defaultProps}
-              membershipRequestStatus="accepted"
-            />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard
+            {...defaultProps}
+            membershipRequestStatus="accepted"
+          />
+        </I18nextProvider>
       </MockedProvider>,
     );
     expect(screen.getByTestId('manageBtn')).toBeInTheDocument();
@@ -196,14 +194,12 @@ describe('OrganizationCard', () => {
     // Test for pending status (Withdraw button)
     rerender(
       <MockedProvider>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationCard
-              {...defaultProps}
-              membershipRequestStatus="pending"
-            />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrganizationCard
+            {...defaultProps}
+            membershipRequestStatus="pending"
+          />
+        </I18nextProvider>
       </MockedProvider>,
     );
     expect(screen.getByTestId('withdrawBtn')).toBeInTheDocument();

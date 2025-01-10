@@ -48,6 +48,8 @@ vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -272,26 +274,46 @@ describe('Organisation Tags Page', () => {
   test('creates a new user tag', async () => {
     renderOrganizationTags(link);
 
-    await wait();
-
+    // Wait for initial render
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    // Open create tag modal
+    await act(async () => {
+      userEvent.click(screen.getByTestId('createTagBtn'));
+    });
 
+    // Wait for modal to be visible
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagSubmitBtn')).toBeInTheDocument();
+    });
+
+    // Try to submit empty form
+    const form = screen.getByTestId('createTagSubmitBtn').closest('form');
+    await act(async () => {
+      fireEvent.submit(form!);
+    });
+
+    // Wait for error toast
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
     });
 
-    userEvent.type(
-      screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      'userTag 12',
-    );
+    // Type tag name
+    await act(async () => {
+      userEvent.type(
+        screen.getByPlaceholderText(translations.tagNamePlaceholder),
+        'userTag 12',
+      );
+    });
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    // Submit form with valid data
+    await act(async () => {
+      fireEvent.submit(form!);
+    });
 
+    // Wait for success toast
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
         translations.tagCreationSuccess,
