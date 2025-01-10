@@ -1,9 +1,0 @@
-.userData {
-  height: 400px;
-  overflow-y: scroll;
-  overflow-x: hidden !important;
-}
-
-.modalContent {
-  width: 530px;
-}
