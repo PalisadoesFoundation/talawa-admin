@@ -42,9 +42,6 @@ interface InterfaceOrganizationCardProps {
   }[];
 }
 
-/**
- * Interface defining the structure of organization properties.
- */
 interface InterfaceOrganization {
   _id: string;
   name: string;
@@ -69,39 +66,17 @@ interface InterfaceOrganization {
   }[];
 }
 
-/**
- * Component for displaying and managing user organizations.
- *
- */
-export default function organizations(): JSX.Element {
+export default function Organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-
-  /**
-   * Handles window resize events to toggle drawer visibility.
-   */
-  const handleResize = (): void => {
-    if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
-    }
-  };
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [organizations, setOrganizations] = React.useState([]);
-  const [filterName, setFilterName] = React.useState('');
-  const [mode, setMode] = React.useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [organizations, setOrganizations] = useState<InterfaceOrganization[]>([]);
+  const [filterName, setFilterName] = useState('');
+  const [mode, setMode] = useState(0);
 
   const modes = [
     t('allOrganizations'),
@@ -119,27 +94,28 @@ export default function organizations(): JSX.Element {
     variables: { filter: filterName },
   });
 
-  const { data: joinedOrganizationsData } = useQuery(
-    USER_JOINED_ORGANIZATIONS,
-    {
-      variables: { id: userId },
-    },
-  );
+  const { data: joinedOrganizationsData } = useQuery(USER_JOINED_ORGANIZATIONS, {
+    variables: { id: userId },
+  });
 
-  const { data: createdOrganizationsData } = useQuery(
-    USER_CREATED_ORGANIZATIONS,
-    {
-      variables: { id: userId },
-    },
-  );
+  const { data: createdOrganizationsData } = useQuery(USER_CREATED_ORGANIZATIONS, {
+    variables: { id: userId },
+  });
 
-  /**
-   * Handles page change in pagination.
-   *
-   * @param _event - The event triggering the page change.
-   * @param  newPage - The new page number.
-   */
-  
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -147,38 +123,21 @@ export default function organizations(): JSX.Element {
     setPage(newPage);
   };
 
-  /**
-   * Handles change in the number of rows per page.
-   *
-   * @param  event - The event triggering the change.
-   */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
-
     setRowsPerPage(parseInt(newRowsPerPage, 10));
     setPage(0);
   };
 
-  /**
-   * Searches organizations based on the provided filter value.
-   *
-   * @param  value - The search filter value.
-   */
   const handleSearch = (value: string): void => {
     setFilterName(value);
-
     refetch({
       filter: value,
     });
   };
 
-  /**
-   * Handles search input submission by pressing the Enter key.
-   *
-   * @param  e - The keyboard event.
-   */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -188,22 +147,16 @@ export default function organizations(): JSX.Element {
     }
   };
 
-  /**
-   * Handles search button click to search organizations.
-   */
   const handleSearchByBtnClick = (): void => {
     const value =
-      (document.getElementById('searchUserOrgs') as HTMLInputElement)?.value ||
+      (document.getElementById('searchOrganizations') as HTMLInputElement)?.value ||
       '';
     handleSearch(value);
   };
 
-  /**
-   * Updates the list of organizations based on query results and selected mode.
-   */
   useEffect(() => {
     if (data) {
-      const organizations = data.organizationsConnection.map(
+      const orgs = data.organizationsConnection.map(
         (organization: InterfaceOrganization) => {
           let membershipRequestStatus = '';
           if (
@@ -222,68 +175,56 @@ export default function organizations(): JSX.Element {
           return { ...organization, membershipRequestStatus };
         },
       );
-      setOrganizations(organizations);
+      setOrganizations(orgs);
     }
-  }, [data]);
+  }, [data, userId]);
 
-  /**
-   * Updates the list of organizations based on the selected mode and query results.
-   */
   useEffect(() => {
-    if (mode === 0) {
-      if (data) {
-        const organizations = data.organizationsConnection.map(
-          (organization: InterfaceOrganization) => {
-            let membershipRequestStatus = '';
-            if (
-              organization.members.find(
-                (member: { _id: string }) => member._id === userId,
-              )
+    if (mode === 0 && data) {
+      const orgs = data.organizationsConnection.map(
+        (organization: InterfaceOrganization) => {
+          let membershipRequestStatus = '';
+          if (
+            organization.members.find(
+              (member: { _id: string }) => member._id === userId,
             )
-              membershipRequestStatus = 'accepted';
-            else if (
-              organization.membershipRequests.find(
-                (request: { user: { _id: string } }) =>
-                  request.user._id === userId,
-              )
+          )
+            membershipRequestStatus = 'accepted';
+          else if (
+            organization.membershipRequests.find(
+              (request: { user: { _id: string } }) =>
+                request.user._id === userId,
             )
-              membershipRequestStatus = 'pending';
-            return {
-              ...organization,
-              membershipRequestStatus,
-              isJoined: membershipRequestStatus === 'accepted',
-            };
-          },
-        );
-        setOrganizations(organizations);
-      }
-    } else if (mode === 1) {
-      if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
-        const organizations =
-          joinedOrganizationsData.users[0]?.user?.joinedOrganizations.map(
-            (org: InterfaceOrganization) => ({
-              ...org,
-              membershipRequestStatus: 'accepted',
-              isJoined: true,
-            }),
-          ) || [];
-        setOrganizations(organizations);
-      }
-    } else if (mode === 2) {
-      if (
-        createdOrganizationsData &&
-        createdOrganizationsData.users.length > 0
-      ) {
-        const organizations =
-          createdOrganizationsData.users[0]?.appUserProfile?.createdOrganizations.map(
-            (org: InterfaceOrganization) => ({
-              ...org,
-              membershipRequestStatus: 'accepted',
-              isJoined: true,
-            }),
-          ) || [];
-        setOrganizations(organizations);
-      }
+          )
+            membershipRequestStatus = 'pending';
+          return {
+            ...organization,
+            membershipRequestStatus,
+            isJoined: membershipRequestStatus === 'accepted',
+          };
+        },
+      );
+      setOrganizations(orgs);
+    } else if (mode === 1 && joinedOrganizationsData?.users?.length > 0) {
+      const orgs =
+        joinedOrganizationsData.users[0]?.user?.joinedOrganizations.map(
+          (org: InterfaceOrganization) => ({
+            ...org,
+            membershipRequestStatus: 'accepted',
+            isJoined: true,
+          }),
+        ) || [];
+      setOrganizations(orgs);
+    } else if (mode === 2 && createdOrganizationsData?.users?.length > 0) {
+      const orgs =
+        createdOrganizationsData.users[0]?.appUserProfile?.createdOrganizations.map(
+          (org: InterfaceOrganization) => ({
+            ...org,
+            membershipRequestStatus: 'accepted',
+            isJoined: true,
+          }),
+        ) || [];
+      setOrganizations(orgs);
     }
   }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
 
@@ -292,9 +233,7 @@ export default function organizations(): JSX.Element {
       {hideDrawer ? (
         <Button
           className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
+          onClick={(): void => setHideDrawer(!hideDrawer)}
           data-testid="openMenu"
         >
           <i className="fa fa-angle-double-right" aria-hidden="true"></i>
@@ -302,9 +241,7 @@ export default function organizations(): JSX.Element {
       ) : (
         <Button
           className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
+          onClick={(): void => setHideDrawer(!hideDrawer)}
           data-testid="closeMenu"
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
@@ -316,11 +253,11 @@ export default function organizations(): JSX.Element {
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expand
-              : styles.contract
+            ? styles.expand
+            : styles.contract
         }`}
       >
-        <div className={`${styles.mainContainer}`}>
+        <div className={styles.mainContainer}>
           <div className="d-flex justify-content-between align-items-center">
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
@@ -344,7 +281,7 @@ export default function organizations(): JSX.Element {
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
               >
-                <SearchOutlined className={`${styles.colorWhite}`} />
+                <SearchOutlined className={styles.colorWhite} />
               </InputGroup.Text>
             </InputGroup>
             <Dropdown drop="down-centered">
@@ -352,76 +289,61 @@ export default function organizations(): JSX.Element {
                 className={`${styles.colorPrimary} ${styles.borderNone}`}
                 variant="success"
                 id="dropdown-basic"
-                data-testid={`modeChangeBtn`}
+                data-testid="modeChangeBtn"
               >
                 {modes[mode]}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {modes.map((value, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid={`modeBtn${index}`}
-                      onClick={(): void => setMode(index)}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  );
-                })}
+                {modes.map((value, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    data-testid={`modeBtn${index}`}
+                    onClick={(): void => setMode(index)}
+                  >
+                    {value}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
           </div>
 
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
-            <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
-            >
+          <div className={`d-flex flex-column justify-content-between ${styles.content}`}>
+            <div className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}>
               {loadingOrganizations ? (
-                <div className={`d-flex flex-row justify-content-center`}>
+                <div className="d-flex flex-row justify-content-center">
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
+              ) : organizations && organizations.length > 0 ? (
+                (rowsPerPage > 0
+                  ? organizations.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage,
+                    )
+                  : organizations
+                ).map((organization: InterfaceOrganization, index) => {
+                  const cardProps: InterfaceOrganizationCardProps = {
+                    name: organization.name,
+                    image: organization.image,
+                    id: organization._id,
+                    description: organization.description,
+                    admins: organization.admins,
+                    members: organization.members,
+                    address: organization.address,
+                    membershipRequestStatus: organization.membershipRequestStatus,
+                    userRegistrationRequired: organization.userRegistrationRequired,
+                    membershipRequests: organization.membershipRequests,
+                  };
+                  return <OrganizationCard key={index} {...cardProps} />;
+                })
               ) : (
-                <>
-                  {' '}
-                  {organizations && organizations.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? organizations.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
-                        organizations
-                    ).map((organization: InterfaceOrganization, index) => {
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name: organization.name,
-                        image: organization.image,
-                        id: organization._id,
-                        description: organization.description,
-                        admins: organization.admins,
-                        members: organization.members,
-                        address: organization.address,
-                        membershipRequestStatus:
-                          organization.membershipRequestStatus,
-                        userRegistrationRequired:
-                          organization.userRegistrationRequired,
-                        membershipRequests: organization.membershipRequests,
-                      };
-                      return <OrganizationCard key={index} {...cardProps} />;
-                    })
-                  ) : (
-                    <span>{t('nothingToShow')}</span>
-                  )}
-                </>
+                <span>{t('nothingToShow')}</span>
               )}
             </div>
             <table>
               <tbody>
                 <tr>
                   <PaginationList
-                    count={
-                      organizations ? organizations.length : 0
-                    }
+                    count={organizations ? organizations.length : 0}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
