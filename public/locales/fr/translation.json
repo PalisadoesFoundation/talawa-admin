@@ -439,7 +439,8 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "talawaApiUnavailable": "API Talawa indisponible",
-    "done": "Fait"
+    "done": "Fait",
+    "createChat": "Créer une discussion"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -579,7 +580,8 @@
     "registerEvent": "Inscrire à l'événement",
     "close": "Fermer",
     "talawaApiUnavailable": "API Talawa non disponible",
-    "done": "Terminé"
+    "done": "Terminé",
+    "createChat": "Créer une discussion"
   },
   "funds": {
     "title": "Fonds",
@@ -1082,6 +1084,17 @@
     "loading": "Chargement...",
     "noAttendees": "Aucun participant trouvé"
   },
+  "eventRegistrant": {
+    "sort": "Trier",
+    "allRegistrants": "Tous les inscrits",
+    "eventRegistrantsTable": "Table des inscrits à l'événement",
+    "serialNumber": "Numéro de série",
+    "registrant": "Inscrit",
+    "registeredAt": "Enregistré le",
+    "createdAt": "Créé le",
+    "addRegistrant": "Ajouter un inscrit",
+    "noRegistrantsFound": "Aucun inscrit trouvé."
+  },
   "onSpotAttendee": {
     "title": "Participant sur place",
     "enterFirstName": "Entrez le prénom",
@@ -1204,7 +1217,8 @@
     "eventDescription": "Description de l'événement",
     "eventLocation": "Lieu de l'événement",
     "startDate": "Date de début",
-    "endDate": "Date de fin"
+    "endDate": "Date de fin",
+    "createChat": "Créer une discussion"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1248,14 +1262,23 @@
     "endOfResults": "Fin des résultats"
   },
   "userChat": {
+    "title": "Discussions",
+    "add": "Ajouter",
     "chat": "Chat",
     "contacts": "Contacts",
     "search": "rechercher",
-    "messages": "messages"
+    "messages": "messages",
+    "create": "créer",
+    "newChat": "nouvelle discussion",
+    "newGroupChat": "Nouvelle discussion de groupe",
+    "groupInfo": "Informations sur le groupe",
+    "members": "Membres",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
-    "sendMessage": "Envoyer le message"
+    "sendMessage": "Envoyer le message",
+    "reply": "répondre"
   },
   "orgProfileField": {
     "loading": "Chargement...",
@@ -1404,6 +1427,9 @@
   },
   "userPledges": {
     "title": "Mes Promesses"
+  },
+  "leaveOrganization": {
+    "title": "Quitter l'organisation"
   },
   "eventVolunteers": {
     "volunteers": "Bénévoles",

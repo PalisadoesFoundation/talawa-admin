@@ -1,6 +1,6 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -123,14 +123,14 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                           src={leader.image}
                           alt="Volunteer"
                           data-testid="leader_image"
-                          className={styles.TableImage}
+                          className={styles.TableImages}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
                             key={leader._id + '1'}
                             containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
+                            avatarStyle={styles.TableImages}
                             dataTestId="leader_avatar"
                             name={leader.firstName + ' ' + leader.lastName}
                             alt={leader.firstName + ' ' + leader.lastName}
@@ -158,14 +158,14 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                           src={creator.image}
                           alt="Volunteer"
                           data-testid="creator_image"
-                          className={styles.TableImage}
+                          className={styles.TableImages}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
                             key={creator._id + '1'}
                             containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
+                            avatarStyle={styles.TableImages}
                             dataTestId="creator_avatar"
                             name={creator.firstName + ' ' + creator.lastName}
                             alt={creator.firstName + ' ' + creator.lastName}
@@ -185,7 +185,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                 className="fw-lighter ms-2 mb-0"
                 style={{
                   fontSize: '0.8rem',
-                  color: 'grey',
+                  color: 'var(--search-button-border)',
                 }}
               >
                 Volunteers

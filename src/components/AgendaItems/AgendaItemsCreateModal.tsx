@@ -4,7 +4,7 @@ import { Autocomplete, TextField } from '@mui/material';
 
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import styles from './AgendaItemsContainer.module.css';
+import styles from '../../style/app.module.css';
 import type { ChangeEvent } from 'react';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import convertToBase64 from 'utils/convertToBase64';
@@ -151,7 +151,7 @@ const AgendaItemsCreateModal: React.FC<
       onHide={hideCreateModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('agendaItemDetails')}</p>
+        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
         <Button
           variant="danger"
           onClick={hideCreateModal}
@@ -260,7 +260,7 @@ const AgendaItemsCreateModal: React.FC<
                 <Button
                   variant="danger"
                   size="sm"
-                  className={styles.deleteButton}
+                  className={styles.deleteButtonAgendaItems}
                   data-testid="deleteUrl"
                   onClick={() => handleRemoveUrl(url)}
                 >
@@ -315,7 +315,7 @@ const AgendaItemsCreateModal: React.FC<
           )}
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.greenregbtnAgendaItems}
             value="createAgendaItem"
             data-testid="createAgendaItemFormBtn"
           >

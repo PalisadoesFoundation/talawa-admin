@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 import { FaXmark } from 'react-icons/fa6';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -13,13 +13,14 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
 import { debounce } from '@mui/material';
+import SortingButton from 'subComponents/SortingButton';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -154,7 +155,7 @@ function requests(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return params.row.id;
       },
@@ -167,7 +168,7 @@ function requests(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         const { firstName, lastName, image } = params.row.volunteer.user;
         return (
@@ -180,14 +181,14 @@ function requests(): JSX.Element {
                 src={image}
                 alt="volunteer"
                 data-testid={`volunteer_image`}
-                className={styles.TableImage}
+                className={styles.TableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key="volunteer_avatar"
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
+                  avatarStyle={styles.TableImages}
                   name={firstName + ' ' + lastName}
                   alt={firstName + ' ' + lastName}
                 />
@@ -205,7 +206,7 @@ function requests(): JSX.Element {
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return dayjs(params.row.createdAt).format('DD/MM/YYYY');
@@ -219,7 +220,7 @@ function requests(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -251,7 +252,7 @@ function requests(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
@@ -260,7 +261,7 @@ function requests(): JSX.Element {
             })}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles.inputFields}
             value={searchValue}
             onChange={(e) => {
               setSearchValue(e.target.value);
@@ -279,30 +280,18 @@ function requests(): JSX.Element {
         </div>
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdown}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_DESC')}
-                  data-testid="createdAt_DESC"
-                >
-                  {t('latest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_ASC')}
-                  data-testid="createdAt_ASC"
-                >
-                  {t('earliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('latest'), value: 'createdAt_DESC' },
+                { label: t('earliest'), value: 'createdAt_ASC' },
+              ]}
+              selectedOption={sortBy ?? ''}
+              onSortChange={(value) =>
+                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
         </div>
       </div>
@@ -316,7 +305,7 @@ function requests(): JSX.Element {
           hideFooter={true}
           getRowId={(row) => row._id}
           sx={dataGridStyle}
-          getRowClassName={() => `${styles.rowBackground}`}
+          getRowClassName={() => `${styles.rowBackgrounds}`}
           autoHeight
           rowHeight={65}
           rows={requests.map((request, index) => ({

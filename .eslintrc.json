@@ -5,7 +5,6 @@
     "es6": true
   },
 
-  // Specify the rulesets from other ESLint Plugins tobe used
   "extends": [
     "plugin:react/recommended",
     "eslint:recommended",
@@ -28,7 +27,6 @@
     "sourceType": "module"
   },
 
-  // Specify the ESLint plugins tobe used
   "plugins": [
     "react",
     "@typescript-eslint",
@@ -55,6 +53,7 @@
     "import/no-duplicates": "error",
     "tsdoc/syntax": "error",
     "@typescript-eslint/ban-ts-comment": "error",
+    "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
@@ -77,13 +76,13 @@
     "camelcase": "off",
     "@typescript-eslint/naming-convention": [
       "error",
-      // Interfaces must begin with Interface or TestInterface followed by a PascalCase name
+
       {
         "selector": "interface",
         "format": ["PascalCase"],
         "prefix": ["Interface", "TestInterface"]
       },
-      // Type Aliases must be in PascalCase
+
       {
         "selector": ["typeAlias", "typeLike", "enum"],
         "format": ["PascalCase"]
@@ -120,20 +119,17 @@
         "format": null
       }
     ],
-    // Ensures that components are always written in PascalCase
+
     "react/jsx-pascal-case": [
       "error",
       { "allowAllCaps": false, "allowNamespace": false }
     ],
 
-    // Enforces whitespace around equal sign operators
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
 
-    // All tests must need not have an assertion
     "jest/expect-expect": 0,
 
-    // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
       0,
@@ -142,10 +138,20 @@
     "prettier/prettier": "error"
   },
 
-  // Let ESLint use the react version in the package.json
   "settings": {
     "react": {
       "version": "detect"
     }
-  }
+  },
+  "ignorePatterns": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.less",
+    "**/*.json",
+    "**/*.svg",
+    "docs/docusaurus.config.ts",
+    "docs/sidebars.ts",
+    "docs/src/**",
+    "docs/blog/**"
+  ]
 }

@@ -1,15 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { Circle, Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
 
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
-import styles from 'screens/OrganizationActionItems/OrganizationActionItems.module.css';
+import styles from '../../../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -22,6 +22,7 @@ import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ItemUpdateStatusModal';
 import { ACTION_ITEMS_BY_USER } from 'GraphQl/Queries/ActionItemQueries';
 import useLocalStorage from 'utils/useLocalstorage';
+import SortingButton from 'subComponents/SortingButton';
 
 enum ModalState {
   VIEW = 'view',
@@ -373,54 +374,29 @@ function actions(): JSX.Element {
         </div>
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdown}
-                data-testid="searchByToggle"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('searchBy', { item: '' })}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('assignee')}
-                  data-testid="assignee"
-                >
-                  {t('assignee')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('category')}
-                  data-testid="category"
-                >
-                  {t('category')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdown}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_DESC')}
-                  data-testid="dueDate_DESC"
-                >
-                  {t('latestDueDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_ASC')}
-                  data-testid="dueDate_ASC"
-                >
-                  {t('earliestDueDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('assignee'), value: 'assignee' },
+                { label: t('category'), value: 'category' },
+              ]}
+              selectedOption={searchBy}
+              onSortChange={(value) =>
+                setSearchBy(value as 'assignee' | 'category')
+              }
+              dataTestIdPrefix="searchByToggle"
+              buttonLabel={tCommon('searchBy', { item: '' })}
+            />
+            <SortingButton
+              sortingOptions={[
+                { label: t('latestDueDate'), value: 'dueDate_DESC' },
+                { label: t('earliestDueDate'), value: 'dueDate_ASC' },
+              ]}
+              onSortChange={(value) =>
+                setSortBy(value as 'dueDate_DESC' | 'dueDate_ASC')
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
         </div>
       </div>

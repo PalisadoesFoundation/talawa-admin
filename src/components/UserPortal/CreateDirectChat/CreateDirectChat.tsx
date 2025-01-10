@@ -1,7 +1,6 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from './CreateDirectChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -17,6 +16,8 @@ import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import styles from '../../../style/app.module.css';
 
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
@@ -27,7 +28,7 @@ interface InterfaceCreateDirectChatProps {
           id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<string>>;
+  ) => Promise<ApolloQueryResult<unknown>>;
 }
 
 /**
@@ -61,6 +62,9 @@ export default function createDirectChatModal({
   createDirectChatModalisOpen,
   chatsListRefetch,
 }: InterfaceCreateDirectChatProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChat',
+  });
   const { orgId: organizationId } = useParams();
 
   const userId: string | null = getItem('userId');
@@ -125,7 +129,7 @@ export default function createDirectChatModal({
             </>
           ) : (
             <>
-              <div className={styles.input}>
+              <div className={styles.inputContainer}>
                 <Form onSubmit={handleUserModalSearchChange}>
                   <Form.Control
                     type="name"
@@ -143,13 +147,16 @@ export default function createDirectChatModal({
                   <Button
                     type="submit"
                     data-testid="submitBtn"
-                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
+                    className={styles.submitBtn}
                   >
                     <Search />
                   </Button>
                 </Form>
               </div>
-              <TableContainer className={styles.userData} component={Paper}>
+              <TableContainer
+                className={styles.tableContainer}
+                component={Paper}
+              >
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
@@ -187,7 +194,7 @@ export default function createDirectChatModal({
                                 }}
                                 data-testid="addBtn"
                               >
-                                Add
+                                {t('add')}
                               </Button>
                             </StyledTableCell>
                           </StyledTableRow>

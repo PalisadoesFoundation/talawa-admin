@@ -1,6 +1,5 @@
 import { useMutation, useQuery, type ApolloError } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import SortIcon from '@mui/icons-material/Sort';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
@@ -11,7 +10,6 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +17,8 @@ import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
-import styles from './OrgPost.module.css';
+import styles from '../../style/app.module.css';
+import SortingButton from '../../subComponents/SortingButton';
 
 interface InterfaceOrgPost {
   _id: string;
@@ -284,96 +283,57 @@ function orgPost(): JSX.Element {
   return (
     <>
       <Row className={styles.head}>
-        <div className={styles.mainpageright}>
-          <div className={styles.btnsContainer}>
-            <div className={styles.input}>
+        <div className={styles.mainpagerightOrgPost}>
+          <div className={styles.btnsContainerOrgPost}>
+            <div className={styles.inputOrgPost}>
               <Form.Control
                 type="text"
                 id="posttitle"
-                className="bg-white"
+                className={styles.inputField}
                 placeholder={showTitle ? t('searchTitle') : t('searchText')}
                 data-testid="searchByName"
                 autoComplete="off"
                 onChange={debouncedHandleSearch}
                 required
               />
-              <Button
-                tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-              >
+              <Button tabIndex={-1} className={`${styles.searchButton} `}>
                 <Search />
               </Button>
             </div>
-            <div className={styles.btnsBlock}>
+            <div className={styles.btnsBlockOrgPost}>
               <div className="d-flex">
-                <Dropdown
-                  aria-expanded="false"
+                <SortingButton
                   title="SearchBy"
-                  data-testid="sea"
-                >
-                  <Dropdown.Toggle
-                    data-testid="searchBy"
-                    variant="outline-success"
-                  >
-                    <SortIcon className={'me-1'} />
-                    {t('searchBy')}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      id="searchText"
-                      onClick={(e): void => {
-                        setShowTitle(false);
-                        e.preventDefault();
-                      }}
-                      data-testid="Text"
-                    >
-                      {t('Text')}
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      id="searchTitle"
-                      onClick={(e): void => {
-                        setShowTitle(true);
-                        e.preventDefault();
-                      }}
-                      data-testid="searchTitle"
-                    >
-                      {t('Title')}
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                <Dropdown
-                  aria-expanded="false"
+                  sortingOptions={[
+                    { label: t('Text'), value: 'Text' },
+                    { label: t('Title'), value: 'Title' },
+                  ]}
+                  selectedOption={showTitle ? t('Title') : t('Text')}
+                  onSortChange={(value) => setShowTitle(value === 'Title')}
+                  dataTestIdPrefix="searchBy"
+                  buttonLabel={t('searchBy')}
+                  className={`${styles.dropdown} `}
+                />
+                <SortingButton
                   title="Sort Post"
-                  data-testid="sort"
-                >
-                  <Dropdown.Toggle
-                    variant="outline-success"
-                    data-testid="sortpost"
-                  >
-                    <SortIcon className={'me-1'} />
-                    {t('sortPost')}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      onClick={(): void => handleSorting('latest')}
-                      data-testid="latest"
-                    >
-                      {t('Latest')}
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={(): void => handleSorting('oldest')}
-                      data-testid="oldest"
-                    >
-                      {t('Oldest')}
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                  sortingOptions={[
+                    { label: t('Latest'), value: 'latest' },
+                    { label: t('Oldest'), value: 'oldest' },
+                  ]}
+                  selectedOption={sortingOption}
+                  onSortChange={handleSorting}
+                  dataTestIdPrefix="sortpost"
+                  dropdownTestId="sort"
+                  className={`${styles.dropdown} `}
+                  buttonLabel={t('sortPost')}
+                />
               </div>
 
               <Button
                 variant="success"
                 onClick={showInviteModal}
                 data-testid="createPostModalBtn"
+                className={`${styles.createButton} mb-2`}
               >
                 <i className={'fa fa-plus me-2'} />
                 {t('createPost')}
@@ -415,7 +375,7 @@ function orgPost(): JSX.Element {
           <div className="col-auto">
             <Button
               onClick={handlePreviousPage}
-              className="btn-sm"
+              className={`${styles.createButton} btn-sm `}
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo
                   .hasPreviousPage
@@ -427,7 +387,7 @@ function orgPost(): JSX.Element {
           <div className="col-auto">
             <Button
               onClick={handleNextPage}
-              className="btn-sm "
+              className={`${styles.createButton} btn-sm `}
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
               }
@@ -444,12 +404,8 @@ function orgPost(): JSX.Element {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header
-          className="bg-primary"
-          data-testid="modalOrganizationHeader"
-          closeButton
-        >
-          <Modal.Title className="text-white">{t('postDetails')}</Modal.Title>
+        <Modal.Header data-testid="modalOrganizationHeader" closeButton>
+          <Modal.Title>{t('postDetails')}</Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={createPost}>
           <Modal.Body>
@@ -502,7 +458,7 @@ function orgPost(): JSX.Element {
             />
 
             {postformState.addMedia && file && (
-              <div className={styles.preview} data-testid="mediaPreview">
+              <div className={styles.previewOrgPost} data-testid="mediaPreview">
                 {/* Display preview for both image and video */}
                 {file.type.startsWith('image') ? (
                   <img
@@ -517,7 +473,7 @@ function orgPost(): JSX.Element {
                   </video>
                 )}
                 <button
-                  className={styles.closeButton}
+                  className={styles.closeButtonOrgPost}
                   onClick={(): void => {
                     setPostFormState({
                       ...postformState,
@@ -556,12 +512,18 @@ function orgPost(): JSX.Element {
           <Modal.Footer>
             <Button
               variant="secondary"
+              className={styles.closeButtonOrgPost}
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
               {tCommon('cancel')}
             </Button>
-            <Button type="submit" value="invite" data-testid="createPostBtn">
+            <Button
+              type="submit"
+              value="invite"
+              data-testid="createPostBtn"
+              className={`${styles.addButtonOrgPost} mt-2`}
+            >
               {t('addPost')}
             </Button>
           </Modal.Footer>

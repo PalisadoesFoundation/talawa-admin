@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -14,27 +14,31 @@ import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import FundModal from './FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import styles from './OrganizationFunds.module.css';
+import styles from '../../style/app.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
+import SortingButton from 'subComponents/SortingButton';
 
 const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
+  borderRadius: '20px',
+  backgroundColor: '#EAEBEF',
+  '& .MuiDataGrid-row': {
+    backgroundColor: '#eff1f7',
+    '&:focus-within': {
+      outline: '2px solid #000',
+      outlineOffset: '-2px',
+    },
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EAEBEF',
+    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EAEBEF',
+    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
   },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
+  '& .MuiDataGrid-cell:focus': {
+    outline: '2px solid #000',
+    outlineOffset: '-2px',
   },
 };
 
@@ -157,7 +161,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return <div>{params.row.id}</div>;
@@ -171,7 +175,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -192,7 +196,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return params.row.creator.firstName + ' ' + params.row.creator.lastName;
       },
@@ -204,7 +208,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       flex: 2,
       renderCell: (params: GridCellParams) => {
         return (
@@ -222,7 +226,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return params.row.isArchived ? 'Archived' : 'Active';
       },
@@ -235,14 +239,15 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              // className="me-2 rounded"
+              className={styles.editButton}
               data-testid="editFundBtn"
               onClick={() =>
                 handleOpenModal(params.row as InterfaceFundInfo, 'edit')
@@ -262,13 +267,12 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <Button
-            variant="outline-success"
             size="sm"
-            className="rounded"
+            className={styles.editButton}
             onClick={() => handleClick(params.row._id as string)}
             data-testid="viewBtn"
           >
@@ -289,53 +293,44 @@ const organizationFunds = (): JSX.Element => {
             placeholder={tCommon('searchByName')}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles.inputFields}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchByName"
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '9px' }}
+            className={`${styles.searchButton} `}
+            style={{ marginBottom: '0px' }}
             data-testid="searchBtn"
           >
-            <Search />
+            <Search className={styles.searchIcon} />
           </Button>
         </div>
         <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between align-items-center">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_DESC')}
-                  data-testid="createdAt_DESC"
-                >
-                  {t('createdLatest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_ASC')}
-                  data-testid="createdAt_ASC"
-                >
-                  {t('createdEarliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          <SortingButton
+            title={tCommon('sort')}
+            sortingOptions={[
+              { label: t('createdLatest'), value: 'createdAt_DESC' },
+              { label: t('createdEarliest'), value: 'createdAt_ASC' },
+            ]}
+            selectedOption={
+              sortBy === 'createdAt_DESC'
+                ? t('createdLatest')
+                : t('createdEarliest')
+            }
+            onSortChange={(value) =>
+              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+            }
+            dataTestIdPrefix="filter"
+            buttonLabel={tCommon('sort')}
+          />
           <div>
             <Button
               variant="success"
               onClick={() => handleOpenModal(null, 'create')}
-              style={{ marginTop: '11px' }}
+              className={styles.createButton}
+              style={{ marginTop: '0px' }}
               data-testid="createFundBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -358,7 +353,7 @@ const organizationFunds = (): JSX.Element => {
           ),
         }}
         sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
         rows={funds.map((fund, index) => ({

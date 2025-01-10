@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from './OrganizationVenues.module.css';
+import styles from '../../style/app.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
@@ -9,11 +9,12 @@ import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Navigate, useParams } from 'react-router-dom';
 import VenueModal from 'components/Venues/VenueModal';
-import { Dropdown, Form } from 'react-bootstrap';
-import { Search, Sort } from '@mui/icons-material';
+import { Form } from 'react-bootstrap';
+import { Search } from '@mui/icons-material';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
+import SortingButton from 'subComponents/SortingButton';
 
 /**
  * Component to manage and display the list of organization venues.
@@ -78,7 +79,6 @@ function organizationVenues(): JSX.Element {
       });
       venueRefetch();
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -93,12 +93,16 @@ function organizationVenues(): JSX.Element {
     setSearchTerm(event.target.value);
   };
 
+  const handleSearchByChange = (value: string): void => {
+    setSearchBy(value as 'name' | 'desc');
+  };
+
   /**
    * Updates the sort order state when the user selects a sort option.
-   * @param order - The order to sort venues by (highest or lowest capacity).
+   * @param value - The order to sort venues by (highest or lowest capacity).
    */
-  const handleSortChange = (order: 'highest' | 'lowest'): void => {
-    setSortOrder(order);
+  const handleSortChange = (value: string): void => {
+    setSortOrder(value as 'highest' | 'lowest');
   };
 
   /**
@@ -128,7 +132,6 @@ function organizationVenues(): JSX.Element {
   };
 
   // Error handling for venue data fetch
-  /* istanbul ignore next */
   if (venueError) {
     errorHandler(t, venueError);
   }
@@ -147,7 +150,7 @@ function organizationVenues(): JSX.Element {
           <Form.Control
             type="name"
             id="searchByName"
-            className="bg-white"
+            className={styles.inputField}
             placeholder={t('searchBy') + ' ' + tCommon(searchBy)}
             data-testid="searchBy"
             autoComplete="off"
@@ -155,84 +158,38 @@ function organizationVenues(): JSX.Element {
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-            data-testid="searchBtn"
-          >
+          <Button className={styles.searchButton} data-testid="searchBtn">
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 flex-wrap ">
-          <div className="d-flex gap-3 justify-content-between flex-fill">
-            <Dropdown
-              aria-expanded="false"
-              title="SearchBy"
-              data-tesid="searchByToggle"
-              className="flex-fill"
-            >
-              <Dropdown.Toggle
-                data-testid="searchByDrpdwn"
-                variant="outline-success"
-              >
-                <Sort className={'me-1'} />
-                {t('searchBy')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  id="searchName"
-                  onClick={(e): void => {
-                    setSearchBy('name');
-                    e.preventDefault();
-                  }}
-                  data-testid="name"
-                >
-                  {tCommon('name')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  id="searchDesc"
-                  onClick={(e): void => {
-                    setSearchBy('desc');
-                    e.preventDefault();
-                  }}
-                  data-testid="desc"
-                >
-                  {tCommon('description')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown
-              aria-expanded="false"
-              title="Sort Venues"
-              data-testid="sort"
-              className="flex-fill"
-            >
-              <Dropdown.Toggle
-                variant="outline-success"
-                data-testid="sortVenues"
-              >
-                <Sort className={'me-1'} />
-                {t('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(): void => handleSortChange('highest')}
-                  data-testid="highest"
-                >
-                  {t('highestCapacity')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(): void => handleSortChange('lowest')}
-                  data-testid="lowest"
-                >
-                  {t('lowestCapacity')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+        <div className="d-flex gap-3 flex-wrap">
+          <SortingButton
+            title="SearchBy"
+            sortingOptions={[
+              { label: tCommon('name'), value: 'name' },
+              { label: tCommon('description'), value: 'desc' },
+            ]}
+            selectedOption={tCommon(searchBy)}
+            onSortChange={handleSearchByChange}
+            dataTestIdPrefix="searchByDrpdwn"
+            className={styles.dropdown} // Pass a custom class name if needed
+          />
+          <SortingButton
+            title="Sort Venues"
+            sortingOptions={[
+              { label: t('highestCapacity'), value: 'highest' },
+              { label: t('lowestCapacity'), value: 'lowest' },
+            ]}
+            selectedOption={t(
+              sortOrder === 'highest' ? 'highestCapacity' : 'lowestCapacity',
+            )}
+            onSortChange={handleSortChange}
+            dataTestIdPrefix="sortVenues"
+            className={styles.dropdown} // Pass a custom class name if needed
+          />
           <Button
             variant="success"
-            className="ml-3 flex-fill"
+            className={styles.dropdown}
             onClick={showCreateVenueModal}
             data-testid="createVenueBtn"
           >

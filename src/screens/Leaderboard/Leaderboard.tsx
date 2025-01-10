@@ -1,20 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import {
-  FilterAltOutlined,
-  Search,
-  Sort,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import gold from 'assets/images/gold.png';
 import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
-import styles from '../OrganizationActionItems/OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -25,6 +20,7 @@ import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import { useQuery } from '@apollo/client';
+import SortingButton from 'subComponents/SortingButton';
 
 enum TimeFrame {
   All = 'allTime',
@@ -200,7 +196,7 @@ function leaderboard(): JSX.Element {
                   <Avatar
                     key={_id + '1'}
                     containerStyle={styles.imageContainer}
-                    avatarStyle={styles.TableImage}
+                    avatarStyle={styles.TableImageSmall}
                     name={firstName + ' ' + lastName}
                     alt={firstName + ' ' + lastName}
                   />
@@ -275,68 +271,31 @@ function leaderboard(): JSX.Element {
         </div>
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-sort"
-                className={styles.dropdown}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('hours_DESC')}
-                  data-testid="hours_DESC"
-                >
-                  {t('mostHours')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('hours_ASC')}
-                  data-testid="hours_ASC"
-                >
-                  {t('leastHours')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-timeFrame"
-                className={styles.dropdown}
-                data-testid="timeFrame"
-              >
-                <FilterAltOutlined className={'me-1'} />
-                {t('timeFrame')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setTimeFrame(TimeFrame.All)}
-                  data-testid="timeFrameAll"
-                >
-                  {t('allTime')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setTimeFrame(TimeFrame.Weekly)}
-                  data-testid="timeFrameWeekly"
-                >
-                  {t('weekly')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setTimeFrame(TimeFrame.Monthly)}
-                  data-testid="timeFrameMonthly"
-                >
-                  {t('monthly')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setTimeFrame(TimeFrame.Yearly)}
-                  data-testid="timeFrameYearly"
-                >
-                  {t('yearly')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('mostHours'), value: 'hours_DESC' },
+                { label: t('leastHours'), value: 'hours_ASC' },
+              ]}
+              selectedOption={sortBy}
+              onSortChange={(value) =>
+                setSortBy(value as 'hours_DESC' | 'hours_ASC')
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+            />
+            <SortingButton
+              sortingOptions={[
+                { label: t('allTime'), value: TimeFrame.All },
+                { label: t('weekly'), value: TimeFrame.Weekly },
+                { label: t('monthly'), value: TimeFrame.Monthly },
+                { label: t('yearly'), value: TimeFrame.Yearly },
+              ]}
+              selectedOption={timeFrame}
+              onSortChange={(value) => setTimeFrame(value as TimeFrame)}
+              dataTestIdPrefix="timeFrame"
+              buttonLabel={t('timeFrame')}
+              type="filter"
+            />
           </div>
         </div>
       </div>

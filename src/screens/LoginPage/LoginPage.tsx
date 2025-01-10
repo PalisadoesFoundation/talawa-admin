@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from '@apollo/client';
 import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -30,7 +30,7 @@ import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
-import styles from './LoginPage.module.css';
+import styles from 'style/app.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
@@ -61,6 +61,8 @@ const loginPage = (): JSX.Element => {
     specialChar: boolean;
   };
 
+  const loginRecaptchaRef = useRef<ReCAPTCHA>(null);
+  const SignupRecaptchaRef = useRef<ReCAPTCHA>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [role, setRole] = useState<'admin' | 'user'>('admin');
@@ -153,7 +155,6 @@ const loginPage = (): JSX.Element => {
       try {
         await fetch(BACKEND_URL as string);
       } catch (error) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
@@ -165,7 +166,6 @@ const loginPage = (): JSX.Element => {
     recaptchaToken: string | null,
   ): Promise<boolean | void> => {
     try {
-      /* istanbul ignore next */
       if (REACT_APP_USE_RECAPTCHA !== 'yes') {
         return true;
       }
@@ -177,7 +177,6 @@ const loginPage = (): JSX.Element => {
 
       return data.recaptcha;
     } catch {
-      /* istanbul ignore next */
       toast.error(t('captchaError') as string);
     }
   };
@@ -199,7 +198,7 @@ const loginPage = (): JSX.Element => {
     } = signformState;
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
-    /* istanbul ignore next */
+
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha') as string);
       return;
@@ -242,7 +241,6 @@ const loginPage = (): JSX.Element => {
             },
           });
 
-          /* istanbul ignore next */
           if (signUpData) {
             toast.success(
               t(
@@ -258,10 +256,11 @@ const loginPage = (): JSX.Element => {
               cPassword: '',
               signOrg: '',
             });
+            SignupRecaptchaRef.current?.reset();
           }
         } catch (error) {
-          /* istanbul ignore next */
           errorHandler(t, error);
+          SignupRecaptchaRef.current?.reset();
         }
       } else {
         toast.warn(t('passwordMismatches') as string);
@@ -285,7 +284,7 @@ const loginPage = (): JSX.Element => {
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const isVerified = await verifyRecaptcha(recaptchaToken);
-    /* istanbul ignore next */
+
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha') as string);
       return;
@@ -299,7 +298,6 @@ const loginPage = (): JSX.Element => {
         },
       });
 
-      /* istanbul ignore next */
       if (loginData) {
         i18n.changeLanguage(loginData.login.appUserProfile.appLanguageCode);
         const { login } = loginData;
@@ -336,8 +334,8 @@ const loginPage = (): JSX.Element => {
         toast.warn(tErrors('notFound') as string);
       }
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error);
+      loginRecaptchaRef.current?.reset();
     }
   };
 
@@ -444,10 +442,7 @@ const loginPage = (): JSX.Element => {
                       autoComplete="username"
                       data-testid="loginEmail"
                     />
-                    <Button
-                      tabIndex={-1}
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                    >
+                    <Button tabIndex={-1} className={styles.email_button}>
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
@@ -474,7 +469,7 @@ const loginPage = (): JSX.Element => {
                     <Button
                       onClick={togglePassword}
                       data-testid="showLoginPassword"
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      className={styles.email_button}
                     >
                       {showPassword ? (
                         <i className="fas fa-eye"></i>
@@ -495,22 +490,21 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
+                        ref={loginRecaptchaRef}
                         className="mt-2"
                         sitekey={
-                          /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
-                    /* istanbul ignore next */
                     <></>
                   )}
                   <Button
                     disabled={loginLoading}
                     type="submit"
-                    className="mt-3 mb-3 w-100"
+                    className={styles.login_btn}
                     value="Login"
                     data-testid="loginBtn"
                   >
@@ -523,7 +517,7 @@ const loginPage = (): JSX.Element => {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-3 w-100"
+                    className={styles.reg_btn}
                     data-testid="goToRegisterPortion"
                     onClick={(): void => {
                       setShowTab('REGISTER');
@@ -839,15 +833,14 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
+                        ref={SignupRecaptchaRef}
                         sitekey={
-                          /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
-                    /* istanbul ignore next */
                     <></>
                   )}
                   <Button

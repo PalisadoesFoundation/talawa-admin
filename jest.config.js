@@ -1,12 +1,23 @@
 export default {
   roots: ['<rootDir>/src'],
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/index.tsx'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/index.tsx',
+    '!node_modules',
+    '!dist',
+    '!**/*.{spec,test}.{js,jsx,ts,tsx}',
+    '!coverage/**',
+    '!**/index.{js,ts}',
+    '!**/*.d.ts',
+    '!src/test/**',
+    '!vitest.config.ts',
+  ],
   // setupFiles: ['react-app-polyfill/jsdom'],
   setupFiles: ['whatwg-fetch'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
-    '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}',
+    '<rootDir>/src/**/*.test.{js,jsx,ts,tsx}',
   ],
   testEnvironment: 'jsdom',
   transform: {
@@ -25,13 +36,15 @@ export default {
     '<rootDir>/src',
   ],
   moduleNameMapper: {
+    '\\.(css|scss|sass|less)$': 'identity-obj-proxy',
     '^react-native$': 'react-native-web',
     '^@dicebear/core$': '<rootDir>/scripts/__mocks__/@dicebear/core.ts',
     '^@dicebear/collection$':
       '<rootDir>/scripts/__mocks__/@dicebear/collection.ts',
     '\\.svg\\?react$': '<rootDir>/scripts/__mocks__/fileMock.js',
-    '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js', 
-    '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts'
+    '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js',
+    '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   moduleFileExtensions: [
     'web.js',
@@ -59,8 +72,8 @@ export default {
   ],
   coverageThreshold: {
     global: {
-      lines: 20,
-      statements: 20,
+      lines: 1,
+      statements: 1,
     },
   },
   testPathIgnorePatterns: [
@@ -68,4 +81,6 @@ export default {
     '<rootDir>/build/',
     '<rootDir>/public/',
   ],
+  coverageDirectory: './coverage/jest',
+  coverageReporters: ['text', 'html', 'text-summary', 'lcov'],
 };

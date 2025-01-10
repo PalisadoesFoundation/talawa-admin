@@ -1,11 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { Dropdown, Form, Table } from 'react-bootstrap';
+import { Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 
 import { Search } from '@mui/icons-material';
-import SortIcon from '@mui/icons-material/Sort';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
@@ -14,8 +13,9 @@ import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './BlockUser.module.css';
+import styles from '../../style/app.module.css';
 import { useParams } from 'react-router-dom';
+import SortingButton from 'subComponents/SortingButton';
 
 interface InterfaceMember {
   _id: string;
@@ -104,13 +104,11 @@ const Requests = (): JSX.Element => {
             orgId: currentUrl,
           },
         });
-        /* istanbul ignore next */
         if (data) {
           toast.success(t('blockedSuccessfully') as string);
           memberRefetch();
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     },
@@ -127,13 +125,11 @@ const Requests = (): JSX.Element => {
             orgId: currentUrl,
           },
         });
-        /* istanbul ignore next */
         if (data) {
           toast.success(t('Un-BlockedSuccessfully') as string);
           memberRefetch();
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     },
@@ -189,9 +185,9 @@ const Requests = (): JSX.Element => {
     <>
       <div>
         {/* Buttons Container */}
-        <div className={styles.btnsContainer}>
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
+        <div className={styles.btnsContainerBlockAndUnblock}>
+          <div className={styles.inputContainerBlockAndUnblock}>
+            <div className={styles.inputBlockAndUnblock}>
               <Form.Control
                 type="name"
                 id="searchBlockedUsers"
@@ -210,7 +206,7 @@ const Requests = (): JSX.Element => {
               />
               <Button
                 tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                className={styles.search}
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
               >
@@ -218,56 +214,41 @@ const Requests = (): JSX.Element => {
               </Button>
             </div>
           </div>
-          <div className={styles.btnsBlock}>
+          <div className={styles.btnsBlockBlockAndUnblock}>
             <div className={styles.largeBtnsWrapper}>
-              {/* Dropdown for filtering members */}
-              <Dropdown aria-expanded="false" title="Sort organizations">
-                <Dropdown.Toggle variant="success" data-testid="userFilter">
-                  <SortIcon className={'me-1'} />
-                  {showBlockedMembers ? t('blockedUsers') : t('allMembers')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    active={!showBlockedMembers}
-                    data-testid="showMembers"
-                    onClick={(): void => setShowBlockedMembers(false)}
-                  >
-                    {t('allMembers')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    active={showBlockedMembers}
-                    data-testid="showBlockedMembers"
-                    onClick={(): void => setShowBlockedMembers(true)}
-                  >
-                    {t('blockedUsers')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              {/* Dropdown for sorting by name */}
-              <Dropdown aria-expanded="false">
-                <Dropdown.Toggle variant="success" data-testid="nameFilter">
-                  <SortIcon className={'me-1'} />
-                  {searchByFirstName
+              <SortingButton
+                title={t('sortOrganizations')}
+                sortingOptions={[
+                  { label: t('allMembers'), value: 'allMembers' },
+                  { label: t('blockedUsers'), value: 'blockedUsers' },
+                ]}
+                selectedOption={
+                  showBlockedMembers ? t('blockedUsers') : t('allMembers')
+                }
+                onSortChange={(value) =>
+                  setShowBlockedMembers(value === 'blockedUsers')
+                }
+                dataTestIdPrefix="userFilter"
+                className={`${styles.createButton} mt-2`}
+              />
+
+              <SortingButton
+                title={t('sortByName')}
+                sortingOptions={[
+                  { label: t('searchByFirstName'), value: 'searchByFirstName' },
+                  { label: t('searchByLastName'), value: 'searchByLastName' },
+                ]}
+                selectedOption={
+                  searchByFirstName
                     ? t('searchByFirstName')
-                    : t('searchByLastName')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    active={searchByFirstName}
-                    data-testid="searchByFirstName"
-                    onClick={(): void => setSearchByFirstName(true)}
-                  >
-                    {t('searchByFirstName')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    active={!searchByFirstName}
-                    data-testid="searchByLastName"
-                    onClick={(): void => setSearchByFirstName(false)}
-                  >
-                    {t('searchByLastName')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+                    : t('searchByLastName')
+                }
+                onSortChange={(value) =>
+                  setSearchByFirstName(value === 'searchByFirstName')
+                }
+                dataTestIdPrefix="nameFilter"
+                className={`${styles.createButton} mt-2`}
+              />
             </div>
           </div>
         </div>
@@ -289,7 +270,11 @@ const Requests = (): JSX.Element => {
             {loadingMembers ? (
               <TableLoader headerTitles={headerTitles} noOfRows={10} />
             ) : (
-              <Table responsive data-testid="userList">
+              <Table
+                responsive
+                data-testid="userList"
+                className={styles.custom_table}
+              >
                 <thead>
                   <tr>
                     {headerTitles.map((title: string, index: number) => {
@@ -315,6 +300,7 @@ const Requests = (): JSX.Element => {
                             <Button
                               variant="danger"
                               size="sm"
+                              className={styles.closeButton}
                               onClick={async (): Promise<void> => {
                                 await handleUnBlockUser(user._id);
                               }}
@@ -326,6 +312,7 @@ const Requests = (): JSX.Element => {
                             <Button
                               variant="success"
                               size="sm"
+                              className={styles.addButton}
                               onClick={async (): Promise<void> => {
                                 await handleBlockUser(user._id);
                               }}

@@ -91,7 +91,7 @@ export default function settings(): JSX.Element {
    * This function sends a mutation request to update the user details
    * and reloads the page on success.
    */
-  /*istanbul ignore next*/
+
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
       let updatedUserDetails = { ...userDetails };
@@ -101,7 +101,6 @@ export default function settings(): JSX.Element {
       const { data } = await updateUserDetails({
         variables: updatedUserDetails,
       });
-      /* istanbul ignore next */
       if (data) {
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
@@ -113,7 +112,6 @@ export default function settings(): JSX.Element {
         setItem('name', userFullName);
       }
     } catch (error: unknown) {
-      /*istanbul ignore next*/
       errorHandler(t, error);
     }
   };
@@ -125,6 +123,19 @@ export default function settings(): JSX.Element {
    * @param value - The new value for the field.
    */
   const handleFieldChange = (fieldName: string, value: string): void => {
+    // If the field is 'birthDate', validate the date
+    if (fieldName === 'birthDate') {
+      const today = new Date();
+      const selectedDate = new Date(value);
+
+      // Prevent updating the state if the selected date is in the future
+      if (selectedDate > today) {
+        console.error('Future dates are not allowed for the birth date.');
+        return; // Exit without updating the state
+      }
+    }
+
+    // Update state if the value passes validation
     setisUpdated(true);
     setUserDetails((prevState) => ({
       ...prevState,
@@ -448,6 +459,7 @@ export default function settings(): JSX.Element {
                           handleFieldChange('birthDate', e.target.value)
                         }
                         className={`${styles.cardControl}`}
+                        max={new Date().toISOString().split('T')[0]}
                       />
                     </Col>
                   </Row>

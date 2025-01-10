@@ -414,6 +414,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
     "enterTitle": "Enter Title",
@@ -553,6 +554,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "createChat": "Create Chat",
     "updatePost": "Update Post",
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
@@ -772,6 +774,17 @@
     "loading": "Loading...",
     "noAttendees": "Attendees not Found"
   },
+  "eventRegistrant": {
+    "sort": "Sort",
+    "allRegistrants": "All Registrants",
+    "eventRegistrantsTable": "Event Registrants Table",
+    "serialNumber": "Serial Number",
+    "registrant": "Registrant",
+    "registeredAt": "Registered At",
+    "createdAt": "Created At",
+    "addRegistrant": "Add Registrant",
+    "noRegistrantsFound": "No Registrants Found."
+  },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
     "enterFirstName": "Enter First Name",
@@ -923,7 +936,7 @@
     "register": "register"
   },
   "addOnStore": {
-    "title": "Add On Store",
+    "title": "Plugin Store",
     "searchName": "Ex: Donations",
     "search": "Search",
     "enable": "Enabled",
@@ -1193,6 +1206,7 @@
     "enterDescription": "Enter Description",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
+    "createChat": "Create Chat",
     "monthlyCalendarView": "Monthly Calendar",
     "yearlyCalendarView": "Yearly Calender",
     "startTime": "startTime",
@@ -1227,7 +1241,7 @@
     "RstartDate": "Select Start Date",
     "RendDate": "Select End Date",
     "RClose": "Close the window",
-    "addNew": "Create new advertisement",
+    "addNew": "Create",
     "EXname": "Ex. Cookie Shop",
     "EXlink": "Ex. http://yourwebsite.com/photo",
     "createAdvertisement": "Create Advertisement",
@@ -1248,14 +1262,23 @@
     "endOfResults": "endOfResults"
   },
   "userChat": {
+    "title": "Chats",
+    "add": "Add",
     "chat": "Chat",
     "search": "Search",
     "messages": "Messages",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "create": "Create",
+    "newChat": "New Chat",
+    "newGroupChat": "New Group Chat",
+    "groupInfo": "Group Info",
+    "members": "Members",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
-    "sendMessage": "Send Message"
+    "sendMessage": "Send Message",
+    "reply": "Reply"
   },
   "orgProfileField": {
     "loading": "Loading...",
@@ -1404,6 +1427,9 @@
   },
   "userPledges": {
     "title": "My Pledges"
+  },
+  "leaveOrganization": {
+    "title": "Leave Organization"
   },
   "eventVolunteers": {
     "volunteers": "Volunteers",

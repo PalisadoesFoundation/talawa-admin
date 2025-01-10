@@ -30,6 +30,7 @@ import type {
   InterfaceEvent,
   InterfaceRecurringEvent,
 } from './InterfaceEvents';
+import styles from '../../../style/app.module.css';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -119,9 +120,8 @@ export const AttendanceStatisticsModal: React.FC<
           try {
             const eventDate = new Date(event.startDate);
             if (Number.isNaN(eventDate.getTime())) {
-              /*istanbul ignore next*/
               console.error(`Invalid date for event: ${event._id}`);
-              /*istanbul ignore next*/
+
               return 'Invalid date';
             }
             return eventDate.toLocaleDateString('en-US', {
@@ -129,12 +129,11 @@ export const AttendanceStatisticsModal: React.FC<
               day: 'numeric',
             });
           } catch (error) {
-            /*istanbul ignore next*/
             console.error(
               `Error formatting date for event: ${event._id}`,
               error,
             );
-            /*istanbul ignore next*/
+
             return 'Invalid date';
           }
         })();
@@ -325,7 +324,6 @@ export const AttendanceStatisticsModal: React.FC<
     exportToCSV(data, `${selectedCategory.toLowerCase()}_demographics.csv`);
   }, [selectedCategory, categoryLabels, categoryData]);
 
-  /*istanbul ignore next*/
   const handleExport = (eventKey: string | null): void => {
     switch (eventKey) {
       case 'trends':
@@ -379,34 +377,25 @@ export const AttendanceStatisticsModal: React.FC<
         id="pdf-content"
       >
         <div
-          className="w-100 d-flex justify-content-end align-baseline position-absolute"
-          style={{ top: '10px', right: '15px', zIndex: 1 }}
+          className={`${styles.positionedTopRight} w-100 d-flex justify-content-end align-baseline position-absolute`}
         ></div>
         <div className="w-100 border border-success d-flex flex-row rounded">
           {isEventRecurring ? (
             <div
-              className="text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success"
-              style={{ borderRight: '1px solid green' }}
+              className={`${styles.borderRightGreen} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success`}
             >
               <Line
                 data={chartData}
                 options={chartOptions}
-                style={{ paddingBottom: '30px' }}
+                className={`${styles.paddingBottom30}`}
               />
               <div
-                className="px-1 border border-success w-30"
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: 0,
-                  borderBottomLeftRadius: 8,
-                }}
+                className={`${styles.topRightCorner} px-1 border border-success w-30`}
               >
                 <p className="text-black">Trends</p>
               </div>
               <div
-                className="d-flex position-absolute bottom-1 end-50 translate-middle-y"
-                style={{ paddingBottom: '2.0rem' }}
+                className={`${styles.paddingBottom2Rem} d-flex position-absolute bottom-1 end-50 translate-middle-y`}
                 role="navigation"
                 aria-label="Chart page navigation"
               >
@@ -458,23 +447,13 @@ export const AttendanceStatisticsModal: React.FC<
             </div>
           ) : (
             <div
-              className="text-success position-relative d-flex align-items-center justify-content-center w-50 border-right-1 border-success"
-              style={{ borderRight: '1px solid green' }}
+              className={`${styles.borderRightGreen} text-success position-relative d-flex align-items-center justify-content-center w-50 border-right-1 border-success`}
             >
-              <h1
-                className="font-weight-bold"
-                style={{ fontSize: 80, fontWeight: 40 }}
-              >
+              <h1 className={`${styles.largeBoldText} font-weight-bold`}>
                 {statistics.totalMembers}
               </h1>
               <div
-                className="px-1 border border-success"
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  bottom: 0,
-                  borderTopLeftRadius: 12,
-                }}
+                className={`${styles.bottomRightCorner} px-1 border border-success`}
               >
                 <p className="text-black">Attendance Count</p>
               </div>
@@ -533,13 +512,7 @@ export const AttendanceStatisticsModal: React.FC<
               }}
             />
             <div
-              className="px-1 border border-success"
-              style={{
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                borderBottomRightRadius: 8,
-              }}
+              className={`${styles.topLeftCorner} px-1 border border-success`}
             >
               <p className="text-black">Demography</p>
             </div>

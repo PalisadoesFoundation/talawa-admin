@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
@@ -6,7 +6,7 @@ import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import RolesIcon from 'assets/svgs/roles.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './LeftDrawer.module.css';
+import styles from 'style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
@@ -30,6 +30,12 @@ const leftDrawer = ({
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
+
+  useEffect(() => {
+    if (hideDrawer === null) {
+      setHideDrawer(false);
+    }
+  }, []);
 
   /**
    * Handles link click to hide the drawer on smaller screens.
@@ -63,17 +69,20 @@ const leftDrawer = ({
               <Button
                 variant={isActive === true ? 'success' : ''}
                 className={`${
-                  isActive === true ? 'text-white' : 'text-secondary'
+                  isActive === true ? 'text-black' : 'text-secondary'
                 }`}
+                style={{
+                  backgroundColor: isActive === true ? '#EAEBEF' : '',
+                }}
                 data-testid="orgsBtn"
               >
                 <div className={styles.iconWrapper}>
                   <OrganizationsIcon
-                    stroke={`${
+                    fill={
                       isActive === true
-                        ? 'var(--bs-white)'
+                        ? 'var(--bs-black)'
                         : 'var(--bs-secondary)'
-                    }`}
+                    }
                   />
                 </div>
                 {t('my organizations')}

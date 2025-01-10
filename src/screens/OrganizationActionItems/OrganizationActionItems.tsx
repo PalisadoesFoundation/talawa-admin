@@ -1,15 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import {
-  Circle,
-  FilterAltOutlined,
-  Search,
-  Sort,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
@@ -32,6 +26,7 @@ import ItemModal from './ItemModal';
 import ItemDeleteModal from './ItemDeleteModal';
 import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from './ItemUpdateStatusModal';
+import SortingButton from 'subComponents/SortingButton';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -140,6 +135,11 @@ function organizationActionItems(): JSX.Element {
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
+
+  // Trigger refetch on sortBy or status change
+  useEffect(() => {
+    actionItemsRefetch();
+  }, [sortBy, status, actionItemsRefetch]);
 
   if (actionItemsLoading) {
     return <Loader size="xl" />;
@@ -367,7 +367,7 @@ function organizationActionItems(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+        <div className={`${styles.input} `}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -383,98 +383,62 @@ function organizationActionItems(): JSX.Element {
             }}
             data-testid="searchBy"
           />
-          <Button
-            tabIndex={-1}
-            className={styles.searchButton}
-            data-testid="searchBtn"
-          >
+          <Button className={styles.searchButton} data-testid="searchBtn">
             <Search />
           </Button>
         </div>
-        <div className="md:d-flex gap-3 mb-1 overflow-auto">
-          <div className="d-flex justify-space-between align-items-center gap-3 overflow-y-auto">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="searchByToggle"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('searchBy', { item: '' })}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('assignee')}
-                  data-testid="assignee"
-                >
-                  {t('assignee')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('category')}
-                  data-testid="category"
-                >
-                  {t('category')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_DESC')}
-                  data-testid="dueDate_DESC"
-                >
-                  {t('latestDueDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_ASC')}
-                  data-testid="dueDate_ASC"
-                >
-                  {t('earliestDueDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <FilterAltOutlined className={'me-1'} />
-                {t('status')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setStatus(null)}
-                  data-testid="statusAll"
-                >
-                  {tCommon('all')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Pending)}
-                  data-testid="statusPending"
-                >
-                  {tCommon('pending')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Completed)}
-                  data-testid="statusCompleted"
-                >
-                  {tCommon('completed')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+        <div className="d-flex gap-3 mb-1">
+          <SortingButton
+            title={tCommon('searchBy')}
+            sortingOptions={[
+              { label: t('assignee'), value: 'assignee' },
+              { label: t('category'), value: 'category' },
+            ]}
+            selectedOption={t(searchBy)}
+            onSortChange={(value) =>
+              setSearchBy(value as 'assignee' | 'category')
+            }
+            dataTestIdPrefix="searchByToggle"
+            buttonLabel={tCommon('searchBy', { item: '' })}
+            className={styles.dropdown} // Pass a custom class name if needed
+          />
+          <SortingButton
+            title={tCommon('sort')}
+            sortingOptions={[
+              { label: t('latestDueDate'), value: 'dueDate_DESC' },
+              { label: t('earliestDueDate'), value: 'dueDate_ASC' },
+            ]}
+            selectedOption={t(
+              sortBy === 'dueDate_DESC' ? 'latestDueDate' : 'earliestDueDate',
+            )}
+            onSortChange={(value) =>
+              setSortBy(value as 'dueDate_DESC' | 'dueDate_ASC')
+            }
+            dataTestIdPrefix="sort"
+            buttonLabel={tCommon('sort')}
+            className={styles.dropdown} // Pass a custom class name if needed
+          />
+          <SortingButton
+            title={t('status')}
+            sortingOptions={[
+              { label: tCommon('all'), value: 'all' },
+              { label: tCommon('pending'), value: ItemStatus.Pending },
+              { label: tCommon('completed'), value: ItemStatus.Completed },
+            ]}
+            selectedOption={t(
+              status === null
+                ? 'all'
+                : status === ItemStatus.Pending
+                  ? 'pending'
+                  : 'completed',
+            )}
+            onSortChange={(value) =>
+              setStatus(value === 'all' ? null : (value as ItemStatus))
+            }
+            dataTestIdPrefix="filter"
+            buttonLabel={t('status')}
+            className={styles.dropdown} // Pass a custom class name if needed
+          />
           <div>
             <Button
               variant="success"

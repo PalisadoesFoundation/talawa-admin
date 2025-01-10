@@ -1,6 +1,6 @@
 import React, { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from './OrgActionItemCategories.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
 import { useMutation } from '@apollo/client';
