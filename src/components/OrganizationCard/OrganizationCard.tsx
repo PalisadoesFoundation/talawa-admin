@@ -9,7 +9,7 @@ import {
   JOIN_PUBLIC_ORGANIZATION,
   SEND_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import { useMutation, useQuery, } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
