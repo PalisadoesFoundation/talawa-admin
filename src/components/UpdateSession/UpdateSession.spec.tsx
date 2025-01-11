@@ -107,6 +107,7 @@ describe('Testing UpdateTimeout Component', () => {
     // Simulate dragging to minimum value
     userEvent.click(slider, {
       // Simulate clicking on the slider to focus
+      // @ts-expect-error: Explanation for why this error is ignored
       clientX: -999, // Adjust the clientX to simulate different slider positions
     });
 
@@ -127,6 +128,7 @@ describe('Testing UpdateTimeout Component', () => {
     // Simulate dragging to maximum value
     userEvent.click(slider, {
       // Simulate clicking on the slider to focus
+      // @ts-expect-error: Explanation for why this error is ignored
       clientX: 999, // Adjust the clientX to simulate different slider positions
     });
 
@@ -147,6 +149,7 @@ describe('Testing UpdateTimeout Component', () => {
     // Simulate invalid value handling
     userEvent.click(slider, {
       // Simulate clicking on the slider to focus
+      // @ts-expect-error: Explanation for why this error is ignored
       clientX: 0, // Adjust the clientX to simulate different slider positions
     });
 
