@@ -360,41 +360,41 @@ const orgFundCampaign = (): JSX.Element => {
               <Search />
             </Button>
           </div>
-          <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}>
-            <div className="d-flex justify-space-between">
-              <SortingButton
-                sortingOptions={[
-                  { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
-                  { label: t('highestGoal'), value: 'fundingGoal_DESC' },
-                  { label: t('latestEndDate'), value: 'endDate_DESC' },
-                  { label: t('earliestEndDate'), value: 'endDate_ASC' },
-                ]}
-                onSortChange={(value) =>
-                  setSortBy(
-                    value as
-                      | 'fundingGoal_ASC'
-                      | 'fundingGoal_DESC'
-                      | 'endDate_ASC'
-                      | 'endDate_DESC',
-                  )
-                }
-                dataTestIdPrefix="filter"
-                buttonLabel={tCommon('sort')}
-              />
-            </div>
-            <div>
-              <Button
-                variant="success"
-                className={styles.dropdown}
-                onClick={() => handleOpenModal(null, 'create')}
-                data-testid="addCampaignBtn"
-                disabled={isArchived}
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('addCampaign')}
-              </Button>
-            </div>
+          {/* <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}> */}
+          <div className={styles.btnsBlock}>
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
+                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'fundingGoal_ASC'
+                    | 'fundingGoal_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
+          <div className={styles.btnsBlock}>
+            <Button
+              variant="success"
+              className={styles.dropdown}
+              onClick={() => handleOpenModal(null, 'create')}
+              data-testid="addCampaignBtn"
+              disabled={isArchived}
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addCampaign')}
+            </Button>
+          </div>
+          {/* </div> */}
         </div>
       </Row>
 

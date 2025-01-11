@@ -181,6 +181,7 @@ const VenueModal = ({
                 name: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <label htmlFor="venuedescrip">{tCommon('description')}</label>
           <Form.Control
@@ -198,6 +199,7 @@ const VenueModal = ({
                 description: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <label htmlFor="venuecapacity">{t('capacity')}</label>
           <Form.Control
@@ -213,6 +215,7 @@ const VenueModal = ({
                 capacity: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <Form.Label htmlFor="venueImg">{t('image')}</Form.Label>
           <Form.Control
@@ -240,6 +243,7 @@ const VenueModal = ({
                 });
               }
             }}
+            className={styles.inputField}
           />
           {venueImage && (
             <div className={styles.previewVenueModal}>

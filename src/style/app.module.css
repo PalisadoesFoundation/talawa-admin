@@ -55,7 +55,7 @@
   --tablerow-bg: #eff1f7;
   --date-picker-bg: #f2f2f2;
   --table-bg-color: var(--grey-bg-color);
-  --tablerow-bg-color: var(--dropdown-hover-color);
+  --tablerow-bg-color: #ffffff;
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
 
@@ -91,17 +91,16 @@
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
-
-  --table-head-bg: var(--blue-subtle, var(--blue-color));
+  --table-head-bg: #eaebef;
   --table-head-color: var(--bs-white, var(--white-color));
-
-  --table-header-color: var(--bs-white, var(--bs-gray-300));
+  --table-header-color: #000000;
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
-  --bg-blue: #a8c7fa;
+  --light-blue: #a8c7fa;
+  --dark-blue: #1778f2;
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   /* breakpoints */
@@ -196,7 +195,7 @@
   font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--bg-blue);
+  border-bottom: 3px solid var(--light-blue);
   width: 15%;
 }
 
@@ -206,7 +205,7 @@
   font-size: 18px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--bg-blue);
+  border-bottom: 3px solid var(--light-blue);
   width: 60%;
 }
 
@@ -442,11 +441,11 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: var(--bs-white);
-  /* box-shadow: 0 1px 1px var(--input-shadow-color); */
+  box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
 .inputField:focus {
-  box-shadow: 0 0 0 0.25rem var(--search-button-bg);
+  box-shadow: 0 0 0 0.25rem var(--light-blue);
 }
 
 .inputFieldModal {
@@ -486,17 +485,12 @@
 
 .addButton {
   margin-bottom: 10px;
-  background-color: var(--search-button-bg);
+  background-color: var(--light-blue);
   border-color: var(--grey-bg-color);
 }
 
-.addButton:is(:hover, :active, :focus) {
-  background-color: #286fe0 !important;
-  border-color: var(--search-button-border);
-}
-
-.addButton:not(:hover, :active, :focus) {
-  background-color: #286fe0 !important;
+.addButton:is(:hover, :active) {
+  background-color: var(--dark-blue) !important;
   border-color: var(--search-button-border);
 }
 
@@ -605,19 +599,16 @@
 }
 
 .editButton {
-  background-color: var(--bs-primary);
-  color: var(--bs-white);
+  background-color: var(--light-blue);
+  color: var(--brown-color);
   border-color: var(--grey-bg-color);
+  --bs-btn-active-bg: var(--dark-blue);
+  --bs-btn-active-border-color: var(--grey-bg-color);
 }
 
-.editButton:hover {
-  background-color: var(--subtle-blue-grey);
+.editButton:is(:hover, :active) {
+  background-color: var(--dark-blue);
   border-color: var(--search-button-border);
-}
-
-.editButton:focus,
-.editButton:active {
-  background-color: var(--bs-primary) !important;
 }
 
 .errorContainer {
@@ -778,13 +769,14 @@ hr {
 }
 
 .switch input {
-  box-shadow: 0 0 0.1rem 0.2rem var(--bg-blue);
+  /* box-shadow: 0 0 0.1rem 0.2rem var(--light-blue); */
+  --bs-form-switch-bg: transparent;
 }
 
 .switch input:checked {
-  background-color: #286fe0;
-  border: var(--bs-primary);
-  box-shadow: 0 0 0.1rem 0.2rem var(--bg-blue);
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
+  box-shadow: 0 0 0.1rem 0.2rem var(--light-blue);
 }
 
 .pageNotFound {
@@ -811,7 +803,7 @@ hr {
 .pageNotFound h1.head {
   font-size: 250px;
   font-weight: 900;
-  color: var(--bg-blue);
+  color: var(--light-blue);
   letter-spacing: 25px;
   margin: 10px 0 0 0;
 }
@@ -892,7 +884,7 @@ hr {
 
 .inputFieldPledge {
   background-color: var(--bs-white);
-  box-shadow: 0 1px 1px var(--bg-blue);
+  box-shadow: 0 1px 1px var(--light-blue);
 }
 
 .dropdownPledge {
@@ -1072,7 +1064,7 @@ hr {
 }
 
 .toggleBtnPledge:is(:hover) + label {
-  color: var(--bg-blue) !important;
+  color: var(--light-blue) !important;
 }
 
 .card {
@@ -1323,7 +1315,7 @@ hr {
 }
 
 .customcell {
-  background-color: var(--bg-blue) !important;
+  background-color: var(--light-blue) !important;
   color: var(--bs-white) !important;
   font-size: medium !important;
   font-weight: 500 !important;
@@ -1349,7 +1341,7 @@ hr {
 }
 
 .table-body > .table-row:nth-child(2n) {
-  background: var(--bg-blue) !important;
+  background: var(--light-blue) !important;
 }
 
 .organizationFundCampaignContainer {
@@ -1716,8 +1708,13 @@ hr {
 .modalHeader {
   border: none;
   padding-bottom: 0;
-  background-color: var(--bs-primary) !important;
+  background-color: var(--white-color) !important;
   padding: 1rem 1rem;
+  color: #000000;
+}
+
+.modalHeader div {
+  color: #000000 !important;
 }
 
 .label {
@@ -1814,7 +1811,7 @@ hr {
 }
 
 .toggleBtn:hover {
-  color: var(--bg-blue) !important;
+  color: var(--light-blue) !important;
 }
 
 input[type='radio']:checked + label {
@@ -1941,12 +1938,19 @@ input[type='radio']:checked + label:hover {
 
 .active {
   background-color: var(--status-active-bg);
+  color: var(--light-blue) !important;
+  border-color: var(--light-blue) !important;
 }
 
 .pending {
   background-color: var(--status-pending-bg);
-  color: var(--status-pending-text);
-  border-color: var(--status-pending-border);
+  color: var(--light-blue) !important;
+  border-color: var(--light-blue) !important;
+}
+
+.checkboxButton input:checked {
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
 }
 
 /* Modals */
@@ -2027,7 +2031,7 @@ input[type='radio']:checked + label:hover {
   border: 0.5px solid var(--brown-color);
 }
 .searchButtonOrgList {
-  background-color: var(--bg-blue);
+  background-color: var(--light-blue);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -3565,7 +3569,7 @@ button[data-testid='createPostBtn'] {
     display: flex !important;
     align-items: center;
     background-color: transparent;
-    color: var(--bg-blue);
+    color: var(--light-blue);
   }
 
   .entryaction .spinner-grow {
@@ -3573,6 +3577,86 @@ button[data-testid='createPostBtn'] {
     width: 1rem;
     margin-right: 8px;
   }
+}
+
+.entrytoggle {
+  margin: 24px 24px 0 auto;
+  width: fit-content;
+}
+
+.entryaction {
+  display: flex !important;
+}
+
+.entryaction i {
+  margin-right: 8px;
+  margin-top: 4px;
+}
+
+.entryaction .spinner-grow {
+  height: 1rem;
+  width: 1rem;
+  margin-right: 8px;
+}
+
+.admedia {
+  object-fit: cover;
+  height: 16rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.addCard {
+  width: 28rem;
+}
+
+.dropdownButton {
+  background-color: transparent;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 8px 10px;
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownmenu {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  width: 120px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 5px 0;
+  margin: 0;
+  list-style-type: none;
+  right: 0;
+  top: 100%;
+}
+
+.dropdownmenu li {
+  cursor: pointer;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  color: #333;
+}
+
+.dropdownmenu li:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdownContainer:hover .dropdownmenu {
+  display: block;
 }
 
 .leftDrawer {

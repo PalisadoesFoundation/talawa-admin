@@ -113,7 +113,11 @@ function addOnEntry({
           </Card.Subtitle>
           <Card.Text>{description}</Card.Text>
           <Button
-            className={styles.entryaction}
+            className={
+              uninstalledOrgs.includes(currentOrg)
+                ? styles.addButton
+                : `btn btn-danger ${styles.removeButton}`
+            }
             variant="primary"
             // disabled={buttonLoading || !configurable}
             disabled={buttonLoading}

@@ -185,13 +185,13 @@ const Requests = (): JSX.Element => {
     <>
       <div>
         {/* Buttons Container */}
-        <div className={styles.btnsContainerBlockAndUnblock}>
-          <div className={styles.inputContainerBlockAndUnblock}>
-            <div className={styles.inputBlockAndUnblock}>
+        <div className={styles.head}>
+          <div className={styles.btnsContainer}>
+            <div className={styles.input}>
               <Form.Control
                 type="name"
                 id="searchBlockedUsers"
-                className="bg-white"
+                className={styles.inputField}
                 placeholder={
                   searchByFirstName
                     ? t('searchByFirstName')
@@ -206,16 +206,16 @@ const Requests = (): JSX.Element => {
               />
               <Button
                 tabIndex={-1}
-                className={styles.search}
+                className={styles.searchButton}
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
               >
                 <Search />
               </Button>
             </div>
-          </div>
-          <div className={styles.btnsBlockBlockAndUnblock}>
-            <div className={styles.largeBtnsWrapper}>
+            {/* <div className={styles.btnsBlockBlockAndUnblock}> */}
+            {/* <div className={styles.largeBtnsWrapper}> */}
+            <div className={styles.btnsBlock}>
               <SortingButton
                 title={t('sortOrganizations')}
                 sortingOptions={[
@@ -231,7 +231,9 @@ const Requests = (): JSX.Element => {
                 dataTestIdPrefix="userFilter"
                 className={`${styles.createButton} mt-2`}
               />
+            </div>
 
+            <div className={styles.btnsBlock}>
               <SortingButton
                 title={t('sortByName')}
                 sortingOptions={[
@@ -251,6 +253,8 @@ const Requests = (): JSX.Element => {
               />
             </div>
           </div>
+          {/* </div> */}
+          {/* </div> */}
         </div>
         {/* Table */}
         {loadingMembers === false &&

@@ -413,7 +413,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('postTitle1')}
               data-testid="modalTitle"
               autoComplete="off"
@@ -430,7 +430,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="descrip"
               id="descrip"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('information1')}
               data-testid="modalinfo"
               autoComplete="off"
@@ -455,6 +455,7 @@ function orgPost(): JSX.Element {
               multiple={false}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
+              className={`mb-3 ${styles.inputField}`}
             />
 
             {postformState.addMedia && file && (
@@ -506,13 +507,14 @@ function orgPost(): JSX.Element {
                   pinPost: !postformState.pinPost,
                 })
               }
+              className={styles.switch}
             />
           </Modal.Body>
 
           <Modal.Footer>
             <Button
               variant="secondary"
-              className={styles.closeButtonOrgPost}
+              className={styles.removeButton}
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
@@ -522,7 +524,7 @@ function orgPost(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createPostBtn"
-              className={`${styles.addButtonOrgPost} mt-2`}
+              className={`${styles.addButton} mt-2`}
             >
               {t('addPost')}
             </Button>

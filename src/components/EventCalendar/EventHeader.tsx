@@ -90,7 +90,7 @@ function eventHeader({
           />
           <Button
             variant="success"
-            className={styles.createButtonEventHeader}
+            className={styles.dropdown}
             onClick={showInviteModal}
             data-testid="createEventModalBtn"
           >
