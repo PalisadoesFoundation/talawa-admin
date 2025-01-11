@@ -5149,6 +5149,78 @@ button[data-testid='createPostBtn'] {
   color: var(--white-color);
 }
 
+/* Styles for Select component */
+.selectboxAdvertisementRegister {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.selectboxAdvertisementRegister .MuiOutlinedInput-root {
+  border-radius: 7px;
+  background-color: var(--input-area-color);
+}
+
+/* Add hover styles for the Select */
+.selectboxAdvertisementRegister
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: rgb(49, 187, 107) !important;
+}
+
+/* Add hover styles for MenuItems */
+.MuiMenuItem-root:hover {
+  background-color: rgb(49, 187, 107) !important;
+  color: white !important;
+}
+
+/* Add selected state styles */
+.MuiMenuItem-root.Mui-selected {
+  background-color: rgb(49, 187, 107) !important;
+  color: white !important;
+}
+
+.MuiMenuItem-root.Mui-selected:hover {
+  background-color: rgb(49, 187, 107) !important;
+  color: rgb(49, 187, 107) !important;
+}
+
+.selectboxAdvertisementRegister
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: rgb(49, 187, 107) !important;
+}
+
+.selectboxAdvertisementRegister .MuiInputLabel-root.Mui-focused {
+  color: rgb(49, 187, 107) !important;
+}
+
+.dateboxAdvertisementRegister {
+  width: 100%;
+}
+
+.dateboxAdvertisementRegister .MuiOutlinedInput-root {
+  border-radius: 7px;
+  background-color: var(--input-area-color);
+}
+
+.dateboxAdvertisementRegister
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: rgb(49, 187, 107) !important;
+}
+
+.dateboxAdvertisementRegister .MuiInputLabel-root.Mui-focused {
+  color: rgb(49, 187, 107) !important;
+}
+
+.dateboxAdvertisementRegister .MuiPickersDay-root.Mui-selected {
+  color: rgb(49, 187, 107) !important;
+}
+
+.dateboxAdvertisementRegister .MuiSvgIcon-root {
+  color: rgb(49, 187, 107);
+}
+
 .link_check {
   display: flex;
   justify-content: center;

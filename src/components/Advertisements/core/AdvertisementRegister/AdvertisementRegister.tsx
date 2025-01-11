@@ -13,6 +13,9 @@ import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
+import { DatePicker } from '@mui/x-date-pickers';
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import type { Dayjs } from 'dayjs';
 
 /**
  * Props for the `advertisementRegister` component.
@@ -357,49 +360,61 @@ function advertisementRegister({
               )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
-              <Form.Label>{t('Rtype')}</Form.Label>
-              <Form.Select
-                aria-label={t('Rtype')}
-                value={formState.type}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    type: e.target.value,
-                  });
-                }}
-              >
-                <option value="POPUP">Popup Ad</option>
-                <option value="BANNER">Banner Ad </option>
-              </Form.Select>
+              <FormControl className={styles.selectboxAdvertisementRegister}>
+                <InputLabel id="advertisement-type-label">
+                  {t('Rtype')}
+                </InputLabel>
+                <Select
+                  labelId="advertisement-type-label"
+                  value={formState.type}
+                  label={t('Rtype')}
+                  onChange={(e): void => {
+                    setFormState({
+                      ...formState,
+                      type: e.target.value as string,
+                    });
+                  }}
+                >
+                  <MenuItem value="POPUP">Popup Ad</MenuItem>
+                  <MenuItem value="BANNER">Banner Ad</MenuItem>
+                </Select>
+              </FormControl>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="registerForm.RstartDate">
-              <Form.Label>{t('RstartDate')}</Form.Label>
-              <Form.Control
-                type="date"
-                required
-                value={formState.startDate.toISOString().slice(0, 10)}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    startDate: new Date(e.target.value),
-                  });
+              <DatePicker
+                label={t('RstartDate')}
+                className={styles.dateboxAdvertisementRegister}
+                value={dayjs(formState.startDate)}
+                onChange={(date: Dayjs | null): void => {
+                  if (date) {
+                    setFormState({
+                      ...formState,
+                      startDate: date.toDate(),
+                      endDate:
+                        formState.endDate < date.toDate()
+                          ? date.toDate()
+                          : formState.endDate,
+                    });
+                  }
                 }}
               />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="registerForm.RDate">
-              <Form.Label>{t('RendDate')}</Form.Label>
-              <Form.Control
-                type="date"
-                required
-                value={formState.endDate.toISOString().slice(0, 10)}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    endDate: new Date(e.target.value),
-                  });
+              <DatePicker
+                label={t('RendDate')}
+                className={styles.dateboxAdvertisementRegister}
+                value={dayjs(formState.endDate)}
+                onChange={(date: Dayjs | null): void => {
+                  if (date) {
+                    setFormState({
+                      ...formState,
+                      endDate: date.toDate(),
+                    });
+                  }
                 }}
+                minDate={dayjs(formState.startDate)}
               />
             </Form.Group>
           </Form>
