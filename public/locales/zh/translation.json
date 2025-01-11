@@ -1262,6 +1262,7 @@
     "endOfResults": "结果结束"
   },
   "userChat": {
+    "title": "聊天",
     "add": "添加",
     "chat": "聊天",
     "contacts": "联系方式",

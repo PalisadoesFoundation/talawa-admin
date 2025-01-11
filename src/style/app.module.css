@@ -48,7 +48,8 @@
   --subtle-blue-grey-hover: #5f7e91;
   --white: #fff;
   --black: black;
-
+  --rating-star-filled: #ff6d75;
+  --rating-star-hover: #ff3d47;
   /* Background and Border */
   --table-bg: #eaebef;
   --tablerow-bg: #eff1f7;
@@ -90,9 +91,11 @@
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
-  --table-head-bg: var(--bs-primary, var(--blue-color));
+
+  --table-head-bg: var(--blue-subtle, var(--blue-color));
   --table-head-color: var(--bs-white, var(--white-color));
-  --table-header-color: var(--bs-greyish-black, var(--black-color));
+
+  --table-header-color: var(--bs-white, var(--bs-gray-300));
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
@@ -105,6 +108,7 @@
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1024px;
 }
+
 .fonts {
   color: var(--grey-bg-color-dark);
 }
@@ -270,13 +274,13 @@
 }
 
 .dropdown {
-  background-color: var(--bs-white);
+  background-color: var(--bs-white) !important;
   border: 1px solid var(--brown-color);
-  color: var(--brown-color);
+  color: var(--brown-color) !important;
   position: relative;
   display: inline-block;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  /* margin-top: 10px;
+  margin-bottom: 10px; */
 }
 
 .dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
@@ -385,8 +389,8 @@
 .createButton {
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
-  margin-top: 10px;
-  margin-left: 5px;
+  /* margin-top: 10px; */
+  /* margin-left: 5px; */
   border: 1px solid var(--brown-color);
 }
 
@@ -702,7 +706,7 @@ hr {
   top: 50%;
   width: 50%;
   height: 1px;
-  background: #fff;
+  background: var(--white);
   content: '';
 }
 .pageNotFound h1.head span:before {
@@ -939,7 +943,17 @@ hr {
 .card {
   width: fit-content;
 }
+.cardContainer {
+  width: 300px;
+}
 
+.ratingFilled {
+  color: var(--rating-star-filled); /* Color for filled stars */
+}
+
+.ratingHover {
+  color: var(--rating-star-hover); /* Color for star on hover */
+}
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
@@ -1005,7 +1019,7 @@ hr {
 }
 
 .justifyspOrganizationEvents {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   margin-top: 20px;
 }
@@ -1449,6 +1463,7 @@ hr {
     flex-direction: column;
     justify-content: center;
   }
+
   .btnsContainer .btnsBlock {
     display: block;
     margin-top: 1rem;
@@ -1486,13 +1501,27 @@ hr {
     margin: 1.5rem 0;
   }
 
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .btnsContainer > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
   .btnsContainer .btnsBlock {
+    display: block;
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
   .btnsContainer .btnsBlock button {
-    margin: 0;
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
   }
 
   .btnsContainer .btnsBlock div button {
@@ -1563,6 +1592,12 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer .btnsBlock button {
+    margin-left: 0;
+  }
 }
 
 .errorMessage {
@@ -1743,14 +1778,6 @@ input[type='radio']:checked + label:hover {
 
 .inputFields {
   box-shadow: 0 1px 1px var(--brand-primary);
-}
-
-.dropdowns {
-  background-color: var(--bs-white);
-  border: 1px solid var(--light-green);
-  position: relative;
-  display: inline-block;
-  color: var(--light-green);
 }
 
 .chipIcon {
@@ -3719,7 +3746,7 @@ button[data-testid='createPostBtn'] {
 
 .primaryText {
   font-weight: bold;
-  color: var(--bs-emphasis-color, #000);
+  color: var(--bs-emphasis-color, var(--black-color));
   @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
 }
 
@@ -3772,7 +3799,7 @@ button[data-testid='createPostBtn'] {
 
 .inactiveButton {
   background-color: transparent;
-  color: var(--bs-emphasis-color, #000);
+  color: var(--bs-emphasis-color, var(--black-color));
 
   &:hover {
     background-color: var(--grey-bg-color);
@@ -4605,26 +4632,39 @@ button[data-testid='createPostBtn'] {
   display: flex;
   position: relative;
   width: 100%;
-  margin-top: 10px;
+  overflow: hidden; /* Ensures content doesn't overflow the card */
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .previewVenueModal img {
   width: 400px;
   height: auto;
+  object-fit: cover; /* Ensures the image stays within the boundaries */
 }
 
 .closeButtonP {
   position: absolute;
   top: 0px;
   right: 0px;
+  width: 32px; /* Make the button circular */
+  height: 32px; /* Make the button circular */
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
+  border-radius: 50%;
   border: none;
   color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.closeButtonP:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
 
 /* YearlyEventCalender.tsx */
@@ -5060,12 +5100,15 @@ button[data-testid='createPostBtn'] {
   position: relative;
   width: 100%;
   margin-top: 10px;
+  overflow: hidden; /* Ensures content doesn't overflow the card */
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .previewAdvertisementRegister img {
   width: 400px;
   height: auto;
+  object-fit: cover; /* Ensures the image stays within the boundaries */
 }
 
 .previewAdvertisementRegister video {
@@ -5074,14 +5117,27 @@ button[data-testid='createPostBtn'] {
 }
 
 .closeButtonAdvertisementRegister {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 32px; /* Make the button circular */
+  height: 32px; /* Make the button circular */
   background: transparent;
+  transform: scale(1.2);
   cursor: pointer;
+  border-radius: 50%;
   border: none;
   color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
-  margin-bottom: 10px;
-  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.closeButtonAdvertisementRegister:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
 
 .buttonAdvertisementRegister {
@@ -5419,7 +5475,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .flex_grow {
-  flex-grow: 1;
+  flex-grow: 0.5;
 }
 
 .space {
@@ -5446,6 +5502,34 @@ button[data-testid='createPostBtn'] {
 .selectTypeEventHeader {
   border-radius: 10px;
   margin-left: 5px;
+}
+
+@media (max-width: 520px) {
+  .calendar__header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .space {
+    display: block !important;
+    text-align: center;
+  }
+
+  .space > * {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* .input {
+    width: 100%; 
+  }
+
+  .createButton {
+    margin: 0 auto;
+    width: 100%; 
+  } */
 }
 
 /* EventListCardModals.tsx */
@@ -5885,4 +5969,73 @@ button[data-testid='createPostBtn'] {
   margin-top: 20vh;
   margin-left: 13vw;
   max-width: 80vw;
+}
+
+.btnsContainer .input {
+  width: 70%;
+}
+
+.btnsContainer .inputContainer button {
+  width: 52px;
+}
+
+.largeBtnsWrapper {
+  display: flex;
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btnsContainer .input {
+    width: 100%;
+  }
+
+  .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
+  }
+}
+
+/* For mobile devices  */
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .largeBtnsWrapper {
+    flex-direction: column;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
 }
