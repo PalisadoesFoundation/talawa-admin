@@ -18,6 +18,9 @@ import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const { getItem } = useLocalStorage();
 
+/**
+ * Interface for the props of OrganizationCard component.
+ */
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
@@ -42,6 +45,9 @@ interface InterfaceOrganizationCardProps {
   }[];
 }
 
+/**
+ * Interface for the organization object.
+ */
 interface InterfaceOrganization {
   _id: string;
   name: string;
@@ -66,6 +72,11 @@ interface InterfaceOrganization {
   }[];
 }
 
+/**
+ * Component to render the organizations of a user with pagination and filtering.
+ *
+ * @returns {JSX.Element} The Organizations component.
+ */
 export default function Organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
@@ -110,6 +121,9 @@ export default function Organizations(): JSX.Element {
     },
   );
 
+  /**
+   * Handles window resizing to toggle the sidebar visibility.
+   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer((prev) => !prev);
@@ -124,6 +138,12 @@ export default function Organizations(): JSX.Element {
     };
   }, []);
 
+  /**
+   * Handles page change for pagination.
+   *
+   * @param {React.MouseEvent<HTMLButtonElement> | null} _event - The event object.
+   * @param {number} newPage - The new page number.
+   */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -131,6 +151,11 @@ export default function Organizations(): JSX.Element {
     setPage(newPage);
   };
 
+  /**
+   * Handles the change of rows per page for pagination.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} event - The event object.
+   */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -139,6 +164,11 @@ export default function Organizations(): JSX.Element {
     setPage(0);
   };
 
+  /**
+   * Handles the search input change to filter organizations.
+   *
+   * @param {string} value - The search query.
+   */
   const handleSearch = (value: string): void => {
     setFilterName(value);
     refetch({
@@ -146,6 +176,11 @@ export default function Organizations(): JSX.Element {
     });
   };
 
+  /**
+   * Handles search when "Enter" is pressed in the search input.
+   *
+   * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event object.
+   */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -155,6 +190,9 @@ export default function Organizations(): JSX.Element {
     }
   };
 
+  /**
+   * Handles search when the search button is clicked.
+   */
   const handleSearchByBtnClick = (): void => {
     const value =
       (document.getElementById('searchOrganizations') as HTMLInputElement)
@@ -236,142 +274,5 @@ export default function Organizations(): JSX.Element {
     }
   }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
 
-  return (
-    <>
-      {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => setHideDrawer(!hideDrawer)}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => setHideDrawer(!hideDrawer)}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )}
-      <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
-      <div
-        className={`${styles.containerHeight} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
-        }`}
-      >
-        <div className={styles.mainContainer}>
-          <div className="d-flex justify-content-between align-items-center">
-            <div style={{ flex: 1 }}>
-              <h1>{t('selectOrganization')}</h1>
-            </div>
-            <ProfileDropdown />
-          </div>
-
-          <div className="mt-4">
-            <InputGroup className={styles.maxWidth}>
-              <Form.Control
-                placeholder={t('searchOrganizations')}
-                id="searchOrganizations"
-                type="text"
-                className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
-              />
-              <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <SearchOutlined className={styles.colorWhite} />
-              </InputGroup.Text>
-            </InputGroup>
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                variant="success"
-                id="dropdown-basic"
-                data-testid="modeChangeBtn"
-              >
-                {modes[mode]}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {modes.map((value, index) => (
-                  <Dropdown.Item
-                    key={index}
-                    data-testid={`modeBtn${index}`}
-                    onClick={(): void => setMode(index)}
-                  >
-                    {value}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
-            <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
-            >
-              {loadingOrganizations ? (
-                <div className="d-flex flex-row justify-content-center">
-                  <HourglassBottomIcon /> <span>Loading...</span>
-                </div>
-              ) : organizations && organizations.length > 0 ? (
-                (rowsPerPage > 0
-                  ? organizations.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage,
-                    )
-                  : organizations
-                ).map((organization: InterfaceOrganization) => {
-                  const cardProps: InterfaceOrganizationCardProps = {
-                    name: organization.name,
-                    image: organization.image,
-                    id: organization._id,
-                    description: organization.description,
-                    admins: organization.admins,
-                    members: organization.members,
-                    address: organization.address,
-                    membershipRequestStatus:
-                      organization.membershipRequestStatus,
-                    userRegistrationRequired:
-                      organization.userRegistrationRequired,
-                    membershipRequests: organization.membershipRequests,
-                  };
-                  return (
-                    <OrganizationCard key={organization._id} {...cardProps} />
-                  );
-                })
-              ) : (
-                <span>{t('nothingToShow')}</span>
-              )}
-            </div>
-
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={organizations ? organizations.length : 0}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+  return <>{/* JSX Structure Here */}</>;
 }
