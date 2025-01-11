@@ -172,7 +172,9 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: white;
-  box-shadow: 0 1px 1px var(--input-shadow-color);
+  box-shadow: 5px 5px 4px 0px var(--input-shadow-color);
+  -webkit-box-shadow: 5px 5px 4px 0px var(--input-shadow-color);
+  -moz-box-shadow: 5px 5px 4px 0px var(--input-shadow-color);
 }
 
 .inputFieldModal {
@@ -189,7 +191,9 @@
 .searchButton {
   margin-bottom: 10px;
   background-color: var(--search-button-bg);
-  border-color: var(--search-button-border);
+  /* border-color: var(--search-button-border); */
+  height: 48px;
+  border: none;
   position: absolute;
   z-index: 10;
   bottom: 0;

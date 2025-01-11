@@ -485,6 +485,7 @@ function ManageTag(): JSX.Element {
                             height="100%"
                             alignItems="center"
                             justifyContent="center"
+                            style={{ backgroundColor: 'white' }}
                           >
                             {t('noAssignedMembersFound')}
                           </Stack>

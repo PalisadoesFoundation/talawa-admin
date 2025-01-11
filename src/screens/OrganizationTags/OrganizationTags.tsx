@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Edit, Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
 import { useNavigate, useParams, Link } from 'react-router-dom';
@@ -12,7 +12,6 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import IconComponent from 'components/IconComponent/IconComponent';
 import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
@@ -287,7 +286,7 @@ function OrganizationTags(): JSX.Element {
             data-testid="manageTagBtn"
             className={styles.addButton}
           >
-            {t('manageTag')}
+            <Edit sx={{ width: 20 }} /> {t('manageTag')}
           </Button>
         );
       },
@@ -300,7 +299,12 @@ function OrganizationTags(): JSX.Element {
         <div>
           <div className={styles.btnsContainer}>
             <div className={styles.input}>
-              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+              <Button
+                className={`${styles.searchButton} `}
+                data-testid={'searchbtn'}
+              >
+                <Search className={styles.searchIcon} />
+              </Button>
               <Form.Control
                 type="text"
                 id="tagName"
@@ -360,7 +364,7 @@ function OrganizationTags(): JSX.Element {
             <Loader />
           ) : (
             <div className="mb-4">
-              <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">
+              {/* <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">
                 <div className="ms-3 my-1">
                   <IconComponent name="Tag" />
                 </div>
@@ -368,7 +372,7 @@ function OrganizationTags(): JSX.Element {
                 <div className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}>
                   {'Tags'}
                 </div>
-              </div>
+              </div> */}
 
               <div
                 id="orgUserTagsScrollableDiv"
@@ -394,6 +398,7 @@ function OrganizationTags(): JSX.Element {
                       noRowsOverlay: /* istanbul ignore next */ () => (
                         <Stack
                           height="100%"
+                          sx={{ backgroundColor: 'white' }}
                           alignItems="center"
                           justifyContent="center"
                         >
@@ -402,10 +407,10 @@ function OrganizationTags(): JSX.Element {
                       ),
                     }}
                     sx={{
-                      borderRadius: '20px',
+                      borderRadius: '16px',
                       backgroundColor: '#EAEBEF',
                       '& .MuiDataGrid-row': {
-                        backgroundColor: '#eff1f7',
+                        backgroundColor: '#fffff',
                         '&:focus-within': {
                           // outline: '2px solid #000',
                           outlineOffset: '-2px',
