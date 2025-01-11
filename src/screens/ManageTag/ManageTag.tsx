@@ -207,7 +207,6 @@ function ManageTag(): JSX.Element {
         },
       });
 
-      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('tagUpdationSuccess'));
         userTagAssignedMembersRefetch();
