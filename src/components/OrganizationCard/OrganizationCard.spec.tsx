@@ -10,7 +10,7 @@ import i18nForTest from 'utils/i18nForTest';
  * This file contains unit tests for the `OrganizationCard` component.
  *
  * The tests cover:
- * 
+ *
  * - Rendering the component with all provided props and verifying the correct display of text elements.
  * - Ensuring the component handles cases where certain props (like image) are not provided.
  *
