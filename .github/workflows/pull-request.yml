@@ -299,22 +299,40 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '20.x'
 
-      - name: resolve dependency
-        run: npm install -g @graphql-inspector/cli
+      - name: Install dependencies
+        run: npm install
       
       - name: Clone API Repository
         run: |
           # Retrieve the complete branch name directly from the GitHub context
           FULL_BRANCH_NAME=${{ github.base_ref }}
-          echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
+          echo "FULL_BRANCH_NAME: $FULL_BRANCH_NAME"
           
           # Clone the specified repository using the extracted branch name
-          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+          if ! git ls-remote --heads https://github.com/PalisadoesFoundation/talawa-api.git $FULL_BRANCH_NAME | grep -q .; then
+            echo "Error: Branch $FULL_BRANCH_NAME does not exist in talawa-api repository"
+            exit 1
+          fi
+          
+          if ! git clone --branch $FULL_BRANCH_NAME --depth 1 https://github.com/PalisadoesFoundation/talawa-api; then
+            echo "Error: Failed to clone talawa-api repository"
+            exit 1
+          fi
 
       - name: Validate Documents
-        run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+        run: |
+          if [ ! -f './talawa-api/schema.graphql' ]; then
+            echo "Error: schema.graphql not found in talawa-api"
+            exit 1
+          fi
+          GRAPHQL_FILES=$(find ./src/GraphQl -name "*.ts" -type f)
+          if [ -z "$GRAPHQL_FILES" ]; then
+            echo "Error: No GraphQL TypeScript files found"
+            exit 1
+          fi
+          graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
         
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
