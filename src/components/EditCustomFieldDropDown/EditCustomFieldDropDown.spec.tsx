@@ -49,15 +49,15 @@ describe('Testing Custom Field Dropdown', () => {
 
     expect(getByText('Number')).toBeInTheDocument();
 
-    act(() => {
-      userEvent.click(getByTestId('toggleBtn'));
+    act(async () => {
+      await userEvent.click(getByTestId('toggleBtn'));
     });
 
     await wait();
 
     availableFieldTypes.forEach(async (_, index) => {
-      act(() => {
-        userEvent.click(getByTestId(`dropdown-btn-${index}`));
+      act(async () => {
+        await userEvent.click(getByTestId(`dropdown-btn-${index}`));
       });
     });
   });

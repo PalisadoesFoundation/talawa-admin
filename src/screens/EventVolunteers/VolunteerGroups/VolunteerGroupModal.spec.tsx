@@ -196,7 +196,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
@@ -246,7 +246,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -274,7 +274,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupUpdated);
@@ -304,7 +304,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -324,7 +324,7 @@ describe('Testing VolunteerGroupModal', () => {
     });
 
     userEvent.clear(vrInput);
-    userEvent.type(vrInput, '1{backspace}');
+    await userEvent.type(vrInput, '1{backspace}');
 
     await waitFor(() => {
       expect(vrInput).toHaveValue('');
@@ -347,7 +347,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();

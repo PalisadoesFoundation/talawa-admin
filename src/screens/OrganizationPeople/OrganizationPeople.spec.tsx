@@ -828,19 +828,19 @@ describe('Organization People Page', () => {
     await wait();
     const dropdownToggles = screen.getAllByTestId('role');
 
-    dropdownToggles.forEach((dropdownToggle) => {
-      userEvent.click(dropdownToggle);
+    dropdownToggles.forEach(async (dropdownToggle) => {
+      await userEvent.click(dropdownToggle);
     });
 
     const memebersDropdownItem = screen.getByTestId('members');
-    userEvent.click(memebersDropdownItem);
+    await userEvent.click(memebersDropdownItem);
     await wait();
 
     const findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
       searchData.fullNameMember,
     );
@@ -919,16 +919,16 @@ describe('Organization People Page', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await waitFor(() => {
+    await waitFor(async () => {
       const addmembersBtn = screen.getByTestId('addMembers');
       expect(addmembersBtn).toBeInTheDocument();
-      userEvent.click(addmembersBtn);
+      await userEvent.click(addmembersBtn);
     });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const newUserBtn = screen.getByTestId('newUser');
       expect(newUserBtn).toBeInTheDocument();
-      userEvent.click(newUserBtn);
+      await userEvent.click(newUserBtn);
     });
 
     await waitFor(() => {
@@ -979,16 +979,16 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const addmembersBtn = screen.getByTestId('addMembers');
       expect(addmembersBtn).toBeInTheDocument();
-      userEvent.click(addmembersBtn);
+      await userEvent.click(addmembersBtn);
     });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const newUserBtn = screen.getByTestId('newUser');
       expect(newUserBtn).toBeInTheDocument();
-      userEvent.click(newUserBtn);
+      await userEvent.click(newUserBtn);
     });
 
     await waitFor(() => {
@@ -1058,16 +1058,16 @@ describe('Organization People Page', () => {
     );
 
     // Open modal and fill form
-    await waitFor(() => {
+    await waitFor(async () => {
       const addmembersBtn = screen.getByTestId('addMembers');
       expect(addmembersBtn).toBeInTheDocument();
-      userEvent.click(addmembersBtn);
+      await userEvent.click(addmembersBtn);
     });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const newUserBtn = screen.getByTestId('newUser');
       expect(newUserBtn).toBeInTheDocument();
-      userEvent.click(newUserBtn);
+      await userEvent.click(newUserBtn);
     });
 
     await waitFor(() => {
@@ -1119,7 +1119,7 @@ describe('Organization People Page', () => {
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
     // Only First Name
-    userEvent.type(fullNameInput, searchData.fullNameMember);
+    await userEvent.type(fullNameInput, searchData.fullNameMember);
     await wait();
 
     let findtext = screen.getByText(/Aditya Memberguy/i);
@@ -1161,16 +1161,16 @@ describe('Organization People Page', () => {
     const dropdownToggles = screen.getAllByTestId('role');
 
     // Click the dropdown toggle to open the dropdown menu
-    dropdownToggles.forEach((dropdownToggle) => {
-      userEvent.click(dropdownToggle);
+    dropdownToggles.forEach(async (dropdownToggle) => {
+      await userEvent.click(dropdownToggle);
     });
 
     // Click the "Admin" dropdown item
     const adminDropdownItem = screen.getByTestId('admins');
-    userEvent.click(adminDropdownItem);
+    await userEvent.click(adminDropdownItem);
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
       searchData.fullNameAdmin,
     );
@@ -1214,21 +1214,21 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('role'));
+    await userEvent.click(screen.getByTestId('role'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('admins'));
+    await userEvent.click(screen.getByTestId('admins'));
     await wait();
 
     // Type the full name into the input field
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
-    userEvent.type(fullNameInput, searchData.fullNameAdmin);
+    await userEvent.type(fullNameInput, searchData.fullNameAdmin);
 
     // Wait for the results to update
     await wait();
     const btn = screen.getByTestId('searchbtn');
-    userEvent.click(btn);
+    await userEvent.click(btn);
     // remove this comment when table fecthing functionality is fixed
     // Check if the expected name is present in the results
     // let findtext = screen.getByText(/Aditya Adminguy/i);
@@ -1264,13 +1264,13 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     expect(screen.getByTestId('existingUser')).toBeInTheDocument();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('existingUser'));
+    await userEvent.click(screen.getByTestId('existingUser'));
     await wait();
 
     expect(
@@ -1279,7 +1279,7 @@ describe('Organization People Page', () => {
     await wait();
 
     const addBtn = screen.getAllByTestId('addBtn');
-    userEvent.click(addBtn[0]);
+    await userEvent.click(addBtn[0]);
   });
 
   test('Open and search existing user', async () => {
@@ -1307,11 +1307,11 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('existingUser'));
+    await userEvent.click(screen.getByTestId('existingUser'));
     await wait();
 
     expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
@@ -1346,16 +1346,16 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('newUser'));
+    await userEvent.click(screen.getByTestId('newUser'));
     await wait();
 
     expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('closeBtn'));
+    await userEvent.click(screen.getByTestId('closeBtn'));
   });
 
   test('Testing add new user modal', async () => {
@@ -1383,11 +1383,11 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('newUser'));
+    await userEvent.click(screen.getByTestId('newUser'));
     await wait();
 
     expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
@@ -1410,18 +1410,18 @@ describe('Organization People Page', () => {
     fireEvent.change(screen.getByTestId('passwordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showPassword'));
+    await userEvent.click(screen.getByTestId('showPassword'));
     expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
 
     fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    await userEvent.click(screen.getByTestId('showConfirmPassword'));
     expect(screen.getByTestId('confirmPasswordInput')).toHaveValue(
       'dishatalreja',
     );
 
-    userEvent.click(screen.getByTestId('createBtn'));
+    await userEvent.click(screen.getByTestId('createBtn'));
   });
 
   test('Throw invalid details error in add new user modal', async () => {
@@ -1449,11 +1449,11 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('newUser'));
+    await userEvent.click(screen.getByTestId('newUser'));
     await wait();
 
     expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
@@ -1476,16 +1476,16 @@ describe('Organization People Page', () => {
     fireEvent.change(screen.getByTestId('passwordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showPassword'));
+    await userEvent.click(screen.getByTestId('showPassword'));
     expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
 
     fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
       target: { value: 'disha' },
     });
-    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    await userEvent.click(screen.getByTestId('showConfirmPassword'));
     expect(screen.getByTestId('confirmPasswordInput')).toHaveValue('disha');
 
-    userEvent.click(screen.getByTestId('createBtn'));
+    await userEvent.click(screen.getByTestId('createBtn'));
   });
 
   test('Throw passwordNotMatch error in add new user modal', async () => {
@@ -1513,11 +1513,11 @@ describe('Organization People Page', () => {
     await wait();
 
     // Click on the dropdown toggle to open the menu
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
 
     // Click on the "Admins" option in the dropdown menu
-    userEvent.click(screen.getByTestId('newUser'));
+    await userEvent.click(screen.getByTestId('newUser'));
     await wait();
 
     expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
@@ -1535,18 +1535,18 @@ describe('Organization People Page', () => {
     fireEvent.change(screen.getByTestId('passwordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showPassword'));
+    await userEvent.click(screen.getByTestId('showPassword'));
     expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
 
     fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
       target: { value: 'dishatalreja' },
     });
-    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    await userEvent.click(screen.getByTestId('showConfirmPassword'));
     expect(screen.getByTestId('confirmPasswordInput')).toHaveValue(
       'dishatalreja',
     );
 
-    userEvent.click(screen.getByTestId('createBtn'));
+    await userEvent.click(screen.getByTestId('createBtn'));
   });
 
   test('Testing USERS list', async () => {
@@ -1577,15 +1577,15 @@ describe('Organization People Page', () => {
 
     const dropdownToggles = screen.getAllByTestId('role');
 
-    dropdownToggles.forEach((dropdownToggle) => {
-      userEvent.click(dropdownToggle);
+    dropdownToggles.forEach(async (dropdownToggle) => {
+      await userEvent.click(dropdownToggle);
     });
 
     const usersDropdownItem = screen.getByTestId('users');
-    userEvent.click(usersDropdownItem);
+    await userEvent.click(usersDropdownItem);
     await wait();
     const btn = screen.getByTestId('searchbtn');
-    userEvent.click(btn);
+    await userEvent.click(btn);
     await wait();
     expect(window.location.href).toBe(
       'http://localhost/orgpeople/6401ff65ce8e8406b8f07af1',
@@ -1618,9 +1618,9 @@ describe('Organization People Page', () => {
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
     // Only Full Name
-    userEvent.type(fullNameInput, searchData.fullNameUser);
+    await userEvent.type(fullNameInput, searchData.fullNameUser);
     const btn = screen.getByTestId('searchbtn');
-    userEvent.click(btn);
+    await userEvent.click(btn);
     await wait();
     expect(window.location.href).toBe(
       'http://localhost/orgpeople/6401ff65ce8e8406b8f07af2',
@@ -1647,12 +1647,12 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByTestId('addMembers'));
+    await userEvent.click(screen.getByTestId('addMembers'));
     await wait();
-    userEvent.click(screen.getByTestId('existingUser'));
+    await userEvent.click(screen.getByTestId('existingUser'));
     await wait();
     const btn = screen.getByTestId('submitBtn');
-    userEvent.click(btn);
+    await userEvent.click(btn);
   });
 
   test('Datagrid renders with members data', async () => {
@@ -1670,7 +1670,7 @@ describe('Organization People Page', () => {
     const dataGrid = screen.getByRole('grid');
     expect(dataGrid).toBeInTheDocument();
     const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
-    userEvent.click(removeButtons[0]);
+    await userEvent.click(removeButtons[0]);
   });
 
   test('Datagrid renders with admin data', async () => {
@@ -1687,14 +1687,14 @@ describe('Organization People Page', () => {
 
     await wait();
     const dropdownToggles = screen.getAllByTestId('role');
-    dropdownToggles.forEach((dropdownToggle) => {
-      userEvent.click(dropdownToggle);
+    dropdownToggles.forEach(async (dropdownToggle) => {
+      await userEvent.click(dropdownToggle);
     });
     const adminDropdownItem = screen.getByTestId('admins');
-    userEvent.click(adminDropdownItem);
+    await userEvent.click(adminDropdownItem);
     await wait();
     const removeButtons = screen.getAllByTestId('removeAdminModalBtn');
-    userEvent.click(removeButtons[0]);
+    await userEvent.click(removeButtons[0]);
   });
 
   test('No Mock Data test', async () => {
@@ -1888,11 +1888,11 @@ test('Open and check if profile image is displayed for existing user', async () 
   await wait();
 
   // Click on the dropdown toggle to open the menu
-  userEvent.click(screen.getByTestId('addMembers'));
+  await userEvent.click(screen.getByTestId('addMembers'));
   await wait();
 
   // Click on the "Admins" option in the dropdown menu
-  userEvent.click(screen.getByTestId('existingUser'));
+  await userEvent.click(screen.getByTestId('existingUser'));
   await wait();
 
   expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
@@ -1937,16 +1937,16 @@ test('opening add user modal', async () => {
   await wait();
 
   const addmemberBtn = screen.getByTestId('addMembers');
-  userEvent.click(addmemberBtn);
+  await userEvent.click(addmemberBtn);
 
   const existUserBtn = screen.getByTestId('existingUser');
-  userEvent.click(existUserBtn);
+  await userEvent.click(existUserBtn);
 
   expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
   expect(screen.getByTestId('pluginNotificationHeader')).toBeInTheDocument();
 
   const closeButton = screen.getByLabelText('Close');
-  userEvent.click(closeButton);
+  await userEvent.click(closeButton);
   await wait();
   expect(screen.queryByTestId('addExistingUserModal')).not.toBeInTheDocument();
 });
@@ -1976,34 +1976,34 @@ test('modal state management - open, close, and toggle', async () => {
 
   expect(screen.queryByTestId('addNewUserModal')).not.toBeInTheDocument();
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const addmembersBtn = screen.getByTestId('addMembers');
-    userEvent.click(addmembersBtn);
+    await userEvent.click(addmembersBtn);
   });
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const newUserBtn = screen.getByTestId('newUser');
     expect(screen.getByTestId('newUser')).toBeInTheDocument();
-    userEvent.click(newUserBtn);
+    await userEvent.click(newUserBtn);
   });
 
   expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
 
   const modalHeader = screen.getByTestId('createUser');
-  userEvent.click(modalHeader);
+  await userEvent.click(modalHeader);
 
   expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
 
   const closeBtn = screen.getByTestId('closeBtn');
-  userEvent.click(closeBtn);
+  await userEvent.click(closeBtn);
 
   await waitFor(() => {
     expect(screen.queryByTestId('addNewUserModal')).not.toBeInTheDocument();
   });
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const newUserBtn = screen.getByTestId('newUser');
-    userEvent.click(newUserBtn);
+    await userEvent.click(newUserBtn);
   });
 
   expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
@@ -2011,13 +2011,13 @@ test('modal state management - open, close, and toggle', async () => {
   const modal = screen.getByTestId('addNewUserModal');
   fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const newUserBtn = screen.getByTestId('newUser');
-    userEvent.click(newUserBtn);
+    await userEvent.click(newUserBtn);
   });
 
   const firstNameInput = screen.getByTestId('firstNameInput');
-  userEvent.type(firstNameInput, 'John');
+  await userEvent.type(firstNameInput, 'John');
 
   fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
 });
@@ -2043,25 +2043,25 @@ test('testing out toast errors', async () => {
     </MockedProvider>,
   );
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const addmembersBtn = screen.getByTestId('addMembers');
-    userEvent.click(addmembersBtn);
+    await userEvent.click(addmembersBtn);
   });
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const newUserBtn = screen.getByTestId('newUser');
     expect(screen.getByTestId('newUser')).toBeInTheDocument();
-    userEvent.click(newUserBtn);
+    await userEvent.click(newUserBtn);
   });
 
   expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
 
   const modalHeader = screen.getByTestId('createUser');
-  userEvent.click(modalHeader);
+  await userEvent.click(modalHeader);
 
   const createBtn = screen.getByTestId('createBtn');
   expect(createBtn).toBeInTheDocument();
-  userEvent.click(createBtn);
+  await userEvent.click(createBtn);
 
   await waitFor(() => {
     expect(toast.error).toHaveBeenCalled();
@@ -2101,35 +2101,35 @@ test('handles GraphQL error when adding member', async () => {
 
   await wait();
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const addmembersBtn = screen.getByTestId('addMembers');
-    userEvent.click(addmembersBtn);
+    await userEvent.click(addmembersBtn);
   });
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const newUserBtn = screen.getByTestId('newUser');
     expect(screen.getByTestId('newUser')).toBeInTheDocument();
-    userEvent.click(newUserBtn);
+    await userEvent.click(newUserBtn);
   });
 
   expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
 
   const modalHeader = screen.getByTestId('createUser');
-  userEvent.click(modalHeader);
+  await userEvent.click(modalHeader);
 
   const firstNameInput = screen.getByTestId('firstNameInput');
   const lastNameInput = screen.getByTestId('lastNameInput');
   const emailInput = screen.getByTestId('emailInput');
   const passwordInput = screen.getByTestId('passwordInput');
 
-  userEvent.type(firstNameInput, 'Abhishek');
-  userEvent.type(lastNameInput, 'Raj');
-  userEvent.type(emailInput, 'test@gmail.com');
-  userEvent.type(passwordInput, 'abhishek');
+  await userEvent.type(firstNameInput, 'Abhishek');
+  await userEvent.type(lastNameInput, 'Raj');
+  await userEvent.type(emailInput, 'test@gmail.com');
+  await userEvent.type(passwordInput, 'abhishek');
 
   const createBtn = screen.getByTestId('createBtn');
   expect(createBtn).toBeInTheDocument();
-  userEvent.click(createBtn);
+  await userEvent.click(createBtn);
 
   await waitFor(() => {
     expect(toast.error).toHaveBeenCalled();
@@ -2168,15 +2168,15 @@ test('createMember handles error and shows toast notification', async () => {
     </MockedProvider>,
   );
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const addmembersBtn = screen.getByTestId('addMembers');
-    userEvent.click(addmembersBtn);
+    await userEvent.click(addmembersBtn);
   });
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const newUserBtn = screen.getByTestId('newUser');
     expect(screen.getByTestId('newUser')).toBeInTheDocument();
-    userEvent.click(newUserBtn);
+    await userEvent.click(newUserBtn);
   });
 
   expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();

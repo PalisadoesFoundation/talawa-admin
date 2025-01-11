@@ -99,7 +99,7 @@ describe('Testing Volunteer Delete Modal', () => {
 
     const yesBtn = screen.getByTestId('deleteyesbtn');
     expect(yesBtn).toBeInTheDocument();
-    userEvent.click(yesBtn);
+    await userEvent.click(yesBtn);
 
     await waitFor(() => {
       expect(itemProps[0].refetchVolunteers).toHaveBeenCalled();
@@ -114,7 +114,7 @@ describe('Testing Volunteer Delete Modal', () => {
 
     const noBtn = screen.getByTestId('deletenobtn');
     expect(noBtn).toBeInTheDocument();
-    userEvent.click(noBtn);
+    await userEvent.click(noBtn);
 
     await waitFor(() => {
       expect(itemProps[0].hide).toHaveBeenCalled();
@@ -127,7 +127,7 @@ describe('Testing Volunteer Delete Modal', () => {
 
     const yesBtn = screen.getByTestId('deleteyesbtn');
     expect(yesBtn).toBeInTheDocument();
-    userEvent.click(yesBtn);
+    await userEvent.click(yesBtn);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

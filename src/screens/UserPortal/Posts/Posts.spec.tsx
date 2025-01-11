@@ -309,7 +309,7 @@ describe('Testing Home Screen: User Portal', () => {
     const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
 
-    userEvent.click(startPostBtn);
+    await userEvent.click(startPostBtn);
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
   });
@@ -327,11 +327,11 @@ describe('Testing Home Screen: User Portal', () => {
     const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
 
-    userEvent.click(startPostBtn);
+    await userEvent.click(startPostBtn);
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
 
-    userEvent.type(screen.getByTestId('postInput'), 'some content');
+    await userEvent.type(screen.getByTestId('postInput'), 'some content');
 
     expect(screen.getByTestId('postInput')).toHaveValue('some content');
     await screen.findByAltText('Post Image Preview');
@@ -340,7 +340,7 @@ describe('Testing Home Screen: User Portal', () => {
     const closeButton = within(startPostModal).getByRole('button', {
       name: /close/i,
     });
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
     const closedModalText = screen.queryByText(/somethingOnYourMind/i);
     expect(closedModalText).not.toBeInTheDocument();
@@ -371,9 +371,9 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
     expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
     const dropdowns = await screen.findAllByTestId('dropdown');
-    userEvent.click(dropdowns[1]);
+    await userEvent.click(dropdowns[1]);
     const deleteButton = await screen.findByTestId('deletePost');
-    userEvent.click(deleteButton);
+    await userEvent.click(deleteButton);
   });
 });
 

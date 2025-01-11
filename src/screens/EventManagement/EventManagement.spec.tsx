@@ -83,7 +83,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      userEvent.click(backButton);
+      await userEvent.click(backButton);
       await waitFor(() => {
         const eventsScreen = screen.getByTestId('eventsScreen');
         expect(eventsScreen).toBeInTheDocument();
@@ -97,7 +97,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      userEvent.click(backButton);
+      await userEvent.click(backButton);
 
       await waitFor(() => {
         const userEventsScreen = screen.getByTestId('userEventsScreen');
@@ -112,7 +112,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      userEvent.click(backButton);
+      await userEvent.click(backButton);
 
       await waitFor(() => {
         const eventsScreen = screen.getByTestId('eventsScreen');
@@ -157,7 +157,7 @@ describe('Event Management', () => {
       ];
 
       for (const { button, tab } of tabsToTest) {
-        userEvent.click(screen.getByTestId(button));
+        await userEvent.click(screen.getByTestId(button));
         expect(screen.getByTestId(tab)).toBeInTheDocument();
       }
     });
@@ -203,7 +203,7 @@ describe('Event Management', () => {
       expect(dropdownContainer).toBeInTheDocument();
 
       await act(async () => {
-        userEvent.click(screen.getByTestId('tabsDropdownToggle'));
+        await userEvent.click(screen.getByTestId('tabsDropdownToggle'));
       });
 
       const tabOptions = [
@@ -226,7 +226,7 @@ describe('Event Management', () => {
         renderEventManagement();
       });
       await act(async () => {
-        userEvent.click(screen.getByTestId('tabsDropdownToggle'));
+        await userEvent.click(screen.getByTestId('tabsDropdownToggle'));
       });
 
       const tabOptions = [
@@ -240,8 +240,8 @@ describe('Event Management', () => {
       ];
 
       for (const option of tabOptions) {
-        act(() => {
-          userEvent.click(screen.getByTestId(`${option}DropdownItem`));
+        act(async () => {
+          await userEvent.click(screen.getByTestId(`${option}DropdownItem`));
         });
 
         expect(screen.getByTestId(`${option}DropdownItem`)).toHaveClass(

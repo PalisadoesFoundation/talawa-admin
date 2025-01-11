@@ -149,21 +149,21 @@ describe('Testing Organization Update', () => {
     fireEvent.change(dependentLocality, { target: { value: '' } });
 
     // Mocking filling form behaviour
-    userEvent.type(name, formData.name);
-    userEvent.type(des, formData.description);
-    userEvent.type(city, formData.address.city);
+    await userEvent.type(name, formData.name);
+    await userEvent.type(des, formData.description);
+    await userEvent.type(city, formData.address.city);
     userEvent.selectOptions(countryCode, formData.address.countryCode);
-    userEvent.type(line1, formData.address.line1);
-    userEvent.type(line2, formData.address.line2);
-    userEvent.type(postalCode, formData.address.postalCode);
-    userEvent.type(dependentLocality, formData.address.dependentLocality);
-    userEvent.type(sortingCode, formData.address.sortingCode);
+    await userEvent.type(line1, formData.address.line1);
+    await userEvent.type(line2, formData.address.line2);
+    await userEvent.type(postalCode, formData.address.postalCode);
+    await userEvent.type(dependentLocality, formData.address.dependentLocality);
+    await userEvent.type(sortingCode, formData.address.sortingCode);
     userEvent.upload(displayImage, formData.displayImage);
-    userEvent.click(userRegistrationRequired);
-    userEvent.click(isVisible);
+    await userEvent.click(userRegistrationRequired);
+    await userEvent.click(isVisible);
 
     await wait();
-    userEvent.click(saveChangesBtn);
+    await userEvent.click(saveChangesBtn);
 
     // Checking if the form got update accordingly
     expect(name).toHaveValue(formData.name);
@@ -235,20 +235,20 @@ describe('Testing Organization Update', () => {
     fireEvent.change(dependentLocality, { target: { value: '' } });
 
     // Mocking filling form behaviour
-    userEvent.type(name, formData.name);
-    userEvent.type(des, formData.description);
-    userEvent.type(city, formData.address.city);
+    await userEvent.type(name, formData.name);
+    await userEvent.type(des, formData.description);
+    await userEvent.type(city, formData.address.city);
     userEvent.selectOptions(countryCode, formData.address.countryCode);
-    userEvent.type(line1, formData.address.line1);
-    userEvent.type(line2, formData.address.line2);
-    userEvent.type(postalCode, formData.address.postalCode);
-    userEvent.type(dependentLocality, formData.address.dependentLocality);
-    userEvent.type(sortingCode, formData.address.sortingCode);
+    await userEvent.type(line1, formData.address.line1);
+    await userEvent.type(line2, formData.address.line2);
+    await userEvent.type(postalCode, formData.address.postalCode);
+    await userEvent.type(dependentLocality, formData.address.dependentLocality);
+    await userEvent.type(sortingCode, formData.address.sortingCode);
     userEvent.upload(displayImage, formData.displayImage);
-    userEvent.click(userRegistrationRequired);
-    userEvent.click(isVisible);
+    await userEvent.click(userRegistrationRequired);
+    await userEvent.click(isVisible);
 
     await wait();
-    userEvent.click(saveChangesBtn);
+    await userEvent.click(saveChangesBtn);
   });
 });

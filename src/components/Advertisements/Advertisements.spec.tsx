@@ -390,8 +390,8 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText('Create Advertisement'));
-    userEvent.type(
+    await userEvent.click(screen.getByText('Create Advertisement'));
+    await userEvent.type(
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop',
     );
@@ -411,10 +411,16 @@ describe('Testing Advertisement Component', () => {
       screen.getByLabelText('Select type of Advertisement'),
       'POPUP',
     );
-    userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
-    userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
+    await userEvent.type(
+      screen.getByLabelText('Select Start Date'),
+      '2023-01-01',
+    );
+    await userEvent.type(
+      screen.getByLabelText('Select End Date'),
+      '2023-02-02',
+    );
 
-    userEvent.click(screen.getByTestId('addonregister'));
+    await userEvent.click(screen.getByTestId('addonregister'));
     expect(
       await screen.findByText('Advertisement created successfully.'),
     ).toBeInTheDocument();
@@ -443,10 +449,10 @@ describe('Testing Advertisement Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Active Campaigns'));
+    await userEvent.click(screen.getByText('Active Campaigns'));
 
     await wait();
-    userEvent.click(screen.getByText('Completed Campaigns'));
+    await userEvent.click(screen.getByText('Completed Campaigns'));
   });
 
   test('if the component renders correctly and ads are correctly categorized date wise', async () => {

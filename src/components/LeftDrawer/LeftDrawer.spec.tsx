@@ -102,13 +102,13 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     ).toBeTruthy();
 
     await act(async () => {
-      userEvent.click(rolesBtn);
+      await userEvent.click(rolesBtn);
     });
 
     expect(global.window.location.pathname).toContain('/users');
 
     await act(async () => {
-      userEvent.click(communityProfileBtn);
+      await userEvent.click(communityProfileBtn);
     });
   });
 
@@ -215,7 +215,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
 
     await act(async () => {
-      userEvent.click(orgsBtn);
+      await userEvent.click(orgsBtn);
     });
 
     expect(global.window.location.pathname).toContain('/orglist');

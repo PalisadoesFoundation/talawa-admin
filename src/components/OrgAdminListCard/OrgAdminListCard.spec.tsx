@@ -89,7 +89,7 @@ describe('Testing Organization Admin List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
+    await userEvent.click(screen.getByTestId(/removeAdminBtn/i));
 
     await wait(2000);
   });

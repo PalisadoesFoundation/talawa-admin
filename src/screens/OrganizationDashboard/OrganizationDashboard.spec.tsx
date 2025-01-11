@@ -182,7 +182,7 @@ describe('Testing Organization Dashboard Screen', () => {
     const membersBtn = await screen.findByText(t.members);
     expect(membersBtn).toBeInTheDocument();
 
-    userEvent.click(membersBtn);
+    await userEvent.click(membersBtn);
     await waitFor(() => {
       expect(screen.getByTestId('orgpeople')).toBeInTheDocument();
     });
@@ -202,7 +202,7 @@ it('Click Post Card', async () => {
   const postsBtn = await screen.findByText(t.posts);
   expect(postsBtn).toBeInTheDocument();
 
-  userEvent.click(postsBtn);
+  await userEvent.click(postsBtn);
   await waitFor(() => {
     expect(screen.getByTestId('orgpost')).toBeInTheDocument();
   });
@@ -214,7 +214,7 @@ it('Click Events Card', async () => {
   const eventsBtn = await screen.findByText(t.events);
   expect(eventsBtn).toBeInTheDocument();
 
-  userEvent.click(eventsBtn);
+  await userEvent.click(eventsBtn);
   await waitFor(() => {
     expect(screen.getByTestId('orgevents')).toBeInTheDocument();
   });
@@ -226,7 +226,7 @@ it('Click Blocked Users Card', async () => {
   const blockedUsersBtn = await screen.findByText(t.blockedUsers);
   expect(blockedUsersBtn).toBeInTheDocument();
 
-  userEvent.click(blockedUsersBtn);
+  await userEvent.click(blockedUsersBtn);
   await waitFor(() => {
     expect(screen.getByTestId('blockuser')).toBeInTheDocument();
   });
@@ -238,7 +238,7 @@ it('Click Requests Card', async () => {
   const requestsBtn = await screen.findByText(t.requests);
   expect(requestsBtn).toBeInTheDocument();
 
-  userEvent.click(requestsBtn);
+  await userEvent.click(requestsBtn);
   await waitFor(() => {
     expect(screen.getByTestId('requests')).toBeInTheDocument();
   });
@@ -250,7 +250,7 @@ it('Click View All Events', async () => {
   const viewAllBtn = await screen.findAllByText(t.viewAll);
   expect(viewAllBtn[0]).toBeInTheDocument();
 
-  userEvent.click(viewAllBtn[0]);
+  await userEvent.click(viewAllBtn[0]);
   await waitFor(() => {
     expect(screen.getByTestId('orgevents')).toBeInTheDocument();
   });
@@ -262,7 +262,7 @@ it('Click View All Posts', async () => {
   const viewAllBtn = await screen.findAllByText(t.viewAll);
   expect(viewAllBtn[1]).toBeInTheDocument();
 
-  userEvent.click(viewAllBtn[1]);
+  await userEvent.click(viewAllBtn[1]);
   await waitFor(() => {
     expect(screen.getByTestId('orgpost')).toBeInTheDocument();
   });
@@ -274,7 +274,7 @@ it('Click View All Requests', async () => {
   const viewAllBtn = await screen.findAllByText(t.viewAll);
   expect(viewAllBtn[2]).toBeInTheDocument();
 
-  userEvent.click(viewAllBtn[2]);
+  await userEvent.click(viewAllBtn[2]);
   await waitFor(() => {
     expect(toast.success).toHaveBeenCalled();
   });
@@ -286,7 +286,7 @@ it('Click View All Leaderboard', async () => {
   const viewAllBtn = await screen.findAllByText(t.viewAll);
   expect(viewAllBtn[3]).toBeInTheDocument();
 
-  userEvent.click(viewAllBtn[3]);
+  await userEvent.click(viewAllBtn[3]);
   await waitFor(() => {
     expect(screen.getByTestId('leaderboard')).toBeInTheDocument();
   });
