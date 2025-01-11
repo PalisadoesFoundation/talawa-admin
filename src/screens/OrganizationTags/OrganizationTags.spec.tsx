@@ -289,10 +289,15 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('createTagSubmitBtn')).toBeInTheDocument();
     });
 
-    // Try to submit empty form
+    // Before submitting the form, we'll verify it exists
     const form = screen.getByTestId('createTagSubmitBtn').closest('form');
+    if (form == null) {
+      throw new Error('Form not found');
+    }
+
+    // Submit empty form
     await act(async () => {
-      fireEvent.submit(form!);
+      fireEvent.submit(form); // No non-null assertion here
     });
 
     // Wait for error toast
@@ -310,7 +315,7 @@ describe('Organisation Tags Page', () => {
 
     // Submit form with valid data
     await act(async () => {
-      fireEvent.submit(form!);
+      fireEvent.submit(form); // Again, no non-null assertion here
     });
 
     // Wait for success toast

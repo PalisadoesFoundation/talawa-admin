@@ -112,7 +112,7 @@ export default function Organizations(): JSX.Element {
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+      setHideDrawer((prev) => !prev);
     }
   };
 
@@ -332,7 +332,7 @@ export default function Organizations(): JSX.Element {
                       page * rowsPerPage + rowsPerPage,
                     )
                   : organizations
-                ).map((organization: InterfaceOrganization, index) => {
+                ).map((organization: InterfaceOrganization) => {
                   const cardProps: InterfaceOrganizationCardProps = {
                     name: organization.name,
                     image: organization.image,
@@ -347,12 +347,15 @@ export default function Organizations(): JSX.Element {
                       organization.userRegistrationRequired,
                     membershipRequests: organization.membershipRequests,
                   };
-                  return <OrganizationCard key={index} {...cardProps} />;
+                  return (
+                    <OrganizationCard key={organization._id} {...cardProps} />
+                  );
                 })
               ) : (
                 <span>{t('nothingToShow')}</span>
               )}
             </div>
+
             <table>
               <tbody>
                 <tr>
