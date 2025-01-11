@@ -52,7 +52,7 @@ function eventHeader({
              *
              * @param e - The event object from the input change.
              */
-            /*istanbul ignore next*/
+
             onChange={(e) => setEventName(e.target.value)}
           />
           <Button

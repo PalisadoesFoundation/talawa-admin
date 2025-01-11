@@ -127,7 +127,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
    * @param e - The form event.
    * @returns Promise<void>
    */
-  /*istanbul ignore next*/
+
   const updateCampaignHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -263,15 +263,12 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                   value={campaignCurrency}
                   label={t('currency')}
                   data-testid="currencySelect"
-                  onChange={
-                    /*istanbul ignore next*/
-                    (e) => {
-                      setFormState({
-                        ...formState,
-                        campaignCurrency: e.target.value,
-                      });
-                    }
-                  }
+                  onChange={(e) => {
+                    setFormState({
+                      ...formState,
+                      campaignCurrency: e.target.value,
+                    });
+                  }}
                 >
                   {currencyOptions.map((currency) => (
                     <MenuItem key={currency.label} value={currency.value}>
