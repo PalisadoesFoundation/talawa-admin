@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dropdown, Form, Button, ProgressBar } from 'react-bootstrap';
+import { Form, Button, ProgressBar } from 'react-bootstrap';
 import styles from './Pledges.module.css';
 import { useTranslation } from 'react-i18next';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfacePledgeInfo, InterfaceUserInfo } from 'utils/interfaces';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
@@ -21,6 +21,7 @@ import { currencySymbols } from 'utils/currency';
 import PledgeDeleteModal from 'screens/FundCampaignPledge/PledgeDeleteModal';
 import { Navigate, useParams } from 'react-router-dom';
 import PledgeModal from '../Campaigns/PledgeModal';
+import SortingButton from 'subComponents/SortingButton';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -393,75 +394,40 @@ const Pledges = (): JSX.Element => {
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 mb-1">
-          <Dropdown
-            aria-expanded="false"
-            title="SearchBy"
-            data-tesid="searchByToggle"
-            className="flex-fill"
-          >
-            <Dropdown.Toggle
-              data-testid="searchByDrpdwn"
-              variant="outline-success"
-            >
-              <Sort className={'me-1'} />
-              {t('searchBy')}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                id="searchPledgers"
-                onClick={(): void => setSearchBy('pledgers')}
-                data-testid="pledgers"
-              >
-                {t('pledgers')}
-              </Dropdown.Item>
-              <Dropdown.Item
-                id="searchCampaigns"
-                onClick={(): void => setSearchBy('campaigns')}
-                data-testid="campaigns"
-              >
-                {t('campaigns')}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+        <div className="d-flex gap-4 ">
+          <SortingButton
+            sortingOptions={[
+              { label: t('pledgers'), value: 'pledgers' },
+              { label: t('campaigns'), value: 'campaigns' },
+            ]}
+            selectedOption={searchBy}
+            onSortChange={(value) =>
+              setSearchBy(value as 'pledgers' | 'campaigns')
+            }
+            dataTestIdPrefix="searchByDrpdwn"
+            buttonLabel={t('searchBy')}
+          />
 
-          <Dropdown>
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              className={styles.dropdown}
-              data-testid="filter"
-            >
-              <Sort className={'me-1'} />
-              {tCommon('sort')}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={() => setSortBy('amount_ASC')}
-                data-testid="amount_ASC"
-              >
-                {t('lowestAmount')}
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => setSortBy('amount_DESC')}
-                data-testid="amount_DESC"
-              >
-                {t('highestAmount')}
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => setSortBy('endDate_DESC')}
-                data-testid="endDate_DESC"
-              >
-                {t('latestEndDate')}
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => setSortBy('endDate_ASC')}
-                data-testid="endDate_ASC"
-              >
-                {t('earliestEndDate')}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <SortingButton
+            sortingOptions={[
+              { label: t('lowestAmount'), value: 'amount_ASC' },
+              { label: t('highestAmount'), value: 'amount_DESC' },
+              { label: t('latestEndDate'), value: 'endDate_DESC' },
+              { label: t('earliestEndDate'), value: 'endDate_ASC' },
+            ]}
+            selectedOption={sortBy}
+            onSortChange={(value) =>
+              setSortBy(
+                value as
+                  | 'amount_ASC'
+                  | 'amount_DESC'
+                  | 'endDate_ASC'
+                  | 'endDate_DESC',
+              )
+            }
+            dataTestIdPrefix="filter"
+            buttonLabel={tCommon('sort')}
+          />
         </div>
       </div>
 

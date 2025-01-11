@@ -1,11 +1,11 @@
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
@@ -22,6 +22,8 @@ import type {
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+
+import SortingButton from 'subComponents/SortingButton';
 
 interface InterfaceCampaignInfo {
   name: string;
@@ -56,6 +58,7 @@ const dataGridStyle = {
     borderRadius: '0.5rem',
   },
 };
+
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
@@ -495,43 +498,26 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('amount_ASC')}
-                  data-testid="amount_ASC"
-                >
-                  {t('lowestAmount')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('amount_DESC')}
-                  data-testid="amount_DESC"
-                >
-                  {t('highestAmount')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_DESC')}
-                  data-testid="endDate_DESC"
-                >
-                  {t('latestEndDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_ASC')}
-                  data-testid="endDate_ASC"
-                >
-                  {t('earliestEndDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestAmount'), value: 'amount_ASC' },
+                { label: t('highestAmount'), value: 'amount_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              selectedOption={sortBy ?? ''}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'amount_ASC'
+                    | 'amount_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
           <div>
             <Button

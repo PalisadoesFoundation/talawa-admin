@@ -23,6 +23,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Posts.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import Carousel from 'react-multi-carousel';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import 'react-multi-carousel/lib/styles.css';
 
 const responsive = {
@@ -156,7 +157,10 @@ export default function home(): JSX.Element {
   const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
-    variables: { id: userId },
+    variables: {
+      id: userId,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE, // This is for tagsAssignedWith pagination
+    },
   });
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;

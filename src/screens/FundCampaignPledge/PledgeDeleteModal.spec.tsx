@@ -15,11 +15,12 @@ import i18nForTest from '../../utils/i18nForTest';
 import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from './PledgesMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -31,7 +32,7 @@ const translations = JSON.parse(
 
 const pledgeProps: InterfaceDeletePledgeModal = {
   isOpen: true,
-  hide: jest.fn(),
+  hide: vi.fn(),
   pledge: {
     _id: '1',
     amount: 100,
@@ -47,7 +48,7 @@ const pledgeProps: InterfaceDeletePledgeModal = {
       },
     ],
   },
-  refetchPledge: jest.fn(),
+  refetchPledge: vi.fn(),
 };
 
 const renderPledgeDeleteModal = (

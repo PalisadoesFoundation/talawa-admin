@@ -6,7 +6,6 @@ import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import 'jest-location-mock';
 import type {
   InterfaceOrgConnectionInfoType,
   InterfaceUserType,
