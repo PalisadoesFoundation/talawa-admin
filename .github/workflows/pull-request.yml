@@ -320,6 +320,10 @@ jobs:
             echo "Error: Failed to clone talawa-api repository"
             exit 1
           fi
+        
+      - name: Install GraphQL Inspector
+        run: |
+          npm install -g @graphql-inspector/cli
 
       - name: Validate Documents
         run: |
