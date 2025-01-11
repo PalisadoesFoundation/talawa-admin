@@ -979,7 +979,7 @@ describe('Testing Users screen', () => {
 
     const search5 = 'Xe';
     await userEvent.type(screen.getByTestId(/searchByName/i), search5);
-    userEvent.clear(screen.getByTestId(/searchByName/i));
+    await userEvent.clear(screen.getByTestId(/searchByName/i));
     await userEvent.type(screen.getByTestId(/searchByName/i), '');
     await userEvent.click(searchBtn);
     await wait();
@@ -1006,7 +1006,7 @@ describe('Testing Users screen', () => {
 
     await act(async () => {
       // Clear the search input
-      userEvent.clear(searchInput);
+      await userEvent.clear(searchInput);
       // Search for a name that doesn't exist
       await userEvent.type(
         screen.getByTestId(/searchByName/i),

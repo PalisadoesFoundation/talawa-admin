@@ -152,13 +152,13 @@ describe('Testing Organization Update', () => {
     await userEvent.type(name, formData.name);
     await userEvent.type(des, formData.description);
     await userEvent.type(city, formData.address.city);
-    userEvent.selectOptions(countryCode, formData.address.countryCode);
+    await userEvent.selectOptions(countryCode, formData.address.countryCode);
     await userEvent.type(line1, formData.address.line1);
     await userEvent.type(line2, formData.address.line2);
     await userEvent.type(postalCode, formData.address.postalCode);
     await userEvent.type(dependentLocality, formData.address.dependentLocality);
     await userEvent.type(sortingCode, formData.address.sortingCode);
-    userEvent.upload(displayImage, formData.displayImage);
+    await userEvent.upload(displayImage, formData.displayImage);
     await userEvent.click(userRegistrationRequired);
     await userEvent.click(isVisible);
 
@@ -238,13 +238,13 @@ describe('Testing Organization Update', () => {
     await userEvent.type(name, formData.name);
     await userEvent.type(des, formData.description);
     await userEvent.type(city, formData.address.city);
-    userEvent.selectOptions(countryCode, formData.address.countryCode);
+    await userEvent.selectOptions(countryCode, formData.address.countryCode);
     await userEvent.type(line1, formData.address.line1);
     await userEvent.type(line2, formData.address.line2);
     await userEvent.type(postalCode, formData.address.postalCode);
     await userEvent.type(dependentLocality, formData.address.dependentLocality);
     await userEvent.type(sortingCode, formData.address.sortingCode);
-    userEvent.upload(displayImage, formData.displayImage);
+    await userEvent.upload(displayImage, formData.displayImage);
     await userEvent.click(userRegistrationRequired);
     await userEvent.click(isVisible);
 

@@ -385,7 +385,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
 
-    userEvent.clear(screen.getByTestId('searchInput'));
+    await userEvent.clear(screen.getByTestId('searchInput'));
     await userEvent.click(searchBtn);
     await wait();
   });

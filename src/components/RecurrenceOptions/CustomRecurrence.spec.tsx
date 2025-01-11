@@ -249,13 +249,13 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     const weekDaysOptions = screen.getAllByTestId('recurrenceWeekDay');
 
-    weekDaysOptions.forEach(async (weekDay) => {
-      await userEvent.click(weekDay);
-    });
+    await Promise.all(
+      weekDaysOptions.map((weekDay) => userEvent.click(weekDay)),
+    );
 
-    weekDaysOptions.forEach(async (weekDay) => {
-      await userEvent.click(weekDay);
-    });
+    await Promise.all(
+      weekDaysOptions.map((weekDay) => userEvent.click(weekDay)),
+    );
 
     await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     await waitFor(() => {

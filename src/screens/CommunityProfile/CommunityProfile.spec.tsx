@@ -238,7 +238,7 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.type(youtube, profileVariables.socialUrl);
     await userEvent.type(reddit, profileVariables.socialUrl);
     await userEvent.type(slack, profileVariables.socialUrl);
-    userEvent.upload(logo, profileVariables.logo);
+    await userEvent.upload(logo, profileVariables.logo);
     await wait();
 
     expect(communityName).toHaveValue(profileVariables.name);

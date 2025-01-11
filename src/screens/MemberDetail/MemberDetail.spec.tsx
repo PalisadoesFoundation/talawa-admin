@@ -164,48 +164,48 @@ describe('MemberDetail', () => {
       target: { value: formData.birthDate },
     });
 
-    userEvent.clear(screen.getByPlaceholderText(/First Name/i));
+    await userEvent.clear(screen.getByPlaceholderText(/First Name/i));
     await userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
       formData.firstName,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
+    await userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
     await userEvent.type(
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/Address/i));
+    await userEvent.clear(screen.getByPlaceholderText(/Address/i));
     await userEvent.type(
       screen.getByPlaceholderText(/Address/i),
       formData.address,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/Country Code/i));
+    await userEvent.clear(screen.getByPlaceholderText(/Country Code/i));
     await userEvent.type(
       screen.getByPlaceholderText(/Country Code/i),
       formData.countryCode,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/State/i));
+    await userEvent.clear(screen.getByPlaceholderText(/State/i));
     await userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
 
-    userEvent.clear(screen.getByPlaceholderText(/City/i));
+    await userEvent.clear(screen.getByPlaceholderText(/City/i));
     await userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
 
-    userEvent.clear(screen.getByPlaceholderText(/Email/i));
+    await userEvent.clear(screen.getByPlaceholderText(/Email/i));
     await userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
 
-    userEvent.clear(screen.getByPlaceholderText(/Phone/i));
+    await userEvent.clear(screen.getByPlaceholderText(/Phone/i));
     await userEvent.type(
       screen.getByPlaceholderText(/Phone/i),
       formData.phoneNumber,
     );
 
     // await userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
-    // userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
-    // userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+    // await userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
+    // await userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
     await wait();
 
     await userEvent.click(screen.getByText(/Save Changes/i));

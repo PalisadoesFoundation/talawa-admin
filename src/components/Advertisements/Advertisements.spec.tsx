@@ -407,7 +407,7 @@ describe('Testing Advertisement Component', () => {
     });
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
-    userEvent.selectOptions(
+    await userEvent.selectOptions(
       screen.getByLabelText('Select type of Advertisement'),
       'POPUP',
     );

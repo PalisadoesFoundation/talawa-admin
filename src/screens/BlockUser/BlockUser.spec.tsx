@@ -483,11 +483,11 @@ describe('Testing Block/Unblock user screen', () => {
     expect(searchBar).toBeInTheDocument();
     await userEvent.type(searchBar, 'Dummy{enter}');
     await wait();
-    userEvent.clear(searchBar);
+    await userEvent.clear(searchBar);
     await userEvent.type(searchBar, 'Dummy');
     await userEvent.click(searchBtn);
     await wait();
-    userEvent.clear(searchBar);
+    await userEvent.clear(searchBar);
     await userEvent.type(searchBar, '');
     await userEvent.click(searchBtn);
   });

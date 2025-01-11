@@ -318,7 +318,7 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
 
     await wait();
-    userEvent.upload(
+    await userEvent.upload(
       screen.getByTestId('postImageInput'),
       new File(['image content'], 'image.png', { type: 'image/png' }),
     );

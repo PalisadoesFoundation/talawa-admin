@@ -352,7 +352,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
 
     expect(screen.getByTestId('editPostModalTitle')).toBeInTheDocument();
-    userEvent.clear(screen.getByTestId('postInput'));
+    await userEvent.clear(screen.getByTestId('postInput'));
     await userEvent.type(screen.getByTestId('postInput'), 'Edited Post');
     await userEvent.click(screen.getByTestId('editPostBtn'));
     await wait();

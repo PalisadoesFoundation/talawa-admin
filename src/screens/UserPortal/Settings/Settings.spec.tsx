@@ -258,21 +258,27 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
     await userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
+    await userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
     await wait();
     await userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
+    await userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Unemployed');
+    await userEvent.selectOptions(
+      screen.getByTestId('inputEmpStatus'),
+      'Unemployed',
+    );
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputMaritalStatus'), 'Single');
+    await userEvent.selectOptions(
+      screen.getByTestId('inputMaritalStatus'),
+      'Single',
+    );
     await wait();
     await userEvent.type(screen.getByTestId('inputAddress'), 'random');
     await wait();
     await userEvent.type(screen.getByTestId('inputState'), 'random');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputCountry'), 'IN');
+    await userEvent.selectOptions(screen.getByTestId('inputCountry'), 'IN');
     await wait();
     expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
     await wait();
@@ -289,7 +295,7 @@ describe('Testing Settings Screen [User Portal]', () => {
       type: 'image/jpeg',
     });
     const files = [imageFile];
-    userEvent.upload(fileInp, files);
+    await userEvent.upload(fileInp, files);
     await wait();
     expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
   });

@@ -466,7 +466,7 @@ describe('Manage Tag Page', () => {
     });
 
     const tagNameInput = screen.getByTestId('tagNameInput');
-    await userEvent.clear(tagNameInput);
+    await await userEvent.clear(tagNameInput);
     await userEvent.type(tagNameInput, 'tag 1 edited');
     expect(tagNameInput).toHaveValue('tag 1 edited');
 

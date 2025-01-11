@@ -323,7 +323,7 @@ describe('Testing VolunteerGroupModal', () => {
       expect(vrInput).toHaveValue('');
     });
 
-    userEvent.clear(vrInput);
+    await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '1{backspace}');
 
     await waitFor(() => {

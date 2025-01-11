@@ -233,10 +233,22 @@ describe('Organisation Post Page', () => {
     await userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
 
     await userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postImage,
+    );
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postVideo,
+    );
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postImage,
+    );
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postVideo,
+    );
     await userEvent.click(screen.getByTestId('pinPost'));
     expect(screen.getByTestId('pinPost')).toBeChecked();
 
@@ -449,7 +461,7 @@ describe('Organisation Post Page', () => {
       type: 'image/png',
     });
     const imageInput = screen.getByTestId('addMediaField');
-    userEvent.upload(imageInput, imageFile);
+    await userEvent.upload(imageInput, imageFile);
 
     // Check if the image is displayed
     const imagePreview = await screen.findByAltText('Post Image Preview');
@@ -574,7 +586,7 @@ describe('Organisation Post Page', () => {
       type: 'image/png',
     });
     const input = screen.getByTestId('addMediaField');
-    userEvent.upload(input, file);
+    await userEvent.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
@@ -620,7 +632,7 @@ describe('Organisation Post Page', () => {
     });
 
     await act(async () => {
-      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
+      await userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
     });
 
     // Check if the video is displayed

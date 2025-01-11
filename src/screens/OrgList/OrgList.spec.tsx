@@ -260,7 +260,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
       formData.address.state,
     );
 
-    userEvent.selectOptions(
+    await userEvent.selectOptions(
       screen.getByTestId('countrycode'),
       formData.address.countryCode,
     );
@@ -311,7 +311,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
     const displayImage = screen.getByTestId('organisationImage');
-    userEvent.upload(displayImage, formData.image);
+    await userEvent.upload(displayImage, formData.image);
     await userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
     await waitFor(() => {
       expect(
@@ -367,7 +367,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
       screen.getByPlaceholderText(/Postal Code/i),
       formData.address.postalCode,
     );
-    userEvent.selectOptions(
+    await userEvent.selectOptions(
       screen.getByTestId('countrycode'),
       formData.address.countryCode,
     );

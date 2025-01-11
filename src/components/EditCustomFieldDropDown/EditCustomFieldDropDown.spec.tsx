@@ -54,11 +54,8 @@ describe('Testing Custom Field Dropdown', () => {
     });
 
     await wait();
-
-    availableFieldTypes.forEach(async (_, index) => {
-      act(async () => {
-        await userEvent.click(getByTestId(`dropdown-btn-${index}`));
-      });
-    });
+    for (const [index] of availableFieldTypes.entries()) {
+      await userEvent.click(getByTestId(`dropdown-btn-${index}`));
+    }
   });
 });

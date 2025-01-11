@@ -177,7 +177,7 @@ describe('VenueModal', () => {
 
     const file = new File(['chad'], 'chad.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
-    userEvent.upload(fileInput, file);
+    await userEvent.upload(fileInput, file);
 
     await wait();
 
@@ -190,7 +190,7 @@ describe('VenueModal', () => {
 
     const file = new File(['chad'], 'chad.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
-    userEvent.upload(fileInput, file);
+    await userEvent.upload(fileInput, file);
 
     await wait();
 
