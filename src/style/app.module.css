@@ -5118,26 +5118,41 @@ button[data-testid='createPostBtn'] {
 
 .closeButtonAdvertisementRegister {
   position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 32px; /* Make the button circular */
-  height: 32px; /* Make the button circular */
-  background: transparent;
-  transform: scale(1.2);
+  top: 10px;
+  right: 12px;
+  width: 70px;
+  height: 45px;
+  background: rgb(49, 187, 107); /* Default background color */
+  transform: scale(1);
   cursor: pointer;
-  border-radius: 50%;
-  border: none;
-  color: var(--grey-dark);
+  border: 2px solid rgb(49, 187, 107); /* Match the background for a seamless look */
+  border-radius: 6px; /* Rounded corners */
+  color: #fff; /* White text for good contrast */
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
+  z-index: 10;
   transition:
-    background-color 0.3s,
-    transform 0.3s;
+    background-color 0.3s ease,
+    transform 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .closeButtonAdvertisementRegister:hover {
-  transform: scale(1.1); /* Slightly enlarge on hover */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  background-color: rgb(40, 150, 86); /* Slightly darker green on hover */
+  color: #fff; /* Keep white text */
+}
+
+.closeButtonAdvertisementRegister:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(49, 187, 107, 0.5); /* Highlight focus state */
+}
+
+.closeButtonAdvertisementRegister:active {
+  transform: scale(0.95); /* Shrinking effect */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 }
 
 .buttonAdvertisementRegister {
