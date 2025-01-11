@@ -524,7 +524,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin "https://${{ github.actor }}:${GITHUB_TOKEN}@github.com/${{ github.event.pull_request.head.repo.full_name }}.git"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.event.pull_request.head.repo.full_name }}.git"
           git fetch origin ${{ github.event.pull_request.head.ref }}
           git checkout ${{ github.event.pull_request.head.ref }}
           git add docs/docs/auto-docs/
