@@ -64,6 +64,22 @@ const formData = {
   confirmPassword: 'johnDoe',
 };
 
+// Additional GraphQL Mock Data for Error Handling
+const ERROR_MOCKS = [
+  {
+    request: {
+      query: SIGNUP_MUTATION,
+      variables: {
+        firstName: 'Error',
+        lastName: 'Test',
+        email: 'error@test.com',
+        password: 'password',
+      },
+    },
+    error: new Error('GraphQL error occurred'),
+  },
+];
+
 // Static Mock Link
 const link = new StaticMockLink(MOCKS, true);
 
@@ -267,5 +283,35 @@ describe('Testing Register Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledWith(
       'Successfully registered. Please wait for admin to approve your request.',
     );
+  });
+
+  // Error Test Case
+  it('Expect toast.error to be called if GraphQL mutation fails', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={ERROR_MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Register {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitForAsync();
+
+    // Fill out the form with error-triggering values
+    userEvent.type(screen.getByTestId('passwordInput'), 'password');
+    userEvent.type(screen.getByTestId('confirmPasswordInput'), 'password');
+    userEvent.type(screen.getByTestId('emailInput'), 'error@test.com');
+    userEvent.type(screen.getByTestId('firstNameInput'), 'Error');
+    userEvent.type(screen.getByTestId('lastNameInput'), 'Test');
+    userEvent.click(screen.getByTestId('registerBtn'));
+
+    await waitForAsync();
+
+    // Assert that toast.error is called with the error message
+    expect(toast.error).toHaveBeenCalledWith('GraphQL error occurred');
   });
 });
