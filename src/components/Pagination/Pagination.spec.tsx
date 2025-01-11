@@ -6,60 +6,115 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Pagination from './Pagination';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
-import { describe, it } from 'vitest';
+import { describe, it, vi, expect } from 'vitest';
 
-describe('Testing Pagination component', () => {
-  const props = {
-    count: 5,
-    page: 10,
-    rowsPerPage: 5,
-    onPageChange: (): number => {
-      return 10;
-    },
+describe('Pagination component tests', () => {
+  const mockOnPageChange = vi.fn();
+
+  const defaultProps = {
+    count: 20, // Total items
+    page: 2, // Current page
+    rowsPerPage: 5, // Items per page
+    onPageChange: mockOnPageChange, // Mocked callback for page change
   };
 
-  it('Component should be rendered properly on rtl', async () => {
+  it('should render all pagination buttons and invoke onPageChange for navigation', async () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
-          <Pagination {...props} />
+          <Pagination {...defaultProps} />
         </Provider>
       </BrowserRouter>,
     );
+
+    // Ensure all buttons are rendered
+    expect(screen.getByTestId('firstPage')).toBeInTheDocument();
+    expect(screen.getByTestId('previousPage')).toBeInTheDocument();
+    expect(screen.getByTestId('nextPage')).toBeInTheDocument();
+    expect(screen.getByTestId('lastPage')).toBeInTheDocument();
+
+    // Simulate button clicks and verify callback invocation
     await act(async () => {
-      await userEvent.click(screen.getByTestId(/nextPage/i));
-      await userEvent.click(screen.getByTestId(/previousPage/i));
+      userEvent.click(screen.getByTestId('nextPage'));
     });
+    expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 3); // Next page
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('previousPage'));
+    });
+    expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 1); // Previous page
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('firstPage'));
+    });
+    expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 0); // First page
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('lastPage'));
+    });
+    expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 3); // Last page
   });
-});
 
-const props = {
-  count: 5,
-  page: 10,
-  rowsPerPage: 5,
-  onPageChange: (): number => {
-    return 10;
-  },
-  theme: { direction: 'rtl' },
-};
+  it('should disable navigation buttons at the boundaries', () => {
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <Pagination {...defaultProps} page={0} />
+        </Provider>
+      </BrowserRouter>,
+    );
 
-it('Component should be rendered properly', async () => {
-  const theme = createTheme({
-    direction: 'rtl',
+    // First and Previous buttons should be disabled on the first page
+    expect(screen.getByTestId('firstPage')).toBeDisabled();
+    expect(screen.getByTestId('previousPage')).toBeDisabled();
+
+    // Next and Last buttons should not be disabled
+    expect(screen.getByTestId('nextPage')).not.toBeDisabled();
+    expect(screen.getByTestId('lastPage')).not.toBeDisabled();
   });
 
-  render(
-    <BrowserRouter>
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <Pagination {...props} />
-        </ThemeProvider>
-      </Provider>
-    </BrowserRouter>,
-  );
+  it('should render correctly with RTL direction', async () => {
+    const rtlTheme = createTheme({ direction: 'rtl' });
 
-  await act(async () => {
-    await userEvent.click(screen.getByTestId(/nextPage/i));
-    await userEvent.click(screen.getByTestId(/previousPage/i));
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <ThemeProvider theme={rtlTheme}>
+            <Pagination {...defaultProps} />
+          </ThemeProvider>
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    // Verify buttons render properly in RTL mode
+    expect(screen.getByTestId('firstPage')).toBeInTheDocument();
+    expect(screen.getByTestId('lastPage')).toBeInTheDocument();
+
+    // Simulate a button click in RTL mode
+    await act(async () => {
+      userEvent.click(screen.getByTestId('nextPage'));
+    });
+    expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 3); // Next page
+  });
+
+  it('should disable Next and Last buttons on the last page', () => {
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <Pagination
+            {...defaultProps}
+            page={Math.ceil(defaultProps.count / defaultProps.rowsPerPage) - 1}
+          />
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    // Next and Last buttons should be disabled on the last page
+    expect(screen.getByTestId('nextPage')).toBeDisabled();
+    expect(screen.getByTestId('lastPage')).toBeDisabled();
+
+    // First and Previous buttons should not be disabled
+    expect(screen.getByTestId('firstPage')).not.toBeDisabled();
+    expect(screen.getByTestId('previousPage')).not.toBeDisabled();
   });
 });
