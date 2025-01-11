@@ -240,7 +240,7 @@ describe('Event Management', () => {
       ];
 
       for (const option of tabOptions) {
-        act(async () => {
+        await act(async () => {
           await userEvent.click(screen.getByTestId(`${option}DropdownItem`));
         });
 

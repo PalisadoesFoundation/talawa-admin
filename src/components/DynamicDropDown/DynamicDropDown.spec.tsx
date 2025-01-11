@@ -43,9 +43,7 @@ describe('DynamicDropDown component', () => {
     expect(dropdownButton).toHaveTextContent('Label 2');
 
     // Open the dropdown menu
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await userEvent.click(dropdownButton);
 
     // Select the first option in the dropdown
     const optionElement = screen.getByTestId('change-fieldname-btn-TEST');
