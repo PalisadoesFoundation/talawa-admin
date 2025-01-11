@@ -74,6 +74,13 @@ const leftDrawerOrg = ({
     () => getIdFromPath(location.pathname),
     [location.pathname],
   );
+
+  useEffect(() => {
+    if (hideDrawer === null) {
+      setHideDrawer(false);
+    }
+  }, []);
+
   // Check if the current page is admin profile page
 
   useEffect(() => {
