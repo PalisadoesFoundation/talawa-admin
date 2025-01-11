@@ -415,14 +415,20 @@
   margin-top: 10px;
   margin-bottom: 10px;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2bfbf17 (fix(styles): adjust and refine organization tags styling)
   background-color: white;
   box-shadow: 5px 5px 4px 0px var(--input-shadow-color);
   -webkit-box-shadow: 5px 5px 4px 0px var(--input-shadow-color);
   -moz-box-shadow: 5px 5px 4px 0px var(--input-shadow-color);
+<<<<<<< HEAD
 =======
   background-color: var(--bs-white);
   box-shadow: 0 1px 1px var(--input-shadow-color);
 >>>>>>> ba4d344 (Merge from develop (#3243))
+=======
+>>>>>>> 2bfbf17 (fix(styles): adjust and refine organization tags styling)
 }
 
 .inputFieldModal {

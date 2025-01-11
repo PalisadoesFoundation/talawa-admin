@@ -1,10 +1,14 @@
 import { useMutation, useQuery } from '@apollo/client';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Edit, Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 =======
 import { WarningAmberRounded } from '@mui/icons-material';
 >>>>>>> ba4d344 (Merge from develop (#3243))
+=======
+import { Edit, Search, WarningAmberRounded } from '@mui/icons-material';
+>>>>>>> 2bfbf17 (fix(styles): adjust and refine organization tags styling)
 import Loader from 'components/Loader/Loader';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
@@ -399,6 +403,7 @@ function OrganizationTags(): JSX.Element {
                     }}
                     sx={{
 <<<<<<< HEAD
+<<<<<<< HEAD
                       borderRadius: '16px',
                       backgroundColor: '#EAEBEF',
                       '& .MuiDataGrid-row': {
@@ -409,6 +414,12 @@ function OrganizationTags(): JSX.Element {
                       '& .MuiDataGrid-row': {
                         backgroundColor: 'var(--tablerow-bg-color)',
 >>>>>>> ba4d344 (Merge from develop (#3243))
+=======
+                      borderRadius: '16px',
+                      backgroundColor: '#EAEBEF',
+                      '& .MuiDataGrid-row': {
+                        backgroundColor: '#fffff',
+>>>>>>> 2bfbf17 (fix(styles): adjust and refine organization tags styling)
                         '&:focus-within': {
                           outlineOffset: '-2px',
                         },

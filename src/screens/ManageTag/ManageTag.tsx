@@ -465,6 +465,9 @@ function ManageTag(): JSX.Element {
                       getRowId={(row) => row.id}
                       slots={{
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2bfbf17 (fix(styles): adjust and refine organization tags styling)
                         noRowsOverlay: /* istanbul ignore next */ () => (
                           <Stack
                             height="100%"
@@ -475,6 +478,7 @@ function ManageTag(): JSX.Element {
                             {t('noAssignedMembersFound')}
                           </Stack>
                         ),
+<<<<<<< HEAD
 =======
                         noRowsOverlay:
                           /* istanbul ignore next -- @preserve */ () => (
@@ -487,6 +491,8 @@ function ManageTag(): JSX.Element {
                             </Stack>
                           ),
 >>>>>>> ba4d344 (Merge from develop (#3243))
+=======
+>>>>>>> 2bfbf17 (fix(styles): adjust and refine organization tags styling)
                       }}
                       sx={dataGridStyle}
                       getRowClassName={() => `${styles.rowBackgrounds}`}
