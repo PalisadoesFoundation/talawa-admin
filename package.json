@@ -91,7 +91,7 @@
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx setup.ts",
     "check-localstorage": "node scripts/githooks/check-localstorage-usage.js",
-    "generate-docs": "typedoc --out docs/docs/auto-docs --plugin typedoc-plugin-markdown --theme markdown --tsconfig tsconfig.docs.json --excludePrivate --excludeProtected --excludeExternals --hideGenerator --categorizeByGroup true --entryPointStrategy expand --entryPoints \"src/**/*.ts\" \"src/**/*.tsx\" --exclude \"src/vite-env.d.ts\" --exclude \"**/*.{test,spec,stories}.{ts,tsx}\" --exclude \"**/__tests__/**\" --exclude \"**/__mocks__/**\" --exclude \"**/node_modules/**\" --cleanOutputDir true --skipErrorChecking --logLevel Warn"
+    "generate-docs": "typedoc --out docs/docs/auto-docs --plugin typedoc-plugin-markdown --theme markdown --tsconfig tsconfig.docs.json --excludePrivate --excludeProtected --excludeExternals --hideGenerator --categorizeByGroup true --entryPointStrategy expand --entryPoints \"src/**/*.ts\" \"src/**/*.tsx\" --exclude \"src/vite-env.d.ts\" --exclude \"**/*.{test,spec,stories}.{ts,tsx}\" --exclude \"**/__tests__/**\" --exclude \"**/__mocks__/**\" --exclude \"**/node_modules/**\" --exclude \"*.md\" --exclude \"docs/**/*.md\" --readme none --cleanOutputDir true --skipErrorChecking --logLevel Warn"
   },
   "eslintConfig": {
     "extends": [
