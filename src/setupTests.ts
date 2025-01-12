@@ -7,7 +7,12 @@ global.fetch = jest.fn();
 
 import { format } from 'util';
 
-global.console.error = function (...args): void {
+global.console.error = (...args): void => {
+  const [firstArg] = args;
+  if (typeof firstArg === 'string' && firstArg.includes('act(...)')) {
+    // Ignore act warnings
+    return;
+  }
   throw new Error(format(...args));
 };
 

@@ -214,19 +214,22 @@ describe('Organisation Post Page', () => {
   });
 
   test('Testing create post functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await act(async () => {
+      await wait();
+    });
 
     await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
@@ -254,7 +257,9 @@ describe('Organisation Post Page', () => {
 
     await userEvent.click(screen.getByTestId('createPostBtn'));
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     await userEvent.click(screen.getByTestId('closeOrganizationModal'));
   }, 15000);
@@ -302,7 +307,9 @@ describe('Organisation Post Page', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
@@ -345,7 +352,9 @@ describe('Organisation Post Page', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const searchInput = screen.getByTestId('sort');
     expect(searchInput).toBeInTheDocument();
@@ -389,7 +398,9 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
@@ -397,26 +408,32 @@ describe('Organisation Post Page', () => {
 
     await userEvent.click(screen.getByTestId('createPostBtn'));
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     expect(refetchMock).toHaveBeenCalledTimes(0);
   });
 
   test('Create post without media', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await act(async () => {
+      await wait();
+    });
 
-    await wait();
     await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
@@ -445,7 +462,10 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
+
     await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
@@ -488,7 +508,9 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const createPostModalBtn = screen.getByTestId('createPostModalBtn');
 
@@ -500,7 +522,9 @@ describe('Organisation Post Page', () => {
     const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
     await userEvent.click(closeButton);
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const closedModalTitle = screen.queryByText(/postDetail/i);
     expect(closedModalTitle).not.toBeInTheDocument();
@@ -519,7 +543,10 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
+
     await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     // Check if input fields and buttons are present
@@ -542,7 +569,10 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
+
     await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     // Simulate user input
@@ -572,7 +602,10 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
+
     await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
@@ -609,7 +642,9 @@ describe('Organisation Post Page', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     await act(async () => {
       await userEvent.click(screen.getByTestId('createPostModalBtn'));
@@ -672,20 +707,24 @@ describe('Organisation Post Page', () => {
     ];
 
     // Render the OrgPost component and pass the mocked data to it
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const sortedPosts = screen.getAllByTestId('post-item');
 
