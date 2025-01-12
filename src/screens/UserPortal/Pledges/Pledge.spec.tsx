@@ -150,6 +150,7 @@ describe('Testing User Pledge Screen', () => {
     const searchPledger = await screen.findByTestId('searchPledges');
     expect(searchPledger).toBeInTheDocument();
 
+
     await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
@@ -194,6 +195,7 @@ describe('Testing User Pledge Screen', () => {
     const searchPledger = await screen.findByTestId('searchPledges');
     expect(searchPledger).toBeInTheDocument();
 
+
     await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
@@ -222,6 +224,7 @@ describe('Testing User Pledge Screen', () => {
     });
     await userEvent.click(screen.getByTestId('endDate_DESC'));
 
+
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.queryByText('Harve Lance')).toBeInTheDocument();
@@ -245,6 +248,7 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('pledgers')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('pledgers'));
+
 
     const searchPledger = screen.getByTestId('searchPledges');
     fireEvent.change(searchPledger, {
@@ -298,6 +302,7 @@ describe('Testing User Pledge Screen', () => {
     const moreContainer = await screen.findAllByTestId('moreContainer');
     await userEvent.click(moreContainer[0]);
 
+
     await waitFor(() => {
       expect(screen.getByTestId('extra1')).toBeInTheDocument();
       expect(screen.getByTestId('extra2')).toBeInTheDocument();
@@ -321,10 +326,13 @@ describe('Testing User Pledge Screen', () => {
     await waitFor(() => expect(deletePledgeBtn[0]).toBeInTheDocument());
     await userEvent.click(deletePledgeBtn[0]);
 
+
     await waitFor(() =>
       expect(screen.getByText(translations.deletePledge)).toBeInTheDocument(),
     );
+
     await userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
+
     await waitFor(() =>
       expect(screen.queryByTestId('deletePledgeCloseBtn')).toBeNull(),
     );
@@ -337,9 +345,11 @@ describe('Testing User Pledge Screen', () => {
     await waitFor(() => expect(editPledgeBtn[0]).toBeInTheDocument());
     await userEvent.click(editPledgeBtn[0]);
 
+
     await waitFor(() =>
       expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
     );
+
     await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
