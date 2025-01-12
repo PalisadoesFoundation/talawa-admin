@@ -162,29 +162,25 @@ export default function chat(): JSX.Element {
   }, [selectedContact]);
 
   React.useEffect(() => {
-    let isMounted = true;
-    if (filterType === 'all') {
-      chatsListRefetch().then(() => {
-        if (isMounted && chatsListData?.chatsByUserId) {
+    async function getChats(): Promise<void> {
+      if (filterType === 'all') {
+        await chatsListRefetch();
+        if (chatsListData && chatsListData.chatsByUserId) {
           setChats(chatsListData.chatsByUserId);
         }
-      });
-    } else if (filterType === 'unread') {
-      unreadChatListRefetch().then(() => {
-        if (isMounted && unreadChatListData?.getUnreadChatsByUserId) {
+      } else if (filterType === 'unread') {
+        await unreadChatListRefetch();
+        if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
           setChats(unreadChatListData.getUnreadChatsByUserId);
         }
-      });
-    } else if (filterType === 'group') {
-      groupChatListRefetch().then(() => {
-        if (isMounted && groupChatListData?.getGroupChatsByUserId) {
+      } else if (filterType === 'group') {
+        await groupChatListRefetch();
+        if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
           setChats(groupChatListData.getGroupChatsByUserId);
         }
-      });
+      }
     }
-    return () => {
-      isMounted = false;
-    };
+    getChats();
   }, [filterType]);
 
   React.useEffect(() => {
