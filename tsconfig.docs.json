@@ -13,11 +13,14 @@
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
     "node_modules",
+    "src/vite-env.d.ts",
     "**/*.spec.ts",
     "**/*.test.ts",
     "**/*.spec.tsx",
     "**/*.test.tsx",
     "**/__tests__/**",
-    "**/__mocks__/**"
+    "**/__mocks__/**",
+    "*.md",
+    "*.ts"
   ]
 }
