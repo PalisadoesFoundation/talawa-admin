@@ -1,0 +1,13 @@
+[**talawa-admin**](../../../README.md)
+
+***
+
+[talawa-admin](../../../modules.md) / GraphQl/Mutations/PledgeMutation
+
+# GraphQl/Mutations/PledgeMutation
+
+## Variables
+
+- [CREATE\_PlEDGE](variables/CREATE_PlEDGE.md)
+- [DELETE\_PLEDGE](variables/DELETE_PLEDGE.md)
+- [UPDATE\_PLEDGE](variables/UPDATE_PLEDGE.md)

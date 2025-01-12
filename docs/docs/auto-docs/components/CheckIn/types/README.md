@@ -1,0 +1,16 @@
+[**talawa-admin**](../../../README.md)
+
+***
+
+[talawa-admin](../../../modules.md) / components/CheckIn/types
+
+# components/CheckIn/types
+
+## Interfaces
+
+- [InterfaceAttendeeCheckIn](interfaces/InterfaceAttendeeCheckIn.md)
+- [InterfaceAttendeeQueryResponse](interfaces/InterfaceAttendeeQueryResponse.md)
+- [InterfaceModalProp](interfaces/InterfaceModalProp.md)
+- [InterfaceTableCheckIn](interfaces/InterfaceTableCheckIn.md)
+- [InterfaceTableData](interfaces/InterfaceTableData.md)
+- [InterfaceUser](interfaces/InterfaceUser.md)

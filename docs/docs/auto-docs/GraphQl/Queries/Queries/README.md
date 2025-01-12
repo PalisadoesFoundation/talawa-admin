@@ -1,0 +1,132 @@
+[**talawa-admin**](../../../README.md)
+
+***
+
+[talawa-admin](../../../modules.md) / GraphQl/Queries/Queries
+
+# GraphQl/Queries/Queries
+
+## Variables
+
+- [ADMIN\_LIST](variables/ADMIN_LIST.md)
+- [BLOCK\_PAGE\_MEMBER\_LIST](variables/BLOCK_PAGE_MEMBER_LIST.md)
+- [CHECK\_AUTH](variables/CHECK_AUTH.md)
+- [EVENT\_ATTENDEES](variables/EVENT_ATTENDEES.md)
+- [EVENT\_CHECKINS](variables/EVENT_CHECKINS.md)
+- [EVENT\_DETAILS](variables/EVENT_DETAILS.md)
+- [EVENT\_FEEDBACKS](variables/EVENT_FEEDBACKS.md)
+- [EVENT\_REGISTRANTS](variables/EVENT_REGISTRANTS.md)
+- [GET\_COMMUNITY\_DATA](variables/GET_COMMUNITY_DATA.md)
+- [GET\_COMMUNITY\_SESSION\_TIMEOUT\_DATA](variables/GET_COMMUNITY_SESSION_TIMEOUT_DATA.md)
+- [MEMBERS\_LIST](variables/MEMBERS_LIST.md)
+- [MEMBERSHIP\_REQUEST](variables/MEMBERSHIP_REQUEST.md)
+- [ORGANIZATION\_CONNECTION\_LIST](variables/ORGANIZATION_CONNECTION_LIST.md)
+- [ORGANIZATION\_DONATION\_CONNECTION\_LIST](variables/ORGANIZATION_DONATION_CONNECTION_LIST.md)
+- [ORGANIZATION\_EVENT\_CONNECTION\_LIST](variables/ORGANIZATION_EVENT_CONNECTION_LIST.md)
+- [ORGANIZATION\_EVENT\_LIST](variables/ORGANIZATION_EVENT_LIST.md)
+- [ORGANIZATION\_LIST](variables/ORGANIZATION_LIST.md)
+- [ORGANIZATIONS\_LIST](variables/ORGANIZATIONS_LIST.md)
+- [ORGANIZATIONS\_MEMBER\_CONNECTION\_LIST](variables/ORGANIZATIONS_MEMBER_CONNECTION_LIST.md)
+- [RECURRING\_EVENTS](variables/RECURRING_EVENTS.md)
+- [USER\_DETAILS](variables/USER_DETAILS.md)
+- [USER\_LIST](variables/USER_LIST.md)
+- [USER\_LIST\_FOR\_TABLE](variables/USER_LIST_FOR_TABLE.md)
+- [USER\_LIST\_REQUEST](variables/USER_LIST_REQUEST.md)
+- [USER\_ORGANIZATION\_LIST](variables/USER_ORGANIZATION_LIST.md)
+- [USERS\_CONNECTION\_LIST](variables/USERS_CONNECTION_LIST.md)
+
+## References
+
+### ACTION\_ITEM\_CATEGORY\_LIST
+
+Re-exports [ACTION_ITEM_CATEGORY_LIST](../ActionItemCategoryQueries/variables/ACTION_ITEM_CATEGORY_LIST.md)
+
+***
+
+### ACTION\_ITEM\_LIST
+
+Re-exports [ACTION_ITEM_LIST](../ActionItemQueries/variables/ACTION_ITEM_LIST.md)
+
+***
+
+### ADVERTISEMENTS\_GET
+
+Re-exports [ADVERTISEMENTS_GET](../PlugInQueries/variables/ADVERTISEMENTS_GET.md)
+
+***
+
+### AGENDA\_ITEM\_CATEGORY\_LIST
+
+Re-exports [AGENDA_ITEM_CATEGORY_LIST](../AgendaCategoryQueries/variables/AGENDA_ITEM_CATEGORY_LIST.md)
+
+***
+
+### AgendaItemByEvent
+
+Re-exports [AgendaItemByEvent](../AgendaItemQueries/variables/AgendaItemByEvent.md)
+
+***
+
+### AgendaItemByOrganization
+
+Re-exports [AgendaItemByOrganization](../AgendaItemQueries/variables/AgendaItemByOrganization.md)
+
+***
+
+### IS\_SAMPLE\_ORGANIZATION\_QUERY
+
+Re-exports [IS_SAMPLE_ORGANIZATION_QUERY](../PlugInQueries/variables/IS_SAMPLE_ORGANIZATION_QUERY.md)
+
+***
+
+### ORGANIZATION\_ADMINS\_LIST
+
+Re-exports [ORGANIZATION_ADMINS_LIST](../OrganizationQueries/variables/ORGANIZATION_ADMINS_LIST.md)
+
+***
+
+### ORGANIZATION\_ADVERTISEMENT\_LIST
+
+Re-exports [ORGANIZATION_ADVERTISEMENT_LIST](../OrganizationQueries/variables/ORGANIZATION_ADVERTISEMENT_LIST.md)
+
+***
+
+### ORGANIZATION\_CUSTOM\_FIELDS
+
+Re-exports [ORGANIZATION_CUSTOM_FIELDS](../PlugInQueries/variables/ORGANIZATION_CUSTOM_FIELDS.md)
+
+***
+
+### ORGANIZATION\_EVENTS\_CONNECTION
+
+Re-exports [ORGANIZATION_EVENTS_CONNECTION](../PlugInQueries/variables/ORGANIZATION_EVENTS_CONNECTION.md)
+
+***
+
+### ORGANIZATION\_POST\_LIST
+
+Re-exports [ORGANIZATION_POST_LIST](../OrganizationQueries/variables/ORGANIZATION_POST_LIST.md)
+
+***
+
+### PLUGIN\_GET
+
+Re-exports [PLUGIN_GET](../PlugInQueries/variables/PLUGIN_GET.md)
+
+***
+
+### USER\_CREATED\_ORGANIZATIONS
+
+Re-exports [USER_CREATED_ORGANIZATIONS](../OrganizationQueries/variables/USER_CREATED_ORGANIZATIONS.md)
+
+***
+
+### USER\_JOINED\_ORGANIZATIONS
+
+Re-exports [USER_JOINED_ORGANIZATIONS](../OrganizationQueries/variables/USER_JOINED_ORGANIZATIONS.md)
+
+***
+
+### USER\_ORGANIZATION\_CONNECTION
+
+Re-exports [USER_ORGANIZATION_CONNECTION](../OrganizationQueries/variables/USER_ORGANIZATION_CONNECTION.md)

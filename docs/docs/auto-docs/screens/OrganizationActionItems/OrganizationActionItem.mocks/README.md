@@ -1,0 +1,13 @@
+[**talawa-admin**](../../../README.md)
+
+***
+
+[talawa-admin](../../../modules.md) / screens/OrganizationActionItems/OrganizationActionItem.mocks
+
+# screens/OrganizationActionItems/OrganizationActionItem.mocks
+
+## Variables
+
+- [MOCKS](variables/MOCKS.md)
+- [MOCKS\_EMPTY](variables/MOCKS_EMPTY.md)
+- [MOCKS\_ERROR](variables/MOCKS_ERROR.md)
