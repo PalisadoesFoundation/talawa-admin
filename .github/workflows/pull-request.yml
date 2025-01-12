@@ -40,6 +40,29 @@ jobs:
           chmod +x ./.github/workflows/scripts/countline.py
           ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
 
+      # Get Changed .ts and .tsx Files
+      - name: Get changed TypeScript files
+        id: changed-ts-files
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            **/*.ts
+            **/*.tsx
+
+      # Run the CSS import check script on changed .ts and .tsx files
+      - name: Check for CSS violations and print correct imports
+        if: steps.changed-ts-files.outputs.any_changed == 'true'
+        run: |
+          if [ ! -f ./.github/workflows/css_check.py ]; then
+            echo "Error: CSS check script not found"
+            exit 1
+          fi
+          chmod +x ./.github/workflows/css_check.py
+          ./.github/workflows/css_check.py --files ${{ steps.changed-ts-files.outputs.modified_files }} || {
+            echo "Error: CSS check failed"
+            exit 1
+          }
+
       - name: Get changed TypeScript files
         id: changed-files
         uses: tj-actions/changed-files@v45
