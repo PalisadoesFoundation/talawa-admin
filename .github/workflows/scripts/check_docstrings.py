@@ -270,7 +270,8 @@ def extract_function_arguments(start, lines):
     for item in items:
         result = item.split(")")[0].split("=")[0].strip()
         if bool(result):
-            arguments.append(result)
+            # Sometimes arguments have colons. We need everything before.
+            arguments.append(result.split(":")[0].strip())
 
     # Fix arguments for methods
     for keyword in method_keywords:
