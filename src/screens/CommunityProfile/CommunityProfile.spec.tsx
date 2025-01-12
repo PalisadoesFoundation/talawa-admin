@@ -577,9 +577,15 @@ describe('Testing Community Profile Screen', () => {
       default: vi.fn().mockResolvedValue(null),
     }));
 
-    const fileInput = screen.getByTestId('fileInput');
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
     userEvent.upload(fileInput, mockFile);
     await wait();
+
+    // Ensure state or UI behavior when base64 conversion fails
+    expect(fileInput.value).toBe('');
+
+    // Ensure no success toast is shown for null conversion
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   test('should show success toast when profile is updated successfully', async () => {
