@@ -716,6 +716,64 @@ describe('Testing PostCard Component [User Portal]', () => {
     });
   });
 
+  test('Comment submission displays error toast when network error occurs', async () => {
+    const cardProps = {
+      id: '1',
+      userImage: 'image.png',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      postedAt: '',
+      image: 'testImage',
+      video: '',
+      text: 'This is post test text',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 0,
+      comments: [],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '1',
+        },
+      ],
+      fetchPosts: vi.fn(),
+    };
+
+    const errorLink = new StaticMockLink([
+      {
+        request: {
+          query: CREATE_COMMENT_POST,
+          variables: {
+            postId: '1',
+            comment: 'test comment',
+          },
+        },
+        error: new Error('Network error'),
+      },
+    ]);
+
+    render(
+      <MockedProvider link={errorLink}>
+        <PostCard {...cardProps} />
+      </MockedProvider>,
+    );
+
+    userEvent.click(screen.getByTestId('viewPostBtn'));
+    userEvent.type(screen.getByTestId('commentInput'), 'test comment');
+    userEvent.click(screen.getByTestId('createCommentBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        i18nForTest.t('postCard.unexpectedError'),
+      );
+    });
+  });
+
   test(`Comment should be liked when like button is clicked`, async () => {
     const cardProps = {
       id: '1',
