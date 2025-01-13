@@ -100,7 +100,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
           setIsRegistered(true);
           toast.success(`Successfully registered for ${props.title}`);
         }
-      } catch (error: unknown) {
+      } catch (error) {
         toast.error(`Failed to register for the event`);
         toast.error(error as string);
       }
