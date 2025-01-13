@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -107,6 +108,7 @@ function deleteOrg(): JSX.Element {
               onClick={toggleDeleteModal}
               data-testid="openDeleteModalBtn"
             >
+              <DeleteIcon style={{ fontSize: '1rem' }} />
               {data && data.isSampleOrganization
                 ? t('deleteSampleOrganization')
                 : t('deleteOrganization')}

@@ -86,7 +86,9 @@
   --bs-primary: #0056b3;
   --bs-warning: #ffc107;
   --bs-white: #fff;
+  --bs-gray-700: #333a44;
   --bs-gray-600: #4b5563;
+  --bs-gray-500: #5c6878;
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
@@ -949,6 +951,9 @@ hr {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: var(--bs-gray-200);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 .cardHeader .cardTitle {
@@ -1697,6 +1702,11 @@ input[type='radio']:checked + label:hover {
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
+}
+
+.greenregbtn:hover {
+  background-color: var(--search-button-bg);
+  border: 1px solid #1778f2 !important;
 }
 
 .manageBtn {
@@ -5981,6 +5991,9 @@ button[data-testid='createPostBtn'] {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: var(--bs-gray-200);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 .deleteOrgCardHeader .cardTitle {
@@ -6023,6 +6036,9 @@ button[data-testid='createPostBtn'] {
 .saveButton {
   width: 10em;
   align-self: self-end;
+  background-color: #1778f2 !important;
+  color: var(--bs-white) !important;
+  border: 1px solid #1778f2 !important;
 }
 
 /* OrgUpdate */
@@ -6039,4 +6055,52 @@ button[data-testid='createPostBtn'] {
   transform: scale(1.5);
   color: var(--bs-danger);
   margin-bottom: 1rem;
+}
+
+.orgSettingHeaderBtn {
+  background-color: transparent;
+  color: var(--bs-gray-600);
+  border: 1px solid var(--bs-gray-400);
+  box-shadow: 4px 4px 4px var(--grey-bg-color-dark);
+}
+
+.orgSettingHeaderBtn:hover,
+.orgSettingHeaderBtn:focus,
+.activeTab {
+  background-color: var(--bs-gray-300) !important;
+  color: var(--bs-gray-700) !important;
+  border: 1px solid var(--bs-gray-500) !important;
+  box-shadow: none !important;
+}
+
+.activeTab {
+  font-weight: bold;
+  transition: 0.5s ease-in-out;
+}
+
+.settingsDropdown button {
+  background-color: transparent;
+  color: var(--bs-gray-600);
+  border: 1px solid var(--bs-gray-400);
+  box-shadow: 4px 4px 4px var(--grey-bg-color-dark);
+}
+
+.settingsDropdown button:hover {
+  background-color: var(--bs-gray-300);
+  color: var(--bs-gray-700) !important;
+  border: 1px solid var(--bs-gray-500);
+  box-shadow: 4px 4px 4px var(--grey-bg-color-dark);
+}
+
+.settingsDropdown button,
+.settingsDropdown button:active,
+.settingsDropdown button .show {
+  background-color: transparent;
+  border: 1px solid var(--bs-gray-700) !important;
+}
+
+.settingsDropdown button:active {
+  background-color: var(--blue-search-bg) !important;
+  color: var(--bs-gray-700) !important;
+  transform: scale(0.98);
 }

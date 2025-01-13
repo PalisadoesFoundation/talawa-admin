@@ -33,6 +33,7 @@ function OrgSettings(): JSX.Element {
   });
 
   const [tab, setTab] = useState<SettingType>('general');
+  const [animationClass, setAnimationClass] = useState<string>('fade-in'); // Default to 'fade-in'
 
   // Set the document title using the translated title for this page
   document.title = t('title');
@@ -44,6 +45,15 @@ function OrgSettings(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
+  const handleTabSwitch = (newTab: SettingType): void => {
+    // Trigger the exit animation first
+    setAnimationClass('fade-out');
+    setTimeout(() => {
+      setTab(newTab);
+      setAnimationClass('fade-in');
+    }, 300);
+  };
+
   return (
     <div className="d-flex flex-column">
       <Row className="mx-3 mt-3">
@@ -53,10 +63,14 @@ function OrgSettings(): JSX.Element {
             {settingtabs.map((setting, index) => (
               <Button
                 key={index}
-                className={`me-3 border rounded-3 ${styles.headerBtn}`}
+                className={`me-3 border rounded-3 ${styles.orgSettingHeaderBtn} ${
+                  tab === setting ? styles.activeTab : ''
+                }`}
                 variant={tab === setting ? `success` : `none`}
-                onClick={() => setTab(setting)}
+                // onClick={() => setTab(setting)}
+                onClick={() => handleTabSwitch(setting)}
                 data-testid={`${setting}Settings`}
+                autoFocus={index === 0}
               >
                 {t(setting)}
               </Button>
@@ -65,7 +79,7 @@ function OrgSettings(): JSX.Element {
 
           {/* Dropdown menu for selecting settings category */}
           <Dropdown
-            className={styles.settingsDropdown}
+            className={`mt-3 ${styles.settingsDropdown}`}
             data-testid="settingsDropdownContainer"
             drop="down"
           >
@@ -82,7 +96,7 @@ function OrgSettings(): JSX.Element {
                 <Dropdown.Item
                   key={index}
                   role="menuitem"
-                  onClick={() => setTab(setting)}
+                  onClick={() => handleTabSwitch(setting)}
                   className={tab === setting ? 'text-secondary' : ''}
                 >
                   {t(setting)}
@@ -98,28 +112,30 @@ function OrgSettings(): JSX.Element {
       </Row>
 
       {/* Render content based on the selected settings category */}
-      {(() => {
-        switch (tab) {
-          case 'general':
-            return (
-              <div data-testid="generalTab">
-                <GeneralSettings orgId={orgId} />
-              </div>
-            );
-          case 'actionItemCategories':
-            return (
-              <div data-testid="actionItemCategoriesTab">
-                <OrgActionItemCategories orgId={orgId} />
-              </div>
-            );
-          case 'agendaItemCategories':
-            return (
-              <div data-testid="agendaItemCategoriesTab">
-                <OrganizationAgendaCategory orgId={orgId} />
-              </div>
-            );
-        }
-      })()}
+      <div className={`mt-3 ${styles.pageContentWrapper} ${animationClass}`}>
+        {(() => {
+          switch (tab) {
+            case 'general':
+              return (
+                <div data-testid="generalTab">
+                  <GeneralSettings orgId={orgId} />
+                </div>
+              );
+            case 'actionItemCategories':
+              return (
+                <div data-testid="actionItemCategoriesTab">
+                  <OrgActionItemCategories orgId={orgId} />
+                </div>
+              );
+            case 'agendaItemCategories':
+              return (
+                <div data-testid="agendaItemCategoriesTab">
+                  <OrganizationAgendaCategory orgId={orgId} />
+                </div>
+              );
+          }
+        })()}
+      </div>
     </div>
   );
 }

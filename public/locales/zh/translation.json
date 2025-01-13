@@ -874,6 +874,7 @@
     "isVisibleInSearch": "在搜索中可见",
     "enterNameOrganization": "输入组织名称",
     "successfulUpdated": "组织更新成功",
+    "changesReset": "表单重置成功",
     "name": "名称",
     "description": "描述",
     "location": "位置",

@@ -3,7 +3,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-
+import ReplayIcon from '@mui/icons-material/Replay';
+import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -148,6 +149,24 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       }
     } catch (error: unknown) {
       errorHandler(t, error);
+    }
+  };
+
+  const onResetChangesClicked = (): void => {
+    if (data) {
+      setFormState({
+        orgName: data.organizations[0].name,
+        orgDescrip: data.organizations[0].description,
+        address: data.organizations[0].address,
+        orgImage: null,
+      });
+      setuserRegistrationRequiredChecked(
+        data.organizations[0].userRegistrationRequired,
+      );
+      setVisibleChecked(data.organizations[0].visibleInSearch);
+      toast.info(t('changesReset') as string);
+    } else {
+      toast.error(t('resetFailed') as string);
     }
   };
 
@@ -300,11 +319,12 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             </Col>
           </Row>
           <Row>
-            <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">
+            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
+              <Form.Label className="me-3 mb-0">
                 {t('userRegistrationRequired')}:
               </Form.Label>
               <Form.Switch
+                className="custom-switch"
                 placeholder={t('userRegistrationRequired')}
                 checked={userRegistrationRequiredChecked}
                 onChange={(): void =>
@@ -314,17 +334,19 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 }
               />
             </Col>
-            <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">
+            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
+              <Form.Label className="me-3 mb-0">
                 {t('isVisibleInSearch')}:
               </Form.Label>
               <Form.Switch
+                className="custom-switch"
                 placeholder={t('isVisibleInSearch')}
                 checked={visiblechecked}
                 onChange={(): void => setVisibleChecked(!visiblechecked)}
               />
             </Col>
           </Row>
+
           <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}:</Form.Label>
           <Form.Control
             className="mb-4"
@@ -345,15 +367,31 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             }}
             data-testid="organisationImage"
           />
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="success"
-              value="savechanges"
-              onClick={onSaveChangesClicked}
-            >
-              {tCommon('saveChanges')}
-            </Button>
-          </div>
+
+          <Row>
+            <Col sm={6}>
+              <Button
+                variant="primary"
+                className="me-2 reset-changes-btn"
+                value="resetchanges"
+                onClick={onResetChangesClicked}
+              >
+                <ReplayIcon className="me-1" />
+                {tCommon('resetChanges')}
+              </Button>
+            </Col>
+            <Col sm={6} className="d-flex justify-content-end">
+              <Button
+                variant="success"
+                className="save-changes-btn"
+                value="savechanges"
+                onClick={onSaveChangesClicked}
+              >
+                <SaveIcon className="me-1" /> {/* Save icon */}
+                {tCommon('saveChanges')}
+              </Button>
+            </Col>
+          </Row>
         </form>
       </div>
     </>

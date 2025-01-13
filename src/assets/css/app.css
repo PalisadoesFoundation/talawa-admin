@@ -2478,9 +2478,9 @@ progress {
 .form-control:focus {
   color: var(--bs-body-color);
   background-color: #f2f2f2;
-  border-color: #98ddb5;
+  border-color: #a8c7fa;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(49, 187, 107, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(168, 199, 250, 0.25);
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -2651,9 +2651,9 @@ textarea.form-control-lg {
 }
 
 .form-select:focus {
-  border-color: #98ddb5;
+  border-color: #a8c7fa;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(49, 187, 107, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(168, 199, 250, 0.25);
 }
 
 .form-select[multiple],
@@ -2744,14 +2744,18 @@ textarea.form-control-lg {
 }
 
 .form-check-input:focus {
-  border-color: #98ddb5;
+  border-color: #a8c7fa;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(49, 187, 107, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(168, 199, 250, 0.25);
+}
+
+.form-check-input:hover {
+  cursor: pointer;
 }
 
 .form-check-input:checked {
-  background-color: #31bb6b;
-  border-color: #31bb6b;
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-bg);
 }
 
 .form-check-input:checked[type='checkbox'] {
@@ -2763,8 +2767,8 @@ textarea.form-control-lg {
 }
 
 .form-check-input[type='checkbox']:indeterminate {
-  background-color: #31bb6b;
-  border-color: #31bb6b;
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-bg);
   --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
 }
 
@@ -2786,8 +2790,10 @@ textarea.form-control-lg {
 
 .form-switch .form-check-input {
   --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
-  width: 2em;
+  width: 2.5em;
+  height: 1em;
   margin-left: -2.5em;
+  /* background-color: blue; */
   background-image: var(--bs-form-switch-bg);
   background-position: left center;
   border-radius: 2em;
@@ -2800,10 +2806,12 @@ textarea.form-control-lg {
   }
 }
 
+/* Green circle SVG */
 .form-switch .form-check-input:focus {
-  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2398ddb5'/%3e%3c/svg%3e");
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%236ca0dc'/%3e%3c/svg%3e");
 }
 
+/* White bg svg */
 .form-switch .form-check-input:checked {
   background-position: right center;
   --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
@@ -2822,6 +2830,24 @@ textarea.form-control-lg {
 .form-check-inline {
   display: inline-block;
   margin-right: 1rem;
+}
+
+.reset-changes-btn {
+  color: #1778f2 !important;
+  background-color: var(--bs-white) !important;
+  border: 1px solid #1778f2 !important;
+}
+
+.reset-changes-btn:hover,
+.reset-changes-btn:active {
+  background-color: #1778f2 !important;
+  color: var(--bs-white) !important;
+}
+
+.save-changes-btn {
+  background-color: #1778f2 !important;
+  color: var(--bs-white) !important;
+  border: 1px solid #1778f2 !important;
 }
 
 .btn-check {
@@ -3397,6 +3423,42 @@ textarea.form-control.is-invalid {
   z-index: 4;
 }
 
+/* Fade in-out animations for OrgSettings page */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+.pageContentWrapper {
+  position: relative;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
 .btn {
   --bs-btn-padding-x: 1rem;
   --bs-btn-padding-y: 0.7rem;
@@ -3475,7 +3537,7 @@ textarea.form-control.is-invalid {
 .btn.active,
 .btn.show {
   color: var(--bs-btn-active-color);
-  background-color: var(--bs-btn-active-bg);
+  background-color: var(--search-button-bg);
   border-color: var(--bs-btn-active-border-color);
 }
 
@@ -4166,7 +4228,7 @@ fieldset:disabled .btn {
 .dropdown-item:active {
   color: var(--bs-dropdown-link-active-color);
   text-decoration: none;
-  background-color: var(--bs-dropdown-link-active-bg);
+  background-color: var(--search-button-bg);
 }
 
 .dropdown-item.disabled,
@@ -4297,6 +4359,28 @@ fieldset:disabled .btn {
 .btn-group-lg > .btn + .dropdown-toggle-split {
   padding-right: 0.75rem;
   padding-left: 0.75rem;
+}
+
+.dropdown button {
+  color: #1778f2;
+  border: 1px solid #1778f2;
+}
+
+.dropdown button:hover,
+.dropdown button:active {
+  color: var(--bs-white);
+  background-color: #1778f2;
+  border: 1px solid #1778f2;
+}
+
+.dropdown .show {
+  border: 1px solid var(--search-button-bg);
+}
+
+.createSettingBtn {
+  background-color: #1778f2 !important;
+  color: var(--bs-white) !important;
+  border: 1px solid #1778f2 !important;
 }
 
 .btn-group-vertical {

@@ -260,7 +260,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
           <Button
             variant="success"
             size="sm"
-            className="me-2 rounded"
+            className="me-2 rounded createSettingBtn"
             data-testid={'editCategoryBtn' + params.row.id}
             onClick={() =>
               handleOpenModal(
@@ -374,6 +374,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               onClick={() => handleOpenModal(null, 'create')}
               style={{ marginTop: '11px' }}
               data-testid="createActionItemCategoryBtn"
+              className="createSettingBtn"
             >
               <i className={'fa fa-plus me-2'} />
               {tCommon('create')}

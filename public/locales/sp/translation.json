@@ -882,6 +882,7 @@
     "cancel": "Cancelar",
     "enterNameOrganization": "Ingrese el nombre de la organización",
     "successfulUpdated": "Exitoso actualizado",
+    "changesReset": "Formulario restablecido con éxito",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "addOnRegister": {
