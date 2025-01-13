@@ -232,18 +232,16 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       }
     } catch (error: unknown) {
       // Handle errors
-      if (error instanceof Error) {
-        if (
-          error.message.includes('Comment validation failed') &&
-          error.message.includes('Path text is required')
-        ) {
-          toast.error('Please enter a comment before submitting.');
-        } else {
-          toast.error('An unexpected error occurred. Please try again.');
-        }
-      } else {
-        toast.error(t('emptyCommentError'));
-      }
+      // Log the original error for debugging
+      console.error(error);
+
+      // Show user-friendly translated message
+      toast.error(
+        error instanceof Error &&
+          error.message.includes('Comment validation failed')
+          ? t('emptyCommentError')
+          : t('unexpectedError'),
+      );
     }
   };
 
