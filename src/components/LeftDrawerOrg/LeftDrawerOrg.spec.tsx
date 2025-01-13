@@ -472,4 +472,47 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
   });
+
+  test('Should set hideDrawer to false when initially null', async () => {
+    const mockSetHideDrawer = vi.fn();
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawerOrg
+                {...props}
+                hideDrawer={null}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+    expect(mockSetHideDrawer).toHaveBeenCalledTimes(1);
+  });
+
+  test('Should not call setHideDrawer when hideDrawer has a value', async () => {
+    const mockSetHideDrawer = vi.fn();
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawerOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(mockSetHideDrawer).not.toHaveBeenCalled();
+  });
 });

@@ -10,7 +10,7 @@ Methodology:
 
     This script enforces code quality practices in the project.
 
-NOTE:
+Note:
     This script complies with our python3 coding and documentation standards.
     It complies with:
 
@@ -28,8 +28,7 @@ import sys
 
 
 def has_eslint_disable(file_path):
-    """
-    Check if a TypeScript file contains eslint-disable statements.
+    """Check if a TypeScript file contains eslint-disable statements.
 
     Args:
         file_path (str): Path to the TypeScript file.
@@ -37,9 +36,10 @@ def has_eslint_disable(file_path):
     Returns:
         bool: True if eslint-disable statement is found, False otherwise.
     """
+    # Initialize key variables
     eslint_disable_pattern = re.compile(
-        r"""\/\/\s*eslint-disable(?:-next-line
-        |-line)?[^\n]*|\/\*\s*eslint-disable[^\*]*\*\/""",
+        r"\/\/\s*eslint-disable(?:-next-line"
+        r"|-line)?[^\n]*|\/\*\s*eslint-disable[^\*]*\*\/",
         re.IGNORECASE,
     )
 
@@ -59,8 +59,7 @@ def has_eslint_disable(file_path):
 
 
 def check_eslint(files_or_directories):
-    """
-    Check TypeScript files for eslint-disable statements.
+    """Check TypeScript files for eslint-disable statements.
 
     Args:
         files_or_directories (list): List of files or directories to check.
@@ -75,7 +74,11 @@ def check_eslint(files_or_directories):
             # If it's a file, directly check it
             if item.endswith(".ts") or item.endswith(".tsx"):
                 if has_eslint_disable(item):
-                    print(f"File {item} contains eslint-disable statement. Please remove them and ensure the code adheres to the specified ESLint rules.")
+                    print(
+                        f"""\
+File {item} contains eslint-disable statement. Please remove them and \
+ensure the code adheres to the specified ESLint rules."""
+                    )
                     eslint_found = True
         elif os.path.isdir(item):
             # If it's a directory, walk through it and check all
@@ -98,6 +101,8 @@ def check_eslint(files_or_directories):
 
 def arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
+
+    Args: None
 
     Returns:
         result: Parsed argument object
@@ -123,11 +128,17 @@ def arg_parser_resolver():
 
 
 def main():
-    """
-    Execute the script's main functionality.
+    """Execute the script's main functionality.
+
+    Args:
+        None
+
+    Returns:
+        None
 
     This function serves as the entry point for the script. It performs
     the following tasks:
+
     1. Validates and retrieves the files and directories to check from
        command line arguments.
     2. Recursively checks TypeScript files for eslint-disable statements.

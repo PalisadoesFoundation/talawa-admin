@@ -525,7 +525,7 @@ describe('Organisations Page testing as Admin', () => {
       fireEvent.click(sortToggle);
     });
 
-    const latestOption = screen.getByTestId('latest');
+    const latestOption = screen.getByTestId('Latest');
 
     await act(async () => {
       fireEvent.click(latestOption);
@@ -537,7 +537,7 @@ describe('Organisations Page testing as Admin', () => {
       fireEvent.click(sortToggle);
     });
 
-    const oldestOption = await waitFor(() => screen.getByTestId('oldest'));
+    const oldestOption = await waitFor(() => screen.getByTestId('Earliest'));
 
     await act(async () => {
       fireEvent.click(oldestOption);

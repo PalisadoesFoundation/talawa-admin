@@ -50,7 +50,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
 vi.mock('../../components/AddPeopleToTag/AddPeopleToTag', async () => {
   return await import('./ManageTagMockComponents/MockAddPeopleToTag');
 });
@@ -58,7 +57,6 @@ vi.mock('../../components/AddPeopleToTag/AddPeopleToTag', async () => {
 vi.mock('../../components/TagActions/TagActions', async () => {
   return await import('./ManageTagMockComponents/MockTagActions');
 });
-/* eslint-enable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
 
 const renderManageTag = (link: ApolloLink): RenderResult => {
   return render(
@@ -372,9 +370,9 @@ describe('Manage Tag Page', () => {
     userEvent.click(screen.getByTestId('sortPeople'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+      expect(screen.getByTestId('ASCENDING')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('oldest'));
+    userEvent.click(screen.getByTestId('ASCENDING'));
 
     // returns the tags in reverse order
     await waitFor(() => {
@@ -389,9 +387,9 @@ describe('Manage Tag Page', () => {
     userEvent.click(screen.getByTestId('sortPeople'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
+      expect(screen.getByTestId('DESCENDING')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('latest'));
+    userEvent.click(screen.getByTestId('DESCENDING'));
 
     // reverse the order again
     await waitFor(() => {
