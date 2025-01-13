@@ -191,7 +191,6 @@ function app(): JSX.Element {
         <Route element={<SecuredRouteForUser />}>
           <Route path="/user/organizations" element={<Organizations />} />
           <Route path="/user/settings" element={<Settings />} />
-          {/* <Route path="/user/chat" element={<Chat />} /> */}
           <Route element={<UserScreen />}>
             <Route path="/user/chat/:orgId" element={<Chat />} />
             <Route path="/user/organizations" element={<Organizations />} />
