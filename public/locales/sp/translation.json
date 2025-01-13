@@ -879,6 +879,7 @@
     "userRegistrationRequired": "Registro de usuario requerido",
     "isVisibleInSearch": "Visible en la búsqueda",
     "saveChanges": "Guardar cambios",
+    "resetChanges": "restablecerCambios",
     "cancel": "Cancelar",
     "enterNameOrganization": "Ingrese el nombre de la organización",
     "successfulUpdated": "Exitoso actualizado",

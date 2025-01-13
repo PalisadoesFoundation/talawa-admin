@@ -875,6 +875,7 @@
     "enterNameOrganization": "Entrez le nom de l'organisation",
     "successfulUpdated": "Organisation mise à jour avec succès",
     "changesReset": "Formulaire réinitialisé avec succès",
+    "resetChanges": "réinitialiserLesModifications",
     "name": "Nom",
     "description": "Description",
     "location": "Lieu",
