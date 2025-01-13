@@ -143,6 +143,50 @@ describe('Testing Event Card In User portal', () => {
       ).toBeInTheDocument(),
     );
   });
+
+  it('should display an error toast when the register mutation fails', async () => {
+    const errorMocks = [
+      {
+        request: {
+          query: REGISTER_EVENT,
+          variables: { eventId: '123' },
+        },
+        result: {
+          data: {
+            registerForEvent: [
+              {
+                _id: '123',
+              },
+            ],
+          },
+        },
+        error: new Error('Failed to register for the event'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(errorMocks, true);
+
+    const { queryByText } = render(
+      <MockedProvider addTypename={false} link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...props} />
+              <ToastContainer />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    userEvent.click(screen.getByText('Register'));
+
+    await waitFor(() =>
+      expect(
+        queryByText('Failed to register for the event'),
+      ).toBeInTheDocument(),
+    );
+  });
 });
 
 describe('Event card when start and end time are not given', () => {
