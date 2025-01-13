@@ -123,7 +123,7 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header className="bg-primary" closeButton>
+          <Modal.Header style={{ backgroundColor: '#a8c7fa' }} closeButton>
             <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
           </Modal.Header>
           <Modal.Body>{t('deleteMsg')}</Modal.Body>
