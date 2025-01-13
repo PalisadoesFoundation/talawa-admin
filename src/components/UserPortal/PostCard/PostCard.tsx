@@ -242,7 +242,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           toast.error('An unexpected error occurred. Please try again.');
         }
       } else {
-        errorHandler(t, error); // Handle unexpected errors
+        toast.error(t('emptyCommentError'));
       }
     }
   };
