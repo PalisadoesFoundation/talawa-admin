@@ -151,15 +151,6 @@ describe('Testing Event Card In User portal', () => {
           query: REGISTER_EVENT,
           variables: { eventId: '123' },
         },
-        result: {
-          data: {
-            registerForEvent: [
-              {
-                _id: '123',
-              },
-            ],
-          },
-        },
         error: new Error('Failed to register for the event'),
       },
     ];
@@ -171,8 +162,8 @@ describe('Testing Event Card In User portal', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <EventCard {...props} />
               <ToastContainer />
+              <EventCard {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -181,11 +172,11 @@ describe('Testing Event Card In User portal', () => {
 
     userEvent.click(screen.getByText('Register'));
 
-    await waitFor(() =>
+    await waitFor(() => {
       expect(
         queryByText('Failed to register for the event'),
-      ).toBeInTheDocument(),
-    );
+      ).toBeInTheDocument();
+    });
   });
 });
 
