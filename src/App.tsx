@@ -99,6 +99,8 @@ function app(): JSX.Element {
 
   const { data, loading } = useQuery(CHECK_AUTH);
 
+  /* eslint-disable-next-line */
+
   useEffect(() => {
     if (!loading && data?.checkAuth) {
       const auth = data.checkAuth;

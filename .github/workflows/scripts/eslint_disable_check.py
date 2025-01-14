@@ -38,9 +38,7 @@ def has_eslint_disable(file_path):
     """
     # Initialize key variables
     eslint_disable_pattern = re.compile(
-        r"\/\/\s*eslint-disable(?:-next-line|-line)?[^\n]*|"
-        r"\/\*\s*eslint-disable[^\*]*\*\/|"
-        r"\/\*[\s\S]*?eslint-disable[\s\S]*?\*\/",
+        r"\/\/.*eslint-disable.*|\/\*[\s\S]*?eslint-disable[\s\S]*?\*\/",
         re.IGNORECASE | re.DOTALL,
     )
 
@@ -86,7 +84,7 @@ def check_eslint(files_or_directories):
                         file_path = os.path.join(root, file_name)
                         if has_eslint_disable(file_path):
                             print(
-                                f"Error: File {item} contains "
+                                f"Error: File {file_path} contains "
                                 "eslint-disable statements."
                             )
 
