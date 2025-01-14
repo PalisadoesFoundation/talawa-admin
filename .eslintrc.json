@@ -48,12 +48,6 @@
         "no-unused-vars": "off",
         "no-undef": "off"
       }
-    },
-    {
-      "files": ["*.js"],
-      "rules": {
-        "@typescript-eslint/explicit-function-return-type": "off"
-      }
     }
   ],
 
@@ -176,10 +170,6 @@
     "package-lock.json",
     "tsconfig.json",
     "docs/**",
-    "examples/**",
-    "docs/docusaurus.config.ts",
-    "docs/sidebars.ts",
-    "docs/src/**",
-    "docs/blog/**"
+    "examples/**"
   ]
 }
