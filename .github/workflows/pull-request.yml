@@ -274,6 +274,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/vitest/lcov.info
           flags: vitest
+          gcov_ignore: 'docs/'
           fail_ci_if_error: true
 
       - name: Merge Jest and Vitest Coverage Reports
@@ -287,6 +288,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
           flags: combined
+          gcov_ignore: 'docs/'
           fail_ci_if_error: true
       
       - name: TypeScript compilation for changed files
@@ -301,7 +303,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: "./coverage/lcov.info"
-          min_coverage: 0.0
+          min_coverage: 90.0
 
   # Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}
