@@ -268,11 +268,12 @@ jobs:
 
       - name: Upload Vitest Coverage to Codecov
         if: steps.changed-files.outputs.any_changed == 'true'
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/vitest/lcov.info
           flags: vitest
-          fail_ci_if_error: true   
+          fail_ci_if_error: true
       
       - name: TypeScript compilation for changed files
         run: |
