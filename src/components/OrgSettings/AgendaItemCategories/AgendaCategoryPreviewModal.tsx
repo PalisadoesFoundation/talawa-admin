@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
-import styles from './OrganizationAgendaCategory.module.css';
+import styles from 'style/app.module.css';
 
 /**
  * InterfaceFormStateType is an object containing the form state
@@ -47,12 +47,14 @@ const AgendaCategoryPreviewModal: React.FC<
 }) => {
   return (
     <Modal
-      className={styles.AgendaCategoryModal}
+      className={styles.campaignModal}
       show={agendaCategoryPreviewModalIsOpen}
       onHide={hidePreviewModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('agendaCategoryDetails')}</p>
+        <p className={styles.titlemodalOrganizationEvents}>
+          {t('agendaCategoryDetails')}
+        </p>
         <Button
           onClick={hidePreviewModal}
           data-testid="previewAgendaCategoryModalCloseBtn"

@@ -12,7 +12,8 @@
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
     "eslint-config-prettier",
-    "prettier"
+    "prettier",
+    "react-app"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -152,6 +153,7 @@
     "docs/docusaurus.config.ts",
     "docs/sidebars.ts",
     "docs/src/**",
-    "docs/blog/**"
+    "docs/blog/**",
+    "pyproject.toml"
   ]
 }

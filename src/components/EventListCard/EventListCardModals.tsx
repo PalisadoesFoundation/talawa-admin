@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal, Popover } from 'react-bootstrap';
-import styles from './EventListCard.module.css';
+import styles from '../../style/app.module.css';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -401,7 +401,9 @@ function EventListCardModals({
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <p className={styles.preview}>{t('eventTitle')}</p>
+            <p className={styles.previewEventListCardModals}>
+              {t('eventTitle')}
+            </p>
             <Form.Control
               type="title"
               id="eventitle"
@@ -425,7 +427,9 @@ function EventListCardModals({
                 eventListCardProps.userRole === Role.USER
               }
             />
-            <p className={styles.preview}>{tCommon('description')}</p>
+            <p className={styles.previewEventListCardModals}>
+              {tCommon('description')}
+            </p>
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
@@ -449,7 +453,9 @@ function EventListCardModals({
                 eventListCardProps.userRole === Role.USER
               }
             />
-            <p className={styles.preview}>{tCommon('location')}</p>
+            <p className={styles.previewEventListCardModals}>
+              {tCommon('location')}
+            </p>
             <Form.Control
               type="text"
               id="eventLocation"
@@ -555,8 +561,8 @@ function EventListCardModals({
               </div>
             )}
             <div className={styles.checkboxContainer}>
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
+              <div className={styles.checkboxdivEventListCardModals}>
+                <div className={styles.dispflexEventListCardModals}>
                   <label htmlFor="allday">{t('allDay')}?</label>
                   <Form.Switch
                     id="allday"
@@ -572,7 +578,7 @@ function EventListCardModals({
                     }
                   />
                 </div>
-                <div className={styles.dispflex}>
+                <div className={styles.dispflexEventListCardModals}>
                   <label htmlFor="recurring">{t('recurringEvent')}:</label>
                   <Form.Switch
                     id="recurring"
@@ -589,8 +595,8 @@ function EventListCardModals({
                   />
                 </div>
               </div>
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
+              <div className={styles.checkboxdivEventListCardModals}>
+                <div className={styles.dispflexEventListCardModals}>
                   <label htmlFor="ispublic">{t('isPublic')}?</label>
                   <Form.Switch
                     id="ispublic"
@@ -606,7 +612,7 @@ function EventListCardModals({
                     }
                   />
                 </div>
-                <div className={styles.dispflex}>
+                <div className={styles.dispflexEventListCardModals}>
                   <label htmlFor="registrable">{t('isRegistrable')}?</label>
                   <Form.Switch
                     id="registrable"

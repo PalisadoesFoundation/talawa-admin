@@ -1,11 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { Dropdown, Form, Table } from 'react-bootstrap';
+import { Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 
 import { Search } from '@mui/icons-material';
-import SortIcon from '@mui/icons-material/Sort';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
@@ -16,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app.module.css';
 import { useParams } from 'react-router-dom';
+import SortingButton from 'subComponents/SortingButton';
 
 interface InterfaceMember {
   _id: string;
@@ -104,13 +104,11 @@ const Requests = (): JSX.Element => {
             orgId: currentUrl,
           },
         });
-        /* istanbul ignore next */
         if (data) {
           toast.success(t('blockedSuccessfully') as string);
           memberRefetch();
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     },
@@ -127,13 +125,11 @@ const Requests = (): JSX.Element => {
             orgId: currentUrl,
           },
         });
-        /* istanbul ignore next */
         if (data) {
           toast.success(t('Un-BlockedSuccessfully') as string);
           memberRefetch();
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     },
@@ -220,66 +216,39 @@ const Requests = (): JSX.Element => {
           </div>
           <div className={styles.btnsBlockBlockAndUnblock}>
             <div className={styles.largeBtnsWrapper}>
-              {/* Dropdown for filtering members */}
-              <Dropdown aria-expanded="false" title="Sort organizations">
-                <Dropdown.Toggle
-                  variant="success"
-                  data-testid="userFilter"
-                  className={`${styles.createButton} mt-2`}
-                >
-                  <SortIcon className={'me-1'} />
-                  {showBlockedMembers ? t('blockedUsers') : t('allMembers')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    active={!showBlockedMembers}
-                    className={styles.dropdownItem}
-                    data-testid="showMembers"
-                    onClick={(): void => setShowBlockedMembers(false)}
-                  >
-                    {t('allMembers')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    active={showBlockedMembers}
-                    className={styles.dropdownItem}
-                    data-testid="showBlockedMembers"
-                    onClick={(): void => setShowBlockedMembers(true)}
-                  >
-                    {t('blockedUsers')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              {/* Dropdown for sorting by name */}
-              <Dropdown aria-expanded="false">
-                <Dropdown.Toggle
-                  variant="success"
-                  data-testid="nameFilter"
-                  className={`${styles.createButton} mt-2`}
-                >
-                  <SortIcon className={'me-1'} />
-                  {searchByFirstName
+              <SortingButton
+                title={t('sortOrganizations')}
+                sortingOptions={[
+                  { label: t('allMembers'), value: 'allMembers' },
+                  { label: t('blockedUsers'), value: 'blockedUsers' },
+                ]}
+                selectedOption={
+                  showBlockedMembers ? t('blockedUsers') : t('allMembers')
+                }
+                onSortChange={(value) =>
+                  setShowBlockedMembers(value === 'blockedUsers')
+                }
+                dataTestIdPrefix="userFilter"
+                className={`${styles.createButton} mt-2`}
+              />
+
+              <SortingButton
+                title={t('sortByName')}
+                sortingOptions={[
+                  { label: t('searchByFirstName'), value: 'searchByFirstName' },
+                  { label: t('searchByLastName'), value: 'searchByLastName' },
+                ]}
+                selectedOption={
+                  searchByFirstName
                     ? t('searchByFirstName')
-                    : t('searchByLastName')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    active={searchByFirstName}
-                    data-testid="searchByFirstName"
-                    className={styles.dropdownItem}
-                    onClick={(): void => setSearchByFirstName(true)}
-                  >
-                    {t('searchByFirstName')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    active={!searchByFirstName}
-                    className={styles.dropdownItem}
-                    data-testid="searchByLastName"
-                    onClick={(): void => setSearchByFirstName(false)}
-                  >
-                    {t('searchByLastName')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+                    : t('searchByLastName')
+                }
+                onSortChange={(value) =>
+                  setSearchByFirstName(value === 'searchByFirstName')
+                }
+                dataTestIdPrefix="nameFilter"
+                className={`${styles.createButton} mt-2`}
+              />
             </div>
           </div>
         </div>

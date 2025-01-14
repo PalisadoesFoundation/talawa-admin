@@ -15,7 +15,7 @@ import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaItemCategoryInfo,
 } from 'utils/interfaces';
-import styles from './AgendaItemsContainer.module.css';
+import styles from '../../style/app.module.css';
 
 import AgendaItemsPreviewModal from 'components/AgendaItems/AgendaItemsPreviewModal';
 import AgendaItemsDeleteModal from 'components/AgendaItems/AgendaItemsDeleteModal';
@@ -258,7 +258,7 @@ function AgendaItemsContainer({
           className={` shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
         >
           <Row
-            className={`${styles.tableHead} mx-0 border border-light-subtle py-3 ${agendaItemConnection === 'Event' ? 'rounded-top-4' : 'rounded-top-2'}`}
+            className={`${styles.tableHeadAgendaItems} mx-0 border border-light-subtle py-3 ${agendaItemConnection === 'Event' ? 'rounded-top-4' : 'rounded-top-2'}`}
           >
             <Col
               xs={6}

@@ -161,6 +161,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>{user.user.email}</td>
         <td>
           <Button
+            className="btn btn-success"
             onClick={() => setShowJoinedOrganizations(true)}
             data-testid={`showJoinedOrgsBtn${user.user._id}`}
           >

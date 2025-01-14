@@ -35,6 +35,9 @@ import { vi } from 'vitest';
  * 9. **Plugin removal on uninstallation**: Ensures plugins are removed when uninstalled for the organization.
  * 10. **Rendering plugins when not uninstalled**: Ensures plugins render if not uninstalled.
  * 11. **No changes for unmatched plugin**: Ensures no changes when an unrecognized plugin update occurs.
+ * 12. **Should handle logout properly**: Ensures that local storage is cleared and user is redirected to home screen when logout button is clicked
+ * 13. **Should navigate to home page on home link click**: Ensures that browser history is correctly updated and navigates to oraganization home page.
+ * 14. **Should use fallback "en" when cookies.get returns null: Ensures component fallsback to "en" language when i18next cookie is absent.
  *
  * Mocked GraphQL queries and subscriptions simulate backend behavior.
  */
@@ -472,5 +475,97 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     );
 
     await wait();
+  });
+
+  it('Should handle logout properly', async () => {
+    const mockStorage = {
+      clear: vi.fn(),
+      getItem: vi.fn((key: 'name' | 'talawaPlugins') => {
+        const items = {
+          name: JSON.stringify('Test User'),
+          talawaPlugins: JSON.stringify([]),
+        };
+        return items[key] || null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      length: 0,
+      key: vi.fn(),
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: mockStorage,
+    });
+    const mockLocation = {
+      replace: vi.fn(),
+    };
+    Object.defineProperty(window, 'location', {
+      value: mockLocation,
+      writable: true,
+    });
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    userEvent.click(screen.getByTestId('personIcon'));
+    userEvent.click(screen.getByTestId('logoutBtn'));
+    expect(mockStorage.clear).toHaveBeenCalled();
+    expect(mockLocation.replace).toHaveBeenCalledWith('/');
+  });
+
+  it('Should navigate to home page on home link click', async () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/initial'],
+    });
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
+    const homeLink = screen.getByText('Home');
+    expect(homeLink).toBeInTheDocument();
+    userEvent.click(homeLink);
+    await wait();
+    expect(history.location.pathname).toBe(
+      `/user/organization/${organizationId}`,
+    );
+  });
+});
+
+describe('Testing OrganizationNavbar Cookie Fallback', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should use fallback "en" when cookies.get returns null', async () => {
+    vi.spyOn(cookies, 'get').mockReturnValue(
+      null as unknown as { [key: string]: string },
+    );
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar currentPage="home" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(cookies.get).toHaveBeenCalledWith('i18next');
+    expect(screen.getByText('Home')).toBeInTheDocument();
   });
 });

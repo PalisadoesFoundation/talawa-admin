@@ -2,7 +2,7 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
-import styles from './YearlyEventCalender.module.css';
+import styles from '../../style/app.module.css';
 import type { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
@@ -310,7 +310,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   onClick={() => toggleExpand(`${monthInx}-${dayIndex}`)}
                 >
                   {expandedY === `${monthInx}-${dayIndex}` ? (
-                    <div className={styles.closebtn}>
+                    <div className={styles.closebtnYearlyEventCalender}>
                       <br />
                       <p>Close</p>
                     </div>
@@ -325,7 +325,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   onClick={() => toggleExpand(`${monthInx}-${dayIndex}`)}
                 >
                   {expandedY === `${monthInx}-${dayIndex}` ? (
-                    <div className={styles.closebtn}>
+                    <div className={styles.closebtnYearlyEventCalender}>
                       <br />
                       <br />
                       No Event Available!
@@ -343,9 +343,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       });
 
       renderedMonths.push(
-        <div className={styles.column} key={monthInx}>
-          <div className={styles.card}>
-            <h6 className={styles.cardHeader}>{months[monthInx]}</h6>
+        <div className={styles.columnYearlyEventCalender} key={monthInx}>
+          <div className={styles.cardYearlyEventCalender}>
+            <h6 className={styles.cardHeaderYearlyEventCalender}>
+              {months[monthInx]}
+            </h6>
             <div className={styles.calendar__weekdays}>
               {weekdaysShorthand.map((weekday, index) => (
                 <div key={index} className={styles.weekday__yearly}>
@@ -388,7 +390,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </Button>
         </div>
 
-        <div className={styles.row}>
+        <div className={styles.rowYearlyEventCalender}>
           <div>{renderMonthDays()}</div>
         </div>
       </div>

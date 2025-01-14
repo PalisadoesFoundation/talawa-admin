@@ -12,6 +12,21 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
 import userEvent from '@testing-library/user-event';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
 const MOCKS = [
   {
     request: {
@@ -109,9 +124,71 @@ const Mocks2 = [
   },
 ];
 
+const updateMock = [
+  {
+    request: {
+      query: UPDATE_USER_MUTATION,
+      variables: {
+        firstName: 'John',
+        lastName: 'randomUpdated',
+        createdAt: '2021-03-01T00:00:00.000Z',
+        gender: 'MALE',
+        email: 'johndoe@gmail.com',
+        phoneNumber: '+174567890',
+        birthDate: '2024-03-01',
+        grade: 'GRADUATE',
+        empStatus: 'PART_TIME',
+        maritalStatus: 'SINGLE',
+        address: 'random',
+        state: 'random',
+        country: 'IN',
+        eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
+        image: '',
+      },
+    },
+    result: {
+      data: {
+        updateUserProfile: {
+          _id: '65ba1621b7b00c20e5f1d8d2',
+        },
+      },
+    },
+  },
+  ...Mocks1,
+];
+
+const errorMock = [
+  {
+    request: {
+      query: UPDATE_USER_MUTATION,
+      variables: {
+        firstName: 'John',
+        lastName: 'Doe2',
+        createdAt: '2021-03-01T00:00:00.000Z',
+        gender: 'MALE',
+        email: 'johndoe@gmail.com',
+        phoneNumber: '4567890',
+        birthDate: '2024-03-01',
+        grade: 'GRADUATE',
+        empStatus: 'PART_TIME',
+        maritalStatus: 'SINGLE',
+        address: 'random',
+        state: 'random',
+        country: 'IN',
+        eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
+        image: '',
+      },
+    },
+    error: new Error('Please enter a valid phone number'),
+  },
+  ...Mocks1,
+];
+
 const link = new StaticMockLink(MOCKS, true);
 const link1 = new StaticMockLink(Mocks1, true);
 const link2 = new StaticMockLink(Mocks2, true);
+const link3 = new StaticMockLink(updateMock, true);
+const link4 = new StaticMockLink(errorMock, true);
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
@@ -442,4 +519,80 @@ it('prevents selecting future dates for birth date', async () => {
   // Checking if value set correctly
   fireEvent.change(birthDateInput, { target: { value: today } });
   expect(birthDateInput.value).toBe(today);
+});
+
+it('should update user profile successfully', async () => {
+  const toastSuccessSpy = vi.spyOn(toast, 'success');
+  await act(async () => {
+    render(
+      <MockedProvider link={link3} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  });
+
+  await wait();
+
+  const lastNameInput = screen.getByTestId('inputLastName');
+  expect(lastNameInput).toHaveValue('Doe');
+  await act(async () => {
+    fireEvent.change(lastNameInput, { target: { value: 'randomUpdated' } });
+  });
+
+  const saveButton = screen.getByTestId('updateUserBtn');
+  expect(saveButton).toBeInTheDocument();
+  await act(async () => {
+    fireEvent.click(saveButton);
+  });
+  await wait();
+
+  expect(lastNameInput).toHaveValue('randomUpdated');
+  expect(toastSuccessSpy).toHaveBeenCalledWith('Profile updated Successfully');
+
+  toastSuccessSpy.mockRestore();
+});
+
+it('should call errorHandler when updating profile with an invalid phone number', async () => {
+  await act(async () => {
+    render(
+      <MockedProvider link={link4} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  });
+
+  await wait(200);
+
+  const lastNameInput = screen.getByTestId('inputLastName');
+  await act(async () => {
+    fireEvent.change(lastNameInput, { target: { value: 'Doe2' } });
+  });
+
+  const phoneNumberInput = screen.getByTestId('inputPhoneNumber');
+
+  await act(async () => {
+    fireEvent.change(phoneNumberInput, { target: { value: '4567890' } });
+  });
+  await wait(200);
+
+  const saveButton = screen.getByTestId('updateUserBtn');
+  expect(saveButton).toBeInTheDocument();
+
+  await act(async () => {
+    fireEvent.click(saveButton);
+  });
+  await wait();
+  expect(errorHandler).toHaveBeenCalled();
 });

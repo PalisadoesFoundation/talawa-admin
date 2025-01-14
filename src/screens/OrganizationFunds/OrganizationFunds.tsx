@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -16,6 +16,7 @@ import FundModal from './FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from '../../style/app.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
+import SortingButton from 'subComponents/SortingButton';
 
 const dataGridStyle = {
   borderRadius: '20px',
@@ -300,46 +301,36 @@ const organizationFunds = (): JSX.Element => {
           <Button
             tabIndex={-1}
             className={`${styles.searchButton} `}
-            style={{ marginBottom: '9px' }}
+            style={{ marginBottom: '0px' }}
             data-testid="searchBtn"
           >
             <Search className={styles.searchIcon} />
           </Button>
         </div>
         <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between align-items-center">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdowns}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_DESC')}
-                  data-testid="createdAt_DESC"
-                >
-                  {t('createdLatest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_ASC')}
-                  data-testid="createdAt_ASC"
-                >
-                  {t('createdEarliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          <SortingButton
+            title={tCommon('sort')}
+            sortingOptions={[
+              { label: t('createdLatest'), value: 'createdAt_DESC' },
+              { label: t('createdEarliest'), value: 'createdAt_ASC' },
+            ]}
+            selectedOption={
+              sortBy === 'createdAt_DESC'
+                ? t('createdLatest')
+                : t('createdEarliest')
+            }
+            onSortChange={(value) =>
+              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+            }
+            dataTestIdPrefix="filter"
+            buttonLabel={tCommon('sort')}
+          />
           <div>
             <Button
               variant="success"
               onClick={() => handleOpenModal(null, 'create')}
               className={styles.createButton}
-              style={{ marginTop: '11px' }}
+              style={{ marginTop: '0px' }}
               data-testid="createFundBtn"
             >
               <i className={'fa fa-plus me-2'} />

@@ -1262,6 +1262,7 @@
     "endOfResults": "endOfResults"
   },
   "userChat": {
+    "title": "Chats",
     "add": "Add",
     "chat": "Chat",
     "search": "Search",
