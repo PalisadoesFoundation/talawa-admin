@@ -518,7 +518,7 @@
 
 .tableHeader {
   background-color: var(--table-head-bg);
-  color: var(--table-header-color);
+  color: var(--black-color);
   font-size: var(--font-size-header);
 }
 
