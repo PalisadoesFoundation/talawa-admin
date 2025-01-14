@@ -208,9 +208,9 @@ function organizationPeople(): JSX.Element {
         return (
           <div
             style={{
-              display: `${styles.profileImage.search('flex') === -1 ? 'flex' : ''}`,
-              justifyContent: `${styles.profileImage.search('center') === -1 ? 'center' : ''}`,
-              alignItems: `${styles.profileImage.search('center') === -1 ? 'center' : ''}`,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             {params.row?.image ? (

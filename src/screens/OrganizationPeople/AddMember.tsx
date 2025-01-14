@@ -20,7 +20,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -97,20 +97,20 @@ function AddMember(): JSX.Element {
     setCreateNewUserModalIsOpen(!addUserModalisOpen);
 
   const [addMember] = useMutation(ADD_MEMBER_MUTATION);
+  function useModal(initialState = false) {
+    const [isOpen, setIsOpen] = useState(initialState);
+    const open = useCallback(() => setIsOpen(true), []);
+    const close = useCallback(() => setIsOpen(false), []);
+    const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
 
-  const [createNewUserModalisOpen1, setCreateNewUserModalIsOpen1] =
-    useState(false);
-
-  // Function to open the modal
-  function openCreateNewUserModal1(): void {
-    setCreateNewUserModalIsOpen(true);
+    return { isOpen, open, close, toggle };
   }
 
-  // Function to close the modal
-  function closeCreateNewUserModal1(): void {
-    setCreateNewUserModalIsOpen(false);
-  }
-
+  const {
+    isOpen: createNewUserModalIsOpen1,
+    open: openCreateNewUserModal1,
+    close: closeCreateNewUserModal1,
+  } = useModal();
   const createMember = async (userId: string): Promise<void> => {
     try {
       await addMember({
@@ -128,7 +128,7 @@ function AddMember(): JSX.Element {
     }
   };
 
-  const { orgId: currentUrl } = useParams();
+  const { orgId: currentUrl } = useParams<{ orgId: string }>();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
