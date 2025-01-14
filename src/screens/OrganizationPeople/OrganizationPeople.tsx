@@ -42,7 +42,7 @@ function organizationPeople(): JSX.Element {
   const location = useLocation();
   const role = location?.state;
 
-  const { orgId: currentUrl } = useParams();
+  const { orgId: currentUrl } = useParams<{ orgId: string }>();
 
   const [state, setState] = useState(role?.role || 0);
 
