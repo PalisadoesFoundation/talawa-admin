@@ -73,6 +73,7 @@
     "web-vitals": "^4.2.4"
   },
   "scripts": {
+    "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
     "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts",
     "build": "tsc && vite build --config config/vite.config.ts",
     "preview": "vite preview --config config/vite.config.ts",
