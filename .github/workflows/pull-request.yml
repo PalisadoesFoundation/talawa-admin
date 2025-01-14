@@ -245,22 +245,23 @@ jobs:
         uses: tj-actions/changed-files@v45
           
       - name: Run Jest Tests
-        if: steps.changed-files.outputs.only_changed != 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/jest'
         run: |
           npm run test -- --watchAll=false --coverage
 
       - name: Upload Jest Coverage to Codecov
-        if: steps.changed-files.outputs.only_changed != 'true'
-        uses: codecov/codecov-action@v3
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/jest/lcov.info
           flags: jest
           fail_ci_if_error: true
 
       - name: Run Vitest Tests
-        if: steps.changed-files.outputs.only_changed != 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
         run: |
@@ -282,16 +283,6 @@ jobs:
               npx tsc --noEmit "$file"
             fi
           done
-
-      - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
-          gcov_ignore: 'docs/'
-          fail_ci_if_error: false
-          files: './coverage/lcov.info'
-          name: '${{env.CODECOV_UNIQUE_NAME}}'
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
