@@ -50,6 +50,30 @@ interface InterfaceOrganizationCardProps {
   isjoined: boolean;
 }
 
+/**
+ * Component to display an organization's card with its image and owner details.
+ * Displays an organization card with options to join or manage membership.
+ *
+ * Shows the organization's name, image, description, address, number of admins and members,
+ * and provides buttons for joining, withdrawing membership requests, or visiting the organization page.
+ *
+ * @param props - The properties for the organization card.
+ * @param id - The unique identifier of the organization.
+ * @param name - The name of the organization.
+ * @param image - The URL of the organization's image.
+ * @param description - A description of the organization.
+ * @param admins - The list of admins with their IDs.
+ * @param members - The list of members with their IDs.
+ * @param address - The address of the organization including city, country code, line1, postal code, and state.
+ * @param membershipRequestStatus - The status of the membership request (accepted, pending, or empty).
+ * @param userRegistrationRequired - Indicates if user registration is required to join the organization.
+ * @param membershipRequests - The list of membership requests with user IDs.
+ *
+ * @param props - Properties for the organization card.
+ * @returns JSX element representing the organization card.
+ * @returns The organization card component.
+ */
+
 function OrganizationCard({
   id,
   name,
