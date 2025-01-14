@@ -38,8 +38,8 @@ def has_eslint_disable(file_path):
     """
     # Initialize key variables
     eslint_disable_pattern = re.compile(
-        r"\/\/\s*eslint-disable(?:-next-line|-line)?[^\n]*|\/\*\s*eslint-disable[^\*]*\*\/",
-        re.IGNORECASE,
+        r"\/\/\s*eslint-disable(?:-next-line|-line)?[^\n]*|\/\*\s*eslint-disable[^\*]*\*\/|\/\*[\s\S]*?eslint-disable[\s\S]*?\*\/",
+        re.IGNORECASE | re.DOTALL,
     )
 
     try:
