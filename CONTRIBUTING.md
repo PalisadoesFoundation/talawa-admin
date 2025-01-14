@@ -19,6 +19,7 @@ If you are new to contributing to open source, please read the Open Source Guide
   - [Contributing Code](#contributing-code)
     - [Jest Testing](#jest-testing)
     - [Vitest Testing](#vitest-testing)
+    - [Combined testing and coverage](#combined-testing-and-coverage)
 - [Internships](#internships)
 - [Community](#community)
 
@@ -101,83 +102,59 @@ The process of proposing a change to Talawa Admin can be summarized as:
 
    2. **_Testing_:**
       #### Jest Testing 
-
       1. Running a single test:
-
          ```
          npm run test path/to/test/file
          ```
-
       2. Running all tests:
-
          ```
          npm run test --watchAll=false
          ```
-
       3. Viewing the code coverage of a single test file:
-
          ```
          npm run test --watchAll=false --coverage /path/to/test/file
          ```
-
       4. Viewing the code coverage of all test files:
-
          ```
          npm run test --watchAll=false --coverage
          ```
-
       5. Debug tests in browser
-
          You can see the output of failing tests in broswer by running `jest-preview` package before running your tests
-
          ```
          npm run jest-preview
          npm run test --watchAll=false --coverage
          ```
-
          You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown in this screenshot -
 
          ![Debugging Test Demo](./public/images/jest-preview.webp)
 
       #### Vitest Testing
       1. Running a single test:
-
          ```
          npm run test:vitest /path/to/test/file
          ```
-
       2. Running all tests:
-
          ```
          npm run test:vitest
          ```
-
       3. Viewing the code coverage of a single test file:
-
          ```
          npm run test:vitest:coverage /path/to/test/file
          ```
-
       4. Viewing the code coverage of all test files:
-
          ```
          npm run test:vitest:coverage
          ```
 
-
       #### Combined testing and coverage
-
       1. Running all tests:
-
-      ```
-      npm run test && npm run test:vitest
-      ```
-
+         ```
+         npm run test && npm run test:vitest
+         ```
       2. Viewing combined code coverage:
-
-      ```
-      npm run test --watchAll=false --coverage && npm run test:vitest:coverage
-      ```
+         ```
+         npm run test --watchAll=false --coverage && npm run test:vitest:coverage
+         ```
 
    3. **_Test Code Coverage_:**
 
