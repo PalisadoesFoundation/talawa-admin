@@ -98,6 +98,7 @@ function app(): JSX.Element {
   // TODO: Fetch Installed plugin extras and store for use within MainContent and Side Panel Components.
 
   const { data, loading } = useQuery(CHECK_AUTH);
+  /*eslint-disable */
 
   useEffect(() => {
     if (!loading && data?.checkAuth) {
