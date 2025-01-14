@@ -406,11 +406,13 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
    sudo useradd -r -s /bin/false talawa_admin
    sudo groupadd -r talawa_admin
    sudo usermod -a -G talawa_admin talawa_admin
-   # Set proper directory permissions
-   sudo chown -R talawa_admin:talawa_admin /path/to/talawa-admin
-   sudo chmod 750 /path/to/talawa-admin
-   sudo find /path/to/talawa-admin -type f -exec chmod 640 {} \
-   sudo chmod 600 /path/to/talawa-admin/.env
+   # Get the absolute path to your talawa-admin installation
+   INSTALL_PATH=$(pwd)
+   
+   sudo chown -R talawa_admin:talawa_admin $INSTALL_PATH
+   sudo chmod 750 $INSTALL_PATH
+   sudo find $INSTALL_PATH -type f -exec chmod 640 {} \;
+   sudo chmod 600 $INSTALL_PATH/.env
    ```
 
 ---
@@ -422,7 +424,7 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
      - For most distributions: `/etc/systemd/system/`
      - For systems using `systemd`, this will be the default directory.
 
-   // Optional Steps...
+   <!-- Optional Steps -->
    - Verify service file permissions and ownership:
    ```bash
    sudo chmod 644 /etc/systemd/system/talawa_admin.service
@@ -439,7 +441,7 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
 #### 4. **Ensure the `.env` File Exists**
    - Verify that the path in the `EnvironmentFile` line points to a valid `.env` file located in the root directory of the Talawa-Admin repository.
 
-   // Optional Steps...
+   <!-- Optional Steps -->
    - Validate environment file permissions and configuration:
    ```bash
    sudo chmod 600 /path/to/talawa-admin/.env
@@ -463,6 +465,8 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
 2. **Start the Talawa-Admin Service**:
    ```bash
    sudo systemctl start talawa_admin.service
+   # Verify service started successfully
+   sudo systemctl status talawa_admin.service
    ```
 
 3. **Stop the Talawa-Admin Service**:
