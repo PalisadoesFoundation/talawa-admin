@@ -22,6 +22,9 @@ import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import SortingButton from 'subComponents/SortingButton';
+import { Dropdown } from 'react-bootstrap';
+import { Sort } from '@mui/icons-material';
+
 /**
  * OrganizationPeople component is used to display the list of members, admins and users of the organization.
  * It also provides the functionality to search the members, admins and users by their full name.
@@ -176,6 +179,21 @@ function organizationPeople(): JSX.Element {
 
   const columns: GridColDef[] = [
     {
+      field: 'rowNumber',
+      headerName: '#',
+      minWidth: 80,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        // Use params.api.getSortedRowIds() or params.rowIndex to generate row numbers
+        const sortedRowIds = params.api.getSortedRowIds(); // Get sorted row IDs
+        const rowIndex = sortedRowIds.indexOf(params.id); // Find the index of the current row
+        return <div>{rowIndex + 1}</div>;
+      },
+    },
+    {
       field: 'profile',
       headerName: tCommon('profile'),
       flex: 1,
@@ -183,51 +201,29 @@ function organizationPeople(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
+      cellClassName: `${styles.profileImage}`,
       sortable: false,
 
       renderCell: (params: GridCellParams) => {
-        // Fallback to a fixed width if computedWidth is unavailable
-        const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.6, 60); // Max size 40px, responsive scaling
-
         return (
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%',
+              display: `${styles.profileImage.search('flex') === -1 ? 'flex' : ''}`,
+              justifyContent: `${styles.profileImage.search('center') === -1 ? 'center' : ''}`,
+              alignItems: `${styles.profileImage.search('center') === -1 ? 'center' : ''}`,
             }}
           >
             {params.row?.image ? (
               <img
                 src={params.row?.image}
                 alt="avatar"
-                style={{
-                  width: `${imageSize}px`,
-                  height: `${imageSize}px`,
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
+                className={styles.TableImage}
               />
             ) : (
-              <div
-                style={{
-                  width: `${imageSize}px`,
-                  height: `${imageSize}px`,
-                  fontSize: `${imageSize * 0.4}px`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '50%',
-                  backgroundColor: '#ccc',
-                }}
-              >
-                <Avatar
-                  name={`${params.row.firstName} ${params.row.lastName}`}
-                />
-              </div>
+              <Avatar
+                avatarStyle={styles.TableImage}
+                name={`${params.row.firstName} ${params.row.lastName}`}
+              />
             )}
           </div>
         );
@@ -335,31 +331,68 @@ function organizationPeople(): JSX.Element {
                 <Button
                   type="submit"
                   className={`${styles.searchButton}`}
-                  data-testid={'searchbtn'}
+                  data-testid="searchbtn"
                 >
                   <Search className={styles.searchIcon} />
                 </Button>
               </Form>
             </div>
             <div className={styles.btnsBlock}>
-              <SortingButton
-                className={styles.dropdown}
-                title={tCommon('sort')}
-                sortingOptions={[
-                  { label: tCommon('users'), value: 'users' },
-                  { label: tCommon('members'), value: 'members' },
-                  { label: tCommon('admins'), value: 'admins' },
-                ]}
-                selectedOption={
-                  state === 2
-                    ? tCommon('users')
-                    : state === 0
-                      ? tCommon('members')
-                      : tCommon('admins')
-                }
-                onSortChange={handleSortChange}
-                dataTestIdPrefix="role"
-              />
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="success"
+                  id="dropdown-basic"
+                  className={styles.dropdown}
+                  data-testid="role"
+                >
+                  <Sort />
+                  {t('sort')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    d-inline
+                    id="userslist"
+                    data-value="userslist"
+                    className={styles.dropdownItem}
+                    data-name="displaylist"
+                    data-testid="users"
+                    defaultChecked={state === 2}
+                    onClick={() => setState(2)}
+                  >
+                    <Form.Label htmlFor="userslist">
+                      {tCommon('users')}
+                    </Form.Label>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    d-inline
+                    id="memberslist"
+                    data-value="memberslist"
+                    className={styles.dropdownItem}
+                    data-name="displaylist"
+                    data-testid="members"
+                    defaultChecked={state === 0}
+                    onClick={() => setState(0)}
+                  >
+                    <Form.Label htmlFor="memberslist">
+                      {tCommon('members')}
+                    </Form.Label>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    d-inline
+                    id="adminslist"
+                    data-value="adminslist"
+                    data-name="displaylist"
+                    className={styles.dropdownItem}
+                    data-testid="admins"
+                    defaultChecked={state === 1}
+                    onClick={() => setState(1)}
+                  >
+                    <Form.Label htmlFor="adminslist">
+                      {tCommon('admins')}
+                    </Form.Label>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
             <div className={styles.btnsBlock}>
               <AddMember />
@@ -367,9 +400,9 @@ function organizationPeople(): JSX.Element {
           </div>
         </div>
       </Row>
-      {((state == 0 && memberData) ||
-        (state == 1 && adminFilteredData) ||
-        (state == 2 && usersData)) && (
+      {((state === 0 && memberData) ||
+        (state === 1 && adminFilteredData) ||
+        (state === 2 && usersData)) && (
         <div className="datatable">
           <DataGrid
             disableColumnMenu
@@ -388,26 +421,16 @@ function organizationPeople(): JSX.Element {
               ),
             }}
             sx={{
-              borderRadius: 'var(--table-head-radius)',
-              backgroundColor: 'var(--grey-bg-color)',
+              // Remove all borders
+              border: 'none',
               '& .MuiDataGrid-row': {
-                backgroundColor: 'var(--tablerow-bg-color)',
-                '&:focus-within': {
-                  outline: '2px solid #000',
-                  outlineOffset: '-2px',
-                },
+                border: 'none', // Removes borders between rows
               },
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: 'var(--grey-bg-color)',
-                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+              '& .MuiDataGrid-cell': {
+                border: 'none', // Removes borders between cells
               },
-              '& .MuiDataGrid-row.Mui-hovered': {
-                backgroundColor: 'var(--grey-bg-color)',
-                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiDataGrid-cell:focus': {
-                outline: '2px solid #000',
-                outlineOffset: '-2px',
+              '& .MuiDataGrid-columnHeaders': {
+                borderBottom: 'none', // Removes the bottom border of the header
               },
             }}
             getRowClassName={() => `${styles.rowBackground}`}
@@ -441,8 +464,6 @@ function organizationPeople(): JSX.Element {
   );
 }
 
-export default organizationPeople;
-
 // This code is used to remove 'user' object from the array index of userData and directly use store the properties at array index, this formatting is needed for DataGrid.
 
 interface InterfaceUser {
@@ -475,3 +496,5 @@ function convertObject(original: InterfaceOriginalObject): InterfaceUser[] {
   });
   return convertedObject.users;
 }
+
+export default organizationPeople;
