@@ -198,7 +198,7 @@ jobs:
       - name: Filter TypeScript files
         id: filter-files
         run: |
-          echo "::set-output name=ts_files::$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | tr ',' '\n' | grep -E '\.(ts|tsx)$' | tr '\n' ' ')"
+          echo "ts_files=$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | tr ',' '\n' | grep -E '\.(ts|tsx)$' | tr '\n' ' ')" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Run Python script

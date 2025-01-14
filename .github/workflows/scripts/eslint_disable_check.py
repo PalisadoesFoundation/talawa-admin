@@ -70,7 +70,9 @@ def check_eslint(files_or_directories):
         if os.path.isfile(item):
             # Check a single file
             if item.endswith((".ts", ".tsx")) and has_eslint_disable(item):
-                print(f"Error: File {item} contains eslint-disable statements.")
+                print(
+                    f"Error: File {item} contains eslint-disable statements."
+                )
                 eslint_found = True
         elif os.path.isdir(item):
             # Recursively check files in a directory
@@ -81,7 +83,9 @@ def check_eslint(files_or_directories):
                     if file_name.endswith((".ts", ".tsx")):
                         file_path = os.path.join(root, file_name)
                         if has_eslint_disable(file_path):
-                            print(f"Error: File {file_path} contains eslint-disable statements.")
+                            print(
+                                f"Error: File {file_path} contains eslint-disable statements."
+                            )
                             eslint_found = True
     return eslint_found
 
