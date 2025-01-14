@@ -1,16 +1,51 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import { MockedProvider } from '@apollo/client/testing';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'i18next';
 import OrganizationCard from './OrganizationCard';
 
-/**
- * This file contains unit tests for the `OrganizationCard` component.
- *
- * The tests cover:
- * - Rendering the component with all provided props and verifying the correct display of text elements.
- * - Ensuring the component handles cases where certain props (like image) are not provided.
- *
- * These tests utilize the React Testing Library for rendering and querying DOM elements.
- */
+// Initialize i18n for testing
+i18n.init({
+  lng: 'en',
+  resources: {
+    en: {
+      translation: {
+        users: {
+          MembershipRequestSent: 'Request sent',
+          orgJoined: 'Joined',
+          AlreadyJoined: 'Already joined',
+          errorOccured: 'Error occurred',
+          MembershipRequestNotFound: 'Request not found',
+          MembershipRequestWithdrawn: 'Request withdrawn',
+          visit: 'Visit',
+          withdraw: 'Withdraw',
+          joinNow: 'Join Now',
+        },
+      },
+      common: {
+        admins: 'Admins',
+        members: 'Members',
+      },
+    },
+  },
+});
+
+// Wrapper component to provide all required contexts
+const TestWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.ReactElement => {
+  return (
+    <MockedProvider>
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </I18nextProvider>
+    </MockedProvider>
+  );
+};
 
 describe('Testing the Organization Card', () => {
   it('should render props and text elements test for the page component', () => {
@@ -20,14 +55,30 @@ describe('Testing the Organization Card', () => {
       firstName: 'John',
       lastName: 'Doe',
       name: 'Sample',
+      description: '',
+      admins: [],
+      members: [],
+      address: {
+        city: '',
+        countryCode: '',
+        line1: '',
+        postalCode: '',
+        state: '',
+      },
+      membershipRequestStatus: '',
+      userRegistrationRequired: false,
+      membershipRequests: [],
     };
 
-    render(<OrganizationCard {...props} />);
+    render(
+      <TestWrapper>
+        <OrganizationCard {...props} />
+      </TestWrapper>,
+    );
 
     expect(screen.getByText(props.name)).toBeInTheDocument();
-    expect(screen.getByText(/Owner:/i)).toBeInTheDocument();
-    expect(screen.getByText(props.firstName)).toBeInTheDocument();
-    expect(screen.getByText(props.lastName)).toBeInTheDocument();
+    expect(screen.getByText(/Admins/i)).toBeInTheDocument();
+    expect(screen.getByText(/Members/i)).toBeInTheDocument();
   });
 
   it('Should render text elements when props value is not passed', () => {
@@ -37,13 +88,29 @@ describe('Testing the Organization Card', () => {
       firstName: 'John',
       lastName: 'Doe',
       name: 'Sample',
+      description: '',
+      admins: [],
+      members: [],
+      address: {
+        city: '',
+        countryCode: '',
+        line1: '',
+        postalCode: '',
+        state: '',
+      },
+      membershipRequestStatus: '',
+      userRegistrationRequired: false,
+      membershipRequests: [],
     };
 
-    render(<OrganizationCard {...props} />);
+    render(
+      <TestWrapper>
+        <OrganizationCard {...props} />
+      </TestWrapper>,
+    );
 
     expect(screen.getByText(props.name)).toBeInTheDocument();
-    expect(screen.getByText(/Owner:/i)).toBeInTheDocument();
-    expect(screen.getByText(props.firstName)).toBeInTheDocument();
-    expect(screen.getByText(props.lastName)).toBeInTheDocument();
+    expect(screen.getByText(/Admins/i)).toBeInTheDocument();
+    expect(screen.getByText(/Members/i)).toBeInTheDocument();
   });
 });

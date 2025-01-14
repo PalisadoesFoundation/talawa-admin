@@ -139,7 +139,6 @@ export default function organizations(): JSX.Element {
    * @param _event - The event triggering the page change.
    * @param  newPage - The new page number.
    */
-  /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -152,7 +151,6 @@ export default function organizations(): JSX.Element {
    *
    * @param  event - The event triggering the change.
    */
-  /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -202,7 +200,6 @@ export default function organizations(): JSX.Element {
   /**
    * Updates the list of organizations based on query results and selected mode.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (data) {
       const organizations = data.organizationsConnection.map(
@@ -231,7 +228,6 @@ export default function organizations(): JSX.Element {
   /**
    * Updates the list of organizations based on the selected mode and query results.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (mode === 0) {
       if (data) {
@@ -251,7 +247,11 @@ export default function organizations(): JSX.Element {
               )
             )
               membershipRequestStatus = 'pending';
-            return { ...organization, membershipRequestStatus };
+            return {
+              ...organization,
+              membershipRequestStatus,
+              isJoined: false,
+            };
           },
         );
         setOrganizations(organizations);
@@ -259,7 +259,13 @@ export default function organizations(): JSX.Element {
     } else if (mode === 1) {
       if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
         const organizations =
-          joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
+          joinedOrganizationsData.users[0]?.user?.joinedOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
         setOrganizations(organizations);
       }
     } else if (mode === 2) {
@@ -268,8 +274,13 @@ export default function organizations(): JSX.Element {
         createdOrganizationsData.users.length > 0
       ) {
         const organizations =
-          createdOrganizationsData.users[0]?.appUserProfile
-            ?.createdOrganizations || [];
+          createdOrganizationsData.users[0]?.appUserProfile?.createdOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
         setOrganizations(organizations);
       }
     }
@@ -379,8 +390,7 @@ export default function organizations(): JSX.Element {
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage,
                         )
-                      : /* istanbul ignore next */
-                        organizations
+                      : organizations
                     ).map((organization: InterfaceOrganization, index) => {
                       const cardProps: InterfaceOrganizationCardProps = {
                         name: organization.name,
@@ -408,10 +418,7 @@ export default function organizations(): JSX.Element {
               <tbody>
                 <tr>
                   <PaginationList
-                    count={
-                      /* istanbul ignore next */
-                      organizations ? organizations.length : 0
-                    }
+                    count={organizations ? organizations.length : 0}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
