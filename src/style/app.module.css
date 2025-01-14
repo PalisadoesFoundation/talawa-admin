@@ -1607,6 +1607,7 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: var(--input-shadow-color);
 }
 
 @media (max-width: 1020px) {
