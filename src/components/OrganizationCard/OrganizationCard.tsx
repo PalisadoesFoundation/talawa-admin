@@ -19,7 +19,7 @@ import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { ApolloError } from '@apollo/client';
 
-const { getItem } = useLocalStorage();
+useLocalStorage();
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -47,29 +47,8 @@ interface InterfaceOrganizationCardProps {
       _id: string;
     };
   }[];
+  isjoined: boolean;
 }
-
-/**
- * Displays an organization card with options to join or manage membership.
- *
- * Shows the organization's name, image, description, address, number of admins and members,
- * and provides buttons for joining, withdrawing membership requests, or visiting the organization page.
- *
- * @param props - The properties for the organization card.
- * @param id - The unique identifier of the organization.
- * @param name - The name of the organization.
- * @param image - The URL of the organization's image.
- * @param description - A description of the organization.
- * @param admins - The list of admins with their IDs.
- * @param members - The list of members with their IDs.
- * @param address - The address of the organization including city, country code, line1, postal code, and state.
- * @param membershipRequestStatus - The status of the membership request (accepted, pending, or empty).
- * @param userRegistrationRequired - Indicates if user registration is required to join the organization.
- * @param membershipRequests - The list of membership requests with user IDs.
- *
- * @returns The organization card component.
- */
-const userId: string | null = getItem('userId');
 
 function OrganizationCard({
   id,
@@ -82,11 +61,13 @@ function OrganizationCard({
   membershipRequestStatus,
   userRegistrationRequired,
   membershipRequests,
+  isjoined,
 }: InterfaceOrganizationCardProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'users',
-  });
+  const { getItem } = useLocalStorage();
+  const userId: string | null = getItem('userId');
+
   const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -131,8 +112,7 @@ function OrganizationCard({
     } catch (error: unknown) {
       if (error instanceof Error) {
         const apolloError = error as ApolloError;
-        const errorCode = apolloError.graphQLErrors[0]?.extensions?.code;
-
+        const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
           toast.error(t('AlreadyJoined') as string);
         } else {
@@ -201,7 +181,7 @@ function OrganizationCard({
           </h6>
         </div>
       </div>
-      {membershipRequestStatus === 'accepted' && (
+      {isjoined && (
         <Button
           variant="success"
           data-testid="manageBtn"
