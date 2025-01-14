@@ -4,7 +4,7 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Typography from '@mui/material/Typography';
-
+import styles from '../../../style/app.module.css';
 // Props for the AverageRating component
 type ModalPropType = {
   data: {
@@ -33,7 +33,7 @@ type FeedbackType = {
 export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
   return (
     <>
-      <Card style={{ width: '300px' }}>
+      <Card className={styles.cardContainer}>
         <Card.Body>
           <Card.Title>
             <h4>Average Review Score</h4>
@@ -50,13 +50,9 @@ export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
             icon={<FavoriteIcon fontSize="inherit" />}
             size="medium"
             emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-            sx={{
-              '& .MuiRating-iconFilled': {
-                color: '#ff6d75', // Color for filled stars
-              },
-              '& .MuiRating-iconHover': {
-                color: '#ff3d47', // Color for star on hover
-              },
+            classes={{
+              iconFilled: styles.ratingFilled,
+              iconHover: styles.ratingHover,
             }}
           />
         </Card.Body>

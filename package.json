@@ -87,7 +87,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\"",
     "check-tsdoc": "node .github/workflows/check-tsdoc.js",
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "prepare": "husky install",
+    "prepare": "husky",
     "jest-preview": "jest-preview",
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",

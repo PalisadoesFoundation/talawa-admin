@@ -308,7 +308,7 @@ describe('Organisation Post Page', () => {
     await act(async () => {
       fireEvent.click(inputText);
     });
-    const toggleTite = screen.getByTestId('searchTitle');
+    const toggleTite = screen.getByTestId('Title');
     await act(async () => {
       fireEvent.click(toggleTite);
     });

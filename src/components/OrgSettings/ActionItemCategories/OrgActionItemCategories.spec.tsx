@@ -125,9 +125,9 @@ describe('Testing Organisation Action Item Categories', () => {
     // Filter by All
     fireEvent.click(filterBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('statusAll')).toBeInTheDocument();
+      expect(screen.getByTestId('all')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('statusAll'));
+    fireEvent.click(screen.getByTestId('all'));
 
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
@@ -137,9 +137,9 @@ describe('Testing Organisation Action Item Categories', () => {
     // Filter by Disabled
     fireEvent.click(filterBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('statusDisabled')).toBeInTheDocument();
+      expect(screen.getByTestId('disabled')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('statusDisabled'));
+    fireEvent.click(screen.getByTestId('disabled'));
     await waitFor(() => {
       expect(screen.queryByText('Category 1')).toBeNull();
       expect(screen.getByText('Category 2')).toBeInTheDocument();
@@ -154,9 +154,9 @@ describe('Testing Organisation Action Item Categories', () => {
 
     fireEvent.click(filterBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('statusActive')).toBeInTheDocument();
+      expect(screen.getByTestId('active')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('statusActive'));
+    fireEvent.click(screen.getByTestId('active'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();

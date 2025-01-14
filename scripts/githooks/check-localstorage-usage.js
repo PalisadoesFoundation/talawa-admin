@@ -86,10 +86,10 @@ if (filesWithLocalStorage.length > 0) {
 
   console.info(
     '\x1b[34m%s\x1b[0m',
-    '\nInfo: Consider using custom hook functions.',
+    '\nInfo: Consider using custom hook functions.'
   );
   console.info(
-    'Please use the getItem, setItem, and removeItem functions provided by the custom hook useLocalStorage.\n',
+    'Please use the getItem, setItem, and removeItem functions provided by the custom hook useLocalStorage.\n'
   );
 
   process.exit(1);
