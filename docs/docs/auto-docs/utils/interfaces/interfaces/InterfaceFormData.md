@@ -6,7 +6,7 @@
 
 # Interface: InterfaceFormData
 
-Defined in: [src/utils/interfaces.ts:552](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L552)
+Defined in: [src/utils/interfaces.ts:552](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L552)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:552](https://github.com/bint-Eve/talawa-adm
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:555](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L555)
+Defined in: [src/utils/interfaces.ts:555](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L555)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:555](https://github.com/bint-Eve/talawa-adm
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:553](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L553)
+Defined in: [src/utils/interfaces.ts:553](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L553)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:553](https://github.com/bint-Eve/talawa-adm
 
 > **gender**: `string`
 
-Defined in: [src/utils/interfaces.ts:557](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L557)
+Defined in: [src/utils/interfaces.ts:557](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L557)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:557](https://github.com/bint-Eve/talawa-adm
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:554](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L554)
+Defined in: [src/utils/interfaces.ts:554](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L554)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/utils/interfaces.ts:554](https://github.com/bint-Eve/talawa-adm
 
 > **phoneNo**: `string`
 
-Defined in: [src/utils/interfaces.ts:556](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L556)
+Defined in: [src/utils/interfaces.ts:556](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L556)

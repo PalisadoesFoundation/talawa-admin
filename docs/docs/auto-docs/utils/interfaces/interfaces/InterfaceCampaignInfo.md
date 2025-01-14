@@ -6,7 +6,7 @@
 
 # Interface: InterfaceCampaignInfo
 
-Defined in: [src/utils/interfaces.ts:362](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L362)
+Defined in: [src/utils/interfaces.ts:362](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L362)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:362](https://github.com/bint-Eve/talawa-adm
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:363](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L363)
+Defined in: [src/utils/interfaces.ts:363](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L363)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:363](https://github.com/bint-Eve/talawa-adm
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:368](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L368)
+Defined in: [src/utils/interfaces.ts:368](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L368)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:368](https://github.com/bint-Eve/talawa-adm
 
 > **currency**: `string`
 
-Defined in: [src/utils/interfaces.ts:369](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L369)
+Defined in: [src/utils/interfaces.ts:369](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L369)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:369](https://github.com/bint-Eve/talawa-adm
 
 > **endDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:367](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L367)
+Defined in: [src/utils/interfaces.ts:367](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L367)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/interfaces.ts:367](https://github.com/bint-Eve/talawa-adm
 
 > **fundingGoal**: `number`
 
-Defined in: [src/utils/interfaces.ts:365](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L365)
+Defined in: [src/utils/interfaces.ts:365](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L365)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/utils/interfaces.ts:365](https://github.com/bint-Eve/talawa-adm
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:364](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L364)
+Defined in: [src/utils/interfaces.ts:364](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L364)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/utils/interfaces.ts:364](https://github.com/bint-Eve/talawa-adm
 
 > **startDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:366](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L366)
+Defined in: [src/utils/interfaces.ts:366](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L366)

@@ -6,7 +6,7 @@
 
 # Enumeration: Frequency
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L28)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L28)
 
 ## Enumeration Members
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com
 
 > **DAILY**: `"DAILY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com
 
 > **MONTHLY**: `"MONTHLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com
 
 > **WEEKLY**: `"WEEKLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com
 
 > **YEARLY**: `"YEARLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)

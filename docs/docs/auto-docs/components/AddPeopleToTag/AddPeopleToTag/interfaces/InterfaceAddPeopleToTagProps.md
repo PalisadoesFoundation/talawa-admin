@@ -6,7 +6,7 @@
 
 # Interface: InterfaceAddPeopleToTagProps
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:28](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L28)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:28](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L28)
 
 Props for the `AddPeopleToTag` component.
 
@@ -16,7 +16,7 @@ Props for the `AddPeopleToTag` component.
 
 > **addPeopleToTagModalIsOpen**: `boolean`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:29](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L29)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:29](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L29)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:29](https://github
 
 > **hideAddPeopleToTagModal**: () => `void`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:30](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L30)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:30](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L30)
 
 #### Returns
 
@@ -36,7 +36,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:30](https://github
 
 > **refetchAssignedMembersData**: () => `void`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:31](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L31)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:31](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L31)
 
 #### Returns
 
@@ -48,7 +48,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:31](https://github
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:32](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L32)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:32](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L32)
 
 ***
 
@@ -56,4 +56,4 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:32](https://github
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:33](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L33)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:33](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L33)

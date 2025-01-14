@@ -6,7 +6,7 @@
 
 # Interface: InterfacePledgeModal
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:30](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L30)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:30](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L30)
 
 Interface representing the properties for the `PledgeModal` component.
 
@@ -16,7 +16,7 @@ Interface representing the properties for the `PledgeModal` component.
 
 > **campaignId**: `string`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:33](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L33)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:33](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L33)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:33](https://github
 
 > **endDate**: `Date`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:37](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L37)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:37](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L37)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:37](https://github
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:32](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L32)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:32](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L32)
 
 #### Returns
 
@@ -44,15 +44,15 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:32](https://github
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:31](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L31)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:31](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L31)
 
 ***
 
 ### mode
 
-> **mode**: `"edit"` \| `"create"`
+> **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:38](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L38)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:38](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L38)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:38](https://github
 
 > **pledge**: [`InterfacePledgeInfo`](../../../../../utils/interfaces/interfaces/InterfacePledgeInfo.md)
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:35](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L35)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:35](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L35)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:35](https://github
 
 > **refetchPledge**: () => `void`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:36](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L36)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:36](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L36)
 
 #### Returns
 
@@ -80,4 +80,4 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:36](https://github
 
 > **userId**: `string`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:34](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L34)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:34](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L34)

@@ -6,7 +6,7 @@
 
 # Interface: InterfaceRecurrenceRuleState
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:6](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L6)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:6](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L6)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:6](https://github.com/
 
 > **count**: `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L12)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L12)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com
 
 > **frequency**: [`Frequency`](../enumerations/Frequency.md)
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L9)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L9)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/
 
 > **interval**: `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:11](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L11)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:11](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L11)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:11](https://github.com
 
 > **recurrenceEndDate**: `Date`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L8)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L8)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/
 
 > **recurrenceStartDate**: `Date`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:7](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L7)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:7](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L7)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:7](https://github.com/
 
 > **weekDayOccurenceInMonth**: `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L13)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L13)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com
 
 > **weekDays**: [`WeekDays`](../enumerations/WeekDays.md)[]
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/recurrenceUtils/recurrenceTypes.ts#L10)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/recurrenceUtils/recurrenceTypes.ts#L10)

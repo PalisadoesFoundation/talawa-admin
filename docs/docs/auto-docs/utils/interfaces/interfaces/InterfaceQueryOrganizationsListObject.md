@@ -6,7 +6,7 @@
 
 # Interface: InterfaceQueryOrganizationsListObject
 
-Defined in: [src/utils/interfaces.ts:113](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L113)
+Defined in: [src/utils/interfaces.ts:113](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L113)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:113](https://github.com/bint-Eve/talawa-adm
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:114](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L114)
+Defined in: [src/utils/interfaces.ts:114](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L114)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:114](https://github.com/bint-Eve/talawa-adm
 
 > **address**: [`InterfaceAddress`](InterfaceAddress.md)
 
-Defined in: [src/utils/interfaces.ts:123](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L123)
+Defined in: [src/utils/interfaces.ts:123](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L123)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:123](https://github.com/bint-Eve/talawa-adm
 
 > **admins**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:132](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L132)
+Defined in: [src/utils/interfaces.ts:132](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L132)
 
 #### \_id
 
@@ -58,7 +58,7 @@ Defined in: [src/utils/interfaces.ts:132](https://github.com/bint-Eve/talawa-adm
 
 > **blockedUsers**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:147](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L147)
+Defined in: [src/utils/interfaces.ts:147](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L147)
 
 #### \_id
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:147](https://github.com/bint-Eve/talawa-adm
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:116](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L116)
+Defined in: [src/utils/interfaces.ts:116](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L116)
 
 #### email
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:116](https://github.com/bint-Eve/talawa-adm
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:122](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L122)
+Defined in: [src/utils/interfaces.ts:122](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L122)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/utils/interfaces.ts:122](https://github.com/bint-Eve/talawa-adm
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:115](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L115)
+Defined in: [src/utils/interfaces.ts:115](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L115)
 
 ***
 
@@ -118,7 +118,7 @@ Defined in: [src/utils/interfaces.ts:115](https://github.com/bint-Eve/talawa-adm
 
 > **members**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:126](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L126)
+Defined in: [src/utils/interfaces.ts:126](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L126)
 
 #### \_id
 
@@ -142,7 +142,7 @@ Defined in: [src/utils/interfaces.ts:126](https://github.com/bint-Eve/talawa-adm
 
 > **membershipRequests**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:139](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L139)
+Defined in: [src/utils/interfaces.ts:139](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L139)
 
 #### \_id
 
@@ -170,7 +170,7 @@ Defined in: [src/utils/interfaces.ts:139](https://github.com/bint-Eve/talawa-adm
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:121](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L121)
+Defined in: [src/utils/interfaces.ts:121](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L121)
 
 ***
 
@@ -178,7 +178,7 @@ Defined in: [src/utils/interfaces.ts:121](https://github.com/bint-Eve/talawa-adm
 
 > **userRegistrationRequired**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:124](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L124)
+Defined in: [src/utils/interfaces.ts:124](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L124)
 
 ***
 
@@ -186,4 +186,4 @@ Defined in: [src/utils/interfaces.ts:124](https://github.com/bint-Eve/talawa-adm
 
 > **visibleInSearch**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:125](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L125)
+Defined in: [src/utils/interfaces.ts:125](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L125)

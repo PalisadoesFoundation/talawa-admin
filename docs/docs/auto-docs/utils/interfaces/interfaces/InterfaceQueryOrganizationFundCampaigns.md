@@ -6,7 +6,7 @@
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
-Defined in: [src/utils/interfaces.ts:319](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L319)
+Defined in: [src/utils/interfaces.ts:319](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L319)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:319](https://github.com/bint-Eve/talawa-adm
 
 > **campaigns**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:322](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L322)
+Defined in: [src/utils/interfaces.ts:322](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L322)
 
 #### \_id
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:322](https://github.com/bint-Eve/talawa-adm
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:321](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L321)
+Defined in: [src/utils/interfaces.ts:321](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L321)
 
 ***
 
@@ -58,4 +58,4 @@ Defined in: [src/utils/interfaces.ts:321](https://github.com/bint-Eve/talawa-adm
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:320](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/interfaces.ts#L320)
+Defined in: [src/utils/interfaces.ts:320](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/interfaces.ts#L320)

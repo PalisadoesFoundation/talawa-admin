@@ -8,7 +8,7 @@
 
 > `const` **TOGGLE\_PINNED\_POST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:220](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/GraphQl/Mutations/OrganizationMutations.ts#L220)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:220](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/GraphQl/Mutations/OrganizationMutations.ts#L220)
 
 GraphQL mutation to toggle the pinned status of a post.
 

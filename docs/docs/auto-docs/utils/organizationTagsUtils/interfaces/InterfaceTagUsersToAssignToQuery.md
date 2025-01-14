@@ -6,7 +6,7 @@
 
 # Interface: InterfaceTagUsersToAssignToQuery
 
-Defined in: [src/utils/organizationTagsUtils.ts:107](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/organizationTagsUtils.ts#L107)
+Defined in: [src/utils/organizationTagsUtils.ts:107](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/organizationTagsUtils.ts#L107)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:107](https://github.com/bint-Eve
 
 > `optional` **data**: `object`
 
-Defined in: [src/utils/organizationTagsUtils.ts:109](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/organizationTagsUtils.ts#L109)
+Defined in: [src/utils/organizationTagsUtils.ts:109](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/organizationTagsUtils.ts#L109)
 
 #### getUsersToAssignTo
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:109](https://github.com/bint-Eve
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/utils/organizationTagsUtils.ts:54](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/organizationTagsUtils.ts#L54)
+Defined in: [src/utils/organizationTagsUtils.ts:54](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/organizationTagsUtils.ts#L54)
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:54](https://github.com/bint-Eve/
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:112](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/organizationTagsUtils.ts#L112)
+Defined in: [src/utils/organizationTagsUtils.ts:112](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/organizationTagsUtils.ts#L112)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:112](https://github.com/bint-Eve
 
 > **loading**: `boolean`
 
-Defined in: [src/utils/organizationTagsUtils.ts:53](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/organizationTagsUtils.ts#L53)
+Defined in: [src/utils/organizationTagsUtils.ts:53](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/organizationTagsUtils.ts#L53)
 
 #### Inherited from
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:53](https://github.com/bint-Eve/
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:55](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/utils/organizationTagsUtils.ts#L55)
+Defined in: [src/utils/organizationTagsUtils.ts:55](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/utils/organizationTagsUtils.ts#L55)
 
 #### Returns
 

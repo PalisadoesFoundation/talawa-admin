@@ -6,7 +6,7 @@
 
 # Interface: InterfaceEditUserTagModalProps
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:10](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/ManageTag/EditUserTagModal.tsx#L10)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:10](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/ManageTag/EditUserTagModal.tsx#L10)
 
 Edit UserTag Modal component for the Manage Tag screen.
 
@@ -16,7 +16,7 @@ Edit UserTag Modal component for the Manage Tag screen.
 
 > **editUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:11](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/ManageTag/EditUserTagModal.tsx#L11)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:11](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/ManageTag/EditUserTagModal.tsx#L11)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:11](https://github.com/b
 
 > **handleEditUserTag**: (`e`) => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:15](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/ManageTag/EditUserTagModal.tsx#L15)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:15](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/ManageTag/EditUserTagModal.tsx#L15)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:15](https://github.com/b
 
 > **hideEditUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:12](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/ManageTag/EditUserTagModal.tsx#L12)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:12](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/ManageTag/EditUserTagModal.tsx#L12)
 
 #### Returns
 
@@ -54,7 +54,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:12](https://github.com/b
 
 > **newTagName**: `string`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:13](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/ManageTag/EditUserTagModal.tsx#L13)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:13](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/ManageTag/EditUserTagModal.tsx#L13)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:13](https://github.com/b
 
 > **setNewTagName**: (`state`) => `void`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:14](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/ManageTag/EditUserTagModal.tsx#L14)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:14](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/ManageTag/EditUserTagModal.tsx#L14)
 
 #### Parameters
 
@@ -80,7 +80,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:14](https://github.com/b
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:16](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/ManageTag/EditUserTagModal.tsx#L16)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:16](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/ManageTag/EditUserTagModal.tsx#L16)
 
 ***
 
@@ -88,4 +88,4 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:16](https://github.com/b
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:17](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/ManageTag/EditUserTagModal.tsx#L17)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:17](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/ManageTag/EditUserTagModal.tsx#L17)

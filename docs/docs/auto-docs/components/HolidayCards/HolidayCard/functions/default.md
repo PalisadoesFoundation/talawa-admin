@@ -8,7 +8,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/HolidayCards/HolidayCard.tsx:15](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/HolidayCards/HolidayCard.tsx#L15)
+Defined in: [src/components/HolidayCards/HolidayCard.tsx:15](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/HolidayCards/HolidayCard.tsx#L15)
 
 Component that displays a card with the name of a holiday.
 

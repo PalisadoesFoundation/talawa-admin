@@ -8,7 +8,7 @@
 
 > **CheckInModal**(`__namedParameters`): `Element`
 
-Defined in: [src/components/CheckIn/CheckInModal.tsx:26](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/CheckIn/CheckInModal.tsx#L26)
+Defined in: [src/components/CheckIn/CheckInModal.tsx:26](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/CheckIn/CheckInModal.tsx#L26)
 
 Modal component for managing event check-ins. Displays a list of attendees
 and their check-in statuses, allowing for filtering by user name.

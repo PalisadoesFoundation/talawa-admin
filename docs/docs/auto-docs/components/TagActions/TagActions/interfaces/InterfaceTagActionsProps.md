@@ -6,7 +6,7 @@
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/components/TagActions/TagActions.tsx:36](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/TagActions/TagActions.tsx#L36)
+Defined in: [src/components/TagActions/TagActions.tsx:36](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/TagActions/TagActions.tsx#L36)
 
 Props for the `AssignToTags` component.
 
@@ -16,7 +16,7 @@ Props for the `AssignToTags` component.
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/components/TagActions/TagActions.tsx:38](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/TagActions/TagActions.tsx#L38)
+Defined in: [src/components/TagActions/TagActions.tsx:38](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/TagActions/TagActions.tsx#L38)
 
 #### Returns
 
@@ -28,7 +28,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:38](https://github.com/bin
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/components/TagActions/TagActions.tsx:40](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/TagActions/TagActions.tsx#L40)
+Defined in: [src/components/TagActions/TagActions.tsx:40](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/TagActions/TagActions.tsx#L40)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:40](https://github.com/bin
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/components/TagActions/TagActions.tsx:37](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/TagActions/TagActions.tsx#L37)
+Defined in: [src/components/TagActions/TagActions.tsx:37](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/TagActions/TagActions.tsx#L37)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:37](https://github.com/bin
 
 > **tagActionType**: [`TagActionType`](../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/components/TagActions/TagActions.tsx:39](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/TagActions/TagActions.tsx#L39)
+Defined in: [src/components/TagActions/TagActions.tsx:39](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/TagActions/TagActions.tsx#L39)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/components/TagActions/TagActions.tsx:39](https://github.com/bin
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/components/TagActions/TagActions.tsx:41](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/TagActions/TagActions.tsx#L41)
+Defined in: [src/components/TagActions/TagActions.tsx:41](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/TagActions/TagActions.tsx#L41)

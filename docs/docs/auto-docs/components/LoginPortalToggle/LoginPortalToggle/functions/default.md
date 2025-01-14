@@ -8,7 +8,7 @@
 
 > **default**(`onToggle`): `JSX.Element`
 
-Defined in: [src/components/LoginPortalToggle/LoginPortalToggle.tsx:18](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L18)
+Defined in: [src/components/LoginPortalToggle/LoginPortalToggle.tsx:18](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L18)
 
 Component for toggling between admin and user login portals.
 

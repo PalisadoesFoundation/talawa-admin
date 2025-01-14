@@ -8,7 +8,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/EventCalendar/EventHeader.tsx:27](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventCalendar/EventHeader.tsx#L27)
+Defined in: [src/components/EventCalendar/EventHeader.tsx:27](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventCalendar/EventHeader.tsx#L27)
 
 EventHeader component displays the header for the event calendar.
 It includes a search field, view type dropdown, event type dropdown, and a button to create an event.

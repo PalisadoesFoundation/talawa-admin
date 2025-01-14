@@ -6,7 +6,7 @@
 
 # Interface: InterfacePledgeModal
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:28](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L28)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:28](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L28)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:28](https://github.c
 
 > **campaignId**: `string`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:31](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L31)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:31](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L31)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:31](https://github.c
 
 > **endDate**: `Date`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:35](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L35)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:35](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L35)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:35](https://github.c
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:30](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L30)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:30](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L30)
 
 #### Returns
 
@@ -42,15 +42,15 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:30](https://github.c
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:29](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L29)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:29](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L29)
 
 ***
 
 ### mode
 
-> **mode**: `"edit"` \| `"create"`
+> **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:36](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L36)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:36](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L36)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:36](https://github.c
 
 > **orgId**: `string`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:32](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L32)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:32](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L32)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:32](https://github.c
 
 > **pledge**: [`InterfacePledgeInfo`](../../../../utils/interfaces/interfaces/InterfacePledgeInfo.md)
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:33](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L33)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:33](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L33)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:33](https://github.c
 
 > **refetchPledge**: () => `void`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:34](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgeModal.tsx#L34)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:34](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgeModal.tsx#L34)
 
 #### Returns
 

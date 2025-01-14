@@ -6,7 +6,7 @@
 
 # Interface: InterfaceModalProp
 
-Defined in: [src/components/CheckIn/types.ts:23](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/CheckIn/types.ts#L23)
+Defined in: [src/components/CheckIn/types.ts:23](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/CheckIn/types.ts#L23)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components/CheckIn/types.ts:23](https://github.com/bint-Eve/tal
 
 > **eventId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:25](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/CheckIn/types.ts#L25)
+Defined in: [src/components/CheckIn/types.ts:25](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/CheckIn/types.ts#L25)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components/CheckIn/types.ts:25](https://github.com/bint-Eve/tal
 
 > **handleClose**: () => `void`
 
-Defined in: [src/components/CheckIn/types.ts:26](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/CheckIn/types.ts#L26)
+Defined in: [src/components/CheckIn/types.ts:26](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/CheckIn/types.ts#L26)
 
 #### Returns
 
@@ -34,4 +34,4 @@ Defined in: [src/components/CheckIn/types.ts:26](https://github.com/bint-Eve/tal
 
 > **show**: `boolean`
 
-Defined in: [src/components/CheckIn/types.ts:24](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/CheckIn/types.ts#L24)
+Defined in: [src/components/CheckIn/types.ts:24](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/CheckIn/types.ts#L24)

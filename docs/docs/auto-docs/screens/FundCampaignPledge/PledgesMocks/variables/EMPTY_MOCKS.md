@@ -8,4 +8,4 @@
 
 > `const` **EMPTY\_MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; \}; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `pledgeOrderBy`: `string`; `where`: \{ `id`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `getFundraisingCampaigns`: `object`[]; \}; \}; \})[]
 
-Defined in: [src/screens/FundCampaignPledge/PledgesMocks.ts:387](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/FundCampaignPledge/PledgesMocks.ts#L387)
+Defined in: [src/screens/FundCampaignPledge/PledgesMocks.ts:387](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/FundCampaignPledge/PledgesMocks.ts#L387)

@@ -8,7 +8,7 @@
 
 > **updateTargets**(`orgId`): (`dispatch`) => `void`
 
-Defined in: [src/state/action-creators/index.ts:37](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/state/action-creators/index.ts#L37)
+Defined in: [src/state/action-creators/index.ts:37](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/state/action-creators/index.ts#L37)
 
 ## Parameters
 

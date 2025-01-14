@@ -55,7 +55,7 @@ import LeaveOrganization from 'screens/UserPortal/LeaveOrganization/LeaveOrganiz
 const { setItem } = useLocalStorage();
 
 /**
- * This is the main function for our application. It sets up all the routes and components,
+ * This is the MAIN function for our application. It sets up all the routes and components,
  * defining how the user can navigate through the app. The function uses React Router's `Routes`
  * and `Route` components to map different URL paths to corresponding screens and components.
  *

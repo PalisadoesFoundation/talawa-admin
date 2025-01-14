@@ -6,7 +6,7 @@
 
 # Interface: InterfaceEvent
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:35](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L35)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:35](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L35)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3
 
 > **\_\_typename**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:66](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L66)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:66](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L66)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:6
 
 > **\_id**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:36](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L36)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:36](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L36)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3
 
 > **allDay**: `boolean`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:44](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L44)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:44](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L44)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **attendees**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:58](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L58)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:58](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L58)
 
 #### \_id
 
@@ -70,7 +70,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:5
 
 > **description**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:38](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L38)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:38](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L38)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3
 
 > **endDate**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:40](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L40)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:40](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L40)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **endTime**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:43](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L43)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:43](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L43)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **isPublic**: `boolean`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:56](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L56)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:56](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L56)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:5
 
 > **isRecurringEventException**: `boolean`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:55](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L55)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:55](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L55)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:5
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:57](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L57)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:57](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L57)
 
 ***
 
@@ -118,7 +118,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:5
 
 > **location**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:41](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L41)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:41](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L41)
 
 ***
 
@@ -126,7 +126,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **recurrenceRule**: `object`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:46](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L46)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:46](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L46)
 
 #### count?
 
@@ -162,7 +162,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **recurring**: `boolean`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:45](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L45)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:45](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L45)
 
 ***
 
@@ -170,7 +170,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **startDate**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:39](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L39)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:39](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L39)
 
 ***
 
@@ -178,7 +178,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3
 
 > **startTime**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:42](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L42)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:42](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L42)
 
 ***
 
@@ -186,4 +186,4 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **title**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:37](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L37)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:37](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L37)

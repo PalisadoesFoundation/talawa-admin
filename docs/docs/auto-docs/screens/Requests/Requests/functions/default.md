@@ -8,7 +8,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/Requests/Requests.tsx:34](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/Requests/Requests.tsx#L34)
+Defined in: [src/screens/Requests/Requests.tsx:34](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/Requests/Requests.tsx#L34)
 
 The `Requests` component fetches and displays a paginated list of membership requests
 for an organization, with functionality for searching, filtering, and infinite scrolling.

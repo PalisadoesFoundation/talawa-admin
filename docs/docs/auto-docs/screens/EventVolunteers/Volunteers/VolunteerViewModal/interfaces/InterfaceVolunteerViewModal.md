@@ -6,7 +6,7 @@
 
 # Interface: InterfaceVolunteerViewModal
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:20](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L20)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:20](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L20)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:20](h
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:22](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L22)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:22](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L22)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:22](h
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:21](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L21)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:21](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L21)
 
 ***
 
@@ -34,4 +34,4 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:21](h
 
 > **volunteer**: [`InterfaceEventVolunteerInfo`](../../../../../utils/interfaces/interfaces/InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:23](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L23)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:23](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L23)

@@ -6,7 +6,7 @@
 
 # Interface: InterfaceAction
 
-Defined in: [src/state/helpers/Action.ts:1](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/state/helpers/Action.ts#L1)
+Defined in: [src/state/helpers/Action.ts:1](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/state/helpers/Action.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/helpers/Action.ts:1](https://github.com/bint-Eve/talawa-a
 
 > **payload**: `any`
 
-Defined in: [src/state/helpers/Action.ts:3](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/state/helpers/Action.ts#L3)
+Defined in: [src/state/helpers/Action.ts:3](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/state/helpers/Action.ts#L3)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/state/helpers/Action.ts:3](https://github.com/bint-Eve/talawa-a
 
 > **type**: `string`
 
-Defined in: [src/state/helpers/Action.ts:2](https://github.com/bint-Eve/talawa-admin/blob/3ea1bc8148fd1f2efa92a17958ea5a5df0d9cc86/src/state/helpers/Action.ts#L2)
+Defined in: [src/state/helpers/Action.ts:2](https://github.com/bint-Eve/talawa-admin/blob/bb9ac170c0ec806cc5423650a66bbe110c3af5d9/src/state/helpers/Action.ts#L2)
