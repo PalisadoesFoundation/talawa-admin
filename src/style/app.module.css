@@ -79,7 +79,8 @@
   --modal-max-width: 680px;
 
   /* Additional Variables */
-  --input-shadow-color: #dddddd;
+  --input-shadow-color: 4px 4px 10px -1px rgb(168, 168, 168, 0.7),
+    /* Shadow on bottom-right */ 2px 2px 10px -1px rgba(169, 169, 169, 0.7); /* Lighter shadow on bottom-right */
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
   --search-button-bg: #a8c7fa;
@@ -327,7 +328,6 @@
   margin: 2.5rem 0;
   align-items: center;
   gap: 10px;
-  border: none;
 }
 
 .btnsContainer .btnsBlock {
@@ -417,13 +417,13 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: var(--bs-white);
-  box-shadow: 0 1px 1px var(--input-shadow-color);
+  box-shadow: var(--input-shadow-color);
 }
 
 .inputFieldModal {
   margin-bottom: 10px;
   background-color: var(--bs-white);
-  box-shadow: 0 1px 1px var(--input-shadow-color);
+  box-shadow: var(--input-shadow-color);
 }
 
 .inputField > button {
@@ -3997,7 +3997,7 @@ button[data-testid='createPostBtn'] {
   gap: 0.5rem;
   align-items: center;
   background-color: var(--bs-white);
-  border-bottom: 1px solid var(--input-shadow-color);
+  border-bottom: 1px solid var(--input-shadow);
 }
 
 .creator {
