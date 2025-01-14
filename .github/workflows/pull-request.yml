@@ -275,6 +275,19 @@ jobs:
           files: ./coverage/vitest/lcov.info
           flags: vitest
           fail_ci_if_error: true
+
+      - name: Merge Jest and Vitest Coverage Reports
+        run: |
+          mkdir -p ./coverage
+          npx lcov-result-merger './coverage/*/lcov.info' './coverage/lcov.info'
+  
+      - name: Upload Combined Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: combined
+          fail_ci_if_error: true
       
       - name: TypeScript compilation for changed files
         run: |
