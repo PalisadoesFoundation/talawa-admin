@@ -52,7 +52,7 @@ function eventHeader({
              *
              * @param e - The event object from the input change.
              */
-            /*istanbul ignore next*/
+
             onChange={(e) => setEventName(e.target.value)}
           />
           <Button
@@ -90,7 +90,7 @@ function eventHeader({
           />
           <Button
             variant="success"
-            className={styles.createButtonEventHeader}
+            className={styles.dropdown}
             onClick={showInviteModal}
             data-testid="createEventModalBtn"
           >

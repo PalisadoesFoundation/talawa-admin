@@ -60,6 +60,10 @@
   border: 1px solid var(--dropdown-border-color);
 }
 
+.manageBtn:hover {
+  border: 1px solid var(--dropdown-border-color) !important;
+}
+
 .orgName {
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -161,7 +161,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return <div>{params.row.id}</div>;
@@ -175,11 +175,11 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`d-flex justify-content-center fw-bold ${styles.subtleBlueGrey}`}
             data-testid="fundName"
             onClick={() => handleClick(params.row._id as string)}
           >
@@ -196,7 +196,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return params.row.creator.firstName + ' ' + params.row.creator.lastName;
       },
@@ -208,7 +208,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       flex: 2,
       renderCell: (params: GridCellParams) => {
         return (
@@ -226,7 +226,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return params.row.isArchived ? 'Archived' : 'Active';
       },
@@ -239,7 +239,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -267,7 +267,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <Button
@@ -286,56 +286,57 @@ const organizationFunds = (): JSX.Element => {
 
   return (
     <div>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputFields}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchByName"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton} `}
-            style={{ marginBottom: '0px' }}
-            data-testid="searchBtn"
-          >
-            <Search className={styles.searchIcon} />
-          </Button>
-        </div>
-        <div className="d-flex gap-4 mb-1">
-          <SortingButton
-            title={tCommon('sort')}
-            sortingOptions={[
-              { label: t('createdLatest'), value: 'createdAt_DESC' },
-              { label: t('createdEarliest'), value: 'createdAt_ASC' },
-            ]}
-            selectedOption={
-              sortBy === 'createdAt_DESC'
-                ? t('createdLatest')
-                : t('createdEarliest')
-            }
-            onSortChange={(value) =>
-              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
-            }
-            dataTestIdPrefix="filter"
-            buttonLabel={tCommon('sort')}
-          />
-          <div>
+      <div className={styles.head}>
+        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+          <div className={`${styles.input} mb-1`}>
+            <Form.Control
+              type="name"
+              placeholder={tCommon('searchByName')}
+              autoComplete="off"
+              required
+              className={styles.inputField}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              data-testid="searchByName"
+            />
             <Button
-              variant="success"
-              onClick={() => handleOpenModal(null, 'create')}
-              className={styles.createButton}
-              style={{ marginTop: '0px' }}
-              data-testid="createFundBtn"
+              tabIndex={-1}
+              className={` ${styles.searchButton} `}
+              data-testid="searchBtn"
             >
-              <i className={'fa fa-plus me-2'} />
-              {t('createFund')}
+              <Search className={styles.searchIcon} />
             </Button>
+          </div>
+          <div className="d-flex gap-4 mb-1">
+            <SortingButton
+              title={tCommon('sort')}
+              sortingOptions={[
+                { label: t('createdLatest'), value: 'createdAt_DESC' },
+                { label: t('createdEarliest'), value: 'createdAt_ASC' },
+              ]}
+              selectedOption={
+                sortBy === 'createdAt_DESC'
+                  ? t('createdLatest')
+                  : t('createdEarliest')
+              }
+              onSortChange={(value) =>
+                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
+            <div>
+              <Button
+                variant="success"
+                onClick={() => handleOpenModal(null, 'create')}
+                className={styles.createButton}
+                style={{ marginTop: '0px' }}
+                data-testid="createFundBtn"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createFund')}
+              </Button>
+            </div>
           </div>
         </div>
       </div>

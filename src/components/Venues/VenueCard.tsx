@@ -85,22 +85,22 @@ const VenueCard = ({
           <div className="d-flex justify-content-end gap-2 mb-2 me-3">
             {/* Edit button */}
             <Button
-              variant="outline-secondary"
               size="sm"
               onClick={() => {
                 showEditVenueModal(venueItem);
               }}
               data-testid={`updateVenueBtn${index + 1}`}
+              className={`btn ${styles.addButton}`}
             >
               <i className="fa fa-pen me-1"></i>
               <span>{tCommon('edit')}</span>
             </Button>
             {/* Delete button */}
             <Button
-              variant="outline-danger"
               size="sm"
               data-testid={`deleteVenueBtn${index + 1}`}
               onClick={() => handleDelete(venueItem._id)}
+              className={`btn btn-danger ${styles.removeButton}`}
             >
               <i className="fa fa-trash me-2"></i>
               <span>{tCommon('delete')}</span>

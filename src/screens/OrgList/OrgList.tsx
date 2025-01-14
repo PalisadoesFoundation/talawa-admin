@@ -334,7 +334,7 @@ function orgList(): JSX.Element {
           <Form.Control
             type="name"
             id="searchOrgname"
-            className={'bg-white'}
+            className={styles.inputField}
             placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
@@ -343,7 +343,8 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={styles.searchButtonOrgList}
+            // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            className={styles.searchButton}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
