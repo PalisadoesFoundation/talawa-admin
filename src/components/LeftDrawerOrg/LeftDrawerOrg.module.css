@@ -72,6 +72,27 @@
   height: 100%;
   overflow-y: scroll;
   padding-bottom: 1.5rem;
+  /* scrollbar-width: thin; For Firefox */
+  /* -ms-overflow-style: none; For Internet Explorer and Edge */
+}
+
+/* Webkit-based browsers (Chrome, Safari) */
+.leftDrawer .optionList::-webkit-scrollbar {
+  width: 8px; /* Set the width of the vertical scrollbar */
+}
+
+.leftDrawer .optionList::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3); /* Change this to your desired color */
+  border-radius: 10px; /* Make it round */
+}
+
+.leftDrawer .optionList::-webkit-scrollbar-track {
+  background: transparent; /* Track color */
+}
+
+.optionList :hover {
+  background-color: #e0eaf6; /* Change background color on hover */
+  /* color: black; */
 }
 
 .leftDrawer .optionList button {
@@ -146,7 +167,7 @@
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;

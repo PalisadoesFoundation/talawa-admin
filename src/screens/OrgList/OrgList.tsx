@@ -362,9 +362,7 @@ function orgList(): JSX.Element {
             >
               <Dropdown.Toggle
                 // className={styles.dropdown}
-                variant={
-                  sortingState.option === '' ? 'outline-success' : 'success'
-                }
+                variant={sortingState.option === '' ? 'success' : 'success'}
                 data-testid="sortOrgs"
               >
                 <SortIcon className={'me-1'} />

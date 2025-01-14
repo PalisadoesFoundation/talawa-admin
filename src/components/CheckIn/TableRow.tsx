@@ -73,7 +73,7 @@ export const TableRow = ({
       inputs.push({ name: data.name.trim() });
       const pdf = await generate({ template: tagTemplate, inputs });
       // istanbul ignore next
-      const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+      const blob = new Blob([pdf], { type: 'application/pdf' });
       // istanbul ignore next
       const url = URL.createObjectURL(blob);
       // istanbul ignore next

@@ -97,6 +97,19 @@ function AddMember(): JSX.Element {
 
   const [addMember] = useMutation(ADD_MEMBER_MUTATION);
 
+  const [createNewUserModalisOpen1, setCreateNewUserModalIsOpen1] =
+    useState(false);
+
+  // Function to open the modal
+  function openCreateNewUserModal1(): void {
+    setCreateNewUserModalIsOpen(true);
+  }
+
+  // Function to close the modal
+  function closeCreateNewUserModal1(): void {
+    setCreateNewUserModalIsOpen(false);
+  }
+
   const createMember = async (userId: string): Promise<void> => {
     try {
       await addMember({
@@ -441,9 +454,9 @@ function AddMember(): JSX.Element {
       <Modal
         data-testid="addNewUserModal"
         show={createNewUserModalisOpen}
-        onHide={toggleCreateNewUserModal}
+        onHide={closeCreateNewUserModal1} // Use the close function directly
       >
-        <Modal.Header className={styles.createUserModalHeader}>
+        <Modal.Header closeButton className={styles.createUserModalHeader}>
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -546,19 +559,6 @@ function AddMember(): JSX.Element {
           </div>
           <div className={styles.createUserActionBtns}>
             <Button
-              className={`${styles.borderNone}`}
-              variant="danger"
-              onClick={closeCreateNewUserModal}
-              data-testid="closeBtn"
-              style={{
-                backgroundColor: 'var(--delete-button-bg)',
-                color: 'var(--delete-button-color)',
-              }}
-            >
-              <Close className={styles.closeButton} />
-              {translateOrgPeople('cancel')}
-            </Button>
-            <Button
               className={`${styles.colorPrimary} ${styles.borderNone}`}
               variant="success"
               onClick={handleCreateUser}
@@ -566,6 +566,7 @@ function AddMember(): JSX.Element {
               style={{
                 backgroundColor: 'var(--search-button-bg)',
                 border: '1px solid var(--dropdown-border-color)',
+                width: '100%',
               }}
             >
               <Check className={styles.searchIcon} />

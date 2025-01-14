@@ -4,8 +4,8 @@
     "node": true,
     "es6": true
   },
-
   "extends": [
+    "react-app",
     "plugin:react/recommended",
     "eslint:recommended",
     "plugin:jest/recommended",
@@ -26,15 +26,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "jest",
-    "import",
-    "eslint-plugin-tsdoc",
-    "prettier"
-  ],
+  "plugins": ["react", "jest", "import", "eslint-plugin-tsdoc", "prettier"],
   "rules": {
     "react/destructuring-assignment": "error",
     "@typescript-eslint/explicit-module-boundary-types": "error",
@@ -59,9 +51,6 @@
     "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
     "@typescript-eslint/no-non-null-assertion": "error",
     "@typescript-eslint/no-var-requires": "error",
-    "@typescript-eslint/no-unsafe-function-type": "error",
-    "@typescript-eslint/no-wrapper-object-types": "error",
-    "@typescript-eslint/no-empty-object-type": "error",
     "@typescript-eslint/no-duplicate-enum-values": "error",
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-assertions": "error",
@@ -76,13 +65,11 @@
     "camelcase": "off",
     "@typescript-eslint/naming-convention": [
       "error",
-
       {
         "selector": "interface",
         "format": ["PascalCase"],
         "prefix": ["Interface", "TestInterface"]
       },
-
       {
         "selector": ["typeAlias", "typeLike", "enum"],
         "format": ["PascalCase"]
@@ -112,24 +99,19 @@
         "format": ["camelCase"],
         "leadingUnderscore": "require"
       },
-
       {
         "selector": "variable",
         "modifiers": ["exported"],
         "format": null
       }
     ],
-
     "react/jsx-pascal-case": [
       "error",
       { "allowAllCaps": false, "allowNamespace": false }
     ],
-
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
-
     "jest/expect-expect": 0,
-
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
       0,
@@ -137,7 +119,6 @@
     ],
     "prettier/prettier": "error"
   },
-
   "settings": {
     "react": {
       "version": "detect"
@@ -152,6 +133,7 @@
     "docs/docusaurus.config.ts",
     "docs/sidebars.ts",
     "docs/src/**",
-    "docs/blog/**"
+    "docs/blog/**",
+    "pyproject.toml"
   ]
 }

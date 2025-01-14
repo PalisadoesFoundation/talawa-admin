@@ -88,7 +88,7 @@
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
-  --table-head-bg: var(--bs-primary, var(--blue-color));
+  --table-head-bg: #eaebef;
   --table-head-color: var(--bs-white, var(--white-color));
   --table-header-color: var(--bs-greyish-black, var(--black-color));
   --input-area-color: #f1f3f6;
@@ -267,8 +267,9 @@
   color: var(--brown-color);
   position: relative;
   display: inline-block;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  /* margin-top: 10px;
+  margin-bottom: 10px; */
+  /* margin-left:30px; */
 }
 
 .dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
@@ -301,7 +302,9 @@
   ) !important;
   color: var(--brown-color) !important;
   outline: none !important;
-  box-shadow: 0 0 4px var(--highlight-color, var(--search-button-bg));
+  box-shadow:
+    4px 4px 10px -1px rgb(168, 168, 168, 0.7),
+    /* Shadow on bottom-right */ 2px 2px 10px -1px rgba(169, 169, 169, 0.7); /* Lighter shadow on bottom-right */
 }
 
 .input {
@@ -314,11 +317,17 @@
   margin: 2.5rem 0;
   align-items: center;
   gap: 10px;
+  border: none;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
   width: max-content;
+  box-shadow:
+    4px 4px 10px -1px rgb(168, 168, 168, 0.7),
+    /* Shadow on bottom-right */ 2px 2px 10px -1px rgba(169, 169, 169, 0.7); /* Lighter shadow on bottom-right */
+  margin: 0 auto;
+  border-radius: 5px;
 }
 
 .btnsContainerBlockAndUnblock {
@@ -403,7 +412,9 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: var(--bs-white);
-  box-shadow: 0 1px 1px var(--input-shadow-color);
+  box-shadow:
+    4px 4px 10px -1px rgb(168, 168, 168, 0.7),
+    /* Shadow on bottom-right */ 2px 2px 10px -1px rgba(169, 169, 169, 0.7); /* Lighter shadow on bottom-right */
 }
 
 .inputFieldModal {
@@ -498,6 +509,14 @@
   background-color: var(--table-head-bg);
   color: var(--table-header-color);
   font-size: var(--font-size-header);
+}
+
+.profileImage {
+  display: flex;
+  justifycontent: center;
+  alignitems: center;
+  height: 100%;
+  width: 100%;
 }
 
 .errorContainer {
@@ -658,6 +677,11 @@ hr {
 .pageNotFound {
   position: relative;
   bottom: 20px;
+}
+
+.head {
+  border: none;
+  /* height: 100vh; */
 }
 
 .pageNotFound h3 {
@@ -1176,7 +1200,7 @@ hr {
 
 .eventsAttended,
 .membername {
-  color: var(--blue-color);
+  color: var(--black-color);
 }
 .actionBtn {
   background-color: var(--white-color) !important;
@@ -1486,10 +1510,6 @@ hr {
   .btnsContainer .btnsBlock button {
     margin: 0;
   }
-
-  .btnsContainer .btnsBlock div button {
-    margin-right: 1.5rem;
-  }
 }
 
 @-webkit-keyframes load8 {
@@ -1551,7 +1571,6 @@ hr {
 }
 
 .btnsContainer .btnsBlock button {
-  margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3304,6 +3323,10 @@ button[data-testid='createPostBtn'] {
   border-radius: 50%;
 }
 
+.iconWrapper:active .icon {
+  fill: var(--white-color);
+}
+
 .cardItem .title {
   font-size: 1rem;
   flex: 1;
@@ -4113,7 +4136,8 @@ button[data-testid='createPostBtn'] {
   align-items: center;
 }
 .tableContainer {
-  height: 400px;
+  height: 700px;
   overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: thin; /* For Firefox */
 }

@@ -177,6 +177,21 @@ function organizationPeople(): JSX.Element {
 
   const columns: GridColDef[] = [
     {
+      field: 'rowNumber',
+      headerName: '#',
+      minWidth: 80,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        // Use params.api.getSortedRowIds() or params.rowIndex to generate row numbers
+        const sortedRowIds = params.api.getSortedRowIds(); // Get sorted row IDs
+        const rowIndex = sortedRowIds.indexOf(params.id); // Find the index of the current row
+        return <div>{rowIndex + 1}</div>;
+      },
+    },
+    {
       field: 'profile',
       headerName: tCommon('profile'),
       flex: 1,
@@ -184,19 +199,30 @@ function organizationPeople(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
+      cellClassName: `${styles.profileImage}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return params.row?.image ? (
-          <img
-            src={params.row?.image}
-            alt="avatar"
-            className={styles.TableImage}
-          />
-        ) : (
-          <Avatar
-            avatarStyle={styles.TableImage}
-            name={`${params.row.firstName} ${params.row.lastName}`}
-          />
+        return (
+          <div
+            style={{
+              display: `${styles.profileImage.search('flex') === -1 ? 'flex' : ''}`,
+              justifyContent: `${styles.profileImage.search('center') === -1 ? 'center' : ''}`,
+              alignItems: `${styles.profileImage.search('center') === -1 ? 'center' : ''}`,
+            }}
+          >
+            {params.row?.image ? (
+              <img
+                src={params.row?.image}
+                alt="avatar"
+                className={styles.TableImage}
+              />
+            ) : (
+              <Avatar
+                avatarStyle={styles.TableImage}
+                name={`${params.row.firstName} ${params.row.lastName}`}
+              />
+            )}
+          </div>
         );
       },
     },
@@ -296,8 +322,8 @@ function organizationPeople(): JSX.Element {
                 />
                 <Button
                   type="submit"
-                  className={`${styles.searchButton} `}
-                  data-testid={'searchbtn'}
+                  className={`${styles.searchButton}`}
+                  data-testid="searchbtn"
                 >
                   <Search className={styles.searchIcon} />
                 </Button>
@@ -322,10 +348,8 @@ function organizationPeople(): JSX.Element {
                     className={styles.dropdownItem}
                     data-name="displaylist"
                     data-testid="users"
-                    defaultChecked={state == 2 ? true : false}
-                    onClick={(): void => {
-                      setState(2);
-                    }}
+                    defaultChecked={state === 2}
+                    onClick={() => setState(2)}
                   >
                     <Form.Label htmlFor="userslist">
                       {tCommon('users')}
@@ -338,10 +362,8 @@ function organizationPeople(): JSX.Element {
                     className={styles.dropdownItem}
                     data-name="displaylist"
                     data-testid="members"
-                    defaultChecked={state == 0 ? true : false}
-                    onClick={(): void => {
-                      setState(0);
-                    }}
+                    defaultChecked={state === 0}
+                    onClick={() => setState(0)}
                   >
                     <Form.Label htmlFor="memberslist">
                       {tCommon('members')}
@@ -354,10 +376,8 @@ function organizationPeople(): JSX.Element {
                     data-name="displaylist"
                     className={styles.dropdownItem}
                     data-testid="admins"
-                    defaultChecked={state == 1 ? true : false}
-                    onClick={(): void => {
-                      setState(1);
-                    }}
+                    defaultChecked={state === 1}
+                    onClick={() => setState(1)}
                   >
                     <Form.Label htmlFor="adminslist">
                       {tCommon('admins')}
@@ -372,9 +392,9 @@ function organizationPeople(): JSX.Element {
           </div>
         </div>
       </Row>
-      {((state == 0 && memberData) ||
-        (state == 1 && adminFilteredData) ||
-        (state == 2 && usersData)) && (
+      {((state === 0 && memberData) ||
+        (state === 1 && adminFilteredData) ||
+        (state === 2 && usersData)) && (
         <div className="datatable">
           <DataGrid
             disableColumnMenu
@@ -393,26 +413,16 @@ function organizationPeople(): JSX.Element {
               ),
             }}
             sx={{
-              borderRadius: 'var(--table-head-radius)',
-              backgroundColor: 'var(--grey-bg-color)',
+              // Remove all borders
+              border: 'none',
               '& .MuiDataGrid-row': {
-                backgroundColor: 'var(--tablerow-bg-color)',
-                '&:focus-within': {
-                  outline: '2px solid #000',
-                  outlineOffset: '-2px',
-                },
+                border: 'none', // Removes borders between rows
               },
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: 'var(--grey-bg-color)',
-                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+              '& .MuiDataGrid-cell': {
+                border: 'none', // Removes borders between cells
               },
-              '& .MuiDataGrid-row.Mui-hovered': {
-                backgroundColor: 'var(--grey-bg-color)',
-                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiDataGrid-cell:focus': {
-                outline: '2px solid #000',
-                outlineOffset: '-2px',
+              '& .MuiDataGrid-columnHeaders': {
+                borderBottom: 'none', // Removes the bottom border of the header
               },
             }}
             getRowClassName={() => `${styles.rowBackground}`}
@@ -446,8 +456,6 @@ function organizationPeople(): JSX.Element {
   );
 }
 
-export default organizationPeople;
-
 // This code is used to remove 'user' object from the array index of userData and directly use store the properties at array index, this formatting is needed for DataGrid.
 
 interface InterfaceUser {
@@ -480,3 +488,5 @@ function convertObject(original: InterfaceOriginalObject): InterfaceUser[] {
   });
   return convertedObject.users;
 }
+
+export default organizationPeople;
