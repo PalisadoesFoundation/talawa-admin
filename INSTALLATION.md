@@ -422,6 +422,14 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
      - For most distributions: `/etc/systemd/system/`
      - For systems using `systemd`, this will be the default directory.
 
+   // Optional Steps...
+   - Verify service file permissions and ownership:
+   ```bash
+   sudo chmod 644 /etc/systemd/system/talawa_admin.service
+   sudo chown root:root /etc/systemd/system/talawa_admin.service
+   sudo systemd-analyze verify talawa_admin.service
+   ```
+
 #### 2. **Verify the CODEROOT Path**
    - Ensure that the `CODEROOT` environment variable matches the absolute path to the Talawa-Admin code directory.
 
@@ -430,6 +438,15 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
 
 #### 4. **Ensure the `.env` File Exists**
    - Verify that the path in the `EnvironmentFile` line points to a valid `.env` file located in the root directory of the Talawa-Admin repository.
+
+   // Optional Steps...
+   - Validate environment file permissions and configuration:
+   ```bash
+   sudo chmod 600 /path/to/talawa-admin/.env
+   sudo chown talawa_admin:talawa_admin /path/to/talawa-admin/.env
+   # Verify environment variables are loaded
+   sudo systemctl show-environment
+   ```
       
 #### 5. **Adjust User and Group**
    - Modify the `User` and `Group` settings to match the user account intended to run the service.
