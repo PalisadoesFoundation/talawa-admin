@@ -251,6 +251,14 @@ jobs:
         run: |
           npm run test -- --watchAll=false --coverage
 
+      - name: Upload Jest Coverage to Codecov
+        if: steps.changed-files.outputs.only_changed != 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/jest/lcov.info
+          flags: jest
+          fail_ci_if_error: true
+
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
@@ -258,14 +266,13 @@ jobs:
         run: |
           npm run test:vitest:coverage
 
-      - name: Merge Coverage Reports
-        if: steps.changed-files.outputs.only_changed != 'true'
-        run: |
-          mkdir -p coverage
-          if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
-            echo "Failed to merge coverage reports"
-            exit 1
-          fi     
+      - name: Upload Vitest Coverage to Codecov
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/vitest/lcov.info
+          flags: vitest
+          fail_ci_if_error: true   
       
       - name: TypeScript compilation for changed files
         run: |
