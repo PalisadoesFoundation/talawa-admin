@@ -128,7 +128,7 @@ The process of proposing a change to Talawa Admin can be summarized as:
             ```
             npm install
             npm run test --watchAll=false --coverage
-            genhtml coverage/lcov.info -o coverage
+            genhtml coverage/jest/lcov.info -o coverage
             ```
          3. The output of the `npm run test` command will give you a tablular coverage report per file
          4. The overall coverage rate will be visible on the penultimate line of the `genhtml` command's output.
