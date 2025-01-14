@@ -366,38 +366,6 @@ export const MOCKS_EMPTY = [
   },
 ];
 
-export const MOCKS_EMPTY_USER_TAG = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
-      variables: {
-        id: 'orgId',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [],
-              pageInfo: {
-                hasNextPage: false,
-                hasPreviousPage: false,
-                startCursor: null,
-                endCursor: null,
-              },
-              totalCount: 0,
-            },
-          },
-        ],
-      },
-    },
-  },
-];
-
 export const MOCKS_UNDEFINED_USER_TAGS = [
   {
     request: {
