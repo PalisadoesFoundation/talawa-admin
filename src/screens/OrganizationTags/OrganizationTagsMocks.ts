@@ -469,3 +469,215 @@ export const MOCKS_EMPTY = [
     },
   },
 ];
+
+export const MOCKS_EMPTY_USER_TAG = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: null,
+                endCursor: null,
+              },
+              totalCount: 0,
+            },
+          },
+        ],
+      },
+    },
+  },
+];
+
+export const MOCKS_UNDEFINED_USER_TAGS = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: undefined, // Simulate undefined userTags
+          },
+        ],
+      },
+    },
+  },
+];
+
+export const MOCKS_NULL_END_CURSOR = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'userTag 1',
+                    parentTag: null,
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 11,
+                    },
+                    ancestorTags: [],
+                  },
+                  cursor: '1',
+                },
+              ],
+              pageInfo: {
+                startCursor: '1',
+                endCursor: null, // Simulate null endCursor
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        after: null,
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'userTag 1',
+                    parentTag: null,
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 11,
+                    },
+                    ancestorTags: [],
+                  },
+                  cursor: '2',
+                },
+              ],
+              pageInfo: {
+                startCursor: '2',
+                endCursor: null, // Simulate null endCursor
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+];
+
+export const MOCKS_NO_MORE_PAGES = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'userTag 1',
+                    parentTag: null,
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 11,
+                    },
+                    ancestorTags: [],
+                  },
+                  cursor: '1', // Cursor for pagination
+                },
+              ],
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '1', // End cursor for the first page
+                hasNextPage: true, // No more pages available
+                hasPreviousPage: false,
+              },
+              totalCount: 2, // Total number of items
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        after: '1', // Cursor for pagination
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: undefined, // No more pages available
+    },
+  },
+];

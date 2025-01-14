@@ -25,6 +25,9 @@ import {
   MOCKS_ERROR,
   MOCKS_ERROR_ERROR_TAG,
   MOCKS_EMPTY,
+  MOCKS_UNDEFINED_USER_TAGS,
+  MOCKS_NULL_END_CURSOR,
+  MOCKS_NO_MORE_PAGES,
 } from './OrganizationTagsMocks';
 import type { ApolloLink } from '@apollo/client';
 
@@ -42,6 +45,9 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const link3 = new StaticMockLink([...MOCKS, ...MOCKS_ERROR_ERROR_TAG], true);
 const link4 = new StaticMockLink(MOCKS_EMPTY, true);
+const link5 = new StaticMockLink(MOCKS_UNDEFINED_USER_TAGS, true);
+const link6 = new StaticMockLink(MOCKS_NULL_END_CURSOR, true);
+const link7 = new StaticMockLink(MOCKS_NO_MORE_PAGES, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -325,11 +331,63 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('No tags are available', async () => {
+  test('renders the no tags found message when there are no tags', async () => {
     renderOrganizationTags(link4);
+
     await wait();
+
     await waitFor(() => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
+    });
+  });
+
+  test('sets dataLength to 0 when userTagsList is undefined', async () => {
+    renderOrganizationTags(link5);
+
+    await wait();
+
+    // Wait for the component to render
+    await waitFor(() => {
+      const userTags = screen.queryAllByTestId('user-tag');
+      expect(userTags).toHaveLength(0);
+    });
+  });
+
+  test('Null endCursor', async () => {
+    renderOrganizationTags(link6);
+
+    await wait();
+
+    const orgUserTagsScrollableDiv = screen.getByTestId(
+      'orgUserTagsScrollableDiv',
+    );
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(orgUserTagsScrollableDiv, {
+      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  test('Null Page available', async () => {
+    renderOrganizationTags(link7);
+
+    await wait();
+
+    const orgUserTagsScrollableDiv = screen.getByTestId(
+      'orgUserTagsScrollableDiv',
+    );
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(orgUserTagsScrollableDiv, {
+      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
   });
 });
