@@ -86,8 +86,10 @@ def check_eslint(files_or_directories):
                         file_path = os.path.join(root, file_name)
                         if has_eslint_disable(file_path):
                             print(
-                                f"Error: File {file_path} contains eslint-disable statements."
+                                f"Error: File {item} contains "
+                                "eslint-disable statements."
                             )
+
                             eslint_found = True
     return eslint_found
 
