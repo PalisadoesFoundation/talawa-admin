@@ -20,7 +20,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -97,7 +97,20 @@ function AddMember(): JSX.Element {
     setCreateNewUserModalIsOpen(!addUserModalisOpen);
 
   const [addMember] = useMutation(ADD_MEMBER_MUTATION);
+  function useModal(initialState = false) {
+    const [isOpen, setIsOpen] = useState(initialState);
+    const open = useCallback(() => setIsOpen(true), []);
+    const close = useCallback(() => setIsOpen(false), []);
+    const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
 
+    return { isOpen, open, close, toggle };
+  }
+
+  const {
+    isOpen: createNewUserModalIsOpen1,
+    open: openCreateNewUserModal1,
+    close: closeCreateNewUserModal1,
+  } = useModal();
   const createMember = async (userId: string): Promise<void> => {
     try {
       await addMember({
@@ -115,7 +128,7 @@ function AddMember(): JSX.Element {
     }
   };
 
-  const { orgId: currentUrl } = useParams();
+  const { orgId: currentUrl } = useParams<{ orgId: string }>();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -422,12 +435,9 @@ function AddMember(): JSX.Element {
       <Modal
         data-testid="addNewUserModal"
         show={createNewUserModalisOpen}
-        onHide={toggleCreateNewUserModal}
+        onHide={closeCreateNewUserModal1} // Use the close function directly
       >
-        <Modal.Header
-          className={styles.createUserModalHeader}
-          data-testid="createUser"
-        >
+        <Modal.Header closeButton className={styles.createUserModalHeader}>
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -530,19 +540,6 @@ function AddMember(): JSX.Element {
           </div>
           <div className={styles.createUserActionBtns}>
             <Button
-              className={`${styles.borderNone}`}
-              variant="danger"
-              onClick={closeCreateNewUserModal}
-              data-testid="closeBtn"
-              style={{
-                backgroundColor: 'var(--delete-button-bg)',
-                color: 'var(--delete-button-color)',
-              }}
-            >
-              <Close className={styles.closeButton} />
-              {translateOrgPeople('cancel')}
-            </Button>
-            <Button
               className={`${styles.colorPrimary} ${styles.borderNone}`}
               variant="success"
               onClick={handleCreateUser}
@@ -550,6 +547,7 @@ function AddMember(): JSX.Element {
               style={{
                 backgroundColor: 'var(--search-button-bg)',
                 border: '1px solid var(--dropdown-border-color)',
+                width: '100%',
               }}
             >
               <Check className={styles.searchIcon} />

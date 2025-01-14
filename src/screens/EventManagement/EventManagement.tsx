@@ -105,9 +105,13 @@ const EventManagement = (): JSX.Element => {
     : adminFor?.length > 0
       ? 'ADMIN'
       : 'USER';
+  type Params = {
+    eventId: string;
+    orgId: string;
+  };
 
   // Extract event and organization IDs from URL parameters
-  const { eventId, orgId } = useParams();
+  const { eventId, orgId } = useParams<Params>();
   if (!eventId || !orgId) {
     // Redirect if event ID or organization ID is missing
     return <Navigate to={'/orglist'} />;

@@ -362,6 +362,7 @@ function orgList(): JSX.Element {
             dataTestIdPrefix="sortOrgs"
             dropdownTestId="sort"
           />
+
           {superAdmin && (
             <Button
               variant="success"

@@ -43,7 +43,7 @@ const collapsibleDropdown = ({
     <>
       <Button
         variant={showDropdown ? 'success' : ''}
-        className={showDropdown ? 'text-white' : 'text-secondary'}
+        className={showDropdown ? 'text-black' : 'text-secondary'}
         onClick={(): void => setShowDropdown(!showDropdown)}
         aria-expanded={showDropdown}
         data-testid="collapsible-dropdown"
@@ -51,13 +51,13 @@ const collapsibleDropdown = ({
         <div className={styles.iconWrapper}>
           <IconComponent
             name={name}
-            fill={showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
+            fill={showDropdown ? 'var(--bs-black)' : 'var(--bs-secondary)'}
           />
         </div>
         {tCommon(name)}
         <i
           className={`ms-auto fa  
-          ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'} 
+          ${showDropdown ? 'var(--bs-black)' : 'var(--bs-secondary)'} 
           ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
           `}
         />
@@ -74,7 +74,7 @@ const collapsibleDropdown = ({
                       variant={isActive === true ? 'success' : 'light'}
                       size="sm"
                       className={`${styles.collapseBtn} ${
-                        isActive === true ? 'text-white' : 'text-secondary'
+                        isActive === true ? 'text-black' : 'text-secondary'
                       }`}
                       onClick={(): void => {
                         navigate(url);
@@ -88,7 +88,7 @@ const collapsibleDropdown = ({
                       <div className="ms-auto">
                         <i
                           className={`fa me-2 fa-chevron-right ${
-                            isActive === true ? 'text-white' : 'text-secondary'
+                            isActive === true ? 'text-black' : 'text-secondary'
                           }`}
                         />
                       </div>

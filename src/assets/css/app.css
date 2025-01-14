@@ -78,7 +78,7 @@
     'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
-    'Liberation Mono', 'Courier New', monospace;
+    --bs-body-color 'Liberation Mono', 'Courier New', monospace;
   --bs-font-lato: 'Lato';
   --bs-gradient: linear-gradient(
     180deg,
@@ -2478,9 +2478,9 @@ progress {
 .form-control:focus {
   color: var(--bs-body-color);
   background-color: #f2f2f2;
-  border-color: #98ddb5;
+  border-color: #98b3dd;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(49, 187, 107, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(155, 174, 211, 0.5);
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -3499,15 +3499,15 @@ fieldset:disabled .btn {
 
 .btn-primary {
   --bs-btn-color: #000;
-  --bs-btn-bg: #31bb6b;
-  --bs-btn-border-color: #31bb6b;
+  --bs-btn-bg: #85a1e9;
+  /* --bs-btn-border-color: #c7d2e9; */
   --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: #50c581;
-  --bs-btn-hover-border-color: #46c27a;
+  --bs-btn-hover-bg: #2f68f0;
+  /* --bs-btn-hover-border-color: #46c27a; */
   --bs-btn-focus-shadow-rgb: 42, 159, 91;
   --bs-btn-active-color: #000;
-  --bs-btn-active-bg: #5ac989;
-  --bs-btn-active-border-color: #46c27a;
+  --bs-btn-active-bg: #2f68f0;
+  /* --bs-btn-active-border-color: #46c27a; */
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #000;
   --bs-btn-disabled-bg: #31bb6b;
@@ -3533,19 +3533,20 @@ fieldset:disabled .btn {
 
 .btn-success {
   --bs-btn-color: #000;
-  --bs-btn-bg: #31bb6b;
-  --bs-btn-border-color: #31bb6b;
+  --bs-btn-bg: #eaebef;
+  /* --bs-btn-border-color: #31bb6b; */
   --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: #50c581;
-  --bs-btn-hover-border-color: #46c27a;
+  --bs-btn-hover-bg: #eaebef;
+  --bs-btn-hover-border-color: #000;
   --bs-btn-focus-shadow-rgb: 42, 159, 91;
   --bs-btn-active-color: #000;
-  --bs-btn-active-bg: #5ac989;
-  --bs-btn-active-border-color: #46c27a;
+  --bs-btn-active-bg: #eaebef;
+  /* --bs-btn-active-border-color: #46c27a; */
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #000;
   --bs-btn-disabled-bg: #31bb6b;
   --bs-btn-disabled-border-color: #31bb6b;
+  color: #000;
 }
 
 .btn-info {
@@ -3583,11 +3584,11 @@ fieldset:disabled .btn {
 }
 
 .btn-danger {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #dc3545;
+  --bs-btn-color: #ce2944;
+  --bs-btn-bg: #f8d6dc;
   --bs-btn-border-color: #dc3545;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #bb2d3b;
+  --bs-btn-hover-bg: #dc3545;
   --bs-btn-hover-border-color: #b02a37;
   --bs-btn-focus-shadow-rgb: 225, 83, 97;
   --bs-btn-active-color: #fff;
@@ -3900,8 +3901,8 @@ fieldset:disabled .btn {
   --bs-dropdown-link-color: var(--bs-body-color);
   --bs-dropdown-link-hover-color: var(--bs-body-color);
   --bs-dropdown-link-hover-bg: var(--bs-tertiary-bg);
-  --bs-dropdown-link-active-color: #fff;
-  --bs-dropdown-link-active-bg: #31bb6b;
+  /* --bs-dropdown-link-active-color: #fff; */
+  --bs-dropdown-link-active-bg: #f8f9fa;
   --bs-dropdown-link-disabled-color: var(--bs-tertiary-color);
   --bs-dropdown-item-padding-x: 1rem;
   --bs-dropdown-item-padding-y: 0.25rem;
@@ -6102,7 +6103,7 @@ fieldset:disabled .btn {
   --bs-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
   --bs-btn-close-opacity: 0.5;
   --bs-btn-close-hover-opacity: 0.75;
-  --bs-btn-close-focus-shadow: 0 0 0 0.25rem rgba(49, 187, 107, 0.25);
+  --bs-btn-close-focus-shadow: 0 0 0 0.25rem rgba(155, 174, 211, 0.5);
   --bs-btn-close-focus-opacity: 1;
   --bs-btn-close-disabled-opacity: 0.25;
   --bs-btn-close-white-filter: invert(1) grayscale(100%) brightness(200%);
@@ -14063,44 +14064,43 @@ fieldset:disabled .btn {
    */
 .btn-primary,
 .btn-secondary,
-.btn-success,
 .btn-warning,
 .btn-info {
   color: #fff;
   /* isolation: isolate; */
 }
 
-.btn-primary:hover,
+.btn-success {
+  color: #707070;
+}
+
 .btn-primary:active,
 .btn-secondary:hover,
 .btn-secondary:active,
-.btn-success:hover,
 .btn-success:active,
 .btn-warning:hover,
 .btn-warning:active,
 .btn-info:hover,
 .btn-info:active {
   color: #fff !important;
-  box-shadow: inset 50px 50px 40px rgba(0, 0, 0, 0.5);
-  background-blend-mode: multiply;
-  /* background-color: #6c757d ; */
-  /* filter: brightness(0.85); */
 }
 
-/* .btn-primary{
-  --hover-bg: #6c757d !important; 
+/* Style for active button's background color */
+.btn-success:hover,
+.btn-success:active {
+  background-color: #e0eaf6 !important;
 }
 
-
-.btn-primary:hover,
-.btn-primary:active{
-  --hover-bg: hsl(var(--button-hue, 0), 100%, 60%) !important;
+/* Style for active button's icon fill color */
+.btn-success:active svg path {
+  fill: #ffffff !important;
+  transition: fill 0.32s !important; /* Add a transition for SVG icon */
 }
 
-.btn-primary:hover,
-.btn-primary:active{
-  --hover-bg: hsl(var(--button-hue, 0), 100%, 0%) !important;
-} */
+/* Ensure text color transition for active state */
+.btn-success .text-secondary {
+  transition: color 0.32s !important;
+}
 
 .btn-outline-primary:hover,
 .btn-outline-primary:active,

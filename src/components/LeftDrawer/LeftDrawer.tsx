@@ -96,7 +96,7 @@ const leftDrawer = ({
                   <Button
                     variant={isActive === true ? 'success' : ''}
                     className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
+                      isActive === true ? 'text-black' : 'text-secondary'
                     }`}
                     data-testid="rolesBtn"
                   >
@@ -104,7 +104,7 @@ const leftDrawer = ({
                       <RolesIcon
                         fill={`${
                           isActive === true
-                            ? 'var(--bs-white)'
+                            ? 'var(--bs-black)'
                             : 'var(--bs-secondary)'
                         }`}
                       />
@@ -118,7 +118,7 @@ const leftDrawer = ({
                   <Button
                     variant={isActive === true ? 'success' : ''}
                     className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
+                      isActive === true ? 'text-black' : 'text-secondary'
                     }`}
                     data-testid="communityProfileBtn"
                   >
