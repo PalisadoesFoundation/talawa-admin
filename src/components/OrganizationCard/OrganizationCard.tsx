@@ -201,7 +201,7 @@ function OrganizationCard({
           </h6>
         </div>
       </div>
-      {membershipRequestStatus === 'accepted' && (
+      {membershipRequestStatus ==='accepted' && (
         <Button
           variant="success"
           data-testid="manageBtn"
