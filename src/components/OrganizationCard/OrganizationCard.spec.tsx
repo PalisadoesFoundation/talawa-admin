@@ -72,7 +72,7 @@ describe('Testing the Organization Card', () => {
 
     render(
       <TestWrapper>
-        <OrganizationCard isjoined={false} {...props} />
+        <OrganizationCard isJoined={false} {...props} />
       </TestWrapper>,
     );
 
@@ -105,7 +105,7 @@ describe('Testing the Organization Card', () => {
 
     render(
       <TestWrapper>
-        <OrganizationCard isjoined={false} {...props} />
+        <OrganizationCard isJoined={false} {...props} />
       </TestWrapper>,
     );
 

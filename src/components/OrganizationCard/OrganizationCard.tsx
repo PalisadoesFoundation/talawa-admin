@@ -47,7 +47,7 @@ interface InterfaceOrganizationCardProps {
       _id: string;
     };
   }[];
-  isjoined: boolean;
+  isJoined: boolean;
 }
 
 /**
@@ -85,7 +85,7 @@ function OrganizationCard({
   membershipRequestStatus,
   userRegistrationRequired,
   membershipRequests,
-  isjoined,
+  isJoined,
 }: InterfaceOrganizationCardProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const userId: string | null = getItem('userId');
@@ -205,7 +205,7 @@ function OrganizationCard({
           </h6>
         </div>
       </div>
-      {isjoined && (
+      {isJoined && (
         <Button
           variant="success"
           data-testid="manageBtn"
