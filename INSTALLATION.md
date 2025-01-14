@@ -448,6 +448,7 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
    sudo chown talawa_admin:talawa_admin /path/to/talawa-admin/.env
    # Verify environment variables are loaded
    sudo systemctl show-environment
+   
    ```
       
 #### 5. **Adjust User and Group**
