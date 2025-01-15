@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './OrganizationCard.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
@@ -14,11 +14,10 @@ import {
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/OrganizationQueries';
-import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { ApolloError } from '@apollo/client';
-
+import useLocalStorage from 'utils/useLocalstorage';
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
@@ -47,7 +46,6 @@ interface InterfaceOrganizationCardProps {
   }[];
   isJoined: boolean;
 }
-
 /**
  * Component to display an organization's card with its image and owner details.
  * Displays an organization card with options to join or manage membership.
@@ -85,13 +83,15 @@ function OrganizationCard({
   membershipRequests,
   isJoined,
 }: InterfaceOrganizationCardProps): JSX.Element {
-  const { getItem } = useLocalStorage();
-  const userId: string | null = getItem('userId');
+  const [userId, setUserId] = useState<string | null>(null);
 
   const { t: tCommon } = useTranslation('common');
   const { t } = useTranslation();
 
   const navigate = useNavigate();
+
+  // Custom hook for localStorage
+  const { getItem } = useLocalStorage();
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
@@ -112,6 +112,18 @@ function OrganizationCard({
   const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS, {
     variables: { id: userId },
   });
+
+  useEffect(() => {
+    try {
+      // Use the custom hook to retrieve the userId
+      const id = getItem('userId'); // Adjust this line based on your actual localStorage key
+      setUserId(id);
+    } catch (error) {
+      console.error('Failed to access localStorage:', error);
+      setUserId(null); // Handle gracefully if localStorage is not available
+      toast.error('Failed to access user data');
+    }
+  }, [getItem]);
 
   async function joinOrganization(): Promise<void> {
     try {
@@ -148,6 +160,8 @@ function OrganizationCard({
     const membershipRequest = membershipRequests.find(
       (request) => request.user._id === userId,
     );
+    console.log('Membership Request:', membershipRequest); // Add this log
+
     try {
       if (!membershipRequest) {
         toast.error(t('MembershipRequestNotFound') as string);
@@ -160,7 +174,8 @@ function OrganizationCard({
         },
       });
 
-      toast.success(t('MembershipRequestWithdrawn') as string);
+      console.log('Mutation executed successfully'); // Log mutation success
+      toast.success(t('MembershipRequestWithdrawn') as string); // Ensure this gets called
     } catch (error: unknown) {
       console.error('Failed to withdraw membership request:', error);
       toast.error(t('errorOccured') as string);
