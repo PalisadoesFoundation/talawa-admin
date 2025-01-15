@@ -162,7 +162,9 @@ function OrganizationCard({
 
       toast.success(t('MembershipRequestWithdrawn') as string);
     } catch (error: unknown) {
-      console.error('Failed to withdraw membership request:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to withdraw membership request:', error);
+      }
       toast.error(t('errorOccured') as string);
     }
   }
