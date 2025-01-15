@@ -2833,21 +2833,21 @@ textarea.form-control-lg {
 }
 
 .reset-changes-btn {
-  color: #1778f2 !important;
+  color: #afffe8 !important;
   background-color: var(--bs-white) !important;
-  border: 1px solid #1778f2 !important;
+  border: 1px solid #afffe8 !important;
 }
 
 .reset-changes-btn:hover,
 .reset-changes-btn:active {
-  background-color: #1778f2 !important;
+  background-color: #afffe8 !important;
   color: var(--bs-white) !important;
 }
 
 .save-changes-btn {
-  background-color: #1778f2 !important;
+  background-color: #afffe8 !important;
   color: var(--bs-white) !important;
-  border: 1px solid #1778f2 !important;
+  border: 1px solid #afffe8 !important;
 }
 
 .btn-check {
@@ -3963,7 +3963,7 @@ fieldset:disabled .btn {
   --bs-dropdown-link-hover-color: var(--bs-body-color);
   --bs-dropdown-link-hover-bg: var(--bs-tertiary-bg);
   --bs-dropdown-link-active-color: #fff;
-  --bs-dropdown-link-active-bg: #31bb6b;
+  --bs-dropdown-link-active-bg: #a8c7fa;
   --bs-dropdown-link-disabled-color: var(--bs-tertiary-color);
   --bs-dropdown-item-padding-x: 1rem;
   --bs-dropdown-item-padding-y: 0.25rem;
@@ -4362,15 +4362,15 @@ fieldset:disabled .btn {
 }
 
 .dropdown button {
-  color: #1778f2;
-  border: 1px solid #1778f2;
+  color: #afffe8;
+  border: 1px solid #afffe8;
 }
 
 .dropdown button:hover,
 .dropdown button:active {
   color: var(--bs-white);
-  background-color: #1778f2;
-  border: 1px solid #1778f2;
+  background-color: #afffe8;
+  border: 1px solid #afffe8;
 }
 
 .dropdown .show {
@@ -4378,9 +4378,9 @@ fieldset:disabled .btn {
 }
 
 .createSettingBtn {
-  background-color: #1778f2 !important;
+  background-color: #afffe8 !important;
   color: var(--bs-white) !important;
-  border: 1px solid #1778f2 !important;
+  border: 1px solid #afffe8 !important;
 }
 
 .btn-group-vertical {
@@ -5729,7 +5729,7 @@ fieldset:disabled .btn {
   --bs-progress-border-radius: var(--bs-border-radius);
   --bs-progress-box-shadow: var(--bs-box-shadow-inset);
   --bs-progress-bar-color: #fff;
-  --bs-progress-bar-bg: #31bb6b;
+  --bs-progress-bar-bg: #0056b3;
   --bs-progress-bar-transition: width 0.6s ease;
   display: flex;
   height: var(--bs-progress-height);

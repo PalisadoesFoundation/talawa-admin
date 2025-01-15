@@ -92,7 +92,7 @@ function orgPeopleListCard(
           {/* Button to confirm the removal action */}
           <Button
             type="button"
-            className={styles.yesButton}
+            className={styles.regularBtn}
             onClick={removeMember}
             data-testid="removeMemberBtn"
           >

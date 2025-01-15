@@ -1,6 +1,7 @@
 import React, { type FC } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import styles from '../../style/app.module.css';
 
 /**
  * A modal component that confirms a post delete operation.
@@ -46,12 +47,13 @@ const DeletePostModal: FC<InterfaceDeletePostModalProps> = ({
           variant="danger"
           onClick={onHide}
           data-testid="deleteModalNoBtn"
+          className={styles.removeButton}
         >
           {tCommon('no')}
         </Button>
         <Button
           type="button"
-          className="btn btn-success"
+          className={`btn ${styles.addButton}`}
           onClick={handleConfirmDelete}
           data-testid="deletePostBtn"
         >

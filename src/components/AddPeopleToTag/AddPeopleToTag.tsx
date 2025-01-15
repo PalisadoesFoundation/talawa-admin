@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
-import styles from './AddPeopleToTag.module.css';
+import styles from '../../style/app.module.css';
 import type { InterfaceTagUsersToAssignToQuery } from 'utils/organizationTagsUtils';
 import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
@@ -106,7 +106,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           getUsersToAssignTo: {
@@ -127,7 +127,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const userTagMembersToAssignTo =
     userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
       (edge) => edge.node,
-    ) ?? /* istanbul ignore next */ [];
+    ) ?? [];
 
   const handleAddOrRemoveMember = (member: InterfaceMemberData): void => {
     setAssignToMembers((prevMembers) => {
@@ -173,7 +173,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
       }
-    } catch (error: unknown) /* istanbul ignore next */ {
+    } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
       toast.error(errorMessage);
@@ -244,7 +244,10 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             data-testid={
               isToBeAssigned ? 'deselectMemberBtn' : 'selectMemberBtn'
             }
-            variant={!isToBeAssigned ? 'primary' : 'danger'}
+            // variant={!isToBeAssigned ? 'primary' : 'danger'}
+            className={
+              !isToBeAssigned ? styles.editButton : `btn btn-danger btn-sm`
+            }
           >
             {isToBeAssigned ? 'x' : '+'}
           </Button>
@@ -263,7 +266,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={`bg-primary ${styles.modalHeader}`}
           data-testid="modalOrganizationHeader"
           closeButton
         >
@@ -301,7 +304,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <Form.Control
                   type="text"
                   id="firstName"
-                  className="bg-light"
+                  className={`bg-light ${styles.inputField}`}
                   placeholder={tCommon('firstName')}
                   onChange={(e) =>
                     setMemberToAssignToSearchFirstName(e.target.value.trim())
@@ -315,7 +318,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <Form.Control
                   type="text"
                   id="lastName"
-                  className="bg-light"
+                  className={`bg-light ${styles.inputField}`}
                   placeholder={tCommon('lastName')}
                   onChange={(e) =>
                     setMemberToAssignToSearchLastName(e.target.value.trim())
@@ -345,8 +348,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                     next={loadMoreMembersToAssignTo}
                     hasMore={
                       userTagsMembersToAssignToData?.getUsersToAssignTo
-                        .usersToAssignTo.pageInfo.hasNextPage ??
-                      /* istanbul ignore next */ false
+                        .usersToAssignTo.pageInfo.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="addPeopleToTagScrollableDiv"
@@ -357,7 +359,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                       hideFooter={true}
                       getRowId={(row) => row.id}
                       slots={{
-                        noRowsOverlay: /* istanbul ignore next */ () => (
+                        noRowsOverlay: () => (
                           <Stack
                             height="100%"
                             alignItems="center"
@@ -396,16 +398,17 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           <Modal.Footer>
             <Button
               onClick={hideAddPeopleToTagModal}
-              variant="outline-secondary"
+              variant="outline-danger"
               data-testid="closeAddPeopleToTagModal"
+              className={styles.removeButton}
             >
               {tCommon('cancel')}
             </Button>
             <Button
               type="submit"
               disabled={addPeopleToTagLoading}
-              variant="primary"
               data-testid="assignPeopleBtn"
+              className={styles.addButton}
             >
               {t('assign')}
             </Button>

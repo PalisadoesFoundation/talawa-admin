@@ -204,6 +204,7 @@ jobs:
         run: |
           python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
+
   Check-Code-Coverage-Disable:
     name: Check for code coverage disable
     runs-on: ubuntu-latest
@@ -245,27 +246,50 @@ jobs:
         uses: tj-actions/changed-files@v45
           
       - name: Run Jest Tests
-        if: steps.changed-files.outputs.only_changed != 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/jest'
         run: |
           npm run test -- --watchAll=false --coverage
 
+      - name: Upload Jest Coverage to Codecov
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/jest/lcov.info
+          flags: jest
+          fail_ci_if_error: true
+
       - name: Run Vitest Tests
-        if: steps.changed-files.outputs.only_changed != 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
         run: |
           npm run test:vitest:coverage
 
-      - name: Merge Coverage Reports
-        if: steps.changed-files.outputs.only_changed != 'true'
+      - name: Upload Vitest Coverage to Codecov
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/vitest/lcov.info
+          flags: vitest
+          fail_ci_if_error: true
+
+      - name: Merge Jest and Vitest Coverage Reports
         run: |
-          mkdir -p coverage
-          if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
-            echo "Failed to merge coverage reports"
-            exit 1
-          fi     
+          mkdir -p ./coverage
+          npx lcov-result-merger './coverage/*/lcov.info' './coverage/lcov.info'
+  
+      - name: Upload Combined Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          gcov_ignore: 'docs/'
+          files: ./coverage/lcov.info
+          flags: combined
+          fail_ci_if_error: true
       
       - name: TypeScript compilation for changed files
         run: |
@@ -274,16 +298,6 @@ jobs:
               npx tsc --noEmit "$file"
             fi
           done
-
-      - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
-          gcov_ignore: 'docs/'
-          fail_ci_if_error: false
-          files: './coverage/lcov.info'
-          name: '${{env.CODECOV_UNIQUE_NAME}}'
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
@@ -413,7 +427,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22.x'
           cache: yarn
           cache-dependency-path: 'docs/'
       # Run Docusaurus in the ./docs directory

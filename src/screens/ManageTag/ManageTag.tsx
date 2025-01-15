@@ -131,7 +131,6 @@ function ManageTag(): JSX.Element {
           };
         },
       ) => {
-        /* istanbul ignore next -- @preserve */
         if (!fetchMoreResult) return prevResult;
 
         return {
@@ -174,7 +173,6 @@ function ManageTag(): JSX.Element {
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned') as string);
     } catch (error: unknown) {
-      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -209,14 +207,12 @@ function ManageTag(): JSX.Element {
         },
       });
 
-      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('tagUpdationSuccess'));
         userTagAssignedMembersRefetch();
         setEditUserTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -236,7 +232,6 @@ function ManageTag(): JSX.Element {
       toggleRemoveUserTagModal();
       toast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
-      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -259,7 +254,7 @@ function ManageTag(): JSX.Element {
   const userTagAssignedMembers =
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
       (edge) => edge.node,
-    ) ?? /* istanbul ignore next -- @preserve */ [];
+    ) ?? [];
 
   // get the ancestorTags array and push the current tag in it
   // used for the tag breadcrumbs
@@ -291,7 +286,7 @@ function ManageTag(): JSX.Element {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return <div>{params.row.id}</div>;
@@ -303,7 +298,7 @@ function ManageTag(): JSX.Element {
       flex: 2,
       minWidth: 100,
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="memberName">
@@ -320,7 +315,7 @@ function ManageTag(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div>
@@ -329,7 +324,9 @@ function ManageTag(): JSX.Element {
               state={{ id: params.row._id }}
               data-testid="viewProfileBtn"
             >
-              <div className="btn btn-sm btn-primary me-3">
+              <div
+                className={`btn btn-sm btn-primary me-3 ${styles.editButton}`}
+              >
                 {t('viewProfile')}
               </div>
             </Link>
@@ -436,7 +433,6 @@ function ManageTag(): JSX.Element {
                     >
                       {tag.name}
                       {orgUserTagAncestors.length - 1 !== index && (
-                        /* istanbul ignore next -- @preserve */
                         <i className={'mx-2 fa fa-caret-right'} />
                       )}
                     </div>
@@ -452,8 +448,7 @@ function ManageTag(): JSX.Element {
                     next={loadMoreAssignedMembers}
                     hasMore={
                       userTagAssignedMembersData?.getAssignedUsers
-                        .usersAssignedTo.pageInfo.hasNextPage ??
-                      /* istanbul ignore next -- @preserve */ false
+                        .usersAssignedTo.pageInfo.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="manageTagScrollableDiv"
@@ -464,16 +459,15 @@ function ManageTag(): JSX.Element {
                       hideFooter={true}
                       getRowId={(row) => row.id}
                       slots={{
-                        noRowsOverlay:
-                          /* istanbul ignore next -- @preserve */ () => (
-                            <Stack
-                              height="100%"
-                              alignItems="center"
-                              justifyContent="center"
-                            >
-                              {t('noAssignedMembersFound')}
-                            </Stack>
-                          ),
+                        noRowsOverlay: () => (
+                          <Stack
+                            height="100%"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            {t('noAssignedMembersFound')}
+                          </Stack>
+                        ),
                       }}
                       sx={dataGridStyle}
                       getRowClassName={() => `${styles.rowBackgrounds}`}
@@ -501,7 +495,7 @@ function ManageTag(): JSX.Element {
                       setTagActionType('assignToTags');
                       showTagActionsModal();
                     }}
-                    className="my-2 btn btn-primary btn-sm w-75"
+                    className={`my-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="assignToTags"
                   >
                     {t('assignToTags')}
@@ -525,7 +519,7 @@ function ManageTag(): JSX.Element {
                   />
                   <div
                     onClick={showEditUserTagModal}
-                    className="mt-1 mb-2 btn btn-primary btn-sm w-75"
+                    className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="editUserTag"
                   >
                     {tCommon('edit')}

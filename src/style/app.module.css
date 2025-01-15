@@ -55,7 +55,7 @@
   --tablerow-bg: #eff1f7;
   --date-picker-bg: #f2f2f2;
   --table-bg-color: var(--grey-bg-color);
-  --tablerow-bg-color: var(--dropdown-hover-color);
+  --tablerow-bg-color: #ffffff;
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
 
@@ -93,16 +93,16 @@
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
-
-  --table-head-bg: var(--blue-subtle, var(--blue-color));
+  --table-head-bg: #eaebef;
   --table-head-color: var(--bs-white, var(--white-color));
-
-  --table-header-color: var(--bs-white, var(--bs-gray-300));
+  --table-header-color: #000000;
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
+  --light-blue: #a8c7fa;
+  --dark-blue: #afffe8;
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   /* breakpoints */
@@ -197,7 +197,7 @@
   font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--light-green);
+  border-bottom: 3px solid var(--light-blue);
   width: 15%;
 }
 
@@ -207,7 +207,7 @@
   font-size: 18px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--light-green);
+  border-bottom: 3px solid var(--light-blue);
   width: 60%;
 }
 
@@ -285,7 +285,15 @@
   margin-bottom: 10px; */
 }
 
-.dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
+.dropdown:is(
+    :hover,
+    :focus,
+    :active,
+    :focus-visible,
+    .show,
+    :disabled,
+    :checked
+  ) {
   background-color: transparent !important;
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
@@ -293,7 +301,20 @@
 
 .dropdown:is(:focus, :focus-visible) {
   outline: 2px solid var(--highlight-color, var(--search-button-bg));
+  border: 1px solid var(--brown-color);
 }
+
+.dropdown:not(:focus) {
+  background-color: var(--bs-white);
+  border: 1px solid var(--brown-color);
+  color: var(--brown-color) !important;
+}
+
+/* .dropdown:disabled {
+  background-color: transparent !important;
+  border: 1px solid var(--brown-color);
+  color: var(--brown-color) !important;
+} */
 
 .dropdownItem {
   background-color: var(--bs-white) !important;
@@ -382,6 +403,11 @@
   gap: 8px;
 }
 
+.deleteButton:is(:hover, :active) {
+  background-color: var(--delete-button-color) !important;
+  color: white;
+}
+
 .actionItemDeleteButton {
   background-color: var(--delete-button-bg);
   color: var(--delete-button-color);
@@ -420,6 +446,10 @@
   box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
+.inputField:focus {
+  box-shadow: 0 0 0 0.25rem var(--light-blue);
+}
+
 .inputFieldModal {
   margin-bottom: 10px;
   background-color: var(--bs-white);
@@ -451,22 +481,47 @@
 
 .searchButton:active {
   transform: scale(0.95);
+  background-color: var(--search-button-hover-bg, #286fe0) !important;
+  border-color: transparent !important;
 }
 
 .addButton {
   margin-bottom: 10px;
-  background-color: var(--search-button-bg);
+  background-color: var(--light-blue);
   border-color: var(--grey-bg-color);
 }
 
-.addButton:hover {
-  background-color: var(--light-blue-color);
+.addButton:is(:hover, :active) {
+  background-color: var(--dark-blue) !important;
   border-color: var(--search-button-border);
+}
+
+.removeButton {
+  margin-bottom: 10px;
+  background-color: var(--delete-button-bg);
+  color: var(--delete-button-color);
+  margin-right: 10px;
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--delete-button-color) !important;
+  border-color: var(--delete-button-color);
+  color: white;
 }
 
 .yesButton {
   background-color: var(--search-button-bg);
   border-color: var(--search-button-border);
+}
+
+.regularBtn {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+}
+
+.regularBtn:is(:hover, :active) {
+  background-color: #286fe0 !important;
+  border-color: var(--search-button-border) !important;
 }
 
 .searchIcon {
@@ -508,10 +563,54 @@
   overflow-y: auto;
 }
 
+.scrollContainer {
+  height: 100px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.memberBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
+}
+
+.loadingDiv {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tagBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
+}
+
 .tableHeader {
   background-color: var(--table-head-bg);
   color: var(--table-header-color);
   font-size: var(--font-size-header);
+}
+
+.editButton {
+  background-color: var(--light-blue);
+  color: var(--brown-color);
+  border-color: var(--grey-bg-color);
+  --bs-btn-active-bg: var(--dark-blue);
+  --bs-btn-active-border-color: var(--grey-bg-color);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--dark-blue);
+  border-color: var(--search-button-border);
 }
 
 .errorContainer {
@@ -564,6 +663,7 @@
   scrollbar-color: var(--bs-gray-400) var(--bs-white);
   max-height: calc(100vh - 18rem);
   overflow: auto;
+  margin-top: 20px !important;
 }
 
 .tagsBreadCrumbs:hover {
@@ -667,6 +767,18 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background-color: var(--search-button-bg); */
+}
+
+.switch input {
+  /* box-shadow: 0 0 0.1rem 0.2rem var(--light-blue); */
+  --bs-form-switch-bg: transparent;
+}
+
+.switch input:checked {
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
+  box-shadow: 0 0 0.1rem 0.2rem var(--light-blue);
 }
 
 .pageNotFound {
@@ -693,7 +805,7 @@ hr {
 .pageNotFound h1.head {
   font-size: 250px;
   font-weight: 900;
-  color: var(--light-green);
+  color: var(--light-blue);
   letter-spacing: 25px;
   margin: 10px 0 0 0;
 }
@@ -736,10 +848,11 @@ hr {
 .greenregbtnPledge {
   margin-top: 15px;
   border: 1px solid var(--bs-gray-300);
+  border-color: var(--grey-bg-color);
   box-shadow: 0 2px 2px var(--grey-border-box-color);
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--bs-primary);
+  background-color: var(--search-button-bg);
   width: 100%;
   font-size: 16px;
   color: var(--bs-white);
@@ -773,7 +886,7 @@ hr {
 
 .inputFieldPledge {
   background-color: var(--bs-white);
-  box-shadow: 0 1px 1px var(--light-green);
+  box-shadow: 0 1px 1px var(--light-blue);
 }
 
 .dropdownPledge {
@@ -875,6 +988,10 @@ hr {
   gap: 0.3rem;
 }
 
+/* .progressBar .bg-info {
+  background-color: #286fe0 !important;
+} */
+
 .endpoints {
   display: flex;
   position: relative;
@@ -936,10 +1053,20 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-color: var(--grey-border-box-color);
 }
 
-.toggleBtnPledge:hover {
-  color: var(--light-green) !important;
+.toggleBtnPledge:is(:focus, :active, :checked) + label {
+  color: black !important;
+  border-color: black !important;
+}
+
+.toggleBtnPledge:not(:checked) + label {
+  color: var(--subtle-blue-grey-hover) !important;
+}
+
+.toggleBtnPledge:is(:hover) + label {
+  color: var(--light-blue) !important;
 }
 
 .card {
@@ -1193,7 +1320,7 @@ hr {
 }
 
 .customcell {
-  background-color: var(--light-green) !important;
+  background-color: var(--light-blue) !important;
   color: var(--bs-white) !important;
   font-size: medium !important;
   font-weight: 500 !important;
@@ -1219,7 +1346,7 @@ hr {
 }
 
 .table-body > .table-row:nth-child(2n) {
-  background: var(--light-neon-green) !important;
+  background: var(--light-blue) !important;
 }
 
 .organizationFundCampaignContainer {
@@ -1240,11 +1367,12 @@ hr {
 .greenregbtnOrganizationFundCampaign {
   margin: 1rem 0 0;
   margin-top: 15px;
-  border: 1px solid var(--bs-gray-300);
+  /* border: 1px solid var(--search-button-bg); */
+  border-color: var(--grey-bg-color);
   box-shadow: 0 2px 2px var(--grey-border-box-color);
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--bs-primary);
+  background-color: var(--search-button-bg);
   width: 100%;
   font-size: 16px;
   color: var(--bs-white);
@@ -1255,6 +1383,11 @@ hr {
     transform 0.2s,
     box-shadow 0.2s;
   flex: 1;
+}
+
+.greenregbtnOrganizationFundCampaign:hover {
+  background-color: #286fe0;
+  border-color: var(--grey-bg-color);
 }
 
 .goalButtonOrganizationFundCampaign {
@@ -1580,6 +1713,13 @@ hr {
 .modalHeader {
   border: none;
   padding-bottom: 0;
+  background-color: var(--white-color) !important;
+  padding: 1rem 1rem;
+  color: #000000;
+}
+
+.modalHeader div {
+  color: #000000 !important;
 }
 
 .label {
@@ -1676,7 +1816,7 @@ hr {
 }
 
 .toggleBtn:hover {
-  color: var(--light-green) !important;
+  color: var(--light-blue) !important;
 }
 
 input[type='radio']:checked + label {
@@ -1717,7 +1857,7 @@ input[type='radio']:checked + label:hover {
 
 .greenregbtn:hover {
   background-color: var(--search-button-bg);
-  border: 1px solid #1778f2 !important;
+  border: 1px solid #afffe8 !important;
 }
 
 .manageBtn {
@@ -1790,6 +1930,14 @@ input[type='radio']:checked + label:hover {
   box-shadow: 0 1px 1px var(--brand-primary);
 }
 
+.dropdowns {
+  background-color: var(--bs-white);
+  border: 1px solid var(--dropdown-border-color);
+  position: relative;
+  display: inline-block;
+  color: black;
+}
+
 .chipIcon {
   height: 0.9rem !important;
 }
@@ -1800,12 +1948,19 @@ input[type='radio']:checked + label:hover {
 
 .active {
   background-color: var(--status-active-bg);
+  color: var(--light-blue) !important;
+  border-color: var(--light-blue) !important;
 }
 
 .pending {
   background-color: var(--status-pending-bg);
-  color: var(--status-pending-text);
-  border-color: var(--status-pending-border);
+  color: var(--light-blue) !important;
+  border-color: var(--light-blue) !important;
+}
+
+.checkboxButton input:checked {
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
 }
 
 /* Modals */
@@ -1886,6 +2041,7 @@ input[type='radio']:checked + label:hover {
   border: 0.5px solid var(--brown-color);
 }
 .searchButtonOrgList {
+  background-color: var(--light-blue);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -3423,7 +3579,7 @@ button[data-testid='createPostBtn'] {
     display: flex !important;
     align-items: center;
     background-color: transparent;
-    color: var(--light-green);
+    color: var(--light-blue);
   }
 
   .entryaction .spinner-grow {
@@ -3431,6 +3587,86 @@ button[data-testid='createPostBtn'] {
     width: 1rem;
     margin-right: 8px;
   }
+}
+
+.entrytoggle {
+  margin: 24px 24px 0 auto;
+  width: fit-content;
+}
+
+.entryaction {
+  display: flex !important;
+}
+
+.entryaction i {
+  margin-right: 8px;
+  margin-top: 4px;
+}
+
+.entryaction .spinner-grow {
+  height: 1rem;
+  width: 1rem;
+  margin-right: 8px;
+}
+
+.admedia {
+  object-fit: cover;
+  height: 16rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.addCard {
+  width: 28rem;
+}
+
+.dropdownButton {
+  background-color: transparent;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 8px 10px;
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownmenu {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  width: 120px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 5px 0;
+  margin: 0;
+  list-style-type: none;
+  right: 0;
+  top: 100%;
+}
+
+.dropdownmenu li {
+  cursor: pointer;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  color: #333;
+}
+
+.dropdownmenu li:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdownContainer:hover .dropdownmenu {
+  display: block;
 }
 
 .leftDrawer {
@@ -6039,9 +6275,9 @@ button[data-testid='createPostBtn'] {
 .saveButton {
   width: 10em;
   align-self: self-end;
-  background-color: #1778f2 !important;
+  background-color: #afffe8 !important;
   color: var(--bs-white) !important;
-  border: 1px solid #1778f2 !important;
+  border: 1px solid #afffe8 !important;
 }
 
 /* OrgUpdate */

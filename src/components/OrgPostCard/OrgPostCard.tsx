@@ -445,7 +445,7 @@ export default function OrgPostCard(
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={styles.modalHeader}
           data-testid="modalOrganizationHeader"
           closeButton
         >
@@ -462,7 +462,7 @@ export default function OrgPostCard(
               onChange={handleInputEvent}
               data-testid="updateTitle"
               required
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('postTitle1')}
               autoComplete="off"
             />
@@ -470,7 +470,7 @@ export default function OrgPostCard(
             <Form.Control
               type="descrip"
               id="descrip"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               name="postinfo"
               value={postformState.postinfo}
               placeholder={t('information1')}
@@ -506,6 +506,7 @@ export default function OrgPostCard(
                       });
                     }
                   }}
+                  className={`mb-3 ${styles.inputField}`}
                 />
                 {postPhoto && (
                   <>
@@ -557,6 +558,7 @@ export default function OrgPostCard(
                       });
                     }
                   }}
+                  className={`mb-3 ${styles.inputField}`}
                 />
                 {postformState.postvideo && (
                   <div className={styles.previewOrgPostCard}>
@@ -578,14 +580,19 @@ export default function OrgPostCard(
           </Modal.Body>
           <Modal.Footer>
             <Button
-              variant="secondary"
+              className={styles.removeButton}
               onClick={toggleShowEditModal}
               data-testid="closeOrganizationModal"
               type="button"
             >
               {tCommon('close')}
             </Button>
-            <Button type="submit" value="invite" data-testid="updatePostBtn">
+            <Button
+              type="submit"
+              value="invite"
+              data-testid="updatePostBtn"
+              className={styles.addButton}
+            >
               {t('updatePost')}
             </Button>
           </Modal.Footer>
