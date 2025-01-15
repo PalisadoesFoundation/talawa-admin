@@ -98,12 +98,14 @@ The process of proposing a change to Talawa Admin can be summarized as:
 1. Run the app and test your changes.
 1. If you've added code, then test suites must be added.
 
-   1. ### General:
+   ### General:
 
       - We need to get to 100% test coverage for the app. We periodically increase the desired test coverage for our pull requests to meet this goal.
       - Pull requests that don't meet the minimum test coverage levels will not be accepted. This may mean that you will have to create tests for code you did not write. You can decide which part of the code base needs additional tests if this happens to you.
 
-   2. ### Testing:
+   ### Testing:
+
+   This section outlines the different testing strategies and tools used in this project. It includes instructions on running tests, viewing code coverage, and debugging using Jest and Vitest. Following these guidelines ensures code reliability and maintains the project's high standards for quality.
       #### Jest Testing
       - Running a single test:
          ```
