@@ -249,7 +249,7 @@ function advertisementRegister({
     <>
       {formStatus === 'register' ? (
         <Button
-          className={styles.modalbtn}
+          className={styles.dropdown}
           variant="primary"
           onClick={handleShow}
           data-testid="createAdvertisement"
@@ -286,6 +286,7 @@ function advertisementRegister({
                     name: e.target.value,
                   });
                 }}
+                className={styles.inputField}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -312,6 +313,7 @@ function advertisementRegister({
                     });
                   }
                 }}
+                className={styles.inputField}
               />
               {formState.advertisementMedia && (
                 <div
@@ -367,6 +369,7 @@ function advertisementRegister({
                     type: e.target.value,
                   });
                 }}
+                className={styles.inputField}
               >
                 <option value="POPUP">Popup Ad</option>
                 <option value="BANNER">Banner Ad </option>
@@ -385,6 +388,7 @@ function advertisementRegister({
                     startDate: new Date(e.target.value),
                   });
                 }}
+                className={styles.inputField}
               />
             </Form.Group>
 
@@ -400,6 +404,7 @@ function advertisementRegister({
                     endDate: new Date(e.target.value),
                   });
                 }}
+                className={styles.inputField}
               />
             </Form.Group>
           </Form>
@@ -408,14 +413,13 @@ function advertisementRegister({
           <Button
             variant="secondary"
             onClick={handleClose}
-            className={styles.closeButtonAdvertisementRegister}
+            className={`btn btn-danger ${styles.removeButton}`}
             data-testid="addonclose"
           >
             {tCommon('close')}
           </Button>
           {formStatus === 'register' ? (
             <Button
-              variant="primary"
               onClick={handleRegister}
               data-testid="addonregister"
               className={styles.addButton}
@@ -424,9 +428,9 @@ function advertisementRegister({
             </Button>
           ) : (
             <Button
-              variant="primary"
               onClick={handleUpdate}
               data-testid="addonupdate"
+              className={styles.addButton}
             >
               {tCommon('saveChanges')}
             </Button>

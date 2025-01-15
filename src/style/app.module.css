@@ -53,13 +53,14 @@
   --organization-indicator-color: #a8c7fa;
   --white: #fff;
   --black: black;
-
+  --rating-star-filled: #ff6d75;
+  --rating-star-hover: #ff3d47;
   /* Background and Border */
   --table-bg: #eaebef;
   --tablerow-bg: #eff1f7;
   --date-picker-bg: #f2f2f2;
   --table-bg-color: var(--grey-bg-color);
-  --tablerow-bg-color: var(--dropdown-hover-color);
+  --tablerow-bg-color: #ffffff;
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
 
@@ -95,14 +96,16 @@
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
-  --table-head-bg: var(--bs-primary, var(--blue-color));
+  --table-head-bg: #eaebef;
   --table-head-color: var(--bs-white, var(--white-color));
-  --table-header-color: var(--bs-greyish-black, var(--black-color));
+  --table-header-color: #000000;
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
+  --light-blue: #a8c7fa;
+  --dark-blue: #1778f2;
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   /* breakpoints */
@@ -110,6 +113,7 @@
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1024px;
 }
+
 .fonts {
   color: var(--grey-bg-color-dark);
 }
@@ -196,7 +200,7 @@
   font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--light-green);
+  border-bottom: 3px solid var(--light-blue);
   width: 15%;
 }
 
@@ -206,7 +210,7 @@
   font-size: 18px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--light-green);
+  border-bottom: 3px solid var(--light-blue);
   width: 60%;
 }
 
@@ -275,9 +279,9 @@
 }
 
 .dropdown {
-  background-color: var(--bs-white);
+  background-color: var(--bs-white) !important;
   border: 1px solid var(--brown-color);
-  color: var(--brown-color);
+  color: var(--brown-color) !important;
   position: relative;
   display: inline-block;
   margin-top: 10px;
@@ -285,7 +289,15 @@
   box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
-.dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
+.dropdown:is(
+    :hover,
+    :focus,
+    :active,
+    :focus-visible,
+    .show,
+    :disabled,
+    :checked
+  ) {
   background-color: transparent !important;
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
@@ -293,7 +305,20 @@
 
 .dropdown:is(:focus, :focus-visible) {
   outline: 2px solid var(--highlight-color, var(--search-button-bg));
+  border: 1px solid var(--brown-color);
 }
+
+.dropdown:not(:focus) {
+  background-color: var(--bs-white);
+  border: 1px solid var(--brown-color);
+  color: var(--brown-color) !important;
+}
+
+/* .dropdown:disabled {
+  background-color: transparent !important;
+  border: 1px solid var(--brown-color);
+  color: var(--brown-color) !important;
+} */
 
 .dropdownItem {
   background-color: var(--bs-white) !important;
@@ -389,6 +414,11 @@
   gap: 8px;
 }
 
+.deleteButton:is(:hover, :active) {
+  background-color: var(--delete-button-color) !important;
+  color: white;
+}
+
 .actionItemDeleteButton {
   background-color: var(--delete-button-bg);
   color: var(--delete-button-color);
@@ -398,8 +428,8 @@
 .createButton {
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
-  margin-top: 10px;
-  margin-left: 5px;
+  /* margin-top: 10px; */
+  /* margin-left: 5px; */
   border: 1px solid var(--brown-color);
 }
 
@@ -425,6 +455,10 @@
   margin-bottom: 10px;
   background-color: var(--bs-white);
   box-shadow: 0 1px 1px var(--input-shadow-color);
+}
+
+.inputField:focus {
+  box-shadow: 0 0 0 0.25rem var(--light-blue);
 }
 
 .inputFieldModal {
@@ -458,22 +492,47 @@
 
 .searchButton:active {
   transform: scale(0.95);
+  background-color: var(--search-button-hover-bg, #286fe0) !important;
+  border-color: transparent !important;
 }
 
 .addButton {
   margin-bottom: 10px;
-  background-color: var(--search-button-bg);
+  background-color: var(--light-blue);
   border-color: var(--grey-bg-color);
 }
 
-.addButton:hover {
-  background-color: var(--light-blue-color);
+.addButton:is(:hover, :active) {
+  background-color: var(--dark-blue) !important;
   border-color: var(--search-button-border);
+}
+
+.removeButton {
+  margin-bottom: 10px;
+  background-color: var(--delete-button-bg);
+  color: var(--delete-button-color);
+  margin-right: 10px;
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--delete-button-color) !important;
+  border-color: var(--delete-button-color);
+  color: white;
 }
 
 .yesButton {
   background-color: var(--search-button-bg);
   border-color: var(--search-button-border);
+}
+
+.regularBtn {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+}
+
+.regularBtn:is(:hover, :active) {
+  background-color: #286fe0 !important;
+  border-color: var(--search-button-border) !important;
 }
 
 .searchIcon {
@@ -515,10 +574,54 @@
   overflow-y: auto;
 }
 
+.scrollContainer {
+  height: 100px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.memberBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
+}
+
+.loadingDiv {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tagBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
+}
+
 .tableHeader {
   background-color: var(--table-head-bg);
   color: var(--table-header-color);
   font-size: var(--font-size-header);
+}
+
+.editButton {
+  background-color: var(--light-blue);
+  color: var(--brown-color);
+  border-color: var(--grey-bg-color);
+  --bs-btn-active-bg: var(--dark-blue);
+  --bs-btn-active-border-color: var(--grey-bg-color);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--dark-blue);
+  border-color: var(--search-button-border);
 }
 
 .errorContainer {
@@ -571,6 +674,7 @@
   scrollbar-color: var(--bs-gray-400) var(--bs-white);
   max-height: calc(100vh - 18rem);
   overflow: auto;
+  margin-top: 20px !important;
 }
 
 .tagsBreadCrumbs:hover {
@@ -674,6 +778,18 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background-color: var(--search-button-bg); */
+}
+
+.switch input {
+  /* box-shadow: 0 0 0.1rem 0.2rem var(--light-blue); */
+  --bs-form-switch-bg: transparent;
+}
+
+.switch input:checked {
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
+  box-shadow: 0 0 0.1rem 0.2rem var(--light-blue);
 }
 
 .pageNotFound {
@@ -700,7 +816,7 @@ hr {
 .pageNotFound h1.head {
   font-size: 250px;
   font-weight: 900;
-  color: var(--light-green);
+  color: var(--light-blue);
   letter-spacing: 25px;
   margin: 10px 0 0 0;
 }
@@ -715,7 +831,7 @@ hr {
   top: 50%;
   width: 50%;
   height: 1px;
-  background: #fff;
+  background: var(--white);
   content: '';
 }
 .pageNotFound h1.head span:before {
@@ -743,10 +859,11 @@ hr {
 .greenregbtnPledge {
   margin-top: 15px;
   border: 1px solid var(--bs-gray-300);
+  border-color: var(--grey-bg-color);
   box-shadow: 0 2px 2px var(--grey-border-box-color);
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--bs-primary);
+  background-color: var(--search-button-bg);
   width: 100%;
   font-size: 16px;
   color: var(--bs-white);
@@ -780,7 +897,7 @@ hr {
 
 .inputFieldPledge {
   background-color: var(--bs-white);
-  box-shadow: 0 1px 1px var(--light-green);
+  box-shadow: 0 1px 1px var(--light-blue);
 }
 
 .dropdownPledge {
@@ -882,6 +999,10 @@ hr {
   gap: 0.3rem;
 }
 
+/* .progressBar .bg-info {
+  background-color: #286fe0 !important;
+} */
+
 .endpoints {
   display: flex;
   position: relative;
@@ -943,16 +1064,36 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-color: var(--grey-border-box-color);
 }
 
-.toggleBtnPledge:hover {
-  color: var(--light-green) !important;
+.toggleBtnPledge:is(:focus, :active, :checked) + label {
+  color: black !important;
+  border-color: black !important;
+}
+
+.toggleBtnPledge:not(:checked) + label {
+  color: var(--subtle-blue-grey-hover) !important;
+}
+
+.toggleBtnPledge:is(:hover) + label {
+  color: var(--light-blue) !important;
 }
 
 .card {
   width: fit-content;
 }
+.cardContainer {
+  width: 300px;
+}
 
+.ratingFilled {
+  color: var(--rating-star-filled); /* Color for filled stars */
+}
+
+.ratingHover {
+  color: var(--rating-star-hover); /* Color for star on hover */
+}
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
@@ -1018,7 +1159,7 @@ hr {
 }
 
 .justifyspOrganizationEvents {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   margin-top: 20px;
 }
@@ -1187,7 +1328,7 @@ hr {
 }
 
 .customcell {
-  background-color: var(--light-green) !important;
+  background-color: var(--light-blue) !important;
   color: var(--bs-white) !important;
   font-size: medium !important;
   font-weight: 500 !important;
@@ -1213,7 +1354,7 @@ hr {
 }
 
 .table-body > .table-row:nth-child(2n) {
-  background: var(--light-neon-green) !important;
+  background: var(--light-blue) !important;
 }
 
 .organizationFundCampaignContainer {
@@ -1234,11 +1375,12 @@ hr {
 .greenregbtnOrganizationFundCampaign {
   margin: 1rem 0 0;
   margin-top: 15px;
-  border: 1px solid var(--bs-gray-300);
+  /* border: 1px solid var(--search-button-bg); */
+  border-color: var(--grey-bg-color);
   box-shadow: 0 2px 2px var(--grey-border-box-color);
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--bs-primary);
+  background-color: var(--search-button-bg);
   width: 100%;
   font-size: 16px;
   color: var(--bs-white);
@@ -1249,6 +1391,11 @@ hr {
     transform 0.2s,
     box-shadow 0.2s;
   flex: 1;
+}
+
+.greenregbtnOrganizationFundCampaign:hover {
+  background-color: #286fe0;
+  border-color: var(--grey-bg-color);
 }
 
 .goalButtonOrganizationFundCampaign {
@@ -1462,6 +1609,7 @@ hr {
     flex-direction: column;
     justify-content: center;
   }
+
   .btnsContainer .btnsBlock {
     display: block;
     margin-top: 1rem;
@@ -1499,13 +1647,27 @@ hr {
     margin: 1.5rem 0;
   }
 
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .btnsContainer > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
   .btnsContainer .btnsBlock {
+    display: block;
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
   .btnsContainer .btnsBlock button {
-    margin: 0;
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
   }
 
   .btnsContainer .btnsBlock div button {
@@ -1559,6 +1721,13 @@ hr {
 .modalHeader {
   border: none;
   padding-bottom: 0;
+  background-color: var(--white-color) !important;
+  padding: 1rem 1rem;
+  color: #000000;
+}
+
+.modalHeader div {
+  color: #000000 !important;
 }
 
 .label {
@@ -1576,6 +1745,12 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer .btnsBlock button {
+    margin-left: 0;
+  }
 }
 
 .errorMessage {
@@ -1649,7 +1824,7 @@ hr {
 }
 
 .toggleBtn:hover {
-  color: var(--light-green) !important;
+  color: var(--light-blue) !important;
 }
 
 input[type='radio']:checked + label {
@@ -1760,10 +1935,10 @@ input[type='radio']:checked + label:hover {
 
 .dropdowns {
   background-color: var(--bs-white);
-  border: 1px solid var(--light-green);
+  border: 1px solid var(--dropdown-border-color);
   position: relative;
   display: inline-block;
-  color: var(--light-green);
+  color: black;
 }
 
 .chipIcon {
@@ -1776,12 +1951,19 @@ input[type='radio']:checked + label:hover {
 
 .active {
   background-color: var(--status-active-bg);
+  color: var(--light-blue) !important;
+  border-color: var(--light-blue) !important;
 }
 
 .pending {
   background-color: var(--status-pending-bg);
-  color: var(--status-pending-text);
-  border-color: var(--status-pending-border);
+  color: var(--light-blue) !important;
+  border-color: var(--light-blue) !important;
+}
+
+.checkboxButton input:checked {
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
 }
 
 /* Modals */
@@ -1862,6 +2044,7 @@ input[type='radio']:checked + label:hover {
   border: 0.5px solid var(--brown-color);
 }
 .searchButtonOrgList {
+  background-color: var(--light-blue);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -3399,7 +3582,7 @@ button[data-testid='createPostBtn'] {
     display: flex !important;
     align-items: center;
     background-color: transparent;
-    color: var(--light-green);
+    color: var(--light-blue);
   }
 
   .entryaction .spinner-grow {
@@ -3407,6 +3590,86 @@ button[data-testid='createPostBtn'] {
     width: 1rem;
     margin-right: 8px;
   }
+}
+
+.entrytoggle {
+  margin: 24px 24px 0 auto;
+  width: fit-content;
+}
+
+.entryaction {
+  display: flex !important;
+}
+
+.entryaction i {
+  margin-right: 8px;
+  margin-top: 4px;
+}
+
+.entryaction .spinner-grow {
+  height: 1rem;
+  width: 1rem;
+  margin-right: 8px;
+}
+
+.admedia {
+  object-fit: cover;
+  height: 16rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.addCard {
+  width: 28rem;
+}
+
+.dropdownButton {
+  background-color: transparent;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 8px 10px;
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownmenu {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  width: 120px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 5px 0;
+  margin: 0;
+  list-style-type: none;
+  right: 0;
+  top: 100%;
+}
+
+.dropdownmenu li {
+  cursor: pointer;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  color: #333;
+}
+
+.dropdownmenu li:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdownContainer:hover .dropdownmenu {
+  display: block;
 }
 
 .leftDrawer {
@@ -3732,7 +3995,7 @@ button[data-testid='createPostBtn'] {
 
 .primaryText {
   font-weight: bold;
-  color: var(--bs-emphasis-color, #000);
+  color: var(--bs-emphasis-color, var(--black-color));
   @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
 }
 
@@ -3785,7 +4048,7 @@ button[data-testid='createPostBtn'] {
 
 .inactiveButton {
   background-color: transparent;
-  color: var(--bs-emphasis-color, #000);
+  color: var(--bs-emphasis-color, var(--black-color));
 
   &:hover {
     background-color: var(--grey-bg-color);
@@ -4627,26 +4890,39 @@ button[data-testid='createPostBtn'] {
   display: flex;
   position: relative;
   width: 100%;
-  margin-top: 10px;
+  overflow: hidden; /* Ensures content doesn't overflow the card */
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .previewVenueModal img {
   width: 400px;
   height: auto;
+  object-fit: cover; /* Ensures the image stays within the boundaries */
 }
 
 .closeButtonP {
   position: absolute;
   top: 0px;
   right: 0px;
+  width: 32px; /* Make the button circular */
+  height: 32px; /* Make the button circular */
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
+  border-radius: 50%;
   border: none;
   color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.closeButtonP:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
 
 /* YearlyEventCalender.tsx */
@@ -5079,12 +5355,15 @@ button[data-testid='createPostBtn'] {
   position: relative;
   width: 100%;
   margin-top: 10px;
+  overflow: hidden; /* Ensures content doesn't overflow the card */
   justify-content: center;
+  border: 1px solid #ccc;
 }
 
 .previewAdvertisementRegister img {
   width: 400px;
   height: auto;
+  object-fit: cover; /* Ensures the image stays within the boundaries */
 }
 
 .previewAdvertisementRegister video {
@@ -5093,14 +5372,27 @@ button[data-testid='createPostBtn'] {
 }
 
 .closeButtonAdvertisementRegister {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 32px; /* Make the button circular */
+  height: 32px; /* Make the button circular */
   background: transparent;
+  transform: scale(1.2);
   cursor: pointer;
+  border-radius: 50%;
   border: none;
   color: var(--grey-dark);
   font-weight: 600;
   font-size: 16px;
-  margin-bottom: 10px;
-  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.closeButtonAdvertisementRegister:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
 
 .buttonAdvertisementRegister {
@@ -5460,7 +5752,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .flex_grow {
-  flex-grow: 1;
+  flex-grow: 0.5;
 }
 
 .space {
@@ -5489,6 +5781,62 @@ button[data-testid='createPostBtn'] {
 .selectTypeEventHeader {
   border-radius: 10px;
   margin: 8px;
+}
+
+@media (max-width: 520px) {
+  .calendar__header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .space {
+    display: block !important;
+    text-align: center;
+  }
+
+  .space > * {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* .input {
+    width: 100%;
+  }
+
+  .createButton {
+    margin: 0 auto;
+    width: 100%;
+  } */
+}
+
+@media (max-width: 520px) {
+  .calendar__header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .space {
+    display: block !important;
+    text-align: center;
+  }
+
+  .space > * {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* .input {
+    width: 100%;
+  }
+
+  .createButton {
+    margin: 0 auto;
+    width: 100%;
+  } */
 }
 
 /* EventListCardModals.tsx */
@@ -5928,6 +6276,75 @@ button[data-testid='createPostBtn'] {
   margin-top: 20vh;
   margin-left: 13vw;
   max-width: 80vw;
+}
+
+.btnsContainer .input {
+  width: 70%;
+}
+
+.btnsContainer .inputContainer button {
+  width: 52px;
+}
+
+.largeBtnsWrapper {
+  display: flex;
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btnsContainer .input {
+    width: 100%;
+  }
+
+  .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
+  }
+}
+
+/* For mobile devices  */
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .largeBtnsWrapper {
+    flex-direction: column;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
 }
 
 /* Holiday card */

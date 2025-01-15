@@ -162,9 +162,9 @@ describe('Testing Volunteers Screen', () => {
     // Filter by All
     fireEvent.click(filterBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('statusAll')).toBeInTheDocument();
+      expect(screen.getByTestId('all')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('statusAll'));
+    fireEvent.click(screen.getByTestId('all'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName).toHaveLength(2);
@@ -183,9 +183,9 @@ describe('Testing Volunteers Screen', () => {
     // Filter by Pending
     fireEvent.click(filterBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('statusPending')).toBeInTheDocument();
+      expect(screen.getByTestId('pending')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('statusPending'));
+    fireEvent.click(screen.getByTestId('pending'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Bruce Graza');
@@ -204,9 +204,9 @@ describe('Testing Volunteers Screen', () => {
     // Filter by Accepted
     fireEvent.click(filterBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('statusAccepted')).toBeInTheDocument();
+      expect(screen.getByTestId('accepted')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('statusAccepted'));
+    fireEvent.click(screen.getByTestId('accepted'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');

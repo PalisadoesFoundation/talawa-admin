@@ -220,4 +220,40 @@ describe('Testing Left Drawer component for ADMIN', () => {
 
     expect(global.window.location.pathname).toContain('/orglist');
   });
+
+  it('Should set hideDrawer to false when initially null', async () => {
+    const mockSetHideDrawer = vi.fn();
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawer hideDrawer={null} setHideDrawer={mockSetHideDrawer} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+    expect(mockSetHideDrawer).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should not call setHideDrawer when hideDrawer has a value', async () => {
+    const mockSetHideDrawer = vi.fn();
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawer
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    expect(mockSetHideDrawer).not.toHaveBeenCalled();
+  });
 });

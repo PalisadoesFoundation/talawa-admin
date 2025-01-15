@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from './AdvertisementEntry.module.css';
+import styles from '../../../../style/app.module.css';
 import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -99,7 +99,7 @@ function AdvertisementEntry({
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
-            <Card className={styles.card}>
+            <Card className={styles.addCard}>
               <div className={styles.dropdownContainer}>
                 <button
                   className={styles.dropdownButton}
@@ -163,7 +163,7 @@ function AdvertisementEntry({
                 </Card.Subtitle>
                 <div className={styles.buttons}>
                   <Button
-                    className={styles.entryaction}
+                    className={`${styles.entryaction} ${styles.addButton}`}
                     variant="primary"
                     disabled={buttonLoading}
                     data-testid="AddOnEntry_btn_install"
@@ -189,12 +189,15 @@ function AdvertisementEntry({
                     {t('deleteAdvertisementMsg')}
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button variant="danger" onClick={toggleShowDeleteModal}>
+                    <Button
+                      className={`btn btn-danger ${styles.removeButton}`}
+                      onClick={toggleShowDeleteModal}
+                    >
                       {tCommon('no')}
                     </Button>
                     <Button
                       type="button"
-                      className="btn btn-success"
+                      className={`btn ${styles.addButton}`}
                       onClick={(): void => {
                         onDelete();
                       }}

@@ -3,17 +3,11 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
 import { store } from '../../state/store';
 import { StaticMockLink } from '../../utils/StaticMockLink';
 import i18nForTest from '../../utils/i18nForTest';
@@ -24,19 +18,21 @@ import {
   MOCK_ERROR,
 } from './OrganizationFundCampaignMocks';
 import type { ApolloLink } from '@apollo/client';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+  const actual = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
 
@@ -83,21 +79,25 @@ const renderFundCampaign = (link: ApolloLink): RenderResult => {
 
 describe('FundCampaigns Screen', () => {
   beforeEach(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId', fundId: 'fundId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actualDom = await vi.importActual('react-router-dom');
+      return {
+        ...actualDom,
+        useParams: vi.fn(),
+      };
+    });
   });
 
   afterEach(() => {
-    cleanup();
+    vi.clearAllMocks();
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
+  const mockRouteParams = (orgId = 'orgId', fundId = 'fundId'): void => {
+    vi.mocked(useParams).mockReturnValue({ orgId, fundId });
+  };
 
   it('should render the Campaign Pledge screen', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
     await waitFor(() => {
       expect(screen.getByTestId('searchFullName')).toBeInTheDocument();
@@ -108,6 +108,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    mockRouteParams('', '');
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/orgfundcampaign/']}>
@@ -136,6 +137,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('open and close Create Campaign modal', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     const addCampaignBtn = await screen.findByTestId('addCampaignBtn');
@@ -152,6 +154,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('open and close update campaign modal', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     await waitFor(() => {
@@ -174,6 +177,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Search the Campaigns list by Name', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
     const searchField = await screen.findByTestId('searchFullName');
     fireEvent.change(searchField, {
@@ -187,6 +191,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should render the Campaign screen with error', async () => {
+    mockRouteParams();
     renderFundCampaign(link2);
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
@@ -194,6 +199,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('renders the empty campaign component', async () => {
+    mockRouteParams();
     renderFundCampaign(link3);
     await waitFor(() =>
       expect(
@@ -203,6 +209,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Sort the Campaigns list by Latest end Date', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     const sortBtn = await screen.findByTestId('filter');
@@ -224,6 +231,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Sort the Campaigns list by Earliest end Date', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     const sortBtn = await screen.findByTestId('filter');
@@ -245,6 +253,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Sort the Campaigns list by lowest goal', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     const sortBtn = await screen.findByTestId('filter');
@@ -264,6 +273,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Sort the Campaigns list by highest goal', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     const sortBtn = await screen.findByTestId('filter');
@@ -283,6 +293,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on Campaign Name', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     const campaignName = await screen.findAllByTestId('campaignName');
@@ -295,6 +306,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on View Pledge', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     const viewBtn = await screen.findAllByTestId('viewBtn');
@@ -307,6 +319,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should render the Fund screen on fund breadcrumb click', async () => {
+    mockRouteParams();
     renderFundCampaign(link1);
 
     const fundBreadcrumb = await screen.findByTestId('fundsLink');

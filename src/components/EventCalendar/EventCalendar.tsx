@@ -549,7 +549,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </Button>
           {/* <div>
             <Button
-              className={styles.btn__today}
+              className={styles.editButton}
               onClick={handleTodayButton}
               data-testid="today"
 

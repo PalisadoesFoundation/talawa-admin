@@ -1,11 +1,11 @@
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
@@ -22,6 +22,8 @@ import type {
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+
+import SortingButton from 'subComponents/SortingButton';
 
 interface InterfaceCampaignInfo {
   name: string;
@@ -56,6 +58,7 @@ const dataGridStyle = {
     borderRadius: '0.5rem',
   },
 };
+
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
@@ -356,7 +359,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={`me-2 ${styles.editButton}`}
               data-testid="editPledgeBtn"
               onClick={() =>
                 handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
@@ -389,10 +392,7 @@ const fundCampaignPledge = (): JSX.Element => {
           underline="hover"
           color="inherit"
           component="button"
-          onClick={
-            /* istanbul ignore next */
-            () => history.go(-2)
-          }
+          onClick={() => history.go(-2)}
         >
           {fundName}
         </Link>
@@ -400,10 +400,7 @@ const fundCampaignPledge = (): JSX.Element => {
           underline="hover"
           color="inherit"
           component="button"
-          onClick={
-            /* istanbul ignore next */
-            () => history.back()
-          }
+          onClick={() => history.back()}
         >
           {campaignInfo?.name}
         </Link>
@@ -429,7 +426,9 @@ const fundCampaignPledge = (): JSX.Element => {
                 name="btnradio"
                 id="pledgedRadio"
                 checked={progressIndicator === 'pledged'}
-                onChange={() => setProgressIndicator('pledged')}
+                onChange={() => {
+                  setProgressIndicator('pledged');
+                }}
               />
               <label
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
@@ -440,7 +439,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
               <input
                 type="radio"
-                className={`btn-check`}
+                className={`btn-check ${styles.toggleBtnPledge}`}
                 name="btnradio"
                 id="raisedRadio"
                 onChange={() => setProgressIndicator('raised')}
@@ -462,6 +461,7 @@ const fundCampaignPledge = (): JSX.Element => {
               max={campaignInfo?.goal}
               style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
+              className={`${styles.progressBar}`}
             />
             <div className={styles.endpoints}>
               <div className={styles.start}>$0</div>
@@ -471,20 +471,20 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       </div>
       <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
-        <div className={`${styles.inputPledge} mb-1`}>
+        <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
             placeholder={t('searchPledger')}
             autoComplete="off"
             required
-            className={styles.inputFieldPledge}
+            className={styles.inputField}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchPledger"
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${styles.searchButton}`}
             data-testid="searchBtn"
           >
             <Search />
@@ -492,48 +492,31 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('amount_ASC')}
-                  data-testid="amount_ASC"
-                >
-                  {t('lowestAmount')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('amount_DESC')}
-                  data-testid="amount_DESC"
-                >
-                  {t('highestAmount')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_DESC')}
-                  data-testid="endDate_DESC"
-                >
-                  {t('latestEndDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_ASC')}
-                  data-testid="endDate_ASC"
-                >
-                  {t('earliestEndDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestAmount'), value: 'amount_ASC' },
+                { label: t('highestAmount'), value: 'amount_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              selectedOption={sortBy ?? ''}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'amount_ASC'
+                    | 'amount_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
           <div>
             <Button
               variant="success"
-              className={styles.orgFundCampaignButton}
+              className={styles.dropdown}
               disabled={endDate < new Date()}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"
