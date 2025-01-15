@@ -1,0 +1,11 @@
+[**talawa-admin**](../../../../README.md)
+
+***
+
+[talawa-admin](../../../../README.md) / [GraphQl/Queries/Queries](../README.md) / EVENT\_FEEDBACKS
+
+# Variable: EVENT\_FEEDBACKS
+
+> `const` **EVENT\_FEEDBACKS**: `DocumentNode`
+
+Defined in: [src/GraphQl/Queries/Queries.ts:361](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/GraphQl/Queries/Queries.ts#L361)
