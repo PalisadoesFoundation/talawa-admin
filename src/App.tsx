@@ -58,6 +58,7 @@ const { setItem } = useLocalStorage();
  * This is the main function for our application. It sets up all the routes and components,
  * defining how the user can navigate through the app. The function uses React Router's `Routes`
  * and `Route` components to map different URL paths to corresponding screens and components.
+ * THESE ARE THE DETAILS FOR THIS MAIN FUNCTION
  *
  * ## Important Details
  * - **UseEffect Hook**: This hook checks user authentication status using the `CHECK_AUTH` GraphQL query.

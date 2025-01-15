@@ -33,6 +33,44 @@ import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import { vi } from 'vitest';
 import { errorHandler } from 'utils/errorHandler';
 
+type MutationCallback = (
+  mutations: MutationRecord[],
+  observer: MutationObserver,
+) => void;
+
+type MutationRecord = {
+  type: string;
+  target: Node;
+  addedNodes: NodeList;
+  removedNodes: NodeList;
+  previousSibling: Node | null;
+  nextSibling: Node | null;
+  attributeName: string | null;
+  attributeNamespace: string | null;
+  oldValue: string | null;
+};
+// Mock MutationObserver
+class MockMutationObserver {
+  private _callback: MutationCallback;
+
+  constructor(callback: MutationCallback) {
+    this._callback = callback;
+  }
+
+  observe(target: Node, options?: MutationObserverInit): void {
+    // Store parameters for future use
+    console.debug('Observing:', { target, options });
+  }
+
+  disconnect(): void {
+    // Mock implementation
+  }
+
+  takeRecords(): MutationRecord[] {
+    return [];
+  }
+}
+
 const MOCKS = [
   {
     request: {
@@ -245,8 +283,8 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
+  await act(async () => {
+    await new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   });
@@ -259,6 +297,15 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
+
+beforeAll(() => {
+  global.MutationObserver =
+    MockMutationObserver as unknown as typeof MutationObserver;
+});
+
+afterAll(() => {
+  vi.restoreAllMocks();
+});
 
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
   return render(
@@ -494,16 +541,24 @@ describe('Organisation Venues', () => {
 
   test('renders without crashing', async () => {
     renderOrganizationVenue(link);
-    waitFor(() => {
-      expect(screen.findByTestId('orgvenueslist')).toBeInTheDocument();
+    await waitFor(async () => {
+      const element = await screen.findByTestId('orgvenueslist');
+      expect(element).toBeInTheDocument();
     });
   });
 
   test('renders the venue list correctly', async () => {
     renderOrganizationVenue(link);
-    waitFor(() => {
-      expect(screen.getByTestId('venueRow2')).toBeInTheDocument();
-      expect(screen.getByTestId('venueRow1')).toBeInTheDocument();
+
+    // First wait for the list container to be present
+    await waitFor(() => {
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+    });
+
+    // Then check for individual venue items
+    await waitFor(() => {
+      expect(screen.getByTestId('venue-item2')).toBeInTheDocument();
+      expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
     });
   });
 });
