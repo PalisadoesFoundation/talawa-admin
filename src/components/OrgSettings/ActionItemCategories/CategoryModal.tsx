@@ -171,6 +171,16 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
                 setFormState({ ...formState, name: e.target.value })
               }
               required
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '&:hover fieldset': {
+                    borderColor: '#a8c7fa',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#a8c7fa',
+                  },
+                },
+              }}
             />
           </FormControl>
           <Form.Group className="d-flex flex-column mb-4">

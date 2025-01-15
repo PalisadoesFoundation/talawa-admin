@@ -8,7 +8,7 @@ import {
   REMOVE_CUSTOM_FIELD,
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_CUSTOM_FIELDS } from 'GraphQl/Queries/Queries';
-import styles from './OrgProfileFieldSettings.module.css';
+import styles from '../../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import EditOrgCustomFieldDropDown from 'components/EditCustomFieldDropDown/EditCustomFieldDropDown';

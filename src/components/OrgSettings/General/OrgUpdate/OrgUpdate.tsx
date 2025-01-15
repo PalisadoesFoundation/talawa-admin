@@ -3,7 +3,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-
+import ReplayIcon from '@mui/icons-material/Replay';
+import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -12,7 +13,7 @@ import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './OrgUpdate.module.css';
+import styles from '../../../../style/app.module.css';
 import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceAddress,
@@ -141,7 +142,6 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           file: formState.orgImage,
         },
       });
-      // istanbul ignore next
       if (data) {
         refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
@@ -151,14 +151,35 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     }
   };
 
+  const onResetChangesClicked = (): void => {
+    if (data) {
+      setFormState({
+        orgName: data.organizations[0].name,
+        orgDescrip: data.organizations[0].description,
+        address: data.organizations[0].address,
+        orgImage: null,
+      });
+      setuserRegistrationRequiredChecked(
+        data.organizations[0].userRegistrationRequired,
+      );
+      setVisibleChecked(data.organizations[0].visibleInSearch);
+      toast.info(t('changesReset') as string);
+    } else {
+      toast.error(t('resetFailed') as string);
+    }
+  };
+
   if (loading) {
-    return <Loader styles={styles.message} size="lg" />;
+    return <Loader styles={styles.orgUpdateMessage} size="lg" />;
   }
 
   if (error) {
     return (
-      <div className={styles.message}>
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+      <div className={styles.orgUpdateMessage}>
+        <WarningAmberRounded
+          className={styles.orgUpdateIcon}
+          fontSize="large"
+        />
         <h6 className="fw-bold text-danger text-center">
           Error occured while loading Organization Data
           <br />
@@ -297,11 +318,12 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             </Col>
           </Row>
           <Row>
-            <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">
+            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
+              <Form.Label className="me-3 mb-0">
                 {t('userRegistrationRequired')}:
               </Form.Label>
               <Form.Switch
+                className="custom-switch"
                 placeholder={t('userRegistrationRequired')}
                 checked={userRegistrationRequiredChecked}
                 onChange={(): void =>
@@ -311,17 +333,19 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 }
               />
             </Col>
-            <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">
+            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
+              <Form.Label className="me-3 mb-0">
                 {t('isVisibleInSearch')}:
               </Form.Label>
               <Form.Switch
+                className="custom-switch"
                 placeholder={t('isVisibleInSearch')}
                 checked={visiblechecked}
                 onChange={(): void => setVisibleChecked(!visiblechecked)}
               />
             </Col>
           </Row>
+
           <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}:</Form.Label>
           <Form.Control
             className="mb-4"
@@ -333,7 +357,6 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
-              /* istanbul ignore else */
               if (file)
                 setFormState({
                   ...formState,
@@ -342,15 +365,31 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             }}
             data-testid="organisationImage"
           />
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="success"
-              value="savechanges"
-              onClick={onSaveChangesClicked}
-            >
-              {tCommon('saveChanges')}
-            </Button>
-          </div>
+
+          <Row>
+            <Col sm={6}>
+              <Button
+                variant="primary"
+                className="me-2 reset-changes-btn"
+                value="resetchanges"
+                onClick={onResetChangesClicked}
+              >
+                <ReplayIcon className="me-1" />
+                {tCommon('resetChanges')}
+              </Button>
+            </Col>
+            <Col sm={6} className="d-flex justify-content-end">
+              <Button
+                variant="success"
+                className="save-changes-btn"
+                value="savechanges"
+                onClick={onSaveChangesClicked}
+              >
+                <SaveIcon className="me-1" /> {/* Save icon */}
+                {tCommon('saveChanges')}
+              </Button>
+            </Col>
+          </Row>
         </form>
       </div>
     </>
