@@ -6,3 +6,6 @@ tsconfig.json
 
 # Ignore the Docusaurus website subdirectory
 docs/**
+
+#Ignore markdown files from linting
+*.md
