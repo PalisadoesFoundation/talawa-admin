@@ -327,9 +327,7 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'Failed to fetch organization tags',
-      );
+      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
   });
 
