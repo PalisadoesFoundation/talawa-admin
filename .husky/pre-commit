@@ -1,5 +1,6 @@
 
-npm run generate-docs 
+npm run generate-docs && npm run generate-docs && find docs/docs/auto-docs -name 'README.md' -delete && npx rimraf docs/docs/auto-docs/_media
+find docs/docs/auto-docs -type d -empty -delete
 npm run format:fix
 # npm run lint:fix
 npm run lint-staged
