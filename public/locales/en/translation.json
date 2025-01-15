@@ -910,7 +910,7 @@
     "dependentLocality": "Dependent Locality",
     "sortingCode": "Sorting code",
     "state": "State / Province",
-    "userRegistrationRequired": "Is Public",
+    "userRegistrationRequired": "User Registration Required",
     "isVisibleInSearch": "Visible in Search",
     "enterNameOrganization": "Enter Organization Name",
     "successfulUpdated": "Organization updated successfully",
