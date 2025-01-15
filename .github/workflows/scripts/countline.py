@@ -10,8 +10,7 @@ Methodology:
     This script was created to help improve code quality by encouraging
     contributors to create reusable code.
 
-NOTE:
-
+Note:
     This script complies with our python3 coding and documentation standards
     and should be used as a reference guide. It complies with:
 
@@ -24,7 +23,6 @@ NOTE:
     your pull requests.
 
 """
-
 # Standard imports
 import os
 import sys

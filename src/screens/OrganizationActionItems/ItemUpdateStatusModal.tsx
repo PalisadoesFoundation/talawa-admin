@@ -113,17 +113,24 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
 
           {isCompleted ? (
             <div className="d-flex gap-3 justify-content-end">
-              <Button type="submit" variant="primary" data-testid="yesBtn">
+              <Button
+                type="submit"
+                className={styles.addButton}
+                data-testid="yesBtn"
+              >
                 {tCommon('yes')}
               </Button>
-              <Button variant="secondary" onClick={hide}>
+              <Button
+                className={`btn btn-danger ${styles.removeButton}`}
+                onClick={hide}
+              >
                 {tCommon('no')}
               </Button>
             </div>
           ) : (
             <Button
               type="submit"
-              className={styles.addButton}
+              className={`${styles.addButton}`}
               data-testid="createBtn"
             >
               {t('markCompletion')}
