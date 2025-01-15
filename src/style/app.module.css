@@ -5426,7 +5426,14 @@ button[data-testid='createPostBtn'] {
 .calendar__header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-right: 50px;
   /* margin: 2rem 10px 0px 10px; */
+}
+
+.calender_month {
+  display: flex;
+  align-items: center;
 }
 
 .calendar__header_month {

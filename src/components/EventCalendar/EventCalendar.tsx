@@ -198,11 +198,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
 
-  // const handleTodayButton = (): void => {
-  //   setCurrentYear(today.getFullYear());
-  //   setCurrentMonth(today.getMonth());
-  //   setCurrentDate(today.getDate());
-  // };
+  const handleTodayButton = (): void => {
+    setCurrentYear(today.getFullYear());
+    setCurrentMonth(today.getMonth());
+    setCurrentDate(today.getDate());
+  };
 
   const timezoneString = `UTC${
     new Date().getTimezoneOffset() > 0 ? '-' : '+'
@@ -513,44 +513,45 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     <div className={styles.calendar}>
       {viewType != ViewType.YEAR && (
         <div className={styles.calendar__header}>
-          <Button
-            variant="outlined"
-            className={styles.buttonEventCalendar}
-            onClick={
-              viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
-            }
-            data-testid="prevmonthordate"
-          >
-            <ChevronLeft />
-          </Button>
+          <div className={styles.calender_month}>
+            <Button
+              variant="outlined"
+              className={styles.buttonEventCalendar}
+              onClick={
+                viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
+              }
+              data-testid="prevmonthordate"
+            >
+              <ChevronLeft />
+            </Button>
 
-          <div
-            className={styles.calendar__header_month}
-            data-testid="current-date"
-          >
-            {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
-            <div>{months[currentMonth]}</div>
+            <div
+              className={styles.calendar__header_month}
+              data-testid="current-date"
+            >
+              {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
+              <div>{months[currentMonth]}</div>
+            </div>
+            <Button
+              variant="outlined"
+              className={styles.buttonEventCalendar}
+              onClick={
+                viewType == ViewType.DAY ? handleNextDate : handleNextMonth
+              }
+              data-testid="nextmonthordate"
+            >
+              <ChevronRight />
+            </Button>
           </div>
-          <Button
-            variant="outlined"
-            className={styles.buttonEventCalendar}
-            onClick={
-              viewType == ViewType.DAY ? handleNextDate : handleNextMonth
-            }
-            data-testid="nextmonthordate"
-          >
-            <ChevronRight />
-          </Button>
-          {/* <div>
+          <div>
             <Button
               className={styles.editButton}
               onClick={handleTodayButton}
               data-testid="today"
-
             >
               Today
             </Button>
-          </div> */}
+          </div>
         </div>
       )}
       <div className={`${styles.calendar__scroll} customScroll`}>
