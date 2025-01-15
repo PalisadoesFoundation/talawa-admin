@@ -5590,7 +5590,7 @@ button[data-testid='createPostBtn'] {
   right: auto;
   overflow: auto;
   padding: 10px 4px 0px 4px;
-  background-color: var(--black-shadow-color);
+  background-color: var(--white-color);
   border: 1px solid var(--grey-border);
   border-radius: 5px;
   margin: 5px;
