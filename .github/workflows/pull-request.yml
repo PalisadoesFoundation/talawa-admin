@@ -65,12 +65,12 @@ jobs:
             fi
           done
 
-          if [ ! -f ./.github/workflows/css_check.py ]; then
+          if [ ! -f ./.github/workflows/scripts/css_check.py ]; then
             echo "Error: CSS check script not found"
             exit 1
           fi
-          chmod +x ./.github/workflows/css_check.py
-          ./.github/workflows/css_check.py --directory  --allowed_css_patterns app.module.cs . || {
+          chmod +x ./.github/workflows/scripts/css_check.py
+          ./.github/workflows/scripts/css_check.py --directory "$(dirname "$file")" --allowed_css_patterns app.module.css || {
             echo "Error: CSS check failed"
             exit 1
           }
