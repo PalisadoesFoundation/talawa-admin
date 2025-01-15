@@ -98,7 +98,6 @@ const VenueModal = ({
           ...(edit && { id: venueData?._id }),
         },
       });
-      /* istanbul ignore next */
       if (data) {
         toast.success(
           edit ? (t('venueUpdated') as string) : (t('venueAdded') as string),
@@ -114,7 +113,6 @@ const VenueModal = ({
         setVenueImage(false);
       }
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   }, [
@@ -136,7 +134,6 @@ const VenueModal = ({
   const clearImageInput = useCallback(() => {
     setFormState((prevState) => ({ ...prevState, imageURL: '' }));
     setVenueImage(false);
-    /* istanbul ignore next */
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -184,6 +181,7 @@ const VenueModal = ({
                 name: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <label htmlFor="venuedescrip">{tCommon('description')}</label>
           <Form.Control
@@ -201,6 +199,7 @@ const VenueModal = ({
                 description: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <label htmlFor="venuecapacity">{t('capacity')}</label>
           <Form.Control
@@ -216,6 +215,7 @@ const VenueModal = ({
                 capacity: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <Form.Label htmlFor="venueImg">{t('image')}</Form.Label>
           <Form.Control
@@ -236,7 +236,6 @@ const VenueModal = ({
               }));
               setVenueImage(true);
               const file = e.target.files?.[0];
-              /* istanbul ignore next */
               if (file) {
                 setFormState({
                   ...formState,
@@ -244,9 +243,10 @@ const VenueModal = ({
                 });
               }
             }}
+            className={styles.inputField}
           />
           {venueImage && (
-            <div className={styles.preview}>
+            <div className={styles.previewVenueModal}>
               <img src={imageURL} alt="Venue Image Preview" />
               <button
                 className={styles.closeButtonP}

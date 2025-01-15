@@ -2,6 +2,7 @@ import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import styles from '../../style/app.module.css';
 
 /**
  * Edit UserTag Modal component for the Manage Tag screen.
@@ -37,7 +38,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={styles.modalHeader}
           data-testid="modalOrganizationHeader"
           closeButton
         >
@@ -56,7 +57,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
             <Form.Control
               type="text"
               id="tagName"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('tagNamePlaceholder')}
               data-testid="tagNameInput"
               autoComplete="off"
@@ -73,10 +74,16 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
               variant="secondary"
               onClick={(): void => hideEditUserTagModal()}
               data-testid="closeEditTagModalBtn"
+              className={styles.removeButton}
             >
               {tCommon('cancel')}
             </Button>
-            <Button type="submit" value="invite" data-testid="editTagSubmitBtn">
+            <Button
+              type="submit"
+              value="invite"
+              data-testid="editTagSubmitBtn"
+              className={styles.addButton}
+            >
               {tCommon('edit')}
             </Button>
           </Modal.Footer>

@@ -115,7 +115,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     }
   };
 
-  /*istanbul ignore next*/
   const updateFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -228,7 +227,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   type="checkbox"
                   checked={formState.taxDeductible}
                   data-testid="setTaxDeductibleSwitch"
-                  className="ms-2"
+                  className={`ms-2 ${styles.switch}`}
                   onChange={() =>
                     setFormState({
                       ...formState,
@@ -241,7 +240,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 <label>{t('default')} </label>
                 <Form.Switch
                   type="checkbox"
-                  className="ms-2"
+                  className={`ms-2 ${styles.switch}`}
                   data-testid="setDefaultSwitch"
                   checked={formState.isDefault}
                   onChange={() =>
@@ -259,7 +258,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                     type="checkbox"
                     checked={formState.isArchived}
                     data-testid="archivedSwitch"
-                    className="ms-2"
+                    className={`ms-2 ${styles.switch}`}
                     onChange={() =>
                       setFormState({
                         ...formState,

@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 
@@ -21,6 +21,7 @@ import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQuerie
 import VolunteerGroupModal from './VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './VolunteerGroupViewModal';
+import SortingButton from 'subComponents/SortingButton';
 
 enum ModalState {
   SAME = 'same',
@@ -321,56 +322,29 @@ function volunteerGroups(): JSX.Element {
         </div>
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdowns}
-                data-testid="searchByToggle"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('searchBy', { item: '' })}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('leader')}
-                  data-testid="leader"
-                >
-                  {t('leader')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('group')}
-                  data-testid="group"
-                >
-                  {t('group')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdowns}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('volunteers_DESC')}
-                  data-testid="volunteers_DESC"
-                >
-                  {t('mostVolunteers')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('volunteers_ASC')}
-                  data-testid="volunteers_ASC"
-                >
-                  {t('leastVolunteers')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('leader'), value: 'leader' },
+                { label: t('group'), value: 'group' },
+              ]}
+              selectedOption={searchBy}
+              onSortChange={(value) => setSearchBy(value as 'leader' | 'group')}
+              dataTestIdPrefix="searchByToggle"
+              buttonLabel={tCommon('searchBy', { item: '' })}
+            />
+            <SortingButton
+              title={tCommon('sort')}
+              sortingOptions={[
+                { label: t('mostVolunteers'), value: 'volunteers_DESC' },
+                { label: t('leastVolunteers'), value: 'volunteers_ASC' },
+              ]}
+              selectedOption={sortBy ?? ''}
+              onSortChange={(value) =>
+                setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC')
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
           <div>
             <Button

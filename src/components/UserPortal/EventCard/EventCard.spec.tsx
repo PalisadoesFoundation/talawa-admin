@@ -2,7 +2,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -12,6 +12,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -142,6 +143,42 @@ describe('Testing Event Card In User portal', () => {
         queryByText('Successfully registered for Test Event'),
       ).toBeInTheDocument(),
     );
+  });
+
+  it('should display an error toast when the register mutation fails', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const errorMocks = [
+      {
+        request: {
+          query: REGISTER_EVENT,
+          variables: { eventId: '123' },
+        },
+        error: new Error('Failed to register for the event'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(errorMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    userEvent.click(screen.getByText('Register'));
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        `Failed to register for the event`,
+      );
+    });
   });
 });
 

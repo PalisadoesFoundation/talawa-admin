@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-
+import styles from '../../style/app.module.css';
 /**
  * Unassign UserTag Modal component for the Manage Tag screen.
  */
@@ -35,7 +35,7 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
       >
         <Modal.Header
           closeButton
-          className="bg-primary"
+          className={styles.modalHeader}
           aria-label={t('closeModal')}
         >
           <Modal.Title className="text-white" id={`unassignTag`}>
@@ -46,7 +46,7 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
         <Modal.Footer>
           <Button
             type="button"
-            className="btn btn-danger"
+            className={`btn btn-danger ${styles.removeButton}`}
             data-dismiss="modal"
             onClick={toggleUnassignUserTagModal}
             data-testid="unassignTagModalCloseBtn"
@@ -56,7 +56,7 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
           </Button>
           <Button
             type="button"
-            className="btn btn-success"
+            className={`btn ${styles.addButton}`}
             onClick={async (e) => {
               const btn = e.currentTarget;
               btn.disabled = true;
