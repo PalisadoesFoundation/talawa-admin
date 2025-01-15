@@ -19,8 +19,6 @@ import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { ApolloError } from '@apollo/client';
 
-useLocalStorage();
-
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
