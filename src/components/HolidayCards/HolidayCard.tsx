@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './HolidayCard.module.css';
+import styles from './../../style/app.module.css';
 
 // Props for the HolidayCard component
 interface InterfaceHolidayList {
@@ -14,7 +14,7 @@ interface InterfaceHolidayList {
  */
 const HolidayCard = (props: InterfaceHolidayList): JSX.Element => {
   /*istanbul ignore next*/
-  return <div className={styles.card}>{props?.holidayName}</div>;
+  return <div className={styles.holidayCard}>{props?.holidayName}</div>;
 };
 
 export default HolidayCard;

@@ -198,11 +198,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
 
-  const handleTodayButton = (): void => {
-    setCurrentYear(today.getFullYear());
-    setCurrentMonth(today.getMonth());
-    setCurrentDate(today.getDate());
-  };
+  // const handleTodayButton = (): void => {
+  //   setCurrentYear(today.getFullYear());
+  //   setCurrentMonth(today.getMonth());
+  //   setCurrentDate(today.getDate());
+  // };
 
   const timezoneString = `UTC${
     new Date().getTimezoneOffset() > 0 ? '-' : '+'
@@ -348,7 +348,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
                     {holiday.date.slice(3)}
                   </span>
-                  <span>{holiday.name}</span>
+                  <span className={styles.holiday_name}>{holiday.name}</span>
                 </li>
               ))}
             </ul>
@@ -357,21 +357,21 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.events_card} role="region" aria-label="Events">
             <h3 className={styles.card_title}>Events</h3>
             <div className={styles.legend}>
-              <div className={styles.list_container}>
-                <span className={styles.holidayIndicator}></span>
-                <span className={styles.holidayText}>Holidays</span>
-              </div>
               <div className={styles.eventsLegend}>
                 <span className={styles.organizationIndicator}></span>
                 <span className={styles.legendText}>
                   Events Created by Organization
                 </span>
               </div>
-              <div className={styles.eventsLegend}>
+              {/* <div className={styles.eventsLegend}>
                 <span className={styles.userEvents__color}></span>
                 <span className={styles.legendText}>
                   Events Created by User
                 </span>
+              </div> */}
+              <div className={styles.list_container_holidays}>
+                <span className={styles.holidayIndicator}></span>
+                <span className={styles.holidayText}>Holidays</span>
               </div>
             </div>
           </div>
@@ -547,15 +547,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           >
             <ChevronRight />
           </Button>
-          <div>
+          {/* <div>
             <Button
               className={styles.btn__today}
               onClick={handleTodayButton}
               data-testid="today"
+
             >
               Today
             </Button>
-          </div>
+          </div> */}
         </div>
       )}
       <div className={`${styles.calendar__scroll} customScroll`}>

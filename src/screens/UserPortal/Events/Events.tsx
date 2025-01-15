@@ -222,7 +222,7 @@ export default function events(): JSX.Element {
   return (
     <>
       <div className={`d-flex flex-row`}>
-        <div className={`${styles.mainContainer}`}>
+        <div className={`${styles.mainContainerEvent}`}>
           <EventHeader
             viewType={viewType}
             showInviteModal={showInviteModal}

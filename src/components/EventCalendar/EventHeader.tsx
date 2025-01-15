@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Dropdown, Form } from 'react-bootstrap';
-import { Search } from '@mui/icons-material';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import AddIcon from '@mui/icons-material/Add';
 import styles from '../../style/app.module.css';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
+// import { FaWeight } from 'react-icons/fa';
 
 /**
  * Props for the EventHeader component.
@@ -34,7 +36,10 @@ function eventHeader({
   });
 
   return (
-    <div className={styles.calendarEventHeader}>
+    <div
+      className={styles.calendarEventHeader}
+      data-testid="calendarEventHeader"
+    >
       <div className={styles.calendar__header}>
         <div className={styles.input}>
           <Form.Control
@@ -56,12 +61,13 @@ function eventHeader({
           />
           <Button
             className={styles.searchButton}
+            data-testid="searchButton"
             style={{ marginBottom: '10px' }}
           >
-            <Search />
+            <SearchOutlinedIcon />
           </Button>
         </div>
-        <div className={styles.flex_grow}></div>
+        {/* <div className={styles.flex_grow}></div> */}
         <div className={styles.space}>
           <div>
             <Dropdown
@@ -113,14 +119,25 @@ function eventHeader({
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          <Button
-            variant="success"
-            className={styles.createButtonEventHeader}
-            onClick={showInviteModal}
-            data-testid="createEventModalBtn"
-          >
-            Create Event
-          </Button>
+          <div className={styles.selectTypeEventHeader}>
+            <Button
+              variant="success"
+              className={styles.createButtonEventHeader}
+              onClick={showInviteModal}
+              data-testid="createEventModalBtn"
+            >
+              <div className="">
+                <AddIcon
+                  sx={{
+                    fontSize: '25px',
+                    marginBottom: '2px',
+                    marginRight: '2px',
+                  }}
+                />
+                <span>Create</span>
+              </div>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
