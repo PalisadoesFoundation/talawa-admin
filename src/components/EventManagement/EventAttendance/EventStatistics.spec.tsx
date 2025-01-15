@@ -177,15 +177,15 @@ describe('AttendanceStatisticsModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const genderButton = screen.getByTestId('gender-button');
       const ageButton = screen.getByTestId('age-button');
 
-      userEvent.click(ageButton);
+      await userEvent.click(ageButton);
       expect(ageButton).toHaveClass('btn-success');
       expect(genderButton).toHaveClass('btn-light');
 
-      userEvent.click(genderButton);
+      await userEvent.click(genderButton);
       expect(genderButton).toHaveClass('btn-success');
       expect(ageButton).toHaveClass('btn-light');
     });
@@ -331,12 +331,12 @@ describe('AttendanceStatisticsModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const nextButton = screen.getByAltText('right-arrow');
       const prevButton = screen.getByAltText('left-arrow');
 
-      userEvent.click(nextButton);
-      userEvent.click(prevButton);
+      await userEvent.click(nextButton);
+      await userEvent.click(prevButton);
     });
   });
 
@@ -354,9 +354,9 @@ describe('AttendanceStatisticsModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const closeButton = screen.getByTestId('close-button');
-      userEvent.click(closeButton);
+      await userEvent.click(closeButton);
       expect(handleClose).toHaveBeenCalled();
     });
   });

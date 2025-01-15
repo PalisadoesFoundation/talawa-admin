@@ -105,8 +105,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to minimum value
-    userEvent.click(slider, {
+    await userEvent.click(slider, {
       // Simulate clicking on the slider to focus
+      // @ts-expect-error: Explanation for why this error is ignored
       clientX: -999, // Adjust the clientX to simulate different slider positions
     });
 
@@ -125,8 +126,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to maximum value
-    userEvent.click(slider, {
+    await userEvent.click(slider, {
       // Simulate clicking on the slider to focus
+      // @ts-expect-error: Explanation for why this error is ignored
       clientX: 999, // Adjust the clientX to simulate different slider positions
     });
 
@@ -145,8 +147,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate invalid value handling
-    userEvent.click(slider, {
+    await userEvent.click(slider, {
       // Simulate clicking on the slider to focus
+      // @ts-expect-error: Explanation for why this error is ignored
       clientX: 0, // Adjust the clientX to simulate different slider positions
     });
 
@@ -167,7 +170,7 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate slider interaction
-    userEvent.type(slider, '45'); // Simulate typing value
+    await userEvent.type(slider, '45'); // Simulate typing value
 
     // Assert that the callback was called with the expected value
     expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number)); // Adjust as needed
@@ -221,7 +224,7 @@ describe('Testing UpdateTimeout Component', () => {
     await wait();
 
     const submitButton = screen.getByTestId('update-button');
-    userEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
     // Wait for the toast success call
 
@@ -303,7 +306,7 @@ describe('Testing UpdateTimeout Component', () => {
     await wait();
 
     const submitButton = screen.getByTestId('update-button');
-    userEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
     await wait();
 

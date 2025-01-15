@@ -214,37 +214,54 @@ describe('Organisation Post Page', () => {
   });
 
   test('Testing create post functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await act(async () => {
+      await wait();
+    });
+
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    await userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
+
+    await userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postImage,
     );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
-
-    userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.click(screen.getByTestId('pinPost'));
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postVideo,
+    );
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postImage,
+    );
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postVideo,
+    );
+    await userEvent.click(screen.getByTestId('pinPost'));
     expect(screen.getByTestId('pinPost')).toBeChecked();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.click(screen.getByTestId('createPostBtn'));
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
-    userEvent.click(screen.getByTestId('closeOrganizationModal'));
+    await userEvent.click(screen.getByTestId('closeOrganizationModal'));
   }, 15000);
 
   test('Testing search functionality', async () => {
@@ -267,10 +284,13 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Search By/i),
+      'postone{enter}',
+    );
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
-    userEvent.click(sortDropdown);
+    await userEvent.click(sortDropdown);
   });
   test('Testing search text and title toggle', async () => {
     await act(async () => {
@@ -287,7 +307,9 @@ describe('Organisation Post Page', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
@@ -330,7 +352,9 @@ describe('Organisation Post Page', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const searchInput = screen.getByTestId('sort');
     expect(searchInput).toBeInTheDocument();
@@ -374,35 +398,43 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     // Fill in post form fields...
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.click(screen.getByTestId('createPostBtn'));
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     expect(refetchMock).toHaveBeenCalledTimes(0);
   });
 
   test('Create post without media', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await act(async () => {
+      await wait();
+    });
 
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -430,8 +462,11 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await act(async () => {
+      await wait();
+    });
+
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -446,7 +481,7 @@ describe('Organisation Post Page', () => {
       type: 'image/png',
     });
     const imageInput = screen.getByTestId('addMediaField');
-    userEvent.upload(imageInput, imageFile);
+    await userEvent.upload(imageInput, imageFile);
 
     // Check if the image is displayed
     const imagePreview = await screen.findByAltText('Post Image Preview');
@@ -473,19 +508,23 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const createPostModalBtn = screen.getByTestId('createPostModalBtn');
 
-    userEvent.click(createPostModalBtn);
+    await userEvent.click(createPostModalBtn);
 
     const modalTitle = screen.getByTestId('modalOrganizationHeader');
     expect(modalTitle).toBeInTheDocument();
 
     const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const closedModalTitle = screen.queryByText(/postDetail/i);
     expect(closedModalTitle).not.toBeInTheDocument();
@@ -504,8 +543,11 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await act(async () => {
+      await wait();
+    });
+
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
@@ -527,8 +569,11 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await act(async () => {
+      await wait();
+    });
+
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     // Simulate user input
     fireEvent.change(screen.getByTestId('modalTitle'), {
@@ -557,8 +602,11 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await act(async () => {
+      await wait();
+    });
+
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -571,7 +619,7 @@ describe('Organisation Post Page', () => {
       type: 'image/png',
     });
     const input = screen.getByTestId('addMediaField');
-    userEvent.upload(input, file);
+    await userEvent.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
@@ -594,10 +642,12 @@ describe('Organisation Post Page', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('createPostModalBtn'));
+      await userEvent.click(screen.getByTestId('createPostModalBtn'));
     });
 
     const postTitleInput = screen.getByTestId('modalTitle');
@@ -617,7 +667,7 @@ describe('Organisation Post Page', () => {
     });
 
     await act(async () => {
-      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
+      await userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
     });
 
     // Check if the video is displayed
@@ -657,20 +707,24 @@ describe('Organisation Post Page', () => {
     ];
 
     // Render the OrgPost component and pass the mocked data to it
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
-    await wait();
+    await act(async () => {
+      await wait();
+    });
 
     const sortedPosts = screen.getAllByTestId('post-item');
 

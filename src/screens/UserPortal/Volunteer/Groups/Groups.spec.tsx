@@ -188,13 +188,13 @@ describe('Testing Groups Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+    await userEvent.click(searchToggle);
 
     const searchByGroup = await screen.findByTestId('group');
     expect(searchByGroup).toBeInTheDocument();
-    userEvent.click(searchByGroup);
+    await userEvent.click(searchByGroup);
 
-    userEvent.type(searchInput, '1');
+    await userEvent.type(searchInput, '1');
     await debounceWait();
 
     const groupName = await screen.findAllByTestId('groupName');
@@ -211,14 +211,14 @@ describe('Testing Groups Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+    await userEvent.click(searchToggle);
 
     const searchByLeader = await screen.findByTestId('leader');
     expect(searchByLeader).toBeInTheDocument();
-    userEvent.click(searchByLeader);
+    await userEvent.click(searchByLeader);
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, 'Bruce');
+    await userEvent.type(searchInput, 'Bruce');
     await debounceWait();
 
     const groupName = await screen.findAllByTestId('groupName');
@@ -255,10 +255,12 @@ describe('Testing Groups Screen', () => {
     renderGroups(link1);
 
     const viewGroupBtn = await screen.findAllByTestId('viewGroupBtn');
-    userEvent.click(viewGroupBtn[0]);
+    await userEvent.click(viewGroupBtn[0]);
 
     expect(await screen.findByText(t.groupDetails)).toBeInTheDocument();
-    userEvent.click(await screen.findByTestId('volunteerViewModalCloseBtn'));
+    await userEvent.click(
+      await screen.findByTestId('volunteerViewModalCloseBtn'),
+    );
   });
 
   /**
@@ -268,9 +270,9 @@ describe('Testing Groups Screen', () => {
     renderGroups(link1);
 
     const editGroupBtn = await screen.findAllByTestId('editGroupBtn');
-    userEvent.click(editGroupBtn[0]);
+    await userEvent.click(editGroupBtn[0]);
 
     expect(await screen.findByText(t.manageGroup)).toBeInTheDocument();
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 });

@@ -109,7 +109,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
+    await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
   });
 
   it('Accept MembershipRequest handles error', async () => {
@@ -141,7 +141,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('acceptMembershipRequestBtn1'));
+    await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn1'));
   });
 
   it('Reject MembershipRequest Button works properly', async () => {
@@ -173,7 +173,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
+    await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
   });
 
   it('Reject MembershipRequest handles error', async () => {
@@ -205,6 +205,6 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('rejectMembershipRequestBtn1'));
+    await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn1'));
   });
 });

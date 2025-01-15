@@ -43,14 +43,12 @@ describe('DynamicDropDown component', () => {
     expect(dropdownButton).toHaveTextContent('Label 2');
 
     // Open the dropdown menu
-    await act(async () => {
-      userEvent.click(dropdownButton);
-    });
+    await userEvent.click(dropdownButton);
 
     // Select the first option in the dropdown
     const optionElement = screen.getByTestId('change-fieldname-btn-TEST');
     await act(async () => {
-      userEvent.click(optionElement);
+      await userEvent.click(optionElement);
     });
 
     // Verify that the setFormData function was called with the correct arguments
@@ -85,12 +83,12 @@ describe('DynamicDropDown component', () => {
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     await act(async () => {
-      userEvent.click(dropdownButton);
+      await userEvent.click(dropdownButton);
     });
 
     const optionElement = screen.getByTestId('change-fieldname-btn-value2');
     await act(async () => {
-      userEvent.click(optionElement);
+      await userEvent.click(optionElement);
     });
 
     expect(customHandleChange).toHaveBeenCalledTimes(1);
@@ -127,7 +125,7 @@ describe('DynamicDropDown component', () => {
     // Open dropdown
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     await act(async () => {
-      userEvent.click(dropdownButton);
+      await userEvent.click(dropdownButton);
     });
 
     // Get dropdown menu
