@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { Navigate, useParams } from 'react-router-dom';
 
 /**
- * Props for the `addOnEntry` component.
+ * Props for the `addOnEntry` component..
  */
 interface InterfaceAddOnEntryProps {
   id: string;
