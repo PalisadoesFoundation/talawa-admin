@@ -330,7 +330,7 @@ export const MOCKS_ERROR_ERROR_TAG = [
       query: CREATE_USER_TAG,
       variables: { name: 'userTagE', organizationId: 'orgId' },
     },
-    error: new Error('Mock Graphql Error'),
+    error: new Error('Failed to fetch organization tags'),
   },
 ];
 
@@ -442,8 +442,8 @@ export const MOCKS_NULL_END_CURSOR = [
               edges: [
                 {
                   node: {
-                    _id: '1',
-                    name: 'userTag 1',
+                    _id: '2',
+                    name: 'userTag 2',
                     parentTag: null,
                     usersAssignedTo: { totalCount: 5 },
                     childTags: { totalCount: 11 },
