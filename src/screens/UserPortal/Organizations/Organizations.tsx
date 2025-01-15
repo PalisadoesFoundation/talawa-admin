@@ -40,12 +40,14 @@ interface InterfaceOrganizationCardProps {
       _id: string;
     };
   }[];
+  isJoined: boolean;
 }
 
 /**
  * Interface defining the structure of organization properties.
  */
 interface InterfaceOrganization {
+  isJoined: boolean;
   _id: string;
   name: string;
   image: string;
@@ -405,6 +407,7 @@ export default function organizations(): JSX.Element {
                         userRegistrationRequired:
                           organization.userRegistrationRequired,
                         membershipRequests: organization.membershipRequests,
+                        isJoined: organization.isJoined,
                       };
                       return <OrganizationCard key={index} {...cardProps} />;
                     })

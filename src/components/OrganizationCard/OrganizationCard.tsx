@@ -157,6 +157,10 @@ function OrganizationCard({
   }
 
   async function withdrawMembershipRequest(): Promise<void> {
+    if (!userId) {
+      toast.error(t('UserIdNotFound') as string);
+      return;
+    }
     const membershipRequest = membershipRequests.find(
       (request) => request.user._id === userId,
     );
