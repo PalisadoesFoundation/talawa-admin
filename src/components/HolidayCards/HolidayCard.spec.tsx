@@ -1,32 +1,51 @@
 import React from 'react';
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { vi, describe, it, expect } from 'vitest';
 import HolidayCard from './HolidayCard';
-
-// Mock styles for testing
-vi.mock('./../../style/app.module.css', () => ({
-  default: {},
-  holidayCard: 'holidayCard',
-}));
+import styles from './../../style/app.module.css';
 
 describe('HolidayCard Component', () => {
-  it('renders correctly with the given holiday name', () => {
-    const holidayName = 'Christmas';
-    render(<HolidayCard holidayName={holidayName} />);
-    const cardElement = screen.getByText(holidayName);
-    expect(cardElement).toBeInTheDocument();
+  test('renders without crashing', () => {
+    render(<HolidayCard holidayName="Christmas" />);
+    expect(screen.getByTestId('holiday-card')).toBeDefined();
   });
 
-  it('handles empty holiday name gracefully', () => {
-    render(<HolidayCard holidayName="" />);
+  test('displays the provided holiday name', () => {
+    const testHolidayName = 'New Year';
+    render(<HolidayCard holidayName={testHolidayName} />);
+
     const cardElement = screen.getByTestId('holiday-card');
-    expect(cardElement).toBeInTheDocument();
+    expect(cardElement.textContent).toBe(testHolidayName);
   });
 
-  it('handles long holiday names appropriately', () => {
-    const longName = 'Very Long Holiday Name That Might Cause Wrapping Issues';
-    render(<HolidayCard holidayName={longName} />);
-    const cardElement = screen.getByText(longName);
-    expect(cardElement).toBeInTheDocument();
+  test('applies the correct CSS class', () => {
+    render(<HolidayCard holidayName="Easter" />);
+
+    const cardElement = screen.getByTestId('holiday-card');
+    expect(cardElement.className).toBe(styles.holidayCard);
+  });
+
+  test('handles empty holiday name', () => {
+    render(<HolidayCard holidayName="" />);
+
+    const cardElement = screen.getByTestId('holiday-card');
+    expect(cardElement.textContent).toBe('');
+  });
+
+  test('handles long holiday names', () => {
+    const longHolidayName = 'International Talk Like a Pirate Day Celebration';
+    render(<HolidayCard holidayName={longHolidayName} />);
+
+    const cardElement = screen.getByTestId('holiday-card');
+    expect(cardElement.textContent).toBe(longHolidayName);
+  });
+
+  // TypeScript compile-time tests
+  test('TypeScript props validation', () => {
+    // @ts-expect-error - Testing TypeScript validation for missing required prop
+    render(<HolidayCard />);
+
+    // @ts-expect-error - Testing TypeScript validation for wrong prop type
+    render(<HolidayCard holidayName={123} />);
   });
 });
