@@ -160,7 +160,6 @@ function OrganizationCard({
     const membershipRequest = membershipRequests.find(
       (request) => request.user._id === userId,
     );
-    console.log('Membership Request:', membershipRequest); // Add this log
 
     try {
       if (!membershipRequest) {
@@ -174,7 +173,6 @@ function OrganizationCard({
         },
       });
 
-      console.log('Mutation executed successfully'); // Log mutation success
       toast.success(t('MembershipRequestWithdrawn') as string); // Ensure this gets called
     } catch (error: unknown) {
       if (process.env.NODE_ENV === 'development') {
