@@ -6,7 +6,7 @@
 
 # Interface: InterfaceTableCheckIn
 
-Defined in: [src/components/CheckIn/types.ts:29](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L29)
+Defined in: [src/components/CheckIn/types.ts:29](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L29)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components/CheckIn/types.ts:29](https://github.com/gautam-divya
 
 > **checkIn**: `object`
 
-Defined in: [src/components/CheckIn/types.ts:33](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L33)
+Defined in: [src/components/CheckIn/types.ts:33](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L33)
 
 #### \_id
 
@@ -30,7 +30,7 @@ Defined in: [src/components/CheckIn/types.ts:33](https://github.com/gautam-divya
 
 > **eventId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:37](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L37)
+Defined in: [src/components/CheckIn/types.ts:37](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L37)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components/CheckIn/types.ts:37](https://github.com/gautam-divya
 
 > **id**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:30](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L30)
+Defined in: [src/components/CheckIn/types.ts:30](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L30)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/components/CheckIn/types.ts:30](https://github.com/gautam-divya
 
 > **name**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:31](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L31)
+Defined in: [src/components/CheckIn/types.ts:31](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L31)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/components/CheckIn/types.ts:31](https://github.com/gautam-divya
 
 > **userId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:32](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L32)
+Defined in: [src/components/CheckIn/types.ts:32](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L32)

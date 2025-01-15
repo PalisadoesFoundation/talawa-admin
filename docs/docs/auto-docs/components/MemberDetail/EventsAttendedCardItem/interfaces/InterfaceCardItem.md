@@ -6,7 +6,7 @@
 
 # Interface: InterfaceCardItem
 
-Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/MemberDetail/EventsAttendedCardItem.tsx#L16)
+Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedCardItem.tsx#L16)
 
 Card component to display individual event attendance information
 Shows event details including title, date, location and organization
@@ -37,7 +37,7 @@ Event location
 
 > `optional` **creator**: `string`
 
-Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/MemberDetail/EventsAttendedCardItem.tsx#L20)
+Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedCardItem.tsx#L20)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:20](https://
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:22](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/MemberDetail/EventsAttendedCardItem.tsx#L22)
+Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:22](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedCardItem.tsx#L22)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:22](https://
 
 > `optional` **location**: `string`
 
-Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/MemberDetail/EventsAttendedCardItem.tsx#L21)
+Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedCardItem.tsx#L21)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:21](https://
 
 > `optional` **orgId**: `string`
 
-Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/MemberDetail/EventsAttendedCardItem.tsx#L23)
+Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedCardItem.tsx#L23)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:23](https://
 
 > `optional` **startdate**: `string`
 
-Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/MemberDetail/EventsAttendedCardItem.tsx#L19)
+Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedCardItem.tsx#L19)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:19](https://
 
 > `optional` **time**: `string`
 
-Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/MemberDetail/EventsAttendedCardItem.tsx#L18)
+Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedCardItem.tsx#L18)
 
 ***
 
@@ -85,4 +85,4 @@ Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:18](https://
 
 > **title**: `string`
 
-Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/MemberDetail/EventsAttendedCardItem.tsx#L17)
+Defined in: [src/components/MemberDetail/EventsAttendedCardItem.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedCardItem.tsx#L17)

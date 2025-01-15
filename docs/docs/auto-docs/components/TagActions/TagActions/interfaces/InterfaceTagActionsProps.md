@@ -6,7 +6,7 @@
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/components/TagActions/TagActions.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/TagActions/TagActions.tsx#L36)
+Defined in: [src/components/TagActions/TagActions.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TagActions/TagActions.tsx#L36)
 
 Props for the `AssignToTags` component.
 
@@ -16,7 +16,7 @@ Props for the `AssignToTags` component.
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/components/TagActions/TagActions.tsx:38](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/TagActions/TagActions.tsx#L38)
+Defined in: [src/components/TagActions/TagActions.tsx:38](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TagActions/TagActions.tsx#L38)
 
 #### Returns
 
@@ -28,7 +28,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:38](https://github.com/gau
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/components/TagActions/TagActions.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/TagActions/TagActions.tsx#L40)
+Defined in: [src/components/TagActions/TagActions.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TagActions/TagActions.tsx#L40)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:40](https://github.com/gau
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/components/TagActions/TagActions.tsx:37](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/TagActions/TagActions.tsx#L37)
+Defined in: [src/components/TagActions/TagActions.tsx:37](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TagActions/TagActions.tsx#L37)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:37](https://github.com/gau
 
 > **tagActionType**: [`TagActionType`](../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/components/TagActions/TagActions.tsx:39](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/TagActions/TagActions.tsx#L39)
+Defined in: [src/components/TagActions/TagActions.tsx:39](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TagActions/TagActions.tsx#L39)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/components/TagActions/TagActions.tsx:39](https://github.com/gau
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/components/TagActions/TagActions.tsx:41](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/TagActions/TagActions.tsx#L41)
+Defined in: [src/components/TagActions/TagActions.tsx:41](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TagActions/TagActions.tsx#L41)

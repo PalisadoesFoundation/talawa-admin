@@ -8,7 +8,7 @@
 
 > **errorHandler**(`a`, `error`): `void`
 
-Defined in: [src/utils/errorHandler.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/errorHandler.tsx#L10)
+Defined in: [src/utils/errorHandler.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/errorHandler.tsx#L10)
 
 This function is used to handle api errors in the application.
 It takes in the error object and displays the error message to the user.

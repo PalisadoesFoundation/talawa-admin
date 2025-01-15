@@ -6,7 +6,7 @@
 
 # Interface: InterfaceDeleteVolunteerModal
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L10)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L10)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:10]
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L12)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L12)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:12]
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L11)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L11)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:11]
 
 > **refetchVolunteers**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L14)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L14)
 
 #### Returns
 
@@ -46,4 +46,4 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:14]
 
 > **volunteer**: [`InterfaceEventVolunteerInfo`](../../../../../utils/interfaces/interfaces/InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L13)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L13)

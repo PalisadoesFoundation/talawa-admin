@@ -8,7 +8,7 @@
 
 > `const` **CREATE\_VENUE\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/VenueMutations.ts:13](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/GraphQl/Mutations/VenueMutations.ts#L13)
+Defined in: [src/GraphQl/Mutations/VenueMutations.ts:13](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/GraphQl/Mutations/VenueMutations.ts#L13)
 
 GraphQL mutation to create a venue.
 

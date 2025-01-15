@@ -6,7 +6,7 @@
 
 # Interface: InterfacePledgeModal
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L28)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L28)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:28](https://github.c
 
 > **campaignId**: `string`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L31)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L31)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:31](https://github.c
 
 > **endDate**: `Date`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:35](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L35)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:35](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L35)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:35](https://github.c
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L30)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L30)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:30](https://github.c
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L29)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L29)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:29](https://github.c
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L36)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L36)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:36](https://github.c
 
 > **orgId**: `string`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:32](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L32)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:32](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L32)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:32](https://github.c
 
 > **pledge**: [`InterfacePledgeInfo`](../../../../utils/interfaces/interfaces/InterfacePledgeInfo.md)
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:33](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L33)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:33](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L33)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:33](https://github.c
 
 > **refetchPledge**: () => `void`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:34](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/FundCampaignPledge/PledgeModal.tsx#L34)
+Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:34](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/FundCampaignPledge/PledgeModal.tsx#L34)
 
 #### Returns
 

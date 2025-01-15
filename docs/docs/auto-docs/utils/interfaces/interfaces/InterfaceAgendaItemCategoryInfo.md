@@ -6,7 +6,7 @@
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
-Defined in: [src/utils/interfaces.ts:531](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L531)
+Defined in: [src/utils/interfaces.ts:531](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/interfaces.ts#L531)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:531](https://github.com/gautam-divyanshu/ta
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:532](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L532)
+Defined in: [src/utils/interfaces.ts:532](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/interfaces.ts#L532)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:532](https://github.com/gautam-divyanshu/ta
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:535](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L535)
+Defined in: [src/utils/interfaces.ts:535](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/interfaces.ts#L535)
 
 #### \_id
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:535](https://github.com/gautam-divyanshu/ta
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:534](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L534)
+Defined in: [src/utils/interfaces.ts:534](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/interfaces.ts#L534)
 
 ***
 
@@ -50,4 +50,4 @@ Defined in: [src/utils/interfaces.ts:534](https://github.com/gautam-divyanshu/ta
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:533](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L533)
+Defined in: [src/utils/interfaces.ts:533](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/interfaces.ts#L533)

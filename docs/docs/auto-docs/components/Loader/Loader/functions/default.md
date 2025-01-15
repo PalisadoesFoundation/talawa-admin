@@ -8,7 +8,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/Loader/Loader.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/Loader/Loader.tsx#L17)
+Defined in: [src/components/Loader/Loader.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/Loader/Loader.tsx#L17)
 
 Loader component for displaying a loading spinner.
 

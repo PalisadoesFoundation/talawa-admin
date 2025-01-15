@@ -6,7 +6,7 @@
 
 # Interface: InterfaceModalProp
 
-Defined in: [src/components/CheckIn/types.ts:23](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L23)
+Defined in: [src/components/CheckIn/types.ts:23](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L23)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components/CheckIn/types.ts:23](https://github.com/gautam-divya
 
 > **eventId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:25](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L25)
+Defined in: [src/components/CheckIn/types.ts:25](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L25)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components/CheckIn/types.ts:25](https://github.com/gautam-divya
 
 > **handleClose**: () => `void`
 
-Defined in: [src/components/CheckIn/types.ts:26](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L26)
+Defined in: [src/components/CheckIn/types.ts:26](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L26)
 
 #### Returns
 
@@ -34,4 +34,4 @@ Defined in: [src/components/CheckIn/types.ts:26](https://github.com/gautam-divya
 
 > **show**: `boolean`
 
-Defined in: [src/components/CheckIn/types.ts:24](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/CheckIn/types.ts#L24)
+Defined in: [src/components/CheckIn/types.ts:24](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/CheckIn/types.ts#L24)

@@ -8,7 +8,7 @@
 
 > **EventStats**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventStats/EventStats.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/EventStats/EventStats.tsx#L27)
+Defined in: [src/components/EventStats/EventStats.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/EventStats/EventStats.tsx#L27)
 
 Component that displays event statistics in a modal.
 Shows feedback, reviews, and average rating for the event.

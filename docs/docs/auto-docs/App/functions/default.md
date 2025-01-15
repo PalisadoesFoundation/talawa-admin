@@ -8,7 +8,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/App.tsx:74](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/App.tsx#L74)
+Defined in: [src/App.tsx:74](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/App.tsx#L74)
 
 This is the main function for our application. It sets up all the routes and components,
 defining how the user can navigate through the app. The function uses React Router's `Routes`

@@ -6,7 +6,7 @@
 
 # Interface: InterfaceVolunteerViewModal
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L20)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L20)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:20](h
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:22](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L22)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:22](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L22)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:22](h
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L21)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L21)
 
 ***
 
@@ -34,4 +34,4 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:21](h
 
 > **volunteer**: [`InterfaceEventVolunteerInfo`](../../../../../utils/interfaces/interfaces/InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L23)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Volunteers/VolunteerViewModal.tsx#L23)
