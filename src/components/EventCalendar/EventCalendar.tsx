@@ -363,12 +363,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   Events Created by Organization
                 </span>
               </div>
-              {/* <div className={styles.eventsLegend}>
-                <span className={styles.userEvents__color}></span>
-                <span className={styles.legendText}>
-                  Events Created by User
-                </span>
-              </div> */}
               <div className={styles.list_container_holidays}>
                 <span className={styles.holidayIndicator}></span>
                 <span className={styles.holidayText}>Holidays</span>

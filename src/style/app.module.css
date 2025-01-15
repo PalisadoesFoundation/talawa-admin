@@ -5811,34 +5811,6 @@ button[data-testid='createPostBtn'] {
   } */
 }
 
-@media (max-width: 520px) {
-  .calendar__header {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .space {
-    display: block !important;
-    text-align: center;
-  }
-
-  .space > * {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  /* .input {
-    width: 100%;
-  }
-
-  .createButton {
-    margin: 0 auto;
-    width: 100%;
-  } */
-}
-
 /* EventListCardModals.tsx */
 
 .dispflexEventListCardModals {

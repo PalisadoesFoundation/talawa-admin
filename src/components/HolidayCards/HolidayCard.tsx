@@ -13,7 +13,11 @@ interface InterfaceHolidayList {
  * @returns JSX element representing a card with the holiday name.
  */
 const HolidayCard = (props: InterfaceHolidayList): JSX.Element => {
-  return <div className={styles.holidayCard}>{props?.holidayName}</div>;
+  return (
+    <div className={styles.holidayCard} data-testid="holiday-card">
+      {props?.holidayName}
+    </div>
+  );
 };
 
 export default HolidayCard;
