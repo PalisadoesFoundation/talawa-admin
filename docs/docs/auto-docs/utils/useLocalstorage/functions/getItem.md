@@ -8,7 +8,7 @@
 
 > **getItem**(`prefix`, `key`): `any`
 
-Defined in: [src/utils/useLocalstorage.ts:29](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/useLocalstorage.ts#L29)
+Defined in: [src/utils/useLocalstorage.ts:29](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/useLocalstorage.ts#L29)
 
 Retrieves the stored value for the given key from local storage.
 

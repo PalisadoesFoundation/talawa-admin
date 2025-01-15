@@ -6,7 +6,7 @@
 
 # Interface: InterfaceIconComponent
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/IconComponent/IconComponent.tsx#L27)
+Defined in: [src/components/IconComponent/IconComponent.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/IconComponent/IconComponent.tsx#L27)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:27](https://github.c
 
 > `optional` **fill**: `string`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/IconComponent/IconComponent.tsx#L29)
+Defined in: [src/components/IconComponent/IconComponent.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/IconComponent/IconComponent.tsx#L29)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:29](https://github.c
 
 > `optional` **height**: `string`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/IconComponent/IconComponent.tsx#L30)
+Defined in: [src/components/IconComponent/IconComponent.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/IconComponent/IconComponent.tsx#L30)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:30](https://github.c
 
 > **name**: `string`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/IconComponent/IconComponent.tsx#L28)
+Defined in: [src/components/IconComponent/IconComponent.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/IconComponent/IconComponent.tsx#L28)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:28](https://github.c
 
 > `optional` **width**: `string`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/IconComponent/IconComponent.tsx#L31)
+Defined in: [src/components/IconComponent/IconComponent.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/IconComponent/IconComponent.tsx#L31)

@@ -6,7 +6,7 @@
 
 # Interface: InterfaceAddOnSpotAttendeeProps
 
-Defined in: [src/utils/interfaces.ts:546](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L546)
+Defined in: [src/utils/interfaces.ts:546](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L546)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:546](https://github.com/gautam-divyanshu/ta
 
 > **handleClose**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:548](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L548)
+Defined in: [src/utils/interfaces.ts:548](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L548)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/utils/interfaces.ts:548](https://github.com/gautam-divyanshu/ta
 
 > **reloadMembers**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:549](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L549)
+Defined in: [src/utils/interfaces.ts:549](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L549)
 
 #### Returns
 
@@ -38,4 +38,4 @@ Defined in: [src/utils/interfaces.ts:549](https://github.com/gautam-divyanshu/ta
 
 > **show**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:547](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L547)
+Defined in: [src/utils/interfaces.ts:547](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L547)

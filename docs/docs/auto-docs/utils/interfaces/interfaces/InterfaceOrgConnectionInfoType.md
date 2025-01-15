@@ -6,7 +6,7 @@
 
 # Interface: InterfaceOrgConnectionInfoType
 
-Defined in: [src/utils/interfaces.ts:91](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L91)
+Defined in: [src/utils/interfaces.ts:91](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L91)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:91](https://github.com/gautam-divyanshu/tal
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:92](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L92)
+Defined in: [src/utils/interfaces.ts:92](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L92)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:92](https://github.com/gautam-divyanshu/tal
 
 > **address**: [`InterfaceAddress`](InterfaceAddress.md)
 
-Defined in: [src/utils/interfaces.ts:107](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L107)
+Defined in: [src/utils/interfaces.ts:107](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L107)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:107](https://github.com/gautam-divyanshu/ta
 
 > **admins**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:103](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L103)
+Defined in: [src/utils/interfaces.ts:103](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L103)
 
 #### \_id
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:103](https://github.com/gautam-divyanshu/ta
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:106](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L106)
+Defined in: [src/utils/interfaces.ts:106](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L106)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:106](https://github.com/gautam-divyanshu/ta
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:94](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L94)
+Defined in: [src/utils/interfaces.ts:94](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L94)
 
 #### \_id
 
@@ -70,7 +70,7 @@ Defined in: [src/utils/interfaces.ts:94](https://github.com/gautam-divyanshu/tal
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:93](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L93)
+Defined in: [src/utils/interfaces.ts:93](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L93)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/utils/interfaces.ts:93](https://github.com/gautam-divyanshu/tal
 
 > **members**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:100](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L100)
+Defined in: [src/utils/interfaces.ts:100](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L100)
 
 #### \_id
 
@@ -90,4 +90,4 @@ Defined in: [src/utils/interfaces.ts:100](https://github.com/gautam-divyanshu/ta
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:99](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L99)
+Defined in: [src/utils/interfaces.ts:99](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L99)

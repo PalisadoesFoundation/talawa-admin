@@ -6,7 +6,7 @@
 
 # Interface: InterfaceAddPeopleToTagProps
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L28)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L28)
 
 Props for the `AddPeopleToTag` component.
 
@@ -16,7 +16,7 @@ Props for the `AddPeopleToTag` component.
 
 > **addPeopleToTagModalIsOpen**: `boolean`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L29)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L29)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:29](https://github
 
 > **hideAddPeopleToTagModal**: () => `void`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L30)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L30)
 
 #### Returns
 
@@ -36,7 +36,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:30](https://github
 
 > **refetchAssignedMembersData**: () => `void`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L31)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L31)
 
 #### Returns
 
@@ -48,7 +48,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:31](https://github
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:32](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L32)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:32](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L32)
 
 ***
 
@@ -56,4 +56,4 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:32](https://github
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:33](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L33)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:33](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L33)

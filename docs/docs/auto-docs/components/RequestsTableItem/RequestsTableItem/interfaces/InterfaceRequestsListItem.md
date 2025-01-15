@@ -6,7 +6,7 @@
 
 # Interface: InterfaceRequestsListItem
 
-Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/RequestsTableItem/RequestsTableItem.tsx#L16)
+Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/RequestsTableItem/RequestsTableItem.tsx#L16)
 
 Represents a membership request in the requests table.
 
@@ -16,7 +16,7 @@ Represents a membership request in the requests table.
 
 > **\_id**: `string`
 
-Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/RequestsTableItem/RequestsTableItem.tsx#L17)
+Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/RequestsTableItem/RequestsTableItem.tsx#L17)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:17](https://
 
 > **user**: `object`
 
-Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/RequestsTableItem/RequestsTableItem.tsx#L18)
+Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/RequestsTableItem/RequestsTableItem.tsx#L18)
 
 #### email
 

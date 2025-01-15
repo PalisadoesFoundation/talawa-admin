@@ -6,7 +6,7 @@
 
 # Interface: InterfaceActionItemCategoryModal
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:26](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L26)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:26](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L26)
 
 Props for the `CategoryModal` component.
 
@@ -23,7 +23,7 @@ mode - The mode of the modal.
 
 > **category**: [`InterfaceActionItemCategoryInfo`](../../../../../utils/interfaces/interfaces/InterfaceActionItemCategoryInfo.md)
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L31)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L31)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:3
 
 > **hide**: () => `void`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L28)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L28)
 
 #### Returns
 
@@ -43,7 +43,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:2
 
 > **isOpen**: `boolean`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L27)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L27)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:2
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:32](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L32)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:32](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L32)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:3
 
 > **orgId**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L30)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L30)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:3
 
 > **refetchCategories**: () => `void`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L29)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L29)
 
 #### Returns
 

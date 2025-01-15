@@ -8,7 +8,7 @@
 
 > `const` **USER\_TAGS\_MEMBERS\_TO\_ASSIGN\_TO**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/userTagQueries.ts:119](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/GraphQl/Queries/userTagQueries.ts#L119)
+Defined in: [src/GraphQl/Queries/userTagQueries.ts:119](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/GraphQl/Queries/userTagQueries.ts#L119)
 
 GraphQL query to retrieve organization members that aren't assigned a certain tag.
 

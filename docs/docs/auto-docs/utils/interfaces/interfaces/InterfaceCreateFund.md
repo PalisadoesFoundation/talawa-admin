@@ -6,7 +6,7 @@
 
 # Interface: InterfaceCreateFund
 
-Defined in: [src/utils/interfaces.ts:463](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L463)
+Defined in: [src/utils/interfaces.ts:463](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L463)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:463](https://github.com/gautam-divyanshu/ta
 
 > **fundName**: `string`
 
-Defined in: [src/utils/interfaces.ts:464](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L464)
+Defined in: [src/utils/interfaces.ts:464](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L464)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:464](https://github.com/gautam-divyanshu/ta
 
 > **fundRef**: `string`
 
-Defined in: [src/utils/interfaces.ts:465](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L465)
+Defined in: [src/utils/interfaces.ts:465](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L465)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:465](https://github.com/gautam-divyanshu/ta
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:467](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L467)
+Defined in: [src/utils/interfaces.ts:467](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L467)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:467](https://github.com/gautam-divyanshu/ta
 
 > **isDefault**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:466](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L466)
+Defined in: [src/utils/interfaces.ts:466](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L466)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/utils/interfaces.ts:466](https://github.com/gautam-divyanshu/ta
 
 > **taxDeductible**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:468](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/interfaces.ts#L468)
+Defined in: [src/utils/interfaces.ts:468](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L468)

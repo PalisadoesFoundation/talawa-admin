@@ -6,7 +6,7 @@
 
 # Interface: InterfaceCampaignModal
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L28)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L28)
 
 Props for the CampaignModal component.
 
@@ -16,7 +16,7 @@ Props for the CampaignModal component.
 
 > **campaign**: [`InterfaceCampaignInfo`](../../../../utils/interfaces/interfaces/InterfaceCampaignInfo.md)
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:33](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L33)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:33](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L33)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:33](https://
 
 > **fundId**: `string`
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L31)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L31)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:31](https://
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L30)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L30)
 
 #### Returns
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:30](https://
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L29)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L29)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:29](https://
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:35](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L35)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:35](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L35)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:35](https://
 
 > **orgId**: `string`
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:32](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L32)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:32](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L32)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:32](https://
 
 > **refetchCampaign**: () => `void`
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:34](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L34)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:34](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L34)
 
 #### Returns
 

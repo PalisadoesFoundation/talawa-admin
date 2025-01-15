@@ -6,7 +6,7 @@
 
 # Interface: InterfaceVolunteerCreateModal
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L14)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L14)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:14]
 
 > **eventId**: `string`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L17)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L17)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:17]
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L16)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L16)
 
 #### Returns
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:16]
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L15)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L15)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:15]
 
 > **orgId**: `string`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L18)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L18)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:18]
 
 > **refetchVolunteers**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L19)
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L19)
 
 #### Returns
 

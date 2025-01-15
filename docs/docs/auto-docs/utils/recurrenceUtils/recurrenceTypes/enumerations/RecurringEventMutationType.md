@@ -6,7 +6,7 @@
 
 # Enumeration: RecurringEventMutationType
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:55](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/recurrenceUtils/recurrenceTypes.ts#L55)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:55](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L55)
 
 ## Enumeration Members
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:55](https://github.com
 
 > **allInstances**: `"allInstances"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:58](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/recurrenceUtils/recurrenceTypes.ts#L58)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:58](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L58)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:58](https://github.com
 
 > **thisAndFollowingInstances**: `"thisAndFollowingInstances"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:57](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/recurrenceUtils/recurrenceTypes.ts#L57)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:57](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L57)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:57](https://github.com
 
 > **thisInstance**: `"thisInstance"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:56](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/recurrenceUtils/recurrenceTypes.ts#L56)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:56](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L56)

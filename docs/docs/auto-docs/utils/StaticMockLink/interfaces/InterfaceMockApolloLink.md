@@ -6,7 +6,7 @@
 
 # Interface: InterfaceMockApolloLink
 
-Defined in: [src/utils/StaticMockLink.ts:157](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/StaticMockLink.ts#L157)
+Defined in: [src/utils/StaticMockLink.ts:157](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/StaticMockLink.ts#L157)
 
 ## Extends
 
@@ -18,4 +18,4 @@ Defined in: [src/utils/StaticMockLink.ts:157](https://github.com/gautam-divyansh
 
 > `optional` **operation**: `Operation`
 
-Defined in: [src/utils/StaticMockLink.ts:158](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/utils/StaticMockLink.ts#L158)
+Defined in: [src/utils/StaticMockLink.ts:158](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/StaticMockLink.ts#L158)

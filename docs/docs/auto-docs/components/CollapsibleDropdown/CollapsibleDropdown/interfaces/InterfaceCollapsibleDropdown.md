@@ -6,7 +6,7 @@
 
 # Interface: InterfaceCollapsibleDropdown
 
-Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:9](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L9)
+Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:9](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L9)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:9](https
 
 > **setShowDropdown**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L12)
+Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L12)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:12](http
 
 > **showDropdown**: `boolean`
 
-Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L10)
+Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L10)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:10](http
 
 > **target**: [`TargetsType`](../../../../state/reducers/routesReducer/type-aliases/TargetsType.md)
 
-Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L11)
+Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L11)

@@ -8,7 +8,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Pagination/Pagination.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/Pagination/Pagination.tsx#L30)
+Defined in: [src/components/Pagination/Pagination.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/Pagination/Pagination.tsx#L30)
 
 Pagination component for navigating between pages in a table.
 

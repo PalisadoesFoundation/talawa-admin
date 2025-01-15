@@ -8,4 +8,4 @@
 
 > `const` **MOCKS\_UPDATE**: (\{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `organizationId`: `string`; `role`: `string`; `userId`: `string`; \}; \}; `result`: `undefined`; \} \| \{ `error`: `undefined`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `organizationId`: `string`; `role`: `string`; `userId`: `string`; \}; \}; `result`: \{ `data`: \{ `updateUserRoleInOrganization`: \{ `_id`: `string`; \}; \}; \}; \})[]
 
-Defined in: [src/components/UsersTableItem/UserTableItemMocks.ts:55](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/UsersTableItem/UserTableItemMocks.ts#L55)
+Defined in: [src/components/UsersTableItem/UserTableItemMocks.ts:55](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UsersTableItem/UserTableItemMocks.ts#L55)

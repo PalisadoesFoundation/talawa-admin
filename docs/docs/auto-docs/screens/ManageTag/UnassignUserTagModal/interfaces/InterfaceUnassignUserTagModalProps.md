@@ -6,7 +6,7 @@
 
 # Interface: InterfaceUnassignUserTagModalProps
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:9](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/ManageTag/UnassignUserTagModal.tsx#L9)
+Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:9](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/ManageTag/UnassignUserTagModal.tsx#L9)
 
 Unassign UserTag Modal component for the Manage Tag screen.
 
@@ -16,7 +16,7 @@ Unassign UserTag Modal component for the Manage Tag screen.
 
 > **handleUnassignUserTag**: () => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/ManageTag/UnassignUserTagModal.tsx#L12)
+Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/ManageTag/UnassignUserTagModal.tsx#L12)
 
 #### Returns
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:12](https://github.c
 
 > **t**: `TFunction`\<`"manageTag"` \| `"memberDetail"`\>
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/ManageTag/UnassignUserTagModal.tsx#L13)
+Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/ManageTag/UnassignUserTagModal.tsx#L13)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:13](https://github.c
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/ManageTag/UnassignUserTagModal.tsx#L14)
+Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/ManageTag/UnassignUserTagModal.tsx#L14)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:14](https://github.c
 
 > **toggleUnassignUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/ManageTag/UnassignUserTagModal.tsx#L11)
+Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/ManageTag/UnassignUserTagModal.tsx#L11)
 
 #### Returns
 
@@ -56,4 +56,4 @@ Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:11](https://github.c
 
 > **unassignUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/screens/ManageTag/UnassignUserTagModal.tsx#L10)
+Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/ManageTag/UnassignUserTagModal.tsx#L10)
