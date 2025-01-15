@@ -10,7 +10,8 @@ import { format } from 'util';
 global.console.error = (...args): void => {
   const [firstArg] = args;
   if (typeof firstArg === 'string' && firstArg.includes('act(...)')) {
-    // Ignore act warnings
+    // Suppress React act warnings which commonly occur with async operations
+    // These warnings are expected when testing async interactions with @testing-library/user-event
     return;
   }
   throw new Error(format(...args));
