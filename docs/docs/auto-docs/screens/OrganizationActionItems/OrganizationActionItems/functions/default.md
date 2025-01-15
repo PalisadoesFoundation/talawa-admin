@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/OrganizationActionItems/OrganizationActionItems](../README.md) / default
 
 # Function: default()
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItems.tsx:51](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationActionItems/OrganizationActionItems.tsx#L51)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItems.tsx:51](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationActionItems/OrganizationActionItems.tsx#L51)
 
 Component for managing and displaying action items within an organization.
 

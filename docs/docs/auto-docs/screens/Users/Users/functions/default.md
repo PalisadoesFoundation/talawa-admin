@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/Users/Users](../README.md) / default
 
 # Function: default()
 
 > **default**(): `Element`
 
-Defined in: [src/screens/Users/Users.tsx:64](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/Users/Users.tsx#L64)
+Defined in: [src/screens/Users/Users.tsx:64](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/Users/Users.tsx#L64)
 
 The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
 It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL

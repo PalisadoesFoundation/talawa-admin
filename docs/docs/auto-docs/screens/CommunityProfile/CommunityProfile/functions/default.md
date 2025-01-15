@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/CommunityProfile/CommunityProfile](../README.md) / default
 
 # Function: default()
 
 > **default**(): `Element`
 
-Defined in: [src/screens/CommunityProfile/CommunityProfile.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/CommunityProfile/CommunityProfile.tsx#L40)
+Defined in: [src/screens/CommunityProfile/CommunityProfile.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/CommunityProfile/CommunityProfile.tsx#L40)
 
 `CommunityProfile` component allows users to view and update their community profile details.
 

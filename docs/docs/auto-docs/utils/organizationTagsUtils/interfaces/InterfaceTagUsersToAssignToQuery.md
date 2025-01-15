@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../README.md) / [utils/organizationTagsUtils](../README.md) / InterfaceTagUsersToAssignToQuery
-
 # Interface: InterfaceTagUsersToAssignToQuery
 
-Defined in: [src/utils/organizationTagsUtils.ts:113](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/organizationTagsUtils.ts#L113)
+Defined in: [src/utils/organizationTagsUtils.ts:113](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/organizationTagsUtils.ts#L113)
 
 ## Extends
 
@@ -18,7 +16,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:113](https://github.com/gautam-d
 
 > `optional` **data**: `object`
 
-Defined in: [src/utils/organizationTagsUtils.ts:115](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/organizationTagsUtils.ts#L115)
+Defined in: [src/utils/organizationTagsUtils.ts:115](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/organizationTagsUtils.ts#L115)
 
 #### getUsersToAssignTo
 
@@ -30,7 +28,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:115](https://github.com/gautam-d
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/organizationTagsUtils.ts#L60)
+Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/organizationTagsUtils.ts#L60)
 
 #### Inherited from
 
@@ -42,7 +40,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/gautam-di
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:118](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/organizationTagsUtils.ts#L118)
+Defined in: [src/utils/organizationTagsUtils.ts:118](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/organizationTagsUtils.ts#L118)
 
 #### Parameters
 
@@ -60,7 +58,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:118](https://github.com/gautam-d
 
 > **loading**: `boolean`
 
-Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/organizationTagsUtils.ts#L59)
+Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/organizationTagsUtils.ts#L59)
 
 #### Inherited from
 
@@ -72,7 +70,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/gautam-di
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/organizationTagsUtils.ts#L61)
+Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/organizationTagsUtils.ts#L61)
 
 #### Returns
 

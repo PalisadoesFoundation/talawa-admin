@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/BlockUser/BlockUser](../README.md) / default
 
 # Function: default()
 
 > **default**(): `Element`
 
-Defined in: [src/screens/BlockUser/BlockUser.tsx:45](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/BlockUser/BlockUser.tsx#L45)
+Defined in: [src/screens/BlockUser/BlockUser.tsx:45](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/BlockUser/BlockUser.tsx#L45)
 
 Requests component displays and manages a list of users that can be blocked or unblocked.
 

@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [screens/UserPortal/Campaigns/Campaigns](../README.md) / default
 
 # Function: default()
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/Campaigns/Campaigns.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Campaigns/Campaigns.tsx#L30)
+Defined in: [src/screens/UserPortal/Campaigns/Campaigns.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Campaigns/Campaigns.tsx#L30)
 
 The `Campaigns` component displays a list of fundraising campaigns for a specific organization.
 It allows users to search, sort, and view details about each campaign. Users can also add pledges to active campaigns.

@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/CurrentHourIndicator/CurrentHourIndicator](../README.md) / default
 
 # Function: default()
 
 > **default**(): `Element`
 
-Defined in: [src/components/CurrentHourIndicator/CurrentHourIndicator.tsx:9](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CurrentHourIndicator/CurrentHourIndicator.tsx#L9)
+Defined in: [src/components/CurrentHourIndicator/CurrentHourIndicator.tsx:9](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/CurrentHourIndicator/CurrentHourIndicator.tsx#L9)
 
 A component that displays an indicator for the current hour.
 

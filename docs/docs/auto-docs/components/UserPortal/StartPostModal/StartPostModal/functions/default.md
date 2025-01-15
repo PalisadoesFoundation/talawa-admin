@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [components/UserPortal/StartPostModal/StartPostModal](../README.md) / default
 
 # Function: default()
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/StartPostModal/StartPostModal.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/StartPostModal/StartPostModal.tsx#L40)
+Defined in: [src/components/UserPortal/StartPostModal/StartPostModal.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/StartPostModal/StartPostModal.tsx#L40)
 
 A modal component for creating a new post.
 

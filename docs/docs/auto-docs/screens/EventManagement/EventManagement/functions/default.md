@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/EventManagement/EventManagement](../README.md) / default
 
 # Function: default()
 
 > **default**(): `Element`
 
-Defined in: [src/screens/EventManagement/EventManagement.tsx:91](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/EventManagement/EventManagement.tsx#L91)
+Defined in: [src/screens/EventManagement/EventManagement.tsx:91](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/EventManagement/EventManagement.tsx#L91)
 
 `EventManagement` component handles the display and navigation of different event management sections.
 

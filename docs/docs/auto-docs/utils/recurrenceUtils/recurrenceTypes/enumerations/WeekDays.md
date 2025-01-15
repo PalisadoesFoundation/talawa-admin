@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [utils/recurrenceUtils/recurrenceTypes](../README.md) / WeekDays
-
 # Enumeration: WeekDays
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:36](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L36)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:36](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L36)
 
 ## Enumeration Members
 
@@ -14,7 +12,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:36](https://github.com
 
 > **FRIDAY**: `"FRIDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com
 
 > **MONDAY**: `"MONDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L38)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L38)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com
 
 > **SATURDAY**: `"SATURDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L43)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L43)
 
 ***
 
@@ -38,7 +36,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com
 
 > **SUNDAY**: `"SUNDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:37](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L37)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:37](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L37)
 
 ***
 
@@ -46,7 +44,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:37](https://github.com
 
 > **THURSDAY**: `"THURSDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
 
 ***
 
@@ -54,7 +52,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com
 
 > **TUESDAY**: `"TUESDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
 
 ***
 
@@ -62,4 +60,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com
 
 > **WEDNESDAY**: `"WEDNESDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)

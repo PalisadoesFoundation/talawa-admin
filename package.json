@@ -91,7 +91,8 @@
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx setup.ts",
     "check-localstorage": "node scripts/githooks/check-localstorage-usage.js",
-    "generate-docs": "typedoc --out docs/docs/auto-docs --plugin typedoc-plugin-markdown --theme markdown --tsconfig tsconfig.docs.json --excludePrivate --excludeProtected --excludeExternals --hideGenerator --categorizeByGroup true --entryPointStrategy expand --entryPoints \"src\" --exclude \"src/vite-env.d.ts\" --exclude \"**/*.spec.{ts,tsx}\" --exclude \"**/*.test.{ts,tsx}\" --exclude \"**/__tests__/**\" --exclude \"**/__mocks__/**\" --readme none --cleanOutputDir true --skipErrorChecking --logLevel Warn"
+    "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete",
+    "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js"
   },
   "eslintConfig": {
     "extends": [

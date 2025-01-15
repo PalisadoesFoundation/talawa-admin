@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [screens/UserPortal/Posts/Posts](../README.md) / default
 
 # Function: default()
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/UserPortal/Posts/Posts.tsx:112](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Posts/Posts.tsx#L112)
+Defined in: [src/screens/UserPortal/Posts/Posts.tsx:112](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Posts/Posts.tsx#L112)
 
 `home` component displays the main feed for a user, including posts, promoted content, and options to create a new post.
 

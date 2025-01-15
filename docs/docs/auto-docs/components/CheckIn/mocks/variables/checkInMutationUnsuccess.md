@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/CheckIn/mocks](../README.md) / checkInMutationUnsuccess
 
 # Variable: checkInMutationUnsuccess
 
 > `const` **checkInMutationUnsuccess**: `object`[]
 
-Defined in: [src/components/CheckIn/mocks.ts:65](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CheckIn/mocks.ts#L65)
+Defined in: [src/components/CheckIn/mocks.ts:65](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/CheckIn/mocks.ts#L65)
 
 ## Type declaration
 

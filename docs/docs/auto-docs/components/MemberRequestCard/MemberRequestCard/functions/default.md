@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/MemberRequestCard/MemberRequestCard](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/MemberRequestCard/MemberRequestCard.tsx#L31)
+Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/MemberRequestCard/MemberRequestCard.tsx#L31)
 
 Component for displaying and managing member requests.
 

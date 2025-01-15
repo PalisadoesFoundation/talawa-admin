@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [screens/OrganizationEvents/OrganizationEvents](../README.md) / ViewType
-
 # Enumeration: ViewType
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationEvents/OrganizationEvents.tsx#L37)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationEvents/OrganizationEvents.tsx#L37)
 
 ## Enumeration Members
 
@@ -14,7 +12,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://g
 
 > **DAY**: `"Day"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationEvents/OrganizationEvents.tsx#L38)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationEvents/OrganizationEvents.tsx#L38)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://g
 
 > **MONTH**: `"Month View"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationEvents/OrganizationEvents.tsx#L39)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationEvents/OrganizationEvents.tsx#L39)
 
 ***
 
@@ -30,4 +28,4 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://g
 
 > **YEAR**: `"Year View"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationEvents/OrganizationEvents.tsx#L40)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationEvents/OrganizationEvents.tsx#L40)

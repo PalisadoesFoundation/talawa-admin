@@ -1,11 +1,9 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [GraphQl/Queries/Queries](../README.md) / GET\_COMMUNITY\_DATA
 
 # Variable: GET\_COMMUNITY\_DATA
 
 > `const` **GET\_COMMUNITY\_DATA**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:839](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/GraphQl/Queries/Queries.ts#L839)
+Defined in: [src/GraphQl/Queries/Queries.ts:839](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/GraphQl/Queries/Queries.ts#L839)

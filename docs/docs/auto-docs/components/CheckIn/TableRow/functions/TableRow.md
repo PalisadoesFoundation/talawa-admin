@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/CheckIn/TableRow](../README.md) / TableRow
 
 # Function: TableRow()
 
 > **TableRow**(`__namedParameters`): `Element`
 
-Defined in: [src/components/CheckIn/TableRow.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CheckIn/TableRow.tsx#L19)
+Defined in: [src/components/CheckIn/TableRow.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/CheckIn/TableRow.tsx#L19)
 
 Component that represents a single row in the check-in table.
 Allows users to mark themselves as checked in and download a tag if they are already checked in.

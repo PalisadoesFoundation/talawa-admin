@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [components/UserPortal/ContactCard/ContactCard](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/ContactCard/ContactCard.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/ContactCard/ContactCard.tsx#L36)
+Defined in: [src/components/UserPortal/ContactCard/ContactCard.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/ContactCard/ContactCard.tsx#L36)
 
 Displays a card for a contact in a contact list.
 

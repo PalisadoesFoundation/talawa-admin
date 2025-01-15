@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [GraphQl/Mutations/OrganizationMutations](../README.md) / REMOVE\_CUSTOM\_FIELD
 
 # Variable: REMOVE\_CUSTOM\_FIELD
 
 > `const` **REMOVE\_CUSTOM\_FIELD**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:260](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/GraphQl/Mutations/OrganizationMutations.ts#L260)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:260](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/GraphQl/Mutations/OrganizationMutations.ts#L260)
 
 GraphQL mutation to remove a custom field from an organization.
 

@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [components/LeftDrawer/LeftDrawer](../README.md) / InterfaceLeftDrawerProps
-
 # Interface: InterfaceLeftDrawerProps
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/LeftDrawer/LeftDrawer.tsx#L12)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/LeftDrawer/LeftDrawer.tsx#L12)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:12](https://github.com/gau
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/LeftDrawer/LeftDrawer.tsx#L13)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/LeftDrawer/LeftDrawer.tsx#L13)
 
 ***
 
@@ -22,4 +20,4 @@ Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:13](https://github.com/gau
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/LeftDrawer/LeftDrawer.tsx#L14)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/LeftDrawer/LeftDrawer.tsx#L14)

@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/TableLoader/TableLoader](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/TableLoader/TableLoader.tsx#L23)
+Defined in: [src/components/TableLoader/TableLoader.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/TableLoader/TableLoader.tsx#L23)
 
 The TableLoader component displays a loading skeleton for tables.
 It shows a specified number of rows and columns as placeholders

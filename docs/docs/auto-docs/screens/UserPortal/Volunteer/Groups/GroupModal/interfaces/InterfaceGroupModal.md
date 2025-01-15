@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../../../README.md) / [screens/UserPortal/Volunteer/Groups/GroupModal](../README.md) / InterfaceGroupModal
-
 # Interface: InterfaceGroupModal
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:35](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L35)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:35](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L35)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:35](https://
 
 > **eventId**: `string`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:38](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L38)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:38](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L38)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:38](https://
 
 > **group**: [`InterfaceVolunteerGroupInfo`](../../../../../../utils/interfaces/interfaces/InterfaceVolunteerGroupInfo.md)
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:39](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L39)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:39](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L39)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:39](https://
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:37](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L37)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:37](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L37)
 
 #### Returns
 
@@ -42,7 +40,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:37](https://
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L36)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L36)
 
 ***
 
@@ -50,7 +48,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:36](https://
 
 > **refetchGroups**: () => `void`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L40)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L40)
 
 #### Returns
 

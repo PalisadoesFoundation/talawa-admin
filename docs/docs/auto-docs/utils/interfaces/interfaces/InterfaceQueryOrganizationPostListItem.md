@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../README.md) / [utils/interfaces](../README.md) / InterfaceQueryOrganizationPostListItem
-
 # Interface: InterfaceQueryOrganizationPostListItem
 
-Defined in: [src/utils/interfaces.ts:180](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L180)
+Defined in: [src/utils/interfaces.ts:180](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L180)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:180](https://github.com/gautam-divyanshu/ta
 
 > **posts**: `object`
 
-Defined in: [src/utils/interfaces.ts:181](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L181)
+Defined in: [src/utils/interfaces.ts:181](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L181)
 
 #### edges
 

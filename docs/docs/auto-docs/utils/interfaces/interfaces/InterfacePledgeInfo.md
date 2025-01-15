@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../README.md) / [utils/interfaces](../README.md) / InterfacePledgeInfo
-
 # Interface: InterfacePledgeInfo
 
-Defined in: [src/utils/interfaces.ts:371](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L371)
+Defined in: [src/utils/interfaces.ts:371](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L371)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:371](https://github.com/gautam-divyanshu/ta
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:372](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L372)
+Defined in: [src/utils/interfaces.ts:372](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L372)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:372](https://github.com/gautam-divyanshu/ta
 
 > **amount**: `number`
 
-Defined in: [src/utils/interfaces.ts:374](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L374)
+Defined in: [src/utils/interfaces.ts:374](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L374)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:374](https://github.com/gautam-divyanshu/ta
 
 > `optional` **campaign**: `object`
 
-Defined in: [src/utils/interfaces.ts:373](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L373)
+Defined in: [src/utils/interfaces.ts:373](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L373)
 
 #### \_id
 
@@ -50,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:373](https://github.com/gautam-divyanshu/ta
 
 > **currency**: `string`
 
-Defined in: [src/utils/interfaces.ts:375](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L375)
+Defined in: [src/utils/interfaces.ts:375](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L375)
 
 ***
 
@@ -58,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:375](https://github.com/gautam-divyanshu/ta
 
 > **endDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:376](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L376)
+Defined in: [src/utils/interfaces.ts:376](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L376)
 
 ***
 
@@ -66,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:376](https://github.com/gautam-divyanshu/ta
 
 > **startDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:377](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L377)
+Defined in: [src/utils/interfaces.ts:377](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L377)
 
 ***
 
@@ -74,4 +72,4 @@ Defined in: [src/utils/interfaces.ts:377](https://github.com/gautam-divyanshu/ta
 
 > **users**: [`InterfaceUserInfo`](InterfaceUserInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:378](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L378)
+Defined in: [src/utils/interfaces.ts:378](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L378)

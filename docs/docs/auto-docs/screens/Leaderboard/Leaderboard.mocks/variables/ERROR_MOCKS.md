@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/Leaderboard/Leaderboard.mocks](../README.md) / ERROR\_MOCKS
 
 # Variable: ERROR\_MOCKS
 
 > `const` **ERROR\_MOCKS**: `object`[]
 
-Defined in: [src/screens/Leaderboard/Leaderboard.mocks.ts:183](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/Leaderboard/Leaderboard.mocks.ts#L183)
+Defined in: [src/screens/Leaderboard/Leaderboard.mocks.ts:183](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/Leaderboard/Leaderboard.mocks.ts#L183)
 
 ## Type declaration
 

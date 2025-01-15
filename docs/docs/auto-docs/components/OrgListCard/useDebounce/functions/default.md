@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/OrgListCard/useDebounce](../README.md) / default
 
 # Function: default()
 
 > **default**\<`T`\>(`callback`, `delay`): `object`
 
-Defined in: [src/components/OrgListCard/useDebounce.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgListCard/useDebounce.tsx#L12)
+Defined in: [src/components/OrgListCard/useDebounce.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/OrgListCard/useDebounce.tsx#L12)
 
 A custom React hook for debouncing a callback function.
 It delays the execution of the callback until after a specified delay has elapsed

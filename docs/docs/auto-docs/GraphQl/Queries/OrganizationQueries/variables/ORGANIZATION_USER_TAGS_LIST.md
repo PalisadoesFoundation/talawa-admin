@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [GraphQl/Queries/OrganizationQueries](../README.md) / ORGANIZATION\_USER\_TAGS\_LIST
 
 # Variable: ORGANIZATION\_USER\_TAGS\_LIST
 
 > `const` **ORGANIZATION\_USER\_TAGS\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:83](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/GraphQl/Queries/OrganizationQueries.ts#L83)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:83](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/GraphQl/Queries/OrganizationQueries.ts#L83)
 
 GraphQL query to retrieve the list of user tags belonging to an organization.
 

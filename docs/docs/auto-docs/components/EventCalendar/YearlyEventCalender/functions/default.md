@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/EventCalendar/YearlyEventCalender](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventCalendar/YearlyEventCalender.tsx:95](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventCalendar/YearlyEventCalender.tsx#L95)
+Defined in: [src/components/EventCalendar/YearlyEventCalender.tsx:95](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventCalendar/YearlyEventCalender.tsx#L95)
 
 Calendar component to display events for a selected year.
 

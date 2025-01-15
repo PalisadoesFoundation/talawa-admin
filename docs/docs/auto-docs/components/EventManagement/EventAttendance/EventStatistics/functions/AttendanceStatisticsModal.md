@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [components/EventManagement/EventAttendance/EventStatistics](../README.md) / AttendanceStatisticsModal
 
 # Function: AttendanceStatisticsModal()
 
 > **AttendanceStatisticsModal**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventManagement/EventAttendance/EventStatistics.tsx:50](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventManagement/EventAttendance/EventStatistics.tsx#L50)
+Defined in: [src/components/EventManagement/EventAttendance/EventStatistics.tsx:50](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventManagement/EventAttendance/EventStatistics.tsx#L50)
 
 Component to display statistical information about event attendance
 Shows metrics like total attendees, filtering options, and attendance trends

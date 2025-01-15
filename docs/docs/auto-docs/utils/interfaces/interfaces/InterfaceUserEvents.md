@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../README.md) / [utils/interfaces](../README.md) / InterfaceUserEvents
-
 # Interface: InterfaceUserEvents
 
-Defined in: [src/utils/interfaces.ts:656](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L656)
+Defined in: [src/utils/interfaces.ts:656](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L656)
 
 ## Extends
 
@@ -18,7 +16,7 @@ Defined in: [src/utils/interfaces.ts:656](https://github.com/gautam-divyanshu/ta
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:19](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L19)
+Defined in: [src/utils/interfaces.ts:19](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L19)
 
 #### Inherited from
 
@@ -30,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:19](https://github.com/gautam-divyanshu/tal
 
 > **allDay**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:27](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L27)
+Defined in: [src/utils/interfaces.ts:27](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L27)
 
 #### Inherited from
 
@@ -42,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:27](https://github.com/gautam-divyanshu/tal
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:21](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L21)
+Defined in: [src/utils/interfaces.ts:21](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L21)
 
 #### Inherited from
 
@@ -54,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:21](https://github.com/gautam-divyanshu/tal
 
 > **endDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:23](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L23)
+Defined in: [src/utils/interfaces.ts:23](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L23)
 
 #### Inherited from
 
@@ -66,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:23](https://github.com/gautam-divyanshu/tal
 
 > **endTime**: `string`
 
-Defined in: [src/utils/interfaces.ts:26](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L26)
+Defined in: [src/utils/interfaces.ts:26](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L26)
 
 #### Inherited from
 
@@ -78,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:26](https://github.com/gautam-divyanshu/tal
 
 > **location**: `string`
 
-Defined in: [src/utils/interfaces.ts:24](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L24)
+Defined in: [src/utils/interfaces.ts:24](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L24)
 
 #### Inherited from
 
@@ -90,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:24](https://github.com/gautam-divyanshu/tal
 
 > **recurring**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:28](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L28)
+Defined in: [src/utils/interfaces.ts:28](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L28)
 
 #### Inherited from
 
@@ -102,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:28](https://github.com/gautam-divyanshu/tal
 
 > **startDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:22](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L22)
+Defined in: [src/utils/interfaces.ts:22](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L22)
 
 #### Inherited from
 
@@ -114,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:22](https://github.com/gautam-divyanshu/tal
 
 > **startTime**: `string`
 
-Defined in: [src/utils/interfaces.ts:25](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L25)
+Defined in: [src/utils/interfaces.ts:25](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L25)
 
 #### Inherited from
 
@@ -126,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:25](https://github.com/gautam-divyanshu/tal
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:20](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L20)
+Defined in: [src/utils/interfaces.ts:20](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L20)
 
 #### Inherited from
 
@@ -138,7 +136,7 @@ Defined in: [src/utils/interfaces.ts:20](https://github.com/gautam-divyanshu/tal
 
 > **volunteerGroups**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:657](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L657)
+Defined in: [src/utils/interfaces.ts:657](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L657)
 
 #### \_id
 
@@ -166,7 +164,7 @@ Defined in: [src/utils/interfaces.ts:657](https://github.com/gautam-divyanshu/ta
 
 > **volunteers**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:664](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L664)
+Defined in: [src/utils/interfaces.ts:664](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L664)
 
 #### \_id
 

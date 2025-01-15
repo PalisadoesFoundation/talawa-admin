@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/OrgContribution/OrgContribution](../README.md) / default
 
 # Function: default()
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrgContribution/OrgContribution.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrgContribution/OrgContribution.tsx#L16)
+Defined in: [src/screens/OrgContribution/OrgContribution.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrgContribution/OrgContribution.tsx#L16)
 
 The `orgContribution` component displays the contributions to an organization.
 It includes a sidebar for filtering contributions by organization name and transaction ID.

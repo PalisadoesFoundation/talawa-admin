@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/OrgListCard/TruncatedText](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgListCard/TruncatedText.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgListCard/TruncatedText.tsx#L31)
+Defined in: [src/components/OrgListCard/TruncatedText.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/OrgListCard/TruncatedText.tsx#L31)
 
 A React functional component that displays text and truncates it with an ellipsis (`...`)
 if the text exceeds the available width or the `maxWidthOverride` value.

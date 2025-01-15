@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [GraphQl/Queries/ActionItemQueries](../README.md) / ACTION\_ITEM\_LIST
 
 # Variable: ACTION\_ITEM\_LIST
 
 > `const` **ACTION\_ITEM\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:14](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/GraphQl/Queries/ActionItemQueries.ts#L14)
+Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:14](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/GraphQl/Queries/ActionItemQueries.ts#L14)
 
 GraphQL query to retrieve action item categories by organization.
 

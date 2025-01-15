@@ -1,11 +1,9 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../../README.md) / [screens/UserPortal/Volunteer/Groups/Groups.mocks](../README.md) / EMPTY\_MOCKS
 
 # Variable: EMPTY\_MOCKS
 
 > `const` **EMPTY\_MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `orderBy`: `any`; `where`: \{ `eventId`: `undefined`; `group`: `undefined`; `leaderName`: `any`; `name_contains`: `string`; `orgId`: `string`; `status`: `undefined`; `userId`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `getEventVolunteerGroups`: `any`[]; `getVolunteerMembership`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `orderBy`: `undefined`; `where`: \{ `eventId`: `string`; `group`: `string`; `leaderName`: `undefined`; `name_contains`: `undefined`; `orgId`: `undefined`; `status`: `string`; `userId`: `undefined`; \}; \}; \}; `result`: \{ `data`: \{ `getEventVolunteerGroups`: `undefined`; `getVolunteerMembership`: `any`[]; \}; \}; \})[]
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts:368](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts#L368)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts:368](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts#L368)

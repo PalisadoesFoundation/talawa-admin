@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [components/UserPortal/OrganizationSidebar/OrganizationSidebar](../README.md) / default
 
 # Function: default()
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx#L36)
+Defined in: [src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx#L36)
 
 OrganizationSidebar displays the sidebar for an organization, showing a list of members and events.
 

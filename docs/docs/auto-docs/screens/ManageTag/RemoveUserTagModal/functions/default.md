@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/ManageTag/RemoveUserTagModal](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/ManageTag/RemoveUserTagModal.tsx#L18)
+Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/ManageTag/RemoveUserTagModal.tsx#L18)
 
 ## Parameters
 

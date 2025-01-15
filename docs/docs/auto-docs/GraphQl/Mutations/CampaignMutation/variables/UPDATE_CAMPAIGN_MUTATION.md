@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [GraphQl/Mutations/CampaignMutation](../README.md) / UPDATE\_CAMPAIGN\_MUTATION
 
 # Variable: UPDATE\_CAMPAIGN\_MUTATION
 
 > `const` **UPDATE\_CAMPAIGN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:53](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/GraphQl/Mutations/CampaignMutation.ts#L53)
+Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:53](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/GraphQl/Mutations/CampaignMutation.ts#L53)
 
 GraphQL mutation to update a fund Campaign.
 

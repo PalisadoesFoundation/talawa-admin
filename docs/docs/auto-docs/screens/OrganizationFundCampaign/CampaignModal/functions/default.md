@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/OrganizationFundCampaign/CampaignModal](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:44](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L44)
+Defined in: [src/screens/OrganizationFundCampaign/CampaignModal.tsx:44](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationFundCampaign/CampaignModal.tsx#L44)
 
 Modal component for creating or editing a campaign.
 

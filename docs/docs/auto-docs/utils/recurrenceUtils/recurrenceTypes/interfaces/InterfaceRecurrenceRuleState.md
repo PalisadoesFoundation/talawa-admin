@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [utils/recurrenceUtils/recurrenceTypes](../README.md) / InterfaceRecurrenceRuleState
-
 # Interface: InterfaceRecurrenceRuleState
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:6](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L6)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:6](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L6)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:6](https://github.com/
 
 > **count**: `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L12)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L12)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com
 
 > **frequency**: [`Frequency`](../enumerations/Frequency.md)
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L9)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L9)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/
 
 > **interval**: `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:11](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L11)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:11](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L11)
 
 ***
 
@@ -38,7 +36,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:11](https://github.com
 
 > **recurrenceEndDate**: `Date`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L8)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L8)
 
 ***
 
@@ -46,7 +44,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/
 
 > **recurrenceStartDate**: `Date`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:7](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L7)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:7](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L7)
 
 ***
 
@@ -54,7 +52,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:7](https://github.com/
 
 > **weekDayOccurenceInMonth**: `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L13)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L13)
 
 ***
 
@@ -62,4 +60,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com
 
 > **weekDays**: [`WeekDays`](../enumerations/WeekDays.md)[]
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/recurrenceUtils/recurrenceTypes.ts#L10)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/recurrenceUtils/recurrenceTypes.ts#L10)

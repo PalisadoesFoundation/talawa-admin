@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [screens/EventVolunteers/Volunteers/Volunteers.mocks](../README.md) / MOCKS\_EMPTY
 
 # Variable: MOCKS\_EMPTY
 
 > `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L288)
+Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L288)
 
 ## Type declaration
 

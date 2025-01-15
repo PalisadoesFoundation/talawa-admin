@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [components/CheckIn/types](../README.md) / InterfaceAttendeeQueryResponse
-
 # Interface: InterfaceAttendeeQueryResponse
 
-Defined in: [src/components/CheckIn/types.ts:16](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CheckIn/types.ts#L16)
+Defined in: [src/components/CheckIn/types.ts:16](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/CheckIn/types.ts#L16)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/components/CheckIn/types.ts:16](https://github.com/gautam-divya
 
 > **event**: `object`
 
-Defined in: [src/components/CheckIn/types.ts:17](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/CheckIn/types.ts#L17)
+Defined in: [src/components/CheckIn/types.ts:17](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/CheckIn/types.ts#L17)
 
 #### \_id
 

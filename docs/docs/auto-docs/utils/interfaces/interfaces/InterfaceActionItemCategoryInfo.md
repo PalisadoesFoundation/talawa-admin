@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../README.md) / [utils/interfaces](../README.md) / InterfaceActionItemCategoryInfo
-
 # Interface: InterfaceActionItemCategoryInfo
 
-Defined in: [src/utils/interfaces.ts:31](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L31)
+Defined in: [src/utils/interfaces.ts:31](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L31)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:31](https://github.com/gautam-divyanshu/tal
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:32](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L32)
+Defined in: [src/utils/interfaces.ts:32](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L32)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:32](https://github.com/gautam-divyanshu/tal
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:35](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L35)
+Defined in: [src/utils/interfaces.ts:35](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L35)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:35](https://github.com/gautam-divyanshu/tal
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:36](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L36)
+Defined in: [src/utils/interfaces.ts:36](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L36)
 
 #### \_id
 
@@ -50,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:36](https://github.com/gautam-divyanshu/tal
 
 > **isDisabled**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:34](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L34)
+Defined in: [src/utils/interfaces.ts:34](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L34)
 
 ***
 
@@ -58,4 +56,4 @@ Defined in: [src/utils/interfaces.ts:34](https://github.com/gautam-divyanshu/tal
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:33](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L33)
+Defined in: [src/utils/interfaces.ts:33](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L33)

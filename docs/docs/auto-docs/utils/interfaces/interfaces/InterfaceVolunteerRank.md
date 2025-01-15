@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../README.md) / [utils/interfaces](../README.md) / InterfaceVolunteerRank
-
 # Interface: InterfaceVolunteerRank
 
-Defined in: [src/utils/interfaces.ts:691](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L691)
+Defined in: [src/utils/interfaces.ts:691](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L691)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:691](https://github.com/gautam-divyanshu/ta
 
 > **hoursVolunteered**: `number`
 
-Defined in: [src/utils/interfaces.ts:693](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L693)
+Defined in: [src/utils/interfaces.ts:693](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L693)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:693](https://github.com/gautam-divyanshu/ta
 
 > **rank**: `number`
 
-Defined in: [src/utils/interfaces.ts:692](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L692)
+Defined in: [src/utils/interfaces.ts:692](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L692)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:692](https://github.com/gautam-divyanshu/ta
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:694](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/interfaces.ts#L694)
+Defined in: [src/utils/interfaces.ts:694](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/interfaces.ts#L694)
 
 #### \_id
 

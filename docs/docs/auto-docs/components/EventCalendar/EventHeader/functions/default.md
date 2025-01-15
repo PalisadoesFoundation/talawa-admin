@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/EventCalendar/EventHeader](../README.md) / default
 
 # Function: default()
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/EventCalendar/EventHeader.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventCalendar/EventHeader.tsx#L27)
+Defined in: [src/components/EventCalendar/EventHeader.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventCalendar/EventHeader.tsx#L27)
 
 EventHeader component displays the header for the event calendar.
 It includes a search field, view type dropdown, event type dropdown, and a button to create an event.

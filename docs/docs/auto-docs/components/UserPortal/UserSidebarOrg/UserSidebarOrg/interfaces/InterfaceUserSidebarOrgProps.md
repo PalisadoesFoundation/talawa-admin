@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../../README.md) / [components/UserPortal/UserSidebarOrg/UserSidebarOrg](../README.md) / InterfaceUserSidebarOrgProps
-
 # Interface: InterfaceUserSidebarOrgProps
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L17)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L17)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:17](htt
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L20)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L20)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:20](htt
 
 > **orgId**: `string`
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L18)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L18)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:18](htt
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L21)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L21)
 
 ***
 
@@ -38,4 +36,4 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:21](htt
 
 > **targets**: [`TargetsType`](../../../../../state/reducers/routesReducer/type-aliases/TargetsType.md)[]
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L19)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L19)

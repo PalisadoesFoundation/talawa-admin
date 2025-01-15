@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [GraphQl/Mutations/OrganizationMutations](../README.md) / UPDATE\_USER\_ROLE\_IN\_ORG\_MUTATION
 
 # Variable: UPDATE\_USER\_ROLE\_IN\_ORG\_MUTATION
 
 > `const` **UPDATE\_USER\_ROLE\_IN\_ORG\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:12](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/GraphQl/Mutations/OrganizationMutations.ts#L12)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:12](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/GraphQl/Mutations/OrganizationMutations.ts#L12)
 
 GraphQL mutation to update the role of a user in an organization.
 

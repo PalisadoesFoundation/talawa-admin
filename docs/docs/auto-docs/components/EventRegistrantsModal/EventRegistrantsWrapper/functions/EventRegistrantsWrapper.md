@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/EventRegistrantsModal/EventRegistrantsWrapper](../README.md) / EventRegistrantsWrapper
 
 # Function: EventRegistrantsWrapper()
 
 > **EventRegistrantsWrapper**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx#L20)
+Defined in: [src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx#L20)
 
 Wrapper component that displays a button to show the event registrants modal.
 

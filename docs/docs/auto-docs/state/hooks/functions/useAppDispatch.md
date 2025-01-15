@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../README.md) / [state/hooks](../README.md) / useAppDispatch
 
 # Function: useAppDispatch()
 
 > **useAppDispatch**\<`AppDispatch`\>(): `AppDispatch`
 
-Defined in: [src/state/hooks.ts:5](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/state/hooks.ts#L5)
+Defined in: [src/state/hooks.ts:5](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/state/hooks.ts#L5)
 
 Returns the dispatch function from the Redux store.
 

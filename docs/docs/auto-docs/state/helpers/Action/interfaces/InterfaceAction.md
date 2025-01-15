@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [state/helpers/Action](../README.md) / InterfaceAction
-
 # Interface: InterfaceAction
 
-Defined in: [src/state/helpers/Action.ts:1](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/state/helpers/Action.ts#L1)
+Defined in: [src/state/helpers/Action.ts:1](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/state/helpers/Action.ts#L1)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/state/helpers/Action.ts:1](https://github.com/gautam-divyanshu/
 
 > **payload**: `any`
 
-Defined in: [src/state/helpers/Action.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/state/helpers/Action.ts#L3)
+Defined in: [src/state/helpers/Action.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/state/helpers/Action.ts#L3)
 
 ***
 
@@ -22,4 +20,4 @@ Defined in: [src/state/helpers/Action.ts:3](https://github.com/gautam-divyanshu/
 
 > **type**: `string`
 
-Defined in: [src/state/helpers/Action.ts:2](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/state/helpers/Action.ts#L2)
+Defined in: [src/state/helpers/Action.ts:2](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/state/helpers/Action.ts#L2)

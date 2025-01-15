@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [GraphQl/Mutations/ActionItemMutations](../README.md) / CREATE\_ACTION\_ITEM\_MUTATION
 
 # Variable: CREATE\_ACTION\_ITEM\_MUTATION
 
 > `const` **CREATE\_ACTION\_ITEM\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:14](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/GraphQl/Mutations/ActionItemMutations.ts#L14)
+Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:14](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/GraphQl/Mutations/ActionItemMutations.ts#L14)
 
 GraphQL mutation to create an action item.
 

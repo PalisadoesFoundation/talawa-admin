@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/EventRegistrantsModal/EventRegistrantsModal](../README.md) / EventRegistrantsModal
 
 # Function: EventRegistrantsModal()
 
 > **EventRegistrantsModal**(`props`): `Element`
 
-Defined in: [src/components/EventRegistrantsModal/EventRegistrantsModal.tsx:44](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventRegistrantsModal/EventRegistrantsModal.tsx#L44)
+Defined in: [src/components/EventRegistrantsModal/EventRegistrantsModal.tsx:44](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventRegistrantsModal/EventRegistrantsModal.tsx#L44)
 
 Modal component for managing event registrants.
 Allows adding and removing attendees from an event.

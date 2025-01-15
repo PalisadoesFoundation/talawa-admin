@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [components/LeftDrawerOrg/LeftDrawerOrg](../README.md) / InterfaceLeftDrawerProps
-
 # Interface: InterfaceLeftDrawerProps
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L18)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L18)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:18](https://github.c
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L21)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L21)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:21](https://github.c
 
 > **orgId**: `string`
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L19)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L19)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:19](https://github.c
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:22](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L22)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:22](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L22)
 
 ***
 
@@ -38,4 +36,4 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:22](https://github.c
 
 > **targets**: [`TargetsType`](../../../../state/reducers/routesReducer/type-aliases/TargetsType.md)[]
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L20)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L20)

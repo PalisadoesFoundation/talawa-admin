@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [components/TableLoader/TableLoader](../README.md) / InterfaceTableLoader
-
 # Interface: InterfaceTableLoader
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/TableLoader/TableLoader.tsx#L5)
+Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/TableLoader/TableLoader.tsx#L5)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/ga
 
 > `optional` **headerTitles**: `string`[]
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/TableLoader/TableLoader.tsx#L7)
+Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/TableLoader/TableLoader.tsx#L7)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/ga
 
 > `optional` **noOfCols**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/TableLoader/TableLoader.tsx#L8)
+Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/TableLoader/TableLoader.tsx#L8)
 
 ***
 
@@ -30,4 +28,4 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/ga
 
 > **noOfRows**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:6](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/TableLoader/TableLoader.tsx#L6)
+Defined in: [src/components/TableLoader/TableLoader.tsx:6](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/TableLoader/TableLoader.tsx#L6)

@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../../README.md) / [screens/UserPortal/Donate/Donate](../README.md) / InterfaceDonationCardProps
-
 # Interface: InterfaceDonationCardProps
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Donate/Donate.tsx#L23)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Donate/Donate.tsx#L23)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:23](https://github.com/gau
 
 > **amount**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Donate/Donate.tsx#L26)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Donate/Donate.tsx#L26)
 
 ***
 
@@ -22,7 +20,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/gau
 
 > **id**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Donate/Donate.tsx#L24)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Donate/Donate.tsx#L24)
 
 ***
 
@@ -30,7 +28,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/gau
 
 > **name**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Donate/Donate.tsx#L25)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Donate/Donate.tsx#L25)
 
 ***
 
@@ -38,7 +36,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/gau
 
 > **payPalId**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Donate/Donate.tsx#L28)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Donate/Donate.tsx#L28)
 
 ***
 
@@ -46,7 +44,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/gau
 
 > **updatedAt**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Donate/Donate.tsx#L29)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Donate/Donate.tsx#L29)
 
 ***
 
@@ -54,4 +52,4 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/gau
 
 > **userId**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/UserPortal/Donate/Donate.tsx#L27)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/UserPortal/Donate/Donate.tsx#L27)

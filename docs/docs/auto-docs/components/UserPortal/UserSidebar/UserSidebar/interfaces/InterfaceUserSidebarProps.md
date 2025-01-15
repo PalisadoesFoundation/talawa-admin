@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../../README.md) / [components/UserPortal/UserSidebar/UserSidebar](../README.md) / InterfaceUserSidebarProps
-
 # Interface: InterfaceUserSidebarProps
 
-Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L10)
+Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L10)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:10](https://g
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L11)
+Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L11)
 
 ***
 
@@ -22,4 +20,4 @@ Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:11](https://g
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L12)
+Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L12)

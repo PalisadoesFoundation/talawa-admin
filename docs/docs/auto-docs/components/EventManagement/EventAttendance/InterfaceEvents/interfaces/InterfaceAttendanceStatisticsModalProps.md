@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../../README.md) / [components/EventManagement/EventAttendance/InterfaceEvents](../README.md) / InterfaceAttendanceStatisticsModalProps
-
 # Interface: InterfaceAttendanceStatisticsModalProps
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L1)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L1)
 
 ## Properties
 
@@ -14,7 +12,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **handleClose**: () => `void`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L3)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L3)
 
 #### Returns
 
@@ -26,7 +24,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3
 
 > **memberData**: [`InterfaceMember`](InterfaceMember.md)[]
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:9](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L9)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:9](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L9)
 
 ***
 
@@ -34,7 +32,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:9
 
 > **show**: `boolean`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L2)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L2)
 
 ***
 
@@ -42,7 +40,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2
 
 > **statistics**: `object`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L4)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L4)
 
 #### attendanceRate
 
@@ -62,7 +60,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:10](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L10)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:10](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L10)
 
 #### Parameters
 

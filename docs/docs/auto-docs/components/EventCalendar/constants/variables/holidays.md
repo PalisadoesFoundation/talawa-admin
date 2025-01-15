@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/EventCalendar/constants](../README.md) / holidays
 
 # Variable: holidays
 
 > `const` **holidays**: `object`[]
 
-Defined in: [src/components/EventCalendar/constants.js:1](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/EventCalendar/constants.js#L1)
+Defined in: [src/components/EventCalendar/constants.js:1](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/EventCalendar/constants.js#L1)
 
 ## Type declaration
 

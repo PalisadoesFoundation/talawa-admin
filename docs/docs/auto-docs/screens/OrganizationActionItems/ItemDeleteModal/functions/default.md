@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/OrganizationActionItems/ItemDeleteModal](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:26](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L26)
+Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:26](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L26)
 
 A modal component for confirming the deletion of an action item.
 

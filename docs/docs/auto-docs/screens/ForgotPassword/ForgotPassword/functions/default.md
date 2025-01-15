@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/ForgotPassword/ForgotPassword](../README.md) / default
 
 # Function: default()
 
 > **default**(): `Element`
 
-Defined in: [src/screens/ForgotPassword/ForgotPassword.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/ForgotPassword/ForgotPassword.tsx#L36)
+Defined in: [src/screens/ForgotPassword/ForgotPassword.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/ForgotPassword/ForgotPassword.tsx#L36)
 
 `ForgotPassword` component allows users to reset their password.
 

@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks](../README.md) / MOCKS\_EMPTY
 
 # Variable: MOCKS\_EMPTY
 
 > `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts:236](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts#L236)
+Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts:236](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts#L236)
 
 ## Type declaration
 

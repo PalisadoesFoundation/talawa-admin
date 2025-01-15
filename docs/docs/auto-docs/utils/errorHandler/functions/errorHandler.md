@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../README.md) / [utils/errorHandler](../README.md) / errorHandler
 
 # Function: errorHandler()
 
 > **errorHandler**(`a`, `error`): `void`
 
-Defined in: [src/utils/errorHandler.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/utils/errorHandler.tsx#L10)
+Defined in: [src/utils/errorHandler.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/utils/errorHandler.tsx#L10)
 
 This function is used to handle api errors in the application.
 It takes in the error object and displays the error message to the user.

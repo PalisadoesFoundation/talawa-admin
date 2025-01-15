@@ -19,6 +19,7 @@
     "**/*.spec.tsx",
     "**/*.test.tsx",
     "**/__tests__/**",
-    "**/__mocks__/**"
+    "**/__mocks__/**",
+    "**/README.md"
   ]
 }

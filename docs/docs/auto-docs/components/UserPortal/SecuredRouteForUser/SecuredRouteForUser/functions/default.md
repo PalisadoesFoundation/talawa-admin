@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../README.md) / [components/UserPortal/SecuredRouteForUser/SecuredRouteForUser](../README.md) / default
 
 # Function: default()
 
 > **default**(): `Element`
 
-Defined in: [src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L14)
+Defined in: [src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L14)
 
 A component that guards routes by checking if the user is logged in.
 If the user is logged in and does not have 'AdminFor' set, the child routes are rendered.

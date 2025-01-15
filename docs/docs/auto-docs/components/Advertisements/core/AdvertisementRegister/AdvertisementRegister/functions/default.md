@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../../../README.md) / [components/Advertisements/core/AdvertisementRegister/AdvertisementRegister](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:60](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L60)
+Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:60](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L60)
 
 Component for registering or editing an advertisement.
 

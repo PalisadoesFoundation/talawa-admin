@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [screens/OrganizationTags/OrganizationTagsMocks](../README.md) / MOCKS\_ERROR
 
 # Variable: MOCKS\_ERROR
 
 > `const` **MOCKS\_ERROR**: `object`[]
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:413](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L413)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:413](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L413)
 
 ## Type declaration
 

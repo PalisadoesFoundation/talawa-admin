@@ -1,14 +1,12 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
-
-[talawa-admin](../../../../README.md) / [components/OrgPeopleListCard/OrgPeopleListCard](../README.md) / default
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/OrgPeopleListCard/OrgPeopleListCard.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/components/OrgPeopleListCard/OrgPeopleListCard.tsx#L30)
+Defined in: [src/components/OrgPeopleListCard/OrgPeopleListCard.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/components/OrgPeopleListCard/OrgPeopleListCard.tsx#L30)
 
 Component for displaying a modal to remove a member from an organization
 

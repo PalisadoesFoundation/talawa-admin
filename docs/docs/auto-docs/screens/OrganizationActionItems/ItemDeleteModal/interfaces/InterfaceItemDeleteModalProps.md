@@ -1,12 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
-[talawa-admin](../../../../README.md) / [screens/OrganizationActionItems/ItemDeleteModal](../README.md) / InterfaceItemDeleteModalProps
-
 # Interface: InterfaceItemDeleteModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L13)
+Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L13)
 
 Props for the `ItemDeleteModal` component.
 
@@ -16,7 +14,7 @@ Props for the `ItemDeleteModal` component.
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L16)
+Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L16)
 
 ***
 
@@ -24,7 +22,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:16](https:/
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L17)
+Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L17)
 
 #### Returns
 
@@ -36,7 +34,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:17](https:/
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L15)
+Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L15)
 
 #### Returns
 
@@ -48,4 +46,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:15](https:/
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/cfee07d9592eee1569f258baf49181c393e48f1b/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L14)
+Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/d5fea688542032271211cd43ee86c7db0866bcc0/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L14)
