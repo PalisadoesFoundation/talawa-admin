@@ -1,0 +1,31 @@
+[**talawa-admin**](../../../../../README.md)
+
+***
+
+[talawa-admin](../../../../../README.md) / [components/UserPortal/EventCard/EventCard](../README.md) / default
+
+# Function: default()
+
+> **default**(`props`): `JSX.Element`
+
+Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:63](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/UserPortal/EventCard/EventCard.tsx#L63)
+
+Displays information about an event and provides an option to register for it.
+
+Shows the event's title, description, location, start and end dates and times,
+creator's name, and registration status. Includes a button to register for the event
+if the user is not already registered.
+
+## Parameters
+
+### props
+
+`InterfaceEventCardProps`
+
+The properties for the event card.
+
+## Returns
+
+`JSX.Element`
+
+The event card component.

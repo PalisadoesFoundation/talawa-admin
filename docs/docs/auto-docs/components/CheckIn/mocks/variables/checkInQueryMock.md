@@ -1,0 +1,37 @@
+[**talawa-admin**](../../../../README.md)
+
+***
+
+[talawa-admin](../../../../README.md) / [components/CheckIn/mocks](../README.md) / checkInQueryMock
+
+# Variable: checkInQueryMock
+
+> `const` **checkInQueryMock**: `object`[]
+
+Defined in: [src/components/CheckIn/mocks.ts:34](https://github.com/gautam-divyanshu/talawa-admin/blob/2490b2ea9583ec972ca984b1d93932def1c9f92b/src/components/CheckIn/mocks.ts#L34)
+
+## Type declaration
+
+### request
+
+> **request**: `object`
+
+#### request.query
+
+> **query**: `DocumentNode` = `EVENT_CHECKINS`
+
+#### request.variables
+
+> **variables**: `object`
+
+#### request.variables.id
+
+> **id**: `string` = `'event123'`
+
+### result
+
+> **result**: `object`
+
+#### result.data
+
+> **data**: [`InterfaceAttendeeQueryResponse`](../../types/interfaces/InterfaceAttendeeQueryResponse.md) = `checkInQueryData`
