@@ -8,7 +8,7 @@
 
 > **default**(`state`, `action`): `object`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:16](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/state/reducers/userRoutesReducer.ts#L16)
+Defined in: [src/state/reducers/userRoutesReducer.ts:16](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/state/reducers/userRoutesReducer.ts#L16)
 
 ## Parameters
 

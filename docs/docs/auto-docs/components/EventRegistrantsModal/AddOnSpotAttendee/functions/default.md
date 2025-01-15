@@ -8,7 +8,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventRegistrantsModal/AddOnSpotAttendee.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/EventRegistrantsModal/AddOnSpotAttendee.tsx#L21)
+Defined in: [src/components/EventRegistrantsModal/AddOnSpotAttendee.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/EventRegistrantsModal/AddOnSpotAttendee.tsx#L21)
 
 Modal component for adding on-spot attendees to an event
 

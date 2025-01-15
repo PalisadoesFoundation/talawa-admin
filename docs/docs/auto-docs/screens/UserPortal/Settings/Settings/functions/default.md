@@ -8,7 +8,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/UserPortal/Settings/Settings.tsx:33](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/UserPortal/Settings/Settings.tsx#L33)
+Defined in: [src/screens/UserPortal/Settings/Settings.tsx:33](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/screens/UserPortal/Settings/Settings.tsx#L33)
 
 The Settings component allows users to view and update their profile settings.
 It includes functionality to handle image uploads, reset changes, and save updated user details.

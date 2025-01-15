@@ -8,7 +8,7 @@
 
 > `const` **UPDATE\_VENUE\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/VenueMutations.ts:45](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/GraphQl/Mutations/VenueMutations.ts#L45)
+Defined in: [src/GraphQl/Mutations/VenueMutations.ts:45](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/GraphQl/Mutations/VenueMutations.ts#L45)
 
 GraphQL mutation to update a venue.
 

@@ -8,7 +8,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx:61](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx#L61)
+Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx:61](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx#L61)
 
 Represents the component for managing organization action item categories.
 This component allows creating, updating, enabling, and disabling action item categories.

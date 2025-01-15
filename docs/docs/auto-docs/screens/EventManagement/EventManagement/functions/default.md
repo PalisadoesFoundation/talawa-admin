@@ -8,7 +8,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/EventManagement/EventManagement.tsx:91](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventManagement/EventManagement.tsx#L91)
+Defined in: [src/screens/EventManagement/EventManagement.tsx:91](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/screens/EventManagement/EventManagement.tsx#L91)
 
 `EventManagement` component handles the display and navigation of different event management sections.
 

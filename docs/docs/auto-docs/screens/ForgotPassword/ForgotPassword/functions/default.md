@@ -8,7 +8,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/ForgotPassword/ForgotPassword.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/ForgotPassword/ForgotPassword.tsx#L36)
+Defined in: [src/screens/ForgotPassword/ForgotPassword.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/screens/ForgotPassword/ForgotPassword.tsx#L36)
 
 `ForgotPassword` component allows users to reset their password.
 

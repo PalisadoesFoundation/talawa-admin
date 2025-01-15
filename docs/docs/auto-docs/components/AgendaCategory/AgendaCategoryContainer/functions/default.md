@@ -8,7 +8,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AgendaCategory/AgendaCategoryContainer.tsx:34](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/AgendaCategory/AgendaCategoryContainer.tsx#L34)
+Defined in: [src/components/AgendaCategory/AgendaCategoryContainer.tsx:34](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/AgendaCategory/AgendaCategoryContainer.tsx#L34)
 
 Component for displaying and managing agenda item categories.
 

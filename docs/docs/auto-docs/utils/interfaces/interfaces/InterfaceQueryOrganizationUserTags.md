@@ -6,7 +6,7 @@
 
 # Interface: InterfaceQueryOrganizationUserTags
 
-Defined in: [src/utils/interfaces.ts:269](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/interfaces.ts#L269)
+Defined in: [src/utils/interfaces.ts:269](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/utils/interfaces.ts#L269)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/utils/interfaces.ts:269](https://github.com/gautam-divyanshu/ta
 
 > **userTags**: `InterfaceTagNodeData`
 
-Defined in: [src/utils/interfaces.ts:270](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/interfaces.ts#L270)
+Defined in: [src/utils/interfaces.ts:270](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/utils/interfaces.ts#L270)

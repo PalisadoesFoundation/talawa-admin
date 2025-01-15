@@ -8,4 +8,4 @@
 
 > `const` **ERROR\_MOCKS**: (\{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `undefined`; `orderBy`: `any`; `status`: `undefined`; `where`: \{ `eventId`: `string`; `status`: `string`; `userName`: `any`; \}; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; `orderBy`: `undefined`; `status`: `string`; `where`: `undefined`; \}; \}; \})[]
 
-Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:167](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L167)
+Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:167](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L167)

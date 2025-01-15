@@ -8,7 +8,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx:46](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx#L46)
+Defined in: [src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx:46](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx#L46)
 
 A React component that represents an add-on entry, displaying its details and allowing installation or uninstallation.
 

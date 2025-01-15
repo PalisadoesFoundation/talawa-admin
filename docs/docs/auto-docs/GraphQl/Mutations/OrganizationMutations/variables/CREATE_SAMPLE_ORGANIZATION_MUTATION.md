@@ -8,7 +8,7 @@
 
 > `const` **CREATE\_SAMPLE\_ORGANIZATION\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:34](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/GraphQl/Mutations/OrganizationMutations.ts#L34)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:34](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/GraphQl/Mutations/OrganizationMutations.ts#L34)
 
 GraphQL mutation to create a sample organization.
 

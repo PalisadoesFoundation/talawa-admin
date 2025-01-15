@@ -8,7 +8,7 @@
 
 > `const` **REGISTRANTS\_MOCKS\_ERROR**: `object`[]
 
-Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:58](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L58)
+Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:58](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L58)
 
 ## Type declaration
 

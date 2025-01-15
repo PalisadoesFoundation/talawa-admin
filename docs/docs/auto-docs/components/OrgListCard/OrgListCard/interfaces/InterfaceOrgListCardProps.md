@@ -6,7 +6,7 @@
 
 # Interface: InterfaceOrgListCardProps
 
-Defined in: [src/components/OrgListCard/OrgListCard.tsx:24](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/OrgListCard/OrgListCard.tsx#L24)
+Defined in: [src/components/OrgListCard/OrgListCard.tsx:24](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/OrgListCard/OrgListCard.tsx#L24)
 
 Props for the OrgListCard component
 
@@ -16,4 +16,4 @@ Props for the OrgListCard component
 
 > **data**: [`InterfaceOrgConnectionInfoType`](../../../../utils/interfaces/interfaces/InterfaceOrgConnectionInfoType.md)
 
-Defined in: [src/components/OrgListCard/OrgListCard.tsx:25](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/OrgListCard/OrgListCard.tsx#L25)
+Defined in: [src/components/OrgListCard/OrgListCard.tsx:25](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/OrgListCard/OrgListCard.tsx#L25)

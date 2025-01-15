@@ -8,7 +8,7 @@
 
 > **default**(): `UseSessionReturnType`
 
-Defined in: [src/utils/useSession.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/utils/useSession.tsx#L30)
+Defined in: [src/utils/useSession.tsx:30](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/utils/useSession.tsx#L30)
 
 Custom hook for managing user session timeouts in a React application.
 

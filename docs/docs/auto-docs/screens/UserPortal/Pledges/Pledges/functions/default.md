@@ -8,7 +8,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/Pledges/Pledges.tsx:70](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/UserPortal/Pledges/Pledges.tsx#L70)
+Defined in: [src/screens/UserPortal/Pledges/Pledges.tsx:70](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/screens/UserPortal/Pledges/Pledges.tsx#L70)
 
 The `Pledges` component is responsible for rendering a user's pledges within a campaign.
 It fetches pledges data using Apollo Client's `useQuery` hook and displays the data

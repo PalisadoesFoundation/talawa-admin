@@ -8,7 +8,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:71](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L71)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:71](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L71)
 
 A modal dialog for creating or editing a volunteer group.
 

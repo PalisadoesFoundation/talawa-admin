@@ -6,7 +6,7 @@
 
 # Interface: InterfaceTableLoader
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TableLoader/TableLoader.tsx#L5)
+Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/TableLoader/TableLoader.tsx#L5)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/ga
 
 > `optional` **headerTitles**: `string`[]
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TableLoader/TableLoader.tsx#L7)
+Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/TableLoader/TableLoader.tsx#L7)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/ga
 
 > `optional` **noOfCols**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TableLoader/TableLoader.tsx#L8)
+Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/TableLoader/TableLoader.tsx#L8)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/ga
 
 > **noOfRows**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:6](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/TableLoader/TableLoader.tsx#L6)
+Defined in: [src/components/TableLoader/TableLoader.tsx:6](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/TableLoader/TableLoader.tsx#L6)

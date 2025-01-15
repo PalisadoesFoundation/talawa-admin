@@ -8,7 +8,7 @@
 
 > **updatePluginLinks**(`plugins`): (`dispatch`) => `void`
 
-Defined in: [src/state/action-creators/index.ts:28](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/state/action-creators/index.ts#L28)
+Defined in: [src/state/action-creators/index.ts:28](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/state/action-creators/index.ts#L28)
 
 ## Parameters
 

@@ -8,7 +8,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/AgendaItems/AgendaItemsUpdateModal.tsx:49](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/AgendaItems/AgendaItemsUpdateModal.tsx#L49)
+Defined in: [src/components/AgendaItems/AgendaItemsUpdateModal.tsx:49](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/AgendaItems/AgendaItemsUpdateModal.tsx#L49)
 
 Modal component for updating details of an agenda item.
 Provides a form to update the agenda item's title, description, duration, categories, URLs, and attachments.

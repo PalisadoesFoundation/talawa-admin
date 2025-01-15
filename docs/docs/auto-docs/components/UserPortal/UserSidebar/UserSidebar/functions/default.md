@@ -8,7 +8,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L28)
+Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L28)
 
 Sidebar component for user navigation, including links to organizations and settings.
 

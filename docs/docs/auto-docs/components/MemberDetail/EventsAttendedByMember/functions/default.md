@@ -8,7 +8,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/MemberDetail/EventsAttendedByMember.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/MemberDetail/EventsAttendedByMember.tsx#L15)
+Defined in: [src/components/MemberDetail/EventsAttendedByMember.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/MemberDetail/EventsAttendedByMember.tsx#L15)
 
 ## Parameters
 

@@ -8,7 +8,7 @@
 
 > `const` **AGENDA\_ITEM\_CATEGORY\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/AgendaCategoryQueries.ts:10](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/GraphQl/Queries/AgendaCategoryQueries.ts#L10)
+Defined in: [src/GraphQl/Queries/AgendaCategoryQueries.ts:10](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/GraphQl/Queries/AgendaCategoryQueries.ts#L10)
 
 GraphQL query to retrieve agenda category by id.
 

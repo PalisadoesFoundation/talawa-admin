@@ -8,4 +8,4 @@
 
 > `const` **RECAPTCHA\_SITE\_KEY**: `string` = `process.env.REACT_APP_RECAPTCHA_SITE_KEY`
 
-Defined in: [src/Constant/constant.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/Constant/constant.ts#L3)
+Defined in: [src/Constant/constant.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/Constant/constant.ts#L3)

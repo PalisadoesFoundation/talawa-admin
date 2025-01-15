@@ -8,7 +8,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:51](https://github.com/gautam-divyanshu/talawa-admin/blob/619e831a8e34de2906df3277eb6df8b5309fb2fc/src/components/UserPortal/CommentCard/CommentCard.tsx#L51)
+Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:51](https://github.com/gautam-divyanshu/talawa-admin/blob/9fec1eef6a4674b14f6abe30e3be3844537d8dc2/src/components/UserPortal/CommentCard/CommentCard.tsx#L51)
 
 Displays a card for a single comment with options to like or dislike the comment.
 
