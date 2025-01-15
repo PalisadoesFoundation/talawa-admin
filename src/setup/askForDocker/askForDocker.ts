@@ -47,6 +47,9 @@ export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
       while (!isConnected && retryCount < MAX_RETRIES) {
         try {
           endpoint = await askForTalawaApiUrl();
+          if (endpoint.endsWith('/')) {
+            endpoint = endpoint.slice(0, -1);
+          }
           const url = new URL(endpoint);
           if (!['http:', 'https:'].includes(url.protocol)) {
             throw new Error('Invalid URL protocol. Must be http or https');
