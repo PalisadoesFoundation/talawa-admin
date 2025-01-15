@@ -135,7 +135,6 @@ export default function events(): JSX.Element {
       setCreateEventmodalisOpen(false);
     } catch (error: unknown) {
       console.error('create event error', error);
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
