@@ -90,8 +90,7 @@
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx setup.ts",
-    "check-localstorage": "node scripts/githooks/check-localstorage-usage.js",
-    "generate-docs": "typedoc --out ./docs/docs/auto-docs --plugin typedoc-plugin-markdown --excludePrivate --excludeProtected --excludeExternals --categorizeByGroup true --entryPointStrategy expand --entryPoints \"src\" --exclude \"src/vite-env.d.ts\" --exclude \"**/*.spec.{ts,tsx}\" --exclude \"**/*.test.{ts,tsx}\" --exclude \"**/__tests__/**\" --exclude \"**/__mocks__/**\" --skipErrorChecking --logLevel Warn"
+    "check-localstorage": "node scripts/githooks/check-localstorage-usage.js"
   },
   "eslintConfig": {
     "extends": [
