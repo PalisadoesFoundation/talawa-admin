@@ -202,7 +202,6 @@ export default function organizations(): JSX.Element {
   /**
    * Updates the list of organizations based on query results and selected mode.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (data) {
       const organizations = data.organizationsConnection.map(
@@ -231,7 +230,6 @@ export default function organizations(): JSX.Element {
   /**
    * Updates the list of organizations based on the selected mode and query results.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (mode === 0) {
       if (data) {
