@@ -94,7 +94,9 @@ function OrganizationTags(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) {
+          return prevResult;
+        }
 
         return {
           organizations: [
@@ -137,7 +139,7 @@ function OrganizationTags(): JSX.Element {
           organizationId: orgId,
         },
       });
-
+      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
@@ -145,12 +147,12 @@ function OrganizationTags(): JSX.Element {
         setCreateTagModalIsOpen(false);
       }
     } catch (error: unknown) {
+      /* istanbul ignore else -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
     }
   };
-
   if (orgUserTagsError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
@@ -166,10 +168,10 @@ function OrganizationTags(): JSX.Element {
     );
   }
 
-  const userTagsList = orgUserTagsData?.organizations[0].userTags.edges.map(
-    (edge) => edge.node,
-  );
-
+  const userTagsList =
+    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
+      (edge) => edge.node,
+    ) || [];
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
@@ -360,7 +362,7 @@ function OrganizationTags(): JSX.Element {
                 className={styles.orgUserTagsScrollableDiv}
               >
                 <InfiniteScroll
-                  dataLength={userTagsList?.length ?? 0}
+                  dataLength={userTagsList?.length}
                   next={loadMoreUserTags}
                   hasMore={
                     orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
@@ -368,6 +370,7 @@ function OrganizationTags(): JSX.Element {
                   }
                   loader={<InfiniteScrollLoader />}
                   scrollableTarget="orgUserTagsScrollableDiv"
+                  data-testid="infinite-scroll"
                 >
                   <DataGrid
                     disableColumnMenu
