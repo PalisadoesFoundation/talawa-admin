@@ -144,7 +144,6 @@ export default function events(): JSX.Element {
    *
    * @returns Void.
    */
-  /* istanbul ignore next */
   const toggleCreateEventModal = (): void =>
     setCreateEventmodalisOpen(!createEventModal);
 
