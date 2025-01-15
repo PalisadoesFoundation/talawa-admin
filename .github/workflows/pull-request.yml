@@ -51,30 +51,9 @@ jobs:
 
       # Run the CSS import check script on changed .ts and .tsx files
       - name: Check for CSS violations and print correct imports
-        if: steps.changed-ts-files.outputs.any_changed == 'true'
+        if: ${{ steps.changed-ts-files.outputs.any_changed == 'true' }}
         run: |
-          if [ -z "${{ steps.changed-ts-files.outputs.modified_files }}" ]; then
-            echo "No TypeScript files were modified"
-            exit 0
-          fi
-
-          echo "${{ steps.changed-ts-files.outputs.modified_files }}" | tr ' ' '\n' | while read -r file; do
-            if [ ! -f "$file" ]; then
-              echo "Error: File not found: $file"
-              exit 1
-            fi
-          done
-
-          if [ ! -f ./.github/workflows/scripts/css_check.py ]; then
-            echo "Error: CSS check script not found"
-            exit 1
-          fi
-          chmod +x ./.github/workflows/scripts/css_check.py
-          ./.github/workflows/scripts/css_check.py --directory "$(dirname "$file")" --allowed_css_patterns app.module.css || {
-            echo "Error: CSS check failed"
-            exit 1
-          }
-
+            echo "${{ steps.changed-ts-files.outputs.modified_files }}" | tr ' ' '\n' | xargs -I {} python3 ./.github/workflows/scripts/css_check.py --directory "$(dirname "{}")" --allowed_css_patterns app.module.css
 
       - name: Get changed TypeScript files
         id: changed-files
