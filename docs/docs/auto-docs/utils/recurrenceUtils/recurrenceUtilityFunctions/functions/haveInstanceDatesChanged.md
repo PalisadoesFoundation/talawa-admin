@@ -1,0 +1,33 @@
+[**talawa-admin**](../../../../README.md)
+
+***
+
+[talawa-admin](../../../../modules.md) / [utils/recurrenceUtils/recurrenceUtilityFunctions](../README.md) / haveInstanceDatesChanged
+
+# Function: haveInstanceDatesChanged()
+
+> **haveInstanceDatesChanged**(`instanceOriginalStartDate`, `instanceOriginalEndDate`, `instanceNewStartDate`, `instanceNewEndDate`): `boolean`
+
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:154](https://github.com/bint-Eve/talawa-admin/blob/16ddeb98e6868a55bca282e700a8f4212d222c01/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L154)
+
+## Parameters
+
+### instanceOriginalStartDate
+
+`string`
+
+### instanceOriginalEndDate
+
+`string`
+
+### instanceNewStartDate
+
+`string`
+
+### instanceNewEndDate
+
+`string`
+
+## Returns
+
+`boolean`

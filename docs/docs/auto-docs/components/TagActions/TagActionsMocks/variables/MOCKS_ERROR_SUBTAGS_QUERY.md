@@ -1,0 +1,11 @@
+[**talawa-admin**](../../../../README.md)
+
+***
+
+[talawa-admin](../../../../modules.md) / [components/TagActions/TagActionsMocks](../README.md) / MOCKS\_ERROR\_SUBTAGS\_QUERY
+
+# Variable: MOCKS\_ERROR\_SUBTAGS\_QUERY
+
+> `const` **MOCKS\_ERROR\_SUBTAGS\_QUERY**: (\{ `error`: `undefined`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `id`: `string`; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `id`: `string`; `where`: `undefined`; \}; \}; `result`: `undefined`; \})[]
+
+Defined in: [src/components/TagActions/TagActionsMocks.ts:636](https://github.com/bint-Eve/talawa-admin/blob/16ddeb98e6868a55bca282e700a8f4212d222c01/src/components/TagActions/TagActionsMocks.ts#L636)
