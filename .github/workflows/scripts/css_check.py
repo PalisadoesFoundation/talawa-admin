@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
 """Check TypeScript files for CSS violations and embedded CSS."""
 import argparse
 import os
@@ -6,10 +8,13 @@ import sys
 from collections import namedtuple
 
 # Define namedtuples for storing results
-Violation = namedtuple('Violation', ['file_path', 'css_file', 'reason'])
-CorrectImport = namedtuple('CorrectImport', ['file_path', 'css_file'])
-EmbeddedViolation = namedtuple('EmbeddedViolation', ['file_path', 'css_codes'])
-CSSCheckResult = namedtuple('CSSCheckResult', ['violations', 'correct_imports', 'embedded_violations'])
+Violation = namedtuple("Violation", ["file_path", "css_file", "reason"])
+CorrectImport = namedtuple("CorrectImport", ["file_path", "css_file"])
+EmbeddedViolation = namedtuple("EmbeddedViolation", ["file_path", "css_codes"])
+CSSCheckResult = namedtuple(
+    "CSSCheckResult", ["violations", "correct_imports", "embedded_violations"]
+)
+
 
 def check_embedded_css(content: str) -> list:
     """
@@ -24,8 +29,12 @@ def check_embedded_css(content: str) -> list:
     embedded_css_pattern = r"#([0-9a-fA-F]{3}){1,2}"  # Matches CSS color codes
     return re.findall(embedded_css_pattern, content)
 
+
 def check_files(
-    directory: str, exclude_files: list, exclude_directories: list, allowed_css_patterns: list
+    directory: str,
+    exclude_files: list,
+    exclude_directories: list,
+    allowed_css_patterns: list,
 ) -> CSSCheckResult:
     """
     Check TypeScript files for CSS violations and correct CSS imports.
@@ -72,7 +81,8 @@ def check_files(
                 css_imports = re.findall(r'import\s+.*?["\'](.+?\.css)["\']', content)
                 for css_file in css_imports:
                     # Try to find the CSS file
-                    css_file_path = os.path.join(os.path.dirname(file_path), css_file)
+                    base_path = os.path.dirname(file_path)
+                    css_file_path = os.path.normpath(os.path.join(base_path, css_file))
                     if not os.path.exists(css_file_path):
                         # If not found, try to find it relative to the src directory
                         src_dir = os.path.abspath(directory)
@@ -80,19 +90,28 @@ def check_files(
 
                     # Check if the CSS file exists
                     if not os.path.exists(css_file_path):
-                        violations.append(Violation(file_path, css_file, "File not found"))
+                        violations.append(
+                            Violation(file_path, css_file, "File not found")
+                        )
                     # Check if the CSS import matches the allowed patterns
-                    elif any(css_file.endswith(pattern) for pattern in allowed_css_patterns):
+                    elif any(
+                        css_file.endswith(pattern) for pattern in allowed_css_patterns
+                    ):
                         correct_css_imports.append(CorrectImport(file_path, css_file))
                     else:
-                        violations.append(Violation(file_path, css_file, "Invalid import"))
+                        violations.append(
+                            Violation(file_path, css_file, "Invalid import")
+                        )
 
                 # Check for embedded CSS
                 embedded_css = check_embedded_css(content)
                 if embedded_css:
-                    embedded_css_violations.append(EmbeddedViolation(file_path, embedded_css))
+                    embedded_css_violations.append(
+                        EmbeddedViolation(file_path, embedded_css)
+                    )
 
     return CSSCheckResult(violations, correct_css_imports, embedded_css_violations)
+
 
 def main():
     """Run the CSS check script."""
@@ -137,24 +156,28 @@ def main():
     if result.violations:
         output.append("CSS Import Violations:")
         for violation in result.violations:
-            output.append(f"- {violation.file_path}: {violation.css_file} ({violation.reason})")
+            output.append(
+                f"- {violation.file_path}: {violation.css_file} ({violation.reason})"
+            )
         exit_code = 1
 
     if result.embedded_violations:
         output.append("\nEmbedded CSS Violations:")
         for violation in result.embedded_violations:
             output.append(f"- {violation.file_path}: {', '.join(violation.css_codes)}")
-        exit_code = 1   
+        exit_code = 1
 
     if output:
         print("\n".join(output))
-        print("""
+        print(
+            """
 Please address the above CSS violations:
 1. For invalid CSS imports, ensure you're using the correct import syntax and file paths.
 2. For embedded CSS, move the CSS to appropriate stylesheet files and import them correctly.
 3. Make sure to use only the allowed CSS patterns as specified in the script arguments.
 4. Check that all imported CSS files exist in the specified locations.
-""")
+"""
+        )
     if args.show_success and result.correct_imports:
         print("\nCorrect CSS Imports:")
         for import_ in result.correct_imports:
@@ -162,6 +185,6 @@ Please address the above CSS violations:
 
     sys.exit(exit_code)
 
+
 if __name__ == "__main__":
     main()
-

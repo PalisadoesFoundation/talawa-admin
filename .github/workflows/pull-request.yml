@@ -70,7 +70,7 @@ jobs:
             exit 1
           fi
           chmod +x ./.github/workflows/css_check.py
-          ./.github/workflows/css_check.py --directory ./src --allowed_css_patterns app.module.css . || {
+          ./.github/workflows/css_check.py --directory  --allowed_css_patterns app.module.cs . || {
             echo "Error: CSS check failed"
             exit 1
           }
