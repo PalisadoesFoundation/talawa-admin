@@ -6,7 +6,7 @@
 
 # Interface: InterfaceCustomFieldData
 
-Defined in: [src/utils/interfaces.ts:600](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L600)
+Defined in: [src/utils/interfaces.ts:600](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L600)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:600](https://github.com/gautam-divyanshu/ta
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:602](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L602)
+Defined in: [src/utils/interfaces.ts:602](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L602)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/utils/interfaces.ts:602](https://github.com/gautam-divyanshu/ta
 
 > **type**: `string`
 
-Defined in: [src/utils/interfaces.ts:601](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L601)
+Defined in: [src/utils/interfaces.ts:601](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L601)

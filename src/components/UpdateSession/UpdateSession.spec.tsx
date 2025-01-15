@@ -105,10 +105,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to minimum value
-    userEvent.click(slider, {
-      // Simulate clicking on the slider to focus
-      clientX: -999, // Adjust the clientX to simulate different slider positions
-    });
+    userEvent.click(slider);
+    // Fire input event to simulate slider change
+    fireEvent.input(slider, { target: { value: '15' } });
 
     expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
   });
@@ -125,10 +124,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to maximum value
-    userEvent.click(slider, {
-      // Simulate clicking on the slider to focus
-      clientX: 999, // Adjust the clientX to simulate different slider positions
-    });
+    userEvent.click(slider);
+    // Fire input event to simulate slider change
+    fireEvent.input(slider, { target: { value: '60' } });
 
     expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
   });
@@ -145,10 +143,9 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate invalid value handling
-    userEvent.click(slider, {
-      // Simulate clicking on the slider to focus
-      clientX: 0, // Adjust the clientX to simulate different slider positions
-    });
+    userEvent.click(slider);
+    // Fire input event to simulate invalid value
+    fireEvent.input(slider, { target: { value: '0' } });
 
     // Ensure onValueChange is not called with invalid values
     expect(mockOnValueChange).not.toHaveBeenCalled();

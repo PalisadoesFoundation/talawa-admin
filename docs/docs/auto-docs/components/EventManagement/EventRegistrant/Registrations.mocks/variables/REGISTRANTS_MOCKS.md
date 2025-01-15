@@ -8,4 +8,4 @@
 
 > `const` **REGISTRANTS\_MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `eventId`: `string`; `id`: `undefined`; \}; \}; `result`: \{ `data`: \{ `event`: `undefined`; `getEventAttendeesByEventId`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `eventId`: `undefined`; `id`: `string`; \}; \}; `result`: \{ `data`: \{ `event`: \{ `attendees`: `object`[]; \}; `getEventAttendeesByEventId`: `undefined`; \}; \}; \})[]
 
-Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L3)
+Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L3)

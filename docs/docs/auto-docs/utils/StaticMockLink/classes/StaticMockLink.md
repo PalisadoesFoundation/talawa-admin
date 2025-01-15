@@ -6,7 +6,7 @@
 
 # Class: StaticMockLink
 
-Defined in: [src/utils/StaticMockLink.ts:30](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/StaticMockLink.ts#L30)
+Defined in: [src/utils/StaticMockLink.ts:30](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/StaticMockLink.ts#L30)
 
 Similar to the standard Apollo MockLink, but doesn't consume a mock
 when it is used allowing it to be used in places like Storybook.
@@ -21,7 +21,7 @@ when it is used allowing it to be used in places like Storybook.
 
 > **new StaticMockLink**(`mockedResponses`, `addTypename`): [`StaticMockLink`](StaticMockLink.md)
 
-Defined in: [src/utils/StaticMockLink.ts:35](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/StaticMockLink.ts#L35)
+Defined in: [src/utils/StaticMockLink.ts:35](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/StaticMockLink.ts#L35)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ readonly `MockedResponse`[]
 
 > **addTypename**: `boolean` = `true`
 
-Defined in: [src/utils/StaticMockLink.ts:32](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/StaticMockLink.ts#L32)
+Defined in: [src/utils/StaticMockLink.ts:32](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/StaticMockLink.ts#L32)
 
 ***
 
@@ -55,7 +55,7 @@ Defined in: [src/utils/StaticMockLink.ts:32](https://github.com/gautam-divyanshu
 
 > `optional` **operation**: `Operation`
 
-Defined in: [src/utils/StaticMockLink.ts:31](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/StaticMockLink.ts#L31)
+Defined in: [src/utils/StaticMockLink.ts:31](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/StaticMockLink.ts#L31)
 
 ## Methods
 
@@ -63,7 +63,7 @@ Defined in: [src/utils/StaticMockLink.ts:31](https://github.com/gautam-divyanshu
 
 > **addMockedResponse**(`mockedResponse`): `void`
 
-Defined in: [src/utils/StaticMockLink.ts:45](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/StaticMockLink.ts#L45)
+Defined in: [src/utils/StaticMockLink.ts:45](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/StaticMockLink.ts#L45)
 
 #### Parameters
 
@@ -81,7 +81,7 @@ Defined in: [src/utils/StaticMockLink.ts:45](https://github.com/gautam-divyanshu
 
 > **request**(`operation`): `Observable`\<`FetchResult`\>
 
-Defined in: [src/utils/StaticMockLink.ts:60](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/StaticMockLink.ts#L60)
+Defined in: [src/utils/StaticMockLink.ts:60](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/StaticMockLink.ts#L60)
 
 #### Parameters
 

@@ -6,7 +6,7 @@
 
 # Interface: InterfaceCreatePledge
 
-Defined in: [src/utils/interfaces.ts:508](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L508)
+Defined in: [src/utils/interfaces.ts:508](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L508)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:508](https://github.com/gautam-divyanshu/ta
 
 > **pledgeAmount**: `number`
 
-Defined in: [src/utils/interfaces.ts:510](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L510)
+Defined in: [src/utils/interfaces.ts:510](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L510)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:510](https://github.com/gautam-divyanshu/ta
 
 > **pledgeCurrency**: `string`
 
-Defined in: [src/utils/interfaces.ts:511](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L511)
+Defined in: [src/utils/interfaces.ts:511](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L511)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:511](https://github.com/gautam-divyanshu/ta
 
 > **pledgeEndDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:513](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L513)
+Defined in: [src/utils/interfaces.ts:513](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L513)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:513](https://github.com/gautam-divyanshu/ta
 
 > **pledgeStartDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:512](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L512)
+Defined in: [src/utils/interfaces.ts:512](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L512)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/utils/interfaces.ts:512](https://github.com/gautam-divyanshu/ta
 
 > **pledgeUsers**: [`InterfaceUserInfo`](InterfaceUserInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:509](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L509)
+Defined in: [src/utils/interfaces.ts:509](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L509)

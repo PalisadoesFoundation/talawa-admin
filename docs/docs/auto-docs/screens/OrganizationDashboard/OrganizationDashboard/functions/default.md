@@ -8,7 +8,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:44](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L44)
+Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:44](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L44)
 
 Component for displaying the organization dashboard.
 

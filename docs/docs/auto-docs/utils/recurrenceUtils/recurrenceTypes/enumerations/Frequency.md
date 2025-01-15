@@ -6,7 +6,7 @@
 
 # Enumeration: Frequency
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/recurrenceUtils/recurrenceTypes.ts#L28)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/recurrenceUtils/recurrenceTypes.ts#L28)
 
 ## Enumeration Members
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com
 
 > **DAILY**: `"DAILY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com
 
 > **MONTHLY**: `"MONTHLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com
 
 > **WEEKLY**: `"WEEKLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com
 
 > **YEARLY**: `"YEARLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)

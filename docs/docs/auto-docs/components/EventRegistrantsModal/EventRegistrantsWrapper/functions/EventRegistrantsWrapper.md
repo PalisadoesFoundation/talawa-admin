@@ -8,7 +8,7 @@
 
 > **EventRegistrantsWrapper**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx#L20)
+Defined in: [src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx#L20)
 
 Wrapper component that displays a button to show the event registrants modal.
 

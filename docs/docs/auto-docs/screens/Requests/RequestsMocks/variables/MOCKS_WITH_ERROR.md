@@ -8,4 +8,4 @@
 
 > `const` **MOCKS\_WITH\_ERROR**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `firstName_contains`: `string`; `id`: `string`; `skip`: `number`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: `undefined`; \}; \})[]
 
-Defined in: [src/screens/Requests/RequestsMocks.ts:556](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/Requests/RequestsMocks.ts#L556)
+Defined in: [src/screens/Requests/RequestsMocks.ts:556](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/screens/Requests/RequestsMocks.ts#L556)

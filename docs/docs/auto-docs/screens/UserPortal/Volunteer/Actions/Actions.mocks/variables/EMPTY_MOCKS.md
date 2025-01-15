@@ -8,7 +8,7 @@
 
 > `const` **EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts:232](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts#L232)
+Defined in: [src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts:232](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts#L232)
 
 ## Type declaration
 

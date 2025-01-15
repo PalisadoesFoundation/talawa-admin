@@ -8,7 +8,7 @@
 
 > **exportTrendsToCSV**(`eventLabels`, `attendeeCounts`, `maleCounts`, `femaleCounts`, `otherCounts`): `void`
 
-Defined in: [src/utils/chartToPdf.ts:50](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/chartToPdf.ts#L50)
+Defined in: [src/utils/chartToPdf.ts:50](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/chartToPdf.ts#L50)
 
 ## Parameters
 

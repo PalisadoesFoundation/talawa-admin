@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
-    "types": ["vite/client", "vite-plugin-svgr/client", "node"],
+    "types": [
+      "vite/client",
+      "vite-plugin-svgr/client",
+      "node",
+      "@testing-library/react",
+      "@testing-library/jest-dom"
+    ],
     "baseUrl": "src",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

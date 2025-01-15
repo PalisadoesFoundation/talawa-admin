@@ -8,4 +8,4 @@
 
 > `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `confirmNewPassword`: `string`; `newPassword`: `string`; `previousPassword`: `string`; \}; \}; `result`: \{ `data`: \{ `users`: `object`[]; \}; `errors`: `undefined`; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `confirmNewPassword`: `string`; `newPassword`: `string`; `previousPassword`: `string`; \}; \}; `result`: \{ `data`: `undefined`; `errors`: `object`[]; \}; \})[]
 
-Defined in: [src/components/UserPasswordUpdate/UserPasswordUpdateMocks.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/UserPasswordUpdate/UserPasswordUpdateMocks.ts#L3)
+Defined in: [src/components/UserPasswordUpdate/UserPasswordUpdateMocks.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/components/UserPasswordUpdate/UserPasswordUpdateMocks.ts#L3)

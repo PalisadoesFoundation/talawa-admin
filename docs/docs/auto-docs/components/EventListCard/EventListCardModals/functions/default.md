@@ -8,7 +8,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/EventListCard/EventListCardModals.tsx:72](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/components/EventListCard/EventListCardModals.tsx#L72)
+Defined in: [src/components/EventListCard/EventListCardModals.tsx:72](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/components/EventListCard/EventListCardModals.tsx#L72)
 
 The `EventListCardModals` component displays the modals related to events, such as viewing,
 updating, and deleting events.

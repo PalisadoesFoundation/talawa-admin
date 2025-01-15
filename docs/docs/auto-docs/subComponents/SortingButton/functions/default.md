@@ -8,7 +8,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/subComponents/SortingButton.tsx:43](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/subComponents/SortingButton.tsx#L43)
+Defined in: [src/subComponents/SortingButton.tsx:43](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/subComponents/SortingButton.tsx#L43)
 
 SortingButton component renders a Dropdown with sorting options.
 It allows users to select a sorting option and triggers a callback on selection.

@@ -8,4 +8,4 @@
 
 > `const` **CANCEL\_MEMBERSHIP\_REQUEST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:295](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/GraphQl/Mutations/OrganizationMutations.ts#L295)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:295](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/GraphQl/Mutations/OrganizationMutations.ts#L295)

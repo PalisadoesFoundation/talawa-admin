@@ -6,7 +6,7 @@
 
 # Interface: InterfaceQueryUserListItem
 
-Defined in: [src/utils/interfaces.ts:396](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L396)
+Defined in: [src/utils/interfaces.ts:396](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L396)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:396](https://github.com/gautam-divyanshu/ta
 
 > **appUserProfile**: `object`
 
-Defined in: [src/utils/interfaces.ts:435](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L435)
+Defined in: [src/utils/interfaces.ts:435](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L435)
 
 #### \_id
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/interfaces.ts:435](https://github.com/gautam-divyanshu/ta
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:397](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L397)
+Defined in: [src/utils/interfaces.ts:397](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L397)
 
 #### \_id
 

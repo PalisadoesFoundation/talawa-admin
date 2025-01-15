@@ -6,7 +6,7 @@
 
 # Interface: InterfaceUserType
 
-Defined in: [src/utils/interfaces.ts:1](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L1)
+Defined in: [src/utils/interfaces.ts:1](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:1](https://github.com/gautam-divyanshu/tala
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:2](https://github.com/gautam-divyanshu/talawa-admin/blob/334f0f7773e45df65600a1da08d00c41806347e4/src/utils/interfaces.ts#L2)
+Defined in: [src/utils/interfaces.ts:2](https://github.com/gautam-divyanshu/talawa-admin/blob/9fef64ff9fb30eb3195cc9100606d8b7a89bca79/src/utils/interfaces.ts#L2)
 
 #### email
 
