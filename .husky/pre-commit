@@ -1,4 +1,5 @@
 
+npm run generate-docs && find docs/docs/auto-docs -name 'README.md' -delete
 npm run format:fix
 # npm run lint:fix
 npm run lint-staged
