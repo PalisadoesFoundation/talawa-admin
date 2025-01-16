@@ -448,6 +448,81 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
   });
 
+  test('Selecting invalid/null as date value for End date option  ', async () => {
+    // When an invalid date or null value is pushed to the data picker, no state should be changed
+    // Covers the else path at line 380
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('recurrenceOptions')).not.toBeInTheDocument();
+
+    userEvent.click(screen.getByTestId('recurringCheck'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('recurrenceOptions'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('customRecurrence'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('never')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('on'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('on')).toBeChecked();
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByLabelText('End Date')[1]).toBeEnabled();
+    });
+
+    const recurrenceEndDatePicker = screen.getAllByLabelText('End Date')[1];
+    fireEvent.change(recurrenceEndDatePicker, {
+      target: { value: null },
+    });
+
+    userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('customRecurrenceSubmitBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   test('Creating a bi monthly recurring event through custom recurrence modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
