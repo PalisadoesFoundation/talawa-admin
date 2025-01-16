@@ -7,7 +7,7 @@ import type {
 } from 'utils/interfaces';
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import styles from './TagActions.module.css';
+import styles from '../../style/app.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -61,7 +61,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           getChildTags: {
@@ -93,8 +93,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   }
 
   const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
-    /* istanbul ignore next */ [];
+    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
 
   const handleTagClick = (): void => {
     setExpanded(!expanded);
@@ -127,6 +126,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
+              id={`checkbox-${tag._id}`}
               aria-label={t('selectTag')}
             />
             <i className="fa fa-folder mx-2" />{' '}
@@ -172,7 +172,6 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               next={loadMoreSubTags}
               hasMore={
                 subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                /* istanbul ignore next */
                 false
               }
               loader={<InfiniteScrollLoader />}

@@ -16,7 +16,7 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from 'style/app.module.css';
+import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 /**
@@ -135,7 +135,7 @@ const ForgotPassword = (): JSX.Element => {
         },
       });
 
-      /* istanbul ignore next */
+      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('passwordChanges') as string);
         setShowEnterEmail(true);
@@ -147,7 +147,6 @@ const ForgotPassword = (): JSX.Element => {
       }
     } catch (error: unknown) {
       setShowEnterEmail(true);
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
@@ -30,6 +30,12 @@ const leftDrawer = ({
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
+
+  useEffect(() => {
+    if (hideDrawer === null) {
+      setHideDrawer(false);
+    }
+  }, []);
 
   /**
    * Handles link click to hide the drawer on smaller screens.

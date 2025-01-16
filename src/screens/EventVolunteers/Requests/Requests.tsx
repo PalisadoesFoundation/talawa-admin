@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 import { FaXmark } from 'react-icons/fa6';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
 import { debounce } from '@mui/material';
+import SortingButton from 'subComponents/SortingButton';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -279,30 +280,18 @@ function requests(): JSX.Element {
         </div>
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.dropdowns}
-                data-testid="sort"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_DESC')}
-                  data-testid="createdAt_DESC"
-                >
-                  {t('latest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('createdAt_ASC')}
-                  data-testid="createdAt_ASC"
-                >
-                  {t('earliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('latest'), value: 'createdAt_DESC' },
+                { label: t('earliest'), value: 'createdAt_ASC' },
+              ]}
+              selectedOption={sortBy ?? ''}
+              onSortChange={(value) =>
+                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+              }
+              dataTestIdPrefix="sort"
+              buttonLabel={tCommon('sort')}
+            />
           </div>
         </div>
       </div>

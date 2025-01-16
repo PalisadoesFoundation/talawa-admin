@@ -80,7 +80,6 @@ export default function organizationSidebar(): JSX.Element {
    *
    * Sets the members state with the data from the query.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (memberData) {
       setMembers(memberData.organizationsMemberConnection.edges);
@@ -92,7 +91,6 @@ export default function organizationSidebar(): JSX.Element {
    *
    * Sets the events state with the data from the query.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (eventsData) {
       setEvents(eventsData.eventsByOrganizationConnection);

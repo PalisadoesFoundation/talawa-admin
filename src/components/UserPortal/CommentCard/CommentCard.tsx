@@ -84,14 +84,12 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
             commentId: props.id,
           },
         });
-        /* istanbul ignore next */
-        if (data) {
+        if (data && data.unlikeComment && data.unlikeComment._id) {
           setLikes((likes) => likes - 1);
           setIsLikedByUser(false);
           props.handleDislikeComment(props.id);
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         toast.error(error as string);
       }
     } else {
@@ -101,14 +99,13 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
             commentId: props.id,
           },
         });
-        /* istanbul ignore next */
-        if (data) {
+
+        if (data && data.likeComment && data.likeComment._id) {
           setLikes((likes) => likes + 1);
           setIsLikedByUser(true);
           props.handleLikeComment(props.id);
         }
       } catch (error: unknown) {
-        /* istanbul ignore next */
         toast.error(error as string);
       }
     }

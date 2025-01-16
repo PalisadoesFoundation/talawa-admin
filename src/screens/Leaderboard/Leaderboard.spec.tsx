@@ -173,7 +173,7 @@ describe('Testing Leaderboard Screen', () => {
     expect(filter).toBeInTheDocument();
 
     fireEvent.click(filter);
-    const timeFrameAll = await screen.findByTestId('timeFrameAll');
+    const timeFrameAll = await screen.findByTestId('allTime');
     expect(timeFrameAll).toBeInTheDocument();
 
     fireEvent.click(timeFrameAll);
@@ -196,7 +196,7 @@ describe('Testing Leaderboard Screen', () => {
     expect(filter).toBeInTheDocument();
     fireEvent.click(filter);
 
-    const timeFrameWeekly = await screen.findByTestId('timeFrameWeekly');
+    const timeFrameWeekly = await screen.findByTestId('weekly');
     expect(timeFrameWeekly).toBeInTheDocument();
     fireEvent.click(timeFrameWeekly);
 
@@ -217,7 +217,7 @@ describe('Testing Leaderboard Screen', () => {
     expect(filter).toBeInTheDocument();
     fireEvent.click(filter);
 
-    const timeFrameMonthly = await screen.findByTestId('timeFrameMonthly');
+    const timeFrameMonthly = await screen.findByTestId('monthly');
     expect(timeFrameMonthly).toBeInTheDocument();
     fireEvent.click(timeFrameMonthly);
 
@@ -238,7 +238,7 @@ describe('Testing Leaderboard Screen', () => {
     expect(filter).toBeInTheDocument();
     fireEvent.click(filter);
 
-    const timeFrameYearly = await screen.findByTestId('timeFrameYearly');
+    const timeFrameYearly = await screen.findByTestId('yearly');
     expect(timeFrameYearly).toBeInTheDocument();
     fireEvent.click(timeFrameYearly);
 

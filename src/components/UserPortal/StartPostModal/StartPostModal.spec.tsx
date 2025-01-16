@@ -14,24 +14,12 @@ import i18nForTest from 'utils/i18nForTest';
 import StartPostModal from './StartPostModal';
 import { vi } from 'vitest';
 
-/**
- * Unit tests for StartPostModal component:
- *
- * 1. **Rendering StartPostModal**: Verifies that the modal renders correctly when the `show` prop is set to `true`.
- * 2. **Invalid post submission**: Ensures that when the post body is empty, an error toast is shown with the appropriate message ("Can't create a post with an empty body").
- * 3. **Valid post submission**: Checks that a post with valid text triggers an info toast, and simulates the creation of a post with the message "Processing your post. Please wait."
- * 4. **User image null**: Confirms that when the user image is null, a default image is displayed instead.
- * 5. **User image not null**: Verifies that when the user image is provided, the correct user image is shown.
- *
- * Mocked GraphQL mutation (`CREATE_POST_MUTATION`) and toast notifications are used to simulate the post creation process.
- * The `renderStartPostModal` function is used to render the modal with different user states and input values.
- */
-
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
     info: vi.fn(),
     success: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -60,6 +48,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
   localStorage.clear();
+  vi.clearAllMocks();
 });
 
 async function wait(ms = 100): Promise<void> {
@@ -73,16 +62,20 @@ async function wait(ms = 100): Promise<void> {
 const renderStartPostModal = (
   visibility: boolean,
   image: string | null,
+  img: string | null = null,
+  onHide: () => void = vi.fn(),
+  fetchPosts: () => void = vi.fn(),
+  customLink: StaticMockLink = link,
 ): RenderResult => {
   const cardProps = {
     show: visibility,
-    onHide: vi.fn(),
-    fetchPosts: vi.fn(),
+    onHide,
+    fetchPosts,
     userData: {
       user: {
         __typename: 'User',
         _id: '123',
-        image: image,
+        image,
         firstName: 'Glen',
         lastName: 'dsza',
         email: 'glen@dsza.com',
@@ -109,11 +102,11 @@ const renderStartPostModal = (
       },
     },
     organizationId: '123',
-    img: '',
+    img,
   };
 
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider addTypename={false} link={customLink}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -126,13 +119,8 @@ const renderStartPostModal = (
 };
 
 describe('Testing StartPostModal Component: User Portal', () => {
-  afterAll(() => {
-    vi.clearAllMocks();
-  });
-
   it('Check if StartPostModal renders properly', async () => {
     renderStartPostModal(true, null);
-
     const modal = await screen.findByTestId('startPostModal');
     expect(modal).toBeInTheDocument();
   });
@@ -158,14 +146,18 @@ describe('Testing StartPostModal Component: User Portal', () => {
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
-    expect(toast.error).not.toHaveBeenCalledWith();
+    expect(toast.error).not.toHaveBeenCalled();
     expect(toast.info).toHaveBeenCalledWith(
       'Processing your post. Please wait.',
     );
-    // await wait();
-    // expect(toast.success).toBeCalledWith(
-    //   'Your post is now visible in the feed.',
-    // );
+  });
+
+  it('should display correct username', async () => {
+    renderStartPostModal(true, null);
+    await wait();
+
+    const userFullName = screen.getByText('Glen dsza');
+    expect(userFullName).toBeInTheDocument();
   });
 
   it('If user image is null then default image should be shown', async () => {
@@ -185,5 +177,104 @@ describe('Testing StartPostModal Component: User Portal', () => {
 
     const userImage = screen.getByTestId('userImage');
     expect(userImage).toHaveAttribute('src', 'image.png');
+  });
+
+  it('should clear post content and hide modal when close button is clicked', async () => {
+    const onHideMock = vi.fn();
+    renderStartPostModal(true, null, null, onHideMock);
+    await wait();
+
+    const input = screen.getByTestId('postInput');
+    userEvent.type(input, 'Test content');
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    userEvent.click(closeButton);
+
+    expect(onHideMock).toHaveBeenCalled();
+    expect(input).toHaveValue('');
+  });
+
+  it('should handle successful post creation', async () => {
+    const fetchPostsMock = vi.fn();
+    const onHideMock = vi.fn();
+    const successMocks = [
+      {
+        request: {
+          query: CREATE_POST_MUTATION,
+          variables: {
+            title: '',
+            text: 'Test content',
+            organizationId: '123',
+            file: null,
+          },
+        },
+        result: {
+          data: {
+            createPost: {
+              _id: '456',
+            },
+          },
+        },
+      },
+    ];
+    const customLink = new StaticMockLink(successMocks, true);
+
+    renderStartPostModal(
+      true,
+      null,
+      null,
+      onHideMock,
+      fetchPostsMock,
+      customLink,
+    );
+    await wait();
+
+    userEvent.type(screen.getByTestId('postInput'), 'Test content');
+    userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+
+    expect(toast.dismiss).toHaveBeenCalled();
+    expect(toast.success).toHaveBeenCalled();
+    expect(fetchPostsMock).toHaveBeenCalled();
+    expect(onHideMock).toHaveBeenCalled();
+  });
+
+  it('should handle failed post creation', async () => {
+    const errorMocks = [
+      {
+        request: {
+          query: CREATE_POST_MUTATION,
+          variables: {
+            title: '',
+            text: 'Test content',
+            organizationId: '123',
+            file: null,
+          },
+        },
+        error: new Error('Failed to create post'),
+      },
+    ];
+    const customLink = new StaticMockLink(errorMocks, true);
+
+    renderStartPostModal(true, null, null, vi.fn(), vi.fn(), customLink);
+    await wait();
+
+    userEvent.type(screen.getByTestId('postInput'), 'Test content');
+    userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalled();
+  });
+
+  it('should display preview image when provided', async () => {
+    const previewImage = 'preview.jpg';
+    renderStartPostModal(true, null, previewImage);
+    await wait();
+
+    const image = screen.getByAltText('Post Image Preview');
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', previewImage);
   });
 });
