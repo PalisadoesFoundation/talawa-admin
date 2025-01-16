@@ -46,6 +46,11 @@
   --grey-border-box-color: #e8e5e5;
   --subtle-blue-grey: #7c9beb;
   --subtle-blue-grey-hover: #5f7e91;
+  --search-bar-icon-blue: #a8c7fa;
+  --holidays-card-background-color: #e0e9ff;
+  --holidays-card-date-color: #3771c8;
+  --events-card-background-color: #eaebef;
+  --organization-indicator-color: #a8c7fa;
   --white: #fff;
   --black: black;
   --rating-star-filled: #ff6d75;
@@ -279,8 +284,9 @@
   color: var(--brown-color) !important;
   position: relative;
   display: inline-block;
-  /* margin-top: 10px;
-  margin-bottom: 10px; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
 .dropdown:is(
@@ -340,6 +346,13 @@
 .input {
   flex: 1;
   position: relative;
+  margin-right: 80px;
+}
+
+.eventCreatebtn {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .btnsContainer {
@@ -462,7 +475,7 @@
 .searchButton {
   margin-bottom: 10px;
   background-color: var(--search-button-bg);
-  border-color: var(--search-button-border);
+  border-color: var(--search-button-bg);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -474,7 +487,7 @@
 
 .searchButton:hover {
   background-color: var(--search-button-hover-bg, var(--light-blue-color));
-  border-color: var(--search-button-border);
+  border-color: var(--search-button-hover-bg, var(--light-blue-color));
 }
 
 .searchButton:active {
@@ -4408,6 +4421,15 @@ button[data-testid='createPostBtn'] {
   padding: 0 1rem;
 }
 
+.mainContainerEvent {
+  margin-top: 2rem;
+  width: 100%;
+  flex-grow: 3;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 0 1rem;
+}
+
 .selectType {
   border-radius: 10px;
 }
@@ -4915,11 +4937,8 @@ button[data-testid='createPostBtn'] {
 .calendar__days {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  grid-template-rows: repeat(6, 1fr);
-}
-
-.day__outside {
-  color: var(--grey-dark) !important;
+  grid-template-rows: repeat(5, 1fr);
+  margin-bottom: 30px;
 }
 
 .day__selected {
@@ -5396,23 +5415,32 @@ button[data-testid='createPostBtn'] {
 .calendar {
   font-family: sans-serif;
   font-size: 1.2rem;
-  margin-bottom: 20px;
-  background: var(--grey-bg-color);
+  margin-bottom: 10px;
+  background: var(--white-color);
   border-radius: 10px;
-  padding: 5px;
+  padding-left: 70px;
+  padding-right: 70px;
+  padding-top: 5px;
 }
 
 .calendar__header {
   display: flex;
   align-items: center;
-  margin: 2rem 10px 0px 10px;
+  justify-content: space-between;
+  margin-right: 50px;
+  /* margin: 2rem 10px 0px 10px; */
+}
+
+.calender_month {
+  display: flex;
+  align-items: center;
 }
 
 .calendar__header_month {
   margin: 0.5rem;
   color: var(--grey-dark);
   font-weight: 800;
-  font-size: 55px;
+  font-size: 45px;
   display: flex;
   gap: 23px;
   flex-direction: row;
@@ -5426,11 +5454,11 @@ button[data-testid='createPostBtn'] {
 
 .buttonEventCalendar {
   border-radius: 100px;
-  color: var(--bs-gray-600);
-  background-color: var(--black-shadow-color);
-  font-weight: bold;
+  color: var(--bs-gray);
+  /* background-color: var(--black-shadow-color); */
+  /* font-weight: bold; */
   border: 0px;
-  font-size: 20px;
+  font-size: 40px;
 }
 
 .calendar__weekdays {
@@ -5438,11 +5466,11 @@ button[data-testid='createPostBtn'] {
   grid-template-columns: repeat(7, 1fr);
   background-color: var(--black-color);
   font-family: Outfit;
-  height: 60px;
+  height: 25px;
 }
 
 .calendar__scroll {
-  height: 80vh;
+  height: 70vh;
   padding: 10px;
 }
 
@@ -5451,13 +5479,9 @@ button[data-testid='createPostBtn'] {
   justify-content: center;
   align-items: center;
   background-color: var(--white);
+  color: var(--gray-white);
+  font-size: medium;
   font-weight: 600;
-}
-
-.calendar__days {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  grid-template-rows: repeat(6, 1fr);
 }
 
 .calendar_hour_text_container {
@@ -5531,12 +5555,12 @@ button[data-testid='createPostBtn'] {
 }
 
 .day_weekends {
-  background-color: var(--black-shadow-color);
+  background-color: var(--grey-light);
 }
 
 .day__outside {
   background-color: var(--white);
-  color: var(--grey-dark);
+  color: var(--grey-light);
 }
 
 .day__selected {
@@ -5548,7 +5572,7 @@ button[data-testid='createPostBtn'] {
   background-color: var(--grey-bg-color);
   font-weight: 700;
   text-decoration: underline;
-  color: var(--light-green);
+  color: var(--blue-subtle);
 }
 
 .day__events {
@@ -5573,7 +5597,7 @@ button[data-testid='createPostBtn'] {
   right: auto;
   overflow: auto;
   padding: 10px 4px 0px 4px;
-  background-color: var(--black-shadow-color);
+  background-color: var(--white-color);
   border: 1px solid var(--grey-border);
   border-radius: 5px;
   margin: 5px;
@@ -5588,8 +5612,9 @@ button[data-testid='createPostBtn'] {
 }
 
 .holidayText {
-  font-size: 14px;
-  color: var(--grey-dark);
+  margin-left: 15px;
+  font-size: 18px;
+  color: var(--black-color);
 }
 
 .eventsLegend {
@@ -5606,17 +5631,33 @@ button[data-testid='createPostBtn'] {
   gap: 8px;
 }
 
+.list_container_holidays {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .holidayIndicator {
-  background-color: var(--grey-bg-color-dark);
+  background-color: var(--black-color);
+  opacity: 15%;
+}
+
+.holidayIndicator,
+.organizationIndicator {
+  width: 35px;
+  height: 12px;
+  border-radius: 4px;
 }
 
 .organizationIndicator {
-  background-color: var(--gray-blue);
+  background-color: var(--organization-indicator-color);
 }
 
 .legendText {
-  font-size: 14px;
-  color: var(--grey-dark);
+  margin-left: 15px;
+  font-size: 18px;
+  color: var(--black-color);
 }
 
 .card_list {
@@ -5634,9 +5675,16 @@ button[data-testid='createPostBtn'] {
 }
 
 .holiday_date {
-  font-weight: 500;
-  margin-right: 10px;
-  color: var(--burnt-orange);
+  font-weight: 600;
+  margin-right: 40px;
+  font-size: 18px;
+  color: var(--holidays-card-date-color);
+}
+
+.holiday_name {
+  font-size: 16px;
+  font-weight: 200;
+  color: var(--black-color);
 }
 
 .calendar_infocards {
@@ -5645,8 +5693,7 @@ button[data-testid='createPostBtn'] {
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  padding: 20px;
-  background-color: var(--grey-bg-color);
+  padding: 20px 0px 20px 0px;
 }
 
 .holidays_card,
@@ -5658,11 +5705,11 @@ button[data-testid='createPostBtn'] {
 }
 
 .holidays_card {
-  background-color: var(--white);
+  background-color: var(--holidays-card-background-color);
 }
 
 .events_card {
-  background-color: var(--white-color);
+  background-color: var(--events-card-background-color);
 }
 
 .legend {
@@ -5672,8 +5719,10 @@ button[data-testid='createPostBtn'] {
 }
 
 .card_list_item:hover {
-  background-color: var(--grey-bg-color-dark);
+  background-color: var(--blue-subtle);
   transition: background-color 0.2s ease;
+  padding: 0.5px 8px 0.5px 8px;
+  border-radius: 4px;
 }
 
 .card_list_item:focus-visible {
@@ -5705,7 +5754,6 @@ button[data-testid='createPostBtn'] {
 .calendarEventHeader {
   width: 100%;
   margin-bottom: 20px;
-  background: var(--grey-bg-color);
   border-radius: 10px;
   padding: 5px;
 }
@@ -5718,26 +5766,28 @@ button[data-testid='createPostBtn'] {
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  gap: 10px;
 }
 
 .createButtonEventHeader {
   background-color: var(--grey-bg-color);
-  color: var(--black-color);
-  width: 130px;
-  margin-left: 5px;
+  color: var(--brown-color);
+  width: 110px;
+  /* margin-left: 5px; */
   border: 1px solid var(--brown-color);
+  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
 .createButtonEventHeader:hover {
   background-color: var(--grey-bg-color);
   color: var(--black-color);
   border: 1px solid var(--brown-color);
+  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
 .selectTypeEventHeader {
   border-radius: 10px;
-  margin-left: 5px;
+  margin: 8px;
 }
 
 @media (max-width: 520px) {
@@ -5759,12 +5809,12 @@ button[data-testid='createPostBtn'] {
   }
 
   /* .input {
-    width: 100%; 
+    width: 100%;
   }
 
   .createButton {
     margin: 0 auto;
-    width: 100%; 
+    width: 100%;
   } */
 }
 
@@ -6274,4 +6324,27 @@ button[data-testid='createPostBtn'] {
     margin-right: 0;
     width: 100%;
   }
+}
+
+/* Holiday card */
+.holidayCard {
+  color: var(--black-color);
+  background-color: rgba(0, 0, 0, 0.15);
+  font-size: 10px;
+  font-weight: 400;
+  display: flex;
+  padding: 8px 4px;
+  border-radius: 5px;
+  margin-bottom: 4px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* event calender */
+.card_title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: var(--black-color);
 }

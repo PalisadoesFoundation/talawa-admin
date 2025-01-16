@@ -10,7 +10,7 @@ Methodology:
 
     This script enforces code quality practices in the project.
 
-NOTE:
+Note:
     This script complies with our python3 coding and documentation standards.
     It complies with:
 
@@ -28,8 +28,7 @@ import sys
 
 
 def has_eslint_disable(file_path):
-    """
-    Check if a TypeScript file contains eslint-disable statements.
+    """Check if a TypeScript file contains eslint-disable statements.
 
     Args:
         file_path (str): Path to the TypeScript file.
@@ -37,10 +36,10 @@ def has_eslint_disable(file_path):
     Returns:
         bool: True if eslint-disable statement is found, False otherwise.
     """
+    # Initialize key variables
     eslint_disable_pattern = re.compile(
-        r"""\/\/\s*eslint-disable(?:-next-line
-        |-line)?[^\n]*|\/\*\s*eslint-disable[^\*]*\*\/""",
-        re.IGNORECASE,
+        r"\/\/.*eslint-disable.*|\/\*[\s\S]*?eslint-disable[\s\S]*?\*\/",
+        re.IGNORECASE | re.DOTALL,
     )
 
     try:
@@ -49,18 +48,15 @@ def has_eslint_disable(file_path):
             return bool(eslint_disable_pattern.search(content))
     except FileNotFoundError:
         print(f"File not found: {file_path}")
-        return False
     except PermissionError:
         print(f"Permission denied: {file_path}")
-        return False
     except (IOError, OSError) as e:
         print(f"Error reading file {file_path}: {e}")
-        return False
+    return False
 
 
 def check_eslint(files_or_directories):
-    """
-    Check TypeScript files for eslint-disable statements.
+    """Check TypeScript files for eslint-disable statements.
 
     Args:
         files_or_directories (list): List of files or directories to check.
@@ -72,62 +68,70 @@ def check_eslint(files_or_directories):
 
     for item in files_or_directories:
         if os.path.isfile(item):
-            # If it's a file, directly check it
-            if item.endswith(".ts") or item.endswith(".tsx"):
-                if has_eslint_disable(item):
-                    print(f"File {item} contains eslint-disable statement. Please remove them and ensure the code adheres to the specified ESLint rules.")
-                    eslint_found = True
+            # Check a single file
+            if item.endswith((".ts", ".tsx")) and has_eslint_disable(item):
+                print(
+                    f"Error: File {item} contains eslint-disable statements."
+                )
+                eslint_found = True
         elif os.path.isdir(item):
-            # If it's a directory, walk through it and check all
-            # .ts and .tsx files
+            # Recursively check files in a directory
             for root, _, files in os.walk(item):
                 if "node_modules" in root:
                     continue
                 for file_name in files:
-                    if file_name.endswith(".ts") or file_name.endswith(".tsx"):
+                    if file_name.endswith((".ts", ".tsx")):
                         file_path = os.path.join(root, file_name)
                         if has_eslint_disable(file_path):
                             print(
-                                f"""File {file_path} contains eslint-disable
-                                statement."""
+                                f"Error: File {file_path} contains "
+                                "eslint-disable statements."
                             )
-                            eslint_found = True
 
+                            eslint_found = True
     return eslint_found
 
 
 def arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
 
+    Args: None
+
     Returns:
         result: Parsed argument object
     """
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Check TypeScript files for eslint-disable statements."
+    )
     parser.add_argument(
         "--files",
         type=str,
         nargs="+",
         default=[],
-        help="""List of files to check for eslint disable
-        statements (default: None).""",
+        help="List of files to check for eslint-disable statements.",
     )
     parser.add_argument(
         "--directory",
         type=str,
         nargs="+",
         default=[os.getcwd()],
-        help="""One or more directories to check for eslint disable
-        statements (default: current directory).""",
+        help="One or more directories to check for eslint-disable statements.",
     )
     return parser.parse_args()
 
 
 def main():
-    """
-    Execute the script's main functionality.
+    """Execute the script's main functionality.
+
+    Args:
+        None
+
+    Returns:
+        None
 
     This function serves as the entry point for the script. It performs
     the following tasks:
+
     1. Validates and retrieves the files and directories to check from
        command line arguments.
     2. Recursively checks TypeScript files for eslint-disable statements.
