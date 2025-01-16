@@ -15,9 +15,9 @@
  * 
  * Example:
  * Instead of component-specific classes like:
- *   .greenregbtnOrganizationFundCampaign, .greenregbtnPledge (used in two different components for same functionality)
+ *   `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge` (used in two different components for same functionality)
  * Use:
- *   .addButton (a single reusable class in the global CSS file that is used for functionalities that add/create tasks)
+ *   `.addButton` (a single reusable class in the global CSS file that is used for functionalities that add/create tasks)
  *
  * Global Classes:
  *   `.inputField` (for form input fields)
