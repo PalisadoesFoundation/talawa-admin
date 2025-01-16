@@ -424,6 +424,7 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }} # Ensure proper branch checkout
           fetch-depth: 0 # Ensure full history for proper branching
 
       - name: Set up Node.js
@@ -439,11 +440,12 @@ jobs:
 
       - name: Commit and Push Changes
         run: |
+          date > generated.txt
           git config user.name "github-actions[bot]"
-          git config user.email "${{ github.actor }}+${{ github.actor }}@users.noreply.github.com"
-          git add docs/docs/auto-docs
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
           git commit -m "Auto-generate documentation"
-          git push origin HEAD:${{ github.head_ref }}
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
