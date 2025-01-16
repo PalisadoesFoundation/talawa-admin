@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Close, Search } from '@mui/icons-material';
+import { Check, Search } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -84,20 +84,14 @@ function AddMember(): JSX.Element {
   const toggleDialogModal = (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
 
-  const [createNewUserModalisOpen, setCreateNewUserModalIsOpen] =
-    useState(false);
-  function openCreateNewUserModal(): void {
-    setCreateNewUserModalIsOpen(true);
-  }
-
-  function closeCreateNewUserModal(): void {
-    setCreateNewUserModalIsOpen(false);
-  }
-  const toggleCreateNewUserModal = (): void =>
-    setCreateNewUserModalIsOpen(!addUserModalisOpen);
-
   const [addMember] = useMutation(ADD_MEMBER_MUTATION);
-  function useModal(initialState = false) {
+
+  function useModal(initialState = false): {
+    isOpen: boolean;
+    open: () => void;
+    close: () => void;
+    toggle: () => void;
+  } {
     const [isOpen, setIsOpen] = useState(initialState);
     const open = useCallback(() => setIsOpen(true), []);
     const close = useCallback(() => setIsOpen(false), []);
@@ -105,11 +99,10 @@ function AddMember(): JSX.Element {
 
     return { isOpen, open, close, toggle };
   }
-
   const {
-    isOpen: createNewUserModalIsOpen1,
-    open: openCreateNewUserModal1,
-    close: closeCreateNewUserModal1,
+    isOpen: createNewUserModalisOpen,
+    open: openCreateNewUserModal,
+    close: closeCreateNewUserModal,
   } = useModal();
   const createMember = async (userId: string): Promise<void> => {
     try {
@@ -435,7 +428,7 @@ function AddMember(): JSX.Element {
       <Modal
         data-testid="addNewUserModal"
         show={createNewUserModalisOpen}
-        onHide={closeCreateNewUserModal1} // Use the close function directly
+        onHide={closeCreateNewUserModal} // Use the close function directly
       >
         <Modal.Header closeButton className={styles.createUserModalHeader}>
           <Modal.Title>Create User</Modal.Title>

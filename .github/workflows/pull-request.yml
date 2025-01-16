@@ -195,14 +195,16 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v45
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
+     - name: Filter TypeScript files
+        id: filter-files
+        run: |
+          echo "ts_files=$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | tr ',' '\n' | grep -E '\.(ts|tsx)$' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+        shell: bash
 
       - name: Run Python script
+      if: steps.filter-files.outputs.ts_files != ''
         run: |
-          python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+          python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.filter-files.outputs.ts_files }}
 
   Check-Code-Coverage-Disable:
     name: Check for code coverage disable

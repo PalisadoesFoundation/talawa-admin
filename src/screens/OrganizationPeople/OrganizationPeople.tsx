@@ -1,5 +1,4 @@
 import { useLazyQuery } from '@apollo/client';
-import { Delete, Search } from '@mui/icons-material';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -10,7 +9,6 @@ import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -21,9 +19,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import SortingButton from 'subComponents/SortingButton';
-import { Dropdown } from 'react-bootstrap';
-import { Sort } from '@mui/icons-material';
+import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Delete, Search, Sort } from '@mui/icons-material';
 
 /**
  * OrganizationPeople component is used to display the list of members, admins and users of the organization.
@@ -305,10 +302,6 @@ function organizationPeople(): JSX.Element {
       },
     },
   ];
-
-  const handleSortChange = (value: string): void => {
-    setState(value === 'users' ? 2 : value === 'members' ? 0 : 1);
-  };
 
   return (
     <>
