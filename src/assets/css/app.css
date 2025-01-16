@@ -14083,6 +14083,7 @@ fieldset:disabled .btn {
 .btn-info:hover,
 .btn-info:active {
   color: #fff !important;
+  background-blend-mode: multiply;
 }
 
 /* Style for active button's background color */
