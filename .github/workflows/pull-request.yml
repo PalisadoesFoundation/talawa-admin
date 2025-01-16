@@ -428,7 +428,7 @@ jobs:
 
       - name: Check Repository URL
         run: |
-          echo "Repository URL: ${{ github.repository }}"
+          echo "Repository URL: ${{ github.event.pull_request.head.repo.full_name }}"
           echo "Branch: ${{ github.head_ref }}"
 
       - name: Set up Node.js
@@ -445,10 +445,10 @@ jobs:
       - name: Commit and Push Changes
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "${{ github.actor }}+${{ github.actor }}@users.noreply.github.com"
           git add .
           git commit -m "Auto-generate documentation"
-          git push
+          git push origin HEAD:${{ github.head_ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
