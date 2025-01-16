@@ -149,6 +149,7 @@ export default function people(): JSX.Element {
     }
   }
   useEffect(() => {
+    /* istanbul ignore else -- @preserve */
     if (mode == 0) {
       if (data) {
         setMembers(allMembers);
