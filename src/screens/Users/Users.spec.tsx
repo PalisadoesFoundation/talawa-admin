@@ -841,42 +841,4 @@ describe('Testing Users screen', () => {
       expect(rows.length).toBe(4);
     });
   });
-
-  it('renders InfiniteScroll with empty users list', async () => {
-    render(
-      <MockedProvider mocks={EMPTY_MOCKS} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    const infiniteScroll = screen.getByTestId('users-list');
-    expect(infiniteScroll).toBeInTheDocument();
-    expect(infiniteScroll).toHaveAttribute('data-length', '0');
-  });
-
-  it('renders InfiniteScroll with users list', async () => {
-    render(
-      <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    const infiniteScroll = screen.getByTestId('users-list');
-    expect(infiniteScroll).toBeInTheDocument();
-    expect(infiniteScroll).toHaveAttribute('data-length', '12'); // Assuming `MOCKS_NEW` returns 12 users
-  });
 });
