@@ -437,7 +437,6 @@ function AddMember(): JSX.Element {
           <div className="my-3">
             <div className="row">
               <div className="col-sm-6">
-                <h6>{translateOrgPeople('firstName')}</h6>
                 <InputGroup className="mt-2 mb-4">
                   <Form.Control
                     placeholder={translateOrgPeople('enterFirstName')}
@@ -449,7 +448,6 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
               <div className="col-sm-6">
-                <h6>{translateOrgPeople('lastName')}</h6>
                 <InputGroup className="mt-2 mb-4">
                   <Form.Control
                     placeholder={translateOrgPeople('enterLastName')}
@@ -461,7 +459,7 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
             </div>
-            <h6>{translateOrgPeople('emailAddress')}</h6>
+
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 placeholder={translateOrgPeople('enterEmail')}
@@ -477,7 +475,7 @@ function AddMember(): JSX.Element {
                 <EmailOutlinedIcon className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
-            <h6>{translateOrgPeople('password')}</h6>
+
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 placeholder={translateOrgPeople('enterPassword')}
@@ -499,7 +497,7 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{translateOrgPeople('confirmPassword')}</h6>
+
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 placeholder={translateOrgPeople('enterConfirmPassword')}
@@ -521,7 +519,7 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{translateOrgPeople('organization')}</h6>
+
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 className={styles.borderNone}
@@ -543,7 +541,6 @@ function AddMember(): JSX.Element {
                 width: '100%',
               }}
             >
-              <Check className={styles.searchIcon} />
               {translateOrgPeople('create')}
             </Button>
           </div>

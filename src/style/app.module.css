@@ -1,3 +1,42 @@
+/**
+ * CSS Methodology for Common Styles:
+ * 
+ * This project aims to reduce CSS duplication by merging similar styles across components
+ * into reusable global classes. This ensures consistency and simplifies maintenance.
+ * 
+ * Steps for contributors:
+ * 1. Identify duplicate or similar styles in different components (e.g., buttons, modals).
+ * 2. Create a global class with a clear, descriptive name (e.g., .addButton, .removeButton).
+ * 3. Use the new global class in all components requiring that style.
+ * 
+ * Naming Convention:
+ * - Use lowercase, descriptive names for global classes (e.g., .addButton, .removeButton).
+ * - Keep names generic enough for reuse but clear in their purpose.
+ * 
+ * Example:
+ * Instead of component-specific classes like:
+ *   `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge` (used in two different components for same functionality)
+ * Use:
+ *   `.addButton` (a single reusable class in the global CSS file that is used for functionalities that add/create tasks)
+ *
+ * Global Classes:
+ *   `.inputField` (for form input fields)
+ *   `.searchButton` (for form input field search button)
+ *   `.addButton` (for buttons that add/create task)
+ *   `.removeButton` (for buttons that remove/delete task)
+ *   `.modalHeader` (for header section of any modal)
+ *   `.editButton` (for buttons inside table)
+ *   `.switch` (for form toggles)
+ *   `.regularBtn` (for a simple blue button)
+ *   `.tableHeader` (for header section of any table component)
+ *   `.subtleBlueGrey` (for blue Text)
+ *
+ *
+ * GLobal Varibles:
+ *   --light-blue (for light blue contrast)
+ *   --dark-blue (for dark blue contrast)
+ */
+
 :root {
   /* Neutral Colors */
   --grey-light: #eaebef;
