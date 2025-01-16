@@ -211,7 +211,6 @@ const Users = (): JSX.Element => {
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
   };
-  /* istanbul ignore next */
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
@@ -222,7 +221,6 @@ const Users = (): JSX.Element => {
     });
     setHasMore(true);
   };
-  /* istanbul ignore next */
   const loadMoreUsers = (skipValue: number, limitVal: number): void => {
     setIsLoadingMore(true);
     fetchMore({
