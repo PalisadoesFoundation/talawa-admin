@@ -759,7 +759,13 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     render(
       <MockedProvider link={errorLink}>
-        <PostCard {...cardProps} />
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
