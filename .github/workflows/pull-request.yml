@@ -53,7 +53,10 @@ jobs:
       - name: Check for CSS violations and print correct imports
         if: ${{ steps.changed-ts-files.outputs.any_changed == 'true' }}
         run: |
-            echo "${{ steps.changed-ts-files.outputs.modified_files }}" | tr ' ' '\n' | xargs -I {} python3 ./.github/workflows/scripts/css_check.py --directory "$(dirname "{}")" --allowed_css_patterns app.module.css
+          # Pass all modified files as arguments to the script
+          python3 ./.github/workflows/scripts/css_check.py \
+            --directories ${{ steps.changed-ts-files.outputs.modified_files }} \
+            --allowed_css_patterns app.module.css
 
       - name: Get changed TypeScript files
         id: changed-files
