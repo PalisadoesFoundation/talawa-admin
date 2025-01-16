@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Close, Search } from '@mui/icons-material';
+import { Check, Search } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -20,7 +20,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -84,33 +84,26 @@ function AddMember(): JSX.Element {
   const toggleDialogModal = (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
 
-  const [createNewUserModalisOpen, setCreateNewUserModalIsOpen] =
-    useState(false);
-  function openCreateNewUserModal(): void {
-    setCreateNewUserModalIsOpen(true);
-  }
-
-  function closeCreateNewUserModal(): void {
-    setCreateNewUserModalIsOpen(false);
-  }
-  const toggleCreateNewUserModal = (): void =>
-    setCreateNewUserModalIsOpen(!addUserModalisOpen);
-
   const [addMember] = useMutation(ADD_MEMBER_MUTATION);
 
-  const [createNewUserModalisOpen1, setCreateNewUserModalIsOpen1] =
-    useState(false);
+  function useModal(initialState = false): {
+    isOpen: boolean;
+    open: () => void;
+    close: () => void;
+    toggle: () => void;
+  } {
+    const [isOpen, setIsOpen] = useState(initialState);
+    const open = useCallback(() => setIsOpen(true), []);
+    const close = useCallback(() => setIsOpen(false), []);
+    const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
 
-  // Function to open the modal
-  function openCreateNewUserModal1(): void {
-    setCreateNewUserModalIsOpen(true);
+    return { isOpen, open, close, toggle };
   }
-
-  // Function to close the modal
-  function closeCreateNewUserModal1(): void {
-    setCreateNewUserModalIsOpen(false);
-  }
-
+  const {
+    isOpen: createNewUserModalisOpen,
+    open: openCreateNewUserModal,
+    close: closeCreateNewUserModal,
+  } = useModal();
   const createMember = async (userId: string): Promise<void> => {
     try {
       await addMember({
@@ -128,7 +121,7 @@ function AddMember(): JSX.Element {
     }
   };
 
-  const { orgId: currentUrl } = useParams();
+  const { orgId: currentUrl } = useParams<{ orgId: string }>();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -435,7 +428,7 @@ function AddMember(): JSX.Element {
       <Modal
         data-testid="addNewUserModal"
         show={createNewUserModalisOpen}
-        onHide={closeCreateNewUserModal1} // Use the close function directly
+        onHide={closeCreateNewUserModal} // Use the close function directly
       >
         <Modal.Header closeButton className={styles.createUserModalHeader}>
           <Modal.Title>Create User</Modal.Title>
