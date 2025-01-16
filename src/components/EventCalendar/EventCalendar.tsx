@@ -9,6 +9,26 @@ import HolidayCard from '../HolidayCards/HolidayCard';
 import { holidays, months, weekdays } from './constants';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import YearlyEventCalender from './YearlyEventCalender';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
 interface InterfaceEventListCardProps {
   userRole?: string;
   key?: string;
