@@ -12,13 +12,12 @@ import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
 import {
   EMPTY_MOCKS,
-  MOCKS,
-  MOCKS2,
   MOCKS_NEW,
   MOCKS_NEW2,
   MOCKS_NEW3,
   MOCKS_NEW_2,
 } from './UsersMocks.mocks';
+import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
@@ -825,17 +824,14 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      // Initial load
       await wait();
       let rows = screen.getAllByRole('row');
       expect(rows.length).toBe(4);
 
-      // Simulate scrolling to the bottom
       await act(async () => {
         fireEvent.scroll(window, { target: { scrollY: 1000 } });
       });
 
-      // Wait for loadMoreUsers to trigger
       await wait();
       rows = screen.getAllByRole('row');
       expect(rows.length).toBe(4);
