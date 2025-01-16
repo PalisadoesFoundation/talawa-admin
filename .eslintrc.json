@@ -153,5 +153,14 @@
     "docs/sidebars.ts",
     "docs/src/**",
     "docs/blog/**"
+  ],
+  "overrides": [
+    {
+      "files": ["scripts/githooks/check-localstorage-usage.js"],
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    }
   ]
 }

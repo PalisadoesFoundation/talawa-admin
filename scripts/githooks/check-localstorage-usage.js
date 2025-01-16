@@ -7,7 +7,6 @@ import { execSync } from 'child_process';
 const args = process.argv.slice(2);
 const scanEntireRepo = args.includes('--scan-entire-repo');
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const containsSkipComment = (file) => {
   try {
     const content = readFileSync(file, 'utf-8');
@@ -18,7 +17,6 @@ const containsSkipComment = (file) => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getModifiedFiles = () => {
   try {
     if (scanEntireRepo) {
@@ -42,7 +40,6 @@ const files = getModifiedFiles();
 
 const filesWithLocalStorage = [];
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const checkLocalStorageUsage = (file) => {
   if (!file) {
     return;
