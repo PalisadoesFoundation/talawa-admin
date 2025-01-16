@@ -18,7 +18,7 @@ import {
   MOCKS_NEW2,
   MOCKS_NEW3,
   MOCKS_NEW_2,
-} from './UsersMocks';
+} from './UsersMocks.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
@@ -840,5 +840,43 @@ describe('Testing Users screen', () => {
       rows = screen.getAllByRole('row');
       expect(rows.length).toBe(4);
     });
+  });
+
+  it('renders InfiniteScroll with empty users list', async () => {
+    render(
+      <MockedProvider mocks={EMPTY_MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const infiniteScroll = screen.getByTestId('users-list');
+    expect(infiniteScroll).toBeInTheDocument();
+    expect(infiniteScroll).toHaveAttribute('data-length', '0');
+  });
+
+  it('renders InfiniteScroll with users list', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const infiniteScroll = screen.getByTestId('users-list');
+    expect(infiniteScroll).toBeInTheDocument();
+    expect(infiniteScroll).toHaveAttribute('data-length', '12'); // Assuming `MOCKS_NEW` returns 12 users
   });
 });

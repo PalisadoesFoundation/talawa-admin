@@ -428,10 +428,7 @@ const Users = (): JSX.Element => {
             />
           )}
           <InfiniteScroll
-            dataLength={
-              /* istanbul ignore next */
-              displayedUsers.length ?? 0
-            }
+            dataLength={displayedUsers.length ?? 0}
             next={() => {
               loadMoreUsers(displayedUsers.length, perPageResult);
             }}

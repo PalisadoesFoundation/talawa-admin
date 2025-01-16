@@ -503,26 +503,6 @@ export const EMPTY_MOCKS = [
   },
 ];
 
-export const EMPTY_MOCK_NEW = [
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 12,
-        skip: 0,
-        firstName_contains: 'NonexistentName',
-        lastName_contains: '',
-        order: 'createdAt_DESC',
-      },
-    },
-    result: {
-      data: {
-        users: [],
-      },
-    },
-  },
-];
-
 export const createAddress = {
   city: 'Kingston',
   countryCode: 'JM',
