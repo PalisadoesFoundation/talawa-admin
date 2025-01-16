@@ -419,17 +419,14 @@ jobs:
 
   generate-docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.head_ref }}
-
-      - name: Check Repository URL
-        run: |
-          echo "Repository URL: ${{ github.event.pull_request.head.repo.full_name }}"
-          echo "Branch: ${{ github.head_ref }}"
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -443,14 +440,22 @@ jobs:
         run: npm run generate-docs
 
       - name: Commit and Push Changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "${{ github.event.pull_request.user.id }}+${{ github.event.pull_request.user.login }}@users.noreply.github.com"          git add .
-          git commit -m "Auto-generate documentation"
-          git push origin HEAD:${{ github.head_ref }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [[ $(git status --porcelain) ]]; then
+            echo "Changes detected. Auto-committing updates."
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "Auto-generate documentation"
+            if ! git push origin HEAD:"$HEAD_REF"; then
+              echo "Failed to push changes. Please check if you have the correct permissions."
+              exit 1
+            fi
+          else
+            echo "No changes detected."
+          fi
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
     runs-on: ubuntu-latest
