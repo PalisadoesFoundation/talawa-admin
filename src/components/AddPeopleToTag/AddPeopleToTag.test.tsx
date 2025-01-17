@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import React from 'react';
 import { vi, expect, describe, it } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
