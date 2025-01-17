@@ -6,7 +6,6 @@ import {
   SlackLogo,
   XLogo,
   YoutubeLogo,
-  RedditLogo,
 } from 'assets/svgs/social-icons';
 
 export const socialMediaLinks = [
@@ -44,10 +43,5 @@ export const socialMediaLinks = [
     tag: 'instagram',
     href: 'https://www.instagram.com/palisadoes/',
     logo: InstagramLogo,
-  },
-  {
-    tag: 'reddit',
-    href: '',
-    logo: RedditLogo,
   },
 ];
