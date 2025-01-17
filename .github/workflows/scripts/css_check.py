@@ -186,12 +186,12 @@ def main():
         print("\n".join(output))
         print(
             """
-Please address the above CSS violations:
-1. For invalid CSS imports, ensure you're using the correct import syntax and file paths.
-2. For embedded CSS, move the CSS to appropriate stylesheet files and import them correctly.
-3. Make sure to use only the allowed CSS patterns as specified in the script arguments.
-4. Check that all imported CSS files exist in the specified locations.
-"""
+            Please address the above CSS violations:
+            1. For invalid CSS imports, ensure you're using the correct import syntax and file paths.
+            2. For embedded CSS, move the CSS to appropriate stylesheet files and import them correctly.
+            3. Make sure to use only the allowed CSS patterns as specified in the script arguments.
+            4. Check that all imported CSS files exist in the specified locations.
+            """
         )
     if args.show_success and result.correct_imports:
         print("\nCorrect CSS Imports:")
