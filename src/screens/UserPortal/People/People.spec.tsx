@@ -1240,7 +1240,6 @@ describe('People Component Additional Coverage Tests', () => {
     searchInput.remove();
 
     userEvent.click(searchBtn);
-    // Wait to ensure no errors occur
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
