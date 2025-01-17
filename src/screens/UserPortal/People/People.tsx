@@ -149,17 +149,17 @@ export default function people(): JSX.Element {
     }
   }
   useEffect(() => {
-    /* istanbul ignore else -- @preserve */
-    if (mode == 0) {
-      if (data) {
-        setMembers(allMembers);
-      }
-    } else if (mode == 1) {
+    if (mode === 0 && data) {
+      setMembers(allMembers);
+    } else if (mode === 1) {
+      // Clear members immediately when switching to admin mode
+      setMembers([]);
+      // Then update with admin data when it's available
       if (data2) {
         setMembers(admins);
       }
     }
-  }, [mode]);
+  }, [mode, data, data2, allMembers, admins]);
 
   return (
     <>

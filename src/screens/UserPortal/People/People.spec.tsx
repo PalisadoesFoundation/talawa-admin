@@ -1243,4 +1243,97 @@ describe('People Component Additional Coverage Tests', () => {
     // Wait to ensure no errors occur
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
+  it('handles admin mode transition when admin data is not yet available', async () => {
+    // Create a mock that will delay the admin data response
+    const delayedAdminMock = {
+      request: {
+        query: ORGANIZATION_ADMINS_LIST,
+        variables: { id: '' },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              __typename: 'Organization', // Add typename to match actual response
+              _id: 'org-1',
+              admins: [
+                {
+                  _id: 'admin1',
+                  firstName: 'Admin',
+                  lastName: 'Test',
+                  email: 'admin@test.com',
+                  image: null,
+                  createdAt: new Date().toISOString(),
+                },
+              ],
+            },
+          ],
+        },
+      },
+      delay: 1000, // Add a delay to ensure we can switch modes before data arrives
+    };
+
+    const membersListMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: { orgId: '', firstName_contains: '' },
+      },
+      result: {
+        data: {
+          organizationsMemberConnection: {
+            edges: [
+              {
+                _id: 'member1',
+                firstName: 'Test',
+                lastName: 'Member',
+                email: 'member@test.com',
+                image: null,
+                createdAt: new Date().toISOString(),
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[membersListMock, delayedAdminMock]}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for initial members data to load
+    await waitFor(() => {
+      expect(screen.getByText('Test Member')).toBeInTheDocument();
+    });
+
+    // Switch to admin mode before admin data is available
+    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await waitFor(() => {
+      userEvent.click(screen.getByTestId('modeBtn1'));
+    });
+
+    // Initially there should be no members shown as we're waiting for admin data
+    expect(screen.queryByText('Test Member')).not.toBeInTheDocument();
+
+    // Wait for admin data to load and verify it appears
+    await waitFor(
+      () => {
+        // Check for the admin's name (firstName + lastName)
+        expect(screen.getByText('Admin Test')).toBeInTheDocument();
+        // Also verify that the admin role is displayed
+        expect(screen.getByText('Admin')).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+  });
 });
