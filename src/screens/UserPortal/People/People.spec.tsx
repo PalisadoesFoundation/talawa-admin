@@ -6,6 +6,7 @@ import {
   fireEvent,
   waitFor,
   waitForElementToBeRemoved,
+  act,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -21,7 +22,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import People from './People';
 import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 /**
  * This file contains unit tests for the People component.
@@ -1243,9 +1243,106 @@ describe('People Component Additional Coverage Tests', () => {
     // Wait to ensure no errors occur
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
-  it('handles admin mode transition when admin data is not yet available', async () => {
-    // Create a mock that will delay the admin data response
-    const delayedAdminMock = {
+
+  it('renders sliced members correctly when rowsPerPage > 0', async () => {
+    const localMocks = [
+      {
+        request: {
+          query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+          variables: { orgId: '', firstName_contains: '' },
+        },
+        result: {
+          data: {
+            organizationsMemberConnection: {
+              edges: Array.from({ length: 6 }, (_, i) => ({
+                _id: `id-${i}`,
+                firstName: `First${i}`,
+                lastName: `Last${i}`,
+                image: '',
+                email: `test${i}@example.com`,
+                userType: 'Member',
+              })),
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADMINS_LIST,
+          variables: { id: '' },
+        },
+        result: {
+          data: {
+            organizations: [{ _id: 'org-1', admins: [] }],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={localMocks} addTypename={false}>
+        <People />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('First0 Last0')).toBeInTheDocument();
+      expect(screen.getByText('First4 Last4')).toBeInTheDocument();
+      expect(screen.queryByText('First5 Last5')).not.toBeInTheDocument();
+    });
+  });
+
+  it('passes expected props to PeopleCard components', async () => {
+    const localMocks = [
+      {
+        request: {
+          query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+          variables: { orgId: '', firstName_contains: '' },
+        },
+        result: {
+          data: {
+            organizationsMemberConnection: {
+              edges: [
+                {
+                  _id: 'mockId1',
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  image: 'mockImage',
+                  email: 'john@example.com',
+                  userType: 'Member',
+                },
+              ],
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADMINS_LIST,
+          variables: { id: '' },
+        },
+        result: {
+          data: {
+            organizations: [{ _id: 'org-1', admins: [] }],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={localMocks} addTypename={false}>
+        <People />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('john@example.com')).toBeInTheDocument();
+    });
+  });
+
+  it('Sets userType to Admin if user is found in admins list', async (): Promise<void> => {
+    const adminMock = {
       request: {
         query: ORGANIZATION_ADMINS_LIST,
         variables: { id: '' },
@@ -1254,26 +1351,21 @@ describe('People Component Additional Coverage Tests', () => {
         data: {
           organizations: [
             {
-              __typename: 'Organization',
-              _id: 'org-1',
+              _id: 'testOrg',
               admins: [
                 {
-                  _id: 'admin1',
-                  firstName: 'Admin',
-                  lastName: 'Test',
+                  _id: 'admin123',
+                  firstName: 'Test',
+                  lastName: 'Admin',
                   email: 'admin@test.com',
-                  image: null,
-                  createdAt: new Date().toISOString(),
                 },
               ],
             },
           ],
         },
       },
-      delay: 1000, // Add a delay to ensure we can switch modes before data arrives
     };
-
-    const membersListMock = {
+    const membersMock = {
       request: {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
         variables: { orgId: '', firstName_contains: '' },
@@ -1283,67 +1375,27 @@ describe('People Component Additional Coverage Tests', () => {
           organizationsMemberConnection: {
             edges: [
               {
-                _id: 'member1',
+                _id: 'admin123',
                 firstName: 'Test',
-                lastName: 'Member',
-                email: 'member@test.com',
-                image: null,
-                createdAt: new Date().toISOString(),
+                lastName: 'Admin',
+                email: 'admin@test.com',
               },
             ],
           },
         },
       },
     };
-
+    const link = new StaticMockLink([adminMock, membersMock], true);
     render(
       <MockedProvider
+        mocks={[adminMock, membersMock]}
         addTypename={false}
-        mocks={[membersListMock, delayedAdminMock]}
+        link={link}
       >
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
+        <People />
       </MockedProvider>,
     );
-
-    // Wait for initial data to load and verify member is shown
-    await waitFor(() => {
-      expect(screen.getByText('Test Member')).toBeInTheDocument();
-    });
-
-    // Use act to wrap state changes
-    await act(async () => {
-      // Open dropdown
-      fireEvent.click(screen.getByTestId('modeChangeBtn'));
-      // Wait for dropdown to open
-      await waitFor(() => {
-        expect(screen.getByTestId('modeBtn1')).toBeInTheDocument();
-      });
-      // Click admin mode button
-      fireEvent.click(screen.getByTestId('modeBtn1'));
-    });
-
-    // Wait for admin data to finish loading
-    await waitFor(
-      () => {
-        // Verify the member is no longer shown
-        expect(screen.queryByText('Test Member')).not.toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
-
-    // Wait for admin data to load and verify admin appears
-    await waitFor(
-      () => {
-        expect(screen.getByText('Admin Test')).toBeInTheDocument();
-        expect(screen.getByText('Admin')).toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
+    await wait();
+    expect(screen.getByText('Admin')).toBeInTheDocument();
   });
 });

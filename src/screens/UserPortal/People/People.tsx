@@ -149,27 +149,16 @@ export default function people(): JSX.Element {
     }
   }
   useEffect(() => {
-    if (mode === 1) {
-      // Admin mode
-      // Immediately clear current members when switching to admin mode
-      setMembers([]);
-      // Only set admin members if we have the data
-      if (data2 && data2.organizations[0]?.admins) {
-        const adminMembers = data2.organizations[0].admins.map(
-          (admin: InterfaceMember) => ({
-            ...admin,
-            userType: 'Admin',
-          }),
-        );
-        setMembers(adminMembers);
-      }
-    } else if (mode === 0) {
-      // All members mode
-      if (data && data.organizationsMemberConnection) {
+    if (mode == 0) {
+      if (data) {
         setMembers(allMembers);
       }
+    } else if (mode == 1) {
+      if (data2) {
+        setMembers(admins);
+      }
     }
-  }, [mode, data, data2, allMembers]);
+  }, [mode]);
 
   return (
     <>
