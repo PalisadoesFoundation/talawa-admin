@@ -149,17 +149,27 @@ export default function people(): JSX.Element {
     }
   }
   useEffect(() => {
-    if (mode === 0 && data) {
-      setMembers(allMembers);
-    } else if (mode === 1) {
-      // Clear members immediately when switching to admin mode
+    if (mode === 1) {
+      // Admin mode
+      // Immediately clear current members when switching to admin mode
       setMembers([]);
-      // Then update with admin data when it's available
-      if (data2) {
-        setMembers(admins);
+      // Only set admin members if we have the data
+      if (data2 && data2.organizations[0]?.admins) {
+        const adminMembers = data2.organizations[0].admins.map(
+          (admin: InterfaceMember) => ({
+            ...admin,
+            userType: 'Admin',
+          }),
+        );
+        setMembers(adminMembers);
+      }
+    } else if (mode === 0) {
+      // All members mode
+      if (data && data.organizationsMemberConnection) {
+        setMembers(allMembers);
       }
     }
-  }, [mode, data, data2, allMembers, admins]);
+  }, [mode, data, data2, allMembers]);
 
   return (
     <>
@@ -238,8 +248,7 @@ export default function people(): JSX.Element {
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage,
                         )
-                      : /* istanbul ignore next */
-                        members
+                      : members
                     ).map((member: InterfaceMember, index) => {
                       const name = `${member.firstName} ${member.lastName}`;
 
@@ -263,10 +272,7 @@ export default function people(): JSX.Element {
               <tbody>
                 <tr>
                   <PaginationList
-                    count={
-                      /* istanbul ignore next */
-                      members ? members.length : 0
-                    }
+                    count={members ? members.length : 0}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

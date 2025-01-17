@@ -1254,7 +1254,7 @@ describe('People Component Additional Coverage Tests', () => {
         data: {
           organizations: [
             {
-              __typename: 'Organization', // Add typename to match actual response
+              __typename: 'Organization',
               _id: 'org-1',
               admins: [
                 {
@@ -1311,26 +1311,36 @@ describe('People Component Additional Coverage Tests', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial members data to load
+    // Wait for initial data to load and verify member is shown
     await waitFor(() => {
       expect(screen.getByText('Test Member')).toBeInTheDocument();
     });
 
-    // Switch to admin mode before admin data is available
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await waitFor(() => {
-      userEvent.click(screen.getByTestId('modeBtn1'));
+    // Use act to wrap state changes
+    await act(async () => {
+      // Open dropdown
+      fireEvent.click(screen.getByTestId('modeChangeBtn'));
+      // Wait for dropdown to open
+      await waitFor(() => {
+        expect(screen.getByTestId('modeBtn1')).toBeInTheDocument();
+      });
+      // Click admin mode button
+      fireEvent.click(screen.getByTestId('modeBtn1'));
     });
 
-    // Initially there should be no members shown as we're waiting for admin data
-    expect(screen.queryByText('Test Member')).not.toBeInTheDocument();
-
-    // Wait for admin data to load and verify it appears
+    // Wait for admin data to finish loading
     await waitFor(
       () => {
-        // Check for the admin's name (firstName + lastName)
+        // Verify the member is no longer shown
+        expect(screen.queryByText('Test Member')).not.toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+
+    // Wait for admin data to load and verify admin appears
+    await waitFor(
+      () => {
         expect(screen.getByText('Admin Test')).toBeInTheDocument();
-        // Also verify that the admin role is displayed
         expect(screen.getByText('Admin')).toBeInTheDocument();
       },
       { timeout: 2000 },
