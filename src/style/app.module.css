@@ -4472,8 +4472,6 @@ button[data-testid='createPostBtn'] {
 .mainContainer_people {
   margin-top: 2rem;
   width: 100%;
-  margin-right: 1000px;
-  /* max-width: 800px; */
   flex-grow: 3;
   max-height: 90vh;
   overflow: auto;
