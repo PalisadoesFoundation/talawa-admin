@@ -427,8 +427,8 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.head_ref }}
+          repository: gautam-divyanshu/talawa-admin          
+          ref: auto-docs
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
       - name: Set up Node.js
