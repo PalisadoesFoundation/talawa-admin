@@ -428,7 +428,7 @@ const Users = (): JSX.Element => {
             />
           )}
           <InfiniteScroll
-            dataLength={displayedUsers.length ?? 0}
+            dataLength={displayedUsers.length}
             next={() => {
               loadMoreUsers(displayedUsers.length, perPageResult);
             }}
@@ -469,7 +469,7 @@ const Users = (): JSX.Element => {
                           index={index}
                           resetAndRefetch={resetAndRefetch}
                           user={user}
-                          loggedInUserId={loggedInUserId ? loggedInUserId : ''}
+                          loggedInUserId={loggedInUserId}
                         />
                       );
                     },

@@ -69,6 +69,16 @@ export const MOCKS_NEW_2 = [
       },
     },
   },
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+  },
 ];
 
 export const MOCKS_NEW = [
