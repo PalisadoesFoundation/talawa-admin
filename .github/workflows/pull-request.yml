@@ -423,11 +423,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.head_ref }}
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
