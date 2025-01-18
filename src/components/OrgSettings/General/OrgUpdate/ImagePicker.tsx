@@ -9,6 +9,7 @@ import { FaCamera } from 'react-icons/fa';
 interface InterfaceImagePickerProps {
   defaultImage?: string; // The default image to display in the preview.
   onImageSelect: (base64Image: string) => void; // Callback for when an image is selected.
+  defaultPlaceholderImage: string;
 }
 
 /**
@@ -29,11 +30,16 @@ const ImagePicker: React.FC<InterfaceImagePickerProps> = ({
   const handleImageChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
-    const file = e.target.files && e.target.files[0];
+    const file = e.target.files?.[0];
     if (file) {
-      const base64Image = await convertToBase64(file);
-      setPreviewImage(base64Image);
-      onImageSelect(base64Image);
+      try {
+        // setIsLoading(true);
+        const base64Image = await convertToBase64(file);
+        setPreviewImage(base64Image);
+        onImageSelect(base64Image);
+      } catch (error) {
+        console.error('Failed to convert image:', error);
+      }
     }
   };
 
