@@ -47,6 +47,25 @@ interface InterfaceOrgPost {
  * It also provides the functionality to create a new post. The user can also sort the posts based on the date of creation.
  * The user can also search for a post based on the title of the post.
  * @returns JSX.Element which contains the posts of the organization.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.removeButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -167,7 +186,6 @@ function orgPost(): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('postCreatedSuccess') as string);
         refetch();
@@ -273,7 +291,7 @@ function orgPost(): JSX.Element {
     if (a.pinned === b.pinned) {
       return 0;
     }
-    /* istanbul ignore next */
+
     if (a.pinned) {
       return -1;
     }
@@ -413,7 +431,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('postTitle1')}
               data-testid="modalTitle"
               autoComplete="off"
@@ -430,7 +448,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="descrip"
               id="descrip"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('information1')}
               data-testid="modalinfo"
               autoComplete="off"
@@ -455,6 +473,7 @@ function orgPost(): JSX.Element {
               multiple={false}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
+              className={`mb-3 ${styles.inputField}`}
             />
 
             {postformState.addMedia && file && (
@@ -506,13 +525,14 @@ function orgPost(): JSX.Element {
                   pinPost: !postformState.pinPost,
                 })
               }
+              className={styles.switch}
             />
           </Modal.Body>
 
           <Modal.Footer>
             <Button
               variant="secondary"
-              className={styles.closeButtonOrgPost}
+              className={styles.removeButton}
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
@@ -522,7 +542,7 @@ function orgPost(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createPostBtn"
-              className={`${styles.addButtonOrgPost} mt-2`}
+              className={`${styles.addButton} mt-2`}
             >
               {t('addPost')}
             </Button>

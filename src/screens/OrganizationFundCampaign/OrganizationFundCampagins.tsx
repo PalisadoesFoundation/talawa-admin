@@ -6,7 +6,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -74,6 +74,30 @@ const dataGridStyle = {
  * - Shows error and loading states using `Loader` and error message components.
  *
  * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButon`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -284,7 +308,7 @@ const orgFundCampaign = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={styles.editButton}
               data-testid="editCampaignBtn"
               onClick={() =>
                 handleOpenModal(
@@ -313,7 +337,7 @@ const orgFundCampaign = (): JSX.Element => {
           <Button
             variant="outline-success"
             size="sm"
-            className="rounded"
+            className={styles.editButton}
             data-testid="viewBtn"
             onClick={() => handleClick(params.row.campaign._id as string)}
           >
@@ -340,27 +364,28 @@ const orgFundCampaign = (): JSX.Element => {
         <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
-      <div className={styles.btnsContainerOrganizationFundCampaign}>
-        <div className={styles.inputOrganizationFundCampaign}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputFieldOrganizationFundCampaign}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchFullName"
-          />
-          <Button
-            className="position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center"
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}>
-          <div className="d-flex justify-space-between">
+      <Row className={styles.head}>
+        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+          <div className={`${styles.input} mb-1`}>
+            <Form.Control
+              type="name"
+              placeholder={tCommon('searchByName')}
+              autoComplete="off"
+              required
+              className={styles.inputField}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              data-testid="searchFullName"
+            />
+            <Button
+              className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center ${styles.searchButton}`}
+              data-testid="searchBtn"
+            >
+              <Search />
+            </Button>
+          </div>
+          {/* <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}> */}
+          <div className={styles.btnsBlock}>
             <SortingButton
               sortingOptions={[
                 { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
@@ -381,10 +406,10 @@ const orgFundCampaign = (): JSX.Element => {
               buttonLabel={tCommon('sort')}
             />
           </div>
-          <div>
+          <div className={styles.btnsBlock}>
             <Button
               variant="success"
-              className={styles.orgFundCampaignButton}
+              className={styles.dropdown}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addCampaignBtn"
               disabled={isArchived}
@@ -393,8 +418,9 @@ const orgFundCampaign = (): JSX.Element => {
               {t('addCampaign')}
             </Button>
           </div>
+          {/* </div> */}
         </div>
-      </div>
+      </Row>
 
       <DataGrid
         disableColumnMenu

@@ -34,6 +34,25 @@ import SortingButton from 'subComponents/SortingButton';
  *
  * This component does not accept any props and is responsible for displaying
  * the content associated with the corresponding route.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.inputField`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 
 function OrganizationTags(): JSX.Element {
@@ -82,7 +101,6 @@ function OrganizationTags(): JSX.Element {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
           orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
-          /* istanbul ignore next */
           null,
       },
       updateQuery: (
@@ -95,7 +113,7 @@ function OrganizationTags(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           organizations: [
@@ -146,7 +164,6 @@ function OrganizationTags(): JSX.Element {
         setCreateTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -283,7 +300,7 @@ function OrganizationTags(): JSX.Element {
             variant="outline-primary"
             onClick={() => redirectToManageTag(params.row._id)}
             data-testid="manageTagBtn"
-            className={styles.addButton}
+            className={styles.editButton}
           >
             {t('manageTag')}
           </Button>
@@ -366,7 +383,7 @@ function OrganizationTags(): JSX.Element {
                   next={loadMoreUserTags}
                   hasMore={
                     orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
-                      ?.hasNextPage ?? /* istanbul ignore next */ false
+                      ?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}
                   scrollableTarget="orgUserTagsScrollableDiv"
@@ -377,7 +394,7 @@ function OrganizationTags(): JSX.Element {
                     hideFooter={true}
                     getRowId={(row) => row.id}
                     slots={{
-                      noRowsOverlay: /* istanbul ignore next */ () => (
+                      noRowsOverlay: () => (
                         <Stack
                           height="100%"
                           alignItems="center"
@@ -393,6 +410,7 @@ function OrganizationTags(): JSX.Element {
                       '& .MuiDataGrid-row': {
                         backgroundColor: 'var(--tablerow-bg-color)',
                         '&:focus-within': {
+                          outline: '2px solid #000',
                           outlineOffset: '-2px',
                         },
                       },
@@ -405,6 +423,7 @@ function OrganizationTags(): JSX.Element {
                         boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
                       },
                       '& .MuiDataGrid-cell:focus': {
+                        outline: '2px solid #000',
                         outlineOffset: '-2px',
                       },
                     }}
@@ -446,7 +465,7 @@ function OrganizationTags(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('tagNamePlaceholder')}
               data-testid="tagNameInput"
               autoComplete="off"
@@ -463,7 +482,7 @@ function OrganizationTags(): JSX.Element {
               variant="secondary"
               onClick={(): void => hideCreateTagModal()}
               data-testid="closeCreateTagModal"
-              className={styles.closeButton}
+              className={styles.removeButton}
             >
               {tCommon('cancel')}
             </Button>

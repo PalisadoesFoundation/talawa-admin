@@ -129,8 +129,6 @@
     "@types/react": "^18.3.12",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-bootstrap": "^0.32.37",
-    "@types/react-chartjs-2": "^2.5.7",
-    "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^18.3.1",
     "@types/react-google-recaptcha": "^2.1.9",
     "@types/react-router-dom": "^5.1.8",
@@ -169,6 +167,14 @@
   },
   "engines": {
     "node": ">=20.x"
+  },
+  "overrides": {
+    "core-js": "^3.40.0",
+    "rc-color-picker": {
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
+    },
+    "gulp-header": "^2.0.9"
   },
   "lint-staged": {
     "**/*.{ts, tsx, json, scss, css}": [

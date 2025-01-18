@@ -35,6 +35,24 @@ interface InterfaceVenueCardProps {
  *   handleDelete={handleDeleteVenue}
  * />
  * ```
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const VenueCard = ({
   venueItem,
@@ -85,22 +103,22 @@ const VenueCard = ({
           <div className="d-flex justify-content-end gap-2 mb-2 me-3">
             {/* Edit button */}
             <Button
-              variant="outline-secondary"
               size="sm"
               onClick={() => {
                 showEditVenueModal(venueItem);
               }}
               data-testid={`updateVenueBtn${index + 1}`}
+              className={`btn ${styles.addButton}`}
             >
               <i className="fa fa-pen me-1"></i>
               <span>{tCommon('edit')}</span>
             </Button>
             {/* Delete button */}
             <Button
-              variant="outline-danger"
               size="sm"
               data-testid={`deleteVenueBtn${index + 1}`}
               onClick={() => handleDelete(venueItem._id)}
+              className={`btn btn-danger ${styles.removeButton}`}
             >
               <i className="fa fa-trash me-2"></i>
               <span>{tCommon('delete')}</span>

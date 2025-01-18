@@ -1,9 +1,29 @@
 import type { TFunction } from 'i18next';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import styles from '../../style/app.module.css';
 
 /**
  * Remove UserTag Modal component for the Manage Tag screen.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.modalHeader`
+ * - `.removeButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 
 export interface InterfaceRemoveUserTagModalProps {
@@ -33,7 +53,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
         keyboard={false}
         centered
       >
-        <Modal.Header closeButton className="bg-primary">
+        <Modal.Header closeButton className={styles.modalHeader}>
           <Modal.Title className="text-white" id="removeUserTag">
             {t('removeUserTag')}
           </Modal.Title>
@@ -44,7 +64,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
         <Modal.Footer>
           <Button
             type="button"
-            className="btn btn-danger"
+            className={`btn btn-danger ${styles.removeButton}`}
             data-dismiss="modal"
             role="button"
             aria-label={tCommon('no')}
@@ -55,7 +75,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
           </Button>
           <Button
             type="button"
-            className="btn btn-success"
+            className={`btn ${styles.addButton}`}
             role="button"
             aria-label={tCommon('yes')}
             onClick={handleRemoveUserTag}
