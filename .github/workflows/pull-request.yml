@@ -417,26 +417,17 @@ jobs:
           docker stop talawa-admin-app-container
           docker rm talawa-admin-app-container
 
+
   generate-docs:
     runs-on: ubuntu-latest
     permissions:
-        actions: write
-        checks: write
-        contents: write
-        deployments: write
-        id-token: write
-        issues: write
-        discussions: write
-        packages: write
-        pages: write
-        pull-requests: write
-        repository-projects: write
-        security-events: write  
-        statuses: write
+      contents: write
+      id-token: write
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -451,23 +442,21 @@ jobs:
       - name: Generate Documentation
         run: npm run generate-docs
 
+      - name: Configure Git User
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
       - name: Commit and Push Changes
-        env:
-          HEAD_REF: ${{ github.head_ref }}
         run: |
           if [[ $(git status --porcelain) ]]; then
-            echo "Changes detected. Auto-committing updates."
-            git config user.name "gautam-divyanshu"
-            git config user.email "137816099+gautam-divyanshu@users.noreply.github.com"
+            echo "Changes detected. Committing and pushing updates."
             git add --all
             git commit -m "Auto-generate documentation"
-            if ! git push origin HEAD:"$HEAD_REF"; then
-              echo "Failed to push changes. Please check if you have the correct permissions."
-              exit 1
-            fi
+            git push origin ${{ github.head_ref }}
           else
             echo "No changes detected."
-          fi
+
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
     runs-on: ubuntu-latest
