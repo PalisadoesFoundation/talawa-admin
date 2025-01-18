@@ -104,7 +104,9 @@
   --tablerow-bg-color: #ffffff;
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
-  --sort-bg: #fcfcfc /* Font Sizes */ --font-size-header: 16px;
+  --sort-bg: #fcfcfc;
+  /* Font Sizes */
+  --font-size-header: 16px;
 
   /* Borders and Radius */
   --primary-border-solid: 1px solid var(--dropdown-border-color);
@@ -2990,6 +2992,21 @@ form > input {
 
 .selectOrgText input {
   outline: none !important;
+}
+
+.selectOrgText {
+  :global(.MuiOutlinedInput-root.Mui-focused) fieldset {
+    border-color: var(--primary-color);
+  }
+
+  :global(.MuiInputLabel-root.Mui-focused) {
+    color: var(--primary-color);
+  }
+
+  :global(.MuiAutocomplete-option:hover) {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+  }
 }
 
 .row .left_portion .inner .palisadoes_logo {

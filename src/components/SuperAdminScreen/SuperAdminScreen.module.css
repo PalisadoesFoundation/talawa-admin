@@ -17,9 +17,9 @@
 }
 
 .collapseSidebarButton {
-  --bs-btn-active-color: var(--profile-bg) !important;
-  --bs-btn-active-bg: var(--profile-bg) !important;
-  --bs-btn-active-border-color: var(--profile-bg) !important;
+  --bs-btn-active-color: var(--profile-bg);
+  --bs-btn-active-bg: var(--profile-bg);
+  --bs-btn-active-border-color: var(--profile-bg);
   position: fixed;
   height: 40px;
   bottom: 0;

@@ -824,23 +824,7 @@ const loginPage = (): JSX.Element => {
                           <TextField
                             {...params}
                             label="Organizations"
-                            className="styles.selectOrgText"
-                            sx={{
-                              '& .MuiOutlinedInput-root': {
-                                '&.Mui-focused fieldset': {
-                                  borderColor: '#555555',
-                                },
-                              },
-                              '& .MuiInputLabel-root.Mui-focused': {
-                                color: '#555555',
-                              },
-                              '& .MuiAutocomplete-option': {
-                                '&:hover': {
-                                  backgroundColor: '#555555',
-                                  color: '#fff', // Ensure visibility on hover
-                                },
-                              },
-                            }}
+                            className={styles.selectOrgText}
                           />
                         )}
                       />

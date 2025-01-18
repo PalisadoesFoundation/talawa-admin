@@ -462,9 +462,11 @@ describe('UserSidebar Component Tests in User Portal', () => {
     const settingsBtn = screen.getByTestId('settingsBtn');
 
     fireEvent.click(orgsBtn);
-    expect(orgsBtn).toHaveClass('text-white btn btn-success');
+    expect(orgsBtn).toHaveClass('text-black font-weight-bold btn btn-success');
     fireEvent.click(settingsBtn);
-    expect(settingsBtn).toHaveClass('text-white btn btn-success');
+    expect(settingsBtn).toHaveClass(
+      'text-black font-weight-bold btn btn-success',
+    );
   });
 
   it('Translation hook displays expected text in UserSidebar', async () => {

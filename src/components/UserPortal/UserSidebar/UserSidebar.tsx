@@ -107,7 +107,7 @@ const userSidebar = ({
                     fontWeight: isActive ? 'bold' : 'normal',
                     boxShadow: isActive ? 'none' : '',
                   }}
-                  data-testid="orgsBtn"
+                  data-testid="settingsBtn"
                 >
                   <div className={styles.iconWrapper}>
                     <SettingsIcon

@@ -61,7 +61,7 @@
   background-color: transparent !important;
 }
 .dropdownToggle {
-  background-image: url(/public/images/svg/angleRight.svg);
+  background-image: url(../../../public/images/svg/angleRight.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-color: var(--profile-bg) !important;

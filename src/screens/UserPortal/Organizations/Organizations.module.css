@@ -26,7 +26,7 @@
 
 .containerHeight {
   background-color: var(--profile-bg) !important;
-  height: 100vh;
+  min-height: 100vh;
   padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
 }
 
