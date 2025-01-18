@@ -422,15 +422,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
     steps:
-      - name: Checkout the Repository
-        uses: actions/checkout@v4
-        with:
-          repository: gautam-divyanshu/talawa-admin          
-          ref: auto-docs
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr checkout ${{ github.event.pull_request.number }}
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -450,7 +447,10 @@ jobs:
         run: |
             git add --all
             git commit -m "Auto-generate documentation"
-            git push https://x-access-token:${TOKEN}@github.com/${{ github.event.pull_request.head.repo.full_name }} ${{ github.head_ref }}     
+      - name: Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: git push
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
