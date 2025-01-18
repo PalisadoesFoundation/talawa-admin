@@ -233,7 +233,7 @@ export const MOCK_USERS = [
   },
 ];
 
-const generateMockUser = (
+export const generateMockUser = (
   id: string,
   firstName: string,
   lastName: string,
