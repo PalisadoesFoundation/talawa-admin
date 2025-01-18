@@ -123,6 +123,7 @@ export default function people(): JSX.Element {
     }
   }, [data2]);
 
+  // Updated members effect
   useEffect(() => {
     if (data?.organizationsMemberConnection?.edges) {
       const membersList = data.organizationsMemberConnection.edges.map(
