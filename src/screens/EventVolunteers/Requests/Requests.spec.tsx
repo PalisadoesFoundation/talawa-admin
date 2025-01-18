@@ -28,6 +28,7 @@ import {
 } from './Requests.mocks';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
+import styles from '../../../style/app.module.css';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -233,5 +234,71 @@ describe('Testing Requests Screen', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
     });
+  });
+});
+
+describe('Requests Component Styling', () => {
+  const renderComponent = (): RenderResult => {
+    return render(
+      <MockedProvider addTypename={false} link={link1}>
+        <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                <Routes>
+                  <Route path="/event/:orgId/:eventId" element={<Requests />} />
+                </Routes>
+              </I18nextProvider>
+            </LocalizationProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+  };
+
+  beforeAll(() => {
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
+      useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
+    }));
+  });
+
+  it('should apply correct styles to the container', async () => {
+    renderComponent();
+    const container = await screen.findByTestId('searchBy');
+    expect(container.parentElement).toHaveClass(styles.input);
+  });
+
+  it('should apply correct styles to the search button', async () => {
+    renderComponent();
+    const searchButton = await screen.findByTestId('searchBtn');
+    expect(searchButton).toHaveClass(styles.regularBtn);
+    expect(searchButton).toHaveStyle({
+      marginBottom: '10px',
+    });
+  });
+
+  it('should apply correct styles to volunteer images', async () => {
+    renderComponent();
+    const volunteerImages = await screen.findAllByTestId('volunteer_image');
+    volunteerImages.forEach((image) => {
+      expect(image).toHaveClass(styles.TableImages);
+    });
+  });
+
+  it('should apply correct styles to avatar container', async () => {
+    renderComponent();
+    const avatarContainers = document.querySelectorAll(
+      `.${styles.avatarContainer}`,
+    );
+    avatarContainers.forEach((container) => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('should apply correct styles to the input fields', async () => {
+    renderComponent();
+    const input = await screen.findByTestId('searchBy');
+    expect(input).toHaveClass(styles.inputFields);
   });
 });

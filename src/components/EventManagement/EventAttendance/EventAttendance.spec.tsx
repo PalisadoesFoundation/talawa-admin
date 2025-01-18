@@ -18,6 +18,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from './Attendance.mocks';
 import { vi, describe, beforeEach, afterEach, expect, it } from 'vitest';
+import styles from '../../../style/app.module.css';
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -150,5 +151,80 @@ describe('Event Attendance Component', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
     });
+  });
+});
+
+describe('CSS Styling Tests', () => {
+  it('should style the search input and button correctly', async () => {
+    renderEventAttendance();
+    await wait();
+
+    const searchContainer = screen.getByTestId('searchByName').parentElement;
+    expect(searchContainer).toHaveClass(styles.input, 'me-3');
+
+    const searchInput = screen.getByTestId('searchByName');
+    expect(searchInput).toHaveClass('bg-white', 'border');
+
+    const searchButton = searchContainer?.querySelector('button');
+    expect(searchButton).toHaveClass(
+      'position-absolute',
+      'z-10',
+      'bottom-0',
+      'end-0',
+      'h-100',
+      styles.regularBtn,
+    );
+  });
+
+  it('should style the statistics button correctly', async () => {
+    renderEventAttendance();
+    await wait();
+
+    const statsButton = screen.getByTestId('stats-modal');
+    expect(statsButton).toHaveClass('border-1', styles.regularBtn);
+  });
+
+  it('should style the filter and sort dropdowns correctly', async () => {
+    renderEventAttendance();
+    await wait();
+
+    const filterDropdown = screen.getByTestId('filter-dropdown');
+    expect(filterDropdown).toHaveClass(styles.dropdown, 'mx-4');
+  });
+
+  it('should style the table cells correctly', async () => {
+    renderEventAttendance();
+    await wait();
+
+    const headerCells = screen.getAllByRole('columnheader');
+    headerCells.forEach((cell) => {
+      expect(cell).toHaveClass(styles.customcell);
+    });
+  });
+
+  it('should style the table container with proper spacing', async () => {
+    renderEventAttendance();
+    await wait();
+
+    const tableContainer = screen.getByRole('grid').parentElement;
+    expect(tableContainer).toHaveClass('mt-3');
+  });
+
+  it('should style the header controls container correctly', async () => {
+    renderEventAttendance();
+    await wait();
+
+    const controlsContainer = screen.getByTestId('stats-modal').parentElement;
+    expect(controlsContainer).toHaveClass(
+      'd-flex',
+      'justify-content-between',
+      'align-items-center',
+      'mb-3',
+    );
+
+    const rightControls = controlsContainer?.querySelector(
+      '.d-flex.align-items-center',
+    );
+    expect(rightControls).toBeInTheDocument();
   });
 });

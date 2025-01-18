@@ -112,7 +112,7 @@ function EventRegistrants(): JSX.Element {
         )}
         <Button
           data-testid="filter-button"
-          className={`border-1 mx-4 ${styles.createButton} `}
+          className={`border-1 mx-4 mt-4 ${styles.createButton} `}
         >
           <img
             src="/images/svg/organization.svg"
@@ -123,13 +123,13 @@ function EventRegistrants(): JSX.Element {
           {t('allRegistrants')}
         </Button>
       </div>
-      <TableContainer component={Paper} className={`mt-3 ${styles.tableHead}`}>
+      <TableContainer component={Paper} className={`mt-4 ${styles.tableHead}`}>
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
-          <TableHead>
-            <TableRow role="row" className={`${styles.rowBackground}`}>
+          <TableHead className={styles.tableHeader}>
+            <TableRow role="row" className={styles.tableHeader}>
               <TableCell
                 data-testid="table-header-serial"
-                className={styles.tableHeader}
+                className={styles.customcell}
                 role="columnheader"
                 aria-sort="none"
               >
@@ -137,25 +137,25 @@ function EventRegistrants(): JSX.Element {
               </TableCell>
               <TableCell
                 data-testid="table-header-registrant"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('registrant')}
               </TableCell>
               <TableCell
                 data-testid="table-header-registered-at"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('registeredAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-created-at"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('createdAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-add-registrant"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('addRegistrant')}
               </TableCell>

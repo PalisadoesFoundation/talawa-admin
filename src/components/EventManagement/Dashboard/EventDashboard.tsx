@@ -86,7 +86,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           t={tEventList}
           tCommon={t}
         />
-        <div className="d-flex px-6" data-testid="event-stats">
+        <div className="d-flex mt-4 px-6" data-testid="event-stats">
           <div
             className={`${styles.ctacards}`}
             data-testid="registrations-card"

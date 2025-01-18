@@ -820,6 +820,8 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--search-button-bg);
+  border: 1px solid var(--blue-primary);
   /* background-color: var(--search-button-bg); */
 }
 
@@ -1804,8 +1806,8 @@ hr {
 }
 
 .tableHeaders {
-  background-color: var(--bs-primary-text-emphasis);
-  color: var(--bs-white);
+  background-color: var(--search-button-bg);
+  color: black;
   font-size: 1rem;
 }
 
@@ -1862,20 +1864,23 @@ hr {
 #requestsRadio,
 #groupsRadio,
 .toggleBtn:hover {
-  color: var(--brand-primary) !important;
+  color: var(--blue-primary) !important;
 }
 
 .toggleBtn:hover {
-  color: var(--light-blue) !important;
+  color: var(--blue-primary) !important;
+  border: 1px solid var(--blue-primary) !important;
 }
 
 input[type='radio']:checked + label {
-  background-color: var(--brand-primary-light) !important;
+  background-color: var(--blue-search-bg) !important;
+  color: var(--black-color) !important;
+  border: 1px solid var(--blue-primary) !important;
 }
 
-input[type='radio']:checked + label:hover {
+/*input[type='radio']:checked + label:hover {
   color: var(--black-color) !important;
-}
+}*/
 
 .dropdownToggle {
   margin-bottom: 0;

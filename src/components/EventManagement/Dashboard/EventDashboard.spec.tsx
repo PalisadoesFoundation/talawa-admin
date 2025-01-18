@@ -10,6 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { ApolloLink, DefaultOptions } from '@apollo/client';
+import styles from '../../../style/app.module.css';
 
 import { MOCKS_WITHOUT_TIME, MOCKS_WITH_TIME } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -103,5 +104,90 @@ describe('Testing Event Dashboard Screen', () => {
 
     // Verify content is visible
     expect(getByTestId('event-title')).toBeInTheDocument();
+  });
+});
+
+describe('CSS Styling Tests', () => {
+  it('should apply correct styling to event stats cards', async () => {
+    const { getByTestId, getAllByAltText } = renderEventDashboard(mockWithTime);
+    await wait();
+    const statsSection = getByTestId('event-stats');
+    expect(statsSection).toHaveClass('d-flex', 'mt-4', 'px-6');
+    const cards = statsSection.querySelectorAll(`.${styles.ctacards}`);
+    expect(cards).toHaveLength(3);
+    const cardImages = getAllByAltText('userImage');
+    cardImages.forEach((image) => {
+      expect(image).toBeInTheDocument();
+    });
+  });
+
+  it('should style event details container correctly', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+    const eventContainer = getByTestId('event-details');
+    expect(eventContainer).toHaveClass(styles.eventContainer);
+    const detailsBox = eventContainer.querySelector(
+      `.${styles.eventDetailsBox}`,
+    );
+    expect(detailsBox).toBeInTheDocument();
+  });
+
+  it('should style event title and description properly', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+    const title = getByTestId('event-title');
+    expect(title).toHaveClass(styles.titlename);
+    const description = getByTestId('event-description');
+    expect(description).toHaveClass(styles.description);
+  });
+
+  it('should style location and registrants information correctly', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+    const location = getByTestId('event-location');
+    const registrants = getByTestId('event-registrants');
+    expect(location).toHaveClass(styles.toporgloc);
+    expect(registrants).toHaveClass(styles.toporgloc);
+  });
+
+  it('should style edit button correctly', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+    const editButton = getByTestId('edit-event-button');
+    expect(editButton).toHaveClass(
+      'btn',
+      'btn-light',
+      'rounded-circle',
+      'position-absolute',
+      'end-0',
+      'me-3',
+      'p-1',
+      'mt-2',
+    );
+  });
+
+  it('should style time section properly', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+    const timeSection = getByTestId('event-time');
+    expect(timeSection).toHaveClass(styles.time);
+    const startTime = getByTestId('start-time');
+    const endTime = getByTestId('end-time');
+    const startDate = getByTestId('start-date');
+    const endDate = getByTestId('end-date');
+    expect(startTime).toHaveClass(styles.startTime);
+    expect(endTime).toHaveClass(styles.endTime);
+    expect(startDate).toHaveClass(styles.startDate);
+    expect(endDate).toHaveClass(styles.endDate);
+  });
+
+  it('should style recurring status with correct colors', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+    const recurringStatus = getByTestId('recurring-status');
+    expect(recurringStatus).toHaveClass(styles.toporgloc, 'd-flex');
+    const statusText = recurringStatus.querySelector('.text-success');
+    expect(statusText).toBeInTheDocument();
+    expect(statusText).toHaveClass('ml-2');
   });
 });

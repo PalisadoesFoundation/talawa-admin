@@ -13,6 +13,7 @@ import { REGISTRANTS_MOCKS } from './Registrations.mocks';
 import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/Attendance.mocks';
 import { vi } from 'vitest';
 import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
+import styles from '../../../style/app.module.css';
 
 const COMBINED_MOCKS = [...REGISTRANTS_MOCKS, ...ATTENDEES_MOCKS];
 
@@ -260,5 +261,77 @@ describe('Event Registrants Component', () => {
     expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
       'N/A',
     );
+  });
+
+  test('Filter button has correct styling classes', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <EventRegistrants />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const filterButton = screen.getByTestId('filter-button');
+    expect(filterButton).toHaveClass('border-1');
+    expect(filterButton).toHaveClass('mx-4');
+    expect(filterButton).toHaveClass('mt-4');
+    expect(filterButton).toHaveClass(styles.createButton);
+  });
+
+  test('Table container has correct styling', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <EventRegistrants />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const tableContainer = screen.getByRole('grid').closest('.mt-4');
+    expect(tableContainer).toHaveClass('mt-4');
+    expect(tableContainer).toHaveClass(styles.tableHead);
+  });
+
+  test('Table cells have custom cell styling', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <EventRegistrants />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const headerCells = screen.getAllByRole('columnheader');
+    headerCells.forEach((cell) => {
+      expect(cell).toHaveClass(styles.customcell);
+    });
+  });
+
+  test('Table has correct ARIA attributes', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <EventRegistrants />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const table = screen.getByRole('grid');
+    const firstHeaderCell = screen.getByTestId('table-header-serial');
+    expect(table).toHaveAttribute('aria-label');
+    expect(firstHeaderCell).toHaveAttribute('aria-sort', 'none');
   });
 });

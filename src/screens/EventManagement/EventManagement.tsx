@@ -10,6 +10,7 @@ import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
+import styles from '../../style/app.module.css';
 
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
@@ -134,16 +135,15 @@ const EventManagement = (): JSX.Element => {
     icon: React.ReactNode;
   }): JSX.Element => {
     const selected = tab === value;
-    const variant = selected ? 'success' : 'light';
+    const variant = selected ? 'secondary' : 'light';
     const translatedText = t(value);
 
     const className = selected
-      ? 'px-4 d-flex align-items-center rounded-3 shadow-sm'
+      ? `px-4 d-flex align-items-center rounded-3 shadow-sm ${styles.createButton}`
       : 'text-secondary bg-white px-4 d-flex align-items-center rounded-3 shadow-sm';
     const props = {
       variant,
       className,
-      style: { height: '2.5rem' },
       onClick: () => setTab(value),
       'data-testid': `${value}Btn`,
     };
@@ -221,19 +221,28 @@ const EventManagement = (): JSX.Element => {
         switch (tab) {
           case 'dashboard':
             return (
-              <div data-testid="eventDashboardTab">
+              <div
+                data-testid="eventDashboardTab"
+                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+              >
                 <EventDashboard eventId={eventId} />
               </div>
             );
           case 'registrants':
             return (
-              <div data-testid="eventRegistrantsTab">
+              <div
+                data-testid="eventRegistrantsTab"
+                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+              >
                 <EventRegistrants />
               </div>
             );
           case 'attendance':
             return (
-              <div data-testid="eventAttendanceTab" className="mx-4">
+              <div
+                data-testid="eventAttendanceTab"
+                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+              >
                 <EventAttendance />
               </div>
             );
@@ -257,13 +266,19 @@ const EventManagement = (): JSX.Element => {
             );
           case 'agendas':
             return (
-              <div data-testid="eventAgendasTab">
+              <div
+                data-testid="eventAgendasTab"
+                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+              >
                 <EventAgendaItems eventId={eventId} />
               </div>
             );
           case 'statistics':
             return (
-              <div data-testid="eventStatsTab">
+              <div
+                data-testid="eventStatsTab"
+                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+              >
                 <h2>Statistics</h2>
               </div>
             );

@@ -66,3 +66,78 @@ describe('Testing CheckIn Wrapper', () => {
     );
   });
 });
+
+describe('CSS Styling Tests', () => {
+  const props = {
+    eventId: 'event123',
+  };
+
+  it('should have the correct button styling classes', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <CheckInWrapper {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const button = screen.getByLabelText('checkInRegistrants');
+    expect(button).toHaveClass('border-1');
+    expect(button).toHaveClass('bg-white');
+    expect(button).toHaveClass('mt-4');
+    expect(button).toHaveClass('text-success');
+    expect(button.className).toMatch(/createButton[^ ]*/);
+  });
+
+  it('should apply margin-top spacing to the button', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <CheckInWrapper {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const button = screen.getByLabelText('checkInRegistrants');
+    const styles = window.getComputedStyle(button);
+    expect(button).toHaveClass('mt-4');
+    expect(styles.marginTop).not.toBe('0px');
+  });
+
+  it('should maintain proper button layout with image and text', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <CheckInWrapper {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const button = screen.getByLabelText('checkInRegistrants');
+    const image = screen.getByAltText('Sort');
+    expect(button).toContainElement(image);
+    expect(button).toHaveTextContent('Check In Registrants');
+    expect(
+      button.innerHTML.indexOf('Sort') <
+        button.innerHTML.indexOf('Check In Registrants'),
+    ).toBe(true);
+  });
+});

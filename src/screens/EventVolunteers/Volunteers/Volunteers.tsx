@@ -324,7 +324,7 @@ function volunteers(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center ${styles.regularBtn}`}
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >
@@ -371,6 +371,7 @@ function volunteers(): JSX.Element {
             <Button
               variant="success"
               onClick={() => handleOpenModal(null, ModalState.ADD)}
+              className={styles.regularBtn}
               style={{ marginTop: '11px' }}
               data-testid="addVolunteerBtn"
             >

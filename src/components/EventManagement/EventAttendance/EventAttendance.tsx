@@ -152,7 +152,7 @@ function EventAttendance(): JSX.Element {
       />
       <div className="d-flex justify-content-between align-items-center mb-3">
         <Button
-          className={`border-1 bg-white text-success ${styles.actionBtn}`}
+          className={`border-1 ${styles.regularBtn}`}
           onClick={showModal}
           data-testid="stats-modal"
         >
@@ -172,7 +172,7 @@ function EventAttendance(): JSX.Element {
             />
             <Button
               tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100`}
+              className={`position-absolute z-10 bottom-0 end-0 h-100 ${styles.regularBtn}`}
             >
               <Search size={20} />
             </Button>
