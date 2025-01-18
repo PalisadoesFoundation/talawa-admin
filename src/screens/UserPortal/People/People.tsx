@@ -136,7 +136,7 @@ export default function people(): JSX.Element {
       setMembers(mode === 0 ? membersList : admins);
     }
   }, [data, admins, mode]);
-  
+
   useEffect(() => {
     setMembers(mode === 0 ? allMembers : admins);
   }, [mode, allMembers, admins]);
