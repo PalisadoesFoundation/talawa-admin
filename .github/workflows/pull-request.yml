@@ -452,7 +452,7 @@ jobs:
         run: |
             git add --all
             git commit -m "Auto-generate documentation"
-            git push origin ${{ github.head_ref }}
+            # git push origin ${{ github.head_ref }}
      
 
   Test-Docusaurus-Deployment:
