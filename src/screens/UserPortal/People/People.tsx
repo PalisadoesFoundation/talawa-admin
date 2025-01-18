@@ -188,7 +188,6 @@ export default function people(): JSX.Element {
           <Dropdown drop="down-centered">
             <Dropdown.Toggle
               className={styles.dropdown}
-              // className={`${styles.greenBorder} ${styles.backgroundWhite} ${styles.colorGreen} ${styles.semiBold} ${styles.shadow} ${styles.borderRounded8}`}
               id="dropdown-basic"
               data-testid={`modeChangeBtn`}
             >
@@ -242,8 +241,7 @@ export default function people(): JSX.Element {
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage,
                       )
-                    : /* istanbul ignore next */
-                      members
+                    : members
                   ).map((member: InterfaceMember, index) => {
                     const name = `${member.firstName} ${member.lastName}`;
 
@@ -267,10 +265,7 @@ export default function people(): JSX.Element {
             <tbody>
               <tr>
                 <PaginationList
-                  count={
-                    /* istanbul ignore next */
-                    members ? members.length : 0
-                  }
+                  count={members ? members.length : 0}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}
@@ -281,7 +276,6 @@ export default function people(): JSX.Element {
           </table>
         </div>
       </div>
-      {/* <OrganizationSidebar /> */}
     </>
   );
 }

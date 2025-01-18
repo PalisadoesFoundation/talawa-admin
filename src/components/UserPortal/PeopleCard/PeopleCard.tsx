@@ -45,7 +45,7 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
             src={imageUrl}
             width="80px"
             height="auto"
-            className={`${styles.personImage}`}
+            className={styles.personImage_peoplecard}
           />
         </span>
       </span>

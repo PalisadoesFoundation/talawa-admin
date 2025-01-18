@@ -1,18 +1,18 @@
 /**
  * CSS Methodology for Common Styles:
- * 
+ *
  * This project aims to reduce CSS duplication by merging similar styles across components
  * into reusable global classes. This ensures consistency and simplifies maintenance.
- * 
+ *
  * Steps for contributors:
  * 1. Identify duplicate or similar styles in different components (e.g., buttons, modals).
  * 2. Create a global class with a clear, descriptive name (e.g., .addButton, .removeButton).
  * 3. Use the new global class in all components requiring that style.
- * 
+ *
  * Naming Convention:
  * - Use lowercase, descriptive names for global classes (e.g., .addButton, .removeButton).
  * - Keep names generic enough for reuse but clear in their purpose.
- * 
+ *
  * Example:
  * Instead of component-specific classes like:
  *   `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge` (used in two different components for same functionality)
@@ -6409,23 +6409,9 @@ button[data-testid='createPostBtn'] {
 }
 
 /* People.tsx */
-.borderNone {
-  border: none;
-}
-.borderBox {
-  border: 1px solid #000;
-}
-
-.borderRounded5 {
-  border-radius: 5px;
-}
 
 .borderRounded8 {
   border-radius: 8px;
-}
-
-.borderRounded24 {
-  border-radius: 24px;
 }
 
 .bottomRadius {
@@ -6437,25 +6423,8 @@ button[data-testid='createPostBtn'] {
   box-shadow: 5px 5px 4px 0px #d9d9d9;
 }
 
-.colorWhite {
-  color: white;
-}
-
-.colorGreen {
-  color: #31bb6b;
-}
-
 .backgroundWhite {
   background-color: white;
-}
-
-.maxWidth {
-  max-width: 600px;
-}
-
-.mainContainer {
-  width: 50%;
-  flex-grow: 3;
 }
 
 .people_content {
@@ -6465,10 +6434,6 @@ button[data-testid='createPostBtn'] {
 
 .gap {
   gap: 20px;
-}
-
-.colorPrimary {
-  background: #a8c7fa;
 }
 
 .semiBold {
@@ -6485,4 +6450,11 @@ button[data-testid='createPostBtn'] {
   justify-content: space-between;
   margin-right: 50px;
   /* margin: 2rem 10px 0px 10px; */
+}
+
+/* people card */
+.personImage_peoplecard {
+  border-radius: 50%;
+  margin-right: 25px;
+  max-width: 70px;
 }
