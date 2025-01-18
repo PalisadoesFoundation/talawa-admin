@@ -138,7 +138,9 @@ const OrgProfileFieldSettings = (): JSX.Element => {
             {/* Form to add a new custom field */}
             <form>
               <div>
-                <Form.Label>{t('customFieldName')}</Form.Label>
+                <Form.Label style={{ fontWeight: 'normal' }}>
+                  {t('customFieldName')}
+                </Form.Label>
                 <Form.Control
                   className="mb-3"
                   placeholder={t('enterCustomFieldName')}
@@ -162,7 +164,10 @@ const OrgProfileFieldSettings = (): JSX.Element => {
               </div>
 
               <div className={styles.textBox}>
-                <Form.Label className={'text-secondary fw-bold'}>
+                <Form.Label
+                  style={{ fontWeight: 'normal' }}
+                  className={'text-secondary'}
+                >
                   {t('customFieldType')}
                 </Form.Label>
                 <EditOrgCustomFieldDropDown

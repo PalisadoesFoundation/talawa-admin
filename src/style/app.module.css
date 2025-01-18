@@ -4,6 +4,7 @@
   --grey-dark: #707070;
   --grey-border: #e8e5e5;
   --input-shadow: #dddddd;
+  --setting-tabs-bg: #ddfeeb;
 
   /* Blue Shades */
   --blue-primary: #0056b3;
@@ -61,6 +62,7 @@
 
   /* Font Sizes */
   --font-size-header: 16px;
+  --font-size-modal-header: 28px;
 
   /* Borders and Radius */
   --primary-border-solid: 1px solid var(--dropdown-border-color);
@@ -303,19 +305,16 @@
 
 .dropdownItem:focus,
 .dropdownItem:hover {
-  outline: 2px solid var(--highlight-color, var(--search-button-bg));
+  /* outline: 2px solid var(--highlight-color, var(--search-button-bg)); */
 }
 
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(
-    --dropdown-hover-color,
-    var(--grey-border-box-color)
-  ) !important;
-  color: var(--brown-color) !important;
+  background-color: var(--subtle-blue-grey) !important;
+  color: var(--bs-black) !important;
   outline: none !important;
-  box-shadow: 0 0 4px var(--highlight-color, var(--search-button-bg));
+  /* box-shadow: 0 0 4px var(--highlight-color, var(--search-button-bg)); */
 }
 
 .input {
@@ -382,6 +381,15 @@
   gap: 8px;
 }
 
+.deleteButton:hover,
+.deleteButton:focus,
+.deleteButton:active {
+  color: #dc3545;
+  background-color: var(--delete-button-bg);
+  /* border: 1px solid #dc3545; */
+  box-shadow: 0 6px 5px var(--bs-gray-400) !important;
+}
+
 .actionItemDeleteButton {
   background-color: var(--delete-button-bg);
   color: var(--delete-button-color);
@@ -416,7 +424,7 @@
 .inputField {
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: var(--bs-white);
+  background-color: var(--bs-white) !important;
   box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
@@ -433,8 +441,8 @@
 
 .searchButton {
   margin-bottom: 10px;
-  background-color: var(--search-button-bg);
-  border-color: var(--search-button-border);
+  background-color: var(--subtle-blue-grey);
+  border-color: var(--subtle-blue-grey);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -445,8 +453,9 @@
 }
 
 .searchButton:hover {
-  background-color: var(--search-button-hover-bg, var(--light-blue-color));
-  border-color: var(--search-button-border);
+  background-color: var(--subtle-blue-grey);
+  border-color: var(--subtle-blue-grey);
+  box-shadow: 0 6px 5px var(--bs-gray-400) !important;
 }
 
 .searchButton:active {
@@ -509,8 +518,8 @@
 }
 
 .tableHeader {
-  background-color: var(--table-head-bg);
-  color: var(--table-header-color);
+  background-color: var(--grey-light);
+  color: var(--bs-black);
   font-size: var(--font-size-header);
 }
 
@@ -1696,7 +1705,7 @@ input[type='radio']:checked + label:hover {
   width: 50%;
 }
 
-.greenregbtn {
+/* .greenregbtn {
   margin-top: 1rem;
   border: 1px solid var(--bs-gray-300);
   box-shadow: 0 2px 2px var(--bs-gray-300);
@@ -1718,6 +1727,63 @@ input[type='radio']:checked + label:hover {
 .greenregbtn:hover {
   background-color: var(--search-button-bg);
   border: 1px solid #1778f2 !important;
+} */
+
+.modalButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-left: 60%;
+  padding: 1rem 0;
+}
+
+.modalCloseBtn,
+.greenregbtn {
+  margin-top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.modalCloseBtn {
+  color: #dc3545;
+  background-color: var(--delete-button-bg);
+  border: 1px solid #dc3545;
+}
+
+.greenregbtn {
+  color: var(--bs-white);
+  background-color: var(--subtle-blue-grey);
+  border: 1px solid var(--subtle-blue-grey);
+}
+
+.greenregbtn:hover,
+.greenregbtn:focus .greenregbtn:active {
+  color: var(--bs-white);
+  background-color: var(--subtle-blue-grey);
+  border: 1px solid var(--subtle-blue-grey);
+  box-shadow: 0 6px 5px var(--bs-gray-400) !important;
+}
+
+.modalCloseBtn:hover,
+.modalCloseBtn:focus,
+.modalCloseBtn:active {
+  color: #dc3545;
+  background-color: var(--delete-button-bg);
+  border: 1px solid #dc3545;
+  box-shadow: 0 6px 5px var(--bs-gray-400) !important;
+}
+
+.MuiInputLabel-root:focus {
+  color: black !important;
 }
 
 .manageBtn {
@@ -1816,21 +1882,21 @@ input[type='radio']:checked + label:hover {
 }
 
 .titlemodal {
-  color: var(--grey-bg-color-dark);
-  font-weight: 600;
-  font-size: 32px;
+  color: var(--bs-black);
+  font-weight: normal;
+  font-size: var(--font-size-modal-header);
   width: 65%;
   margin-bottom: 0px;
 }
 
-.modalCloseBtn {
+/* .modalCloseBtn {
   width: 40px;
   height: 40px;
   padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .imageContainer {
   display: flex;
@@ -4592,8 +4658,8 @@ button[data-testid='createPostBtn'] {
 /* UserPasswordUpdate.tsx */
 
 .userupdatediv {
-  border: 1px solid var(--grey-border);
-  box-shadow: 2px 1px var(--grey-border);
+  /* border: 1px solid var(--grey-border);
+  box-shadow: 2px 1px var(--grey-border); */
   padding: 25px 16px;
   border-radius: 5px;
   background: var(--white-color);
@@ -5965,10 +6031,6 @@ button[data-testid='createPostBtn'] {
   position: relative;
 }
 
-.btnsContainerOrgActionItemCategories input {
-  outline: 1px solid var(--bs-gray-400);
-}
-
 .btnsContainerOrgActionItemCategories .input button {
   width: 52px;
 }
@@ -5979,6 +6041,7 @@ button[data-testid='createPostBtn'] {
   margin-top: 20vh;
   margin-left: 13vw;
   max-width: 80vw;
+  font-weight: normal;
 }
 
 /* Organisation Settings CSS */
@@ -6039,9 +6102,9 @@ button[data-testid='createPostBtn'] {
 .saveButton {
   width: 10em;
   align-self: self-end;
-  background-color: #1778f2 !important;
+  background-color: var(--blue-subtle) !important;
   color: var(--bs-white) !important;
-  border: 1px solid #1778f2 !important;
+  border: 1px solid var(--blue-subtle) !important;
 }
 
 /* OrgUpdate */
@@ -6062,22 +6125,21 @@ button[data-testid='createPostBtn'] {
 
 .orgSettingHeaderBtn {
   background-color: transparent;
-  color: var(--bs-gray-600);
-  border: 1px solid var(--bs-gray-400);
-  box-shadow: 4px 4px 4px var(--grey-bg-color-dark);
+  color: #808080;
+  border: 1px solid #dddddd;
+  /* box-shadow: 4px 4px 4px var(--grey-bg-color-dark); */
 }
 
 .orgSettingHeaderBtn:hover,
 .orgSettingHeaderBtn:focus,
 .activeTab {
-  background-color: var(--bs-gray-300) !important;
-  color: var(--bs-gray-700) !important;
-  border: 1px solid var(--bs-gray-500) !important;
+  background-color: #eaebef !important;
+  color: #808080 !important;
+  border: 1px solid #808080 !important;
   box-shadow: none !important;
 }
 
 .activeTab {
-  font-weight: bold;
   transition: 0.5s ease-in-out;
 }
 
@@ -6175,4 +6237,58 @@ button[data-testid='createPostBtn'] {
     margin-right: 0;
     width: 100%;
   }
+}
+
+.imagePicker {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.imagePickerContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #ccc;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.overlay:hover {
+  opacity: 1;
+}
+
+.fileInput {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cameraIcon {
+  color: white;
+  font-size: 1.5rem;
+  pointer-events: none;
 }

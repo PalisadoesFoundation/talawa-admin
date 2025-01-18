@@ -31,6 +31,10 @@ function deleteOrg(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
+  const blueSearchBg = getComputedStyle(
+    document.documentElement,
+  ).getPropertyValue('--blue-search-bg');
+
   // Get the current organization ID from the URL
   const { orgId: currentUrl } = useParams();
   // Navigation hook for redirecting
@@ -123,8 +127,11 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header style={{ backgroundColor: '#a8c7fa' }} closeButton>
-            <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
+          <Modal.Header
+            style={{ backgroundColor: blueSearchBg.trim() }}
+            closeButton
+          >
+            <h5 className=" fw-bold">{t('deleteOrganization')}</h5>
           </Modal.Header>
           <Modal.Body>{t('deleteMsg')}</Modal.Body>
           <Modal.Footer>

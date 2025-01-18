@@ -18,6 +18,8 @@ import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
 import CategoryModal from './CategoryModal';
 import SortingButton from 'subComponents/SortingButton';
+// import { borderColor } from '@mui/system';
+// import { blue } from '@mui/material/colors';
 
 enum ModalState {
   SAME = 'same',
@@ -32,6 +34,13 @@ enum CategoryStatus {
 interface InterfaceActionItemCategoryProps {
   orgId: string;
 }
+
+const blueSubtle = getComputedStyle(document.documentElement).getPropertyValue(
+  '--blue-subtle',
+);
+const greyDark = getComputedStyle(document.documentElement).getPropertyValue(
+  '--grey-dark',
+);
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -51,6 +60,27 @@ const dataGridStyle = {
   },
   '& .MuiDataGrid-main': {
     borderRadius: '0.5rem',
+  },
+  '& .MuiDataGrid-row': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-cell:focus': {
+    outline: 'none',
+  },
+  '& .MuiDataGrid-cell': {
+    borderBottom: 'none',
+  },
+  '& .MuiDataGrid-columnSeparator--resizable:hover': {
+    color: blueSubtle.trim(),
+  },
+  '& .MuiChip-label': {
+    color: blueSubtle.trim(),
+  },
+  '& .MuiChip-icon': {
+    color: `${blueSubtle.trim()} !important`,
+  },
+  '& .MuiChip-root': {
+    borderColor: blueSubtle.trim(),
   },
 };
 
@@ -182,8 +212,9 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className="d-flex justify-content-center fw-normal"
             data-testid="categoryName"
+            style={{ color: blueSubtle.trim() }}
           >
             {params.row.name}
           </div>
@@ -264,7 +295,11 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               )
             }
           >
-            <i className="fa fa-edit" />
+            <i
+              className="fa fa-edit"
+              style={{ paddingRight: '5px', color: greyDark.trim() }}
+            />
+            <span style={{ color: greyDark.trim() }}>Edit</span>
           </Button>
         );
       },
@@ -375,7 +410,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
+        sx={{ ...dataGridStyle, '&, [class^=MuiDataGrid]': { border: 'none' } }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}

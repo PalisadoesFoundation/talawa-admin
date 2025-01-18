@@ -19,6 +19,7 @@ import type {
   InterfaceAddress,
 } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
+// import ImagePicker from './ImagePicker';
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
@@ -193,7 +194,9 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     <>
       <div id="orgupdate" className={styles.userupdatediv}>
         <form>
-          <Form.Label>{tCommon('name')}</Form.Label>
+          <Form.Label style={{ fontWeight: 'normal' }}>
+            {tCommon('name')}
+          </Form.Label>
           <Form.Control
             className="mb-3"
             placeholder={t('enterNameOrganization')}
@@ -207,7 +210,9 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label>{tCommon('description')}</Form.Label>
+          <Form.Label style={{ fontWeight: 'normal' }}>
+            {tCommon('description')}
+          </Form.Label>
           <Form.Control
             className="mb-3"
             placeholder={tCommon('description')}
@@ -221,7 +226,9 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label>{tCommon('address')}</Form.Label>
+          <Form.Label style={{ fontWeight: 'normal' }}>
+            {tCommon('address')}
+          </Form.Label>
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
               <Form.Control
@@ -319,7 +326,10 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           </Row>
           <Row>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <Form.Label className="me-3 mb-0">
+              <Form.Label
+                style={{ fontWeight: 'normal' }}
+                className="me-3 mb-0"
+              >
                 {t('userRegistrationRequired')}:
               </Form.Label>
               <Form.Switch
@@ -334,7 +344,10 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               />
             </Col>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <Form.Label className="me-3 mb-0">
+              <Form.Label
+                style={{ fontWeight: 'normal' }}
+                className="me-3 mb-0"
+              >
                 {t('isVisibleInSearch')}:
               </Form.Label>
               <Form.Switch
@@ -346,7 +359,9 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             </Col>
           </Row>
 
-          <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}:</Form.Label>
+          <Form.Label style={{ fontWeight: 'normal' }} htmlFor="orgphoto">
+            {tCommon('displayImage')}:
+          </Form.Label>
           <Form.Control
             className="mb-4"
             accept="image/*"
@@ -365,6 +380,17 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             }}
             data-testid="organisationImage"
           />
+
+          {/* <ImagePicker
+            // label={tCommon('displayImage')}
+            data-testid="organisationImage"
+            onImageSelect={(base64Image: string) => {
+              setFormState({
+                ...formState,
+                orgImage: base64Image,
+              });
+            }}
+          /> */}
 
           <Row>
             <Col sm={6}>

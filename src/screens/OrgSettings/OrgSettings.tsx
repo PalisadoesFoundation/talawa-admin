@@ -54,11 +54,21 @@ function OrgSettings(): JSX.Element {
     }, 300);
   };
 
+  const settingsTabsBg = getComputedStyle(
+    document.documentElement,
+  ).getPropertyValue('--setting-tabs-bg');
+
   return (
     <div className="d-flex flex-column">
       <Row className="mx-3 mt-3">
-        <Col>
-          <div className={styles.settingsTabs}>
+        <Col
+          className="pt-2 pb-3"
+          style={{ backgroundColor: 'white', borderRadius: '15px' }}
+        >
+          <div
+            className={`pt-3 ${styles.settingsTabs}`}
+            style={{ borderTop: `1px solid ${settingsTabsBg.trim()}` }}
+          >
             {/* Render buttons for each settings category */}
             {settingtabs.map((setting, index) => (
               <Button
@@ -78,37 +88,33 @@ function OrgSettings(): JSX.Element {
           </div>
 
           {/* Dropdown menu for selecting settings category */}
-          <Dropdown
-            className={`mt-3 ${styles.settingsDropdown}`}
-            data-testid="settingsDropdownContainer"
-            drop="down"
-          >
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              data-testid="settingsDropdownToggle"
-            >
-              <span className="me-1">{t(tab)}</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {/* Render dropdown items for each settings category */}
-              {settingtabs.map((setting, index) => (
-                <Dropdown.Item
-                  key={index}
-                  role="menuitem"
-                  onClick={() => handleTabSwitch(setting)}
-                  className={tab === setting ? 'text-secondary' : ''}
-                >
-                  {t(setting)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
         </Col>
-
-        <Row className="mt-3">
-          <hr />
-        </Row>
+        <Dropdown
+          className={`mt-0 ${styles.settingsDropdown}`}
+          data-testid="settingsDropdownContainer"
+          drop="down"
+          style={{ display: 'none' }} // Hide the dropdown initially to prevent flickering
+        >
+          <Dropdown.Toggle
+            variant="success"
+            id="dropdown-basic"
+            data-testid="settingsDropdownToggle"
+          >
+            <span className="me-0">{t(tab)}</span>
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {settingtabs.map((setting, index) => (
+              <Dropdown.Item
+                key={index}
+                role="menuitem"
+                onClick={() => handleTabSwitch(setting)}
+                className={tab === setting ? 'text-secondary' : ''}
+              >
+                {t(setting)}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
       </Row>
 
       {/* Render content based on the selected settings category */}
