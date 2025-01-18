@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Search } from '@mui/icons-material';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import AddIcon from '@mui/icons-material/Add';
 import styles from '../../style/app.module.css';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +24,23 @@ interface InterfaceEventHeaderProps {
  * @param handleChangeView - Function to handle changing the view type.
  * @param showInviteModal - Function to show the invite modal for creating an event.
  * @returns JSX.Element - The rendered EventHeader component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function eventHeader({
   viewType,
@@ -35,7 +53,10 @@ function eventHeader({
   });
 
   return (
-    <div className={styles.calendarEventHeader}>
+    <div
+      className={styles.calendarEventHeader}
+      data-testid="calendarEventHeader"
+    >
       <div className={styles.calendar__header}>
         <div className={styles.input}>
           <Form.Control
@@ -57,12 +78,13 @@ function eventHeader({
           />
           <Button
             className={styles.searchButton}
+            data-testid="searchButton"
             style={{ marginBottom: '10px' }}
           >
-            <Search />
+            <SearchOutlinedIcon />
           </Button>
         </div>
-        <div className={styles.flex_grow}></div>
+        {/* <div className={styles.flex_grow}></div> */}
         <div className={styles.space}>
           <SortingButton
             title={t('viewType')}
@@ -88,14 +110,25 @@ function eventHeader({
             className={styles.dropdown}
             buttonLabel={t('eventType')}
           />
-          <Button
-            variant="success"
-            className={styles.dropdown}
-            onClick={showInviteModal}
-            data-testid="createEventModalBtn"
-          >
-            Create Event
-          </Button>
+          <div className={styles.selectTypeEventHeader}>
+            <Button
+              variant="success"
+              className={styles.dropdown}
+              onClick={showInviteModal}
+              data-testid="createEventModalBtn"
+            >
+              <div className="">
+                <AddIcon
+                  sx={{
+                    fontSize: '25px',
+                    marginBottom: '2px',
+                    marginRight: '2px',
+                  }}
+                />
+                <span>Create</span>
+              </div>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

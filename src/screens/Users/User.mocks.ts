@@ -41,7 +41,7 @@ export const MOCKS = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              createdAt: '20/06/2022',
+              createdAt: '2022-06-20T00:00:00.000Z',
               registeredEvents: [],
               membershipRequests: [],
               organizationsBlockedBy: [
@@ -116,7 +116,7 @@ export const MOCKS = [
               firstName: 'Jane',
               lastName: 'Doe',
               image: null,
-              email: 'john@example.com',
+              email: 'jane@example.com',
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -351,7 +351,7 @@ export const MOCKS2 = [
               firstName: 'Jane',
               lastName: 'Doe',
               image: null,
-              email: 'john@example.com',
+              email: 'jane@example.com',
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -469,35 +469,6 @@ export const MOCKS2 = [
             },
           },
         ],
-      },
-    },
-  },
-];
-
-export const EMPTY_MOCKS = [
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 12,
-        skip: 0,
-        firstName_contains: '',
-        lastName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        users: [],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [],
       },
     },
   },

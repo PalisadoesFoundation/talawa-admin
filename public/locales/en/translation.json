@@ -1094,7 +1094,9 @@
     "comments": "Comments",
     "viewPost": "View Post",
     "editPost": "Edit Post",
-    "postedOn": "Posted on {{date}}"
+    "postedOn": "Posted on {{date}}",
+    "emptyCommentError": "Please enter a comment before submitting.",
+    "unexpectedError": "An unexpected error occurred. Please try again."
   },
   "home": {
     "posts": "Posts",
