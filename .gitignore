@@ -2,7 +2,7 @@
 .docusaurus
 
 # generated docs using husky pre-commit hook
-/docs/docs/auto-docs
+# /docs/docs/auto-docs
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 

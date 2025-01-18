@@ -428,8 +428,10 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Install dependencies
+        run: npm install
 
-          
       - name: Generate Documentation
         run: npm run generate-docs
 
