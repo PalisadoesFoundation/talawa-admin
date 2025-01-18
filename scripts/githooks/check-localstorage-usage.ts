@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* istanbul ignore file */
 
 import { readFileSync, existsSync } from 'fs';
 import path from 'path';
