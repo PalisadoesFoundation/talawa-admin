@@ -4,7 +4,7 @@
 
 # Interface: InterfaceItemUpdateStatusModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L11)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L11)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:11](h
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L15)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L15)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:15](h
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L14)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L14)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:14](h
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L13)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L13)
 
 #### Returns
 
@@ -44,4 +44,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:13](h
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L12)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L12)

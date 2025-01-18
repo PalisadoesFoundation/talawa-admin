@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:56](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationEvents/OrganizationEvents.tsx#L56)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:56](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationEvents/OrganizationEvents.tsx#L56)
 
 Organization Events Page Component to display the events of an organization
 and create new events for the organization by the admin or superadmin user.

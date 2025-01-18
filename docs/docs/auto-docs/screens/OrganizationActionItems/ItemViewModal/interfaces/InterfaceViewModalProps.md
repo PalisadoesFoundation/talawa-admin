@@ -4,7 +4,7 @@
 
 # Interface: InterfaceViewModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemViewModal.tsx#L13)
+Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemViewModal.tsx#L13)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:13](https://g
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemViewModal.tsx#L15)
+Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemViewModal.tsx#L15)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:15](https://g
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemViewModal.tsx#L14)
+Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemViewModal.tsx#L14)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:14](https://g
 
 > **item**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/screens/OrganizationActionItems/ItemViewModal.tsx#L16)
+Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/screens/OrganizationActionItems/ItemViewModal.tsx#L16)

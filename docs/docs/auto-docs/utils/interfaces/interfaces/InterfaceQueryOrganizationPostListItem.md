@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationPostListItem
 
-Defined in: [src/utils/interfaces.ts:180](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/utils/interfaces.ts#L180)
+Defined in: [src/utils/interfaces.ts:180](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/utils/interfaces.ts#L180)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:180](https://github.com/gautam-divyanshu/ta
 
 > **posts**: `object`
 
-Defined in: [src/utils/interfaces.ts:181](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/utils/interfaces.ts#L181)
+Defined in: [src/utils/interfaces.ts:181](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/utils/interfaces.ts#L181)
 
 #### edges
 

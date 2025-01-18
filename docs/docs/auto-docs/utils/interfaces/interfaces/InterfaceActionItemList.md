@@ -4,7 +4,7 @@
 
 # Interface: InterfaceActionItemList
 
-Defined in: [src/utils/interfaces.ts:68](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/utils/interfaces.ts#L68)
+Defined in: [src/utils/interfaces.ts:68](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/utils/interfaces.ts#L68)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/utils/interfaces.ts:68](https://github.com/gautam-divyanshu/tal
 
 > **actionItemsByOrganization**: [`InterfaceActionItemInfo`](InterfaceActionItemInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:69](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/utils/interfaces.ts#L69)
+Defined in: [src/utils/interfaces.ts:69](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/utils/interfaces.ts#L69)

@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgListCard/TruncatedText.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/components/OrgListCard/TruncatedText.tsx#L31)
+Defined in: [src/components/OrgListCard/TruncatedText.tsx:31](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/components/OrgListCard/TruncatedText.tsx#L31)
 
 A React functional component that displays text and truncates it with an ellipsis (`...`)
 if the text exceeds the available width or the `maxWidthOverride` value.

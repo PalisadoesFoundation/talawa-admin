@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/AgendaItems/AgendaItemsPreviewModal.tsx:41](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/components/AgendaItems/AgendaItemsPreviewModal.tsx#L41)
+Defined in: [src/components/AgendaItems/AgendaItemsPreviewModal.tsx:41](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/components/AgendaItems/AgendaItemsPreviewModal.tsx#L41)
 
 Modal component for previewing details of an agenda item.
 Displays the details of the selected agenda item, including its categories, title, description, duration, creator, URLs, and attachments.

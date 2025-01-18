@@ -6,7 +6,7 @@
 
 > `const` **CREATE\_CAMPAIGN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:15](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/GraphQl/Mutations/CampaignMutation.ts#L15)
+Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:15](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/GraphQl/Mutations/CampaignMutation.ts#L15)
 
 GraphQL mutation to create a new fund Campaign.
 

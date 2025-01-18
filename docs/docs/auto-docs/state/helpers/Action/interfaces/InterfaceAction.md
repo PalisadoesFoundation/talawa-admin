@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAction
 
-Defined in: [src/state/helpers/Action.ts:1](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/state/helpers/Action.ts#L1)
+Defined in: [src/state/helpers/Action.ts:1](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/state/helpers/Action.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/state/helpers/Action.ts:1](https://github.com/gautam-divyanshu/
 
 > **payload**: `any`
 
-Defined in: [src/state/helpers/Action.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/state/helpers/Action.ts#L3)
+Defined in: [src/state/helpers/Action.ts:3](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/state/helpers/Action.ts#L3)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/state/helpers/Action.ts:3](https://github.com/gautam-divyanshu/
 
 > **type**: `string`
 
-Defined in: [src/state/helpers/Action.ts:2](https://github.com/gautam-divyanshu/talawa-admin/blob/10f2081e01fc4f6c0767e35f8c4ed3f09fb1baac/src/state/helpers/Action.ts#L2)
+Defined in: [src/state/helpers/Action.ts:2](https://github.com/gautam-divyanshu/talawa-admin/blob/7e5a95aa37ca1c5b95489b6b18ea8cf85fb3559b/src/state/helpers/Action.ts#L2)
