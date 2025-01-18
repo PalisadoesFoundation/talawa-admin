@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Search } from '@mui/icons-material';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import AddIcon from '@mui/icons-material/Add';
 import styles from '../../style/app.module.css';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +36,10 @@ function eventHeader({
   });
 
   return (
-    <div className={styles.calendarEventHeader}>
+    <div
+      className={styles.calendarEventHeader}
+      data-testid="calendarEventHeader"
+    >
       <div className={styles.calendar__header}>
         <div className={styles.input}>
           <Form.Control
@@ -52,17 +56,18 @@ function eventHeader({
              *
              * @param e - The event object from the input change.
              */
-            /*istanbul ignore next*/
+
             onChange={(e) => setEventName(e.target.value)}
           />
           <Button
             className={styles.searchButton}
+            data-testid="searchButton"
             style={{ marginBottom: '10px' }}
           >
-            <Search />
+            <SearchOutlinedIcon />
           </Button>
         </div>
-        <div className={styles.flex_grow}></div>
+        {/* <div className={styles.flex_grow}></div> */}
         <div className={styles.space}>
           <SortingButton
             title={t('viewType')}
@@ -88,14 +93,25 @@ function eventHeader({
             className={styles.dropdown}
             buttonLabel={t('eventType')}
           />
-          <Button
-            variant="success"
-            className={styles.createButtonEventHeader}
-            onClick={showInviteModal}
-            data-testid="createEventModalBtn"
-          >
-            Create Event
-          </Button>
+          <div className={styles.selectTypeEventHeader}>
+            <Button
+              variant="success"
+              className={styles.dropdown}
+              onClick={showInviteModal}
+              data-testid="createEventModalBtn"
+            >
+              <div className="">
+                <AddIcon
+                  sx={{
+                    fontSize: '25px',
+                    marginBottom: '2px',
+                    marginRight: '2px',
+                  }}
+                />
+                <span>Create</span>
+              </div>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

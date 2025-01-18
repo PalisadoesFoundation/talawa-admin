@@ -18,9 +18,11 @@ export const dataGridStyle = {
   },
   '& .MuiDataGrid-row:hover': {
     backgroundColor: 'transparent',
+    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
     backgroundColor: 'transparent',
+    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
   },
   '& .MuiDataGrid-root': {
     borderRadius: '0.1rem',
@@ -35,6 +37,10 @@ export const dataGridStyle = {
   },
   '& .MuiDataGrid-virtualScrollerContent': {
     marginTop: 6.5,
+  },
+  '& .MuiDataGrid-cell:focus': {
+    outline: '2px solid #000',
+    outlineOffset: '-2px',
   },
 };
 

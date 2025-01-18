@@ -348,7 +348,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
                     {holiday.date.slice(3)}
                   </span>
-                  <span>{holiday.name}</span>
+                  <span className={styles.holiday_name}>{holiday.name}</span>
                 </li>
               ))}
             </ul>
@@ -357,21 +357,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.events_card} role="region" aria-label="Events">
             <h3 className={styles.card_title}>Events</h3>
             <div className={styles.legend}>
-              <div className={styles.list_container}>
-                <span className={styles.holidayIndicator}></span>
-                <span className={styles.holidayText}>Holidays</span>
-              </div>
               <div className={styles.eventsLegend}>
                 <span className={styles.organizationIndicator}></span>
                 <span className={styles.legendText}>
                   Events Created by Organization
                 </span>
               </div>
-              <div className={styles.eventsLegend}>
-                <span className={styles.userEvents__color}></span>
-                <span className={styles.legendText}>
-                  Events Created by User
-                </span>
+              <div className={styles.list_container_holidays}>
+                <span className={styles.holidayIndicator}></span>
+                <span className={styles.holidayText}>Holidays</span>
               </div>
             </div>
           </div>
@@ -519,37 +513,39 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     <div className={styles.calendar}>
       {viewType != ViewType.YEAR && (
         <div className={styles.calendar__header}>
-          <Button
-            variant="outlined"
-            className={styles.buttonEventCalendar}
-            onClick={
-              viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
-            }
-            data-testid="prevmonthordate"
-          >
-            <ChevronLeft />
-          </Button>
+          <div className={styles.calender_month}>
+            <Button
+              variant="outlined"
+              className={styles.buttonEventCalendar}
+              onClick={
+                viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
+              }
+              data-testid="prevmonthordate"
+            >
+              <ChevronLeft />
+            </Button>
 
-          <div
-            className={styles.calendar__header_month}
-            data-testid="current-date"
-          >
-            {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
-            <div>{months[currentMonth]}</div>
+            <div
+              className={styles.calendar__header_month}
+              data-testid="current-date"
+            >
+              {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
+              <div>{months[currentMonth]}</div>
+            </div>
+            <Button
+              variant="outlined"
+              className={styles.buttonEventCalendar}
+              onClick={
+                viewType == ViewType.DAY ? handleNextDate : handleNextMonth
+              }
+              data-testid="nextmonthordate"
+            >
+              <ChevronRight />
+            </Button>
           </div>
-          <Button
-            variant="outlined"
-            className={styles.buttonEventCalendar}
-            onClick={
-              viewType == ViewType.DAY ? handleNextDate : handleNextMonth
-            }
-            data-testid="nextmonthordate"
-          >
-            <ChevronRight />
-          </Button>
           <div>
             <Button
-              className={styles.btn__today}
+              className={styles.editButton}
               onClick={handleTodayButton}
               data-testid="today"
             >
