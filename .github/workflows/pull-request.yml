@@ -452,7 +452,8 @@ jobs:
         run: |
             git add --all
             git commit -m "Auto-generate documentation"
-            git push origin HEAD:"$HEAD_REF"     
+            git push origin ${{ github.head_ref }}
+     
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
