@@ -450,13 +450,10 @@ jobs:
 
       - name: Commit and Push Changes
         run: |
-          if [[ $(git status --porcelain) ]]; then
-            echo "Changes detected. Committing and pushing updates."
             git add --all
             git commit -m "Auto-generate documentation"
             git push origin ${{ github.head_ref }}
-          else
-            echo "No changes detected."
+     
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
