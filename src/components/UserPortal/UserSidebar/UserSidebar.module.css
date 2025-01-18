@@ -1,5 +1,6 @@
 .leftDrawer {
   width: calc(300px);
+  background-color: var(--profile-bg) !important;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -54,6 +55,17 @@
   border-radius: 16px;
   outline: none;
   border: none;
+}
+.leftDrawer .optionList button:hover {
+  background-color: var(--grey-light);
+  color: var(--black) !important;
+  box-shadow: var(--hover-shadow);
+}
+.leftbarcompheight {
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
+  padding-bottom: 48px;
 }
 
 .leftDrawer .optionList button .iconWrapper {

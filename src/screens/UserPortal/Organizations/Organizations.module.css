@@ -3,7 +3,7 @@
 }
 
 .colorWhite {
-  color: white;
+  color: var(--brown-color);
 }
 
 .colorLight {
@@ -16,7 +16,7 @@
 }
 
 .content {
-  height: fit-content;
+  height: 100vh;
   min-height: calc(100% - 40px);
 }
 
@@ -25,6 +25,7 @@
 }
 
 .containerHeight {
+  background-color: var(--profile-bg) !important;
   height: 100vh;
   padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
 }
@@ -40,7 +41,16 @@
 }
 
 .colorPrimary {
-  background: #31bb6b;
+  background: var(--blue-search-bg);
+  color: var(--brown-color) !important;
+  --bs-btn-active-bg: var(--blue-search-bg);
+}
+.colorPrimary:hover,
+.colorPrimary:focus,
+.colorPrimary:active {
+  background-color: var(--blue-search-bg) !important;
+  box-shadow: var(--hover-shadow);
+  color: var(--brown-color) !important;
 }
 
 .backgroundWhite {
@@ -90,14 +100,19 @@
   margin-right: 20px;
   color: black;
 }
-
+.collapseSidebarButton:hover,
 .opendrawer:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+  background-color: var(--profile-bg);
+  box-shadow: var(--hover-shadow);
 }
-.collapseSidebarButton:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+
+.collapseSidebarButton:active,
+.opendrawer:active {
+  background-color: var(--profile-bg) !important;
+}
+
+.maxWidth {
+  max-width: 473px;
 }
 
 @media screen and (max-width: 850px) {

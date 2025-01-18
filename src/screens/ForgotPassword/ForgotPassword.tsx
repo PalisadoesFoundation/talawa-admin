@@ -191,7 +191,7 @@ const ForgotPassword = (): JSX.Element => {
                     </div>
                     <Button
                       type="submit"
-                      className="mt-4 w-100"
+                      className={`mt-4 w-100 ${styles.login_btn}`}
                       data-testid="getOtpBtn"
                     >
                       {t('getOtp')}

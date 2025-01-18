@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--profile-bg) !important;
   padding: 1rem 1.5rem 0 calc(300px + 2rem + 1.5rem);
 }
 
@@ -16,6 +17,9 @@
 }
 
 .collapseSidebarButton {
+  --bs-btn-active-color: var(--profile-bg) !important;
+  --bs-btn-active-bg: var(--profile-bg) !important;
+  --bs-btn-active-border-color: var(--profile-bg) !important;
   position: fixed;
   height: 40px;
   bottom: 0;
@@ -30,9 +34,14 @@
 .collapseSidebarButton:hover,
 .opendrawer:hover {
   opacity: 1;
+  background-color: var(--profile-bg);
+  box-shadow: var(--hover-shadow);
   color: black !important;
 }
 .opendrawer {
+  --bs-btn-active-color: var(--profile-bg);
+  --bs-btn-active-bg: var(--profile-bg);
+  --bs-btn-active-border-color: var(--profile-bg);
   position: fixed;
   display: flex;
   align-items: center;
@@ -42,7 +51,7 @@
   width: 40px;
   height: 100vh;
   z-index: 9999;
-  background-color: rgba(245, 245, 245);
+  background-color: var(--profile-bg);
   border: none;
   border-radius: 0px;
   margin-right: 20px;

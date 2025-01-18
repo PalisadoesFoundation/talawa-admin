@@ -96,15 +96,15 @@
   --rating-star-hover: #ff3d47;
   /* Background and Border */
   --table-bg: #eaebef;
+  --profile-bg: #f6f8fc;
+  --screen-bg: #f2f7ff;
   --tablerow-bg: #eff1f7;
   --date-picker-bg: #f2f2f2;
   --table-bg-color: var(--grey-bg-color);
   --tablerow-bg-color: #ffffff;
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
-
-  /* Font Sizes */
-  --font-size-header: 16px;
+  --sort-bg: #fcfcfc /* Font Sizes */ --font-size-header: 16px;
 
   /* Borders and Radius */
   --primary-border-solid: 1px solid var(--dropdown-border-color);
@@ -121,6 +121,9 @@
   /* Modal Dimensions */
   --modal-width: 670px;
   --modal-max-width: 680px;
+  /* Hover style */
+  --hover-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
+    0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   /* Additional Variables */
   --input-shadow-color: #dddddd;
@@ -328,6 +331,9 @@
   margin-bottom: 10px;
   box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
+.dropdown:hover {
+  box-shadow: var(--hover-shadow);
+}
 
 .dropdown:is(
     :hover,
@@ -341,6 +347,7 @@
   background-color: transparent !important;
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
+  border-color: var(--brown-color) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
@@ -387,6 +394,7 @@
   flex: 1;
   position: relative;
   margin-right: 80px;
+  max-width: 473px !important;
 }
 
 .eventCreatebtn {
@@ -494,11 +502,12 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: var(--bs-white);
+  border: none;
   box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
 .inputField:focus {
-  box-shadow: 0 0 0 0.25rem var(--light-blue);
+  box-shadow: var(--hover-shadow);
 }
 
 .inputFieldModal {
@@ -513,7 +522,11 @@
 }
 
 .searchButton {
+  --bs-btn-active-color: var(--search-button-bg);
+  --bs-btn-active-bg: var(--search-button-bg);
+  --bs-btn-active-border-color: var(--search-button-bg);
   margin-bottom: 10px;
+  color: var(--brown-color);
   background-color: var(--search-button-bg);
   border-color: var(--search-button-bg);
   position: absolute;
@@ -526,13 +539,15 @@
 }
 
 .searchButton:hover {
-  background-color: var(--search-button-hover-bg, var(--light-blue-color));
-  border-color: var(--search-button-hover-bg, var(--light-blue-color));
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-bg);
+  box-shadow: var(--hover-shadow);
+  color: var(--brown-color) !important;
 }
 
 .searchButton:active {
   transform: scale(0.95);
-  background-color: var(--search-button-hover-bg, #286fe0) !important;
+  background-color: var(--search-button-bg) !important;
   border-color: transparent !important;
 }
 
@@ -2062,6 +2077,8 @@ input[type='radio']:checked + label:hover {
 
 .btnsContainerOrgList {
   display: flex;
+  width: 100%;
+  justify-content: space-between;
   margin: 2.5rem 0 2.5rem 0;
 }
 
@@ -2161,9 +2178,9 @@ input[type='radio']:checked + label:hover {
   position: relative;
 }
 
-.btnsContainerOrgList input {
+/* .btnsContainerOrgList input {
   outline: 1px solid var(--bs-gray-400);
-}
+} */
 
 .btnsContainerOrgList .inputOrgList button {
   width: 52px;
@@ -2177,6 +2194,21 @@ input[type='radio']:checked + label:hover {
 
 .listBoxOrgList .itemCardOrgList {
   width: 50%;
+}
+
+.createorgdropdown {
+  background-color: var(--grey-light);
+  border-color: var(--brown-color);
+  height: 3rem;
+  margin-top: 0.7rem;
+  color: var(--brown-color);
+}
+.createorgdropdown:active,
+.createorgdropdown:hover {
+  background-color: var(--grey-light) !important;
+  border-color: var(--brown-color) !important;
+  color: var(--brown-color) !important;
+  box-shadow: var(--hover-shadow);
 }
 .notFound {
   flex: 1;
@@ -2996,10 +3028,22 @@ form > input {
   left: 1rem;
 }
 
+/* Define your custom button styles */
 .langChangeBtnStyle {
+  --bs-btn-active-bg: var(--light-blue);
+  --bs-btn-active-border-color: var(--light-blue);
+  --bs-btn-active-color: var(--dark-blue);
   width: 7.5rem;
   height: 2.2rem;
   padding: 0;
+  color: var(--dark-blue);
+  border-color: var(--light-blue);
+  background-color: transparent; /* Default transparent background */
+}
+
+.langChangeBtnStyle:hover {
+  background-color: var(--light-blue) !important;
+  border-color: var(--light-blue) !important;
 }
 
 .talawa_logo {
@@ -3027,6 +3071,10 @@ form > input {
 }
 
 .email_button {
+  --bs-btn-active-bg: var(--search-button-bg);
+  --bs-btn-active-border-color: var(--search-button-bg);
+  --bs-btn-hover-bg: var(--search-button-bg);
+  --bs-btn-hover-border-color: var(--search-button-bg);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -3034,14 +3082,28 @@ form > input {
   height: 100%;
   display: flex;
   background-color: var(--search-button-bg);
-  border-color: var(--search-button-border, var(--black-color));
+  border-color: var(--search-button-bg);
   justify-content: center;
   align-items: center;
+  color: var(--brown-color);
+}
+.email_button:hover {
+  color: var(--brown-color) !important;
+  box-shadow: var(--hover-shadow);
 }
 
 .login_btn {
-  background-color: var(--search-button-bg);
-  border-color: var(--search-button-border, var(--black-color));
+  font-weight: bold;
+  color: var(--brown-color);
+  --bs-btn-bg: var(--search-button-bg);
+  --bs-btn-border-color: var(--search-button-bg);
+  --bs-btn-hover-bg: var(--search-button-bg);
+  --bs-btn-hover-border-color: var(--search-button-bg);
+  --bs-btn-active-color: var(--search-button-bg);
+  --bs-btn-active-bg: var(--search-button-bg);
+  --bs-btn-active-border-color: var(--search-button-bg);
+  --bs-btn-disabled-bg: var(--search-button-bg);
+  --bs-btn-disabled-border-color: var(--search-button-bg);
   margin-top: 1rem;
   margin-bottom: 1rem;
   width: 100%;
@@ -3049,15 +3111,31 @@ form > input {
   cursor: pointer;
 }
 
+.login_btn:hover {
+  color: var(--brown-color) !important;
+  box-shadow: var(--hover-shadow);
+}
+
 .reg_btn {
-  background-color: var(--dropdown-border-color);
-  border-color: var(--dropdown-border-color);
+  font-weight: bold;
+  background-color: var(--grey-light);
+  border-color: var(--grey-light);
+
+  --bs-btn-hover-bg: var(--grey-light);
+  --bs-btn-hover-border-color: var(--grey-light);
+  --bs-btn-active-color: var(--grey-light);
+  --bs-btn-active-bg: var(--grey-light);
+  --bs-btn-active-border-color: var(--grey-light);
   margin-top: 1rem;
-  color: var(--bs-white);
+  color: var(--brown-color);
   margin-bottom: 1rem;
   width: 100%;
   transition: background-color 0.2s ease;
   cursor: pointer;
+}
+.reg_btn:hover {
+  color: var(--brown-color) !important;
+  box-shadow: var(--hover-shadow);
 }
 
 .active_tab {
@@ -3612,6 +3690,9 @@ button[data-testid='createPostBtn'] {
     }
   }
 
+  .buttonList {
+    background-color: var(--light-blue) !important;
+  }
   /* AddOnEntry.tsx */
 
   .entrytoggle {
@@ -3723,7 +3804,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   flex-direction: column;
   padding: 1rem 1rem 0 1rem;
-  background-color: var(--input-area-color);
+  background-color: var(--profile-bg);
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
 }
@@ -3759,6 +3840,7 @@ button[data-testid='createPostBtn'] {
 .leftDrawer .titleHeader {
   margin: 2rem 0 1rem 0;
   font-weight: 600;
+  color: var(--black) !important;
 }
 
 .leftDrawer .optionList button {
@@ -3770,6 +3852,21 @@ button[data-testid='createPostBtn'] {
   border-radius: 16px;
   outline: none;
   border: none;
+}
+
+.leftDrawer .optionList button:hover {
+  background-color: var(--grey-light) !important;
+  box-shadow: var(--hover-shadow);
+  color: black !important;
+}
+.leftDrawer .optionList button:active,
+.leftDrawer .optionList button:focus {
+  background-color: var(--grey-light) !important;
+  color: black !important;
+  font-weight: bold;
+}
+.leftDrawer .optionList button:hover svg {
+  stroke: var(--black) !important;
 }
 
 .leftDrawer .optionList button .iconWrapper {
@@ -3784,6 +3881,11 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
   background-color: var(--bs-white);
+}
+
+.leftDrawer .sidebarcompheight {
+  height: 100%;
+  padding-bottom: 48px;
 }
 
 .leftDrawer .profileContainer:focus {
@@ -3956,6 +4058,7 @@ button[data-testid='createPostBtn'] {
 /* LeftDrawer general styles */
 .leftDrawer {
   height: 100vh; /* Ensure it spans the full height */
+  background-color: var(--profile-bg);
   overflow-y: auto; /* Enable vertical scrolling */
   transition: transform 0.3s ease;
   will-change: transform; /* NEW */

@@ -6,29 +6,31 @@
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  color: var(--bs-gray-900);
+  color: var(--brown-color);
   border-radius: 0.3rem;
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid var(--bs-gray-700);
+  border: 1px solid var(--grey-light);
   font-weight: 500;
   transition: all 0.25s ease;
+  background-color: var(--grey-light);
 }
 
 .navLinkClass:hover {
-  color: var(--bs-white);
-  background-color: var(--bs-gray);
-  border-color: var(--bs-gray);
+  box-shadow: var(--hover-shadow);
+  background-color: var(--grey-light);
+  border-color: var(--grey-light);
 }
 
 .activeLink {
-  color: white;
-  border: 1px solid var(--bs-primary);
-  background-color: var(--toggle-button-bg);
+  color: var(--brown-color);
+  border: 1px solid var(--light-blue);
+  background-color: var(--light-blue);
 }
 
 .activeLink:hover {
-  color: var(--bs-white);
-  background-color: var(--toggle-button-bg);
-  border: 1px solid var(--bs-primary);
+  box-shadow: var(--hover-shadow);
+  color: var(--brown-color);
+  border: 1px solid var(--light-blue);
+  background-color: var(--light-blue);
 }

@@ -112,8 +112,12 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             )}
             {/* Display the number of admins and members */}
             <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{admins.length}</span> &nbsp; &nbsp;
-              &nbsp; {tCommon('members')}: <span>{members.length}</span>
+              <div>
+                {tCommon('admins')}: <span>{admins.length}</span>
+              </div>
+              <div>
+                {tCommon('members')}: <span>{members.length}</span>
+              </div>
             </h6>
           </div>
         </div>

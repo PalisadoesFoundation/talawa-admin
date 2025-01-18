@@ -5,11 +5,12 @@
   border-radius: 8px 0px 0px 8px;
   display: flex;
   align-items: center;
-  background-color: white !important;
-  box-shadow:
-    0 4px 4px 0 rgba(177, 177, 177, 0.2),
-    0 6px 44px 0 rgba(246, 246, 246, 0.19);
+  background-color: var(--profile-bg) !important;
 }
+.profilebutton {
+  width: 100%;
+}
+
 .profileContainer:focus {
   outline: none;
   background-color: var(--bs-gray-100);
@@ -60,10 +61,10 @@
   background-color: transparent !important;
 }
 .dropdownToggle {
-  background-image: url(/public/images/svg/angleDown.svg);
+  background-image: url(/public/images/svg/angleRight.svg);
   background-repeat: no-repeat;
   background-position: center;
-  background-color: azure;
+  background-color: var(--profile-bg) !important;
 }
 
 .dropdownToggle::after {
