@@ -3,44 +3,49 @@
 import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import type { ExecSyncOptionsWithStringEncoding } from 'child_process';
 
-const args = process.argv.slice(2);
-const scanEntireRepo = args.includes('--scan-entire-repo');
+const args: string[] = process.argv.slice(2);
+const scanEntireRepo: boolean = args.includes('--scan-entire-repo');
 
-const containsSkipComment = (file) => {
+const containsSkipComment = (file: string): boolean => {
   try {
     const content = readFileSync(file, 'utf-8');
     return content.includes('// SKIP_LOCALSTORAGE_CHECK');
   } catch (error) {
-    console.error(`Error reading file ${file}:`, error.message);
+    console.error(
+      `Error reading file ${file}:`,
+      error instanceof Error ? error.message : error,
+    );
     return false;
   }
 };
 
-const getModifiedFiles = () => {
+const getModifiedFiles = (): string[] => {
   try {
+    const options: ExecSyncOptionsWithStringEncoding = { encoding: 'utf-8' };
+
     if (scanEntireRepo) {
-      const result = execSync('git ls-files | grep ".tsx\\?$"', {
-        encoding: 'utf-8',
-      });
+      const result = execSync('git ls-files | grep ".tsx\\?$"', options);
       return result.trim().split('\n');
     }
 
-    const result = execSync('git diff --cached --name-only', {
-      encoding: 'utf-8',
-    });
+    const result = execSync('git diff --cached --name-only', options);
     return result.trim().split('\n');
   } catch (error) {
-    console.error('Error fetching modified files:', error.message);
+    console.error(
+      'Error fetching modified files:',
+      error instanceof Error ? error.message : error,
+    );
     process.exit(1);
   }
+  return [];
 };
 
-const files = getModifiedFiles();
+const files: string[] = getModifiedFiles();
+const filesWithLocalStorage: string[] = [];
 
-const filesWithLocalStorage = [];
-
-const checkLocalStorageUsage = (file) => {
+const checkLocalStorageUsage = (file: string): void => {
   if (!file) {
     return;
   }
@@ -49,7 +54,7 @@ const checkLocalStorageUsage = (file) => {
 
   // Skip files with specific names or containing a skip comment
   if (
-    fileName === 'check-localstorage-usage.js' ||
+    fileName === 'check-localstorage-usage.ts' || // Updated extension
     fileName === 'useLocalstorage.test.ts' ||
     fileName === 'useLocalstorage.ts' ||
     containsSkipComment(file)
@@ -73,7 +78,10 @@ const checkLocalStorageUsage = (file) => {
       console.log(`File ${file} does not exist.`);
     }
   } catch (error) {
-    console.error(`Error reading file ${file}:`, error.message);
+    console.error(
+      `Error reading file ${file}:`,
+      error instanceof Error ? error.message : error,
+    );
   }
 };
 

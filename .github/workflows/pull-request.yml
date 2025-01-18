@@ -66,8 +66,8 @@ jobs:
 
       - name: Check for localStorage Usage
         run: |
-          chmod +x scripts/githooks/check-localstorage-usage.js
-          node scripts/githooks/check-localstorage-usage.js --scan-entire-repo
+          chmod +x scripts/githooks/check-localstorage-usage.ts
+          tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
 
       - name: Compare translation files
         run: |

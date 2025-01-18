@@ -92,7 +92,7 @@
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx setup.ts",
-    "check-localstorage": "node scripts/githooks/check-localstorage-usage.js"
+    "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts"
   },
   "eslintConfig": {
     "extends": [
