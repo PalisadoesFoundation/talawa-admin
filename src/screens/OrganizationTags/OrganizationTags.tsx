@@ -139,18 +139,16 @@ function OrganizationTags(): JSX.Element {
           organizationId: orgId,
         },
       });
-      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
         setCreateTagModalIsOpen(false);
+      } else {
+        toast.error('Tag creation failed');
       }
     } catch (error: unknown) {
-      /* istanbul ignore else -- @preserve */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
   if (orgUserTagsError) {

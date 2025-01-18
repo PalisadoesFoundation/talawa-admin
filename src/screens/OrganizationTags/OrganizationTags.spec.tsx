@@ -98,12 +98,10 @@ describe('Organisation Tags Page', () => {
       };
     });
   });
-
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
-
   test('component loads correctly', async () => {
     const { getByText } = renderOrganizationTags(link);
 
@@ -113,7 +111,6 @@ describe('Organisation Tags Page', () => {
       expect(getByText(translations.createTag)).toBeInTheDocument();
     });
   });
-
   test('render error component on unsuccessful userTags query', async () => {
     const { queryByText } = renderOrganizationTags(link2);
 
@@ -123,7 +120,6 @@ describe('Organisation Tags Page', () => {
       expect(queryByText(translations.createTag)).not.toBeInTheDocument();
     });
   });
-
   test('opens and closes the create tag modal', async () => {
     renderOrganizationTags(link);
 
@@ -159,7 +155,6 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
     });
   });
-
   test('navigates to manage tag page after clicking manage tag option', async () => {
     renderOrganizationTags(link);
 
@@ -174,7 +169,6 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
     });
   });
-
   test('searchs for tags where the name matches the provided search input', async () => {
     renderOrganizationTags(link);
 
@@ -195,7 +189,6 @@ describe('Organisation Tags Page', () => {
       expect(buttons.length).toEqual(2);
     });
   });
-
   test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
     renderOrganizationTags(link);
 
@@ -252,7 +245,6 @@ describe('Organisation Tags Page', () => {
       );
     });
   });
-
   test('fetches more tags with infinite scroll', async () => {
     const { getByText } = renderOrganizationTags(link);
 
@@ -281,7 +273,6 @@ describe('Organisation Tags Page', () => {
       expect(getByText(translations.createTag)).toBeInTheDocument();
     });
   });
-
   test('creates a new user tag', async () => {
     renderOrganizationTags(link);
 
@@ -311,7 +302,6 @@ describe('Organisation Tags Page', () => {
       );
     });
   });
-
   test('creates a new user tag with error', async () => {
     renderOrganizationTags(link3);
 
@@ -330,7 +320,6 @@ describe('Organisation Tags Page', () => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
   });
-
   test('renders the no tags found message when there are no tags', async () => {
     renderOrganizationTags(link4);
 
@@ -340,7 +329,6 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
     });
   });
-
   test('sets dataLength to 0 when userTagsList is undefined', async () => {
     renderOrganizationTags(link5);
 
@@ -352,7 +340,6 @@ describe('Organisation Tags Page', () => {
       expect(userTags).toHaveLength(0);
     });
   });
-
   test('Null endCursor', async () => {
     renderOrganizationTags(link6);
 
@@ -371,7 +358,6 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
   });
-
   test('Null Page available', async () => {
     renderOrganizationTags(link7);
 
@@ -388,6 +374,27 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+  });
+  test('creates a new user tag with undefined data', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('createTagBtn'));
+
+    userEvent.type(
+      screen.getByPlaceholderText(translations.tagNamePlaceholder),
+      'userTag 13',
+    );
+
+    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Tag creation failed');
     });
   });
 });

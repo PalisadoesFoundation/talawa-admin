@@ -307,6 +307,13 @@ export const MOCKS = [
     },
     result: { data: { createUserTag: { _id: '12' } } },
   },
+  {
+    request: {
+      query: CREATE_USER_TAG,
+      variables: { name: 'userTag 13', organizationId: 'orgId' },
+    },
+    result: { data: null },
+  },
 ];
 
 export const MOCKS_ERROR = [
