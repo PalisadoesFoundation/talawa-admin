@@ -416,44 +416,7 @@ jobs:
         run: |
           docker stop talawa-admin-app-container
           docker rm talawa-admin-app-container
-   
-  generate-docs:
-    runs-on: ubuntu-latest
-    permissions:
-        contents: write
- 
-    steps:
-      - name: Checkout the Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-        
-      - name: Install dependencies
-        run: npm install
-
-      - name: Generate Documentation
-        run: npm run generate-docs
-
-      - name: Commit and Push Changes
-        env:
-          HEAD_REF: ${{ github.head_ref }}
-          GH_PAT: ${{ secrets.PAT_TOKEN }}
-        run: |
-          if [[ $(git status --porcelain) ]]; then
-            echo "Changes detected. Auto-committing updates."
-            git config user.name "gautam-divyanshu"
-            git config user.email "gautam-divyanshu034@gmail.com"
-            git add --all
-            git commit -m "Auto-generate documentation"
-            git remote set-url origin https://$GH_PAT@github.com/PalisadoesFoundation/talawa-admin.git
-            if ! git push origin HEAD:"$HEAD_REF"; then
-              echo "Please check if you have the correct permissions."
-              exit 1
-            fi
-          else
-            echo "No changes detected."
-          fi
+  
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
