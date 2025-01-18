@@ -383,6 +383,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
           {/* <ImagePicker
             // label={tCommon('displayImage')}
+            defaultPlaceholderImage="/path/to/default-image.jpg"
             data-testid="organisationImage"
             onImageSelect={(base64Image: string) => {
               setFormState({
