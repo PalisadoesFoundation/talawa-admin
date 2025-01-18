@@ -442,11 +442,11 @@ jobs:
           if [[ $(git status --porcelain) ]]; then
             echo "Changes detected. Auto-committing updates."
             git config user.name "gautam-divyanshu"
-            git config user.email "137816099+gautam-divyanshu@users.noreply.github.com"
+            git config user.email "gautam-divyanshu034@gmail.com"
             git add --all
             git commit -m "Auto-generate documentation"
             if ! git push origin HEAD:"$HEAD_REF"; then
-              echo "Failed to push changes. Please check if you have the correct permissions."
+              echo "Please check if you have the correct permissions."
               exit 1
             fi
           else
