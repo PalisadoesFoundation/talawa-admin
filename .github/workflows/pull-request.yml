@@ -423,6 +423,8 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
       - name: Checkout PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
