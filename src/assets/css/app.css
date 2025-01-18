@@ -14081,7 +14081,7 @@ fieldset:disabled .btn {
 .btn-info:hover,
 .btn-info:active {
   color: #fff !important;
-  box-shadow: inset 50px 50px 40px rgba(0, 0, 0, 0.5);
+  /* box-shadow: inset 50px 50px 40px rgba(0, 0, 0, 0.5); */
   background-blend-mode: multiply;
   /* background-color: #6c757d ; */
   /* filter: brightness(0.85); */
