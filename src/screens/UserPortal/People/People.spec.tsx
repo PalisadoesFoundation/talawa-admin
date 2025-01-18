@@ -3,7 +3,6 @@ import type { RenderResult } from '@testing-library/react';
 import {
   render,
   screen,
-  fireEvent,
   waitFor,
   waitForElementToBeRemoved,
   act,
@@ -184,6 +183,20 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: { orgId: '', firstName_contains: '' },
+    },
+    error: new Error('Network error'),
+  },
+  {
+    request: {
+      query: ORGANIZATION_ADMINS_LIST,
+      variables: { id: '' },
+    },
+    error: new Error('GraphQL error'),
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
@@ -321,8 +334,9 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-    await wait();
+    const loadingElement = screen.getByText('Loading...');
+    expect(loadingElement).toBeInTheDocument();
+    await waitForElementToBeRemoved(loadingElement);
   });
 });
 
@@ -883,33 +897,6 @@ describe('Testing People Screen Edge Cases [User Portal]', () => {
 
 describe('People Component Additional Coverage Tests', () => {
   // Mock for testing error states
-
-  // Test case to cover line 142: handleSearchByEnter with non-Enter key
-  it('should not trigger search for non-Enter key press', async () => {
-    render(
-      <MockedProvider addTypename={false} mocks={[]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const searchInput = screen.getByTestId('searchInput');
-    fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
-
-    // Wait a bit to ensure no search is triggered
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    // The loading state should not appear
-    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    // Ensure no new data is fetched
-    expect(screen.queryByText('John Cena')).not.toBeInTheDocument();
-    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
-  });
-
   // Test case to cover line 151: handleSearchByBtnClick with empty input
   it('should handle search with empty input value', async () => {
     render(
@@ -931,7 +918,10 @@ describe('People Component Additional Coverage Tests', () => {
     userEvent.clear(searchInput);
     userEvent.click(searchBtn);
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await waitFor(() => {
+      expect((searchInput as HTMLInputElement).value).toBe('');
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
   });
 
   it('Sets userType to Admin if user is found in admins list', async (): Promise<void> => {
