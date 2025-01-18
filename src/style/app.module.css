@@ -2622,7 +2622,7 @@ input[type='radio']:checked + label:hover {
 .people_card_header {
   background-color: var(--grey-light);
   display: flex;
-  border: 1px;
+  border: 1px solid var(--grey-border);
   padding: 1rem 1.5rem;
   margin-top: 1.5rem;
   border-top-left-radius: 16px;
