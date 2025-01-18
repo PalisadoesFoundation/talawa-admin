@@ -59,8 +59,8 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
       </span>
       {/* Person's role with additional styling */}
       <div style={{ flex: '2' }} className="align-self-center">
-        <div className={`w-75 border py-2 px-3 ${styles.borderBox}`}>
-          <span className={`${styles.greenText}`}>{props.role}</span>
+        <div className={`w-75 border py-2 px-3 rounded`}>
+          <span>{props.role}</span>
         </div>
       </div>
     </div>
