@@ -430,8 +430,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
+          token: ${{ secrets.PAT_TOKEN }}
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -445,15 +444,13 @@ jobs:
 
       - name: Configure Git User
         run: |
-            git config user.name "gautam-divyanshu"
-            git config user.email "137816099+gautam-divyanshu@users.noreply.github.com"
-
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
       - name: Commit and Push Changes
         run: |
             git add --all
             git commit -m "Auto-generate documentation"
-            git push origin ${{ github.head_ref }}
-     
+            git push https://x-access-token:${TOKEN}@github.com/${{ github.event.pull_request.head.repo.full_name }} ${{ github.head_ref }}     
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
