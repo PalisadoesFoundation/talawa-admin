@@ -261,19 +261,13 @@ export default function people(): JSX.Element {
               </>
             )}
           </div>
-          <table>
-            <tbody>
-              <tr>
-                <PaginationList
-                  count={members ? members.length : 0}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </tr>
-            </tbody>
-          </table>
+          <PaginationList
+            count={members ? members.length : 0}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </div>
       </div>
     </>
