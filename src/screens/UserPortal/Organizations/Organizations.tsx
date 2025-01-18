@@ -390,8 +390,7 @@ export default function organizations(): JSX.Element {
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage,
                           )
-                        : /* istanbul ignore next */
-                          organizations
+                        : organizations
                       ).map((organization: InterfaceOrganization, index) => {
                         const cardProps: InterfaceOrganizationCardProps = {
                           name: organization.name,
