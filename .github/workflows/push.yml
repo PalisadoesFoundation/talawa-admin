@@ -60,36 +60,3 @@ jobs:
           gcov_ignore: 'docs/'
           fail_ci_if_error: false
           name: '${{env.CODECOV_UNIQUE_NAME}}'
-
-  Generate-Docs:
-    name: Generate Documentation
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
-          
-      - name: Install dependencies
-        run: npm install
-
-      - name: Generate documentation
-        run: typedoc --out docs/docs/auto-docs --plugin typedoc-plugin-markdown --theme markdown --tsconfig tsconfig.docs.json --excludePrivate --excludeProtected --excludeExternals --hideGenerator --categorizeByGroup true --entryPointStrategy expand --entryPoints \"src\" --exclude \"src/vite-env.d.ts\" --exclude \"**/*.spec.{ts,tsx}\" --exclude \"**/*.test.{ts,tsx}\" --exclude \"**/__tests__/**\" --exclude \"**/__mocks__/**\" --skipErrorChecking --logLevel Warn"
-
-      - name: Clean up documentation
-        run: |
-          find docs/docs/auto-docs -name 'README.md' -delete
-          find docs/docs/auto-docs -name '_media' -exec rm -r {} +
-          find docs/docs/auto-docs -type d -empty -delete
-
-      - name: Commit and push changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Auto-generate documentation"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
