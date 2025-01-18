@@ -816,6 +816,9 @@ describe('Testing People Screen Edge Cases [User Portal]', () => {
           };
           return translations[key] || key;
         },
+        i18n: {
+          changeLanguage: () => new Promise(() => {}),
+        },
       }),
     };
   });
@@ -904,6 +907,9 @@ describe('People Component Additional Coverage Tests', () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     // The loading state should not appear
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    // Ensure no new data is fetched
+    expect(screen.queryByText('John Cena')).not.toBeInTheDocument();
+    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
 
   // Test case to cover line 151: handleSearchByBtnClick with empty input
@@ -921,11 +927,12 @@ describe('People Component Additional Coverage Tests', () => {
     );
 
     const searchBtn = screen.getByTestId('searchBtn');
-    // Remove the search input from DOM to simulate edge case
     const searchInput = screen.getByTestId('searchInput');
-    searchInput.remove();
 
+    // Simulate clearing the input value
+    userEvent.clear(searchInput);
     userEvent.click(searchBtn);
+
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
