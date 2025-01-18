@@ -785,8 +785,6 @@ describe('People Additional Flow Tests', () => {
 
     expect(screen.getByText('Charlie Test')).toBeInTheDocument();
   });
-
-  // Add test for error handling
 });
 describe('Testing People Screen Edge Cases [User Portal]', () => {
   const renderComponent = (mocks = MOCKS): RenderResult => {
