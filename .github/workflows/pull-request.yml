@@ -204,7 +204,6 @@ jobs:
         run: |
           python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
-
   Check-Code-Coverage-Disable:
     name: Check for code coverage disable
     runs-on: ubuntu-latest
@@ -494,7 +493,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GITHUB_REPOSITORY: ${{ github.repository }
+          GITHUB_REPOSITORY: ${{ github.repository }}
           
   Python-Compliance:
     name: Check Python Code Style
