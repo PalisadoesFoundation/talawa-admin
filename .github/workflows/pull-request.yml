@@ -445,15 +445,14 @@ jobs:
 
       - name: Configure Git User
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git config user.name "gautam-divyanshu"
+            git config user.email "137816099+gautam-divyanshu@users.noreply.github.com"
 
       - name: Commit and Push Changes
         run: |
             git add --all
             git commit -m "Auto-generate documentation"
-            # git push origin ${{ github.head_ref }}
-     
+            git push origin HEAD:"$HEAD_REF"     
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
