@@ -43,7 +43,6 @@ const profileDropdown = (): JSX.Element => {
     try {
       await revokeRefreshToken();
     } catch (error) {
-      /*istanbul ignore next*/
       console.error('Error revoking refresh token:', error);
     }
     localStorage.clear();
@@ -54,8 +53,7 @@ const profileDropdown = (): JSX.Element => {
   const fullName = `${firstName} ${lastName}`;
   const displayedName =
     fullName.length > MAX_NAME_LENGTH
-      ? /*istanbul ignore next*/
-        fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
+      ? fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
       : fullName;
 
   return (
@@ -67,7 +65,6 @@ const profileDropdown = (): JSX.Element => {
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
-            /*istanbul ignore next*/
             <img
               src={userImage}
               alt={`profile picture`}
