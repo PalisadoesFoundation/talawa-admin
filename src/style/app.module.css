@@ -6406,6 +6406,13 @@ button[data-testid='createPostBtn'] {
   color: var(--black-color);
 }
 
+/* people card */
+.personImage_peoplecard {
+  border-radius: 50%;
+  margin-right: 25px;
+  max-width: 70px;
+}
+
 /* People.tsx */
 
 .borderRounded8 {
@@ -6447,11 +6454,4 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   justify-content: space-between;
   margin-right: 50px;
-}
-
-/* people card */
-.personImage_peoplecard {
-  border-radius: 50%;
-  margin-right: 25px;
-  max-width: 70px;
 }
