@@ -54,8 +54,7 @@ function EventAttendance(): JSX.Element {
       const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
       return sortOrder === 'ascending'
         ? nameA.localeCompare(nameB)
-        : /*istanbul ignore next*/
-          nameB.localeCompare(nameA);
+        : nameB.localeCompare(nameA);
     });
   };
 
