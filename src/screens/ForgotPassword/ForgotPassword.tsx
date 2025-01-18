@@ -105,7 +105,7 @@ const ForgotPassword = (): JSX.Element => {
   };
 
   /**
-   * Handles the form submission for resetting the password.
+   * manages the form submission for resetting the password.
    *
    * @param e - The form submit event
    */
