@@ -225,6 +225,7 @@ describe('CSS Styling Tests', () => {
     const rightControls = controlsContainer?.querySelector(
       '.d-flex.align-items-center',
     );
+    expect(rightControls).not.toBeNull();
     expect(rightControls).toBeInTheDocument();
   });
 });
