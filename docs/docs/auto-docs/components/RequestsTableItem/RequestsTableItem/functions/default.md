@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:45](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/RequestsTableItem/RequestsTableItem.tsx#L45)
+Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RequestsTableItem/RequestsTableItem.tsx#L45)
 
 Renders a table row item for a membership request.
 

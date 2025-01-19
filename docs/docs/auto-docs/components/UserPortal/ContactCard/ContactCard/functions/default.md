@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/ContactCard/ContactCard.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/UserPortal/ContactCard/ContactCard.tsx#L36)
+Defined in: [src/components/UserPortal/ContactCard/ContactCard.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ContactCard/ContactCard.tsx#L36)
 
 Displays a card for a contact in a contact list.
 
