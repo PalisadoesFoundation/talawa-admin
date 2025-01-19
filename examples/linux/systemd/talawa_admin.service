@@ -51,12 +51,19 @@ ExecStart=/bin/bash -c '\
   fi'
   
 Restart=on-failure
+RestartSec=10
+StartLimitInterval=5min
+StartLimitBurst=3
 RemainAfterExit=yes
 ProtectSystem=full
 NoNewPrivileges=true
 PrivateTmp=true
 Type=simple
 RuntimeDirectory=talawa-admin
+MemoryMax=1G
+CPUQuota=200%
+LimitNOFILE=65535
+
 
 
 [Install]
