@@ -12,7 +12,7 @@ import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './../../style/app.module.css'; // Import the global CSS file
-// import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
@@ -150,7 +150,7 @@ const leftDrawerOrg = ({
             )
           ) : (
             <button className={styles.profileContainer} data-testid="OrgBtn">
-              {/* <div className={styles.imageContainer}>
+              <div className={styles.imageContainer}>
                 {organization.image ? (
                   <img src={organization.image} alt={`profile picture`} />
                 ) : (
@@ -160,7 +160,7 @@ const leftDrawerOrg = ({
                     alt={'Dummy Organization Picture'}
                   />
                 )}
-              </div> */}
+              </div>
               <div className={styles.profileText}>
                 <span className={styles.primaryText}>{organization.name}</span>
                 <span className={styles.secondaryText}>
