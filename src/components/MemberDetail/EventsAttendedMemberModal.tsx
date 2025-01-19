@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../screens/MemberDetail/MemberDetail.module.css';
+import styles from '../../style/app.module.css';
 import { CustomTableCell } from './customTableCell';
 /**
  * Modal component to display paginated list of events attended by a member
