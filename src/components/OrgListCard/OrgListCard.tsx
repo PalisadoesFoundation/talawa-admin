@@ -4,7 +4,7 @@ import TruncatedText from './TruncatedText';
 import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from './OrgListCard.module.css';
+import styles from '../../style/app.module.css';
 import { useNavigate } from 'react-router-dom';
 import type {
   InterfaceOrgConnectionInfoType,

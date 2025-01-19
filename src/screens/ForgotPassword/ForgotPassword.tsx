@@ -163,7 +163,10 @@ const ForgotPassword = (): JSX.Element => {
             <div className={styles.cardTemplate}>
               <div className={styles.keyWrapper}>
                 <div className={styles.themeOverlay} />
-                <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />
+                <KeyLogo
+                  className={styles.keyLogo}
+                  fill="var(--forgot-password-fill)"
+                />
               </div>
               <h3 className="text-center fw-bold">
                 {tCommon('forgotPassword')}

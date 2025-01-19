@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
-import styles from './SuperAdminScreen.module.css';
+import styles from '../../style/app.module.css';
 
 /**
  * The SuperAdminScreen component manages the layout for the Super Admin screen,

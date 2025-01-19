@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Organizations.module.css';
+import styles from '../../../style/app.module.css';
 
 const { getItem } = useLocalStorage();
 
@@ -316,11 +316,11 @@ export default function organizations(): JSX.Element {
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expand
-              : styles.contract
+              ? styles.expandOrg
+              : styles.contractOrg
         }`}
       >
-        <div className={`${styles.mainContainer}`}>
+        <div className={`${styles.mainContainerOrganization}`}>
           <div className="d-flex justify-content-between align-items-center">
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
@@ -375,7 +375,7 @@ export default function organizations(): JSX.Element {
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-column  ${styles.gap} ${styles.paddingY}`}
             >
               {loadingOrganizations ? (
                 <div className={`d-flex flex-row justify-content-center`}>

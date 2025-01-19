@@ -70,24 +70,24 @@ const leftDrawer = ({
               {({ isActive }) => (
                 <Button
                   variant={isActive === true ? 'success' : ''}
-                  className={` ${
-                    isActive === true
-                      ? 'text-black font-weight-bold'
-                      : 'text-secondary'
-                  }`}
                   style={{
-                    backgroundColor: isActive === true ? '#EAEBEF' : '',
+                    backgroundColor:
+                      isActive === true ? 'var(--sidebar-option-bg)' : '',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    color: isActive
+                      ? 'var(--sidebar-option-text-active)'
+                      : 'var(--sidebar-option-text-inactive)',
                   }}
                   data-testid="orgsBtn"
                 >
                   <div className={styles.iconWrapper}>
                     <OrganizationsIcon
                       fill="none"
-                      stroke={
+                      stroke={`${
                         isActive === true
-                          ? 'var(--bs-black)'
-                          : 'var(--bs-secondary)'
-                      }
+                          ? 'var(--sidebar-icon-stroke-active)'
+                          : 'var(--sidebar-icon-stroke-inactive)'
+                      }`}
                     />
                   </div>
                   {t('my organizations')}
@@ -100,13 +100,13 @@ const leftDrawer = ({
                   {({ isActive }) => (
                     <Button
                       variant={isActive === true ? 'success' : ''}
-                      className={` ${
-                        isActive === true
-                          ? 'text-black font-weight-bold'
-                          : 'text-secondary'
-                      }`}
                       style={{
-                        backgroundColor: isActive === true ? '#EAEBEF' : '',
+                        backgroundColor:
+                          isActive === true ? 'var(--sidebar-option-bg)' : '',
+                        fontWeight: isActive ? 'bold' : 'normal',
+                        color: isActive
+                          ? 'var(--sidebar-option-text-active)'
+                          : 'var(--sidebar-option-text-inactive)',
                       }}
                       data-testid="rolesBtn"
                     >
@@ -115,8 +115,8 @@ const leftDrawer = ({
                           fill="none"
                           stroke={`${
                             isActive === true
-                              ? 'var(--black)'
-                              : 'var(--bs-secondary)'
+                              ? 'var(--sidebar-icon-stroke-active)'
+                              : 'var(--sidebar-icon-stroke-inactive)'
                           }`}
                         />
                       </div>
@@ -128,13 +128,13 @@ const leftDrawer = ({
                   {({ isActive }) => (
                     <Button
                       variant={isActive === true ? 'success' : ''}
-                      className={` ${
-                        isActive === true
-                          ? 'text-black font-weight-bold'
-                          : 'text-secondary'
-                      }`}
                       style={{
-                        backgroundColor: isActive === true ? '#EAEBEF' : '',
+                        backgroundColor:
+                          isActive === true ? 'var(--sidebar-option-bg)' : '',
+                        fontWeight: isActive ? 'bold' : 'normal',
+                        color: isActive
+                          ? 'var(--sidebar-option-text-active)'
+                          : 'var(--sidebar-option-text-inactive)',
                       }}
                       data-testid="communityProfileBtn"
                     >
@@ -143,8 +143,8 @@ const leftDrawer = ({
                           fill="none"
                           stroke={`${
                             isActive === true
-                              ? 'var(--black)'
-                              : 'var(--bs-secondary)'
+                              ? 'var(--sidebar-icon-stroke-active)'
+                              : 'var(--sidebar-icon-stroke-inactive)'
                           }`}
                         />
                       </div>

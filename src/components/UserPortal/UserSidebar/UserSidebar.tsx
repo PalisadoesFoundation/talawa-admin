@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './UserSidebar.module.css';
+import styles from '../../../style/app.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 export interface InterfaceUserSidebarProps {
@@ -72,12 +72,12 @@ const userSidebar = ({
               {({ isActive }) => (
                 <Button
                   variant={isActive ? 'success' : ''}
-                  className={`${
-                    isActive ? 'text-black font-weight-bold' : 'text-secondary'
-                  }`}
                   style={{
-                    backgroundColor: isActive ? '#EAEBEF' : '',
-                    fontWeight: isActive ? 'bold' : 'normal', // Ensures text is bold when active
+                    backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    color: isActive
+                      ? 'var(--sidebar-option-text-active)'
+                      : 'var(--sidebar-option-text-inactive)',
                   }}
                   data-testid="orgsBtn"
                 >
@@ -85,8 +85,8 @@ const userSidebar = ({
                     <OrganizationsIcon
                       stroke={`${
                         isActive === true
-                          ? 'var(--bs-black)'
-                          : 'var(--bs-secondary)'
+                          ? 'var(--sidebar-icon-stroke-active)'
+                          : 'var(--sidebar-icon-stroke-inactive)'
                       }`}
                     />
                   </div>
@@ -99,13 +99,13 @@ const userSidebar = ({
               {({ isActive }) => (
                 <Button
                   variant={isActive ? 'success' : ''}
-                  className={`${
-                    isActive ? 'text-black font-weight-bold' : 'text-secondary'
-                  } `}
                   style={{
-                    backgroundColor: isActive ? '#EAEBEF' : '',
+                    backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
                     fontWeight: isActive ? 'bold' : 'normal',
                     boxShadow: isActive ? 'none' : '',
+                    color: isActive
+                      ? 'var(--sidebar-option-text-active)'
+                      : 'var(--sidebar-option-text-inactive)',
                   }}
                   data-testid="settingsBtn"
                 >
@@ -113,8 +113,8 @@ const userSidebar = ({
                     <SettingsIcon
                       stroke={`${
                         isActive === true
-                          ? 'var(--bs-black)'
-                          : 'var(--bs-secondary)'
+                          ? 'var(--sidebar-icon-stroke-active)'
+                          : 'var(--sidebar-icon-stroke-inactive)'
                       }`}
                     />
                   </div>
