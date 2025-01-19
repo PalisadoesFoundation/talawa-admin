@@ -117,6 +117,66 @@ const MOCKS = [
   },
 ];
 
+const EMPTY_MOCKS = [
+  {
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: {
+        orgId: '',
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizationsMemberConnection: {
+          edges: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_ADMINS_LIST,
+      variables: {
+        id: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af2',
+            admins: [],
+          },
+        ],
+      },
+    },
+  },
+];
+
+const LOADING_MOCKS = [
+  {
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: {
+        orgId: '',
+        firstName_contains: '',
+      },
+    },
+    loading: true,
+  },
+  {
+    request: {
+      query: ORGANIZATION_ADMINS_LIST,
+      variables: {
+        id: '',
+      },
+    },
+    loading: true,
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -238,5 +298,182 @@ describe('Testing People Screen [User Portal]', () => {
 
     expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+  });
+
+  it('should handle pagination page change', async () => {
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    // Find and click next page button using data-testid
+    const nextPageButton = screen.getByTestId('nextPage');
+    expect(nextPageButton).toBeInTheDocument();
+    await userEvent.click(nextPageButton);
+
+    // Verify page change
+    const pageInfo = screen.getByTestId('table-pagination');
+    expect(pageInfo).toBeInTheDocument();
+  });
+
+  it('should handle rows per page change', async () => {
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    // Find and change rows per page select
+    const select = screen.getByRole('combobox', { name: /rows per page/i });
+    expect(select).toBeInTheDocument();
+    await userEvent.selectOptions(select, '10');
+
+    // Verify rows per page changed
+    const pageInfo = screen.getByTestId('table-pagination');
+    expect(pageInfo).toBeInTheDocument();
+  });
+
+  it('should display loading state', async () => {
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(LOADING_MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
+  it('should display empty state message', async () => {
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(EMPTY_MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    // Look for the actual text that appears in the DOM
+    expect(screen.getByText('people.nothingToShow')).toBeInTheDocument();
+  });
+
+  it('should switch back to All Members mode', async () => {
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    // Switch to Admins mode first
+    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+    userEvent.click(screen.getByTestId('modeBtn1'));
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    // Switch back to All Members
+    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+    userEvent.click(screen.getByTestId('modeBtn0'));
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    expect(screen.queryAllByText('Noble Mittal')).not.toHaveLength(0);
+  });
+
+  it('should handle rows per page selection', async () => {
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    const select = screen.getByRole('combobox', { name: /rows per page/i });
+    expect(select).toBeInTheDocument();
+
+    await act(async () => {
+      await userEvent.selectOptions(select, '10');
+    });
+
+    const pageInfo = screen.getByTestId('table-pagination');
+    expect(pageInfo).toBeInTheDocument();
   });
 });

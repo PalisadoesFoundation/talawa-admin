@@ -215,9 +215,9 @@ export default function people(): JSX.Element {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <div className={`d-flex flex-column ${styles.people_content}`}>
+        <div className={styles.people_content}>
           <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className="d-flex">
+            <span style={{ flex: '1' }} className={styles.display_flex}>
               <span style={{ flex: '1' }}>S.No</span>
               <span style={{ flex: '1' }}>Avatar</span>
             </span>
@@ -226,11 +226,9 @@ export default function people(): JSX.Element {
             <span style={{ flex: '2' }}>Role</span>
           </div>
 
-          <div
-            className={`d-flex flex-column border px-4 p-3 mt-0 ${styles.gap} ${styles.bottomRadius} ${styles.backgroundWhite}`}
-          >
+          <div className={styles.people_card_main_container}>
             {loading ? (
-              <div className={`d-flex flex-row justify-content-center`}>
+              <div className={styles.custom_row_center}>
                 <HourglassBottomIcon /> <span>Loading...</span>
               </div>
             ) : (

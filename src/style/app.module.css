@@ -6413,6 +6413,28 @@ button[data-testid='createPostBtn'] {
   max-width: 70px;
 }
 
+.people_card_container {
+  display: flex;
+}
+
+.display_flex {
+  display: flex;
+}
+
+.align_center {
+  align-self: center;
+}
+
+.people_role {
+  width: 75%;
+  border: 1px solid #dee2e6;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.25rem;
+}
+
 /* People.tsx */
 
 .borderRounded8 {
@@ -6433,6 +6455,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .people_content {
+  display: flex;
+  flex-direction: column;
   height: fit-content;
   min-height: calc(100% - 40px);
 }
@@ -6454,4 +6478,24 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   justify-content: space-between;
   margin-right: 50px;
+}
+
+.people_card_main_container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--grey-light);
+  padding: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-top: 0;
+  gap: var(--spacing-lg, 1.25rem);
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  background-color: var(--bs-white);
+}
+
+.custom_row_center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
