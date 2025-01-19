@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryUserTagChildTags
 
-Defined in: [src/utils/interfaces.ts:273](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L273)
+Defined in: [src/utils/interfaces.ts:273](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L273)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:273](https://github.com/gautam-divyanshu/ta
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:276](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L276)
+Defined in: [src/utils/interfaces.ts:276](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L276)
 
 #### \_id
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:276](https://github.com/gautam-divyanshu/ta
 
 > **childTags**: `InterfaceTagNodeData`
 
-Defined in: [src/utils/interfaces.ts:275](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L275)
+Defined in: [src/utils/interfaces.ts:275](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L275)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/utils/interfaces.ts:275](https://github.com/gautam-divyanshu/ta
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:274](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L274)
+Defined in: [src/utils/interfaces.ts:274](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L274)

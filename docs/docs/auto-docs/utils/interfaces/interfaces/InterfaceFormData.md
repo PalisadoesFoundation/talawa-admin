@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFormData
 
-Defined in: [src/utils/interfaces.ts:552](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L552)
+Defined in: [src/utils/interfaces.ts:552](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L552)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:552](https://github.com/gautam-divyanshu/ta
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:555](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L555)
+Defined in: [src/utils/interfaces.ts:555](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L555)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:555](https://github.com/gautam-divyanshu/ta
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:553](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L553)
+Defined in: [src/utils/interfaces.ts:553](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L553)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:553](https://github.com/gautam-divyanshu/ta
 
 > **gender**: `string`
 
-Defined in: [src/utils/interfaces.ts:557](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L557)
+Defined in: [src/utils/interfaces.ts:557](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L557)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:557](https://github.com/gautam-divyanshu/ta
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:554](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L554)
+Defined in: [src/utils/interfaces.ts:554](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L554)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/utils/interfaces.ts:554](https://github.com/gautam-divyanshu/ta
 
 > **phoneNo**: `string`
 
-Defined in: [src/utils/interfaces.ts:556](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L556)
+Defined in: [src/utils/interfaces.ts:556](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L556)

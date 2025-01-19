@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCardItem
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/OrganizationDashCards/CardItem.tsx#L14)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:14](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/OrganizationDashCards/CardItem.tsx#L14)
 
 Interface for the CardItem component's props.
 
@@ -14,7 +14,7 @@ Interface for the CardItem component's props.
 
 > `optional` **creator**: `object`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/OrganizationDashCards/CardItem.tsx#L20)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:20](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/OrganizationDashCards/CardItem.tsx#L20)
 
 #### \_id
 
@@ -38,7 +38,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem.tsx:20](https://githu
 
 > `optional` **enddate**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/OrganizationDashCards/CardItem.tsx#L19)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:19](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/OrganizationDashCards/CardItem.tsx#L19)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem.tsx:19](https://githu
 
 > `optional` **location**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:26](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/OrganizationDashCards/CardItem.tsx#L26)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:26](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/OrganizationDashCards/CardItem.tsx#L26)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem.tsx:26](https://githu
 
 > `optional` **startdate**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:18](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/OrganizationDashCards/CardItem.tsx#L18)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:18](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/OrganizationDashCards/CardItem.tsx#L18)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem.tsx:18](https://githu
 
 > `optional` **time**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:17](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/OrganizationDashCards/CardItem.tsx#L17)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:17](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/OrganizationDashCards/CardItem.tsx#L17)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem.tsx:17](https://githu
 
 > **title**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:16](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/OrganizationDashCards/CardItem.tsx#L16)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:16](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/OrganizationDashCards/CardItem.tsx#L16)
 
 ***
 
@@ -78,4 +78,4 @@ Defined in: [src/components/OrganizationDashCards/CardItem.tsx:16](https://githu
 
 > **type**: `"Event"` \| `"Post"` \| `"MembershipRequest"`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/OrganizationDashCards/CardItem.tsx#L15)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:15](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/OrganizationDashCards/CardItem.tsx#L15)

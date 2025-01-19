@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCampaignInfo
 
-Defined in: [src/utils/interfaces.ts:362](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L362)
+Defined in: [src/utils/interfaces.ts:362](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L362)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:362](https://github.com/gautam-divyanshu/ta
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:363](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L363)
+Defined in: [src/utils/interfaces.ts:363](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L363)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:363](https://github.com/gautam-divyanshu/ta
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:368](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L368)
+Defined in: [src/utils/interfaces.ts:368](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L368)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:368](https://github.com/gautam-divyanshu/ta
 
 > **currency**: `string`
 
-Defined in: [src/utils/interfaces.ts:369](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L369)
+Defined in: [src/utils/interfaces.ts:369](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L369)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:369](https://github.com/gautam-divyanshu/ta
 
 > **endDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:367](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L367)
+Defined in: [src/utils/interfaces.ts:367](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L367)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:367](https://github.com/gautam-divyanshu/ta
 
 > **fundingGoal**: `number`
 
-Defined in: [src/utils/interfaces.ts:365](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L365)
+Defined in: [src/utils/interfaces.ts:365](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L365)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:365](https://github.com/gautam-divyanshu/ta
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:364](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L364)
+Defined in: [src/utils/interfaces.ts:364](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L364)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/utils/interfaces.ts:364](https://github.com/gautam-divyanshu/ta
 
 > **startDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:366](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L366)
+Defined in: [src/utils/interfaces.ts:366](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L366)

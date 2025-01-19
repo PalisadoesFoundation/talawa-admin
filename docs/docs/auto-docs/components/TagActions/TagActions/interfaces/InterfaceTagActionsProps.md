@@ -4,9 +4,29 @@
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/components/TagActions/TagActions.tsx:36](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/TagActions/TagActions.tsx#L36)
+Defined in: [src/components/TagActions/TagActions.tsx:56](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/TagActions/TagActions.tsx#L56)
 
 Props for the `AssignToTags` component.
+
+## CSS Strategy Explanation:
+
+To ensure consistency across the application and reduce duplication, common styles
+(such as button styles) have been moved to the global CSS file. Instead of using
+component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+class (e.g., .addButton) is now applied.
+
+### Benefits:
+- **Reduces redundant CSS code.
+- **Improves maintainability by centralizing common styles.
+- **Ensures consistent styling across components.
+
+### Global CSS Classes used:
+- `.modalHeader`
+- `.inputField`
+- `.removeButton`
+- `.addButton`
+
+For more details on the reusable classes, refer to the global CSS file.
 
 ## Properties
 
@@ -14,7 +34,7 @@ Props for the `AssignToTags` component.
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/components/TagActions/TagActions.tsx:38](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/TagActions/TagActions.tsx#L38)
+Defined in: [src/components/TagActions/TagActions.tsx:58](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/TagActions/TagActions.tsx#L58)
 
 #### Returns
 
@@ -26,7 +46,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:38](https://github.com/gau
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/components/TagActions/TagActions.tsx:40](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/TagActions/TagActions.tsx#L40)
+Defined in: [src/components/TagActions/TagActions.tsx:60](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/TagActions/TagActions.tsx#L60)
 
 ***
 
@@ -34,7 +54,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:40](https://github.com/gau
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/components/TagActions/TagActions.tsx:37](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/TagActions/TagActions.tsx#L37)
+Defined in: [src/components/TagActions/TagActions.tsx:57](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/TagActions/TagActions.tsx#L57)
 
 ***
 
@@ -42,7 +62,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:37](https://github.com/gau
 
 > **tagActionType**: [`TagActionType`](../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/components/TagActions/TagActions.tsx:39](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/TagActions/TagActions.tsx#L39)
+Defined in: [src/components/TagActions/TagActions.tsx:59](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/TagActions/TagActions.tsx#L59)
 
 ***
 
@@ -50,4 +70,4 @@ Defined in: [src/components/TagActions/TagActions.tsx:39](https://github.com/gau
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/components/TagActions/TagActions.tsx:41](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/TagActions/TagActions.tsx#L41)
+Defined in: [src/components/TagActions/TagActions.tsx:61](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/TagActions/TagActions.tsx#L61)

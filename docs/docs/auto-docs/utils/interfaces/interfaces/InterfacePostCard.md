@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostCard
 
-Defined in: [src/utils/interfaces.ts:471](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L471)
+Defined in: [src/utils/interfaces.ts:471](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L471)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:471](https://github.com/gautam-divyanshu/ta
 
 > **commentCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:485](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L485)
+Defined in: [src/utils/interfaces.ts:485](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L485)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:485](https://github.com/gautam-divyanshu/ta
 
 > **comments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:486](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L486)
+Defined in: [src/utils/interfaces.ts:486](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L486)
 
 #### creator
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:486](https://github.com/gautam-divyanshu/ta
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:473](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L473)
+Defined in: [src/utils/interfaces.ts:473](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L473)
 
 #### email
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:473](https://github.com/gautam-divyanshu/ta
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:505](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L505)
+Defined in: [src/utils/interfaces.ts:505](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L505)
 
 #### Returns
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:505](https://github.com/gautam-divyanshu/ta
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:472](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L472)
+Defined in: [src/utils/interfaces.ts:472](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L472)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:472](https://github.com/gautam-divyanshu/ta
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:480](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L480)
+Defined in: [src/utils/interfaces.ts:480](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L480)
 
 ***
 
@@ -116,7 +116,7 @@ Defined in: [src/utils/interfaces.ts:480](https://github.com/gautam-divyanshu/ta
 
 > **likeCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:484](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L484)
+Defined in: [src/utils/interfaces.ts:484](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L484)
 
 ***
 
@@ -124,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:484](https://github.com/gautam-divyanshu/ta
 
 > **likedBy**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:500](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L500)
+Defined in: [src/utils/interfaces.ts:500](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L500)
 
 #### firstName
 
@@ -144,7 +144,7 @@ Defined in: [src/utils/interfaces.ts:500](https://github.com/gautam-divyanshu/ta
 
 > **postedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:479](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L479)
+Defined in: [src/utils/interfaces.ts:479](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L479)
 
 ***
 
@@ -152,7 +152,7 @@ Defined in: [src/utils/interfaces.ts:479](https://github.com/gautam-divyanshu/ta
 
 > **text**: `string`
 
-Defined in: [src/utils/interfaces.ts:482](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L482)
+Defined in: [src/utils/interfaces.ts:482](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L482)
 
 ***
 
@@ -160,7 +160,7 @@ Defined in: [src/utils/interfaces.ts:482](https://github.com/gautam-divyanshu/ta
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:483](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L483)
+Defined in: [src/utils/interfaces.ts:483](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L483)
 
 ***
 
@@ -168,4 +168,4 @@ Defined in: [src/utils/interfaces.ts:483](https://github.com/gautam-divyanshu/ta
 
 > **video**: `string`
 
-Defined in: [src/utils/interfaces.ts:481](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L481)
+Defined in: [src/utils/interfaces.ts:481](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L481)

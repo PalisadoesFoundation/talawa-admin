@@ -4,7 +4,25 @@
 
 # Interface: InterfaceItemUpdateStatusModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L11)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:31](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L31)
+
+## CSS Strategy Explanation:
+
+To ensure consistency across the application and reduce duplication, common styles
+(such as button styles) have been moved to the global CSS file. Instead of using
+component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+class (e.g., .addButton) is now applied.
+
+### Benefits:
+- **Reduces redundant CSS code.
+- **Improves maintainability by centralizing common styles.
+- **Ensures consistent styling across components.
+
+### Global CSS Classes used:
+- `.addButton`
+- `.removeButton`
+
+For more details on the reusable classes, refer to the global CSS file.
 
 ## Properties
 
@@ -12,7 +30,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:11](h
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L15)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L35)
 
 ***
 
@@ -20,7 +38,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:15](h
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L14)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L34)
 
 #### Returns
 
@@ -32,7 +50,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:14](h
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L13)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L33)
 
 #### Returns
 
@@ -44,4 +62,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:13](h
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L12)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:32](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L32)

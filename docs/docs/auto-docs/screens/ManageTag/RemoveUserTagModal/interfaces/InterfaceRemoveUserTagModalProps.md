@@ -4,9 +4,28 @@
 
 # Interface: InterfaceRemoveUserTagModalProps
 
-Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:10](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/ManageTag/RemoveUserTagModal.tsx#L10)
+Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:29](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/ManageTag/RemoveUserTagModal.tsx#L29)
 
 Remove UserTag Modal component for the Manage Tag screen.
+
+## CSS Strategy Explanation:
+
+To ensure consistency across the application and reduce duplication, common styles
+(such as button styles) have been moved to the global CSS file. Instead of using
+component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+class (e.g., .addButton) is now applied.
+
+### Benefits:
+- **Reduces redundant CSS code.
+- **Improves maintainability by centralizing common styles.
+- **Ensures consistent styling across components.
+
+### Global CSS Classes used:
+- `.modalHeader`
+- `.removeButton`
+- `.addButton`
+
+For more details on the reusable classes, refer to the global CSS file.
 
 ## Properties
 
@@ -14,7 +33,7 @@ Remove UserTag Modal component for the Manage Tag screen.
 
 > **handleRemoveUserTag**: () => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:13](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/ManageTag/RemoveUserTagModal.tsx#L13)
+Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:32](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/ManageTag/RemoveUserTagModal.tsx#L32)
 
 #### Returns
 
@@ -26,7 +45,7 @@ Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:13](https://github.com
 
 > **removeUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:11](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/ManageTag/RemoveUserTagModal.tsx#L11)
+Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:30](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/ManageTag/RemoveUserTagModal.tsx#L30)
 
 ***
 
@@ -34,7 +53,7 @@ Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:11](https://github.com
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/ManageTag/RemoveUserTagModal.tsx#L14)
+Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:33](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/ManageTag/RemoveUserTagModal.tsx#L33)
 
 ***
 
@@ -42,7 +61,7 @@ Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:14](https://github.com
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:15](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/ManageTag/RemoveUserTagModal.tsx#L15)
+Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:34](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/ManageTag/RemoveUserTagModal.tsx#L34)
 
 ***
 
@@ -50,7 +69,7 @@ Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:15](https://github.com
 
 > **toggleRemoveUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:12](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/ManageTag/RemoveUserTagModal.tsx#L12)
+Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:31](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/ManageTag/RemoveUserTagModal.tsx#L31)
 
 #### Returns
 

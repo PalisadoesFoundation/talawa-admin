@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMember
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:13](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L13)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:13](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L13)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **\_\_typename**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:23](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L23)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:23](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L23)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2
 
 > **\_id**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:24](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L24)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:24](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L24)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2
 
 > **birthDate**: `Date`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:22](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L22)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:22](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L22)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2
 
 > **createdAt**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:14](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L14)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:14](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L14)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **email**: `` `${string}@${string}.${string}` ``
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:17](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L17)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:17](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L17)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > `optional` **eventsAttended**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:19](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L19)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:19](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L19)
 
 #### \_id
 
@@ -64,7 +64,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **firstName**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:15](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L15)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:15](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L15)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **gender**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:18](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L18)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:18](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L18)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **lastName**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:16](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L16)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:16](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L16)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **tagsAssignedWith**: `object`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:25](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L25)
+Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:25](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L25)
 
 #### edges
 

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagData
 
-Defined in: [src/utils/interfaces.ts:222](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L222)
+Defined in: [src/utils/interfaces.ts:222](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L222)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:222](https://github.com/gautam-divyanshu/ta
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:223](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L223)
+Defined in: [src/utils/interfaces.ts:223](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L223)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:223](https://github.com/gautam-divyanshu/ta
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:232](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L232)
+Defined in: [src/utils/interfaces.ts:232](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L232)
 
 #### \_id
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:232](https://github.com/gautam-divyanshu/ta
 
 > **childTags**: `object`
 
-Defined in: [src/utils/interfaces.ts:229](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L229)
+Defined in: [src/utils/interfaces.ts:229](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L229)
 
 #### totalCount
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:229](https://github.com/gautam-divyanshu/ta
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:224](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L224)
+Defined in: [src/utils/interfaces.ts:224](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L224)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:224](https://github.com/gautam-divyanshu/ta
 
 > **parentTag**: `object`
 
-Defined in: [src/utils/interfaces.ts:225](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L225)
+Defined in: [src/utils/interfaces.ts:225](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L225)
 
 #### \_id
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:225](https://github.com/gautam-divyanshu/ta
 
 > **usersAssignedTo**: `object`
 
-Defined in: [src/utils/interfaces.ts:226](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L226)
+Defined in: [src/utils/interfaces.ts:226](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L226)
 
 #### totalCount
 

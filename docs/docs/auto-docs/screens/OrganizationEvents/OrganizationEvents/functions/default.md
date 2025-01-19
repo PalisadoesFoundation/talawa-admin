@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:56](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/OrganizationEvents/OrganizationEvents.tsx#L56)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:75](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/OrganizationEvents/OrganizationEvents.tsx#L75)
 
 Organization Events Page Component to display the events of an organization
 and create new events for the organization by the admin or superadmin user.
@@ -23,3 +23,22 @@ The component uses the EventCalendar component to display the events and EventHe
 `JSX.Element`
 
 JSX.Element to display the Organization Events Page
+
+## CSS Strategy Explanation:
+
+To ensure consistency across the application and reduce duplication, common styles
+(such as button styles) have been moved to the global CSS file. Instead of using
+component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+class (e.g., .addButton) is now applied.
+
+### Benefits:
+- **Reduces redundant CSS code.
+- **Improves maintainability by centralizing common styles.
+- **Ensures consistent styling across components.
+
+### Global CSS Classes used:
+- `.inputField`
+- `.switch`
+- `.addButton`
+
+For more details on the reusable classes, refer to the global CSS file.

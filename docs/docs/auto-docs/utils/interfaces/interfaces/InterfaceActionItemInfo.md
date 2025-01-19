@@ -4,7 +4,7 @@
 
 # Interface: InterfaceActionItemInfo
 
-Defined in: [src/utils/interfaces.ts:43](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L43)
+Defined in: [src/utils/interfaces.ts:43](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L43)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:43](https://github.com/gautam-divyanshu/tal
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:44](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L44)
+Defined in: [src/utils/interfaces.ts:44](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L44)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:44](https://github.com/gautam-divyanshu/tal
 
 > **actionItemCategory**: `object`
 
-Defined in: [src/utils/interfaces.ts:50](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L50)
+Defined in: [src/utils/interfaces.ts:50](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L50)
 
 #### \_id
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:50](https://github.com/gautam-divyanshu/tal
 
 > **allottedHours**: `number`
 
-Defined in: [src/utils/interfaces.ts:65](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L65)
+Defined in: [src/utils/interfaces.ts:65](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L65)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:65](https://github.com/gautam-divyanshu/tal
 
 > **assignee**: [`InterfaceEventVolunteerInfo`](InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/utils/interfaces.ts:46](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L46)
+Defined in: [src/utils/interfaces.ts:46](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L46)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:46](https://github.com/gautam-divyanshu/tal
 
 > **assigneeGroup**: [`InterfaceVolunteerGroupInfo`](InterfaceVolunteerGroupInfo.md)
 
-Defined in: [src/utils/interfaces.ts:47](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L47)
+Defined in: [src/utils/interfaces.ts:47](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L47)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:47](https://github.com/gautam-divyanshu/tal
 
 > **assigneeType**: `"User"` \| `"EventVolunteerGroup"` \| `"EventVolunteer"`
 
-Defined in: [src/utils/interfaces.ts:45](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L45)
+Defined in: [src/utils/interfaces.ts:45](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L45)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:45](https://github.com/gautam-divyanshu/tal
 
 > **assigneeUser**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:48](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L48)
+Defined in: [src/utils/interfaces.ts:48](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L48)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:48](https://github.com/gautam-divyanshu/tal
 
 > **assigner**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:49](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L49)
+Defined in: [src/utils/interfaces.ts:49](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L49)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:49](https://github.com/gautam-divyanshu/tal
 
 > **assignmentDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:56](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L56)
+Defined in: [src/utils/interfaces.ts:56](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L56)
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:56](https://github.com/gautam-divyanshu/tal
 
 > **completionDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:58](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L58)
+Defined in: [src/utils/interfaces.ts:58](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L58)
 
 ***
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:58](https://github.com/gautam-divyanshu/tal
 
 > **creator**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:64](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L64)
+Defined in: [src/utils/interfaces.ts:64](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L64)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:64](https://github.com/gautam-divyanshu/tal
 
 > **dueDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:57](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L57)
+Defined in: [src/utils/interfaces.ts:57](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L57)
 
 ***
 
@@ -116,7 +116,7 @@ Defined in: [src/utils/interfaces.ts:57](https://github.com/gautam-divyanshu/tal
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:60](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L60)
+Defined in: [src/utils/interfaces.ts:60](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L60)
 
 #### \_id
 
@@ -132,7 +132,7 @@ Defined in: [src/utils/interfaces.ts:60](https://github.com/gautam-divyanshu/tal
 
 > **isCompleted**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:59](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L59)
+Defined in: [src/utils/interfaces.ts:59](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L59)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [src/utils/interfaces.ts:59](https://github.com/gautam-divyanshu/tal
 
 > **postCompletionNotes**: `string`
 
-Defined in: [src/utils/interfaces.ts:55](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L55)
+Defined in: [src/utils/interfaces.ts:55](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L55)
 
 ***
 
@@ -148,4 +148,4 @@ Defined in: [src/utils/interfaces.ts:55](https://github.com/gautam-divyanshu/tal
 
 > **preCompletionNotes**: `string`
 
-Defined in: [src/utils/interfaces.ts:54](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L54)
+Defined in: [src/utils/interfaces.ts:54](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L54)

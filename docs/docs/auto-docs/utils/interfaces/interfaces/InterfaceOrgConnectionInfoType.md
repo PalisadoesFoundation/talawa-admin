@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgConnectionInfoType
 
-Defined in: [src/utils/interfaces.ts:91](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L91)
+Defined in: [src/utils/interfaces.ts:91](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L91)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:91](https://github.com/gautam-divyanshu/tal
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:92](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L92)
+Defined in: [src/utils/interfaces.ts:92](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L92)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:92](https://github.com/gautam-divyanshu/tal
 
 > **address**: [`InterfaceAddress`](InterfaceAddress.md)
 
-Defined in: [src/utils/interfaces.ts:107](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L107)
+Defined in: [src/utils/interfaces.ts:107](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L107)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:107](https://github.com/gautam-divyanshu/ta
 
 > **admins**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:103](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L103)
+Defined in: [src/utils/interfaces.ts:103](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L103)
 
 #### \_id
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:103](https://github.com/gautam-divyanshu/ta
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:106](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L106)
+Defined in: [src/utils/interfaces.ts:106](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L106)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:106](https://github.com/gautam-divyanshu/ta
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:94](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L94)
+Defined in: [src/utils/interfaces.ts:94](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L94)
 
 #### \_id
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:94](https://github.com/gautam-divyanshu/tal
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:93](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L93)
+Defined in: [src/utils/interfaces.ts:93](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L93)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:93](https://github.com/gautam-divyanshu/tal
 
 > **members**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:100](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L100)
+Defined in: [src/utils/interfaces.ts:100](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L100)
 
 #### \_id
 
@@ -88,4 +88,4 @@ Defined in: [src/utils/interfaces.ts:100](https://github.com/gautam-divyanshu/ta
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:99](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L99)
+Defined in: [src/utils/interfaces.ts:99](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L99)

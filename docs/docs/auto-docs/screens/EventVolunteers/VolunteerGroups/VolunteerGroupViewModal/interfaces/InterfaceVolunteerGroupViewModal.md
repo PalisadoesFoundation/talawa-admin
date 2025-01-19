@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerGroupViewModal
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx:19](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx#L19)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx:19](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx#L19)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal
 
 > **group**: [`InterfaceVolunteerGroupInfo`](../../../../../utils/interfaces/interfaces/InterfaceVolunteerGroupInfo.md)
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx:22](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx#L22)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx:22](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx#L22)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx#L21)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx:21](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx#L21)
 
 #### Returns
 
@@ -32,4 +32,4 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx:20](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx#L20)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx:20](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal.tsx#L20)

@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:14](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L14)
+Defined in: [src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:14](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L14)
 
 A component that guards routes by checking if the user is logged in.
 If the user is logged in and does not have 'AdminFor' set, the child routes are rendered.

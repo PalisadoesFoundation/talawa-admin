@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventVolunteerInfo
 
-Defined in: [src/utils/interfaces.ts:605](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L605)
+Defined in: [src/utils/interfaces.ts:605](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L605)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:605](https://github.com/gautam-divyanshu/ta
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:606](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L606)
+Defined in: [src/utils/interfaces.ts:606](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L606)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:606](https://github.com/gautam-divyanshu/ta
 
 > **assignments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:610](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L610)
+Defined in: [src/utils/interfaces.ts:610](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L610)
 
 #### \_id
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:610](https://github.com/gautam-divyanshu/ta
 
 > **groups**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:613](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L613)
+Defined in: [src/utils/interfaces.ts:613](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L613)
 
 #### \_id
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:613](https://github.com/gautam-divyanshu/ta
 
 > **hasAccepted**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:607](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L607)
+Defined in: [src/utils/interfaces.ts:607](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L607)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:607](https://github.com/gautam-divyanshu/ta
 
 > **hoursVolunteered**: `number`
 
-Defined in: [src/utils/interfaces.ts:608](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L608)
+Defined in: [src/utils/interfaces.ts:608](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L608)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/utils/interfaces.ts:608](https://github.com/gautam-divyanshu/ta
 
 > **user**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:609](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L609)
+Defined in: [src/utils/interfaces.ts:609](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L609)

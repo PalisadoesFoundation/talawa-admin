@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserInfo
 
-Defined in: [src/utils/interfaces.ts:10](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L10)
+Defined in: [src/utils/interfaces.ts:10](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:10](https://github.com/gautam-divyanshu/tal
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:11](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L11)
+Defined in: [src/utils/interfaces.ts:11](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L11)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:11](https://github.com/gautam-divyanshu/tal
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:12](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L12)
+Defined in: [src/utils/interfaces.ts:12](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:12](https://github.com/gautam-divyanshu/tal
 
 > `optional` **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:14](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L14)
+Defined in: [src/utils/interfaces.ts:14](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L14)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/utils/interfaces.ts:14](https://github.com/gautam-divyanshu/tal
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:13](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/utils/interfaces.ts#L13)
+Defined in: [src/utils/interfaces.ts:13](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/utils/interfaces.ts#L13)

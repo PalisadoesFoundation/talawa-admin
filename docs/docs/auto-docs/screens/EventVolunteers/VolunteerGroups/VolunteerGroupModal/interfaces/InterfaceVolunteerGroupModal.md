@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerGroupModal
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:21](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L21)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:21](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L21)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx
 
 > **eventId**: `string`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:24](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L24)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:24](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L24)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx
 
 > **group**: [`InterfaceVolunteerGroupInfo`](../../../../../utils/interfaces/interfaces/InterfaceVolunteerGroupInfo.md)
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:26](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L26)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:26](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L26)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L23)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:23](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L23)
 
 #### Returns
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:22](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L22)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:22](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L22)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:28](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L28)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:28](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L28)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx
 
 > **orgId**: `string`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:25](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L25)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:25](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L25)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx
 
 > **refetchGroups**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:27](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L27)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:27](https://github.com/syedali237/talawa-admin/blob/dd4a08e622d0fa38bcf9758a530e8cdf917dbac8/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L27)
 
 #### Returns
 
