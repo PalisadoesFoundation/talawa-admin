@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostCard
 
-Defined in: [src/utils/interfaces.ts:471](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L471)
+Defined in: [src/utils/interfaces.ts:471](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L471)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:471](https://github.com/abhassen44/talawa-a
 
 > **commentCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:485](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L485)
+Defined in: [src/utils/interfaces.ts:485](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L485)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:485](https://github.com/abhassen44/talawa-a
 
 > **comments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:486](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L486)
+Defined in: [src/utils/interfaces.ts:486](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L486)
 
 #### creator
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:486](https://github.com/abhassen44/talawa-a
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:473](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L473)
+Defined in: [src/utils/interfaces.ts:473](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L473)
 
 #### email
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:473](https://github.com/abhassen44/talawa-a
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:505](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L505)
+Defined in: [src/utils/interfaces.ts:505](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L505)
 
 #### Returns
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:505](https://github.com/abhassen44/talawa-a
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:472](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L472)
+Defined in: [src/utils/interfaces.ts:472](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L472)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:472](https://github.com/abhassen44/talawa-a
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:480](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L480)
+Defined in: [src/utils/interfaces.ts:480](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L480)
 
 ***
 
@@ -116,7 +116,7 @@ Defined in: [src/utils/interfaces.ts:480](https://github.com/abhassen44/talawa-a
 
 > **likeCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:484](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L484)
+Defined in: [src/utils/interfaces.ts:484](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L484)
 
 ***
 
@@ -124,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:484](https://github.com/abhassen44/talawa-a
 
 > **likedBy**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:500](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L500)
+Defined in: [src/utils/interfaces.ts:500](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L500)
 
 #### firstName
 
@@ -144,7 +144,7 @@ Defined in: [src/utils/interfaces.ts:500](https://github.com/abhassen44/talawa-a
 
 > **postedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:479](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L479)
+Defined in: [src/utils/interfaces.ts:479](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L479)
 
 ***
 
@@ -152,7 +152,7 @@ Defined in: [src/utils/interfaces.ts:479](https://github.com/abhassen44/talawa-a
 
 > **text**: `string`
 
-Defined in: [src/utils/interfaces.ts:482](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L482)
+Defined in: [src/utils/interfaces.ts:482](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L482)
 
 ***
 
@@ -160,7 +160,7 @@ Defined in: [src/utils/interfaces.ts:482](https://github.com/abhassen44/talawa-a
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:483](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L483)
+Defined in: [src/utils/interfaces.ts:483](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L483)
 
 ***
 
@@ -168,4 +168,4 @@ Defined in: [src/utils/interfaces.ts:483](https://github.com/abhassen44/talawa-a
 
 > **video**: `string`
 
-Defined in: [src/utils/interfaces.ts:481](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L481)
+Defined in: [src/utils/interfaces.ts:481](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L481)

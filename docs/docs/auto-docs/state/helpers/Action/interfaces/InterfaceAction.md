@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAction
 
-Defined in: [src/state/helpers/Action.ts:1](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/state/helpers/Action.ts#L1)
+Defined in: [src/state/helpers/Action.ts:1](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/state/helpers/Action.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/state/helpers/Action.ts:1](https://github.com/abhassen44/talawa
 
 > **payload**: `any`
 
-Defined in: [src/state/helpers/Action.ts:3](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/state/helpers/Action.ts#L3)
+Defined in: [src/state/helpers/Action.ts:3](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/state/helpers/Action.ts#L3)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/state/helpers/Action.ts:3](https://github.com/abhassen44/talawa
 
 > **type**: `string`
 
-Defined in: [src/state/helpers/Action.ts:2](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/state/helpers/Action.ts#L2)
+Defined in: [src/state/helpers/Action.ts:2](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/state/helpers/Action.ts#L2)

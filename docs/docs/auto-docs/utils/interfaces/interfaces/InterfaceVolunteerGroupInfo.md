@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerGroupInfo
 
-Defined in: [src/utils/interfaces.ts:622](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L622)
+Defined in: [src/utils/interfaces.ts:622](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L622)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:622](https://github.com/abhassen44/talawa-a
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:623](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L623)
+Defined in: [src/utils/interfaces.ts:623](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L623)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:623](https://github.com/abhassen44/talawa-a
 
 > **assignments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:637](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L637)
+Defined in: [src/utils/interfaces.ts:637](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L637)
 
 #### \_id
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:637](https://github.com/abhassen44/talawa-a
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:630](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L630)
+Defined in: [src/utils/interfaces.ts:630](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L630)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:630](https://github.com/abhassen44/talawa-a
 
 > **creator**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:631](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L631)
+Defined in: [src/utils/interfaces.ts:631](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L631)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:631](https://github.com/abhassen44/talawa-a
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:625](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L625)
+Defined in: [src/utils/interfaces.ts:625](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L625)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:625](https://github.com/abhassen44/talawa-a
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:626](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L626)
+Defined in: [src/utils/interfaces.ts:626](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L626)
 
 #### \_id
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:626](https://github.com/abhassen44/talawa-a
 
 > **leader**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:632](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L632)
+Defined in: [src/utils/interfaces.ts:632](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L632)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:632](https://github.com/abhassen44/talawa-a
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:624](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L624)
+Defined in: [src/utils/interfaces.ts:624](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L624)
 
 ***
 
@@ -104,7 +104,7 @@ Defined in: [src/utils/interfaces.ts:624](https://github.com/abhassen44/talawa-a
 
 > **volunteers**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:633](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L633)
+Defined in: [src/utils/interfaces.ts:633](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L633)
 
 #### \_id
 
@@ -120,4 +120,4 @@ Defined in: [src/utils/interfaces.ts:633](https://github.com/abhassen44/talawa-a
 
 > **volunteersRequired**: `number`
 
-Defined in: [src/utils/interfaces.ts:629](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L629)
+Defined in: [src/utils/interfaces.ts:629](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L629)

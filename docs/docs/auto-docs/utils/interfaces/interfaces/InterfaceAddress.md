@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAddress
 
-Defined in: [src/utils/interfaces.ts:453](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L453)
+Defined in: [src/utils/interfaces.ts:453](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L453)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:453](https://github.com/abhassen44/talawa-a
 
 > **city**: `string`
 
-Defined in: [src/utils/interfaces.ts:454](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L454)
+Defined in: [src/utils/interfaces.ts:454](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L454)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:454](https://github.com/abhassen44/talawa-a
 
 > **countryCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:455](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L455)
+Defined in: [src/utils/interfaces.ts:455](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L455)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:455](https://github.com/abhassen44/talawa-a
 
 > **dependentLocality**: `string`
 
-Defined in: [src/utils/interfaces.ts:456](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L456)
+Defined in: [src/utils/interfaces.ts:456](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L456)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:456](https://github.com/abhassen44/talawa-a
 
 > **line1**: `string`
 
-Defined in: [src/utils/interfaces.ts:457](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L457)
+Defined in: [src/utils/interfaces.ts:457](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L457)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:457](https://github.com/abhassen44/talawa-a
 
 > **line2**: `string`
 
-Defined in: [src/utils/interfaces.ts:458](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L458)
+Defined in: [src/utils/interfaces.ts:458](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L458)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:458](https://github.com/abhassen44/talawa-a
 
 > **postalCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:459](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L459)
+Defined in: [src/utils/interfaces.ts:459](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L459)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:459](https://github.com/abhassen44/talawa-a
 
 > **sortingCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:460](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L460)
+Defined in: [src/utils/interfaces.ts:460](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L460)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/utils/interfaces.ts:460](https://github.com/abhassen44/talawa-a
 
 > **state**: `string`
 
-Defined in: [src/utils/interfaces.ts:461](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L461)
+Defined in: [src/utils/interfaces.ts:461](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L461)

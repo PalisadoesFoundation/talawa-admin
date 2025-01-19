@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationListObject
 
-Defined in: [src/utils/interfaces.ts:155](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L155)
+Defined in: [src/utils/interfaces.ts:155](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L155)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:155](https://github.com/abhassen44/talawa-a
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:156](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L156)
+Defined in: [src/utils/interfaces.ts:156](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L156)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:156](https://github.com/abhassen44/talawa-a
 
 > **address**: [`InterfaceAddress`](InterfaceAddress.md)
 
-Defined in: [src/utils/interfaces.ts:170](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L170)
+Defined in: [src/utils/interfaces.ts:170](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L170)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:170](https://github.com/abhassen44/talawa-a
 
 > **admins**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:166](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L166)
+Defined in: [src/utils/interfaces.ts:166](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L166)
 
 #### \_id
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:166](https://github.com/abhassen44/talawa-a
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:169](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L169)
+Defined in: [src/utils/interfaces.ts:169](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L169)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:169](https://github.com/abhassen44/talawa-a
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:158](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L158)
+Defined in: [src/utils/interfaces.ts:158](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L158)
 
 #### firstName
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:158](https://github.com/abhassen44/talawa-a
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:157](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L157)
+Defined in: [src/utils/interfaces.ts:157](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L157)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:157](https://github.com/abhassen44/talawa-a
 
 > **members**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:163](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L163)
+Defined in: [src/utils/interfaces.ts:163](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L163)
 
 #### \_id
 
@@ -84,4 +84,4 @@ Defined in: [src/utils/interfaces.ts:163](https://github.com/abhassen44/talawa-a
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:162](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L162)
+Defined in: [src/utils/interfaces.ts:162](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L162)

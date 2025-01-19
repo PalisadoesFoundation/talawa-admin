@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEditUserTagModalProps
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:31](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/ManageTag/EditUserTagModal.tsx#L31)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:31](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L31)
 
 Edit UserTag Modal component for the Manage Tag screen.
 
@@ -34,7 +34,7 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **editUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/ManageTag/EditUserTagModal.tsx#L32)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L32)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/a
 
 > **handleEditUserTag**: (`e`) => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/ManageTag/EditUserTagModal.tsx#L36)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L36)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/a
 
 > **hideEditUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/ManageTag/EditUserTagModal.tsx#L33)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L33)
 
 #### Returns
 
@@ -72,7 +72,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/a
 
 > **newTagName**: `string`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/ManageTag/EditUserTagModal.tsx#L34)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L34)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/a
 
 > **setNewTagName**: (`state`) => `void`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:35](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/ManageTag/EditUserTagModal.tsx#L35)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:35](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L35)
 
 #### Parameters
 
@@ -98,7 +98,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:35](https://github.com/a
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:37](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/ManageTag/EditUserTagModal.tsx#L37)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:37](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L37)
 
 ***
 
@@ -106,4 +106,4 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:37](https://github.com/a
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:38](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/ManageTag/EditUserTagModal.tsx#L38)
+Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:38](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L38)

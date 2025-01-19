@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTableData
 
-Defined in: [src/components/CheckIn/types.ts:40](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/CheckIn/types.ts#L40)
+Defined in: [src/components/CheckIn/types.ts:40](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/CheckIn/types.ts#L40)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/CheckIn/types.ts:40](https://github.com/abhassen44/t
 
 > **checkInData**: [`InterfaceTableCheckIn`](InterfaceTableCheckIn.md)
 
-Defined in: [src/components/CheckIn/types.ts:43](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/CheckIn/types.ts#L43)
+Defined in: [src/components/CheckIn/types.ts:43](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/CheckIn/types.ts#L43)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/CheckIn/types.ts:43](https://github.com/abhassen44/t
 
 > **id**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:42](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/CheckIn/types.ts#L42)
+Defined in: [src/components/CheckIn/types.ts:42](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/CheckIn/types.ts#L42)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/components/CheckIn/types.ts:42](https://github.com/abhassen44/t
 
 > **userName**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:41](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/CheckIn/types.ts#L41)
+Defined in: [src/components/CheckIn/types.ts:41](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/CheckIn/types.ts#L41)

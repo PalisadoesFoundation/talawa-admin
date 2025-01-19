@@ -4,7 +4,7 @@
 
 # Enumeration: ViewType
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L37)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L37)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://g
 
 > **DAY**: `"Day"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L38)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L38)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://g
 
 > **MONTH**: `"Month View"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L39)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L39)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://g
 
 > **YEAR**: `"Year View"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:40](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L40)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:40](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L40)

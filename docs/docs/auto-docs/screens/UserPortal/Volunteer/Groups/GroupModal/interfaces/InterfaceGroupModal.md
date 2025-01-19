@@ -4,7 +4,7 @@
 
 # Interface: InterfaceGroupModal
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:35](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L35)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:35](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L35)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:35](https://
 
 > **eventId**: `string`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:38](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L38)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:38](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L38)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:38](https://
 
 > **group**: [`InterfaceVolunteerGroupInfo`](../../../../../../utils/interfaces/interfaces/InterfaceVolunteerGroupInfo.md)
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:39](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L39)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:39](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L39)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:39](https://
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:37](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L37)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:37](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L37)
 
 #### Returns
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:37](https://
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:36](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L36)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:36](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L36)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:36](https://
 
 > **refetchGroups**: () => `void`
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:40](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L40)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:40](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L40)
 
 #### Returns
 

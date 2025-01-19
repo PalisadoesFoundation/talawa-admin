@@ -4,7 +4,7 @@
 
 # Interface: InterfaceActionItemCategoryModal
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:26](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L26)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:26](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L26)
 
 Props for the `CategoryModal` component.
 
@@ -21,7 +21,7 @@ mode - The mode of the modal.
 
 > **category**: [`InterfaceActionItemCategoryInfo`](../../../../../utils/interfaces/interfaces/InterfaceActionItemCategoryInfo.md)
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:31](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L31)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:31](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L31)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:3
 
 > **hide**: () => `void`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:28](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L28)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:28](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L28)
 
 #### Returns
 
@@ -41,7 +41,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:2
 
 > **isOpen**: `boolean`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:27](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L27)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:27](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L27)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:2
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:32](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L32)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:32](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L32)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:3
 
 > **orgId**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:30](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L30)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:30](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L30)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:3
 
 > **refetchCategories**: () => `void`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:29](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L29)
+Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:29](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L29)
 
 #### Returns
 

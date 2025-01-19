@@ -4,7 +4,7 @@
 
 # Interface: InterfaceModalProp
 
-Defined in: [src/components/CheckIn/types.ts:23](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/CheckIn/types.ts#L23)
+Defined in: [src/components/CheckIn/types.ts:23](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/CheckIn/types.ts#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/CheckIn/types.ts:23](https://github.com/abhassen44/t
 
 > **eventId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:25](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/CheckIn/types.ts#L25)
+Defined in: [src/components/CheckIn/types.ts:25](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/CheckIn/types.ts#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/CheckIn/types.ts:25](https://github.com/abhassen44/t
 
 > **handleClose**: () => `void`
 
-Defined in: [src/components/CheckIn/types.ts:26](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/CheckIn/types.ts#L26)
+Defined in: [src/components/CheckIn/types.ts:26](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/CheckIn/types.ts#L26)
 
 #### Returns
 
@@ -32,4 +32,4 @@ Defined in: [src/components/CheckIn/types.ts:26](https://github.com/abhassen44/t
 
 > **show**: `boolean`
 
-Defined in: [src/components/CheckIn/types.ts:24](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/CheckIn/types.ts#L24)
+Defined in: [src/components/CheckIn/types.ts:24](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/CheckIn/types.ts#L24)

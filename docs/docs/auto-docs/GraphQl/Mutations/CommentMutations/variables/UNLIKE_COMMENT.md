@@ -6,7 +6,7 @@
 
 > `const` **UNLIKE\_COMMENT**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/CommentMutations.ts:52](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/GraphQl/Mutations/CommentMutations.ts#L52)
+Defined in: [src/GraphQl/Mutations/CommentMutations.ts:52](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/GraphQl/Mutations/CommentMutations.ts#L52)
 
 GraphQL mutation to unlike a comment.
 

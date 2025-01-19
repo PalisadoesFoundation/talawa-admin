@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
-Defined in: [src/utils/interfaces.ts:531](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L531)
+Defined in: [src/utils/interfaces.ts:531](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L531)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:531](https://github.com/abhassen44/talawa-a
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:532](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L532)
+Defined in: [src/utils/interfaces.ts:532](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L532)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:532](https://github.com/abhassen44/talawa-a
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:535](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L535)
+Defined in: [src/utils/interfaces.ts:535](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L535)
 
 #### \_id
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:535](https://github.com/abhassen44/talawa-a
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:534](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L534)
+Defined in: [src/utils/interfaces.ts:534](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L534)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [src/utils/interfaces.ts:534](https://github.com/abhassen44/talawa-a
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:533](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/interfaces.ts#L533)
+Defined in: [src/utils/interfaces.ts:533](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L533)

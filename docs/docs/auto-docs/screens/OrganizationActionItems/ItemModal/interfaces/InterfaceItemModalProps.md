@@ -4,7 +4,7 @@
 
 # Interface: InterfaceItemModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:52](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemModal.tsx#L52)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:52](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemModal.tsx#L52)
 
 Props for the `ItemModal` component.
 
@@ -14,7 +14,7 @@ Props for the `ItemModal` component.
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:58](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemModal.tsx#L58)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:58](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemModal.tsx#L58)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:58](https://githu
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:57](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemModal.tsx#L57)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:57](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemModal.tsx#L57)
 
 #### Returns
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:57](https://githu
 
 > **editMode**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:59](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemModal.tsx#L59)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:59](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemModal.tsx#L59)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:59](https://githu
 
 > **eventId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:56](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemModal.tsx#L56)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:56](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemModal.tsx#L56)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:56](https://githu
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:54](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemModal.tsx#L54)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:54](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemModal.tsx#L54)
 
 #### Returns
 
@@ -62,7 +62,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:54](https://githu
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:53](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemModal.tsx#L53)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:53](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemModal.tsx#L53)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:53](https://githu
 
 > **orgId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:55](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemModal.tsx#L55)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:55](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemModal.tsx#L55)

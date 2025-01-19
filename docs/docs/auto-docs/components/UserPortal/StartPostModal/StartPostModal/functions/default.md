@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/StartPostModal/StartPostModal.tsx:40](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/UserPortal/StartPostModal/StartPostModal.tsx#L40)
+Defined in: [src/components/UserPortal/StartPostModal/StartPostModal.tsx:40](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/UserPortal/StartPostModal/StartPostModal.tsx#L40)
 
 A modal component for creating a new post.
 

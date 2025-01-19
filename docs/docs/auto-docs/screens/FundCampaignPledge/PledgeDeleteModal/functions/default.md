@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeDeleteModal.tsx:42](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/FundCampaignPledge/PledgeDeleteModal.tsx#L42)
+Defined in: [src/screens/FundCampaignPledge/PledgeDeleteModal.tsx:42](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/FundCampaignPledge/PledgeDeleteModal.tsx#L42)
 
 A modal dialog for confirming the deletion of a pledge.
 

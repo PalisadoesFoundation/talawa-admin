@@ -4,7 +4,7 @@
 
 # Interface: InterfaceItemUpdateStatusModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:31](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L31)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:31](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L31)
 
 ## CSS Strategy Explanation:
 
@@ -30,7 +30,7 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L35)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L35)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](h
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L34)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L34)
 
 #### Returns
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](h
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L33)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L33)
 
 #### Returns
 
@@ -62,4 +62,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](h
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:32](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L32)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:32](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L32)

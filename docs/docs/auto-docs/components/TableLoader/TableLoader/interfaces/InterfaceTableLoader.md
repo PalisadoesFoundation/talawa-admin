@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTableLoader
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/TableLoader/TableLoader.tsx#L5)
+Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TableLoader/TableLoader.tsx#L5)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/ab
 
 > `optional` **headerTitles**: `string`[]
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/TableLoader/TableLoader.tsx#L7)
+Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TableLoader/TableLoader.tsx#L7)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/ab
 
 > `optional` **noOfCols**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/TableLoader/TableLoader.tsx#L8)
+Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TableLoader/TableLoader.tsx#L8)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/ab
 
 > **noOfRows**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:6](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/TableLoader/TableLoader.tsx#L6)
+Defined in: [src/components/TableLoader/TableLoader.tsx:6](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TableLoader/TableLoader.tsx#L6)

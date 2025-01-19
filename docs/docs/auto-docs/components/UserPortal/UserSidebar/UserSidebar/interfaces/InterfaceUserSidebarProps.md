@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserSidebarProps
 
-Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:10](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L10)
+Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:10](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:10](https://g
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:11](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L11)
+Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:11](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L11)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:11](https://g
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:12](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L12)
+Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:12](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L12)

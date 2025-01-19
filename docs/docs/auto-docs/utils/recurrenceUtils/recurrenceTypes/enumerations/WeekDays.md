@@ -4,7 +4,7 @@
 
 # Enumeration: WeekDays
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:36](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/recurrenceUtils/recurrenceTypes.ts#L36)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:36](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/recurrenceUtils/recurrenceTypes.ts#L36)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:36](https://github.com
 
 > **FRIDAY**: `"FRIDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com
 
 > **MONDAY**: `"MONDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/recurrenceUtils/recurrenceTypes.ts#L38)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/recurrenceUtils/recurrenceTypes.ts#L38)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com
 
 > **SATURDAY**: `"SATURDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/recurrenceUtils/recurrenceTypes.ts#L43)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/recurrenceUtils/recurrenceTypes.ts#L43)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com
 
 > **SUNDAY**: `"SUNDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:37](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/recurrenceUtils/recurrenceTypes.ts#L37)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:37](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/recurrenceUtils/recurrenceTypes.ts#L37)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:37](https://github.com
 
 > **THURSDAY**: `"THURSDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com
 
 > **TUESDAY**: `"TUESDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com
 
 > **WEDNESDAY**: `"WEDNESDAY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
