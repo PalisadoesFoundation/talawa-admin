@@ -456,6 +456,15 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: var(--bs-white);
+  /* box-shadow: var(--input-shadow-color); */
+}
+
+.inputField:focus {
+  background-color: var(--bs-white); /* Ensure no color change on focus */
+}
+
+.inputField:hover {
+  background-color: var(--bs-white);
   box-shadow: var(--input-shadow-color);
 }
 
@@ -2686,6 +2695,11 @@ input::file-selector-button {
   font-size: 14px;
   display: block;
   color: var(--bs-secondary, var(--bs-gray-400));
+}
+
+.blueText {
+  color: var(--blue-color);
+  font-weight: bold;
 }
 
 /* Loading OrgList CSS */

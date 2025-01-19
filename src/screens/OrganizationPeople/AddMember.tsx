@@ -36,8 +36,8 @@ import SortingButton from 'subComponents/SortingButton';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'var(--table-head-bg, blue)',
-    color: 'var(--table-header-color, black)',
+    backgroundColor: 'var(--grey-light)',
+    color: 'var(--black-color)',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -389,7 +389,7 @@ function AddMember(): JSX.Element {
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Link
-                                className={`${styles.membername} ${styles.subtleBlueGrey}`}
+                                className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.blueText}`}
                                 to={{
                                   pathname: `/member/${currentUrl}`,
                                 }}
@@ -536,7 +536,6 @@ function AddMember(): JSX.Element {
               onClick={handleCreateUser}
               data-testid="createBtn"
               style={{
-                backgroundColor: 'var(--search-button-bg)',
                 border: '1px solid var(--dropdown-border-color)',
                 width: '100%',
               }}
