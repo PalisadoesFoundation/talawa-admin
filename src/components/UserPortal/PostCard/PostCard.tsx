@@ -213,6 +213,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   // Create a new comment
   const createComment = async (): Promise<void> => {
     try {
+      // Ensure the input is not empty
+      if (!commentInput.trim()) {
+        toast.error(t('emptyCommentError'));
+        return;
+      }
+
       const { data: createEventData } = await create({
         variables: {
           postId: props.id,
@@ -242,7 +248,21 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setComments([...comments, newComment]);
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      // Handle errors
+      // Log error with context for debugging
+      console.error('Error creating comment:', error);
+
+      // Show user-friendly translated message based on error type
+      if (error instanceof Error) {
+        const isValidationError = error.message.includes(
+          'Comment validation failed',
+        );
+        toast.error(
+          isValidationError ? t('emptyCommentError') : t('unexpectedError'),
+        );
+      } else {
+        toast.error(t('unexpectedError'));
+      }
     }
   };
 

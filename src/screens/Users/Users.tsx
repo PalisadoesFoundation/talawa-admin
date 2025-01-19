@@ -231,7 +231,6 @@ const Users = (): JSX.Element => {
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
   };
-  /* istanbul ignore next */
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
@@ -242,7 +241,6 @@ const Users = (): JSX.Element => {
     });
     setHasMore(true);
   };
-  /* istanbul ignore next */
   const loadMoreUsers = (skipValue: number, limitVal: number): void => {
     setIsLoadingMore(true);
     fetchMore({
@@ -449,10 +447,7 @@ const Users = (): JSX.Element => {
             />
           )}
           <InfiniteScroll
-            dataLength={
-              /* istanbul ignore next */
-              displayedUsers.length ?? 0
-            }
+            dataLength={displayedUsers.length}
             next={() => {
               loadMoreUsers(displayedUsers.length, perPageResult);
             }}
@@ -493,7 +488,7 @@ const Users = (): JSX.Element => {
                           index={index}
                           resetAndRefetch={resetAndRefetch}
                           user={user}
-                          loggedInUserId={loggedInUserId ? loggedInUserId : ''}
+                          loggedInUserId={loggedInUserId}
                         />
                       );
                     },
