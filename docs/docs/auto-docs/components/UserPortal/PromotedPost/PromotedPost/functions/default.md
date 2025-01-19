@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:23](https://github.com/gautam-divyanshu/talawa-admin/blob/69cd9f147d3701d1db7821366b2c564d1fb49f77/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L23)
+Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L23)
 
 PromotedPost component displays a card representing promoted content.
 
