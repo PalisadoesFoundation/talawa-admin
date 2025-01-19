@@ -18,6 +18,52 @@ import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from '../../../style/app.module.css';
+import { errorHandler } from 'utils/errorHandler';
+
+type DirectMessage = {
+  _id: string;
+  createdAt: Date;
+  sender: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+  };
+  replyTo:
+    | {
+        _id: string;
+        createdAt: Date;
+        sender: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          image: string;
+        };
+        messageContent: string;
+        receiver: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+        };
+      }
+    | undefined;
+  messageContent: string;
+};
+type Chat = {
+  _id: string;
+  isGroup: boolean;
+  name: string;
+  image: string;
+  messages: DirectMessage[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    image: string;
+  }[];
+  unseenMessagesByUsers: string;
+};
 
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
@@ -29,6 +75,7 @@ interface InterfaceCreateDirectChatProps {
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
+  chats: Chat[];
 }
 
 /**
@@ -61,6 +108,7 @@ export default function createDirectChatModal({
   toggleCreateDirectChatModal,
   createDirectChatModalisOpen,
   chatsListRefetch,
+  chats,
 }: InterfaceCreateDirectChatProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
@@ -74,13 +122,27 @@ export default function createDirectChatModal({
   const [createChat] = useMutation(CREATE_CHAT);
 
   const handleCreateDirectChat = async (id: string): Promise<void> => {
-    await createChat({
-      variables: {
-        organizationId,
-        userIds: [userId, id],
-        isGroup: false,
-      },
+    let chatExists = false;
+    chats.forEach((chat) => {
+      if (id === chat.users[0]._id || id === chat.users[1]._id)
+        chatExists = true;
     });
+
+    if (chatExists) {
+      errorHandler(
+        t,
+        new Error('Conversation with the selected user already exists!'),
+      );
+    } else {
+      await createChat({
+        variables: {
+          organizationId,
+          userIds: [userId, id],
+          isGroup: false,
+        },
+      });
+    }
+
     await chatsListRefetch();
     toggleCreateDirectChatModal();
   };
