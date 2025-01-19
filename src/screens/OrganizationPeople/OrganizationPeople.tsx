@@ -414,8 +414,17 @@ function organizationPeople(): JSX.Element {
               ),
             }}
             sx={{
-              // Remove all borders
-              border: 'none',
+              border: '1px solid lightgray',
+              borderRadius: '15px',
+              overflow: 'hidden',
+              margin: '25px',
+              '& .MuiDataGrid-main': {
+                borderRadius: 'inherit',
+              },
+
+              '& .MuiDataGrid-root': {
+                border: 'none', // Removes border
+              },
               '& .MuiDataGrid-row': {
                 border: 'none', // Removes borders between rows
               },
