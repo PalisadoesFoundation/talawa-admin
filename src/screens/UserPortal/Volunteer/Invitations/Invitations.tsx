@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import styles from '../VolunteerManagement.module.css';
+import styles from '../../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
@@ -28,6 +28,23 @@ enum ItemFilter {
  * It allows the user to search, sort, and accept/reject invites.
  *
  * @returns The rendered component displaying the upcoming events.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const Invitations = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -150,7 +167,7 @@ const Invitations = (): JSX.Element => {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${styles.searchButton}`}
             data-testid="searchBtn"
           >
             <Search />

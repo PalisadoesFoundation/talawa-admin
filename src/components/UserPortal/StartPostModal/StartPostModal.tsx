@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { errorHandler } from 'utils/errorHandler';
 import UserDefault from '../../../assets/images/defaultImg.png';
-import styles from './StartPostModal.module.css';
+import styles from '../../../style/app.module.css';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 
@@ -36,6 +36,25 @@ interface InterfaceStartPostModalProps {
  * @param img - The URL of the image to be included in the post.
  *
  * @returns JSX.Element - The rendered modal component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const startPostModal = ({
   show,
@@ -113,13 +132,13 @@ const startPostModal = ({
       data-testid="startPostModal"
     >
       <Modal.Header
-        className="bg-primary"
+        className={styles.modalHeader}
         closeButton
         data-testid="modalHeader"
       >
         <Modal.Title className="text-white">
           <span className="d-flex gap-2 align-items-center">
-            <span className={styles.userImage}>
+            <span className={styles.userImageUserPost}>
               <Image
                 src={userData?.user?.image || UserDefault}
                 roundedCircle
@@ -131,6 +150,7 @@ const startPostModal = ({
           </span>
         </Modal.Title>
       </Modal.Header>
+      <hr style={{ margin: 0 }}></hr>
       <Form>
         <Modal.Body>
           <Form.Control
@@ -138,7 +158,7 @@ const startPostModal = ({
             as="textarea"
             rows={3}
             id="orgname"
-            className={styles.postInput}
+            className={styles.inputField}
             data-testid="postInput"
             autoComplete="off"
             required
@@ -155,8 +175,7 @@ const startPostModal = ({
         <Modal.Footer>
           <Button
             size="sm"
-            variant="success"
-            className="px-4"
+            className={`px-4 ${styles.addButton}`}
             value="invite"
             data-testid="createPostBtn"
             onClick={handlePost}

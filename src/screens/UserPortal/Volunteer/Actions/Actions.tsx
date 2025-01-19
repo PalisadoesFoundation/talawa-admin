@@ -56,6 +56,25 @@ const dataGridStyle = {
  * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
  *
  * @returns The rendered component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.switch`
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function actions(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -309,7 +328,7 @@ function actions(): JSX.Element {
               variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`me-2 rounded ${styles.editButton}`}
               data-testid={`viewItemBtn`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
@@ -336,6 +355,7 @@ function actions(): JSX.Element {
               data-testid={`statusCheckbox`}
               checked={params.row.isCompleted}
               onChange={() => handleModalClick(params.row, ModalState.STATUS)}
+              className={styles.switch}
             />
           </div>
         );
@@ -365,7 +385,7 @@ function actions(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+            className={`${styles.searchButton}`}
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >

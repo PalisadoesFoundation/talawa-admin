@@ -8,7 +8,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { FilterAltOutlined, SearchOutlined } from '@mui/icons-material';
-import styles from './People.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router-dom';
@@ -35,6 +35,28 @@ interface InterfaceMember {
  * `People` component displays a list of people associated with an organization.
  * It allows users to filter between all members and admins, search for members by their first name,
  * and paginate through the list.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function people(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -163,21 +185,19 @@ export default function people(): JSX.Element {
   return (
     <>
       <div className={`d-flex flex-row`}>
-        <div className={`${styles.mainContainer}`}>
-          <div
-            className={`mt-4 d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
-          >
-            <InputGroup className={`${styles.maxWidth} ${styles.shadow}`}>
+        <div className={`${styles.mainContainerUserPeople}`}>
+          <div className={`${styles.btnsContainer}`}>
+            <InputGroup className={`${styles.input}`}>
               <Form.Control
                 placeholder={t('searchUsers')}
                 id="searchPeople"
                 type="text"
-                className={`${styles.borderBox} ${styles.backgroundWhite} ${styles.placeholderColor}`}
+                className={`${styles.inputField}`}
                 onKeyUp={handleSearchByEnter}
                 data-testid="searchInput"
               />
               <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderRounded5}`}
+                className={`${styles.searchButton}`}
                 style={{ cursor: 'pointer' }}
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
@@ -185,29 +205,31 @@ export default function people(): JSX.Element {
                 <SearchOutlined className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle
-                className={`${styles.greenBorder} ${styles.backgroundWhite} ${styles.colorGreen} ${styles.semiBold} ${styles.shadow} ${styles.borderRounded8}`}
-                id="dropdown-basic"
-                data-testid={`modeChangeBtn`}
-              >
-                <FilterAltOutlined />
-                {tCommon('filter').toUpperCase()}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {modes.map((value, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid={`modeBtn${index}`}
-                      onClick={(): void => setMode(index)}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
+            <div className={styles.btnsBlock}>
+              <Dropdown drop="down-centered">
+                <Dropdown.Toggle
+                  className={`${styles.dropdown}`}
+                  id="dropdown-basic"
+                  data-testid={`modeChangeBtn`}
+                >
+                  <FilterAltOutlined />
+                  {tCommon('filter').toUpperCase()}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {modes.map((value, index) => {
+                    return (
+                      <Dropdown.Item
+                        key={index}
+                        data-testid={`modeBtn${index}`}
+                        onClick={(): void => setMode(index)}
+                      >
+                        {value}
+                      </Dropdown.Item>
+                    );
+                  })}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           </div>
           <div className={`d-flex flex-column ${styles.content}`}>
             <div

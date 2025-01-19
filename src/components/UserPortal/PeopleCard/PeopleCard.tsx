@@ -1,6 +1,6 @@
 import React from 'react';
 import aboutImg from 'assets/images/defaultImg.png';
-import styles from './PeopleCard.module.css';
+import styles from '../../../style/app.module.css';
 
 /**
  * Props interface for the PeopleCard component.
@@ -26,6 +26,23 @@ interface InterfaceOrganizationCardProps {
  *
  * @param props - The properties passed to the component.
  * @returns JSX.Element representing a card with the person's details.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.blueText`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
   // Determine the image URL; use default image if no image URL is provided
@@ -60,7 +77,7 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
       {/* Person's role with additional styling */}
       <div style={{ flex: '2' }} className="align-self-center">
         <div className={`w-75 border py-2 px-3 ${styles.borderBox}`}>
-          <span className={`${styles.greenText}`}>{props.role}</span>
+          <span className={`${styles.blueText}`}>{props.role}</span>
         </div>
       </div>
     </div>

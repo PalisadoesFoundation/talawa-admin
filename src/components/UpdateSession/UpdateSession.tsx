@@ -20,6 +20,23 @@ import Loader from 'components/Loader/Loader';
  * The component also handles form submission, making a mutation request to update the session timeout.
  *
  * @returns JSX.Element - The rendered component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 
 interface TestInterfaceUpdateTimeoutProps {
@@ -164,16 +181,17 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
                 max={60}
                 sx={{
                   '& .MuiSlider-track': {
-                    backgroundColor: '#00c451',
+                    backgroundColor: '#1778f2',
                     border: 'none',
                   },
                   '& .MuiSlider-thumb': {
-                    backgroundColor: '#31BB6B',
+                    backgroundColor: '#1778f2',
                   },
                   '& .MuiSlider-rail': {
                     backgroundColor: '#E6E6E6',
                   },
                 }}
+                className={styles.slider}
               />
             </Box>
 
@@ -189,8 +207,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
             <div className={styles.updateTimeoutButtonContainer}>
               <Button
                 type="submit"
-                variant="success"
-                className={styles.updateTimeoutButton}
+                className={styles.addButton}
                 data-testid="update-button"
               >
                 Update

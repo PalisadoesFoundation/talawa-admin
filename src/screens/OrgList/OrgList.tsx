@@ -46,6 +46,11 @@ import SortingButton from 'subComponents/SortingButton';
  * ### Global CSS Classes used:
  * - `.inputField`
  * - `.searchButton`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ * - `.modalHeader`
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
@@ -349,7 +354,7 @@ function orgList(): JSX.Element {
   return (
     <>
       {/* Buttons Container */}
-      <div className={styles.btnsContainerOrgList}>
+      <div className={styles.btnsContainer}>
         <div className={styles.input}>
           <Form.Control
             type="name"
@@ -371,7 +376,7 @@ function orgList(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className={styles.btnsBlockOrgList}>
+        <div className={styles.btnsBlock}>
           <SortingButton
             title="Sort organizations"
             sortingOptions={[
@@ -383,9 +388,11 @@ function orgList(): JSX.Element {
             dataTestIdPrefix="sortOrgs"
             dropdownTestId="sort"
           />
+        </div>
+        <div className={styles.btnsBlock}>
           {superAdmin && (
             <Button
-              variant="success"
+              className={styles.dropdown}
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
             >
@@ -528,7 +535,7 @@ function orgList(): JSX.Element {
       {/* Plugin Notification Modal after Org is Created */}
       <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
-          className={`bg-primary`}
+          className={styles.modalHeader}
           closeButton
           data-testid="pluginNotificationHeader"
         >

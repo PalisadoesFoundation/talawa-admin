@@ -2875,7 +2875,7 @@ textarea.form-control-lg {
   width: 1rem;
   height: 1rem;
   margin-top: -0.25rem;
-  background-color: #31bb6b;
+  background-color: #1778f2;
   border: 0;
   border-radius: 1rem;
   transition:
@@ -2900,7 +2900,7 @@ textarea.form-control-lg {
   height: 0.5rem;
   color: transparent;
   cursor: pointer;
-  background-color: var(--bs-tertiary-bg);
+  background-color: #1778f2;
   border-color: transparent;
   border-radius: 1rem;
 }

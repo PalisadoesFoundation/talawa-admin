@@ -60,6 +60,26 @@ import SortingButton from 'subComponents/SortingButton';
  * - Shows appropriate messages when no users are found or when search yields no results.
  *
  * @returns  The rendered `Users` component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -343,33 +363,32 @@ const Users = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <div className={styles.inputContainer}>
-          <div
-            className={styles.input}
-            style={{
-              display: userType === 'SUPERADMIN' ? 'block' : 'none',
-            }}
+        <div
+          className={styles.input}
+          style={{
+            display: userType === 'SUPERADMIN' ? 'block' : 'none',
+          }}
+        >
+          <Form.Control
+            type="name"
+            id="searchUsers"
+            className={styles.inputField}
+            placeholder={t('enterName')}
+            data-testid="searchByName"
+            autoComplete="off"
+            required
+            onKeyUp={handleSearchByEnter}
+          />
+          <Button
+            tabIndex={-1}
+            className={styles.searchButton}
+            data-testid="searchButton"
+            onClick={handleSearchByBtnClick}
           >
-            <Form.Control
-              type="name"
-              id="searchUsers"
-              className="bg-white"
-              placeholder={t('enterName')}
-              data-testid="searchByName"
-              autoComplete="off"
-              required
-              onKeyUp={handleSearchByEnter}
-            />
-            <Button
-              tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-              data-testid="searchButton"
-              onClick={handleSearchByBtnClick}
-            >
-              <Search />
-            </Button>
-          </div>
+            <Search />
+          </Button>
         </div>
+
         <div className={styles.btnsBlock}>
           <div className="d-flex">
             <SortingButton

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './OrganizationCard.module.css';
+import styles from '../../../style/app.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -189,12 +189,12 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
         </div>
         {props.membershipRequestStatus === 'accepted' && (
           <Button
-            variant="success"
             data-testid="manageBtn"
-            className={styles.joinedBtn}
+            className={styles.addButton}
             onClick={() => {
               navigate(`/user/organization/${props.id}`);
             }}
+            style={{ width: '8rem' }}
           >
             {t('visit')}
           </Button>
@@ -214,8 +214,8 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
           <Button
             onClick={joinOrganization}
             data-testid="joinBtn"
-            className={styles.joinBtn}
-            variant="outline-success"
+            className={styles.outlineBtn}
+            style={{ width: '8rem' }}
           >
             {t('joinNow')}
           </Button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, ProgressBar } from 'react-bootstrap';
-import styles from './Campaigns.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
@@ -26,6 +26,29 @@ import SortingButton from 'subComponents/SortingButton';
  * It allows users to search, sort, and view details about each campaign. Users can also add pledges to active campaigns.
  *
  * @returns The rendered component displaying the campaigns.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ * - `.regularBtn`
+ * - `.outlineBtn`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const Campaigns = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -143,48 +166,47 @@ const Campaigns = (): JSX.Element => {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${styles.searchButton}`}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
-            <SortingButton
-              sortingOptions={[
-                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
-                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
-              ]}
-              selectedOption={sortBy}
-              onSortChange={(value) =>
-                setSortBy(
-                  value as
-                    | 'fundingGoal_ASC'
-                    | 'fundingGoal_DESC'
-                    | 'endDate_ASC'
-                    | 'endDate_DESC',
-                )
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div>
-            {/* Button to navigate to the user's pledges */}
-            <Button
-              variant="success"
-              data-testid="myPledgesBtn"
-              onClick={() =>
-                navigate(`/user/pledges/${orgId}`, { replace: true })
-              }
-            >
-              {t('myPledges')}
-              <i className="fa fa-angle-right ms-2" />
-            </Button>
-          </div>
+        <div className={`${styles.btnsBlock}`}>
+          <SortingButton
+            sortingOptions={[
+              { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
+              { label: t('highestGoal'), value: 'fundingGoal_DESC' },
+              { label: t('latestEndDate'), value: 'endDate_DESC' },
+              { label: t('earliestEndDate'), value: 'endDate_ASC' },
+            ]}
+            selectedOption={sortBy}
+            onSortChange={(value) =>
+              setSortBy(
+                value as
+                  | 'fundingGoal_ASC'
+                  | 'fundingGoal_DESC'
+                  | 'endDate_ASC'
+                  | 'endDate_DESC',
+              )
+            }
+            dataTestIdPrefix="filter"
+            buttonLabel={tCommon('sort')}
+          />
+        </div>
+        <div className={`${styles.btnsBlock}`}>
+          {/* Button to navigate to the user's pledges */}
+          <Button
+            variant="success"
+            data-testid="myPledgesBtn"
+            onClick={() =>
+              navigate(`/user/pledges/${orgId}`, { replace: true })
+            }
+            className={styles.regularBtn}
+          >
+            {t('myPledges')}
+            <i className="fa fa-angle-right ms-2" />
+          </Button>
         </div>
       </div>
       {campaigns.length < 1 ? (
@@ -198,7 +220,7 @@ const Campaigns = (): JSX.Element => {
             <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
               <div className={styles.accordionSummary}>
                 <div
-                  className={styles.titleContainer}
+                  className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
                 >
                   <div className="d-flex">
@@ -245,6 +267,7 @@ const Campaigns = (): JSX.Element => {
                     data-testid="addPledgeBtn"
                     disabled={new Date(campaign.endDate) < new Date()}
                     onClick={() => openModal(campaign)}
+                    className={styles.outlineBtn}
                   >
                     <i className={'fa fa-plus me-2'} />
                     {t('addPledge')}
@@ -254,13 +277,13 @@ const Campaigns = (): JSX.Element => {
             </AccordionSummary>
             <AccordionDetails className="d-flex gap-3 ms-2">
               <span className="fw-bold">Amount Raised: </span>
-              <div className={styles.progress}>
+              <div className={styles.progressAccordion}>
                 <span>$0</span>
                 <ProgressBar
                   now={0}
                   label={`${(200 / 1000) * 100}%`}
                   max={1000}
-                  className={styles.progressBar}
+                  className={styles.progressBarAccordion}
                   data-testid="progressBar"
                 />
                 <span>$1000</span>

@@ -9,6 +9,26 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 /**
  * Represents the state of the form in the organization modal.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.switch`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 interface InterfaceFormStateType {
   name: string;
@@ -84,7 +104,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       centered
     >
       <Modal.Header
-        className="bg-primary"
+        className={styles.modalHeader}
         closeButton
         data-testid="modalOrganizationHeader"
       >
@@ -98,7 +118,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Form.Control
             type="name"
             id="orgname"
-            className="mb-3"
+            className={`mb-3 ${styles.inputField}`}
             placeholder={t('enterName')}
             data-testid="modalOrganizationName"
             autoComplete="off"
@@ -118,7 +138,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Form.Control
             type="descrip"
             id="descrip"
-            className="mb-3"
+            className={`mb-3 ${styles.inputField}`}
             placeholder={tCommon('description')}
             autoComplete="off"
             required
@@ -145,6 +165,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   const countryCode = e.target.value;
                   handleInputChange('countryCode', countryCode);
                 }}
+                className={`mb-3 ${styles.inputField}`}
               >
                 <option value="" disabled>
                   Select a country
@@ -166,6 +187,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 required
                 value={formState.address.city}
                 onChange={(e) => handleInputChange('city', e.target.value)}
+                className={`mb-3 ${styles.inputField}`}
               />
             </Col>
           </Row>
@@ -176,6 +198,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 autoComplete="off"
                 value={formState.address.state}
                 onChange={(e) => handleInputChange('state', e.target.value)}
+                className={`mb-3 ${styles.inputField}`}
               />
             </Col>
             <Col sm={6} className="mb-3">
@@ -186,6 +209,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e) =>
                   handleInputChange('dependentLocality', e.target.value)
                 }
+                className={`mb-3 ${styles.inputField}`}
               />
             </Col>
           </Row>
@@ -197,6 +221,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 required
                 value={formState.address.line1}
                 onChange={(e) => handleInputChange('line1', e.target.value)}
+                className={`mb-3 ${styles.inputField}`}
               />
             </Col>
             <Col sm={6} className="mb-1">
@@ -205,6 +230,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 autoComplete="off"
                 value={formState.address.line2}
                 onChange={(e) => handleInputChange('line2', e.target.value)}
+                className={`mb-3 ${styles.inputField}`}
               />
             </Col>
           </Row>
@@ -217,6 +243,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e) =>
                   handleInputChange('postalCode', e.target.value)
                 }
+                className={`mb-3 ${styles.inputField}`}
               />
             </Col>
             <Col sm={6} className="mb-1">
@@ -227,6 +254,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e) =>
                   handleInputChange('sortingCode', e.target.value)
                 }
+                className={`mb-3 ${styles.inputField}`}
               />
             </Col>
           </Row>
@@ -247,6 +275,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                       !formState.userRegistrationRequired,
                   })
                 }
+                className={styles.switch}
               />
             </Col>
             <Col>
@@ -264,6 +293,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                     visible: !formState.visible,
                   })
                 }
+                className={styles.switch}
               />
             </Col>
           </Row>
@@ -271,7 +301,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Form.Control
             accept="image/*"
             id="orgphoto"
-            className="mb-3"
+            className={`mb-3 ${styles.inputField}`}
             name="photo"
             type="file"
             multiple={false}
@@ -289,7 +319,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           />
           <Col className={styles.sampleOrgSection}>
             <Button
-              className={styles.orgCreationBtn}
+              className={styles.addButton}
               type="submit"
               value="invite"
               data-testid="submitOrganizationForm"
@@ -304,7 +334,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             {((adminFor && adminFor.length > 0) || superAdmin) && (
               <div className={styles.sampleOrgSection}>
                 <Button
-                  className={styles.sampleOrgCreationBtn}
+                  className={styles.addButton}
                   onClick={() => triggerCreateSampleOrg()}
                   data-testid="createSampleOrganizationBtn"
                 >

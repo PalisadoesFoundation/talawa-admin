@@ -11,11 +11,31 @@ import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
 import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
+import styles from '../../../style/app.module.css';
 
 /**
  * List of tabs for the volunteer dashboard.
  *
  * Each tab is associated with an icon and value.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.activeTab`
+ * - `.inActiveTab`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const volunteerDashboardTabs: {
   value: TabOptions;
@@ -93,12 +113,11 @@ const VolunteerManagement = (): JSX.Element => {
     const translatedText = t(value);
 
     const className = selected
-      ? 'px-4 d-flex align-items-center rounded-3 shadow-sm'
-      : 'text-secondary bg-white px-4 d-flex align-items-center rounded-3 shadow-sm';
+      ? `rounded-3 shadow-sm ${styles.activeTab}`
+      : `rounded-3 shadow-sm ${styles.inActiveTab}`;
     const props = {
       variant,
       className,
-      style: { height: '2.5rem' },
       onClick: () => setTab(value),
       'data-testid': `${value}Btn`,
     };
@@ -144,7 +163,7 @@ const VolunteerManagement = (): JSX.Element => {
               id="dropdown-basic"
               data-testid="tabsDropdownToggle"
             >
-              <span className="me-1">{t(tab)}</span>
+              <span className={`me-1 ${styles.dropdown}`}>{t(tab)}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {/* Render dropdown items for each settings category */}

@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Posts.module.css';
+import styles from '../../../style/app.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import Carousel from 'react-multi-carousel';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
@@ -108,6 +108,24 @@ type InterfacePostNode = {
  * It utilizes Apollo Client for fetching and managing data through GraphQL queries. The component fetches and displays posts from an organization, promoted advertisements, and handles user interactions for creating new posts. It also manages state for displaying modal dialogs and handling file uploads for new posts.
  *
  * @returns JSX.Element - The rendered `home` component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function home(): JSX.Element {
   // Translation hook for localized text
@@ -277,18 +295,18 @@ export default function home(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+      <div className={`d-flex flex-row ${styles.containerHeightUserPost}`}>
+        <div className={`${styles.colorLight} ${styles.mainContainer50}`}>
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>
               <Row className="d-flex gap-1">
-                <Col className={styles.maxWidth}>
+                <Col className={styles.maxWidthUserPost}>
                   <Form.Control
                     type="file"
                     accept="image/*"
                     multiple={false}
-                    className={styles.inputArea}
+                    className={styles.inputField}
                     data-testid="postImageInput"
                     autoComplete="off"
                     onChange={async (
@@ -309,7 +327,7 @@ export default function home(): JSX.Element {
                 size="sm"
                 data-testid={'postBtn'}
                 onClick={handlePostButtonClick}
-                className="px-4 py-sm-2"
+                className={`px-4 py-sm-2 ${styles.addButton}`}
               >
                 {t('post')} <SendIcon />
               </Button>
@@ -347,27 +365,28 @@ export default function home(): JSX.Element {
             </div>
           )}
           <p className="fs-5 mt-5">{t(`yourFeed`)}</p>
-          <div className={` ${styles.postsCardsContainer}`}></div>
-          {loadingPosts ? (
-            <div className={`d-flex flex-row justify-content-center`}>
-              <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
-            </div>
-          ) : (
-            <>
-              {posts.length > 0 ? (
-                <Row className="my-2">
-                  {posts.map(({ node }: { node: InterfacePostNode }) => {
-                    const cardProps = getCardProps(node);
-                    return <PostCard key={node._id} {...cardProps} />;
-                  })}
-                </Row>
-              ) : (
-                <p className="container flex justify-content-center my-4">
-                  {t(`nothingToShowHere`)}
-                </p>
-              )}
-            </>
-          )}
+          <div className={` ${styles.postsCardsContainer}`}>
+            {loadingPosts ? (
+              <div className={`d-flex flex-row justify-content-center`}>
+                <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
+              </div>
+            ) : (
+              <>
+                {posts.length > 0 ? (
+                  <Row className="my-2">
+                    {posts.map(({ node }: { node: InterfacePostNode }) => {
+                      const cardProps = getCardProps(node);
+                      return <PostCard key={node._id} {...cardProps} />;
+                    })}
+                  </Row>
+                ) : (
+                  <p className="container flex justify-content-center my-4">
+                    {t(`nothingToShowHere`)}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
           <StartPostModal
             show={showModal}
             onHide={handleModalClose}

@@ -39,6 +39,8 @@ interface InterfaceEventHeaderProps {
  *
  * ### Global CSS Classes used:
  * - `.dropdown`
+ * - `.btnsContainer`
+ * - `.btnsBlock`
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
@@ -57,7 +59,7 @@ function eventHeader({
       className={styles.calendarEventHeader}
       data-testid="calendarEventHeader"
     >
-      <div className={styles.calendar__header}>
+      <div className={styles.btnsContainer}>
         <div className={styles.input}>
           <Form.Control
             type="text"
@@ -84,8 +86,7 @@ function eventHeader({
             <SearchOutlinedIcon />
           </Button>
         </div>
-        {/* <div className={styles.flex_grow}></div> */}
-        <div className={styles.space}>
+        <div className={styles.btnsBlock}>
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
@@ -98,6 +99,8 @@ function eventHeader({
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
+        </div>
+        <div className={styles.btnsBlock}>
           <SortingButton
             title={t('eventType')}
             sortingOptions={[
@@ -110,6 +113,8 @@ function eventHeader({
             className={styles.dropdown}
             buttonLabel={t('eventType')}
           />
+        </div>
+        <div className={styles.btnsBlock}>
           <div className={styles.selectTypeEventHeader}>
             <Button
               variant="success"

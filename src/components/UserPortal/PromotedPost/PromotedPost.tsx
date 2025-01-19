@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import styles from './PromotedPost.module.css';
+import styles from '../../../style/app.module.css';
 import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 
 interface InterfacePostCardProps {
@@ -19,6 +19,22 @@ interface InterfacePostCardProps {
  *
  * @param props - Properties passed to the component including an image, title, and ID.
  * @returns JSX.Element representing a card with promoted content.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function promotedPost(
   props: InterfacePostCardProps,
@@ -27,7 +43,7 @@ export default function promotedPost(
     <>
       <Card className="my-3">
         <Card.Header>
-          <div className={`${styles.cardHeader}`}>
+          <div className={`${styles.cardHeaderPromotedPost}`}>
             {/* Icon indicating promoted content */}
             <StarPurple500Icon />
             {'Promoted Content'}
@@ -40,7 +56,10 @@ export default function promotedPost(
           <Card.Text>{props.title}</Card.Text>
           {/* Conditionally render the image if provided */}
           {props.image && (
-            <img src={props.image} className={styles.imageContainer} />
+            <img
+              src={props.image}
+              className={styles.imageContainerPromotedPost}
+            />
           )}
         </Card.Body>
       </Card>

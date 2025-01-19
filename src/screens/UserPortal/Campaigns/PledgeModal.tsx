@@ -8,7 +8,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfo,
 } from 'utils/interfaces';
-import styles from './Campaigns.module.css';
+import styles from '../../../style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -360,7 +360,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           {/* Button to submit the pledge form */}
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.addButton}
             data-testid="submitPledgeBtn"
           >
             {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
