@@ -50,6 +50,7 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+  --text-grey-light: #959595;
   /* Background and Border */
   --table-bg: #eaebef;
   --tablerow-bg: #eff1f7;
@@ -58,6 +59,7 @@
   --tablerow-bg-color: var(--dropdown-hover-color);
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
+  --border-bottom-color: rgb(171, 171, 171);
 
   /* Font Sizes */
   --font-size-header: 16px;
@@ -91,6 +93,11 @@
   --bs-gray-400: #9ca3af;
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
+
+  /* icon */
+
+  --cancel-icon-color: rgb(197, 42, 42);
+  --check-icon-color: rgb(42, 197, 42);
 
   --table-head-bg: var(--blue-subtle, var(--blue-color));
   --table-head-color: var(--bs-white, var(--white-color));
@@ -5969,4 +5976,101 @@ button[data-testid='createPostBtn'] {
   margin-top: 20vh;
   margin-left: 13vw;
   max-width: 80vw;
+}
+
+/* GroupChatDetails */
+
+.groupInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.memberList {
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.memberList::-webkit-scrollbar {
+  display: none;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.groupMembersList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupMembersList p {
+  margin: 0;
+  color: var(--text-grey-light);
+}
+
+.membersImage {
+  width: 40px !important;
+}
+
+.groupImage {
+  margin-bottom: 10px;
+}
+
+.editImgBtn {
+  padding: 2px 6px 6px 8px;
+  border-radius: 100%;
+  background-color: var(--white-color);
+  border: 1px solid var(--text-grey-light);
+  color: var(--text-grey-light);
+  outline: none;
+  position: relative;
+  top: -40px;
+  left: 40px;
+}
+
+.chatImage {
+  height: 120px;
+  border-radius: 100%;
+  width: 120px;
+}
+
+.editChatNameContainer {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.editChatNameContainer input {
+  border: none;
+  border-bottom: 1px solid var(--border-bottom-color);
+  outline: none;
+  padding: 0px 5px;
+}
+
+.editChatNameContainer h3 {
+  margin: 0;
+}
+
+.cancelIcon {
+  color: var(--cancel-icon-color);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.checkIcon {
+  color: var(--check-icon-color);
+  cursor: pointer;
+}
+
+.chatUserDetails {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
