@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/components/UserPortal/UserNavbar/UserNavbar.tsx:26](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L26)
+Defined in: [src/components/UserPortal/UserNavbar/UserNavbar.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L26)
 
 Navbar component for user-specific actions and settings.
 

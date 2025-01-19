@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/OrgContriCards/OrgContriCards.tsx:30](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/OrgContriCards/OrgContriCards.tsx#L30)
+Defined in: [src/components/OrgContriCards/OrgContriCards.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgContriCards/OrgContriCards.tsx#L30)
 
 Component to display organization contribution cards
 

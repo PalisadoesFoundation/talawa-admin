@@ -6,7 +6,7 @@
 
 > **TargetsType**: `object`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:3](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/state/reducers/userRoutesReducer.ts#L3)
+Defined in: [src/state/reducers/userRoutesReducer.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L3)
 
 ## Type declaration
 

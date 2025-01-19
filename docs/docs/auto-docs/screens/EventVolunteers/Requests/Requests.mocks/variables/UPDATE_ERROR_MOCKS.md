@@ -6,4 +6,4 @@
 
 > `const` **UPDATE\_ERROR\_MOCKS**: (\{ `error`: `undefined`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `undefined`; `status`: `undefined`; `where`: \{ `eventId`: `string`; `status`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `getVolunteerMembership`: `object`[]; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; `status`: `string`; `where`: `undefined`; \}; \}; `result`: `undefined`; \})[]
 
-Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:194](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L194)
+Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L194)

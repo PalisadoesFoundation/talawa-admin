@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTableCheckIn
 
-Defined in: [src/components/CheckIn/types.ts:29](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/CheckIn/types.ts#L29)
+Defined in: [src/components/CheckIn/types.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L29)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/CheckIn/types.ts:29](https://github.com/hustlernik/t
 
 > **checkIn**: `object`
 
-Defined in: [src/components/CheckIn/types.ts:33](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/CheckIn/types.ts#L33)
+Defined in: [src/components/CheckIn/types.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L33)
 
 #### \_id
 
@@ -28,7 +28,7 @@ Defined in: [src/components/CheckIn/types.ts:33](https://github.com/hustlernik/t
 
 > **eventId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:37](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/CheckIn/types.ts#L37)
+Defined in: [src/components/CheckIn/types.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L37)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/components/CheckIn/types.ts:37](https://github.com/hustlernik/t
 
 > **id**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:30](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/CheckIn/types.ts#L30)
+Defined in: [src/components/CheckIn/types.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L30)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/components/CheckIn/types.ts:30](https://github.com/hustlernik/t
 
 > **name**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:31](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/CheckIn/types.ts#L31)
+Defined in: [src/components/CheckIn/types.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L31)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/components/CheckIn/types.ts:31](https://github.com/hustlernik/t
 
 > **userId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:32](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/CheckIn/types.ts#L32)
+Defined in: [src/components/CheckIn/types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L32)

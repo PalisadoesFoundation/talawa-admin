@@ -6,7 +6,7 @@
 
 > `const` **ERROR\_MOCKS**: `object`[]
 
-Defined in: [src/components/EventListCard/EventListCardMocks.ts:191](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/EventListCard/EventListCardMocks.ts#L191)
+Defined in: [src/components/EventListCard/EventListCardMocks.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/EventListCardMocks.ts#L191)
 
 ## Type declaration
 

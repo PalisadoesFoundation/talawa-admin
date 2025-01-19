@@ -6,7 +6,7 @@
 
 > **TableRow**(`__namedParameters`): `Element`
 
-Defined in: [src/components/CheckIn/TableRow.tsx:19](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/CheckIn/TableRow.tsx#L19)
+Defined in: [src/components/CheckIn/TableRow.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/TableRow.tsx#L19)
 
 Component that represents a single row in the check-in table.
 Allows users to mark themselves as checked in and download a tag if they are already checked in.

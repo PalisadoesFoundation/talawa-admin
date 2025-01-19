@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:24](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/LeftDrawer/LeftDrawer.tsx#L24)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L24)
 
 LeftDrawer component for displaying navigation options.
 

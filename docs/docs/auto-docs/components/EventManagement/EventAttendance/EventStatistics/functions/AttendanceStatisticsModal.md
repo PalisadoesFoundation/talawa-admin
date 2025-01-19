@@ -6,7 +6,7 @@
 
 > **AttendanceStatisticsModal**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventManagement/EventAttendance/EventStatistics.tsx:50](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/EventManagement/EventAttendance/EventStatistics.tsx#L50)
+Defined in: [src/components/EventManagement/EventAttendance/EventStatistics.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventStatistics.tsx#L50)
 
 Component to display statistical information about event attendance
 Shows metrics like total attendees, filtering options, and attendance trends

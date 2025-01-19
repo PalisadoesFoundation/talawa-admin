@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:30](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L30)
+Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L30)
 
 PeopleCard component displays information about a person within an organization.
 

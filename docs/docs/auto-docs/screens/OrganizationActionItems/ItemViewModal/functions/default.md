@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:32](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/OrganizationActionItems/ItemViewModal.tsx#L32)
+Defined in: [src/screens/OrganizationActionItems/ItemViewModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemViewModal.tsx#L32)
 
 A modal dialog for viewing action item details.
 

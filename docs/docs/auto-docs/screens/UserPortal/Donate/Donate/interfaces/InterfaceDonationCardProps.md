@@ -4,7 +4,7 @@
 
 # Interface: InterfaceDonationCardProps
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:23](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Donate/Donate.tsx#L23)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:23](https://github.com/hus
 
 > **amount**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Donate/Donate.tsx#L26)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L26)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/hus
 
 > **id**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Donate/Donate.tsx#L24)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L24)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/hus
 
 > **name**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Donate/Donate.tsx#L25)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L25)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/hus
 
 > **payPalId**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Donate/Donate.tsx#L28)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L28)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/hus
 
 > **updatedAt**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Donate/Donate.tsx#L29)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L29)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/hus
 
 > **userId**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:27](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Donate/Donate.tsx#L27)
+Defined in: [src/screens/UserPortal/Donate/Donate.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L27)

@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:39](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L39)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L39)
 
 Sidebar component for user navigation within an organization.
 

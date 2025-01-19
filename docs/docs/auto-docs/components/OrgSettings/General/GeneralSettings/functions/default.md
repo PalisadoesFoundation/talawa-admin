@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/OrgSettings/General/GeneralSettings.tsx#L23)
+Defined in: [src/components/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/GeneralSettings.tsx#L23)
 
 A component for displaying general settings for an organization.
 

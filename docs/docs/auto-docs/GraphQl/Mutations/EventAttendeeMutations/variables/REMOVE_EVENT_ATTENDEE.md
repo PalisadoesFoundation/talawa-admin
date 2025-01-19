@@ -6,7 +6,7 @@
 
 > `const` **REMOVE\_EVENT\_ATTENDEE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:27](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/GraphQl/Mutations/EventAttendeeMutations.ts#L27)
+Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L27)
 
 GraphQL mutation to remove an attendee from an event.
 

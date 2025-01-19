@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AddOn/support/components/MainContent/MainContent.tsx:25](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/AddOn/support/components/MainContent/MainContent.tsx#L25)
+Defined in: [src/components/AddOn/support/components/MainContent/MainContent.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/components/MainContent/MainContent.tsx#L25)
 
 A React component that renders a main content container with additional styles.
 

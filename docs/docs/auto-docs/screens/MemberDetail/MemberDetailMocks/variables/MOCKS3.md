@@ -6,7 +6,7 @@
 
 > `const` **MOCKS3**: `object`[]
 
-Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:437](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/MemberDetail/MemberDetailMocks.ts#L437)
+Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:437](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L437)
 
 ## Type declaration
 

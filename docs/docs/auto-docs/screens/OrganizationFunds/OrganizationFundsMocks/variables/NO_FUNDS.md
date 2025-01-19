@@ -6,7 +6,7 @@
 
 > `const` **NO\_FUNDS**: `object`[]
 
-Defined in: [src/screens/OrganizationFunds/OrganizationFundsMocks.ts:173](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/OrganizationFunds/OrganizationFundsMocks.ts#L173)
+Defined in: [src/screens/OrganizationFunds/OrganizationFundsMocks.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/OrganizationFundsMocks.ts#L173)
 
 ## Type declaration
 

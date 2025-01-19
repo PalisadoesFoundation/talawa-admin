@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/RecurrenceOptions/RecurrenceOptions.tsx:49](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/RecurrenceOptions/RecurrenceOptions.tsx#L49)
+Defined in: [src/components/RecurrenceOptions/RecurrenceOptions.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RecurrenceOptions/RecurrenceOptions.tsx#L49)
 
 Renders a dropdown menu for selecting recurrence options.
 

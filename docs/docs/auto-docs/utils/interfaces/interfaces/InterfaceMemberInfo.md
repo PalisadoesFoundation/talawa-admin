@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMemberInfo
 
-Defined in: [src/utils/interfaces.ts:79](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/utils/interfaces.ts#L79)
+Defined in: [src/utils/interfaces.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L79)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:79](https://github.com/hustlernik/talawa-ad
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:80](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/utils/interfaces.ts#L80)
+Defined in: [src/utils/interfaces.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L80)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:80](https://github.com/hustlernik/talawa-ad
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:85](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/utils/interfaces.ts#L85)
+Defined in: [src/utils/interfaces.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L85)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:85](https://github.com/hustlernik/talawa-ad
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:83](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/utils/interfaces.ts#L83)
+Defined in: [src/utils/interfaces.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L83)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:83](https://github.com/hustlernik/talawa-ad
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:81](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/utils/interfaces.ts#L81)
+Defined in: [src/utils/interfaces.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L81)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:81](https://github.com/hustlernik/talawa-ad
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:84](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/utils/interfaces.ts#L84)
+Defined in: [src/utils/interfaces.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L84)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:84](https://github.com/hustlernik/talawa-ad
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:82](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/utils/interfaces.ts#L82)
+Defined in: [src/utils/interfaces.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L82)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:82](https://github.com/hustlernik/talawa-ad
 
 > **organizationsBlockedBy**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:86](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/utils/interfaces.ts#L86)
+Defined in: [src/utils/interfaces.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L86)
 
 #### \_id
 

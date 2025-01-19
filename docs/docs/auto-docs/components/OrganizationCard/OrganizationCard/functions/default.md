@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/OrganizationCard/OrganizationCard.tsx:73](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/OrganizationCard/OrganizationCard.tsx#L73)
+Defined in: [src/components/OrganizationCard/OrganizationCard.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationCard/OrganizationCard.tsx#L73)
 
 Component to display an organization's card with its image and owner details.
 Displays an organization card with options to join or manage membership.

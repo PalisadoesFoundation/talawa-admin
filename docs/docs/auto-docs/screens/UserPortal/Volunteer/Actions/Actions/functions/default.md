@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/UserPortal/Volunteer/Actions/Actions.tsx:60](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Volunteer/Actions/Actions.tsx#L60)
+Defined in: [src/screens/UserPortal/Volunteer/Actions/Actions.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Actions/Actions.tsx#L60)
 
 Component for managing and displaying action items within an organization.
 

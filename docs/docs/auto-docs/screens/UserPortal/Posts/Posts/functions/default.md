@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/UserPortal/Posts/Posts.tsx:112](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/UserPortal/Posts/Posts.tsx#L112)
+Defined in: [src/screens/UserPortal/Posts/Posts.tsx:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Posts/Posts.tsx#L112)
 
 `home` component displays the main feed for a user, including posts, promoted content, and options to create a new post.
 

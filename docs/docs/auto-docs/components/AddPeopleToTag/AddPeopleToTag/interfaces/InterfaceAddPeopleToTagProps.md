@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAddPeopleToTagProps
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:49](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L49)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L49)
 
 Props for the `AddPeopleToTag` component.
 
@@ -35,7 +35,7 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **addPeopleToTagModalIsOpen**: `boolean`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:50](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L50)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L50)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:50](https://github
 
 > **hideAddPeopleToTagModal**: () => `void`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:51](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L51)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L51)
 
 #### Returns
 
@@ -55,7 +55,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:51](https://github
 
 > **refetchAssignedMembersData**: () => `void`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:52](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L52)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L52)
 
 #### Returns
 
@@ -67,7 +67,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:52](https://github
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:53](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L53)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L53)
 
 ***
 
@@ -75,4 +75,4 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:53](https://github
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:54](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L54)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L54)

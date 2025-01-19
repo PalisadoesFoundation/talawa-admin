@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVenueModalProps
 
-Defined in: [src/components/Venues/VenueModal.tsx:15](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/Venues/VenueModal.tsx#L15)
+Defined in: [src/components/Venues/VenueModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L15)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/Venues/VenueModal.tsx:15](https://github.com/hustler
 
 > **edit**: `boolean`
 
-Defined in: [src/components/Venues/VenueModal.tsx:21](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/Venues/VenueModal.tsx#L21)
+Defined in: [src/components/Venues/VenueModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L21)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/Venues/VenueModal.tsx:21](https://github.com/hustler
 
 > **onHide**: () => `void`
 
-Defined in: [src/components/Venues/VenueModal.tsx:17](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/Venues/VenueModal.tsx#L17)
+Defined in: [src/components/Venues/VenueModal.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L17)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/components/Venues/VenueModal.tsx:17](https://github.com/hustler
 
 > **orgId**: `string`
 
-Defined in: [src/components/Venues/VenueModal.tsx:19](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/Venues/VenueModal.tsx#L19)
+Defined in: [src/components/Venues/VenueModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L19)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/components/Venues/VenueModal.tsx:19](https://github.com/hustler
 
 > **refetchVenues**: () => `void`
 
-Defined in: [src/components/Venues/VenueModal.tsx:18](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/Venues/VenueModal.tsx#L18)
+Defined in: [src/components/Venues/VenueModal.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L18)
 
 #### Returns
 
@@ -52,7 +52,7 @@ Defined in: [src/components/Venues/VenueModal.tsx:18](https://github.com/hustler
 
 > **show**: `boolean`
 
-Defined in: [src/components/Venues/VenueModal.tsx:16](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/Venues/VenueModal.tsx#L16)
+Defined in: [src/components/Venues/VenueModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L16)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/components/Venues/VenueModal.tsx:16](https://github.com/hustler
 
 > `optional` **venueData**: [`InterfaceQueryVenueListItem`](../../../../utils/interfaces/interfaces/InterfaceQueryVenueListItem.md)
 
-Defined in: [src/components/Venues/VenueModal.tsx:20](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/Venues/VenueModal.tsx#L20)
+Defined in: [src/components/Venues/VenueModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L20)

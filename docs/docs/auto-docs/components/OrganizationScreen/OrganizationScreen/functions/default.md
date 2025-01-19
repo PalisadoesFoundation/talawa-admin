@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/OrganizationScreen/OrganizationScreen.tsx:37](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/OrganizationScreen/OrganizationScreen.tsx#L37)
+Defined in: [src/components/OrganizationScreen/OrganizationScreen.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationScreen/OrganizationScreen.tsx#L37)
 
 Component for the organization screen
 

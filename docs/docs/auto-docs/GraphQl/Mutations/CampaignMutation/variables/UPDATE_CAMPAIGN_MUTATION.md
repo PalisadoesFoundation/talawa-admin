@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_CAMPAIGN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:53](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/GraphQl/Mutations/CampaignMutation.ts#L53)
+Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CampaignMutation.ts#L53)
 
 GraphQL mutation to update a fund Campaign.
 

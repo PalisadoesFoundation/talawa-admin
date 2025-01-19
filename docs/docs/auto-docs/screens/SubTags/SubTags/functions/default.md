@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/SubTags/SubTags.tsx:60](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/SubTags/SubTags.tsx#L60)
+Defined in: [src/screens/SubTags/SubTags.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/SubTags/SubTags.tsx#L60)
 
 Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
 

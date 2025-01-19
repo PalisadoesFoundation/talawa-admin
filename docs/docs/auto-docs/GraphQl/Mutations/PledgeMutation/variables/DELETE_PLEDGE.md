@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_PLEDGE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:78](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/GraphQl/Mutations/PledgeMutation.ts#L78)
+Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L78)
 
 GraphQL mutation to delete a pledge.
 

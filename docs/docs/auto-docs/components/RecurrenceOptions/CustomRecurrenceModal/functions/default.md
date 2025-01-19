@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/RecurrenceOptions/CustomRecurrenceModal.tsx:54](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/RecurrenceOptions/CustomRecurrenceModal.tsx#L54)
+Defined in: [src/components/RecurrenceOptions/CustomRecurrenceModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RecurrenceOptions/CustomRecurrenceModal.tsx#L54)
 
 A modal for setting up custom recurrence rules.
 

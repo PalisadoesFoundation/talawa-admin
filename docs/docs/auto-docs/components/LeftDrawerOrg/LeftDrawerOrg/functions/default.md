@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:35](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L35)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L35)
 
 LeftDrawerOrg component for displaying organization details and navigation options.
 

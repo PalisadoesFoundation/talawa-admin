@@ -6,7 +6,7 @@
 
 > **reducers**(`state`, `action`): `object`
 
-Defined in: [src/state/reducers/index.ts:6](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/state/reducers/index.ts#L6)
+Defined in: [src/state/reducers/index.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/index.ts#L6)
 
 ## Parameters
 

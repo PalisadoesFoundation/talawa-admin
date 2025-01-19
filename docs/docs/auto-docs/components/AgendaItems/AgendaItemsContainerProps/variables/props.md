@@ -6,7 +6,7 @@
 
 > `const` **props**: `object`
 
-Defined in: [src/components/AgendaItems/AgendaItemsContainerProps.ts:4](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/components/AgendaItems/AgendaItemsContainerProps.ts#L4)
+Defined in: [src/components/AgendaItems/AgendaItemsContainerProps.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsContainerProps.ts#L4)
 
 ## Type declaration
 

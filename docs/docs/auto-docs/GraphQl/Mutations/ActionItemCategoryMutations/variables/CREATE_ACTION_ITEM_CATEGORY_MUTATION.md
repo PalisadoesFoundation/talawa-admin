@@ -6,7 +6,7 @@
 
 > `const` **CREATE\_ACTION\_ITEM\_CATEGORY\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/ActionItemCategoryMutations.ts:11](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/GraphQl/Mutations/ActionItemCategoryMutations.ts#L11)
+Defined in: [src/GraphQl/Mutations/ActionItemCategoryMutations.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemCategoryMutations.ts#L11)
 
 GraphQL mutation to create an action item category.
 

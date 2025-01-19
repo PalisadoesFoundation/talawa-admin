@@ -6,7 +6,7 @@
 
 > **TestMock**: `object`
 
-Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:34](https://github.com/hustlernik/talawa-admin/blob/fe326ed17e0fa5ad916ff9f383f63b5d38aedc7b/src/screens/OrganizationPeople/MockDataTypes.ts#L34)
+Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L34)
 
 ## Type declaration
 
