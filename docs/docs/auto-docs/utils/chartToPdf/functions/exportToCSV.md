@@ -1,0 +1,23 @@
+[Admin Docs](/)
+
+***
+
+# Function: exportToCSV()
+
+> **exportToCSV**(`data`, `filename`): `void`
+
+Defined in: [src/utils/chartToPdf.ts:3](https://github.com/abhassen44/talawa-admin/blob/bb7b6d5252385a81ad100b897eb0cba4f7ba10d2/src/utils/chartToPdf.ts#L3)
+
+## Parameters
+
+### data
+
+`CSVData`
+
+### filename
+
+`string`
+
+## Returns
+
+`void`
