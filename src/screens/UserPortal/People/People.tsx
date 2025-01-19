@@ -113,53 +113,36 @@ export default function people(): JSX.Element {
   };
 
   useEffect(() => {
-    if (data2) {
-      const admin = data2.organizations[0].admins[0];
-      const updatedAdmin: InterfaceMember = {
-        ...admin,
-        userType: 'Admin',
-      };
-      setAdmins([updatedAdmin]);
+    if (data2?.organizations?.[0]?.admins) {
+      const adminsList = data2.organizations[0].admins.map(
+        (admin: InterfaceMember) => ({
+          ...admin,
+          userType: 'Admin',
+        }),
+      );
+      setAdmins(adminsList);
     }
   }, [data2]);
 
+  // Updated members effect
   useEffect(() => {
-    if (data) {
-      const updatedAdmins = data.organizationsMemberConnection.edges.map(
+    if (data?.organizationsMemberConnection?.edges) {
+      const membersList = data.organizationsMemberConnection.edges.map(
         (memberData: InterfaceMember) => ({
-          ...memberData, // Spread the existing properties
+          ...memberData,
           userType: admins?.some((admin) => admin._id === memberData._id)
             ? 'Admin'
             : 'Member',
         }),
       );
-
-      setAllMembers(updatedAdmins);
-      setMembers(updatedAdmins);
+      setAllMembers(membersList);
+      setMembers(mode === 0 ? membersList : admins);
     }
-  }, [data, admins]);
+  }, [data, admins, mode]);
 
-  if (admins && admins.length > 0) {
-    const adminIds = admins.map((adm) => adm._id);
-    for (let i = 0; i < allMembers.length; i++) {
-      if (adminIds.includes(allMembers[i]._id)) {
-        allMembers[i].userType = 'Admin';
-      } else {
-        allMembers[i].userType = 'Member';
-      }
-    }
-  }
   useEffect(() => {
-    if (mode == 0) {
-      if (data) {
-        setMembers(allMembers);
-      }
-    } else if (mode == 1) {
-      if (data2) {
-        setMembers(admins);
-      }
-    }
-  }, [mode]);
+    setMembers(mode === 0 ? allMembers : admins);
+  }, [mode, allMembers, admins]);
 
   return (
     <>
