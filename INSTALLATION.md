@@ -19,11 +19,6 @@ This document provides instructions on how to set up and start a running instanc
 - [Talawa-Admin Service Setup Guide](#talawa-admin-service-setup-guide)
   - [Prerequisites](#prerequisites-2)
     - [Service Configuration](#service-configuration)
-      - [1. **Copy the `talawa_admin.service` file**](#1-copy-the-talawa_adminservice-file)
-      - [2. **Verify the CODEROOT Path**](#2-verify-the-coderoot-path)
-      - [3. **Set the Correct Working Directory**](#3-set-the-correct-working-directory)
-      - [4. **Ensure the `.env` File Exists**](#4-ensure-the-env-file-exists)
-      - [5. **Adjust User and Group**](#5-adjust-user-and-group)
     - [Steps to Enable and Manage the Service](#steps-to-enable-and-manage-the-service)
     - [Troubleshooting](#troubleshooting)
 
@@ -397,11 +392,11 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
 
 ## Prerequisites
 
-- Firstly, You should have locally setup the Talawa-Admin repo using [Setting up this repository](#setting-up-this-repository)
-- Ensure **Node.js** and **npm** are correctly installed and available for the specified user and group.
-- It’s recommended to use **nvm** (Node Version Manager) for better management of different Node.js versions.
-- Ensure you have root or sudo access to configure systemd services.
-- Create a dedicated service user:
+1. Firstly, You should have locally setup the Talawa-Admin repo using [Setting up this repository](#setting-up-this-repository)
+2. Ensure **Node.js** and **npm** are correctly installed and available for the specified user and group.
+3. It’s recommended to use **nvm** (Node Version Manager) for better management of different Node.js versions.
+4. Ensure you have root or sudo access to configure systemd services.
+5. Create a dedicated service user:
    ```bash
    sudo useradd -r -s /bin/false talawa_admin
    sudo groupadd -r talawa_admin
@@ -418,11 +413,13 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
 ---
 
 ### Service Configuration
+These steps below will help you setup the Linux Daemon Service for Talawa-Admin Project.
+Please make sure to follow these step in sequence.
 
-#### 1. **Copy the `talawa_admin.service` file**
+1. **Copy the `talawa_admin.service` file**
    - Place the `talawa_admin.service` file in the appropriate systemd directory based on your Linux distribution:
-     - For most distributions: `/etc/systemd/system/`
-     - For systems using `systemd`, this will be the default directory.
+      - For most distributions: `/etc/systemd/system/`
+      - For systems using `systemd`, this will be the default directory.
 
    <!-- Optional Steps -->
    - Verify service file permissions and ownership:
@@ -432,13 +429,13 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
    sudo systemd-analyze verify talawa_admin.service
    ```
 
-#### 2. **Verify the CODEROOT Path**
+2. **Verify the CODEROOT Path**
    - Ensure that the `CODEROOT` environment variable matches the absolute path to the Talawa-Admin code directory.
 
-#### 3. **Set the Correct Working Directory**
+3. **Set the Correct Working Directory**
    - Always use the absolute path for the `WorkingDirectory`. Do **not** use `$CODEROOT` in the `WorkingDirectory` field.
 
-#### 4. **Ensure the `.env` File Exists**
+4. **Ensure the `.env` File Exists**
    - Verify that the path in the `EnvironmentFile` line points to a valid `.env` file located in the root directory of the Talawa-Admin repository.
 
    <!-- Optional Steps -->
@@ -451,7 +448,7 @@ This guide outlines the steps to set up and manage the Talawa-Admin service on a
    
    ```
       
-#### 5. **Adjust User and Group**
+5. **Adjust User and Group**
    - Modify the `User` and `Group` settings to match the user account intended to run the service.
 
 ---
