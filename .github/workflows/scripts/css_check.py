@@ -17,8 +17,7 @@ CSSCheckResult = namedtuple(
 
 
 def check_embedded_css(content: str) -> list:
-    """
-    Check for embedded CSS in the content.
+    """Check for embedded CSS in the content.
 
     Args:
         content: The content of the file to check.
@@ -38,8 +37,7 @@ def process_typescript_file(
     correct_css_imports,
     embedded_css_violations,
 ):
-    """
-    Process a TypeScript file for CSS violations and correct CSS imports.
+    """Process a TypeScript file for CSS violations and correct CSS imports.
 
     Args:
         file_path: Path to the TypeScript file to process.
@@ -88,6 +86,17 @@ def check_files(
     exclude_directories: list,
     allowed_css_patterns: list,
 ) -> CSSCheckResult:
+    """Scan directories for TypeScript files and check for CSS violations.
+
+    This function checks TypeScriptfiles in given directories for violations.
+
+    Args:
+        directories: List of directories to scan for TypeScript files.
+        exclude_files: List of file paths to exclude from the scan.
+        exclude_directories: List of directories to exclude from the scan.
+        allowed_css_patterns: List of allowed CSS patterns for validation.
+
+    """
     violations = []
     correct_css_imports = []
     embedded_css_violations = []
@@ -176,7 +185,8 @@ def main():
         output.append("CSS Import Violations:")
         for violation in result.violations:
             output.append(
-                f"- {violation.file_path}: {violation.css_file} ({violation.reason})"
+                f"- {violation.file_path}: "
+                f"{violation.css_file} ({violation.reason})"
             )
         exit_code = 1
 
@@ -191,14 +201,18 @@ def main():
     if output:
         print("\n".join(output))
         print(
-            """
-            Please address the above CSS violations:
-            1. For invalid CSS imports, ensure you're using the correct import syntax and file paths.
-            2. For embedded CSS, move the CSS to appropriate stylesheet files and import them correctly.
-            3. Make sure to use only the allowed CSS patterns as specified in the script arguments.
-            4. Check that all imported CSS files exist in the specified locations.
-            """
+            "Please address the above CSS violations:\n"
+            "1. For invalid CSS imports,\n"
+            "   ensure you're using the correct import syntax and file paths.\n"
+            "2. For embedded CSS,\n"
+            "   move the CSS to appropriate stylesheet\n"
+            "   files and import them correctly.\n"
+            "3. Make sure to use only the allowed CSS patterns\n"
+            "   as specified in the script arguments.\n"
+            "4. Check that all imported CSS files\n"
+            "   exist in the specified locations."
         )
+
     if args.show_success and result.correct_imports:
         print("\nCorrect CSS Imports:")
         for import_ in result.correct_imports:
