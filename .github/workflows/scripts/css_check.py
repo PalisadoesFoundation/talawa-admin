@@ -100,10 +100,10 @@ def check_files(
         allowed_css_patterns: List of allowed CSS patterns for validation.
 
     Returns:
-    CSSCheckResult: A result object containing:
-        - violations: List of CSS violations found.
-        - correct_css_imports: List of correct CSS imports.
-        - embedded_css_violations: List of embedded CSS violations.
+        CSSCheckResult: A result object containing:
+            - violations: List of CSS violations found.
+            - correct_css_imports: List of correct CSS imports.
+            - embedded_css_violations: List of embedded CSS violations.
     """
     violations = []
     correct_css_imports = []
@@ -152,6 +152,7 @@ def main():
 
     Args:
         None: This function does not take any arguments.
+               It uses argparse to handle command-line arguments.
 
     Returns:
         None: This function does not return any value but prints the violations.
