@@ -23,7 +23,7 @@ def check_embedded_css(content: str) -> list:
         content: The content of the file to check.
 
     Returns:
-        A list of embedded CSS violations found.
+        list: A list of embedded CSS violations found.
     """
     embedded_css_pattern = r"#([0-9a-fA-F]{3}){1,2}"  # Matches CSS color codes
     return re.findall(embedded_css_pattern, content)
@@ -46,6 +46,9 @@ def process_typescript_file(
         violations: List to store CSS violations.
         correct_css_imports: List to store correct CSS imports.
         embedded_css_violations: List to store embedded CSS violations.
+
+    Returns:
+        None: This function modifies provided lists & does not return any value.
     """
     try:
         with open(file_path, "r", encoding="utf-8") as f:
@@ -96,6 +99,11 @@ def check_files(
         exclude_directories: List of directories to exclude from the scan.
         allowed_css_patterns: List of allowed CSS patterns for validation.
 
+    Returns:
+    CSSCheckResult: A result object containing:
+        - violations: List of CSS violations found.
+        - correct_css_imports: List of correct CSS imports.
+        - embedded_css_violations: List of embedded CSS violations.
     """
     violations = []
     correct_css_imports = []
@@ -137,7 +145,17 @@ def check_files(
 
 
 def main():
-    """Run the CSS check script."""
+    """Main function to run the CSS check.
+
+    This function serves as the entry point to run the CSS check, processing the
+    necessary files and directories, and printing the violations found.
+
+    Args:
+        None: This function does not take any arguments.
+
+    Returns:
+        None: This function does not return any value but prints the violations.
+    """
     parser = argparse.ArgumentParser(
         description="Check for CSS violations in TypeScript files."
     )
