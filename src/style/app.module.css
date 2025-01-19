@@ -1656,6 +1656,7 @@ hr {
 .modalHeader {
   border: none;
   padding-bottom: 0;
+  background-color: var(--blue-search-bg);
 }
 
 .label {

@@ -118,7 +118,10 @@ function OrgSettings(): JSX.Element {
       </Row>
 
       {/* Render content based on the selected settings category */}
-      <div className={`mt-3 ${styles.pageContentWrapper} ${animationClass}`}>
+      <div
+        data-testid="settingsWrapper"
+        className={`mt-3 ${styles.pageContentWrapper} ${animationClass}`}
+      >
         {(() => {
           switch (tab) {
             case 'general':

@@ -194,9 +194,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     <>
       <div id="orgupdate" className={styles.userupdatediv}>
         <form>
-          <Form.Label style={{ fontWeight: 'normal' }}>
-            {tCommon('name')}
-          </Form.Label>
+          <Form.Label className="fw-normal">{tCommon('name')}</Form.Label>
           <Form.Control
             className="mb-3"
             placeholder={t('enterNameOrganization')}
@@ -210,7 +208,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label style={{ fontWeight: 'normal' }}>
+          <Form.Label className="fw-normal">
             {tCommon('description')}
           </Form.Label>
           <Form.Control
@@ -226,9 +224,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label style={{ fontWeight: 'normal' }}>
-            {tCommon('address')}
-          </Form.Label>
+          <Form.Label className="fw-normal">{tCommon('address')}</Form.Label>
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
               <Form.Control
@@ -326,10 +322,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           </Row>
           <Row>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <Form.Label
-                style={{ fontWeight: 'normal' }}
-                className="me-3 mb-0"
-              >
+              <Form.Label className="me-3 mb-0 fw-normal">
                 {t('userRegistrationRequired')}:
               </Form.Label>
               <Form.Switch
@@ -344,10 +337,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               />
             </Col>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <Form.Label
-                style={{ fontWeight: 'normal' }}
-                className="me-3 mb-0"
-              >
+              <Form.Label className="me-3 mb-0 fw-normal">
                 {t('isVisibleInSearch')}:
               </Form.Label>
               <Form.Switch
@@ -359,7 +349,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             </Col>
           </Row>
 
-          <Form.Label style={{ fontWeight: 'normal' }} htmlFor="orgphoto">
+          <Form.Label className="fw-normal" htmlFor="orgphoto">
             {tCommon('displayImage')}:
           </Form.Label>
           <Form.Control

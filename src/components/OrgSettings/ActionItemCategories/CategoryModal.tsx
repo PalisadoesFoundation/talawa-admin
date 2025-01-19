@@ -56,10 +56,6 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     isDisabled: category?.isDisabled ?? false,
   });
 
-  const blueSearchBg = getComputedStyle(
-    document.documentElement,
-  ).getPropertyValue('--blue-search-bg');
-
   const { name, isDisabled } = formState;
 
   useEffect(() => {
@@ -178,17 +174,17 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
               sx={{
                 '& .MuiOutlinedInput-root': {
                   '&:hover fieldset': {
-                    borderColor: blueSearchBg.trim(),
+                    borderColor: 'var(--blue-search-bg)',
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: blueSearchBg.trim(),
+                    borderColor: 'var(--blue-search-bg)',
                   },
                 },
                 '& .MuiInputLabel-root': {
                   color: 'gray',
                 },
                 '& .MuiInputLabel-root.Mui-focused': {
-                  color: blueSearchBg.trim(),
+                  color: 'var(--blue-search-bg)',
                 },
               }}
             />

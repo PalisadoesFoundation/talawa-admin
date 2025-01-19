@@ -18,8 +18,6 @@ import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
 import CategoryModal from './CategoryModal';
 import SortingButton from 'subComponents/SortingButton';
-// import { borderColor } from '@mui/system';
-// import { blue } from '@mui/material/colors';
 
 enum ModalState {
   SAME = 'same',
@@ -34,13 +32,6 @@ enum CategoryStatus {
 interface InterfaceActionItemCategoryProps {
   orgId: string;
 }
-
-const blueSubtle = getComputedStyle(document.documentElement).getPropertyValue(
-  '--blue-subtle',
-);
-const greyDark = getComputedStyle(document.documentElement).getPropertyValue(
-  '--grey-dark',
-);
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -71,16 +62,16 @@ const dataGridStyle = {
     borderBottom: 'none',
   },
   '& .MuiDataGrid-columnSeparator--resizable:hover': {
-    color: blueSubtle.trim(),
+    color: 'var(--blue-subtle)',
   },
   '& .MuiChip-label': {
-    color: blueSubtle.trim(),
+    color: 'var(--blue-subtle)',
   },
   '& .MuiChip-icon': {
-    color: `${blueSubtle.trim()} !important`,
+    color: 'var(--blue-subtle) !important',
   },
   '& .MuiChip-root': {
-    borderColor: blueSubtle.trim(),
+    borderColor: 'var(--blue-subtle)',
   },
 };
 
@@ -214,7 +205,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
           <div
             className="d-flex justify-content-center fw-normal"
             data-testid="categoryName"
-            style={{ color: blueSubtle.trim() }}
+            style={{ color: 'var(--blue-subtle)' }}
           >
             {params.row.name}
           </div>
@@ -297,9 +288,9 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
           >
             <i
               className="fa fa-edit"
-              style={{ paddingRight: '5px', color: greyDark.trim() }}
+              style={{ paddingRight: '5px', color: 'var(--grey-dark)' }}
             />
-            <span style={{ color: greyDark.trim() }}>Edit</span>
+            <span style={{ color: 'var(--grey-dark)' }}>Edit</span>
           </Button>
         );
       },

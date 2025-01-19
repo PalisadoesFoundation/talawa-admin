@@ -130,6 +130,21 @@ describe('Organisation Settings Page', () => {
     });
   });
 
+  it('should verify animation functionality during tab switches', async () => {
+    renderOrganisationSettings();
+
+    const wrapper = screen.getByTestId('settingsWrapper');
+    expect(wrapper.className).toContain('fade-in');
+
+    userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+
+    expect(wrapper.className).toContain('fade-out');
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    expect(wrapper.className).toContain('fade-in');
+    expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
+  });
+
   // it('should handle dropdown item selection correctly', async () => {
   //   renderOrganisationSettings();
 
