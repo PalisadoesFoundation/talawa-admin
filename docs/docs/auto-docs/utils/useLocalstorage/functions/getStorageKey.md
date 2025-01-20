@@ -6,7 +6,7 @@
 
 > **getStorageKey**(`prefix`, `key`): `string`
 
-Defined in: [src/utils/useLocalstorage.ts:19](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/useLocalstorage.ts#L19)
+Defined in: [src/utils/useLocalstorage.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L19)
 
 Generates the prefixed key for storage.
 

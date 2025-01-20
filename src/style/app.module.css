@@ -328,7 +328,7 @@
 }
 
 .dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
-  background-color: transparent !important;
+  background-color: var(--bs-white) !important;
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
 }
@@ -471,8 +471,22 @@
   box-shadow: var(--input-shadow-color);
 }
 
+.inputField:focus {
+  background-color: var(--bs-white);
+  box-shadow: var(--input-shadow-color);
+}
+
 .inputFieldModal {
   margin-bottom: 10px;
+  background-color: var(--bs-white);
+}
+
+.inputFieldModal:hover {
+  background-color: var(--bs-white);
+  box-shadow: var(--input-shadow-color);
+}
+
+.inputFieldModal:focus {
   background-color: var(--bs-white);
   box-shadow: var(--input-shadow-color);
 }
@@ -1673,7 +1687,15 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.btnsBlock button:hover {
   box-shadow: var(--input-shadow-color);
+  background-color: var(--bs-white);
+}
+.btnsBlock button:focus {
+  box-shadow: var(--input-shadow-color);
+  background-color: var(--bs-white);
 }
 
 @media (max-width: 1020px) {

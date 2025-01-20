@@ -6,7 +6,11 @@
 
 > `const` **MOCKS3**: `object`[]
 
+<<<<<<< HEAD
 Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:437](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/MemberDetail/MemberDetailMocks.ts#L437)
+=======
+Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:437](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L437)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ## Type declaration
 

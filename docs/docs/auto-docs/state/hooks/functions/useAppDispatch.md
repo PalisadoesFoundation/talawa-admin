@@ -6,7 +6,7 @@
 
 > **useAppDispatch**\<`AppDispatch`\>(): `AppDispatch`
 
-Defined in: [src/state/hooks.ts:5](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/state/hooks.ts#L5)
+Defined in: [src/state/hooks.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/hooks.ts#L5)
 
 Returns the dispatch function from the Redux store.
 

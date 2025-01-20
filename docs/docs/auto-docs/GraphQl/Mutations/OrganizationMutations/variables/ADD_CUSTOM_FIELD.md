@@ -6,7 +6,7 @@
 
 > `const` **ADD\_CUSTOM\_FIELD**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:237](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/GraphQl/Mutations/OrganizationMutations.ts#L237)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L237)
 
 GraphQL mutation to add a custom field to an organization.
 

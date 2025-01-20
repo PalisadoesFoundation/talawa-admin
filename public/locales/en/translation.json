@@ -315,8 +315,8 @@
     "confirmPassword": "confirmPassword",
     "create": "create",
     "cancel": "cancel",
-    "user": "user",
-    "profile": "profile"
+    "user": "User",
+    "profile": "Profile"
   },
   "organizationTags": {
     "title": "Organization Tags",

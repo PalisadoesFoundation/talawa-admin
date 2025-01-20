@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserInfo
 
-Defined in: [src/utils/interfaces.ts:10](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L10)
+Defined in: [src/utils/interfaces.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:10](https://github.com/abhassen44/talawa-ad
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:11](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L11)
+Defined in: [src/utils/interfaces.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L11)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:11](https://github.com/abhassen44/talawa-ad
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:12](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L12)
+Defined in: [src/utils/interfaces.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:12](https://github.com/abhassen44/talawa-ad
 
 > `optional` **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:14](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L14)
+Defined in: [src/utils/interfaces.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L14)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/utils/interfaces.ts:14](https://github.com/abhassen44/talawa-ad
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:13](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/utils/interfaces.ts#L13)
+Defined in: [src/utils/interfaces.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L13)

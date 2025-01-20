@@ -4,7 +4,11 @@
 
 # Class: default
 
+<<<<<<< HEAD
 Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:5](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/AddOn/support/services/Plugin.helper.ts#L5)
+=======
+Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/services/Plugin.helper.ts#L5)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 Helper class for managing plugin-related tasks such as fetching store data, installed plugins, and generating plugin links.
 
@@ -24,7 +28,11 @@ Helper class for managing plugin-related tasks such as fetching store data, inst
 
 > **fetchInstalled**(): `Promise`\<`any`\>
 
+<<<<<<< HEAD
 Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:21](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/AddOn/support/services/Plugin.helper.ts#L21)
+=======
+Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/services/Plugin.helper.ts#L21)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 Fetches the list of installed plugins from a local server.
 
@@ -40,7 +48,11 @@ A promise that resolves to the installed plugins data in JSON format.
 
 > **fetchStore**(): `Promise`\<`any`\>
 
+<<<<<<< HEAD
 Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:11](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/AddOn/support/services/Plugin.helper.ts#L11)
+=======
+Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/services/Plugin.helper.ts#L11)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 Fetches the store data from a local server.
 
@@ -56,7 +68,11 @@ A promise that resolves to the store data in JSON format.
 
 > **generateLinks**(`plugins`): `object`[]
 
+<<<<<<< HEAD
 Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:32](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/AddOn/support/services/Plugin.helper.ts#L32)
+=======
+Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/services/Plugin.helper.ts#L32)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 Generates an array of links for the enabled plugins.
 

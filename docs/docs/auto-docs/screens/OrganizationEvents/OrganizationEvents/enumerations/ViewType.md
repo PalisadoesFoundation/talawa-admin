@@ -4,7 +4,11 @@
 
 # Enumeration: ViewType
 
+<<<<<<< HEAD
 Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L37)
+=======
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L37)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ## Enumeration Members
 
@@ -12,7 +16,11 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:37](https://g
 
 > **DAY**: `"Day"`
 
+<<<<<<< HEAD
 Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L38)
+=======
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L38)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -20,7 +28,11 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:38](https://g
 
 > **MONTH**: `"Month View"`
 
+<<<<<<< HEAD
 Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L39)
+=======
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L39)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -28,4 +40,8 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:39](https://g
 
 > **YEAR**: `"Year View"`
 
+<<<<<<< HEAD
 Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:40](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationEvents/OrganizationEvents.tsx#L40)
+=======
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L40)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84

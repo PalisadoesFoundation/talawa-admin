@@ -6,7 +6,11 @@
 
 > **default**(): `Promise`\<`void`\>
 
+<<<<<<< HEAD
 Defined in: [src/setup/askAndUpdatePort/askAndUpdatePort.ts:6](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/setup/askAndUpdatePort/askAndUpdatePort.ts#L6)
+=======
+Defined in: [src/setup/askAndUpdatePort/askAndUpdatePort.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askAndUpdatePort/askAndUpdatePort.ts#L6)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ## Returns
 

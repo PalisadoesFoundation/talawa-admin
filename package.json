@@ -91,7 +91,7 @@
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx setup.ts",
     "check-localstorage": "node scripts/githooks/check-localstorage-usage.js",
-    "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete",
+    "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node fix-repo-url.js",
     "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js"
   },
   "eslintConfig": {

@@ -4,7 +4,11 @@
 
 # Interface: InterfaceTagActionsProps
 
+<<<<<<< HEAD
 Defined in: [src/components/TagActions/TagActions.tsx:56](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TagActions/TagActions.tsx#L56)
+=======
+Defined in: [src/components/TagActions/TagActions.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L56)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 Props for the `AssignToTags` component.
 
@@ -34,7 +38,11 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **hideTagActionsModal**: () => `void`
 
+<<<<<<< HEAD
 Defined in: [src/components/TagActions/TagActions.tsx:58](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TagActions/TagActions.tsx#L58)
+=======
+Defined in: [src/components/TagActions/TagActions.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L58)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 #### Returns
 
@@ -46,7 +54,11 @@ Defined in: [src/components/TagActions/TagActions.tsx:58](https://github.com/abh
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
+<<<<<<< HEAD
 Defined in: [src/components/TagActions/TagActions.tsx:60](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TagActions/TagActions.tsx#L60)
+=======
+Defined in: [src/components/TagActions/TagActions.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L60)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -54,7 +66,11 @@ Defined in: [src/components/TagActions/TagActions.tsx:60](https://github.com/abh
 
 > **tagActionsModalIsOpen**: `boolean`
 
+<<<<<<< HEAD
 Defined in: [src/components/TagActions/TagActions.tsx:57](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TagActions/TagActions.tsx#L57)
+=======
+Defined in: [src/components/TagActions/TagActions.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L57)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -62,7 +78,11 @@ Defined in: [src/components/TagActions/TagActions.tsx:57](https://github.com/abh
 
 > **tagActionType**: [`TagActionType`](../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
+<<<<<<< HEAD
 Defined in: [src/components/TagActions/TagActions.tsx:59](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TagActions/TagActions.tsx#L59)
+=======
+Defined in: [src/components/TagActions/TagActions.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L59)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -70,4 +90,8 @@ Defined in: [src/components/TagActions/TagActions.tsx:59](https://github.com/abh
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
+<<<<<<< HEAD
 Defined in: [src/components/TagActions/TagActions.tsx:61](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/TagActions/TagActions.tsx#L61)
+=======
+Defined in: [src/components/TagActions/TagActions.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L61)
+>>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84

@@ -362,10 +362,10 @@ function AddMember(): JSX.Element {
                     <TableRow>
                       <StyledTableCell>#</StyledTableCell>
                       <StyledTableCell align="center">
-                        {translateAddMember('profile')}
+                        {translateOrgPeople('profile')}
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        {translateAddMember('user')}
+                        {translateOrgPeople('user')}
                       </StyledTableCell>
                       <StyledTableCell align="center">
                         {translateAddMember('addMember')}
