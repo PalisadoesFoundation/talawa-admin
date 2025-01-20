@@ -379,7 +379,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledTimes(2);
   });
 
-  test('Displays error when user is already a member', async () => {
+  it('Displays error when user is already a member', async () => {
     const errorProps = { ...props, id: '3' }; // Using organizationId '3'
 
     render(
@@ -408,7 +408,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     });
   });
 
-  test('Displays generic error when a different error occurs', async () => {
+  it('Displays generic error when a different error occurs', async () => {
     const errorProps = { ...props, id: '4' }; // Using organizationId '4'
 
     render(
