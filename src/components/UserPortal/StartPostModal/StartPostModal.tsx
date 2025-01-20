@@ -136,7 +136,7 @@ const startPostModal = ({
         closeButton
         data-testid="modalHeader"
       >
-        <Modal.Title className="text-white">
+        <Modal.Title>
           <span className="d-flex gap-2 align-items-center">
             <span className={styles.userImageUserPost}>
               <Image

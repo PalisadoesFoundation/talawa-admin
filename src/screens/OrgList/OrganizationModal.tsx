@@ -308,7 +308,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
-              /* istanbul ignore else */
+
               if (file)
                 setFormState({
                   ...formState,

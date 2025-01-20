@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L39)
+Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L41)
 
 PromotedPost component displays a card representing promoted content.
 
@@ -42,5 +42,7 @@ class (e.g., .addButton) is now applied.
 - **Ensures consistent styling across components.
 
 ### Global CSS Classes used:
+- `.cardHeaderPromotedPost`
+- `.imageContainerPromotedPost`
 
 For more details on the reusable classes, refer to the global CSS file.

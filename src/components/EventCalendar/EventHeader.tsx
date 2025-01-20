@@ -117,7 +117,6 @@ function eventHeader({
         <div className={styles.btnsBlock}>
           <div className={styles.selectTypeEventHeader}>
             <Button
-              variant="success"
               className={styles.dropdown}
               onClick={showInviteModal}
               data-testid="createEventModalBtn"

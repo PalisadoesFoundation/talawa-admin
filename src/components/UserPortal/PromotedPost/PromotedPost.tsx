@@ -33,6 +33,8 @@ interface InterfacePostCardProps {
  * - **Ensures consistent styling across components.
  *
  * ### Global CSS Classes used:
+ * - `.cardHeaderPromotedPost`
+ * - `.imageContainerPromotedPost`
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
@@ -58,6 +60,7 @@ export default function promotedPost(
           {props.image && (
             <img
               src={props.image}
+              alt={`Promoted content: ${props.title}`}
               className={styles.imageContainerPromotedPost}
             />
           )}
