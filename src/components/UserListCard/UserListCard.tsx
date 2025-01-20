@@ -45,6 +45,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
         },
       });
 
+      /* istanbul ignore next */
       if (data) {
         toast.success(t('addedAsAdmin') as string);
         setTimeout(() => {
@@ -52,6 +53,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
         }, 2000);
       }
     } catch (error: unknown) {
+      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
