@@ -147,14 +147,23 @@ def check_files(
 def main():
     """Main function to run the CSS check.
 
-    This function serves as the entry point to run the CSS check, processing the
-    necessary files and directories, and printing the violations found.
+    This function serves as the entry point to run the CSS check. It processes
+    directories and files, checks for CSS violations, and prints the results.
 
     Args:
-        None: This function does not take any arguments.
+        None: This function does not directly accept arguments but uses argparse
+        to handle command-line inputs.
+
+    Command-line Arguments:
+        --directories: List of directories or files to check for CSS violations.
+        --exclude_files: Specific files to exclude from analysis.
+        --exclude_directories: Directories to exclude from analysis.
+        --allowed_css_patterns: Allowed CSS file patterns.
+        --show_success: Flag to show successful CSS imports.
 
     Returns:
-        None: This function does not return any value but prints the violations.
+        None: This function does not return any value. It prints the results
+        and exits with a code indicating success (0) or failure (1).
     """
     parser = argparse.ArgumentParser(
         description="Check for CSS violations in TypeScript files."
