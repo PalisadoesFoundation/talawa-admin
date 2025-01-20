@@ -18,7 +18,8 @@ import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from '../../../style/app.module.css';
-
+import type { Chat } from 'screens/UserPortal/Chat/Chat';
+import { errorHandler } from 'utils/errorHandler';
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
@@ -29,6 +30,7 @@ interface InterfaceCreateDirectChatProps {
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
+  chats: Chat[];
 }
 
 /**
@@ -61,6 +63,7 @@ export default function createDirectChatModal({
   toggleCreateDirectChatModal,
   createDirectChatModalisOpen,
   chatsListRefetch,
+  chats,
 }: InterfaceCreateDirectChatProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
@@ -74,15 +77,27 @@ export default function createDirectChatModal({
   const [createChat] = useMutation(CREATE_CHAT);
 
   const handleCreateDirectChat = async (id: string): Promise<void> => {
-    await createChat({
-      variables: {
-        organizationId,
-        userIds: [userId, id],
-        isGroup: false,
-      },
+    let chatExists = false;
+    chats.forEach((chat) => {
+      if (chat.users[0]._id === id || chat.users[1]._id === id)
+        chatExists = true;
     });
-    await chatsListRefetch();
-    toggleCreateDirectChatModal();
+    if (chatExists) {
+      errorHandler(
+        t,
+        new Error('Conversation with the selected user already exists!'),
+      );
+    } else {
+      await createChat({
+        variables: {
+          organizationId,
+          userIds: [userId, id],
+          isGroup: false,
+        },
+      });
+      await chatsListRefetch();
+      toggleCreateDirectChatModal();
+    }
   };
 
   const {
