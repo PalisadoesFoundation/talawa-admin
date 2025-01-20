@@ -1,5 +1,11 @@
 import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -31,6 +37,7 @@ jest.mock('react-toastify', () => ({
 }));
 
 const MOCKS = [
+  // Successful membership request
   {
     request: {
       query: SEND_MEMBERSHIP_REQUEST,
@@ -53,6 +60,7 @@ const MOCKS = [
       },
     },
   },
+  // Successful public organization join
   {
     request: {
       query: JOIN_PUBLIC_ORGANIZATION,
@@ -68,6 +76,27 @@ const MOCKS = [
       },
     },
   },
+  // Error: User is already a member
+  {
+    request: {
+      query: SEND_MEMBERSHIP_REQUEST,
+      variables: {
+        organizationId: '3', // A different org ID to test error handling
+      },
+    },
+    error: new Error('User is already a member'),
+  },
+  // Error: Generic error occurred
+  {
+    request: {
+      query: SEND_MEMBERSHIP_REQUEST,
+      variables: {
+        organizationId: '4', // Another org ID to test generic errors
+      },
+    },
+    error: new Error('Some unexpected error occurred'),
+  },
+  // User joined organizations
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS,
@@ -91,6 +120,7 @@ const MOCKS = [
       },
     },
   },
+  // Organization connection data
   {
     request: {
       query: USER_ORGANIZATION_CONNECTION,
@@ -314,6 +344,64 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     await wait();
 
     expect(toast.success).toHaveBeenCalledTimes(2);
+  });
+
+  test('Displays error when user is already a member', async () => {
+    const errorProps = { ...props, id: '3' }; // Using organizationId '3'
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationCard {...errorProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to render
+    await waitFor(() =>
+      expect(screen.getByTestId('joinBtn')).toBeInTheDocument(),
+    );
+
+    // Simulate clicking the join button
+    fireEvent.click(screen.getByTestId('joinBtn'));
+
+    // Wait for the error handling
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('AlreadyJoined'); // Verify toast error
+    });
+  });
+
+  test('Displays generic error when a different error occurs', async () => {
+    const errorProps = { ...props, id: '4' }; // Using organizationId '4'
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationCard {...errorProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to render
+    await waitFor(() =>
+      expect(screen.getByTestId('joinBtn')).toBeInTheDocument(),
+    );
+
+    // Simulate clicking the join button
+    fireEvent.click(screen.getByTestId('joinBtn'));
+
+    // Wait for the error handling
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('errorOccured'); // Verify generic error toast
+    });
   });
 
   test('withdraw membership request', async () => {

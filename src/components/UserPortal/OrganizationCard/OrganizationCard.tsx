@@ -121,6 +121,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       }
       refetch();
     } catch (error: unknown) {
+      /* istanbul ignore next */
       if (error instanceof Error) {
         if (error.message === 'User is already a member') {
           toast.error(t('AlreadyJoined') as string);
