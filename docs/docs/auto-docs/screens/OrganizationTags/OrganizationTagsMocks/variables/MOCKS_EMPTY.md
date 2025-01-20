@@ -2,17 +2,13 @@
 
 ***
 
-# Variable: MOCKS\_ERROR
+# Variable: MOCKS\_EMPTY
 
-> `const` **MOCKS\_ERROR**: `object`[]
+> `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L319)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L344)
 
 ## Type declaration
-
-### error
-
-> **error**: `Error`
 
 ### request
 
@@ -32,7 +28,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:319](https://
 
 #### request.variables.id
 
-> **id**: `string` = `'orgIdError'`
+> **id**: `string` = `'orgId'`
 
 #### request.variables.sortedBy
 
@@ -53,3 +49,15 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:319](https://
 #### request.variables.where.name.starts\_with
 
 > **starts\_with**: `string` = `''`
+
+### result
+
+> **result**: `object`
+
+#### result.data
+
+> **data**: `object`
+
+#### result.data.organizations
+
+> **organizations**: `object`[]

@@ -327,7 +327,6 @@
   display: inline-block;
   margin-top: 10px;
   margin-bottom: 10px;
-  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
 .dropdown:is(
@@ -339,8 +338,8 @@
     :disabled,
     :checked
   ) {
-  background-color: transparent !important;
-  border: 1px solid var(--brown-color);
+  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--brown-color) !important;
   color: var(--brown-color) !important;
 }
 
@@ -499,7 +498,11 @@
 }
 
 .inputField:focus {
-  box-shadow: 0 0 0 0.25rem var(--light-blue);
+  border: 0.1px solid var(--dimp-white) !important;
+  background-color: var(--bs-white) !important;
+  box-shadow: 4px 4px 8px var(--black-shadow-color);
+  outline: none;
+  transition: box-shadow 0.2s ease;
 }
 
 .inputFieldModal {
@@ -515,8 +518,8 @@
 
 .searchButton {
   margin-bottom: 10px;
-  background-color: var(--search-button-bg);
-  border-color: var(--search-button-bg);
+  background-color: var(--search-button-bg) !important;
+  border-color: var(--search-button-bg) !important;
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -524,17 +527,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .searchButton:hover {
-  background-color: var(--search-button-hover-bg, var(--light-blue-color));
-  border-color: var(--search-button-hover-bg, var(--light-blue-color));
+  background-color: var(--search-button-bg) !important;
+  border-color: var(--search-button-bg) !important;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .searchButton:active {
-  transform: scale(0.95);
-  background-color: var(--search-button-hover-bg, #286fe0) !important;
-  border-color: transparent !important;
+  background-color: var(--search-button-bg) !important;
+  border-color: var(--search-button-bg) !important;
+  transform: scale(0.98);
+}
+
+.searchButton:focus {
+  outline: none !important;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
 }
 
 .addButton {
