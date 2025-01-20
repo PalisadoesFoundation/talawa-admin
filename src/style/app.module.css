@@ -1690,14 +1690,13 @@ hr {
 }
 
 .btnsBlock button:hover {
-  box-shadow: var(--input-shadow-color);
+  box-shadow: var(--card-shadow);
   background-color: var(--bs-white);
 }
 .btnsBlock button:focus {
-  box-shadow: var(--input-shadow-color);
+  box-shadow: var(--card-shadow);
   background-color: var(--bs-white);
 }
-
 @media (max-width: 1020px) {
   .btnsContainer .btnsBlock button {
     margin-left: 0;
