@@ -8,7 +8,7 @@ import {
   REMOVE_CUSTOM_FIELD,
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_CUSTOM_FIELDS } from 'GraphQl/Queries/Queries';
-import styles from './OrgProfileFieldSettings.module.css';
+import styles from '../../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import EditOrgCustomFieldDropDown from 'components/EditCustomFieldDropDown/EditCustomFieldDropDown';
@@ -138,7 +138,9 @@ const OrgProfileFieldSettings = (): JSX.Element => {
             {/* Form to add a new custom field */}
             <form>
               <div>
-                <Form.Label>{t('customFieldName')}</Form.Label>
+                <Form.Label className="fw-normal">
+                  {t('customFieldName')}
+                </Form.Label>
                 <Form.Control
                   className="mb-3"
                   placeholder={t('enterCustomFieldName')}
@@ -162,7 +164,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
               </div>
 
               <div className={styles.textBox}>
-                <Form.Label className={'text-secondary fw-bold'}>
+                <Form.Label className={'fw-normal text-secondary'}>
                   {t('customFieldType')}
                 </Form.Label>
                 <EditOrgCustomFieldDropDown

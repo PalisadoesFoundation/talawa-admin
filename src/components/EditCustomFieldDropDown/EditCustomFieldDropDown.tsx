@@ -44,11 +44,11 @@ const EditOrgCustomFieldDropDown = ({
   return (
     <Dropdown
       title="Edit Custom Field"
-      className={`${parentContainerStyle ?? ''}`}
+      className={`${parentContainerStyle ?? ''} customDropdown`}
     >
       <Dropdown.Toggle
         variant="outline-success"
-        className={`${btnStyle ?? ''}`}
+        className={`${btnStyle ?? ''} customDropdownToggle`}
         data-testid="toggleBtn"
       >
         {customFieldData.type ? t(customFieldData.type) : tCommon('none')}
@@ -57,7 +57,7 @@ const EditOrgCustomFieldDropDown = ({
         {availableFieldTypes.map((customFieldType, index: number) => (
           <Dropdown.Item
             key={`dropdown-item-${index}`}
-            className="dropdown-item"
+            className="dropdown-item customDropdownItem"
             data-testid={`dropdown-btn-${index}`}
             onClick={(): void => {
               setCustomFieldData({

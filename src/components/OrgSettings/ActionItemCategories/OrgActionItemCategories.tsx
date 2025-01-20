@@ -52,6 +52,27 @@ const dataGridStyle = {
   '& .MuiDataGrid-main': {
     borderRadius: '0.5rem',
   },
+  '& .MuiDataGrid-row': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-cell:focus': {
+    outline: 'none',
+  },
+  '& .MuiDataGrid-cell': {
+    borderBottom: 'none',
+  },
+  '& .MuiDataGrid-columnSeparator--resizable:hover': {
+    color: 'var(--blue-subtle)',
+  },
+  '& .MuiChip-label': {
+    color: 'var(--blue-subtle)',
+  },
+  '& .MuiChip-icon': {
+    color: 'var(--blue-subtle) !important',
+  },
+  '& .MuiChip-root': {
+    borderColor: 'var(--blue-subtle)',
+  },
 };
 
 /**
@@ -182,8 +203,9 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className="d-flex justify-content-center fw-normal"
             data-testid="categoryName"
+            style={{ color: 'var(--blue-subtle)' }}
           >
             {params.row.name}
           </div>
@@ -255,7 +277,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
           <Button
             variant="success"
             size="sm"
-            className="me-2 rounded"
+            className="me-2 rounded createSettingBtn"
             data-testid={'editCategoryBtn' + params.row.id}
             onClick={() =>
               handleOpenModal(
@@ -264,7 +286,11 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               )
             }
           >
-            <i className="fa fa-edit" />
+            <i
+              className="fa fa-edit"
+              style={{ paddingRight: '5px', color: 'var(--grey-dark)' }}
+            />
+            <span style={{ color: 'var(--grey-dark)' }}>Edit</span>
           </Button>
         );
       },
@@ -353,6 +379,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               onClick={() => handleOpenModal(null, 'create')}
               style={{ marginTop: '11px' }}
               data-testid="createActionItemCategoryBtn"
+              className="createSettingBtn"
             >
               <i className={'fa fa-plus me-2'} />
               {tCommon('create')}
@@ -374,7 +401,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
+        sx={{ ...dataGridStyle, '&, [class^=MuiDataGrid]': { border: 'none' } }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}

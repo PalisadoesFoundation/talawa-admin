@@ -143,14 +143,14 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     <Modal className={styles.createModal} show={isOpen} onHide={hide}>
       <Modal.Header>
         <p className={`${styles.titlemodal}`}>{t('categoryDetails')}</p>
-        <Button
+        {/* <Button
           variant="danger"
           onClick={hide}
           className={styles.modalCloseBtn}
           data-testid="actionItemCategoryModalCloseBtn"
         >
           <i className="fa fa-times"></i>
-        </Button>
+        </Button> */}
       </Modal.Header>
       <Modal.Body>
         <Form
@@ -171,6 +171,22 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
                 setFormState({ ...formState, name: e.target.value })
               }
               required
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '&:hover fieldset': {
+                    borderColor: 'var(--blue-search-bg)',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'var(--blue-search-bg)',
+                  },
+                },
+                '& .MuiInputLabel-root': {
+                  color: 'gray',
+                },
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: 'var(--blue-search-bg)',
+                },
+              }}
             />
           </FormControl>
           <Form.Group className="d-flex flex-column mb-4">
@@ -189,16 +205,30 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
             />
           </Form.Group>
 
-          <Button
-            type="submit"
-            className={styles.greenregbtn}
-            value="creatActionItemCategory"
-            data-testid="formSubmitButton"
-          >
-            {mode === 'create'
-              ? tCommon('create')
-              : t('updateActionItemCategory')}
-          </Button>
+          <div className={styles.modalButtonContainer}>
+            <Button
+              variant="danger"
+              onClick={hide}
+              className={styles.modalCloseBtn}
+              data-testid="actionItemCategoryModalCloseBtn"
+            >
+              <i className="fa fa-times"></i>
+              <span style={{ marginLeft: '5px' }}>Close</span>
+            </Button>
+            <Button
+              type="submit"
+              className={styles.greenregbtn}
+              value="createActionItemCategory"
+              data-testid="formSubmitButton"
+            >
+              <i className="fas fa-check"></i>
+              <span style={{ marginLeft: '5px' }}>
+                {mode === 'create'
+                  ? tCommon('create')
+                  : t('updateActionItemCategory')}
+              </span>
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
     </Modal>

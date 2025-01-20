@@ -57,12 +57,12 @@ const ChangeLanguageDropDown = (
   return (
     <Dropdown
       title="Change Langauge"
-      className={`${props?.parentContainerStyle ?? ''}`}
+      className={`${props?.parentContainerStyle ?? ''} customDropdown`}
       data-testid="language-dropdown-container"
     >
       <Dropdown.Toggle
         variant="outline-success"
-        className={`${props?.btnStyle ?? ''}`}
+        className={`${props?.btnStyle ?? ''} customDropdownToggle`}
         data-testid="language-dropdown-btn"
       >
         {languages.map((language, index: number) => (
@@ -83,7 +83,7 @@ const ChangeLanguageDropDown = (
         {languages.map((language, index: number) => (
           <Dropdown.Item
             key={`dropdown-item-${index}`}
-            className={`dropdown-item`}
+            className={`dropdown-item customDropdownItem`}
             onClick={async (): Promise<void> => changeLanguage(language.code)}
             disabled={currentLanguageCode === language.code}
             data-testid={`change-language-btn-${language.code}`}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -9,7 +10,7 @@ import {
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
-import styles from './DeleteOrg.module.css';
+import styles from '../../../../style/app.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -96,10 +97,10 @@ function deleteOrg(): JSX.Element {
     <>
       {canDelete && (
         <Card className="rounded-4 shadow-sm mb-4 border border-light-subtle">
-          <div className={styles.cardHeader}>
+          <div className={styles.deleteOrgCardHeader}>
             <div className={styles.cardTitle}>{t('deleteOrganization')}</div>
           </div>
-          <Card.Body className={styles.cardBody}>
+          <Card.Body className={styles.deleteOrgCardBody}>
             <div className={styles.textBox}>{t('longDelOrgMsg')}</div>
             <Button
               variant="danger"
@@ -107,6 +108,7 @@ function deleteOrg(): JSX.Element {
               onClick={toggleDeleteModal}
               data-testid="openDeleteModalBtn"
             >
+              <DeleteIcon style={{ fontSize: '1rem' }} />
               {data && data.isSampleOrganization
                 ? t('deleteSampleOrganization')
                 : t('deleteOrganization')}
@@ -121,8 +123,8 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header className="bg-primary" closeButton>
-            <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
+          <Modal.Header className={styles.modalHeader}>
+            <h5 className=" fw-bold">{t('deleteOrganization')}</h5>
           </Modal.Header>
           <Modal.Body>{t('deleteMsg')}</Modal.Body>
           <Modal.Footer>
