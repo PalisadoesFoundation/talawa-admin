@@ -78,7 +78,7 @@
     'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
-    --bs-body-color 'Liberation Mono', 'Courier New', monospace;
+    --bs-body-color: 'Liberation Mono', 'Courier New', monospace;
   --bs-font-lato: 'Lato';
   --bs-gradient: linear-gradient(
     180deg,
