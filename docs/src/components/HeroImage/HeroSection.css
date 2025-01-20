@@ -1,0 +1,31 @@
+.heroBanner_qdFl {
+  background-color: transparent;
+}
+
+.header-image {
+  max-height: 60vh;
+  margin: auto;
+  padding: 0;
+}
+
+.Hero,
+.heroBanner_qdFl {
+  padding-bottom: 0 !important;
+}
+
+.hero-image-section {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+}
+
+.hero-image {
+  height: 100%;
+}
+
+@media (min-width: 480px) {
+  .hero-image-section {
+    min-height: 600px;
+    max-height: 950px;
+  }
+}

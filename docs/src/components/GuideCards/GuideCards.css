@@ -1,0 +1,85 @@
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 4rem;
+  padding: 20px;
+  height: fit-content;
+}
+
+.card {
+  background-color: var(--ifm-color-emphasis-100);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: left;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.guide-header {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.svg-icon {
+  width: 35px;
+  height: 24px;
+  fill: currentColor;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.card-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  margin: 0.5rem 0;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s;
+}
+
+.card-item:hover {
+  background-color: var(--ifm-color-emphasis-200);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.card h3 {
+  color: var(--secondary-blue-900);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  color: var(--primary-neutral-600);
+  line-height: 1.5;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  transform: translateY(-5px);
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    height: fit-content;
+  }
+
+  .card {
+    justify-content: center;
+    height: 300px;
+  }
+}

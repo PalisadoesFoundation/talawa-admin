@@ -25,7 +25,7 @@
   --ifm-color-emphasis-0: #fff;
   --ifm-color-primary: #1e56e3;
   --ifm-background-surface-color: var(--ifm-color-white);
-  --ifm-menu-color: var(--ifm-color-gray-600);
+  /* --ifm-menu-color: var(--ifm-color-gray-600); */
   --ifm-toc-link-color: var(--ifm-color-gray-600);
   --ifm-code-font-size: 95%;
   --ifm-toc-border-color: transparent;
@@ -46,7 +46,7 @@
     Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
-/* Dak mode css */
+/* Dark mode css */
 
 html[data-theme='dark'] {
   --ifm-background-color: #111927;
@@ -98,8 +98,7 @@ h1.docTitle_node_modules-\@docusaurus-theme-classic-src-theme-DocItem- {
 .menu__link,
 .menu * {
   line-height: 1.5;
-  font-size: 0.7rem;
-  padding-left: 0.5rem;
+  font-size: 0.72rem;
   padding-bottom: 0;
   text-transform: uppercase;
   font-weight: 700;
@@ -110,9 +109,39 @@ h1.docTitle_node_modules-\@docusaurus-theme-classic-src-theme-DocItem- {
   border-bottom: 1px solid var(--next-prev-border-color);
 }
 
-.menu__list ul {
-  margin-left: 15px;
-  margin-right: 15px;
+/* Target specifically the link text */
+.menu__link {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  line-height: 1.2 !important;
+  padding-right: 1rem !important;
+}
+
+/* Target the container of menu items */
+.menu__list-item {
+  width: 100% !important;
+  padding-right: 0 !important;
+}
+
+/* Ensure the menu itself has proper width */
+.menu__list {
+  width: 100% !important;
+}
+
+/* Target the entire menu container */
+.theme-doc-sidebar-menu {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+@media (min-width: 997px) {
+  .menu_SIkG {
+    flex-grow: 1;
+    padding: 1rem !important;
+  }
 }
 
 .markdown > h2 {
@@ -162,6 +191,14 @@ h1.docTitle_node_modules-\@docusaurus-theme-classic-src-theme-DocItem- {
 
 .dropdown__link {
   color: var(--ifm-navbar-link-color);
+}
+
+.markdown {
+  --ifm-h1-vertical-rhythm-top: 3;
+  --ifm-h2-vertical-rhythm-top: 4.5;
+  --ifm-h3-vertical-rhythm-top: 2.5;
+  --ifm-heading-vertical-rhythm-top: 1.25;
+  --ifm-h1-vertical-rhythm-bottom: 1.25;
 }
 
 .header-github-link:hover {
@@ -321,6 +358,22 @@ html[data-theme='dark'] .header-youtube-link:before {
   background: url(/img/icons/youtube-white.svg) no-repeat;
 }
 
+.markdown > button {
+  background: linear-gradient(90deg, #ff3600 0%, #ff8100 100%);
+  border: none;
+  border-radius: 5px;
+  padding: 16.8px 32px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.8s;
+  font-size: 16px;
+}
+
+.markdown > button:hover {
+  background: linear-gradient(90deg, #ff3600 30%, #ff8100 78%);
+}
+
 @media (max-width: 996px) {
   .navbar__item.github-button {
     display: none;
@@ -422,4 +475,16 @@ a:hover {
 /* Hide external link svg on Navbar */
 .iconExternalLink_nPIU {
   display: none !important;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hero__subtitle {
+  line-height: 1.4;
 }

@@ -8,7 +8,7 @@ Defined in: [src/utils/StaticMockLink.ts:157](https://github.com/PalisadoesFound
 
 ## Extends
 
-- `ApolloLink`
+- `unknown`
 
 ## Properties
 
