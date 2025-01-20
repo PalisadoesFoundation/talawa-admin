@@ -27,12 +27,6 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: gkbishnoi07/talawa-admin
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
