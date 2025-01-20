@@ -439,7 +439,8 @@
     "startDate": "प्रारंभ तिथि",
     "endDate": "समाप्ति तिथि",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "done": "पूर्ण"
+    "done": "पूर्ण",
+    "createChat": "चैट बनाएं"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -579,7 +580,8 @@
     "registerEvent": "कार्यक्रम के लिए पंजीकरण करें",
     "close": "बंद करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "done": "समाप्त"
+    "done": "समाप्त",
+    "createChat": "चैट बनाएं"
   },
   "funds": {
     "title": "फंड",
@@ -1050,7 +1052,9 @@
     "comments": "टिप्पणियाँ",
     "viewPost": "पोस्ट देखें",
     "editPost": "पोस्ट संपादित करें",
-    "postedOn": "{{date}} को पोस्ट किया गया"
+    "postedOn": "{{date}} को पोस्ट किया गया",
+    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
+    "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।"
   },
   "home": {
     "title": "पदों",
@@ -1081,6 +1085,17 @@
     "Admin": "व्यवस्थापक",
     "loading": "लोड हो रहा है",
     "noAttendees": "कोई प्रतिभागी नहीं मिला"
+  },
+  "eventRegistrant": {
+    "sort": "छांटें",
+    "allRegistrants": "सभी पंजीकृत व्यक्ति",
+    "eventRegistrantsTable": "इवेंट पंजीकृत व्यक्ति तालिका",
+    "serialNumber": "सिरियल नंबर",
+    "registrant": "पंजीकृत व्यक्ति",
+    "registeredAt": "पंजीकरण तिथि",
+    "createdAt": "निर्माण तिथि",
+    "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
+    "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला"
   },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",
@@ -1204,7 +1219,8 @@
     "eventDescription": "कार्यक्रम विवरण",
     "eventLocation": "कार्यक्रम स्थान",
     "startDate": "प्रारंभ तिथि",
-    "endDate": "समाप्ति तिथि"
+    "endDate": "समाप्ति तिथि",
+    "createChat": "चैट बनाएं"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1248,14 +1264,23 @@
     "endOfResults": "परिणाम समाप्त"
   },
   "userChat": {
+    "title": "चैट्स",
+    "add": "जोड़ें",
     "chat": "बात करना",
     "contacts": "संपर्क",
     "search": "खोज",
-    "messages": "संदेश"
+    "messages": "संदेश",
+    "create": "बनाएं",
+    "newChat": "नई चैट",
+    "newGroupChat": "नया समूह चैट",
+    "groupInfo": "समूह जानकारी",
+    "members": "सदस्यों",
+    "addMembers": "सदस्य जोड़ें"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
-    "sendMessage": "मेसेज भेजें"
+    "sendMessage": "मेसेज भेजें",
+    "reply": "जवाब"
   },
   "orgProfileField": {
     "loading": "लोड हो रहा है...",

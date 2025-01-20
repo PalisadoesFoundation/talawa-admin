@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 
-import styles from './OrganizationAgendaCategory.module.css';
+import styles from 'style/app.module.css';
 
 /**
  * InterfaceFormStateType is an object containing the form state
@@ -49,12 +49,14 @@ const AgendaCategoryUpdateModal: React.FC<
 }) => {
   return (
     <Modal
-      className={styles.AgendaCategoryModal}
+      className={styles.campaignModal}
       show={agendaCategoryUpdateModalIsOpen}
       onHide={hideUpdateModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('updateAgendaCategory')}</p>
+        <p className={styles.titlemodalOrganizationEvents}>
+          {t('updateAgendaCategory')}
+        </p>
         <Button
           onClick={hideUpdateModal}
           data-testid="updateAgendaCategoryModalCloseBtn"

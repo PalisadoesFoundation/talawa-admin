@@ -7,7 +7,7 @@ import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from './TagActions.module.css';
+import styles from '../../style/app.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
@@ -32,6 +32,26 @@ interface InterfaceUserTagsAncestorData {
 
 /**
  * Props for the `AssignToTags` component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.removeButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 export interface InterfaceTagActionsProps {
   tagActionsModalIsOpen: boolean;
@@ -82,7 +102,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           organizations: [
@@ -106,7 +126,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const userTagsList =
     orgUserTagsData?.organizations[0]?.userTags.edges.map(
       (edge) => edge.node,
-    ) ?? /* istanbul ignore next */ [];
+    ) ?? [];
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -129,7 +149,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   useEffect(() => {
     const newCheckedTags = new Set(checkedTags);
     const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
-    /* istanbul ignore next */
+
     addAncestorTagsData.forEach(
       (ancestorTag: InterfaceUserTagsAncestorData) => {
         const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
@@ -148,7 +168,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   useEffect(() => {
     const newCheckedTags = new Set(checkedTags);
     const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
-    /* istanbul ignore next */
+
     removeAncestorTagsData.forEach(
       (ancestorTag: InterfaceUserTagsAncestorData) => {
         const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
@@ -178,7 +198,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const deSelectTag = (tag: InterfaceTagData): void => {
     if (!selectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
-      /* istanbul ignore next */
       return;
     }
 
@@ -240,7 +259,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         hideTagActionsModal();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -270,7 +288,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={styles.modalHeader}
           data-testid="modalOrganizationHeader"
           closeButton
         >
@@ -312,7 +330,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               <Form.Control
                 type="text"
                 id="userName"
-                className="bg-light"
+                className={styles.inputField}
                 placeholder={tCommon('searchByName')}
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
                 data-testid="searchByName"
@@ -388,13 +406,18 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
           <Modal.Footer>
             <Button
-              variant="secondary"
+              className={`btn btn-danger ${styles.removeButton}`}
               onClick={(): void => hideTagActionsModal()}
               data-testid="closeTagActionsModalBtn"
             >
               {tCommon('cancel')}
             </Button>
-            <Button type="submit" value="add" data-testid="tagActionSubmitBtn">
+            <Button
+              type="submit"
+              value="add"
+              data-testid="tagActionSubmitBtn"
+              className={`btn ${styles.addButton}`}
+            >
               {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
             </Button>
           </Modal.Footer>

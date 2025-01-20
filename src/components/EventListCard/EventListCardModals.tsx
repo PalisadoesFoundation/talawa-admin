@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal, Popover } from 'react-bootstrap';
-import styles from './EventListCard.module.css';
+import styles from '../../style/app.module.css';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -41,6 +41,27 @@ enum Role {
  * Converts a time string to a Dayjs object representing the current date with the specified time.
  * @param time - A string representing the time in 'HH:mm:ss' format.
  * @returns A Dayjs object with the current date and specified time.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.switch`
+ * - `.addButton`
+ * - `.removeButton`
+ * - `.modalHeader`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -401,11 +422,13 @@ function EventListCardModals({
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <p className={styles.preview}>{t('eventTitle')}</p>
+            <p className={styles.previewEventListCardModals}>
+              {t('eventTitle')}
+            </p>
             <Form.Control
               type="title"
               id="eventitle"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               autoComplete="off"
               data-testid="updateTitle"
               required
@@ -425,11 +448,13 @@ function EventListCardModals({
                 eventListCardProps.userRole === Role.USER
               }
             />
-            <p className={styles.preview}>{tCommon('description')}</p>
+            <p className={styles.previewEventListCardModals}>
+              {tCommon('description')}
+            </p>
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               autoComplete="off"
               data-testid="updateDescription"
               required
@@ -449,11 +474,13 @@ function EventListCardModals({
                 eventListCardProps.userRole === Role.USER
               }
             />
-            <p className={styles.preview}>{tCommon('location')}</p>
+            <p className={styles.previewEventListCardModals}>
+              {tCommon('location')}
+            </p>
             <Form.Control
               type="text"
               id="eventLocation"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               autoComplete="off"
               data-testid="updateLocation"
               required
@@ -555,13 +582,14 @@ function EventListCardModals({
               </div>
             )}
             <div className={styles.checkboxContainer}>
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
+              <div className={styles.checkboxdivEventListCardModals}>
+                <div className={styles.dispflexEventListCardModals}>
                   <label htmlFor="allday">{t('allDay')}?</label>
                   <Form.Switch
                     id="allday"
                     type="checkbox"
                     data-testid="updateAllDay"
+                    className={styles.switch}
                     checked={alldaychecked}
                     onChange={(): void => {
                       setAllDayChecked(!alldaychecked);
@@ -572,12 +600,13 @@ function EventListCardModals({
                     }
                   />
                 </div>
-                <div className={styles.dispflex}>
+                <div className={styles.dispflexEventListCardModals}>
                   <label htmlFor="recurring">{t('recurringEvent')}:</label>
                   <Form.Switch
                     id="recurring"
                     type="checkbox"
                     data-testid="updateRecurring"
+                    className={styles.switch}
                     checked={recurringchecked}
                     onChange={(): void => {
                       setRecurringChecked(!recurringchecked);
@@ -589,13 +618,14 @@ function EventListCardModals({
                   />
                 </div>
               </div>
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
+              <div className={styles.checkboxdivEventListCardModals}>
+                <div className={styles.dispflexEventListCardModals}>
                   <label htmlFor="ispublic">{t('isPublic')}?</label>
                   <Form.Switch
                     id="ispublic"
                     type="checkbox"
                     data-testid="updateIsPublic"
+                    className={styles.switch}
                     checked={publicchecked}
                     onChange={(): void => {
                       setPublicChecked(!publicchecked);
@@ -606,12 +636,13 @@ function EventListCardModals({
                     }
                   />
                 </div>
-                <div className={styles.dispflex}>
+                <div className={styles.dispflexEventListCardModals}>
                   <label htmlFor="registrable">{t('isRegistrable')}?</label>
                   <Form.Switch
                     id="registrable"
                     type="checkbox"
                     data-testid="updateRegistrable"
+                    className={styles.switch}
                     checked={registrablechecked}
                     onChange={(): void => {
                       setRegistrableChecked(!registrablechecked);
@@ -645,7 +676,7 @@ function EventListCardModals({
               variant="success"
               onClick={openEventDashboard}
               data-testid="showEventDashboardBtn"
-              className={styles.icon}
+              className={styles.addButton}
             >
               {' '}
               Show Event Dashboard{' '}
@@ -655,7 +686,7 @@ function EventListCardModals({
             eventListCardProps.creator?._id === userId) && (
             <Button
               variant="success"
-              className={styles.icon}
+              className={styles.addButton}
               data-testid="updateEventBtn"
               onClick={handleEventUpdate}
             >
@@ -667,7 +698,7 @@ function EventListCardModals({
             <Button
               variant="danger"
               data-testid="deleteEventModalBtn"
-              className={styles.icon}
+              className={styles.removeButton}
               onClick={toggleDeleteModal}
             >
               {t('deleteEvent')}
@@ -676,16 +707,12 @@ function EventListCardModals({
           {eventListCardProps.userRole === Role.USER &&
             !(eventListCardProps.creator?._id === userId) &&
             (isRegistered ? (
-              <Button
-                className={styles.customButton}
-                variant="success"
-                disabled
-              >
+              <Button className={styles.addButton} variant="success" disabled>
                 {t('alreadyRegistered')}
               </Button>
             ) : (
               <Button
-                className={styles.customButton}
+                className={styles.addButton}
                 variant="success"
                 onClick={registerEventHandler}
                 data-testid="registerEventBtn"
@@ -706,7 +733,7 @@ function EventListCardModals({
         keyboard={false}
         centered
       >
-        <Modal.Header closeButton className="bg-primary">
+        <Modal.Header closeButton className={`${styles.modalHeader}`}>
           <Modal.Title
             className="text-white"
             id={`recurringEventUpdateOptionsLabel${eventListCardProps.id}`}
@@ -731,6 +758,7 @@ function EventListCardModals({
                   }
                   defaultChecked={option === recurringEventUpdateType}
                   data-testid={`update-${option}`}
+                  className={styles.switch}
                 />
               </div>
             ))}
@@ -739,7 +767,7 @@ function EventListCardModals({
         <Modal.Footer>
           <Button
             type="button"
-            className="btn btn-danger"
+            className={`btn btn-danger ${styles.removeButton}`}
             data-dismiss="modal"
             onClick={toggleRecurringEventUpdateModal}
             data-testid="eventUpdateOptionsModalCloseBtn"
@@ -748,7 +776,7 @@ function EventListCardModals({
           </Button>
           <Button
             type="button"
-            className="btn btn-success"
+            className={`btn ${styles.addButton}`}
             onClick={updateEventHandler}
             data-testid="recurringEventUpdateOptionSubmitBtn"
           >
@@ -767,7 +795,7 @@ function EventListCardModals({
         keyboard={false}
         centered
       >
-        <Modal.Header closeButton className="bg-primary">
+        <Modal.Header closeButton className={`${styles.modalHeader}`}>
           <Modal.Title
             className="text-white"
             id={`deleteEventModalLabel${eventListCardProps.id}`}
@@ -795,6 +823,7 @@ function EventListCardModals({
                       }
                       defaultChecked={option === recurringEventDeleteType}
                       data-testid={`delete-${option}`}
+                      className={styles.switch}
                     />
                   </div>
                 ))}
@@ -805,7 +834,7 @@ function EventListCardModals({
         <Modal.Footer>
           <Button
             type="button"
-            className="btn btn-danger"
+            className={`btn btn-danger ${styles.removeButton}`}
             data-dismiss="modal"
             onClick={toggleDeleteModal}
             data-testid="eventDeleteModalCloseBtn"
@@ -814,7 +843,7 @@ function EventListCardModals({
           </Button>
           <Button
             type="button"
-            className="btn btn-success"
+            className={`btn ${styles.addButton}`}
             onClick={deleteEventHandler}
             data-testid="deleteEventBtn"
           >

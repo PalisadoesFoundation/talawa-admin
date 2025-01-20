@@ -1,0 +1,19 @@
+[**talawa-admin**](../../../../../README.md)
+
+***
+
+# Function: default()
+
+> **default**(`props`): `JSX.Element`
+
+Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:100](https://github.com/MayankJha014/talawa-admin/blob/0dd35cc200a4ed7562fa81ab87ec9b2a6facd18b/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L100)
+
+## Parameters
+
+### props
+
+`InterfaceChatRoomProps`
+
+## Returns
+
+`JSX.Element`

@@ -1,0 +1,27 @@
+[**talawa-admin**](../../../../../README.md)
+
+***
+
+# Function: default()
+
+> **default**(`props`): `Element`
+
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.tsx:20](https://github.com/MayankJha014/talawa-admin/blob/0dd35cc200a4ed7562fa81ab87ec9b2a6facd18b/src/components/EventManagement/Dashboard/EventDashboard.tsx#L20)
+
+Component that displays event details.
+
+## Parameters
+
+### props
+
+The props for the EventDashboard component.
+
+#### eventId
+
+`string`
+
+## Returns
+
+`Element`
+
+The rendered EventDashboard component.

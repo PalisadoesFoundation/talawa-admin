@@ -5,7 +5,7 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
-import styles from './OrganizationFundCampaign.module.css';
+import styles from '../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -24,6 +24,23 @@ import type { InterfaceCampaignInfo } from 'utils/interfaces';
 
 /**
  * Props for the CampaignModal component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 export interface InterfaceCampaignModal {
   isOpen: boolean;
@@ -127,7 +144,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
    * @param e - The form event.
    * @returns Promise<void>
    */
-  /*istanbul ignore next*/
+
   const updateCampaignHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -263,15 +280,12 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                   value={campaignCurrency}
                   label={t('currency')}
                   data-testid="currencySelect"
-                  onChange={
-                    /*istanbul ignore next*/
-                    (e) => {
-                      setFormState({
-                        ...formState,
-                        campaignCurrency: e.target.value,
-                      });
-                    }
-                  }
+                  onChange={(e) => {
+                    setFormState({
+                      ...formState,
+                      campaignCurrency: e.target.value,
+                    });
+                  }}
                 >
                   {currencyOptions.map((currency) => (
                     <MenuItem key={currency.label} value={currency.value}>
@@ -301,7 +315,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             {/* Button to create the campaign */}
             <Button
               type="submit"
-              className={styles.greenregbtn}
+              className={styles.addButton}
               data-testid="submitCampaignBtn"
             >
               {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}

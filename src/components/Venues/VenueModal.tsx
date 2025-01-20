@@ -35,6 +35,23 @@ export interface InterfaceVenueModalProps {
  * @param edit - A flag indicating if the modal is in edit mode. If true, the component will update an existing venue; if false, it will create a new one.
  *
  * @returns The rendered modal component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const VenueModal = ({
   show,
@@ -98,7 +115,6 @@ const VenueModal = ({
           ...(edit && { id: venueData?._id }),
         },
       });
-      /* istanbul ignore next */
       if (data) {
         toast.success(
           edit ? (t('venueUpdated') as string) : (t('venueAdded') as string),
@@ -114,7 +130,6 @@ const VenueModal = ({
         setVenueImage(false);
       }
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   }, [
@@ -136,7 +151,6 @@ const VenueModal = ({
   const clearImageInput = useCallback(() => {
     setFormState((prevState) => ({ ...prevState, imageURL: '' }));
     setVenueImage(false);
-    /* istanbul ignore next */
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -184,6 +198,7 @@ const VenueModal = ({
                 name: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <label htmlFor="venuedescrip">{tCommon('description')}</label>
           <Form.Control
@@ -201,6 +216,7 @@ const VenueModal = ({
                 description: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <label htmlFor="venuecapacity">{t('capacity')}</label>
           <Form.Control
@@ -216,6 +232,7 @@ const VenueModal = ({
                 capacity: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <Form.Label htmlFor="venueImg">{t('image')}</Form.Label>
           <Form.Control
@@ -236,7 +253,6 @@ const VenueModal = ({
               }));
               setVenueImage(true);
               const file = e.target.files?.[0];
-              /* istanbul ignore next */
               if (file) {
                 setFormState({
                   ...formState,
@@ -244,9 +260,10 @@ const VenueModal = ({
                 });
               }
             }}
+            className={styles.inputField}
           />
           {venueImage && (
-            <div className={styles.preview}>
+            <div className={styles.previewVenueModal}>
               <img src={imageURL} alt="Venue Image Preview" />
               <button
                 className={styles.closeButtonP}

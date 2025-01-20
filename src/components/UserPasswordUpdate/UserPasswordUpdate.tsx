@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
-import styles from './UserPasswordUpdate.module.css';
+import styles from '../../style/app.module.css';
 import { toast } from 'react-toastify';
 import { Form } from 'react-bootstrap';
 
@@ -93,7 +93,7 @@ const UserUpdate: React.FC<
       <div id="userupdate" className={styles.userupdatediv}>
         <form>
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
-          <div className={styles.dispflex}>
+          <div className={styles.dispflexUserPasswordUpdate}>
             <div>
               <label>{t('previousPassword')}</label>
               <Form.Control
@@ -112,7 +112,7 @@ const UserUpdate: React.FC<
               />
             </div>
           </div>
-          <div className={styles.dispflex}>
+          <div className={styles.dispflexUserPasswordUpdate}>
             <div>
               <label>{t('newPassword')}</label>
               <Form.Control
@@ -131,7 +131,7 @@ const UserUpdate: React.FC<
               />
             </div>
           </div>
-          <div className={styles.dispflex}>
+          <div className={styles.dispflexUserPasswordUpdate}>
             <div>
               <label>{t('confirmNewPassword')}</label>
               <Form.Control

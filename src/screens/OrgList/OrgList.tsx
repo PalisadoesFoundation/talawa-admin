@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import SortIcon from '@mui/icons-material/Sort';
 import {
   CREATE_ORGANIZATION_MUTATION,
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
@@ -13,7 +12,7 @@ import {
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
@@ -27,9 +26,29 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-// import styles from '../../style/app.module.css';
 import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
+import SortingButton from 'subComponents/SortingButton';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -49,8 +68,10 @@ function orgList(): JSX.Element {
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
+
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
+
   document.title = t('title');
 
   const perPageResult = 8;
@@ -59,6 +80,7 @@ function orgList(): JSX.Element {
     option: '',
     selectedOption: t('sort'),
   });
+
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -82,9 +104,7 @@ function orgList(): JSX.Element {
   });
 
   const toggleModal = (): void => setShowModal(!showModal);
-
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
-
   const [createSampleOrganization] = useMutation(
     CREATE_SAMPLE_ORGANIZATION_MUTATION,
   );
@@ -233,6 +253,8 @@ function orgList(): JSX.Element {
   };
 
   if (errorList || errorUser) {
+    errorHandler(t, errorList || errorUser);
+    localStorage.clear();
     window.location.assign('/');
   }
 
@@ -276,7 +298,6 @@ function orgList(): JSX.Element {
   };
 
   const loadMoreOrganizations = (): void => {
-    console.log('loadMoreOrganizations');
     setIsLoadingMore(true);
     fetchMore({
       variables: {
@@ -311,14 +332,12 @@ function orgList(): JSX.Element {
     });
   };
 
-  const handleSorting = (option: string): void => {
+  const handleSortChange = (value: string): void => {
     setSortingState({
-      option,
-      selectedOption: t(option),
+      option: value,
+      selectedOption: t(value),
     });
-
-    const orderBy = option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
-
+    const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
     refetchOrgs({
       first: perPageResult,
       skip: 0,
@@ -335,7 +354,7 @@ function orgList(): JSX.Element {
           <Form.Control
             type="name"
             id="searchOrgname"
-            className={'bg-white'}
+            className={styles.inputField}
             placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
@@ -345,7 +364,7 @@ function orgList(): JSX.Element {
           <Button
             tabIndex={-1}
             // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-            className={styles.searchButtonOrgList}
+            className={styles.searchButton}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
@@ -353,38 +372,17 @@ function orgList(): JSX.Element {
           </Button>
         </div>
         <div className={styles.btnsBlockOrgList}>
-          <div className="d-flex">
-            <Dropdown
-              aria-expanded="false"
-              title="Sort organizations"
-              data-testid="sort"
-            >
-              <Dropdown.Toggle
-                // className={styles.dropdown}
-                variant={
-                  sortingState.option === '' ? 'outline-success' : 'success'
-                }
-                data-testid="sortOrgs"
-              >
-                <SortIcon className={'me-1'} />
-                {sortingState.selectedOption}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(): void => handleSorting('Latest')}
-                  data-testid="latest"
-                >
-                  {t('Latest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(): void => handleSorting('Earliest')}
-                  data-testid="oldest"
-                >
-                  {t('Earliest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          <SortingButton
+            title="Sort organizations"
+            sortingOptions={[
+              { label: t('Latest'), value: 'Latest' },
+              { label: t('Earliest'), value: 'Earliest' },
+            ]}
+            selectedOption={sortingState.selectedOption}
+            onSortChange={handleSortChange}
+            dataTestIdPrefix="sortOrgs"
+            dropdownTestId="sort"
+          />
           {superAdmin && (
             <Button
               variant="success"
@@ -397,7 +395,9 @@ function orgList(): JSX.Element {
           )}
         </div>
       </div>
+
       {/* Text Infos for list */}
+
       {!isLoading &&
       (!orgsData?.organizationsConnection ||
         orgsData.organizationsConnection.length === 0) &&
@@ -484,6 +484,7 @@ function orgList(): JSX.Element {
                       <div
                         className={`${styles.orgImgContainer} shimmer`}
                       ></div>
+
                       <div className={styles.content}>
                         <h5 className="shimmer" title="Org name"></h5>
                         <h6 className="shimmer" title="Location"></h6>

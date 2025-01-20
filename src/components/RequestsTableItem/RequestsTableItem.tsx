@@ -65,13 +65,11 @@ const RequestsTableItem = (props: Props): JSX.Element => {
           id: membershipRequestId,
         },
       });
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('acceptedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -93,13 +91,11 @@ const RequestsTableItem = (props: Props): JSX.Element => {
           id: membershipRequestId,
         },
       });
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('rejectedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };

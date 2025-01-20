@@ -6,7 +6,7 @@ import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 
-import styles from './AgendaItemsContainer.module.css';
+import styles from '../../style/app.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 
 interface InterfaceFormStateType {
@@ -157,7 +157,7 @@ const AgendaItemsUpdateModal: React.FC<
       onHide={hideUpdateModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('updateAgendaItem')}</p>
+        <p className={styles.titlemodalAgendaItems}>{t('updateAgendaItem')}</p>
         <Button
           onClick={hideUpdateModal}
           data-testid="updateAgendaItemModalCloseBtn"
@@ -266,7 +266,7 @@ const AgendaItemsUpdateModal: React.FC<
                   variant="danger"
                   size="sm"
                   data-testid="deleteUrl"
-                  className={styles.deleteButton}
+                  className={styles.deleteButtonAgendaItems}
                   onClick={() => handleRemoveUrl(url)}
                 >
                   <FaTrash />
@@ -320,7 +320,7 @@ const AgendaItemsUpdateModal: React.FC<
           )}
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.greenregbtnAgendaItems}
             data-testid="updateAgendaItemBtn"
           >
             {t('update')}

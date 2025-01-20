@@ -7,7 +7,7 @@ import type {
 } from 'utils/interfaces';
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import styles from './TagActions.module.css';
+import styles from '../../style/app.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -15,6 +15,22 @@ import type { TFunction } from 'i18next';
 
 /**
  * Props for the `TagNode` component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
@@ -61,7 +77,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           getChildTags: {
@@ -93,8 +109,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   }
 
   const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
-    /* istanbul ignore next */ [];
+    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
 
   const handleTagClick = (): void => {
     setExpanded(!expanded);
@@ -127,6 +142,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
+              id={`checkbox-${tag._id}`}
               aria-label={t('selectTag')}
             />
             <i className="fa fa-folder mx-2" />{' '}
@@ -172,7 +188,6 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               next={loadMoreSubTags}
               hasMore={
                 subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                /* istanbul ignore next */
                 false
               }
               loader={<InfiniteScrollLoader />}

@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -14,12 +14,13 @@ import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import CampaignModal from './CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import styles from './OrganizationFundCampaign.module.css';
+import styles from '../../style/app.module.css';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfaceCampaignInfo,
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
+import SortingButton from 'subComponents/SortingButton';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -73,6 +74,30 @@ const dataGridStyle = {
  * - Shows error and loading states using `Loader` and error message components.
  *
  * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButon`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -283,7 +308,7 @@ const orgFundCampaign = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={styles.editButton}
               data-testid="editCampaignBtn"
               onClick={() =>
                 handleOpenModal(
@@ -312,7 +337,7 @@ const orgFundCampaign = (): JSX.Element => {
           <Button
             variant="outline-success"
             size="sm"
-            className="rounded"
+            className={styles.editButton}
             data-testid="viewBtn"
             onClick={() => handleClick(params.row.campaign._id as string)}
           >
@@ -339,69 +364,52 @@ const orgFundCampaign = (): JSX.Element => {
         <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
-      <div className={styles.btnsContainer}>
-        <div className={styles.input}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchFullName"
-          />
-          <Button
-            className="position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center"
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className={styles.btnsBlock}>
-          <div className="d-flex justify-space-between">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('fundingGoal_ASC')}
-                  data-testid="fundingGoal_ASC"
-                >
-                  {t('lowestGoal')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('fundingGoal_DESC')}
-                  data-testid="fundingGoal_DESC"
-                >
-                  {t('highestGoal')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_DESC')}
-                  data-testid="endDate_DESC"
-                >
-                  {t('latestEndDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_ASC')}
-                  data-testid="endDate_ASC"
-                >
-                  {t('earliestEndDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+      <Row className={styles.head}>
+        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+          <div className={`${styles.input} mb-1`}>
+            <Form.Control
+              type="name"
+              placeholder={tCommon('searchByName')}
+              autoComplete="off"
+              required
+              className={styles.inputField}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              data-testid="searchFullName"
+            />
+            <Button
+              className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center ${styles.searchButton}`}
+              data-testid="searchBtn"
+            >
+              <Search />
+            </Button>
           </div>
-          <div>
+          {/* <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}> */}
+          <div className={styles.btnsBlock}>
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
+                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'fundingGoal_ASC'
+                    | 'fundingGoal_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
+          </div>
+          <div className={styles.btnsBlock}>
             <Button
               variant="success"
-              className={styles.orgFundCampaignButton}
+              className={styles.dropdown}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addCampaignBtn"
               disabled={isArchived}
@@ -410,8 +418,9 @@ const orgFundCampaign = (): JSX.Element => {
               {t('addCampaign')}
             </Button>
           </div>
+          {/* </div> */}
         </div>
-      </div>
+      </Row>
 
       <DataGrid
         disableColumnMenu
@@ -426,7 +435,9 @@ const orgFundCampaign = (): JSX.Element => {
           ),
         }}
         sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowClassName={() =>
+          `${styles.rowBackgroundOrganizationFundCampaign}`
+        }
         autoHeight
         rowHeight={65}
         rows={campaigns.map((campaign, index) => ({

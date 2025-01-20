@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './AddOnEntry.module.css';
+import styles from './../../../../style/app.module.css';
 import { Button, Card, Spinner } from 'react-bootstrap';
 import { UPDATE_INSTALL_STATUS_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -42,6 +42,23 @@ interface InterfaceAddOnEntryProps {
  *   getInstalledPlugins={() => {}}
  * />
  * ```
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function addOnEntry({
   id,
@@ -104,19 +121,8 @@ function addOnEntry({
     <>
       <Card
         data-testid="AddOnEntry"
-        style={{ border: '1px solid #31BB6B', borderRadius: '10px' }}
+        style={{ border: 'var(--primary-border-solid)', borderRadius: '10px' }}
       >
-        {/* {uninstalledOrgs.includes(currentOrg) && (
-          <Form.Check
-            type="switch"
-            id="custom-switch"
-            label={t('enable')}
-            className={styles.entrytoggle}
-            onChange={(): void => {}}
-            disabled={switchInProgress}
-            checked={enabled}
-          />
-        )} */}
         <Card.Body>
           <Card.Title style={{ fontWeight: '800' }}>{title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted author">
@@ -124,7 +130,11 @@ function addOnEntry({
           </Card.Subtitle>
           <Card.Text>{description}</Card.Text>
           <Button
-            className={styles.entryaction}
+            className={
+              uninstalledOrgs.includes(currentOrg)
+                ? styles.addButton
+                : `btn btn-danger ${styles.removeButton}`
+            }
             variant="primary"
             // disabled={buttonLoading || !configurable}
             disabled={buttonLoading}

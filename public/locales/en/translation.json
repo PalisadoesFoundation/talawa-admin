@@ -414,6 +414,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
     "enterTitle": "Enter Title",
@@ -553,6 +554,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "createChat": "Create Chat",
     "updatePost": "Update Post",
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
@@ -771,6 +773,17 @@
     "Admin": "Admin",
     "loading": "Loading...",
     "noAttendees": "Attendees not Found"
+  },
+  "eventRegistrant": {
+    "sort": "Sort",
+    "allRegistrants": "All Registrants",
+    "eventRegistrantsTable": "Event Registrants Table",
+    "serialNumber": "Serial Number",
+    "registrant": "Registrant",
+    "registeredAt": "Registered At",
+    "createdAt": "Created At",
+    "addRegistrant": "Add Registrant",
+    "noRegistrantsFound": "No Registrants Found."
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
@@ -1079,7 +1092,9 @@
     "comments": "Comments",
     "viewPost": "View Post",
     "editPost": "Edit Post",
-    "postedOn": "Posted on {{date}}"
+    "postedOn": "Posted on {{date}}",
+    "emptyCommentError": "Please enter a comment before submitting.",
+    "unexpectedError": "An unexpected error occurred. Please try again."
   },
   "home": {
     "posts": "Posts",
@@ -1193,6 +1208,7 @@
     "enterDescription": "Enter Description",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
+    "createChat": "Create Chat",
     "monthlyCalendarView": "Monthly Calendar",
     "yearlyCalendarView": "Yearly Calender",
     "startTime": "startTime",
@@ -1248,14 +1264,23 @@
     "endOfResults": "endOfResults"
   },
   "userChat": {
+    "title": "Chats",
+    "add": "Add",
     "chat": "Chat",
     "search": "Search",
     "messages": "Messages",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "create": "Create",
+    "newChat": "New Chat",
+    "newGroupChat": "New Group Chat",
+    "groupInfo": "Group Info",
+    "members": "Members",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
-    "sendMessage": "Send Message"
+    "sendMessage": "Send Message",
+    "reply": "Reply"
   },
   "orgProfileField": {
     "loading": "Loading...",

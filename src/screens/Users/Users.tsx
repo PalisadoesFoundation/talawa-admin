@@ -1,13 +1,11 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Form, Table } from 'react-bootstrap';
+import { Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 import { Search } from '@mui/icons-material';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import SortIcon from '@mui/icons-material/Sort';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
@@ -19,6 +17,8 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
+import SortingButton from 'subComponents/SortingButton';
+
 /**
  * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
  * It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL
@@ -211,7 +211,6 @@ const Users = (): JSX.Element => {
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
   };
-  /* istanbul ignore next */
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
@@ -222,7 +221,6 @@ const Users = (): JSX.Element => {
     });
     setHasMore(true);
   };
-  /* istanbul ignore next */
   const loadMoreUsers = (skipValue: number, limitVal: number): void => {
     setIsLoadingMore(true);
     fetchMore({
@@ -372,74 +370,29 @@ const Users = (): JSX.Element => {
         </div>
         <div className={styles.btnsBlock}>
           <div className="d-flex">
-            <Dropdown
-              aria-expanded="false"
-              title="Sort Users"
-              data-testid="sort"
-            >
-              <Dropdown.Toggle variant="success" data-testid="sortUsers">
-                <SortIcon className={'me-1'} />
-                {sortingOption === 'newest' ? t('Newest') : t('Oldest')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(): void => {
-                    handleSorting('newest');
-                  }}
-                  data-testid="newest"
-                >
-                  {t('Newest')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(): void => {
-                    handleSorting('oldest');
-                  }}
-                  data-testid="oldest"
-                >
-                  {t('Oldest')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown
-              aria-expanded="false"
-              title="Filter organizations"
-              data-testid="filter"
-            >
-              <Dropdown.Toggle
-                variant="outline-success"
-                data-testid="filterUsers"
-              >
-                <FilterListIcon className={'me-1'} />
-                {tCommon('filter')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  data-testid="admin"
-                  onClick={(): void => handleFiltering('admin')}
-                >
-                  {tCommon('admin')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  data-testid="superAdmin"
-                  onClick={(): void => handleFiltering('superAdmin')}
-                >
-                  {tCommon('superAdmin')}
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  data-testid="user"
-                  onClick={(): void => handleFiltering('user')}
-                >
-                  {tCommon('user')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  data-testid="cancel"
-                  onClick={(): void => handleFiltering('cancel')}
-                >
-                  {tCommon('cancel')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <SortingButton
+              sortingOptions={[
+                { label: t('Newest'), value: 'newest' },
+                { label: t('Oldest'), value: 'oldest' },
+              ]}
+              selectedOption={sortingOption}
+              onSortChange={handleSorting}
+              dataTestIdPrefix="sortUsers"
+            />
+            <SortingButton
+              sortingOptions={[
+                { label: tCommon('admin'), value: 'admin' },
+                { label: tCommon('superAdmin'), value: 'superAdmin' },
+                { label: tCommon('user'), value: 'user' },
+                { label: tCommon('cancel'), value: 'cancel' },
+              ]}
+              selectedOption={filteringOption}
+              onSortChange={handleFiltering}
+              dataTestIdPrefix="filterUsers"
+              buttonLabel={tCommon('filter')}
+              type="filter"
+              dropdownTestId="filter"
+            />
           </div>
         </div>
       </div>
@@ -475,10 +428,7 @@ const Users = (): JSX.Element => {
             />
           )}
           <InfiniteScroll
-            dataLength={
-              /* istanbul ignore next */
-              displayedUsers.length ?? 0
-            }
+            dataLength={displayedUsers.length}
             next={() => {
               loadMoreUsers(displayedUsers.length, perPageResult);
             }}
@@ -519,7 +469,7 @@ const Users = (): JSX.Element => {
                           index={index}
                           resetAndRefetch={resetAndRefetch}
                           user={user}
-                          loggedInUserId={loggedInUserId ? loggedInUserId : ''}
+                          loggedInUserId={loggedInUserId}
                         />
                       );
                     },

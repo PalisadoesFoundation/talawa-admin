@@ -67,6 +67,23 @@ export interface InterfacePledgeModal {
  * - Calls `createPledge` mutation to create a new pledge.
  *
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
@@ -111,7 +128,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   useEffect(() => {
     if (memberData) {
-      /*istanbul ignore next*/
       setPledgers(memberData.organizations[0].members);
     }
   }, [memberData]);
@@ -124,7 +140,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate,
   } = formState;
 
-  /*istanbul ignore next*/
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
@@ -194,7 +209,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
-        /*istanbul ignore next*/
         toast.error((error as Error).message);
       }
     },
@@ -238,15 +252,12 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               getOptionLabel={(member: InterfaceUserInfo): string =>
                 `${member.firstName} ${member.lastName}`
               }
-              onChange={
-                /*istanbul ignore next*/
-                (_, newPledgers): void => {
-                  setFormState({
-                    ...formState,
-                    pledgeUsers: newPledgers,
-                  });
-                }
-              }
+              onChange={(_, newPledgers): void => {
+                setFormState({
+                  ...formState,
+                  pledgeUsers: newPledgers,
+                });
+              }}
               renderInput={(params) => (
                 <TextField {...params} label="Pledgers" />
               )}
@@ -266,7 +277,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                     pledgeStartDate: date.toDate(),
                     pledgeEndDate:
                       pledgeEndDate &&
-                      /*istanbul ignore next*/
                       (pledgeEndDate < date?.toDate()
                         ? date.toDate()
                         : pledgeEndDate),
@@ -305,15 +315,12 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 value={pledgeCurrency}
                 label={t('currency')}
                 data-testid="currencySelect"
-                onChange={
-                  /*istanbul ignore next*/
-                  (e) => {
-                    setFormState({
-                      ...formState,
-                      pledgeCurrency: e.target.value,
-                    });
-                  }
-                }
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    pledgeCurrency: e.target.value,
+                  });
+                }}
               >
                 {currencyOptions.map((currency) => (
                   <MenuItem key={currency.label} value={currency.value}>
@@ -343,7 +350,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           {/* Button to submit the pledge form */}
           <Button
             type="submit"
-            className={styles.greenregbtnPledge}
+            className={styles.addButton}
             data-testid="submitPledgeBtn"
           >
             {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
