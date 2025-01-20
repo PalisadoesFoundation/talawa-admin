@@ -116,7 +116,7 @@ const VenueModal = ({
 
     // Validate capacity
     const capacityNum = parseInt(formState.capacity, 10);
-    if (isNaN(capacityNum) || capacityNum <= 0) {
+    if (Number.isNaN(capacityNum) || capacityNum <= 0) {
       toast.error(t('venueCapacityError') as string);
       return;
     }
