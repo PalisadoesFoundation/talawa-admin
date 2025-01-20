@@ -151,8 +151,7 @@ def main():
     necessary files and directories, and printing the violations found.
 
     Args:
-        None: This function does not take any arguments.It uses
-        argparse to handle command-line arguments.
+        None: This function does not take any arguments.
 
     Returns:
         None: This function does not return any value but prints the violations.
