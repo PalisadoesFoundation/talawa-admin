@@ -4,11 +4,7 @@
 
 # Interface: InterfaceEditUserTagModalProps
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:31](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L31)
-=======
 Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L31)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 Edit UserTag Modal component for the Manage Tag screen.
 
@@ -38,11 +34,7 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **editUserTagModalIsOpen**: `boolean`
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L32)
-=======
 Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L32)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -50,11 +42,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/P
 
 > **handleEditUserTag**: (`e`) => `Promise`\<`void`\>
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L36)
-=======
 Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L36)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 #### Parameters
 
@@ -72,11 +60,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/P
 
 > **hideEditUserTagModal**: () => `void`
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L33)
-=======
 Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L33)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 #### Returns
 
@@ -88,11 +72,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/P
 
 > **newTagName**: `string`
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L34)
-=======
 Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L34)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -100,11 +80,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/P
 
 > **setNewTagName**: (`state`) => `void`
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:35](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L35)
-=======
 Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L35)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 #### Parameters
 
@@ -122,11 +98,7 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:35](https://github.com/P
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:37](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L37)
-=======
 Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L37)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -134,8 +106,4 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:37](https://github.com/P
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:38](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/EditUserTagModal.tsx#L38)
-=======
 Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L38)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84

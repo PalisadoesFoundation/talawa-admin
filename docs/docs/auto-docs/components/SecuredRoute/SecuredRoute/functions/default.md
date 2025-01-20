@@ -6,11 +6,7 @@
 
 > **default**(): `Element`
 
-<<<<<<< HEAD
-Defined in: [src/components/SecuredRoute/SecuredRoute.tsx:16](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/SecuredRoute/SecuredRoute.tsx#L16)
-=======
 Defined in: [src/components/SecuredRoute/SecuredRoute.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SecuredRoute/SecuredRoute.tsx#L16)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 A route guard that checks if the user is logged in and has the necessary permissions.
 

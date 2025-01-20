@@ -6,11 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-<<<<<<< HEAD
-Defined in: [src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx:36](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx#L36)
-=======
 Defined in: [src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx#L36)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 OrganizationSidebar displays the sidebar for an organization, showing a list of members and events.
 

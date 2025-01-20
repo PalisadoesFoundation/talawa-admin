@@ -6,11 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-<<<<<<< HEAD
-Defined in: [src/screens/ManageTag/ManageTag.tsx:64](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/ManageTag/ManageTag.tsx#L64)
-=======
 Defined in: [src/screens/ManageTag/ManageTag.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTag.tsx#L64)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/manageTag/:tagId'.
 

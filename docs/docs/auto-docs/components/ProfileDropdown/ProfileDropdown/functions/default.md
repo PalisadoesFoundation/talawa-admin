@@ -6,11 +6,7 @@
 
 > **default**(): `Element`
 
-<<<<<<< HEAD
-Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:24](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/components/ProfileDropdown/ProfileDropdown.tsx#L24)
-=======
 Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileDropdown/ProfileDropdown.tsx#L24)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 Renders a profile dropdown menu for the user.
 

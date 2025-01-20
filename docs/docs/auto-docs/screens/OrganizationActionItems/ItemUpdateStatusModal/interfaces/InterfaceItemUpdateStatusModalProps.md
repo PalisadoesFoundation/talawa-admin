@@ -4,11 +4,7 @@
 
 # Interface: InterfaceItemUpdateStatusModalProps
 
-<<<<<<< HEAD
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:31](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L31)
-=======
 Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L31)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ## CSS Strategy Explanation:
 
@@ -34,11 +30,7 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-<<<<<<< HEAD
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L35)
-=======
 Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L35)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 ***
 
@@ -46,11 +38,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](h
 
 > **actionItemsRefetch**: () => `void`
 
-<<<<<<< HEAD
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L34)
-=======
 Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L34)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 #### Returns
 
@@ -62,11 +50,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](h
 
 > **hide**: () => `void`
 
-<<<<<<< HEAD
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L33)
-=======
 Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L33)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
 
 #### Returns
 
@@ -78,8 +62,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](h
 
 > **isOpen**: `boolean`
 
-<<<<<<< HEAD
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:32](https://github.com/abhassen44/talawa-admin/blob/285f7384c3d26b5028a286d84f89b85120d130a2/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L32)
-=======
 Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L32)
->>>>>>> 0c0fc8e1d54e2ef61a81dd93e93d1afca438df84
