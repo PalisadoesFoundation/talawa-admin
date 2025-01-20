@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Search } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
