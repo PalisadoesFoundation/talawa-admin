@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import { Dropdown, Form, InputGroup } from 'react-bootstrap';
+import { Dropdown, Form, Button } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_ADMINS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import { FilterAltOutlined, SearchOutlined } from '@mui/icons-material';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { FilterAltOutlined } from '@mui/icons-material';
 import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -167,117 +168,110 @@ export default function people(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row`}>
-        <div className={`${styles.mainContainerUserPeople}`}>
-          <div className={`${styles.btnsContainer}`}>
-            <InputGroup className={`${styles.input}`}>
-              <Form.Control
-                placeholder={t('searchUsers')}
-                id="searchPeople"
-                type="text"
-                className={`${styles.inputField}`}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
+      <div className={`${styles.mainContainer_people}`}>
+        <div className={styles.people__header}>
+          <div className={styles.input}>
+            <Form.Control
+              placeholder={t('searchUsers')}
+              id="searchPeople"
+              type="text"
+              className={styles.inputField}
+              onKeyUp={handleSearchByEnter}
+              data-testid="searchInput"
+            />
+
+            <Button
+              className={styles.searchButton}
+              data-testid="searchBtn"
+              style={{ cursor: 'pointer' }}
+              onClick={handleSearchByBtnClick}
+            >
+              <SearchOutlinedIcon />
+            </Button>
+          </div>
+
+          <Dropdown drop="down-centered">
+            <Dropdown.Toggle
+              className={styles.dropdown}
+              id="dropdown-basic"
+              data-testid={`modeChangeBtn`}
+            >
+              <FilterAltOutlined
+                sx={{
+                  fontSize: '25px',
+                  marginBottom: '2px',
+                  marginRight: '2px',
+                }}
               />
-              <InputGroup.Text
-                className={`${styles.searchButton}`}
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <SearchOutlined className={`${styles.colorWhite}`} />
-              </InputGroup.Text>
-            </InputGroup>
-            <div className={styles.btnsBlock}>
-              <Dropdown drop="down-centered">
-                <Dropdown.Toggle
-                  className={`${styles.dropdown}`}
-                  id="dropdown-basic"
-                  data-testid={`modeChangeBtn`}
-                >
-                  <FilterAltOutlined />
-                  {tCommon('filter').toUpperCase()}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {modes.map((value, index) => {
-                    return (
-                      <Dropdown.Item
-                        key={index}
-                        data-testid={`modeBtn${index}`}
-                        onClick={(): void => setMode(index)}
-                      >
-                        {value}
-                      </Dropdown.Item>
-                    );
-                  })}
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </div>
-          <div className={`d-flex flex-column ${styles.content}`}>
-            <div
-              className={`d-flex border py-3 px-4 mt-4 bg-white ${styles.topRadius}`}
-            >
-              <span style={{ flex: '1' }} className="d-flex">
-                <span style={{ flex: '1' }}>S.No</span>
-                <span style={{ flex: '1' }}>Avatar</span>
-              </span>
-              <span style={{ flex: '2' }}>Name</span>
-              <span style={{ flex: '2' }}>Email</span>
-              <span style={{ flex: '2' }}>Role</span>
-            </div>
-
-            <div
-              className={`d-flex flex-column border px-4 p-3 mt-0 ${styles.gap} ${styles.bottomRadius} ${styles.backgroundWhite}`}
-            >
-              {loading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
-                </div>
-              ) : (
-                <>
-                  {members && members.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? members.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
-                      : members
-                    ).map((member: InterfaceMember, index) => {
-                      const name = `${member.firstName} ${member.lastName}`;
-
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name,
-                        image: member.image,
-                        id: member._id,
-                        email: member.email,
-                        role: member.userType,
-                        sno: (index + 1).toString(),
-                      };
-                      return <PeopleCard key={index} {...cardProps} />;
-                    })
-                  ) : (
-                    <span>{t('nothingToShow')}</span>
-                  )}
-                </>
-              )}
-            </div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={members ? members.length : 0}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              {tCommon('filter')}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {modes.map((value, index) => {
+                return (
+                  <Dropdown.Item
+                    key={index}
+                    data-testid={`modeBtn${index}`}
+                    onClick={(): void => setMode(index)}
+                  >
+                    {value}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
-        {/* <OrganizationSidebar /> */}
+        <div className={styles.people_content}>
+          <div className={styles.people_card_header}>
+            <span style={{ flex: '1' }} className={styles.display_flex}>
+              <span style={{ flex: '1' }}>S.No</span>
+              <span style={{ flex: '1' }}>Avatar</span>
+            </span>
+            <span style={{ flex: '2' }}>Name</span>
+            <span style={{ flex: '2' }}>Email</span>
+            <span style={{ flex: '2' }}>Role</span>
+          </div>
+
+          <div className={styles.people_card_main_container}>
+            {loading ? (
+              <div className={styles.custom_row_center}>
+                <HourglassBottomIcon /> <span>Loading...</span>
+              </div>
+            ) : (
+              <>
+                {members && members.length > 0 ? (
+                  (rowsPerPage > 0
+                    ? members.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage,
+                      )
+                    : members
+                  ).map((member: InterfaceMember, index) => {
+                    const name = `${member.firstName} ${member.lastName}`;
+
+                    const cardProps: InterfaceOrganizationCardProps = {
+                      name,
+                      image: member.image,
+                      id: member._id,
+                      email: member.email,
+                      role: member.userType,
+                      sno: (index + 1).toString(),
+                    };
+                    return <PeopleCard key={index} {...cardProps} />;
+                  })
+                ) : (
+                  <span>{t('nothingToShow')}</span>
+                )}
+              </>
+            )}
+          </div>
+          <PaginationList
+            count={members ? members.length : 0}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
       </div>
     </>
   );
