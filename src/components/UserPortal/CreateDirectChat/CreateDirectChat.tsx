@@ -77,26 +77,32 @@ export default function createDirectChatModal({
   const [createChat] = useMutation(CREATE_CHAT);
 
   const handleCreateDirectChat = async (id: string): Promise<void> => {
-    let chatExists = false;
-    chats.forEach((chat) => {
-      if (chat.users[0]._id === id || chat.users[1]._id === id)
-        chatExists = true;
-    });
-    if (chatExists) {
+    const existingChat = chats.find(
+      (chat) =>
+        chat.users?.length === 2 && chat.users.some((user) => user._id === id),
+    );
+    if (existingChat) {
+      const existingUser = existingChat.users.find((user) => user._id === id);
       errorHandler(
         t,
-        new Error('Conversation with the selected user already exists!'),
+        new Error(
+          `A conversation with ${existingUser?.firstName || 'this user'} already exists!`,
+        ),
       );
     } else {
-      await createChat({
-        variables: {
-          organizationId,
-          userIds: [userId, id],
-          isGroup: false,
-        },
-      });
-      await chatsListRefetch();
-      toggleCreateDirectChatModal();
+      try {
+        await createChat({
+          variables: {
+            organizationId,
+            userIds: [userId, id],
+            isGroup: false,
+          },
+        });
+        await chatsListRefetch();
+        toggleCreateDirectChatModal();
+      } catch (error) {
+        errorHandler(t, error);
+      }
     }
   };
 
