@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client';
-import { Delete, Search } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -10,7 +10,7 @@ import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -22,6 +22,7 @@ import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 /**
  * OrganizationPeople component is used to display the list of members, admins and users of the organization.
  * It also provides the functionality to search the members, admins and users by their full name.
@@ -49,7 +50,6 @@ function organizationPeople(): JSX.Element {
   });
   const [adminFilteredData, setAdminFilteredData] = useState();
 
-  const [userName, setUserName] = useState('');
   const [showRemoveModal, setShowRemoveModal] = React.useState(false);
   const [selectedAdminId, setSelectedAdminId] = React.useState<
     string | undefined
@@ -138,9 +138,8 @@ function organizationPeople(): JSX.Element {
     );
   }
 
-  const handleFullNameSearchChange = (e: React.FormEvent): void => {
-    e.preventDefault();
-    const [firstName, lastName] = userName.split(' ');
+  const handleFullNameSearchChange = (searchTerm: string): void => {
+    const [firstName, lastName] = searchTerm.split(' ');
     const newFilterData = {
       firstName_contains: firstName || '',
       lastName_contains: lastName || '',
@@ -163,7 +162,7 @@ function organizationPeople(): JSX.Element {
         }) => {
           return (value.firstName + value.lastName)
             .toLowerCase()
-            .includes(userName.toLowerCase());
+            .includes(searchTerm.toLowerCase());
         },
       );
       setAdminFilteredData(filterData);
@@ -319,28 +318,11 @@ function organizationPeople(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
-            <div className={styles.input}>
-              <Form onSubmit={handleFullNameSearchChange}>
-                <Form.Control
-                  type="name"
-                  id="searchLastName"
-                  placeholder={t('searchFullName')}
-                  autoComplete="off"
-                  className={styles.inputField}
-                  onChange={(e): void => {
-                    const { value } = e.target;
-                    setUserName(value);
-                  }}
-                />
-                <Button
-                  type="submit"
-                  className={`${styles.searchButton}`}
-                  data-testid={'searchbtn'}
-                >
-                  <Search className={styles.searchIcon} />
-                </Button>
-              </Form>
-            </div>
+            <SearchBar
+              placeholder={t('searchFullName')}
+              onSearch={handleFullNameSearchChange}
+              buttonTestId="searchbtn"
+            />
             <div className={styles.btnsBlock}>
               <SortingButton
                 className={styles.dropdown}

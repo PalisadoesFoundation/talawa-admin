@@ -27,7 +27,7 @@ interface InterfaceSearchBarProps {
 const SearchBar: React.FC<InterfaceSearchBarProps> = ({
   placeholder,
   onSearch,
-  className = `${styles.input} mb-1`,
+  className,
   inputTestId,
   buttonTestId,
 }) => {
@@ -50,7 +50,7 @@ const SearchBar: React.FC<InterfaceSearchBarProps> = ({
   };
 
   return (
-    <div className={`${styles.input} ${className}`}>
+    <div className={`${styles.input} mb-1 ${className}`}>
       <Form.Control
         type="text"
         value={searchTerm}
