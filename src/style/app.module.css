@@ -599,7 +599,6 @@
   transform: scale(0.95);
   background-color: var(--search-button-bg) !important;
   border-color: transparent !important;
- 
 }
 
 .addButton {
@@ -7158,7 +7157,7 @@ button[data-testid='createPostBtn'] {
   color: var(--LoginToggle-button-color);
   border: 1px solid var(--LoginToggle-button-active);
   background-color: var(--LoginToggle-button-active);
-=======
+}
 /* people card */
 .personImage_peoplecard {
   border-radius: 50%;
@@ -7251,5 +7250,4 @@ button[data-testid='createPostBtn'] {
   display: flex;
   flex-direction: row;
   justify-content: center;
-
 }
