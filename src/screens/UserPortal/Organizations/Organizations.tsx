@@ -14,7 +14,6 @@ import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 /**
  *
@@ -341,38 +340,39 @@ export default function organizations(): JSX.Element {
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expand
-              : styles.contract
+              ? styles.expandOrg
+              : styles.contractOrg
         }`}
       >
-        <div className={`${styles.mainContainerUser}`}>
+        <div className={`${styles.mainContainerOrganization}`}>
           <div className="d-flex justify-content-between align-items-center">
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
             </div>
-            <ProfileDropdown />
           </div>
 
-          <div className="mt-4">
+          <div className={styles.head}>
             <div className={styles.btnsContainer}>
-              <InputGroup className={styles.input}>
-                <Form.Control
-                  placeholder={t('searchOrganizations')}
-                  id="searchOrganizations"
-                  type="text"
-                  className={`${styles.inputField} border border-0`}
-                  onKeyUp={handleSearchByEnter}
-                  data-testid="searchInput"
-                />
-                <InputGroup.Text
-                  className={`${styles.searchButton} border-0`}
-                  style={{ cursor: 'pointer' }}
-                  onClick={handleSearchByBtnClick}
-                  data-testid="searchBtn"
-                >
-                  <SearchOutlined className={`${styles.colorWhite}`} />
-                </InputGroup.Text>
-              </InputGroup>
+              <div className={styles.input}>
+                <InputGroup className={styles.maxWidth}>
+                  <Form.Control
+                    placeholder={t('searchOrganizations')}
+                    id="searchOrganizations"
+                    type="text"
+                    className={`${styles.inputField}`}
+                    onKeyUp={handleSearchByEnter}
+                    data-testid="searchInput"
+                  />
+                  <InputGroup.Text
+                    className={`${styles.searchButton}`}
+                    style={{ cursor: 'pointer' }}
+                    onClick={handleSearchByBtnClick}
+                    data-testid="searchBtn"
+                  >
+                    <SearchOutlined className={`${styles.colorWhite}`} />
+                  </InputGroup.Text>
+                </InputGroup>
+              </div>
               <div className={styles.btnsBlock}>
                 <Dropdown drop="down-centered">
                   <Dropdown.Toggle
@@ -405,7 +405,7 @@ export default function organizations(): JSX.Element {
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-column  ${styles.gap} ${styles.paddingY}`}
             >
               {loadingOrganizations ? (
                 <div className={`d-flex flex-row justify-content-center`}>
@@ -413,32 +413,37 @@ export default function organizations(): JSX.Element {
                 </div>
               ) : (
                 <>
-                  {' '}
                   {organizations && organizations.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? organizations.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
-                      : organizations
-                    ).map((organization: InterfaceOrganization, index) => {
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name: organization.name,
-                        image: organization.image,
-                        id: organization._id,
-                        description: organization.description,
-                        admins: organization.admins,
-                        members: organization.members,
-                        address: organization.address,
-                        membershipRequestStatus:
-                          organization.membershipRequestStatus,
-                        userRegistrationRequired:
-                          organization.userRegistrationRequired,
-                        membershipRequests: organization.membershipRequests,
-                        isJoined: organization.isJoined,
-                      };
-                      return <OrganizationCard key={index} {...cardProps} />;
-                    })
+                    <div className="row">
+                      {(rowsPerPage > 0
+                        ? organizations.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
+                        : organizations
+                      ).map((organization: InterfaceOrganization, index) => {
+                        const cardProps: InterfaceOrganizationCardProps = {
+                          name: organization.name,
+                          image: organization.image,
+                          id: organization._id,
+                          description: organization.description,
+                          admins: organization.admins,
+                          members: organization.members,
+                          address: organization.address,
+                          membershipRequestStatus:
+                            organization.membershipRequestStatus,
+                          userRegistrationRequired:
+                            organization.userRegistrationRequired,
+                          membershipRequests: organization.membershipRequests,
+                          isJoined: organization.isJoined,
+                        };
+                        return (
+                          <div key={index} className="col-md-6 mb-4">
+                            <OrganizationCard {...cardProps} />
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
                     <span>{t('nothingToShow')}</span>
                   )}

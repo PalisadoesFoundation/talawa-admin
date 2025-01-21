@@ -392,7 +392,7 @@ function orgList(): JSX.Element {
         <div className={styles.btnsBlock}>
           {superAdmin && (
             <Button
-              className={styles.dropdown}
+              className={`${styles.dropdown} ${styles.createorgdropdown}`}
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
             >

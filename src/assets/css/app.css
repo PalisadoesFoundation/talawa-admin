@@ -2478,9 +2478,7 @@ progress {
 .form-control:focus {
   color: var(--bs-body-color);
   background-color: #f2f2f2;
-  border-color: #98ddb5;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(49, 187, 107, 0.25);
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -3253,6 +3251,12 @@ textarea.form-control.is-valid {
 .was-validated .form-check-input:valid,
 .form-check-input.is-valid {
   border-color: var(--bs-form-valid-border-color);
+}
+
+input:-webkit-autofill {
+  background-color: white !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: initial !important;
 }
 
 .was-validated .form-check-input:valid:checked,
