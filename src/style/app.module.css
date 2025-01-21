@@ -638,6 +638,10 @@
   margin-top: 20px;
 }
 
+.dataGridContainer {
+  border-radius: 20px;
+}
+
 .rowBackground {
   background-color: var(--row-background);
   max-height: 120px;

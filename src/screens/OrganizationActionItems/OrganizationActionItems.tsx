@@ -466,29 +466,7 @@ function organizationActionItems(): JSX.Element {
             </Stack>
           ),
         }}
-        sx={{
-          borderRadius: '20px',
-          backgroundColor: 'FFFFFF)',
-          '& .MuiDataGrid-row': {
-            backgroundColor: '#FFFFFF',
-            '&:focus-within': {
-              // outline: '2px solid #000',
-              outlineOffset: '-2px',
-            },
-          },
-          '& .MuiDataGrid-row:hover': {
-            backgroundColor: '#FFFFFF',
-            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiDataGrid-row.Mui-hovered': {
-            backgroundColor: '#FFFFFF',
-            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiDataGrid-cell:focus': {
-            // outline: '2px solid #000',
-            // outlineOffset: '-2px',
-          },
-        }}
+        className={styles.dataGridContainer}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}

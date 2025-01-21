@@ -38,7 +38,9 @@ import '../src/assets/css/scrollStyles.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1778F2',
+      main: getComputedStyle(document.documentElement)
+        .getPropertyValue('--blue-primary')
+        .trim(),
     },
   },
 });
