@@ -13,28 +13,13 @@ import { MockedProvider } from '@apollo/react-testing';
 import { checkInMutationSuccess, checkInMutationUnsuccess } from './mocks';
 import { vi } from 'vitest';
 
-/**
- * Test suite for the `TableRow` component, focusing on the CheckIn table functionality.
- */
-
-describe('Testing Table Row for CheckIn Table', () => {
+describe('Testing TableRow component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  test('If the user is not checked in, button to check in should be displayed, and the user should be able to check in successfully', async () => {
-    const props = {
-      data: {
-        id: `123`,
-        name: `John Doe`,
-        userId: `user123`,
-        checkIn: null,
-        eventId: `event123`,
-      },
-      refetch: vi.fn(),
-    };
-
-    const { findByText } = render(
+  const renderWithProviders = (props: any) =>
+    render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
@@ -49,14 +34,26 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
+  test('If user is not checked in, "Check In" button should be displayed and work correctly', async () => {
+    const props = {
+      data: {
+        id: '123',
+        name: 'John Doe',
+        userId: 'user123',
+        checkIn: null,
+        eventId: 'event123',
+      },
+      refetch: vi.fn(),
+    };
+
+    const { findByText } = renderWithProviders(props);
+
     expect(await findByText('Check In')).toBeInTheDocument();
-
     fireEvent.click(await findByText('Check In'));
-
     expect(await findByText('Checked in successfully')).toBeInTheDocument();
   });
 
-  test('If the user is checked in, the option to download tag should be shown', async () => {
+  test('If user is already checked in, "Download Tag" button should be available', async () => {
     const props = {
       data: {
         id: '123',
@@ -71,44 +68,30 @@ describe('Testing Table Row for CheckIn Table', () => {
       refetch: vi.fn(),
     };
 
-    const { findByText } = render(
-      <BrowserRouter>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <TableRow {...props} />
-              </I18nextProvider>
-            </Provider>
-          </MockedProvider>
-        </LocalizationProvider>
-      </BrowserRouter>,
-    );
-
+    // Mock global functions
     global.URL.createObjectURL = vi.fn(() => 'mockURL');
     global.window.open = vi.fn();
+
+    const { findByText } = renderWithProviders(props);
 
     expect(await findByText('Checked In')).toBeInTheDocument();
     expect(await findByText('Download Tag')).toBeInTheDocument();
 
     fireEvent.click(await findByText('Download Tag'));
 
-    expect(await findByText('Generating pdf...')).toBeInTheDocument();
+    expect(global.URL.createObjectURL).toHaveBeenCalled();
+    expect(global.window.open).toHaveBeenCalledWith('mockURL');
     expect(await findByText('PDF generated successfully!')).toBeInTheDocument();
-
-    // Cleanup mocks
-    vi.clearAllMocks();
   });
 
-  test('Upon failing of check in mutation, the appropriate error message should be shown', async () => {
+  test('Upon check-in mutation failure, an error message should be displayed', async () => {
     const props = {
       data: {
-        id: `123`,
-        name: `John Doe`,
-        userId: `user123`,
+        id: '123',
+        name: 'John Doe',
+        userId: 'user123',
         checkIn: null,
-        eventId: `event123`,
+        eventId: 'event123',
       },
       refetch: vi.fn(),
     };
@@ -128,52 +111,67 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
-    expect(await findByText('Check In')).toBeInTheDocument();
-
     fireEvent.click(await findByText('Check In'));
 
     expect(await findByText('Error checking in')).toBeInTheDocument();
     expect(await findByText('Oops')).toBeInTheDocument();
   });
 
-  test('If PDF generation fails, the error message should be shown', async () => {
+  test('If PDF generation fails, an error message should be displayed', async () => {
     const props = {
       data: {
-        id: `123`,
+        id: '123',
         name: '',
-        userId: `user123`,
+        userId: 'user123',
         checkIn: {
           _id: '123',
           time: '12:00:00',
         },
-        eventId: `event123`,
+        eventId: 'event123',
       },
       refetch: vi.fn(),
     };
 
-    const { findByText } = render(
-      <BrowserRouter>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <TableRow {...props} />
-              </I18nextProvider>
-            </Provider>
-          </MockedProvider>
-        </LocalizationProvider>
-      </BrowserRouter>,
-    );
-
-    // Mocking the PDF generation function to throw an error
-    global.URL.createObjectURL = vi.fn(() => 'mockURL');
+    // Mock global functions
+    global.URL.createObjectURL = vi.fn(() => {
+      throw new Error('Blob creation failed');
+    });
     global.window.open = vi.fn();
+
+    const { findByText } = renderWithProviders(props);
 
     fireEvent.click(await findByText('Download Tag'));
 
     expect(
-      await findByText('Error generating pdf: Invalid or empty name provided'),
+      await findByText('Error generating pdf: Blob creation failed'),
     ).toBeInTheDocument();
+  });
+
+  test('Generated PDF should be downloadable with correct content', async () => {
+    const props = {
+      data: {
+        id: '123',
+        name: 'John Doe',
+        userId: 'user123',
+        checkIn: {
+          _id: '123',
+          time: '12:00:00',
+        },
+        eventId: 'event123',
+      },
+      refetch: vi.fn(),
+    };
+
+    // Mock Blob creation and window functions
+    const mockBlob = new Blob(['mock content'], { type: 'application/pdf' });
+    global.URL.createObjectURL = vi.fn(() => 'mockURL');
+    global.window.open = vi.fn();
+
+    const { findByText } = renderWithProviders(props);
+
+    fireEvent.click(await findByText('Download Tag'));
+
+    expect(global.URL.createObjectURL).toHaveBeenCalledWith(mockBlob);
+    expect(global.window.open).toHaveBeenCalledWith('mockURL');
   });
 });

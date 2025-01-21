@@ -72,13 +72,13 @@ export const TableRow = ({
       }
       inputs.push({ name: data.name.trim() });
       const pdf = await generate({ template: tagTemplate, inputs });
-      // istanbul ignore next
+
       const blob = new Blob([pdf], { type: 'application/pdf' });
-      // istanbul ignore next
+
       const url = URL.createObjectURL(blob);
-      // istanbul ignore next
+
       window.open(url);
-      // istanbul ignore next
+
       toast.success('PDF generated successfully!');
     } catch (error: unknown) {
       const errorMessage =
