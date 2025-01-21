@@ -29,7 +29,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
         </TableCell>
       </TableRow>
     );
-  /*istanbul ignore next*/
+  
   if (error) {
     return (
       <TableRow data-testid="error-state">
@@ -40,7 +40,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     );
   }
   const event = data?.event;
-  /*istanbul ignore next*/
+  
   if (!event) {
     return (
       <TableRow data-testid="no-event-state">
