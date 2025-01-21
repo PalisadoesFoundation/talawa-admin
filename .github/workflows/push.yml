@@ -14,8 +14,8 @@ name: PUSH Workflow - All Branches
 on:
   push:
     branches:
-      - '**'   
-      
+      - '**'
+
 env:
     CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
   

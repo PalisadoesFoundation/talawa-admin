@@ -204,7 +204,6 @@ jobs:
         run: |
           python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
-
   Check-Code-Coverage-Disable:
     name: Check for code coverage disable
     runs-on: ubuntu-latest
@@ -452,6 +451,35 @@ jobs:
           echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
           echo "Error: Close this PR and try again."
           exit 1
+  
+  Generate-Docs:
+    name: Generate Documentation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate documentation
+        run: typedoc --out docs/docs/auto-docs --plugin typedoc-plugin-markdown --theme markdown --tsconfig tsconfig.docs.json --excludePrivate --excludeProtected --excludeExternals --hideGenerator --categorizeByGroup true --entryPointStrategy expand --entryPoints \"src\" --exclude \"src/vite-env.d.ts\" --exclude \"**/*.spec.{ts,tsx}\" --exclude \"**/*.test.{ts,tsx}\" --exclude \"**/__tests__/**\" --exclude \"**/__mocks__/**\" --skipErrorChecking --logLevel Warn"
+
+      - name: Clean up documentation
+        run: |
+          find docs/docs/auto-docs -name 'README.md' -delete
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Auto-generate documentation"
+          git push origin ${{ github.head_ref }}
 
   Validate-Coderabbit:
     name: Validate CodeRabbit Approval
@@ -469,8 +497,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-
-
+          
   Python-Compliance:
     name: Check Python Code Style
     runs-on: ubuntu-latest
