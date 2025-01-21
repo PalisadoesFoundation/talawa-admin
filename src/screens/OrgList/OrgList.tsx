@@ -331,14 +331,14 @@ function orgList(): JSX.Element {
   return (
     <>
       {/* Buttons Container */}
-      <div className={styles.btnsContainerOrgList}>
+      <div className={styles.btnsContainerSearchBar}>
         <SearchBar
           placeholder={tCommon('searchByName')}
           onSearch={handleSearch}
           inputTestId="searchByName"
           buttonTestId="searchBtn"
         />
-        <div className={styles.btnsBlockOrgList}>
+        <div className={styles.btnsBlockSearchBar}>
           <SortingButton
             title="Sort organizations"
             sortingOptions={[

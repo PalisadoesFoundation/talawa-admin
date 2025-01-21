@@ -2082,12 +2082,12 @@ input[type='radio']:checked + label:hover {
 
 /* * Refortoring css for OrgList */
 
-.btnsContainerOrgList {
+.btnsContainerSearchBar {
   display: flex;
   margin: 2.5rem 0 2.5rem 0;
 }
 
-.btnsContainerOrgList .btnsBlockOrgList {
+.btnsContainerSearchBar .btnsBlockSearchBar {
   display: flex;
 }
 
@@ -2171,23 +2171,23 @@ input[type='radio']:checked + label:hover {
   background-color: var(--bs-primary);
 }
 
-.btnsContainerOrgList .btnsBlockOrgList button {
+.btnsContainerSearchBar .btnsBlockSearchBar button {
   margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.btnsContainerOrgList .inputOrgList {
+.btnsContainerSearchBar .inputOrgList {
   flex: 1;
   position: relative;
 }
 
-.btnsContainerOrgList input {
+.btnsContainerSearchBar input {
   outline: 1px solid var(--bs-gray-400);
 }
 
-.btnsContainerOrgList .inputOrgList button {
+.btnsContainerSearchBar .inputOrgList button {
   width: 52px;
 }
 
@@ -2764,21 +2764,21 @@ input::file-selector-button {
 }
 
 @media (max-width: 1020px) {
-  .btnsContainerOrgList {
+  .btnsContainerSearchBar {
     flex-direction: column;
     margin: 1.5rem 0;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList {
+  .btnsContainerSearchBar .btnsBlockSearchBar {
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList button {
+  .btnsContainerSearchBar .btnsBlockSearchBar button {
     margin: 0;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList div button {
+  .btnsContainerSearchBar .btnsBlockSearchBar div button {
     margin-right: 1.5rem;
   }
 }
@@ -2786,25 +2786,25 @@ input::file-selector-button {
 /* For mobile devices  */
 
 @media (max-width: 520px) {
-  .btnsContainerOrgList {
+  .btnsContainerSearchBar {
     margin-bottom: 0;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList {
+  .btnsContainerSearchBar .btnsBlockSearchBar {
     display: block;
     margin-top: 1rem;
     margin-right: 0;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList div {
+  .btnsContainerSearchBar .btnsBlockSearchBar div {
     flex: 1;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList div[title='Sort organizations'] {
+  .btnsContainerSearchBar .btnsBlockSearchBar div[title='Sort organizations'] {
     margin-right: 0.5rem;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList button {
+  .btnsContainerSearchBar .btnsBlockSearchBar button {
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
