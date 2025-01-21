@@ -286,12 +286,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           );
         }) || [];
 
-    const shouldShowViewMore = useMemo(() => {
-      return (
-        allDayEventsList.length > 2 ||
-        (windowWidth <= 700 && allDayEventsList.length > 0)
-      );
-    }, [allDayEventsList.length, windowWidth]);
+    const shouldShowViewMore =
+      allDayEventsList.length > 2 ||
+      (windowWidth <= 700 && allDayEventsList.length > 0);
 
     const handleExpandClick: () => void = () => {
       toggleExpand(-100);
