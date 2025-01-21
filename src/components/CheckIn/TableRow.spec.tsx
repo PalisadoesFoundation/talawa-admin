@@ -13,12 +13,28 @@ import { MockedProvider } from '@apollo/react-testing';
 import { checkInMutationSuccess, checkInMutationUnsuccess } from './mocks';
 import { vi } from 'vitest';
 
+interface TableRowProps {
+  data: {
+    id: string;
+    name: string;
+    userId: string;
+    checkIn: null | {
+      _id: string;
+      time: string;
+    };
+    eventId: string;
+  };
+  refetch: () => void;
+}
+
 describe('Testing TableRow component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  const renderWithProviders = (props: any) =>
+  const renderWithProviders = (
+    props: TableRowProps,
+  ): ReturnType<typeof render> =>
     render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -35,7 +51,7 @@ describe('Testing TableRow component', () => {
     );
 
   test('If user is not checked in, "Check In" button should be displayed and work correctly', async () => {
-    const props = {
+    const props: TableRowProps = {
       data: {
         id: '123',
         name: 'John Doe',
@@ -54,7 +70,7 @@ describe('Testing TableRow component', () => {
   });
 
   test('If user is already checked in, "Download Tag" button should be available', async () => {
-    const props = {
+    const props: TableRowProps = {
       data: {
         id: '123',
         name: 'John Doe',
@@ -68,7 +84,6 @@ describe('Testing TableRow component', () => {
       refetch: vi.fn(),
     };
 
-    // Mock global functions
     global.URL.createObjectURL = vi.fn(() => 'mockURL');
     global.window.open = vi.fn();
 
@@ -85,7 +100,7 @@ describe('Testing TableRow component', () => {
   });
 
   test('Upon check-in mutation failure, an error message should be displayed', async () => {
-    const props = {
+    const props: TableRowProps = {
       data: {
         id: '123',
         name: 'John Doe',
@@ -118,7 +133,7 @@ describe('Testing TableRow component', () => {
   });
 
   test('If PDF generation fails, an error message should be displayed', async () => {
-    const props = {
+    const props: TableRowProps = {
       data: {
         id: '123',
         name: '',
@@ -132,7 +147,6 @@ describe('Testing TableRow component', () => {
       refetch: vi.fn(),
     };
 
-    // Mock global functions
     global.URL.createObjectURL = vi.fn(() => {
       throw new Error('Blob creation failed');
     });
@@ -148,7 +162,7 @@ describe('Testing TableRow component', () => {
   });
 
   test('Generated PDF should be downloadable with correct content', async () => {
-    const props = {
+    const props: TableRowProps = {
       data: {
         id: '123',
         name: 'John Doe',
@@ -162,7 +176,6 @@ describe('Testing TableRow component', () => {
       refetch: vi.fn(),
     };
 
-    // Mock Blob creation and window functions
     const mockBlob = new Blob(['mock content'], { type: 'application/pdf' });
     global.URL.createObjectURL = vi.fn(() => 'mockURL');
     global.window.open = vi.fn();
