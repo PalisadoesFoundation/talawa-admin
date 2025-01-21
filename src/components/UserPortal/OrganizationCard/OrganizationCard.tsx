@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './OrganizationCard.module.css';
+import styles from '../../../style/app.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -180,9 +180,12 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
               </div>
             )}
             <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{props.admins?.length}</span> &nbsp;
-              &nbsp; &nbsp; {tCommon('members')}:{' '}
-              <span>{props.members?.length}</span>
+              <div>
+                {tCommon('admins')}: <span>{props.admins?.length}</span>
+              </div>
+              <div>
+                {tCommon('members')}: <span>{props.members?.length}</span>
+              </div>
             </h6>
           </div>
         </div>

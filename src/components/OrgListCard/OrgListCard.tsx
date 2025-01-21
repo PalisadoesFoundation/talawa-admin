@@ -4,7 +4,7 @@ import TruncatedText from './TruncatedText';
 import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from './OrgListCard.module.css';
+import styles from '../../style/app.module.css';
 import { useNavigate } from 'react-router-dom';
 import type {
   InterfaceOrgConnectionInfoType,
@@ -112,8 +112,12 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             )}
             {/* Display the number of admins and members */}
             <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{admins.length}</span> &nbsp; &nbsp;
-              &nbsp; {tCommon('members')}: <span>{members.length}</span>
+              <div>
+                {tCommon('admins')}: <span>{admins.length}</span>
+              </div>
+              <div>
+                {tCommon('members')}: <span>{members.length}</span>
+              </div>
             </h6>
           </div>
         </div>
