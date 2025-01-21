@@ -137,6 +137,7 @@ describe('VenueModal', () => {
     vi.clearAllMocks();
   });
 
+  // Basic Rendering Tests
   test('renders correctly when show is true', () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
     expect(screen.getByText('Venue Details')).toBeInTheDocument();
@@ -151,6 +152,7 @@ describe('VenueModal', () => {
     expect(container.firstChild).toBeNull();
   });
 
+  // Form Field Tests
   test('populates form fields correctly in edit mode', () => {
     renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
     expect(screen.getByDisplayValue('Venue 1')).toBeInTheDocument();
@@ -169,12 +171,14 @@ describe('VenueModal', () => {
     expect(screen.getByPlaceholderText('Enter Venue Capacity')).toHaveValue('');
   });
 
+  // UI Interaction Tests
   test('calls onHide when close button is clicked', () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
     fireEvent.click(screen.getByTestId('createVenueModalCloseBtn'));
     expect(defaultProps.onHide).toHaveBeenCalled();
   });
 
+  // Image Handling Tests
   test('displays image preview and clear button when an image is selected', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
     const file = new File(['test'], 'test.png', { type: 'image/png' });
@@ -198,15 +202,14 @@ describe('VenueModal', () => {
     expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
   });
 
+  // Validation Tests
   test('shows error when venue name is empty', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-    // Fill capacity with valid value
     fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
       target: { value: '100' },
     });
 
-    // Submit form without filling name
     await act(async () => {
       fireEvent.click(screen.getByTestId('createVenueBtn'));
     });
@@ -219,12 +222,10 @@ describe('VenueModal', () => {
   test('shows error when venue capacity is not a positive number', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-    // Fill name with valid value
     fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
       target: { value: 'Test Venue' },
     });
 
-    // Set invalid capacity
     fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
       target: { value: '-1' },
     });
@@ -240,10 +241,10 @@ describe('VenueModal', () => {
     });
   });
 
+  // Creation Tests
   test('shows success toast when a new venue is created', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-    // Fill required fields
     fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
       target: { value: 'Test Venue' },
     });
@@ -267,14 +268,13 @@ describe('VenueModal', () => {
     });
   });
 
+  // Update Tests
   test('shows success toast when an existing venue is updated', async () => {
     const mockLink = new StaticMockLink(MOCKS, true);
     renderVenueModal(editProps, mockLink);
 
-    // Wait for initial render
     await wait(0);
 
-    // Update form fields
     fireEvent.change(screen.getByDisplayValue('Venue 1'), {
       target: { value: 'Updated Venue' },
     });
@@ -290,13 +290,11 @@ describe('VenueModal', () => {
       target: { value: '200' },
     });
 
-    // Trigger update
     await act(async () => {
       fireEvent.click(screen.getByTestId('updateVenueBtn'));
-      await wait(0); // Wait for mutation to complete
+      await wait(0);
     });
 
-    // Wait for toast and callbacks
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
         'Venue details updated successfully',
@@ -305,5 +303,145 @@ describe('VenueModal', () => {
 
     expect(editProps.refetchVenues).toHaveBeenCalled();
     expect(editProps.onHide).toHaveBeenCalled();
+  });
+
+  test('refetchVenues is called after successful venue creation', async () => {
+    const refetchVenues = vi.fn();
+    const props = { ...defaultProps, refetchVenues };
+
+    renderVenueModal(props, new StaticMockLink(MOCKS, true));
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: 'Test Venue' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+      target: { value: 'Test Venue Desc' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '100' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(refetchVenues).toHaveBeenCalled();
+    });
+  });
+
+  test('handles invalid capacity input correctly', async () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: 'Test Venue' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: 'not-a-number' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Capacity must be a positive number!',
+      );
+    });
+  });
+
+  test('handles venue update with all fields correctly', async () => {
+    const mockUpdateMutation = {
+      request: {
+        query: UPDATE_VENUE_MUTATION,
+        variables: {
+          id: 'venue1',
+          name: 'Updated Name',
+          capacity: 150,
+          description: 'Updated description',
+          file: 'image1',
+        },
+      },
+      result: {
+        data: {
+          editVenue: {
+            _id: 'venue1',
+          },
+        },
+      },
+    };
+
+    const customMocks = [...MOCKS, mockUpdateMutation];
+    const mockLink = new StaticMockLink(customMocks, true);
+
+    renderVenueModal(editProps, mockLink);
+
+    fireEvent.change(screen.getByDisplayValue('Venue 1'), {
+      target: { value: 'Updated Name' },
+    });
+    fireEvent.change(screen.getByDisplayValue('100'), {
+      target: { value: '150' },
+    });
+    fireEvent.change(
+      screen.getByDisplayValue('Updated description for venue 1'),
+      {
+        target: { value: 'Updated description' },
+      },
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('updateVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(editProps.refetchVenues).toHaveBeenCalled();
+      expect(editProps.onHide).toHaveBeenCalled();
+    });
+  });
+
+  test('trims whitespace from name and description before submission', async () => {
+    const mockCreateMutation = {
+      request: {
+        query: CREATE_VENUE_MUTATION,
+        variables: {
+          name: 'Test Venue',
+          description: 'Test Description',
+          capacity: 100,
+          organizationId: 'orgId',
+          file: '',
+        },
+      },
+      result: {
+        data: {
+          createVenue: {
+            _id: 'newVenue',
+          },
+        },
+      },
+    };
+
+    const customMocks = [...MOCKS, mockCreateMutation];
+    renderVenueModal(defaultProps, new StaticMockLink(customMocks, true));
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: '  Test Venue  ' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+      target: { value: '  Test Description  ' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '100' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'organizationVenues.venueCreated',
+      );
+    });
   });
 });
