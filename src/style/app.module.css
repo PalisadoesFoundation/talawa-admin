@@ -1,18 +1,18 @@
 /**
  * CSS Methodology for Common Styles:
- * 
+ *
  * This project aims to reduce CSS duplication by merging similar styles across components
  * into reusable global classes. This ensures consistency and simplifies maintenance.
- * 
+ *
  * Steps for contributors:
  * 1. Identify duplicate or similar styles in different components (e.g., buttons, modals).
  * 2. Create a global class with a clear, descriptive name (e.g., .addButton, .removeButton).
  * 3. Use the new global class in all components requiring that style.
- * 
+ *
  * Naming Convention:
  * - Use lowercase, descriptive names for global classes (e.g., .addButton, .removeButton).
  * - Keep names generic enough for reuse but clear in their purpose.
- * 
+ *
  * Example:
  * Instead of component-specific classes like:
  *   `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge` (used in two different components for same functionality)
@@ -89,6 +89,7 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+
   /* Background and Border */
   --table-bg: #eaebef;
   --tablerow-bg: #eff1f7;
@@ -97,6 +98,20 @@
   --tablerow-bg-color: var(--dropdown-hover-color);
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
+  --input-field-border: var(--dimp-white);
+  --input-field-bg: #fff;
+  --input-field-shadow: var(--black-shadow-color);
+  --search-button-shadow: #0000001a;
+  --people-card-header-bg: #eaebef;
+  --people-card-header-border: #e8e5e5;
+  --people-role-border: #dee2e6;
+  --shadow: #d9d9d9;
+  --placeholder-color: #737373;
+  --people-card-container-border: #eaebef;
+  --people-card-container-bg: #fff;
+  --background-color: #fff;
+  --dropdown-shadow: #0000004c;
+  --dropdown-color: #555555;
 
   /* Font Sizes */
   --font-size-header: 16px;
@@ -318,6 +333,7 @@
 
 .dropdown {
   background-color: var(--bs-white) !important;
+  min-width: 150px;
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
   position: relative;
@@ -513,12 +529,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
-
-/* .searchButton:hover {
-  background-color: var(--search-button-hover-bg, var(--light-blue-color));
-  border-color: var(--search-button-border);
-} */
 
 .searchButton:active {
   transform: scale(0.95);
@@ -2530,7 +2544,12 @@ input[type='radio']:checked + label:hover {
   color: var(--grey-bg-color-dark);
 }
 
-.topRadius {
+.people_card_header {
+  background-color: var(--people-card-header-bg);
+  display: flex;
+  border: 1px solid var(--people-card-header-border);
+  padding: 1rem 1.5rem;
+  margin-top: 1.5rem;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
@@ -4297,7 +4316,16 @@ button[data-testid='createPostBtn'] {
 .mainContainer {
   margin-top: 2rem;
   width: 100%;
-  max-width: 800px;
+  /* max-width: 800px; */
+  flex-grow: 3;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 0 1rem;
+}
+
+.mainContainer_people {
+  margin-top: 2rem;
+  width: 100%;
   flex-grow: 3;
   max-height: 90vh;
   overflow: auto;
@@ -6192,4 +6220,98 @@ button[data-testid='createPostBtn'] {
   margin-bottom: 10px;
   font-weight: bold;
   color: var(--black-color);
+}
+
+/* people card */
+.personImage_peoplecard {
+  border-radius: 50%;
+  margin-right: 25px;
+  max-width: 70px;
+}
+
+.people_card_container {
+  display: flex;
+}
+
+.display_flex {
+  display: flex;
+}
+
+.align_center {
+  align-self: center;
+}
+
+.people_role {
+  width: 75%;
+  border: 1px solid var(--people-role-border);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.25rem;
+}
+
+/* People.tsx */
+
+.borderRounded8 {
+  border-radius: 8px;
+}
+
+.bottomRadius {
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.shadow {
+  box-shadow: 5px 5px 4px 0px var(--shadow);
+}
+
+.backgroundWhite {
+  background-color: var(--background-color);
+}
+
+.people_content {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  min-height: calc(100% - 40px);
+}
+
+.gap {
+  gap: 20px;
+}
+
+.semiBold {
+  font-weight: 500;
+}
+
+.placeholderColor::placeholder {
+  color: var(--placeholder-color);
+}
+
+.people__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 50px;
+}
+
+.people_card_main_container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--people-card-container-border);
+  padding: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-top: 0;
+  gap: var(--spacing-lg, 1.25rem);
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  background-color: var(--people-card-container-bg);
+}
+
+.custom_row_center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
