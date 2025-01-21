@@ -478,7 +478,6 @@
 .actionItemDeleteButton {
   background-color: var(--delete-button-bg);
   color: var(--delete-button-color);
-  border: none;
 }
 
 .createButton {
