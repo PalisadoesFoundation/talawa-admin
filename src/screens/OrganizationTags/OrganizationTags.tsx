@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded, Search } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
@@ -29,6 +29,7 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SortingButton from 'subComponents/SortingButton';
+
 /**
  * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
  *
@@ -170,13 +171,18 @@ function OrganizationTags(): JSX.Element {
       toast.error((error as Error).message);
     }
   };
+
+  const handleSearchButtonClick = (): void => {
+    orgUserTagsRefetch();
+  };
+
   if (orgUserTagsError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Organization Tags Data
+            Error occurred while loading Organization Tags Data
             <br />
             {orgUserTagsError.message}
           </h6>
@@ -189,6 +195,7 @@ function OrganizationTags(): JSX.Element {
     orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
       (edge) => edge.node,
     ) || [];
+
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
@@ -329,6 +336,14 @@ function OrganizationTags(): JSX.Element {
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
                 autoComplete="off"
               />
+
+              <Button
+                tabIndex={-1}
+                className={` ${styles.searchButton} `}
+                onClick={handleSearchButtonClick}
+              >
+                <Search className={styles.searchIcon} />
+              </Button>
             </div>
             <div className={styles.btnsBlock}>
               <SortingButton
@@ -351,7 +366,7 @@ function OrganizationTags(): JSX.Element {
               <Button
                 onClick={showCreateTagModal}
                 data-testid="createTagBtn"
-                className={`${styles.createButton} mb-2`}
+                className={`${styles.createButton}`}
               >
                 <i className={'fa fa-plus me-2'} />
                 {t('createTag')}
