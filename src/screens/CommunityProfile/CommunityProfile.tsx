@@ -150,7 +150,6 @@ const CommunityProfile = (): JSX.Element => {
       });
       toast.success(t('profileChangedMsg') as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error as Error);
     }
   };
@@ -183,7 +182,6 @@ const CommunityProfile = (): JSX.Element => {
       });
       toast.success(t(`resetData`) as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error as Error);
     }
   };

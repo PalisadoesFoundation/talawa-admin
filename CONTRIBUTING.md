@@ -17,6 +17,12 @@ If you are new to contributing to open source, please read the Open Source Guide
     - [Branching Strategy](#branching-strategy)
     - [Conflict Resolution](#conflict-resolution)
   - [Contributing Code](#contributing-code)
+  - [General:](#general)
+  - [Testing:](#testing)
+    - [Jest Testing](#jest-testing)
+    - [Vitest Testing](#vitest-testing)
+    - [Combined testing and coverage](#combined-testing-and-coverage)
+    - [Test Code Coverage:](#test-code-coverage)
 - [Internships](#internships)
 - [Community](#community)
 
@@ -92,60 +98,94 @@ The process of proposing a change to Talawa Admin can be summarized as:
 1. Run the app and test your changes.
 1. If you've added code, then test suites must be added.
 
-   1. **_General_:**
+   ### General:
 
-      1. We need to get to 100% test coverage for the app. We periodically increase the desired test coverage for our pull requests to meet this goal.
-      1. Pull requests that don't meet the minimum test coverage levels will not be accepted. This may mean that you will have to create tests for code you did not write. You can decide which part of the code base needs additional tests if this happens to you.
+      - We need to get to 100% test coverage for the app. We periodically increase the desired test coverage for our pull requests to meet this goal.
+      - Pull requests that don't meet the minimum test coverage levels will not be accepted. This may mean that you will have to create tests for code you did not write. You can decide which part of the code base needs additional tests if this happens to you.
 
-   2. **_Testing_:**
+   ### Testing:
 
-      1. Test using this set of commands:
-
+   This section outlines the different testing strategies and tools used in this project. It includes instructions on running tests, viewing code coverage, and debugging using Jest and Vitest. Following these guidelines ensures code reliability and maintains the project's high standards for quality.
+      #### Jest Testing
+      - Running a single test:
          ```
-         npm install
+         npm run test path/to/test/file
+         ```
+      - Running all tests:
+         ```
+         npm run test --watchAll=false
+         ```
+      - Viewing the code coverage of a single test file:
+         ```
+         npm run test --watchAll=false --coverage /path/to/test/file
+         ```
+      - Viewing the code coverage of all test files:
+         ```
          npm run test --watchAll=false --coverage
          ```
-
-      2. Debug tests in browser
-
+      - Debug tests in browser
          You can see the output of failing tests in broswer by running `jest-preview` package before running your tests
-
          ```
-         npm install
          npm run jest-preview
          npm run test --watchAll=false --coverage
          ```
-
          You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown in this screenshot -
 
          ![Debugging Test Demo](./public/images/jest-preview.webp)
+      #### Vitest Testing
+      - Running a single test:
+         ```
+         npm run test:vitest /path/to/test/file
+         ```
+      - Running all tests:
+         ```
+         npm run test:vitest
+         ```
+      - Viewing the code coverage of a single test file:
+         ```
+         npm run test:vitest:coverage /path/to/test/file
+         ```
+      - Viewing the code coverage of all test files:
+         ```
+         npm run test:vitest:coverage
+         ```
+      
+      #### Combined testing and coverage
+      - Running all tests:
+         ```
+         npm run test && npm run test:vitest
+         ```
+      - Viewing combined code coverage:
+         ```
+         npm run test --watchAll=false --coverage && npm run test:vitest:coverage            
+         ```
 
-   3. **_Test Code Coverage_:**
+      #### Test Code Coverage:
 
       1. _General Information_
-         1. The current code coverage of the repo is: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
-         2. You can determine the percentage test coverage of your code by running these two commands in sequence:
+         - The current code coverage of the repo is: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
+         - You can determine the percentage test coverage of your code by running these two commands in sequence:
             ```
             npm install
             npm run test --watchAll=false --coverage
             genhtml coverage/lcov.info -o coverage
             ```
-         3. The output of the `npm run test` command will give you a tablular coverage report per file
-         4. The overall coverage rate will be visible on the penultimate line of the `genhtml` command's output.
-         5. The `genhtml` command is part of the Linux `lcov` package. Similar packages can be found for Windows and MacOS.
-         6. The currently acceptable coverage rate can be found in the [GitHub Pull Request file](.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
+         - The output of the `npm run test` command will give you a tablular coverage report per file
+         - The overall coverage rate will be visible on the penultimate line of the `genhtml` command's output.
+         - The `genhtml` command is part of the Linux `lcov` package. Similar packages can be found for Windows and MacOS.
+         - The currently acceptable coverage rate can be found in the [GitHub Pull Request file](.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
       2. _Testing Individual Files_
-         1. You can test an individual file by running this command:
+         - You can test an individual file by running this command:
             ```
             npm run test --watchAll=false /path/to/test/file
             ```
-         2. You can get the test coverage report for that file by running this command. The report will list all tests in the suite. Those tests that are not run will have zero values. You will need to look for the output line relevant to your test file.
+         - You can get the test coverage report for that file by running this command. The report will list all tests in the suite. Those tests that are not run will have zero values. You will need to look for the output line relevant to your test file.
             ```
             npm run test --watchAll=false --coverage /path/to/test/file
             ```
       3. _Creating your code coverage account_
 
-         1. You can also see your code coverage online for your fork of the repo. This is provided by `codecov.io`
+         - You can also see your code coverage online for your fork of the repo. This is provided by `codecov.io`
 
             1. Go to this link: `https://app.codecov.io/gh/XXXX/YYYY` where XXXX is your GitHub account username and YYYY is the name of the repository
             2. Login to `codecov.io` using your GitHub account, and add your **repo** and **branches** to the `codecov.io` dashboard.

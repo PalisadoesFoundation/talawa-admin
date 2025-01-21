@@ -16,7 +16,7 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from 'style/app.module.css';
+import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 /**
@@ -105,7 +105,7 @@ const ForgotPassword = (): JSX.Element => {
   };
 
   /**
-   * Handles the form submission for resetting the password.
+   * manages the form submission for resetting the password.
    *
    * @param e - The form submit event
    */
@@ -135,7 +135,6 @@ const ForgotPassword = (): JSX.Element => {
         },
       });
 
-      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('passwordChanges') as string);
         setShowEnterEmail(true);
@@ -164,7 +163,10 @@ const ForgotPassword = (): JSX.Element => {
             <div className={styles.cardTemplate}>
               <div className={styles.keyWrapper}>
                 <div className={styles.themeOverlay} />
-                <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />
+                <KeyLogo
+                  className={styles.keyLogo}
+                  fill="var(--forgot-password-fill)"
+                />
               </div>
               <h3 className="text-center fw-bold">
                 {tCommon('forgotPassword')}
@@ -191,7 +193,7 @@ const ForgotPassword = (): JSX.Element => {
                     </div>
                     <Button
                       type="submit"
-                      className="mt-4 w-100"
+                      className={`mt-4 w-100 ${styles.login_btn}`}
                       data-testid="getOtpBtn"
                     >
                       {t('getOtp')}

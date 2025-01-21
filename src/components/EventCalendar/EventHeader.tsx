@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
-import { Search } from '@mui/icons-material';
+import { Button, Form } from 'react-bootstrap';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import AddIcon from '@mui/icons-material/Add';
 import styles from '../../style/app.module.css';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
+import SortingButton from 'subComponents/SortingButton';
 
 /**
  * Props for the EventHeader component.
@@ -22,6 +24,23 @@ interface InterfaceEventHeaderProps {
  * @param handleChangeView - Function to handle changing the view type.
  * @param showInviteModal - Function to show the invite modal for creating an event.
  * @returns JSX.Element - The rendered EventHeader component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function eventHeader({
   viewType,
@@ -34,7 +53,10 @@ function eventHeader({
   });
 
   return (
-    <div className={styles.calendarEventHeader}>
+    <div
+      className={styles.calendarEventHeader}
+      data-testid="calendarEventHeader"
+    >
       <div className={styles.calendar__header}>
         <div className={styles.input}>
           <Form.Control
@@ -51,78 +73,62 @@ function eventHeader({
              *
              * @param e - The event object from the input change.
              */
-            /*istanbul ignore next*/
+
             onChange={(e) => setEventName(e.target.value)}
           />
           <Button
             className={styles.searchButton}
+            data-testid="searchButton"
             style={{ marginBottom: '10px' }}
           >
-            <Search />
+            <SearchOutlinedIcon />
           </Button>
         </div>
-        <div className={styles.flex_grow}></div>
+        {/* <div className={styles.flex_grow}></div> */}
         <div className={styles.space}>
-          <div>
-            <Dropdown
-              onSelect={handleChangeView}
-              className={styles.selectTypeEventHeader}
+          <SortingButton
+            title={t('viewType')}
+            sortingOptions={[
+              { label: ViewType.MONTH, value: 'selectMonth' },
+              { label: ViewType.DAY, value: 'selectDay' },
+              { label: ViewType.YEAR, value: 'selectYear' },
+            ]}
+            selectedOption={viewType}
+            onSortChange={handleChangeView}
+            dataTestIdPrefix="selectViewType"
+            className={styles.dropdown}
+          />
+          <SortingButton
+            title={t('eventType')}
+            sortingOptions={[
+              { label: 'Events', value: 'Events' },
+              { label: 'Workshops', value: 'Workshops' },
+            ]}
+            selectedOption={t('eventType')}
+            onSortChange={(value) => console.log(`Selected: ${value}`)}
+            dataTestIdPrefix="eventType"
+            className={styles.dropdown}
+            buttonLabel={t('eventType')}
+          />
+          <div className={styles.selectTypeEventHeader}>
+            <Button
+              variant="success"
+              className={styles.dropdown}
+              onClick={showInviteModal}
+              data-testid="createEventModalBtn"
             >
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="selectViewType"
-                style={{ width: '100%' }}
-              >
-                {viewType}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  eventKey={ViewType.MONTH}
-                  data-testid="selectMonth"
-                >
-                  {ViewType.MONTH}
-                </Dropdown.Item>
-                <Dropdown.Item eventKey={ViewType.DAY} data-testid="selectDay">
-                  {ViewType.DAY}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey={ViewType.YEAR}
-                  data-testid="selectYear"
-                >
-                  {ViewType.YEAR}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+              <div className="">
+                <AddIcon
+                  sx={{
+                    fontSize: '25px',
+                    marginBottom: '2px',
+                    marginRight: '2px',
+                  }}
+                />
+                <span>Create</span>
+              </div>
+            </Button>
           </div>
-          <div>
-            <Dropdown className={styles.selectTypeEventHeader}>
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="eventType"
-                style={{ width: '100%' }}
-              >
-                {t('eventType')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item eventKey="Events" data-testid="events">
-                  Events
-                </Dropdown.Item>
-                <Dropdown.Item eventKey="Workshops" data-testid="workshop">
-                  Workshops
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <Button
-            variant="success"
-            className={styles.createButtonEventHeader}
-            onClick={showInviteModal}
-            data-testid="createEventModalBtn"
-          >
-            Create Event
-          </Button>
         </div>
       </div>
     </div>

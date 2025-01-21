@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
@@ -8,6 +8,7 @@ import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from 'style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null; // Controls the visibility of the drawer
@@ -30,6 +31,12 @@ const leftDrawer = ({
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
+
+  useEffect(() => {
+    if (hideDrawer === null) {
+      setHideDrawer(false);
+    }
+  }, []);
 
   /**
    * Handles link click to hide the drawer on smaller screens.
@@ -57,80 +64,100 @@ const leftDrawer = ({
         <h5 className={`${styles.titleHeader} text-secondary`}>
           {tCommon('menu')}
         </h5>
-        <div className={styles.optionList}>
-          <NavLink to={'/orglist'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <Button
-                variant={isActive === true ? 'success' : ''}
-                className={`${
-                  isActive === true ? 'text-black' : 'text-secondary'
-                }`}
-                style={{
-                  backgroundColor: isActive === true ? '#EAEBEF' : '',
-                }}
-                data-testid="orgsBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <OrganizationsIcon
-                    fill={
-                      isActive === true
-                        ? 'var(--bs-black)'
-                        : 'var(--bs-secondary)'
-                    }
-                  />
-                </div>
-                {t('my organizations')}
-              </Button>
+        <div className={`d-flex flex-column ${styles.sidebarcompheight} `}>
+          <div className={styles.optionList}>
+            <NavLink to={'/orglist'} onClick={handleLinkClick}>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive === true ? 'success' : ''}
+                  style={{
+                    backgroundColor:
+                      isActive === true ? 'var(--sidebar-option-bg)' : '',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    color: isActive
+                      ? 'var(--sidebar-option-text-active)'
+                      : 'var(--sidebar-option-text-inactive)',
+                  }}
+                  data-testid="orgsBtn"
+                >
+                  <div className={styles.iconWrapper}>
+                    <OrganizationsIcon
+                      fill="none"
+                      stroke={`${
+                        isActive === true
+                          ? 'var(--sidebar-icon-stroke-active)'
+                          : 'var(--sidebar-icon-stroke-inactive)'
+                      }`}
+                    />
+                  </div>
+                  {t('my organizations')}
+                </Button>
+              )}
+            </NavLink>
+            {superAdmin && (
+              <>
+                <NavLink to={'/users'} onClick={handleLinkClick}>
+                  {({ isActive }) => (
+                    <Button
+                      variant={isActive === true ? 'success' : ''}
+                      style={{
+                        backgroundColor:
+                          isActive === true ? 'var(--sidebar-option-bg)' : '',
+                        fontWeight: isActive ? 'bold' : 'normal',
+                        color: isActive
+                          ? 'var(--sidebar-option-text-active)'
+                          : 'var(--sidebar-option-text-inactive)',
+                      }}
+                      data-testid="rolesBtn"
+                    >
+                      <div className={styles.iconWrapper}>
+                        <RolesIcon
+                          fill="none"
+                          stroke={`${
+                            isActive === true
+                              ? 'var(--sidebar-icon-stroke-active)'
+                              : 'var(--sidebar-icon-stroke-inactive)'
+                          }`}
+                        />
+                      </div>
+                      {tCommon('users')}
+                    </Button>
+                  )}
+                </NavLink>
+                <NavLink to={'/communityProfile'} onClick={handleLinkClick}>
+                  {({ isActive }) => (
+                    <Button
+                      variant={isActive === true ? 'success' : ''}
+                      style={{
+                        backgroundColor:
+                          isActive === true ? 'var(--sidebar-option-bg)' : '',
+                        fontWeight: isActive ? 'bold' : 'normal',
+                        color: isActive
+                          ? 'var(--sidebar-option-text-active)'
+                          : 'var(--sidebar-option-text-inactive)',
+                      }}
+                      data-testid="communityProfileBtn"
+                    >
+                      <div className={styles.iconWrapper}>
+                        <SettingsIcon
+                          fill="none"
+                          stroke={`${
+                            isActive === true
+                              ? 'var(--sidebar-icon-stroke-active)'
+                              : 'var(--sidebar-icon-stroke-inactive)'
+                          }`}
+                        />
+                      </div>
+                      {t('communityProfile')}
+                    </Button>
+                  )}
+                </NavLink>
+              </>
             )}
-          </NavLink>
-          {superAdmin && (
-            <>
-              <NavLink to={'/users'} onClick={handleLinkClick}>
-                {({ isActive }) => (
-                  <Button
-                    variant={isActive === true ? 'success' : ''}
-                    className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
-                    }`}
-                    data-testid="rolesBtn"
-                  >
-                    <div className={styles.iconWrapper}>
-                      <RolesIcon
-                        fill={`${
-                          isActive === true
-                            ? 'var(--bs-white)'
-                            : 'var(--bs-secondary)'
-                        }`}
-                      />
-                    </div>
-                    {tCommon('users')}
-                  </Button>
-                )}
-              </NavLink>
-              <NavLink to={'/communityProfile'} onClick={handleLinkClick}>
-                {({ isActive }) => (
-                  <Button
-                    variant={isActive === true ? 'success' : ''}
-                    className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
-                    }`}
-                    data-testid="communityProfileBtn"
-                  >
-                    <div className={styles.iconWrapper}>
-                      <SettingsIcon
-                        stroke={`${
-                          isActive === true
-                            ? 'var(--bs-white)'
-                            : 'var(--bs-secondary)'
-                        }`}
-                      />
-                    </div>
-                    {t('communityProfile')}
-                  </Button>
-                )}
-              </NavLink>
-            </>
-          )}
+          </div>
+          <div className="mt-auto">
+            <ProfileDropdown />
+          </div>
         </div>
       </div>
     </>

@@ -21,7 +21,7 @@ import {
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
+import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -32,6 +32,7 @@ import type {
 } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import SortingButton from 'subComponents/SortingButton';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,6 +58,24 @@ const StyledTableRow = styled(TableRow)(() => ({
  *  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
  *  USERS_CONNECTION_LIST,
  *  ADD_MEMBER_MUTATION,SIGNUP_MUTATION.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.removeButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function AddMember(): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
@@ -270,44 +289,27 @@ function AddMember(): JSX.Element {
     });
   };
 
+  const handleSortChange = (value: string): void => {
+    if (value === 'existingUser') {
+      openAddUserModal();
+    } else if (value === 'newUser') {
+      openCreateNewUserModal();
+    }
+  };
+
   return (
     <>
-      <Dropdown>
-        <Dropdown.Toggle
-          variant="success"
-          id="dropdown-basic"
-          className={styles.dropdown}
-          data-testid="addMembers"
-        >
-          {translateOrgPeople('addMembers')}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item
-            id="existingUser"
-            data-value="existingUser"
-            data-name="existingUser"
-            data-testid="existingUser"
-            onClick={(): void => {
-              openAddUserModal();
-            }}
-          >
-            <Form.Label htmlFor="existingUser">
-              {translateOrgPeople('existingUser')}
-            </Form.Label>
-          </Dropdown.Item>
-          <Dropdown.Item
-            id="newUser"
-            data-value="newUser"
-            data-name="newUser"
-            data-testid="newUser"
-            onClick={(): void => {
-              openCreateNewUserModal();
-            }}
-          >
-            <label htmlFor="memberslist">{translateOrgPeople('newUser')}</label>
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <SortingButton
+        title={translateOrgPeople('addMembers')}
+        sortingOptions={[
+          { label: translateOrgPeople('existingUser'), value: 'existingUser' },
+          { label: translateOrgPeople('newUser'), value: 'newUser' },
+        ]}
+        selectedOption={translateOrgPeople('addMembers')}
+        onSortChange={handleSortChange}
+        dataTestIdPrefix="addMembers"
+        className={styles.dropdown}
+      />
 
       {/* Existing User Modal */}
       <Modal
@@ -544,35 +546,29 @@ function AddMember(): JSX.Element {
               />
             </InputGroup>
           </div>
+        </Modal.Body>
+        <Modal.Footer>
           <div className={styles.createUserActionBtns}>
             <Button
-              className={`${styles.borderNone}`}
+              className={`${styles.removeButton}`}
               variant="danger"
               onClick={closeCreateNewUserModal}
               data-testid="closeBtn"
-              style={{
-                backgroundColor: 'var(--delete-button-bg)',
-                color: 'var(--delete-button-color)',
-              }}
             >
               <Close className={styles.closeButton} />
               {translateOrgPeople('cancel')}
             </Button>
             <Button
-              className={`${styles.colorPrimary} ${styles.borderNone}`}
+              className={`${styles.addButton}`}
               variant="success"
               onClick={handleCreateUser}
               data-testid="createBtn"
-              style={{
-                backgroundColor: 'var(--search-button-bg)',
-                border: '1px solid var(--dropdown-border-color)',
-              }}
             >
               <Check className={styles.searchIcon} />
               {translateOrgPeople('create')}
             </Button>
           </div>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
     </>
   );

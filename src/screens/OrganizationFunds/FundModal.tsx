@@ -48,6 +48,23 @@ export interface InterfaceFundModal {
  * - `handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)`: Updates the state based on user input.
  *
  * @returns  The rendered modal dialog.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.switch`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const FundModal: React.FC<InterfaceFundModal> = ({
   isOpen,
@@ -115,7 +132,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     }
   };
 
-  /*istanbul ignore next*/
   const updateFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -228,7 +244,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   type="checkbox"
                   checked={formState.taxDeductible}
                   data-testid="setTaxDeductibleSwitch"
-                  className="ms-2"
+                  className={`ms-2 ${styles.switch}`}
                   onChange={() =>
                     setFormState({
                       ...formState,
@@ -241,7 +257,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 <label>{t('default')} </label>
                 <Form.Switch
                   type="checkbox"
-                  className="ms-2"
+                  className={`ms-2 ${styles.switch}`}
                   data-testid="setDefaultSwitch"
                   checked={formState.isDefault}
                   onChange={() =>
@@ -259,7 +275,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                     type="checkbox"
                     checked={formState.isArchived}
                     data-testid="archivedSwitch"
-                    className="ms-2"
+                    className={`ms-2 ${styles.switch}`}
                     onChange={() =>
                       setFormState({
                         ...formState,

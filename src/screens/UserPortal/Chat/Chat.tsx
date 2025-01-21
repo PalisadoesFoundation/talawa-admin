@@ -84,7 +84,7 @@ type DirectMessage = {
   messageContent: string;
 };
 
-type Chat = {
+export type Chat = {
   _id: string;
   isGroup: boolean;
   name: string;
@@ -110,25 +110,6 @@ export default function chat(): JSX.Element {
   const [filterType, setFilterType] = useState('all');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
-
-  React.useEffect(() => {
-    if (filterType === 'all') {
-      chatsListRefetch();
-      if (chatsListData && chatsListData.chatsByUserId) {
-        setChats(chatsListData.chatsByUserId);
-      }
-    } else if (filterType === 'unread') {
-      unreadChatListRefetch();
-      if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
-        setChats(unreadChatListData.getUnreadChatsByUserId);
-      }
-    } else if (filterType === 'group') {
-      groupChatListRefetch();
-      if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
-        setChats(groupChatListData.getGroupChatsByUserId);
-      }
-    }
-  }, [filterType]);
 
   const [createDirectChatModalisOpen, setCreateDirectChatModalisOpen] =
     useState(false);
@@ -179,6 +160,28 @@ export default function chat(): JSX.Element {
       chatsListRefetch({ id: userId });
     });
   }, [selectedContact]);
+
+  React.useEffect(() => {
+    async function getChats(): Promise<void> {
+      if (filterType === 'all') {
+        await chatsListRefetch();
+        if (chatsListData && chatsListData.chatsByUserId) {
+          setChats(chatsListData.chatsByUserId);
+        }
+      } else if (filterType === 'unread') {
+        await unreadChatListRefetch();
+        if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
+          setChats(unreadChatListData.getUnreadChatsByUserId);
+        }
+      } else if (filterType === 'group') {
+        await groupChatListRefetch();
+        if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
+          setChats(groupChatListData.getGroupChatsByUserId);
+        }
+      }
+    }
+    getChats();
+  }, [filterType]);
 
   React.useEffect(() => {
     if (chatsListData && chatsListData?.chatsByUserId.length) {
@@ -329,6 +332,7 @@ export default function chat(): JSX.Element {
           toggleCreateDirectChatModal={toggleCreateDirectChatModal}
           createDirectChatModalisOpen={createDirectChatModalisOpen}
           chatsListRefetch={chatsListRefetch}
+          chats={chats}
         ></CreateDirectChat>
       )}
     </>
