@@ -468,20 +468,20 @@ function organizationActionItems(): JSX.Element {
         }}
         sx={{
           borderRadius: '20px',
-          backgroundColor: 'EAEBEF)',
+          backgroundColor: 'FFFFFF)',
           '& .MuiDataGrid-row': {
-            backgroundColor: '#eff1f7',
+            backgroundColor: '#FFFFFF',
             '&:focus-within': {
               // outline: '2px solid #000',
               outlineOffset: '-2px',
             },
           },
           '& .MuiDataGrid-row:hover': {
-            backgroundColor: '#EAEBEF',
+            backgroundColor: '#FFFFFF',
             boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
           },
           '& .MuiDataGrid-row.Mui-hovered': {
-            backgroundColor: '#EAEBEF',
+            backgroundColor: '#FFFFFF',
             boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
           },
           '& .MuiDataGrid-cell:focus': {

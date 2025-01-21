@@ -62,7 +62,7 @@ const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
           <Button
             variant="danger"
             onClick={hide}
-            className={styles.modalCloseBtn}
+            className={styles.closeButton}
             data-testid="modalCloseBtn"
           >
             {' '}
