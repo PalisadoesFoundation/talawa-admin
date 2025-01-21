@@ -126,6 +126,7 @@
   --background-color: #fff;
   --dropdown-shadow: #0000004c;
   --dropdown-color: #555555;
+
   --dropdown-button-bg: #555555;
   --dropdown-button-fill: #555555;
 
@@ -598,6 +599,7 @@
   transform: scale(0.95);
   background-color: var(--search-button-bg) !important;
   border-color: transparent !important;
+ 
 }
 
 .addButton {
@@ -7156,4 +7158,98 @@ button[data-testid='createPostBtn'] {
   color: var(--LoginToggle-button-color);
   border: 1px solid var(--LoginToggle-button-active);
   background-color: var(--LoginToggle-button-active);
+=======
+/* people card */
+.personImage_peoplecard {
+  border-radius: 50%;
+  margin-right: 25px;
+  max-width: 70px;
+}
+
+.people_card_container {
+  display: flex;
+}
+
+.display_flex {
+  display: flex;
+}
+
+.align_center {
+  align-self: center;
+}
+
+.people_role {
+  width: 75%;
+  border: 1px solid var(--people-role-border);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.25rem;
+}
+
+/* People.tsx */
+
+.borderRounded8 {
+  border-radius: 8px;
+}
+
+.bottomRadius {
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.shadow {
+  box-shadow: 5px 5px 4px 0px var(--shadow);
+}
+
+.backgroundWhite {
+  background-color: var(--background-color);
+}
+
+.people_content {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  min-height: calc(100% - 40px);
+}
+
+.gap {
+  gap: 20px;
+}
+
+.semiBold {
+  font-weight: 500;
+}
+
+.placeholderColor::placeholder {
+  color: var(--placeholder-color);
+}
+
+.people__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 50px;
+}
+
+.people_card_main_container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--people-card-container-border);
+  padding: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-top: 0;
+  gap: var(--spacing-lg, 1.25rem);
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  background-color: var(--people-card-container-bg);
+}
+
+.custom_row_center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
 }
