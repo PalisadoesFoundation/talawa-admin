@@ -476,8 +476,12 @@
 }
 
 .actionItemDeleteButton {
-  background-color: var(--delete-button-bg);
-  color: var(--delete-button-color);
+  background-color: var(--delete-button-bg) !important;
+  color: var(--delete-button-color) !important;
+}
+
+.actionItemDeleteButton:hover {
+  box-shadow: var(--drop-shadow);
 }
 
 .createButton {
@@ -610,16 +614,16 @@
 }
 
 .infoButton {
-  background-color: var(--search-button-bg);
-  border-color: var(--search-button-border);
+  background-color: var(--search-button-bg) !important;
+  border-color: var(--search-button-border) !important;
   color: var(--brown-color);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
 }
 
 .infoButton:hover {
-  background-color: var(--light-blue-color);
-  border-color: var(--search-button-border);
+  color: var(--brown-color) !important;
+  box-shadow: var(--drop-shadow);
 }
 
 .TableImage {
@@ -643,7 +647,7 @@
 }
 
 .rowBackground {
-  background-color: var(--row-background);
+  background-color: var(--row-background) !important;
   max-height: 120px;
   overflow-y: auto;
 }
@@ -2038,6 +2042,15 @@ input[type='radio']:checked + label:hover {
 .checkboxButton input:checked {
   background-color: var(--dark-blue);
   border-color: var(--dark-blue);
+}
+
+.checkboxButton input:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 /* Modals */
