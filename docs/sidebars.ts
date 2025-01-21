@@ -29,7 +29,7 @@ const sidebars: SidebarsConfig = {
     },
   ],
 
-  // But you can create a sidebar manually
+  // But you can create a sidebar manually like this
   /*
   tutorialSidebar: [
     'intro',

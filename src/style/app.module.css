@@ -1,18 +1,18 @@
 /**
  * CSS Methodology for Common Styles:
- * 
+ *
  * This project aims to reduce CSS duplication by merging similar styles across components
  * into reusable global classes. This ensures consistency and simplifies maintenance.
- * 
+ *
  * Steps for contributors:
  * 1. Identify duplicate or similar styles in different components (e.g., buttons, modals).
  * 2. Create a global class with a clear, descriptive name (e.g., .addButton, .removeButton).
  * 3. Use the new global class in all components requiring that style.
- * 
+ *
  * Naming Convention:
  * - Use lowercase, descriptive names for global classes (e.g., .addButton, .removeButton).
  * - Keep names generic enough for reuse but clear in their purpose.
- * 
+ *
  * Example:
  * Instead of component-specific classes like:
  *   `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge` (used in two different components for same functionality)
@@ -94,6 +94,7 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+
   /* Background and Border */
   --table-bg: #eaebef;
   --profile-bg: #f6f8fc;
@@ -111,6 +112,22 @@
   --sidebar-option-text-active: #000000;
   --sidebar-option-text-inactive: #808080;
   --forgot-password-fill: #555555;
+  --input-field-border: var(--dimp-white);
+  --input-field-bg: #fff;
+  --input-field-shadow: var(--black-shadow-color);
+  --search-button-shadow: #0000001a;
+  --people-card-header-bg: #eaebef;
+  --people-card-header-border: #e8e5e5;
+  --people-role-border: #dee2e6;
+  --shadow: #d9d9d9;
+  --placeholder-color: #737373;
+  --people-card-container-border: #eaebef;
+  --people-card-container-bg: #fff;
+  --background-color: #fff;
+  --dropdown-shadow: #0000004c;
+  --dropdown-color: #555555;
+  --dropdown-button-bg: #555555;
+  --dropdown-button-fill: #555555;
 
   /* Font Sizes */
   --font-size-header: 16px;
@@ -141,6 +158,31 @@
   --search-button-bg: #a8c7fa;
   --search-button-border: #555555;
   --search-outline: #555555;
+  --search-button-fill: #555555;
+  --createorgdropdown-button-bg: #eaebef;
+  --createorgdropdown-button-border: #555555;
+  --langChange-button-bg: #a8c7fa;
+  --langChange-button-text: #1778f2;
+  --login-button-fill: #555555;
+  --login-button-bg: #a8c7fa;
+  --register-button-bg: #eaebef;
+  --buttonList-bg: #a8c7fa;
+  --leftDrawer-option-hover-focus-bg: #eaebef;
+  --leftDrawer-option-text: black;
+  --leftDrawer-bg: #fff;
+  --collapse-Sidebar-Button-fill: black;
+  --joined-button-color: #555555;
+  --joined-button-bg: #a8c7fa;
+  --org-desc-color: #4b5563;
+  --orgCard-bg: #fff;
+  --orgCard-outline: #e9ecef;
+  --orgCard-Image-bg: #e9ecef;
+  --profileContainer-focus-bg: #f8f9fa;
+  --organization-bg: #a8c7fa;
+  --organization-color: #555555;
+  --LoginToggle-button-color: #555555;
+  --LoginToggle-button-bg: #eaebef;
+  --LoginToggle-button-active: #a8c7fa;
   --bs-primary: #0056b3;
   --bs-warning: #ffc107;
   --bs-white: #fff;
@@ -333,13 +375,13 @@
 
 .dropdown {
   background-color: var(--bs-white) !important;
+  min-width: 150px;
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
   position: relative;
   display: inline-block;
   margin-top: 10px;
   margin-bottom: 10px;
-  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 .dropdown:hover {
   box-shadow: var(--hover-shadow);
@@ -356,7 +398,7 @@
   ) {
   background-color: transparent !important;
   border: 1px solid var(--brown-color);
-  color: var(--brown-color) !important;
+  color: var(--dropdown-button-bg) !important;
   border-color: var(--brown-color) !important;
 }
 
@@ -370,12 +412,6 @@
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
 }
-
-/* .dropdown:disabled {
-  background-color: transparent !important;
-  border: 1px solid var(--brown-color);
-  color: var(--brown-color) !important;
-} */
 
 .dropdownItem {
   background-color: var(--bs-white) !important;
@@ -536,7 +572,7 @@
   --bs-btn-active-bg: var(--search-button-bg);
   --bs-btn-active-border-color: var(--search-button-bg);
   margin-bottom: 10px;
-  color: var(--brown-color);
+  color: var(--search-button-fill);
   background-color: var(--search-button-bg);
   border-color: var(--search-button-bg);
   position: absolute;
@@ -546,6 +582,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .searchButton:hover {
@@ -2207,17 +2246,17 @@ input[type='radio']:checked + label:hover {
 }
 
 .createorgdropdown {
-  background-color: var(--grey-light);
-  border-color: var(--brown-color);
+  background-color: var(--createorgdropdown-button-bg);
+  border-color: var(--createorgdropdown-button-border);
   height: 3rem;
   margin-top: 0.7rem;
-  color: var(--brown-color);
+  color: var(--dropdown-button-fill);
 }
 .createorgdropdown:active,
 .createorgdropdown:hover {
-  background-color: var(--grey-light) !important;
-  border-color: var(--brown-color) !important;
-  color: var(--brown-color) !important;
+  background-color: var(--createorgdropdown-button-bg) !important;
+  border-color: var(--createorgdropdown-button-border) !important;
+  color: var(--dropdown-button-fill) !important;
   box-shadow: var(--hover-shadow);
 }
 .notFound {
@@ -2660,7 +2699,12 @@ input[type='radio']:checked + label:hover {
   color: var(--grey-bg-color-dark);
 }
 
-.topRadius {
+.people_card_header {
+  background-color: var(--people-card-header-bg);
+  display: flex;
+  border: 1px solid var(--people-card-header-border);
+  padding: 1rem 1.5rem;
+  margin-top: 1.5rem;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
@@ -3055,20 +3099,20 @@ form > input {
 
 /* Define your custom button styles */
 .langChangeBtnStyle {
-  --bs-btn-active-bg: var(--light-blue);
-  --bs-btn-active-border-color: var(--light-blue);
-  --bs-btn-active-color: var(--dark-blue);
+  --bs-btn-active-bg: var(--langChange-button-bg);
+  --bs-btn-active-border-color: var(--langChange-button-bg);
+  --bs-btn-active-color: var(--langChange-button-text);
   width: 7.5rem;
   height: 2.2rem;
   padding: 0;
-  color: var(--dark-blue);
-  border-color: var(--light-blue);
+  color: var(--langChange-button-text);
+  border-color: var(--langChange-button-bg);
   background-color: transparent; /* Default transparent background */
 }
 
 .langChangeBtnStyle:hover {
-  background-color: var(--light-blue) !important;
-  border-color: var(--light-blue) !important;
+  background-color: var(--langChange-button-bg) !important;
+  border-color: var(--langChange-button-bg) !important;
 }
 
 .talawa_logo {
@@ -3110,25 +3154,25 @@ form > input {
   border-color: var(--search-button-bg);
   justify-content: center;
   align-items: center;
-  color: var(--brown-color);
+  color: var(--search-button-fill);
 }
 .email_button:hover {
-  color: var(--brown-color) !important;
+  color: var(--search-button-fill) !important;
   box-shadow: var(--hover-shadow);
 }
 
 .login_btn {
   font-weight: bold;
-  color: var(--brown-color);
-  --bs-btn-bg: var(--search-button-bg);
-  --bs-btn-border-color: var(--search-button-bg);
-  --bs-btn-hover-bg: var(--search-button-bg);
-  --bs-btn-hover-border-color: var(--search-button-bg);
-  --bs-btn-active-color: var(--search-button-bg);
-  --bs-btn-active-bg: var(--search-button-bg);
-  --bs-btn-active-border-color: var(--search-button-bg);
-  --bs-btn-disabled-bg: var(--search-button-bg);
-  --bs-btn-disabled-border-color: var(--search-button-bg);
+  color: var(--login-button-fill);
+  --bs-btn-bg: var(--login-button-bg);
+  --bs-btn-border-color: var(--login-button-bg);
+  --bs-btn-hover-bg: var(--login-button-bg);
+  --bs-btn-hover-border-color: var(--login-button-bg);
+  --bs-btn-active-color: var(--login-button-bg);
+  --bs-btn-active-bg: var(--login-button-bg);
+  --bs-btn-active-border-color: var(--login-button-bg);
+  --bs-btn-disabled-bg: var(--login-button-bg);
+  --bs-btn-disabled-border-color: var(--login-button-bg);
   margin-top: 1rem;
   margin-bottom: 1rem;
   width: 100%;
@@ -3137,29 +3181,28 @@ form > input {
 }
 
 .login_btn:hover {
-  color: var(--brown-color) !important;
+  color: var(--login-button-fill) !important;
   box-shadow: var(--hover-shadow);
 }
 
 .reg_btn {
   font-weight: bold;
-  background-color: var(--grey-light);
-  border-color: var(--grey-light);
-
-  --bs-btn-hover-bg: var(--grey-light);
-  --bs-btn-hover-border-color: var(--grey-light);
-  --bs-btn-active-color: var(--grey-light);
-  --bs-btn-active-bg: var(--grey-light);
-  --bs-btn-active-border-color: var(--grey-light);
+  background-color: var(--register-button-bg);
+  border-color: var(--register-button-bg);
+  --bs-btn-hover-bg: var(--register-button-bg);
+  --bs-btn-hover-border-color: var(--register-button-bg);
+  --bs-btn-active-color: var(--register-button-bg);
+  --bs-btn-active-bg: var(---register-button-bg);
+  --bs-btn-active-border-color: var(--register-button-bg);
   margin-top: 1rem;
-  color: var(--brown-color);
+  color: var(--login-button-fill);
   margin-bottom: 1rem;
   width: 100%;
   transition: background-color 0.2s ease;
   cursor: pointer;
 }
 .reg_btn:hover {
-  color: var(--brown-color) !important;
+  color: var(--login-button-fill) !important;
   box-shadow: var(--hover-shadow);
 }
 
@@ -3709,7 +3752,7 @@ button[data-testid='createPostBtn'] {
   }
 
   .buttonList {
-    background-color: var(--light-blue) !important;
+    background-color: var(--buttonList-bg) !important;
   }
   /* AddOnEntry.tsx */
 
@@ -3859,18 +3902,18 @@ button[data-testid='createPostBtn'] {
 }
 
 .leftDrawer .optionList button:hover {
-  background-color: var(--grey-light) !important;
+  background-color: var(--leftDrawer-option-hover-focus-bg) !important;
   box-shadow: var(--hover-shadow);
-  color: black !important;
+  color: var(--leftDrawer-option-text) !important;
 }
 .leftDrawer .optionList button:active,
 .leftDrawer .optionList button:focus {
-  background-color: var(--grey-light) !important;
-  color: black !important;
+  background-color: var(--leftDrawer-option-hover-focus-bg) !important;
+  color: var(--leftDrawer-option-text) !important;
   font-weight: bold;
 }
 .leftDrawer .optionList button:hover svg {
-  stroke: var(--black) !important;
+  stroke: var(--leftDrawer-option-text) !important;
 }
 
 .leftDrawer .optionList button .iconWrapper {
@@ -4552,7 +4595,16 @@ button[data-testid='createPostBtn'] {
 .mainContainer {
   margin-top: 2rem;
   width: 100%;
-  max-width: 800px;
+  /* max-width: 800px; */
+  flex-grow: 3;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 0 1rem;
+}
+
+.mainContainer_people {
+  margin-top: 2rem;
+  width: 100%;
   flex-grow: 3;
   max-height: 90vh;
   overflow: auto;
@@ -6500,7 +6552,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   flex-direction: column;
   padding: 1rem 1rem 0 1rem;
-  background-color: var(--bs-white);
+  background-color: var(--leftDrawer-bg);
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
 }
@@ -6560,7 +6612,7 @@ button[data-testid='createPostBtn'] {
 
 .profileContainer:focus {
   outline: none;
-  background-color: var(--bs-gray-100);
+  background-color: var(--profileContainer-focus-bg);
 }
 .imageContainer {
   width: 56px;
@@ -6647,9 +6699,9 @@ button[data-testid='createPostBtn'] {
   height: 40px;
   bottom: 0;
   z-index: 9999;
-  width: calc(300px + 2rem);
+  width: calc(250px + 2rem);
   background-color: rgba(245, 245, 245, 0.7);
-  color: black;
+  color: var(--collapse-Sidebar-Button-fill);
   border: none;
   border-radius: 0px;
 }
@@ -6744,16 +6796,16 @@ button[data-testid='createPostBtn'] {
   display: flex;
   justify-content: space-around;
   width: 8rem;
-  color: var(--brown-color);
+  color: var(--joined-button-color);
   font-weight: bold;
-  background-color: var(--light-blue) !important;
-  border-color: var(--light-blue) !important;
+  background-color: var(--joined-button-bg) !important;
+  border-color: var(--joined-button-bg) !important;
 }
 
 .joinedBtn:hover {
-  background-color: var(--light-blue) !important;
-  border-color: var(--light-blue) !important;
-  color: var(--brown-color) !important;
+  background-color: var(--joined-button-bg) !important;
+  border-color: var(--joined-button-bg) !important;
+  color: var(--joined-button-color) !important;
   box-shadow: var(--hover-shadow);
 }
 
@@ -6772,7 +6824,7 @@ button[data-testid='createPostBtn'] {
 
 .orgdesc {
   font-size: 0.9rem;
-  color: var(--bs-gray-600);
+  color: var(--org-desc-color);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -6828,11 +6880,11 @@ button[data-testid='createPostBtn'] {
 /* OrgListCard */
 
 .orgCard {
-  background-color: var(--bs-white);
+  background-color: var(--orgCard-bg);
   margin: 1rem;
   padding: 1rem;
   border-radius: 8px;
-  outline: 1px solid var(--bs-gray-200);
+  outline: 1px solid var(--orgCard-outline);
   position: relative;
 }
 
@@ -6852,7 +6904,7 @@ button[data-testid='createPostBtn'] {
   height: 120px;
   object-fit: contain;
   margin-bottom: 0.8rem;
-  background-color: var(--bs-gray-200);
+  background-color: var(--orgCard-Image-bg);
 }
 .orgCard .innerContainer .content {
   flex: 1;
@@ -6889,7 +6941,7 @@ button[data-testid='createPostBtn'] {
 
 .orgdesc {
   font-size: 0.9rem;
-  color: var(--bs-gray-600);
+  color: var(--org-desc-color);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -6913,7 +6965,7 @@ button[data-testid='createPostBtn'] {
 
 .address h6 {
   font-size: 0.9rem;
-  color: var(--bs-gray-600);
+  color: var(--org-desc-color);
 }
 
 @media (max-width: 580px) {
@@ -6992,16 +7044,16 @@ button[data-testid='createPostBtn'] {
 }
 
 .colorPrimary {
-  background: var(--blue-search-bg);
-  color: var(--brown-color) !important;
-  --bs-btn-active-bg: var(--blue-search-bg);
+  background: var(--organization-bg);
+  color: var(--organization-color) !important;
+  --bs-btn-active-bg: var(--organization-bg);
 }
 .colorPrimary:hover,
 .colorPrimary:focus,
 .colorPrimary:active {
-  background-color: var(--blue-search-bg) !important;
+  background-color: var(--organization-bg) !important;
   box-shadow: var(--hover-shadow);
-  color: var(--brown-color) !important;
+  color: var(--organization-color) !important;
 }
 
 .backgroundWhite {
@@ -7065,4 +7117,43 @@ button[data-testid='createPostBtn'] {
     left: 0;
     right: 0;
   }
+}
+
+/* LoginPortaltoggle */
+
+.navLinkClass {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.4;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  color: var(--LoginToggle-button-color);
+  border-radius: 0.3rem;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--LoginToggle-button-bg);
+  font-weight: 500;
+  transition: all 0.25s ease;
+  background-color: var(--LoginToggle-button-bg);
+}
+
+.navLinkClass:hover {
+  box-shadow: var(--hover-shadow);
+  background-color: var(--LoginToggle-button-bg);
+  border-color: var(--LoginToggle-button-bg);
+}
+
+.activeLink {
+  color: var(--LoginToggle-button-color);
+  border: 1px solid var(--LoginToggle-button-active);
+  background-color: var(--LoginToggle-button-active);
+}
+
+.activeLink:hover {
+  box-shadow: var(--hover-shadow);
+  color: var(--LoginToggle-button-color);
+  border: 1px solid var(--LoginToggle-button-active);
+  background-color: var(--LoginToggle-button-active);
 }
