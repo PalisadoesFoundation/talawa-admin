@@ -357,7 +357,7 @@ export default function organizations(): JSX.Element {
                 <InputGroup className={styles.maxWidth}>
                   <Form.Control
                     placeholder={t('searchOrganizations')}
-                    id="searchOrganizations"
+                    id="searchUserOrgs"
                     type="text"
                     className={`${styles.inputField}`}
                     onKeyUp={handleSearchByEnter}
