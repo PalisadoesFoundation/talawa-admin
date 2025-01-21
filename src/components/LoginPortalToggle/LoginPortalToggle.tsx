@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './LoginPortalToggle.module.css';
+// import styles from './LoginPortalToggle.module.css';
+import styles from '../../style/app.module.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { NavLink } from 'react-router-dom';
