@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -18,11 +18,14 @@ import {
   RECAPTCHA_SITE_KEY,
 } from 'Constant/constant';
 import {
-  LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  GET_COMMUNITY_DATA,
+  ORGANIZATION_LIST,
+  LOGIN_QUERY,
+} from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
@@ -122,12 +125,12 @@ const loginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, refetch } = useQuery(GET_COMMUNITY_DATA);
-  useEffect(() => {
-    // refetching the data if the pre-login data updates
-    refetch();
-  }, [data]);
-  const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
+  // const { data, refetch } = useQuery(GET_COMMUNITY_DATA);
+  // useEffect(() => {
+  //   // refetching the data if the pre-login data updates
+  //   refetch();
+  // }, [data]);
+  const [signin, { loading: loginLoading }] = useLazyQuery(LOGIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
@@ -291,39 +294,45 @@ const loginPage = (): JSX.Element => {
     }
 
     try {
-      const { data: loginData } = await login({
+      const { data: signInData } = await signin({
         variables: {
           email: formState.email,
           password: formState.password,
         },
       });
+      console.log(signInData);
 
-      if (loginData) {
-        i18n.changeLanguage(loginData.login.appUserProfile.appLanguageCode);
-        const { login } = loginData;
-        const { user, appUserProfile } = login;
-        const isAdmin: boolean =
-          appUserProfile.isSuperAdmin || appUserProfile.adminFor.length !== 0;
+      if (signInData) {
+        if (signInData.signIn.user.countryCode !== null) {
+          i18n.changeLanguage(signInData.signIn.user.countryCode);
+        }
+
+        const { signIn } = signInData;
+        const { user, authenticationToken } = signIn;
+        const isAdmin: boolean = user.role === 'administrator';
 
         if (role === 'admin' && !isAdmin) {
           toast.warn(tErrors('notAuthorised') as string);
           return;
         }
-        const loggedInUserId = user._id;
+        const loggedInUserId = user.id;
 
-        setItem('token', login.accessToken);
-        setItem('refreshToken', login.refreshToken);
+        setItem('token', authenticationToken);
+        // setItem('refreshToken', login.refreshToken);
         setItem('IsLoggedIn', 'TRUE');
-        setItem('name', `${user.firstName} ${user.lastName}`);
-        setItem('email', user.email);
-        setItem('FirstName', user.firstName);
-        setItem('LastName', user.lastName);
-        setItem('UserImage', user.image);
+        setItem('name', `${user.name}`);
+        setItem('email', user.emailAddress);
+        // setItem('FirstName', user.firstName);
+        // setItem('LastName', user.lastName);
+        // setItem('UserImage', user.avatarURL);
 
         if (role === 'admin') {
           setItem('id', loggedInUserId);
-          setItem('SuperAdmin', appUserProfile.isSuperAdmin);
-          setItem('AdminFor', appUserProfile.adminFor);
+          setItem(
+            'SuperAdmin',
+            user.emailAddress === 'administrator@email.com',
+          );
+          // setItem('AdminFor', appUserProfile.adminFor);
         } else {
           setItem('userId', loggedInUserId);
         }
@@ -339,31 +348,31 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
-    data?.getCommunityData ? (
-      data.getCommunityData?.socialMediaUrls?.[tag] && (
-        <a
-          key={index}
-          href={data.getCommunityData?.socialMediaUrls?.[tag]}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-testid="preLoginSocialMedia"
-        >
-          <img src={logo} />
-        </a>
-      )
-    ) : (
-      <a
-        key={index}
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-testid="PalisadoesSocialMedia"
-      >
-        <img src={logo} />
-      </a>
-    ),
-  );
+  // const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
+  //   data?.getCommunityData ? (
+  //     data.getCommunityData?.socialMediaUrls?.[tag] && (
+  //       <a
+  //         key={index}
+  //         href={data.getCommunityData?.socialMediaUrls?.[tag]}
+  //         target="_blank"
+  //         rel="noopener noreferrer"
+  //         data-testid="preLoginSocialMedia"
+  //       >
+  //         <img src={logo} />
+  //       </a>
+  //     )
+  //   ) : (
+  //     <a
+  //       key={index}
+  //       href={href}
+  //       target="_blank"
+  //       rel="noopener noreferrer"
+  //       data-testid="PalisadoesSocialMedia"
+  //     >
+  //       <img src={logo} />
+  //     </a>
+  //   ),
+  // );
 
   return (
     <>
@@ -371,7 +380,7 @@ const loginPage = (): JSX.Element => {
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
-              {data?.getCommunityData ? (
+              {/* {data?.getCommunityData ? (
                 <a
                   href={data.getCommunityData.websiteLink}
                   target="_blank"
@@ -385,21 +394,21 @@ const loginPage = (): JSX.Element => {
                   />
                   <p className="text-center">{data.getCommunityData.name}</p>
                 </a>
-              ) : (
-                <a
-                  href="https://www.palisadoes.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <PalisadoesLogo
-                    className={styles.palisadoes_logo}
-                    data-testid="PalisadoesLogo"
-                  />
-                  <p className="text-center">{t('fromPalisadoes')}</p>
-                </a>
-              )}
+              ) : ( */}
+              <a
+                href="https://www.palisadoes.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <PalisadoesLogo
+                  className={styles.palisadoes_logo}
+                  data-testid="PalisadoesLogo"
+                />
+                <p className="text-center">{t('fromPalisadoes')}</p>
+              </a>
+              {/* )} */}
             </div>
-            <div className={styles.socialIcons}>{socialIconsList}</div>
+            {/* <div className={styles.socialIcons}>{socialIconsList}</div> */}
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>

@@ -7,7 +7,7 @@ import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   educationGradeEnum,
@@ -57,7 +57,7 @@ export default function settings(): JSX.Element {
   }, []);
 
   const { setItem } = useLocalStorage();
-  const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
+  const { data } = useQuery(CURRENT_USER, { fetchPolicy: 'network-only' });
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
   const [userDetails, setUserDetails] = React.useState({
     firstName: '',

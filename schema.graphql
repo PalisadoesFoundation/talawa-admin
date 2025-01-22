@@ -482,7 +482,7 @@ type LanguageModel {
 scalar Latitude
 
 input LoginInput {
-  email: EmailAddress!
+  email: String!
   password: String!
 }
 
@@ -663,7 +663,6 @@ type Mutation {
   leaveOrganization(organizationId: ID!): User!
   likeComment(id: ID!): Comment
   likePost(id: ID!): Post
-  login(data: LoginInput!): AuthData!
   logout: Boolean!
   otp(data: OTPInput!): OtpData!
   recaptcha(data: RecaptchaVerification!): Boolean!
@@ -695,7 +694,7 @@ type Mutation {
   saveFcmToken(token: String): Boolean!
   sendMembershipRequest(organizationId: ID!): MembershipRequest!
   sendMessageToChat(chatId: ID!, messageContent: String!, type: String!, replyTo: ID): ChatMessage!
-  signUp(data: UserInput!, file: String): AuthData!
+  signUp(input: UserInput!, file: String): AuthData!
   togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
   unblockUser(organizationId: ID!, userId: ID!): User!
@@ -798,6 +797,10 @@ type OrganizationInfoNode {
   visibleInSearch: Boolean!
 }
 
+type AuthenticationPayload {
+  authenticationToken: String,
+  user: User
+}
 input OrganizationInput {
   address: AddressInput!
   apiUrl: URL
@@ -1004,6 +1007,7 @@ input PostWhereInput {
 }
 
 type Query {
+  signIn(input: LoginInput!) : AuthenticationPayload
   actionItem(id: ID!): ActionItem
   actionItemCategoriesByOrganization(organizationId: ID!): [ActionItemCategory]
   actionItemCategory(id: ID!): ActionItemCategory
@@ -1011,7 +1015,7 @@ type Query {
   actionItemsByOrganization(organizationId: ID!): [ActionItem]
   adminPlugin(orgId: ID!): [Plugin]
   agendaCategory(id: ID!): AgendaCategory!
-  checkAuth: User!
+  currentUser: User!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
   customFieldsByOrganization(id: ID!): [OrganizationCustomField]
   chatById(id: ID!): Chat!

@@ -29,7 +29,6 @@ import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
-import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
@@ -62,21 +61,8 @@ const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       graphQLErrors.map(({ message }) => {
-        if (message === 'User is not authenticated') {
-          refreshToken().then((success) => {
-            if (success) {
-              const oldHeaders = operation.getContext().headers;
-              operation.setContext({
-                headers: {
-                  ...oldHeaders,
-                  authorization: 'Bearer ' + getItem('token'),
-                },
-              });
-              return forward(operation);
-            } else {
-              localStorage.clear();
-            }
-          });
+        if (message === 'You must be authenticated to perform this action.') {
+          localStorage.clear();
         }
       });
     } else if (networkError) {

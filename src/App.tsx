@@ -40,7 +40,7 @@ import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
 import Chat from 'screens/UserPortal/Chat/Chat';
 import { useQuery } from '@apollo/client';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 
@@ -97,19 +97,19 @@ function app(): JSX.Element {
 
   // TODO: Fetch Installed plugin extras and store for use within MainContent and Side Panel Components.
 
-  const { data, loading } = useQuery(CHECK_AUTH);
+  const { data, loading } = useQuery(CURRENT_USER);
 
   useEffect(() => {
-    if (!loading && data?.checkAuth) {
-      const auth = data.checkAuth;
+    if (!loading && data?.currentUser) {
+      const auth = data.currentUser;
       setItem('IsLoggedIn', 'TRUE');
-      setItem('id', auth._id);
-      setItem('name', `${auth.firstName} ${auth.lastName}`);
-      setItem('FirstName', auth.firstName);
-      setItem('LastName', auth.lastName);
-      setItem('email', auth.email);
-      setItem('Email', auth.email);
-      setItem('UserImage', auth.image);
+      setItem('id', auth.id);
+      setItem('name', auth.name);
+      // setItem('FirstName', auth.firstName);
+      // setItem('LastName', auth.lastName);
+      setItem('email', auth.emailAddress);
+      setItem('Email', auth.emailAddress);
+      // setItem('UserImage', auth.image);
     }
   }, [data, loading, setItem]);
 

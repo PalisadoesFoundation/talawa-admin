@@ -2,31 +2,14 @@ import gql from 'graphql-tag';
 
 //Query List
 // Check Auth
-export const CHECK_AUTH = gql`
+
+export const CURRENT_USER = gql`
   query {
-    checkAuth {
-      _id
-      firstName
-      lastName
-      createdAt
-      image
-      email
-      birthDate
-      educationGrade
-      employmentStatus
-      gender
-      maritalStatus
-      phone {
-        mobile
-      }
-      address {
-        line1
-        state
-        countryCode
-      }
-      eventsAttended {
-        _id
-      }
+    currentUser {
+      id
+      name
+      role
+      emailAddress
     }
   }
 `;
@@ -853,6 +836,21 @@ export const GET_COMMUNITY_DATA = gql`
         reddit
         slack
       }
+    }
+  }
+`;
+export const LOGIN_QUERY = gql`
+  query SignIn($email: String!, $password: String!) {
+    signIn(input: { emailAddress: $email, password: $password }) {
+      user {
+        id
+        name
+        emailAddress
+        role
+        countryCode
+        avatarURL
+      }
+      authenticationToken
     }
   }
 `;
