@@ -44,9 +44,7 @@ const config: Config = {
             'https://github.com/PalisadoesFoundation/talawa-admin/tree/develop/docs/docs',
         },
         theme: {
-          customCss: [
-            require.resolve('./src/css/custom.css'),
-          ],
+          customCss: [require.resolve('./src/css/custom.css')],
         },
       },
     ],
@@ -55,6 +53,14 @@ const config: Config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     {
+      themeConfig: {
+        metadata: [
+          {
+            name: 'robots',
+            content: 'noindex',
+          },
+        ],
+      },
       docs: {
         sidebar: {
           hideable: false,

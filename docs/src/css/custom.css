@@ -8,10 +8,10 @@
 
 :root {
   --h1-markdown: #021526;
-  --h2-markdown: #3A6D8C;
-  --h3-markdown: #474E93;
-  --h4-markdown: #508C9B;
-  --h5-markdown: #6A9AB0;
+  --h2-markdown: #3a6d8c;
+  --h3-markdown: #474e93;
+  --h4-markdown: #508c9b;
+  --h5-markdown: #6a9ab0;
   --h6-markdown: #888888;
   --hx-markdown-underline: #eeeeee;
   --ifm-color-primary: #1e56e3;
@@ -64,15 +64,15 @@
   --ifm-color-emphasis-100: #f4f8fb;
   --ifm-color-emphasis-0: #fff;
   --ifm-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
-    Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --ifm-font-family-monospace: "IBM Plex Mono", SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+    Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-monospace: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --ifm-color-primary: #1e56e3;
   --ifm-color-primary-light: #29d5b0;
   --ifm-color-primary-lighter: #32d8b4;
@@ -80,17 +80,17 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-[data-theme="dark"] .themedComponent--light_NVdE {
+[data-theme='dark'] .themedComponent--light_NVdE {
   display: initial;
 }
 
-[data-theme="dark"] .navbar {
+[data-theme='dark'] .navbar {
   border-bottom: 1px solid #2d3956;
 }
 
 /* Dark mode css */
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --ifm-background-color: #111927;
   --ifm-background-surface-color: var(--ifm-background-color);
   --ifm-menu-color: var(--neutral-mid-400);
@@ -121,10 +121,10 @@ html[data-theme="dark"] {
 
 /* stylelint-disable docusaurus/copyright-header */
 
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
-.container>div>div:first-child {
+.container > div > div:first-child {
   padding: 1rem 5rem;
 }
 
@@ -159,16 +159,15 @@ html[data-theme="dark"] {
 }
 
 .table-of-contents__link {
-  border-left: .125rem solid #0000;
+  border-left: 0.125rem solid #0000;
   font-size: 0.875rem;
   padding-left: 1.25rem;
   font-weight: 500;
   color: var(--neutral-mid-400);
-
 }
 
 .table-of-contents__link--active {
-  border-left: .125rem solid var(--secondary-blue-400);
+  border-left: 0.125rem solid var(--secondary-blue-400);
   font-weight: 600;
   margin-left: 0;
 }
@@ -191,7 +190,7 @@ h1 {
 }
 
 .navbar__brand img {
-  max-height: 50px; 
+  max-height: 50px;
   width: auto;
   padding: 5px;
 }
@@ -239,7 +238,7 @@ h1 {
 }
 
 /* Target the container of menu items */
-.menu__list-item { 
+.menu__list-item {
   width: 100% !important;
   padding-right: 0 !important;
 }
@@ -262,7 +261,7 @@ h1 {
   }
 }
 
-.markdown>h2 {
+.markdown > h2 {
   --ifm-h2-font-size: 1.875rem;
   margin-bottom: 0.8rem;
   margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * 0rem);
@@ -271,7 +270,7 @@ h1 {
   padding-bottom: 5px;
 }
 
-.markdown>h3 {
+.markdown > h3 {
   --ifm-h3-font-size: 1.5rem;
   margin-bottom: 0.8rem;
   margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * 0rem);
@@ -280,17 +279,17 @@ h1 {
   padding-bottom: 5px;
 }
 
-.markdown>h4 {
+.markdown > h4 {
   color: var(--h4-markdown);
   border-bottom: 1px solid var(--hx-markdown-underline);
   padding-bottom: 5px;
 }
 
-.markdown>h5 {
+.markdown > h5 {
   color: var(--h5-markdown);
 }
 
-.markdown>h6 {
+.markdown > h6 {
   color: var(--h6-markdown);
 }
 
@@ -316,7 +315,7 @@ h1 {
   text-decoration: none;
 }
 
-.navbar__items--right>.navbar__item:not(:first-of-type) {
+.navbar__items--right > .navbar__item:not(:first-of-type) {
   margin-left: 0.25px;
 }
 
@@ -385,33 +384,33 @@ h1 {
 }
 
 .header-github-link:before {
-  content: "";
+  content: '';
   width: 20px;
   height: 20px;
   display: flex;
-  background: url("/img/icons/github-dark.svg") no-repeat;
+  background: url('/img/icons/github-dark.svg') no-repeat;
   position: relative;
   right: 8px;
   top: 1.5px;
 }
 
 .header-twitter-link:before {
-  content: "";
+  content: '';
   width: 15px;
   height: 15px;
   display: flex;
-  background: url("/img/icons/twitter.svg") no-repeat 90% 100%;
+  background: url('/img/icons/twitter.svg') no-repeat 90% 100%;
   position: relative;
   right: 6px;
   top: 2px;
 }
 
 .header-youtube-link:before {
-  content: "";
+  content: '';
   width: 25px;
   height: 30px;
   display: flex;
-  background: url("/img/icons/youtube.svg") no-repeat;
+  background: url('/img/icons/youtube.svg') no-repeat;
   position: relative;
   right: 8px;
   top: 4.5px;
@@ -433,7 +432,7 @@ h1 {
 }
 
 .footer__icon:before {
-  content: "";
+  content: '';
   display: inline-flex;
   height: 16px;
   width: 16px;
@@ -488,16 +487,16 @@ h1 {
   mask: url(/img/icons/team.svg) no-repeat 100% 100%;
   mask-size: cover;
 }
-  
-html[data-theme="dark"] .header-github-link:before {
+
+html[data-theme='dark'] .header-github-link:before {
   background: url(/img/icons/github.svg) no-repeat;
 }
 
-html[data-theme="dark"] .header-youtube-link:before {
+html[data-theme='dark'] .header-youtube-link:before {
   background: url(/img/icons/youtube-white.svg) no-repeat;
 }
 
-.markdown>button {
+.markdown > button {
   background: linear-gradient(90deg, #ff3600 0%, #ff8100 100%);
   border: none;
   border-radius: 5px;
@@ -509,7 +508,7 @@ html[data-theme="dark"] .header-youtube-link:before {
   font-size: 16px;
 }
 
-.markdown>button:hover {
+.markdown > button:hover {
   background: linear-gradient(90deg, #ff3600 30%, #ff8100 78%);
 }
 
@@ -519,7 +518,8 @@ html[data-theme="dark"] .header-youtube-link:before {
   }
 
   .github-button {
-    margin: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+    margin: var(--ifm-menu-link-padding-vertical)
+      var(--ifm-menu-link-padding-horizontal);
   }
 
   .navbar__item.youtube-button {
@@ -527,7 +527,8 @@ html[data-theme="dark"] .header-youtube-link:before {
   }
 
   .youtube-button {
-    margin: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+    margin: var(--ifm-menu-link-padding-vertical)
+      var(--ifm-menu-link-padding-horizontal);
   }
 
   .center {
@@ -536,7 +537,7 @@ html[data-theme="dark"] .header-youtube-link:before {
 }
 
 @media (max-width: 1000px) {
-  .navbar__items--right>.navbar__item:not(:first-of-type) {
+  .navbar__items--right > .navbar__item:not(:first-of-type) {
     margin-left: 0.25rem;
   }
 
@@ -554,7 +555,7 @@ html[data-theme="dark"] .header-youtube-link:before {
 }
 
 @media (max-width: 1149px) and (min-width: 1050px) {
-  .navbar__items--right>.navbar__item:not(:first-of-type) {
+  .navbar__items--right > .navbar__item:not(:first-of-type) {
     margin-left: 1.5rem;
   }
 
@@ -568,7 +569,7 @@ html[data-theme="dark"] .header-youtube-link:before {
 }
 
 @media (max-width: 1049px) and (min-width: 1001px) {
-  .navbar__items--right>.navbar__item:not(:first-of-type) {
+  .navbar__items--right > .navbar__item:not(:first-of-type) {
     margin-left: 0.5rem;
   }
 
@@ -582,7 +583,7 @@ html[data-theme="dark"] .header-youtube-link:before {
 }
 
 @media (max-width: 768px) {
-  .container>div>div:first-child {
+  .container > div > div:first-child {
     padding: 1rem !important;
   }
 
@@ -592,7 +593,7 @@ html[data-theme="dark"] .header-youtube-link:before {
 }
 
 @media (min-width: 997px) and (max-width: 1327px) {
-  .container>div>div:first-child {
+  .container > div > div:first-child {
     padding-left: 4rem !important;
     padding-right: 4rem !important;
   }
@@ -617,7 +618,6 @@ h6 {
   color: var(--secondary-blue-900);
   margin: 20px 0 !important;
 }
-
 
 p,
 textarea,
@@ -695,15 +695,15 @@ a:hover {
   margin: 0;
 }
 
-.card__wide ul>li {
+.card__wide ul > li {
   margin: 10px 0;
   position: relative;
   text-align: left;
   padding-left: 25px;
 }
 
-.card__wide ul>li::before {
-  content: "✦";
+.card__wide ul > li::before {
+  content: '✦';
   font-size: 1 rem;
   background: linear-gradient(45deg, #97aaff, #8dbaff, #004c8c, #00bfff);
   background-size: 400% 400%;
@@ -732,13 +732,12 @@ a:hover {
 }
 
 @media (max-width: 996px) {
-  .fourth-panel>.card__wide {
+  .fourth-panel > .card__wide {
     height: auto;
   }
 }
 
 @media only screen and (max-width: 960px) {
-
   .card__container,
   .card__wide {
     margin: 0 2rem !important;
