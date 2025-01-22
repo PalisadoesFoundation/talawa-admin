@@ -551,6 +551,7 @@ describe('Testing Organization Action Items Screen', () => {
 
     userEvent.type(searchInput, 'John');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
@@ -597,6 +598,7 @@ describe('Testing Organization Action Items Screen', () => {
 
     userEvent.type(searchInput, 'Category 1');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();

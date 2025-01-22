@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
@@ -27,6 +27,7 @@ import ItemDeleteModal from './ItemDeleteModal';
 import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from './ItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -66,7 +67,6 @@ function organizationActionItems(): JSX.Element {
     null,
   );
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
     null,
@@ -367,26 +367,16 @@ function organizationActionItems(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} `}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button className={styles.searchButton} data-testid="searchBtn">
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          onSearch={(value) => {
+            debouncedSearch(value);
+          }}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3">
           <SortingButton
             title={tCommon('searchBy')}
@@ -439,17 +429,15 @@ function organizationActionItems(): JSX.Element {
             buttonLabel={t('status')}
             className={styles.dropdown} // Pass a custom class name if needed
           />
-          <div>
-            <Button
-              variant="success"
-              onClick={() => handleModalClick(null, ModalState.SAME)}
-              className={styles.createButton}
-              data-testid="createActionItemBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {tCommon('create')}
-            </Button>
-          </div>
+          <Button
+            variant="success"
+            onClick={() => handleModalClick(null, ModalState.SAME)}
+            className={styles.createButton}
+            data-testid="createActionItemBtn"
+          >
+            <i className={'fa fa-plus me-2'} />
+            {tCommon('create')}
+          </Button>
         </div>
       </div>
 
