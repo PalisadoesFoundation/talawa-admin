@@ -7254,19 +7254,16 @@ button[data-testid='createPostBtn'] {
 
 .alignimg {
   border-radius: 50%;
+  background-color: var(--white-color);
   background-blend-mode: darken;
-  height: 65px;
-  width: 65px;
+  height: clamp(50px, 4vw, 65px);
+  width: clamp(50px, 4vw, 65px);
+  object-fit: cover;
 }
 
 .box {
   color: var(--light-orange);
 }
-
-.box :hover {
-  color: var(--light-orange);
-}
-
 .first_box {
   display: flex;
   flex-direction: row;
@@ -7295,6 +7292,7 @@ button[data-testid='createPostBtn'] {
 
 .deco {
   border: 1px solid var(--grey-border);
-  width: 65vw;
-  height: 0px !important;
+  width: 100%;
+  max-width: 800px;
+  height: 0;
 }
