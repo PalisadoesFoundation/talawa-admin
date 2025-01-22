@@ -62,7 +62,7 @@ const config: Config = {
         },
       },
       navbar: {
-        title: 'Talawa Admin Documentation',
+        title: 'Talawa',
         logo: {
           alt: 'Talawa Logo',
           src: 'img/icons/favicon_palisadoes.ico',
