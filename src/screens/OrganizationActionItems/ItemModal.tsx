@@ -230,7 +230,11 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     if (field === 'allottedHours') {
       // If the value is not a valid number or is negative, set to null
       const numValue = typeof value === 'string' ? Number(value) : value;
-      if (typeof numValue !== 'number' || isNaN(numValue) || numValue < 0) {
+      if (
+        typeof numValue !== 'number' ||
+        Number.isNaN(numValue) ||
+        numValue < 0
+      ) {
         setFormState((prevState) => ({ ...prevState, [field]: null }));
         return;
       }
