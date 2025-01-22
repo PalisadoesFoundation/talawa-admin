@@ -1,9 +1,8 @@
-import React from "react";
-import  Section  from "../../utils/Section";
-import  TwoColumns  from "../../utils/TwoColumns";
-import  HomeCallToAction  from "../../utils/HomeCallToAction";
-import useBaseUrl from "@docusaurus/useBaseUrl";
-
+import React from 'react';
+import Section from '../../utils/Section';
+import TwoColumns from '../../utils/TwoColumns';
+import HomeCallToAction from '../../utils/HomeCallToAction';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 function HeaderHero() {
   return (
@@ -14,7 +13,7 @@ function HeaderHero() {
         columnOne={
           <img
             className="custom-image bounce-animation"
-            src={useBaseUrl("img/image-01.png")}
+            src={useBaseUrl('img/image-01.png')}
             alt="HeaderHero Image"
           />
         }
@@ -35,4 +34,4 @@ function HeaderHero() {
   );
 }
 
-export default HeaderHero
+export default HeaderHero;

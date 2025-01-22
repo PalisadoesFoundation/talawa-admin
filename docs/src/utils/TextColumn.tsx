@@ -1,5 +1,5 @@
-import React from "react";
-import  Heading  from "./Heading";
+import React from 'react';
+import Heading from './Heading';
 
 interface TextColumnProps {
   title: string;
@@ -7,7 +7,7 @@ interface TextColumnProps {
   moreContent?: React.ReactNode;
 }
 
- function TextColumn({ title, text, moreContent }: TextColumnProps) {
+function TextColumn({ title, text, moreContent }: TextColumnProps) {
   return (
     <>
       <Heading text={title} />
@@ -17,4 +17,4 @@ interface TextColumnProps {
   );
 }
 
-export default TextColumn
+export default TextColumn;

@@ -1,14 +1,14 @@
-import React from "react";
-import  Section  from "../../utils/Section";
-import  TwoColumns  from "../../utils/TwoColumns";
-import  TextColumn  from "../../utils/TextColumn";
-import  textcontent  from "../../utils/textcontent";
-import AppFeaturesCard from "../../utils/AppFeaturesCard";
+import React from 'react';
+import Section from '../../utils/Section';
+import TwoColumns from '../../utils/TwoColumns';
+import TextColumn from '../../utils/TextColumn';
+import textcontent from '../../utils/textcontent';
+import AppFeaturesCard from '../../utils/AppFeaturesCard';
 
- function FifthPanel() {
+function FifthPanel() {
   return (
     <Section className="fifth-panel">
-      <AppFeaturesCard/>
+      <AppFeaturesCard />
       {/* <div className="custom-panel">
         <div className="wrapper">
           <TwoColumns
@@ -36,4 +36,4 @@ import AppFeaturesCard from "../../utils/AppFeaturesCard";
   );
 }
 
-export default FifthPanel
+export default FifthPanel;

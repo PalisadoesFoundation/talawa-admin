@@ -1,10 +1,10 @@
-import React from "react";
-import Section from "../../utils/Section";
+import React from 'react';
+import Section from '../../utils/Section';
 // import TextColumn from "../../utils/TextColumn";
 // import TwoColumns from "../../utils/TwoColumns";
 // import textcontent from "../../utils/textcontent";
 // import useBaseUrl from "@docusaurus/useBaseUrl";
-import AboutCards from "../../utils/ManagementFeaturesCard";
+import AboutCards from '../../utils/ManagementFeaturesCard';
 
 interface ThirdPanelProps {}
 

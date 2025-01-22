@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
 interface SectionProps {
   element?: keyof JSX.IntrinsicElements;
   children: React.ReactNode;
   className?: string;
-  background?: "light" | "dark" | "tint";
+  background?: 'light' | 'dark' | 'tint';
 }
 
- function Section({
-  element = "section",
+function Section({
+  element = 'section',
   children,
   className,
-  background = "light",
+  background = 'light',
 }: SectionProps) {
   const El = element;
   return (
@@ -27,4 +27,4 @@ interface SectionProps {
   );
 }
 
-export default Section
+export default Section;

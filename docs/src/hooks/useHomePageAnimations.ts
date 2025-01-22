@@ -9,4 +9,4 @@ const useHomePageAnimations = () => {
   }, []);
 };
 
-export default useHomePageAnimations
+export default useHomePageAnimations;

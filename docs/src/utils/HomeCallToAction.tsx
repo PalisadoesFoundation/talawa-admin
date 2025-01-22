@@ -1,16 +1,12 @@
-import React from "react";
-import  ActionButton  from "./ActionButton";
+import React from 'react';
+import ActionButton from './ActionButton';
 
 interface HomeCallToActionProps {}
 
- const HomeCallToAction: React.FC<HomeCallToActionProps> = () => {
+const HomeCallToAction: React.FC<HomeCallToActionProps> = () => {
   return (
     <>
-      <ActionButton
-        type="primary"
-        href="/docs"
-        buttonClassName="custom-button"
-      >
+      <ActionButton type="primary" href="/docs" buttonClassName="custom-button">
         Learn More
       </ActionButton>
       <ActionButton
@@ -36,5 +32,4 @@ interface HomeCallToActionProps {}
   );
 };
 
-
-export default HomeCallToAction
+export default HomeCallToAction;
