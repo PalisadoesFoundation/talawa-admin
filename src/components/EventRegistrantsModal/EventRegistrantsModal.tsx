@@ -7,7 +7,7 @@ import {
   ADD_EVENT_ATTENDEE,
   REMOVE_EVENT_ATTENDEE,
 } from 'GraphQl/Mutations/mutations';
-import styles from 'components/EventRegistrantsModal/EventRegistrantsModal.module.css';
+import styles from '../../style/app.module.css';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
