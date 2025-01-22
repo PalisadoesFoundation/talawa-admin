@@ -9,13 +9,11 @@ import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Navigate, useParams } from 'react-router-dom';
 import VenueModal from 'components/Venues/VenueModal';
-import { Form } from 'react-bootstrap';
-import { Search } from '@mui/icons-material';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
 import SortingButton from 'subComponents/SortingButton';
-
+import SearchBar from 'subComponents/SearchBar';
 /**
  * Component to manage and display the list of organization venues.
  * Handles searching, sorting, and CRUD operations for venues.
@@ -84,15 +82,17 @@ function organizationVenues(): JSX.Element {
   };
 
   /**
-   * Updates the search term state when the user types in the search input.
-   * @param event - The input change event.
+   * Handles the search operation by updating the search term state.
+   * @param term - The search term entered by the user.
    */
-  const handleSearchChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setSearchTerm(event.target.value);
+  const handleSearch = (term: string): void => {
+    setSearchTerm(term);
   };
 
+  /**
+   * Updates the search by state when the user selects a search option.
+   * @param value - The field to search by (name or description).
+   */
   const handleSearchByChange = (value: string): void => {
     setSearchBy(value as 'name' | 'desc');
   };
@@ -146,22 +146,12 @@ function organizationVenues(): JSX.Element {
   return (
     <>
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
-        <div className={`${styles.input}`}>
-          <Form.Control
-            type="name"
-            id="searchByName"
-            className={styles.inputField}
-            placeholder={t('searchBy') + ' ' + tCommon(searchBy)}
-            data-testid="searchBy"
-            autoComplete="off"
-            required
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-          <Button className={styles.searchButton} data-testid="searchBtn">
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={t('searchBy') + ' ' + tCommon(searchBy)}
+          onSearch={handleSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 flex-wrap">
           <SortingButton
             title="SearchBy"

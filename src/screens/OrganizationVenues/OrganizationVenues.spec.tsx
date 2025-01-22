@@ -344,6 +344,8 @@ describe('Organisation Venues', () => {
     fireEvent.change(searchInput, {
       target: { value: 'Updated Venue 1' },
     });
+    fireEvent.click(screen.getByTestId('searchBtn'));
+
     await waitFor(() => {
       expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
       expect(screen.queryByTestId('venue-item2')).not.toBeInTheDocument();
@@ -363,6 +365,7 @@ describe('Organisation Venues', () => {
     fireEvent.change(searchInput, {
       target: { value: 'Updated description for venue 1' },
     });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
