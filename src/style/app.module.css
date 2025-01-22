@@ -55,6 +55,8 @@
   /* Red Shades */
   --red-delete-bg: #f8d6dc;
   --red-delete-text: #ff4d4f;
+  --red-line-bg: #ff0000;
+  
 
   /* Yellow/Orange Shades */
   --loader-color: #febc59;
@@ -224,6 +226,28 @@
 
 .capacityLabel svg {
   margin-bottom: 3px;
+}
+
+.currentHourIndicator_container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  top: -8px;
+  left: -9px;
+}
+
+.currentHourIndicator_round {
+  background-color: var(--red-line-bg);
+  border-radius: 100%;
+  width: 15px;
+  height: 15px;
+}
+
+.currentHourIndicator_line{
+  width: 100%;
+  height: 1px;
+  background-color: var(--red-line-bg);
+  margin: auto;
 }
 
 .sidebar {
