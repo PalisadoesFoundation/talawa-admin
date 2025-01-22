@@ -438,4 +438,11 @@ describe('Calendar', () => {
       });
     });
   });
+  it('render the hour view', async () => {
+    render(<Calendar eventData={eventData} viewType={ViewType.DAY} />);
+
+    await wait();
+    const renderHourComponent = screen.getByTestId('hour');
+    expect(renderHourComponent).toBeInTheDocument();
+  });
 });

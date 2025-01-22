@@ -89,9 +89,9 @@ function eventHeader({
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
-              { label: ViewType.MONTH, value: 'selectMonth' },
-              { label: ViewType.DAY, value: 'selectDay' },
-              { label: ViewType.YEAR, value: 'selectYear' },
+              { label: 'Select Month', value: ViewType.MONTH },
+              { label: 'Select Day', value: ViewType.DAY },
+              { label: 'Select Year', value: ViewType.YEAR },
             ]}
             selectedOption={viewType}
             onSortChange={handleChangeView}
