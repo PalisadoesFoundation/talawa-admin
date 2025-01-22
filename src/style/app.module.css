@@ -7287,7 +7287,7 @@ button[data-testid='createPostBtn'] {
   text-decoration: none;
   font-size: 10px;
   font-weight: 100;
-  color: #969696;
+  color: var(--gray-white);
 }
 
 .deco {
