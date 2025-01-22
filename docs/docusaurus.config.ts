@@ -46,7 +46,6 @@ const config: Config = {
         theme: {
           customCss: [
             require.resolve('./src/css/custom.css'),
-            require.resolve('./src/css/index.css'),
           ],
         },
       },
@@ -117,62 +116,6 @@ const config: Config = {
         defaultMode: 'light',
         disableSwitch: false,
         respectPrefersColorScheme: false,
-      },
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Community',
-            items: [
-              {
-                label: ' Slack',
-                to: 'https://github.com/PalisadoesFoundation',
-                className: 'footer__icon footer__slack',
-              },
-              {
-                label: ' News',
-                to: 'https://www.palisadoes.org/news/',
-                className: 'footer__icon footer__news',
-              },
-              {
-                label: ' Contact Us',
-                to: 'https://www.palisadoes.org/contact/',
-                className: 'footer__icon footer__contact',
-              },
-            ],
-          },
-          {
-            title: 'Social Media',
-            items: [
-              {
-                label: ' Twitter',
-                to: 'https://twitter.com/palisadoesorg?lang=en',
-                className: 'footer__icon footer__twitter',
-              },
-              {
-                label: ' Facebook',
-                to: 'https://www.facebook.com/palisadoesproject/',
-                className: 'footer__icon footer__facebook',
-              },
-              {
-                label: ' Instagram',
-                to: 'https://www.instagram.com/palisadoes/?hl=en',
-                className: 'footer__icon footer__instagram',
-              },
-            ],
-          },
-          {
-            title: 'Development',
-            items: [
-              {
-                label: ' GitHub',
-                to: 'https://github.com/PalisadoesFoundation',
-                className: 'footer__icon footer__github',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} The Palisadoes Foundation, LLC. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
