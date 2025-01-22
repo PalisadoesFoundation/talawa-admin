@@ -7260,11 +7260,11 @@ button[data-testid='createPostBtn'] {
 }
 
 .box {
-  color: #ffbd59;
+  color: var(--light-orange);
 }
 
 .box :hover {
-  color: #ffbd59;
+  color: var(--light-orange);
 }
 
 .first_box {
@@ -7280,7 +7280,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .second_box > h4 {
-  font-size: 10;
+  font-size: 10px;
   font-weight: bold;
   text-decoration: none;
   color: black;
@@ -7288,13 +7288,13 @@ button[data-testid='createPostBtn'] {
 
 .second_box > h5 {
   text-decoration: none;
-  font-size: 10;
+  font-size: 10px;
   font-weight: 100;
   color: #969696;
 }
 
 .deco {
-  border: 1px solid #dfdfdf;
+  border: 1px solid var(--grey-border);
   width: 65vw;
   height: 0px !important;
 }
