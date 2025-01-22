@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/EventVolunteers/Requests/Requests.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Requests/Requests.tsx#L53)
+Defined in: [src/screens/EventVolunteers/Requests/Requests.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Requests/Requests.tsx#L55)
 
 Component for managing and displaying Volunteer Membership requests for an event.
 

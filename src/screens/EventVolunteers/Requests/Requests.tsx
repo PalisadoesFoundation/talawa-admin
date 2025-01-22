@@ -23,6 +23,8 @@ import { debounce } from '@mui/material';
 import SortingButton from 'subComponents/SortingButton';
 
 const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
@@ -155,7 +157,7 @@ function requests(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return params.row.id;
       },
@@ -168,7 +170,7 @@ function requests(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { firstName, lastName, image } = params.row.volunteer.user;
         return (
@@ -206,7 +208,7 @@ function requests(): JSX.Element {
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return dayjs(params.row.createdAt).format('DD/MM/YYYY');
@@ -220,7 +222,7 @@ function requests(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -252,8 +254,11 @@ function requests(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+        <div
+          className={styles.input}
+          style={{ position: 'relative', width: '200px', display: 'flex' }}
+        >
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -270,9 +275,16 @@ function requests(): JSX.Element {
             data-testid="searchBy"
           />
           <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
+            className={`${styles.searchButton}`}
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              height: '100%',
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              marginRight: '290px',
+            }}
             data-testid="searchBtn"
           >
             <Search />

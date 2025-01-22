@@ -35,6 +35,8 @@ enum ModalState {
 }
 
 const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
@@ -174,7 +176,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.user;
         return (
@@ -214,7 +216,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <Chip
@@ -234,7 +236,7 @@ function volunteers(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -252,7 +254,7 @@ function volunteers(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
@@ -273,7 +275,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -305,8 +307,8 @@ function volunteers(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+        <div className={`${styles.input}`} style={{ marginRight: '300px' }}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -314,7 +316,7 @@ function volunteers(): JSX.Element {
             })}
             autoComplete="off"
             required
-            className={styles.inputFields}
+            className={styles.inputField}
             value={searchValue}
             onChange={(e) => {
               setSearchValue(e.target.value);
@@ -324,8 +326,7 @@ function volunteers(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
+            className={`${styles.searchButton}`}
             data-testid="searchBtn"
           >
             <Search />
@@ -372,6 +373,7 @@ function volunteers(): JSX.Element {
               variant="success"
               onClick={() => handleOpenModal(null, ModalState.ADD)}
               style={{ marginTop: '11px' }}
+              className={styles.actionsButton}
               data-testid="addVolunteerBtn"
             >
               <i className={'fa fa-plus me-2'} />

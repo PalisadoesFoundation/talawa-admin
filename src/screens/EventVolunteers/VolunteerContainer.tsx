@@ -34,12 +34,7 @@ function volunteerContainer(): JSX.Element {
   return (
     <div>
       <div className="mt-2 mb-4 d-flex justify-content-between">
-        <span className={styles.titlemodal} data-testid="dataTypeTitle">
-          {t(
-            `${dataType === 'group' ? 'volunteerGroups' : dataType === 'individual' ? 'volunteers' : 'requests'}`,
-          )}
-        </span>
-        <div className="d-flex justify-content-center">
+        <div className="ms-auto">
           <div
             className={`btn-group ${styles.toggleGroup}`}
             role="group"

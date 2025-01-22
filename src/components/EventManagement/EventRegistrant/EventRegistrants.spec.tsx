@@ -13,6 +13,7 @@ import { REGISTRANTS_MOCKS } from './Registrations.mocks';
 import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/Attendance.mocks';
 import { vi } from 'vitest';
 import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
+import styles from '../../../style/app.module.css';
 
 const COMBINED_MOCKS = [...REGISTRANTS_MOCKS, ...ATTENDEES_MOCKS];
 
@@ -260,5 +261,75 @@ describe('Event Registrants Component', () => {
     expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
       'N/A',
     );
+  });
+});
+
+describe('EventRegistrants CSS Tests', () => {
+  const renderEventRegistrants = (): RenderResult => {
+    return render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <EventRegistrants />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  beforeEach(() => {
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
+      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+    }));
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should apply correct styles to the filter button', () => {
+    renderEventRegistrants();
+    const filterButton = screen.getByTestId('filter-button');
+
+    expect(filterButton).toHaveClass('border-1', 'mx-4', styles.createButton);
+  });
+
+  it('should apply correct styles to the table container', () => {
+    renderEventRegistrants();
+    const tableContainer = screen.getByRole('grid').closest('.MuiPaper-root');
+    expect(tableContainer).toHaveClass('mt-3');
+    expect(tableContainer).toHaveStyle({
+      borderRadius: '16px',
+    });
+  });
+
+  it('should style table header cells with custom cell class', () => {
+    renderEventRegistrants();
+    const headerCells = [
+      screen.getByTestId('table-header-serial'),
+      screen.getByTestId('table-header-registrant'),
+      screen.getByTestId('table-header-registered-at'),
+      screen.getByTestId('table-header-created-at'),
+      screen.getByTestId('table-header-add-registrant'),
+    ];
+    headerCells.forEach((cell) => {
+      expect(cell).toHaveClass(styles.customcell);
+    });
+  });
+
+  it('should style the check-in wrapper component correctly', () => {
+    renderEventRegistrants();
+    const checkInWrapper = screen.getByTestId('stats-modal');
+    expect(checkInWrapper).toBeInTheDocument();
+    expect(checkInWrapper).toHaveClass(styles.createButton);
+  });
+
+  it('should apply proper spacing between buttons', () => {
+    renderEventRegistrants();
+    const filterButton = screen.getByTestId('filter-button');
+    expect(filterButton).toHaveClass('mx-4');
   });
 });

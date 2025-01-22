@@ -123,13 +123,17 @@ function EventRegistrants(): JSX.Element {
           {t('allRegistrants')}
         </Button>
       </div>
-      <TableContainer component={Paper} className={`mt-3 ${styles.tableHead}`}>
+      <TableContainer
+        component={Paper}
+        className="mt-3"
+        sx={{ borderRadius: '16px' }}
+      >
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>
-            <TableRow role="row" className={`${styles.rowBackground}`}>
+            <TableRow role="row">
               <TableCell
                 data-testid="table-header-serial"
-                className={styles.tableHeader}
+                className={styles.customcell}
                 role="columnheader"
                 aria-sort="none"
               >
@@ -137,25 +141,25 @@ function EventRegistrants(): JSX.Element {
               </TableCell>
               <TableCell
                 data-testid="table-header-registrant"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('registrant')}
               </TableCell>
               <TableCell
                 data-testid="table-header-registered-at"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('registeredAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-created-at"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('createdAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-add-registrant"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('addRegistrant')}
               </TableCell>

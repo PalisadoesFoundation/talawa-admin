@@ -54,8 +54,7 @@ function EventAttendance(): JSX.Element {
       const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
       return sortOrder === 'ascending'
         ? nameA.localeCompare(nameB)
-        : /*istanbul ignore next*/
-          nameB.localeCompare(nameA);
+        : nameB.localeCompare(nameA);
     });
   };
 
@@ -68,8 +67,7 @@ function EventAttendance(): JSX.Element {
           const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
           return filteringBy === 'This Month'
             ? isSameYear && attendeeDate.getMonth() === now.getMonth()
-            : /*istanbul ignore next*/
-              isSameYear;
+            : isSameYear;
         });
   };
 
@@ -138,7 +136,6 @@ function EventAttendance(): JSX.Element {
   }, [eventId, getEventAttendees]);
 
   if (loading) return <p>{t('loading')}</p>;
-  /*istanbul ignore next*/
   if (error) return <p>{error.message}</p>;
 
   return (
@@ -152,29 +149,26 @@ function EventAttendance(): JSX.Element {
       />
       <div className="d-flex justify-content-between align-items-center mb-3">
         <Button
-          className={`border-1 bg-white text-success ${styles.actionBtn}`}
+          className={`border-1 bg-white text-success ${styles.createButton}`}
           onClick={showModal}
           data-testid="stats-modal"
         >
           {t('historical_statistics')}
         </Button>
         <div className="d-flex align-items-center">
-          <div className={`${styles.input} me-3`}>
+          <div className={`${styles.input} me-3 `}>
             <FormControl
-              type="text"
+              type="name"
               id="posttitle"
-              className="bg-white border"
+              className={styles.inputField}
               placeholder={t('Search member')}
               data-testid="searchByName"
               autoComplete="off"
               required
               onChange={(e): void => searchEventAttendees(e.target.value)}
             />
-            <Button
-              tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100`}
-            >
-              <Search size={20} />
+            <Button tabIndex={-1} className={styles.searchButton}>
+              <Search size={23} />
             </Button>
           </div>
           <SortingButton
@@ -208,7 +202,11 @@ function EventAttendance(): JSX.Element {
           />
         </div>
       </div>
-      <TableContainer component={Paper} className="mt-3">
+      <TableContainer
+        component={Paper}
+        className="mt-3"
+        sx={{ borderRadius: '16px' }}
+      >
         <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
             <TableRow className="" data-testid="table-header-row" role="row">
@@ -318,8 +316,7 @@ function EventAttendance(): JSX.Element {
                         <span className={styles.eventsAttended}>
                           {member.eventsAttended
                             ? member.eventsAttended.length
-                            : /*istanbul ignore next*/
-                              '0'}
+                            : '0'}
                         </span>
                       </TableCell>
                     </Tooltip>
@@ -328,9 +325,7 @@ function EventAttendance(): JSX.Element {
                       data-testid={`attendee-task-assigned-${index}`}
                     >
                       {member.tagsAssignedWith ? (
-                        /*istanbul ignore next*/
                         member.tagsAssignedWith.edges.map(
-                          /*istanbul ignore next*/
                           (
                             edge: { node: { name: string } },
                             tagIndex: number,
