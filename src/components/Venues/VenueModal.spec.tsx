@@ -575,15 +575,30 @@ describe('VenueModal', () => {
       });
     });
 
-    test('handles unchanged name in edit mode', () => {
+    test('handles unchanged name in edit mode', async () => {
       renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
+
       fireEvent.change(screen.getByDisplayValue('Venue 1'), {
         target: { value: 'Venue 1' }, // Same name
       });
-      fireEvent.click(screen.getByTestId('updateVenueBtn'));
-      // Verify only other fields are updated
-    });
+      fireEvent.change(screen.getByDisplayValue('100'), {
+        target: { value: '150' },
+      });
+      fireEvent.change(
+        screen.getByDisplayValue('Updated description for venue 1'),
+        { target: { value: 'Changed description' } },
+      );
 
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('updateVenueBtn'));
+      });
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'Venue details updated successfully',
+        );
+      });
+    });
     // Error Handling Tests
     describe('Error Handling', () => {
       test('shows error toast when network error occurs during update', async () => {
