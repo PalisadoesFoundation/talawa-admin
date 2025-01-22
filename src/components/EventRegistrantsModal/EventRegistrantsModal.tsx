@@ -129,16 +129,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
         <AddOnSpotAttendee
           show={open}
-          handleClose={
-            /*istanbul ignore next */
-            () => setOpen(false)
-          }
-          reloadMembers={
-            /*istanbul ignore next */
-            () => {
-              attendeesRefetch();
-            }
-          }
+          handleClose={() => setOpen(false)}
+          reloadMembers={() => {
+            attendeesRefetch();
+          }}
         />
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white">Event Registrants</Modal.Title>
