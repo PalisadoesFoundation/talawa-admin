@@ -94,6 +94,14 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+  --info-button-bg: var(--light-blue);
+  --info-button-border: var(--brown-color);
+  --info-button-text: var(--brown-color);
+  --close-button-text: var(--remove-button-color);
+  --close-button-bg: var(--white-color);
+  --checkbox-focus-border: var(--bs-gray-300);
+  --checkbox-bg: var(--dark-blue);
+  --checkbox-border: var(--dark-blue);
 
   /* Background and Border */
   --table-bg: #eaebef;
@@ -138,6 +146,7 @@
   --modal-max-width: 680px;
 
   /* Additional Variables */
+  --primary-theme-color: #1778f2;
   --input-shadow-color: #dddddd;
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
@@ -335,9 +344,9 @@
 }
 
 .closeButton {
-  color: var(--remove-button-color);
+  color: var(--close-button-text);
   border: none;
-  background-color: var(--white-color);
+  background-color: var(--close-button-bg);
 }
 
 .dropdown {
@@ -614,15 +623,15 @@
 }
 
 .infoButton {
-  background-color: var(--search-button-bg) !important;
-  border-color: var(--search-button-border) !important;
-  color: var(--brown-color);
+  background-color: var(--info-button-bg) !important;
+  border-color: var(--info-button-border) !important;
+  color: var(--info-button-text);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
 }
 
 .infoButton:hover {
-  color: var(--brown-color) !important;
+  color: var(--info-button-text) !important;
   box-shadow: var(--drop-shadow);
 }
 
@@ -640,10 +649,6 @@
   border-radius: var(--table-head-radius) !important;
   padding: 20px;
   margin-top: 20px;
-}
-
-.dataGridContainer {
-  border-radius: 20px;
 }
 
 .rowBackground {
@@ -2040,8 +2045,8 @@ input[type='radio']:checked + label:hover {
 }
 
 .checkboxButton input:checked {
-  background-color: var(--dark-blue);
-  border-color: var(--dark-blue);
+  background-color: var(--checkbox-bg);
+  border-color: var(--checkbox-border);
 }
 
 .checkboxButton input:hover {
@@ -2049,6 +2054,7 @@ input[type='radio']:checked + label:hover {
 }
 
 .checkboxButton input:focus {
+  border-color: var(--checkbox-focus-border);
   outline: none;
   box-shadow: none;
 }

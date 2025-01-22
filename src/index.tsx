@@ -39,7 +39,7 @@ const theme = createTheme({
   palette: {
     primary: {
       main: getComputedStyle(document.documentElement)
-        .getPropertyValue('--blue-primary')
+        .getPropertyValue('--primary-theme-color')
         .trim(),
     },
   },

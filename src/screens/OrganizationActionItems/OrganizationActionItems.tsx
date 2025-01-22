@@ -466,7 +466,27 @@ function organizationActionItems(): JSX.Element {
             </Stack>
           ),
         }}
-        className={styles.dataGridContainer}
+        sx={{
+          borderRadius: 'var(--table-head-radius)',
+          backgroundColor: 'var(--grey-bg-color)',
+          '& .MuiDataGrid-cell': {
+            outline: 'none',
+          },
+          '& .MuiDataGrid-cell:focus': {
+            outline: 'none',
+            outlineOffset: '-2px',
+          },
+          '& .MuiDataGrid-cell:focus-within': {
+            outline: 'none',
+            outlineOffset: '-2px',
+          },
+          '& .MuiDataGrid-row': {
+            backgroundColor: 'var(--tablerow-bg-color)',
+            '&:focus-within': {
+              outline: 'none',
+            },
+          },
+        }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
