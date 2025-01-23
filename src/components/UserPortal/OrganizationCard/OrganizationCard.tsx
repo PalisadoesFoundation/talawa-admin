@@ -148,7 +148,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
 
   return (
     <>
-      <div className="styles.pageContainer">
+      <div className={styles.pageContainer}>
         <div className={styles.orgCard}>
           <div className={styles.innerContainer}>
             <div className={styles.orgImgContainer}>
