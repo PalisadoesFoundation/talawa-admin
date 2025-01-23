@@ -51,6 +51,23 @@ const dataGridStyle = {
  * Component for managing volunteer groups for an event.
  * This component allows users to view, filter, sort, and create action items. It also provides a modal for creating and editing action items.
  * @returns The rendered component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function groups(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -303,7 +320,7 @@ function groups(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+            className={`${styles.searchButton}`}
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >
