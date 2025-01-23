@@ -336,18 +336,16 @@ const organizationFunds = (): JSX.Element => {
               dataTestIdPrefix="filter"
               buttonLabel={tCommon('sort')}
             />
-            <div>
-              <Button
-                variant="success"
-                onClick={() => handleOpenModal(null, 'create')}
-                className={styles.createButton}
-                style={{ marginTop: '0px' }}
-                data-testid="createFundBtn"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('createFund')}
-              </Button>
-            </div>
+            <Button
+              variant="success"
+              onClick={() => handleOpenModal(null, 'create')}
+              className={styles.createButton}
+              style={{ marginTop: '0px' }}
+              data-testid="createFundBtn"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('createFund')}
+            </Button>
           </div>
         </div>
       </div>
