@@ -34,6 +34,25 @@ import SortingButton from 'subComponents/SortingButton';
  *
  * This component does not accept any props and is responsible for displaying
  * the content associated with the corresponding route.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.inputField`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 
 function OrganizationTags(): JSX.Element {
@@ -94,7 +113,9 @@ function OrganizationTags(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) {
+          return prevResult;
+        }
 
         return {
           organizations: [
@@ -137,20 +158,18 @@ function OrganizationTags(): JSX.Element {
           organizationId: orgId,
         },
       });
-
       if (data) {
         toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
         setCreateTagModalIsOpen(false);
+      } else {
+        toast.error('Tag creation failed');
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
-
   if (orgUserTagsError) {
     return (
       <div
@@ -170,10 +189,10 @@ function OrganizationTags(): JSX.Element {
     );
   }
 
-  const userTagsList = orgUserTagsData?.organizations[0].userTags.edges.map(
-    (edge) => edge.node,
-  );
-
+  const userTagsList =
+    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
+      (edge) => edge.node,
+    ) || [];
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
@@ -370,7 +389,7 @@ function OrganizationTags(): JSX.Element {
                 className={styles.orgUserTagsScrollableDiv}
               >
                 <InfiniteScroll
-                  dataLength={userTagsList?.length ?? 0}
+                  dataLength={userTagsList?.length}
                   next={loadMoreUserTags}
                   hasMore={
                     orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
@@ -378,6 +397,7 @@ function OrganizationTags(): JSX.Element {
                   }
                   loader={<InfiniteScrollLoader />}
                   scrollableTarget="orgUserTagsScrollableDiv"
+                  data-testid="infinite-scroll"
                 >
                   <DataGrid
                     disableColumnMenu

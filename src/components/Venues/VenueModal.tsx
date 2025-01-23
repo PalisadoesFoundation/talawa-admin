@@ -35,6 +35,23 @@ export interface InterfaceVenueModalProps {
  * @param edit - A flag indicating if the modal is in edit mode. If true, the component will update an existing venue; if false, it will create a new one.
  *
  * @returns The rendered modal component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const VenueModal = ({
   show,

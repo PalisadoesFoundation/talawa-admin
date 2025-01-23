@@ -24,6 +24,23 @@ interface InterfaceEventHeaderProps {
  * @param handleChangeView - Function to handle changing the view type.
  * @param showInviteModal - Function to show the invite modal for creating an event.
  * @returns JSX.Element - The rendered EventHeader component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function eventHeader({
   viewType,

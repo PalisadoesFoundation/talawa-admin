@@ -1052,7 +1052,9 @@
     "comments": "commentaires",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
-    "postedOn": "Publié le {{date}}"
+    "postedOn": "Publié le {{date}}",
+    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
   },
   "home": {
     "posts": "Des postes",

@@ -105,7 +105,7 @@ const ForgotPassword = (): JSX.Element => {
   };
 
   /**
-   * Handles the form submission for resetting the password.
+   * manages the form submission for resetting the password.
    *
    * @param e - The form submit event
    */
@@ -135,7 +135,6 @@ const ForgotPassword = (): JSX.Element => {
         },
       });
 
-      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('passwordChanges') as string);
         setShowEnterEmail(true);
@@ -168,7 +167,10 @@ const ForgotPassword = (): JSX.Element => {
             <div className={styles.cardTemplate}>
               <div className={styles.keyWrapper}>
                 <div className={styles.themeOverlay} />
-                <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />
+                <KeyLogo
+                  className={styles.keyLogo}
+                  fill="var(--forgot-password-fill)"
+                />
               </div>
               <h3 className={`${styles['text-center']} ${styles['fw-bold']}`}>
                 {tCommon('forgotPassword')}
@@ -195,7 +197,8 @@ const ForgotPassword = (): JSX.Element => {
                     </div>
                     <Button
                       type="submit"
-                      className={`${styles['mt-4']} ${styles['w-100']}`}
+                      className={`${styles['mt-4']} ${styles.login_btn} ${styles['w-100']}`}
+
                       data-testid="getOtpBtn"
                     >
                       {t('getOtp')}

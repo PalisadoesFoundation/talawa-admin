@@ -612,7 +612,7 @@ const loginPage = (): JSX.Element => {
                       />
                       <Button
                         tabIndex={-1}
-                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                        className={`${styles.email_button}`}
                       >
                         <EmailOutlinedIcon />
                       </Button>
@@ -645,7 +645,7 @@ const loginPage = (): JSX.Element => {
                       <Button
                         onClick={togglePassword}
                         data-testid="showPassword"
-                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                        className={`${styles.email_button}`}
                       >
                         {showPassword ? (
                           <i className="fas fa-eye"></i>
@@ -797,7 +797,8 @@ const loginPage = (): JSX.Element => {
                       <Button
                         data-testid="showPasswordCon"
                         onClick={toggleConfirmPassword}
-                        className={`${styles['position-absolute']} ${styles['z-10']} ${styles['bottom-0']} ${styles['end-0']} ${styles['h-100']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['align-items-center']}`}
+
+                        className={`${styles.email_button}`}
                       >
                         {showConfirmPassword ? (
                           <i className="fas fa-eye"></i>
@@ -860,7 +861,9 @@ const loginPage = (): JSX.Element => {
                   )}
                   <Button
                     type="submit"
-                    className={`${styles['mt-4']} ${styles['w-100']} ${styles['mb-3']}`}
+
+                    className={`${styles['mt-4']} ${styles['w-100']} ${styles['mb-3']} ${styles['fw-bold']} ${styles.login_btn}`}
+
                     value="Register"
                     data-testid="registrationBtn"
                     disabled={signinLoading}
@@ -874,7 +877,9 @@ const loginPage = (): JSX.Element => {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className={`${styles['mt-3']} ${styles['mb-5']} ${styles['w-100']}`}
+
+                    className={`${styles['mt-3']} ${styles['mb-5']} ${styles['w-100']} ${styles['fw-bold']} ${styles.reg_btn}`}
+
                     data-testid="goToLoginPortion"
                     onClick={(): void => {
                       setShowTab('LOGIN');

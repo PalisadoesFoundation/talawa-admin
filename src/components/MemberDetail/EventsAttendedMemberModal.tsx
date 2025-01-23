@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../screens/MemberDetail/MemberDetail.module.css';
-import style from '../../style/app.module.css';
+
+import styles from '../../style/app.module.css';
 import { CustomTableCell } from './customTableCell';
 /**
  * Modal component to display paginated list of events attended by a member
@@ -77,12 +77,12 @@ const EventsAttendedMemberModal: React.FC<
           <p>{t('noeventsAttended')}</p>
         ) : (
           <>
-            <h5 className={`${style['text-end']}`}>
+            <h5 className={`${styles['text-end']}`}>
               Showing {(page - 1) * eventsPerPage + 1} -{' '}
               {Math.min(page * eventsPerPage, eventsAttended.length)} of{' '}
               {eventsAttended.length} Events
             </h5>
-            <TableContainer component={Paper} className={`${style['mt-3']}`}>
+            <TableContainer component={Paper} className={`${styles['mt-3']}`}>
               <Table aria-label="customized table">
                 <TableHead>
                   <TableRow data-testid="row">
@@ -108,10 +108,10 @@ const EventsAttendedMemberModal: React.FC<
               </Table>
             </TableContainer>
             <div
-              className={`${style['d-flex']} ${style['justify-content-center']} ${style['mt-3']}`}
+              className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['mt-3']}`}
             >
               <div
-                className={`${style['d-flex']} ${style['justify-content-center']} ${style['mt-3']}`}
+                className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['mt-3']}`}
               >
                 <Pagination
                   count={totalPages}

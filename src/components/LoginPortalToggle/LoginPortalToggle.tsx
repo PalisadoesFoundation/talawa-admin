@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './LoginPortalToggle.module.css';
-import style from '../../style/app.module.css';
+import styles from '../../style/app.module.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { NavLink } from 'react-router-dom';
@@ -33,8 +32,8 @@ function loginPortalToggle({
   };
 
   return (
-    <Row className={`${style['mb-4']} ${style['row']}`}>
-      <Col className={style.rowChild}>
+    <Row className={`${styles['mb-4']} ${styles['row']}`}>
+      <Col className={styles.rowChild}>
         <NavLink
           className={`${styles.navLinkClass} ${activeRole === 'admin' && styles.activeLink}`} // Apply active link styles if 'admin' is active
           to="/"
@@ -43,7 +42,7 @@ function loginPortalToggle({
           {tCommon('admin')}
         </NavLink>
       </Col>
-      <Col className={style.rowChild}>
+      <Col className={styles.rowChild}>
         <NavLink
           className={`${styles.navLinkClass} ${activeRole === 'user' && styles.activeLink}`} // Apply active link styles if 'user' is active
           to="/"

@@ -4,8 +4,8 @@ import TruncatedText from './TruncatedText';
 import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from './OrgListCard.module.css';
-import style from '../../style/app.module.css';
+
+import styles from '../../style/app.module.css';
 import { useNavigate } from 'react-router-dom';
 import type {
   InterfaceOrgConnectionInfoType,
@@ -94,12 +94,12 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
           <div className={styles.content}>
             {/* Tooltip for the organization name */}
             <Tooltip title={name} placement="top-end">
-              <h4 className={`${styles.orgName} ${style['fw-semibold']}`}>
+              <h4 className={`${styles.orgName} ${styles['fw-semibold']}`}>
                 {name}
               </h4>
             </Tooltip>
             {/* Description of the organization */}
-            <div className={`${styles.orgdesc} ${style['fw-semibold']}`}>
+            <div className={`${styles.orgdesc} ${styles['fw-semibold']}`}>
               <TruncatedText
                 text={userData?.organizations[0]?.description || ''}
               />
@@ -115,8 +115,12 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             )}
             {/* Display the number of admins and members */}
             <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{admins.length}</span> &nbsp; &nbsp;
-              &nbsp; {tCommon('members')}: <span>{members.length}</span>
+              <div>
+                {tCommon('admins')}: <span>{admins.length}</span>
+              </div>
+              <div>
+                {tCommon('members')}: <span>{members.length}</span>
+              </div>
             </h6>
           </div>
         </div>

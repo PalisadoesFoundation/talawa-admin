@@ -7,8 +7,8 @@ import {
   ADD_EVENT_ATTENDEE,
   REMOVE_EVENT_ATTENDEE,
 } from 'GraphQl/Mutations/mutations';
-import styles from 'components/EventRegistrantsModal/EventRegistrantsModal.module.css';
-import style from '../../style/app.module.css';
+
+import styles from '../../style/app.module.css';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -130,30 +130,24 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
         <AddOnSpotAttendee
           show={open}
-          handleClose={
-            /*istanbul ignore next */
-            () => setOpen(false)
-          }
-          reloadMembers={
-            /*istanbul ignore next */
-            () => {
-              attendeesRefetch();
-            }
-          }
+          handleClose={() => setOpen(false)}
+          reloadMembers={() => {
+            attendeesRefetch();
+          }}
         />
-        <Modal.Header closeButton className={style['bg-primary']}>
-          <Modal.Title className={style['text-white']}>
+        <Modal.Header closeButton className={styles['bg-primary']}>
+          <Modal.Title className={styles['text-white']}>
             Event Registrants
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5 className={style['mb-2']}> Registered Registrants </h5>
+          <h5 className={styles['mb-2']}> Registered Registrants </h5>
           {attendeesData.event.attendees.length == 0
             ? `There are no registered attendees for this event.`
             : null}
           <Stack
             direction="row"
-            className={`${style['flex-wrap']} ${style['gap-2']}`}
+            className={`${styles['flex-wrap']} ${styles['gap-2']}`}
           >
             {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
               <Chip
@@ -175,10 +169,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               setMember(newMember);
             }}
             noOptionsText={
-              <div className={style['d-flex']}>
-                <p className={style['me-2']}>No Registrations found</p>
+              <div className={styles['d-flex']}>
+                <p className={styles['me-2']}>No Registrations found</p>
                 <span
-                  className={style['underline']}
+                  className={styles['underline']}
                   onClick={() => {
                     setOpen(true);
                   }}

@@ -85,7 +85,7 @@ type DirectMessage = {
   messageContent: string;
 };
 
-type Chat = {
+export type Chat = {
   _id: string;
   isGroup: boolean;
   name: string;
@@ -337,6 +337,7 @@ export default function chat(): JSX.Element {
           toggleCreateDirectChatModal={toggleCreateDirectChatModal}
           createDirectChatModalisOpen={createDirectChatModalisOpen}
           chatsListRefetch={chatsListRefetch}
+          chats={chats}
         ></CreateDirectChat>
       )}
     </>

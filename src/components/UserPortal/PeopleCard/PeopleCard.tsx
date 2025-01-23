@@ -1,7 +1,7 @@
 import React from 'react';
 import aboutImg from 'assets/images/defaultImg.png';
-import styles from './PeopleCard.module.css';
-import style from '../../../style/app.module.css';
+
+import styles from './../../../style/app.module.css';
 /**
  * Props interface for the PeopleCard component.
  */
@@ -32,11 +32,12 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const imageUrl = props.image ? props.image : aboutImg;
 
   return (
-    <div className={`${style['d-flex']} ${style['flex-row']}`}>
+
+    <div className={styles.people_card_container}>
       {/* Container for serial number and image */}
-      <span style={{ flex: '1' }} className={style['d-flex']}>
+      <span style={{ flex: '1' }} className={styles.display_flex}>
         {/* Serial number */}
-        <span style={{ flex: '1' }} className={style['align-self-center']}>
+        <span style={{ flex: '1' }} className={styles.align_center}>
           {props.sno}
         </span>
         {/* Person's image */}
@@ -45,24 +46,23 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
             src={imageUrl}
             width="80px"
             height="auto"
-            className={`${styles.personImage}`}
+            className={styles.personImage_peoplecard}
           />
         </span>
       </span>
       {/* Person's name */}
-      <b style={{ flex: '2' }} className={style['align-self-center']}>
+
+      <b style={{ flex: '2' }} className={styles.align_center}>
         {props.name}
       </b>
       {/* Person's email */}
-      <span style={{ flex: '2' }} className={style['align-self-center']}>
+      <span style={{ flex: '2' }} className={styles.align_center}>
         {props.email}
       </span>
       {/* Person's role with additional styling */}
-      <div style={{ flex: '2' }} className={style['align-self-center']}>
-        <div
-          className={`${style['w-75']} ${style['border']} ${style['py-2']} ${style['px-3']} ${styles.borderBox}`}
-        >
-          <span className={styles.greenText}>{props.role}</span>
+      <div style={{ flex: '2' }} className={styles.align_center}>
+        <div className={styles.people_role}>
+          <span>{props.role}</span>
         </div>
       </div>
     </div>

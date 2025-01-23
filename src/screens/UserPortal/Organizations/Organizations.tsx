@@ -13,9 +13,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Organizations.module.css';
-import style from '../../../style/app.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+
+import styles from '../../../style/app.module.css';
 
 const { getItem } = useLocalStorage();
 
@@ -318,21 +317,24 @@ export default function organizations(): JSX.Element {
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expand
-              : styles.contract
+              ? styles.expandOrg
+              : styles.contractOrg
         }`}
       >
-        <div className={styles['mainContainer']}>
+
+        <div className={`${styles.mainContainerOrganization}`}>
           <div
-            className={`${style['d-flex']} ${style['justify-content-between']} ${style['align-items-center']}`}
+            className={`${styles['d-flex']} ${styles['justify-content-between']} ${styles['align-items-center']}`}
           >
+
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
             </div>
-            <ProfileDropdown />
           </div>
-          <div className={style['mt-4']}>
+
+          <div className={`${styles['mt-4']} ${styles['d-flex']} ${styles['justify-content-between']} ${styles['gap-4']} `}>
             <InputGroup className={styles['maxWidth']}>
+
               <Form.Control
                 placeholder={t('searchOrganizations')}
                 id="searchOrganizations"
@@ -378,42 +380,47 @@ export default function organizations(): JSX.Element {
             className={`${style['d-flex']} ${style['flex-column']} ${style['justify-content-between']} ${styles['content']}`}
           >
             <div
-              className={`${style['d-flex']} ${style['flex-column']} ${styles['gap']} ${styles['paddingY']}`}
-            >
+              className={`${styles['d-flex']} ${styles['flex-column']} ${styles['gap']} ${styles['paddingY']}`}
+
               {loadingOrganizations ? (
                 <div
-                  className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-center']}`}
+                  className={`${styles['d-flex']} ${styles['flex-row']} ${styles['justify-content-center']}`}
                 >
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
                 <>
-                  {' '}
                   {organizations && organizations.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? organizations.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
-                      : organizations
-                    ).map((organization: InterfaceOrganization, index) => {
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name: organization.name,
-                        image: organization.image,
-                        id: organization._id,
-                        description: organization.description,
-                        admins: organization.admins,
-                        members: organization.members,
-                        address: organization.address,
-                        membershipRequestStatus:
-                          organization.membershipRequestStatus,
-                        userRegistrationRequired:
-                          organization.userRegistrationRequired,
-                        membershipRequests: organization.membershipRequests,
-                        isJoined: organization.isJoined,
-                      };
-                      return <OrganizationCard key={index} {...cardProps} />;
-                    })
+                    <div className="row">
+                      {(rowsPerPage > 0
+                        ? organizations.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
+                        : organizations
+                      ).map((organization: InterfaceOrganization, index) => {
+                        const cardProps: InterfaceOrganizationCardProps = {
+                          name: organization.name,
+                          image: organization.image,
+                          id: organization._id,
+                          description: organization.description,
+                          admins: organization.admins,
+                          members: organization.members,
+                          address: organization.address,
+                          membershipRequestStatus:
+                            organization.membershipRequestStatus,
+                          userRegistrationRequired:
+                            organization.userRegistrationRequired,
+                          membershipRequests: organization.membershipRequests,
+                          isJoined: organization.isJoined,
+                        };
+                        return (
+                          <div key={index}className={`${styles['col-md-6']} ${styles['mb-4']}`}>
+                            <OrganizationCard {...cardProps} />
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
                     <span>{t('nothingToShow')}</span>
                   )}

@@ -3,7 +3,8 @@ src/components/CheckIn/tagTemplate.ts
 package.json
 package-lock.json
 tsconfig.json
-
+fix-readme-links.js
+fix-repo-url.js
 # Ignore the Docusaurus website subdirectory
 docs/**
 
