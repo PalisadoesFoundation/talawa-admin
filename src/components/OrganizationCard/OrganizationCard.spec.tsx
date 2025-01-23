@@ -14,6 +14,16 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 
+/**
+ * This file contains unit tests for the `OrganizationCard` component.
+ *
+ * The tests cover:
+ * - Rendering the component with all provided props and verifying the correct display of text elements.
+ * - Ensuring the component handles cases where certain props (like image) are not provided.
+ *
+ * These tests utilize the React Testing Library for rendering and querying DOM elements.
+ */
+
 // Mock hooks
 const mockGetItem = vi.fn();
 vi.mock('utils/useLocalstorage', () => ({
