@@ -13,7 +13,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { checkInMutationSuccess, checkInMutationUnsuccess } from './mocks';
 import { vi } from 'vitest';
 
-interface TableRowProps {
+interface TestInterfaceTableRowProps {
   data: {
     id: string;
     name: string;
@@ -33,7 +33,7 @@ describe('Testing TableRow component', () => {
   });
 
   const renderWithProviders = (
-    props: TableRowProps,
+    props: TestInterfaceTableRowProps,
   ): ReturnType<typeof render> =>
     render(
       <BrowserRouter>
@@ -51,7 +51,7 @@ describe('Testing TableRow component', () => {
     );
 
   test('If user is not checked in, "Check In" button should be displayed and work correctly', async () => {
-    const props: TableRowProps = {
+    const props: TestInterfaceTableRowProps = {
       data: {
         id: '123',
         name: 'John Doe',
@@ -70,7 +70,7 @@ describe('Testing TableRow component', () => {
   });
 
   test('If user is already checked in, "Download Tag" button should be available', async () => {
-    const props: TableRowProps = {
+    const props: TestInterfaceTableRowProps = {
       data: {
         id: '123',
         name: 'John Doe',
@@ -100,7 +100,7 @@ describe('Testing TableRow component', () => {
   });
 
   test('Upon check-in mutation failure, an error message should be displayed', async () => {
-    const props: TableRowProps = {
+    const props: TestInterfaceTableRowProps = {
       data: {
         id: '123',
         name: 'John Doe',
@@ -133,7 +133,7 @@ describe('Testing TableRow component', () => {
   });
 
   test('If PDF generation fails, an error message should be displayed', async () => {
-    const props: TableRowProps = {
+    const props: TestInterfaceTableRowProps = {
       data: {
         id: '123',
         name: '',
@@ -162,7 +162,7 @@ describe('Testing TableRow component', () => {
   });
 
   test('Generated PDF should be downloadable with correct content', async () => {
-    const props: TableRowProps = {
+    const props: TestInterfaceTableRowProps = {
       data: {
         id: '123',
         name: 'John Doe',

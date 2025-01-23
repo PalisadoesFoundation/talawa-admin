@@ -31,7 +31,7 @@ export interface InterfaceLeftDrawerProps {
  * @param setHideDrawer - Function to update the visibility state of the drawer.
  * @returns JSX element for the left navigation drawer with organization details.
  */
-const leftDrawerOrg = ({
+const LeftDrawerOrg = ({
   targets,
   orgId,
   hideDrawer,
@@ -211,4 +211,4 @@ const leftDrawerOrg = ({
   );
 };
 
-export default leftDrawerOrg;
+export default LeftDrawerOrg;
