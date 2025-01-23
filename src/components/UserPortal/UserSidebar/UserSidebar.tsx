@@ -6,8 +6,6 @@ import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from '../../../style/app.module.css';
-
-// Import the ProfileDropdown component
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean | null;

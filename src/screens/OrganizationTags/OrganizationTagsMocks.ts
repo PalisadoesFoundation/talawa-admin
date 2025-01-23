@@ -24,12 +24,8 @@ export const MOCKS = [
                     _id: '1',
                     name: 'userTag 1',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 11,
-                    },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 11 },
                     ancestorTags: [],
                   },
                   cursor: '1',
@@ -39,12 +35,8 @@ export const MOCKS = [
                     _id: '2',
                     name: 'userTag 2',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 0,
-                    },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 0 },
                     ancestorTags: [],
                   },
                   cursor: '2',
@@ -54,12 +46,8 @@ export const MOCKS = [
                     _id: '3',
                     name: 'userTag 3',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 0,
-                    },
-                    childTags: {
-                      totalCount: 5,
-                    },
+                    usersAssignedTo: { totalCount: 0 },
+                    childTags: { totalCount: 5 },
                     ancestorTags: [],
                   },
                   cursor: '3',
@@ -69,12 +57,8 @@ export const MOCKS = [
                     _id: '4',
                     name: 'userTag 4',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 0,
-                    },
-                    childTags: {
-                      totalCount: 0,
-                    },
+                    usersAssignedTo: { totalCount: 0 },
+                    childTags: { totalCount: 0 },
                     ancestorTags: [],
                   },
                   cursor: '4',
@@ -84,12 +68,8 @@ export const MOCKS = [
                     _id: '5',
                     name: 'userTag 5',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 5,
-                    },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 5 },
                     ancestorTags: [],
                   },
                   cursor: '5',
@@ -99,12 +79,8 @@ export const MOCKS = [
                     _id: '6',
                     name: 'userTag 6',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 6,
-                    },
-                    childTags: {
-                      totalCount: 6,
-                    },
+                    usersAssignedTo: { totalCount: 6 },
+                    childTags: { totalCount: 6 },
                     ancestorTags: [],
                   },
                   cursor: '6',
@@ -114,12 +90,8 @@ export const MOCKS = [
                     _id: '7',
                     name: 'userTag 7',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 7,
-                    },
-                    childTags: {
-                      totalCount: 7,
-                    },
+                    usersAssignedTo: { totalCount: 7 },
+                    childTags: { totalCount: 7 },
                     ancestorTags: [],
                   },
                   cursor: '7',
@@ -129,12 +101,8 @@ export const MOCKS = [
                     _id: '8',
                     name: 'userTag 8',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 8,
-                    },
-                    childTags: {
-                      totalCount: 8,
-                    },
+                    usersAssignedTo: { totalCount: 8 },
+                    childTags: { totalCount: 8 },
                     ancestorTags: [],
                   },
                   cursor: '8',
@@ -144,12 +112,8 @@ export const MOCKS = [
                     _id: '9',
                     name: 'userTag 9',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 9,
-                    },
-                    childTags: {
-                      totalCount: 9,
-                    },
+                    usersAssignedTo: { totalCount: 9 },
+                    childTags: { totalCount: 9 },
                     ancestorTags: [],
                   },
                   cursor: '9',
@@ -159,12 +123,8 @@ export const MOCKS = [
                     _id: '10',
                     name: 'userTag 10',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 10,
-                    },
-                    childTags: {
-                      totalCount: 10,
-                    },
+                    usersAssignedTo: { totalCount: 10 },
+                    childTags: { totalCount: 10 },
                     ancestorTags: [],
                   },
                   cursor: '10',
@@ -205,12 +165,8 @@ export const MOCKS = [
                     _id: '11',
                     name: 'userTag 11',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 5,
-                    },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 5 },
                     ancestorTags: [],
                   },
                   cursor: '11',
@@ -220,12 +176,8 @@ export const MOCKS = [
                     _id: '12',
                     name: 'userTag 12',
                     parentTag: null,
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 0,
-                    },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 0 },
                     ancestorTags: [],
                   },
                   cursor: '12',
@@ -264,21 +216,10 @@ export const MOCKS = [
                   node: {
                     _id: 'searchUserTag1',
                     name: 'searchUserTag 1',
-                    parentTag: {
-                      _id: '1',
-                    },
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 5,
-                    },
-                    ancestorTags: [
-                      {
-                        _id: '1',
-                        name: 'userTag 1',
-                      },
-                    ],
+                    parentTag: { _id: '1' },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 5 },
+                    ancestorTags: [{ _id: '1', name: 'userTag 1' }],
                   },
                   cursor: 'searchUserTag1',
                 },
@@ -286,21 +227,10 @@ export const MOCKS = [
                   node: {
                     _id: 'searchUserTag2',
                     name: 'searchUserTag 2',
-                    parentTag: {
-                      _id: '1',
-                    },
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 0,
-                    },
-                    ancestorTags: [
-                      {
-                        _id: '1',
-                        name: 'userTag 1',
-                      },
-                    ],
+                    parentTag: { _id: '1' },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 0 },
+                    ancestorTags: [{ _id: '1', name: 'userTag 1' }],
                   },
                   cursor: 'searchUserTag2',
                 },
@@ -338,21 +268,10 @@ export const MOCKS = [
                   node: {
                     _id: 'searchUserTag2',
                     name: 'searchUserTag 2',
-                    parentTag: {
-                      _id: '1',
-                    },
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 5,
-                    },
-                    ancestorTags: [
-                      {
-                        _id: '1',
-                        name: 'userTag 1',
-                      },
-                    ],
+                    parentTag: { _id: '1' },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 5 },
+                    ancestorTags: [{ _id: '1', name: 'userTag 1' }],
                   },
                   cursor: 'searchUserTag2',
                 },
@@ -360,21 +279,10 @@ export const MOCKS = [
                   node: {
                     _id: 'searchUserTag1',
                     name: 'searchUserTag 1',
-                    parentTag: {
-                      _id: '1',
-                    },
-                    usersAssignedTo: {
-                      totalCount: 5,
-                    },
-                    childTags: {
-                      totalCount: 0,
-                    },
-                    ancestorTags: [
-                      {
-                        _id: '1',
-                        name: 'userTag 1',
-                      },
-                    ],
+                    parentTag: { _id: '1' },
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 0 },
+                    ancestorTags: [{ _id: '1', name: 'userTag 1' }],
                   },
                   cursor: 'searchUserTag1',
                 },
@@ -395,22 +303,45 @@ export const MOCKS = [
   {
     request: {
       query: CREATE_USER_TAG,
-      variables: {
-        name: 'userTag 12',
-        organizationId: 'orgId',
-      },
+      variables: { name: 'userTag 12', organizationId: 'orgId' },
     },
-    result: {
-      data: {
-        createUserTag: {
-          _id: '12',
-        },
-      },
+    result: { data: { createUserTag: { _id: '12' } } },
+  },
+  {
+    request: {
+      query: CREATE_USER_TAG,
+      variables: { name: 'userTag 13', organizationId: 'orgId' },
     },
+    result: { data: null },
   },
 ];
 
 export const MOCKS_ERROR = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgIdError',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+];
+
+export const MOCKS_ERROR_ERROR_TAG = [
+  {
+    request: {
+      query: CREATE_USER_TAG,
+      variables: { name: 'userTagE', organizationId: 'orgId' },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+];
+
+export const MOCKS_EMPTY = [
   {
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
@@ -421,6 +352,181 @@ export const MOCKS_ERROR = [
         sortedBy: { id: 'DESCENDING' },
       },
     },
-    error: new Error('Mock Graphql Error'),
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: null,
+                endCursor: null,
+              },
+              totalCount: 0,
+            },
+          },
+        ],
+      },
+    },
+  },
+];
+
+export const MOCKS_UNDEFINED_USER_TAGS = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: { data: { organizations: [{ userTags: undefined }] } },
+  },
+];
+
+export const MOCKS_NULL_END_CURSOR = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'userTag 1',
+                    parentTag: null,
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 11 },
+                    ancestorTags: [],
+                  },
+                  cursor: '1',
+                },
+              ],
+              pageInfo: {
+                startCursor: '1',
+                endCursor: null,
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        after: null,
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'userTag 1',
+                    parentTag: null,
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 11 },
+                    ancestorTags: [],
+                  },
+                  cursor: '2',
+                },
+              ],
+              pageInfo: {
+                startCursor: '2',
+                endCursor: null,
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+];
+
+export const MOCKS_NO_MORE_PAGES = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'userTag 1',
+                    parentTag: null,
+                    usersAssignedTo: { totalCount: 5 },
+                    childTags: { totalCount: 11 },
+                    ancestorTags: [],
+                  },
+                  cursor: '1',
+                },
+              ],
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '1',
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        after: '1',
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: { data: undefined },
   },
 ];

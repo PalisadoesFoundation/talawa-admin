@@ -184,7 +184,11 @@ export default function advertisements(): JSX.Element {
                   )}
                 </InfiniteScroll>
               </Tab>
-              <Tab eventKey="archievedAds" title={t('archievedAds')}>
+              <Tab
+                eventKey="archievedAds"
+                title={t('archievedAds')}
+                className="pt-4 m-2"
+              >
                 <InfiniteScroll
                   dataLength={advertisements?.length ?? 0}
                   next={loadMoreAdvertisements}
@@ -219,7 +223,7 @@ export default function advertisements(): JSX.Element {
                       (ad: Ad) => new Date(ad.endDate) < new Date(),
                     ).length !== 0 && (
                       <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{t('endOfResults')}</h5>
+                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                       </div>
                     )
                   }

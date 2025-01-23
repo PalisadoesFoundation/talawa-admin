@@ -1053,7 +1053,9 @@
     "comments": "Comentarios",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
-    "postedOn": "Publicado el {{date}}"
+    "postedOn": "Publicado el {{date}}",
+    "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
+    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
   },
   "home": {
     "posts": "Publicaciones",

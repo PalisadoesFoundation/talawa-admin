@@ -6,6 +6,13 @@
  */
 
 :root {
+  --h1-markdown: #021526;
+  --h2-markdown: #3a6d8c;
+  --h3-markdown: #474e93;
+  --h4-markdown: #508c9b;
+  --h5-markdown: #6a9ab0;
+  --h6-markdown: #888888;
+  --hx-markdown-underline: #eeeeee;
   --secondary-blue-900: #001c63;
   --sidebar-bg-color: #f3f4f6;
   --secondary-blue-500: #3970fd;
@@ -119,12 +126,32 @@ h1.docTitle_node_modules-\@docusaurus-theme-classic-src-theme-DocItem- {
   --ifm-h2-font-size: 1.875rem;
   margin-bottom: 0.8rem;
   margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * 0rem);
+  color: var(--h2-markdown);
+  border-bottom: 1px solid var(--hx-markdown-underline);
+  padding-bottom: 5px;
 }
 
 .markdown > h3 {
   --ifm-h3-font-size: 1.5rem;
   margin-bottom: 0.8rem;
   margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * 0rem);
+  color: var(--h3-markdown);
+  border-bottom: 1px solid var(--hx-markdown-underline);
+  padding-bottom: 5px;
+}
+
+.markdown > h4 {
+  color: var(--h4-markdown);
+  border-bottom: 1px solid var(--hx-markdown-underline);
+  padding-bottom: 5px;
+}
+
+.markdown > h5 {
+  color: var(--h5-markdown);
+}
+
+.markdown > h6 {
+  color: var(--h6-markdown);
 }
 
 .navbar {

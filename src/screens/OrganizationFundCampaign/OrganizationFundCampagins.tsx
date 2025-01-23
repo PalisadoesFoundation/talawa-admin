@@ -74,6 +74,30 @@ const dataGridStyle = {
  * - Shows error and loading states using `Loader` and error message components.
  *
  * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButon`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {

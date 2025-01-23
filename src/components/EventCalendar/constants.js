@@ -13,7 +13,15 @@ export const holidays = [
   },
   { name: 'Christmas Day', date: '12-25', month: 'December' }, // December 25th
 ];
-export const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const weekdays = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 export const months = [
   'January',
   'February',
