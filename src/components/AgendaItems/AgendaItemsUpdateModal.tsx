@@ -167,10 +167,12 @@ const AgendaItemsUpdateModal: React.FC<
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={updateAgendaItemHandler}>
-          <Form.Group className="d-flex mb-3 w-100">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+          >
             <Autocomplete
               multiple
-              className={`${styles.noOutline} w-100`}
+              className={`${styles['noOutline']} ${styles['w-100']}`}
               limitTags={2}
               data-testid="categorySelect"
               options={agendaItemCategories || []}
@@ -197,9 +199,9 @@ const AgendaItemsUpdateModal: React.FC<
             />
           </Form.Group>
 
-          <Row className="mb-3">
-            <Col>
-              <Form.Group className="mb-3" controlId="title">
+          <Row className={`${styles.row} ${styles['mb-3']}`}>
+            <Col className={`${styles.rowChild}`}>
+              <Form.Group className={`${styles['mb-3']}`} controlId="title">
                 <Form.Label>{t('title')}</Form.Label>
                 <Form.Control
                   type="text"
@@ -211,7 +213,7 @@ const AgendaItemsUpdateModal: React.FC<
                 />
               </Form.Group>
             </Col>
-            <Col>
+            <Col className={`${styles.rowChild}`}>
               <Form.Group controlId="duration">
                 <Form.Label>{t('duration')}</Form.Label>
                 <Form.Control
@@ -227,7 +229,7 @@ const AgendaItemsUpdateModal: React.FC<
             </Col>
           </Row>
 
-          <Form.Group className="mb-3" controlId="description">
+          <Form.Group className={`${styles['mb-3']}`} controlId="description">
             <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               as="textarea"
@@ -240,9 +242,9 @@ const AgendaItemsUpdateModal: React.FC<
             />
           </Form.Group>
 
-          <Form.Group className="mb-3">
+          <Form.Group className={`${styles['mb-3']}`}>
             <Form.Label>{t('url')}</Form.Label>
-            <div className="d-flex">
+            <div className={`${styles.dFlex}`}>
               <Form.Control
                 type="text"
                 placeholder={t('enterUrl')}
@@ -274,7 +276,7 @@ const AgendaItemsUpdateModal: React.FC<
               </li>
             ))}
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className={`${styles['mb-3']}`}>
             <Form.Label>{t('attachments')}</Form.Label>
             <Form.Control
               accept="image/*, video/*"

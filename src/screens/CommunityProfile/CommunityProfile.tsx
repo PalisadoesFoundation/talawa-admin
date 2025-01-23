@@ -209,12 +209,15 @@ const CommunityProfile = (): JSX.Element => {
 
   return (
     <>
-      <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
+      <Card
+        border="0"
+        className={`${styles.card} ${styles['rounded-4']} ${styles['my-4']} ${styles['shadow-sm']}`}
+      >
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('editProfile')}</div>
         </div>
         <Card.Body>
-          <div className="mb-3">{t('communityProfileInfo')}</div>
+          <div className={styles['mb-3']}>{t('communityProfileInfo')}</div>
           <Form onSubmit={handleOnSubmit}>
             <Form.Group>
               <Form.Label className={styles.formLabel}>
@@ -226,7 +229,7 @@ const CommunityProfile = (): JSX.Element => {
                 name="name"
                 value={profileVariable.name}
                 onChange={handleOnChange}
-                className="mb-3"
+                className={styles['mb-3']}
                 placeholder={t('communityName')}
                 autoComplete="off"
                 required
@@ -242,7 +245,7 @@ const CommunityProfile = (): JSX.Element => {
                 name="websiteLink"
                 value={profileVariable.websiteLink}
                 onChange={handleOnChange}
-                className="mb-3"
+                className={styles['mb-3']}
                 placeholder={t('wesiteLink')}
                 autoComplete="off"
                 required
@@ -272,7 +275,7 @@ const CommunityProfile = (): JSX.Element => {
                     logoUrl: base64file ?? '',
                   });
                 }}
-                className="mb-3"
+                className={styles['mb-3']}
                 autoComplete="off"
                 required
               />
@@ -282,7 +285,9 @@ const CommunityProfile = (): JSX.Element => {
                 {t('social')}
               </Form.Label>
               {/* Social media inputs */}
-              <div className="mb-3 d-flex align-items-center gap-3">
+              <div
+                className={`${styles['mb-3']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-3']}`}
+              >
                 <img src={FacebookLogo} alt="Facebook Logo" />
                 <Form.Control
                   type="url"
@@ -296,7 +301,9 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
-              <div className="mb-3 d-flex align-items-center gap-3">
+              <div
+                className={`${styles['mb-3']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-3']}`}
+              >
                 <img src={InstagramLogo} alt="Instagram Logo" />
                 <Form.Control
                   type="url"
@@ -310,7 +317,9 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
-              <div className="mb-3 d-flex align-items-center gap-3">
+              <div
+                className={`${styles['mb-3']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-3']}`}
+              >
                 <img src={XLogo} alt="X Logo" />
                 <Form.Control
                   type="url"
@@ -324,7 +333,9 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
-              <div className="mb-3 d-flex align-items-center gap-3">
+              <div
+                className={`${styles['mb-3']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-3']}`}
+              >
                 <img src={LinkedInLogo} alt="LinkedIn Logo" />
                 <Form.Control
                   type="url"
@@ -338,7 +349,9 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
-              <div className="mb-3 d-flex align-items-center gap-3">
+              <div
+                className={`${styles['mb-3']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-3']}`}
+              >
                 <img src={GithubLogo} alt="Github Logo" />
                 <Form.Control
                   type="url"
@@ -352,7 +365,9 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
-              <div className="mb-3 d-flex align-items-center gap-3">
+              <div
+                className={`${styles['mb-3']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-3']}`}
+              >
                 <img src={YoutubeLogo} alt="Youtube Logo" />
                 <Form.Control
                   type="url"
@@ -366,7 +381,9 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
-              <div className="mb-3 d-flex align-items-center gap-3">
+              <div
+                className={`${styles['mb-3']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-3']}`}
+              >
                 <img src={RedditLogo} alt="Reddit Logo" />
                 <Form.Control
                   type="url"
@@ -380,7 +397,9 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
-              <div className="mb-3 d-flex align-items-center gap-3">
+              <div
+                className={`${styles['mb-3']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-3']}`}
+              >
                 <img src={SlackLogo} alt="Slack Logo" />
                 <Form.Control
                   type="url"
@@ -396,7 +415,7 @@ const CommunityProfile = (): JSX.Element => {
               </div>
             </Form.Group>
             <div
-              className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
+              className={`${styles.btn} ${styles['d-flex']} ${styles['justify-content-end']} ${styles['gap-3']} ${styles['my-3']}`}
             >
               <Button
                 variant="outline-success"

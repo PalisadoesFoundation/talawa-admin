@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import styles from '../../../style/app.module.css';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
@@ -23,19 +24,19 @@ const volunteerDashboardTabs: {
 }[] = [
   {
     value: 'upcomingEvents',
-    icon: <TbCalendarEvent size={21} className="me-1" />,
+    icon: <TbCalendarEvent size={21} className={styles['me-1']} />,
   },
   {
     value: 'invitations',
-    icon: <FaRegEnvelopeOpen size={18} className="me-1" />,
+    icon: <FaRegEnvelopeOpen size={18} className={styles['me-1']} />,
   },
   {
     value: 'actions',
-    icon: <FaTasks size={18} className="me-2" />,
+    icon: <FaTasks size={18} className={styles['me-2']} />,
   },
   {
     value: 'groups',
-    icon: <FaUserGroup size={18} className="me-2" />,
+    icon: <FaUserGroup size={18} className={styles['me-2']} />,
   },
 ];
 
@@ -116,14 +117,16 @@ const VolunteerManagement = (): JSX.Element => {
   };
 
   return (
-    <div className="d-flex flex-column">
-      <Row className="mt-4">
-        <Col>
-          <div className="d-none d-md-flex gap-3">
+    <div className={`${styles['d-flex']} ${styles['flex-column']}`}>
+      <Row className={`${styles.row} ${styles['mt-4']}`}>
+        <Col className={styles.rowChild}>
+          <div
+            className={`${styles['d-none']} ${styles['d-md-flex']} ${styles['gap-3']}`}
+          >
             <Button
               size="sm"
               variant="light"
-              className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3"
+              className={`${styles['d-flex']} ${styles['text-secondary']} ${styles['bg-white']} ${styles['align-items-center']} ${styles['px-3']} ${styles['shadow-sm']} ${styles['rounded-3']}`}
             >
               <FaChevronLeft
                 cursor={'pointer'}
@@ -135,7 +138,7 @@ const VolunteerManagement = (): JSX.Element => {
           </div>
 
           <Dropdown
-            className="d-md-none"
+            className={styles['d-md-none']}
             data-testid="tabsDropdownContainer"
             drop="down"
           >
@@ -144,7 +147,7 @@ const VolunteerManagement = (): JSX.Element => {
               id="dropdown-basic"
               data-testid="tabsDropdownToggle"
             >
-              <span className="me-1">{t(tab)}</span>
+              <span className={styles['me-1']}>{t(tab)}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {/* Render dropdown items for each settings category */}
@@ -152,7 +155,7 @@ const VolunteerManagement = (): JSX.Element => {
                 <Dropdown.Item
                   key={index}
                   onClick={() => setTab(value)}
-                  className={`d-flex gap-2 ${tab === value && 'text-secondary'}`}
+                  className={`${styles['d-flex']} ${styles['gap-2']} ${tab === value && styles['text-secondary']}`}
                 >
                   {icon} {t(value)}
                 </Dropdown.Item>
@@ -160,8 +163,7 @@ const VolunteerManagement = (): JSX.Element => {
             </Dropdown.Menu>
           </Dropdown>
         </Col>
-
-        <Row className="mt-3">
+        <Row className={`${styles.row} ${styles['mt-3']}`}>
           <hr />
         </Row>
       </Row>

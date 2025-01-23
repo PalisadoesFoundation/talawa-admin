@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
+import styles from '../../style/app.module.css';
 /**
  * Component for displaying organization deletion message
  *
@@ -16,7 +16,7 @@ function orgDelete(): JSX.Element {
   return (
     <>
       {/* Container for the organization deletion message */}
-      <div id="OrgDelete" className="search-OrgDelete">
+      <div id="OrgDelete" className={`${styles['search-OrgDelete']}`}>
         {t('deleteOrg')}
       </div>
     </>

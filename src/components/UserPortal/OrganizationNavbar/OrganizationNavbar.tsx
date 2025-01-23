@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './OrganizationNavbar.module.css';
+import style from '../../../style/app.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
 import { Container, Dropdown, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 import { languages } from 'utils/languages';
@@ -170,7 +171,10 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
             <Offcanvas.Title>Talawa</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
+            <Nav
+              className={`${style['me-auto']} ${style['flex-grow-1']} ${style['pe-3']} ${style['pt-1']}`}
+              variant="dark"
+            >
               <Nav.Link
                 active={props.currentPage === 'home'}
                 onClick={(): void => navigate(homeLink)}
@@ -190,7 +194,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   ),
               )}
             </Nav>
-            <Navbar.Collapse className="justify-content-end">
+            <Navbar.Collapse className={style['justify-content-end']}>
               <Dropdown data-testid="languageDropdown" drop={dropDirection}>
                 <Dropdown.Toggle
                   variant="white"

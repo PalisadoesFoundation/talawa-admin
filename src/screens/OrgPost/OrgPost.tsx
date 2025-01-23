@@ -281,7 +281,7 @@ function orgPost(): JSX.Element {
 
   return (
     <>
-      <Row className={styles.head}>
+      <Row className={`${styles.row} ${styles.head}`}>
         <div className={styles.mainpagerightOrgPost}>
           <div className={styles.btnsContainerOrgPost}>
             <div className={styles.inputOrgPost}>
@@ -300,7 +300,7 @@ function orgPost(): JSX.Element {
               </Button>
             </div>
             <div className={styles.btnsBlockOrgPost}>
-              <div className="d-flex">
+              <div className={styles['d-flex']}>
                 <SortingButton
                   title="SearchBy"
                   sortingOptions={[
@@ -332,14 +332,14 @@ function orgPost(): JSX.Element {
                 variant="success"
                 onClick={showInviteModal}
                 data-testid="createPostModalBtn"
-                className={`${styles.createButton} mb-2`}
+                className={`${styles.createButton}${styles['mb-2']}`}
               >
-                <i className={'fa fa-plus me-2'} />
+                <i className={`fa fa-plus ${styles['mb-2']}`} />
                 {t('createPost')}
               </Button>
             </div>
           </div>
-          <div className={`row ${styles.list_box}`}>
+          <div className={`${styles.row} ${styles.list_box}`}>
             {sortedPostsList && sortedPostsList.length > 0 ? (
               sortedPostsList.map(
                 (datas: {
@@ -370,11 +370,13 @@ function orgPost(): JSX.Element {
             )}
           </div>
         </div>
-        <div className="row m-lg-1 d-flex justify-content-center w-100">
-          <div className="col-auto">
+        <div
+          className={`${styles['row']} ${styles['m-lg-1']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['w-100']}`}
+        >
+          <div className={styles['col-auto']}>
             <Button
               onClick={handlePreviousPage}
-              className={`${styles.createButton} btn-sm `}
+              className={`${styles.createButton} ${styles['btn-sm']}`}
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo
                   .hasPreviousPage
@@ -383,10 +385,10 @@ function orgPost(): JSX.Element {
               {t('Previous')}
             </Button>
           </div>
-          <div className="col-auto">
+          <div className={styles['col-auto']}>
             <Button
               onClick={handleNextPage}
-              className={`${styles.createButton} btn-sm `}
+              className={`${styles.createButton} ${styles['btn-sm']} `}
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
               }
@@ -412,7 +414,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className={`mb-3 ${styles.inputField}`}
+              className={`${styles['mb-3']} ${styles.inputField}`}
               placeholder={t('postTitle1')}
               data-testid="modalTitle"
               autoComplete="off"
@@ -429,7 +431,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="descrip"
               id="descrip"
-              className={`mb-3 ${styles.inputField}`}
+              className={`${styles['mb-3']} ${styles.inputField}`}
               placeholder={t('information1')}
               data-testid="modalinfo"
               autoComplete="off"
@@ -454,7 +456,7 @@ function orgPost(): JSX.Element {
               multiple={false}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
-              className={`mb-3 ${styles.inputField}`}
+              className={`${styles['mb-3']} ${styles.inputField}`}
             />
 
             {postformState.addMedia && file && (
@@ -492,7 +494,7 @@ function orgPost(): JSX.Element {
                 </button>
               </div>
             )}
-            <Form.Label htmlFor="pinpost" className="mt-3">
+            <Form.Label htmlFor="pinpost" className={styles['mt-3']}>
               {t('pinPost')}
             </Form.Label>
             <Form.Switch
@@ -523,7 +525,7 @@ function orgPost(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createPostBtn"
-              className={`${styles.addButton} mt-2`}
+              className={`${styles.addButton} ${styles['mt-2']}`}
             >
               {t('addPost')}
             </Button>

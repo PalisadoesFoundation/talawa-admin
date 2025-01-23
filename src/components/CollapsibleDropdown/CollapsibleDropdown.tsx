@@ -5,7 +5,7 @@ import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import style from '../../style/app.module.css';
 export interface InterfaceCollapsibleDropdown {
   showDropdown: boolean;
   target: TargetsType;
@@ -43,7 +43,7 @@ const collapsibleDropdown = ({
     <>
       <Button
         variant={showDropdown ? 'success' : ''}
-        className={showDropdown ? 'text-white' : 'text-secondary'}
+        className={showDropdown ? style['text-white'] : style['text-secondary']}
         onClick={(): void => setShowDropdown(!showDropdown)}
         aria-expanded={showDropdown}
         data-testid="collapsible-dropdown"
@@ -56,14 +56,13 @@ const collapsibleDropdown = ({
         </div>
         {tCommon(name)}
         <i
-          className={`ms-auto fa  
-          ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'} 
-          ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
-          `}
+          className={`${style['ms-auto']} fa ${
+            showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'
+          } ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}`}
         />
       </Button>
       <Collapse in={showDropdown}>
-        <div className="ps-4">
+        <div className={`${style['ps-4']}`}>
           {subTargets &&
             subTargets.map(({ name, icon: stringIcon, url }, index) => {
               return (
@@ -74,7 +73,9 @@ const collapsibleDropdown = ({
                       variant={isActive === true ? 'success' : 'light'}
                       size="sm"
                       className={`${styles.collapseBtn} ${
-                        isActive === true ? 'text-white' : 'text-secondary'
+                        isActive === true
+                          ? style['text-white']
+                          : style['text-secondary']
                       }`}
                       onClick={(): void => {
                         navigate(url);
@@ -85,10 +86,12 @@ const collapsibleDropdown = ({
                         <i className={`fa ${stringIcon}`} />
                       </div>
                       {tCommon(name || '')}
-                      <div className="ms-auto">
+                      <div className={`${style['ms-auto']}`}>
                         <i
-                          className={`fa me-2 fa-chevron-right ${
-                            isActive === true ? 'text-white' : 'text-secondary'
+                          className={`fa ${style['me-2']} fa-chevron-right ${
+                            isActive === true
+                              ? style['text-white']
+                              : style['text-secondary']
                           }`}
                         />
                       </div>

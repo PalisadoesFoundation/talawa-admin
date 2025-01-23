@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './PromotedPost.module.css';
+import style from '../../../style/app.module.css';
 import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 
 interface InterfacePostCardProps {
@@ -25,7 +26,7 @@ export default function promotedPost(
 ): JSX.Element {
   return (
     <>
-      <Card className="my-3">
+      <Card className={style['my-3']}>
         <Card.Header>
           <div className={`${styles.cardHeader}`}>
             {/* Icon indicating promoted content */}

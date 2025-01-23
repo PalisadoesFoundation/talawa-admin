@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './MemberRequestCard.module.css';
+import style from '../../style/app.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -89,7 +90,7 @@ function MemberRequestCard(
   return (
     <>
       <div className={styles.peoplelistdiv}>
-        <Row className={styles.memberlist}>
+        <Row className={`${style.row} ${styles.memberlist}`}>
           {props.memberImage ? (
             <img
               src={props.memberImage}
@@ -103,7 +104,7 @@ function MemberRequestCard(
               alt="userImage"
             />
           )}
-          <Col className={styles.singledetails}>
+          <Col className={`${style.singledetails} ${styles.rowChild}`}>
             <div className={styles.singledetails_data_left}>
               <p className={styles.membername}>
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}

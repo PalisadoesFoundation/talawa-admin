@@ -6,6 +6,7 @@ import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './UserSidebar.module.css';
+import style from '../../../style/app.module.css';
 
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean | null;
@@ -58,7 +59,7 @@ const userSidebar = ({
         {/* Logo and title */}
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaUserPortal')}</p>
-        <h5 className={`${styles.titleHeader} text-secondary`}>
+        <h5 className={`${styles.titleHeader} ${style['text-secondary']}`}>
           {tCommon('menu')}
         </h5>
         <div className={styles.optionList}>
@@ -68,7 +69,9 @@ const userSidebar = ({
               <Button
                 variant={isActive === true ? 'success' : ''}
                 className={`${
-                  isActive === true ? 'text-white' : 'text-secondary'
+                  isActive === true
+                    ? style['text-white']
+                    : style['text-secondary']
                 }`}
                 data-testid="orgsBtn"
               >
@@ -91,7 +94,9 @@ const userSidebar = ({
               <Button
                 variant={isActive === true ? 'success' : ''}
                 className={`${
-                  isActive === true ? 'text-white' : 'text-secondary'
+                  isActive === true
+                    ? style['text-white']
+                    : style['text-secondary']
                 }`}
                 data-testid="settingsBtn"
               >

@@ -11,7 +11,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import styles from './AgendaCategoryContainer.module.css';
-
+import style from '../../style/app.module.css';
 import AgendaCategoryDeleteModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryDeleteModal';
 import AgendaCategoryPreviewModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryPreviewModal';
 import AgendaCategoryUpdateModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryUpdateModal';
@@ -193,72 +193,89 @@ function agendaCategoryContainer({
   return (
     <>
       <div
-        className={`mx-1 ${agendaCategoryConnection === 'Organization' ? 'my-4' : 'my-0'}`}
+        className={`${style['mx-1']} ${agendaCategoryConnection === 'Organization' ? style['my-4'] : style['my-0']}`}
       >
         <div
-          className={`shadow-sm ${agendaCategoryConnection === 'Organization' ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
+          className={`${style['shadow-sm']} ${agendaCategoryConnection === 'Organization' ? style['rounded-top-4'] : style['rounded-top-2']} ${agendaCategoryConnection === 'Organization' ? style['mx-4'] : style['mx-0']}`}
         >
           <Row
-            className={`mx-0 border border-light-subtle py-3 ${agendaCategoryConnection === 'Organization' ? 'rounded-top-4' : 'rounded-top-2'}`}
+            className={`${style.row} ${style['shadow-sm']} ${agendaCategoryConnection === 'Organization' ? style['rounded-top-4'] : style['rounded-top-2']} ${agendaCategoryConnection === 'Organization' ? style['mx-4'] : style['mx-0']}`}
           >
             <Col
               xs={7}
               sm={4}
               md={3}
               lg={2}
-              className="align-self-center ps-3 fw-bold"
+              className={`${style.rowChild} ${style['align-self-center']} ${style['ps-3']} ${style['fw-bold']}`}
             >
-              <div className="ms-3">{t('name')}</div>
+              <div className={`${style['ms-3']}`}>{t('name')}</div>
             </Col>
             <Col
-              className={`  align-self-center  fw-bold d-none d-md-block`}
+              className={`${style.rowChild} ${style['align-self-center']} ${style['fw-bold']} ${style['d-none']} ${style['d-md-block']}`}
               md={6}
               lg={6}
             >
               {t('description')}
             </Col>
-            <Col className="d-none d-lg-block fw-bold align-self-center" lg={2}>
-              <div className="ms-1">{t('createdBy')}</div>
+            <Col
+              className={` ${style.rowChild} ${style['d-none']} ${style['d-lg-block']} ${style['fw-bold']} ${style['align-self-center']}`}
+              lg={2}
+            >
+              <div className={`${style['ms-1']}`}>{t('createdBy')}</div>
             </Col>
-            <Col xs={5} sm={3} lg={2} className="fw-bold align-self-center">
-              <div className="ms-2">{t('options')}</div>
+            <Col
+              xs={5}
+              sm={3}
+              lg={2}
+              className={`${style.rowChild} ${style['fw-bold']} ${style['align-self-center']}`}
+            >
+              <div className={`${style['ms-2']}`}>{t('options')}</div>
             </Col>
           </Row>
         </div>
         <div
-          className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${agendaCategoryConnection === 'Organization' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
+          className={`${style['bg-light-subtle']} ${style['border']} ${style['border-light-subtle']} ${style['border-top-0']} ${style['shadow-sm']} ${agendaCategoryConnection === 'Organization' ? style['rounded-bottom-4'] : style['rounded-bottom-2']} ${agendaCategoryConnection === 'Organization' ? style['mx-4'] : style['mx-0']} ${agendaCategoryConnection === 'Organization' ? style['mb-2'] : ''}`}
         >
           {agendaCategoryData?.map((agendaCategory, index) => (
             <div key={index}>
-              <Row className={`${index === 0 ? 'pt-3' : ''} mb-3 mx-2 `}>
+              <Row
+                className={` ${style.row} ${index === 0 ? style['pt-3'] : ''} ${style['mb-3']} ${style['mx-2']}`}
+              >
                 <Col
                   sm={4}
                   xs={7}
                   md={3}
                   lg={2}
-                  className="align-self-center text-body-secondary"
+                  className={`${style.rowChild} ${style['align-self-center']} ${style['text-body-secondary']}`}
                 >
                   {`${agendaCategory.name}`}
                 </Col>
                 <Col
                   md={6}
                   lg={6}
-                  className="p-1 d-none d-md-block align-self-center text-body-secondary"
+                  className={`${style.rowChild} ${style['p-1']} ${style['d-none']} ${style['d-md-block']} ${style['align-self-center']} ${style['text-body-secondary']}`}
                 >
                   {agendaCategory.description}
                 </Col>
                 <Col
                   lg={2}
-                  className="p-1 d-none d-lg-block align-self-center text-body-secondary"
+                  className={`${style.rowChild} ${style['p-1']} ${style['d-none']} ${style['d-lg-block']} ${style['align-self-center']} ${style['text-body-secondary']}`}
                 >
                   {`${agendaCategory.createdBy.firstName} ${agendaCategory.createdBy.lastName}`}
                 </Col>
 
-                <Col xs={5} sm={3} lg={2} className="p-0 align-self-center">
-                  <div className="d-flex align-items-center ms-4 gap-2">
+                <Col
+                  xs={5}
+                  sm={3}
+                  lg={2}
+                  className={`${style.rowChild} ${style['p-0']} ${style['align-self-center']}`}
+                >
+                  <div
+                    className={`${style['d-flex']} ${style['align-items-center']} ${style['ms-4']} ${style['gap-2']}`}
+                  >
                     <Button
                       data-testid="previewAgendaCategoryModalBtn"
-                      className={`${styles.agendaCategoryOptionsButton} d-flex align-items-center justify-content-center`}
+                      className={`${styles.agendaCategoryOptionsButton} ${style['d-flex']} ${style['align-items-center']} ${style['justify-content-center']}`}
                       variant="outline-secondary"
                       size="sm"
                       onClick={() => showPreviewModal(agendaCategory)}
@@ -279,12 +296,14 @@ function agendaCategoryContainer({
               </Row>
 
               {index !== agendaCategoryData.length - 1 && (
-                <hr className="mx-3" />
+                <hr className={`${style['mx-3']}`} />
               )}
             </div>
           ))}
           {agendaCategoryData?.length === 0 && (
-            <div className="lh-lg text-center fw-semibold text-body-tertiary">
+            <div
+              className={`${style['lh-lg']} ${style['text-center']} ${style['fw-semibold']} ${style['text-body-tertiary']}`}
+            >
               {t('noAgendaCategories')}
             </div>
           )}

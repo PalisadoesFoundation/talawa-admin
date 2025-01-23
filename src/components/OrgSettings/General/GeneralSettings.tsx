@@ -26,9 +26,11 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
   });
 
   return (
-    <Row className={`${styles.settingsBody} mt-3`}>
-      <Col lg={7}>
-        <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
+    <Row className={`${styles.settingsBody} ${styles.row} mt-3`}>
+      <Col className={`${styles.rowChild}`} lg={7}>
+        <Card
+          className={`${styles['rounded-4']} ${styles['mb-4']} ${styles['mx-auto']} ${styles['shadow-sm']} ${styles['border']} ${styles['border-light-subtle']}`}
+        >
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('updateOrganization')}</div>
           </div>
@@ -38,9 +40,11 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
           </Card.Body>
         </Card>
       </Col>
-      <Col lg={5}>
+      <Col className={`${styles.rowChild}`} lg={5}>
         <DeleteOrg />
-        <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
+        <Card
+          className={`${styles['rounded-4']} ${styles['mb-4']} ${styles['mx-auto']} ${styles['shadow-sm']} ${styles['border']} ${styles['border-light-subtle']}`}
+        >
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('otherSettings')}</div>
           </div>
@@ -55,8 +59,10 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
           </Card.Body>
         </Card>
       </Col>
-      <Col lg={7}>
-        <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
+      <Col className={`${styles.rowChild}`} lg={7}>
+        <Card
+          className={`${styles['rounded-4']} ${styles['mb-4']} ${styles['mx-auto']} ${styles['shadow-sm']} ${styles['border']} ${styles['border-light-subtle']}`}
+        >
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('manageCustomFields')}</div>
           </div>

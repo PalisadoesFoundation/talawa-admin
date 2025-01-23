@@ -875,7 +875,7 @@ progress {
   --bs-breakpoint-xxl: 1400px;
 }
 
-.row {
+/* .row {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
   display: flex;
@@ -892,7 +892,7 @@ progress {
   padding-right: calc(var(--bs-gutter-x) * 0.5);
   padding-left: calc(var(--bs-gutter-x) * 0.5);
   margin-top: var(--bs-gutter-y);
-}
+} */
 
 .col {
   flex: 1 0 0%;

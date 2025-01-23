@@ -96,9 +96,12 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
         </Button>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmitCapture={updateActionItemHandler} className="p-2">
+        <Form
+          onSubmitCapture={updateActionItemHandler}
+          className={styles['p-2']}
+        >
           {!isCompleted ? (
-            <FormControl fullWidth className="mb-2">
+            <FormControl fullWidth className={styles['mb-2']}>
               <TextField
                 label={t('postCompletionNotes')}
                 variant="outlined"
@@ -112,7 +115,9 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
           )}
 
           {isCompleted ? (
-            <div className="d-flex gap-3 justify-content-end">
+            <div
+              className={`${styles['d-flex']} ${styles['gap-3']} ${styles['justify-content-end']}`}
+            >
               <Button
                 type="submit"
                 className={styles.addButton}
@@ -121,7 +126,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
                 {tCommon('yes')}
               </Button>
               <Button
-                className={`btn btn-danger ${styles.removeButton}`}
+                className={`${styles['btn']} ${styles['btn-danger']} ${styles['removeButton']}`}
                 onClick={hide}
               >
                 {tCommon('no')}

@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './OrganizationCard.module.css';
+import style from '../../../style/app.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -171,7 +172,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             </h6>
             {props.address && props.address.city && (
               <div className={styles.address}>
-                <h6 className="text-secondary">
+                <h6 className={styles['text-secondary']}>
                   <span className="address-line">{props.address.line1}, </span>
                   <span className="address-line">{props.address.city}, </span>
                   <span className="address-line">

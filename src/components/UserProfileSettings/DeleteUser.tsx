@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfileSettings.module.css';
-
+import style from '../../style/app.module.css';
 /**
  * DeleteUser component displays a card with a button to delete a user.
  * It includes a message and a button to trigger the delete action.
@@ -15,7 +15,7 @@ const DeleteUser: React.FC = () => {
   });
   return (
     <>
-      <Card border="0" className="rounded-4 mb-4">
+      <Card border="0" className={`${style['rounded-4']} ${style['mb-4']}`}>
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('deleteUser')}</div>
         </div>

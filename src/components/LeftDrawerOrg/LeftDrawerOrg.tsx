@@ -130,19 +130,19 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Organization Section */}
-        <div className={`${styles.organizationContainer} pe-3`}>
+        <div className={`${styles.organizationContainer}${styles['pe-3']}`}>
           {loading ? (
             <button
-              className={`${styles.profileContainer} shimmer`}
+              className={`${styles.profileContainer} ${styles.shimmer}`}
               data-testid="orgBtn"
             />
           ) : organization == undefined ? (
             !isProfilePage && (
               <button
-                className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
+                className={`${styles.profileContainer} ${styles.bgDanger} ${styles['text-start']} ${styles['text-white']}`}
                 disabled
               >
-                <div className="px-3">
+                <div className={`${styles['px-3']}`}>
                   <WarningAmberOutlined />
                 </div>
                 {tErrors('errorLoading', { entity: 'Organization' })}
@@ -173,7 +173,7 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Options List */}
-        <h5 className={`${styles.titleHeader} text-secondary`}>
+        <h5 className={`${styles.titleHeader} ${styles['text-secondary']}`}>
           {tCommon('menu')}
         </h5>
         <div className={styles.optionList}>

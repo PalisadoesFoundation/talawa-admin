@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './UsersTableItem.module.css';
+import style from '../../style/app.module.css';
 type Props = {
   user: InterfaceQueryUserListItem;
   index: number;
@@ -161,7 +162,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>{user.user.email}</td>
         <td>
           <Button
-            className="btn btn-success"
+            className={style['btn-success']}
             onClick={() => setShowJoinedOrganizations(true)}
             data-testid={`showJoinedOrgsBtn${user.user._id}`}
           >
@@ -185,18 +186,20 @@ const UsersTableItem = (props: Props): JSX.Element => {
         data-testid={`modal-joined-org-${user.user._id}`}
         onHide={() => setShowJoinedOrganizations(false)}
       >
-        <Modal.Header className="bg-primary" closeButton>
-          <Modal.Title className="text-white">
+        <Modal.Header className={style['bg-primary']} closeButton>
+          <Modal.Title className={style['text-white']}>
             {t('orgJoinedBy')} {`${user.user.firstName}`}{' '}
             {`${user.user.lastName}`} ({user.user.joinedOrganizations.length})
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {user.user.joinedOrganizations.length !== 0 && (
-            <div className={'position-relative mb-4 border rounded'}>
+            <div
+              className={`${style['position-relative']} ${style['mb-4']} ${style['border']} ${style['rounded']}`}
+            >
               <Form.Control
                 id="orgname-joined-orgs"
-                className="bg-white"
+                className={style['bg-white']}
                 defaultValue={searchByNameJoinedOrgs}
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameJoinedOrgs"
@@ -205,7 +208,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               />
               <Button
                 tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                className={`${style['position-absolute']} ${style['z-10']} ${style['bottom-0']} ${style['end-0']} ${style['h-100']} ${style['d-flex']} ${style['justify-content-center']} ${style['align-items-center']}`}
                 onClick={handleSearchButtonClickJoinedOrgs}
                 data-testid="searchBtnJoinedOrgs"
               >
@@ -213,7 +216,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               </Button>
             </div>
           )}
-          <Row>
+          <Row className={` ${style.row}`}>
             {user.user.joinedOrganizations.length == 0 ? (
               <div className={styles.notJoined}>
                 <h4>
@@ -255,7 +258,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         <td>
                           <Button
                             variant="link"
-                            className="p-0"
+                            className={style['p-0']}
                             onClick={() => goToOrg(org._id)}
                           >
                             {org.image ? (
@@ -271,7 +274,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         <td>
                           <Button
                             variant="link"
-                            className="p-0"
+                            className={style['p-0']}
                             onClick={() => handleCreator()}
                             data-testid={`creator${org._id}`}
                           >
@@ -376,8 +379,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
         onHide={() => setShowBlockedOrganizations(false)}
         data-testid={`modal-blocked-org-${user.user._id}`}
       >
-        <Modal.Header className="bg-danger" closeButton>
-          <Modal.Title className="text-white">
+        <Modal.Header className={style['bg-danger']} closeButton>
+          <Modal.Title className={style['text-white']}>
             {t('orgThatBlocked')} {`${user.user.firstName}`}{' '}
             {`${user.user.lastName}`} ({user.user.organizationsBlockedBy.length}
             )
@@ -385,10 +388,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
         </Modal.Header>
         <Modal.Body>
           {user.user.organizationsBlockedBy.length !== 0 && (
-            <div className={'position-relative mb-4 border rounded'}>
+            <div
+              className={`${style['position-relative']} ${style['mb-4']} ${style['border']} ${style['rounded']}`}
+            >
               <Form.Control
                 id="orgname-blocked-by"
-                className="bg-white"
+                className={style['bg-white']}
                 defaultValue={searchByNameOrgsBlockedBy}
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameOrgsBlockedBy"
@@ -398,7 +403,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               <Button
                 tabIndex={-1}
                 variant="danger"
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                className={`${style['position-absolute']} ${style['z-10']} ${style['bottom-0']} ${style['end-0']} ${style['h-100']} ${style['d-flex']} ${style['justify-content-center']} ${style['align-items-center']}`}
                 onClick={handleSearchButtonClickOrgsBlockedBy}
                 data-testid="searchBtnOrgsBlockedBy"
               >
@@ -406,7 +411,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               </Button>
             </div>
           )}
-          <Row>
+          <Row className={` ${style.row}`}>
             {user.user.organizationsBlockedBy.length == 0 ? (
               <div className={styles.notJoined}>
                 <h4>
@@ -444,7 +449,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         <td>
                           <Button
                             variant="link"
-                            className="p-0"
+                            className={style['p-0']}
                             onClick={() => goToOrg(org._id)}
                           >
                             {org.image ? (
@@ -460,7 +465,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         <td>
                           <Button
                             variant="link"
-                            className="p-0"
+                            className={style['p-0']}
                             onClick={() => handleCreator()}
                             data-testid={`creator${org._id}`}
                           >
@@ -558,8 +563,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
         data-testid={`modal-remove-user-${user.user._id}`}
         onHide={() => onHideRemoveUserModal()}
       >
-        <Modal.Header className="bg-danger" closeButton>
-          <Modal.Title className="text-white">
+        <Modal.Header className={style['bg-danger']} closeButton>
+          <Modal.Title className={style['text-white']}>
             {t('removeUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>

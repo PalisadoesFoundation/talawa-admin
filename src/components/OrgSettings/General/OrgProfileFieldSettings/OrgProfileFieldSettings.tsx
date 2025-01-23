@@ -9,6 +9,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_CUSTOM_FIELDS } from 'GraphQl/Queries/Queries';
 import styles from './OrgProfileFieldSettings.module.css';
+import style from '../../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import EditOrgCustomFieldDropDown from 'components/EditCustomFieldDropDown/EditCustomFieldDropDown';
@@ -140,7 +141,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
               <div>
                 <Form.Label>{t('customFieldName')}</Form.Label>
                 <Form.Control
-                  className="mb-3"
+                  className={`${style['mb-3']}`}
                   placeholder={t('enterCustomFieldName')}
                   autoComplete="off"
                   required
@@ -162,7 +163,9 @@ const OrgProfileFieldSettings = (): JSX.Element => {
               </div>
 
               <div className={styles.textBox}>
-                <Form.Label className={'text-secondary fw-bold'}>
+                <Form.Label
+                  className={`${style['text-secondary']} ${style['fw-bold']}`}
+                >
                   {t('customFieldType')}
                 </Form.Label>
                 <EditOrgCustomFieldDropDown

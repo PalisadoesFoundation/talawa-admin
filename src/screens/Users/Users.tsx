@@ -353,7 +353,7 @@ const Users = (): JSX.Element => {
             <Form.Control
               type="name"
               id="searchUsers"
-              className="bg-white"
+              className={styles['bg-white']}
               placeholder={t('enterName')}
               data-testid="searchByName"
               autoComplete="off"
@@ -362,7 +362,7 @@ const Users = (): JSX.Element => {
             />
             <Button
               tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              className={`${styles['position-absolute']} ${styles['z-10']} ${styles['bottom-0']} ${styles['end-0']} ${styles['h-100']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['align-items-center']}`}
               data-testid="searchButton"
               onClick={handleSearchByBtnClick}
             >
@@ -370,8 +370,8 @@ const Users = (): JSX.Element => {
             </Button>
           </div>
         </div>
-        <div className={styles.btnsBlock}>
-          <div className="d-flex">
+        <div className={styles['btnsBlock']}>
+          <div className={styles['d-flex']}>
             <SortingButton
               sortingOptions={[
                 { label: t('Newest'), value: 'newest' },
@@ -447,12 +447,14 @@ const Users = (): JSX.Element => {
             className={styles.listBox}
             data-testid="users-list"
             endMessage={
-              <div className={'w-100 text-center my-4'}>
-                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+              <div
+                className={`${styles['w-100']} ${styles['text-center']} ${styles['my-4']}`}
+              >
+                <h5 className={styles['m-0']}>{tCommon('endOfResults')}</h5>
               </div>
             }
           >
-            <Table className="mb-0" responsive>
+            <Table className={styles['mb-0']} responsive>
               <thead>
                 <tr>
                   {headerTitles.map((title: string, index: number) => {

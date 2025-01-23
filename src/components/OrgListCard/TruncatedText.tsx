@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useDebounce from './useDebounce';
-
+import styles from '../../style/app.module.css';
 /**
  * Props for the `TruncatedText` component.
  *
@@ -71,7 +71,7 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   }, [text, maxWidthOverride, debouncedCallback, cancel]);
 
   return (
-    <h6 ref={textRef} className="text-secondary">
+    <h6 ref={textRef} className={`${styles['text-secondary']}`}>
       {truncatedText}
     </h6>
   );

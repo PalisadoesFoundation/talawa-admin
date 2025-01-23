@@ -554,7 +554,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </div>
         </div>
       )}
-      <div className={`${styles.calendar__scroll} customScroll`}>
+      <div className={`${styles.calendar__scroll} ${styles.customScroll}`}>
         {viewType == ViewType.MONTH ? (
           <>
             <div className={styles.calendar__weekdays}>

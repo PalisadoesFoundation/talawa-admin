@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './OrganizationCard.module.css';
+import style from '../../style/app.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -202,14 +203,14 @@ function OrganizationCard({
         </div>
         <div className={styles.content}>
           <Tooltip title={name} placement="top-end">
-            <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
+            <h4 className={`${styles.orgName} ${style['fw-semibold']}`}>{name}</h4>
           </Tooltip>
-          <h6 className={`${styles.orgdesc} fw-semibold`}>
+          <h6 className={`${styles.orgdesc} ${style['fw-semibold']}`}>
             <span>{description}</span>
           </h6>
           {address && address.city && (
             <div className={styles.address}>
-              <h6 className="text-secondary">
+              <h6 className={style['text-secondary']}>
                 <span className="address-line">{address.line1}, </span>
                 <span className="address-line">{address.city}, </span>
                 <span className="address-line">{address.countryCode}</span>

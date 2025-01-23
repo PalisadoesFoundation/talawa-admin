@@ -41,8 +41,11 @@ const AgendaCategoryDeleteModal: React.FC<
       backdrop="static"
       keyboard={false}
     >
-      <Modal.Header closeButton className="bg-primary">
-        <Modal.Title className="text-white" id={`deleteAgendaCategory`}>
+      <Modal.Header closeButton className={`${styles['bg-primary']}`}>
+        <Modal.Title
+          className={`${styles['text-white']}`}
+          id={`deleteAgendaCategory`}
+        >
           {t('deleteAgendaCategory')}
         </Modal.Title>
       </Modal.Header>
@@ -52,7 +55,7 @@ const AgendaCategoryDeleteModal: React.FC<
       <Modal.Footer>
         <Button
           type="button"
-          className="btn btn-danger"
+          className={`${styles['btn']} ${styles['btn-danger']}`}
           data-dismiss="modal"
           onClick={toggleDeleteModal}
           data-testid="deleteAgendaCategoryCloseBtn"
@@ -61,7 +64,7 @@ const AgendaCategoryDeleteModal: React.FC<
         </Button>
         <Button
           type="button"
-          className="btn btn-success"
+          className={`${styles['btn']} ${styles['btn-success']}`}
           onClick={deleteAgendaCategoryHandler}
           data-testid="deleteAgendaCategoryBtn"
         >

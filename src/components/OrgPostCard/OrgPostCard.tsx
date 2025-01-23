@@ -218,10 +218,10 @@ export default function OrgPostCard(
     }
   };
   return (
-    <>
+    <div className={`${styles.rowChild} `}>
       <div
         key={postID}
-        className="col-xl-4 col-lg-4 col-md-6"
+        className={`${styles['fs-5']} ${styles.rowChild} `}
         data-testid="post-item"
       >
         <div
@@ -251,7 +251,7 @@ export default function OrgPostCard(
                   <PushPin
                     color="success"
                     fontSize="large"
-                    className="fs-5"
+                    className={`${styles['fs-5']}`}
                     data-testid="pin-icon"
                   />
                 )}
@@ -281,7 +281,11 @@ export default function OrgPostCard(
               />
               <Card.Body>
                 {pinned && (
-                  <PushPin color="success" fontSize="large" className="fs-5" />
+                  <PushPin
+                    color="success"
+                    fontSize="large"
+                    className={`${styles['fs-5']}`}
+                  />
                 )}
                 <Card.Title className={styles.titleOrgPostCard}>
                   {postTitle}
@@ -306,7 +310,7 @@ export default function OrgPostCard(
                     <PushPin
                       color="success"
                       fontSize="large"
-                      className="fs-5"
+                      className={`${styles['fs-5']}`}
                     />
                   )}
                   <Card.Title className={styles.titleOrgPostCard}>
@@ -449,7 +453,9 @@ export default function OrgPostCard(
           data-testid="modalOrganizationHeader"
           closeButton
         >
-          <Modal.Title className="text-white">{t('editPost')}</Modal.Title>
+          <Modal.Title className={`${styles['text-white']}`}>
+            {t('editPost')}
+          </Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={updatePostHandler}>
           <Modal.Body>
@@ -598,6 +604,6 @@ export default function OrgPostCard(
           </Modal.Footer>
         </Form>
       </Modal>
-    </>
+    </div>
   );
 }

@@ -362,40 +362,42 @@ export const AttendanceStatisticsModal: React.FC<
     <Modal
       show={show}
       onHide={handleClose}
-      className="attendance-modal"
+      className={styles['attendance-modal']}
       centered
       size={isEventRecurring ? 'xl' : 'lg'}
       data-testid="attendance-modal"
     >
-      <Modal.Header closeButton className="bg-success">
-        <Modal.Title className="text-white" data-testid="modal-title">
+      <Modal.Header closeButton className={styles['bg-success']}>
+        <Modal.Title className={styles['text-white']} data-testid="modal-title">
           {t('historical_statistics')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body
-        className="w-100 d-flex flex-column align-items-center position-relative"
+        className={`${styles['w-100']} ${styles['d-flex']} ${styles['flex-column']} ${styles['align-items-center']} ${styles['position-relative']}`}
         id="pdf-content"
       >
         <div
-          className={`${styles.positionedTopRight} w-100 d-flex justify-content-end align-baseline position-absolute`}
+          className={`${styles['positionedTopRight']} ${styles['w-100']} ${styles['d-flex']} ${styles['justify-content-end']} ${styles['align-baseline']} ${styles['position-absolute']}`}
         ></div>
-        <div className="w-100 border border-success d-flex flex-row rounded">
+        <div
+          className={`${styles['w-100']} ${styles['border']} ${styles['border-success']} ${styles['d-flex']} ${styles['flex-row']} ${styles['rounded']}`}
+        >
           {isEventRecurring ? (
             <div
-              className={`${styles.borderRightGreen} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success`}
+              className={`${styles['borderRightGreen']} ${styles['text-success']} ${styles['position-relative']} ${styles['pt-4']} ${styles['align-items-center']} ${styles['justify-content-center']} ${styles['w-50']} ${styles['border-right-1']} ${styles['border-success']}`}
             >
               <Line
                 data={chartData}
                 options={chartOptions}
-                className={`${styles.paddingBottom30}`}
+                className={styles['paddingBottom30']}
               />
               <div
-                className={`${styles.topRightCorner} px-1 border border-success w-30`}
+                className={`${styles['topRightCorner']} ${styles['px-1']} ${styles['border']} ${styles['border-success']} ${styles['w-30']}`}
               >
-                <p className="text-black">Trends</p>
+                <p className={styles['text-black']}>Trends</p>
               </div>
               <div
-                className={`${styles.paddingBottom2Rem} d-flex position-absolute bottom-1 end-50 translate-middle-y`}
+                className={`${styles['paddingBottom2Rem']} ${styles['d-flex']} ${styles['position-absolute']} ${styles['bottom-1']} ${styles['end-50']} ${styles['translate-middle-y']}`}
                 role="navigation"
                 aria-label="Chart page navigation"
               >
@@ -404,7 +406,7 @@ export const AttendanceStatisticsModal: React.FC<
                   overlay={<Tooltip id="tooltip-prev">Previous Page</Tooltip>}
                 >
                   <Button
-                    className="p-0"
+                    className={styles['p-0']}
                     onClick={handlePreviousPage}
                     disabled={currentPage === 0}
                     aria-label="Previous page"
@@ -419,7 +421,7 @@ export const AttendanceStatisticsModal: React.FC<
                 </OverlayTrigger>
                 <Button
                   data-testid="today-button"
-                  className="p-1 ms-2"
+                  className={`${styles['p-1']} ${styles['ms-2']}`}
                   onClick={() => handleDateChange(new Date())}
                   aria-label="Go to today"
                 >
@@ -430,7 +432,7 @@ export const AttendanceStatisticsModal: React.FC<
                   overlay={<Tooltip id="tooltip-next">Next Page</Tooltip>}
                 >
                   <Button
-                    className="p-0 ms-2"
+                    className={`${styles['p-0']} ${styles['ms-2']}`}
                     onClick={handleNextPage}
                     disabled={currentPage >= totalPages - 1}
                     aria-label="Next page"
@@ -447,24 +449,30 @@ export const AttendanceStatisticsModal: React.FC<
             </div>
           ) : (
             <div
-              className={`${styles.borderRightGreen} text-success position-relative d-flex align-items-center justify-content-center w-50 border-right-1 border-success`}
+              className={`${styles['borderRightGreen']} ${styles['text-success']} ${styles['position-relative']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']} ${styles['w-50']} ${styles['border-right-1']} ${styles['border-success']}`}
             >
-              <h1 className={`${styles.largeBoldText} font-weight-bold`}>
+              <h1
+                className={`${styles['largeBoldText']} ${styles['font-weight-bold']}`}
+              >
                 {statistics.totalMembers}
               </h1>
               <div
-                className={`${styles.bottomRightCorner} px-1 border border-success`}
+                className={`${styles['bottomRightCorner']} ${styles['px-1']} ${styles['border']} ${styles['border-success']}`}
               >
-                <p className="text-black">Attendance Count</p>
+                <p className={styles['text-black']}>Attendance Count</p>
               </div>
             </div>
           )}
-          <div className="text-success position-relative d-flex flex-column align-items-center justify-content-start w-50">
-            <ButtonGroup className="mt-2 pb-2 p-2">
+          <div
+            className={`${styles['text-success']} ${styles['position-relative']} ${styles['d-flex']} ${styles['flex-column']} ${styles['align-items-center']} ${styles['justify-content-start']} ${styles['w-50']}`}
+          >
+            <ButtonGroup
+              className={`${styles['mt-2']} ${styles['pb-2']} ${styles['p-2']}`}
+            >
               <Button
                 data-testid="gender-button"
                 variant={selectedCategory === 'Gender' ? 'success' : 'light'}
-                className="border border-success p-2 pl-2"
+                className={`${styles['border']} ${styles['border-success']} ${styles['p-2']} ${styles['pl-2']}`}
                 onClick={() => handleCategoryChange('Gender')}
               >
                 Gender
@@ -472,14 +480,14 @@ export const AttendanceStatisticsModal: React.FC<
               <Button
                 data-testid="age-button"
                 variant={selectedCategory === 'Age' ? 'success' : 'light'}
-                className="border border-success border-left-0 p-2"
+                className={`${styles['border']} ${styles['border-success']} ${styles['border-left-0']} ${styles['p-2']}`}
                 onClick={() => handleCategoryChange('Age')}
               >
                 Age
               </Button>
             </ButtonGroup>
             <Bar
-              className="mb-3"
+              className={styles['mb-3']}
               options={{ responsive: true, animation: false }}
               data={{
                 labels: categoryLabels,
@@ -512,17 +520,17 @@ export const AttendanceStatisticsModal: React.FC<
               }}
             />
             <div
-              className={`${styles.topLeftCorner} px-1 border border-success`}
+              className={`${styles['topLeftCorner']} ${styles['px-1']} ${styles['border']} ${styles['border-success']}`}
             >
-              <p className="text-black">Demography</p>
+              <p className={styles['text-black']}>Demography</p>
             </div>
           </div>
         </div>
       </Modal.Body>
-      <Modal.Footer className="p-0 m-2">
+      <Modal.Footer className={`${styles['p-0']} ${styles['m-2']}`}>
         <Dropdown data-testid="export-dropdown" onSelect={handleExport}>
           <Dropdown.Toggle
-            className="p-2 m-2"
+            className={`${styles['p-2']} ${styles['m-2']}`}
             variant="info"
             id="export-dropdown"
           >
@@ -543,7 +551,7 @@ export const AttendanceStatisticsModal: React.FC<
           </Dropdown.Menu>
         </Dropdown>
         <Button
-          className="p-2 m-2"
+          className={`${styles['p-2']} ${styles['m-2']}`}
           variant="secondary"
           onClick={handleClose}
           data-testid="close-button"

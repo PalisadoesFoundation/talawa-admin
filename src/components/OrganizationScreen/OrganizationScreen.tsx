@@ -14,6 +14,7 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
+import style from '../../style/app.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
 import type { InterfaceMapType } from 'utils/interfaces';
@@ -147,7 +148,9 @@ const OrganizationScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-between align-items-center">
+        <div
+          className={`${style['d-flex']} ${style['justify-content-between']} ${style['align-items-center']}`}
+        >
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
             {eventName && <h4 className="">{eventName}</h4>}

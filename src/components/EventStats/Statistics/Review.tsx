@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Rating from '@mui/material/Rating';
-
+import styles from '../../../style/app.module.css';
 // Props for the ReviewStats component
 type ModalPropType = {
   data: {
@@ -50,10 +50,13 @@ export const ReviewStats = ({ data }: ModalPropType): JSX.Element => {
           <h5>Filled by {reviews.length} people.</h5>
           {reviews.length ? (
             reviews.map((review) => (
-              <div className="card user-review m-1" key={review._id}>
-                <div className="card-body">
+              <div
+                className={`${styles['card']} ${styles['user-review']} ${styles['m-1']}`}
+                key={review._id}
+              >
+                <div className={`${styles['card-body']}`}>
                   <Rating name="read-only" value={review.rating} readOnly />
-                  <p className="card-text">{review.review}</p>
+                  <p className={`${styles['card-text']}`}>{review.review}</p>
                 </div>
               </div>
             ))

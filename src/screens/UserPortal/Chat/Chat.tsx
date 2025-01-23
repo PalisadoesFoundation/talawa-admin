@@ -8,6 +8,7 @@ import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
 import styles from './Chat.module.css';
+import style from '../../../style/app.module.css';
 import {
   CHATS_LIST,
   GROUP_CHAT_LIST,
@@ -191,11 +192,13 @@ export default function chat(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
+      <div
+        className={`${style['d-flex']} ${style['flex-row']} ${styles.containerHeight}`}
+      >
         <div data-testid="chat" className={`${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
             <div
-              className={`d-flex justify-content-between ${styles.addChatContainer}`}
+              className={`${style['d-flex']} ${style['justify-content-between']} ${styles.addChatContainer}`}
             >
               <h4>{t('messages')}</h4>
               <Dropdown style={{ cursor: 'pointer' }}>
@@ -226,7 +229,9 @@ export default function chat(): JSX.Element {
             </div>
             <div className={styles.contactListContainer}>
               {chatsListLoading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
+                <div
+                  className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-center']}`}
+                >
                   <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
                 </div>
               ) : (

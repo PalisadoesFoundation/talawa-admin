@@ -9,14 +9,14 @@ const CardItemLoading = (): JSX.Element => {
   return (
     <>
       <div
-        className={`${styles.cardItem} border-bottom`}
+        className={`${styles.cardItem} ${styles['border-bottom']}`}
         data-testid="cardItemLoading"
       >
-        <div className={`${styles.iconWrapper} me-3`}>
+        <div className={`${styles.iconWrapper} ${styles['me-3']}`}>
           <div className={styles.themeOverlay} />
         </div>
         <span
-          className={`${styles.title} shimmer rounded`}
+          className={`${styles.title} ${styles['shimmer']} ${styles['rounded']}`}
           style={{
             height: '1.5rem',
           }}

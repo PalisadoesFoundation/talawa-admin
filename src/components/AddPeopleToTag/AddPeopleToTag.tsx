@@ -185,7 +185,9 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} text-center`}
+          >
             {t('errorOccurredWhileLoadingMembers')}
             <br />
             {userTagsMembersToAssignToError.message}
@@ -266,26 +268,30 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         centered
       >
         <Modal.Header
-          className={`bg-primary ${styles.modalHeader}`}
+          className={`${styles['bg-primary']} ${styles.modalHeader}`}
           data-testid="modalOrganizationHeader"
           closeButton
         >
-          <Modal.Title className="text-white">{t('addPeople')}</Modal.Title>
+          <Modal.Title className={`${styles['text-white']}`}>
+            {t('addPeople')}
+          </Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={addPeopleToCurrentTag}>
           <Modal.Body>
             <div
-              className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
+              className={`${styles['d-flex']} ${styles['flex-wrap']} ${styles['align-items-center']} ${styles['border']} ${styles['border-2']} ${styles['border-dark-subtle']} ${styles['bg-light-subtle']} ${styles['rounded-3']} ${styles['p-2']} ${styles['scrollContainer']}`}
             >
               {assignToMembers.length === 0 ? (
-                <div className="text-body-tertiary mx-auto">
+                <div
+                  className={`${styles['text-body-tertiary']} ${styles['mx-auto']}`}
+                >
                   {t('noOneSelected')}
                 </div>
               ) : (
                 assignToMembers.map((member) => (
                   <div
                     key={member._id}
-                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
+                    className={`${styles['badge']} ${styles['bg-dark-subtle']} ${styles['text-secondary-emphasis']} ${styles['lh-lg']} ${styles['my-2']} ${styles['ms-2']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['memberBadge']}`}
                   >
                     {member.firstName} {member.lastName}
                     <i
@@ -298,13 +304,17 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               )}
             </div>
 
-            <div className="my-3 d-flex">
-              <div className="me-2 position-relative">
-                <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+            <div className={`${styles['my-3']} ${styles['d-flex']}`}>
+              <div
+                className={`${styles['me-2']} ${styles['position-relative']}`}
+              >
+                <i
+                  className={`${styles['fa']} ${styles['fa-search']} ${styles['position-absolute']} ${styles['text-body-tertiary']} ${styles['end-0']} ${styles['top-50']} ${styles['translate-middle']}`}
+                />
                 <Form.Control
                   type="text"
                   id="firstName"
-                  className={`bg-light ${styles.inputField}`}
+                  className={`${styles['bg-light']} ${styles['inputField']}`}
                   placeholder={tCommon('firstName')}
                   onChange={(e) =>
                     setMemberToAssignToSearchFirstName(e.target.value.trim())
@@ -313,12 +323,16 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   autoComplete="off"
                 />
               </div>
-              <div className="mx-2 position-relative">
-                <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+              <div
+                className={`${styles['mx-2']} ${styles['position-relative']}`}
+              >
+                <i
+                  className={`${styles['fa']} ${styles['fa-search']} ${styles['position-absolute']} ${styles['text-body-tertiary']} ${styles['end-0']} ${styles['top-50']} ${styles['translate-middle']}`}
+                />
                 <Form.Control
                   type="text"
                   id="lastName"
-                  className={`bg-light ${styles.inputField}`}
+                  className={`${styles['bg-light']} ${styles.inputField}`}
                   placeholder={tCommon('lastName')}
                   onChange={(e) =>
                     setMemberToAssignToSearchLastName(e.target.value.trim())

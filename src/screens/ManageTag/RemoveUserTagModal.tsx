@@ -35,7 +35,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
         centered
       >
         <Modal.Header closeButton className={styles.modalHeader}>
-          <Modal.Title className="text-white" id="removeUserTag">
+          <Modal.Title className={`${styles['text-white']}`} id="removeUserTag">
             {t('removeUserTag')}
           </Modal.Title>
         </Modal.Header>
@@ -45,7 +45,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
         <Modal.Footer>
           <Button
             type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
+            className={`${styles['btn']} ${styles['btn-danger']} ${styles['removeButton']}`}
             data-dismiss="modal"
             role="button"
             aria-label={tCommon('no')}
@@ -56,7 +56,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
           </Button>
           <Button
             type="button"
-            className={`btn ${styles.addButton}`}
+            className={`${styles['btn']} ${styles.addButton}`}
             role="button"
             aria-label={tCommon('yes')}
             onClick={handleRemoveUserTag}

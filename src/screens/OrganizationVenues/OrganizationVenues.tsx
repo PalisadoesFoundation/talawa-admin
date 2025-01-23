@@ -145,7 +145,9 @@ function organizationVenues(): JSX.Element {
 
   return (
     <>
-      <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
+      <div
+        className={`${styles.btnsContainer} ${styles['gap-3']} ${styles['flex-wrap']}`}
+      >
         <div className={`${styles.input}`}>
           <Form.Control
             type="name"
@@ -162,7 +164,9 @@ function organizationVenues(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 flex-wrap">
+        <div
+          className={`${styles['d-flex']} ${styles['gap-3']} ${styles['flex-wrap']}`}
+        >
           <SortingButton
             title="SearchBy"
             sortingOptions={[
@@ -193,7 +197,7 @@ function organizationVenues(): JSX.Element {
             onClick={showCreateVenueModal}
             data-testid="createVenueBtn"
           >
-            <i className="fa fa-plus me-1"></i> {t('addVenue')}
+            <i className={`fa fa-plus ${styles['ms-3']}`}></i> {t('addVenue')}
           </Button>
         </div>
       </div>
@@ -206,7 +210,7 @@ function organizationVenues(): JSX.Element {
             </>
           ) : (
             <div
-              className={`${styles.list_box} row `}
+              className={`${styles.list_box} ${styles['rows']} `}
               data-testid="orgvenueslist"
             >
               {venues.length ? (

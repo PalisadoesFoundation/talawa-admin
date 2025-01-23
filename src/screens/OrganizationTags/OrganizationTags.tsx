@@ -153,10 +153,14 @@ function OrganizationTags(): JSX.Element {
 
   if (orgUserTagsError) {
     return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.errorContainer} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             Error occured while loading Organization Tags Data
             <br />
             {orgUserTagsError.message}
@@ -200,7 +204,7 @@ function OrganizationTags(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams<InterfaceTagData>) => {
         return (
-          <div className="d-flex">
+          <div className={styles['d-flex']}>
             {params.row.parentTag &&
               params.row.ancestorTags?.map((tag) => (
                 <div
@@ -209,7 +213,7 @@ function OrganizationTags(): JSX.Element {
                   data-testid="ancestorTagsBreadCrumbs"
                 >
                   {tag.name}
-                  <i className={'mx-2 fa fa-caret-right'} />
+                  <i className={`${styles['mx-2']} fa fa-caret-right`} />
                 </div>
               ))}
 
@@ -219,7 +223,7 @@ function OrganizationTags(): JSX.Element {
               onClick={() => redirectToSubTags(params.row._id)}
             >
               {params.row.name}
-              <i className={'ms-2 fa fa-caret-right'} />
+              <i className={`${styles['ms-2']} fa fa-caret-right`} />
             </div>
           </div>
         );
@@ -237,7 +241,7 @@ function OrganizationTags(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <Link
-            className="text-secondary"
+            className={styles['text-secondary']}
             to={`/orgtags/${orgId}/subTags/${params.row._id}`}
           >
             {params.row.childTags.totalCount}
@@ -257,7 +261,7 @@ function OrganizationTags(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <Link
-            className="text-secondary"
+            className={styles['text-secondary']}
             to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
             {params.row.usersAssignedTo.totalCount}
@@ -296,11 +300,13 @@ function OrganizationTags(): JSX.Element {
 
   return (
     <>
-      <Row>
+      <Row className={`${styles.row}`}>
         <div>
           <div className={styles.btnsContainer}>
             <div className={styles.input}>
-              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+              <i
+                className={`fa fa-search ${styles['position-absolute']} ${styles['text-body-tertiary']} ${styles['end-0']} ${styles['top-50']} ${styles['translate-middle']}`}
+              />
               <Form.Control
                 type="text"
                 id="tagName"
@@ -332,9 +338,9 @@ function OrganizationTags(): JSX.Element {
               <Button
                 onClick={showCreateTagModal}
                 data-testid="createTagBtn"
-                className={`${styles.createButton} mb-2`}
+                className={`${styles.createButton} ${styles['mb-2']}`}
               >
-                <i className={'fa fa-plus me-2'} />
+                <i className={`${styles['me-2']} fa fa-plus`} />
                 {t('createTag')}
               </Button>
             </div>
@@ -343,13 +349,17 @@ function OrganizationTags(): JSX.Element {
           {orgUserTagsLoading || createUserTagLoading ? (
             <Loader />
           ) : (
-            <div className="mb-4">
-              <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">
-                <div className="ms-3 my-1">
+            <div className={styles['mb-4']}>
+              <div
+                className={`${styles['bg-white']} ${styles['border']} ${styles['light']} ${styles['rounded-top']} ${styles['mb-0']} ${styles['py-2']} ${styles['d-flex']} ${styles['align-items-center']}`}
+              >
+                <div className={`${styles['ms-3']} ${styles['my-1']}`}>
                   <IconComponent name="Tag" />
                 </div>
 
-                <div className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}>
+                <div
+                  className={`${styles['fs-4']} ${styles['ms-3']} ${styles['my-1']} ${styles.tagsBreadCrumbs}`}
+                >
                   {'Tags'}
                 </div>
               </div>
@@ -446,7 +456,7 @@ function OrganizationTags(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className={`mb-3 ${styles.inputField}`}
+              className={`${styles['mb-3']} ${styles.inputField}`}
               placeholder={t('tagNamePlaceholder')}
               data-testid="tagNameInput"
               autoComplete="off"

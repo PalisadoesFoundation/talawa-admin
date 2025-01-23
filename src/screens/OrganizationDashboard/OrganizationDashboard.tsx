@@ -171,16 +171,16 @@ function OrganizationDashboard(): JSX.Element {
 
   return (
     <>
-      <Row className="mt-4">
-        <Col xl={8}>
+      <Row className={`${styles['mt-4']} ${styles.row}`}>
+        <Col xl={8} className={`${styles.rowChild}`}>
           {loadingOrgData ? (
-            <Row style={{ display: 'flex' }}>
+            <Row style={{ display: 'flex' }} className={`${styles.row}`}>
               {[...Array(6)].map((_, index) => {
                 return (
                   <Col
                     xs={6}
                     sm={4}
-                    className="mb-4"
+                    className={`${styles['mb-4']} ${styles.rowChild}`}
                     key={`orgLoading_${index}`}
                   >
                     <DashboardCardLoading />
@@ -189,12 +189,12 @@ function OrganizationDashboard(): JSX.Element {
               })}
             </Row>
           ) : (
-            <Row style={{ display: 'flex' }}>
+            <Row style={{ display: 'flex' }} className={`${styles.row}`}>
               <Col
                 xs={6}
                 sm={4}
                 role="button"
-                className="mb-4"
+                className={`${styles['mb-4']} ${styles.rowChild}`}
                 onClick={(): void => {
                   navigate(peopleLink);
                 }}
@@ -209,7 +209,7 @@ function OrganizationDashboard(): JSX.Element {
                 xs={6}
                 sm={4}
                 role="button"
-                className="mb-4"
+                className={`${styles['mb-4']} ${styles.rowChild}`}
                 onClick={
                   /*istanbul ignore next*/
                   (): void => {
@@ -227,7 +227,7 @@ function OrganizationDashboard(): JSX.Element {
                 xs={6}
                 sm={4}
                 role="button"
-                className="mb-4"
+                className={`${styles['mb-4']} ${styles.rowChild}`}
                 onClick={(): void => {
                   navigate(postsLink);
                 }}
@@ -242,7 +242,7 @@ function OrganizationDashboard(): JSX.Element {
                 xs={6}
                 sm={4}
                 role="button"
-                className="mb-4"
+                className={`${styles['mb-4']} ${styles.rowChild}`}
                 onClick={(): void => {
                   navigate(eventsLink);
                 }}
@@ -257,7 +257,7 @@ function OrganizationDashboard(): JSX.Element {
                 xs={6}
                 sm={4}
                 role="button"
-                className="mb-4"
+                className={`${styles['mb-4']} ${styles.rowChild}`}
                 onClick={(): void => {
                   navigate(blockUserLink);
                 }}
@@ -272,7 +272,7 @@ function OrganizationDashboard(): JSX.Element {
                 xs={6}
                 sm={4}
                 role="button"
-                className="mb-4"
+                className={`${styles['mb-4']} ${styles.rowChild}`}
                 onClick={(): void => {
                   navigate(requestLink);
                 }}
@@ -285,11 +285,13 @@ function OrganizationDashboard(): JSX.Element {
               </Col>
             </Row>
           )}
-          <Row>
-            <Col lg={6} className="mb-4">
-              <Card border="0" className="rounded-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('upcomingEvents')}</div>
+          <Row className={`${styles.row}`}>
+            <Col lg={6} className={`${styles['mb-4']} ${styles.rowChild}`}>
+              <Card border="0" className={styles['rounded-4']}>
+                <div className={styles['cardHeader']}>
+                  <div className={styles['cardTitle']}>
+                    {t('upcomingEvents')}
+                  </div>
                   <Button
                     size="sm"
                     variant="light"
@@ -299,13 +301,13 @@ function OrganizationDashboard(): JSX.Element {
                     {t('viewAll')}
                   </Button>
                 </div>
-                <Card.Body className={styles.containerBody}>
+                <Card.Body className={styles['containerBody']}>
                   {loadingEvent ? (
                     [...Array(4)].map((_, index) => {
                       return <CardItemLoading key={`eventLoading_${index}`} />;
                     })
                   ) : upcomingEvents.length == 0 ? (
-                    <div className={styles.emptyContainer}>
+                    <div className={styles['emptyContainer']}>
                       <h6>{t('noUpcomingEvents')}</h6>
                     </div>
                   ) : (
@@ -328,10 +330,10 @@ function OrganizationDashboard(): JSX.Element {
                 </Card.Body>
               </Card>
             </Col>
-            <Col lg={6} className="mb-4">
-              <Card border="0" className="rounded-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('latestPosts')}</div>
+            <Col lg={6} className={`${styles['mb-4']} ${styles.rowChild}`}>
+              <Card border="0" className={styles['rounded-4']}>
+                <div className={styles['cardHeader']}>
+                  <div className={styles['cardTitle']}>{t('latestPosts')}</div>
                   <Button
                     size="sm"
                     variant="light"
@@ -373,11 +375,15 @@ function OrganizationDashboard(): JSX.Element {
             </Col>
           </Row>
         </Col>
-        <Col xl={4}>
-          <Row className="mb-4">
-            <Card border="0" className="rounded-4" style={{ height: '220px' }}>
-              <div className={styles.cardHeader}>
-                <div className={styles.cardTitle}>
+        <Col xl={4} className={`${styles.rowChild}`}>
+          <Row className={`${styles['mb-4']} ${styles.row}`}>
+            <Card
+              border="0"
+              className={styles['rounded-4']}
+              style={{ height: '220px' }}
+            >
+              <div className={styles['cardHeader']}>
+                <div className={styles['cardTitle']}>
                   {t('membershipRequests')}
                 </div>
                 <Button
@@ -422,10 +428,12 @@ function OrganizationDashboard(): JSX.Element {
               </Card.Body>
             </Card>
           </Row>
-          <Row>
-            <Card border="0" className="rounded-4">
-              <div className={styles.cardHeader}>
-                <div className={styles.cardTitle}>{t('volunteerRankings')}</div>
+          <Row className={`${styles.row}`}>
+            <Card border="0" className={styles['rounded-4']}>
+              <div className={styles['cardHeader']}>
+                <div className={styles['cardTitle']}>
+                  {t('volunteerRankings')}
+                </div>
                 <Button
                   size="sm"
                   variant="light"
@@ -451,8 +459,12 @@ function OrganizationDashboard(): JSX.Element {
                   rankings.map(({ rank, user, hoursVolunteered }, index) => {
                     return (
                       <div key={`ranking_${index}`}>
-                        <div className="d-flex ms-4 mt-1 mb-3">
-                          <div className="fw-bold me-2">
+                        <div
+                          className={`${styles['d-flex']} ${styles['ms-4']} ${styles['mt-1']} ${styles['mb-3']}`}
+                        >
+                          <div
+                            className={`${styles['fw-bold']} ${styles['me-2']}`}
+                          >
                             {rank <= 3 ? (
                               <img
                                 src={
@@ -469,8 +481,12 @@ function OrganizationDashboard(): JSX.Element {
                               rank
                             )}
                           </div>
-                          <div className="me-2 mt-2">{`${user.firstName} ${user.lastName}`}</div>
-                          <div className="mt-2">- {hoursVolunteered} hours</div>
+                          <div
+                            className={`${styles['me-2']} ${styles['mt-2']}`}
+                          >{`${user.firstName} ${user.lastName}`}</div>
+                          <div className={styles['mt-2']}>
+                            - {hoursVolunteered} hours
+                          </div>
                         </div>
                         {index < 2 && <hr />}
                       </div>

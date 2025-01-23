@@ -127,7 +127,9 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
 
   return (
     <>
-      <Card className={`${styles.updateTimeoutCard} rounded-4 shadow-sm`}>
+      <Card
+        className={`${styles.updateTimeoutCard} ${styles['rounded-4']} ${styles['shadow-sm']} `}
+      >
         <Card.Header className={styles.updateTimeoutCardHeader}>
           <div className={styles.updateTimeoutCardTitle}>
             Login Session Timeout

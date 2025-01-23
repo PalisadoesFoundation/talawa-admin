@@ -146,12 +146,14 @@ const AgendaItemsCreateModal: React.FC<
 
   return (
     <Modal
-      className={styles.AgendaItemsModal}
+      className={styles['AgendaItemsModal']}
       show={agendaItemCreateModalIsOpen}
       onHide={hideCreateModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
+        <p className={styles['titlemodalAgendaItems']}>
+          {t('agendaItemDetails')}
+        </p>
         <Button
           variant="danger"
           onClick={hideCreateModal}
@@ -162,10 +164,12 @@ const AgendaItemsCreateModal: React.FC<
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={createAgendaItemHandler}>
-          <Form.Group className="d-flex mb-3 w-100">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+          >
             <Autocomplete
               multiple
-              className={`${styles.noOutline} w-100`}
+              className={`${styles['noOutline']} ${styles['w-100']}`}
               limitTags={2}
               data-testid="categorySelect"
               options={agendaItemCategories || []}
@@ -191,9 +195,9 @@ const AgendaItemsCreateModal: React.FC<
               )}
             />
           </Form.Group>
-          <Row className="mb-3">
-            <Col>
-              <Form.Group className="mb-3" controlId="title">
+          <Row className={`${styles.row} ${styles['mb-3']}`}>
+            <Col className={`${styles.rowChild}`}>
+              <Form.Group className={styles['mb-3']} controlId="title">
                 <Form.Label>{t('title')}</Form.Label>
                 <Form.Control
                   type="text"
@@ -206,7 +210,7 @@ const AgendaItemsCreateModal: React.FC<
                 />
               </Form.Group>
             </Col>
-            <Col>
+            <Col className={`${styles.rowChild}`}>
               <Form.Group controlId="duration">
                 <Form.Label>{t('duration')}</Form.Label>
                 <Form.Control
@@ -221,7 +225,7 @@ const AgendaItemsCreateModal: React.FC<
               </Form.Group>
             </Col>
           </Row>
-          <Form.Group className="mb-3" controlId="description">
+          <Form.Group className={styles['mb-3']} controlId="description">
             <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               as="textarea"
@@ -235,9 +239,9 @@ const AgendaItemsCreateModal: React.FC<
             />
           </Form.Group>
 
-          <Form.Group className="mb-3">
+          <Form.Group className={styles['mb-3']}>
             <Form.Label>{t('url')}</Form.Label>
-            <div className="d-flex">
+            <div className={styles['d-flex']}>
               <Form.Control
                 type="text"
                 placeholder={t('enterUrl')}
@@ -252,15 +256,15 @@ const AgendaItemsCreateModal: React.FC<
             </div>
 
             {formState.urls.map((url, index) => (
-              <li key={index} className={styles.urlListItem}>
-                <FaLink className={styles.urlIcon} />
+              <li key={index} className={styles['urlListItem']}>
+                <FaLink className={styles['urlIcon']} />
                 <a href={url} target="_blank" rel="noopener noreferrer">
                   {url.length > 50 ? url.substring(0, 50) + '...' : url}
                 </a>
                 <Button
                   variant="danger"
                   size="sm"
-                  className={styles.deleteButtonAgendaItems}
+                  className={styles['deleteButtonAgendaItems']}
                   data-testid="deleteUrl"
                   onClick={() => handleRemoveUrl(url)}
                 >
@@ -269,7 +273,7 @@ const AgendaItemsCreateModal: React.FC<
               </li>
             ))}
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className={styles['mb-3']}>
             <Form.Label>{t('attachments')}</Form.Label>
             <Form.Control
               accept="image/*, video/*"
@@ -283,9 +287,9 @@ const AgendaItemsCreateModal: React.FC<
             <Form.Text>{t('attachmentLimit')}</Form.Text>
           </Form.Group>
           {formState.attachments && (
-            <div className={styles.previewFile} data-testid="mediaPreview">
+            <div className={styles['previewFile']} data-testid="mediaPreview">
               {formState.attachments.map((attachment, index) => (
-                <div key={index} className={styles.attachmentPreview}>
+                <div key={index} className={styles['attachmentPreview']}>
                   {attachment.includes('video') ? (
                     <video
                       muted
@@ -300,7 +304,7 @@ const AgendaItemsCreateModal: React.FC<
                     <img src={attachment} alt="Attachment preview" />
                   )}
                   <button
-                    className={styles.closeButtonFile}
+                    className={styles['closeButtonFile']}
                     onClick={(e) => {
                       e.preventDefault();
                       handleRemoveAttachment(attachment);
@@ -315,7 +319,7 @@ const AgendaItemsCreateModal: React.FC<
           )}
           <Button
             type="submit"
-            className={styles.greenregbtnAgendaItems}
+            className={styles['greenregbtnAgendaItems']}
             value="createAgendaItem"
             data-testid="createAgendaItemFormBtn"
           >

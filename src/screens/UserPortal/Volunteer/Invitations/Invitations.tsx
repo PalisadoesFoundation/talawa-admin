@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import styles from '../VolunteerManagement.module.css';
+import style from '../../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
@@ -118,10 +119,17 @@ const Invitations = (): JSX.Element => {
   if (invitationError) {
     // Displays an error message if there is an issue loading the invitations
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
-        <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+      <div
+        className={`${styles['container']} ${style['bg-white']} ${style['rounded-4']} ${style['my-3']}`}
+      >
+        <div className={styles['message']} data-testid="errorMsg">
+          <WarningAmberRounded
+            className={styles['errorIcon']}
+            fontSize="large"
+          />
+          <h6
+            className={`${style['fw-bold']} ${style['text-danger']} ${style['text-center']}`}
+          >
             {tErrors('errorLoading', { entity: 'Volunteership Invitations' })}
           </h6>
         </div>
@@ -132,9 +140,11 @@ const Invitations = (): JSX.Element => {
   // Renders the invitations list and UI elements for searching, sorting, and accepting/rejecting invites
   return (
     <>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div
+        className={`${styles['btnsContainer']} ${style['gap-4']} ${style['flex-wrap']}`}
+      >
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
+        <div className={`${styles['input']} ${style['mb-1']}`}>
           <Form.Control
             type="name"
             placeholder={t('searchByEventName')}
@@ -150,14 +160,18 @@ const Invitations = (): JSX.Element => {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${style['position-absolute']} ${style['z-10']} ${style['bottom-0']} ${style['end-0']} ${style['d-flex']} ${style['justify-content-center']} ${style['align-items-center']}`}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex gap-3 justify-space-between">
+        <div
+          className={`${style['d-flex']} ${style['gap-4']} ${style['mb-1']}`}
+        >
+          <div
+            className={`${style['d-flex']} ${style['gap-3']} ${style['justify-space-between']}`}
+          >
             <SortingButton
               sortingOptions={[
                 { label: t('receivedLatest'), value: 'createdAt_DESC' },
@@ -193,23 +207,28 @@ const Invitations = (): JSX.Element => {
       ) : (
         invitations.map((invite: InterfaceVolunteerMembership) => (
           <div
-            className="bg-white p-4  rounded shadow-sm d-flex justify-content-between mb-3"
+            className={`${style['bg-white']} ${style['p-4']} ${style['rounded']} ${style['shadow-sm']} ${style['d-flex']} ${style['justify-content-between']} ${style['mb-3']}`}
             key={invite._id}
           >
-            <div className="d-flex flex-column gap-2">
-              <div className="fw-bold" data-testid="inviteSubject">
+            <div
+              className={`${style['d-flex']} ${style['flex-column']} ${style['gap-2']}`}
+            >
+              <div className={style['fw-bold']} data-testid="inviteSubject">
                 {invite.group ? (
                   <>{t('groupInvitationSubject')}</>
                 ) : (
                   <>{t('eventInvitationSubject')}</>
                 )}
               </div>
-              <div className="d-flex gap-3">
+              <div className={`${style['d-flex']} ${style['gap-3']}`}>
                 {invite.group && (
                   <>
                     <div>
-                      <FaUserGroup className="mb-1 me-1" color="grey" />
-                      <span className="text-muted">Group:</span>{' '}
+                      <FaUserGroup
+                        className={`${style['mb-1']} ${style['me-1']}`}
+                        color="grey"
+                      />
+                      <span className={style['text-muted']}>Group:</span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
                     |
@@ -217,22 +236,25 @@ const Invitations = (): JSX.Element => {
                 )}
                 <div>
                   <TbCalendarEvent
-                    className="mb-1 me-1"
+                    className={`${style['mb-1']} ${style['me-1']}`}
                     color="grey"
                     size={20}
                   />
-                  <span className="text-muted">Event:</span>{' '}
+                  <span className={style['text-muted']}>Event:</span>{' '}
                   <span>{invite.event.title}</span>
                 </div>
                 |
                 <div>
-                  <FaRegClock className="mb-1 me-1" color="grey" />
-                  <span className="text-muted">Received:</span>{' '}
+                  <FaRegClock
+                    className={`${style['mb-1']} ${styles['me-1']}`}
+                    color="grey"
+                  />
+                  <span className={style['text-muted']}>Received:</span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>
               </div>
             </div>
-            <div className="d-flex gap-2">
+            <div className={`${style['d-flex']} ${style['gap-2']}`}>
               <Button
                 variant="outline-success"
                 size="sm"

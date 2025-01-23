@@ -316,7 +316,7 @@ function organizationPeople(): JSX.Element {
 
   return (
     <>
-      <Row className={styles.head}>
+      <Row className={`${styles.row} ${styles.head}`}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
             <div className={styles.input}>

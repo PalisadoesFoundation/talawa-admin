@@ -272,7 +272,10 @@ function advertisementRegister({
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="registerForm.Rname">
+            <Form.Group
+              className={`${styles['mb-3']}`}
+              controlId="registerForm.Rname"
+            >
               <Form.Label>{t('Rname')}</Form.Label>
               <Form.Control
                 type="text"
@@ -289,7 +292,7 @@ function advertisementRegister({
                 className={styles.inputField}
               />
             </Form.Group>
-            <Form.Group className="mb-3">
+            <Form.Group className={`${styles['mb-3']}`}>
               <Form.Label htmlFor="advertisementMedia">
                 {t('Rmedia')}
               </Form.Label>
@@ -358,7 +361,10 @@ function advertisementRegister({
                 </div>
               )}
             </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.Rtype">
+            <Form.Group
+              className={`${styles['mb-3']}`}
+              controlId="registerForm.Rtype"
+            >
               <Form.Label>{t('Rtype')}</Form.Label>
               <Form.Select
                 aria-label={t('Rtype')}
@@ -376,7 +382,10 @@ function advertisementRegister({
               </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="registerForm.RstartDate">
+            <Form.Group
+              className={`${styles['mb-3']}`}
+              controlId="registerForm.RstartDate"
+            >
               <Form.Label>{t('RstartDate')}</Form.Label>
               <Form.Control
                 type="date"
@@ -392,7 +401,10 @@ function advertisementRegister({
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="registerForm.RDate">
+            <Form.Group
+              className={`${styles['mb-3']}`}
+              controlId="registerForm.RDate"
+            >
               <Form.Label>{t('RendDate')}</Form.Label>
               <Form.Control
                 type="date"
@@ -413,7 +425,7 @@ function advertisementRegister({
           <Button
             variant="secondary"
             onClick={handleClose}
-            className={`btn btn-danger ${styles.removeButton}`}
+            className={`${styles['btn']} ${styles['btn-danger']} ${styles['removeButton']}`}
             data-testid="addonclose"
           >
             {tCommon('close')}

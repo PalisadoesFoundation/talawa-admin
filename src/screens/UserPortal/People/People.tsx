@@ -9,6 +9,7 @@ import {
 import { useQuery } from '@apollo/client';
 import { FilterAltOutlined, SearchOutlined } from '@mui/icons-material';
 import styles from './People.module.css';
+import style from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router-dom';
@@ -162,10 +163,10 @@ export default function people(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row`}>
-        <div className={`${styles.mainContainer}`}>
+      <div className={`${style['d-flex']} ${style['flex-row']}`}>
+        <div className={styles['mainContainer']}>
           <div
-            className={`mt-4 d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
+            className={`${style['mt-4']} ${style['d-flex']} ${style['flex-row']} ${style['justify-content-between']} ${style['flex-wrap']} ${styles['gap']}`}
           >
             <InputGroup className={`${styles.maxWidth} ${styles.shadow}`}>
               <Form.Control
@@ -209,11 +210,13 @@ export default function people(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          <div className={`d-flex flex-column ${styles.content}`}>
+          <div
+            className={`${style['d-flex']} ${style['flex-column']} ${styles['content']}`}
+          >
             <div
-              className={`d-flex border py-3 px-4 mt-4 bg-white ${styles.topRadius}`}
+              className={`${style['d-flex']} ${style['border']} ${style['py-3']} ${style['px-4']} ${style['mt-4']} ${style['bg-white']} ${style['topRadius']}`}
             >
-              <span style={{ flex: '1' }} className="d-flex">
+              <span style={{ flex: '1' }} className={style['d-flex']}>
                 <span style={{ flex: '1' }}>S.No</span>
                 <span style={{ flex: '1' }}>Avatar</span>
               </span>
@@ -221,12 +224,13 @@ export default function people(): JSX.Element {
               <span style={{ flex: '2' }}>Email</span>
               <span style={{ flex: '2' }}>Role</span>
             </div>
-
             <div
-              className={`d-flex flex-column border px-4 p-3 mt-0 ${styles.gap} ${styles.bottomRadius} ${styles.backgroundWhite}`}
+              className={`${style['d-flex']} ${style['flex-column']} ${style['border']} ${style['px-4']} ${style['p-3']} ${style['mt-0']} ${styles['gap']} ${styles['bottomRadius']} ${styles['backgroundWhite']}`}
             >
               {loading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
+                <div
+                  className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-center']}`}
+                >
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (

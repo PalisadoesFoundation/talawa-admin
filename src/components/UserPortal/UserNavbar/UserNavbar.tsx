@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './UserNavbar.module.css';
+import style from '../../../style/app.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
 import { Container, Dropdown, Navbar } from 'react-bootstrap';
 import { languages } from 'utils/languages';
@@ -76,7 +77,7 @@ function userNavbar(): JSX.Element {
         <Navbar.Toggle />
 
         {/* Navbar collapsible content */}
-        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Collapse className={style['justify-content-end']}>
           {/* Dropdown for language selection */}
           <Dropdown data-testid="languageDropdown" drop="start">
             <Dropdown.Toggle

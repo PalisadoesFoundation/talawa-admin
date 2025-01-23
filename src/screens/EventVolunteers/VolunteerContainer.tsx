@@ -33,13 +33,17 @@ function volunteerContainer(): JSX.Element {
 
   return (
     <div>
-      <div className="mt-2 mb-4 d-flex justify-content-between">
+      <div
+        className={`${styles['mt-2']} ${styles['mb-4']} ${styles['d-flex']} ${styles['justify-content-between']}`}
+      >
         <span className={styles.titlemodal} data-testid="dataTypeTitle">
           {t(
             `${dataType === 'group' ? 'volunteerGroups' : dataType === 'individual' ? 'volunteers' : 'requests'}`,
           )}
         </span>
-        <div className="d-flex justify-content-center">
+        <div
+          className={`${styles['d-flex']} ${styles['justify-content-center']}`}
+        >
           <div
             className={`btn-group ${styles.toggleGroup}`}
             role="group"
@@ -47,52 +51,52 @@ function volunteerContainer(): JSX.Element {
           >
             <input
               type="radio"
-              className={`btn-check ${styles.toggleBtn}`}
+              className={`${styles['btn-check']} ${styles.toggleBtn}`}
               name="btnradio"
               id="individualRadio"
               checked={dataType === 'individual'}
               onChange={() => setDataType('individual')}
             />
             <label
-              className={`btn btn-outline-primary ${styles.toggleBtn}`}
+              className={`${styles['btn-outline-primary']} ${styles.toggleBtn}`}
               htmlFor="individualRadio"
               data-testid="individualRadio"
             >
-              <HiUser className="me-1" />
+              <HiUser className={styles['me-1']} />
               {t('individuals')}
             </label>
 
             <input
               type="radio"
-              className={`btn-check ${styles.toggleBtn}`}
+              className={`${styles['btn-check']} ${styles.toggleBtn}`}
               name="btnradio"
               id="groupsRadio"
               onChange={() => setDataType('group')}
               checked={dataType === 'group'}
             />
             <label
-              className={`btn btn-outline-primary ${styles.toggleBtn}`}
+              className={`${styles['btn']} ${styles['btn-outline-primary']} ${styles.toggleBtn}`}
               htmlFor="groupsRadio"
               data-testid="groupsRadio"
             >
-              <HiUserGroup className="me-1" />
+              <HiUserGroup className={styles['me-1']} />
               {t('groups')}
             </label>
 
             <input
               type="radio"
-              className={`btn-check ${styles.toggleBtn}`}
+              className={`${styles['btn-check']} ${styles.toggleBtn}`}
               name="btnradio"
               id="requestsRadio"
               onChange={() => setDataType('requests')}
               checked={dataType === 'requests'}
             />
             <label
-              className={`btn btn-outline-primary ${styles.toggleBtn}`}
+              className={`${styles['btn']} ${styles['btn-outline-primary']} ${styles.toggleBtn}`}
               htmlFor="requestsRadio"
               data-testid="requestsRadio"
             >
-              <FaRegFile className="me-1 mb-1" />
+              <FaRegFile className={`${styles['me-1']} ${styles['mb-1']}`} />
               {t('requests')}
             </label>
           </div>

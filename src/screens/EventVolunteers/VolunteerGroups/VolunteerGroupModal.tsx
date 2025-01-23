@@ -199,10 +199,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           onSubmitCapture={
             mode === 'edit' ? updateGroupHandler : createGroupHandler
           }
-          className="p-3"
+          className={`${styles['p-3']}`}
         >
           {/* Input field to enter the group name */}
-          <Form.Group className="mb-3">
+          <Form.Group className={`${styles['mb-3']}`}>
             <FormControl fullWidth>
               <TextField
                 required
@@ -217,7 +217,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             </FormControl>
           </Form.Group>
           {/* Input field to enter the group description */}
-          <Form.Group className="mb-3">
+          <Form.Group className={`${styles['mb-3']}`}>
             <FormControl fullWidth>
               <TextField
                 multiline
@@ -233,9 +233,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             </FormControl>
           </Form.Group>
           {/* A dropdown to select leader for volunteer group */}
-          <Form.Group className="d-flex mb-3 w-100">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+          >
             <Autocomplete
-              className={`${styles.noOutline} w-100`}
+              className={`${styles['noOutline']} ${styles['w-100']}`}
               limitTags={2}
               data-testid="leaderSelect"
               options={members}
@@ -273,10 +275,12 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           </Form.Group>
 
           {/* A Multi-select dropdown to select more than one volunteer */}
-          <Form.Group className="d-flex mb-3 w-100">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+          >
             <Autocomplete
               multiple
-              className={`${styles.noOutline} w-100`}
+              className={`${styles['noOutline']} ${styles['w-100']}`}
               limitTags={2}
               data-testid="volunteerSelect"
               options={members}
@@ -301,7 +305,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               )}
             />
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className={`${styles['mb-3']}`}>
             <FormControl fullWidth>
               <TextField
                 label={t('volunteersRequired')}

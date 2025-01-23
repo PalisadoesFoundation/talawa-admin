@@ -9,6 +9,7 @@ import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
+import styles from '../../../style/app.module.css';
 
 const userEmail = (() => {
   try {
@@ -121,7 +122,10 @@ const LeaveOrganization = (): JSX.Element => {
 
   if (orgLoading) {
     return (
-      <div className="text-center mt-4" role="status">
+      <div
+        className={`${styles['text-center']} ${styles['mt-4']}`}
+        role="status"
+      >
         <Spinner animation="border" />
         <p>Loading organization details...</p>
       </div>

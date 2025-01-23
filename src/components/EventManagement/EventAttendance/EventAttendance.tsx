@@ -150,20 +150,22 @@ function EventAttendance(): JSX.Element {
         memberData={filteredAttendees}
         t={t}
       />
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div
+        className={`${styles['d-flex']} ${styles['justify-content-between']} ${styles['align-items-center']} ${styles['mb-3']}`}
+      >
         <Button
-          className={`border-1 bg-white text-success ${styles.actionBtn}`}
+          className={`${styles['border-1']} ${styles['bg-white']} ${styles['text-success']} ${styles.actionBtn}`}
           onClick={showModal}
           data-testid="stats-modal"
         >
           {t('historical_statistics')}
         </Button>
-        <div className="d-flex align-items-center">
-          <div className={`${styles.input} me-3`}>
+        <div className={`${styles['d-flex']} ${styles['align-items-center']}`}>
+          <div className={`${styles.input} ${styles['me-3']}`}>
             <FormControl
               type="text"
               id="posttitle"
-              className="bg-white border"
+              className={`${styles['bg-white']} ${styles['border']}`}
               placeholder={t('Search member')}
               data-testid="searchByName"
               autoComplete="off"
@@ -172,7 +174,7 @@ function EventAttendance(): JSX.Element {
             />
             <Button
               tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100`}
+              className={`${styles['position-absolute']} ${styles['z-10']} ${styles['bottom-0']} ${styles['end-0']} ${styles['h-100']}`}
             >
               <Search size={20} />
             </Button>
@@ -190,7 +192,7 @@ function EventAttendance(): JSX.Element {
             selectedOption={filteringBy}
             onSortChange={(value) => setFilteringBy(value as FilterPeriod)}
             dataTestIdPrefix="filter-dropdown"
-            className={`${styles.dropdown} mx-4`}
+            className={`${styles.dropdown} ${styles['mx-4']}`}
             buttonLabel="Filter"
           />
           <SortingButton
@@ -208,7 +210,7 @@ function EventAttendance(): JSX.Element {
           />
         </div>
       </div>
-      <TableContainer component={Paper} className="mt-3">
+      <TableContainer component={Paper} className={`${styles['mt-3']}`}>
         <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
             <TableRow className="" data-testid="table-header-row" role="row">
@@ -259,7 +261,7 @@ function EventAttendance(): JSX.Element {
                   <TableRow
                     key={index}
                     data-testid={`attendee-row-${index}`}
-                    className="my-6"
+                    className={`${styles['my-6']}`}
                   >
                     <TableCell
                       component="th"

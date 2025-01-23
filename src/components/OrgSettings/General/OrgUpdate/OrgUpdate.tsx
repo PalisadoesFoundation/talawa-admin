@@ -13,6 +13,7 @@ import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgUpdate.module.css';
+import style from '../../../../style/app.module.css';
 import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceAddress,
@@ -159,7 +160,9 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     return (
       <div className={styles.message}>
         <WarningAmberRounded className={styles.icon} fontSize="large" />
-        <h6 className="fw-bold text-danger text-center">
+        <h6
+          className={`${style['fw-bold']} ${style['text-danger']} ${style['text-center']}`}
+        >
           Error occured while loading Organization Data
           <br />
           {`${error.message}`}
@@ -174,7 +177,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         <form>
           <Form.Label>{tCommon('name')}</Form.Label>
           <Form.Control
-            className="mb-3"
+            className={style['mb-3']}
             placeholder={t('enterNameOrganization')}
             autoComplete="off"
             required
@@ -188,7 +191,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           />
           <Form.Label>{tCommon('description')}</Form.Label>
           <Form.Control
-            className="mb-3"
+            className={style['mb-3']}
             placeholder={tCommon('description')}
             autoComplete="off"
             required
@@ -201,8 +204,8 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             }}
           />
           <Form.Label>{tCommon('address')}</Form.Label>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-3">
+          <Row className={`${style.row} ${styles['mb-1']}`}>
+            <Col sm={6} className={`${style['mb-3']} ${style.rowChild}`}>
               <Form.Control
                 required
                 as="select"
@@ -226,7 +229,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 ))}
               </Form.Control>
             </Col>
-            <Col sm={6} className="mb-3">
+            <Col sm={6} className={`${style['mb-3']} ${style.rowChild}`}>
               <Form.Control
                 placeholder={t('city')}
                 autoComplete="off"
@@ -236,8 +239,8 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               />
             </Col>
           </Row>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-3">
+          <Row className={`${style.row} ${styles['mb-1']}`}>
+            <Col sm={6} className={`${style['mb-3']} ${style.rowChild}`}>
               <Form.Control
                 placeholder={t('state')}
                 autoComplete="off"
@@ -245,7 +248,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 onChange={(e) => handleInputChange('state', e.target.value)}
               />
             </Col>
-            <Col sm={6} className="mb-3">
+            <Col sm={6} className={`${style['mb-3']} ${style.rowChild}`}>
               <Form.Control
                 placeholder={t('dependentLocality')}
                 autoComplete="off"
@@ -256,8 +259,8 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               />
             </Col>
           </Row>
-          <Row className="mb-3">
-            <Col sm={6} className="mb-1">
+          <Row className={`${style.row} ${styles['mb-3']}`}>
+            <Col sm={6} className={`${style['mb-1']} ${style.rowChild}`}>
               <Form.Control
                 placeholder={t('line1')}
                 autoComplete="off"
@@ -265,7 +268,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 onChange={(e) => handleInputChange('line1', e.target.value)}
               />
             </Col>
-            <Col sm={6} className="mb-1">
+            <Col sm={6} className={`${style['mb-1']} ${style.rowChild}`}>
               <Form.Control
                 placeholder={t('line2')}
                 autoComplete="off"
@@ -274,8 +277,8 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               />
             </Col>
           </Row>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-1">
+          <Row className={`${style.row} ${styles['mb-1']}`}>
+            <Col sm={6} className={`${style['mb-1']} ${style.rowChild}`}>
               <Form.Control
                 placeholder={t('postalCode')}
                 autoComplete="off"
@@ -285,7 +288,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 }
               />
             </Col>
-            <Col sm={6} className="mb-1">
+            <Col sm={6} className={`${style['mb-1']} ${style.rowChild}`}>
               <Form.Control
                 placeholder={t('sortingCode')}
                 autoComplete="off"
@@ -296,9 +299,12 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               />
             </Col>
           </Row>
-          <Row>
-            <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">
+          <Row className={`${style.row}`}>
+            <Col
+              sm={6}
+              className={`${style['d-flex']} ${style['mb-3']} ${style.rowChild}`}
+            >
+              <Form.Label className={style['me-3']}>
                 {t('userRegistrationRequired')}:
               </Form.Label>
               <Form.Switch
@@ -311,8 +317,11 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 }
               />
             </Col>
-            <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">
+            <Col
+              sm={6}
+              className={`${style['d-flex']} ${style['mb-3']} ${style.rowChild}`}
+            >
+              <Form.Label className={style['me-3']}>
                 {t('isVisibleInSearch')}:
               </Form.Label>
               <Form.Switch
@@ -324,7 +333,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           </Row>
           <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}:</Form.Label>
           <Form.Control
-            className="mb-4"
+            className={style['mb-4']}
             accept="image/*"
             placeholder={tCommon('displayImage')}
             name="photo"
@@ -342,7 +351,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             }}
             data-testid="organisationImage"
           />
-          <div className="d-flex justify-content-end">
+          <div className={`${style['d-flex']} ${style['justify-content-end']}`}>
             <Button
               variant="success"
               value="savechanges"

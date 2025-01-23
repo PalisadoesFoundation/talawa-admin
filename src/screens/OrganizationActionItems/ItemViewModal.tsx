@@ -64,8 +64,10 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
         </Button>
       </Modal.Header>
       <Modal.Body>
-        <Form className="p-3">
-          <Form.Group className="d-flex mb-3 w-100">
+        <Form className={styles['p-3']}>
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+          >
             <FormControl fullWidth>
               <TextField
                 label={t('category')}
@@ -76,7 +78,9 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
               />
             </FormControl>
           </Form.Group>
-          <Form.Group className="d-flex gap-3 mb-3">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mb-3']}`}
+          >
             <FormControl fullWidth>
               <TextField
                 label={t('assignee')}
@@ -163,7 +167,9 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
               />
             </FormControl>
           </Form.Group>
-          <Form.Group className="d-flex gap-3 mx-auto mb-3">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mx-auto']} ${styles['mb-3']}`}
+          >
             {/* Status of Action Item */}
             <TextField
               label={t('status')}
@@ -173,9 +179,12 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                 startAdornment: (
                   <>
                     {isCompleted ? (
-                      <TaskAlt color="success" className="me-2" />
+                      <TaskAlt color="success" className={styles['me-2']} />
                     ) : (
-                      <HistoryToggleOff color="warning" className="me-2" />
+                      <HistoryToggleOff
+                        color="warning"
+                        className={styles['me-2']}
+                      />
                     )}
                   </>
                 ),
@@ -194,17 +203,19 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
             <TextField
               label={t('allottedHours')}
               variant="outlined"
-              className={`${styles.noOutline} w-100`}
+              className={`${styles['noOutline']} ${styles['w-100']}`}
               value={allottedHours ?? '-'}
               disabled
             />
           </Form.Group>
-          <Form.Group className={`d-flex gap-3 mb-3`}>
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mb-3']}`}
+          >
             {/* Date Calendar Component to display due date of Action Item */}
             <DatePicker
               format="DD/MM/YYYY"
               label={t('dueDate')}
-              className={`${styles.noOutline} w-100`}
+              className={`${styles['noOutline']} ${styles['w-100']}`}
               value={dayjs(dueDate)}
               disabled
             />
@@ -214,13 +225,15 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
               <DatePicker
                 format="DD/MM/YYYY"
                 label={t('completionDate')}
-                className={`${styles.noOutline} w-100`}
+                className={`${styles['noOutline']} ${styles['w-100']}`}
                 value={dayjs(completionDate)}
                 disabled
               />
             )}
           </Form.Group>
-          <Form.Group className={`d-flex ${isCompleted && 'mb-3'}`}>
+          <Form.Group
+            className={`${styles['d-flex']} ${isCompleted && styles['mb-3']}`}
+          >
             <FormControl fullWidth>
               <TextField
                 label={t('preCompletionNotes')}

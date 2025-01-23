@@ -5,6 +5,7 @@ import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';
+import style from '../../style/app.module.css';
 import { useNavigate } from 'react-router-dom';
 import type {
   InterfaceOrgConnectionInfoType,
@@ -93,10 +94,12 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
           <div className={styles.content}>
             {/* Tooltip for the organization name */}
             <Tooltip title={name} placement="top-end">
-              <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
+              <h4 className={`${styles.orgName} ${style['fw-semibold']}`}>
+                {name}
+              </h4>
             </Tooltip>
             {/* Description of the organization */}
-            <div className={`${styles.orgdesc} fw-semibold`}>
+            <div className={`${styles.orgdesc} ${style['fw-semibold']}`}>
               <TruncatedText
                 text={userData?.organizations[0]?.description || ''}
               />

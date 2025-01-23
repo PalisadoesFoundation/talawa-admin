@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
+import style from '../../../style/app.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -255,7 +256,7 @@ export default function settings(): JSX.Element {
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`d-flex flex-row ${styles.containerHeight} ${
+        className={`${styles['d-flex']} ${styles['flex-row']} ${styles['containerHeight']} ${
           hideDrawer === null
             ? ''
             : hideDrawer
@@ -263,30 +264,42 @@ export default function settings(): JSX.Element {
               : styles.contract
         }`}
       >
-        <div className={`${styles.mainContainer}`}>
-          <div className="d-flex justify-content-between align-items-center">
+        <div className={styles['mainContainer']}>
+          <div
+            className={`${style['d-flex']} ${style['justify-content-between']} ${style['align-items-center']}`}
+          >
             <div style={{ flex: 1 }}>
               <h1>{tCommon('settings')}</h1>
             </div>
             <ProfileDropdown />
           </div>
           <h3>{tCommon('settings')}</h3>
-          <Row>
-            <Col lg={7}>
-              <Card border="0" className="rounded-4 mb-4">
-                <div className={`${styles.cardHeader}`}>
-                  <div className={`${styles.cardTitle}`}>
+          <Row className={style.row}>
+            <Col className={style.rowChild} lg={7}>
+              <Card
+                border="0"
+                className={`${style['rounded-4']} ${style['mb-4']}`}
+              >
+                <div className={styles['cardHeader']}>
+                  <div className={styles['cardTitle']}>
                     {t('profileSettings')}
                   </div>
                 </div>
-                <Card.Body className={`${styles.cardBody}`}>
-                  <Row className="mb-1">
-                    <Col lg={12} className="mb-2">
-                      <div className="text-center mb-3">
-                        <div className="position-relative d-inline-block">
+                <Card.Body className={styles['cardBody']}>
+                  <Row className={`${styles.row} ${styles['mb-1']}`}>
+                    <Col
+                      lg={12}
+                      className={`${style['mb-2']} ${style['rowChild']}`}
+                    >
+                      <div
+                        className={`${style['text-center']} ${style['mb-3']}`}
+                      >
+                        <div
+                          className={`${style['position-relative']} ${style['d-inline-block']}`}
+                        >
                           {userDetails?.image ? (
                             <img
-                              className="rounded-circle"
+                              className={style['rounded-circle']}
                               style={{
                                 width: '60px',
                                 height: '60px',
@@ -306,7 +319,7 @@ export default function settings(): JSX.Element {
                             />
                           )}
                           <i
-                            className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+                            className={`fas fa-edit ${style['position-absolute']} ${style['bottom-0']} ${style['right-0']} ${style['p-2']} ${style['bg-white']} ${style['rounded-circle']}`}
                             onClick={handleImageUpload}
                             data-testid="uploadImageBtn"
                             style={{ cursor: 'pointer', fontSize: '1.2rem' }}
@@ -326,7 +339,7 @@ export default function settings(): JSX.Element {
                         id="postphoto"
                         name="photo"
                         type="file"
-                        className={styles.cardControl}
+                        className={styles['cardControl']}
                         data-testid="fileInput"
                         multiple={false}
                         ref={fileInputRef}
@@ -345,10 +358,10 @@ export default function settings(): JSX.Element {
                         style={{ display: 'none' }}
                       />
                     </Col>
-                    <Col lg={4}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="inputFirstName"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {tCommon('firstName')}
                       </Form.Label>
@@ -359,14 +372,14 @@ export default function settings(): JSX.Element {
                         onChange={(e) =>
                           handleFieldChange('firstName', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         data-testid="inputFirstName"
                       />
                     </Col>
-                    <Col lg={4}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="inputLastName"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {tCommon('lastName')}
                       </Form.Label>
@@ -377,14 +390,14 @@ export default function settings(): JSX.Element {
                         onChange={(e) =>
                           handleFieldChange('lastName', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         data-testid="inputLastName"
                       />
                     </Col>
-                    <Col lg={4}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="gender"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {t('gender')}
                       </Form.Label>
@@ -395,7 +408,7 @@ export default function settings(): JSX.Element {
                         onChange={(e) =>
                           handleFieldChange('gender', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         data-testid="inputGender"
                       >
                         <option value="" disabled>
@@ -409,11 +422,11 @@ export default function settings(): JSX.Element {
                       </Form.Control>
                     </Col>
                   </Row>
-                  <Row className="mb-1">
-                    <Col lg={4}>
+                  <Row className={`${styles.row} ${styles['mb-1']}`}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="inputEmail"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {tCommon('emailAddress')}
                       </Form.Label>
@@ -421,14 +434,14 @@ export default function settings(): JSX.Element {
                         type="email"
                         id="inputEmail"
                         value={userDetails.email}
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         disabled
                       />
                     </Col>
-                    <Col lg={4}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="phoneNo"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {t('phoneNumber')}
                       </Form.Label>
@@ -440,14 +453,14 @@ export default function settings(): JSX.Element {
                         onChange={(e) =>
                           handleFieldChange('phoneNumber', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         data-testid="inputPhoneNumber"
                       />
                     </Col>
-                    <Col lg={4}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="birthDate"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {t('birthDate')}
                       </Form.Label>
@@ -458,16 +471,16 @@ export default function settings(): JSX.Element {
                         onChange={(e) =>
                           handleFieldChange('birthDate', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         max={new Date().toISOString().split('T')[0]}
                       />
                     </Col>
                   </Row>
-                  <Row className="mb-1">
-                    <Col lg={4}>
+                  <Row className={`${styles.row} ${styles['mb-1']}`}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="grade"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {t('grade')}
                       </Form.Label>
@@ -478,7 +491,7 @@ export default function settings(): JSX.Element {
                         onChange={(e) =>
                           handleFieldChange('grade', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         data-testid="inputGrade"
                       >
                         <option value="" disabled>
@@ -494,10 +507,10 @@ export default function settings(): JSX.Element {
                         ))}
                       </Form.Control>
                     </Col>
-                    <Col lg={4}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="empStatus"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {t('empStatus')}
                       </Form.Label>
@@ -508,7 +521,7 @@ export default function settings(): JSX.Element {
                         onChange={(e) =>
                           handleFieldChange('empStatus', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         data-testid="inputEmpStatus"
                       >
                         <option value="" disabled>
@@ -524,10 +537,10 @@ export default function settings(): JSX.Element {
                         ))}
                       </Form.Control>
                     </Col>
-                    <Col lg={4}>
+                    <Col className={style.rowChild} lg={4}>
                       <Form.Label
                         htmlFor="maritalStatus"
-                        className={`${styles.cardLabel}`}
+                        className={styles['cardLabel']}
                       >
                         {t('maritalStatus')}
                       </Form.Label>
@@ -538,7 +551,7 @@ export default function settings(): JSX.Element {
                         onChange={(e) =>
                           handleFieldChange('maritalStatus', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
+                        className={styles['cardControl']}
                         data-testid="inputMaritalStatus"
                       >
                         <option value="" disabled>
@@ -579,7 +592,7 @@ export default function settings(): JSX.Element {
                       <Button
                         onClick={handleUpdateUserDetails}
                         data-testid="updateUserBtn"
-                        className={`${styles.cardButton}`}
+                        className={styles['cardButton']}
                       >
                         {tCommon('saveChanges')}
                       </Button>
@@ -588,11 +601,17 @@ export default function settings(): JSX.Element {
                 </Card.Body>
               </Card>
             </Col>
-            <Col lg={5} className="d-none d-lg-block">
+            <Col
+              lg={5}
+              className={`${style['d-none']} ${style['d-lg-block']} ${style['rowChild']}`}
+            >
               <DeleteUser />
               <OtherSettings />
             </Col>
-            <Col lg={5} className="d-lg-none">
+            <Col
+              lg={5}
+              className={`${style['d-lg-none']} ${style['rowChild']}`}
+            >
               <DeleteUser />
               <OtherSettings />
             </Col>

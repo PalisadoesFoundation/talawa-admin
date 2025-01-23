@@ -202,38 +202,38 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       </Modal.Header>
       <Modal.Body>
         <div
-          className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
+          className={`${styles['btn-group']} ${styles['toggleGroup']} ${styles['mt-0']} ${styles['px-3']} ${styles['mb-4']} ${styles['w-100']}`}
           role="group"
         >
           <input
             type="radio"
-            className={`btn-check ${styles.toggleBtn}`}
+            className={`${styles['btn-check']} ${styles['toggleBtn']}`}
             name="btnradio"
             id="detailsRadio"
             checked={modalType === 'details'}
             onChange={() => setModalType('details')}
           />
           <label
-            className={`btn btn-outline-primary ${styles.toggleBtn}`}
+            className={`${styles['btn']} ${styles['btn-outline-primary']} ${styles['toggleBtn']}`}
             htmlFor="detailsRadio"
           >
-            <TbListDetails className="me-2" />
+            <TbListDetails className={styles['me-2']} />
             {t('details')}
           </label>
 
           <input
             type="radio"
-            className={`btn-check ${styles.toggleBtn}`}
+            className={`${styles['btn-check']} ${styles['toggleBtn']}`}
             name="btnradio"
             id="groupsRadio"
             onChange={() => setModalType('requests')}
             checked={modalType === 'requests'}
           />
           <label
-            className={`btn btn-outline-primary ${styles.toggleBtn}`}
+            className={`${styles['btn']} ${styles['btn-outline-primary']} ${styles['toggleBtn']}`}
             htmlFor="groupsRadio"
           >
-            <PiUserListBold className="me-2" size={21} />
+            <PiUserListBold className={styles['me-2']} size={21} />
             {t('requests')}
           </label>
         </div>
@@ -242,16 +242,16 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           <Form
             data-testid="pledgeForm"
             onSubmitCapture={updateGroupHandler}
-            className="p-3"
+            className={styles['p-3']}
           >
             {/* Input field to enter the group name */}
-            <Form.Group className="mb-3">
+            <Form.Group className={styles['mb-3']}>
               <FormControl fullWidth>
                 <TextField
                   required
                   label={tCommon('name')}
                   variant="outlined"
-                  className={styles.noOutline}
+                  className={styles['noOutline']}
                   value={name}
                   data-testid="nameInput"
                   onChange={(e) =>
@@ -261,7 +261,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
               </FormControl>
             </Form.Group>
             {/* Input field to enter the group description */}
-            <Form.Group className="mb-3">
+            <Form.Group className={styles['mb-3']}>
               <FormControl fullWidth>
                 <TextField
                   multiline
@@ -277,7 +277,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
               </FormControl>
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            <Form.Group className={styles['mb-3']}>
               <FormControl fullWidth>
                 <TextField
                   label={t('volunteersRequired')}
@@ -311,7 +311,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             </Button>
           </Form>
         ) : (
-          <div className="px-3">
+          <div className={styles['px-3']}>
             {requests.length === 0 ? (
               <Stack height="100%" alignItems="center" justifyContent="center">
                 {t('noRequests')}
@@ -325,8 +325,10 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                 <Table aria-label="group table">
                   <TableHead>
                     <TableRow>
-                      <TableCell className="fw-bold">Name</TableCell>
-                      <TableCell className="fw-bold">Actions</TableCell>
+                      <TableCell className={styles['fw-bold']}>Name</TableCell>
+                      <TableCell className={styles['fw-bold']}>
+                        Actions
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -343,7 +345,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                           <TableCell
                             component="th"
                             scope="row"
-                            className="d-flex gap-1 align-items-center"
+                            className={`${styles['d-flex']} ${styles['gap-1']} ${styles['align-items-center']}`}
                             data-testid="userName"
                           >
                             {image ? (
@@ -367,12 +369,14 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                             {firstName + ' ' + lastName}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            <div className="d-flex gap-2">
+                            <div
+                              className={`${styles['d-flex']} ${styles['gap-2']}`}
+                            >
                               <Button
                                 variant="success"
                                 size="sm"
                                 style={{ minWidth: '32px' }}
-                                className="me-2 rounded"
+                                className={`${styles['me-2']} ${styles['rounded']}`}
                                 data-testid={`acceptBtn`}
                                 onClick={() =>
                                   updateMembershipStatus(
@@ -386,7 +390,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                               <Button
                                 size="sm"
                                 variant="danger"
-                                className="rounded"
+                                className={styles.rounded}
                                 data-testid={`rejectBtn`}
                                 onClick={() =>
                                   updateMembershipStatus(

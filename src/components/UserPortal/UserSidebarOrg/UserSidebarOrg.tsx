@@ -12,6 +12,7 @@ import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './UserSidebarOrg.module.css';
+import style from '../../../style/app.module.css';
 import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceUserSidebarOrgProps {
@@ -110,17 +111,17 @@ const UserSidebarOrg = ({
           {loading ? (
             <>
               <button
-                className={`${styles.profileContainer} shimmer`}
+                className={`${styles.profileContainer} ${style['shimmer']}`}
                 data-testid="orgBtn"
               />
             </>
           ) : organization == undefined ? (
             <>
               <button
-                className={`${styles.profileContainer} bg-danger text-start text-white`}
+                className={`${styles.profileContainer} ${style['bg-danger']} ${style['text-start']} ${style['text-white']}`}
                 disabled
               >
-                <div className="px-3">
+                <div className={style['px-3']}>
                   <WarningAmberOutlined />
                 </div>
                 Error Occured while loading the Organization
@@ -151,7 +152,7 @@ const UserSidebarOrg = ({
 
         {/* Options List */}
         <div className={styles.optionList}>
-          <h5 className={`${styles.titleHeader} text-secondary`}>
+          <h5 className={`${styles.titleHeader} ${style['text-secondary']}`}>
             {tCommon('menu')}
           </h5>
           {targets.map(({ name, url }, index) => {
@@ -162,7 +163,9 @@ const UserSidebarOrg = ({
                     key={name}
                     variant={isActive === true ? 'success' : ''}
                     className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
+                      isActive === true
+                        ? style['text-white']
+                        : style['text-secondary']
                     }`}
                   >
                     <div className={styles.iconWrapper}>

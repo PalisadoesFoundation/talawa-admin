@@ -8,6 +8,7 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './EventDashboardScreen.module.css';
+import style from '../../style/app.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
@@ -37,10 +38,12 @@ const EventDashboardScreen = (): JSX.Element => {
   if (adminFor === null) {
     return (
       <>
-        <div className={`d-flex flex-row ${styles.containerHeight}`}>
+        <div
+          className={`${style['d-flex']} ${style['flex-row']} ${styles.containerHeight}`}
+        >
           <div className={`${styles.colorLight} ${styles.mainContainer}`}>
             <div
-              className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
+              className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-between']} ${style['flex-wrap']} ${styles.gap}`}
             >
               <div style={{ flex: 1 }}>
                 <h1>{t('title')}</h1>
@@ -124,7 +127,9 @@ const EventDashboardScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-between align-items-center">
+        <div
+          className={`${style['d-flex']} ${style['justify-content-between']} ${style['align-items-center']}`}
+        >
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
           </div>

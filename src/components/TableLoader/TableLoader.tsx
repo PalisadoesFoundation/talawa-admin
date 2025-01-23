@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import styles from './TableLoader.module.css';
+import style from '../../style/app.module.css';
 import { Table } from 'react-bootstrap';
 
 export interface InterfaceTableLoader {
@@ -33,7 +34,7 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
 
   return (
     <>
-      <Table className="mb-4" responsive>
+      <Table className={`${style['mb-4']}`} responsive>
         <thead>
           <tr>
             {headerTitles
@@ -52,7 +53,7 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
             return (
               <tr
                 key={rowIndex}
-                className="mb-4"
+                className={`${style['mb-4']}`}
                 data-testid={`row-${rowIndex}-tableLoading`}
               >
                 {[...Array(headerTitles ? headerTitles?.length : noOfCols)].map(
@@ -62,7 +63,9 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
                         key={colIndex}
                         data-testid={`row-${rowIndex}-col-${colIndex}-tableLoading`}
                       >
-                        <div className={`${styles.loadingItem} shimmer`} />
+                        <div
+                          className={`${styles.loadingItem} ${style['shimmer']}`}
+                        />
                       </td>
                     );
                   },

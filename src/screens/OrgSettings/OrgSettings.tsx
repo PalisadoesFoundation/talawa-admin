@@ -45,15 +45,15 @@ function OrgSettings(): JSX.Element {
   }
 
   return (
-    <div className="d-flex flex-column">
-      <Row className="mx-3 mt-3">
-        <Col>
+    <div className={`${styles['d-flex']} ${styles['flex-column']}`}>
+      <Row className={`${styles['mx-3']} ${styles['mt-3']} ${styles['row']}`}>
+        <Col className={styles['rowChild']}>
           <div className={styles.settingsTabs}>
             {/* Render buttons for each settings category */}
             {settingtabs.map((setting, index) => (
               <Button
                 key={index}
-                className={`me-3 border rounded-3 ${styles.headerBtn}`}
+                className={`${styles['me-3']} ${styles['border']} ${styles['rounded-3']} ${styles.headerBtn}`}
                 variant={tab === setting ? `success` : `none`}
                 onClick={() => setTab(setting)}
                 data-testid={`${setting}Settings`}
@@ -64,7 +64,7 @@ function OrgSettings(): JSX.Element {
           </div>
         </Col>
 
-        <Row className="mt-3">
+        <Row className={`${styles['mt-3']} ${styles['row']}`}>
           <hr />
         </Row>
       </Row>

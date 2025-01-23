@@ -183,14 +183,16 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             onSubmitCapture={
               mode === 'create' ? createFundHandler : updateFundHandler
             }
-            className="p-3"
+            className={styles['p-3']}
           >
-            <Form.Group className="d-flex mb-3 w-100">
+            <Form.Group
+              className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+            >
               <FormControl fullWidth>
                 <TextField
                   label={t('fundName')}
                   variant="outlined"
-                  className={`${styles.noOutline} w-100`}
+                  className={`${styles.noOutline} ${styles['w-100']}`}
                   value={formState.fundName}
                   onChange={(e) =>
                     setFormState({
@@ -201,12 +203,14 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 />
               </FormControl>
             </Form.Group>
-            <Form.Group className="d-flex mb-3 w-100">
+            <Form.Group
+              className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+            >
               <FormControl fullWidth>
                 <TextField
                   label={t('fundId')}
                   variant="outlined"
-                  className={`${styles.noOutline} w-100`}
+                  className={`${styles.noOutline} ${styles['w-100']}`}
                   value={formState.fundRef}
                   onChange={(e) =>
                     setFormState({
@@ -219,15 +223,19 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             </Form.Group>
 
             <div
-              className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit' ? 'justify-content-between' : 'justify-content-start gap-3'} `}
+              className={`${styles['d-flex']} ${styles['mt-2']} ${styles['mb-3']} ${styles['flex-wrap']} ${
+                mode === 'edit'
+                  ? styles['justify-content-between']
+                  : `${styles['justify-content-start']} ${styles['gap-3']}`
+              }`}
             >
-              <Form.Group className="d-flex">
+              <Form.Group className={styles['d-flex']}>
                 <label>{t('taxDeductible')} </label>
                 <Form.Switch
                   type="checkbox"
                   checked={formState.taxDeductible}
                   data-testid="setTaxDeductibleSwitch"
-                  className={`ms-2 ${styles.switch}`}
+                  className={`${styles['ms-2']} ${styles.switch}`}
                   onChange={() =>
                     setFormState({
                       ...formState,
@@ -236,11 +244,11 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   }
                 />
               </Form.Group>
-              <Form.Group className="d-flex">
+              <Form.Group className={styles['d-flex']}>
                 <label>{t('default')} </label>
                 <Form.Switch
                   type="checkbox"
-                  className={`ms-2 ${styles.switch}`}
+                  className={`${styles['ms-2']} ${styles.switch}`}
                   data-testid="setDefaultSwitch"
                   checked={formState.isDefault}
                   onChange={() =>
@@ -252,13 +260,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 />
               </Form.Group>
               {mode === 'edit' && (
-                <Form.Group className="d-flex">
+                <Form.Group className={styles['d-flex']}>
                   <label>{t('archived')} </label>
                   <Form.Switch
                     type="checkbox"
                     checked={formState.isArchived}
                     data-testid="archivedSwitch"
-                    className={`ms-2 ${styles.switch}`}
+                    className={`${styles['ms-2']} ${styles.switch}`}
                     onChange={() =>
                       setFormState({
                         ...formState,

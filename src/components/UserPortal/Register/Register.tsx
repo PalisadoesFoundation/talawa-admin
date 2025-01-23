@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import styles from './Register.module.css';
+import style from '../../../style/app.module.css';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
@@ -141,10 +142,12 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
 
   return (
     <>
-      <h3 className="mt-3 font-weight-bold">{tCommon('register')}</h3>
-      <div className="my-3">
+      <h3 className={`${style['mt-3']} ${style['font-weight-bold']}`}>
+        {tCommon('register')}
+      </h3>
+      <div className={style['my-3']}>
         <h6>{tCommon('firstName')}</h6>
-        <InputGroup className="mb-3">
+        <InputGroup className={style['mb-3']}>
           <Form.Control
             placeholder={t('enterFirstName')}
             className={styles.borderNone}
@@ -159,7 +162,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           </InputGroup.Text>
         </InputGroup>
         <h6>{tCommon('lastName')}</h6>
-        <InputGroup className="mb-3">
+        <InputGroup className={style['mb-3']}>
           <Form.Control
             placeholder={t('enterLastName')}
             className={styles.borderNone}
@@ -174,7 +177,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           </InputGroup.Text>
         </InputGroup>
         <h6>{tCommon('emailAddress')}</h6>
-        <InputGroup className="mb-3">
+        <InputGroup className={style['mb-3']}>
           <Form.Control
             placeholder={tCommon('enterEmail')}
             type="email"
@@ -190,7 +193,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           </InputGroup.Text>
         </InputGroup>
         <h6>{tCommon('password')}</h6>
-        <InputGroup className="mb-3">
+        <InputGroup className={style['mb-3']}>
           <Form.Control
             placeholder={tCommon('enterPassword')}
             type="password"
@@ -206,7 +209,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           </InputGroup.Text>
         </InputGroup>
         <h6>{tCommon('confirmPassword')}</h6>
-        <InputGroup className="mb-3">
+        <InputGroup className={style['mb-3']}>
           <Form.Control
             placeholder={t('enterConfirmPassword')}
             type="password"
@@ -231,7 +234,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         {tCommon('register')}
       </Button>
 
-      <div className="mt-4 text-center">
+      <div className={`${style['mt-4']} ${style['text-center']}`}>
         {t('alreadyhaveAnAccount')}{' '}
         <span
           onClick={handleModeChangeToLogin}

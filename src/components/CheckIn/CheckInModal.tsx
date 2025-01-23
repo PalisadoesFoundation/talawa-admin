@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import { EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
 import styles from 'components/CheckIn/CheckInModal.module.css';
+import style from '../../style/app.module.css';
 import { TableRow } from './TableRow';
 import type {
   InterfaceAttendeeCheckIn,
@@ -105,13 +106,16 @@ export const CheckInModal = ({
         centered
         size="lg"
       >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" data-testid="modal-title">
+        <Modal.Header closeButton className={`${style['bg-primary']}`}>
+          <Modal.Title
+            className={`${style['text-white']}`}
+            data-testid="modal-title"
+          >
             Event Check In Management
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="p-2">
+          <div className={`${style['p-2']}`}>
             <TextField
               id="searchAttendees"
               label="Search Attendees"

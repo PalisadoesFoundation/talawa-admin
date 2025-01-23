@@ -37,10 +37,10 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
   return (
     <>
       <div
-        className={`${styles.cardItem} border-bottom py-3 pe-5 ps-4`}
+        className={`${styles.cardItem} ${styles['border-bottom']} ${styles['py-3']} ${styles['pe-5']} ${styles['ps-4']}`}
         data-testid="cardItem"
       >
-        <div className={`${styles.iconWrapper} me-3`}>
+        <div className={`${styles.iconWrapper} ${styles['me-3']}`}>
           <div className={styles.themeOverlay} />
           {type == 'Event' ? (
             <EventsIcon fill="var(--bs-primary)" width={20} height={20} />
@@ -75,14 +75,17 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
 
           {title && (
             <span
-              className={`${styles.title} fst-normal fw-semibold --bs-black`}
+              className={`${styles.title} ${styles['fst-normal']} ${styles['fw-semibold']}`}
+              style={{ color: 'var(--bs-black)' }}
             >
               {title}
             </span>
           )}
 
           {location && (
-            <span className={`${styles.location} fst-normal fw-semibold`}>
+            <span
+              className={`${styles.location} ${styles['fst-normal']} ${styles['fw-semibold']}`}
+            >
               <MarkerIcon
                 title="Event Location"
                 stroke="var(--bs-primary)"
@@ -93,7 +96,9 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
             </span>
           )}
           {type == 'Event' && startdate && (
-            <span className={`${styles.time} fst-normal fw-semibold`}>
+            <span
+              className={`${styles.time} ${styles['fst-normal']} ${styles['fw-semibold']}`}
+            >
               {type === 'Event' && (
                 <DateIcon
                   title="Event Date"

@@ -66,7 +66,7 @@ const AgendaCategoryUpdateModal: React.FC<
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={updateAgendaCategoryHandler}>
-          <Form.Group className="mb-3" controlId="name">
+          <Form.Group className={`${styles['mb-3']}`} controlId="name">
             <Form.Label>{t('name')}</Form.Label>
             <Form.Control
               type="text"
@@ -77,7 +77,7 @@ const AgendaCategoryUpdateModal: React.FC<
               }
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="description">
+          <Form.Group className={`${styles['mb-3']}`} controlId="description">
             <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               type="text"

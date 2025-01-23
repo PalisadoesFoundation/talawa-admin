@@ -37,7 +37,7 @@ export const EventRegistrantsWrapper = ({
       {/* Button to open the event registrants modal */}
       <Button
         data-testid="filter-button"
-        className={`border-1 mx-4 ${style.createButton}`}
+        className={`${style['border-1']} ${style['mx-4']} ${style.createButton}`}
         aria-label="showAttendees"
         onClick={(): void => {
           setShowModal(true); // Show the modal when button is clicked

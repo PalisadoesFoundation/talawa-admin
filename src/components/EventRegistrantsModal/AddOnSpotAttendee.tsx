@@ -11,6 +11,7 @@ import type {
 } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import styles from '../../style/app.module.css';
 /**
  * Modal component for adding on-spot attendees to an event
  * @param show - Boolean to control modal visibility
@@ -104,13 +105,18 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
-        <Modal.Header closeButton className="bg-success text-white">
+        <Modal.Header
+          closeButton
+          className={`${styles['bg-success']} ${styles['text-white']}`}
+        >
           <Modal.Title>{t('title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
-            <div className="d-flex justify-content-between">
-              <Form.Group className="mb-1">
+            <div
+              className={`${styles['d-flex']} ${styles['justify-content-between']}`}
+            >
+              <Form.Group className={styles['mb-1']}>
                 <Form.Label htmlFor="firstName">
                   {tCommon('firstName')}
                 </Form.Label>
@@ -123,7 +129,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                   placeholder="John"
                 />
               </Form.Group>
-              <Form.Group className="mb-1">
+              <Form.Group className={styles['mb-1']}>
                 <Form.Label htmlFor="lastName">
                   {tCommon('lastName')}
                 </Form.Label>
@@ -137,7 +143,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 />
               </Form.Group>
             </div>
-            <Form.Group className="mb-3">
+            <Form.Group className={styles['mb-3']}>
               <Form.Label htmlFor="phoneNo">{t('phoneNumber')}</Form.Label>
               <Form.Control
                 id="phoneNo"
@@ -149,7 +155,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            <Form.Group className={styles['mb-3']}>
               <Form.Label htmlFor="email">{tCommon('email')}</Form.Label>
               <Form.Control
                 id="email"
@@ -161,7 +167,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            <Form.Group className={styles['mb-3']}>
               <Form.Label htmlFor="gender">{tCommon('gender')}</Form.Label>
               <Form.Control
                 id="gender"
@@ -180,7 +186,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
             <Button
               variant="success"
               type="submit"
-              className="w-100"
+              className={styles['w-100']}
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -191,7 +197,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                     size="sm"
                     role="status"
                     aria-hidden="true"
-                    className="me-2"
+                    className={styles['me-2']}
                   />
                   {t('addingAttendee')}
                 </>

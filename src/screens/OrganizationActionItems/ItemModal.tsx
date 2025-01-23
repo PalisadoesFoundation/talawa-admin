@@ -390,11 +390,13 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           onSubmitCapture={
             editMode ? updateActionItemHandler : createActionItemHandler
           }
-          className="p-2"
+          className={`${styles['gap-2']}`}
         >
-          <Form.Group className="d-flex gap-3 mb-3">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mb-3']}`}
+          >
             <Autocomplete
-              className={`${styles.noOutline} w-100`}
+              className={`${styles['noOutline']} ${styles['w-100']}`}
               data-testid="categorySelect"
               options={actionItemCategories}
               value={actionItemCategory}
@@ -444,15 +446,17 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
             <>
               {eventId && (
                 <>
-                  <Form.Label className="my-0 py-0">{t('assignTo')}</Form.Label>
+                  <Form.Label className={`${styles['my-0']} ${styles['py-0']}`}>
+                    {t('assignTo')}
+                  </Form.Label>
                   <div
-                    className={`btn-group ${styles.toggleGroup} mt-0`}
+                    className={`${styles['btn-group']} ${styles['toggleGroup']} ${styles['mt-0']}`}
                     role="group"
                     aria-label="Basic radio toggle button group"
                   >
                     <input
                       type="radio"
-                      className={`btn-check ${styles.toggleBtn}`}
+                      className={`${styles['btn-check']} ${styles['toggleBtn']}`}
                       name="btnradio"
                       id="individualRadio"
                       checked={assigneeType === 'EventVolunteer'}
@@ -461,16 +465,16 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                       }
                     />
                     <label
-                      className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                      className={`${styles['btn']} ${styles['btn-outline-primary']} ${styles['toggleBtn']}`}
                       htmlFor="individualRadio"
                     >
-                      <HiUser className="me-1" />
+                      <HiUser className={`${styles['me-1']}`} />
                       {t('individuals')}
                     </label>
 
                     <input
                       type="radio"
-                      className={`btn-check ${styles.toggleBtn}`}
+                      className={`${styles['btn-check']} ${styles['toggleBtn']}`}
                       name="btnradio"
                       id="groupsRadio"
                       onChange={() =>
@@ -479,10 +483,10 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                       checked={assigneeType === 'EventVolunteerGroup'}
                     />
                     <label
-                      className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                      className={`${styles['btn']} ${styles['btn-outline-primary']} ${styles['toggleBtn']}`}
                       htmlFor="groupsRadio"
                     >
-                      <HiUserGroup className="me-1" />
+                      <HiUserGroup className={`${styles['me-1']}`} />
                       {t('groups')}
                     </label>
                   </div>
@@ -490,9 +494,9 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
               )}
 
               {assigneeType === 'EventVolunteer' ? (
-                <Form.Group className="mb-3 w-100">
+                <Form.Group className={`${styles['mb-3']} ${styles['w-100']}`}>
                   <Autocomplete
-                    className={`${styles.noOutline} w-100`}
+                    className={`${styles['noOutline']} ${styles['w-100']}`}
                     data-testid="volunteerSelect"
                     options={volunteers}
                     value={assignee}
@@ -515,9 +519,9 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   />
                 </Form.Group>
               ) : assigneeType === 'EventVolunteerGroup' ? (
-                <Form.Group className="mb-3 w-100">
+                <Form.Group className={`${styles['mb-3']} ${styles['w-100']}`}>
                   <Autocomplete
-                    className={`${styles.noOutline} w-100`}
+                    className={`${styles['noOutline']} ${styles['w-100']}`}
                     data-testid="volunteerGroupSelect"
                     options={groups}
                     value={assigneeGroup}
@@ -542,9 +546,9 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   />
                 </Form.Group>
               ) : (
-                <Form.Group className="mb-3 w-100">
+                <Form.Group className={`${styles['mb-3']} ${styles['w-100']}`}>
                   <Autocomplete
-                    className={`${styles.noOutline} w-100`}
+                    className={`${styles['noOutline']} ${styles['w-100']}`}
                     data-testid="memberSelect"
                     options={members}
                     value={assigneeUser}
@@ -566,7 +570,9 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                 </Form.Group>
               )}
 
-              <Form.Group className="d-flex gap-3 mx-auto  mb-3">
+              <Form.Group
+                className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mx-auto']} ${styles['mb-3']}`}
+              >
                 {/* Date Calendar Component to select due date of an action item */}
                 <DatePicker
                   format="DD/MM/YYYY"
@@ -585,7 +591,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   <TextField
                     label={t('allottedHours')}
                     variant="outlined"
-                    className={styles.noOutline}
+                    className={styles['noOutline']}
                     value={allottedHours ?? ''}
                     onChange={(e) =>
                       handleFormChange(
@@ -600,7 +606,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
               </Form.Group>
 
               {/* Input text Component to add notes for action item */}
-              <FormControl fullWidth className="mb-2">
+              <FormControl fullWidth className={styles['mb-2']}>
                 <TextField
                   label={t('preCompletionNotes')}
                   variant="outlined"
@@ -615,7 +621,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           )}
 
           {isCompleted && (
-            <FormControl fullWidth className="mb-2">
+            <FormControl fullWidth className={styles['mb-2']}>
               <TextField
                 label={t('postCompletionNotes')}
                 className={styles.noOutline}

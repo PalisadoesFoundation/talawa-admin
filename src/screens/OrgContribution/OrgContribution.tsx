@@ -24,8 +24,8 @@ function OrgContribution(): JSX.Element {
 
   return (
     <>
-      <Row>
-        <Col sm={3}>
+      <Row className={`${styles.row} `}>
+        <Col className={`${styles.rowChild}`} sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               {/* Input for filtering by organization name */}
@@ -60,9 +60,9 @@ function OrgContribution(): JSX.Element {
             </div>
           </div>
         </Col>
-        <Col sm={8}>
+        <Col className={`${styles.rowChild}`} sm={8}>
           <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
+            <Row className={`${styles.justifysp} ${styles.rowChild}`}>
               <p className={styles.logintitle}>{t('contribution')}</p>
             </Row>
             {/* Section displaying a list of contribution cards */}

@@ -84,11 +84,11 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       centered
     >
       <Modal.Header
-        className="bg-primary"
+        className={styles['bg-primary']}
         closeButton
         data-testid="modalOrganizationHeader"
       >
-        <Modal.Title className="text-white">
+        <Modal.Title className={styles['text-white']}>
           {t('createOrganization')}
         </Modal.Title>
       </Modal.Header>
@@ -98,7 +98,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Form.Control
             type="name"
             id="orgname"
-            className="mb-3"
+            className={styles['mb-3']}
             placeholder={t('enterName')}
             data-testid="modalOrganizationName"
             autoComplete="off"
@@ -118,7 +118,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Form.Control
             type="descrip"
             id="descrip"
-            className="mb-3"
+            className={styles['mb-3']}
             placeholder={tCommon('description')}
             autoComplete="off"
             required
@@ -134,8 +134,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             }}
           />
           <Form.Label>{tCommon('address')}</Form.Label>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-3">
+          <Row className={`${styles.row} ${styles['mb-1']}`}>
+            <Col sm={6} className={`${styles['mb-3']} ${styles.rowChild}`}>
               <Form.Control
                 required
                 as="select"
@@ -159,7 +159,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 ))}
               </Form.Control>
             </Col>
-            <Col sm={6} className="mb-3">
+            <Col sm={6} className={`${styles['mb-3']} ${styles.rowChild}`}>
               <Form.Control
                 placeholder={t('city')}
                 autoComplete="off"
@@ -169,8 +169,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               />
             </Col>
           </Row>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-3">
+          <Row className={`${styles.row} ${styles['mb-1']}`}>
+            <Col sm={6} className={`${styles['mb-3']} ${styles.rowChild}`}>
               <Form.Control
                 placeholder={t('state')}
                 autoComplete="off"
@@ -178,7 +178,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e) => handleInputChange('state', e.target.value)}
               />
             </Col>
-            <Col sm={6} className="mb-3">
+            <Col sm={6} className={`${styles['mb-3']} ${styles.rowChild}`}>
               <Form.Control
                 placeholder={t('dependentLocality')}
                 autoComplete="off"
@@ -189,8 +189,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               />
             </Col>
           </Row>
-          <Row className="mb-3">
-            <Col sm={6} className="mb-1">
+          <Row className={`${styles.row} ${styles['mb-3']}`}>
+            <Col sm={6} className={`${styles['mb-1']} ${styles.rowChild}`}>
               <Form.Control
                 placeholder={t('line1')}
                 autoComplete="off"
@@ -199,7 +199,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e) => handleInputChange('line1', e.target.value)}
               />
             </Col>
-            <Col sm={6} className="mb-1">
+            <Col sm={6} className={`${styles['mb-1']} ${styles.rowChild}`}>
               <Form.Control
                 placeholder={t('line2')}
                 autoComplete="off"
@@ -208,8 +208,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               />
             </Col>
           </Row>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-1">
+          <Row className={`${styles.row} ${styles['mb-1']}`}>
+            <Col sm={6} className={`${styles['mb-1']} ${styles.rowChild}`}>
               <Form.Control
                 placeholder={t('postalCode')}
                 autoComplete="off"
@@ -219,7 +219,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 }
               />
             </Col>
-            <Col sm={6} className="mb-1">
+            <Col sm={6} className={`${styles['mb-1']} ${styles.rowChild}`}>
               <Form.Control
                 placeholder={t('sortingCode')}
                 autoComplete="off"
@@ -230,8 +230,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               />
             </Col>
           </Row>
-          <Row className="mb-3">
-            <Col>
+          <Row className={`${styles.row} ${styles['mb-3']}`}>
+            <Col className={` ${styles.rowChild}`}>
               <Form.Label htmlFor="userRegistrationRequired">
                 {t('userRegistrationRequired')}
               </Form.Label>
@@ -249,7 +249,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 }
               />
             </Col>
-            <Col>
+            <Col className={` ${styles.rowChild}`}>
               <Form.Label htmlFor="visibleInSearch">
                 {t('visibleInSearch')}
               </Form.Label>
@@ -271,7 +271,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Form.Control
             accept="image/*"
             id="orgphoto"
-            className="mb-3"
+            className={styles['mb-3']}
             name="photo"
             type="file"
             multiple={false}
@@ -287,7 +287,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             }}
             data-testid="organisationImage"
           />
-          <Col className={styles.sampleOrgSection}>
+          <Col className={`${styles['sampleOrgSection']} ${styles.rowChild}`}>
             <Button
               className={styles.orgCreationBtn}
               type="submit"
@@ -297,9 +297,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               {t('createOrganization')}
             </Button>
 
-            <div className="position-relative">
+            <div className={styles['position-relative']}>
               <hr />
-              <span className={styles.orText}>{tCommon('OR')}</span>
+              <span className={styles['orText']}>{tCommon('OR')}</span>
             </div>
             {((adminFor && adminFor.length > 0) || superAdmin) && (
               <div className={styles.sampleOrgSection}>

@@ -14,6 +14,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 import styles from './Donate.module.css';
+import style from '../../../style/app.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
@@ -168,14 +169,16 @@ export default function donate(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row mt-4`}>
-        <div className={`${styles.mainContainer} me-4`}>
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
+      <div
+        className={`${style['d-flex']} ${style['flex-row']} ${style['mt-4']}`}
+      >
+        <div className={`${styles['mainContainer']} ${style['me-4']}`}>
+          <div className={styles['inputContainer']}>
+            <div className={styles['input']}>
               <Form.Control
                 type="name"
                 id="searchUsers"
-                className="bg-white"
+                className={style['bg-white']}
                 placeholder={t('searchDonations')}
                 data-testid="searchByName"
                 autoComplete="off"
@@ -184,7 +187,7 @@ export default function donate(): JSX.Element {
               />
               <Button
                 tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                className={`${style['position-absolute']} ${style['z-10']} ${style['bottom-0']} ${style['end-0']} ${style['h-100']} ${style['d-flex']} ${style['justify-content-center']} ${style['align-items-center']}`}
                 data-testid="searchButton"
                 // onClick={handleSearchByBtnClick}
               >
@@ -235,7 +238,7 @@ export default function donate(): JSX.Element {
                 />
               </InputGroup>
             </div>
-            <Form.Text className="text-muted">
+            <Form.Text className={style['text-muted']}>
               {t('donationAmountDescription')}
             </Form.Text>
             <div className={styles.donateActions}>
@@ -252,12 +255,12 @@ export default function donate(): JSX.Element {
           <div className={styles.donationsContainer}>
             <h5>{t('yourPreviousDonations')}</h5>
             <div
-              className={`d-flex flex-column justify-content-between ${styles.content}`}
+              className={`${style['d-flex']} ${style['flex-column']} ${style['justify-content-between']} ${styles['content']}`}
             >
               <div className={` ${styles.donationCardsContainer}`}>
                 {loading ? (
                   <div
-                    className={`d-flex flex-row justify-content-center`}
+                    className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-center']}`}
                     data-testid="loading-state"
                   >
                     <HourglassBottomIcon /> <span>Loading...</span>

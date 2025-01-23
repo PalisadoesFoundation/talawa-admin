@@ -264,11 +264,14 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   return (
-    <Col key={props.id} className="d-flex justify-content-center my-2">
-      <Card className={`${styles.cardStyles}`}>
-        <Card.Header className={`${styles.cardHeaderPostCard}`}>
-          <div className={`${styles.creator}`}>
-            <AccountCircleIcon className="my-2" />
+    <Col
+      key={props.id}
+      className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['my-2']} ${styles.rowChild}`}
+    >
+      <Card className={styles.cardStyles}>
+        <Card.Header className={styles.cardHeaderPostCard}>
+          <div className={styles.creator}>
+            <AccountCircleIcon className={styles['my-2']} />
             <p>{postCreator}</p>
           </div>
           <Dropdown style={{ cursor: 'pointer' }}>
@@ -309,14 +312,14 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
               : props.image
           }
         />
-        <Card.Body className="pb-0">
-          <Card.Title className={`${styles.cardTitlePostCard}`}>
+        <Card.Body className={styles['pb-0']}>
+          <Card.Title className={styles.cardTitlePostCard}>
             {props.title}
           </Card.Title>
           <Card.Subtitle style={{ color: '#808080' }}>
             {t('postedOn', { date: props.postedAt })}
           </Card.Subtitle>
-          <Card.Text className={`${styles.cardText} mt-4`}>
+          <Card.Text className={`${styles.cardText} ${styles['mt-4']}`}>
             {props.text}
           </Card.Text>
         </Card.Body>
@@ -325,7 +328,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             <Button
               size="sm"
               variant="success"
-              className="px-4"
+              className={styles['px-4']}
               data-testid={'viewPostBtn'}
               onClick={toggleViewPost}
             >
@@ -335,8 +338,13 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         </Card.Footer>
       </Card>
       <Modal show={viewPost} onHide={toggleViewPost} size="xl" centered>
-        <Modal.Body className="d-flex w-100 p-0" style={{ minHeight: '80vh' }}>
-          <div className="w-50 d-flex  align-items-center justify-content-center">
+        <Modal.Body
+          className={`${styles['d-flex']} ${styles['w-100']} ${styles['p-0']}`}
+          style={{ minHeight: '80vh' }}
+        >
+          <div
+            className={`${styles['w-50']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']}`}
+          >
             <img
               src={
                 props.image === '' || props.image === null
@@ -344,20 +352,24 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                   : props.image
               }
               alt="postImg"
-              className="w-100"
+              className={styles['w-100']}
             />
           </div>
-          <div className="w-50 p-2 position-relative">
-            <div className="d-flex justify-content-between align-items-center">
-              <div className={`${styles.cardHeaderPostCard} p-0`}>
-                <AccountCircleIcon className="my-2" />
+          <div
+            className={`${styles['w-50']} ${styles['p-2']} ${styles['position-relative']}`}
+          >
+            <div
+              className={`${styles['d-flex']} ${styles['justify-content-between']} ${styles['align-items-center']}`}
+            >
+              <div className={`${styles.cardHeaderPostCard} ${styles['p-0']}`}>
+                <AccountCircleIcon className={styles['my-2']} />
                 <p>{postCreator}</p>
               </div>
               <div style={{ cursor: 'pointer' }}>
                 <MoreVertIcon />
               </div>
             </div>
-            <div className="mt-2">
+            <div className={styles['mt-2']}>
               <p style={{ fontSize: '1.5rem', fontWeight: 600 }}>
                 {props.title}
               </p>
@@ -388,8 +400,10 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
               )}
             </div>
             <div className={styles.modalFooter}>
-              <div className={`${styles.modalActions}`}>
-                <div className="d-flex align-items-center gap-2">
+              <div className={styles.modalActions}>
+                <div
+                  className={`${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-2']}`}
+                >
                   <Button
                     className={`${styles.cardActionBtn}`}
                     onClick={handleToggleLike}
@@ -406,15 +420,17 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                   {likes}
                   {` ${t('likes')}`}
                 </div>
-                <div className="d-flex align-items-center gap-2">
-                  <Button className={`${styles.cardActionBtn}`}>
+                <div
+                  className={`${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-2']}`}
+                >
+                  <Button className={styles.cardActionBtn}>
                     <CommentIcon fontSize="small" />
                   </Button>
                   {numComments}
                   {` ${t('comments')}`}
                 </div>
               </div>
-              <InputGroup className="mt-2">
+              <InputGroup className={styles['mt-2']}>
                 <Form.Control
                   placeholder={'Enter comment'}
                   type="text"
@@ -440,8 +456,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         </Modal.Body>
       </Modal>
       <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
-        <Modal.Header closeButton className="py-2 ">
-          <p className="fs-3" data-testid={'editPostModalTitle'}>
+        <Modal.Header closeButton className={styles['py-2']}>
+          <p className={`${styles['fs-3']}`} data-testid={'editPostModalTitle'}>
             {t('editPost')}
           </p>
         </Modal.Header>
@@ -462,7 +478,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           <Button
             size="sm"
             variant="success"
-            className="px-4"
+            className={`${styles['px-4']}`}
             data-testid={'editPostBtn'}
             onClick={handleEditPost}
           >

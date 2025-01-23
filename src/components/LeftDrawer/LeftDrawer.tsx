@@ -60,7 +60,7 @@ const leftDrawer = ({
       >
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
-        <h5 className={`${styles.titleHeader} text-secondary`}>
+        <h5 className={`${styles.titleHeader} ${styles['text-secondary']}`}>
           {tCommon('menu')}
         </h5>
         <div className={styles.optionList}>
@@ -69,7 +69,9 @@ const leftDrawer = ({
               <Button
                 variant={isActive === true ? 'success' : ''}
                 className={`${
-                  isActive === true ? 'text-black' : 'text-secondary'
+                  isActive === true
+                    ? styles['text-black']
+                    : styles['text-secondary']
                 }`}
                 style={{
                   backgroundColor: isActive === true ? '#EAEBEF' : '',
@@ -96,7 +98,9 @@ const leftDrawer = ({
                   <Button
                     variant={isActive === true ? 'success' : ''}
                     className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
+                      isActive === true
+                        ? styles['text-white']
+                        : styles['text-secondary']
                     }`}
                     data-testid="rolesBtn"
                   >
@@ -118,7 +122,9 @@ const leftDrawer = ({
                   <Button
                     variant={isActive === true ? 'success' : ''}
                     className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
+                      isActive === true
+                        ? styles['text-white']
+                        : styles['text-secondary']
                     }`}
                     data-testid="communityProfileBtn"
                   >

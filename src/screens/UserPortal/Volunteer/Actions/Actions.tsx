@@ -148,7 +148,15 @@ function actions(): JSX.Element {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
-        <h6 className="fw-bold text-danger text-center">
+        <h6
+          className={
+            styles['fw-bold'] +
+            ' ' +
+            styles['text-danger'] +
+            ' ' +
+            styles['text-center']
+          }
+        >
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
       </div>
@@ -164,7 +172,7 @@ function actions(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: styles['tableHeader'],
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } =
           params.row.assignee?.user || {};
@@ -174,7 +182,15 @@ function actions(): JSX.Element {
             {params.row.assigneeType === 'EventVolunteer' ? (
               <>
                 <div
-                  className="d-flex fw-bold align-items-center ms-2"
+                  className={
+                    styles['d-flex'] +
+                    ' ' +
+                    styles['fw-bold'] +
+                    ' ' +
+                    styles['align-items-center'] +
+                    ' ' +
+                    styles['ms-2']
+                  }
                   data-testid="assigneeName"
                 >
                   {image ? (
@@ -182,14 +198,14 @@ function actions(): JSX.Element {
                       src={image}
                       alt="Assignee"
                       data-testid={`image${_id + 1}`}
-                      className={styles.TableImage}
+                      className={styles['TableImage']}
                     />
                   ) : (
-                    <div className={styles.avatarContainer}>
+                    <div className={styles['avatarContainer']}>
                       <Avatar
                         key={_id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
+                        containerStyle={styles['imageContainer']}
+                        avatarStyle={styles['TableImage']}
                         name={firstName + ' ' + lastName}
                         alt={firstName + ' ' + lastName}
                       />
@@ -201,10 +217,18 @@ function actions(): JSX.Element {
             ) : (
               <>
                 <div
-                  className="d-flex fw-bold align-items-center ms-2"
+                  className={
+                    styles['d-flex'] +
+                    ' ' +
+                    styles['fw-bold'] +
+                    ' ' +
+                    styles['align-items-center'] +
+                    ' ' +
+                    styles['ms-2']
+                  }
                   data-testid="assigneeName"
                 >
-                  <div className={styles.avatarContainer}>
+                  <div className={styles['avatarContainer']}>
                     <Avatar
                       key={_id + '1'}
                       containerStyle={styles.imageContainer}
@@ -233,7 +257,13 @@ function actions(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={
+              styles['d-flex'] +
+              ' ' +
+              styles['justify-content-center'] +
+              ' ' +
+              styles['fw-bold']
+            }
             data-testid="categoryName"
           >
             {params.row.actionItemCategory?.name}
@@ -309,7 +339,7 @@ function actions(): JSX.Element {
               variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={styles['me-2'] + ' ' + styles['rounded']}
               data-testid={`viewItemBtn`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
@@ -330,7 +360,17 @@ function actions(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex align-items-center justify-content-center mt-3">
+          <div
+            className={
+              styles['d-flex'] +
+              ' ' +
+              styles['align-items-center'] +
+              ' ' +
+              styles['justify-content-center'] +
+              ' ' +
+              styles['mt-3']
+            }
+          >
             <Form.Check
               type="checkbox"
               data-testid={`statusCheckbox`}
@@ -346,8 +386,16 @@ function actions(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div
+        className={
+          styles['btnsContainer'] +
+          ' ' +
+          styles['gap-4'] +
+          ' ' +
+          styles['flex-wrap']
+        }
+      >
+        <div className={styles['input'] + ' ' + styles['mb-1']}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -365,15 +413,43 @@ function actions(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+            className={
+              styles['position-absolute'] +
+              ' ' +
+              styles['z-10'] +
+              ' ' +
+              styles['bottom-0'] +
+              ' ' +
+              styles['end-0'] +
+              ' ' +
+              styles['d-flex'] +
+              ' ' +
+              styles['justify-content-center'] +
+              ' ' +
+              styles['align-items-center']
+            }
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
+        <div
+          className={
+            styles['d-flex'] + ' ' + styles['gap-3'] + ' ' + styles['mb-1']
+          }
+        >
+          <div
+            className={
+              styles['d-flex'] +
+              ' ' +
+              styles['justify-space-between'] +
+              ' ' +
+              styles['align-items-center'] +
+              ' ' +
+              styles['gap-3']
+            }
+          >
             <SortingButton
               sortingOptions={[
                 { label: t('assignee'), value: 'assignee' },

@@ -65,9 +65,11 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
         </Button>
       </Modal.Header>
       <Modal.Body>
-        <Form className="p-3">
+        <Form className={`${styles['p-3']}`}>
           {/* Group name & Volunteers Required */}
-          <Form.Group className="d-flex gap-3 mb-3">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mb-3']}`}
+          >
             <FormControl fullWidth>
               <TextField
                 required
@@ -93,7 +95,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
           </Form.Group>
           {/* Input field to enter the group description */}
           {description && (
-            <Form.Group className="mb-3">
+            <Form.Group className={`${styles['mb-3']}`}>
               <FormControl fullWidth>
                 <TextField
                   multiline
@@ -107,7 +109,9 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               </FormControl>
             </Form.Group>
           )}
-          <Form.Group className="mb-3 d-flex gap-3">
+          <Form.Group
+            className={`${styles['mb-3']} ${styles['d-flex']} ${styles['gap-3']}`}
+          >
             <FormControl fullWidth>
               <TextField
                 label={t('leader')}
@@ -182,7 +186,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
           {volunteers && volunteers.length > 0 && (
             <Form.Group>
               <Form.Label
-                className="fw-lighter ms-2 mb-0"
+                className={`${styles['fw-lighter']} ${styles['ms-2']} ${styles['mb-0']}`}
                 style={{
                   fontSize: '0.8rem',
                   color: 'var(--search-button-border)',
@@ -199,8 +203,12 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                 <Table aria-label="group table">
                   <TableHead>
                     <TableRow>
-                      <TableCell className="fw-bold">Sr. No.</TableCell>
-                      <TableCell className="fw-bold">Name</TableCell>
+                      <TableCell className={`${styles['fw-bold']}`}>
+                        Sr. No.
+                      </TableCell>
+                      <TableCell className={`${styles['fw-bold']}`}>
+                        Name
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

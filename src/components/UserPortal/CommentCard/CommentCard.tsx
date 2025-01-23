@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import styles from './CommentCard.module.css';
+import style from '../../../style/app.module.css';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
@@ -114,8 +115,10 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.personDetails}>
-        <div className="d-flex align-items-center gap-2">
-          <AccountCircleIcon className="my-2" />
+        <div
+          className={`${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-2']}`}
+        >
+          <AccountCircleIcon className={style['my-2']} />
           <b>{creatorName}</b>
         </div>
         <span>{props.text}</span>

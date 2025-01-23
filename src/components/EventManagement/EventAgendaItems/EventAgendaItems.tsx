@@ -159,10 +159,14 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       'Unknown error';
 
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.container} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.message}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             Error occurred while loading{' '}
             {agendaCategoryError ? 'Agenda Categories' : 'Agenda Items'} Data
             <br />
@@ -175,10 +179,14 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
 
   return (
     <div className={styles.eventAgendaItemContainer}>
-      <div className={`bg-white rounded-4 my-3`}>
-        <div className={`pt-4 mx-4`}>
+      <div
+        className={`${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
+        <div className={`${styles['pt-4']} ${styles['mx-4']}`}>
           <div className={styles.btnsContainer}>
-            <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
+            <div
+              className={`${styles['d-none']} ${styles['d-lg-inline']} ${styles['flex-grow-1']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['border']} ${styles['bg-light-subtle']} ${styles['rounded-3']}`}
+            >
               {/* <input
                 type="search"
                 className="form-control border-0 bg-light-subtle"

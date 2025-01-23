@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from './tagTemplate';
 import { useTranslation } from 'react-i18next';
+import styles from '../../style/app.module.css';
 /**
  * Component that represents a single row in the check-in table.
  * Allows users to mark themselves as checked in and download a tag if they are already checked in.
@@ -91,10 +92,18 @@ export const TableRow = ({
     <>
       {data.checkIn !== null ? (
         <div>
-          <Button variant="contained" disabled className="m-2 p-2">
+          <Button
+            variant="contained"
+            disabled
+            className={`${styles['m-2']} ${styles['p-2']}`}
+          >
             Checked In
           </Button>
-          <Button variant="contained" className="m-2 p-2" onClick={notify}>
+          <Button
+            variant="contained"
+            className={`${styles['m-2']} ${styles['p-2']}`}
+            onClick={notify}
+          >
             Download Tag
           </Button>
         </div>
@@ -103,7 +112,7 @@ export const TableRow = ({
           variant="contained"
           color="success"
           onClick={markCheckIn}
-          className="m-2 p-2"
+          className={`${styles['m-2']} ${styles['p-2']}`}
         >
           Check In
         </Button>

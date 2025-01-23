@@ -17,16 +17,16 @@ const dashBoardCard = (props: {
 }): JSX.Element => {
   const { icon, count, title } = props;
   return (
-    <Card className="rounded-4" border="0">
+    <Card className={styles['rounded-4']} border="0">
       <Card.Body className={styles.cardBody}>
-        <Row className="align-items-center">
-          <Col sm={4}>
+        <Row className={`${styles.row} ${styles['align-items-center']}`}>
+          <Col className={`${styles.rowChild}`} sm={4}>
             <div className={styles.iconWrapper}>
               <div className={styles.themeOverlay} />
               {icon}
             </div>
           </Col>
-          <Col sm={8} className={styles.textWrapper}>
+          <Col sm={8} className={`${styles.textWrapper} ${styles.rowChild}`}>
             <span className={styles.primaryText}>{count ?? 0}</span>
             <span className={styles.secondaryText}>{title}</span>
           </Col>

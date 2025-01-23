@@ -10,6 +10,7 @@ import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
+import styles from '../../style/app.module.css';
 
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
@@ -29,31 +30,35 @@ const eventDashboardTabs: {
 }[] = [
   {
     value: 'dashboard',
-    icon: <MdOutlineDashboard size={18} className="me-1" />,
+    icon: <MdOutlineDashboard size={18} className={styles['me-1']} />,
   },
   {
     value: 'registrants',
-    icon: <EventRegistrantsIcon width={23} height={23} className="me-1" />,
+    icon: (
+      <EventRegistrantsIcon width={23} height={23} className={styles['me-1']} />
+    ),
   },
   {
     value: 'attendance',
-    icon: <BsPersonCheck size={20} className="me-1" />,
+    icon: <BsPersonCheck size={20} className={styles['me-1']} />,
   },
   {
     value: 'agendas',
-    icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
+    icon: (
+      <EventAgendaItemsIcon width={23} height={23} className={styles['me-1']} />
+    ),
   },
   {
     value: 'actions',
-    icon: <FaTasks size={16} className="me-1" />,
+    icon: <FaTasks size={16} className={styles['me-1']} />,
   },
   {
     value: 'volunteers',
-    icon: <IoIosHand size={20} className="me-1" />,
+    icon: <IoIosHand size={20} className={styles['me-1']} />,
   },
   {
     value: 'statistics',
-    icon: <IoMdStats size={20} className="me-2" />,
+    icon: <IoMdStats size={20} className={styles['me-2']} />,
   },
 ];
 
@@ -138,8 +143,9 @@ const EventManagement = (): JSX.Element => {
     const translatedText = t(value);
 
     const className = selected
-      ? 'px-4 d-flex align-items-center rounded-3 shadow-sm'
-      : 'text-secondary bg-white px-4 d-flex align-items-center rounded-3 shadow-sm';
+      ? `${styles['px-4']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['rounded-3']} ${styles['shadow-sm']}`
+      : `${styles['text-secondary']} ${styles['bg-white']} ${styles['px-4']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['rounded-3']} ${styles['shadow-sm']}`;
+
     const props = {
       variant,
       className,
@@ -165,14 +171,16 @@ const EventManagement = (): JSX.Element => {
   };
 
   return (
-    <div className="d-flex flex-column">
-      <Row className="mx-3 mt-4">
-        <Col>
-          <div className="d-none d-md-flex gap-3">
+    <div className={`styles['d-flex']  styles['flex-column']`}>
+      <Row className={`${styles.row} ${styles['mx-3']} ${styles['mt-4']}`}>
+        <Col className={` ${styles.rowChild}`}>
+          <div
+            className={`${styles['d-none']} ${styles['d-md-flex']} ${styles['gap-3']}`}
+          >
             <Button
               size="sm"
               variant="light"
-              className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3"
+              className={`${styles['d-flex']} ${styles['text-secondary']} ${styles['bg-white']} ${styles['align-items-center']} ${styles['px-3']} ${styles['shadow-sm']} ${styles['rounded-3']}`}
             >
               <FaChevronLeft
                 cursor={'pointer'}
@@ -184,7 +192,7 @@ const EventManagement = (): JSX.Element => {
           </div>
 
           <Dropdown
-            className="d-md-none"
+            className={styles['d-md-none']}
             data-testid="tabsDropdownContainer"
             drop="down"
           >
@@ -193,7 +201,7 @@ const EventManagement = (): JSX.Element => {
               id="dropdown-basic"
               data-testid="tabsDropdownToggle"
             >
-              <span className="me-1">{t(tab)}</span>
+              <span className={`${styles['me-1']}`}>{t(tab)}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {/* Render dropdown items for each settings category */}
@@ -201,7 +209,7 @@ const EventManagement = (): JSX.Element => {
                 <Dropdown.Item
                   key={index}
                   onClick={() => setTab(value)}
-                  className={`d-flex gap-2 ${tab === value ? 'text-secondary' : ''}`}
+                  className={`${styles['d-flex']} ${styles['gap-2']} ${tab === value ? styles['text-secondary'] : ''}`}
                   data-testid={`${value}DropdownItem`}
                 >
                   {icon} {t(value)}
@@ -211,7 +219,7 @@ const EventManagement = (): JSX.Element => {
           </Dropdown>
         </Col>
 
-        <Row className="mt-3">
+        <Row className={`${styles.row} ${styles['mt-3']}`}>
           <hr />
         </Row>
       </Row>
@@ -233,7 +241,10 @@ const EventManagement = (): JSX.Element => {
             );
           case 'attendance':
             return (
-              <div data-testid="eventAttendanceTab" className="mx-4">
+              <div
+                data-testid="eventAttendanceTab"
+                className={`${styles['mx-4']}`}
+              >
                 <EventAttendance />
               </div>
             );
@@ -241,7 +252,7 @@ const EventManagement = (): JSX.Element => {
             return (
               <div
                 data-testid="eventActionsTab"
-                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+                className={`${styles['mx-4']} ${styles['bg-white']} ${styles['p-4']} ${styles['pt-2']} ${styles['rounded-4']} ${styles['shadow']}`}
               >
                 <OrganizationActionItems />
               </div>
@@ -250,7 +261,7 @@ const EventManagement = (): JSX.Element => {
             return (
               <div
                 data-testid="eventVolunteersTab"
-                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+                className={`${styles['mx-4']} ${styles['bg-white']} ${styles['p-4']} ${styles['pt-2']} ${styles['rounded-4']} ${styles['shadow']}`}
               >
                 <VolunteerContainer />
               </div>

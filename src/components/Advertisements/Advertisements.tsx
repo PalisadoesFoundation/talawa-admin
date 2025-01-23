@@ -78,10 +78,13 @@ export default function advertisements(): JSX.Element {
 
   return (
     <>
-      <Row data-testid="advertisements">
-        <Col col={8} className={styles.containerAdvertisements}>
+      <Row className={`${styles.row}`} data-testid="advertisements">
+        <Col
+          col={8}
+          className={`${styles.containerAdvertisements} ${styles.rowChild}`}
+        >
           <div className={styles.justifyspAdvertisements}>
-            <Col className={styles.colAdvertisements}>
+            <Col className={`${styles.colAdvertisements} ${styles.rowChild}`}>
               <div className={styles.inputAdvertisements}>
                 <Form.Control
                   type="name"
@@ -102,12 +105,12 @@ export default function advertisements(): JSX.Element {
             <Tabs
               defaultActiveKey="archievedAds"
               id="uncontrolled-tab-example"
-              className="mt-4"
+              className={`${styles['mt-4']}`}
             >
               <Tab
                 eventKey="activeAds"
                 title={t('activeAds')}
-                className="pt-4 m-2"
+                className={`${styles['pt-4']} ${styles['m-2']}`}
               >
                 <InfiniteScroll
                   dataLength={advertisements?.length ?? 0}
@@ -123,10 +126,15 @@ export default function advertisements(): JSX.Element {
                                 className={`${styles.orgImgContainer} shimmer`}
                               ></div>
                               <div className={styles.content}>
-                                <h5 className="shimmer" title="Name"></h5>
+                                <h5
+                                  className={`${styles['shimmer']}`}
+                                  title="Name"
+                                ></h5>
                               </div>
                             </div>
-                            <div className={`shimmer ${styles.button}`} />
+                            <div
+                              className={`${styles['shimmer']} ${styles.button}`}
+                            />
                           </div>
                         </div>
                       ))}
@@ -142,8 +150,12 @@ export default function advertisements(): JSX.Element {
                     advertisements.filter(
                       (ad: Ad) => new Date(ad.endDate) > new Date(),
                     ).length !== 0 && (
-                      <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+                      <div
+                        className={`${styles['w-100']} ${styles['text-center']} ${styles['my-4']}`}
+                      >
+                        <h5 className={`${styles['m-0']}`}>
+                          {tCommon('endOfResults')}
+                        </h5>
                       </div>
                     )
                   }
@@ -196,13 +208,18 @@ export default function advertisements(): JSX.Element {
                           <div className={styles.loadingWrapper}>
                             <div className={styles.innerContainer}>
                               <div
-                                className={`${styles.orgImgContainer} shimmer`}
+                                className={`${styles.orgImgContainer} ${styles['shimmer']}`}
                               ></div>
                               <div className={styles.content}>
-                                <h5 className="shimmer" title="Name"></h5>
+                                <h5
+                                  className={`${styles['shimmer']}`}
+                                  title="Name"
+                                ></h5>
                               </div>
                             </div>
-                            <div className={`shimmer ${styles.button}`} />
+                            <div
+                              className={`${styles['shimmer']} ${styles.button}`}
+                            />
                           </div>
                         </div>
                       ))}
@@ -218,8 +235,12 @@ export default function advertisements(): JSX.Element {
                     advertisements.filter(
                       (ad: Ad) => new Date(ad.endDate) < new Date(),
                     ).length !== 0 && (
-                      <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{t('endOfResults')}</h5>
+                      <div
+                        className={`${styles['w-100']} ${styles['text-center']} ${styles['my-4']}`}
+                      >
+                        <h5 className={`${styles['m-0']}`}>
+                          {t('endOfResults')}
+                        </h5>
                       </div>
                     )
                   }

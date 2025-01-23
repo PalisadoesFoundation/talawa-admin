@@ -5,7 +5,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfileSettings.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-
+import style from '../../style/app.module.css';
 interface InterfaceUserProfile {
   firstName: string;
   lastName: string;
@@ -49,12 +49,14 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
 
   return (
     <>
-      <Card border="0" className="rounded-4 mb-4">
+      <Card border="0" className={`${style['rounded-4']} ${style['mb-4']}`}>
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('profileDetails')}</div>
         </div>
         <Card.Body className={styles.cardBody}>
-          <div className={`d-flex mb-2 ${styles.profileContainer}`}>
+          <div
+            className={`${style['d-flex']} ${style['mb-2']} ${styles.profileContainer}`}
+          >
             <div className={styles.imgContianer}>
               {image && image !== 'null' ? (
                 <img src={image} alt={`profile picture`} />
@@ -86,15 +88,17 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
                   : email}
               </span>
               <ReactTooltip id="email" />
-              <span className="d-flex">
+              <span className={style['d-flex']}>
                 <CalendarMonthOutlinedIcon />
-                <span className="d-flex align-end">
+                <span className={`${style['d-flex']} ${style['align-end']}`}>
                   {tCommon('joined')} {joinedDate(createdAt)}
                 </span>
               </span>
             </div>
           </div>
-          <div className="mt-4 mb-1 d-flex justify-content-center">
+          <div
+            className={`${style['mt-4']} ${style['mb-1']} ${style['d-flex']} ${style['justify-content-center']}`}
+          >
             <Button data-testid="copyProfileLink">{t('copyLink')}</Button>
           </div>
         </Card.Body>

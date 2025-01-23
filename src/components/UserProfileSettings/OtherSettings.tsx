@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfileSettings.module.css';
-
+import style from '../../style/app.module.css';
 /**
  * OtherSettings component displays a card with settings options such as changing the language.
  * It includes a label and a dropdown for selecting a different language.
@@ -15,7 +15,7 @@ const OtherSettings: React.FC = () => {
     keyPrefix: 'settings',
   });
   return (
-    <Card border="0" className="rounded-4 mb-4">
+    <Card border="0" className={`${style['rounded-4']} ${style['mb-4']}`}>
       <div className={styles.cardHeader}>
         <div className={styles.cardTitle}>{t('otherSettings')}</div>
       </div>

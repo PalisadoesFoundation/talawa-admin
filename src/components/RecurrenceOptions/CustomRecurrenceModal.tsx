@@ -164,16 +164,18 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
             <i className="fa fa-times"></i>
           </Button>
         </Modal.Header>
-        <Modal.Body className="pb-2">
-          <div className="mb-4">
-            <span className="fw-semibold text-secondary">
+        <Modal.Body className={styles['pb-2']}>
+          <div className={styles['mb-4']}>
+            <span
+              className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+            >
               {t('repeatsEvery')}
             </span>{' '}
             <FormControl
               type="number"
               value={interval}
               min={1}
-              className={`${styles.recurrenceRuleNumberInput} ms-2 d-inline-block py-2`}
+              className={`${styles.recurrenceRuleNumberInput} ${styles['ms-2']} ${styles['d-inline-block']} ${styles['py-2']}`}
               data-testid="customRecurrenceIntervalInput"
               onChange={(e) =>
                 setRecurrenceRuleState({
@@ -182,9 +184,11 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                 })
               }
             />
-            <Dropdown className="ms-3 d-inline-block">
+            <Dropdown
+              className={`${styles['ms-3']} ${styles['d-inline-block']}`}
+            >
               <Dropdown.Toggle
-                className="py-2"
+                className={styles['py-2']}
                 variant="outline-secondary"
                 id="dropdown-basic"
                 data-testid="customRecurrenceFrequencyDropdown"
@@ -247,12 +251,16 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
           </div>
 
           {frequency === Frequency.WEEKLY && (
-            <div className="mb-4">
-              <span className="fw-semibold text-secondary">
+            <div className={styles['mb-4']}>
+              <span
+                className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+              >
                 {t('repeatsOn')}
               </span>
               <br />
-              <div className="mx-2 mt-3 d-flex gap-1">
+              <div
+                className={`${styles['mx-2']} ${styles['mt-3']} ${styles['d-flex']} ${styles['gap-1']}`}
+              >
                 {daysOptions.map((day, index) => (
                   <div
                     key={index}
@@ -268,17 +276,19 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
           )}
 
           {frequency === Frequency.MONTHLY && (
-            <div className="mb-4">
-              <Dropdown drop="down" className="w-100">
+            <div className={styles['mb-4']}>
+              <Dropdown drop="down" className={styles['w-100']}>
                 <Dropdown.Toggle
                   variant="outline-secondary"
-                  className="py-2 border border-secondary-subtle rounded-2"
+                  className={`${styles['py-2']} ${styles['border']} ${styles['border-secondary-subtle']} ${styles['rounded-2']}`}
                   id="dropdown-basic"
                   data-testid="monthlyRecurrenceOptions"
                 >
-                  <span className="fw-semibold">{recurrenceRuleText}</span>
+                  <span className={styles['fw-semibold']}>
+                    {recurrenceRuleText}
+                  </span>
                 </Dropdown.Toggle>
-                <Dropdown.Menu className="mb-2">
+                <Dropdown.Menu className={styles['mb-2']}>
                   <Dropdown.Item
                     onClick={() =>
                       setRecurrenceRuleState({
@@ -289,7 +299,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     }
                     data-testid="monthlyRecurrenceOptionOnThatDay"
                   >
-                    <span className="fw-semibold text-secondary">
+                    <span
+                      className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+                    >
                       {getRecurrenceRuleText({
                         ...recurrenceRuleState,
                         frequency: Frequency.MONTHLY,
@@ -310,7 +322,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                       }
                       data-testid="monthlyRecurrenceOptionOnThatOccurence"
                     >
-                      <span className="fw-semibold text-secondary">
+                      <span
+                        className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+                      >
                         {getRecurrenceRuleText({
                           ...recurrenceRuleState,
                           frequency: Frequency.MONTHLY,
@@ -333,7 +347,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                       }
                       data-testid="monthlyRecurrenceOptionOnLastOccurence"
                     >
-                      <span className="fw-semibold text-secondary">
+                      <span
+                        className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+                      >
                         {getRecurrenceRuleText({
                           ...recurrenceRuleState,
                           frequency: Frequency.MONTHLY,
@@ -348,18 +364,25 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
             </div>
           )}
 
-          <div className="mb-3">
-            <span className="fw-semibold text-secondary">{t('ends')}</span>
-            <div className="ms-3 mt-3">
+          <div className={styles['mb-3']}>
+            <span
+              className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+            >
+              {t('ends')}
+            </span>
+            <div className={`${styles['ms-3']} ${styles['mt-3']}`}>
               <Form>
                 {recurrenceEndOptions.map((option, index) => (
-                  <div key={index} className="my-0 d-flex align-items-center">
+                  <div
+                    key={index}
+                    className={`${styles['my-0']} ${styles['d-flex']} ${styles['align-items-center']}`}
+                  >
                     <Form.Check
                       type="radio"
                       id={`radio-${index}`}
                       label={t(option)}
                       name="recurrenceEndOption"
-                      className="d-inline-block me-5"
+                      className={`${styles['d-inline-block']} ${styles['me-5']}`}
                       value={option}
                       onChange={handleRecurrenceEndOptionChange}
                       defaultChecked={option === selectedRecurrenceEndOption}
@@ -367,7 +390,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     />
 
                     {option === endsOn && (
-                      <div className="ms-3">
+                      <div className={styles['ms-3']}>
                         <DatePicker
                           label={tCommon('endDate')}
                           className={styles.recurrenceRuleDateBox}
@@ -399,7 +422,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                               count: Number(e.target.value),
                             })
                           }
-                          className={`${styles.recurrenceRuleNumberInput} ms-1 me-2 d-inline-block py-2`}
+                          className={`${styles.recurrenceRuleNumberInput} ${styles['ms-1']} ${styles['me-2']} ${styles['d-inline-block']} ${styles['py-2']}`}
                           disabled={selectedRecurrenceEndOption !== endsAfter}
                           data-testid="customRecurrenceCountInput"
                         />{' '}
@@ -412,9 +435,13 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
             </div>
           </div>
 
-          <hr className="mt-4 mb-2 mx-2" />
+          <hr
+            className={`${styles['mt-4']} ${styles['mb-2']} ${styles['mx-2']}`}
+          />
 
-          <div className="mx w-100 position-relative">
+          <div
+            className={`${styles['mx']} ${styles['w-100']} ${styles['position-relative']}`}
+          >
             <Button
               className={styles.recurrenceRuleSubmitBtn}
               data-testid="customRecurrenceSubmitBtn"

@@ -8,6 +8,7 @@ import {
   REMOVE_EVENT_ATTENDEE,
 } from 'GraphQl/Mutations/mutations';
 import styles from 'components/EventRegistrantsModal/EventRegistrantsModal.module.css';
+import style from '../../style/app.module.css';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -140,15 +141,20 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             }
           }
         />
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white">Event Registrants</Modal.Title>
+        <Modal.Header closeButton className={style['bg-primary']}>
+          <Modal.Title className={style['text-white']}>
+            Event Registrants
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5 className="mb-2"> Registered Registrants </h5>
+          <h5 className={style['mb-2']}> Registered Registrants </h5>
           {attendeesData.event.attendees.length == 0
             ? `There are no registered attendees for this event.`
             : null}
-          <Stack direction="row" className="flex-wrap gap-2">
+          <Stack
+            direction="row"
+            className={`${style['flex-wrap']} ${style['gap-2']}`}
+          >
             {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
               <Chip
                 avatar={
@@ -169,10 +175,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               setMember(newMember);
             }}
             noOptionsText={
-              <div className="d-flex ">
-                <p className="me-2">No Registrations found</p>
+              <div className={style['d-flex']}>
+                <p className={style['me-2']}>No Registrations found</p>
                 <span
-                  className="underline"
+                  className={style['underline']}
                   onClick={() => {
                     setOpen(true);
                   }}

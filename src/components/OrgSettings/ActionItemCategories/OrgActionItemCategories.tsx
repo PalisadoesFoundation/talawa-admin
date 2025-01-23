@@ -147,7 +147,9 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
           className={styles.iconOrgActionItemCategories}
           fontSize="large"
         />
-        <h6 className="fw-bold text-danger text-center">
+        <h6
+          className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+        >
           {tErrors('errorLoading', { entity: 'Action Item Categories' })}
           <br />
           {`${catError.message}`}
@@ -182,7 +184,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
             data-testid="categoryName"
           >
             {params.row.name}
@@ -255,7 +257,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
           <Button
             variant="success"
             size="sm"
-            className="me-2 rounded"
+            className={`${styles['me-2']} ${styles['rounded']}`}
             data-testid={'editCategoryBtn' + params.row.id}
             onClick={() =>
               handleOpenModal(
@@ -272,12 +274,12 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   ];
 
   return (
-    <div className="mx-4">
+    <div className={`${styles['mx-4']}`}>
       {/* Header with search, filter  and Create Button */}
       <div
-        className={`${styles.btnsContainerOrgActionItemCategories} gap-4 flex-wrap`}
+        className={`${styles.btnsContainerOrgActionItemCategories} ${styles['gap-4']} ${styles['flex-wrap']}`}
       >
-        <div className={`${styles.input} mb-1`}>
+        <div className={`${styles.input} ${styles['mb-1']}`}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchByName')}
@@ -304,8 +306,12 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-4">
+        <div
+          className={`${styles['d-flex']} ${styles['gap-4']} ${styles['mb-1']}`}
+        >
+          <div
+            className={`${styles['d-flex']} ${styles['justify-space-between']} ${styles['align-items-center']} ${styles['gap-4']}`}
+          >
             <SortingButton
               title={tCommon('sort')}
               sortingOptions={[
@@ -354,7 +360,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               style={{ marginTop: '11px' }}
               data-testid="createActionItemCategoryBtn"
             >
-              <i className={'fa fa-plus me-2'} />
+              <i className={`fa fa-plus ${styles['me-2']}`} />
               {tCommon('create')}
             </Button>
           </div>

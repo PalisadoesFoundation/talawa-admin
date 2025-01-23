@@ -78,7 +78,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   // Render event details
   return (
     <div data-testid="event-dashboard">
-      <Row className="">
+      <Row className={`${styles.row} `}>
         <EventListCardModals
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
@@ -86,7 +86,10 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           t={tEventList}
           tCommon={t}
         />
-        <div className="d-flex px-6" data-testid="event-stats">
+        <div
+          className={`${styles['d-flex']} ${styles['px-6']}`}
+          data-testid="event-stats"
+        >
           <div
             className={`${styles.ctacards}`}
             data-testid="registrations-card"
@@ -122,11 +125,11 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             </div>
           </div>
         </div>
-        <Col>
+        <Col className={`${styles.rowChild}`}>
           <div className={styles.eventContainer} data-testid="event-details">
             <div className={styles.eventDetailsBox}>
               <button
-                className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
+                className={`${styles['btn']} ${styles['btn-light']} ${styles['rounded-circle']} ${styles['position-absolute']} ${styles['end-0']} ${styles['me-3']} ${styles['p-1']} ${styles['mt-2']}`}
                 onClick={showViewModal}
                 data-testid="edit-event-button"
               >
@@ -150,7 +153,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 data-testid="recurring-status"
               >
                 <b>Recurring Event:</b>{' '}
-                <span className="text-success ml-2">
+                <span className={`${styles['text-success']} ${styles['ml-2']}`}>
                   {eventData.event.recurring ? 'Active' : 'Inactive'}
                 </span>
               </div>

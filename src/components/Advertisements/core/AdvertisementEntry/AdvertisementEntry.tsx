@@ -96,9 +96,14 @@ function AdvertisementEntry({
 
   return (
     <>
-      <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
+      <Row
+        data-testid="AdEntry"
+        xs={1}
+        md={2}
+        className={`${styles.row} ${styles['g-4']}`}
+      >
         {Array.from({ length: 1 }).map((_, idx) => (
-          <Col key={idx}>
+          <Col key={idx} className={`${styles.rowChild}`}>
             <Card className={styles.addCard}>
               <div className={styles.dropdownContainer}>
                 <button
@@ -150,7 +155,9 @@ function AdvertisementEntry({
                 />
               )}
               <Card.Body>
-                <Card.Title className="t-bold">{name}</Card.Title>
+                <Card.Title className={`${styles['t-bold']}`}>
+                  {name}
+                </Card.Title>
                 <Card.Text data-testid="Ad_end_date">
                   Starts on {startDate?.toDateString()}
                 </Card.Text>
@@ -158,7 +165,9 @@ function AdvertisementEntry({
                   Ends on {endDate?.toDateString()}
                 </Card.Text>
 
-                <Card.Subtitle className="mb-2 text-muted author">
+                <Card.Subtitle
+                  className={`${styles['mb-2']} ${styles['text-muted']} ${styles['author']}`}
+                >
                   {type}
                 </Card.Subtitle>
                 <div className={styles.buttons}>
@@ -190,14 +199,14 @@ function AdvertisementEntry({
                   </Modal.Body>
                   <Modal.Footer>
                     <Button
-                      className={`btn btn-danger ${styles.removeButton}`}
+                      className={`${styles['btn']} ${styles['btn-danger']} ${styles['removeButton']}`}
                       onClick={toggleShowDeleteModal}
                     >
                       {tCommon('no')}
                     </Button>
                     <Button
                       type="button"
-                      className={`btn ${styles.addButton}`}
+                      className={`${styles['btn']} ${styles.addButton}`}
                       onClick={(): void => {
                         onDelete();
                       }}

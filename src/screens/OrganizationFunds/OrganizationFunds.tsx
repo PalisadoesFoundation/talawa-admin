@@ -140,10 +140,14 @@ const organizationFunds = (): JSX.Element => {
   }
   if (fundError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.container} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             Error occured while loading Funds
             <br />
             {fundError.message}
@@ -179,7 +183,7 @@ const organizationFunds = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className={`d-flex justify-content-center fw-bold ${styles.subtleBlueGrey}`}
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']} ${styles.subtleBlueGrey}`}
             data-testid="fundName"
             onClick={() => handleClick(params.row._id as string)}
           >
@@ -276,7 +280,7 @@ const organizationFunds = (): JSX.Element => {
             onClick={() => handleClick(params.row._id as string)}
             data-testid="viewBtn"
           >
-            <i className="fa fa-eye me-1" />
+            <i className={`fa fa-eye ${styles['me-1']}`} />
             {t('viewCampaigns')}
           </Button>
         );
@@ -287,8 +291,10 @@ const organizationFunds = (): JSX.Element => {
   return (
     <div>
       <div className={styles.head}>
-        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <div className={`${styles.input} mb-1`}>
+        <div
+          className={`${styles.btnsContainer} ${styles['gap-4']} ${styles['flex-wrap']}`}
+        >
+          <div className={`${styles.input} ${styles['mb-1']}`}>
             <Form.Control
               type="name"
               placeholder={tCommon('searchByName')}
@@ -307,7 +313,9 @@ const organizationFunds = (): JSX.Element => {
               <Search className={styles.searchIcon} />
             </Button>
           </div>
-          <div className="d-flex gap-4 mb-1">
+          <div
+            className={`${styles['d-flex']} ${styles['gap-4']} ${styles['mb-1']}`}
+          >
             <SortingButton
               title={tCommon('sort')}
               sortingOptions={[
@@ -333,7 +341,7 @@ const organizationFunds = (): JSX.Element => {
                 style={{ marginTop: '0px' }}
                 data-testid="createFundBtn"
               >
-                <i className={'fa fa-plus me-2'} />
+                <i className={`fa fa-plus ${styles['me-2']}`} />
                 {t('createFund')}
               </Button>
             </div>

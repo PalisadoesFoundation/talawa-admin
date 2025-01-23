@@ -403,7 +403,7 @@ function AddMember(): JSX.Element {
                                 data-testid="addBtn"
                                 className={styles.addButton}
                               >
-                                <i className={'fa fa-plus me-2'} />
+                                <i className={`fa fa-plus ${styles['me-2']}`} />
                                 Add
                               </Button>
                             </StyledTableCell>
@@ -431,11 +431,11 @@ function AddMember(): JSX.Element {
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="my-3">
-            <div className="row">
-              <div className="col-sm-6">
+          <div className={styles['my-3']}>
+            <div className={styles['row']}>
+              <div className={styles['col-sm-6']}>
                 <h6>{translateOrgPeople('firstName')}</h6>
-                <InputGroup className="mt-2 mb-4">
+                <InputGroup className={`${styles['mt-2']} ${styles['mb-4']}`}>
                   <Form.Control
                     placeholder={translateOrgPeople('enterFirstName')}
                     className={styles.borderNone}
@@ -445,9 +445,9 @@ function AddMember(): JSX.Element {
                   />
                 </InputGroup>
               </div>
-              <div className="col-sm-6">
+              <div className={styles['col-sm-6']}>
                 <h6>{translateOrgPeople('lastName')}</h6>
-                <InputGroup className="mt-2 mb-4">
+                <InputGroup className={`${styles['mt-2']} ${styles['mb-4']}`}>
                   <Form.Control
                     placeholder={translateOrgPeople('enterLastName')}
                     className={styles.borderNone}
@@ -459,7 +459,7 @@ function AddMember(): JSX.Element {
               </div>
             </div>
             <h6>{translateOrgPeople('emailAddress')}</h6>
-            <InputGroup className="mt-2 mb-4">
+            <InputGroup className={`${styles['mt-2']} ${styles['mb-4']}`}>
               <Form.Control
                 placeholder={translateOrgPeople('enterEmail')}
                 type="email"
@@ -475,7 +475,7 @@ function AddMember(): JSX.Element {
               </InputGroup.Text>
             </InputGroup>
             <h6>{translateOrgPeople('password')}</h6>
-            <InputGroup className="mt-2 mb-4">
+            <InputGroup className={`${styles['mt-2']} ${styles['mb-4']}`}>
               <Form.Control
                 placeholder={translateOrgPeople('enterPassword')}
                 type={showPassword ? 'text' : 'password'}
@@ -497,7 +497,7 @@ function AddMember(): JSX.Element {
               </InputGroup.Text>
             </InputGroup>
             <h6>{translateOrgPeople('confirmPassword')}</h6>
-            <InputGroup className="mt-2 mb-4">
+            <InputGroup className={`${styles['mt-2']} ${styles['mb-4']}`}>
               <Form.Control
                 placeholder={translateOrgPeople('enterConfirmPassword')}
                 type={showConfirmPassword ? 'text' : 'password'}
@@ -519,7 +519,7 @@ function AddMember(): JSX.Element {
               </InputGroup.Text>
             </InputGroup>
             <h6>{translateOrgPeople('organization')}</h6>
-            <InputGroup className="mt-2 mb-4">
+            <InputGroup className={`${styles['mt-2']} ${styles['mb-4']}`}>
               <Form.Control
                 className={styles.borderNone}
                 value={organizationData?.organizations[0]?.name}

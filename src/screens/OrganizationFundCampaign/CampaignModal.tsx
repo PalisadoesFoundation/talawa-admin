@@ -193,14 +193,16 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             onSubmitCapture={
               mode === 'edit' ? updateCampaignHandler : createCampaignHandler
             }
-            className="p-3"
+            className={styles['p-3']}
           >
-            <Form.Group className="d-flex mb-3 w-100">
+            <Form.Group
+              className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+            >
               <FormControl fullWidth>
                 <TextField
                   label={t('campaignName')}
                   variant="outlined"
-                  className={`${styles.noOutline} w-100`}
+                  className={`${styles.noOutline} ${styles['w-100']}`}
                   value={campaignName}
                   onChange={(e) =>
                     setFormState({
@@ -212,7 +214,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               </FormControl>
             </Form.Group>
 
-            <Form.Group className="d-flex gap-4 mx-auto mb-3">
+            <Form.Group
+              className={`${styles['d-flex']} ${styles['gap-4']} ${styles['mx-auto']} ${styles['mb-3']}`}
+            >
               {/* Date Calendar Component to select start date of campaign*/}
               <DatePicker
                 format="DD/MM/YYYY"
@@ -252,7 +256,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               />
             </Form.Group>
 
-            <Form.Group className="d-flex gap-4 mb-4">
+            <Form.Group
+              className={`${styles['d-flex']} ${styles['gap-4']} ${styles['mb-4']}`}
+            >
               {/* Dropdown to select the currency for funding goal of the campaign*/}
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">

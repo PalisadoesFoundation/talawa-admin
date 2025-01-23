@@ -112,12 +112,14 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
         <Form
           data-testid="volunteerForm"
           onSubmitCapture={addVolunteerHandler}
-          className="p-3"
+          className={styles['p-3']}
         >
           {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
-          <Form.Group className="d-flex mb-3 w-100">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+          >
             <Autocomplete
-              className={`${styles.noOutline} w-100`}
+              className={`${styles.noOutline} ${styles['w-100']}`}
               limitTags={2}
               data-testid="membersSelect"
               options={members}

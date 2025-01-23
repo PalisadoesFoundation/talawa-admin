@@ -34,8 +34,8 @@ function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
 
   return (
     <>
-      <Row>
-        <Col className={styles.cards}>
+      <Row className={`${styles.row}`}>
+        <Col className={`${styles.cards} ${styles.rowChild}`}>
           <h2>{props.userName}</h2>
           <p>{props.userEmail}</p>
           <p>

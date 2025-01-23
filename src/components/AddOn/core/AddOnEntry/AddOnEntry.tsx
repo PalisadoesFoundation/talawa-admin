@@ -108,7 +108,7 @@ function addOnEntry({
       >
         <Card.Body>
           <Card.Title style={{ fontWeight: '800' }}>{title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted author">
+          <Card.Subtitle className={`mb-2 ${styles['text-muted']} author`}>
             {createdBy}
           </Card.Subtitle>
           <Card.Text>{description}</Card.Text>
@@ -116,7 +116,7 @@ function addOnEntry({
             className={
               uninstalledOrgs.includes(currentOrg)
                 ? styles.addButton
-                : `btn btn-danger ${styles.removeButton}`
+                : `${styles.btn} ${styles['btn-danger']} ${styles.removeButton}`
             }
             variant="primary"
             // disabled={buttonLoading || !configurable}

@@ -267,15 +267,17 @@ const Requests = (): JSX.Element => {
       </div>
       {!isLoading && orgsData?.organizationsConnection.length === 0 ? (
         <div className={styles.notFound}>
-          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+          <h3 className={styles['m-0']}>{t('noOrgErrorTitle')}</h3>
+          <h6 className={styles['text-secondary']}>
+            {t('noOrgErrorDescription')}
+          </h6>
         </div>
       ) : !isLoading &&
         data &&
         displayedRequests.length === 0 &&
         searchByName.length > 0 ? (
         <div className={styles.notFound}>
-          <h4 className="m-0">
+          <h4 className={styles['m-0']}>
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
@@ -301,8 +303,10 @@ const Requests = (): JSX.Element => {
               className={styles.listTable}
               data-testid="requests-list"
               endMessage={
-                <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+                <div
+                  className={`${styles['w-100']} ${styles['text-center']} ${styles['my-4']}`}
+                >
+                  <h5 className={styles['m-0']}>{tCommon('endOfResults')}</h5>
                 </div>
               }
             >

@@ -14,6 +14,7 @@ import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Organizations.module.css';
+import style from '../../../style/app.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const { getItem } = useLocalStorage();
@@ -321,16 +322,17 @@ export default function organizations(): JSX.Element {
               : styles.contract
         }`}
       >
-        <div className={`${styles.mainContainer}`}>
-          <div className="d-flex justify-content-between align-items-center">
+        <div className={styles['mainContainer']}>
+          <div
+            className={`${style['d-flex']} ${style['justify-content-between']} ${style['align-items-center']}`}
+          >
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
             </div>
             <ProfileDropdown />
           </div>
-
-          <div className="mt-4">
-            <InputGroup className={styles.maxWidth}>
+          <div className={style['mt-4']}>
+            <InputGroup className={styles['maxWidth']}>
               <Form.Control
                 placeholder={t('searchOrganizations')}
                 id="searchOrganizations"
@@ -372,15 +374,16 @@ export default function organizations(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-
           <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
+            className={`${style['d-flex']} ${style['flex-column']} ${style['justify-content-between']} ${styles['content']}`}
           >
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`${style['d-flex']} ${style['flex-column']} ${styles['gap']} ${styles['paddingY']}`}
             >
               {loadingOrganizations ? (
-                <div className={`d-flex flex-row justify-content-center`}>
+                <div
+                  className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-center']}`}
+                >
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (

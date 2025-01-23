@@ -3,6 +3,7 @@ import { CircularProgress, TableCell, TableRow } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
 import styles from '../../screens/MemberDetail/MemberDetail.module.css';
+import style from '../../style/app.module.css';
 import { Link } from 'react-router-dom';
 /**
  * Custom table cell component to display event details
@@ -52,7 +53,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   }
 
   return (
-    <TableRow className="my-6" data-testid="custom-row">
+    <TableRow className={`${style['my-6']}`} data-testid="custom-row">
       <TableCell align="left">
         <Link
           to={`/event/${event.organization._id}/${event._id}`}

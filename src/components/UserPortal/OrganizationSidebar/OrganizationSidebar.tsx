@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
+import style from '../../../style/app.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
@@ -104,7 +105,9 @@ export default function organizationSidebar(): JSX.Element {
         <b>{tCommon('members')}</b>
       </div>
       {memberLoading ? (
-        <div className={`d-flex flex-row justify-content-center`}>
+        <div
+          className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-center']}`}
+        >
           <HourglassBottomIcon /> <span>Loading...</span>
         </div>
       ) : (
@@ -116,9 +119,9 @@ export default function organizationSidebar(): JSX.Element {
                 <ListGroup.Item
                   key={member._id}
                   action
-                  className={`${styles.rounded} ${styles.colorLight} my-1`}
+                  className={`${styles.rounded} ${styles.colorLight} ${style['my-1']}`}
                 >
-                  <div className="d-flex flex-row">
+                  <div className={`${style['d-flex']} ${style['flex-row']}`}>
                     <img
                       src={member.image ? member.image : AboutImg}
                       className={styles.memberImage}
@@ -131,7 +134,9 @@ export default function organizationSidebar(): JSX.Element {
               );
             })
           ) : (
-            <div className="w-100 text-center">{t('noMembers')}</div>
+            <div className={`${style['w-100']} ${style['text-center']}`}>
+              {t('noMembers')}
+            </div>
           )}
         </ListGroup>
       )}
@@ -149,7 +154,9 @@ export default function organizationSidebar(): JSX.Element {
         <b>{t('events')}</b>
       </div>
       {eventsLoading ? (
-        <div className={`d-flex flex-row justify-content-center`}>
+        <div
+          className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-center']}`}
+        >
           <HourglassBottomIcon /> <span>Loading...</span>
         </div>
       ) : (
@@ -162,18 +169,24 @@ export default function organizationSidebar(): JSX.Element {
                   action
                   className={`${styles.rounded} ${styles.colorLight} my-1`}
                 >
-                  <div className="d-flex flex-column">
-                    <div className="d-flex flex-row justify-content-between align-items-center">
+                  <div className={`${style['d-flex']} ${style['flex-column']}`}>
+                    <div
+                      className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-between']} ${style['align-items-center']}`}
+                    >
                       <div className={styles.orgName}>{event.title}</div>
                       <div>
                         <CalendarMonthIcon />
                       </div>
                     </div>
-                    <div className={`d-flex flex-row ${styles.eventDetails}`}>
+                    <div
+                      className={`${style['d-flex']} ${style['flex-row']} ${styles.eventDetails}`}
+                    >
                       Starts{' '}
                       <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
                     </div>
-                    <div className={`d-flex flex-row ${styles.eventDetails}`}>
+                    <div
+                      className={`${style['d-flex']} ${style['flex-row']} ${styles.eventDetails}`}
+                    >
                       Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
                     </div>
                   </div>
@@ -181,7 +194,9 @@ export default function organizationSidebar(): JSX.Element {
               );
             })
           ) : (
-            <div className="w-100 text-center">{t('noEvents')}</div>
+            <div className={`${style['w-100']} ${style['text-center']}`}>
+              {t('noEvents')}
+            </div>
           )}
         </ListGroup>
       )}

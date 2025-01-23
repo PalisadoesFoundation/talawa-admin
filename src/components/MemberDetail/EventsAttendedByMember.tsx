@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './EventsAttendedCardItem';
 import { Spinner } from 'react-bootstrap';
+import styles from '../../style/app.module.css';
 /**
  * Component to display events attended by a specific member
  * @param eventsId - ID of the event to fetch and display details for
@@ -25,14 +26,14 @@ function EventsAttendedByMember({
 
   if (loading)
     return (
-      <div data-testid="loading" className="loading-state">
+      <div data-testid="loading" className={`${styles['loading-state']}`}>
         <Spinner />
         <p>Loading event details...</p>
       </div>
     );
   if (error)
     return (
-      <div data-testid="error" className="error-state">
+      <div data-testid="error" className={`${styles['error-state']}`}>
         <p>Unable to load event details. Please try again later.</p>
       </div>
     );

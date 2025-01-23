@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import styles from '../../style/app.module.css';
 /**
  * Card component to display individual event attendance information
  * Shows event details including title, date, location and organization
@@ -27,41 +28,56 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
   const { title, startdate, location, orgId, eventId } = props;
 
   return (
-    <Card className="border-0 py-1 rounded-0" data-testid="EventsAttendedCard">
-      <Card.Body className="p-1">
-        <Row className="align-items-center">
-          <Col xs={3} md={2} className="text-center">
-            <div className="text-secondary">
+    <Card
+      className={`${styles['border-0']} ${styles['py-1']} ${styles['rounded-0']}`}
+      data-testid="EventsAttendedCard"
+    >
+      <Card.Body className={styles['p-1']}>
+        <Row className={`${styles.row} ${styles['align-items-center']}`}>
+          <Col
+            xs={3}
+            md={2}
+            className={`${styles['text-center']} ${styles.rowChild}`}
+          >
+            <div className={styles['text-secondary']}>
               {startdate && dayjs(startdate).isValid() ? (
                 <>
-                  <div className="fs-6 fw-normal">
+                  <div className={`${styles['fs-6']} ${styles['fw-normal']}`}>
                     {dayjs(startdate).format('MMM').toUpperCase()}
                   </div>
-                  <div className="fs-1 fw-semibold">
+                  <div className={`${styles['fs-1']} ${styles['fw-semibold']}`}>
                     {dayjs(startdate).format('D')}
                   </div>
                 </>
               ) : (
                 /*istanbul ignore next*/
-                <div className="fs-6 fw-normal">Date N/A</div>
+                <div className={`${styles['fs-6']} ${styles['fw-normal']}`}>
+                  Date N/A
+                </div>
               )}
             </div>
           </Col>
-          <Col xs={7} md={9} className="mb-3">
-            <h5 className="mb-1">{title}</h5>
-            <p className="text-muted mb-0 small">
+          <Col xs={7} md={9} className={`${styles['mb-3']} ${styles.rowChild}`}>
+            <h5 className={styles['mb-1']}>{title}</h5>
+            <p
+              className={`${styles['text-muted']} ${styles['mb-0']} ${styles['small']}`}
+            >
               <MdLocationOn
-                className="text-action"
+                className={styles['text-action']}
                 size={20}
                 data-testid="LocationOnIcon"
               />
               {location}
             </p>
           </Col>
-          <Col xs={2} md={1} className="text-end">
+          <Col
+            xs={2}
+            md={1}
+            className={`${styles['text-end']} ${styles.rowChild}`}
+          >
             <Link to={`/event/${orgId}/${eventId}`} state={{ id: eventId }}>
               <MdChevronRight
-                className="text-action"
+                className={styles['text-action']}
                 size={20}
                 data-testid="ChevronRightIcon"
               />
@@ -69,7 +85,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
           </Col>
         </Row>
       </Card.Body>
-      <div className="border-top border-1"></div>
+      <div className={`${styles['border-top']} ${styles['border-1']}`}></div>
     </Card>
   );
 };

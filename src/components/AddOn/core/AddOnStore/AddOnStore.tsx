@@ -122,8 +122,8 @@ function addOnStore(): JSX.Element {
 
   return (
     <>
-      <Row className={styles.containerAddOnStore}>
-        <Col className={styles.colAddOnStore}>
+      <Row className={`${styles.row} ${styles.containerAddOnStore}`}>
+        <Col className={`${styles.colAddOnStore} ${styles.rowChild}`}>
           <div className={styles.inputAddOnStore}>
             <Form.Control
               type="name"
@@ -170,7 +170,7 @@ function addOnStore(): JSX.Element {
           <Tabs
             defaultActiveKey="available"
             id="uncontrolled-tab-example"
-            className="mb-3 mt-3"
+            className={`${styles['mb-3']} ${styles['mt-3']}`}
             onSelect={(eventKey) => {
               if (eventKey) {
                 updateSelectedTab(eventKey);

@@ -47,7 +47,7 @@ const AgendaCategoryCreateModal: React.FC<
 }) => {
   return (
     <Modal
-      className={`mt-5 ${styles.campaignModal}`}
+      className={`${styles['mt-5']} ${styles.campaignModal}`}
       show={agendaCategoryCreateModalIsOpen}
       onHide={hideCreateModal}
     >
@@ -65,7 +65,7 @@ const AgendaCategoryCreateModal: React.FC<
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={createAgendaCategoryHandler}>
-          <Form.Group className="mb-3" controlId="name">
+          <Form.Group className={`${styles['mb-3']}`} controlId="name">
             <Form.Label>{t('name')}</Form.Label>
             <Form.Control
               type="text"
@@ -77,7 +77,7 @@ const AgendaCategoryCreateModal: React.FC<
               }
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="description">
+          <Form.Group className={`${styles['mb-3']}`} controlId="description">
             <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               type="text"

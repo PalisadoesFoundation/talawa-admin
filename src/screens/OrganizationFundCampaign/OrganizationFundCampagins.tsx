@@ -144,10 +144,14 @@ const orgFundCampaign = (): JSX.Element => {
   }
   if (campaignError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.container} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             Error occured while loading Campaigns
             <br />
             {campaignError.message}
@@ -182,7 +186,7 @@ const orgFundCampaign = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
             data-testid="campaignName"
             onClick={() => handleClick(params.row.campaign._id as string)}
           >
@@ -231,7 +235,7 @@ const orgFundCampaign = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
             data-testid="goalCell"
           >
             {
@@ -256,7 +260,7 @@ const orgFundCampaign = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
             data-testid="goalCell"
           >
             {
@@ -317,7 +321,7 @@ const orgFundCampaign = (): JSX.Element => {
             data-testid="viewBtn"
             onClick={() => handleClick(params.row.campaign._id as string)}
           >
-            <i className="fa fa-eye me-1" />
+            <i className={`fa fa-eye ${styles['me-1']}`} />
             {t('viewPledges')}
           </Button>
         );
@@ -327,7 +331,7 @@ const orgFundCampaign = (): JSX.Element => {
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+      <Breadcrumbs aria-label="breadcrumb" className={styles['ms-1']}>
         <Link
           underline="hover"
           color="inherit"
@@ -340,9 +344,11 @@ const orgFundCampaign = (): JSX.Element => {
         <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
-      <Row className={styles.head}>
-        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <div className={`${styles.input} mb-1`}>
+      <Row className={`${styles.row} ${styles.head}`}>
+        <div
+          className={`${styles.btnsContainer} ${styles['gap-4']} ${styles['flex-wrap']}`}
+        >
+          <div className={`${styles.input} ${styles['mb-1']}`}>
             <Form.Control
               type="name"
               placeholder={tCommon('searchByName')}
@@ -354,7 +360,7 @@ const orgFundCampaign = (): JSX.Element => {
               data-testid="searchFullName"
             />
             <Button
-              className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center ${styles.searchButton}`}
+              className={`${styles['position-absolute']} ${styles['z-10']} ${styles['bottom-0']} ${styles['end-0']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['align-items-center']} ${styles.searchButton}`}
               data-testid="searchBtn"
             >
               <Search />

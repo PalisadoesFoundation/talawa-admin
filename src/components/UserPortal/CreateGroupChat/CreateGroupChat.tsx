@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateGroupChat.module.css';
+import style from '../../../style/app.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -193,7 +194,10 @@ export default function CreateGroupChat({
             </button>
           </div>
           <Form>
-            <Form.Group className="mb-3" controlId="registerForm.Rname">
+            <Form.Group
+              className={`${style['mb-3']}`}
+              controlId="registerForm.Rname"
+            >
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
@@ -207,7 +211,10 @@ export default function CreateGroupChat({
                 }}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.Rname">
+            <Form.Group
+              className={`${style['mb-3']}`}
+              controlId="registerForm.Rname"
+            >
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"

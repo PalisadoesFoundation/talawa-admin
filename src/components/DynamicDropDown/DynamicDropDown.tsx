@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import styles from './DynamicDropDown.module.css';
-
+import style from '../../style/app.module.css';
 /**
  * Props for the DynamicDropDown component.
  */
@@ -64,12 +64,12 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
   return (
     <Dropdown
       title={`Select ${fieldName}`}
-      className={`${parentContainerStyle ?? ''} m-2`}
+      className={`${parentContainerStyle ?? ''} ${style['me-2']}`}
       data-testid={`${fieldName.toLowerCase()}-dropdown-container`}
       aria-label={`Select ${fieldName}`}
     >
       <Dropdown.Toggle
-        className={`${btnStyle ?? 'w-100'} ${styles.dropwdownToggle}`}
+        className={`${btnStyle ?? style['w-100']} ${styles['dropwdownToggle']}`}
         data-testid={`${fieldName.toLowerCase()}-dropdown-btn`}
         aria-expanded="false"
       >
@@ -91,7 +91,7 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
         {fieldOptions.map((option, index: number) => (
           <Dropdown.Item
             key={`${fieldName.toLowerCase()}-dropdown-item-${index}`}
-            className="dropdown-item"
+            className={`${styles['dropdown-item']}`}
             onClick={() => handleFieldChange(option.value)}
             data-testid={`change-${fieldName.toLowerCase()}-btn-${option.value}`}
             role="option"

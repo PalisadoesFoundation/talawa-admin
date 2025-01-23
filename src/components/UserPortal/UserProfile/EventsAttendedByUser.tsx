@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './common.module.css';
+import style from '../../../style/app.module.css';
 import EventsAttendedByMember from 'components/MemberDetail/EventsAttendedByMember';
 /**
  * Component to display events attended by a user in card format
@@ -33,7 +34,7 @@ export const EventsAttendedByUser: React.FC<InterfaceUser> = ({
   t,
 }) => {
   return (
-    <Card border="0" className="rounded-4 mb-4">
+    <Card border="0" className={`${style['rounded-4']} ${style['mb-4']}`}>
       <div className={`${styles.cardHeader}`}>
         <div className={`${styles.cardTitle}`}>{t('eventAttended')}</div>
       </div>

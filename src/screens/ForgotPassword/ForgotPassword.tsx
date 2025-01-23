@@ -159,26 +159,30 @@ const ForgotPassword = (): JSX.Element => {
   return (
     <>
       <div className={styles.pageWrapper}>
-        <div className="row container-fluid d-flex justify-content-center items-center">
-          <div className="col-12 col-lg-4 px-0">
+        <div
+          className={`${styles['rows']} ${styles['container-fluid']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['items-center']}`}
+        >
+          <div
+            className={`${styles['col-12']} ${styles['col-lg-4']} ${styles['px-0']}`}
+          >
             <div className={styles.cardTemplate}>
               <div className={styles.keyWrapper}>
                 <div className={styles.themeOverlay} />
                 <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />
               </div>
-              <h3 className="text-center fw-bold">
+              <h3 className={`${styles['text-center']} ${styles['fw-bold']}`}>
                 {tCommon('forgotPassword')}
               </h3>
               {showEnterEmail ? (
-                <div className="mt-4">
+                <div className={styles['mt-4']}>
                   <Form onSubmit={getOTP}>
                     <Form.Label htmlFor="registeredEmail">
                       {t('registeredEmail')}:
                     </Form.Label>
-                    <div className="position-relative">
+                    <div className={styles['position-relative']}>
                       <Form.Control
                         type="email"
-                        className="form-control"
+                        className={styles['form-control']}
                         id="registeredEmail"
                         placeholder={t('registeredEmail')}
                         value={registeredEmail}
@@ -191,7 +195,7 @@ const ForgotPassword = (): JSX.Element => {
                     </div>
                     <Button
                       type="submit"
-                      className="mt-4 w-100"
+                      className={`${styles['mt-4']} ${styles['w-100']}`}
                       data-testid="getOtpBtn"
                     >
                       {t('getOtp')}
@@ -199,12 +203,12 @@ const ForgotPassword = (): JSX.Element => {
                   </Form>
                 </div>
               ) : (
-                <div className="mt-4">
+                <div className={styles['mt-4']}>
                   <Form onSubmit={submitForgotPassword}>
                     <Form.Label htmlFor="userOtp">{t('enterOtp')}:</Form.Label>
                     <Form.Control
                       type="number"
-                      className="form-control"
+                      className={styles['form-control']}
                       id="userOtp"
                       placeholder={t('userOtp')}
                       name="userOtp"
@@ -222,7 +226,7 @@ const ForgotPassword = (): JSX.Element => {
                     </Form.Label>
                     <Form.Control
                       type="password"
-                      className="form-control"
+                      className={styles['form-control']}
                       id="newPassword"
                       placeholder={tCommon('password')}
                       data-testid="newPassword"
@@ -241,7 +245,7 @@ const ForgotPassword = (): JSX.Element => {
                     </Form.Label>
                     <Form.Control
                       type="password"
-                      className="form-control"
+                      className={styles['form-control']}
                       id="confirmNewPassword"
                       placeholder={t('cofirmNewPassword')}
                       data-testid="confirmNewPassword"
@@ -255,16 +259,21 @@ const ForgotPassword = (): JSX.Element => {
                         })
                       }
                     />
-                    <Button type="submit" className="mt-2 w-100">
+                    <Button
+                      type="submit"
+                      className={`${styles['mt-2']} ${styles['w-100']}`}
+                    >
                       {t('changePassword')}
                     </Button>
                   </Form>
                 </div>
               )}
-              <div className="d-flex justify-content-between items-center mt-4">
+              <div
+                className={`${styles['d-flex']} ${styles['justify-content-between']} ${styles['items-center']} ${styles['mt-4']}`}
+              >
                 <Link
                   to={'/'}
-                  className="mx-auto d-flex items-center text-secondary"
+                  className={`${styles['mx-auto']} ${styles['d-flex']} ${styles['items-center']} ${styles['text-secondary']}`}
                 >
                   <ArrowRightAlt
                     fontSize="medium"

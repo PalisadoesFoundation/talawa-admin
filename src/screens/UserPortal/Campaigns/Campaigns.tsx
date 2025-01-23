@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, ProgressBar } from 'react-bootstrap';
 import styles from './Campaigns.module.css';
+import style from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
@@ -112,10 +113,17 @@ const Campaigns = (): JSX.Element => {
   if (campaignError) {
     // Displays an error message if there is an issue loading the campaigns
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
-        <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+      <div
+        className={`${styles['container']} ${style['bg-white']} ${style['rounded-4']} ${style['my-3']}`}
+      >
+        <div className={styles['message']} data-testid="errorMsg">
+          <WarningAmberRounded
+            className={styles['errorIcon']}
+            fontSize="large"
+          />
+          <h6
+            className={`${style['fw-bold']} ${style['text-danger']} ${style['text-center']}`}
+          >
             {tErrors('errorLoading', { entity: 'Campaigns' })}
             <br />
             {campaignError.message}
@@ -128,29 +136,35 @@ const Campaigns = (): JSX.Element => {
   // Renders the campaign list and UI elements for searching, sorting, and adding pledges
   return (
     <>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div
+        className={`${styles['btnsContainer']} ${style['gap-4']} ${style['flex-wrap']}`}
+      >
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
+        <div className={`${styles['input']} ${style['mb-1']}`}>
           <Form.Control
             type="name"
             placeholder={t('searchByName')}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles['inputField']}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchCampaigns"
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${style['position-absolute']} ${style['z-10']} ${style['bottom-0']} ${style['end-0']} ${style['d-flex']} ${style['justify-content-center']} ${style['align-items-center']}`}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
+        <div
+          className={`${style['d-flex']} ${style['gap-4']} ${style['mb-1']}`}
+        >
+          <div
+            className={`${style['d-flex']} ${style['justify-space-between']}`}
+          >
             <SortingButton
               sortingOptions={[
                 { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
@@ -182,7 +196,7 @@ const Campaigns = (): JSX.Element => {
               }
             >
               {t('myPledges')}
-              <i className="fa fa-angle-right ms-2" />
+              <i className={`${styles['ms2']} fa fa-angle-right`} />
             </Button>
           </div>
         </div>
@@ -194,17 +208,20 @@ const Campaigns = (): JSX.Element => {
         </Stack>
       ) : (
         campaigns.map((campaign: InterfaceUserCampaign, index: number) => (
-          <Accordion className="mt-3 rounded" key={index}>
+          <Accordion
+            className={`${style['mt-3']} ${style['rounded']}`}
+            key={index}
+          >
             <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-              <div className={styles.accordionSummary}>
+              <div className={styles['accordionSummary']}>
                 <div
-                  className={styles.titleContainer}
+                  className={styles['titleContainer']}
                   data-testid={`detailContainer${index + 1}`}
                 >
-                  <div className="d-flex">
+                  <div className={style['d-flex']}>
                     <h3>{campaign.name}</h3>
                     <Chip
-                      icon={<Circle className={styles.chipIcon} />}
+                      icon={<Circle className={styles['chipIcon']} />}
                       label={
                         new Date(campaign.endDate) < new Date()
                           ? 'Ended'
@@ -212,11 +229,13 @@ const Campaigns = (): JSX.Element => {
                       }
                       variant="outlined"
                       color="primary"
-                      className={`${styles.chip} ${new Date(campaign.endDate) < new Date() ? styles.pending : styles.active}`}
+                      className={`${styles['chip']} ${new Date(campaign.endDate) < new Date() ? styles['pending'] : styles['active']}`}
                     />
                   </div>
 
-                  <div className={`d-flex gap-4 ${styles.subContainer}`}>
+                  <div
+                    className={`${style['d-flex']} ${style['gap-4']} ${styles['subContainer']}`}
+                  >
                     <span>
                       Goal:{' '}
                       {
@@ -235,7 +254,7 @@ const Campaigns = (): JSX.Element => {
                     </span>
                   </div>
                 </div>
-                <div className="d-flex gap-3">
+                <div className={`${style['d-flex']} ${style['gap-3']}`}>
                   <Button
                     variant={
                       new Date(campaign.endDate) < new Date()
@@ -246,15 +265,17 @@ const Campaigns = (): JSX.Element => {
                     disabled={new Date(campaign.endDate) < new Date()}
                     onClick={() => openModal(campaign)}
                   >
-                    <i className={'fa fa-plus me-2'} />
+                    <i className={`fa fa-plus ${style['me-2']}`} />
                     {t('addPledge')}
                   </Button>
                 </div>
               </div>
             </AccordionSummary>
-            <AccordionDetails className="d-flex gap-3 ms-2">
-              <span className="fw-bold">Amount Raised: </span>
-              <div className={styles.progress}>
+            <AccordionDetails
+              className={`${style['d-flex']} ${style['gap-3']} ${style['ms-2']}`}
+            >
+              <span className={style['fw-bold']}>Amount Raised: </span>
+              <div className={styles['progress']}>
                 <span>$0</span>
                 <ProgressBar
                   now={0}

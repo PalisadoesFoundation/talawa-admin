@@ -2,7 +2,7 @@ import React from 'react';
 import { countryOptions } from 'utils/formEnumFields';
 import { Col, Form, Row } from 'react-bootstrap';
 import styles from './common.module.css';
-
+import style from '../../../style/app.module.css';
 interface InterfaceUserAddressFieldsProps {
   tCommon: (key: string) => string;
   t: (key: string) => string;
@@ -30,8 +30,8 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
   userDetails,
 }) => {
   return (
-    <Row className="mb-1">
-      <Col lg={4}>
+    <Row className={`${styles.row} ${style['mb-1']}`}>
+      <Col className={` ${style.rowChild}`} lg={4}>
         <Form.Label htmlFor="address" className={styles.cardLabel}>
           {tCommon('address')}
         </Form.Label>
@@ -45,7 +45,7 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
           data-testid="inputAddress"
         />
       </Col>
-      <Col lg={4}>
+      <Col className={`${style.rowChild}`} lg={4}>
         <Form.Label htmlFor="inputState" className={styles.cardLabel}>
           {t('state')}
         </Form.Label>
@@ -59,7 +59,7 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
           data-testid="inputState"
         />
       </Col>
-      <Col lg={4}>
+      <Col className={` ${style.rowChild}`} lg={4}>
         <Form.Label htmlFor="country" className={styles.cardLabel}>
           {t('country')}
         </Form.Label>

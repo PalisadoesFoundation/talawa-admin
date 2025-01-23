@@ -125,10 +125,17 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
 
   if (agendaCategoryError) {
     return (
-      <div className={`${styles.container} bg-transparent rounded-4 my-3`}>
-        <div className={styles.message}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+      <div
+        className={`${styles['container']} ${styles['bg-transparent']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
+        <div className={styles['message']}>
+          <WarningAmberRounded
+            className={styles['errorIcon']}
+            fontSize="large"
+          />
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             Error occured while loading{' '}
             {agendaCategoryError && 'Agenda Categories'}
             Data
@@ -141,11 +148,13 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   }
 
   return (
-    <div className={`mx-4`}>
-      <div className={` bg-transparent rounded-4 my-3`}>
-        <div className={`mx-4`}>
-          <div className={`${styles.btnsContainer} my-0`}>
-            <div className={`${styles.input} mb-1`}>
+    <div className={styles['mx-4']}>
+      <div
+        className={`${styles['bg-transparent']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
+        <div className={styles['mx-4']}>
+          <div className={`${styles['btnsContainer']} ${styles['my-0']}`}>
+            <div className={`${styles['input']} ${styles['mb-1']}`}>
               <Form.Control
                 type="name"
                 placeholder={tCommon('searchByName')}
@@ -179,7 +188,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
               data-testid="createAgendaCategoryBtn"
               className={styles.addButton}
             >
-              <i className={'fa fa-plus me-2'} />
+              <i className={`fa fa-plus ${styles['me-2']}`} />
               {t('createAgendaCategory')}
             </Button>
           </div>

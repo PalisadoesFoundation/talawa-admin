@@ -38,7 +38,7 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
           className={styles.modalHeader}
           aria-label={t('closeModal')}
         >
-          <Modal.Title className="text-white" id={`unassignTag`}>
+          <Modal.Title className={`${styles['text-white']}`} id={`unassignTag`}>
             {t('unassignUserTag')}
           </Modal.Title>
         </Modal.Header>
@@ -46,7 +46,7 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
         <Modal.Footer>
           <Button
             type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
+            className={`${styles['btn']} ${styles['btn-danger']} ${styles['removeButton']}`}
             data-dismiss="modal"
             onClick={toggleUnassignUserTagModal}
             data-testid="unassignTagModalCloseBtn"
@@ -56,7 +56,7 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
           </Button>
           <Button
             type="button"
-            className={`btn ${styles.addButton}`}
+            className={`${styles['btn']} ${styles.addButton}`}
             onClick={async (e) => {
               const btn = e.currentTarget;
               btn.disabled = true;

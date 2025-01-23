@@ -311,18 +311,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           setShow={setShow}
         />
       )}
-      <Row className="g-4 mt-1">
-        <Col md={6}>
-          <Card className={`${styles.allRound}`}>
+      <Row className={` ${styles.row} ${styles['gap-4']} ${styles['mt-1']}`}>
+        <Col className={`${styles.rowChild}`} md={6}>
+          <Card className={styles['allRound']}>
             <Card.Header
-              className={`bg-success text-white py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+              className={`${styles['bg-success']} ${styles['text-white']} ${styles['py-3']} ${styles['px-4']} ${styles['d-flex']} ${styles['justify-content-between']} ${styles['align-items-center']} ${styles['topRadius']}`}
             >
-              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
+              <h3 className={styles['m-0']}>{t('personalDetailsHeading')}</h3>
               <Button
                 variant="light"
                 size="sm"
                 disabled
-                className="rounded-pill fw-bolder"
+                className={`${styles['rounded-pill']} ${styles['fw-bolder']}`}
               >
                 {userData?.appUserProfile?.isSuperAdmin
                   ? 'Super Admin'
@@ -331,19 +331,21 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     : 'User'}
               </Button>
             </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <div className="text-center mb-3">
+            <Card.Body className={`${styles['py-3']} ${styles['px-3']}`}>
+              <div className={`${styles['text-center']} ${styles['mb-3']}`}>
                 {formState?.image ? (
-                  <div className="position-relative d-inline-block">
+                  <div
+                    className={`${styles['position-relative']} ${styles['d-inline-block']}`}
+                  >
                     <img
-                      className="rounded-circle"
+                      className={`${styles['rounded-circle']}`}
                       style={{ width: '55px', aspectRatio: '1/1' }}
                       src={formState.image}
                       alt="User"
                       data-testid="userImagePresent"
                     />
                     <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
+                      className={`${styles['fas']} ${styles['fa-edit']} ${styles['position-absolute']} ${styles['bottom-0']} ${styles['right-0']} ${styles['p-1']} ${styles['bg-white']} ${styles['rounded-circle']}`}
                       onClick={handleEditIconClick}
                       style={{ cursor: 'pointer' }}
                       data-testid="editImage"
@@ -358,7 +360,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     />
                   </div>
                 ) : (
-                  <div className="position-relative d-inline-block">
+                  <div
+                    className={`${styles['position-relative']} ${styles['d-inline-block']}`}
+                  >
                     <Avatar
                       name={`${formState.firstName} ${formState.lastName}`}
                       alt="User Image"
@@ -367,7 +371,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       radius={150}
                     />
                     <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
+                      className={`${styles['fas']} ${styles['fa-edit']} ${styles['position-absolute']} ${styles['bottom-0']} ${styles['right-0']} ${styles['p-1']} ${styles['bg-white']} ${styles['rounded-circle']}`}
                       onClick={handleEditIconClick}
                       data-testid="editImage"
                       style={{ cursor: 'pointer' }}
@@ -385,15 +389,15 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   style={{ display: 'none' }}
                 />
               </div>
-              <Row className="g-3">
-                <Col md={6}>
-                  <label htmlFor="firstName" className="form-label">
+              <Row className={`${styles.row} g-3`}>
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label htmlFor="firstName" className={styles['form-label']}>
                     {tCommon('firstName')}
                   </label>
                   <input
                     id="firstName"
                     value={formState.firstName}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`${styles['form-control']} ${styles['inputColor']}`}
                     type="text"
                     name="firstName"
                     onChange={handleChange}
@@ -401,14 +405,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder={tCommon('firstName')}
                   />
                 </Col>
-                <Col md={6}>
-                  <label htmlFor="lastName" className="form-label">
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label htmlFor="lastName" className={styles['form-label']}>
                     {tCommon('lastName')}
                   </label>
                   <input
                     id="lastName"
                     value={formState.lastName}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`${styles['form-control']} ${styles['inputColor']}`}
                     type="text"
                     name="lastName"
                     onChange={handleChange}
@@ -416,8 +420,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder={tCommon('lastName')}
                   />
                 </Col>
-                <Col md={6}>
-                  <label htmlFor="gender" className="form-label">
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label htmlFor="gender" className={styles['form-label']}>
                     {t('gender')}
                   </label>
                   <DynamicDropDown
@@ -428,12 +432,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     handleChange={handleChange}
                   />
                 </Col>
-                <Col md={6}>
-                  <label htmlFor="birthDate" className="form-label">
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label htmlFor="birthDate" className={styles['form-label']}>
                     {t('birthDate')}
                   </label>
                   <DatePicker
-                    className={`${styles.dateboxMemberDetail} w-100`}
+                    className={`${styles['dateboxMemberDetail']} ${styles['w-100']}`}
                     value={dayjs(formState.birthDate)}
                     onChange={handleDateChange}
                     data-testid="birthDate"
@@ -447,8 +451,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     }}
                   />
                 </Col>
-                <Col md={6}>
-                  <label htmlFor="grade" className="form-label">
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label htmlFor="grade" className={styles['form-label']}>
                     {t('educationGrade')}
                   </label>
                   <DynamicDropDown
@@ -459,8 +463,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     handleChange={handleChange}
                   />
                 </Col>
-                <Col md={6}>
-                  <label htmlFor="empStatus" className="form-label">
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label htmlFor="empStatus" className={styles['form-label']}>
                     {t('employmentStatus')}
                   </label>
                   <DynamicDropDown
@@ -471,8 +475,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     handleChange={handleChange}
                   />
                 </Col>
-                <Col md={6}>
-                  <label htmlFor="maritalStatus" className="form-label">
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label
+                    htmlFor="maritalStatus"
+                    className={styles['form-label']}
+                  >
                     {t('maritalStatus')}
                   </label>
                   <DynamicDropDown
@@ -487,23 +494,23 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6}>
-          <Card className={`${styles.allRound}`}>
+        <Col className={`${styles.rowChild}`} md={6}>
+          <Card className={styles['allRound']}>
             <Card.Header
-              className={`bg-success text-white py-3 px-4 ${styles.topRadius}`}
+              className={`${styles['bg-success']} ${styles['text-white']} ${styles['py-3']} ${styles['px-4']} ${styles['topRadius']}`}
             >
               <h3 className="m-0">{t('contactInfoHeading')}</h3>
             </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <Row className="g-3">
-                <Col md={12}>
-                  <label htmlFor="email" className="form-label">
+            <Card.Body className={`${styles['py-3']} ${styles['px-3']}`}>
+              <Row className={`${styles.row} g-3`}>
+                <Col className={`${styles.rowChild}`} md={12}>
+                  <label htmlFor="email" className={styles['form-label']}>
                     {tCommon('email')}
                   </label>
                   <input
                     id="email"
                     value={formState.email}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`${styles['form-control']} ${styles['inputColor']}`}
                     type="email"
                     name="email"
                     onChange={handleChange}
@@ -511,14 +518,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder={tCommon('email')}
                   />
                 </Col>
-                <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
+                <Col className={`${styles.rowChild}`} md={12}>
+                  <label htmlFor="phoneNumber" className={styles['form-label']}>
                     {t('phone')}
                   </label>
                   <input
                     id="phoneNumber"
                     value={formState.phoneNumber}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`${styles['form-control']} ${styles['inputColor']}`}
                     type="tel"
                     name="phoneNumber"
                     onChange={handleChange}
@@ -526,56 +533,56 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder={t('phone')}
                   />
                 </Col>
-                <Col md={12}>
-                  <label htmlFor="address" className="form-label">
+                <Col className={`${styles.rowChild}`} md={12}>
+                  <label htmlFor="address" className={styles['form-label']}>
                     {tCommon('address')}
                   </label>
                   <input
                     id="address"
                     value={formState.address}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`${styles['form-control']} ${styles['inputColor']}`}
                     type="text"
                     name="address"
                     onChange={handleChange}
                     placeholder={tCommon('address')}
                   />
                 </Col>
-                <Col md={6}>
-                  <label htmlFor="city" className="form-label">
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label htmlFor="city" className={styles['form-label']}>
                     {t('city')}
                   </label>
                   <input
                     id="city"
                     value={formState.city}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`${styles['form-control']} ${styles['inputColor']}`}
                     type="text"
                     name="city"
                     onChange={handleChange}
                     placeholder={t('city')}
                   />
                 </Col>
-                <Col md={6}>
-                  <label htmlFor="state" className="form-label">
+                <Col className={`${styles.rowChild}`} md={6}>
+                  <label htmlFor="state" className={styles['form-label']}>
                     {t('state')}
                   </label>
                   <input
                     id="state"
                     value={formState.state}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`${styles['form-control']} ${styles['inputColor']}`}
                     type="text"
                     name="state"
                     onChange={handleChange}
                     placeholder={tCommon('state')}
                   />
                 </Col>
-                <Col md={12}>
-                  <label htmlFor="country" className="form-label">
+                <Col className={`${styles.rowChild}`} md={12}>
+                  <label htmlFor="country" className={styles['form-label']}>
                     {t('countryCode')}
                   </label>
                   <input
                     id="country"
                     value={formState.country}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`${styles['form-control']} ${styles['inputColor']}`}
                     type="text"
                     name="country"
                     onChange={handleChange}
@@ -587,8 +594,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Card>
         </Col>
         {isUpdated && (
-          <Col md={12}>
-            <Card.Footer className="bg-white border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
+          <Col className={`${styles.rowChild}`} md={12}>
+            <Card.Footer
+              className={`${styles['bg-white']} ${styles['border-top-0']} ${styles['d-flex']} ${styles['justify-content-end']} ${styles['gap-2']} ${styles['py-3']} ${styles['px-2']}`}
+            >
               <Button
                 variant="outline-secondary"
                 onClick={resetChanges}
@@ -608,23 +617,30 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         )}
       </Row>
 
-      <Row className="mb-4">
-        <Col xs={12} lg={6}>
-          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+      <Row className={`${styles.row} ${styles['mb-4']}`}>
+        <Col className={`${styles.rowChild}`} xs={12} lg={6}>
+          <Card
+            className={`${styles['contact']} ${styles['allRound']} ${styles['mt-3']}`}
+          >
             <Card.Header
-              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              className={`${styles['bg-primary']} ${styles['d-flex']} ${styles['justify-content-between']} ${styles['align-items-center']} ${styles['py-3']} ${styles['px-4']} ${styles['topRadius']}`}
             >
-              <h3 className="text-white m-0" data-testid="eventsAttended-title">
+              <h3
+                className={`${styles['text-white']} ${styles['m-0']}`}
+                data-testid="eventsAttended-title"
+              >
                 {t('tagsAssigned')}
               </h3>
             </Card.Header>
             <Card.Body
               id="tagsAssignedScrollableDiv"
               data-testid="tagsAssignedScrollableDiv"
-              className={`${styles.cardBody} pe-0`}
+              className={`${styles['cardBody']} ${styles['pe-0']}`}
             >
               {!tagsAssigned.length ? (
-                <div className="w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary">
+                <div
+                  className={`${styles['w-100']} ${styles['h-100']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['align-items-center']} ${styles['fw-semibold']} ${styles['text-secondary']}`}
+                >
                   {t('noTagsAssigned')}
                 </div>
               ) : (
@@ -641,7 +657,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 >
                   {tagsAssigned.map((tag: InterfaceTagData, index: number) => (
                     <div key={tag._id}>
-                      <div className="d-flex justify-content-between my-2 ms-2">
+                      <div
+                        className={`${styles['d-flex']} ${styles['justify-content-between']} ${styles['my-2']} ${styles['ms-2']}`}
+                      >
                         <div
                           className={styles.tagLink}
                           data-testid="tagName"
@@ -652,10 +670,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           {tag.parentTag ? (
                             <>
                               <i className={'fa fa-angle-double-right'} />
-                              <span className="me-2">...</span>
+                              <span className={styles['me-2']}>...</span>
                             </>
                           ) : (
-                            <i className={'me-2 fa fa-angle-right'} />
+                            <i
+                              className={`${styles['me-2']} fa fa-angle-right`}
+                            />
                           )}
                           {tag.name}
                         </div>
@@ -666,14 +686,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                             setUnassignTagId(tag._id);
                             toggleUnassignUserTagModal();
                           }}
-                          className="me-2"
+                          className={styles['me-2']}
                           data-testid="unassignTagBtn"
                         >
                           {'Unassign'}
                         </Button>
                       </div>
                       {index + 1 !== tagsAssigned.length && (
-                        <hr className="mx-0" />
+                        <hr className={styles['mx-0']} />
                       )}
                     </div>
                   ))}
@@ -683,12 +703,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Card>
         </Col>
 
-        <Col>
-          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+        <Col className={`${styles.rowChild}`}>
+          <Card
+            className={`${styles['contact']} ${styles['allRound']} ${styles['mt-3']}`}
+          >
             <Card.Header
-              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              className={`${styles['bg-primary']} ${styles['d-flex']} ${styles['justify-content-between']} ${styles['align-items-center']} ${styles['py-3']} ${styles['px-4']} ${styles['topRadius']}`}
             >
-              <h3 className="text-white m-0" data-testid="eventsAttended-title">
+              <h3
+                className={`${styles['text-white']} ${styles['m-0']}`}
+                data-testid="eventsAttended-title"
+              >
                 {t('eventsAttended')}
               </h3>
               <Button
@@ -702,11 +727,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Button>
             </Card.Header>
             <Card.Body
-              className={`${styles.cardBody} ${styles.scrollableCardBody}`}
+              className={`${styles['cardBody']} ${styles['scrollableCardBody']}`}
             >
               {!userData?.user.eventsAttended?.length ? (
                 <div
-                  className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
+                  className={`${styles['emptyContainer']} ${styles['w-100']} ${styles['h-100']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['align-items-center']} ${styles['fw-semibold']} ${styles['text-secondary']}`}
                 >
                   {t('noeventsAttended')}
                 </div>

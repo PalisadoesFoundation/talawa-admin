@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import UserDefault from '../../../assets/images/defaultImg.png';
 import styles from './StartPostModal.module.css';
+import style from '../../../style/app.module.css';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 
@@ -113,17 +114,19 @@ const startPostModal = ({
       data-testid="startPostModal"
     >
       <Modal.Header
-        className="bg-primary"
+        className={`${style['bg-primary']}`}
         closeButton
         data-testid="modalHeader"
       >
-        <Modal.Title className="text-white">
-          <span className="d-flex gap-2 align-items-center">
+        <Modal.Title className={`${style['text-white']}`}>
+          <span
+            className={`${style['d-flex']} ${style['gap-2']} ${style['align-items-center']}`}
+          >
             <span className={styles.userImage}>
               <Image
                 src={userData?.user?.image || UserDefault}
                 roundedCircle
-                className="mt-2"
+                className={`${style['mt-2']}`}
                 data-testid="userImage"
               />
             </span>
@@ -156,7 +159,7 @@ const startPostModal = ({
           <Button
             size="sm"
             variant="success"
-            className="px-4"
+            className={`${style['px-4']}`}
             value="invite"
             data-testid="createPostBtn"
             onClick={handlePost}

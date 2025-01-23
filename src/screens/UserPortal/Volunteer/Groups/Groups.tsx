@@ -143,7 +143,9 @@ function groups(): JSX.Element {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
-        <h6 className="fw-bold text-danger text-center">
+        <h6
+          className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+        >
           {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
         </h6>
       </div>
@@ -163,7 +165,7 @@ function groups(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
             data-testid="groupName"
           >
             {params.row.name}
@@ -184,7 +186,7 @@ function groups(): JSX.Element {
         const { _id, firstName, lastName, image } = params.row.leader;
         return (
           <div
-            className="d-flex fw-bold align-items-center ms-2"
+            className={`${styles['d-flex']} ${styles['fw-bold']} ${styles['align-items-center']} ${styles['ms-2']}`}
             data-testid="leaderName"
           >
             {image ? (
@@ -220,7 +222,9 @@ function groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex justify-content-center fw-bold">
+          <div
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
+          >
             {params.row.assignments.length}
           </div>
         );
@@ -236,7 +240,9 @@ function groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex justify-content-center fw-bold">
+          <div
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
+          >
             {params.row.volunteers.length}
           </div>
         );
@@ -258,7 +264,7 @@ function groups(): JSX.Element {
               variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`${styles['me-2']} ${styles['rounded']}`}
               data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
@@ -268,7 +274,7 @@ function groups(): JSX.Element {
               <Button
                 variant="success"
                 size="sm"
-                className="me-2 rounded"
+                className={`${styles['me-2']} ${styles['rounded']}`}
                 data-testid="editGroupBtn"
                 onClick={() => handleModalClick(params.row, ModalState.EDIT)}
               >
@@ -284,8 +290,10 @@ function groups(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div
+        className={`${styles['btnsContainer']} ${styles['gap-4']} ${styles['flex-wrap']}`}
+      >
+        <div className={`${styles['input']} ${styles['mb-1']}`}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -303,15 +311,19 @@ function groups(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+            className={`${styles['position-absolute']} ${styles['z-10']} ${styles['bottom-0']} ${styles['end-0']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['align-items-center']}`}
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
+        <div
+          className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mb-1']}`}
+        >
+          <div
+            className={`${styles['d-flex']} ${styles['justify-space-between']} ${styles['align-items-center']} ${styles['gap-3']}`}
+          >
             <SortingButton
               sortingOptions={[
                 { label: t('leader'), value: 'leader' },

@@ -140,10 +140,14 @@ function SubTags(): JSX.Element {
 
   if (subTagsError) {
     return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.errorContainer} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             Error occured while loading sub tags
           </h6>
         </div>
@@ -203,7 +207,7 @@ function SubTags(): JSX.Element {
           >
             {params.row.name}
 
-            <i className={'ms-2 fa fa-caret-right'} />
+            <i className={`${styles['ms-2']} fa fa-caret-right`} />
           </div>
         );
       },
@@ -220,7 +224,7 @@ function SubTags(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <Link
-            className="text-secondary"
+            className={styles['text-secondary']}
             to={`/orgtags/${orgId}/subTags/${params.row._id}`}
           >
             {params.row.childTags.totalCount}
@@ -240,7 +244,7 @@ function SubTags(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <Link
-            className="text-secondary"
+            className={styles['text-secondary']}
             to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
             {params.row.usersAssignedTo.totalCount}
@@ -274,14 +278,16 @@ function SubTags(): JSX.Element {
 
   return (
     <>
-      <Row>
-        <div>
-          <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-            <div className={`${styles.input} mb-1`}>
+      <Row className={styles.row}>
+        <div className={styles.rowChild}>
+          <div
+            className={`${styles['btnsContainer']} ${styles['gap-4']} ${styles['flex-wrap']}`}
+          >
+            <div className={`${styles['input']} ${styles['mb-1']}`}>
               <Form.Control
                 type="text"
                 id="tagName"
-                className={`${styles.inputField} `}
+                className={`${styles['inputField']} `}
                 placeholder={tCommon('searchByName')}
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
                 data-testid="searchByName"
@@ -310,7 +316,7 @@ function SubTags(): JSX.Element {
             <Button
               onClick={() => redirectToManageTag(parentTagId as string)}
               data-testid="manageCurrentTagBtn"
-              className={`${styles.createButton} mb-3`}
+              className={`${styles['createButton']} ${styles['mb-3']}`}
             >
               {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
             </Button>
@@ -319,9 +325,9 @@ function SubTags(): JSX.Element {
               variant="success"
               onClick={showAddSubTagModal}
               data-testid="addSubTagBtn"
-              className={`${styles.createButton} mb-3`}
+              className={`${styles['createButton']} ${styles['mb-3']}`}
             >
-              <i className={'fa fa-plus me-2'} />
+              <i className={`fa fa-plus ${styles['me-2']}`} />
               {t('addChildTag')}
             </Button>
           </div>
@@ -329,32 +335,34 @@ function SubTags(): JSX.Element {
           {subTagsLoading || createUserTagLoading ? (
             <Loader />
           ) : (
-            <div className="mb-2 ">
-              <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
-                <div className="ms-3 my-1">
+            <div className={styles['mb-2']}>
+              <div
+                className={`${styles['bg-white']} ${styles['light']} ${styles['border']} ${styles['rounded-top']} ${styles['mb-0']} ${styles['py-2']} ${styles['d-flex']} ${styles['align-items-center']}`}
+              >
+                <div className={`${styles['ms-3']} ${styles['my-1']}`}>
                   <IconComponent name="Tag" />
                 </div>
 
                 <div
                   onClick={() => navigate(`/orgtags/${orgId}`)}
-                  className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
+                  className={`${styles['fs-6']} ${styles['ms-3']} ${styles['my-1']} ${styles['tagsBreadCrumbs']}`}
                   data-testid="allTagsBtn"
                 >
                   {'Tags'}
-                  <i className={'mx-2 fa fa-caret-right'} />
+                  <i className={`${styles['mx-2']} fa fa-caret-right`} />
                 </div>
 
                 {orgUserTagAncestors?.map((tag, index) => (
                   <div
                     key={index}
-                    className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
+                    className={`${styles['ms-2']}  ${tag._id === parentTagId ? `${styles['fs-4']} ${styles['fw-semibold']} ${styles['text-secondary']}` : `${styles['tagsBreadCrumbs']} ${styles['fs-6']}`}`}
                     onClick={() => redirectToSubTags(tag._id as string)}
                     data-testid="redirectToSubTags"
                   >
                     {tag.name}
 
                     {orgUserTagAncestors.length - 1 !== index && (
-                      <i className={'mx-2 fa fa-caret-right'} />
+                      <i className={`${styles['mx-2']} fa fa-caret-right`} />
                     )}
                   </div>
                 ))}
@@ -429,7 +437,7 @@ function SubTags(): JSX.Element {
             <Form.Control
               type="name"
               id="tagname"
-              className={`mb-3 ${styles.inputField}`}
+              className={`${styles['mb-3']} ${styles['inputField']}`}
               placeholder={t('tagNamePlaceholder')}
               data-testid="modalTitle"
               autoComplete="off"
@@ -446,7 +454,7 @@ function SubTags(): JSX.Element {
               variant="secondary"
               onClick={(): void => hideAddSubTagModal()}
               data-testid="addSubTagModalCloseBtn"
-              className={styles.removeButton}
+              className={styles['removeButton']}
             >
               {tCommon('cancel')}
             </Button>
@@ -454,7 +462,7 @@ function SubTags(): JSX.Element {
               type="submit"
               value="add"
               data-testid="addSubTagSubmitBtn"
-              className={styles.addButton}
+              className={styles['addButton']}
             >
               {tCommon('create')}
             </Button>

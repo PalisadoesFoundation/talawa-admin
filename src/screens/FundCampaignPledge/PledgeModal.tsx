@@ -219,13 +219,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           onSubmitCapture={
             mode === 'edit' ? updatePledgeHandler : createPledgeHandler
           }
-          className="p-3"
+          className={`${styles['p-3']}`}
         >
           {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
-          <Form.Group className="d-flex mb-3 w-100">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['mb-3']} ${styles['w-100']}`}
+          >
             <Autocomplete
               multiple
-              className={`${styles.noOutlinePledge} w-100`}
+              className={`${styles.noOutlinePledge} ${styles['w-100']}`}
               limitTags={2}
               data-testid="pledgerSelect"
               options={pledgers}
@@ -246,7 +248,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               )}
             />
           </Form.Group>
-          <Form.Group className="d-flex gap-3 mx-auto  mb-3">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mx-auto']} ${styles['mb-3']}`}
+          >
             {/* Date Calendar Component to select start date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
@@ -287,7 +291,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               maxDate={dayjs(endDate)}
             />
           </Form.Group>
-          <Form.Group className="d-flex gap-3 mb-4">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mb-4']}`}
+          >
             {/* Dropdown to select the currency in which amount is to be pledged */}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">

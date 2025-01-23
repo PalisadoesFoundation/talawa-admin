@@ -112,7 +112,7 @@ function EventRegistrants(): JSX.Element {
         )}
         <Button
           data-testid="filter-button"
-          className={`border-1 mx-4 ${styles.createButton} `}
+          className={`${styles['border-1']} ${styles['mx-4']} ${styles.createButton}`}
         >
           <img
             src="/images/svg/organization.svg"
@@ -123,7 +123,10 @@ function EventRegistrants(): JSX.Element {
           {t('allRegistrants')}
         </Button>
       </div>
-      <TableContainer component={Paper} className={`mt-3 ${styles.tableHead}`}>
+      <TableContainer
+        component={Paper}
+        className={`${styles['mt-3']} ${styles.tableHead}`}
+      >
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>
             <TableRow role="row" className={`${styles.rowBackground}`}>

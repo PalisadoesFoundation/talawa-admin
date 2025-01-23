@@ -123,7 +123,9 @@ function leaderboard(): JSX.Element {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
-        <h6 className="fw-bold text-danger text-center">
+        <h6
+          className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+        >
           {tErrors('errorLoading', { entity: 'Volunteer Rankings' })}
         </h6>
       </div>
@@ -139,24 +141,24 @@ function leaderboard(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles['tableHeader']}`,
       renderCell: (params: GridCellParams) => {
         if (params.row.rank === 1) {
           return (
             <>
-              <img src={gold} alt="gold" className={styles.rankings} />
+              <img src={gold} alt="gold" className={styles['rankings']} />
             </>
           );
         } else if (params.row.rank === 2) {
           return (
             <>
-              <img src={silver} alt="silver" className={styles.rankings} />
+              <img src={silver} alt="silver" className={styles['rankings']} />
             </>
           );
         } else if (params.row.rank === 3) {
           return (
             <>
-              <img src={bronze} alt="bronze" className={styles.rankings} />
+              <img src={bronze} alt="bronze" className={styles['rankings']} />
             </>
           );
         } else return <>{params.row.rank}</>;
@@ -177,7 +179,7 @@ function leaderboard(): JSX.Element {
         return (
           <>
             <div
-              className="d-flex fw-bold align-items-center ms-5 "
+              className={`${styles['d-flex']} ${styles['fw-bold']} ${styles['align-items-center']} ${styles['ms-5']}`}
               style={{ cursor: 'pointer' }}
               onClick={() =>
                 navigate(`/member/${orgId}`, { state: { id: _id } })
@@ -220,7 +222,7 @@ function leaderboard(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center"
+            className={`${styles['d-flex']} ${styles['justify-content-center']}`}
             data-testid="userEmail"
           >
             {params.row.user.email}
@@ -237,16 +239,22 @@ function leaderboard(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return <div className="fw-bold">{params.row.hoursVolunteered}</div>;
+        return (
+          <div className={styles['fw-bold']}>{params.row.hoursVolunteered}</div>
+        );
       },
     },
   ];
 
   return (
-    <div className="mt-4 mx-2 bg-white p-4 pt-2 rounded-4 shadow">
+    <div
+      className={`${styles['mt-4']} ${styles['mx-2']} ${styles['bg-white']} ${styles['p-4']} ${styles['pt-2']} ${styles['rounded-4']} ${styles['shadow']}`}
+    >
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div
+        className={`${styles['btnsContainer']} ${styles['gap-4']} ${styles['flex-wrap']}`}
+      >
+        <div className={`${styles['input']} ${styles['mb-1']}`}>
           <Form.Control
             type="name"
             placeholder={t('searchByVolunteer')}
@@ -262,15 +270,19 @@ function leaderboard(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+            className={`${styles['position-absolute']} ${styles['z-10']} ${styles['bottom-0']} ${styles['end-0']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['align-items-center']}`}
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
+        <div
+          className={`${styles['d-flex']} ${styles['gap-3']} ${styles['mb-1']}`}
+        >
+          <div
+            className={`${styles['d-flex']} ${styles['justify-space-between']} ${styles['align-items-center']} ${styles['gap-3']}`}
+          >
             <SortingButton
               sortingOptions={[
                 { label: t('mostHours'), value: 'hours_DESC' },

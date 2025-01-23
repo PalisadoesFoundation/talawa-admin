@@ -155,11 +155,11 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
       <Modal.Body>
         <Form
           onSubmitCapture={mode === 'create' ? handleCreate : handleEdit}
-          className="p-2"
+          className={`${styles['p-2']}`}
         >
           {/* Input field to enter amount to be pledged */}
 
-          <FormControl fullWidth className="mb-2">
+          <FormControl fullWidth className={`${styles['mb-2']}`}>
             <TextField
               label={t('actionItemCategoryName')}
               type="text"
@@ -173,13 +173,15 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
               required
             />
           </FormControl>
-          <Form.Group className="d-flex flex-column mb-4">
+          <Form.Group
+            className={`${styles['d-flex']} ${styles['flex-column']} ${styles['mb-4']}`}
+          >
             <label>{tCommon('disabled')} </label>
             <Form.Switch
               type="checkbox"
               checked={isDisabled}
               data-testid="isDisabledSwitch"
-              className="mt-2 ms-2"
+              className={`${styles['mt-2']} ${styles['ms-2']}`}
               onChange={() =>
                 setFormState({
                   ...formState,

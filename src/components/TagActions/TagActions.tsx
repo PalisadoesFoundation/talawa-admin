@@ -247,10 +247,14 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   if (orgUserTagsError) {
     return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.errorContainer} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             {t('errorOccurredWhileLoadingOrganizationUserTags')}
           </h6>
         </div>
@@ -272,30 +276,32 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           data-testid="modalOrganizationHeader"
           closeButton
         >
-          <Modal.Title className="text-white">
+          <Modal.Title className={styles['text-white']}>
             {tagActionType === 'assignToTags'
               ? t('assignToTags')
               : t('removeFromTags')}
           </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleTagAction}>
-          <Modal.Body className="pb-0">
+          <Modal.Body className={styles['pb-0']}>
             <div
-              className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
+              className={`${styles['d-flex']} ${styles['flex-wrap']} ${styles['align-items-center']} ${styles['border']} ${styles['border-2']} ${styles['border-dark-subtle']} ${styles['bg-light-subtle']} ${styles['rounded-3']} ${styles['p-2']} ${styles.scrollContainer}`}
             >
               {selectedTags.length === 0 ? (
-                <div className="text-body-tertiary mx-auto">
+                <div
+                  className={`${styles['text-body-tertiary']} ${styles['mx-auto']}`}
+                >
                   {t('noTagSelected')}
                 </div>
               ) : (
                 selectedTags.map((tag: InterfaceTagData) => (
                   <div
                     key={tag._id}
-                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
+                    className={`${styles['badge']} ${styles['bg-dark-subtle']} ${styles['text-secondary-emphasis']} ${styles['lh-lg']} ${styles['my-2']} ${styles['ms-2']} ${styles['d-flex']} ${styles['align-items-center']} ${styles.tagBadge}`}
                   >
                     {tag.name}
                     <button
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
+                      className={`${styles.removeFilterIcon} fa fa-times ${styles['ms-2']} ${styles['text-body-tertiary']} ${styles['border-0']} ${styles['bg-transparent']}`}
                       onClick={() => deSelectTag(tag)}
                       data-testid={`clearSelectedTag${tag._id}`}
                       aria-label={t('remove')}
@@ -305,8 +311,10 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               )}
             </div>
 
-            <div className="mt-3 position-relative">
-              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+            <div className={`${styles['mt-3']} ${styles['position-relative']}`}>
+              <i
+                className={`fa fa-search ${styles['position-absolute']} ${styles['text-body-tertiary']} ${styles['end-0']} ${styles['top-50']} ${styles['translate-middle']}`}
+              />
               <Form.Control
                 type="text"
                 id="userName"
@@ -318,7 +326,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               />
             </div>
 
-            <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
+            <div
+              className={`${styles['mt-3']} ${styles['mb-2']} ${styles['fs-5']} ${styles['fw-semibold']} ${styles['text-dark-emphasis']}`}
+            >
               {t('allTags')}
             </div>
             {orgUserTagsLoading ? (
@@ -346,9 +356,12 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     scrollableTarget="scrollableDiv"
                   >
                     {userTagsList?.map((tag) => (
-                      <div key={tag._id} className="position-relative w-100">
+                      <div
+                        key={tag._id}
+                        className={`${styles['position-relative']} ${styles['w-100']}`}
+                      >
                         <div
-                          className="d-inline-block w-100"
+                          className={`${styles['d-inline-block']} ${styles['w-100']}`}
                           data-testid="orgUserTag"
                         >
                           <TagNode
@@ -361,16 +374,20 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
                         {/* Ancestor tags breadcrumbs positioned at the end of TagNode */}
                         {tag.parentTag && (
-                          <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
+                          <div
+                            className={`${styles['position-absolute']} ${styles['end-0']} ${styles['top-0']} ${styles['d-flex']} ${styles['flex-row']} ${styles['mt-2']} ${styles['me-3']} ${styles['pt-0']} ${styles['text-secondary']}`}
+                          >
                             <>{'('}</>
                             {tag.ancestorTags?.map((ancestorTag) => (
                               <span
                                 key={ancestorTag._id}
-                                className="ms-2 my-0"
+                                className={`${styles['ms-2']} ${styles['my-0']}`}
                                 data-testid="ancestorTagsBreadCrumbs"
                               >
                                 {ancestorTag.name}
-                                <i className="ms-2 fa fa-caret-right" />
+                                <i
+                                  className={`${styles['ms-2']} fa fa-caret-right`}
+                                />
                               </span>
                             ))}
                             <>{')'}</>
@@ -386,7 +403,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
           <Modal.Footer>
             <Button
-              className={`btn btn-danger ${styles.removeButton}`}
+              className={`${styles['btn']} ${styles['btn-danger']} ${styles.removeButton}`}
               onClick={(): void => hideTagActionsModal()}
               data-testid="closeTagActionsModalBtn"
             >
@@ -396,7 +413,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               type="submit"
               value="add"
               data-testid="tagActionSubmitBtn"
-              className={`btn ${styles.addButton}`}
+              className={`${styles['btn']} ${styles.addButton}`}
             >
               {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
             </Button>

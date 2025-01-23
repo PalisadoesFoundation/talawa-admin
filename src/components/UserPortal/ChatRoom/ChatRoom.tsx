@@ -3,6 +3,7 @@ import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
+import style from '../../../style/app.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
@@ -269,12 +270,12 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   return (
     <div
-      className={`d-flex flex-column ${styles.chatAreaContainer}`}
+      className={`${style['d-flex']} ${style['flex-column']} ${styles.chatAreaContainer}`}
       id="chat-area"
     >
       {!props.selectedContact ? (
         <div
-          className={`d-flex flex-column justify-content-center align-items-center w-100 h-75 gap-2 ${styles.grey}`}
+          className={`${style['d-flex']} ${style['flex-column']} ${style['justify-content-center']} ${style['align-items-center']} ${style['w-100']} ${style['h-75']} ${style['gap-2']} ${styles.grey}`}
         >
           <PermContactCalendarIcon fontSize="medium" className={styles.grey} />
           <h6 data-testid="noChatSelected">{t('selectContact')}</h6>
@@ -305,7 +306,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
               </div>
             </div>
           </div>
-          <div className={`d-flex flex-grow-1 flex-column`}>
+          <div
+            className={`${style['d-flex']} ${style['flex-grow-1']} ${style['flex-column']}`}
+          >
             <div className={styles.chatMessages}>
               {!!chat?.messages.length && (
                 <div id="messages">

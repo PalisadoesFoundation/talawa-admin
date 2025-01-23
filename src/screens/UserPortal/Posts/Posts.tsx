@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Posts.module.css';
+import style from '../../../style/app.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import Carousel from 'react-multi-carousel';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
@@ -277,13 +278,17 @@ export default function home(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
+      <div
+        className={`${style['d-flex']} ${style['flex-row']} ${styles['containerHeight']}`}
+      >
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>
-              <Row className="d-flex gap-1">
-                <Col className={styles.maxWidth}>
+              <Row
+                className={`${style['d-flex']} ${style['gap-1']} ${style['row']}`}
+              >
+                <Col className={`${styles.maxWidth} ${style.rowChild}`}>
                   <Form.Control
                     type="file"
                     accept="image/*"
@@ -304,12 +309,14 @@ export default function home(): JSX.Element {
                 </Col>
               </Row>
             </div>
-            <div className="d-flex justify-content-end">
+            <div
+              className={`${style['d-flex']} ${style['justify-content-end']}`}
+            >
               <Button
                 size="sm"
                 data-testid={'postBtn'}
                 onClick={handlePostButtonClick}
-                className="px-4 py-sm-2"
+                className={`${style['px-4']} ${style['py-sm-2']}`}
               >
                 {t('post')} <SendIcon />
               </Button>
@@ -346,23 +353,27 @@ export default function home(): JSX.Element {
               ))}
             </div>
           )}
-          <p className="fs-5 mt-5">{t(`yourFeed`)}</p>
+          <p className={`${style['fs-5']} ${style['mt-5']}`}>{t(`yourFeed`)}</p>
           <div className={` ${styles.postsCardsContainer}`}></div>
           {loadingPosts ? (
-            <div className={`d-flex flex-row justify-content-center`}>
+            <div
+              className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-center']}`}
+            >
               <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
             </div>
           ) : (
             <>
               {posts.length > 0 ? (
-                <Row className="my-2">
+                <Row className={`${style['my-2']} ${style.row}`}>
                   {posts.map(({ node }: { node: InterfacePostNode }) => {
                     const cardProps = getCardProps(node);
                     return <PostCard key={node._id} {...cardProps} />;
                   })}
                 </Row>
               ) : (
-                <p className="container flex justify-content-center my-4">
+                <p
+                  className={`${style['container']} ${style['flex']} ${style['justify-content-center']} ${style['my-4']}`}
+                >
                   {t(`nothingToShowHere`)}
                 </p>
               )}

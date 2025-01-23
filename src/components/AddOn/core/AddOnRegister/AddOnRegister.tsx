@@ -7,7 +7,7 @@ import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-
+import style from '../../../../style/app.module.css';
 /**
  * Interface defining the form state for the `addOnRegister` component.
  */
@@ -116,7 +116,10 @@ function addOnRegister({
         <Modal.Body>
           <Form>
             {/* Form group for plugin name */}
-            <Form.Group className="mb-3" controlId="registerForm.PluginName">
+            <Form.Group
+              className={`${style['mb-3']}`}
+              controlId="registerForm.PluginName"
+            >
               <Form.Label>{t('pluginName')}</Form.Label>
               <Form.Control
                 type="text"
@@ -133,7 +136,10 @@ function addOnRegister({
                 }}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.PluginName">
+            <Form.Group
+              className={`${style['mb-3']}`}
+              controlId="registerForm.PluginName"
+            >
               <Form.Label>{t('creatorName')}</Form.Label>
               <Form.Control
                 type="text"
@@ -151,7 +157,10 @@ function addOnRegister({
               />
             </Form.Group>
             {/* Form group for plugin description */}
-            <Form.Group className="mb-3" controlId="registerForm.PluginURL">
+            <Form.Group
+              className={`${style['mb-3']}`}
+              controlId="registerForm.PluginURL"
+            >
               <Form.Label>{t('pluginDesc')}</Form.Label>
               <Form.Control
                 // type="text"

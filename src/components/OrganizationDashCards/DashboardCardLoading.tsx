@@ -9,23 +9,23 @@ import styles from '../../style/app.module.css';
  */
 const DashBoardCardLoading = (): JSX.Element => {
   return (
-    <Card className="rounded-4" border="0" data-testid="Card">
+    <Card className={`${styles['rounded-4']}`} border="0" data-testid="Card">
       <Card.Body className={styles.cardBody}>
-        <Row className="align-items-center">
-          <Col sm={4}>
+        <Row className={`${styles.row} ${styles['align-items-center']}`}>
+          <Col className={`${styles.rowChild}`} sm={4}>
             <div className={styles.iconWrapper}>
               <div className={styles.themeOverlay} />
             </div>
           </Col>
-          <Col sm={8} className={styles.textWrapper}>
+          <Col sm={8} className={`${styles.textWrapper} ${styles.rowChild}`}>
             <span
-              className={`${styles.primaryText} shimmer rounded w-75 mb-2`}
+              className={`${styles.primaryText} ${styles.shimmer} ${styles.rounded} ${styles['w-75']} ${styles['mb-2']}`}
               style={{
                 height: '1.75rem',
               }}
             />
             <span
-              className={`${styles.secondaryText} shimmer rounded`}
+              className={`${styles.secondaryText} ${styles.shimmer} ${styles.rounded}`}
               style={{
                 height: '1.25rem',
               }}

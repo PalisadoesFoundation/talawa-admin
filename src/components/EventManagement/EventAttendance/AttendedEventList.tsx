@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 import { Link, useParams } from 'react-router-dom';
 import { formatDate } from 'utils/dateFormatter';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
+import styles from '../../../style/app.module.css';
 interface InterfaceEventsAttended {
   eventId: string;
 }
@@ -30,19 +31,22 @@ const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
   if (loading) return <p>Loading...</p>;
   return (
     <React.Fragment>
-      <Table className="bg-primary" aria-label="Attended events list">
-        <TableBody className="bg-primary">
+      <Table
+        className={`${styles['bg-primary']}`}
+        aria-label="Attended events list"
+      >
+        <TableBody className={`${styles['bg-primary']}`}>
           {event && (
             <TableRow
               key={event._id}
-              className="bg-white rounded"
+              className={`${styles['bg-white']} ${styles['rounded']}`}
               role="row"
               aria-label={`Event: ${event.title}`}
             >
               <TableCell>
                 <Link
                   to={`/event/${currentOrg}/${event._id}`}
-                  className="d-flex justify-items-center align-items-center"
+                  className={`${styles['d-flex']} ${styles['justify-items-center']} ${styles['align-items-center']}`}
                   style={{ color: 'blue', textDecoration: 'none' }}
                 >
                   <DateIcon
@@ -50,7 +54,7 @@ const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
                     fill="var(--bs-gray-600)"
                     width={25}
                     height={25}
-                    className="mx-2 rounded-full"
+                    className={`${styles['mx-2']} ${styles['rounded-full']}`}
                   />
                   <div>
                     <div>{event.title}</div>

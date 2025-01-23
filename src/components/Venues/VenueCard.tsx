@@ -47,7 +47,7 @@ const VenueCard = ({
 
   return (
     <div
-      className="col-xl-4 col-lg-4 col-md-6"
+      className={`${styles['col-xl-4']} ${styles['col-lg-4']} ${styles['col-md-6']}`}
       data-testid={`venue-item${index + 1}`}
       key={venueItem._id}
     >
@@ -60,8 +60,8 @@ const VenueCard = ({
             alt="image not found"
             className={styles.novenueimage}
           />
-          <Card.Body className="pb-0">
-            <Card.Title className="d-flex justify-content-between">
+          <Card.Body className={styles['pb-0']}>
+            <Card.Title className={styles['d-flex-justify-content-between']}>
               {/* Venue name with truncation if too long */}
               <div className={styles.title}>
                 {venueItem.name.length > 25
@@ -72,7 +72,7 @@ const VenueCard = ({
               {/* Venue capacity with icon */}
               <div className={styles.capacityLabel}>
                 Capacity: {venueItem.capacity}
-                <PeopleIcon className="ms-1" width={16} height={16} />
+                <PeopleIcon className={styles['ms-1']} width={16} height={16} />
               </div>
             </Card.Title>
             <Card.Text className={styles.text}>
@@ -82,7 +82,9 @@ const VenueCard = ({
                 : venueItem.description}
             </Card.Text>
           </Card.Body>
-          <div className="d-flex justify-content-end gap-2 mb-2 me-3">
+          <div
+            className={`${styles['d-flex']} ${styles['justify-content-end']} ${styles['gap-2']} ${styles['mb-2']} ${styles['me-3']}`}
+          >
             {/* Edit button */}
             <Button
               size="sm"
@@ -90,9 +92,9 @@ const VenueCard = ({
                 showEditVenueModal(venueItem);
               }}
               data-testid={`updateVenueBtn${index + 1}`}
-              className={`btn ${styles.addButton}`}
+              className={`${styles['btn']} ${styles['addButton']}`}
             >
-              <i className="fa fa-pen me-1"></i>
+              <i className="fa fa-pen me-1" />
               <span>{tCommon('edit')}</span>
             </Button>
             {/* Delete button */}
@@ -100,9 +102,9 @@ const VenueCard = ({
               size="sm"
               data-testid={`deleteVenueBtn${index + 1}`}
               onClick={() => handleDelete(venueItem._id)}
-              className={`btn btn-danger ${styles.removeButton}`}
+              className={`${styles['btn']} ${styles['btn-danger']} ${styles['removeButton']}`}
             >
-              <i className="fa fa-trash me-2"></i>
+              <i className="fa fa-trash me-2" />
               <span>{tCommon('delete')}</span>
             </Button>
           </div>

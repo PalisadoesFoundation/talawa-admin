@@ -3,7 +3,7 @@ import { EventStats } from './EventStats';
 import { Button } from 'react-bootstrap';
 import IconComponent from 'components/IconComponent/IconComponent';
 import styles from './EventStatsWrapper.module.css';
-
+import style from '../../style/app.module.css';
 // Props for the EventStatsWrapper component
 type PropType = {
   eventId: string;
@@ -24,7 +24,7 @@ export const EventStatsWrapper = ({ eventId }: PropType): JSX.Element => {
       {/* Button to open the event statistics view */}
       <Button
         variant="light"
-        className="text-secondary"
+        className={`${style['text-secondary']}`}
         aria-label="checkInRegistrants"
         onClick={(): void => {
           setShowModal(true); // Show the EventStats component when button is clicked

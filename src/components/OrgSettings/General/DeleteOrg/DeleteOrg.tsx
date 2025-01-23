@@ -10,6 +10,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
+import style from '../../../../style/app.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -95,7 +96,9 @@ function deleteOrg(): JSX.Element {
   return (
     <>
       {canDelete && (
-        <Card className="rounded-4 shadow-sm mb-4 border border-light-subtle">
+        <Card
+          className={`${style['rounded-4']} ${style['mb-4']} ${style['mx-auto']} ${style['shadow-sm']} ${style['border']} ${style['border-light-subtle']}`}
+        >
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('deleteOrganization')}</div>
           </div>
@@ -121,8 +124,10 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header className="bg-primary" closeButton>
-            <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
+          <Modal.Header className={`${style['bg-primary']}`} closeButton>
+            <h5 className={`${style['text-white']} ${style['fw-bold']}`}>
+              {t('deleteOrganization')}
+            </h5>
           </Modal.Header>
           <Modal.Body>{t('deleteMsg')}</Modal.Body>
           <Modal.Footer>

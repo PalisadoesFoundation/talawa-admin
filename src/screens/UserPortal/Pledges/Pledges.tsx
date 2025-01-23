@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Form, Button, ProgressBar } from 'react-bootstrap';
 import styles from './Pledges.module.css';
+import style from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -170,10 +171,17 @@ const Pledges = (): JSX.Element => {
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
-        <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+      <div
+        className={`${styles['container']} ${style['bg-white']} ${style['rounded-4']} ${style['my-3']}`}
+      >
+        <div className={styles['message']} data-testid="errorMsg">
+          <WarningAmberRounded
+            className={styles['errorIcon']}
+            fontSize="large"
+          />
+          <h6
+            className={`${style['fw-bold']} ${style['text-danger']} ${style['text-center']}`}
+          >
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
             {pledgeError.message}
@@ -195,7 +203,10 @@ const Pledges = (): JSX.Element => {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
+          <div
+            className={`${style['d-flex']} ${style['flex-wrap']} ${style['gap-1']}`}
+            style={{ maxHeight: 120 }}
+          >
             {params.row.users
               .slice(0, 2)
               .map((user: InterfaceUserInfo, index: number) => (
@@ -273,7 +284,7 @@ const Pledges = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${style['d-flex']} ${style['justify-content-center']} ${style['fw-bold']}`}
             data-testid="amountCell"
           >
             {
@@ -297,7 +308,7 @@ const Pledges = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${style['d-flex']} ${style['justify-content-center']} ${style['fw-bold']}`}
             data-testid="paidCell"
           >
             {
@@ -321,7 +332,9 @@ const Pledges = (): JSX.Element => {
       sortable: false,
       renderCell: () => {
         return (
-          <div className="d-flex justify-content-center align-items-center h-100">
+          <div
+            className={`${style['d-flex']} ${style['justify-content-center']} ${style['align-items-center']} ${style['h-100']}`}
+          >
             <ProgressBar
               now={200}
               label={`${(200 / 1000) * 100}%`}
@@ -348,7 +361,7 @@ const Pledges = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={`${style['me-2']} ${style['rounded']}`}
               data-testid="editPledgeBtn"
               onClick={() => handleOpenModal(params.row as InterfacePledgeInfo)}
             >
@@ -358,7 +371,7 @@ const Pledges = (): JSX.Element => {
             <Button
               size="sm"
               variant="danger"
-              className="rounded"
+              className={style['rounded']}
               data-testid="deletePledgeBtn"
               onClick={() =>
                 handleDeleteClick(params.row as InterfacePledgeInfo)
@@ -374,8 +387,10 @@ const Pledges = (): JSX.Element => {
 
   return (
     <div>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div
+        className={`${styles['btnsContainer']} ${style['gap-4']} ${style['flex-wrap']}`}
+      >
+        <div className={`${styles['input']} ${style['mb-1']}`}>
           <Form.Control
             type="name"
             placeholder={t('searchBy') + ' ' + t(searchBy)}
@@ -388,13 +403,13 @@ const Pledges = (): JSX.Element => {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${style['position-absolute']} ${style['z-10']} ${style['bottom-0']} ${style['end-0']} ${style['d-flex']} ${style['justify-content-center']} ${style['align-items-center']}`}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 ">
+        <div className={`${style['d-flex']} ${style['gap-4']}`}>
           <SortingButton
             sortingOptions={[
               { label: t('pledgers'), value: 'pledgers' },

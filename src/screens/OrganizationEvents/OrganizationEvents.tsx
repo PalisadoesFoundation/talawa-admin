@@ -381,7 +381,7 @@ function organizationEvents(): JSX.Element {
             </div>
             {!alldaychecked && (
               <div className={styles.datedivOrganizationEvents}>
-                <div className="mr-3">
+                <div className={styles['mr-3']}>
                   <TimePicker
                     label={tCommon('startTime')}
                     className={styles.dateboxOrganizationEvents}
@@ -426,7 +426,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="allday">{t('allDay')}?</label>
                 <Form.Switch
-                  className={`me-4 ${styles.switch}`}
+                  className={`${styles['me-4']} ${styles.switch}`}
                   id="allday"
                   type="checkbox"
                   checked={alldaychecked}
@@ -437,7 +437,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="ispublic">{t('isPublic')}?</label>
                 <Form.Switch
-                  className={`me-4 ${styles.switch}`}
+                  className={`${styles['me-4']} ${styles.switch}`}
                   id="ispublic"
                   type="checkbox"
                   data-testid="ispublicCheck"
@@ -450,7 +450,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="recurring">{t('recurringEvent')}?</label>
                 <Form.Switch
-                  className={`me-4 ${styles.switch}`}
+                  className={`${styles['me-4']} ${styles.switch}`}
                   id="recurring"
                   type="checkbox"
                   data-testid="recurringCheck"
@@ -463,7 +463,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="registrable">{t('isRegistrable')}?</label>
                 <Form.Switch
-                  className={`me-4 ${styles.switch}`}
+                  className={`${styles['me-4']} ${styles.switch}`}
                   id="registrable"
                   type="checkbox"
                   data-testid="registrableCheck"
@@ -478,7 +478,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflex}>
                 <label htmlFor="createChat">{t('createChat')}?</label>
                 <Form.Switch
-                  className={`me-4 ${styles.switch}`}
+                  className={`${styles['me-4']} ${styles.switch}`}
                   id="chat"
                   type="checkbox"
                   data-testid="createChat"

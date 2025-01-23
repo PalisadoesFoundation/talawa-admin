@@ -201,10 +201,14 @@ const fundCampaignPledge = (): JSX.Element => {
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.container} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
             {pledgeError.message}
@@ -226,7 +230,10 @@ const fundCampaignPledge = (): JSX.Element => {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
+          <div
+            className={`${styles['d-flex']} ${styles['flex-wrap']} ${styles['gap-1']}`}
+            style={{ maxHeight: 120 }}
+          >
             {params.row.users
               .slice(0, 2)
               .map((user: InterfaceUserInfo, index: number) => (
@@ -306,7 +313,7 @@ const fundCampaignPledge = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
             data-testid="amountCell"
           >
             {
@@ -331,7 +338,7 @@ const fundCampaignPledge = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
             data-testid="paidCell"
           >
             {
@@ -359,7 +366,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className={`me-2 ${styles.editButton}`}
+              className={`${styles['me-2']} ${styles.editButton}`}
               data-testid="editPledgeBtn"
               onClick={() =>
                 handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
@@ -371,7 +378,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               size="sm"
               variant="danger"
-              className="rounded"
+              className={`${styles['rounded']}`}
               data-testid="deletePledgeBtn"
               onClick={() =>
                 handleDeleteClick(params.row as InterfacePledgeInfo)
@@ -387,7 +394,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+      <Breadcrumbs aria-label="breadcrumb" className={`${styles['ms-1']}`}>
         <Link
           underline="hover"
           color="inherit"
@@ -414,15 +421,17 @@ const fundCampaignPledge = (): JSX.Element => {
           </span>
         </div>
         <div className={styles.progressContainer}>
-          <div className="d-flex justify-content-center">
+          <div
+            className={`${styles['d-flex']} ${styles['justify-content-center']}`}
+          >
             <div
-              className={`btn-group ${styles.toggleGroup}`}
+              className={`${styles['btn-group']} ${styles.toggleGroup}`}
               role="group"
               aria-label="Toggle between Pledged and Raised amounts"
             >
               <input
                 type="radio"
-                className={`btn-check ${styles.toggleBtnPledge}`}
+                className={`${styles['btn-check']} ${styles.toggleBtnPledge}`}
                 name="btnradio"
                 id="pledgedRadio"
                 checked={progressIndicator === 'pledged'}
@@ -431,7 +440,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 }}
               />
               <label
-                className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
+                className={`${styles['btn']} ${styles['btn-outline-primary']} ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
                 {t('pledgedAmount')}
@@ -439,14 +448,14 @@ const fundCampaignPledge = (): JSX.Element => {
 
               <input
                 type="radio"
-                className={`btn-check ${styles.toggleBtnPledge}`}
+                className={`${styles['btn-check']} ${styles.toggleBtnPledge}`}
                 name="btnradio"
                 id="raisedRadio"
                 onChange={() => setProgressIndicator('raised')}
                 checked={progressIndicator === 'raised'}
               />
               <label
-                className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
+                className={`${styles['btn']} ${styles['btn-outline-primary']} ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
                 {t('raisedAmount')}
@@ -470,7 +479,9 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
+      <div
+        className={`${styles.btnsContainerPledge} ${styles['gap-4']} ${styles['flex-wrap']}`}
+      >
         <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
@@ -490,8 +501,12 @@ const fundCampaignPledge = (): JSX.Element => {
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
+        <div
+          className={`${styles['d-flex']} ${styles['gap-4']} ${styles['mb-1']}`}
+        >
+          <div
+            className={`${styles['d-flex']} ${styles['justify-space-between']}`}
+          >
             <SortingButton
               sortingOptions={[
                 { label: t('lowestAmount'), value: 'amount_ASC' },

@@ -240,10 +240,14 @@ function ManageTag(): JSX.Element {
 
   if (userTagAssignedMembersError) {
     return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles['errorContainer']} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             Error occured while loading assigned users
           </h6>
         </div>
@@ -325,7 +329,7 @@ function ManageTag(): JSX.Element {
               data-testid="viewProfileBtn"
             >
               <div
-                className={`btn btn-sm btn-primary me-3 ${styles.editButton}`}
+                className={`${styles['btn']} ${styles['btn-sm']} ${styles['btn-primary']} ${styles['me-3']} ${styles['editButton']}`}
               >
                 {t('viewProfile')}
               </div>
@@ -350,7 +354,7 @@ function ManageTag(): JSX.Element {
 
   return (
     <>
-      <Row className={styles.head}>
+      <Row className={`${styles.row} ${styles.head}`}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
             <div className={styles.input}>
@@ -390,7 +394,7 @@ function ManageTag(): JSX.Element {
               <Button
                 variant="success"
                 onClick={() => redirectToSubTags(currentTagId as string)}
-                className={`${styles.createButton} mb-2`}
+                className={`${styles.createButton} ${styles['mb-2']}`}
                 data-testid="subTagsBtn"
               >
                 {t('subTags')}
@@ -400,7 +404,7 @@ function ManageTag(): JSX.Element {
               variant="success"
               onClick={showAddPeopleToTagModal}
               data-testid="addPeopleToTagBtn"
-              className={`${styles.createButton} mb-2 ms-3`}
+              className={`${styles.createButton} ${styles['mb-2']} ${styles['ms-3']}`}
             >
               <i className={'fa fa-plus me-2'} />
               {t('addPeopleToTag')}
@@ -410,30 +414,32 @@ function ManageTag(): JSX.Element {
           {userTagAssignedMembersLoading ? (
             <Loader />
           ) : (
-            <Row className="mb-4">
-              <Col xs={9}>
-                <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
-                  <div className="ms-3 my-1">
+            <Row className={`${styles.row} ${styles['mb-4']}`}>
+              <Col className={`${styles.rowChild}`} xs={9}>
+                <div
+                  className={`${styles['bg-white']} ${styles['light']} ${styles['border']} ${styles['rounded-top']} ${styles['mb-0']} ${styles['py-2']} ${styles['d-flex']} ${styles['align-items-center']}`}
+                >
+                  <div className={`${styles['ms-3']} ${styles['my-1']}`}>
                     <IconComponent name="Tag" />
                   </div>
                   <div
                     onClick={() => navigate(`/orgtags/${orgId}`)}
-                    className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
+                    className={`${styles['fs-6']} ${styles['ms-3']} ${styles['my-1']} ${styles['tagsBreadCrumbs']}`}
                     data-testid="allTagsBtn"
                   >
                     {'Tags'}
-                    <i className={'mx-2 fa fa-caret-right'} />
+                    <i className={`${styles['mx-2']} fa fa-caret-right`} />
                   </div>
                   {orgUserTagAncestors?.map((tag, index) => (
                     <div
                       key={index}
-                      className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
+                      className={`${styles['ms-2']} ${styles['my-1']} ${tag._id === currentTagId ? `${styles['fs-4']} ${styles['fw-semibold']} ${styles['text-secondary']}` : `${styles['tagsBreadCrumbs']} ${styles['fs-6']}`}`}
                       onClick={() => redirectToManageTag(tag._id as string)}
                       data-testid="redirectToManageTag"
                     >
                       {tag.name}
                       {orgUserTagAncestors.length - 1 !== index && (
-                        <i className={'mx-2 fa fa-caret-right'} />
+                        <i className={`${styles['mx-2']} fa fa-caret-right`} />
                       )}
                     </div>
                   ))}
@@ -485,17 +491,23 @@ function ManageTag(): JSX.Element {
                   </InfiniteScroll>
                 </div>
               </Col>
-              <Col className="ms-auto" xs={3}>
-                <div className="bg-secondary text-white rounded-top mb-0 py-2 fw-semibold ms-2">
-                  <div className="ms-3 fs-5">{'Actions'}</div>
+              <Col className={`${styles['ms-auto']} ${styles.rowChild}`} xs={3}>
+                <div
+                  className={`${styles['bg-secondary']} ${styles['text-white']} ${styles['rounded-top']} ${styles['mb-0']} ${styles['py-2']} ${styles['fw-semibold']} ${styles['ms-2']}`}
+                >
+                  <div className={`${styles['ms-3']} ${styles['fs-5']}`}>
+                    {'Actions'}
+                  </div>
                 </div>
-                <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
+                <div
+                  className={`${styles['d-flex']} ${styles['flex-column']} ${styles['align-items-center']} ${styles['bg-white']} ${styles['rounded-bottom']} ${styles['mb-0']} ${styles['py-2']} ${styles['fw-semibold']} ${styles['ms-2']}`}
+                >
                   <div
                     onClick={() => {
                       setTagActionType('assignToTags');
                       showTagActionsModal();
                     }}
-                    className={`my-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
+                    className={`${styles['my-2']} ${styles['btn']} ${styles['btn-primary']} ${styles['btn-sm']} ${styles['w-75']} ${styles['editButton']}`}
                     data-testid="assignToTags"
                   >
                     {t('assignToTags')}
@@ -505,7 +517,7 @@ function ManageTag(): JSX.Element {
                       setTagActionType('removeFromTags');
                       showTagActionsModal();
                     }}
-                    className="mb-1 btn btn-danger btn-sm w-75"
+                    className={`${styles['mb-1']} ${styles['btn']} ${styles['btn-danger']} ${styles['btn-sm']} ${styles['w-75']}`}
                     data-testid="removeFromTags"
                   >
                     {t('removeFromTags')}
@@ -519,14 +531,14 @@ function ManageTag(): JSX.Element {
                   />
                   <div
                     onClick={showEditUserTagModal}
-                    className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
+                    className={`${styles['mt-1']} ${styles['mb-2']} ${styles['btn']} ${styles['btn-primary']} ${styles['btn-sm']} ${styles['w-75']} ${styles['editButton']}`}
                     data-testid="editUserTag"
                   >
                     {tCommon('edit')}
                   </div>
                   <div
                     onClick={toggleRemoveUserTagModal}
-                    className="mb-2 btn btn-danger btn-sm w-75"
+                    className={`${styles['mb-2']} ${styles['btn']} ${styles['btn-danger']} ${styles['btn-sm']} ${styles['w-75']}`}
                     data-testid="removeTag"
                   >
                     {tCommon('remove')}

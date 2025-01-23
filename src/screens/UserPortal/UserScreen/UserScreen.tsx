@@ -6,6 +6,7 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './UserScreen.module.css';
+import style from '../../../style/app.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
@@ -131,7 +132,9 @@ const UserScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-between align-items-center">
+        <div
+          className={`${style['d-flex']} ${style['justify-content-between']} ${style['align-items-center']}`}
+        >
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
           </div>

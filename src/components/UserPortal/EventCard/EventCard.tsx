@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './EventCard.module.css';
+import style from '../../../style/app.module.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import { Button } from 'react-bootstrap';
@@ -109,7 +110,9 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
 
   return (
     <div className={styles.mainContainer}>
-      <div className="d-flex flex-row justify-content-between align-items-center">
+      <div
+        className={`${style['d-flex']} ${style['flex-row']} ${style['justify-content-between']} ${style['align-items-center']}`}
+      >
         <div className={styles.orgName}>
           <b>{props.title}</b>
         </div>
@@ -122,7 +125,9 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
         {`${tCommon('location')} `}
         <b>{props.location}</b>
       </span>
-      <div className={`d-flex flex-row ${styles.eventDetails}`}>
+      <div
+        className={`${style['d-flex']} ${style['flex-row']} ${styles.eventDetails}`}
+      >
         {`${t('starts')} `}
         {props.startTime ? (
           <b data-testid="startTime">
@@ -133,7 +138,9 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
         )}
         <b> {dayjs(props.startDate).format("D MMMM 'YY")}</b>
       </div>
-      <div className={`d-flex flex-row ${styles.eventDetails}`}>
+      <div
+        className={`${style['d-flex']} ${style['flex-row']} ${styles.eventDetails}`}
+      >
         {`${t('ends')} `}
         {props.endTime ? (
           <b data-testid="endTime">
@@ -149,7 +156,9 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
         <b>{creatorName}</b>
       </span>
 
-      <div className={`d-flex flex-row ${styles.eventActions}`}>
+      <div
+        className={`${style['d-flex']} ${style['flex-row']} ${styles.eventActions}`}
+      >
         {loading ? (
           <HourglassBottomIcon fontSize="small" />
         ) : isRegistered ? (

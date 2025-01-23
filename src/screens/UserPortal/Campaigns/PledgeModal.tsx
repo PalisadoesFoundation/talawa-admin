@@ -9,6 +9,7 @@ import type {
   InterfaceUserInfo,
 } from 'utils/interfaces';
 import styles from './Campaigns.module.css';
+import style from '../../../style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -237,13 +238,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           onSubmitCapture={
             mode === 'edit' ? updatePledgeHandler : createPledgeHandler
           }
-          className="p-3"
+          className={style['p-3']}
         >
           {/* A Multi-select dropdown enables user to view participating pledgers */}
-          <Form.Group className="d-flex mb-3 w-100">
+          <Form.Group
+            className={`${style['d-flex']} ${style['mb-3']} ${style['w-100']}`}
+          >
             <Autocomplete
               multiple
-              className={`${styles.noOutline} w-100`}
+              className={`${styles['noOutline']} ${style['w-100']}`}
               limitTags={2}
               data-testid="pledgerSelect"
               options={[...pledgers, ...pledgeUsers]}
@@ -269,7 +272,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               )}
             />
           </Form.Group>
-          <Form.Group className="d-flex gap-3 mx-auto  mb-3">
+          <Form.Group
+            className={`${style['d-flex']} ${style['gap-3']} ${style['mx-auto']} ${style['mb-3']}`}
+          >
             {/* Date Calendar Component to select start date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
@@ -311,7 +316,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               maxDate={dayjs(endDate)}
             />
           </Form.Group>
-          <Form.Group className="d-flex gap-3 mb-4">
+          <Form.Group
+            className={`${style['d-flex']} ${style['gap-3']} ${style['mb-4']}`}
+          >
             {/* Dropdown to select the currency in which amount is to be pledged */}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">

@@ -1,7 +1,7 @@
 import React from 'react';
 import aboutImg from 'assets/images/defaultImg.png';
 import styles from './PeopleCard.module.css';
-
+import style from '../../../style/app.module.css';
 /**
  * Props interface for the PeopleCard component.
  */
@@ -32,11 +32,11 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const imageUrl = props.image ? props.image : aboutImg;
 
   return (
-    <div className={`d-flex flex-row`}>
+    <div className={`${style['d-flex']} ${style['flex-row']}`}>
       {/* Container for serial number and image */}
-      <span style={{ flex: '1' }} className="d-flex">
+      <span style={{ flex: '1' }} className={style['d-flex']}>
         {/* Serial number */}
-        <span style={{ flex: '1' }} className="align-self-center">
+        <span style={{ flex: '1' }} className={style['align-self-center']}>
           {props.sno}
         </span>
         {/* Person's image */}
@@ -50,17 +50,19 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
         </span>
       </span>
       {/* Person's name */}
-      <b style={{ flex: '2' }} className="align-self-center">
+      <b style={{ flex: '2' }} className={style['align-self-center']}>
         {props.name}
       </b>
       {/* Person's email */}
-      <span style={{ flex: '2' }} className="align-self-center">
+      <span style={{ flex: '2' }} className={style['align-self-center']}>
         {props.email}
       </span>
       {/* Person's role with additional styling */}
-      <div style={{ flex: '2' }} className="align-self-center">
-        <div className={`w-75 border py-2 px-3 ${styles.borderBox}`}>
-          <span className={`${styles.greenText}`}>{props.role}</span>
+      <div style={{ flex: '2' }} className={style['align-self-center']}>
+        <div
+          className={`${style['w-75']} ${style['border']} ${style['py-2']} ${style['px-3']} ${styles.borderBox}`}
+        >
+          <span className={styles.greenText}>{props.role}</span>
         </div>
       </div>
     </div>

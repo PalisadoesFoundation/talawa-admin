@@ -367,10 +367,15 @@ const loginPage = (): JSX.Element => {
 
   return (
     <>
-      <section className={styles.login_background}>
-        <Row className={styles.row}>
-          <Col sm={0} md={6} lg={7} className={styles.left_portion}>
-            <div className={styles.inner}>
+      <section className={styles['login_background']}>
+        <Row className={styles['row']}>
+          <Col
+            sm={0}
+            md={6}
+            lg={7}
+            className={`${styles['left_portion']} ${styles['rowChild']}`}
+          >
+            <div className={styles['inner']}>
               {data?.getCommunityData ? (
                 <a
                   href={data.getCommunityData.websiteLink}
@@ -383,7 +388,9 @@ const loginPage = (): JSX.Element => {
                     alt="Community Logo"
                     data-testid="preLoginLogo"
                   />
-                  <p className="text-center">{data.getCommunityData.name}</p>
+                  <p className={styles['text-center']}>
+                    {data.getCommunityData.name}
+                  </p>
                 </a>
               ) : (
                 <a
@@ -395,14 +402,14 @@ const loginPage = (): JSX.Element => {
                     className={styles.palisadoes_logo}
                     data-testid="PalisadoesLogo"
                   />
-                  <p className="text-center">{t('fromPalisadoes')}</p>
+                  <p className={styles['text-center']}>{t('fromPalisadoes')}</p>
                 </a>
               )}
             </div>
             <div className={styles.socialIcons}>{socialIconsList}</div>
           </Col>
-          <Col sm={12} md={6} lg={5}>
-            <div className={styles.right_portion}>
+          <Col sm={12} md={6} lg={5} className={`${styles['rowChild']}`}>
+            <div className={styles['right_portion']}>
               <ChangeLanguageDropDown
                 parentContainerStyle={styles.langChangeBtn}
                 btnStyle={styles.langChangeBtnStyle}
@@ -412,9 +419,7 @@ const loginPage = (): JSX.Element => {
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
-
               <LoginPortalToggle onToggle={handleRoleToggle} />
-
               {/* LOGIN FORM */}
               <div
                 className={`${
@@ -422,11 +427,13 @@ const loginPage = (): JSX.Element => {
                 }`}
               >
                 <form onSubmit={loginLink}>
-                  <h1 className="fs-2 fw-bold text-dark mb-3">
+                  <h1
+                    className={`${styles['fs-2']} ${styles['fw-bold']} ${styles['text-dark']} ${styles['mb-3']}`}
+                  >
                     {role === 'admin' ? tCommon('login') : t('userLogin')}
                   </h1>
                   <Form.Label>{tCommon('email')}</Form.Label>
-                  <div className="position-relative">
+                  <div className={styles['position-relative']}>
                     <Form.Control
                       type="email"
                       disabled={loginLoading}
@@ -446,13 +453,13 @@ const loginPage = (): JSX.Element => {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label className="mt-3">
+                  <Form.Label className={styles['mt-3']}>
                     {tCommon('password')}
                   </Form.Label>
-                  <div className="position-relative">
+                  <div className={styles['position-relative']}>
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
-                      className="input_box_second lh-1"
+                      className={`${styles['input_box_second']} ${styles['lh-1']}`}
                       placeholder={tCommon('enterPassword')}
                       required
                       value={formState.password}
@@ -478,20 +485,20 @@ const loginPage = (): JSX.Element => {
                       )}
                     </Button>
                   </div>
-                  <div className="text-end mt-3">
+                  <div className={`${styles['text-end']} ${styles['mt-3']}`}>
                     <Link
                       to="/forgotPassword"
-                      className="text-secondary"
+                      className={styles['text-secondary']}
                       tabIndex={-1}
                     >
                       {tCommon('forgotPassword')}
                     </Link>
                   </div>
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
-                    <div className="googleRecaptcha">
+                    <div className={styles['googleRecaptcha']}>
                       <ReCAPTCHA
                         ref={loginRecaptchaRef}
-                        className="mt-2"
+                        className={styles['mt-2']}
                         sitekey={
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
@@ -504,13 +511,15 @@ const loginPage = (): JSX.Element => {
                   <Button
                     disabled={loginLoading}
                     type="submit"
-                    className={styles.login_btn}
+                    className={styles['login_btn']}
                     value="Login"
                     data-testid="loginBtn"
                   >
                     {tCommon('login')}
                   </Button>
-                  <div className="position-relative my-2">
+                  <div
+                    className={`${styles['position-relative']} ${styles['my-2']}`}
+                  >
                     <hr />
                     <span className={styles.orText}>{tCommon('OR')}</span>
                   </div>
@@ -535,18 +544,20 @@ const loginPage = (): JSX.Element => {
                 }`}
               >
                 <Form onSubmit={signupLink}>
-                  <h1 className="fs-2 fw-bold text-dark mb-3">
+                  <h1
+                    className={`${styles['fs-2']} ${styles['fw-bold']} ${styles['text-dark']} ${styles['mb-3']}`}
+                  >
                     {tCommon('register')}
                   </h1>
-                  <Row>
-                    <Col sm={6}>
+                  <Row className={styles.row}>
+                    <Col sm={6} className={`${styles.rowChild}`}>
                       <div>
                         <Form.Label>{tCommon('firstName')}</Form.Label>
                         <Form.Control
                           disabled={signinLoading}
                           type="text"
                           id="signfirstname"
-                          className="mb-3"
+                          className={styles['mb-3']}
                           placeholder={tCommon('firstName')}
                           required
                           value={signformState.signfirstName}
@@ -559,14 +570,14 @@ const loginPage = (): JSX.Element => {
                         />
                       </div>
                     </Col>
-                    <Col sm={6}>
+                    <Col sm={6} className={`${styles.rowChild}`}>
                       <div>
                         <Form.Label>{tCommon('lastName')}</Form.Label>
                         <Form.Control
                           disabled={signinLoading}
                           type="text"
                           id="signlastname"
-                          className="mb-3"
+                          className={styles['mb-3']}
                           placeholder={tCommon('lastName')}
                           required
                           value={signformState.signlastName}
@@ -580,14 +591,14 @@ const loginPage = (): JSX.Element => {
                       </div>
                     </Col>
                   </Row>
-                  <div className="position-relative">
+                  <div className={styles['position-relative']}>
                     <Form.Label>{tCommon('email')}</Form.Label>
-                    <div className="position-relative">
+                    <div className={styles['position-relative']}>
                       <Form.Control
                         disabled={signinLoading}
                         type="email"
                         data-testid="signInEmail"
-                        className="mb-3"
+                        className={styles['mb-3']}
                         placeholder={tCommon('email')}
                         autoComplete="username"
                         required
@@ -608,9 +619,11 @@ const loginPage = (): JSX.Element => {
                     </div>
                   </div>
 
-                  <div className="position-relative mb-3">
+                  <div
+                    className={`${styles['position-relative']} ${styles['mb-3']}`}
+                  >
                     <Form.Label>{tCommon('password')}</Form.Label>
-                    <div className="position-relative">
+                    <div className={styles['position-relative']}>
                       <Form.Control
                         disabled={signinLoading}
                         type={showPassword ? 'text' : 'password'}
@@ -763,9 +776,9 @@ const loginPage = (): JSX.Element => {
                       )}
                     </div>
                   </div>
-                  <div className="position-relative">
+                  <div className={styles['position-relative']}>
                     <Form.Label>{tCommon('confirmPassword')}</Form.Label>
-                    <div className="position-relative">
+                    <div className={styles['position-relative']}>
                       <Form.Control
                         disabled={signinLoading}
                         type={showConfirmPassword ? 'text' : 'password'}
@@ -784,7 +797,7 @@ const loginPage = (): JSX.Element => {
                       <Button
                         data-testid="showPasswordCon"
                         onClick={toggleConfirmPassword}
-                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                        className={`${styles['position-absolute']} ${styles['z-10']} ${styles['bottom-0']} ${styles['end-0']} ${styles['h-100']} ${styles['d-flex']} ${styles['justify-content-center']} ${styles['align-items-center']}`}
                       >
                         {showConfirmPassword ? (
                           <i className="fas fa-eye"></i>
@@ -797,16 +810,18 @@ const loginPage = (): JSX.Element => {
                       signformState.signPassword !==
                         signformState.cPassword && (
                         <div
-                          className="form-text text-danger"
+                          className={styles['form-text text-danger']}
                           data-testid="passwordCheck"
                         >
                           {t('Password_and_Confirm_password_mismatches.')}
                         </div>
                       )}
                   </div>
-                  <div className="position-relative  my-2">
+                  <div
+                    className={`${styles['position-relative']} ${styles['my-2']}`}
+                  >
                     <Form.Label>{t('selectOrg')}</Form.Label>
-                    <div className="position-relative">
+                    <div className={styles['position-relative']}>
                       <Autocomplete
                         disablePortal
                         data-testid="selectOrg"
@@ -824,14 +839,14 @@ const loginPage = (): JSX.Element => {
                           <TextField
                             {...params}
                             label="Organizations"
-                            className={styles.selectOrgText}
+                            className={styles['selectOrgText']}
                           />
                         )}
                       />
                     </div>
                   </div>
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
-                    <div className="mt-3">
+                    <div className={styles['mt-3']}>
                       <ReCAPTCHA
                         ref={SignupRecaptchaRef}
                         sitekey={
@@ -845,21 +860,21 @@ const loginPage = (): JSX.Element => {
                   )}
                   <Button
                     type="submit"
-                    className="mt-4 w-100 mb-3"
+                    className={`${styles['mt-4']} ${styles['w-100']} ${styles['mb-3']}`}
                     value="Register"
                     data-testid="registrationBtn"
                     disabled={signinLoading}
                   >
                     {tCommon('register')}
                   </Button>
-                  <div className="position-relative">
+                  <div className={styles['position-relative']}>
                     <hr />
-                    <span className={styles.orText}>{tCommon('OR')}</span>
+                    <span className={styles['orText']}>{tCommon('OR')}</span>
                   </div>
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-5 w-100"
+                    className={`${styles['mt-3']} ${styles['mb-5']} ${styles['w-100']}`}
                     data-testid="goToLoginPortion"
                     onClick={(): void => {
                       setShowTab('LOGIN');

@@ -81,10 +81,14 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
 
   if (subTagsError) {
     return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.errorContainer} ${styles['bg-white']} ${styles['rounded-4']} ${styles['my-3']}`}
+      >
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+          >
             {t('errorOccurredWhileLoadingSubTags')}
           </h6>
         </div>
@@ -106,13 +110,13 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   };
 
   return (
-    <div className="my-2">
+    <div className={styles['my-2']}>
       <div>
         {tag.childTags.totalCount ? (
           <>
             <span
               onClick={handleTagClick}
-              className="me-3"
+              className={styles['me-3']}
               style={{ cursor: 'pointer' }}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
@@ -123,7 +127,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               style={{ cursor: 'pointer' }}
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className="me-2"
+              className={styles['me-2']}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               id={`checkbox-${tag._id}`}
@@ -133,12 +137,12 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           </>
         ) : (
           <>
-            <span className="me-3">●</span>
+            <span className={styles['me-3']}>●</span>
             <input
               style={{ cursor: 'pointer' }}
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className="ms-1 me-2"
+              className={`${styles['ms-1']} ${styles['me-2']}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               aria-label={tag.name}
@@ -151,7 +155,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       </div>
 
       {expanded && subTagsLoading && (
-        <div className="ms-5">
+        <div className={styles['ms-5']}>
           <div className={styles.simpleLoader}>
             <div className={styles.spinner} />
           </div>

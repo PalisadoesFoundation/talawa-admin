@@ -213,14 +213,14 @@ export default function events(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row`}>
+      <div className={`${styles['d-flex']} ${styles['flex-row']}`}>
         <div className={`${styles.mainContainerEvent}`}>
           <EventHeader
             viewType={viewType}
             showInviteModal={showInviteModal}
             handleChangeView={handleChangeView}
           />
-          <div className="mt-4">
+          <div className={styles['mt-4']}>
             <EventCalendar
               viewType={viewType}
               eventData={events}
@@ -306,7 +306,7 @@ export default function events(): JSX.Element {
                   </div>
                 </div>
                 <div className={styles.datediv}>
-                  <div className="mr-3">
+                  <div className={styles['mr-3']}>
                     <TimePicker
                       label={tCommon('startTime')}
                       className={styles.dateboxEvents}
@@ -341,7 +341,7 @@ export default function events(): JSX.Element {
                   <div className={styles.dispflexEvents}>
                     <label htmlFor="allday">{t('allDay')}?</label>
                     <Form.Switch
-                      className="ms-2 mt-3"
+                      className={`${styles['ms-2']} ${styles['mt-3']}`}
                       id="allday"
                       type="checkbox"
                       checked={isAllDay}
@@ -352,7 +352,7 @@ export default function events(): JSX.Element {
                   <div className={styles.dispflexEvents}>
                     <label htmlFor="recurring">{t('recurring')}:</label>
                     <Form.Switch
-                      className="ms-2 mt-3"
+                      className={`${styles['ms-2']} ${styles['mt-3']}`}
                       id="recurring"
                       type="checkbox"
                       checked={isRecurring}
@@ -365,7 +365,7 @@ export default function events(): JSX.Element {
                   <div className={styles.dispflexEvents}>
                     <label htmlFor="ispublic">{t('publicEvent')}?</label>
                     <Form.Switch
-                      className="ms-2 mt-3"
+                      className={`${styles['ms-2']} ${styles['mt-3']}`}
                       id="ispublic"
                       type="checkbox"
                       checked={isPublic}
@@ -376,7 +376,7 @@ export default function events(): JSX.Element {
                   <div className={styles.dispflexEvents}>
                     <label htmlFor="registrable">{t('registerable')}?</label>
                     <Form.Switch
-                      className="ms-2 mt-3"
+                      className={`${styles['ms-2']} ${styles['mt-3']}`}
                       id="registrable"
                       type="checkbox"
                       checked={isRegisterable}
@@ -389,7 +389,7 @@ export default function events(): JSX.Element {
                   <div className={styles.dispflex}>
                     <label htmlFor="createChat">{t('createChat')}?</label>
                     <Form.Switch
-                      className="me-4"
+                      className={styles['me-4']}
                       id="chat"
                       type="checkbox"
                       data-testid="createChatCheck"

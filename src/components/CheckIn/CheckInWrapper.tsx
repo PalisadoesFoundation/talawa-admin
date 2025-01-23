@@ -21,7 +21,7 @@ export const CheckInWrapper = ({ eventId }: PropType): JSX.Element => {
     <>
       <Button
         data-testid="stats-modal"
-        className={`border-1 bg-white text-success ${style.createButton} `}
+        className={`${style['border-1']} ${style['bg-white']} ${style['text-success']} ${style.createButton} `}
         aria-label="checkInRegistrants"
         onClick={(): void => {
           setShowModal(true);

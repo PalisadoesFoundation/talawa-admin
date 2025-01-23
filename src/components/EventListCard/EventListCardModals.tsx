@@ -390,7 +390,7 @@ function EventListCardModals({
       {/* preview modal */}
       <Modal show={eventModalIsOpen} centered dialogClassName="" scrollable>
         <Modal.Header>
-          <p className={styles.titlemodal}>{t('eventDetails')}</p>
+          <p className={styles['titlemodal']}>{t('eventDetails')}</p>
           <Button
             variant="danger"
             onClick={hideViewModal}
@@ -401,13 +401,13 @@ function EventListCardModals({
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <p className={styles.previewEventListCardModals}>
+            <p className={styles['previewEventListCardModals']}>
               {t('eventTitle')}
             </p>
             <Form.Control
               type="title"
               id="eventitle"
-              className={`mb-3 ${styles.inputField}`}
+              className={`${styles['mb-3']} ${styles['inputField']}`}
               autoComplete="off"
               data-testid="updateTitle"
               required
@@ -433,7 +433,7 @@ function EventListCardModals({
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
-              className={`mb-3 ${styles.inputField}`}
+              className={`${styles['mb-3']} ${styles['inputField']}`}
               autoComplete="off"
               data-testid="updateDescription"
               required
@@ -459,7 +459,7 @@ function EventListCardModals({
             <Form.Control
               type="text"
               id="eventLocation"
-              className={`mb-3 ${styles.inputField}`}
+              className={`${styles['mb-3']} ${styles['inputField']}`}
               autoComplete="off"
               data-testid="updateLocation"
               required
@@ -714,16 +714,19 @@ function EventListCardModals({
       >
         <Modal.Header closeButton className={`${styles.modalHeader}`}>
           <Modal.Title
-            className="text-white"
+            className={styles['text-white']}
             id={`recurringEventUpdateOptionsLabel${eventListCardProps.id}`}
           >
             {t('editEvent')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form className="mt-3">
+          <Form className={styles['mt-3']}>
             {recurringEventUpdateOptions.map((option, index) => (
-              <div key={index} className="my-0 d-flex align-items-center">
+              <div
+                key={index}
+                className={`${styles['my-0']} ${styles['d-flex']} ${styles['align-items-center']}`}
+              >
                 <Form.Check
                   type="radio"
                   id={`radio-${index}`}
@@ -746,7 +749,7 @@ function EventListCardModals({
         <Modal.Footer>
           <Button
             type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
+            className={`${styles['btn']} ${styles['btn-danger']} ${styles['removeButton']}`}
             data-dismiss="modal"
             onClick={toggleRecurringEventUpdateModal}
             data-testid="eventUpdateOptionsModalCloseBtn"
@@ -755,7 +758,7 @@ function EventListCardModals({
           </Button>
           <Button
             type="button"
-            className={`btn ${styles.addButton}`}
+            className={`${styles['btn']} ${styles['addButton']}`}
             onClick={updateEventHandler}
             data-testid="recurringEventUpdateOptionSubmitBtn"
           >
@@ -776,7 +779,7 @@ function EventListCardModals({
       >
         <Modal.Header closeButton className={`${styles.modalHeader}`}>
           <Modal.Title
-            className="text-white"
+            className={styles['text-white']}
             id={`deleteEventModalLabel${eventListCardProps.id}`}
           >
             {t('deleteEvent')}
@@ -786,9 +789,12 @@ function EventListCardModals({
           {!eventListCardProps.recurring && t('deleteEventMsg')}
           {eventListCardProps.recurring && (
             <>
-              <Form className="mt-3">
+              <Form className={styles['mt-3']}>
                 {recurringEventMutationOptions.map((option, index) => (
-                  <div key={index} className="my-0 d-flex align-items-center">
+                  <div
+                    key={index}
+                    className={`${styles['my-0']} ${styles['d-flex']} ${styles['align-items-center']}`}
+                  >
                     <Form.Check
                       type="radio"
                       id={`radio-${index}`}
@@ -813,7 +819,7 @@ function EventListCardModals({
         <Modal.Footer>
           <Button
             type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
+            className={`${styles['btn']} ${styles['btn-danger']} ${styles.removeButton}`}
             data-dismiss="modal"
             onClick={toggleDeleteModal}
             data-testid="eventDeleteModalCloseBtn"
@@ -822,7 +828,7 @@ function EventListCardModals({
           </Button>
           <Button
             type="button"
-            className={`btn ${styles.addButton}`}
+            className={`${styles['btn']} ${styles.addButton}`}
             onClick={deleteEventHandler}
             data-testid="deleteEventBtn"
           >

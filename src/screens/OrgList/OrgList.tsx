@@ -369,7 +369,7 @@ function orgList(): JSX.Element {
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
             >
-              <i className={'fa fa-plus me-2'} />
+              <i className={`fa fa-plus ${styles['me-2']}`} />
               {t('createOrganization')}
             </Button>
           )}
@@ -383,15 +383,17 @@ function orgList(): JSX.Element {
         orgsData.organizationsConnection.length === 0) &&
       searchByName.length === 0 &&
       (!userData || adminFor.length === 0 || superAdmin) ? (
-        <div className={styles.notFound}>
-          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+        <div className={styles['notFound']}>
+          <h3 className={styles['m-0']}>{t('noOrgErrorTitle')}</h3>
+          <h6 className={styles['text-secondary']}>
+            {t('noOrgErrorDescription')}
+          </h6>
         </div>
       ) : !isLoading &&
         orgsData?.organizationsConnection.length == 0 &&
         searchByName.length > 0 ? (
-        <div className={styles.notFound} data-testid="noResultFound">
-          <h4 className="m-0">
+        <div className={styles['notFound']} data-testid="noResultFound">
+          <h4 className={styles['m-0']}>
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
@@ -407,16 +409,27 @@ function orgList(): JSX.Element {
                     <div className={styles.loadingWrapper}>
                       <div className={styles.innerContainer}>
                         <div
-                          className={`${styles.orgImgContainer} shimmer`}
+                          className={`${styles['orgImgContainer']} ${styles['shimmer']}`}
                         ></div>
-                        <div className={styles.content}>
-                          <h5 className="shimmer" title="Org name"></h5>
-                          <h6 className="shimmer" title="Location"></h6>
-                          <h6 className="shimmer" title="Admins"></h6>
-                          <h6 className="shimmer" title="Members"></h6>
+                        <div className={styles['content']}>
+                          <h5
+                            className={styles['shimmer']}
+                            title="Org name"
+                          ></h5>
+                          <h6
+                            className={styles['shimmer']}
+                            title="Location"
+                          ></h6>
+                          <h6 className={styles['shimmer']} title="Admins"></h6>
+                          <h6
+                            className={styles['shimmer']}
+                            title="Members"
+                          ></h6>
                         </div>
                       </div>
-                      <div className={`shimmer ${styles.button}`} />
+                      <div
+                        className={`${styles['shimmer']} ${styles['button']}`}
+                      />
                     </div>
                   </div>
                 ))}
@@ -426,8 +439,10 @@ function orgList(): JSX.Element {
             className={styles.listBoxOrgList}
             data-testid="organizations-list"
             endMessage={
-              <div className={'w-100 text-center my-4'}>
-                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+              <div
+                className={`${styles['w-100']} ${styles['text-center']} ${styles['my-4']}`}
+              >
+                <h5 className={styles['m-0']}>{tCommon('endOfResults')}</h5>
               </div>
             }
           >
@@ -447,7 +462,10 @@ function orgList(): JSX.Element {
                   (item: InterfaceOrgConnectionInfoType) => {
                     if (isAdminForCurrentOrg(item)) {
                       return (
-                        <div key={item._id} className={styles.itemCardOrgList}>
+                        <div
+                          key={item._id}
+                          className={styles['itemCardOrgList']}
+                        >
                           <OrgListCard data={item} />
                         </div>
                       );
@@ -462,17 +480,18 @@ function orgList(): JSX.Element {
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
                       <div
-                        className={`${styles.orgImgContainer} shimmer`}
+                        className={`${styles['orgImgContainer']} ${styles['shimmer']}`}
                       ></div>
-
-                      <div className={styles.content}>
-                        <h5 className="shimmer" title="Org name"></h5>
-                        <h6 className="shimmer" title="Location"></h6>
-                        <h6 className="shimmer" title="Admins"></h6>
-                        <h6 className="shimmer" title="Members"></h6>
+                      <div className={styles['content']}>
+                        <h5 className={styles['shimmer']} title="Org name"></h5>
+                        <h6 className={styles['shimmer']} title="Location"></h6>
+                        <h6 className={styles['shimmer']} title="Admins"></h6>
+                        <h6 className={styles['shimmer']} title="Members"></h6>
                       </div>
                     </div>
-                    <div className={`shimmer ${styles.button}`} />
+                    <div
+                      className={`${styles['shimmer']} ${styles['button']}`}
+                    />
                   </div>
                 </div>
               ))}
@@ -508,11 +527,11 @@ function orgList(): JSX.Element {
       {/* Plugin Notification Modal after Org is Created */}
       <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
-          className={`bg-primary`}
+          className={`${styles['bg-primary']}`}
           closeButton
           data-testid="pluginNotificationHeader"
         >
-          <Modal.Title className="text-white">
+          <Modal.Title className={styles['text-white']}>
             {t('manageFeatures')}
           </Modal.Title>
         </Modal.Header>
@@ -525,7 +544,7 @@ function orgList(): JSX.Element {
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link
-                  className={`btn  btn-primary ${styles.pluginStoreBtn}`}
+                  className={`${styles['btn']} ${styles['btn-primary']} ${styles['pluginStoreBtn']}`}
                   data-testid="goToStore"
                   to={`orgstore/id=${dialogRedirectOrgId}`}
                 >
@@ -534,7 +553,7 @@ function orgList(): JSX.Element {
                 {/* </button> */}
                 <Button
                   type="submit"
-                  className={styles.enableEverythingBtn}
+                  className={styles['enableEverythingBtn']}
                   onClick={closeDialogModal}
                   value="invite"
                   data-testid="enableEverythingForm"

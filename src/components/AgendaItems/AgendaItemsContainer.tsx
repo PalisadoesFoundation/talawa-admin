@@ -252,20 +252,20 @@ function AgendaItemsContainer({
   return (
     <>
       <div
-        className={`mx-1 ${agendaItemConnection == 'Event' ? 'my-4' : 'my-0'}`}
+        className={`${styles['mx-1']} ${agendaItemConnection == 'Event' ? styles['my-4'] : styles['my-0']}`}
       >
         <div
-          className={` shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
+          className={`${styles['shadow-sm']} ${agendaItemConnection === 'Event' ? styles['rounded-top-4'] : styles['rounded-top-2']} ${agendaItemConnection === 'Event' ? styles['mx-4'] : styles['mx-0']}`}
         >
           <Row
-            className={`${styles.tableHeadAgendaItems} mx-0 border border-light-subtle py-3 ${agendaItemConnection === 'Event' ? 'rounded-top-4' : 'rounded-top-2'}`}
+            className={`${styles.row} ${styles['tableHeadAgendaItems']} ${styles['mx-0']} ${styles['border']} ${styles['border-light-subtle']} ${styles['py-3']} ${agendaItemConnection === 'Event' ? styles['rounded-top-4'] : styles['rounded-top-2']}`}
           >
             <Col
               xs={6}
               sm={4}
               md={2}
               lg={1}
-              className="align-self-center ps-3 fw-bold"
+              className={`${styles.rowChild} ${styles['align-self-center']} ${styles['ps-3']} ${styles['fw-bold']}`}
             >
               <div>{t('sequence')}</div>
             </Col>
@@ -274,19 +274,19 @@ function AgendaItemsContainer({
               sm={4}
               md={2}
               lg={3}
-              className="align-self-center fw-bold text-center"
+              className={`${styles.rowChild} ${styles['align-self-center']} ${styles['fw-bold']} ${styles['text-center']}`}
             >
               {t('title')}
             </Col>
             <Col
-              className="fw-bold align-self-center d-none d-md-block text-center"
+              className={`${styles.rowChild} ${styles['fw-bold']} ${styles['align-self-center']} ${styles['d-none']} ${styles['d-md-block']} ${styles['text-center']}`}
               md={3}
               lg={3}
             >
               {t('category')}
             </Col>
             <Col
-              className="fw-bold align-self-center d-none d-md-block text-center"
+              className={`${styles.rowChild} ${styles['fw-bold']} ${styles['align-self-center']} ${styles['d-none']} ${styles['d-md-block']} ${styles['text-center']}`}
               md={3}
               lg={3}
             >
@@ -297,7 +297,7 @@ function AgendaItemsContainer({
               sm={4}
               md={2}
               lg={2}
-              className="fw-bold align-self-center text-center"
+              className={`${styles.rowChild} ${styles['fw-bold']} ${styles['align-self-center']} ${styles['text-center']}`}
             >
               <div>{t('options')}</div>
             </Col>
@@ -309,7 +309,7 @@ function AgendaItemsContainer({
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
+                className={`${styles['bg-light-subtle']} ${styles['border']} ${styles['border-light-subtle']} ${styles['border-top-0']} ${styles['shadow-sm']} ${agendaItemConnection === 'Event' ? `${styles['rounded-bottom-4']} ${styles['mx-4']}` : `${styles['rounded-bottom-2']} ${styles['mb-2']} ${styles['mx-0']}`}`}
               >
                 {agendaItemData &&
                   agendaItemData.map((agendaItem, index) => (
@@ -323,19 +323,17 @@ function AgendaItemsContainer({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className={`${styles.agendaItemRow} ${
-                            snapshot.isDragging ? styles.dragging : ''
-                          }`}
+                          className={`${styles['agendaItemRow']} ${snapshot.isDragging ? styles['dragging'] : ''}`}
                         >
                           <Row
-                            className={`${index === 0 ? 'pt-3' : ''} mb-2 mt-2 mx-3 `}
+                            className={`${styles.row} ${index === 0 ? styles['pt-3'] : ''} ${styles['mb-2']} ${styles['mt-2']} ${styles['mx-3']}`}
                           >
                             <Col
                               xs={6}
                               sm={4}
                               md={2}
                               lg={1}
-                              className="align-self-center text-body-secondary text-center"
+                              className={`${styles.rowChild} ${styles['align-self-center']} ${styles['text-body-secondary']} ${styles['text-center']}`}
                             >
                               <i className="fas fa-bars fa-sm" />
                             </Col>
@@ -344,21 +342,21 @@ function AgendaItemsContainer({
                               sm={4}
                               md={2}
                               lg={3}
-                              className="p-1 align-self-center text-body-secondary text-center"
+                              className={`${styles.rowChild} ${styles['p-1']} ${styles['align-self-center']} ${styles['text-body-secondary']} ${styles['text-center']}`}
                             >
                               {agendaItem.title}
                             </Col>
                             <Col
                               md={3}
                               lg={3}
-                              className="p-1 d-none d-md-block align-self-center text-body-secondary text-center"
+                              className={`${styles.rowChild} ${styles['p-1']} ${styles['d-none']} ${styles['d-md-block']} ${styles['align-self-center']} ${styles['text-body-secondary']} ${styles['text-center']}`}
                             >
-                              <div className={styles.categoryContainer}>
+                              <div className={styles['categoryContainer']}>
                                 {agendaItem.categories.length > 0 ? (
                                   agendaItem.categories.map((category, idx) => (
                                     <span
                                       key={category._id}
-                                      className={styles.categoryChip}
+                                      className={styles['categoryChip']}
                                     >
                                       {category.name}
                                       {idx < agendaItem.categories.length - 1 &&
@@ -366,16 +364,16 @@ function AgendaItemsContainer({
                                     </span>
                                   ))
                                 ) : (
-                                  <span className={styles.categoryChip}>
+                                  <span className={styles['categoryChip']}>
                                     No Category
                                   </span>
                                 )}
                               </div>
-                            </Col>{' '}
+                            </Col>
                             <Col
                               md={3}
                               lg={3}
-                              className="p-1 d-none d-md-block align-self-center text-body-secondary text-center"
+                              className={`${styles.rowChild} ${styles['p-1']} ${styles['d-none']} ${styles['d-md-block']} ${styles['align-self-center']} ${styles['text-body-secondary']} ${styles['text-center']}`}
                             >
                               {agendaItem.description}
                             </Col>
@@ -384,12 +382,14 @@ function AgendaItemsContainer({
                               sm={4}
                               md={2}
                               lg={2}
-                              className="p-0 align-self-center d-flex justify-content-center"
+                              className={`${styles.rowChild} ${styles['p-0']} ${styles['align-self-center']} ${styles['d-flex']} ${styles['justify-content-center']}`}
                             >
-                              <div className="d-flex align-items-center gap-2">
+                              <div
+                                className={`${styles['d-flex']} ${styles['align-items-center']} ${styles['gap-2']}`}
+                              >
                                 <Button
                                   data-testid="previewAgendaItemModalBtn"
-                                  className={`${styles.agendaCategoryOptionsButton} d-flex align-items-center justify-content-center`}
+                                  className={`${styles['agendaCategoryOptionsButton']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']}`}
                                   variant="outline-secondary"
                                   size="sm"
                                   onClick={() => showPreviewModal(agendaItem)}
@@ -400,7 +400,7 @@ function AgendaItemsContainer({
                                   size="sm"
                                   data-testid="editAgendaItemModalBtn"
                                   onClick={() => handleEditClick(agendaItem)}
-                                  className={`${styles.agendaItemsOptionsButton} d-flex align-items-center justify-content-center`}
+                                  className={`${styles['agendaItemsOptionsButton']} ${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']}`}
                                   variant="outline-secondary"
                                 >
                                   <i className="fas fa-edit fa-sm" />
@@ -413,7 +413,9 @@ function AgendaItemsContainer({
                     </Draggable>
                   ))}
                 {agendaItemData?.length === 0 && (
-                  <div className="lh-lg text-center fw-semibold text-body-tertiary">
+                  <div
+                    className={`${styles['lh-lg']} ${styles['text-center']} ${styles['fw-semibold']} ${styles['text-body-tertiary']}`}
+                  >
                     {t('noAgendaItems')}
                   </div>
                 )}

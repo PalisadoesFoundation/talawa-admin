@@ -154,7 +154,9 @@ const VenueModal = ({
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header className="d-flex align-items-start">
+      <Modal.Header
+        className={`${styles['d-flex']} ${styles['align-items-start']}`}
+      >
         <p className={styles.titlemodal}>{t('venueDetails')}</p>
         <Button
           variant="danger"

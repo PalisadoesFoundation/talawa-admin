@@ -4,7 +4,7 @@ import { Dropdown } from 'react-bootstrap';
 import availableFieldTypes from 'utils/fieldTypes';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCustomFieldData } from 'utils/interfaces';
-
+import styles from '../../style/app.module.css';
 /**
  * Props for the EditOrgCustomFieldDropDown component.
  */
@@ -57,7 +57,7 @@ const EditOrgCustomFieldDropDown = ({
         {availableFieldTypes.map((customFieldType, index: number) => (
           <Dropdown.Item
             key={`dropdown-item-${index}`}
-            className="dropdown-item"
+            className={`${styles['dropdown-item']}`}
             data-testid={`dropdown-btn-${index}`}
             onClick={(): void => {
               setCustomFieldData({

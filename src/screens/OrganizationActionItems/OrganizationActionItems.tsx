@@ -149,7 +149,9 @@ function organizationActionItems(): JSX.Element {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
-        <h6 className="fw-bold text-danger text-center">
+        <h6
+          className={`${styles['fw-bold']} ${styles['text-danger']} ${styles['text-center']}`}
+        >
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
       </div>
@@ -175,7 +177,7 @@ function organizationActionItems(): JSX.Element {
             {params.row.assigneeType !== 'EventVolunteerGroup' ? (
               <>
                 <div
-                  className="d-flex fw-bold align-items-center ms-2"
+                  className={`${styles['d-flex']} ${styles['fw-bold']} ${styles['align-items-center']} ${styles['ms-2']}`}
                   data-testid="assigneeName"
                 >
                   {image ? (
@@ -202,7 +204,7 @@ function organizationActionItems(): JSX.Element {
             ) : (
               <>
                 <div
-                  className="d-flex fw-bold align-items-center ms-2"
+                  className={`${styles['d-flex']} ${styles['fw-bold']} ${styles['align-items-center']} ${styles['ms-2']}`}
                   data-testid="assigneeName"
                 >
                   <div className={styles.avatarContainer}>
@@ -234,7 +236,7 @@ function organizationActionItems(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={`${styles['d-flex']} ${styles['justify-content-center']} ${styles['fw-bold']}`}
             data-testid="categoryName"
           >
             {params.row.actionItemCategory?.name}
@@ -349,7 +351,9 @@ function organizationActionItems(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex align-items-center justify-content-center mt-3">
+          <div
+            className={`${styles['d-flex']} ${styles['align-items-center']} ${styles['justify-content-center']} ${styles['mt-3']}`}
+          >
             <Form.Check
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
@@ -366,7 +370,9 @@ function organizationActionItems(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div
+        className={`${styles['btnsContainer']} ${styles['gap-4']} ${styles['flex-wrap']}`}
+      >
         <div className={`${styles.input} `}>
           <Form.Control
             type="name"
@@ -387,7 +393,7 @@ function organizationActionItems(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3">
+        <div className={`${styles['d-flex']} ${styles['gap-3']}`}>
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[

@@ -10,7 +10,7 @@ import {
   mondayToFriday,
 } from 'utils/recurrenceUtils';
 import CustomRecurrenceModal from './CustomRecurrenceModal';
-
+import styles from '../../style/app.module.css';
 interface InterfaceRecurrenceOptionsProps {
   recurrenceRuleState: InterfaceRecurrenceRuleState;
   recurrenceRuleText: string;
@@ -65,10 +65,13 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
 
   return (
     <>
-      <Dropdown drop="up" className="mt-2 d-inline-block w-100">
+      <Dropdown
+        drop="up"
+        className={`${styles['mt-2']} ${styles['d-inline-block']} ${styles['w-100']}`}
+      >
         <Dropdown.Toggle
           variant="outline-secondary"
-          className="py-2 border border-secondary-subtle rounded-2"
+          className={`${styles['py-2']} ${styles['border']} ${styles['border-secondary-subtle']} ${styles['rounded-2']}`}
           id="dropdown-basic"
           data-testid="recurrenceOptions"
         >
@@ -79,18 +82,18 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               overlay={popover}
             >
               <span
-                className="fw-semibold"
+                className={styles['fw-semibold']}
                 data-testid="recurrenceRuleTextOverlay"
               >
                 {`${recurrenceRuleText.substring(0, 45)}...`}
               </span>
             </OverlayTrigger>
           ) : (
-            <span className="fw-semibold">{recurrenceRuleText}</span>
+            <span className={styles['fw-semibold']}>{recurrenceRuleText}</span>
           )}
         </Dropdown.Toggle>
 
-        <Dropdown.Menu className="mb-2">
+        <Dropdown.Menu className={styles['mb-2']}>
           <Dropdown.Item
             onClick={() =>
               setRecurrenceRuleState({
@@ -101,7 +104,9 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
             }
             data-testid="dailyRecurrence"
           >
-            <span className="fw-semibold text-secondary">
+            <span
+              className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+            >
               {getRecurrenceRuleText({
                 ...recurrenceRuleState,
                 frequency: Frequency.DAILY,
@@ -119,7 +124,9 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
             }
             data-testid="weeklyRecurrence"
           >
-            <span className="fw-semibold text-secondary">
+            <span
+              className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+            >
               {getRecurrenceRuleText({
                 ...recurrenceRuleState,
                 frequency: Frequency.WEEKLY,
@@ -137,7 +144,9 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
             }
             data-testid="monthlyRecurrenceOnThatDay"
           >
-            <span className="fw-semibold text-secondary">
+            <span
+              className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+            >
               {getRecurrenceRuleText({
                 ...recurrenceRuleState,
                 frequency: Frequency.MONTHLY,
@@ -158,7 +167,9 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               }
               data-testid="monthlyRecurrenceOnThatOccurence"
             >
-              <span className="fw-semibold text-secondary">
+              <span
+                className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+              >
                 {getRecurrenceRuleText({
                   ...recurrenceRuleState,
                   frequency: Frequency.MONTHLY,
@@ -181,7 +192,9 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               }
               data-testid="monthlyRecurrenceOnLastOccurence"
             >
-              <span className="fw-semibold text-secondary">
+              <span
+                className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+              >
                 {getRecurrenceRuleText({
                   ...recurrenceRuleState,
                   frequency: Frequency.MONTHLY,
@@ -201,7 +214,9 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
             }
             data-testid="yearlyRecurrence"
           >
-            <span className="fw-semibold text-secondary">
+            <span
+              className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+            >
               {getRecurrenceRuleText({
                 ...recurrenceRuleState,
                 frequency: Frequency.YEARLY,
@@ -220,7 +235,9 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
             }
             data-testid="mondayToFridayRecurrence"
           >
-            <span className="fw-semibold text-secondary">
+            <span
+              className={`${styles['fw-semibold']} ${styles['text-secondary']}`}
+            >
               {getRecurrenceRuleText({
                 ...recurrenceRuleState,
                 frequency: Frequency.WEEKLY,
@@ -232,7 +249,11 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
             onClick={() => setCustomRecurrenceModalIsOpen(true)}
             data-testid="customRecurrence"
           >
-            <span className="fw-semibold text-body-tertiary">Custom...</span>
+            <span
+              className={`${styles['fw-semibold']} ${styles['text-body-tertiary']}`}
+            >
+              Custom...
+            </span>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import styles from '../VolunteerManagement.module.css';
+import style from '../../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -128,10 +129,14 @@ const UpcomingEvents = (): JSX.Element => {
   if (eventsError) {
     // Displays an error message if there is an issue loading the events
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div
+        className={`${styles.container} ${style['bg-white']} ${style['rounded-4']} ${style['my-3']}`}
+      >
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
+          <h6
+            className={`${style['fw-bold']} ${style['text-danger']} ${style['text-center']}`}
+          >
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
         </div>
@@ -142,9 +147,11 @@ const UpcomingEvents = (): JSX.Element => {
   // Renders the upcoming events list and UI elements for searching, sorting, and adding pledges
   return (
     <>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div
+        className={`${styles.btnsContainer} ${style['gap-4']} ${style['flex-wrap']}`}
+      >
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
+        <div className={`${styles.input} ${style['mb-1']}`}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -162,14 +169,18 @@ const UpcomingEvents = (): JSX.Element => {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${style['position-absolute']} ${style['z-10']} ${style['bottom-0']} ${style['end-0']} ${style['d-flex']} ${style['justify-content-center']} ${style['align-items-center']}`}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
+        <div
+          className={`${style['d-flex']} ${style['gap-4']} ${style['mb-1']}`}
+        >
+          <div
+            className={`${style['d-flex']} ${style['justify-space-between']} ${style['align-items-center']} ${style['gap-3']}`}
+          >
             <SortingButton
               sortingOptions={[
                 { label: t('name'), value: 'title' },
@@ -207,14 +218,17 @@ const UpcomingEvents = (): JSX.Element => {
             (volunteer) => volunteer.user._id === userId,
           );
           return (
-            <Accordion className="mt-3 rounded" key={_id}>
+            <Accordion
+              className={`${style['mt-3']} ${style.rounded}`}
+              key={_id}
+            >
               <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
                 <div className={styles.accordionSummary}>
                   <div
                     className={styles.titleContainer}
                     data-testid={`detailContainer${index + 1}`}
                   >
-                    <div className="d-flex">
+                    <div className={`${style['d-flex']}`}>
                       <h3 data-testid="eventTitle">{title}</h3>
                       {recurring && (
                         <Chip
@@ -227,17 +241,21 @@ const UpcomingEvents = (): JSX.Element => {
                       )}
                     </div>
 
-                    <div className={`d-flex gap-4 ${styles.subContainer}`}>
+                    <div
+                      className={`${style['d-flex']} ${style['gap-4']} ${styles.subContainer}`}
+                    >
                       <span>
                         {' '}
-                        <IoLocationOutline className="me-1 mb-1" />
+                        <IoLocationOutline
+                          className={`${style['me-1']} ${style['mb-1']}`}
+                        />
                         location: {location}
                       </span>
                       <span>Start Date: {startDate as unknown as string}</span>
                       <span>End Date: {endDate as unknown as string}</span>
                     </div>
                   </div>
-                  <div className="d-flex gap-3">
+                  <div className={`${style['d-flex']} ${style['gap-3']}`}>
                     <Button
                       variant={
                         new Date(endDate) < new Date()
@@ -249,9 +267,9 @@ const UpcomingEvents = (): JSX.Element => {
                       onClick={() => handleVolunteer(_id, null, 'requested')}
                     >
                       {isVolunteered ? (
-                        <FaCheck className="me-1" />
+                        <FaCheck className={`${style['me-1']}`} />
                       ) : (
-                        <IoIosHand className="me-1" size={21} />
+                        <IoIosHand className={`${style['me-1']}`} size={21} />
                       )}
 
                       {t(isVolunteered ? 'volunteered' : 'volunteer')}
@@ -259,11 +277,13 @@ const UpcomingEvents = (): JSX.Element => {
                   </div>
                 </div>
               </AccordionSummary>
-              <AccordionDetails className="d-flex gap-3 flex-column">
+              <AccordionDetails
+                className={`${style['d-flex']} ${style['gap-3']} ${style['flex-column']}`}
+              >
                 {
                   /*istanbul ignore next*/
                   description && (
-                    <div className="d-flex gap-3">
+                    <div className={`${style['d-flex']} ${style['gap-3']}`}>
                       <span>Description: </span>
                       <span>{description}</span>
                     </div>
@@ -272,7 +292,7 @@ const UpcomingEvents = (): JSX.Element => {
                 {volunteerGroups && volunteerGroups.length > 0 && (
                   <Form.Group>
                     <Form.Label
-                      className="fw-lighter ms-2 mb-2 "
+                      className={`${style['fw-lighter']} ${style['ms-2']} ${style['mb-2']}`}
                       style={{
                         fontSize: '1rem',
                         color: 'grey',
@@ -289,14 +309,22 @@ const UpcomingEvents = (): JSX.Element => {
                       <Table aria-label="group table">
                         <TableHead>
                           <TableRow>
-                            <TableCell className="fw-bold">Sr. No.</TableCell>
-                            <TableCell className="fw-bold">
+                            <TableCell className={style['fw-bold']}>
+                              Sr. No.
+                            </TableCell>
+                            <TableCell className={style['fw-bold']}>
                               Group Name
                             </TableCell>
-                            <TableCell className="fw-bold" align="center">
+                            <TableCell
+                              className={style['fw-bold']}
+                              align="center"
+                            >
                               No. of Members
                             </TableCell>
-                            <TableCell className="fw-bold" align="center">
+                            <TableCell
+                              className={style['fw-bold']}
+                              align="center"
+                            >
                               Options
                             </TableCell>
                           </TableRow>
