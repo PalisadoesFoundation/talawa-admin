@@ -87,6 +87,12 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+  --info-button-text: var(--davys-grey);
+  --close-button-text: var(--remove-button-color);
+  --close-button-bg: var(--white-color);
+  --checkbox-focus-border: var(--bs-gray-300);
+  --checkbox-bg: var(--dark-blue);
+  --checkbox-border: var(--dark-blue);
 
   /* Background and Border */
   --table-bg: #eaebef;
@@ -148,8 +154,12 @@
     0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   /* Additional Variables */
+
   --input-shadow-color: 4px 4px 10px -1px rgb(168, 168, 168, 0.7),
     /* Shadow on bottom-right */ 2px 2px 10px -1px rgba(169, 169, 169, 0.7); /* Lighter shadow on bottom-right */
+
+  --primary-theme-color: #1778f2;
+
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
   --search-button-bg: #a8c7fa;
@@ -201,6 +211,7 @@
   --dark-blue: #1778f2;
   --remove-button-color: #c8102e;
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --drop-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
   /* breakpoints */
   --breakpoint-mobile: 576px;
@@ -372,6 +383,12 @@
   text-decoration: underline;
 }
 
+.closeButton {
+  color: var(--close-button-text);
+  border: none;
+  background-color: var(--close-button-bg);
+}
+
 .dropdown {
   background-color: var(--bs-white) !important;
   min-width: 150px;
@@ -488,15 +505,18 @@
 }
 
 .actionItemDeleteButton {
-  background-color: var(--delete-button-bg);
-  color: var(--delete-button-color);
-  border: none;
+  background-color: var(--delete-button-bg) !important;
+  color: var(--delete-button-color) !important;
+}
+
+.actionItemDeleteButton:hover {
+  box-shadow: var(--drop-shadow);
 }
 
 .createButton {
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
-  /* margin-top: 10px; */
+  margin-top: 10px;
   /* margin-left: 5px; */
   border: 1px solid var(--davys-grey);
 }
@@ -505,6 +525,7 @@
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
   border: 1px solid var(--davys-grey) !important;
+  box-shadow: var(--drop-shadow);
 }
 
 .visuallyHidden {
@@ -627,9 +648,9 @@
 }
 
 .infoButton {
-  background-color: var(--search-button-bg);
+  background-color: var(--search-button-bg) !important;
   border-color: var(--search-button-border);
-  color: var(--davys-grey);
+  color: var(--davys-grey) !important;
   margin-right: 0.5rem;
   border-radius: 0.25rem;
 }
@@ -637,6 +658,8 @@
 .infoButton:hover {
   background-color: var(--light-blue-color);
   border-color: var(--search-button-border);
+  color: var(--info-button-text) !important;
+  box-shadow: var(--drop-shadow);
 }
 
 .TableImage {
@@ -656,7 +679,7 @@
 }
 
 .rowBackground {
-  background-color: var(--row-background);
+  background-color: var(--row-background) !important;
   max-height: 120px;
   overflow-y: auto;
 }
@@ -1970,8 +1993,23 @@ input[type='radio']:checked + label:hover {
 
 .pending {
   background-color: var(--status-pending-bg);
-  color: var(--status-pending-text);
-  border-color: var(--status-pending-border);
+  color: var(--light-blue) !important;
+  border-color: var(--light-blue) !important;
+}
+
+.checkboxButton input:checked {
+  background-color: var(--checkbox-bg);
+  border-color: var(--checkbox-border);
+}
+
+.checkboxButton input:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:focus {
+  border-color: var(--checkbox-focus-border);
+  outline: none;
+  box-shadow: none;
 }
 
 /* Modals */
@@ -4414,7 +4452,7 @@ button[data-testid='createPostBtn'] {
   padding-block: 0.5rem;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--input-shadow-color);
+  border-top: var(--input-shadow-color);
 }
 
 .inputArea {
