@@ -3255,6 +3255,12 @@ textarea.form-control.is-valid {
   border-color: var(--bs-form-valid-border-color);
 }
 
+input:-webkit-autofill {
+  background-color: white !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: initial !important;
+}
+
 .was-validated .form-check-input:valid:checked,
 .form-check-input.is-valid:checked {
   background-color: var(--bs-form-valid-color);

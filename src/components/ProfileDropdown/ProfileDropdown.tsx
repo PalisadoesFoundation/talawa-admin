@@ -3,7 +3,7 @@ import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './ProfileDropdown.module.css';
+import styles from '../../style/app.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -43,7 +43,6 @@ const profileDropdown = (): JSX.Element => {
     try {
       await revokeRefreshToken();
     } catch (error) {
-      /*istanbul ignore next*/
       console.error('Error revoking refresh token:', error);
     }
     localStorage.clear();
@@ -54,16 +53,18 @@ const profileDropdown = (): JSX.Element => {
   const fullName = `${firstName} ${lastName}`;
   const displayedName =
     fullName.length > MAX_NAME_LENGTH
-      ? /*istanbul ignore next*/
-        fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
+      ? fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
       : fullName;
 
   return (
-    <Dropdown as={ButtonGroup} variant="none">
+    <Dropdown
+      className={`${styles.profilebutton}`}
+      as={ButtonGroup}
+      variant="none"
+    >
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
-            /*istanbul ignore next*/
             <img
               src={userImage}
               alt={`profile picture`}

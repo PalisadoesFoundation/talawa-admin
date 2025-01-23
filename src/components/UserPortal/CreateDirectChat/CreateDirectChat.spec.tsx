@@ -13,7 +13,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import Chat from '../../../screens/UserPortal/Chat/Chat';
+import type { Chat } from '../../../screens/UserPortal/Chat/Chat';
+import ChatComp from '../../../screens/UserPortal/Chat/Chat';
 import {
   CREATE_CHAT,
   MARK_CHAT_MESSAGES_AS_READ,
@@ -27,6 +28,10 @@ import {
 } from 'GraphQl/Queries/PlugInQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
+import { handleCreateDirectChat } from './CreateDirectChat';
+import type { TFunction } from 'i18next';
+import type { ApolloQueryResult, FetchResult } from '@apollo/client';
+
 const { setItem } = useLocalStorage();
 
 /**
@@ -3947,7 +3952,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Chat />
+              <ChatComp />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -4001,7 +4006,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Chat />
+              <ChatComp />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -4032,5 +4037,161 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     await new Promise(process.nextTick);
 
     await wait();
+  });
+  it('should create chat if a conversation does not with the selected user', async () => {
+    const t = ((key: string) => {
+      return key;
+    }) as TFunction;
+    const createChat = vi.fn(async (): Promise<FetchResult<unknown>> => {
+      return { data: {} } as FetchResult<unknown>;
+    });
+    const chatsListRefetch = vi.fn(
+      async (): Promise<ApolloQueryResult<unknown>> => {
+        return { data: {} } as ApolloQueryResult<unknown>;
+      },
+    );
+    const toggleCreateDirectChatModal = vi.fn();
+    const chats: Chat[] = [
+      {
+        _id: '1',
+        isGroup: false,
+        name: '',
+        image: '',
+        messages: [],
+        unseenMessagesByUsers: '{}',
+        users: [
+          {
+            _id: '1',
+            firstName: 'Aaditya',
+            lastName: 'Agarwal',
+            email: '',
+            image: '',
+          },
+          {
+            _id: '3',
+            firstName: 'Test',
+            lastName: 'User',
+            email: '',
+            image: '',
+          },
+        ],
+      },
+    ];
+    await handleCreateDirectChat(
+      '2',
+      chats,
+      t,
+      createChat,
+      '1',
+      '1',
+      chatsListRefetch,
+      toggleCreateDirectChatModal,
+    );
+    expect(createChat).toHaveBeenCalled();
+    expect(chatsListRefetch).toHaveBeenCalled();
+    expect(toggleCreateDirectChatModal).toHaveBeenCalled();
+  });
+  it('should not create chat if a conversation already exists with the selected user', async () => {
+    const t = ((key: string) => {
+      return key;
+    }) as TFunction;
+    const createChat = vi.fn(async (): Promise<FetchResult<unknown>> => {
+      return { data: {} } as FetchResult<unknown>;
+    });
+    const chatsListRefetch = vi.fn(
+      async (): Promise<ApolloQueryResult<unknown>> => {
+        return { data: {} } as ApolloQueryResult<unknown>;
+      },
+    );
+    const toggleCreateDirectChatModal = vi.fn();
+    const chats: Chat[] = [
+      {
+        _id: '1',
+        isGroup: false,
+        name: '',
+        image: '',
+        messages: [],
+        unseenMessagesByUsers: '{}',
+        users: [
+          {
+            _id: '1',
+            firstName: 'Aaditya',
+            lastName: 'Agarwal',
+            email: '',
+            image: '',
+          },
+          {
+            _id: '2',
+            firstName: 'Test',
+            lastName: 'User',
+            email: '',
+            image: '',
+          },
+        ],
+      },
+    ];
+    await handleCreateDirectChat(
+      '2',
+      chats,
+      t,
+      createChat,
+      '1',
+      '1',
+      chatsListRefetch,
+      toggleCreateDirectChatModal,
+    );
+    expect(createChat).not.toHaveBeenCalled();
+    expect(chatsListRefetch).not.toHaveBeenCalled();
+    expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
+  });
+
+  it('should handle error if create chat fails', async () => {
+    const t = ((key: string) => {
+      return key;
+    }) as TFunction;
+    const createChat = vi.fn(async (): Promise<FetchResult<unknown>> => {
+      throw new Error('Error');
+    });
+    const chatsListRefetch = vi.fn();
+    const toggleCreateDirectChatModal = vi.fn();
+    const chats: Chat[] = [
+      {
+        _id: '1',
+        isGroup: false,
+        name: '',
+        image: '',
+        messages: [],
+        unseenMessagesByUsers: '{}',
+        users: [
+          {
+            _id: '1',
+            firstName: 'Aaditya',
+            lastName: 'Agarwal',
+            email: '',
+            image: '',
+          },
+          {
+            _id: '3',
+            firstName: 'Test',
+            lastName: 'User',
+            email: '',
+            image: '',
+          },
+        ],
+      },
+    ];
+    await handleCreateDirectChat(
+      '2',
+      chats,
+      t,
+      createChat,
+      '1',
+      '1',
+      chatsListRefetch,
+      toggleCreateDirectChatModal,
+    );
+    expect(createChat).toHaveBeenCalled();
+    expect(chatsListRefetch).not.toHaveBeenCalled();
+    expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
   });
 });
