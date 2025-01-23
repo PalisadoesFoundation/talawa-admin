@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import React from 'react';
+import { Button } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
 import styles from '../../style/app.module.css';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * Props for the EventHeader component.
@@ -47,7 +47,6 @@ function eventHeader({
   handleChangeView,
   showInviteModal,
 }: InterfaceEventHeaderProps): JSX.Element {
-  const [eventName, setEventName] = useState('');
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
@@ -58,33 +57,12 @@ function eventHeader({
       data-testid="calendarEventHeader"
     >
       <div className={styles.calendar__header}>
-        <div className={styles.input}>
-          <Form.Control
-            type="text"
-            id="searchEvent"
-            data-testid="searchEvent"
-            placeholder={t('searchEventName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={eventName}
-            /**
-             * Updates the event name state when the input value changes.
-             *
-             * @param e - The event object from the input change.
-             */
-
-            onChange={(e) => setEventName(e.target.value)}
-          />
-          <Button
-            className={styles.searchButton}
-            data-testid="searchButton"
-            style={{ marginBottom: '10px' }}
-          >
-            <SearchOutlinedIcon />
-          </Button>
-        </div>
-        {/* <div className={styles.flex_grow}></div> */}
+        <SearchBar
+          placeholder={t('searchEventName')}
+          onSearch={(term) => console.log(`Search term: ${term}`)}
+          inputTestId="searchEvent"
+          buttonTestId="searchButton"
+        />
         <div className={styles.space}>
           <SortingButton
             title={t('viewType')}
