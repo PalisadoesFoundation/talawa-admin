@@ -22,9 +22,9 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
-  GET_COMMUNITY_DATA,
+  // GET_COMMUNITY_DATA,
   ORGANIZATION_LIST,
-  LOGIN_QUERY,
+  SIGNIN_QUERY,
 } from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
@@ -32,7 +32,7 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import { socialMediaLinks } from '../../constants';
+// import { socialMediaLinks } from '../../constants';
 import styles from 'style/app.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
@@ -71,8 +71,7 @@ const loginPage = (): JSX.Element => {
   const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
-    signfirstName: '',
-    signlastName: '',
+    signName: '',
     signEmail: '',
     signPassword: '',
     cPassword: '',
@@ -130,7 +129,7 @@ const loginPage = (): JSX.Element => {
   //   // refetching the data if the pre-login data updates
   //   refetch();
   // }, [data]);
-  const [signin, { loading: loginLoading }] = useLazyQuery(LOGIN_QUERY);
+  const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
@@ -191,14 +190,8 @@ const loginPage = (): JSX.Element => {
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const {
-      signfirstName,
-      signlastName,
-      signEmail,
-      signPassword,
-      cPassword,
-      signOrg,
-    } = signformState;
+    const { signName, signEmail, signPassword, cPassword, signOrg } =
+      signformState;
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
@@ -224,10 +217,8 @@ const loginPage = (): JSX.Element => {
     };
 
     if (
-      isValidName(signfirstName) &&
-      isValidName(signlastName) &&
-      signfirstName.trim().length > 1 &&
-      signlastName.trim().length > 1 &&
+      isValidName(signName) &&
+      signName.trim().length > 1 &&
       signEmail.length >= 8 &&
       signPassword.length > 1 &&
       validatePassword(signPassword)
@@ -236,8 +227,7 @@ const loginPage = (): JSX.Element => {
         try {
           const { data: signUpData } = await signup({
             variables: {
-              firstName: signfirstName,
-              lastName: signlastName,
+              name: signName,
               email: signEmail,
               password: signPassword,
               orgId: signOrg,
@@ -252,8 +242,7 @@ const loginPage = (): JSX.Element => {
             );
             setShowTab('LOGIN');
             setSignFormState({
-              signfirstName: '',
-              signlastName: '',
+              signName: '',
               signEmail: '',
               signPassword: '',
               cPassword: '',
@@ -269,11 +258,8 @@ const loginPage = (): JSX.Element => {
         toast.warn(t('passwordMismatches') as string);
       }
     } else {
-      if (!isValidName(signfirstName)) {
-        toast.warn(t('firstName_invalid') as string);
-      }
-      if (!isValidName(signlastName)) {
-        toast.warn(t('lastName_invalid') as string);
+      if (!isValidName(signName)) {
+        toast.warn(t('name_invalid') as string);
       }
       if (!validatePassword(signPassword)) {
         toast.warn(t('password_invalid') as string);
@@ -320,7 +306,7 @@ const loginPage = (): JSX.Element => {
         setItem('token', authenticationToken);
         // setItem('refreshToken', login.refreshToken);
         setItem('IsLoggedIn', 'TRUE');
-        setItem('name', `${user.name}`);
+        setItem('name', user.name);
         setItem('email', user.emailAddress);
         // setItem('FirstName', user.firstName);
         // setItem('LastName', user.lastName);
@@ -548,27 +534,27 @@ const loginPage = (): JSX.Element => {
                     {tCommon('register')}
                   </h1>
                   <Row>
-                    <Col sm={6}>
-                      <div>
-                        <Form.Label>{tCommon('firstName')}</Form.Label>
-                        <Form.Control
-                          disabled={signinLoading}
-                          type="text"
-                          id="signfirstname"
-                          className="mb-3"
-                          placeholder={tCommon('firstName')}
-                          required
-                          value={signformState.signfirstName}
-                          onChange={(e): void => {
-                            setSignFormState({
-                              ...signformState,
-                              signfirstName: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                    </Col>
-                    <Col sm={6}>
+                    {/* <Col sm={6}> */}
+                    <div>
+                      <Form.Label>{tCommon('Name')}</Form.Label>
+                      <Form.Control
+                        disabled={signinLoading}
+                        type="text"
+                        id="signname"
+                        className="mb-3"
+                        placeholder={tCommon('Name')}
+                        required
+                        value={signformState.signName}
+                        onChange={(e): void => {
+                          setSignFormState({
+                            ...signformState,
+                            signName: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    {/* </Col> */}
+                    {/* <Col sm={6}>
                       <div>
                         <Form.Label>{tCommon('lastName')}</Form.Label>
                         <Form.Control
@@ -585,9 +571,9 @@ const loginPage = (): JSX.Element => {
                               signlastName: e.target.value,
                             });
                           }}
-                        />
+                        />dwdwdw
                       </div>
-                    </Col>
+                    </Col> */}
                   </Row>
                   <div className="position-relative">
                     <Form.Label>{tCommon('email')}</Form.Label>

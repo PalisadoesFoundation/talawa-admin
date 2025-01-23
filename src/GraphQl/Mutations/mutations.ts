@@ -145,14 +145,8 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
 // to sign up in the talawa admin
 
 export const SIGNUP_MUTATION = gql`
-  mutation SignUp(
-    $firstName: String!
-    $email: EmailAddress!
-    $password: String!
-  ) {
-    signUp(
-      input: { name: $firstName, emailAddress: $email, password: $password }
-    ) {
+  mutation SignUp($name: String!, $email: String!, $password: String!) {
+    signUp(input: { name: $name, emailAddress: $email, password: $password }) {
       user {
         id
       }

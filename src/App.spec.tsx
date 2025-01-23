@@ -7,7 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App';
 import { store } from 'state/store';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
@@ -27,7 +27,7 @@ vi.mock('/src/assets/svgs/talawa.svg?react', () => ({
 const MOCKS = [
   {
     request: {
-      query: CHECK_AUTH,
+      query: CURRENT_USER,
     },
     result: {
       data: {

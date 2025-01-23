@@ -839,7 +839,7 @@ export const GET_COMMUNITY_DATA = gql`
     }
   }
 `;
-export const LOGIN_QUERY = gql`
+export const SIGNIN_QUERY = gql`
   query SignIn($email: String!, $password: String!) {
     signIn(input: { emailAddress: $email, password: $password }) {
       user {
