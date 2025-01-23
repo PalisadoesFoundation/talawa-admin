@@ -803,6 +803,23 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('validates allottedHours edge cases', async () => {
+    renderItemModal(link1, itemProps[0]);
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+
+    // Test invalid string
+    fireEvent.change(allottedHours, { target: { value: 'invalid' } });
+    expect(allottedHours).toHaveValue('');
+
+    // Test NaN
+    fireEvent.change(allottedHours, { target: { value: NaN } });
+    expect(allottedHours).toHaveValue('');
+
+    // Test negative number
+    fireEvent.change(allottedHours, { target: { value: -5 } });
+    expect(allottedHours).toHaveValue('');
+  });
+
   it('should fail to Create Action Item', async () => {
     renderItemModal(link2, itemProps[0]);
     // Click Submit
