@@ -78,8 +78,17 @@ const profileDropdown = (): JSX.Element => {
         </div>
         <div
           className={styles.profileTextTitle}
-          data-testid="profileBtn"
+          role="button"
++         tabIndex={0}
           aria-label="View Profile"
++         onKeyDown={(e) => {
++          if (e.key === 'Enter' || e.key === ' ') {
++              userRole === 'User'
++              ? navigate(`/user/settings`)
++              : navigate(`/member/${orgId || ''}`);
++    }
++  }}
+          data-testid="profileBtn"
           onClick={() =>
             userRole === 'User'
               ? navigate(`/user/settings`)
