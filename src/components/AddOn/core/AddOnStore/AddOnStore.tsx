@@ -3,12 +3,12 @@ import styles from '../../../../style/app.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import { useQuery } from '@apollo/client';
 import { PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
-import { Col, Dropdown, Form, Row, Tab, Tabs, Button } from 'react-bootstrap';
+import { Col, Dropdown, Row, Tab, Tabs } from 'react-bootstrap';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Search } from '@mui/icons-material';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfacePluginHelper {
   _id: string;
@@ -124,20 +124,12 @@ function addOnStore(): JSX.Element {
     <>
       <Row className={styles.containerAddOnStore}>
         <Col className={styles.colAddOnStore}>
-          <div className={styles.inputAddOnStore}>
-            <Form.Control
-              type="name"
-              id="searchname"
-              className={styles.inputField}
-              placeholder={t('searchName')}
-              autoComplete="off"
-              required
-              onChange={(e): void => setSearchText(e.target.value)}
-            />
-            <Button className={styles.searchButton}>
-              <Search />
-            </Button>
-          </div>
+          <SearchBar
+            placeholder={t('searchName')}
+            onSearch={setSearchText}
+            inputTestId="searchByName"
+            buttonTestId="searchBtn"
+          />
           {!isStore && (
             <Dropdown
               onSelect={
