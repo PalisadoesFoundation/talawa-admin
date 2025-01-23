@@ -827,6 +827,17 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('handles null date change', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const dateInput = screen.getByLabelText(t.dueDate);
+    fireEvent.change(dateInput, { target: { value: null } });
+
+    await waitFor(() => {
+      expect(dateInput).toHaveValue('');
+    });
+  });
+
   it('should fail to Update Action Item', async () => {
     renderItemModal(link2, itemProps[2]);
     expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2);
