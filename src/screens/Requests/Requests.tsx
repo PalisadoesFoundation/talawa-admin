@@ -1,10 +1,8 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Form, Table } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Search } from '@mui/icons-material';
 import {
   MEMBERSHIP_REQUEST,
   ORGANIZATION_CONNECTION_LIST,
@@ -16,6 +14,7 @@ import type { InterfaceQueryMembershipRequestsListItem } from 'utils/interfaces'
 import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router-dom';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfaceRequestsListItem {
   _id: string;
@@ -141,31 +140,6 @@ const Requests = (): JSX.Element => {
   };
 
   /**
-   * Handles search input when the Enter key is pressed.
-   *
-   * @param  e - The keyboard event.
-   */
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
-      handleSearch(value);
-    }
-  };
-
-  /**
-   * Handles the search button click to trigger the search.
-   */
-  const handleSearchByBtnClick = (): void => {
-    const inputElement = document.getElementById(
-      'searchRequests',
-    ) as HTMLInputElement;
-    const inputValue = inputElement?.value || '';
-    handleSearch(inputValue);
-  };
-
-  /**
    * Resets search and refetches the data.
    */
   const resetAndRefetch = (): void => {
@@ -235,36 +209,25 @@ const Requests = (): JSX.Element => {
         className={`${styles.btnsContainer} gap-4 flex-wrap`}
         data-testid="testComp"
       >
-        <div className={`${styles.input} mb-1`}>
-          <div
-            style={{
-              display:
-                userRole === 'ADMIN' || userRole === 'SUPERADMIN'
-                  ? 'block'
-                  : 'none',
-            }}
-          >
-            <Form.Control
-              type="name"
-              id="searchRequests"
-              className={styles.inputField}
-              placeholder={t('searchRequests')}
-              data-testid="searchByName"
-              autoComplete="off"
-              required
-              onKeyUp={handleSearchByEnter}
-            />
-            <Button
-              tabIndex={-1}
-              className={`${styles.searchButton} `}
-              data-testid="searchButton"
-              onClick={handleSearchByBtnClick}
-            >
-              <Search />
-            </Button>
-          </div>
+        <div
+          className={`${styles.input}`}
+          style={{
+            display:
+              userRole === 'ADMIN' || userRole === 'SUPERADMIN'
+                ? 'block'
+                : 'none',
+          }}
+        >
+          <SearchBar
+            placeholder={t('searchRequests')}
+            onSearch={handleSearch}
+            inputTestId="searchByName"
+            buttonTestId="searchButton"
+            className=""
+          />
         </div>
       </div>
+
       {!isLoading && orgsData?.organizationsConnection.length === 0 ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
