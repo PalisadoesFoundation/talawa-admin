@@ -92,9 +92,7 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
-  --info-button-bg: var(--light-blue);
-  --info-button-border: var(--brown-color);
-  --info-button-text: var(--brown-color);
+  --info-button-text: var(--davys-grey);
   --close-button-text: var(--remove-button-color);
   --close-button-bg: var(--white-color);
   --checkbox-focus-border: var(--bs-gray-300);
@@ -413,9 +411,10 @@
     :disabled,
     :checked
   ) {
-  box-shadow: var(--drop-shadow);
-  border: 1px solid var(--brown-color) !important;
-  color: var(--dropdown-color) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--davys-grey);
+  color: var(--dropdown-button-bg) !important;
+  border-color: var(--davys-grey) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
@@ -549,7 +548,7 @@
 .createButton:hover {
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
-  border: 1px solid var(--brown-color) !important;
+  border: 1px solid var(--davys-grey) !important;
   box-shadow: var(--drop-shadow);
 }
 
@@ -668,14 +667,16 @@
 }
 
 .infoButton {
-  background-color: var(--info-button-bg) !important;
-  border-color: var(--info-button-border) !important;
-  color: var(--info-button-text);
+  background-color: var(--search-button-bg) !important;
+  border-color: var(--search-button-border);
+  color: var(--davys-grey) !important;
   margin-right: 0.5rem;
   border-radius: 0.25rem;
 }
 
 .infoButton:hover {
+  background-color: var(--light-blue-color);
+  border-color: var(--search-button-border);
   color: var(--info-button-text) !important;
   box-shadow: var(--drop-shadow);
 }
