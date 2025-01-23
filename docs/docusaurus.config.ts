@@ -57,7 +57,7 @@ const config: Config = {
         metadata: [
           {
             name: 'robots',
-            content: 'noindex',
+            content: 'noindex, nofollow',
           },
         ],
       },
