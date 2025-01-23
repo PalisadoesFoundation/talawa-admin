@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { CircularProgress, TableCell, TableRow } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
-import styles from '../../screens/MemberDetail/MemberDetail.module.css';
+import styles from '../../style/app.module.css';
 import { Link } from 'react-router-dom';
 /**
  * Custom table cell component to display event details
@@ -29,7 +29,6 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
         </TableCell>
       </TableRow>
     );
-  /*istanbul ignore next*/
   if (error) {
     return (
       <TableRow data-testid="error-state">
@@ -40,7 +39,6 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     );
   }
   const event = data?.event;
-  /*istanbul ignore next*/
   if (!event) {
     return (
       <TableRow data-testid="no-event-state">
