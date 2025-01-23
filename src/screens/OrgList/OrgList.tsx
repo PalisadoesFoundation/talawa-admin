@@ -388,6 +388,7 @@ function orgList(): JSX.Element {
               variant="success"
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
+              className={styles.createorgdropdown}
             >
               <i className={'fa fa-plus me-2'} />
               {t('createOrganization')}

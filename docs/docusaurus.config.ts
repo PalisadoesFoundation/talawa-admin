@@ -30,18 +30,26 @@ const config: Config = {
   presets: [
     [
       'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
       {
         docs: {
-          sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          sidebarPath: require.resolve('./sidebars.js'),
+          editUrl: ({ docPath }) => {
+            return `https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/${docPath}`;
+          },
+        },
+        blog: {
+          showReadingTime: true,
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/PalisadoesFoundation/talawa-admin/tree/develop/docs/docs',
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: [
+            require.resolve('./src/css/custom.css'),
+            require.resolve('./src/css/index.css'),
+          ],
         },
-      } satisfies Preset.Options,
+      },
     ],
   ],
 
@@ -62,27 +70,27 @@ const config: Config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
             label: 'General',
             position: 'left',
+            href: 'https://docs.talawa.io/docs',
+            target: '_self',
           },
           {
             label: 'Mobile Guide',
             position: 'left',
-            href: 'https://docs-mobile.talawa.io/',
+            href: 'https://docs-mobile.talawa.io/docs',
             target: '_self',
           },
           {
             label: 'Admin Guide',
             position: 'left',
-            href: 'https://docs-admin.talawa.io/',
+            href: '/docs',
             target: '_self',
           },
           {
             label: 'API Guide',
             position: 'left',
-            href: 'https://docs-api.talawa.io/',
+            href: 'https://docs-api.talawa.io/docs',
             target: '_self',
           },
 
