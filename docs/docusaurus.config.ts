@@ -53,14 +53,6 @@ const config: Config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     {
-      themeConfig: {
-        metadata: [
-          {
-            name: 'robots',
-            content: 'noindex, nofollow',
-          },
-        ],
-      },
       docs: {
         sidebar: {
           hideable: false,
