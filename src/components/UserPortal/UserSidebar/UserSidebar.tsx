@@ -74,7 +74,7 @@ const UserSidebar = ({
             <Button
               variant={isActive === true ? 'success' : ''}
               className={`${
-                isActive === true ? 'text-white' : 'text-secondary'
+                isActive === true ? 'text-black' : 'text-secondary'
               }`}
               data-testid="settingsBtn"
             >
