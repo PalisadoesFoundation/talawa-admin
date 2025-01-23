@@ -3539,7 +3539,7 @@ fieldset:disabled .btn {
 
 .btn-success {
   --bs-btn-color: #000;
-  --bs-btn-bg: #eaebef;
+  --bs-btn-bg: #31bb6b;
   /* --bs-btn-border-color: #31bb6b; */
   --bs-btn-hover-color: #000;
   --bs-btn-hover-bg: #eaebef;
@@ -3552,7 +3552,7 @@ fieldset:disabled .btn {
   --bs-btn-disabled-color: #000;
   --bs-btn-disabled-bg: #31bb6b;
   --bs-btn-disabled-border-color: #31bb6b;
-  color: #000;
+  color: #fff;
 }
 
 .btn-info {
@@ -14095,7 +14095,7 @@ fieldset:disabled .btn {
 /* Style for active button's background color */
 .btn-success:hover,
 .btn-success:active {
-  background-color: #e0eaf6 !important;
+  background-color: #2aa65d  !important;
 }
 
 /* Style for active button's icon fill color */
