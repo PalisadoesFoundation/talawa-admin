@@ -194,7 +194,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
           </div>
           {props.membershipRequestStatus === 'accepted' && (
             <Button
-              variant="success"
+              variant="outline-success"
               data-testid="manageBtn"
               className={styles.joinedBtn}
               onClick={() => {
