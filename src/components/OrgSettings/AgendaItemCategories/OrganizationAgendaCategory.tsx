@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
-import { WarningAmberRounded, Search } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
 import { useMutation, useQuery } from '@apollo/client';
@@ -15,6 +15,7 @@ import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryCon
 import AgendaCategoryCreateModal from './AgendaCategoryCreateModal';
 import styles from 'style/app.module.css';
 import Loader from 'components/Loader/Loader';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfaceAgendaCategoryProps {
   orgId: string;
@@ -27,7 +28,6 @@ interface InterfaceAgendaCategoryProps {
  *
  * @returns The rendered component.
  */
-
 const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   orgId,
 }) => {
@@ -39,7 +39,6 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   const [agendaCategoryCreateModalIsOpen, setAgendaCategoryCreateModalIsOpen] =
     useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [formState, setFormState] = useState({
     name: '',
     description: '',
@@ -145,33 +144,12 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
       <div className={` bg-transparent rounded-4 my-3`}>
         <div className={`mx-4`}>
           <div className={`${styles.btnsContainer} my-0`}>
-            <div className={`${styles.input} mb-1`}>
-              <Form.Control
-                type="name"
-                placeholder={tCommon('searchByName')}
-                autoComplete="off"
-                required
-                className={styles.inputField}
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') {
-                    setSearchTerm(searchValue);
-                  } else if (e.key === 'Backspace' && searchValue === '') {
-                    setSearchTerm('');
-                  }
-                }}
-                data-testid="searchByName"
-              />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                onClick={() => setSearchTerm(searchValue)}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              onSearch={setSearchTerm}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
 
             <Button
               variant="success"
