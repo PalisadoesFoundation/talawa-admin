@@ -38,7 +38,9 @@ import '../src/assets/css/scrollStyles.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#31bb6b',
+      main: getComputedStyle(document.documentElement)
+        .getPropertyValue('--primary-theme-color')
+        .trim(),
     },
   },
 });
@@ -139,7 +141,10 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const fallbackLoader = <div className="loader"></div>;
 
 const container = document.getElementById('root');
-const root = createRoot(container!); // Note the use of '!' is to assert the container is not null
+if (!container) {
+  throw new Error('Root container missing in the DOM');
+}
+const root = createRoot(container);
 
 root.render(
   <Suspense fallback={fallbackLoader}>

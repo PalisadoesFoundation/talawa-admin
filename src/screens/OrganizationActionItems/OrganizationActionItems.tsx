@@ -467,26 +467,24 @@ function organizationActionItems(): JSX.Element {
           ),
         }}
         sx={{
-          borderRadius: '20px',
-          backgroundColor: 'EAEBEF)',
-          '& .MuiDataGrid-row': {
-            backgroundColor: '#eff1f7',
-            '&:focus-within': {
-              // outline: '2px solid #000',
-              outlineOffset: '-2px',
-            },
-          },
-          '& .MuiDataGrid-row:hover': {
-            backgroundColor: '#EAEBEF',
-            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiDataGrid-row.Mui-hovered': {
-            backgroundColor: '#EAEBEF',
-            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+          borderRadius: 'var(--table-head-radius)',
+          backgroundColor: 'var(--grey-bg-color)',
+          '& .MuiDataGrid-cell': {
+            outline: 'none',
           },
           '& .MuiDataGrid-cell:focus': {
-            // outline: '2px solid #000',
-            // outlineOffset: '-2px',
+            outline: 'none',
+            outlineOffset: '-2px',
+          },
+          '& .MuiDataGrid-cell:focus-within': {
+            outline: 'none',
+            outlineOffset: '-2px',
+          },
+          '& .MuiDataGrid-row': {
+            backgroundColor: 'var(--tablerow-bg-color)',
+            '&:focus-within': {
+              outline: 'none',
+            },
           },
         }}
         getRowClassName={() => `${styles.rowBackground}`}
