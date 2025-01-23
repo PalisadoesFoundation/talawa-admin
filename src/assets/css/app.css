@@ -14095,7 +14095,7 @@ fieldset:disabled .btn {
 /* Style for active button's background color */
 .btn-success:hover,
 .btn-success:active {
-  background-color: #2aa65d  !important;
+  background-color: #2aa65d !important;
 }
 
 /* Style for active button's icon fill color */
