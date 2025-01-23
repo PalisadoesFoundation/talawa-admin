@@ -14,4 +14,4 @@ export default function Home(): JSX.Element {
       </Head>
     </Layout>
   );
-} 
+}
