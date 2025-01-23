@@ -104,7 +104,7 @@ function MemberRequestCard(
               alt="userImage"
             />
           )}
-          <Col className={`${style.singledetails} ${styles.rowChild}`}>
+          <Col className={`${styles.singledetails} ${styles.rowChild}`}>
             <div className={styles.singledetails_data_left}>
               <p className={styles.membername}>
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
