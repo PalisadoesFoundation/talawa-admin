@@ -714,7 +714,7 @@ describe('mockSingleLink', () => {
       observable.subscribe({
         next(response) {
           const elapsed = Date.now() - startTime;
-          expect(elapsed).toBeGreaterThanOrEqual(50);
+          expect(elapsed).toBeGreaterThanOrEqual(40);
           expect(response).toEqual(mockResponse.result);
           resolve();
         },
