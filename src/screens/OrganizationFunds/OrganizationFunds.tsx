@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -17,6 +17,7 @@ import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from '../../style/app.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
   borderRadius: '20px',
@@ -311,25 +312,12 @@ const organizationFunds = (): JSX.Element => {
     <div>
       <div className={styles.head}>
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <div className={`${styles.input} mb-1`}>
-            <Form.Control
-              type="name"
-              placeholder={tCommon('searchByName')}
-              autoComplete="off"
-              required
-              className={styles.inputField}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              data-testid="searchByName"
-            />
-            <Button
-              tabIndex={-1}
-              className={` ${styles.searchButton} `}
-              data-testid="searchBtn"
-            >
-              <Search className={styles.searchIcon} />
-            </Button>
-          </div>
+          <SearchBar
+            placeholder={tCommon('searchByName')}
+            onSearch={setSearchTerm}
+            inputTestId="searchByName"
+            buttonTestId="searchBtn"
+          />
           <div className="d-flex gap-4 mb-1">
             <SortingButton
               title={tCommon('sort')}
