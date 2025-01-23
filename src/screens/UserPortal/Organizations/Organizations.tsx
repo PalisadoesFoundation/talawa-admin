@@ -317,7 +317,8 @@ export default function organizations(): JSX.Element {
                   type="name"
                   id="searchOrgname"
                   className={styles.inputField}
-                  // placeholder={tCommon('searchByName')}
+                  placeholder={t('searchByName')}
+                  aria-label={t('searchByName')}
                   data-testid="searchByName"
                   autoComplete="off"
                   required
@@ -327,6 +328,7 @@ export default function organizations(): JSX.Element {
                   tabIndex={-1}
                   // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
                   className={styles.searchButton}
+                  aria-label={t('search')}
                   onClick={handleSearchByBtnClick}
                   data-testid="searchBtn"
                 >
