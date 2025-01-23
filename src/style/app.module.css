@@ -60,11 +60,10 @@
   --loader-color: #febc59;
 
   /* Miscellaneous */
-  --brown-color: #555555;
+  --davys-grey: #555555;
   --blue-color: #0000ff;
   --light-blue-color: #286fe0;
   --dimp-white: #b5b5b5;
-  --gray-blue: #1e293b;
   --gray-white: #808080;
   --dropdown-hover-color: #eff1f7;
   --grey-bg-color: #eaebef;
@@ -80,7 +79,6 @@
   --black-color: #000000;
   --black-shadow-color: #00000029;
   --white-shadow-color: #ffffff33;
-  --light-dark-gray-color: #505050;
   --light-orange: #febc59;
   --grey-border-box-color: #e8e5e5;
   --subtle-blue-grey: #7c9beb;
@@ -379,8 +377,8 @@
 .dropdown {
   background-color: var(--bs-white) !important;
   min-width: 150px;
-  border: 1px solid var(--brown-color);
-  color: var(--brown-color) !important;
+  border: 1px solid var(--davys-grey);
+  color: var(--davys-grey) !important;
   position: relative;
   display: inline-block;
   margin-top: 10px;
@@ -400,25 +398,25 @@
     :checked
   ) {
   background-color: transparent !important;
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
   color: var(--dropdown-button-bg) !important;
-  border-color: var(--brown-color) !important;
+  border-color: var(--davys-grey) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
   outline: 2px solid var(--highlight-color, var(--search-button-bg));
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
 }
 
 .dropdown:not(:focus) {
   background-color: var(--bs-white);
-  border: 1px solid var(--brown-color);
-  color: var(--brown-color) !important;
+  border: 1px solid var(--davys-grey);
+  color: var(--davys-grey) !important;
 }
 
 .dropdownItem {
   background-color: var(--bs-white) !important;
-  color: var(--brown-color) !important;
+  color: var(--davys-grey) !important;
   border: none !important;
 }
 
@@ -434,7 +432,7 @@
     --dropdown-hover-color,
     var(--grey-border-box-color)
   ) !important;
-  color: var(--brown-color) !important;
+  color: var(--davys-grey) !important;
   outline: none !important;
   box-shadow: 0 0 4px var(--highlight-color, var(--search-button-bg));
 }
@@ -527,13 +525,13 @@
   color: var(--black-color) !important;
   /* margin-top: 10px; */
   /* margin-left: 5px; */
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
 }
 
 .createButton:hover {
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
-  border: 1px solid var(--brown-color) !important;
+  border: 1px solid var(--davys-grey) !important;
 }
 
 .visuallyHidden {
@@ -594,7 +592,7 @@
   background-color: var(--search-button-bg);
   border-color: var(--search-button-bg);
   box-shadow: var(--hover-shadow);
-  color: var(--brown-color) !important;
+  color: var(--davys-grey) !important;
 }
 
 .searchButton:active {
@@ -605,7 +603,7 @@
 
 .addButton {
   margin-bottom: 10px;
-  color: var(--brown-color);
+  color: var(--davys-grey);
   background-color: var(--light-blue);
   border-color: var(--grey-bg-color);
 }
@@ -645,13 +643,13 @@
 }
 
 .searchIcon {
-  color: var(--brown-color);
+  color: var(--davys-grey);
 }
 
 .infoButton {
   background-color: var(--search-button-bg);
   border-color: var(--search-button-border);
-  color: var(--brown-color);
+  color: var(--davys-grey);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
 }
@@ -722,7 +720,7 @@
 
 .editButton {
   background-color: var(--light-blue);
-  color: var(--brown-color);
+  color: var(--davys-grey);
   border-color: var(--grey-bg-color);
   --bs-btn-active-bg: var(--dark-blue);
   --bs-btn-active-border-color: var(--grey-bg-color);
@@ -866,7 +864,7 @@ hr {
   flex-direction: row;
   font-weight: 900;
   font-size: 16px;
-  color: var(--light-dark-gray-color);
+  color: var(--davys-grey);
 }
 
 .rankings {
@@ -1074,7 +1072,7 @@ hr {
 .titleContainer h3 {
   font-size: 1.75rem;
   font-weight: 750;
-  color: var(--light-dark-gray-color);
+  color: var(--davys-grey);
   margin-top: 0.2rem;
 }
 
@@ -1091,7 +1089,7 @@ hr {
   align-items: center;
   font-size: 1.25rem;
   font-weight: 750;
-  color: var(--light-dark-gray-color);
+  color: var(--davys-grey);
 }
 
 .progressContainer {
@@ -1149,7 +1147,7 @@ hr {
   padding: 0.75rem;
   border: 1px solid #e2e8f0;
   background-color: var(--bs-white);
-  color: var(--gray-blue);
+  color: var(--black);
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.15);
   display: flex;
   flex-direction: column;
@@ -2151,8 +2149,8 @@ input[type='radio']:checked + label:hover {
 .pluginStoreBtn {
   width: 100%;
   background-color: var(--bs-white);
-  color: var(--brown-color);
-  border: 0.5px solid var(--brown-color);
+  color: var(--davys-grey);
+  border: 0.5px solid var(--davys-grey);
 }
 .searchButtonOrgList {
   background-color: var(--light-blue);
@@ -2169,8 +2167,8 @@ input[type='radio']:checked + label:hover {
 .pluginStoreBtn:hover,
 .pluginStoreBtn:focus {
   background-color: var(--dropdown-hover-color) !important;
-  color: var(--brown-color) !important;
-  border-color: var(--brown-color) !important;
+  color: var(--davys-grey) !important;
+  border-color: var(--davys-grey) !important;
 }
 
 .flexContainer {
@@ -5718,7 +5716,7 @@ button[data-testid='createPostBtn'] {
   border: 0px;
   font-size: 14px;
   background-color: initial;
-  color: var(--gray-blue);
+  color: var(--black);
   font-weight: 600;
   transition: all 200ms;
   position: relative;
@@ -5976,17 +5974,17 @@ button[data-testid='createPostBtn'] {
 
 .createButtonEventHeader {
   background-color: var(--grey-bg-color);
-  color: var(--brown-color);
+  color: var(--davys-grey);
   width: 110px;
   /* margin-left: 5px; */
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
   box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
 .createButtonEventHeader:hover {
   background-color: var(--grey-bg-color);
   color: var(--black-color);
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
   box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
@@ -6949,7 +6947,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .manageBtn:hover {
-  color: var(--brown-color) !important;
+  color: var(--davys-grey) !important;
   box-shadow: var(--hover-shadow);
 }
 
