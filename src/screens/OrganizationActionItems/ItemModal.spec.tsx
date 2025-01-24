@@ -751,6 +751,25 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('validates date input changes', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const dateInput = screen.getByLabelText(t.dueDate);
+
+    // Test invalid date
+    fireEvent.change(dateInput, { target: { value: 'invalid-date' } });
+
+    // Test empty date
+    fireEvent.change(dateInput, { target: { value: '' } });
+
+    // Test valid date
+    fireEvent.change(dateInput, { target: { value: '01/01/2024' } });
+
+    await waitFor(() => {
+      expect(dateInput).toHaveValue('01/01/2024');
+    });
+  });
+
   it('Try adding negative Allotted Hours', async () => {
     renderItemModal(link1, itemProps[0]);
     expect(screen.getAllByText(t.createActionItem)).toHaveLength(2);
@@ -809,15 +828,32 @@ describe('Testing ItemModal', () => {
 
     // Test invalid string
     fireEvent.change(allottedHours, { target: { value: 'invalid' } });
-    expect(allottedHours).toHaveValue('');
+    await waitFor(() => {
+      expect(allottedHours).toHaveValue('');
+    });
 
     // Test NaN
     fireEvent.change(allottedHours, { target: { value: NaN } });
-    expect(allottedHours).toHaveValue('');
+    await waitFor(() => {
+      expect(allottedHours).toHaveValue('');
+    });
 
     // Test negative number
     fireEvent.change(allottedHours, { target: { value: -5 } });
-    expect(allottedHours).toHaveValue('');
+    await waitFor(() => {
+      expect(allottedHours).toHaveValue('');
+    });
+  });
+
+  it('handles edge case when allottedHours is undefined', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    fireEvent.change(allottedHours, { target: { value: undefined } });
+
+    await waitFor(() => {
+      expect(allottedHours).toHaveValue('');
+    });
   });
 
   it('should fail to Create Action Item', async () => {
@@ -841,6 +877,42 @@ describe('Testing ItemModal', () => {
 
     await waitFor(() => {
       expect(toast.warning).toHaveBeenCalledWith(t.noneUpdated);
+    });
+  });
+
+  it('handles form submission with all fields changed', async () => {
+    renderItemModal(link1, itemProps[4]);
+
+    // Change category
+    const categorySelect = screen.getByTestId('categorySelect');
+    fireEvent.mouseDown(within(categorySelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Category 1'));
+
+    // Change assignee type and select new assignee
+    const groupRadio = screen.getByLabelText(t.groups);
+    fireEvent.click(groupRadio);
+
+    const groupSelect = await screen.getByTestId('volunteerGroupSelect');
+    fireEvent.mouseDown(within(groupSelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('group2'));
+
+    // Change due date
+    const dateInput = screen.getByLabelText(t.dueDate);
+    fireEvent.change(dateInput, { target: { value: '01/01/2024' } });
+
+    // Change allotted hours
+    const hoursInput = screen.getByLabelText(t.allottedHours);
+    fireEvent.change(hoursInput, { target: { value: '10' } });
+
+    // Change pre-completion notes
+    const notesInput = screen.getByLabelText(t.preCompletionNotes);
+    fireEvent.change(notesInput, { target: { value: 'New notes' } });
+
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
     });
   });
 
@@ -872,5 +944,14 @@ describe('Testing ItemModal', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
+  });
+
+  it('handles modal close button click', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const closeButton = screen.getByTestId('modalCloseBtn');
+    fireEvent.click(closeButton);
+
+    expect(itemProps[0].hide).toHaveBeenCalled();
   });
 });
