@@ -57,25 +57,23 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(
-  ({ graphQLErrors, networkError, operation, forward }) => {
-    if (graphQLErrors) {
-      graphQLErrors.map(({ message }) => {
-        if (message === 'You must be authenticated to perform this action.') {
-          localStorage.clear();
-        }
-      });
-    } else if (networkError) {
-      console.log(`[Network error]: ${networkError}`);
-      toast.error(
-        'API server unavailable. Check your connection or try again later',
-        {
-          toastId: 'apiServer',
-        },
-      );
-    }
-  },
-);
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message }) => {
+      if (message === 'You must be authenticated to perform this action.') {
+        localStorage.clear();
+      }
+    });
+  } else if (networkError) {
+    console.log(`[Network error]: ${networkError}`);
+    toast.error(
+      'API server unavailable. Check your connection or try again later',
+      {
+        toastId: 'apiServer',
+      },
+    );
+  }
+});
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -125,21 +123,24 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const fallbackLoader = <div className="loader"></div>;
 
 const container = document.getElementById('root');
-const root = createRoot(container!); // Note the use of '!' is to assert the container is not null
-
-root.render(
-  <Suspense fallback={fallbackLoader}>
-    <ApolloProvider client={client}>
-      <BrowserRouter>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ThemeProvider theme={theme}>
-            <Provider store={store}>
-              <App />
-              <ToastContainer limit={5} />
-            </Provider>
-          </ThemeProvider>
-        </LocalizationProvider>
-      </BrowserRouter>
-    </ApolloProvider>
-  </Suspense>,
-);
+if (container) {
+  const root = createRoot(container);
+  root.render(
+    <Suspense fallback={fallbackLoader}>
+      <ApolloProvider client={client}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ThemeProvider theme={theme}>
+              <Provider store={store}>
+                <App />
+                <ToastContainer limit={5} />
+              </Provider>
+            </ThemeProvider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </ApolloProvider>
+    </Suspense>,
+  );
+} else {
+  console.error('Root element not found');
+}
