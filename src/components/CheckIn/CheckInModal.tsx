@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import { EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
-import styles from 'components/CheckIn/CheckInModal.module.css';
+import styles from '../../style/app.module.css';
 import { TableRow } from './TableRow';
 import type {
   InterfaceAttendeeCheckIn,
