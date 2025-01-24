@@ -148,80 +148,83 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
 
   return (
     <>
-      <div className={styles.orgCard}>
-        <div className={styles.innerContainer}>
-          <div className={styles.orgImgContainer}>
-            {props.image ? (
-              <img src={props.image} alt={`${props.name} image`} />
-            ) : (
-              <Avatar
-                name={props.name}
-                alt={`${props.name} image`}
-                dataTestId="emptyContainerForImage"
-              />
-            )}
-          </div>
-          <div className={styles.content}>
-            <Tooltip title={props.name} placement="top-end">
-              <h4 className={`${styles.orgName} fw-semibold`}>{props.name}</h4>
-            </Tooltip>
-            <h6 className={`${styles.orgdesc} fw-semibold`}>
-              <span>{props.description}</span>
-            </h6>
-            {props.address && props.address.city && (
-              <div className={styles.address}>
-                <h6 className="text-secondary">
-                  <span className="address-line">{props.address.line1}, </span>
-                  <span className="address-line">{props.address.city}, </span>
-                  <span className="address-line">
-                    {props.address.countryCode}
-                  </span>
-                </h6>
-              </div>
-            )}
-            <h6 className={styles.orgadmin}>
-              <div>
+      <div className={styles.pageContainer}>
+        <div className={styles.orgCard}>
+          <div className={styles.innerContainer}>
+            <div className={styles.orgImgContainer}>
+              {props.image ? (
+                <img src={props.image} alt={`${props.name} image`} />
+              ) : (
+                <Avatar
+                  name={props.name}
+                  alt={`${props.name} image`}
+                  dataTestId="emptyContainerForImage"
+                />
+              )}
+            </div>
+            <div className={styles.content}>
+              <Tooltip title={props.name} placement="top-end">
+                <h4 className={`${styles.orgName} fw-semibold`}>
+                  {props.name}
+                </h4>
+              </Tooltip>
+              <h6 className={`${styles.orgdesc} fw-semibold`}>
+                <span>{props.description}</span>
+              </h6>
+              {props.address && props.address.city && (
+                <div className={styles.address}>
+                  <h6 className="text-secondary">
+                    <span className="address-line">
+                      {props.address.line1},{' '}
+                    </span>
+                    <span className="address-line">{props.address.city}, </span>
+                    <span className="address-line">
+                      {props.address.countryCode}
+                    </span>
+                  </h6>
+                </div>
+              )}
+              <h6 className={styles.orgadmin}>
                 {tCommon('admins')}: <span>{props.admins?.length}</span>
-              </div>
-              <div>
+              </h6>
+              <h6 className={styles.orgmember}>
                 {tCommon('members')}: <span>{props.members?.length}</span>
-              </div>
-            </h6>
+              </h6>
+            </div>
           </div>
+          {props.membershipRequestStatus === 'accepted' && (
+            <Button
+              variant="outline-success"
+              data-testid="manageBtn"
+              className={styles.joinedBtn}
+              onClick={() => {
+                navigate(`/user/organization/${props.id}`);
+              }}
+            >
+              {t('visit')}
+            </Button>
+          )}
+          {props.membershipRequestStatus === '' && (
+            <Button
+              onClick={joinOrganization}
+              data-testid="joinBtn"
+              className={styles.joinBtn}
+              variant="outline-success"
+            >
+              {t('joinNow')}
+            </Button>
+          )}
+          {props.membershipRequestStatus === 'pending' && (
+            <Button
+              variant="danger"
+              onClick={withdrawMembershipRequest}
+              data-testid="withdrawBtn"
+              className={styles.withdrawBtn}
+            >
+              {t('withdraw')}
+            </Button>
+          )}
         </div>
-        {props.membershipRequestStatus === 'accepted' && (
-          <Button
-            variant="success"
-            data-testid="manageBtn"
-            className={styles.joinedBtn}
-            onClick={() => {
-              navigate(`/user/organization/${props.id}`);
-            }}
-          >
-            {t('visit')}
-          </Button>
-        )}
-
-        {props.membershipRequestStatus === 'pending' && (
-          <Button
-            variant="danger"
-            onClick={withdrawMembershipRequest}
-            data-testid="withdrawBtn"
-            className={styles.withdrawBtn}
-          >
-            {t('withdraw')}
-          </Button>
-        )}
-        {props.membershipRequestStatus === '' && (
-          <Button
-            onClick={joinOrganization}
-            data-testid="joinBtn"
-            className={styles.joinBtn}
-            variant="outline-success"
-          >
-            {t('joinNow')}
-          </Button>
-        )}
       </div>
     </>
   );

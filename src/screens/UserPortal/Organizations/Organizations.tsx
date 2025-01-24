@@ -1,16 +1,15 @@
 import { useQuery } from '@apollo/client';
-import { SearchOutlined } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
-import PaginationList from 'components/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import { Button, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app.module.css';
@@ -98,8 +97,6 @@ export default function organizations(): JSX.Element {
     };
   }, []);
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [organizations, setOrganizations] = React.useState([]);
   const [filterName, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
@@ -140,27 +137,11 @@ export default function organizations(): JSX.Element {
    * @param _event - The event triggering the page change.
    * @param  newPage - The new page number.
    */
-  const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ): void => {
-    setPage(newPage);
-  };
-
   /**
    * Handles change in the number of rows per page.
    *
    * @param  event - The event triggering the change.
    */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    const newRowsPerPage = event.target.value;
-
-    setRowsPerPage(parseInt(newRowsPerPage, 10));
-    setPage(0);
-  };
-
   /**
    * Searches organizations based on the provided filter value.
    *
@@ -320,60 +301,68 @@ export default function organizations(): JSX.Element {
               : styles.contractOrg
         }`}
       >
-        <div className={`${styles.mainContainerOrganization}`}>
+
+        <div className={`${styles.mainContainer2}`}>
           <div className="d-flex justify-content-between align-items-center">
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
             </div>
           </div>
+          <div>
+            {/* <div className='SearchandDropdown'> */}
+            <div className="mt-4 d-flex align-items-center justify-between">
+              {/* Search Input */}
+              <div className={styles.input}>
+                <Form.Control
+                  type="name"
+                  id="searchOrgname"
+                  className={styles.inputField}
+                  placeholder={t('searchByName')}
+                  aria-label={t('searchByName')}
+                  data-testid="searchByName"
+                  autoComplete="off"
+                  required
+                  onKeyUp={handleSearchByEnter}
+                />
+                <Button
+                  tabIndex={-1}
+                  // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                  className={styles.searchButton}
+                  aria-label={t('search')}
+                  onClick={handleSearchByBtnClick}
+                  data-testid="searchBtn"
+                >
+                  <Search />
+                </Button>
+              </div>
 
-          <div className="mt-4  d-flex justify-content-between gap-4">
-            <InputGroup className={styles.maxWidth}>
-              <Form.Control
-                placeholder={t('searchOrganizations')}
-                id="searchOrganizations"
-                type="text"
-                className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
-              />
-              <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <SearchOutlined className={`${styles.colorWhite}`} />
-              </InputGroup.Text>
-            </InputGroup>
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                variant="success"
-                id="dropdown-basic"
-                data-testid={`modeChangeBtn`}
-              >
-                {modes[mode]}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {modes.map((value, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid={`modeBtn${index}`}
-                      onClick={(): void => setMode(index)}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
+              {/* Dropdown */}
+              <Dropdown drop="down-centered">
+                <Dropdown.Toggle
+                  className={`${styles.colorPrimary} ${styles.borderNone} ${styles.dropdown} `} // Tailwind hover effect
+                  variant="success"
+                  id="dropdown-basic"
+                  data-testid="modeChangeBtn"
+                >
+                  {modes[mode]}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {modes.map((value, index) => {
+                    return (
+                      <Dropdown.Item
+                        key={index}
+                        data-testid={`modeBtn${index}`}
+                        onClick={(): void => setMode(index)}
+                      >
+                        {value}
+                      </Dropdown.Item>
+                    );
+                  })}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           </div>
-
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
+          <div className={`d-flex flex-row  ${styles.content}`}>
             <div
               className={`d-flex flex-column  ${styles.gap} ${styles.paddingY}`}
             >
@@ -384,35 +373,35 @@ export default function organizations(): JSX.Element {
               ) : (
                 <>
                   {organizations && organizations.length > 0 ? (
-                    <div className="row">
-                      {(rowsPerPage > 0
-                        ? organizations.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage,
-                          )
-                        : organizations
-                      ).map((organization: InterfaceOrganization, index) => {
-                        const cardProps: InterfaceOrganizationCardProps = {
-                          name: organization.name,
-                          image: organization.image,
-                          id: organization._id,
-                          description: organization.description,
-                          admins: organization.admins,
-                          members: organization.members,
-                          address: organization.address,
-                          membershipRequestStatus:
-                            organization.membershipRequestStatus,
-                          userRegistrationRequired:
-                            organization.userRegistrationRequired,
-                          membershipRequests: organization.membershipRequests,
-                          isJoined: organization.isJoined,
-                        };
-                        return (
-                          <div key={index} className="col-md-6 mb-4">
-                            <OrganizationCard {...cardProps} />
-                          </div>
-                        );
-                      })}
+                    <div className={`${styles.OrgList}`}>
+                      {organizations.map(
+                        (organization: InterfaceOrganization, index) => {
+                          const cardProps: InterfaceOrganizationCardProps = {
+                            name: organization.name,
+                            image: organization.image,
+                            id: organization._id,
+                            description: organization.description,
+                            admins: organization.admins,
+                            members: organization.members,
+                            address: organization.address,
+                            membershipRequestStatus:
+                              organization.membershipRequestStatus,
+                            userRegistrationRequired:
+                              organization.userRegistrationRequired,
+                            membershipRequests: organization.membershipRequests,
+                          };
+
+                          return (
+                            <div
+                              key={index}
+                              className={`${styles.cardcontainer}`}
+                              style={{ width: '48%', marginBottom: '20px' }}
+                            >
+                              <OrganizationCard {...cardProps} />
+                            </div>
+                          );
+                        },
+                      )}
                     </div>
                   ) : (
                     <span>{t('nothingToShow')}</span>
@@ -420,19 +409,6 @@ export default function organizations(): JSX.Element {
                 </>
               )}
             </div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={organizations ? organizations.length : 0}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
