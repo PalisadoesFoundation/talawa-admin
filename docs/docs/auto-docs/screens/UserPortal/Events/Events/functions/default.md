@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/UserPortal/Events/Events.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Events/Events.tsx#L52)
+Defined in: [src/screens/UserPortal/Events/Events.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Events/Events.tsx#L43)
 
 Component to manage and display events for an organization.
 
