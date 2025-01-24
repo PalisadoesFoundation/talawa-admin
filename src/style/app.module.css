@@ -6651,25 +6651,80 @@ button[data-testid='createPostBtn'] {
   justify-content: space-around;
   width: 8rem;
 }
+🛠️ Refactor suggestion
 
+Improve text truncation accessibility.
+
+The text truncation should maintain accessibility while preventing layout shifts.
+
+ .orgName {
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   overflow: hidden;
+   font-size: 1rem;
++  max-width: 100%;
++  display: block;
+ }
+
+ .orgdesc {
+   font-size: 0.9rem;
+   color: var(--bs-gray-600);
+   overflow: hidden;
+   display: -webkit-box;
+   -webkit-line-clamp: 1;
+   line-clamp: 1;
+   -webkit-box-orient: vertical;
+   max-width: 20rem;
++  /* Fallback for browsers that don't support line-clamp */
++  @supports not (-webkit-line-clamp: 1) {
++    white-space: nowrap;
++    text-overflow: ellipsis;
++  }
+ }
+📝 Committable suggestion
+‼️ IMPORTANT
+Carefully review the code before committing. Ensure that it accurately replaces the highlighted code, contains no missing lines, and has no issues with indentation. Thoroughly test & benchmark the code to ensure it meets the requirements.
+
+Suggested change
 .orgName {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   font-size: 1rem;
 }
-
 .orgdesc {
   font-size: 0.9rem;
-
-  color: var(--org-desc-color);
-
+  color: var(--bs-gray-600);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   line-clamp: 1;
   -webkit-box-orient: vertical;
   max-width: 20rem;
+}
+.orgName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 1rem;
+   max-width: 100%;
+  display: block;
+}
+
+.orgdesc {
+  font-size: 0.9rem;
+  color: var(--bs-gray-600);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  max-width: 20rem;
+   /* Fallback for browsers that don't support line-clamp */
+  @supports not (-webkit-line-clamp: 1) {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 .orgadmin {
