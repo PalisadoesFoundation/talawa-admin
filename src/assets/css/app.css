@@ -3537,10 +3537,9 @@ fieldset:disabled .btn {
 
 .btn-success {
   --bs-btn-color: #000;
-  --bs-btn-bg: #31bb6b;
-  --bs-btn-border-color: #31bb6b;
-  --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: #50c581;
+  --bs-btn-bg: #c1c1c1a3;
+  --bs-btn-border-color: #c1c1c1a3 --bs-btn-hover-color: #000;
+  --bs-btn-hover-bg: #dfdcdca3;
   --bs-btn-hover-border-color: #46c27a;
   --bs-btn-focus-shadow-rgb: 42, 159, 91;
   --bs-btn-active-color: #000;
@@ -14084,7 +14083,7 @@ fieldset:disabled .btn {
 .btn-warning:active,
 .btn-info:hover,
 .btn-info:active {
-  color: #fff !important;
+  color: #000 !important;
   /* box-shadow: inset 50px 50px 40px rgba(0, 0, 0, 0.5); */
   background-blend-mode: multiply;
   /* background-color: #6c757d ; */

@@ -162,7 +162,7 @@ const UserSidebarOrg = ({
                     key={name}
                     variant={isActive === true ? 'success' : ''}
                     className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
+                      isActive === true ? 'text-black' : 'text-secondary'
                     }`}
                   >
                     <div className={styles.iconWrapper}>
@@ -170,7 +170,7 @@ const UserSidebarOrg = ({
                         name={name}
                         fill={
                           isActive === true
-                            ? 'var(--bs-white)'
+                            ? 'var(--bs-black)'
                             : 'var(--bs-secondary)'
                         }
                       />

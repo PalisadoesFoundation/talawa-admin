@@ -5,6 +5,7 @@ import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENTS_CONNECTION,
 } from 'GraphQl/Queries/Queries';
+import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
 import EventHeader from 'components/EventCalendar/EventHeader';
 import type { Dayjs } from 'dayjs';
@@ -20,6 +21,7 @@ import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './../../../style/app.module.css';
+import { MdOutlineArrowDropDown } from 'react-icons/md';
 
 /**
  * Converts a time string to a Dayjs object.
@@ -30,6 +32,13 @@ import styles from './../../../style/app.module.css';
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+};
+
+// Interface for venue list
+type Venue = {
+  _id: string;
+  name: string;
+  capacity: number;
 };
 
 /**
@@ -65,6 +74,7 @@ export default function events(): JSX.Element {
   const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
   const [createChatCheck, setCreateChatCheck] = React.useState(false);
   const { orgId: organizationId } = useParams();
+  const [eventVenue, setEventVenue] = React.useState('');
 
   // Query to fetch events for the organization
   const { data, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
@@ -107,6 +117,7 @@ export default function events(): JSX.Element {
       const { data: createEventData } = await create({
         variables: {
           title: eventTitle,
+          venue: eventVenue,
           description: eventDescription,
           isPublic,
           recurring: isRecurring,
@@ -125,6 +136,7 @@ export default function events(): JSX.Element {
         toast.success(t('eventCreated') as string);
         refetch();
         setEventTitle('');
+        setEventVenue('');
         setEventDescription('');
         setEventLocation('');
         setStartDate(new Date());
@@ -211,6 +223,12 @@ export default function events(): JSX.Element {
     }
   };
 
+  const { data: venueData } = useQuery(VENUE_LIST, {
+    variables: {
+      orgId: organizationId,
+    },
+  });
+
   return (
     <>
       <div className={`d-flex flex-row`}>
@@ -275,6 +293,33 @@ export default function events(): JSX.Element {
                   onChange={handleEventLocationChange}
                   data-testid="eventLocationInput"
                 />
+
+                <label htmlFor="eventVenue">{tCommon('Venue')}</label>
+                <div className={styles.selectContainer}>
+                  <select
+                    id="eventVenue"
+                    name="eventVenue"
+                    className={styles.dropDownEventVenue}
+                    defaultValue="" // Sets the default selected value
+                  >
+                    <option value="" disabled>
+                      {tCommon('Select Venue')}
+                    </option>
+                    {venueData?.getVenueByOrgId?.length === 0 ? (
+                      <option value="" disabled>
+                        {tCommon('No venues available')}
+                      </option>
+                    ) : (
+                      venueData?.getVenueByOrgId?.map((venue: Venue) => (
+                        <option key={venue._id} value={venue._id}>
+                          {venue.name} - Capacity: {venue.capacity}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                  <MdOutlineArrowDropDown className={styles.arrowIcon} />
+                </div>
+
                 <div className={styles.datedivEvents}>
                   <div>
                     <DatePicker

@@ -12,6 +12,7 @@ import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
+import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
@@ -28,6 +29,7 @@ import {
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRuleState } from 'utils/recurrenceUtils';
 import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
+import { MdOutlineArrowDropDown } from 'react-icons/md';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -39,6 +41,12 @@ export enum ViewType {
   MONTH = 'Month View',
   YEAR = 'Year View',
 }
+
+type Venue = {
+  _id: string;
+  name: string;
+  capacity: number;
+};
 
 /**
  * Organization Events Page Component to display the events of an organization
@@ -105,6 +113,7 @@ function organizationEvents(): JSX.Element {
 
   const [formState, setFormState] = useState({
     title: '',
+    venue: '',
     eventdescrip: '',
     date: '',
     location: '',
@@ -180,6 +189,7 @@ function organizationEvents(): JSX.Element {
         const { data: createEventData } = await create({
           variables: {
             title: formState.title,
+            venue: formState.venue,
             description: formState.eventdescrip,
             isPublic: publicchecked,
             recurring: recurringchecked,
@@ -220,6 +230,7 @@ function organizationEvents(): JSX.Element {
           hideCreateEventModal();
           setFormState({
             title: '',
+            venue: '',
             eventdescrip: '',
             date: '',
             location: '',
@@ -275,6 +286,12 @@ function organizationEvents(): JSX.Element {
       <Popover.Body>{recurrenceRuleText}</Popover.Body>
     </Popover>
   );
+
+  const { data: venueData } = useQuery(VENUE_LIST, {
+    variables: {
+      orgId: currentUrl,
+    },
+  });
 
   return (
     <>
@@ -360,6 +377,33 @@ function organizationEvents(): JSX.Element {
                 });
               }}
             />
+
+            <label htmlFor="eventVenue">{tCommon('Venue')}</label>
+            <div className={styles.selectContainer}>
+              <select
+                id="eventVenue"
+                name="eventVenue"
+                className={styles.dropDownEventVenue}
+                defaultValue="" // Sets the default selected value
+              >
+                <option value="" disabled>
+                  {tCommon('Select Venue')}
+                </option>
+                {venueData?.getVenueByOrgId?.length === 0 ? (
+                  <option value="" disabled>
+                    {tCommon('No venues available')}
+                  </option>
+                ) : (
+                  venueData?.getVenueByOrgId?.map((venue: Venue) => (
+                    <option key={venue._id} value={venue._id}>
+                      {venue.name} - Capacity: {venue.capacity}
+                    </option>
+                  ))
+                )}
+              </select>
+              <MdOutlineArrowDropDown className={styles.arrowIcon} />
+            </div>
+
             <div className={styles.datedivOrganizationEvents}>
               <div>
                 <DatePicker

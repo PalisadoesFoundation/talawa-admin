@@ -218,12 +218,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
 
-  const handleTodayButton = (): void => {
-    setCurrentYear(today.getFullYear());
-    setCurrentMonth(today.getMonth());
-    setCurrentDate(today.getDate());
-  };
-
   const timezoneString = `UTC${
     new Date().getTimezoneOffset() > 0 ? '-' : '+'
   }${String(Math.floor(Math.abs(new Date().getTimezoneOffset()) / 60)).padStart(
@@ -561,15 +555,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               data-testid="nextmonthordate"
             >
               <ChevronRight />
-            </Button>
-          </div>
-          <div>
-            <Button
-              className={styles.editButton}
-              onClick={handleTodayButton}
-              data-testid="today"
-            >
-              Today
             </Button>
           </div>
         </div>
