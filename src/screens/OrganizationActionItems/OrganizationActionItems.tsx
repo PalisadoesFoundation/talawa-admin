@@ -456,10 +456,23 @@ function organizationActionItems(): JSX.Element {
       {/* Table with Action Items */}
       <DataGrid
         disableColumnMenu
+        disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
         getRowId={(row) => row._id}
-        sx={{ backgroundColor: 'white', borderRadius: '16px' }}
+        sx={{
+          backgroundColor: 'white',
+          borderRadius: '16px',
+          '& .MuiDataGrid-columnHeaders': {
+            border: 'none',
+          },
+          '& .MuiDataGrid-cell': {
+            border: 'none',
+          },
+          '& .MuiDataGrid-columnSeparator': {
+            display: 'none',
+          },
+        }}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">

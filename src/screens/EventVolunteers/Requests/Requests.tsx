@@ -25,6 +25,15 @@ import SortingButton from 'subComponents/SortingButton';
 const dataGridStyle = {
   backgroundColor: 'white',
   borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-cell': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-columnSeparator': {
+    display: 'none',
+  },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },

@@ -167,7 +167,7 @@ function EventRegistrants(): JSX.Element {
           </TableHead>
           <TableBody>
             {combinedData.length === 0 ? (
-              <TableRow>
+              <TableRow className={styles.noBorderRow}>
                 <TableCell
                   colSpan={5}
                   align="center"

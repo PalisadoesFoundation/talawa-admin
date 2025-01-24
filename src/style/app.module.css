@@ -132,6 +132,9 @@
 
   --dropdown-button-bg: #555555;
   --dropdown-button-fill: #555555;
+  --dropdown-border-color: #555555;
+  --dropdown-font-color: #555555;
+  --dropdownItem-focus-bg: #e0e9ff;
 
   /* Font Sizes */
   --font-size-header: 16px;
@@ -205,7 +208,16 @@
   --light-blue: #a8c7fa;
   --dark-blue: #1778f2;
   --remove-button-color: #c8102e;
+  --dropdown-item-bg: #fff;
+  --dropdown-item-text: #000000;
+  --action-button-text: #555555;
+  --eventManagement-button-text: #808080;
+  --eventManagement-button-border: #dddddd;
+  --eventManagement-button-bg: #ffffff;
+  --create_button-text: #555555;
+  --create-button-border: #dddddd;
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --dorpdownItem-hover-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 
   /* breakpoints */
   --breakpoint-mobile: 576px;
@@ -380,9 +392,8 @@
 .dropdown {
   background-color: var(--bs-white) !important;
   min-width: 150px;
-  border: 1px solid var(--brown-color);
-  color: var(--brown-color) !important;
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--dropdown-border-color);
+  color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
   margin-top: 10px;
@@ -419,10 +430,10 @@
 }
 
 .dropdownItem {
-  background-color: var(--bs-white) !important;
-  color: var(--black-color) !important;
+  background-color: var(--dropdown-item-bg) !important;
+  color: var(--dropdown-item-text) !important;
   border: none !important;
-  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--dorpdownItem-hover-shadow);
 }
 
 .dropdownItem:focus,
@@ -433,8 +444,8 @@
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(--holidays-card-background-color) !important;
-  color: var(--black-color) !important;
+  background-color: var(--dropdownItem-focus-bg) !important;
+  color: var(--dropdown-item-text) !important;
   outline: none !important;
 }
 
@@ -535,7 +546,7 @@
 
 .actionsButton {
   background-color: var(--search-button-bg);
-  color: var(--brown-color);
+  color: var(--action-button-text);
   border: 1px solid var(--search-button-bg) !important;
 }
 
@@ -547,46 +558,46 @@
 }
 
 .eventManagementBtn {
-  color: var(--gray-white);
-  background-color: var(--white-color) !important;
-  border-color: var(--input-shadow) !important;
+  color: var(--eventManagement-button-text);
+  background-color: var(--eventManagement-button-bg) !important;
+  border-color: var(--eventManagement-button-border) !important;
 }
 
 .eventManagementBtn:hover {
-  color: var(--gray-white) !important;
-  border-color: var(--input-shadow);
+  color: var(--eventManagement-button-text) !important;
+  border-color: var(--eventManagement-button-border);
 }
 
 .eventManagementSelectedBtn {
-  color: var(--brown-color);
-  background-color: var(--grey-light) !important;
-  border: 1px solid var(--gray-white) !important;
+  color: var(--action-button-text);
+  background-color: var(--sidebar-option-bg) !important;
+  border: 1px solid var(--eventManagement-button-text) !important;
 }
 
 .eventManagementSelectedBtn:hover {
-  color: var(--brown-color) !important;
-  border: 1px solid var(--gray-white);
+  color: var(--action-button-text) !important;
+  border: 1px solid var(--eventManagement-button-text);
 }
 
 .createButton {
   background-color: var(--create-button-bg-color) !important;
-  color: var(--gray-white) !important;
+  color: var(--create_button-text) !important;
   /* margin-top: 10px; */
   /* margin-left: 5px; */
-  border: 1px solid var(--input-shadow) !important;
+  border: 1px solid var(--create-button-border) !important;
 }
 
 .createButton:hover {
-  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--dorpdownItem-hover-shadow);
   background-color: var(--create-button-bg-color) !important;
-  color: var(--gray-white) !important;
-  border: 1px solid var(--input-shadow) !important;
+  color: var(--create_button-text) !important;
+  border: 1px solid var(--create-button-border) !important;
 }
 
 .createButton:active {
-  color: var(--brown-color) !important;
+  color: var(--eventManagement-button-text) !important;
   background-color: var(--table-bg) !important;
-  border: 1px solid var(--gray-white) !important;
+  border: 1px solid var(--eventManagement-button-text) !important;
 }
 
 .visuallyHidden {
@@ -603,7 +614,7 @@
 .inputField {
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: var(--white-color);
+  background-color: var(--eventManagement-button-bg);
   border: 1px solid var(--input-shadow);
 }
 
@@ -629,7 +640,7 @@
   margin-bottom: 10px;
   background-color: var(--search-button-bg) !important;
   border-color: var(--search-button-bg) !important;
-  color: var(--brown-color);
+  color: var(--action-button-text);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -730,8 +741,8 @@
 }
 
 .rowBackground {
-  background-color: var(--white-color);
-  color: var(--black-color);
+  background-color: var(--eventManagement-button-bg);
+  color: var(--dropdown-item-text);
   max-height: 120px;
   overflow-y: auto;
 }
@@ -859,7 +870,7 @@ input[type='checkbox']:checked + label {
 }
 
 input[type='radio']:checked + label:hover {
-  color: var(--black-color) !important;
+  color: var(--table-header-color) !important;
 }
 
 .actionItemsContainer {
@@ -941,8 +952,8 @@ hr {
   justify-content: center;
   align-items: center;
   background-color: var(--create-button-bg-color) !important;
-  color: var(--gray-white) !important;
-  border: 1px solid var(--input-shadow) !important;
+  color: var(--eventManagement-button-text) !important;
+  border: 1px solid var(--create-button-border) !important;
 }
 
 .switch input {
@@ -1301,7 +1312,7 @@ hr {
   background: var(--white-color);
   width: 66%;
   padding: 0.3rem;
-  border: 1px solid var(--input-shadow);
+  border: 1px solid var(--create-button-border);
   border-radius: 8px;
   margin-bottom: 0;
   margin-top: 20px;
@@ -1314,7 +1325,7 @@ hr {
   margin: 0 4px;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid var(--input-shadow);
+  border: 1px solid var(--create-button-border);
   border-radius: 8px;
 }
 .ctacards span {
@@ -1491,8 +1502,8 @@ hr {
 }
 
 .customcell {
-  background-color: var(--grey-light) !important;
-  color: var(--black-color) !important;
+  background-color: var(--sidebar-option-bg) !important;
+  color: var(--table-header-color) !important;
   font-size: medium !important;
   font-weight: 500 !important;
   padding-top: 15px !important;
@@ -1936,6 +1947,10 @@ hr {
   overflow-y: auto; /* Handle content overflow */
 }
 
+.noBorderRow td {
+  border: none !important;
+}
+
 .subTagsLink {
   color: var(--blue-color);
   font-weight: 500;
@@ -1987,17 +2002,17 @@ hr {
 }
 
 .toggleBtn:hover {
-  color: var(--brown-color) !important;
-  border: 1px solid var(--input-shadow) !important;
+  color: var(--dropdown-font-color) !important;
+  border: 1px solid var(--create-button-border) !important;
 }
 
 input[type='radio']:checked + label {
-  color: var(--black-color) !important;
+  color: var(--table-header-color) !important;
   background-color: var(--table-bg-color) !important;
 }
 
 input[type='radio']:checked + label:hover {
-  color: var(--black-color) !important;
+  color: var(--table-header-color) !important;
 }
 
 .dropdownToggle {
@@ -2095,9 +2110,9 @@ input[type='radio']:checked + label:hover {
 }
 
 .inputFields {
-  background-color: var(--white-color);
-  border: 1px solid var(--input-shadow);
-  color: var(--white-color);
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--create-button-border);
+  color: var(--eventManagement-button-bg);
   box-shadow: 0 1px 1px var(--brand-primary);
   width: 375px;
   padding-right: 40px; /* Make room for the button */
@@ -2105,9 +2120,9 @@ input[type='radio']:checked + label:hover {
 }
 
 .inputFields:focus {
-  background-color: var(--white-color) !important;
-  border: 1px solid var(--input-shadow) !important;
-  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
+  background-color: var(--eventManagement-button-bg) !important;
+  border: 1px solid var(--create-button-border) !important;
+  box-shadow: var(--dorpdownItem-hover-shadow);
 }
 
 .dropdowns {

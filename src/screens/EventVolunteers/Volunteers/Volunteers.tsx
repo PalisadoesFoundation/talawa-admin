@@ -37,6 +37,15 @@ enum ModalState {
 const dataGridStyle = {
   backgroundColor: 'white',
   borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-cell': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-columnSeparator': {
+    display: 'none',
+  },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
@@ -386,6 +395,7 @@ function volunteers(): JSX.Element {
       {/* Table with Volunteers */}
       <DataGrid
         disableColumnMenu
+        disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
         getRowId={(row) => row._id}

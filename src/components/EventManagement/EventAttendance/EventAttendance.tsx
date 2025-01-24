@@ -246,7 +246,7 @@ function EventAttendance(): JSX.Element {
           </TableHead>
           <TableBody>
             {filteredAttendees.length === 0 ? (
-              <TableRow>
+              <TableRow className={styles.noBorderRow}>
                 <TableCell colSpan={5} align="center">
                   {t('noAttendees')}
                 </TableCell>
