@@ -778,6 +778,48 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('should not allow letters or negative values in allotted hours', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    expect(allottedHours).toBeInTheDocument();
+
+    // Test letter input
+    fireEvent.change(allottedHours, { target: { value: 'abc' } });
+    await waitFor(() => {
+      expect(allottedHours).toHaveValue('');
+    });
+
+    // Test negative value
+    fireEvent.change(allottedHours, { target: { value: '-5' } });
+    await waitFor(() => {
+      expect(allottedHours).toHaveValue('');
+    });
+
+    // Test valid positive number
+    fireEvent.change(allottedHours, { target: { value: '5' } });
+    await waitFor(() => {
+      expect(allottedHours).toHaveValue('5');
+    });
+  });
+
+  it('validates allottedHours edge cases', async () => {
+    renderItemModal(link1, itemProps[0]);
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+
+    // Test invalid string
+    fireEvent.change(allottedHours, { target: { value: 'invalid' } });
+    expect(allottedHours).toHaveValue('');
+
+    // Test NaN
+    fireEvent.change(allottedHours, { target: { value: NaN } });
+    expect(allottedHours).toHaveValue('');
+
+    // Test negative number
+    fireEvent.change(allottedHours, { target: { value: -5 } });
+    expect(allottedHours).toHaveValue('');
+  });
+
   it('should fail to Create Action Item', async () => {
     renderItemModal(link2, itemProps[0]);
     // Click Submit
@@ -799,6 +841,17 @@ describe('Testing ItemModal', () => {
 
     await waitFor(() => {
       expect(toast.warning).toHaveBeenCalledWith(t.noneUpdated);
+    });
+  });
+
+  it('handles null date change', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const dateInput = screen.getByLabelText(t.dueDate);
+    fireEvent.change(dateInput, { target: { value: null } });
+
+    await waitFor(() => {
+      expect(dateInput).toHaveValue('');
     });
   });
 
