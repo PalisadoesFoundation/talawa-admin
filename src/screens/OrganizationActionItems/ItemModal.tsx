@@ -226,6 +226,20 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     field: keyof InterfaceFormStateType,
     value: string | number | boolean | Date | undefined | null,
   ): void => {
+    // Special handling for allottedHours
+    if (field === 'allottedHours') {
+      // If the value is not a valid number or is negative, set to null
+      const numValue = typeof value === 'string' ? Number(value) : value;
+      if (
+        typeof numValue !== 'number' ||
+        Number.isNaN(numValue) ||
+        numValue < 0
+      ) {
+        setFormState((prevState) => ({ ...prevState, [field]: null }));
+        return;
+      }
+    }
+
     setFormState((prevState) => ({ ...prevState, [field]: value }));
   };
 
@@ -574,8 +588,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   className={styles.noOutline}
                   value={dayjs(dueDate)}
                   onChange={(date: Dayjs | null): void => {
-                    // Added istanbul ignore else, which will ignore else condition, we are not using else condition here
-                    /* istanbul ignore else -- @preserve */
                     if (date) handleFormChange('dueDate', date.toDate());
                   }}
                 />
