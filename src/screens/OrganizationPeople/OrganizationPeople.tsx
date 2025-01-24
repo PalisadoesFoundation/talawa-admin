@@ -443,7 +443,6 @@ function organizationPeople(): JSX.Element {
               '& .MuiDataGrid-main': {
                 borderRadius: 'inherit',
               },
-
               '& .MuiDataGrid-root': {
                 border: 'none', // Removes border
               },
@@ -455,6 +454,9 @@ function organizationPeople(): JSX.Element {
               },
               '& .MuiDataGrid-columnHeaders': {
                 borderBottom: 'none', // Removes the bottom border of the header
+              },
+              '& .MuiDataGrid-row:hover': {
+                backgroundColor: 'var(--grey-bg-color)', // Changes hover color to blue
               },
             }}
             getRowClassName={() => `${styles.rowBackground}`}

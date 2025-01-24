@@ -698,7 +698,7 @@
 }
 
 .rowBackground {
-  background-color: var(--row-background) !important;
+  background-color: var(--row-background);
   max-height: 120px;
   overflow-y: auto;
 }
