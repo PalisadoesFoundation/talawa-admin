@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceMember
-
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L13)
 
 ## Properties
 
@@ -12,7 +10,9 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **\_\_typename**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L23)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L23)
 
 ***
 
@@ -20,7 +20,9 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2
 
 > **\_id**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L24)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L24)
 
 ***
 
@@ -28,7 +30,9 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2
 
 > **birthDate**: `Date`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L22)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L22)
 
 ***
 
@@ -36,15 +40,19 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2
 
 > **createdAt**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L14)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L14)
 
 ***
 
 ### email
 
-> **email**: `` `${string}@${string}.${string}` ``
+> **email**: \`$\{string\}@$\{string\}.$\{string\}\`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L17)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L17)
 
 ***
 
@@ -52,11 +60,9 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > `optional` **eventsAttended**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L19)
+#### Defined in
 
-#### \_id
-
-> **\_id**: `string`
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L19)
 
 ***
 
@@ -64,7 +70,9 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **firstName**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L15)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L15)
 
 ***
 
@@ -72,7 +80,9 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **gender**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L18)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L18)
 
 ***
 
@@ -80,7 +90,9 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **lastName**: `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L16)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L16)
 
 ***
 
@@ -88,8 +100,10 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **tagsAssignedWith**: `object`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L25)
-
 #### edges
 
 > **edges**: `object`[]
+
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L25)

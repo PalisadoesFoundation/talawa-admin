@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx#L26)
 
 A component for deleting an organization.
 
@@ -20,3 +18,7 @@ success or error messages.
 `JSX.Element`
 
 JSX.Element - The rendered component with delete functionality.
+
+## Defined in
+
+[src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx#L26)

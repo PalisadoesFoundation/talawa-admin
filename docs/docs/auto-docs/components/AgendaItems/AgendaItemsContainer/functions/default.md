@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,36 +6,30 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsContainer.tsx#L32)
-
 Component for displaying and managing agenda items.
 Supports drag-and-drop functionality, and includes modals for previewing,
 updating, and deleting agenda items.
 
 ## Parameters
 
-### props
+• **props**
 
 The props for the component.
 
-#### agendaItemCategories
+• **props.agendaItemCategories**: [`InterfaceAgendaItemCategoryInfo`](../../../../utils/interfaces/interfaces/InterfaceAgendaItemCategoryInfo.md)[]
 
-[`InterfaceAgendaItemCategoryInfo`](../../../../utils/interfaces/interfaces/InterfaceAgendaItemCategoryInfo.md)[]
+• **props.agendaItemConnection**: `"Event"`
 
-#### agendaItemConnection
+• **props.agendaItemData**: [`InterfaceAgendaItemInfo`](../../../../utils/interfaces/interfaces/InterfaceAgendaItemInfo.md)[]
 
-`"Event"`
-
-#### agendaItemData
-
-[`InterfaceAgendaItemInfo`](../../../../utils/interfaces/interfaces/InterfaceAgendaItemInfo.md)[]
-
-#### agendaItemRefetch
-
-() => `void`
+• **props.agendaItemRefetch**
 
 ## Returns
 
 `JSX.Element`
 
 JSX.Element
+
+## Defined in
+
+[src/components/AgendaItems/AgendaItemsContainer.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsContainer.tsx#L32)

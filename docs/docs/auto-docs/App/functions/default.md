@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/App.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L74)
 
 This is the main function for our application. It sets up all the routes and components,
 defining how the user can navigate through the app. The function uses React Router's `Routes`
@@ -26,3 +24,7 @@ and `Route` components to map different URL paths to corresponding screens and c
 `JSX.Element`
 
 The rendered routes and components of the application.
+
+## Defined in
+
+[src/App.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L74)

@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `Element`
-
-Defined in: [src/screens/ForgotPassword/ForgotPassword.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ForgotPassword/ForgotPassword.tsx#L36)
 
 `ForgotPassword` component allows users to reset their password.
 
@@ -25,3 +23,7 @@ JSX.Element - The `ForgotPassword` component.
 ```tsx
 <ForgotPassword />
 ```
+
+## Defined in
+
+[src/screens/ForgotPassword/ForgotPassword.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ForgotPassword/ForgotPassword.tsx#L36)

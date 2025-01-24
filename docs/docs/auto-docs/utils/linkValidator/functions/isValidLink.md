@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,14 +6,14 @@
 
 > **isValidLink**(`link`): `boolean`
 
-Defined in: [src/utils/linkValidator.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/linkValidator.ts#L1)
-
 ## Parameters
 
-### link
-
-`string`
+• **link**: `string`
 
 ## Returns
 
 `boolean`
+
+## Defined in
+
+[src/utils/linkValidator.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/linkValidator.ts#L1)

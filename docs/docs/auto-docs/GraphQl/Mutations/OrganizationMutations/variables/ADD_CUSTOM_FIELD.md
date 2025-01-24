@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: ADD\_CUSTOM\_FIELD
 
 > `const` **ADD\_CUSTOM\_FIELD**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L237)
 
 GraphQL mutation to add a custom field to an organization.
 
@@ -25,3 +23,7 @@ The name of the custom field.
 ## Returns
 
 The added organization custom field object.
+
+## Defined in
+
+[src/GraphQl/Mutations/OrganizationMutations.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L237)

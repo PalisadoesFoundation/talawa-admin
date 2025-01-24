@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceBaseEvent
-
-Defined in: [src/utils/interfaces.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L18)
 
 ## Extended by
 
@@ -17,7 +15,9 @@ Defined in: [src/utils/interfaces.ts:18](https://github.com/PalisadoesFoundation
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L19)
+#### Defined in
+
+[src/utils/interfaces.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L19)
 
 ***
 
@@ -25,7 +25,9 @@ Defined in: [src/utils/interfaces.ts:19](https://github.com/PalisadoesFoundation
 
 > **allDay**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L27)
+#### Defined in
+
+[src/utils/interfaces.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L27)
 
 ***
 
@@ -33,7 +35,9 @@ Defined in: [src/utils/interfaces.ts:27](https://github.com/PalisadoesFoundation
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L21)
+#### Defined in
+
+[src/utils/interfaces.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L21)
 
 ***
 
@@ -41,7 +45,9 @@ Defined in: [src/utils/interfaces.ts:21](https://github.com/PalisadoesFoundation
 
 > **endDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L23)
+#### Defined in
+
+[src/utils/interfaces.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L23)
 
 ***
 
@@ -49,7 +55,9 @@ Defined in: [src/utils/interfaces.ts:23](https://github.com/PalisadoesFoundation
 
 > **endTime**: `string`
 
-Defined in: [src/utils/interfaces.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L26)
+#### Defined in
+
+[src/utils/interfaces.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L26)
 
 ***
 
@@ -57,7 +65,9 @@ Defined in: [src/utils/interfaces.ts:26](https://github.com/PalisadoesFoundation
 
 > **location**: `string`
 
-Defined in: [src/utils/interfaces.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L24)
+#### Defined in
+
+[src/utils/interfaces.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L24)
 
 ***
 
@@ -65,7 +75,9 @@ Defined in: [src/utils/interfaces.ts:24](https://github.com/PalisadoesFoundation
 
 > **recurring**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L28)
+#### Defined in
+
+[src/utils/interfaces.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L28)
 
 ***
 
@@ -73,7 +85,9 @@ Defined in: [src/utils/interfaces.ts:28](https://github.com/PalisadoesFoundation
 
 > **startDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L22)
+#### Defined in
+
+[src/utils/interfaces.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L22)
 
 ***
 
@@ -81,7 +95,9 @@ Defined in: [src/utils/interfaces.ts:22](https://github.com/PalisadoesFoundation
 
 > **startTime**: `string`
 
-Defined in: [src/utils/interfaces.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L25)
+#### Defined in
+
+[src/utils/interfaces.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L25)
 
 ***
 
@@ -89,4 +105,6 @@ Defined in: [src/utils/interfaces.ts:25](https://github.com/PalisadoesFoundation
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L20)
+#### Defined in
+
+[src/utils/interfaces.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L20)

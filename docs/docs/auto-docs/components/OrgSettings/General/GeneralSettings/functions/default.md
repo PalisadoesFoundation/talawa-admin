@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,21 +6,15 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/GeneralSettings.tsx#L23)
-
 A component for displaying general settings for an organization.
 
 ## Parameters
 
-### props
-
-`InterfaceGeneralSettingsProps`
+• **props**: `InterfaceGeneralSettingsProps`
 
 The properties passed to the component.
 
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -33,3 +27,7 @@ The properties passed to the component.
 `ReactNode`
 
 The `GeneralSettings` component.
+
+## Defined in
+
+[src/components/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/GeneralSettings.tsx#L23)

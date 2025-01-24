@@ -1,7 +1,7 @@
 {
   "out": "docs/docs/auto-docs",
   "plugin": ["typedoc-plugin-markdown"],
-  "theme": "markdown",
+  "theme": "default",
   "tsconfig": "tsconfig.docs.json",
   "excludePrivate": true,
   "excludeProtected": true,

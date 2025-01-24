@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,4 +6,6 @@
 
 > `const` **GROUP\_CHAT\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L210)
+## Defined in
+
+[src/GraphQl/Queries/PlugInQueries.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L210)

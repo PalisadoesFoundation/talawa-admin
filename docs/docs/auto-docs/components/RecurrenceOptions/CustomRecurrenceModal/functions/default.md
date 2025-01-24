@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
-
-Defined in: [src/components/RecurrenceOptions/CustomRecurrenceModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RecurrenceOptions/CustomRecurrenceModal.tsx#L54)
 
 A modal for setting up custom recurrence rules.
 
@@ -16,15 +14,11 @@ recurrence, as well as specific end options.
 
 ## Parameters
 
-### props
-
-`InterfaceCustomRecurrenceModalProps`
+• **props**: `InterfaceCustomRecurrenceModalProps`
 
 The props object containing various configurations and state management functions.
 
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -37,3 +31,7 @@ The props object containing various configurations and state management function
 `ReactNode`
 
 The JSX element representing the CustomRecurrenceModal.
+
+## Defined in
+
+[src/components/RecurrenceOptions/CustomRecurrenceModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RecurrenceOptions/CustomRecurrenceModal.tsx#L54)

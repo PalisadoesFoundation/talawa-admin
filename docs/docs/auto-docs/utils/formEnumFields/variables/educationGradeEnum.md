@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,14 +6,6 @@
 
 > `const` **educationGradeEnum**: `object`[]
 
-Defined in: [src/utils/formEnumFields.ts:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/formEnumFields.ts#L202)
+## Defined in
 
-## Type declaration
-
-### label
-
-> **label**: `string` = `'No-Grade'`
-
-### value
-
-> **value**: `string` = `'NO_GRADE'`
+[src/utils/formEnumFields.ts:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/formEnumFields.ts#L202)

@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
-
-Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L30)
 
 PeopleCard component displays information about a person within an organization.
 
@@ -19,9 +17,7 @@ It includes:
 
 ## Parameters
 
-### props
-
-`InterfaceOrganizationCardProps`
+• **props**: `InterfaceOrganizationCardProps`
 
 The properties passed to the component.
 
@@ -30,3 +26,7 @@ The properties passed to the component.
 `JSX.Element`
 
 JSX.Element representing a card with the person's details.
+
+## Defined in
+
+[src/components/UserPortal/PeopleCard/PeopleCard.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L30)

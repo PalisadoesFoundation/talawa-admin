@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,19 +6,13 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrgList/OrganizationModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrganizationModal.tsx#L55)
-
 Represents the organization modal component.
 
 ## Parameters
 
-### props
+• **props**: `InterfaceOrganizationModalProps`
 
-`InterfaceOrganizationModalProps`
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -29,3 +23,7 @@ Represents the organization modal component.
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/screens/OrgList/OrganizationModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrganizationModal.tsx#L55)

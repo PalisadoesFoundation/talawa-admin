@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: REMOVE\_CUSTOM\_FIELD
 
 > `const` **REMOVE\_CUSTOM\_FIELD**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:260](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L260)
 
 GraphQL mutation to remove a custom field from an organization.
 
@@ -21,3 +19,7 @@ The ID of the custom field to be removed.
 ## Returns
 
 The removed organization custom field object.
+
+## Defined in
+
+[src/GraphQl/Mutations/OrganizationMutations.ts:260](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L260)

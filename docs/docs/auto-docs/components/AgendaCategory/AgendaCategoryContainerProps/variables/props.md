@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: props
 
 > `const` **props**: `object`
-
-Defined in: [src/components/AgendaCategory/AgendaCategoryContainerProps.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaCategory/AgendaCategoryContainerProps.ts#L4)
 
 ## Type declaration
 
@@ -20,4 +18,8 @@ Defined in: [src/components/AgendaCategory/AgendaCategoryContainerProps.ts:4](ht
 
 ### agendaCategoryRefetch
 
-> **agendaCategoryRefetch**: `Mock`
+> **agendaCategoryRefetch**: `Mock`\<`Procedure`\>
+
+## Defined in
+
+[src/components/AgendaCategory/AgendaCategoryContainerProps.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaCategory/AgendaCategoryContainerProps.ts#L4)

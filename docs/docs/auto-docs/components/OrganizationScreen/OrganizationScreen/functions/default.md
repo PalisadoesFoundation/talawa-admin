@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `Element`
-
-Defined in: [src/components/OrganizationScreen/OrganizationScreen.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationScreen/OrganizationScreen.tsx#L37)
 
 Component for the organization screen
 
@@ -20,3 +18,7 @@ based on the route.
 `Element`
 
 JSX.Element representing the organization screen
+
+## Defined in
+
+[src/components/OrganizationScreen/OrganizationScreen.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationScreen/OrganizationScreen.tsx#L37)

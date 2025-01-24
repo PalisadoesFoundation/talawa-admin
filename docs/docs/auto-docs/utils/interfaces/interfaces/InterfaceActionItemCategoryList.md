@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceActionItemCategoryList
-
-Defined in: [src/utils/interfaces.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L39)
 
 ## Properties
 
@@ -12,4 +10,6 @@ Defined in: [src/utils/interfaces.ts:39](https://github.com/PalisadoesFoundation
 
 > **actionItemCategoriesByOrganization**: [`InterfaceActionItemCategoryInfo`](InterfaceActionItemCategoryInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L40)
+#### Defined in
+
+[src/utils/interfaces.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L40)

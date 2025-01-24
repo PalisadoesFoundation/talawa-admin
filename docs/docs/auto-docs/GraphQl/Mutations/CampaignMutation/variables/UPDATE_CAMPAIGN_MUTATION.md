@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: UPDATE\_CAMPAIGN\_MUTATION
 
 > `const` **UPDATE\_CAMPAIGN\_MUTATION**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CampaignMutation.ts#L53)
 
 GraphQL mutation to update a fund Campaign.
 
@@ -37,3 +35,7 @@ The currency of the campaign.
 ## Returns
 
 The ID of the updated campaign.
+
+## Defined in
+
+[src/GraphQl/Mutations/CampaignMutation.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CampaignMutation.ts#L53)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,4 +6,6 @@
 
 > `const` **EVENT\_REGISTRANTS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:331](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L331)
+## Defined in
+
+[src/GraphQl/Queries/Queries.ts:331](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L331)

@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceEditUserTagModalProps
-
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L31)
 
 Edit UserTag Modal component for the Manage Tag screen.
 
@@ -34,7 +32,9 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **editUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L32)
+#### Defined in
+
+[src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L32)
 
 ***
 
@@ -42,17 +42,17 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:32](https://github.com/P
 
 > **handleEditUserTag**: (`e`) => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L36)
-
 #### Parameters
 
-##### e
-
-`FormEvent`\<`HTMLFormElement`\>
+• **e**: `FormEvent`\<`HTMLFormElement`\>
 
 #### Returns
 
 `Promise`\<`void`\>
+
+#### Defined in
+
+[src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L36)
 
 ***
 
@@ -60,11 +60,13 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:36](https://github.com/P
 
 > **hideEditUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L33)
-
 #### Returns
 
 `void`
+
+#### Defined in
+
+[src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L33)
 
 ***
 
@@ -72,7 +74,9 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:33](https://github.com/P
 
 > **newTagName**: `string`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L34)
+#### Defined in
+
+[src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L34)
 
 ***
 
@@ -80,30 +84,34 @@ Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:34](https://github.com/P
 
 > **setNewTagName**: (`state`) => `void`
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L35)
-
 #### Parameters
 
-##### state
-
-`SetStateAction`\<`string`\>
+• **state**: `SetStateAction`\<`string`\>
 
 #### Returns
 
 `void`
 
+#### Defined in
+
+[src/screens/ManageTag/EditUserTagModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L35)
+
 ***
 
 ### t
 
-> **t**: `TFunction`\<`"manageTag"`\>
+> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L37)
+#### Defined in
+
+[src/screens/ManageTag/EditUserTagModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L37)
 
 ***
 
 ### tCommon
 
-> **tCommon**: `TFunction`\<`"common"`\>
+> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/screens/ManageTag/EditUserTagModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L38)
+#### Defined in
+
+[src/screens/ManageTag/EditUserTagModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/EditUserTagModal.tsx#L38)

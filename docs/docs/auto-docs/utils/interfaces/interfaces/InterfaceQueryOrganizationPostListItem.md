@@ -1,18 +1,14 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceQueryOrganizationPostListItem
-
-Defined in: [src/utils/interfaces.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L180)
 
 ## Properties
 
 ### posts
 
 > **posts**: `object`
-
-Defined in: [src/utils/interfaces.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L181)
 
 #### edges
 
@@ -22,22 +18,26 @@ Defined in: [src/utils/interfaces.ts:181](https://github.com/PalisadoesFoundatio
 
 > **pageInfo**: `object`
 
-##### pageInfo.endCursor
+#### pageInfo.endCursor
 
 > **endCursor**: `string`
 
-##### pageInfo.hasNextPage
+#### pageInfo.hasNextPage
 
 > **hasNextPage**: `boolean`
 
-##### pageInfo.hasPreviousPage
+#### pageInfo.hasPreviousPage
 
 > **hasPreviousPage**: `boolean`
 
-##### pageInfo.startCursor
+#### pageInfo.startCursor
 
 > **startCursor**: `string`
 
 #### totalCount
 
 > **totalCount**: `number`
+
+#### Defined in
+
+[src/utils/interfaces.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L181)

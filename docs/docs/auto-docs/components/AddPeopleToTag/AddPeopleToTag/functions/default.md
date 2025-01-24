@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L63)
-
 ## Parameters
 
-### props
+• **props**: [`InterfaceAddPeopleToTagProps`](../interfaces/InterfaceAddPeopleToTagProps.md)
 
-[`InterfaceAddPeopleToTagProps`](../interfaces/InterfaceAddPeopleToTagProps.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:63](https://github
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/components/AddPeopleToTag/AddPeopleToTag.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L63)

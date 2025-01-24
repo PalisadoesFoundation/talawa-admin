@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/components/AddOn/core/AddOnStore/AddOnStore.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnStore/AddOnStore.tsx#L37)
 
 Component for managing and displaying plugins in the store.
 
@@ -21,3 +19,7 @@ This component:
 `JSX.Element`
 
 A JSX element containing the UI for the add-on store.
+
+## Defined in
+
+[src/components/AddOn/core/AddOnStore/AddOnStore.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnStore/AddOnStore.tsx#L37)

@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`__namedParameters`): `Element`
-
-Defined in: [src/components/Venues/VenueCard.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueCard.tsx#L57)
 
 Represents a card component displaying venue information.
 
@@ -15,9 +13,7 @@ It also provides buttons to edit or delete the venue.
 
 ## Parameters
 
-### \_\_namedParameters
-
-`InterfaceVenueCardProps`
+• **\_\_namedParameters**: `InterfaceVenueCardProps`
 
 ## Returns
 
@@ -53,3 +49,7 @@ class (e.g., .addButton) is now applied.
 - `.removeButton`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/components/Venues/VenueCard.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueCard.tsx#L57)

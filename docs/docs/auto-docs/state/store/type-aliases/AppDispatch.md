@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,4 +6,6 @@
 
 > **AppDispatch**: *typeof* `store.dispatch`
 
-Defined in: [src/state/store.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/store.ts#L8)
+## Defined in
+
+[src/state/store.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/store.ts#L8)

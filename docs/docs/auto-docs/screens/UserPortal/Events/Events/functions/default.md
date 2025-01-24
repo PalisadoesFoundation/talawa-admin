@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/screens/UserPortal/Events/Events.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Events/Events.tsx#L43)
 
 Component to manage and display events for an organization.
 
@@ -18,3 +16,7 @@ It includes a calendar view, a form to create new events, and various filters an
 `JSX.Element`
 
 The JSX element for the events management interface.
+
+## Defined in
+
+[src/screens/UserPortal/Events/Events.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Events/Events.tsx#L43)

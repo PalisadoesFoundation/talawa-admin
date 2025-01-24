@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,28 +6,24 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/OrganizationDashCards/DashboardCard.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/DashboardCard.tsx#L13)
-
 Dashboard card component is used to display the card with icon, title and count.
 
 ## Parameters
 
-### props
+• **props**
 
-#### count
+• **props.count?**: `number`
 
-`number`
+• **props.icon**: `ReactNode`
 
-#### icon
-
-`ReactNode`
-
-#### title
-
-`string`
+• **props.title**: `string`
 
 ## Returns
 
 `Element`
 
 Dashboard card component
+
+## Defined in
+
+[src/components/OrganizationDashCards/DashboardCard.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/DashboardCard.tsx#L13)

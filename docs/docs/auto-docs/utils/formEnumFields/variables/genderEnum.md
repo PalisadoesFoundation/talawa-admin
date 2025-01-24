@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,14 +6,6 @@
 
 > `const` **genderEnum**: `object`[]
 
-Defined in: [src/utils/formEnumFields.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/formEnumFields.ts#L296)
+## Defined in
 
-## Type declaration
-
-### label
-
-> **label**: `string` = `'Male'`
-
-### value
-
-> **value**: `string` = `'MALE'`
+[src/utils/formEnumFields.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/formEnumFields.ts#L296)

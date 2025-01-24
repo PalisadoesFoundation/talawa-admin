@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L75)
 
 Organization Events Page Component to display the events of an organization
 and create new events for the organization by the admin or superadmin user.
@@ -42,3 +40,7 @@ class (e.g., .addButton) is now applied.
 - `.addButton`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/screens/OrganizationEvents/OrganizationEvents.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L75)

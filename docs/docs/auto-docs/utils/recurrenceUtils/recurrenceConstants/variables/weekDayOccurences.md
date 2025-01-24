@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,4 +6,6 @@
 
 > `const` **weekDayOccurences**: `string`[]
 
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L87)
+## Defined in
+
+[src/utils/recurrenceUtils/recurrenceConstants.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L87)

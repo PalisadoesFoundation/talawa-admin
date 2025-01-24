@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: USER\_ORGANIZATION\_CONNECTION
 
 > `const` **USER\_ORGANIZATION\_CONNECTION**: `DocumentNode`
-
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L182)
 
 GraphQL query to retrieve organizations based on user connection.
 
@@ -29,3 +27,7 @@ Optional. The ID of a specific organization to retrieve.
 ## Returns
 
 The list of organizations based on the applied filters.
+
+## Defined in
+
+[src/GraphQl/Queries/OrganizationQueries.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L182)

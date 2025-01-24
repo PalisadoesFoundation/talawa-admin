@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/TagActions/TagActions.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L64)
-
 ## Parameters
 
-### props
+• **props**: [`InterfaceTagActionsProps`](../interfaces/InterfaceTagActionsProps.md)
 
-[`InterfaceTagActionsProps`](../interfaces/InterfaceTagActionsProps.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:64](https://github.com/Pal
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/components/TagActions/TagActions.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L64)

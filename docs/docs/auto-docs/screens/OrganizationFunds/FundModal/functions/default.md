@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
-
-Defined in: [src/screens/OrganizationFunds/FundModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/FundModal.tsx#L69)
 
 `FundModal` component provides a modal dialog for creating or editing a fund.
 It allows users to input fund details and submit them to the server.
@@ -36,13 +34,9 @@ or update the fund details and triggers a refetch of the fund data.
 
 ## Parameters
 
-### props
+• **props**: [`InterfaceFundModal`](../interfaces/InterfaceFundModal.md)
 
-[`InterfaceFundModal`](../interfaces/InterfaceFundModal.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -72,3 +66,7 @@ class (e.g., .addButton) is now applied.
 - `.switch`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/screens/OrganizationFunds/FundModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/FundModal.tsx#L69)

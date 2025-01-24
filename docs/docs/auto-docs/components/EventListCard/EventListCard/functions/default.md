@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,15 +6,11 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/EventListCard/EventListCard.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/EventListCard.tsx#L45)
-
 Component that displays an event card with a modal for event details.
 
 ## Parameters
 
-### props
-
-[`InterfaceEventListCardProps`](../interfaces/InterfaceEventListCardProps.md)
+• **props**: [`InterfaceEventListCardProps`](../interfaces/InterfaceEventListCardProps.md)
 
 The props for the EventListCard component.
 
@@ -23,3 +19,7 @@ The props for the EventListCard component.
 `JSX.Element`
 
 The rendered EventListCard component.
+
+## Defined in
+
+[src/components/EventListCard/EventListCard.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/EventListCard.tsx#L45)

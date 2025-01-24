@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: CREATE\_VOLUNTEER\_GROUP
 
 > `const` **CREATE\_VOLUNTEER\_GROUP**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L48)
 
 GraphQL mutation to create an event volunteer group.
 
@@ -24,3 +22,7 @@ The data required to create an event volunteer group.
 ## Returns
 
 The ID of the created event volunteer group.
+
+## Defined in
+
+[src/GraphQl/Mutations/EventVolunteerMutation.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L48)

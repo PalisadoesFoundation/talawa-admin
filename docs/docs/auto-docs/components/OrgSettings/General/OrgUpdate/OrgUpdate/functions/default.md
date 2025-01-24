@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
-
-Defined in: [src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L36)
 
 Component for updating organization details.
 
@@ -16,9 +14,7 @@ fetch and update data.
 
 ## Parameters
 
-### props
-
-`InterfaceOrgUpdateProps`
+• **props**: `InterfaceOrgUpdateProps`
 
 Component props containing the organization ID.
 
@@ -27,3 +23,7 @@ Component props containing the organization ID.
 `JSX.Element`
 
 The rendered component.
+
+## Defined in
+
+[src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L36)
