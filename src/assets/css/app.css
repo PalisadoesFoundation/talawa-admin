@@ -3587,11 +3587,11 @@ fieldset:disabled .btn {
 }
 
 .btn-danger {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #dc3545;
+  --bs-btn-color: #ce2944;
+  --bs-btn-bg: #f8d6dc;
   --bs-btn-border-color: #dc3545;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #bb2d3b;
+  --bs-btn-hover-bg: #dc3545;
   --bs-btn-hover-border-color: #b02a37;
   --bs-btn-focus-shadow-rgb: 225, 83, 97;
   --bs-btn-active-color: #fff;

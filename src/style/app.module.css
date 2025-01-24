@@ -83,6 +83,7 @@
   --grey-border-box-color: #e8e5e5;
   --subtle-blue-grey: #7c9beb;
   --subtle-blue-grey-hover: #5f7e91;
+  --org-people-hover-blue: #e9edf5;
   --search-bar-icon-blue: #a8c7fa;
   --holidays-card-background-color: #e0e9ff;
   --holidays-card-date-color: #3771c8;
@@ -92,9 +93,10 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+  --delete-theme-color: #dc3545;
   --info-button-text: var(--davys-grey);
   --close-button-text: var(--remove-button-color);
-  --close-button-bg: var(--white-color);
+  --close-button-bg: #f8d6dc;
   --checkbox-focus-border: var(--bs-gray-300);
   --checkbox-bg: var(--dark-blue);
   --checkbox-border: var(--dark-blue);
@@ -638,7 +640,7 @@
   background-color: var(--delete-button-bg);
   color: var(--remove-button-color);
   margin-right: 10px;
-  --bs-btn-border-color: #dc3545;
+  --bs-btn-border-color: var(--delete-theme-color);
 }
 
 .removeButton:is(:hover, :active, :focus) {
@@ -698,7 +700,7 @@
 }
 
 .rowBackground {
-  background-color: var(--row-background) !important;
+  background-color: var(--row-background);
   max-height: 120px;
   overflow-y: auto;
 }
@@ -1467,7 +1469,7 @@ hr {
 
 .eventsAttended,
 .membername {
-  color: var(--blue-color);
+  color: var(--black-color);
 }
 .actionBtn {
   background-color: var(--white-color) !important;
@@ -5025,7 +5027,6 @@ button[data-testid='createPostBtn'] {
 
 .membername {
   font-size: 16px;
-  font-weight: bold;
 }
 
 .memberfont {
