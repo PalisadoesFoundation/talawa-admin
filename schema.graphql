@@ -551,11 +551,6 @@ type MinimumValueError implements FieldError {
   path: [String!]!
 }
 
-enum AdvertisementType {
-  BANNER
-  MENU
-  POPUP
-}
 
 input CreateAdvertisementInput {
   endDate: Date!
@@ -779,12 +774,6 @@ type OrganizationCustomField {
   type: String!
 }
 
-type OrganizationCustomField {
-  _id: ID!
-  name: String!
-  organizationId: String!
-  type: String!
-}
 
 type OrganizationInfoNode {
   _id: ID!
