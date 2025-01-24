@@ -92,6 +92,14 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Volunteer',
     testId: 'Icon-Component-Volunteer',
   },
+  AddMember: {
+    name: 'AddMember',
+    testId: 'Icon-Component-AddMemberIcon',
+  },
+  TrashBin: {
+    name: 'TrashBin',
+    testId: 'Icon-Component-TrashBinIcon',
+  },
   default: {
     name: 'default',
     testId: 'Icon-Component-DefaultIcon',

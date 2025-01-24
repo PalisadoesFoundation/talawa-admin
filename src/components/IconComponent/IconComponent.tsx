@@ -19,6 +19,8 @@ import PostsIcon from 'assets/svgs/posts.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import VenueIcon from 'assets/svgs/venues.svg?react';
 import RequestsIcon from 'assets/svgs/requests.svg?react';
+import AddMemberIcon from 'assets/svgs/addMember.svg?react';
+import TrashBinIcon from 'assets/svgs/trashBin.svg?react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';
 
@@ -150,6 +152,14 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
           width={props.width}
           data-testid="Icon-Component-Volunteer"
         />
+      );
+    case 'AddMember':
+      return (
+        <AddMemberIcon {...props} data-testid="Icon-Component-AddMemberIcon" />
+      );
+    case 'TrashBin':
+      return (
+        <TrashBinIcon {...props} data-testid="Icon-Component-TrashBinIcon" />
       );
     default:
       return (

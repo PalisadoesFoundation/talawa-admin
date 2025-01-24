@@ -8,7 +8,8 @@ import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './RequestsTableItem.module.css';
+import styles from '../../style/app.module.css';
+import IconComponent from 'components/IconComponent/IconComponent';
 
 /**
  * Represents a membership request in the requests table.
@@ -116,6 +117,9 @@ const RequestsTableItem = (props: Props): JSX.Element => {
           }}
           className={styles.acceptButton}
         >
+          <div className={styles.iconWrapper}>
+            <IconComponent name={'AddMember'} fill={'var(--bs-black)'} />
+          </div>
           {t('accept')}
         </Button>
       </td>
@@ -128,6 +132,9 @@ const RequestsTableItem = (props: Props): JSX.Element => {
           }}
           className={styles.rejectButton}
         >
+          <div className={styles.iconWrapper}>
+            <IconComponent name={'TrashBin'} fill={'var(--bs-black)'} />
+          </div>
           {t('reject')}
         </Button>
       </td>
