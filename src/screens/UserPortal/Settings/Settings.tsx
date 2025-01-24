@@ -7,7 +7,7 @@ import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   educationGradeEnum,
@@ -57,7 +57,7 @@ export default function settings(): JSX.Element {
   }, []);
 
   const { setItem } = useLocalStorage();
-  const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
+  const { data } = useQuery(CURRENT_USER, { fetchPolicy: 'network-only' });
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
   const [userDetails, setUserDetails] = React.useState({
     firstName: '',
@@ -158,7 +158,7 @@ export default function settings(): JSX.Element {
    */
   const handleResetChanges = (): void => {
     setisUpdated(false);
-    /* istanbul ignore next */
+
     if (data) {
       const {
         firstName,
@@ -192,7 +192,6 @@ export default function settings(): JSX.Element {
   };
 
   useEffect(() => {
-    /* istanbul ignore next */
     if (data) {
       const {
         firstName,
@@ -314,9 +313,8 @@ export default function settings(): JSX.Element {
                             role="button"
                             aria-label="Edit profile picture"
                             tabIndex={0}
-                            onKeyDown={
-                              /*istanbul ignore next*/
-                              (e) => e.key === 'Enter' && handleImageUpload()
+                            onKeyDown={(e) =>
+                              e.key === 'Enter' && handleImageUpload()
                             }
                           />
                         </div>
@@ -330,18 +328,15 @@ export default function settings(): JSX.Element {
                         data-testid="fileInput"
                         multiple={false}
                         ref={fileInputRef}
-                        onChange={
-                          /* istanbul ignore next */
-                          async (
-                            e: React.ChangeEvent<HTMLInputElement>,
-                          ): Promise<void> => {
-                            const file = e.target?.files?.[0];
-                            if (file) {
-                              const image = await convertToBase64(file);
-                              setUserDetails({ ...userDetails, image });
-                            }
+                        onChange={async (
+                          e: React.ChangeEvent<HTMLInputElement>,
+                        ): Promise<void> => {
+                          const file = e.target?.files?.[0];
+                          if (file) {
+                            const image = await convertToBase64(file);
+                            setUserDetails({ ...userDetails, image });
                           }
-                        }
+                        }}
                         style={{ display: 'none' }}
                       />
                     </Col>

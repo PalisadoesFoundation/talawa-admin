@@ -14,21 +14,24 @@ import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import LoginPage from './LoginPage';
 import {
-  LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import {
+  SIGNIN_QUERY,
+  GET_COMMUNITY_DATA,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
-import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
 
 const MOCKS = [
   {
     request: {
-      query: LOGIN_MUTATION,
+      query: SIGNIN_QUERY,
       variables: {
         email: 'johndoe@gmail.com',
         password: 'johndoe',
@@ -54,8 +57,7 @@ const MOCKS = [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
-        firstName: 'John Patrick ',
-        lastName: 'Doe ',
+        name: 'John Patrick',
         email: 'johndoe@gmail.com',
         password: 'johnDoe',
       },
@@ -64,10 +66,13 @@ const MOCKS = [
       data: {
         register: {
           user: {
-            _id: '1',
+            id: '1',
+            name: 'John Patrick',
+            emailAddress: 'johndoe@gmail.com',
+            role: 'User',
+            countryCode: '12',
           },
-          accessToken: 'accessToken',
-          refreshToken: 'refreshToken',
+          authenticationToken: 'authenticationToken',
         },
       },
     },

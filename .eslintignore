@@ -5,6 +5,7 @@ package-lock.json
 tsconfig.json
 fix-readme-links.js
 fix-repo-url.js
+schema.graphql
 # Ignore the Docusaurus website subdirectory
 docs/**
 

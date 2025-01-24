@@ -11,7 +11,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
 import userEvent from '@testing-library/user-event';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -59,7 +59,7 @@ const MOCKS = [
 const Mocks1 = [
   {
     request: {
-      query: CHECK_AUTH,
+      query: CURRENT_USER,
     },
     result: {
       data: {
@@ -93,7 +93,7 @@ const Mocks1 = [
 const Mocks2 = [
   {
     request: {
-      query: CHECK_AUTH,
+      query: CURRENT_USER,
     },
     result: {
       data: {
