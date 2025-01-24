@@ -57,7 +57,7 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
         <Button
           variant="danger"
           onClick={hide}
-          className={styles.modalCloseBtn}
+          className={styles.closeButton}
           data-testid="modalCloseBtn"
         >
           <i className="fa fa-times"></i>
