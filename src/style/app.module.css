@@ -1467,7 +1467,7 @@ hr {
 
 .eventsAttended,
 .membername {
-  color: var(--blue-color);
+  color: var(--black-color);
 }
 .actionBtn {
   background-color: var(--white-color) !important;
@@ -5025,7 +5025,6 @@ button[data-testid='createPostBtn'] {
 
 .membername {
   font-size: 16px;
-  font-weight: bold;
 }
 
 .memberfont {

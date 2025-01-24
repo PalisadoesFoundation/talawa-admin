@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Close, Search } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -20,7 +20,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -36,8 +36,8 @@ import SortingButton from 'subComponents/SortingButton';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'var(--table-head-bg, blue)',
-    color: 'var(--table-header-color, black)',
+    backgroundColor: 'var(--grey-light)',
+    color: 'var(--black-color)',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -102,20 +102,26 @@ function AddMember(): JSX.Element {
   const toggleDialogModal = (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
 
-  const [createNewUserModalisOpen, setCreateNewUserModalIsOpen] =
-    useState(false);
-  function openCreateNewUserModal(): void {
-    setCreateNewUserModalIsOpen(true);
-  }
-
-  function closeCreateNewUserModal(): void {
-    setCreateNewUserModalIsOpen(false);
-  }
-  const toggleCreateNewUserModal = (): void =>
-    setCreateNewUserModalIsOpen(!addUserModalisOpen);
-
   const [addMember] = useMutation(ADD_MEMBER_MUTATION);
 
+  function useModal(initialState = false): {
+    isOpen: boolean;
+    open: () => void;
+    close: () => void;
+    toggle: () => void;
+  } {
+    const [isOpen, setIsOpen] = useState(initialState);
+    const open = useCallback(() => setIsOpen(true), []);
+    const close = useCallback(() => setIsOpen(false), []);
+    const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
+
+    return { isOpen, open, close, toggle };
+  }
+  const {
+    isOpen: createNewUserModalisOpen,
+    open: openCreateNewUserModal,
+    close: closeCreateNewUserModal,
+  } = useModal();
   const createMember = async (userId: string): Promise<void> => {
     try {
       await addMember({
@@ -133,7 +139,7 @@ function AddMember(): JSX.Element {
     }
   };
 
-  const { orgId: currentUrl } = useParams();
+  const { orgId: currentUrl } = useParams<{ orgId: string }>();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -356,10 +362,10 @@ function AddMember(): JSX.Element {
                     <TableRow>
                       <StyledTableCell>#</StyledTableCell>
                       <StyledTableCell align="center">
-                        {translateAddMember('profile')}
+                        {translateOrgPeople('profile')}
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        {translateAddMember('user')}
+                        {translateOrgPeople('user')}
                       </StyledTableCell>
                       <StyledTableCell align="center">
                         {translateAddMember('addMember')}
@@ -401,7 +407,7 @@ function AddMember(): JSX.Element {
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Link
-                                className={`${styles.membername} ${styles.subtleBlueGrey}`}
+                                className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.blueText}`}
                                 to={{
                                   pathname: `/member/${currentUrl}`,
                                 }}
@@ -440,19 +446,15 @@ function AddMember(): JSX.Element {
       <Modal
         data-testid="addNewUserModal"
         show={createNewUserModalisOpen}
-        onHide={toggleCreateNewUserModal}
+        onHide={closeCreateNewUserModal} // Use the close function directly
       >
-        <Modal.Header
-          className={styles.createUserModalHeader}
-          data-testid="createUser"
-        >
+        <Modal.Header closeButton className={styles.createUserModalHeader}>
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="my-3">
             <div className="row">
               <div className="col-sm-6">
-                <h6>{translateOrgPeople('firstName')}</h6>
                 <InputGroup className="mt-2 mb-4">
                   <Form.Control
                     placeholder={translateOrgPeople('enterFirstName')}
@@ -464,7 +466,6 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
               <div className="col-sm-6">
-                <h6>{translateOrgPeople('lastName')}</h6>
                 <InputGroup className="mt-2 mb-4">
                   <Form.Control
                     placeholder={translateOrgPeople('enterLastName')}
@@ -476,7 +477,7 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
             </div>
-            <h6>{translateOrgPeople('emailAddress')}</h6>
+
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 placeholder={translateOrgPeople('enterEmail')}
@@ -492,7 +493,7 @@ function AddMember(): JSX.Element {
                 <EmailOutlinedIcon className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
-            <h6>{translateOrgPeople('password')}</h6>
+
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 placeholder={translateOrgPeople('enterPassword')}
@@ -514,7 +515,7 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{translateOrgPeople('confirmPassword')}</h6>
+
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 placeholder={translateOrgPeople('enterConfirmPassword')}
@@ -536,7 +537,7 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{translateOrgPeople('organization')}</h6>
+
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 className={styles.borderNone}
@@ -550,21 +551,15 @@ function AddMember(): JSX.Element {
         <Modal.Footer>
           <div className={styles.createUserActionBtns}>
             <Button
-              className={`${styles.removeButton}`}
-              variant="danger"
-              onClick={closeCreateNewUserModal}
-              data-testid="closeBtn"
-            >
-              <Close className={styles.closeButton} />
-              {translateOrgPeople('cancel')}
-            </Button>
-            <Button
-              className={`${styles.addButton}`}
+              className={`${styles.colorPrimary} ${styles.borderNone}`}
               variant="success"
               onClick={handleCreateUser}
               data-testid="createBtn"
+              style={{
+                border: '1px solid var(--dropdown-border-color)',
+                width: '100%',
+              }}
             >
-              <Check className={styles.searchIcon} />
               {translateOrgPeople('create')}
             </Button>
           </div>
