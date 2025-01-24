@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,14 +6,6 @@
 
 > `const` **maritalStatusEnum**: `object`[]
 
-Defined in: [src/utils/formEnumFields.ts:269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/formEnumFields.ts#L269)
+## Defined in
 
-## Type declaration
-
-### label
-
-> **label**: `string` = `'Single'`
-
-### value
-
-> **value**: `string` = `'SINGLE'`
+[src/utils/formEnumFields.ts:269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/formEnumFields.ts#L269)

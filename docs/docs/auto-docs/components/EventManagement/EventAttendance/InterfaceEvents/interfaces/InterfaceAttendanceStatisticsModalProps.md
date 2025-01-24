@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceAttendanceStatisticsModalProps
-
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L1)
 
 ## Properties
 
@@ -12,11 +10,13 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:1
 
 > **handleClose**: () => `void`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L3)
-
 #### Returns
 
 `void`
+
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L3)
 
 ***
 
@@ -24,7 +24,9 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:3
 
 > **memberData**: [`InterfaceMember`](InterfaceMember.md)[]
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L9)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L9)
 
 ***
 
@@ -32,15 +34,15 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:9
 
 > **show**: `boolean`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L2)
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L2)
 
 ***
 
 ### statistics
 
 > **statistics**: `object`
-
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L4)
 
 #### attendanceRate
 
@@ -54,20 +56,24 @@ Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4
 
 > **totalMembers**: `number`
 
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L4)
+
 ***
 
 ### t()
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/components/EventManagement/EventAttendance/InterfaceEvents.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L10)
-
 #### Parameters
 
-##### key
-
-`string`
+• **key**: `string`
 
 #### Returns
 
 `string`
+
+#### Defined in
+
+[src/components/EventManagement/EventAttendance/InterfaceEvents.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/InterfaceEvents.ts#L10)

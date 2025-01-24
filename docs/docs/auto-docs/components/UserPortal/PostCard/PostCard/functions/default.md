@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
-
-Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L69)
 
 PostCard component displays an individual post, including its details, interactions, and comments.
 
@@ -19,9 +17,7 @@ The component allows users to:
 
 ## Parameters
 
-### props
-
-[`InterfacePostCard`](../../../../../utils/interfaces/interfaces/InterfacePostCard.md)
+• **props**: [`InterfacePostCard`](../../../../../utils/interfaces/interfaces/InterfacePostCard.md)
 
 The properties passed to the component including post details, comments, and related actions.
 
@@ -30,3 +26,7 @@ The properties passed to the component including post details, comments, and rel
 `JSX.Element`
 
 JSX.Element representing a post card with interactive features.
+
+## Defined in
+
+[src/components/UserPortal/PostCard/PostCard.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L69)

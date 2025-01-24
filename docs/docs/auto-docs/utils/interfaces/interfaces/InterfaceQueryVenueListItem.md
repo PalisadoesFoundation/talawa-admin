@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceQueryVenueListItem
-
-Defined in: [src/utils/interfaces.ts:445](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L445)
 
 ## Properties
 
@@ -12,7 +10,9 @@ Defined in: [src/utils/interfaces.ts:445](https://github.com/PalisadoesFoundatio
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:446](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L446)
+#### Defined in
+
+[src/utils/interfaces.ts:446](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L446)
 
 ***
 
@@ -20,7 +20,9 @@ Defined in: [src/utils/interfaces.ts:446](https://github.com/PalisadoesFoundatio
 
 > **capacity**: `string`
 
-Defined in: [src/utils/interfaces.ts:450](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L450)
+#### Defined in
+
+[src/utils/interfaces.ts:450](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L450)
 
 ***
 
@@ -28,7 +30,9 @@ Defined in: [src/utils/interfaces.ts:450](https://github.com/PalisadoesFoundatio
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:448](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L448)
+#### Defined in
+
+[src/utils/interfaces.ts:448](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L448)
 
 ***
 
@@ -36,7 +40,9 @@ Defined in: [src/utils/interfaces.ts:448](https://github.com/PalisadoesFoundatio
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:449](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L449)
+#### Defined in
+
+[src/utils/interfaces.ts:449](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L449)
 
 ***
 
@@ -44,4 +50,6 @@ Defined in: [src/utils/interfaces.ts:449](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:447](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L447)
+#### Defined in
+
+[src/utils/interfaces.ts:447](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L447)

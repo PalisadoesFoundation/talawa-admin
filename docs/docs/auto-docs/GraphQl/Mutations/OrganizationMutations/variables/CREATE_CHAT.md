@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: CREATE\_CHAT
 
 > `const` **CREATE\_CHAT**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L60)
 
 GraphQL mutation to create a chat between users in an organization.
 
@@ -21,3 +19,7 @@ The ID of the organization where the direct chat is created.
 ## Returns
 
 The created direct chat object.
+
+## Defined in
+
+[src/GraphQl/Mutations/OrganizationMutations.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L60)

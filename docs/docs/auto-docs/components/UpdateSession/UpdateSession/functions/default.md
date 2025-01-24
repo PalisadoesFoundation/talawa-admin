@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/UpdateSession/UpdateSession.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UpdateSession/UpdateSession.tsx#L29)
-
 ## Parameters
 
-### props
+• **props**: `TestInterfaceUpdateTimeoutProps`
 
-`TestInterfaceUpdateTimeoutProps`
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/components/UpdateSession/UpdateSession.tsx:29](https://github.c
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/components/UpdateSession/UpdateSession.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UpdateSession/UpdateSession.tsx#L29)

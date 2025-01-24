@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: ORGANIZATION\_USER\_TAGS\_LIST
 
 > `const` **ORGANIZATION\_USER\_TAGS\_LIST**: `DocumentNode`
-
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L83)
 
 GraphQL query to retrieve the list of user tags belonging to an organization.
 
@@ -33,3 +31,7 @@ Id of the first tag on the current page.
 ## Returns
 
 The list of organizations based on the applied filters.
+
+## Defined in
+
+[src/GraphQl/Queries/OrganizationQueries.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L83)

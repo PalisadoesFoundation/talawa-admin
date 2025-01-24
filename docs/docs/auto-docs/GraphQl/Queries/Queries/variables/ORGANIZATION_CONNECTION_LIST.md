@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,4 +6,6 @@
 
 > `const` **ORGANIZATION\_CONNECTION\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L67)
+## Defined in
+
+[src/GraphQl/Queries/Queries.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L67)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,18 +6,16 @@
 
 > **default**(`state`, `action`): `any`
 
-Defined in: [src/state/reducers/pluginReducer.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/pluginReducer.ts#L3)
-
 ## Parameters
 
-### state
+• **state**: `any` = `INITIAL_STATE`
 
-`any` = `INITIAL_STATE`
-
-### action
-
-[`InterfaceAction`](../../../helpers/Action/interfaces/InterfaceAction.md)
+• **action**: [`InterfaceAction`](../../../helpers/Action/interfaces/InterfaceAction.md)
 
 ## Returns
 
 `any`
+
+## Defined in
+
+[src/state/reducers/pluginReducer.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/pluginReducer.ts#L3)

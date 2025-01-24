@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Type Alias: TargetsType
 
 > **TargetsType**: `object`
-
-Defined in: [src/state/reducers/routesReducer.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L3)
 
 ## Type declaration
 
@@ -21,3 +19,7 @@ Defined in: [src/state/reducers/routesReducer.ts:3](https://github.com/Palisadoe
 ### url?
 
 > `optional` **url**: `string`
+
+## Defined in
+
+[src/state/reducers/routesReducer.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L3)

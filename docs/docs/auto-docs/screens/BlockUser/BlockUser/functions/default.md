@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `Element`
-
-Defined in: [src/screens/BlockUser/BlockUser.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/BlockUser/BlockUser.tsx#L67)
 
 Requests component displays and manages a list of users that can be blocked or unblocked.
 
@@ -46,3 +44,7 @@ class (e.g., .addButton) is now applied.
 - `.btnsBlock`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/screens/BlockUser/BlockUser.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/BlockUser/BlockUser.tsx#L67)

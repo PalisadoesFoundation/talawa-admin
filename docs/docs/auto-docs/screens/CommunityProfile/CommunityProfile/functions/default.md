@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `Element`
-
-Defined in: [src/screens/CommunityProfile/CommunityProfile.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/CommunityProfile/CommunityProfile.tsx#L40)
 
 `CommunityProfile` component allows users to view and update their community profile details.
 
@@ -26,3 +24,7 @@ JSX.Element - The `CommunityProfile` component.
 ```tsx
 <CommunityProfile />
 ```
+
+## Defined in
+
+[src/screens/CommunityProfile/CommunityProfile.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/CommunityProfile/CommunityProfile.tsx#L40)

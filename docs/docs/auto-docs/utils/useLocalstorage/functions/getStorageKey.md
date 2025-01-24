@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,21 +6,15 @@
 
 > **getStorageKey**(`prefix`, `key`): `string`
 
-Defined in: [src/utils/useLocalstorage.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L19)
-
 Generates the prefixed key for storage.
 
 ## Parameters
 
-### prefix
-
-`string`
+• **prefix**: `string`
 
 Prefix to be added to the key, common for all keys.
 
-### key
-
-`string`
+• **key**: `string`
 
 The unique name identifying the value.
 
@@ -29,3 +23,7 @@ The unique name identifying the value.
 `string`
 
 - Prefixed key.
+
+## Defined in
+
+[src/utils/useLocalstorage.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L19)

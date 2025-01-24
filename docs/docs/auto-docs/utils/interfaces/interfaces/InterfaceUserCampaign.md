@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceUserCampaign
-
-Defined in: [src/utils/interfaces.ts:332](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L332)
 
 ## Properties
 
@@ -12,7 +10,9 @@ Defined in: [src/utils/interfaces.ts:332](https://github.com/PalisadoesFoundatio
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L333)
+#### Defined in
+
+[src/utils/interfaces.ts:333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L333)
 
 ***
 
@@ -20,7 +20,9 @@ Defined in: [src/utils/interfaces.ts:333](https://github.com/PalisadoesFoundatio
 
 > **currency**: `string`
 
-Defined in: [src/utils/interfaces.ts:338](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L338)
+#### Defined in
+
+[src/utils/interfaces.ts:338](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L338)
 
 ***
 
@@ -28,7 +30,9 @@ Defined in: [src/utils/interfaces.ts:338](https://github.com/PalisadoesFoundatio
 
 > **endDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L337)
+#### Defined in
+
+[src/utils/interfaces.ts:337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L337)
 
 ***
 
@@ -36,7 +40,9 @@ Defined in: [src/utils/interfaces.ts:337](https://github.com/PalisadoesFoundatio
 
 > **fundingGoal**: `number`
 
-Defined in: [src/utils/interfaces.ts:335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L335)
+#### Defined in
+
+[src/utils/interfaces.ts:335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L335)
 
 ***
 
@@ -44,7 +50,9 @@ Defined in: [src/utils/interfaces.ts:335](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L334)
+#### Defined in
+
+[src/utils/interfaces.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L334)
 
 ***
 
@@ -52,4 +60,6 @@ Defined in: [src/utils/interfaces.ts:334](https://github.com/PalisadoesFoundatio
 
 > **startDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L336)
+#### Defined in
+
+[src/utils/interfaces.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L336)

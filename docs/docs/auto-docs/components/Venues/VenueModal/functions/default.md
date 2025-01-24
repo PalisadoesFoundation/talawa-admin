@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`__namedParameters`): `Element`
-
-Defined in: [src/components/Venues/VenueModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L56)
 
 A modal component for creating or updating venue information.
 
@@ -15,9 +13,7 @@ It also handles submitting the form data to create or update a venue based on wh
 
 ## Parameters
 
-### \_\_namedParameters
-
-[`InterfaceVenueModalProps`](../interfaces/InterfaceVenueModalProps.md)
+• **\_\_namedParameters**: [`InterfaceVenueModalProps`](../interfaces/InterfaceVenueModalProps.md)
 
 ## Returns
 
@@ -41,3 +37,7 @@ class (e.g., .addButton) is now applied.
 - `.inputField`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/components/Venues/VenueModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueModal.tsx#L56)

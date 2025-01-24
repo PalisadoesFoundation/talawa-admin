@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,19 +6,13 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L48)
-
 A modal dialog for add a volunteer for an event.
 
 ## Parameters
 
-### props
+• **props**: [`InterfaceVolunteerCreateModal`](../interfaces/InterfaceVolunteerCreateModal.md)
 
-[`InterfaceVolunteerCreateModal`](../interfaces/InterfaceVolunteerCreateModal.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -45,3 +39,7 @@ On form submission, the component:
 - Calls `addVolunteer` mutation to add a new Volunteer.
 
 Success or error messages are displayed using toast notifications based on the result of the mutation.
+
+## Defined in
+
+[src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/VolunteerCreateModal.tsx#L48)

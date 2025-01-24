@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/RemoveUserTagModal.tsx#L37)
-
 ## Parameters
 
-### props
+• **props**: [`InterfaceRemoveUserTagModalProps`](../interfaces/InterfaceRemoveUserTagModalProps.md)
 
-[`InterfaceRemoveUserTagModalProps`](../interfaces/InterfaceRemoveUserTagModalProps.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/screens/ManageTag/RemoveUserTagModal.tsx:37](https://github.com
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/screens/ManageTag/RemoveUserTagModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/RemoveUserTagModal.tsx#L37)

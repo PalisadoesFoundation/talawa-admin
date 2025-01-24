@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/screens/OrgPost/OrgPost.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPost.tsx#L70)
 
 This function is used to display the posts of the organization. It displays the posts in a card format.
 It also provides the functionality to create a new post. The user can also sort the posts based on the date of creation.
@@ -36,3 +34,7 @@ class (e.g., .addButton) is now applied.
 - `.addButton`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/screens/OrgPost/OrgPost.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPost.tsx#L70)

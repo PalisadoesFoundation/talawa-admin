@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceItemUpdateStatusModalProps
-
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L31)
 
 ## CSS Strategy Explanation:
 
@@ -30,7 +28,9 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L35)
+#### Defined in
+
+[src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L35)
 
 ***
 
@@ -38,11 +38,13 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:35](h
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L34)
-
 #### Returns
 
 `void`
+
+#### Defined in
+
+[src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L34)
 
 ***
 
@@ -50,11 +52,13 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:34](h
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L33)
-
 #### Returns
 
 `void`
+
+#### Defined in
+
+[src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L33)
 
 ***
 
@@ -62,4 +66,6 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:33](h
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L32)
+#### Defined in
+
+[src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L32)

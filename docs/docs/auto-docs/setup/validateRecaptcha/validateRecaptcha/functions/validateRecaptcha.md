@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,14 +6,14 @@
 
 > **validateRecaptcha**(`string`): `boolean`
 
-Defined in: [src/setup/validateRecaptcha/validateRecaptcha.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/validateRecaptcha/validateRecaptcha.ts#L1)
-
 ## Parameters
 
-### string
-
-`string`
+• **string**: `string`
 
 ## Returns
 
 `boolean`
+
+## Defined in
+
+[src/setup/validateRecaptcha/validateRecaptcha.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/validateRecaptcha/validateRecaptcha.ts#L1)

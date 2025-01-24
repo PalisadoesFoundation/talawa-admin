@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: ORGANIZATION\_EVENTS\_CONNECTION
 
 > `const` **ORGANIZATION\_EVENTS\_CONNECTION**: `DocumentNode`
-
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L59)
 
 GraphQL query to retrieve a list of events based on organization connection.
 
@@ -37,3 +35,7 @@ Optional. Number of events to skip before starting to collect the result set.
 ## Returns
 
 The list of events associated with the organization based on the applied filters.
+
+## Defined in
+
+[src/GraphQl/Queries/PlugInQueries.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L59)

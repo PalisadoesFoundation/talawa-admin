@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: UPDATE\_PLEDGE
 
 > `const` **UPDATE\_PLEDGE**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L48)
 
 GraphQL mutation to update a pledge.
 
@@ -33,3 +31,7 @@ The end date of the pledge.
 ## Returns
 
 The ID of the updated pledge.
+
+## Defined in
+
+[src/GraphQl/Mutations/PledgeMutation.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L48)

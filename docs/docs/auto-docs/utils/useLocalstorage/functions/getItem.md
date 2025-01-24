@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,21 +6,15 @@
 
 > **getItem**(`prefix`, `key`): `any`
 
-Defined in: [src/utils/useLocalstorage.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L29)
-
 Retrieves the stored value for the given key from local storage.
 
 ## Parameters
 
-### prefix
-
-`string`
+• **prefix**: `string`
 
 Prefix to be added to the key, common for all keys.
 
-### key
-
-`string`
+• **key**: `string`
 
 The unique name identifying the value.
 
@@ -29,3 +23,7 @@ The unique name identifying the value.
 `any`
 
 - The stored value for the given key from local storage.
+
+## Defined in
+
+[src/utils/useLocalstorage.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L29)

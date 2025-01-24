@@ -1,18 +1,14 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceAttendeeQueryResponse
-
-Defined in: [src/components/CheckIn/types.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L16)
 
 ## Properties
 
 ### event
 
 > **event**: `object`
-
-Defined in: [src/components/CheckIn/types.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L17)
 
 #### \_id
 
@@ -21,3 +17,7 @@ Defined in: [src/components/CheckIn/types.ts:17](https://github.com/PalisadoesFo
 #### attendeesCheckInStatus
 
 > **attendeesCheckInStatus**: [`InterfaceAttendeeCheckIn`](InterfaceAttendeeCheckIn.md)[]
+
+#### Defined in
+
+[src/components/CheckIn/types.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L17)

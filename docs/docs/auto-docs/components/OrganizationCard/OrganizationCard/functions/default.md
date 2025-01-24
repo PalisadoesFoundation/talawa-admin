@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`__namedParameters`): `JSX.Element`
-
-Defined in: [src/components/OrganizationCard/OrganizationCard.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationCard/OrganizationCard.tsx#L73)
 
 Component to display an organization's card with its image and owner details.
 Displays an organization card with options to join or manage membership.
@@ -16,9 +14,7 @@ and provides buttons for joining, withdrawing membership requests, or visiting t
 
 ## Parameters
 
-### \_\_namedParameters
-
-`InterfaceOrganizationCardProps`
+• **\_\_namedParameters**: `InterfaceOrganizationCardProps`
 
 ## Returns
 
@@ -27,3 +23,7 @@ and provides buttons for joining, withdrawing membership requests, or visiting t
 JSX element representing the organization card.
 
 The organization card component.
+
+## Defined in
+
+[src/components/OrganizationCard/OrganizationCard.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationCard/OrganizationCard.tsx#L73)

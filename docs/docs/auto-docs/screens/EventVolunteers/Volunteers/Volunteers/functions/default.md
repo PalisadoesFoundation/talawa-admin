@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.tsx#L65)
 
 Component for managing and displaying event volunteers related to an event.
 
@@ -17,3 +15,7 @@ This component allows users to view, filter, sort, and create volunteers. It als
 `JSX.Element`
 
 The rendered component.
+
+## Defined in
+
+[src/screens/EventVolunteers/Volunteers/Volunteers.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.tsx#L65)

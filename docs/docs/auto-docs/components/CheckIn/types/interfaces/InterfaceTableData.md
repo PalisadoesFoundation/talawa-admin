@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceTableData
-
-Defined in: [src/components/CheckIn/types.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L40)
 
 ## Properties
 
@@ -12,7 +10,9 @@ Defined in: [src/components/CheckIn/types.ts:40](https://github.com/PalisadoesFo
 
 > **checkInData**: [`InterfaceTableCheckIn`](InterfaceTableCheckIn.md)
 
-Defined in: [src/components/CheckIn/types.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L43)
+#### Defined in
+
+[src/components/CheckIn/types.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L43)
 
 ***
 
@@ -20,7 +20,9 @@ Defined in: [src/components/CheckIn/types.ts:43](https://github.com/PalisadoesFo
 
 > **id**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L42)
+#### Defined in
+
+[src/components/CheckIn/types.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L42)
 
 ***
 
@@ -28,4 +30,6 @@ Defined in: [src/components/CheckIn/types.ts:42](https://github.com/PalisadoesFo
 
 > **userName**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L41)
+#### Defined in
+
+[src/components/CheckIn/types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L41)

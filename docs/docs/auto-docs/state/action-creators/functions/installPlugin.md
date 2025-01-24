@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,13 +6,9 @@
 
 > **installPlugin**(`plugin`): (`dispatch`) => `void`
 
-Defined in: [src/state/action-creators/index.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/action-creators/index.ts#L10)
-
 ## Parameters
 
-### plugin
-
-`any`
+• **plugin**: `any`
 
 ## Returns
 
@@ -20,10 +16,12 @@ Defined in: [src/state/action-creators/index.ts:10](https://github.com/Palisadoe
 
 ### Parameters
 
-#### dispatch
-
-`any`
+• **dispatch**: `any`
 
 ### Returns
 
 `void`
+
+## Defined in
+
+[src/state/action-creators/index.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/action-creators/index.ts#L10)

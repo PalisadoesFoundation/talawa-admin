@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,14 +6,14 @@
 
 > **getWeekDayOccurenceInMonth**(`date`): `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L126)
-
 ## Parameters
 
-### date
-
-`Date`
+• **date**: `Date`
 
 ## Returns
 
 `number`
+
+## Defined in
+
+[src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L126)

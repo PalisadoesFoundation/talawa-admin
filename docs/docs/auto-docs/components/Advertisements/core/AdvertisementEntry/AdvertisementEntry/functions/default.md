@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,16 +6,12 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L49)
-
 Component for displaying an advertisement entry.
 Allows viewing, editing, and deleting of the advertisement.
 
 ## Parameters
 
-### props
-
-`InterfaceAddOnEntryProps`
+• **props**: `InterfaceAddOnEntryProps`
 
 Component properties
 
@@ -42,3 +38,7 @@ class (e.g., .addButton) is now applied.
 - `.removeButton`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L49)

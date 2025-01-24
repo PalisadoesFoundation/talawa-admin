@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Type Alias: Chat
 
 > **Chat**: `object`
-
-Defined in: [src/screens/UserPortal/Chat/Chat.tsx:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Chat/Chat.tsx#L87)
 
 ## Type declaration
 
@@ -37,3 +35,7 @@ Defined in: [src/screens/UserPortal/Chat/Chat.tsx:87](https://github.com/Palisad
 ### users
 
 > **users**: `object`[]
+
+## Defined in
+
+[src/screens/UserPortal/Chat/Chat.tsx:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Chat/Chat.tsx#L87)

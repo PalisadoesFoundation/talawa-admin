@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
-
-Defined in: [src/components/EventCalendar/YearlyEventCalender.tsx:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalendar/YearlyEventCalender.tsx#L95)
 
 Calendar component to display events for a selected year.
 
@@ -15,13 +13,9 @@ It displays events for each day, with functionality to expand and view details o
 
 ## Parameters
 
-### props
+• **props**: `InterfaceCalendarProps`
 
-`InterfaceCalendarProps`
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -34,3 +28,7 @@ It displays events for each day, with functionality to expand and view details o
 `ReactNode`
 
 JSX.Element - The rendered calendar component.
+
+## Defined in
+
+[src/components/EventCalendar/YearlyEventCalender.tsx:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalendar/YearlyEventCalender.tsx#L95)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,19 +6,13 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventRegistrantsModal/AddOnSpotAttendee.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/AddOnSpotAttendee.tsx#L21)
-
 Modal component for adding on-spot attendees to an event
 
 ## Parameters
 
-### props
+• **props**: [`InterfaceAddOnSpotAttendeeProps`](../../../../utils/interfaces/interfaces/InterfaceAddOnSpotAttendeeProps.md)
 
-[`InterfaceAddOnSpotAttendeeProps`](../../../../utils/interfaces/interfaces/InterfaceAddOnSpotAttendeeProps.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -31,3 +25,7 @@ Modal component for adding on-spot attendees to an event
 `ReactNode`
 
 Modal component with form for adding new attendee
+
+## Defined in
+
+[src/components/EventRegistrantsModal/AddOnSpotAttendee.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/AddOnSpotAttendee.tsx#L21)

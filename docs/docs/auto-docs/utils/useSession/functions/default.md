@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `UseSessionReturnType`
-
-Defined in: [src/utils/useSession.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useSession.tsx#L30)
 
 Custom hook for managing user session timeouts in a React application.
 
@@ -22,3 +20,7 @@ This hook handles:
 `UseSessionReturnType`
 
 UseSessionReturnType - An object with methods to start and end the session, and to handle logout.
+
+## Defined in
+
+[src/utils/useSession.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useSession.tsx#L30)
