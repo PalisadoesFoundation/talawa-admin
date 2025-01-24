@@ -456,7 +456,7 @@ function organizationPeople(): JSX.Element {
                 borderBottom: 'none', // Removes the bottom border of the header
               },
               '& .MuiDataGrid-row:hover': {
-                backgroundColor: 'var(--grey-bg-color)', // Changes hover color to blue
+                backgroundColor: 'var(--org-people-hover-blue)', // Changes hover color to blue
               },
             }}
             getRowClassName={() => `${styles.rowBackground}`}
