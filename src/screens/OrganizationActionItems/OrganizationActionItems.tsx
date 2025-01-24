@@ -367,7 +367,7 @@ function organizationActionItems(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} `}>
+        <div className={`${styles.input}`}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -443,7 +443,7 @@ function organizationActionItems(): JSX.Element {
             <Button
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
-              className={styles.createButton}
+              className={`mt-2 ${styles.actionsButton}`}
               data-testid="createActionItemBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -456,36 +456,29 @@ function organizationActionItems(): JSX.Element {
       {/* Table with Action Items */}
       <DataGrid
         disableColumnMenu
+        disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
         getRowId={(row) => row._id}
+        sx={{
+          backgroundColor: 'white',
+          borderRadius: '16px',
+          '& .MuiDataGrid-columnHeaders': {
+            border: 'none',
+          },
+          '& .MuiDataGrid-cell': {
+            border: 'none',
+          },
+          '& .MuiDataGrid-columnSeparator': {
+            display: 'none',
+          },
+        }}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
               {t('noActionItems')}
             </Stack>
           ),
-        }}
-        sx={{
-          borderRadius: 'var(--table-head-radius)',
-          backgroundColor: 'var(--grey-bg-color)',
-          '& .MuiDataGrid-cell': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-cell:focus': {
-            outline: 'none',
-            outlineOffset: '-2px',
-          },
-          '& .MuiDataGrid-cell:focus-within': {
-            outline: 'none',
-            outlineOffset: '-2px',
-          },
-          '& .MuiDataGrid-row': {
-            backgroundColor: 'var(--tablerow-bg-color)',
-            '&:focus-within': {
-              outline: 'none',
-            },
-          },
         }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
