@@ -218,6 +218,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
 
+  const handleTodayButton = (): void => {
+    setCurrentYear(today.getFullYear());
+    setCurrentMonth(today.getMonth());
+    setCurrentDate(today.getDate());
+  };
+
   const timezoneString = `UTC${
     new Date().getTimezoneOffset() > 0 ? '-' : '+'
   }${String(Math.floor(Math.abs(new Date().getTimezoneOffset()) / 60)).padStart(
@@ -238,10 +244,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       events
         ?.filter((datas) => {
           const currDate = new Date(currentYear, currentMonth, currentDate);
-          if (
-            datas.startTime == undefined &&
-            datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
-          ) {
+          if (datas.startDate == dayjs(currDate).format('YYYY-MM-DD')) {
             return datas;
           }
         })
@@ -280,12 +283,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           );
         }) || [];
 
-    const shouldShowViewMore = useMemo(() => {
-      return (
-        allDayEventsList.length > 2 ||
-        (windowWidth <= 700 && allDayEventsList.length > 0)
-      );
-    }, [allDayEventsList.length, windowWidth]);
+    const shouldShowViewMore =
+      allDayEventsList.length > 2 ||
+      (windowWidth <= 700 && allDayEventsList.length > 0);
 
     const handleExpandClick: () => void = () => {
       toggleExpand(-100);
@@ -293,7 +293,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
     return (
       <>
-        <div className={styles.calendar_hour_block}>
+        <div className={styles.calendar_hour_block} data-testid="hour">
           <div className={styles.calendar_hour_text_container}>
             <p className={styles.calendar_timezone_text}>{timezoneString}</p>
           </div>
@@ -557,9 +557,18 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               <ChevronRight />
             </Button>
           </div>
+          <div>
+            <Button
+              className={styles.editButton}
+              onClick={handleTodayButton}
+              data-testid="today"
+            >
+              Today
+            </Button>
+          </div>
         </div>
       )}
-      <div className={`${styles.calendar__scroll} customScroll`}>
+      <div>
         {viewType == ViewType.MONTH ? (
           <>
             <div className={styles.calendar__weekdays}>
@@ -572,14 +581,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <div className={styles.calendar__days}>{renderDays()}</div>
           </>
         ) : viewType == ViewType.YEAR ? (
-          <YearlyEventCalender eventData={eventData} />
-        ) : (
-          <div className={styles.calendar__hours}>{renderHours()}</div>
-        )}
-      </div>
-
-      <div>
-        {viewType == ViewType.YEAR ? (
           <YearlyEventCalender eventData={eventData} />
         ) : (
           <div className={styles.calendar__hours}>{renderHours()}</div>
