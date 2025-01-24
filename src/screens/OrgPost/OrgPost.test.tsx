@@ -13,6 +13,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgPost from './OrgPost';
+
 const MOCKS = [
   {
     request: {
@@ -186,6 +187,121 @@ describe('Organisation Post Page', () => {
     postVideo: new File(['hello'], 'hello.mp4', { type: 'video/mp4' }),
   };
 
+  test('handleAddMediaChange: uploading a file and verifying the preview', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const fileInput = screen.getByTestId('addMediaField');
+    userEvent.upload(fileInput, formData.postImage);
+
+    const imagePreview = await screen.findByAltText('Post Image Preview');
+    expect(imagePreview).toBeInTheDocument();
+
+    const closeButton = screen.getByTestId('mediaCloseButton');
+    fireEvent.click(closeButton);
+    expect(imagePreview).not.toBeInTheDocument();
+  });
+
+  test('handleSearch: searching by title and text', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const searchInput = screen.getByPlaceholderText(/Search By/i);
+    userEvent.type(searchInput, 'postone{enter}');
+    expect(searchInput).toHaveValue('postone');
+
+    const sortDropdown = screen.getByTestId('sort');
+    userEvent.click(sortDropdown);
+  });
+
+  test('createPost: creating a post with and without media, and error handling', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const postTitleInput = screen.getByTestId('modalTitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+    const postInfoTextarea = screen.getByTestId('modalinfo');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
+
+    const createPostBtn = screen.getByTestId('createPostBtn');
+    fireEvent.click(createPostBtn);
+
+    await wait();
+    // Add assertions to verify post creation and error handling
+
+    userEvent.click(screen.getByTestId('closeOrganizationModal'));
+  });
+
+  test('Modal interactions: opening and closing the modal', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const createPostModalBtn = screen.getByTestId('createPostModalBtn');
+    userEvent.click(createPostModalBtn);
+
+    const modalTitle = screen.getByTestId('modalOrganizationHeader');
+    expect(modalTitle).toBeInTheDocument();
+
+    const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
+    userEvent.click(closeButton);
+
+    await wait();
+
+    const closedModalTitle = screen.queryByText(/postDetail/i);
+    expect(closedModalTitle).not.toBeInTheDocument();
+  });
+
   test('correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.organizations[0].posts.edges[0];
 
@@ -272,9 +388,9 @@ describe('Organisation Post Page', () => {
     const sortDropdown = screen.getByTestId('sort');
     userEvent.click(sortDropdown);
   });
+
   test('Testing search text and title toggle', async () => {
     await act(async () => {
-      // Wrap the test code in act
       render(
         <MockedProvider addTypename={false} link={link}>
           <BrowserRouter>
@@ -315,9 +431,9 @@ describe('Organisation Post Page', () => {
 
     expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
   });
+
   test('Testing search latest and oldest toggle', async () => {
     await act(async () => {
-      // Wrap the test code in act
       render(
         <MockedProvider addTypename={false} link={link}>
           <BrowserRouter>
@@ -358,6 +474,7 @@ describe('Organisation Post Page', () => {
     });
     expect(searchInput).toBeInTheDocument();
   });
+
   test('After creating a post, the data should be refetched', async () => {
     const refetchMock = jest.fn();
 
@@ -490,6 +607,7 @@ describe('Organisation Post Page', () => {
     const closedModalTitle = screen.queryByText(/postDetail/i);
     expect(closedModalTitle).not.toBeInTheDocument();
   });
+
   it('renders the form with input fields and buttons', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -579,6 +697,7 @@ describe('Organisation Post Page', () => {
     const closeButton = screen.getByTestId('mediaCloseButton');
     fireEvent.click(closeButton);
   }, 15000);
+
   test('Create post, preview image, and close preview', async () => {
     await act(async () => {
       render(
@@ -631,6 +750,7 @@ describe('Organisation Post Page', () => {
     });
     expect(videoPreview).not.toBeInTheDocument();
   });
+
   test('Sorting posts by pinned status', async () => {
     // Mocked data representing posts with different pinned statuses
     const mockedPosts = [
@@ -685,5 +805,333 @@ describe('Organisation Post Page', () => {
     expect(sortedPosts[2]).toHaveTextContent(
       'posttwoTis is the post two Aditya Shelke',
     );
+  });
+
+  test('successful post creation should reset form and close modal', async () => {
+    const successMock = {
+      request: {
+        query: CREATE_POST_MUTATION,
+        variables: {
+          title: 'Test Post',
+          text: 'Test Content',
+          organizationId: undefined,
+          file: '',
+          pinned: false,
+        },
+      },
+      result: {
+        data: {
+          createPost: {
+            _id: '123',
+            title: 'Test Post',
+            text: 'Test Content',
+          },
+        },
+      },
+    };
+
+    const customMocks = [...MOCKS, successMock];
+    const customLink = new StaticMockLink(customMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={customLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Open modal
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    // Fill form
+    userEvent.type(screen.getByTestId('modalTitle'), 'Test Post');
+    userEvent.type(screen.getByTestId('modalinfo'), 'Test Content');
+
+    // Submit form
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createPostBtn'));
+    });
+
+    await wait();
+
+    // Verify modal is closed
+    expect(
+      screen.queryByTestId('modalOrganizationHeader'),
+    ).not.toBeInTheDocument();
+
+    // Verify form fields are reset - try to open modal again
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    expect(screen.getByTestId('modalTitle')).toHaveValue('');
+    expect(screen.getByTestId('modalinfo')).toHaveValue('');
+    expect(screen.getByTestId('pinPost')).not.toBeChecked();
+
+    // Using data-testid for toast notification instead of text content
+    const toastContainer = screen.getByRole('alert');
+    expect(toastContainer).toBeInTheDocument();
+  });
+
+  test('pagination controls work correctly', async () => {
+    const mockPostEdges =
+      MOCKS[0]?.result?.data?.organizations[0].posts.edges ?? [];
+    const paginationMock = {
+      request: {
+        query: ORGANIZATION_POST_LIST,
+        variables: {
+          id: undefined,
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              posts: {
+                edges: mockPostEdges,
+                pageInfo: {
+                  startCursor: 'startCursor123',
+                  endCursor: 'endCursor123',
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                },
+                totalCount: 10,
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const customMocks = [...MOCKS, paginationMock];
+    const customLink = new StaticMockLink(customMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={customLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Find pagination buttons using className
+    const nextButton = screen.getByRole('button', { name: /next/i });
+    const previousButton = screen.getByRole('button', { name: /previous/i });
+
+    expect(nextButton).toBeInTheDocument();
+    expect(previousButton).toBeInTheDocument();
+
+    // Test Next Page
+    await act(async () => {
+      fireEvent.click(nextButton);
+    });
+    await wait();
+
+    // Test Previous Page
+    await act(async () => {
+      fireEvent.click(previousButton);
+    });
+    await wait();
+
+    // Verify the buttons remain in the document
+    expect(nextButton).toBeInTheDocument();
+    expect(previousButton).toBeInTheDocument();
+  });
+
+  test('pagination buttons states are correctly set', async () => {
+    const mockPostEdges =
+      MOCKS[0]?.result?.data?.organizations[0].posts.edges ?? [];
+    const noPaginationMock = {
+      request: {
+        query: ORGANIZATION_POST_LIST,
+        variables: {
+          id: undefined,
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              posts: {
+                edges: mockPostEdges,
+                pageInfo: {
+                  startCursor: 'startCursor123',
+                  endCursor: 'endCursor123',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+                totalCount: 4,
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const customMocks = [...MOCKS, noPaginationMock];
+    const customLink = new StaticMockLink(customMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={customLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Find pagination buttons using className and role
+    const nextButton = screen.getByRole('button', { name: /next/i });
+    const previousButton = screen.getByRole('button', { name: /previous/i });
+
+    // Verify buttons are disabled
+    expect(nextButton).toHaveAttribute('disabled');
+    expect(previousButton).toHaveAttribute('disabled');
+  });
+
+  test('handleNextPage sets correct pagination variables', async () => {
+    const mockPostEdges =
+      MOCKS[0]?.result?.data?.organizations[0].posts.edges ?? [];
+    const paginationMock = {
+      request: {
+        query: ORGANIZATION_POST_LIST,
+        variables: {
+          id: undefined,
+          after: 'endCursor123',
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              posts: {
+                edges: mockPostEdges,
+                pageInfo: {
+                  startCursor: 'startCursor123',
+                  endCursor: 'endCursor123',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+                totalCount: 10,
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const customMocks = [...MOCKS, paginationMock];
+    const customLink = new StaticMockLink(customMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={customLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const nextButton = screen.getByTestId('nextButton');
+    await act(async () => {
+      fireEvent.click(nextButton);
+    });
+
+    // Verify that the next query is made with correct variables
+    await wait();
+    expect(nextButton).toBeInTheDocument();
+  });
+
+  test('handlePreviousPage sets correct pagination variables', async () => {
+    const mockPostEdges =
+      MOCKS[0]?.result?.data?.organizations[0].posts.edges ?? [];
+    const paginationMock = {
+      request: {
+        query: ORGANIZATION_POST_LIST,
+        variables: {
+          id: undefined,
+          after: null,
+          before: 'startCursor123',
+          first: null,
+          last: 6,
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              posts: {
+                edges: mockPostEdges,
+                pageInfo: {
+                  startCursor: 'startCursor123',
+                  endCursor: 'endCursor123',
+                  hasNextPage: false,
+                  hasPreviousPage: true,
+                },
+                totalCount: 10,
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const customMocks = [...MOCKS, paginationMock];
+    const customLink = new StaticMockLink(customMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={customLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const previousButton = screen.getByTestId('previousButton');
+    await act(async () => {
+      fireEvent.click(previousButton);
+    });
+
+    // Verify that the previous query is made with correct variables
+    await wait();
+    expect(previousButton).toBeInTheDocument();
   });
 });

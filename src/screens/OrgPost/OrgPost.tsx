@@ -167,7 +167,6 @@ function orgPost(): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('postCreatedSuccess') as string);
         refetch();
@@ -273,7 +272,7 @@ function orgPost(): JSX.Element {
     if (a.pinned === b.pinned) {
       return 0;
     }
-    /* istanbul ignore next */
+
     if (a.pinned) {
       return -1;
     }
@@ -380,6 +379,7 @@ function orgPost(): JSX.Element {
                 !orgPostListData?.organizations[0].posts.pageInfo
                   .hasPreviousPage
               }
+              data-testid="previousButton"
             >
               {t('Previous')}
             </Button>
@@ -391,6 +391,7 @@ function orgPost(): JSX.Element {
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
               }
+              data-testid="nextButton"
             >
               {t('Next')}
             </Button>
