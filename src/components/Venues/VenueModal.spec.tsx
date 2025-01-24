@@ -640,67 +640,172 @@ describe('VenueModal', () => {
       });
     });
 
+    test('handles "alreadyExists" error specifically', async () => {
+      const duplicateNameMock = {
+        request: {
+          query: CREATE_VENUE_MUTATION,
+          variables: {
+            name: 'Duplicate Venue',
+            description: 'Test Description',
+            capacity: 100,
+            organizationId: 'orgId',
+            file: '',
+          },
+        },
+        error: new Error('alreadyExists'),
+      };
+
+      renderVenueModal(
+        defaultProps,
+        new StaticMockLink([duplicateNameMock], true),
+      );
+
+      await act(async () => {
+        await userEvent.type(
+          screen.getByPlaceholderText('Enter Venue Name'),
+          'Duplicate Venue',
+        );
+        await userEvent.type(
+          screen.getByPlaceholderText('Enter Venue Description'),
+          'Test Description',
+        );
+        await userEvent.type(
+          screen.getByPlaceholderText('Enter Venue Capacity'),
+          '100',
+        );
+        fireEvent.click(screen.getByTestId('createVenueBtn'));
+      });
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'organizationVenues.venueNameExists',
+        );
+      });
+    });
+
     // Cleanup Tests
     describe('Cleanup', () => {
-      test('resets form state when modal is closed and reopened', async () => {
-        const { rerender } = renderVenueModal(
-          defaultProps,
-          new StaticMockLink(MOCKS, true),
-        );
-        // Fill in form
+      test('handles mutation errors with custom error messages', async () => {
+        const errorMock = {
+          request: {
+            query: CREATE_VENUE_MUTATION,
+            variables: {
+              name: 'Test Venue',
+              description: 'Test Description',
+              capacity: 100,
+              organizationId: 'orgId',
+              file: '',
+            },
+          },
+          error: new Error('Custom error message'),
+        };
+
+        renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
+
         await act(async () => {
-          const nameInput = screen.getByPlaceholderText('Enter Venue Name');
-          const descInput = screen.getByPlaceholderText(
-            'Enter Venue Description',
+          await userEvent.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
           );
-          const capInput = screen.getByPlaceholderText('Enter Venue Capacity');
-
-          await userEvent.type(nameInput, 'Test Venue');
-          await userEvent.type(descInput, 'Test Description');
-          await userEvent.type(capInput, '100');
-
-          // Verify values were set
-          expect(nameInput).toHaveValue('Test Venue');
-          expect(descInput).toHaveValue('Test Description');
-          expect(capInput).toHaveValue('100');
-        });
-
-        // Completely unmount by setting show to false
-        await act(async () => {
-          rerender(
-            <MockedProvider
-              addTypename={false}
-              link={new StaticMockLink(MOCKS, true)}
-            >
-              <BrowserRouter>
-                <Provider store={store}>
-                  <I18nextProvider i18n={i18nForTest}>
-                    <VenueModal {...defaultProps} show={false} />
-                  </I18nextProvider>
-                </Provider>
-              </BrowserRouter>
-            </MockedProvider>,
+          await userEvent.type(
+            screen.getByPlaceholderText('Enter Venue Description'),
+            'Test Description',
           );
-          await wait(100); // Give time for unmount
+          await userEvent.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          fireEvent.click(screen.getByTestId('createVenueBtn'));
         });
-
-        // Mount fresh component
-        renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
         await waitFor(() => {
-          const newNameInput = screen.getByPlaceholderText('Enter Venue Name');
-          const newDescInput = screen.getByPlaceholderText(
-            'Enter Venue Description',
-          );
-          const newCapInput = screen.getByPlaceholderText(
-            'Enter Venue Capacity',
-          );
-
-          // Check if inputs are empty in new instance
-          expect(newNameInput).toHaveValue('');
-          expect(newDescInput).toHaveValue('');
-          expect(newCapInput).toHaveValue('');
+          expect(toast.error).toHaveBeenCalled();
         });
+      });
+
+      test('handles unexpected mutation errors', async () => {
+        const errorMock = {
+          request: {
+            query: UPDATE_VENUE_MUTATION,
+            variables: {
+              id: 'venue1',
+              capacity: 100,
+              description: 'Test Description',
+              file: 'image1',
+            },
+          },
+          error: new Error('Unexpected error'),
+        };
+
+        renderVenueModal(editProps, new StaticMockLink([errorMock], true));
+
+        await act(async () => {
+          fireEvent.click(screen.getByTestId('updateVenueBtn'));
+        });
+
+        await waitFor(() => {
+          expect(toast.error).toHaveBeenCalled();
+        });
+      });
+    });
+
+    // Form State Management
+    test('resets form state when modal is closed and reopened', async () => {
+      const { rerender } = renderVenueModal(
+        defaultProps,
+        new StaticMockLink(MOCKS, true),
+      );
+
+      // Fill in form
+      await act(async () => {
+        const nameInput = screen.getByPlaceholderText('Enter Venue Name');
+        const descInput = screen.getByPlaceholderText(
+          'Enter Venue Description',
+        );
+        const capInput = screen.getByPlaceholderText('Enter Venue Capacity');
+
+        await userEvent.type(nameInput, 'Test Venue');
+        await userEvent.type(descInput, 'Test Description');
+        await userEvent.type(capInput, '100');
+
+        expect(nameInput).toHaveValue('Test Venue');
+        expect(descInput).toHaveValue('Test Description');
+        expect(capInput).toHaveValue('100');
+      });
+
+      // Completely unmount by setting show to false
+      await act(async () => {
+        rerender(
+          <MockedProvider
+            addTypename={false}
+            link={new StaticMockLink(MOCKS, true)}
+          >
+            <BrowserRouter>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <VenueModal {...defaultProps} show={false} />
+                </I18nextProvider>
+              </Provider>
+            </BrowserRouter>
+          </MockedProvider>,
+        );
+        await wait(100);
+      });
+
+      // Mount fresh component
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+      await waitFor(() => {
+        const newNameInput = screen.getByPlaceholderText('Enter Venue Name');
+        const newDescInput = screen.getByPlaceholderText(
+          'Enter Venue Description',
+        );
+        const newCapInput = screen.getByPlaceholderText('Enter Venue Capacity');
+
+        // Check if inputs are empty in new instance
+        expect(newNameInput).toHaveValue('');
+        expect(newDescInput).toHaveValue('');
+        expect(newCapInput).toHaveValue('');
       });
     });
     describe('VenueModal Additional Tests', () => {
@@ -737,7 +842,7 @@ describe('VenueModal', () => {
       // Image Handling Edge Cases
       describe('Image Handling Edge Cases', () => {
         // In VenueModal.spec.tsx
-        test('handles file input change with multiple files selected', async () => {
+        test('handles multiple files selected in image upload', async () => {
           renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
           const fileInput = screen.getByTestId('venueImgUrl');
           const files = [
@@ -752,10 +857,216 @@ describe('VenueModal', () => {
           // Should only use the first file
           expect(screen.getAllByAltText('Venue Image Preview')).toHaveLength(1);
         });
-      });
 
-      // Validation Edge Cases
-      describe('Validation Edge Cases', () => {
+        // Validation Edge Cases
+        describe('Validation Edge Cases', () => {
+          test('handles empty venue name', async () => {
+            renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              {
+                target: { value: '100' },
+              },
+            );
+
+            await act(async () => {
+              fireEvent.click(screen.getByTestId('createVenueBtn'));
+            });
+
+            await waitFor(() => {
+              expect(toast.error).toHaveBeenCalledWith(
+                'Venue title cannot be empty!',
+              );
+            });
+          });
+
+          test('handles empty description', async () => {
+            const createVenueMock = {
+              request: {
+                query: CREATE_VENUE_MUTATION,
+                variables: {
+                  name: 'Test Venue',
+                  description: '',
+                  capacity: 100,
+                  organizationId: 'orgId',
+                  file: '',
+                },
+              },
+              result: {
+                data: {
+                  createVenue: {
+                    _id: 'newVenue',
+                  },
+                },
+              },
+            };
+
+            const mockLink = new StaticMockLink([createVenueMock], true);
+
+            renderVenueModal(defaultProps, mockLink);
+
+            await act(async () => {
+              await userEvent.type(
+                screen.getByPlaceholderText('Enter Venue Name'),
+                'Test Venue',
+              );
+              await userEvent.type(
+                screen.getByPlaceholderText('Enter Venue Capacity'),
+                '100',
+              );
+              fireEvent.click(screen.getByTestId('createVenueBtn'));
+            });
+
+            await waitFor(() => {
+              expect(toast.success).toHaveBeenCalledWith(
+                'organizationVenues.venueCreated',
+              );
+            });
+          });
+
+          test('handles null imageURL', async () => {
+            const createVenueMock = {
+              request: {
+                query: CREATE_VENUE_MUTATION,
+                variables: {
+                  name: 'Test Venue',
+                  description: 'Test Description',
+                  capacity: 100,
+                  organizationId: 'orgId',
+                  file: '', // Explicitly passing empty string
+                },
+              },
+              result: {
+                data: {
+                  createVenue: {
+                    _id: 'newVenue',
+                  },
+                },
+              },
+            };
+
+            renderVenueModal(
+              {
+                ...defaultProps,
+                venueData: {
+                  _id: 'testVenue',
+                  name: 'Test Venue',
+                  description: 'Test Description',
+                  capacity: '100',
+                  image: null, // Null image
+                },
+              },
+              new StaticMockLink([createVenueMock], true),
+            );
+
+            await act(async () => {
+              fireEvent.click(screen.getByTestId('createVenueBtn'));
+            });
+
+            await waitFor(() => {
+              expect(toast.success).toHaveBeenCalledWith(
+                'organizationVenues.venueCreated',
+              );
+            });
+          });
+
+          test('handles empty image URL', async () => {
+            const createVenueMock = {
+              request: {
+                query: CREATE_VENUE_MUTATION,
+                variables: {
+                  name: 'Test Venue',
+                  description: 'Test Description',
+                  capacity: 100,
+                  organizationId: 'orgId',
+                  file: '',
+                },
+              },
+              result: {
+                data: {
+                  createVenue: {
+                    _id: 'newVenue',
+                  },
+                },
+              },
+            };
+
+            const mockLink = new StaticMockLink([createVenueMock], true);
+
+            renderVenueModal(defaultProps, mockLink);
+
+            await act(async () => {
+              await userEvent.type(
+                screen.getByPlaceholderText('Enter Venue Name'),
+                'Test Venue',
+              );
+              await userEvent.type(
+                screen.getByPlaceholderText('Enter Venue Description'),
+                'Test Description',
+              );
+              await userEvent.type(
+                screen.getByPlaceholderText('Enter Venue Capacity'),
+                '100',
+              );
+              fireEvent.click(screen.getByTestId('createVenueBtn'));
+            });
+
+            await waitFor(() => {
+              expect(toast.success).toHaveBeenCalledWith(
+                'organizationVenues.venueCreated',
+              );
+            });
+          });
+
+          // Test for fallback error message when venue name already exists
+          test('uses fallback error message when venue name exists', async () => {
+            const duplicateNameMock = {
+              request: {
+                query: CREATE_VENUE_MUTATION,
+                variables: {
+                  name: 'Duplicate Venue',
+                  description: 'Test Description',
+                  capacity: 100,
+                  organizationId: 'orgId',
+                  file: '',
+                },
+              },
+              error: new Error('alreadyExists'),
+            };
+
+            const mockLink = new StaticMockLink([duplicateNameMock], true);
+
+            // Mock toast.error to check the exact message
+            const toastErrorSpy = vi.spyOn(toast, 'error');
+
+            renderVenueModal(defaultProps, mockLink);
+
+            await act(async () => {
+              await userEvent.type(
+                screen.getByPlaceholderText('Enter Venue Name'),
+                'Duplicate Venue',
+              );
+              await userEvent.type(
+                screen.getByPlaceholderText('Enter Venue Description'),
+                'Test Description',
+              );
+              await userEvent.type(
+                screen.getByPlaceholderText('Enter Venue Capacity'),
+                '100',
+              );
+              fireEvent.click(screen.getByTestId('createVenueBtn'));
+            });
+
+            await waitFor(() => {
+              // Check that the error was called with either the translated message or the fallback
+              expect(toastErrorSpy).toHaveBeenCalledWith(
+                expect.stringMatching('organizationVenues.venueNameExists'),
+              );
+            });
+          });
+        });
+
         test('handles special characters in venue name', async () => {
           renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
           const nameInput = screen.getByPlaceholderText('Enter Venue Name');
@@ -791,6 +1102,151 @@ describe('VenueModal', () => {
 
       // Error Boundary Tests
       describe('Error Handling', () => {
+        test('handles image upload with no files', async () => {
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          const fileInput = screen.getByTestId('venueImgUrl');
+
+          await act(async () => {
+            // Simulate file input event with no files
+            fireEvent.change(fileInput, { target: { files: null } });
+          });
+
+          // Verify that the form state remains unchanged
+          expect(screen.getByPlaceholderText('Enter Venue Name')).toHaveValue(
+            '',
+          );
+        });
+
+        test('handles empty description with trim and empty image URL', async () => {
+          const createVenueMock = {
+            request: {
+              query: CREATE_VENUE_MUTATION,
+              variables: {
+                name: 'Test Venue',
+                description: '',
+                capacity: 100,
+                organizationId: 'orgId',
+                file: '',
+              },
+            },
+            result: {
+              data: {
+                createVenue: {
+                  _id: 'newVenue',
+                },
+              },
+            },
+          };
+
+          renderVenueModal(
+            defaultProps,
+            new StaticMockLink([createVenueMock], true),
+          );
+
+          await act(async () => {
+            await userEvent.type(
+              screen.getByPlaceholderText('Enter Venue Name'),
+              'Test Venue',
+            );
+            await userEvent.type(
+              screen.getByPlaceholderText('Enter Venue Description'),
+              '   ', // Only whitespace
+            );
+            await userEvent.type(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              '100',
+            );
+            fireEvent.click(screen.getByTestId('createVenueBtn'));
+          });
+
+          await waitFor(() => {
+            expect(toast.success).toHaveBeenCalled();
+          });
+        });
+
+        test('handles empty image URL during venue update', async () => {
+          const updateMock = {
+            request: {
+              query: UPDATE_VENUE_MUTATION,
+              variables: {
+                id: 'venue1',
+                name: 'Updated Venue',
+                capacity: 100,
+                description: '',
+                file: '',
+              },
+            },
+            result: {
+              data: {
+                editVenue: {
+                  _id: 'venue1',
+                },
+              },
+            },
+          };
+
+          renderVenueModal(
+            {
+              ...editProps,
+              venueData: {
+                _id: 'venue1',
+                name: 'Original Venue',
+                description: '',
+                image: '',
+                capacity: '100',
+              },
+            },
+            new StaticMockLink([updateMock], true),
+          );
+
+          await act(async () => {
+            fireEvent.change(screen.getByDisplayValue('Original Venue'), {
+              target: { value: 'Updated Venue' },
+            });
+            fireEvent.click(screen.getByTestId('updateVenueBtn'));
+          });
+
+          await waitFor(() => {
+            expect(toast.success).toHaveBeenCalledWith(
+              'Venue details updated successfully',
+            );
+          });
+        });
+
+        test('handles form submission with undefined venueData in edit mode', async () => {
+          const editPropsWithUndefinedVenueData = {
+            ...editProps,
+            venueData: undefined,
+          };
+
+          const mockLink = new StaticMockLink(MOCKS, true);
+          renderVenueModal(editPropsWithUndefinedVenueData, mockLink);
+
+          // Attempt to submit form
+          await act(async () => {
+            fireEvent.click(screen.getByTestId('updateVenueBtn'));
+          });
+
+          // This test ensures no runtime errors occur
+          expect(screen.getByTestId('updateVenueBtn')).toBeInTheDocument();
+        });
+
+        test('handles description truncation', async () => {
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          const descInput = screen.getByPlaceholderText(
+            'Enter Venue Description',
+          );
+
+          const longDescription = 'a'.repeat(600); // More than 500 characters
+
+          await act(async () => {
+            await userEvent.type(descInput, longDescription);
+          });
+
+          // Verify that the description is truncated to 500 characters
+          expect(descInput).toHaveValue(longDescription.slice(0, 500));
+        });
+
         test('handles mutation errors with custom error messages', async () => {
           const errorMock = {
             request: {
