@@ -60,11 +60,10 @@
   --loader-color: #febc59;
 
   /* Miscellaneous */
-  --brown-color: #555555;
+  --davys-grey: #555555;
   --blue-color: #0000ff;
   --light-blue-color: #286fe0;
   --dimp-white: #b5b5b5;
-  --gray-blue: #1e293b;
   --gray-white: #808080;
   --dropdown-hover-color: #eff1f7;
   --grey-bg-color: #eaebef;
@@ -80,7 +79,6 @@
   --black-color: #000000;
   --black-shadow-color: #00000029;
   --white-shadow-color: #ffffff33;
-  --light-dark-gray-color: #505050;
   --light-orange: #febc59;
   --grey-border-box-color: #e8e5e5;
   --subtle-blue-grey: #7c9beb;
@@ -94,7 +92,15 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+
   --input-text-color: #737373;
+  --info-button-text: var(--davys-grey);
+  --close-button-text: var(--remove-button-color);
+  --close-button-bg: var(--white-color);
+  --checkbox-focus-border: var(--bs-gray-300);
+  --checkbox-bg: var(--dark-blue);
+  --checkbox-border: var(--dark-blue);
+
 
   /* Background and Border */
   --table-bg: #eaebef;
@@ -129,6 +135,8 @@
   --background-color: #fff;
   --dropdown-shadow: #0000004c;
   --dropdown-color: #555555;
+  --loader-border: #ffffff33;
+  --loader-border-left: #febc59;
 
   --dropdown-button-bg: #555555;
   --dropdown-button-fill: #555555;
@@ -159,6 +167,7 @@
     0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   /* Additional Variables */
+  --primary-theme-color: #1778f2;
   --input-shadow-color: #dddddd;
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
@@ -217,7 +226,11 @@
   --create_button-text: #555555;
   --create-button-border: #dddddd;
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   --dorpdownItem-hover-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
+
+  --drop-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
 
   /* breakpoints */
   --breakpoint-mobile: 576px;
@@ -389,6 +402,12 @@
   text-decoration: underline;
 }
 
+.closeButton {
+  color: var(--close-button-text);
+  border: none;
+  background-color: var(--close-button-bg);
+}
+
 .dropdown {
   background-color: var(--bs-white) !important;
   min-width: 150px;
@@ -413,20 +432,20 @@
     :checked
   ) {
   background-color: transparent !important;
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
   color: var(--dropdown-button-bg) !important;
-  border-color: var(--brown-color) !important;
+  border-color: var(--davys-grey) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
   outline: 2px solid var(--highlight-color, var(--search-button-bg));
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
 }
 
 .dropdown:not(:focus) {
   background-color: var(--bs-white);
-  border: 1px solid var(--brown-color);
-  color: var(--brown-color) !important;
+  border: 1px solid var(--davys-grey);
+  color: var(--davys-grey) !important;
 }
 
 .dropdownItem {
@@ -539,9 +558,12 @@
 }
 
 .actionItemDeleteButton {
-  background-color: var(--delete-button-bg);
-  color: var(--delete-button-color);
-  border: none;
+  background-color: var(--delete-button-bg) !important;
+  color: var(--delete-button-color) !important;
+}
+
+.actionItemDeleteButton:hover {
+  box-shadow: var(--drop-shadow);
 }
 
 .actionsButton {
@@ -619,7 +641,11 @@
 }
 
 .inputField:focus {
-  box-shadow: var(--hover-shadow);
+  border: 0.1px solid var(--input-field-border) !important;
+  background-color: var(--input-field-bg) !important;
+  box-shadow: var(--drop-shadow);
+  outline: none;
+  transition: box-shadow 0.2s ease;
 }
 
 .inputFieldModal {
@@ -657,7 +683,7 @@
   background-color: var(--search-button-bg);
   border-color: var(--search-button-bg);
   box-shadow: var(--hover-shadow);
-  color: var(--brown-color) !important;
+  color: var(--davys-grey) !important;
 }
 
 .searchButton:active {
@@ -668,7 +694,7 @@
 
 .addButton {
   margin-bottom: 10px;
-  color: var(--brown-color);
+  color: var(--davys-grey);
   background-color: var(--light-blue);
   border-color: var(--grey-bg-color);
 }
@@ -708,13 +734,13 @@
 }
 
 .searchIcon {
-  color: var(--brown-color);
+  color: var(--davys-grey);
 }
 
 .infoButton {
-  background-color: var(--search-button-bg);
+  background-color: var(--search-button-bg) !important;
   border-color: var(--search-button-border);
-  color: var(--brown-color);
+  color: var(--davys-grey) !important;
   margin-right: 0.5rem;
   border-radius: 0.25rem;
 }
@@ -722,6 +748,8 @@
 .infoButton:hover {
   background-color: var(--light-blue-color);
   border-color: var(--search-button-border);
+  color: var(--info-button-text) !important;
+  box-shadow: var(--drop-shadow);
 }
 
 .TableImage {
@@ -786,7 +814,7 @@
 
 .editButton {
   background-color: var(--light-blue);
-  color: var(--brown-color);
+  color: var(--davys-grey);
   border-color: var(--grey-bg-color);
   --bs-btn-active-bg: var(--dark-blue);
   --bs-btn-active-border-color: var(--grey-bg-color);
@@ -930,7 +958,7 @@ hr {
   flex-direction: row;
   font-weight: 900;
   font-size: 16px;
-  color: var(--light-dark-gray-color);
+  color: var(--davys-grey);
 }
 
 .rankings {
@@ -1140,7 +1168,7 @@ hr {
 .titleContainer h3 {
   font-size: 1.75rem;
   font-weight: 750;
-  color: var(--light-dark-gray-color);
+  color: var(--davys-grey);
   margin-top: 0.2rem;
 }
 
@@ -1157,7 +1185,7 @@ hr {
   align-items: center;
   font-size: 1.25rem;
   font-weight: 750;
-  color: var(--light-dark-gray-color);
+  color: var(--davys-grey);
 }
 
 .progressContainer {
@@ -1215,7 +1243,7 @@ hr {
   padding: 0.75rem;
   border: 1px solid #e2e8f0;
   background-color: var(--bs-white);
-  color: var(--gray-blue);
+  color: var(--black);
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.15);
   display: flex;
   flex-direction: column;
@@ -2154,8 +2182,18 @@ input[type='radio']:checked + label:hover {
 }
 
 .checkboxButton input:checked {
-  background-color: var(--dark-blue);
-  border-color: var(--dark-blue);
+  background-color: var(--checkbox-bg);
+  border-color: var(--checkbox-border);
+}
+
+.checkboxButton input:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:focus {
+  border-color: var(--checkbox-focus-border);
+  outline: none;
+  box-shadow: none;
 }
 
 /* Modals */
@@ -2234,8 +2272,8 @@ input[type='radio']:checked + label:hover {
 .pluginStoreBtn {
   width: 100%;
   background-color: var(--bs-white);
-  color: var(--brown-color);
-  border: 0.5px solid var(--brown-color);
+  color: var(--davys-grey);
+  border: 0.5px solid var(--davys-grey);
 }
 .searchButtonOrgList {
   background-color: var(--light-blue);
@@ -2252,8 +2290,8 @@ input[type='radio']:checked + label:hover {
 .pluginStoreBtn:hover,
 .pluginStoreBtn:focus {
   background-color: var(--dropdown-hover-color) !important;
-  color: var(--brown-color) !important;
-  border-color: var(--brown-color) !important;
+  color: var(--davys-grey) !important;
+  border-color: var(--davys-grey) !important;
 }
 
 .flexContainer {
@@ -3690,15 +3728,25 @@ button[data-testid='createPostBtn'] {
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
-  border-top: 1.1em solid var(--white-shadow-color);
-  border-right: 1.1em solid var(--white-shadow-color);
-  border-bottom: 1.1em solid var(--white-shadow-color);
-  border-left: 1.1em solid var(--light-orange);
+  border-top: 1.1em solid var(--loader-border);
+  border-right: 1.1em solid var(--loader-border);
+  border-bottom: 1.1em solid var(--loader-border);
+  border-left: 1.1em solid var(--loader-border-left);
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
   -webkit-animation: load8 1.1s infinite linear;
   animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 @keyframes load8 {
   0% {
@@ -3710,6 +3758,7 @@ button[data-testid='createPostBtn'] {
     transform: rotate(360deg);
   }
 }
+
 .list_box {
   height: 70vh;
   overflow-y: auto;
@@ -5790,7 +5839,7 @@ button[data-testid='createPostBtn'] {
   border: 0px;
   font-size: 14px;
   background-color: initial;
-  color: var(--gray-blue);
+  color: var(--black);
   font-weight: 600;
   transition: all 200ms;
   position: relative;
@@ -6048,17 +6097,17 @@ button[data-testid='createPostBtn'] {
 
 .createButtonEventHeader {
   background-color: var(--grey-bg-color);
-  color: var(--brown-color);
+  color: var(--davys-grey);
   width: 110px;
   /* margin-left: 5px; */
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
   box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
 .createButtonEventHeader:hover {
   background-color: var(--grey-bg-color);
   color: var(--black-color);
-  border: 1px solid var(--brown-color);
+  border: 1px solid var(--davys-grey);
   box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
 }
 
@@ -7021,7 +7070,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .manageBtn:hover {
-  color: var(--brown-color) !important;
+  color: var(--davys-grey) !important;
   box-shadow: var(--hover-shadow);
 }
 
@@ -7335,4 +7384,31 @@ button[data-testid='createPostBtn'] {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+/* Loader.tsx */
+.spinner_wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerXl {
+  width: 6rem;
+  height: 6rem;
+  border-width: 0.5rem;
+}
+
+.spinnerLg {
+  height: 4rem;
+  width: 4rem;
+  border-width: 0.3rem;
+}
+
+.spinnerSm {
+  height: 2rem;
+  width: 2rem;
+  border-width: 0.2rem;
 }
