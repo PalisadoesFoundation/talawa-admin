@@ -93,9 +93,10 @@
   --black: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+  --delete-theme-color: #dc3545;
   --info-button-text: var(--davys-grey);
   --close-button-text: var(--remove-button-color);
-  --close-button-bg: var(--white-color);
+  --close-button-bg: #f8d6dc;
   --checkbox-focus-border: var(--bs-gray-300);
   --checkbox-bg: var(--dark-blue);
   --checkbox-border: var(--dark-blue);
@@ -639,7 +640,7 @@
   background-color: var(--delete-button-bg);
   color: var(--remove-button-color);
   margin-right: 10px;
-  --bs-btn-border-color: #dc3545;
+  --bs-btn-border-color: var(--delete-theme-color);
 }
 
 .removeButton:is(:hover, :active, :focus) {
