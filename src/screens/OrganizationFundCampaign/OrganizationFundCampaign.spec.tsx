@@ -142,12 +142,12 @@ describe('FundCampaigns Screen', () => {
 
     const addCampaignBtn = await screen.findByTestId('addCampaignBtn');
     expect(addCampaignBtn).toBeInTheDocument();
-    userEvent.click(addCampaignBtn);
+    await userEvent.click(addCampaignBtn);
 
     await waitFor(() =>
       expect(screen.getAllByText(translations.createCampaign)).toHaveLength(2),
     );
-    userEvent.click(screen.getByTestId('campaignCloseBtn'));
+    await userEvent.click(screen.getByTestId('campaignCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('campaignCloseBtn')).toBeNull(),
     );
@@ -163,14 +163,14 @@ describe('FundCampaigns Screen', () => {
 
     const editCampaignBtn = await screen.findAllByTestId('editCampaignBtn');
     await waitFor(() => expect(editCampaignBtn[0]).toBeInTheDocument());
-    userEvent.click(editCampaignBtn[0]);
+    await userEvent.click(editCampaignBtn[0]);
 
     await waitFor(() =>
       expect(
         screen.getAllByText(translations.updateCampaign)[0],
       ).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('campaignCloseBtn'));
+    await userEvent.click(screen.getByTestId('campaignCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('campaignCloseBtn')).toBeNull(),
     );

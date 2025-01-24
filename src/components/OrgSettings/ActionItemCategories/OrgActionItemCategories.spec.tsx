@@ -170,10 +170,12 @@ describe('Testing Organisation Action Item Categories', () => {
       'createActionItemCategoryBtn',
     );
     expect(addCategoryBtn).toBeInTheDocument();
-    userEvent.click(addCategoryBtn);
+    await userEvent.click(addCategoryBtn);
 
     await waitFor(() => expect(screen.getAllByText(t.create)).toHaveLength(2));
-    userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
+    await userEvent.click(
+      screen.getByTestId('actionItemCategoryModalCloseBtn'),
+    );
     await waitFor(() =>
       expect(
         screen.queryByTestId('actionItemCategoryModalCloseBtn'),
@@ -186,12 +188,14 @@ describe('Testing Organisation Action Item Categories', () => {
 
     const editCategoryBtn = await screen.findByTestId('editCategoryBtn1');
     await waitFor(() => expect(editCategoryBtn).toBeInTheDocument());
-    userEvent.click(editCategoryBtn);
+    await userEvent.click(editCategoryBtn);
 
     await waitFor(() =>
       expect(screen.getByText(t.updateActionItemCategory)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
+    await userEvent.click(
+      screen.getByTestId('actionItemCategoryModalCloseBtn'),
+    );
     await waitFor(() =>
       expect(
         screen.queryByTestId('actionItemCategoryModalCloseBtn'),
@@ -205,8 +209,8 @@ describe('Testing Organisation Action Item Categories', () => {
     const searchInput = await screen.findByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'Category 1');
-    userEvent.click(screen.getByTestId('searchBtn'));
+    await userEvent.type(searchInput, 'Category 1');
+    await userEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -220,7 +224,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Clear the search input by backspace
-    userEvent.type(searchInput, 'A{backspace}');
+    await userEvent.type(searchInput, 'A{backspace}');
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.getByText('Category 2')).toBeInTheDocument();
@@ -234,7 +238,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Simulate typing and pressing ENTER
-    userEvent.type(searchInput, 'Category 1{enter}');
+    await userEvent.type(searchInput, 'Category 1{enter}');
 
     // Wait for the filtering to complete
     await waitFor(() => {

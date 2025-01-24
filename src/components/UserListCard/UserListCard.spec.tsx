@@ -73,7 +73,63 @@ describe('Testing User List Card', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByText(/Add Admin/i));
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+
+    await waitFor(
+      () => {
+        expect(toast.error).toHaveBeenCalled();
+      },
+      { timeout: DEFAULT_TIMEOUT },
+    );
+  });
+
+  test('Should render button with correct styling', () => {
+    const props = {
+      id: TEST_USER_ID,
+      key: 1,
+    };
+
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const button = screen.getByRole('button', { name: /Add Admin/i });
+    expect(button).toBeInTheDocument();
+    expect(button.className).toContain('memberfontcreatedbtn');
+  });
+
+  test('Should handle translations and URL parameters correctly', async () => {
+    const props = {
+      id: TEST_USER_ID,
+    };
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={123} {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const button = screen.getByText(/Add Admin/i);
+    expect(button).toBeInTheDocument();
+
+    await userEvent.click(button);
+
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalled();
+      },
+      { timeout: DEFAULT_TIMEOUT },
+    );
   });
 });

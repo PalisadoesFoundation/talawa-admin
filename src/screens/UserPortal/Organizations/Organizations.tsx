@@ -140,6 +140,7 @@ export default function organizations(): JSX.Element {
    * @param _event - The event triggering the page change.
    * @param  newPage - The new page number.
    */
+
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -152,6 +153,7 @@ export default function organizations(): JSX.Element {
    *
    * @param  event - The event triggering the change.
    */
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
