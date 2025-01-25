@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../../style/app.module.css';
+import styles from './OrganizationCard.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -115,7 +115,7 @@ function OrganizationCard({
 
   useEffect(() => {
     try {
-      // Use the custom Hook to retrieve the userId
+      // Use the custom hook to retrieve the userId
       const id = getItem('userId'); // Adjust this line based on your actual localStorage key
       setUserId(id);
     } catch (error) {
@@ -157,13 +157,10 @@ function OrganizationCard({
   }
 
   async function withdrawMembershipRequest(): Promise<void> {
-    if (!userId) {
-      toast.error(t('UserIdNotFound') as string);
-      return;
-    }
     const membershipRequest = membershipRequests.find(
       (request) => request.user._id === userId,
     );
+    console.log('Membership Request:', membershipRequest); // Add this log
 
     try {
       if (!membershipRequest) {
@@ -177,11 +174,10 @@ function OrganizationCard({
         },
       });
 
+      console.log('Mutation executed successfully'); // Log mutation success
       toast.success(t('MembershipRequestWithdrawn') as string); // Ensure this gets called
     } catch (error: unknown) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Failed to withdraw membership request:', error);
-      }
+      console.error('Failed to withdraw membership request:', error);
       toast.error(t('errorOccured') as string);
     }
   }
