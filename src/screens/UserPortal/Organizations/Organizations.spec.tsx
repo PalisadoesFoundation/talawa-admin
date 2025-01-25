@@ -17,7 +17,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Organizations from './Organizations';
 import React, { act } from 'react';
 const { getItem, setItem } = useLocalStorage();
-
+import '../../../style/app.module.css';
 /**
  * Mock data for GraphQL queries.
  */

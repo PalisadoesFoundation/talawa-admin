@@ -10,6 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
+import '../../style/app.module.css';
 
 const { setItem } = useLocalStorage();
 

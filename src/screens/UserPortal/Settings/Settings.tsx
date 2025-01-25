@@ -23,7 +23,7 @@ import Avatar from 'components/Avatar/Avatar';
 import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
 import { EventsAttendedByUser } from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
-
+import '../../../style/app.module.css';
 /**
  * The Settings component allows users to view and update their profile settings.
  * It includes functionality to handle image uploads, reset changes, and save updated user details.

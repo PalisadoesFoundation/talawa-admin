@@ -15,7 +15,7 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import '../../../style/app.module.css';
 const { setItem } = useLocalStorage();
 vi.mock('react-toastify', () => ({
   toast: {

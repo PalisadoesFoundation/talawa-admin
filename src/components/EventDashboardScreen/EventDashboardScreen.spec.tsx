@@ -11,7 +11,7 @@ import EventDashboardScreen from './EventDashboardScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import '../../style/app.module.css';
 const { setItem } = useLocalStorage();
 
 Object.defineProperty(window, 'matchMedia', {

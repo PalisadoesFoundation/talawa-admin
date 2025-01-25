@@ -29,7 +29,7 @@ import Users from 'screens/Users/Users';
 import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
 import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
 import Leaderboard from 'screens/Leaderboard/Leaderboard';
-
+import './style/app.module.css';
 import React, { useEffect } from 'react';
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';

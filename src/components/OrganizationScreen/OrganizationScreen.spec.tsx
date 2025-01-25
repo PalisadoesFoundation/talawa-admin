@@ -12,6 +12,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './OrganizationScreen.module.css';
 import { vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
+import '../../style/app.module.css';
 const { setItem } = useLocalStorage();
 const mockID: string | undefined = '123';
 vi.mock('react-router-dom', async () => ({
