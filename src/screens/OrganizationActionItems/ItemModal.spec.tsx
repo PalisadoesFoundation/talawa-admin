@@ -844,6 +844,7 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  //checking for empty and null values
   it('handles empty and null form values correctly', async () => {
     renderItemModal(link1, itemProps[0]);
 
@@ -862,6 +863,7 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  // validation of catergory selection
   it('validates category selection', async () => {
     renderItemModal(link1, itemProps[0]);
 
@@ -883,6 +885,7 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  // changing of assignee type handling
   it('handles assignee type changes correctly', async () => {
     renderItemModal(link1, itemProps[1]);
 
@@ -903,6 +906,7 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  // validating when dates are due
   it('validates due date handling', async () => {
     renderItemModal(link1, itemProps[0]);
 
@@ -920,6 +924,7 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  // for testing network handling
   it('handles network errors gracefully', async () => {
     renderItemModal(link2, itemProps[0]);
 
@@ -956,6 +961,7 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  // for handling edge cases in timezone
   it('handles timezone edge cases', async () => {
     renderItemModal(link1, itemProps[0]);
 
