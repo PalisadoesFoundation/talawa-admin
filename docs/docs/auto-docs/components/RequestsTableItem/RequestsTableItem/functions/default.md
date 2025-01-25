@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`): `Element`
-
-Defined in: [src/components/RequestsTableItem/RequestsTableItem.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RequestsTableItem/RequestsTableItem.tsx#L45)
 
 Renders a table row item for a membership request.
 
@@ -16,9 +14,7 @@ toast notifications.
 
 ## Parameters
 
-### props
-
-`Props`
+• **props**: `Props`
 
 The props object containing request details, index, and state reset function.
 
@@ -27,3 +23,7 @@ The props object containing request details, index, and state reset function.
 `Element`
 
 The JSX element representing the RequestsTableItem.
+
+## Defined in
+
+[src/components/RequestsTableItem/RequestsTableItem.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RequestsTableItem/RequestsTableItem.tsx#L45)

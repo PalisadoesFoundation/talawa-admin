@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: CREATE\_CAMPAIGN\_MUTATION
 
 > `const` **CREATE\_CAMPAIGN\_MUTATION**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CampaignMutation.ts#L15)
 
 GraphQL mutation to create a new fund Campaign.
 
@@ -37,3 +35,7 @@ The currency of the campaign.
 ## Returns
 
 The ID of the created campaign.
+
+## Defined in
+
+[src/GraphQl/Mutations/CampaignMutation.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CampaignMutation.ts#L15)

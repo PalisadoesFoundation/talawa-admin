@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Enumeration: Frequency
-
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L28)
 
 ## Enumeration Members
 
@@ -12,7 +10,9 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com
 
 > **DAILY**: `"DAILY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
+#### Defined in
+
+[src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
 
 ***
 
@@ -20,7 +20,9 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com
 
 > **MONTHLY**: `"MONTHLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)
+#### Defined in
+
+[src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)
 
 ***
 
@@ -28,7 +30,9 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com
 
 > **WEEKLY**: `"WEEKLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
+#### Defined in
+
+[src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
 
 ***
 
@@ -36,4 +40,6 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com
 
 > **YEARLY**: `"YEARLY"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)
+#### Defined in
+
+[src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)

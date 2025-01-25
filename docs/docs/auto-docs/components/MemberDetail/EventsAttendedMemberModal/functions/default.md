@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/MemberDetail/EventsAttendedMemberModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberDetail/EventsAttendedMemberModal.tsx#L39)
-
 ## Parameters
 
-### props
+• **props**: `InterfaceEventsAttendedMemberModalProps`
 
-`InterfaceEventsAttendedMemberModalProps`
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/components/MemberDetail/EventsAttendedMemberModal.tsx:39](https
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/components/MemberDetail/EventsAttendedMemberModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberDetail/EventsAttendedMemberModal.tsx#L39)

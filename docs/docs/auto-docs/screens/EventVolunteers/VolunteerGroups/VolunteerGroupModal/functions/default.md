@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,19 +6,13 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L63)
-
 A modal dialog for creating or editing a volunteer group.
 
 ## Parameters
 
-### props
+• **props**: [`InterfaceVolunteerGroupModal`](../interfaces/InterfaceVolunteerGroupModal.md)
 
-[`InterfaceVolunteerGroupModal`](../interfaces/InterfaceVolunteerGroupModal.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -50,3 +44,7 @@ On form submission, the component either:
 - Calls `createPledge` mutation to create a new pledge.
 
 Success or error messages are displayed using toast notifications based on the result of the mutation.
+
+## Defined in
+
+[src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/VolunteerGroupModal.tsx#L63)

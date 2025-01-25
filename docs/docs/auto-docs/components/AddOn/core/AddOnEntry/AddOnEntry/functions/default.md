@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,15 +6,11 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx#L63)
-
 A React component that represents an add-on entry, displaying its details and allowing installation or uninstallation.
 
 ## Parameters
 
-### props
-
-`InterfaceAddOnEntryProps`
+• **props**: `InterfaceAddOnEntryProps`
 
 The properties for the component.
 
@@ -56,3 +52,7 @@ class (e.g., .addButton) is now applied.
 - `.removeButton`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx#L63)

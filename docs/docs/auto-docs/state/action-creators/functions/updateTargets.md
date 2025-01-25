@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,13 +6,9 @@
 
 > **updateTargets**(`orgId`): (`dispatch`) => `void`
 
-Defined in: [src/state/action-creators/index.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/action-creators/index.ts#L37)
-
 ## Parameters
 
-### orgId
-
-`string`
+• **orgId**: `string`
 
 ## Returns
 
@@ -20,10 +16,12 @@ Defined in: [src/state/action-creators/index.ts:37](https://github.com/Palisadoe
 
 ### Parameters
 
-#### dispatch
-
-`any`
+• **dispatch**: `any`
 
 ### Returns
 
 `void`
+
+## Defined in
+
+[src/state/action-creators/index.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/action-creators/index.ts#L37)

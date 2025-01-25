@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Class: StaticMockLink
-
-Defined in: [src/utils/StaticMockLink.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L30)
 
 Similar to the standard Apollo MockLink, but doesn't consume a mock
 when it is used allowing it to be used in places like Storybook.
@@ -19,17 +17,11 @@ when it is used allowing it to be used in places like Storybook.
 
 > **new StaticMockLink**(`mockedResponses`, `addTypename`): [`StaticMockLink`](StaticMockLink.md)
 
-Defined in: [src/utils/StaticMockLink.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L35)
-
 #### Parameters
 
-##### mockedResponses
+• **mockedResponses**: readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>[]
 
-readonly `MockedResponse`[]
-
-##### addTypename
-
-`boolean` = `true`
+• **addTypename**: `boolean` = `true`
 
 #### Returns
 
@@ -39,13 +31,19 @@ readonly `MockedResponse`[]
 
 `ApolloLink.constructor`
 
+#### Defined in
+
+[src/utils/StaticMockLink.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L35)
+
 ## Properties
 
 ### addTypename
 
 > **addTypename**: `boolean` = `true`
 
-Defined in: [src/utils/StaticMockLink.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L32)
+#### Defined in
+
+[src/utils/StaticMockLink.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L32)
 
 ***
 
@@ -53,7 +51,9 @@ Defined in: [src/utils/StaticMockLink.ts:32](https://github.com/PalisadoesFounda
 
 > `optional` **operation**: `Operation`
 
-Defined in: [src/utils/StaticMockLink.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L31)
+#### Defined in
+
+[src/utils/StaticMockLink.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L31)
 
 ## Methods
 
@@ -61,17 +61,17 @@ Defined in: [src/utils/StaticMockLink.ts:31](https://github.com/PalisadoesFounda
 
 > **addMockedResponse**(`mockedResponse`): `void`
 
-Defined in: [src/utils/StaticMockLink.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L45)
-
 #### Parameters
 
-##### mockedResponse
-
-`MockedResponse`
+• **mockedResponse**: `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>
 
 #### Returns
 
 `void`
+
+#### Defined in
+
+[src/utils/StaticMockLink.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L45)
 
 ***
 
@@ -79,13 +79,9 @@ Defined in: [src/utils/StaticMockLink.ts:45](https://github.com/PalisadoesFounda
 
 > **request**(`operation`): `Observable`\<`FetchResult`\>
 
-Defined in: [src/utils/StaticMockLink.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L60)
-
 #### Parameters
 
-##### operation
-
-`any`
+• **operation**: `any`
 
 #### Returns
 
@@ -94,3 +90,7 @@ Defined in: [src/utils/StaticMockLink.ts:60](https://github.com/PalisadoesFounda
 #### Overrides
 
 `ApolloLink.request`
+
+#### Defined in
+
+[src/utils/StaticMockLink.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L60)

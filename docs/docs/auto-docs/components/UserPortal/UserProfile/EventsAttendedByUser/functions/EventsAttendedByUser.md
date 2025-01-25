@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **EventsAttendedByUser**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/UserPortal/UserProfile/EventsAttendedByUser.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserProfile/EventsAttendedByUser.tsx#L31)
-
 ## Parameters
 
-### props
+• **props**: `InterfaceUser`
 
-`InterfaceUser`
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/components/UserPortal/UserProfile/EventsAttendedByUser.tsx:31](
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/components/UserPortal/UserProfile/EventsAttendedByUser.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserProfile/EventsAttendedByUser.tsx#L31)

@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceActionItemCategoryInfo
-
-Defined in: [src/utils/interfaces.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L31)
 
 ## Properties
 
@@ -12,7 +10,9 @@ Defined in: [src/utils/interfaces.ts:31](https://github.com/PalisadoesFoundation
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L32)
+#### Defined in
+
+[src/utils/interfaces.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L32)
 
 ***
 
@@ -20,15 +20,15 @@ Defined in: [src/utils/interfaces.ts:32](https://github.com/PalisadoesFoundation
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L35)
+#### Defined in
+
+[src/utils/interfaces.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L35)
 
 ***
 
 ### creator
 
 > **creator**: `object`
-
-Defined in: [src/utils/interfaces.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L36)
 
 #### \_id
 
@@ -42,13 +42,19 @@ Defined in: [src/utils/interfaces.ts:36](https://github.com/PalisadoesFoundation
 
 > **lastName**: `string`
 
+#### Defined in
+
+[src/utils/interfaces.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L36)
+
 ***
 
 ### isDisabled
 
 > **isDisabled**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L34)
+#### Defined in
+
+[src/utils/interfaces.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L34)
 
 ***
 
@@ -56,4 +62,6 @@ Defined in: [src/utils/interfaces.ts:34](https://github.com/PalisadoesFoundation
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L33)
+#### Defined in
+
+[src/utils/interfaces.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L33)

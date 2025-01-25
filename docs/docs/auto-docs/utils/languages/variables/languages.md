@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,18 +6,6 @@
 
 > `const` **languages**: `object`[]
 
-Defined in: [src/utils/languages.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/languages.ts#L3)
+## Defined in
 
-## Type declaration
-
-### code
-
-> **code**: `string` = `'en'`
-
-### country\_code
-
-> **country\_code**: `string` = `'gb'`
-
-### name
-
-> **name**: `string` = `'English'`
+[src/utils/languages.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/languages.ts#L3)

@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/screens/OrganizationPeople/AddMember.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/AddMember.tsx#L80)
 
 AddMember component is used to add new members to the organization by selecting from
 the existing users or creating a new user.
@@ -37,3 +35,7 @@ For more details on the reusable classes, refer to the global CSS file.
 ## Returns
 
 `JSX.Element`
+
+## Defined in
+
+[src/screens/OrganizationPeople/AddMember.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/AddMember.tsx#L80)

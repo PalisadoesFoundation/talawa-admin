@@ -1,18 +1,14 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceTableCheckIn
-
-Defined in: [src/components/CheckIn/types.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L29)
 
 ## Properties
 
 ### checkIn
 
 > **checkIn**: `object`
-
-Defined in: [src/components/CheckIn/types.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L33)
 
 #### \_id
 
@@ -22,13 +18,19 @@ Defined in: [src/components/CheckIn/types.ts:33](https://github.com/PalisadoesFo
 
 > **time**: `string`
 
+#### Defined in
+
+[src/components/CheckIn/types.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L33)
+
 ***
 
 ### eventId
 
 > **eventId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L37)
+#### Defined in
+
+[src/components/CheckIn/types.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L37)
 
 ***
 
@@ -36,7 +38,9 @@ Defined in: [src/components/CheckIn/types.ts:37](https://github.com/PalisadoesFo
 
 > **id**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L30)
+#### Defined in
+
+[src/components/CheckIn/types.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L30)
 
 ***
 
@@ -44,7 +48,9 @@ Defined in: [src/components/CheckIn/types.ts:30](https://github.com/PalisadoesFo
 
 > **name**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L31)
+#### Defined in
+
+[src/components/CheckIn/types.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L31)
 
 ***
 
@@ -52,4 +58,6 @@ Defined in: [src/components/CheckIn/types.ts:31](https://github.com/PalisadoesFo
 
 > **userId**: `string`
 
-Defined in: [src/components/CheckIn/types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L32)
+#### Defined in
+
+[src/components/CheckIn/types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/types.ts#L32)

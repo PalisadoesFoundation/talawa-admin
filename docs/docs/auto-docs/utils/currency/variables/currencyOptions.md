@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,14 +6,6 @@
 
 > `const` **currencyOptions**: `object`[]
 
-Defined in: [src/utils/currency.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/currency.ts#L1)
+## Defined in
 
-## Type declaration
-
-### label
-
-> **label**: `string` = `'AED'`
-
-### value
-
-> **value**: `string` = `'AED'`
+[src/utils/currency.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/currency.ts#L1)

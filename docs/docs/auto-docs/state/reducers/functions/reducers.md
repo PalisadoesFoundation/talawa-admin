@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **reducers**(`state`, `action`): `object`
 
-Defined in: [src/state/reducers/index.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/index.ts#L6)
-
 ## Parameters
 
-### state
+• **state**: `object` \| `Partial`\<`object`\>
 
-\{ `appRoutes`: \{ `components`: [`ComponentType`](../routesReducer/type-aliases/ComponentType.md)[]; `targets`: [`TargetsType`](../routesReducer/type-aliases/TargetsType.md)[]; \}; `plugins`: `any`; `userRoutes`: \{ `components`: [`ComponentType`](../userRoutesReducer/type-aliases/ComponentType.md)[]; `targets`: [`TargetsType`](../userRoutesReducer/type-aliases/TargetsType.md)[]; \}; \} | `Partial`\<\{ `appRoutes`: `never`; `plugins`: `never`; `userRoutes`: `never`; \}\>
-
-### action
-
-[`InterfaceAction`](../../helpers/Action/interfaces/InterfaceAction.md)
+• **action**: [`InterfaceAction`](../../helpers/Action/interfaces/InterfaceAction.md)
 
 ## Returns
 
@@ -26,11 +20,11 @@ Defined in: [src/state/reducers/index.ts:6](https://github.com/PalisadoesFoundat
 
 > **appRoutes**: `object` = `routesReducer`
 
-#### appRoutes.components
+### appRoutes.components
 
 > **components**: [`ComponentType`](../routesReducer/type-aliases/ComponentType.md)[]
 
-#### appRoutes.targets
+### appRoutes.targets
 
 > **targets**: [`TargetsType`](../routesReducer/type-aliases/TargetsType.md)[]
 
@@ -42,10 +36,14 @@ Defined in: [src/state/reducers/index.ts:6](https://github.com/PalisadoesFoundat
 
 > **userRoutes**: `object` = `userRoutesReducer`
 
-#### userRoutes.components
+### userRoutes.components
 
 > **components**: [`ComponentType`](../userRoutesReducer/type-aliases/ComponentType.md)[]
 
-#### userRoutes.targets
+### userRoutes.targets
 
 > **targets**: [`TargetsType`](../userRoutesReducer/type-aliases/TargetsType.md)[]
+
+## Defined in
+
+[src/state/reducers/index.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/index.ts#L6)

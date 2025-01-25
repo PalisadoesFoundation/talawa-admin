@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,30 +6,6 @@
 
 > `const` **checkInMutationUnsuccess**: `object`[]
 
-Defined in: [src/components/CheckIn/mocks.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/mocks.ts#L65)
+## Defined in
 
-## Type declaration
-
-### error
-
-> **error**: `Error`
-
-### request
-
-> **request**: `object`
-
-#### request.query
-
-> **query**: `DocumentNode` = `MARK_CHECKIN`
-
-#### request.variables
-
-> **variables**: `object`
-
-#### request.variables.eventId
-
-> **eventId**: `string` = `'event123'`
-
-#### request.variables.userId
-
-> **userId**: `string` = `'user123'`
+[src/components/CheckIn/mocks.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/mocks.ts#L65)

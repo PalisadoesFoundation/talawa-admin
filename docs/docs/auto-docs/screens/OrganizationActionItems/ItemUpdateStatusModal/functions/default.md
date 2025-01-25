@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L38)
-
 ## Parameters
 
-### props
+• **props**: [`InterfaceItemUpdateStatusModalProps`](../interfaces/InterfaceItemUpdateStatusModalProps.md)
 
-[`InterfaceItemUpdateStatusModalProps`](../interfaces/InterfaceItemUpdateStatusModalProps.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:38](h
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L38)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventCalendar/EventCalendar.tsx:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalendar/EventCalendar.tsx#L78)
-
 ## Parameters
 
-### props
+• **props**: `InterfaceCalendarProps`
 
-`InterfaceCalendarProps`
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/components/EventCalendar/EventCalendar.tsx:78](https://github.c
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/components/EventCalendar/EventCalendar.tsx:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalendar/EventCalendar.tsx#L78)

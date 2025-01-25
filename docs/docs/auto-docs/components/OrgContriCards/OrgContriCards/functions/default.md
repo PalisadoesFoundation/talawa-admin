@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
-
-Defined in: [src/components/OrgContriCards/OrgContriCards.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgContriCards/OrgContriCards.tsx#L30)
 
 Component to display organization contribution cards
 
@@ -15,9 +13,7 @@ the user's name, email, contribution date, transaction ID, and the contribution 
 
 ## Parameters
 
-### props
-
-`InterfaceOrgContriCardsProps`
+• **props**: `InterfaceOrgContriCardsProps`
 
 The properties passed to the component
 
@@ -26,3 +22,7 @@ The properties passed to the component
 `JSX.Element`
 
 JSX.Element representing a contribution card
+
+## Defined in
+
+[src/components/OrgContriCards/OrgContriCards.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgContriCards/OrgContriCards.tsx#L30)

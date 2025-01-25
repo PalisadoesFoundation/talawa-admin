@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,15 +6,11 @@
 
 > **default**(`onToggle`): `JSX.Element`
 
-Defined in: [src/components/LoginPortalToggle/LoginPortalToggle.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L18)
-
 Component for toggling between admin and user login portals.
 
 ## Parameters
 
-### onToggle
-
-`InterfaceLoginPortalToggleProps`
+• **onToggle**: `InterfaceLoginPortalToggleProps`
 
 Callback function to handle role changes ('admin' or 'user').
 
@@ -23,3 +19,7 @@ Callback function to handle role changes ('admin' or 'user').
 `JSX.Element`
 
 JSX element for login portal toggle.
+
+## Defined in
+
+[src/components/LoginPortalToggle/LoginPortalToggle.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L18)

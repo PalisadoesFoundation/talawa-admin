@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: CREATE\_ACTION\_ITEM\_MUTATION
 
 > `const` **CREATE\_ACTION\_ITEM\_MUTATION**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L14)
 
 GraphQL mutation to create an action item.
 
@@ -33,3 +31,7 @@ Event to which the ActionItem is related.
 ## Param
 
 Hours allotted for the ActionItem.
+
+## Defined in
+
+[src/GraphQl/Mutations/ActionItemMutations.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L14)

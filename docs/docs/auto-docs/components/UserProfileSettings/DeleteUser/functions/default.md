@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,18 +6,14 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/UserProfileSettings/DeleteUser.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserProfileSettings/DeleteUser.tsx#L12)
-
 DeleteUser component displays a card with a button to delete a user.
 It includes a message and a button to trigger the delete action.
 
 ## Parameters
 
-### props
+• **props**
 
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -30,3 +26,7 @@ It includes a message and a button to trigger the delete action.
 `ReactNode`
 
 The JSX element for the delete user card.
+
+## Defined in
+
+[src/components/UserProfileSettings/DeleteUser.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserProfileSettings/DeleteUser.tsx#L12)

@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `Element`
-
-Defined in: [src/components/ProfileCard/ProfileCard.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileCard/ProfileCard.tsx#L21)
 
 Renders a profile card for the user.
 
@@ -21,3 +19,7 @@ and their role (SuperAdmin, Admin, or User). It provides options to view the pro
 `Element`
 
 JSX.Element - The profile card .
+
+## Defined in
+
+[src/components/ProfileCard/ProfileCard.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileCard/ProfileCard.tsx#L21)

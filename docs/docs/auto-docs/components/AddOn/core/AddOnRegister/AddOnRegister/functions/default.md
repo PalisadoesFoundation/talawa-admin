@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`__namedParameters`): `JSX.Element`
-
-Defined in: [src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx#L38)
 
 A React component for registering a new add-on plugin.
 
@@ -19,12 +17,14 @@ This component:
 
 ## Parameters
 
-### \_\_namedParameters
-
-`InterfaceAddOnRegisterProps`
+• **\_\_namedParameters**: `InterfaceAddOnRegisterProps`
 
 ## Returns
 
 `JSX.Element`
 
 A JSX element containing the button and modal for plugin registration.
+
+## Defined in
+
+[src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx#L38)

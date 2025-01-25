@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,4 +6,6 @@
 
 > `const` **AgendaItemByEvent**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/AgendaItemQueries.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/AgendaItemQueries.ts#L39)
+## Defined in
+
+[src/GraphQl/Queries/AgendaItemQueries.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/AgendaItemQueries.ts#L39)

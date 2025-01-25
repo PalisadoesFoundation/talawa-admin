@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx#L36)
 
 OrganizationSidebar displays the sidebar for an organization, showing a list of members and events.
 
@@ -25,3 +23,7 @@ The sidebar handles loading states and displays appropriate messages while data 
 `JSX.Element`
 
 JSX.Element representing the organization sidebar.
+
+## Defined in
+
+[src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx#L36)

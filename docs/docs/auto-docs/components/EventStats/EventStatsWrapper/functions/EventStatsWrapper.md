@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,15 +6,11 @@
 
 > **EventStatsWrapper**(`eventId`): `Element`
 
-Defined in: [src/components/EventStats/EventStatsWrapper.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsWrapper.tsx#L18)
-
 Wrapper component that displays a button to show event statistics.
 
 ## Parameters
 
-### eventId
-
-`PropType`
+• **eventId**: `PropType`
 
 The ID of the event.
 
@@ -23,3 +19,7 @@ The ID of the event.
 `Element`
 
 JSX element representing the wrapper with a button to view event statistics.
+
+## Defined in
+
+[src/components/EventStats/EventStatsWrapper.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsWrapper.tsx#L18)

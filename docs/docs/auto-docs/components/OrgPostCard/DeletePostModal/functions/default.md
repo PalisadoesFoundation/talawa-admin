@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,17 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgPostCard/DeletePostModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPostCard/DeletePostModal.tsx#L38)
-
 ## Parameters
 
-### props
+• **props**: `InterfaceDeletePostModalProps`
 
-`InterfaceDeletePostModalProps`
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -27,3 +21,7 @@ Defined in: [src/components/OrgPostCard/DeletePostModal.tsx:38](https://github.c
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/components/OrgPostCard/DeletePostModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPostCard/DeletePostModal.tsx#L38)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,20 +6,14 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/AgendaItems/AgendaItemsCreateModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsCreateModal.tsx#L43)
-
 Component for creating a new agenda item.
 Displays a modal form where users can input details for a new agenda item, including title, description, duration, categories, URLs, and attachments.
 
 ## Parameters
 
-### props
+• **props**: `InterfaceAgendaItemsCreateModalProps`
 
-`InterfaceAgendaItemsCreateModalProps`
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -30,3 +24,7 @@ Displays a modal form where users can input details for a new agenda item, inclu
 ## Returns
 
 `ReactNode`
+
+## Defined in
+
+[src/components/AgendaItems/AgendaItemsCreateModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsCreateModal.tsx#L43)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,23 +6,15 @@
 
 > **default**(`state`, `action`): `object`
 
-Defined in: [src/state/reducers/routesReducer.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L16)
-
 ## Parameters
 
-### state
+• **state** = `INITIAL_STATE`
 
-#### components
+• **state.components**: [`ComponentType`](../type-aliases/ComponentType.md)[]
 
-[`ComponentType`](../type-aliases/ComponentType.md)[]
+• **state.targets**: [`TargetsType`](../type-aliases/TargetsType.md)[] = `...`
 
-#### targets
-
-[`TargetsType`](../type-aliases/TargetsType.md)[] = `...`
-
-### action
-
-[`InterfaceAction`](../../../helpers/Action/interfaces/InterfaceAction.md)
+• **action**: [`InterfaceAction`](../../../helpers/Action/interfaces/InterfaceAction.md)
 
 ## Returns
 
@@ -35,3 +27,7 @@ Defined in: [src/state/reducers/routesReducer.ts:16](https://github.com/Palisado
 ### targets
 
 > **targets**: [`TargetsType`](../type-aliases/TargetsType.md)[]
+
+## Defined in
+
+[src/state/reducers/routesReducer.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L16)

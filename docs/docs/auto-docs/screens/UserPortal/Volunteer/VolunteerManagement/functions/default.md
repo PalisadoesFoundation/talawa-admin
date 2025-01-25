@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `Element`
-
-Defined in: [src/screens/UserPortal/Volunteer/VolunteerManagement.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/VolunteerManagement.tsx#L58)
 
 `VolunteerManagement` component handles the display and navigation of different event management sections.
 
@@ -21,3 +19,7 @@ It provides a tabbed interface for:
 `Element`
 
 JSX.Element - The `VolunteerManagement` component.
+
+## Defined in
+
+[src/screens/UserPortal/Volunteer/VolunteerManagement.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/VolunteerManagement.tsx#L58)

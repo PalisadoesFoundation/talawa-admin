@@ -1,18 +1,14 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceQueryUserListItem
-
-Defined in: [src/utils/interfaces.ts:396](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L396)
 
 ## Properties
 
 ### appUserProfile
 
 > **appUserProfile**: `object`
-
-Defined in: [src/utils/interfaces.ts:435](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L435)
 
 #### \_id
 
@@ -38,13 +34,15 @@ Defined in: [src/utils/interfaces.ts:435](https://github.com/PalisadoesFoundatio
 
 > **isSuperAdmin**: `boolean`
 
+#### Defined in
+
+[src/utils/interfaces.ts:435](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L435)
+
 ***
 
 ### user
 
 > **user**: `object`
-
-Defined in: [src/utils/interfaces.ts:397](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L397)
 
 #### \_id
 
@@ -85,3 +83,7 @@ Defined in: [src/utils/interfaces.ts:397](https://github.com/PalisadoesFoundatio
 #### registeredEvents
 
 > **registeredEvents**: `object`[]
+
+#### Defined in
+
+[src/utils/interfaces.ts:397](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L397)

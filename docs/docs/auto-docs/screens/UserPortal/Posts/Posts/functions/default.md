@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/screens/UserPortal/Posts/Posts.tsx:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Posts/Posts.tsx#L112)
 
 `home` component displays the main feed for a user, including posts, promoted content, and options to create a new post.
 
@@ -17,3 +15,7 @@ It utilizes Apollo Client for fetching and managing data through GraphQL queries
 `JSX.Element`
 
 JSX.Element - The rendered `home` component.
+
+## Defined in
+
+[src/screens/UserPortal/Posts/Posts.tsx:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Posts/Posts.tsx#L112)

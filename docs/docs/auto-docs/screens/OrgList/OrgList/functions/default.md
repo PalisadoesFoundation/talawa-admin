@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/screens/OrgList/OrgList.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrgList.tsx#L53)
 
 ## CSS Strategy Explanation:
 
@@ -29,3 +27,7 @@ For more details on the reusable classes, refer to the global CSS file.
 ## Returns
 
 `JSX.Element`
+
+## Defined in
+
+[src/screens/OrgList/OrgList.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrgList.tsx#L53)

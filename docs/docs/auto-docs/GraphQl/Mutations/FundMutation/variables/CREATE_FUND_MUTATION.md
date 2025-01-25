@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: CREATE\_FUND\_MUTATION
 
 > `const` **CREATE\_FUND\_MUTATION**: `DocumentNode`
-
-Defined in: [src/GraphQl/Mutations/FundMutation.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/FundMutation.ts#L14)
 
 GraphQL mutation to create a new fund.
 
@@ -37,3 +35,7 @@ Whether the fund is the default.
 ## Returns
 
 The ID of the created fund.
+
+## Defined in
+
+[src/GraphQl/Mutations/FundMutation.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/FundMutation.ts#L14)

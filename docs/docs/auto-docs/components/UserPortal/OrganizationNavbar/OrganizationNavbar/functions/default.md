@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
-
-Defined in: [src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L44)
 
 Displays the organization navbar with navigation options, user settings, and language selection.
 
@@ -18,9 +16,7 @@ The navbar includes:
 
 ## Parameters
 
-### props
-
-`InterfaceNavbarProps`
+• **props**: `InterfaceNavbarProps`
 
 The properties for the navbar.
 
@@ -29,3 +25,7 @@ The properties for the navbar.
 `JSX.Element`
 
 The organization navbar component.
+
+## Defined in
+
+[src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L44)

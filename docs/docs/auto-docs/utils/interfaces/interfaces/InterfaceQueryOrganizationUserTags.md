@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceQueryOrganizationUserTags
-
-Defined in: [src/utils/interfaces.ts:269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L269)
 
 ## Properties
 
@@ -12,4 +10,6 @@ Defined in: [src/utils/interfaces.ts:269](https://github.com/PalisadoesFoundatio
 
 > **userTags**: `InterfaceTagNodeData`
 
-Defined in: [src/utils/interfaces.ts:270](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L270)
+#### Defined in
+
+[src/utils/interfaces.ts:270](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L270)

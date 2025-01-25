@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceQueryUserTagsAssignedMembers
-
-Defined in: [src/utils/interfaces.ts:282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L282)
 
 ## Properties
 
@@ -12,15 +10,9 @@ Defined in: [src/utils/interfaces.ts:282](https://github.com/PalisadoesFoundatio
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L285)
+#### Defined in
 
-#### \_id
-
-> **\_id**: `string`
-
-#### name
-
-> **name**: `string`
+[src/utils/interfaces.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L285)
 
 ***
 
@@ -28,7 +20,9 @@ Defined in: [src/utils/interfaces.ts:285](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L283)
+#### Defined in
+
+[src/utils/interfaces.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L283)
 
 ***
 
@@ -36,4 +30,6 @@ Defined in: [src/utils/interfaces.ts:283](https://github.com/PalisadoesFoundatio
 
 > **usersAssignedTo**: `InterfaceTagMembersData`
 
-Defined in: [src/utils/interfaces.ts:284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L284)
+#### Defined in
+
+[src/utils/interfaces.ts:284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L284)

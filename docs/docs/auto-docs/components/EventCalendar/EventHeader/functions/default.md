@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,16 +6,12 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/EventCalendar/EventHeader.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalendar/EventHeader.tsx#L45)
-
 EventHeader component displays the header for the event calendar.
 It includes a search field, view type dropdown, event type dropdown, and a button to create an event.
 
 ## Parameters
 
-### \_\_namedParameters
-
-`InterfaceEventHeaderProps`
+• **\_\_namedParameters**: `InterfaceEventHeaderProps`
 
 ## Returns
 
@@ -39,3 +35,7 @@ class (e.g., .addButton) is now applied.
 - `.dropdown`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/components/EventCalendar/EventHeader.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalendar/EventHeader.tsx#L45)

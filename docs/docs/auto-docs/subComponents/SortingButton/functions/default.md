@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,22 +6,16 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/subComponents/SortingButton.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SortingButton.tsx#L43)
-
 SortingButton component renders a Dropdown with sorting options.
 It allows users to select a sorting option and triggers a callback on selection.
 
 ## Parameters
 
-### props
-
-`InterfaceSortingButtonProps`
+• **props**: `InterfaceSortingButtonProps`
 
 The properties for the SortingButton component.
 
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -34,3 +28,7 @@ The properties for the SortingButton component.
 `ReactNode`
 
 The rendered SortingButton component.
+
+## Defined in
+
+[src/subComponents/SortingButton.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SortingButton.tsx#L43)

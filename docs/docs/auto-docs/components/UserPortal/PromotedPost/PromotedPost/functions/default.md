@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
-
-Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L23)
 
 PromotedPost component displays a card representing promoted content.
 
@@ -17,9 +15,7 @@ This component includes:
 
 ## Parameters
 
-### props
-
-`InterfacePostCardProps`
+• **props**: `InterfacePostCardProps`
 
 Properties passed to the component including an image, title, and ID.
 
@@ -28,3 +24,7 @@ Properties passed to the component including an image, title, and ID.
 `JSX.Element`
 
 JSX.Element representing a card with promoted content.
+
+## Defined in
+
+[src/components/UserPortal/PromotedPost/PromotedPost.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L23)

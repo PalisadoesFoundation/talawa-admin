@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Type Alias: ComponentType
 
 > **ComponentType**: `object`
-
-Defined in: [src/state/reducers/userRoutesReducer.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L32)
 
 ## Type declaration
 
@@ -25,3 +23,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:32](https://github.com/Pali
 ### subTargets?
 
 > `optional` **subTargets**: `object`[]
+
+## Defined in
+
+[src/state/reducers/userRoutesReducer.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L32)

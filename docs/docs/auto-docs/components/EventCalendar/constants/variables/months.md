@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,4 +6,6 @@
 
 > `const` **months**: `string`[]
 
-Defined in: [src/components/EventCalendar/constants.js:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalendar/constants.js#L25)
+## Defined in
+
+[src/components/EventCalendar/constants.js:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalendar/constants.js#L25)

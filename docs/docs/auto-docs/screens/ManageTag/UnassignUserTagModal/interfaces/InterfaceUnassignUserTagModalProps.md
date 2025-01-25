@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceUnassignUserTagModalProps
-
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L28)
 
 Unassign UserTag Modal component for the Manage Tag screen.
 
@@ -33,27 +31,33 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **handleUnassignUserTag**: () => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L31)
-
 #### Returns
 
 `Promise`\<`void`\>
+
+#### Defined in
+
+[src/screens/ManageTag/UnassignUserTagModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L31)
 
 ***
 
 ### t
 
-> **t**: `TFunction`\<`"manageTag"` \| `"memberDetail"`\>
+> **t**: `TFunction`\<`"translation"`, `"manageTag"` \| `"memberDetail"`\>
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L32)
+#### Defined in
+
+[src/screens/ManageTag/UnassignUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L32)
 
 ***
 
 ### tCommon
 
-> **tCommon**: `TFunction`\<`"common"`\>
+> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L33)
+#### Defined in
+
+[src/screens/ManageTag/UnassignUserTagModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L33)
 
 ***
 
@@ -61,11 +65,13 @@ Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:33](https://github.c
 
 > **toggleUnassignUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L30)
-
 #### Returns
 
 `void`
+
+#### Defined in
+
+[src/screens/ManageTag/UnassignUserTagModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L30)
 
 ***
 
@@ -73,4 +79,6 @@ Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:30](https://github.c
 
 > **unassignUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/UnassignUserTagModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L29)
+#### Defined in
+
+[src/screens/ManageTag/UnassignUserTagModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/UnassignUserTagModal.tsx#L29)

@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `Element`
-
-Defined in: [src/components/SignOut/SignOut.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SignOut/SignOut.tsx#L20)
 
 Renders a sign out button.
 
@@ -18,3 +16,7 @@ The logout function revokes the refresh token and clears local storage before re
 `Element`
 
 JSX.Element - The profile card .
+
+## Defined in
+
+[src/components/SignOut/SignOut.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SignOut/SignOut.tsx#L19)

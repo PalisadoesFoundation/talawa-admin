@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,34 +6,24 @@
 
 > **generateMockUser**(`id`, `firstName`, `lastName`, `email`, `createdAt`, `isSuperAdmin`): `InterfaceMockUser`
 
-Defined in: [src/screens/Users/Organization.mocks.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L236)
-
 ## Parameters
 
-### id
+• **id**: `string`
 
-`string`
+• **firstName**: `string`
 
-### firstName
+• **lastName**: `string`
 
-`string`
+• **email**: `string`
 
-### lastName
+• **createdAt**: `string`
 
-`string`
-
-### email
-
-`string`
-
-### createdAt
-
-`string`
-
-### isSuperAdmin
-
-`boolean` = `false`
+• **isSuperAdmin**: `boolean` = `false`
 
 ## Returns
 
 `InterfaceMockUser`
+
+## Defined in
+
+[src/screens/Users/Organization.mocks.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L236)

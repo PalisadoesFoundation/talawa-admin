@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceMembersList
-
-Defined in: [src/utils/interfaces.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L72)
 
 ## Properties
 
@@ -12,12 +10,6 @@ Defined in: [src/utils/interfaces.ts:72](https://github.com/PalisadoesFoundation
 
 > **organizations**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L73)
+#### Defined in
 
-#### \_id
-
-> **\_id**: `string`
-
-#### members
-
-> **members**: [`InterfaceMemberInfo`](InterfaceMemberInfo.md)[]
+[src/utils/interfaces.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L73)

@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: dayNames
 
 > `const` **dayNames**: `object`
-
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L60)
 
 ## Type declaration
 
@@ -37,3 +35,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:60](https://github
 ### WEDNESDAY
 
 > **WEDNESDAY**: `string` = `'Wednesday'`
+
+## Defined in
+
+[src/utils/recurrenceUtils/recurrenceConstants.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L60)

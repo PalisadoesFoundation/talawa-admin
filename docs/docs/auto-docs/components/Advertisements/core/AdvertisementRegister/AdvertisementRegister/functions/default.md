@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,15 +6,11 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L79)
-
 Component for registering or editing an advertisement.
 
 ## Parameters
 
-### props
-
-`InterfaceAddOnRegisterProps`
+• **props**: `InterfaceAddOnRegisterProps`
 
 Contains form status, advertisement details, and a function to update parent state.
 
@@ -32,3 +28,7 @@ A JSX element that renders a form inside a modal for creating or editing an adve
   setAfter={(value) => console.log(value)}
 />
 ```
+
+## Defined in
+
+[src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L79)

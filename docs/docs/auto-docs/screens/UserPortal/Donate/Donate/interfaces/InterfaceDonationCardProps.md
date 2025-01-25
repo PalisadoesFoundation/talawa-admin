@@ -1,10 +1,8 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Interface: InterfaceDonationCardProps
-
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L23)
 
 ## Properties
 
@@ -12,7 +10,9 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:23](https://github.com/Pal
 
 > **amount**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L26)
+#### Defined in
+
+[src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L26)
 
 ***
 
@@ -20,7 +20,9 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:26](https://github.com/Pal
 
 > **id**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L24)
+#### Defined in
+
+[src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L24)
 
 ***
 
@@ -28,7 +30,9 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:24](https://github.com/Pal
 
 > **name**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L25)
+#### Defined in
+
+[src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L25)
 
 ***
 
@@ -36,7 +40,9 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:25](https://github.com/Pal
 
 > **payPalId**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L28)
+#### Defined in
+
+[src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L28)
 
 ***
 
@@ -44,7 +50,9 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:28](https://github.com/Pal
 
 > **updatedAt**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L29)
+#### Defined in
+
+[src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L29)
 
 ***
 
@@ -52,4 +60,6 @@ Defined in: [src/screens/UserPortal/Donate/Donate.tsx:29](https://github.com/Pal
 
 > **userId**: `string`
 
-Defined in: [src/screens/UserPortal/Donate/Donate.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L27)
+#### Defined in
+
+[src/screens/UserPortal/Donate/Donate.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L27)

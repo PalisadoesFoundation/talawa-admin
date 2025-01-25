@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(`props`): `JSX.Element`
-
-Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/EventCard/EventCard.tsx#L63)
 
 Displays information about an event and provides an option to register for it.
 
@@ -16,9 +14,7 @@ if the user is not already registered.
 
 ## Parameters
 
-### props
-
-`InterfaceEventCardProps`
+• **props**: `InterfaceEventCardProps`
 
 The properties for the event card.
 
@@ -27,3 +23,7 @@ The properties for the event card.
 `JSX.Element`
 
 The event card component.
+
+## Defined in
+
+[src/components/UserPortal/EventCard/EventCard.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/EventCard/EventCard.tsx#L63)

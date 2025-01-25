@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,16 +6,12 @@
 
 > **ReviewStats**(`data`): `Element`
 
-Defined in: [src/components/EventStats/Statistics/Review.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/Review.tsx#L30)
-
 Component that displays reviews for an event.
 Shows a list of reviews with ratings and text.
 
 ## Parameters
 
-### data
-
-`ModalPropType`
+• **data**: `ModalPropType`
 
 Data containing event feedback to be displayed.
 
@@ -24,3 +20,7 @@ Data containing event feedback to be displayed.
 `Element`
 
 JSX element representing the reviews card.
+
+## Defined in
+
+[src/components/EventStats/Statistics/Review.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/Review.tsx#L30)

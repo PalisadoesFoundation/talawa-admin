@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,19 +6,13 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/FundCampaignPledge/PledgeModal.tsx:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/PledgeModal.tsx#L89)
-
 A modal dialog for creating or editing a pledge.
 
 ## Parameters
 
-### props
+• **props**: [`InterfacePledgeModal`](../interfaces/InterfacePledgeModal.md)
 
-[`InterfacePledgeModal`](../interfaces/InterfacePledgeModal.md)
-
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -66,3 +60,7 @@ class (e.g., .addButton) is now applied.
 - `.addButton`
 
 For more details on the reusable classes, refer to the global CSS file.
+
+## Defined in
+
+[src/screens/FundCampaignPledge/PledgeModal.tsx:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/PledgeModal.tsx#L89)

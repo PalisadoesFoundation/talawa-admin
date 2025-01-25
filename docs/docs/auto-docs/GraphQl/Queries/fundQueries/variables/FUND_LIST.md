@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Variable: FUND\_LIST
 
 > `const` **FUND\_LIST**: `DocumentNode`
-
-Defined in: [src/GraphQl/Queries/fundQueries.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/fundQueries.ts#L11)
 
 GraphQL query to retrieve the list of members for a specific organization.
 
@@ -21,3 +19,7 @@ The filter to search for a specific member.
 ## Returns
 
 The list of members associated with the organization.
+
+## Defined in
+
+[src/GraphQl/Queries/fundQueries.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/fundQueries.ts#L11)

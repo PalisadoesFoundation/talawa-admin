@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
@@ -6,21 +6,15 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L41)
-
 A modal component for creating and editing action item categories.
 
 ## Parameters
 
-### props
-
-[`InterfaceActionItemCategoryModal`](../interfaces/InterfaceActionItemCategoryModal.md)
+• **props**: [`InterfaceActionItemCategoryModal`](../interfaces/InterfaceActionItemCategoryModal.md)
 
 The properties passed to the component.
 
-### deprecatedLegacyContext?
-
-`any`
+• **deprecatedLegacyContext?**: `any`
 
 **Deprecated**
 
@@ -33,3 +27,7 @@ The properties passed to the component.
 `ReactNode`
 
 The `CategoryModal` component.
+
+## Defined in
+
+[src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L41)

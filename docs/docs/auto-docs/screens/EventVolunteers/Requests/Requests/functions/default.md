@@ -1,12 +1,10 @@
-[Admin Docs](/)
+[Admin Docs](/) • **Docs**
 
 ***
 
 # Function: default()
 
 > **default**(): `JSX.Element`
-
-Defined in: [src/screens/EventVolunteers/Requests/Requests.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Requests/Requests.tsx#L64)
 
 Component for managing and displaying Volunteer Membership requests for an event.
 
@@ -17,3 +15,7 @@ This component allows users to view, filter, sort, and create action items. It a
 `JSX.Element`
 
 The rendered component.
+
+## Defined in
+
+[src/screens/EventVolunteers/Requests/Requests.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Requests/Requests.tsx#L64)
