@@ -43,7 +43,6 @@ const profileDropdown = (): JSX.Element => {
     try {
       await revokeRefreshToken();
     } catch (error) {
-      /*istanbul ignore next*/
       console.error('Error revoking refresh token:', error);
     }
     localStorage.clear();
