@@ -919,6 +919,13 @@
   color: var(--activeTab-color);
   border-color: var(--activeTab-color);
   align-items: center;
+  position: relative;
+  outline: none;
+}
+
+.activeTab:focus-visible {
+  outline: 2px solid var(--activeTab-color);
+  outline-offset: 2px;
 }
 
 .activeTab:is(:hover, :focus, :active) {
@@ -933,6 +940,13 @@
   color: var(--inActiveTab-color);
   border-color: var(--inActiveTab-color);
   align-items: center;
+  position: relative;
+  outline: none;
+}
+
+.inActiveTab:focus-visible {
+  outline: 2px solid var(--inActiveTab-color);
+  outline-offset: 2px;
 }
 
 .inActiveTab:is(:hover, :focus, :active) {
