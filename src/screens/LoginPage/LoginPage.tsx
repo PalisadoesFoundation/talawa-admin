@@ -304,7 +304,6 @@ const loginPage = (): JSX.Element => {
         const loggedInUserId = user.id;
 
         setItem('token', authenticationToken);
-        // setItem('refreshToken', login.refreshToken);
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);
@@ -314,11 +313,6 @@ const loginPage = (): JSX.Element => {
 
         if (role === 'admin') {
           setItem('id', loggedInUserId);
-          setItem(
-            'SuperAdmin',
-            user.emailAddress === 'administrator@email.com',
-          );
-          // setItem('AdminFor', appUserProfile.adminFor);
         } else {
           setItem('userId', loggedInUserId);
         }
