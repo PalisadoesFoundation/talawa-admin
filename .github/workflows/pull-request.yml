@@ -51,8 +51,8 @@ jobs:
           # Pass all modified files as arguments to the script
           echo ""
           # python3 ./.github/workflows/scripts/css_check.py \
-            --files ${{ steps.changed-files.outputs.modified_files }} \
-            --allowed_css_patterns app.module.css
+          #  --files ${{ steps.changed-files.outputs.modified_files }} \
+          #  --allowed_css_patterns app.module.css
 
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
