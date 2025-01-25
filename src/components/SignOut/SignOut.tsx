@@ -22,7 +22,7 @@ const SignOut = (): JSX.Element => {
   const navigate = useNavigate();
 
   const logout = async (): Promise<void> => {
-    const handleSignOut = () => {
+    const handleSignOut = (): void => {
       localStorage.clear();
       endSession();
       navigate('/');
@@ -40,7 +40,11 @@ const SignOut = (): JSX.Element => {
   return (
     <div className={styles.signOutContainer}>
       <LogoutIcon />
-      <button className={styles.signOutButton} onClick={logout}>
+      <button
+        className={styles.signOutButton}
+        onClick={logout}
+        aria-label="Sign out"
+      >
         Sign Out
       </button>
     </div>
