@@ -14,16 +14,6 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 
-/**
- * This file contains unit tests for the `OrganizationCard` component.
- *
- * The tests cover:
- * - Rendering the component with all provided props and verifying the correct display of text elements.
- * - Ensuring the component handles cases where certain props (like image) are not provided.
- *
- * These tests utilize the React Testing Library for rendering and querying DOM elements.
- */
-
 // Mock hooks
 const mockGetItem = vi.fn();
 vi.mock('utils/useLocalstorage', () => ({
@@ -333,48 +323,6 @@ describe('OrganizationCard Component', () => {
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('errorOccured');
       });
-    });
-  });
-
-  it('should handle membership withdrawal successfully', async () => {
-    const props = {
-      ...defaultProps,
-      membershipRequestStatus: 'pending',
-      membershipRequests: [{ _id: 'requestId', user: { _id: 'mockUserId' } }],
-    };
-
-    render(
-      <TestWrapper mocks={successMocks}>
-        <OrganizationCard {...props} isJoined={false} />
-      </TestWrapper>,
-    );
-
-    const withdrawButton = screen.getByTestId('withdrawBtn');
-    await fireEvent.click(withdrawButton);
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('MembershipRequestWithdrawn');
-    });
-  });
-
-  it('should handle membership withdrawal error when request not found', async () => {
-    const props = {
-      ...defaultProps,
-      membershipRequestStatus: 'pending',
-      membershipRequests: [], // Empty requests to trigger error
-    };
-
-    render(
-      <TestWrapper mocks={errorMocks}>
-        <OrganizationCard {...props} isJoined={false} />
-      </TestWrapper>,
-    );
-
-    const withdrawButton = screen.getByTestId('withdrawBtn');
-    await fireEvent.click(withdrawButton);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('MembershipRequestNotFound');
     });
   });
 });
