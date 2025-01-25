@@ -4071,7 +4071,7 @@ button[data-testid='createPostBtn'] {
 }
 .leftDrawer .optionList button:active,
 .leftDrawer .optionList button:focus {
-  font-weight:500;
+  font-weight: 500;
 }
 .leftDrawer .optionList button:hover svg {
   stroke: var(--leftDrawer-option-text) !important;
@@ -7432,7 +7432,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   flex-direction: column;
   padding: 0.8rem 1rem 0 1rem;
-  background-color: var(--user-sidebar-org-bg)!important;
+  background-color: var(--user-sidebar-org-bg) !important;
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
 }
