@@ -84,4 +84,4 @@ const ProfileCard = (): JSX.Element => {
   );
 };
 
-export default profileCard;
+export default ProfileCard;
