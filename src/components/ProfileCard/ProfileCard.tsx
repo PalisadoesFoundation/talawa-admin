@@ -77,15 +77,7 @@ const profileCard = (): JSX.Element => {
               : navigate(`/member/${orgId || ''}`)
           }
         >
-          <ChevronRightIcon
-            sx={{
-              color: 'gray',
-              background: 'white',
-              fontSize: 40,
-              strokeWidth: 0.5,
-              marginLeft: '50px',
-            }}
-          />
+          <ChevronRightIcon className={styles.chevronIcon} />
         </button>
       </div>
     </Dropdown>

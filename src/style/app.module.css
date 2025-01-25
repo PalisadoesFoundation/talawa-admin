@@ -7915,6 +7915,14 @@ button[data-testid='createPostBtn'] {
   background-color: var(--tablerow-bg-color);
 }
 
+.chevronIcon {
+  color: var(--eventManagement-button-text);
+  background: var(--tablerow-bg-color);
+  font-size: 60px;
+  stroke-width: 1;
+  margin-left: 50px;
+}
+
 /* SignOut.tsx */
 
 .signOutContainer {
