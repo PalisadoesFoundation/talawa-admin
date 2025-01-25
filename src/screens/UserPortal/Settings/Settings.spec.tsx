@@ -14,7 +14,9 @@ import userEvent from '@testing-library/user-event';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import useLocalStorage from 'utils/useLocalstorage';
 
+const { setItem } = useLocalStorage();
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -203,6 +205,7 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing Settings Screen [User Portal]', () => {
   beforeAll(() => {
+    setItem('name', 'John Doe');
     vi.useFakeTimers();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,

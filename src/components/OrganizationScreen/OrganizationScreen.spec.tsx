@@ -11,6 +11,8 @@ import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './OrganizationScreen.module.css';
 import { vi } from 'vitest';
+import useLocalStorage from 'utils/useLocalstorage';
+const { setItem } = useLocalStorage();
 const mockID: string | undefined = '123';
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual('react-router-dom')),
@@ -50,6 +52,9 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing OrganizationScreen', () => {
+  beforeAll(() => {
+    setItem('name', 'John Doe');
+  });
   const renderComponent = (): void => {
     render(
       <MockedProvider addTypename={false} link={link} mocks={MOCKS}>

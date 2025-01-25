@@ -16,7 +16,7 @@ import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import Organizations from './Organizations';
 import React, { act } from 'react';
-const { getItem } = useLocalStorage();
+const { getItem, setItem } = useLocalStorage();
 
 /**
  * Mock data for GraphQL queries.
@@ -344,6 +344,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
   /**
    * Test to ensure the screen is rendered properly.
    */
+  beforeEach(() => {
+    setItem('name', 'Noble Mittal');
+  });
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
