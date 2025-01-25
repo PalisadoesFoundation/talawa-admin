@@ -180,7 +180,18 @@ def check_files(
 
 
 def validate_directories_input(input_directories):
-    """Validate that the --directories input is correctly formatted."""
+    """Validate that the --directories input is correctly formatted.
+
+    Args:
+        input_directories: A list of file or directory paths to validate.
+
+    Returns:
+        validated_dirs: A list containing validated directory paths.
+        If the input is a file, its parent directory is added to the list.
+
+    Raises:
+        ValueError: If a path is neither a valid file nor a directory.
+    """
     validated_dirs = []
     for path in input_directories:
         if os.path.isdir(path):
