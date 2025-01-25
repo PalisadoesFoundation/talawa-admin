@@ -4070,7 +4070,10 @@ button[data-testid='createPostBtn'] {
 }
 .leftDrawer .optionList button:active,
 .leftDrawer .optionList button:focus {
+.leftDrawer .optionList button:active,
+.leftDrawer .optionList button:focus {
   font-weight: 500;
+}
 }
 .leftDrawer .optionList button:hover svg {
   stroke: var(--leftDrawer-option-text) !important;
