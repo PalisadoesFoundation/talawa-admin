@@ -105,11 +105,8 @@ function app(): JSX.Element {
       setItem('IsLoggedIn', 'TRUE');
       setItem('id', auth.id);
       setItem('name', auth.name);
-      // setItem('FirstName', auth.firstName);
-      // setItem('LastName', auth.lastName);
       setItem('email', auth.emailAddress);
-      setItem('Email', auth.emailAddress);
-      // setItem('UserImage', auth.image);
+      setItem('UserImage', auth.image);
     }
   }, [data, loading, setItem]);
 
