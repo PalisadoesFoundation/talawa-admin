@@ -139,7 +139,16 @@ def check_files(
                 if file_path in exclude_files:
                     continue
 
-                if file.endswith((".ts", ".tsx")) and "test" not in root:
+                if file.endswith((".ts", ".tsx")) and not any(
+                    pattern in root
+                    for pattern in [
+                        "__tests__",
+                        ".test.",
+                        ".spec.",
+                        "test/",
+                        "tests/",
+                    ]
+                ):
                     process_typescript_file(
                         file_path,
                         directory,
