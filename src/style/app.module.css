@@ -136,7 +136,6 @@
   --dropdown-shadow: #0000004c;
   --dropdown-color: #555555;
   --user-sidebar-org-option-bg: #eaebef;
-  --user-sidebar-org-bg: #f6f8fc;
   --user-sidebar-org-item-bg: #eaebef;
   --user-sidebar-org-bg: #ffffff;
   --sign-out-bg: #d3e3fd;
@@ -7906,6 +7905,11 @@ button[data-testid='createPostBtn'] {
 
 .profileCardContainer {
   margin-top: 80px !important;
+}
+
+.chevronRightbtn {
+	border:0px;
+	background-color: var(--tablerow-bg-color);
 }
 
 /* SignOut.tsx */

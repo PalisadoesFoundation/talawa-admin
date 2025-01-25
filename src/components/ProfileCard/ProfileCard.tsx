@@ -69,7 +69,7 @@ const profileCard = (): JSX.Element => {
           </span>
         </div>
         <button
-          className="border-0 bg-white"
+          className={styles.chevronRightbtn}
           data-testid="profileBtn"
           onClick={() =>
             userRole === 'User'
