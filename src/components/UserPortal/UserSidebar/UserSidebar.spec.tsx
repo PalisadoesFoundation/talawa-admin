@@ -384,6 +384,7 @@ const renderUserSidebar = (
 
 describe('UserSidebar Component Tests in User Portal', () => {
   beforeEach(() => {
+    setItem('name', 'Noble Mittal');
     vi.clearAllMocks();
   });
 
