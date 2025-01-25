@@ -22,7 +22,6 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
-  // GET_COMMUNITY_DATA,
   ORGANIZATION_LIST,
   SIGNIN_QUERY,
 } from 'GraphQl/Queries/Queries';
