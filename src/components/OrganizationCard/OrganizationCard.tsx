@@ -93,7 +93,7 @@ function OrganizationCard({
   // Custom hook for localStorage
   const { getItem } = useLocalStorage();
 
-  // Mutations for handling organization memberships
+  // Mutations for handling Organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
     refetchQueries: [
       { query: USER_ORGANIZATION_CONNECTION, variables: { id } },
