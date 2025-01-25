@@ -25,8 +25,15 @@ def check_embedded_css(content: str) -> list:
     Returns:
         list: A list of embedded CSS violations found.
     """
-    embedded_css_pattern = r"\{[^{}]*#[0-9a-fA-F]{3,6}\b.*?}"
-    return re.findall(embedded_css_pattern, content, re.DOTALL)
+    color_code_pattern = r"#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b"
+    violations = []
+
+    for line_number, line in enumerate(content.splitlines(), start=1):
+        matches = re.findall(color_code_pattern, line)
+        for match in matches:
+            violations.append((line_number, match))
+
+    return violations
 
 
 def process_typescript_file(
@@ -304,9 +311,12 @@ def main():
     if result.embedded_violations:
         output.append("\nEmbedded CSS Violations:")
         for violation in result.embedded_violations:
-            output.append(
-                f"- {violation.file_path}: {', '.join(violation.css_codes)}"
-            )
+            for css_code in violation.css_codes:
+                output.append(
+                    f"- {violation.file_path}: "
+                    f"has embedded color code `{css_code}`. use CSS variable "
+                    f"in src/style/app.module.css."
+                )
         exit_code = 1
 
     if output:
