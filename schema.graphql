@@ -787,8 +787,8 @@ type OrganizationInfoNode {
 }
 
 type AuthenticationPayload {
-  authenticationToken: String!
-  user: User!
+  authenticationToken: String,
+  user: User
 }
 input OrganizationInput {
   address: AddressInput!
