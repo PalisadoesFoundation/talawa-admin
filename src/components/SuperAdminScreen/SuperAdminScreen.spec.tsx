@@ -24,6 +24,9 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
   beforeAll(() => {
     setItem('name', 'John Doe');
   });
+  afterAll(() => {
+    localStorage.clear();
+  });
   test('Testing LeftDrawer in page functionality', async () => {
     render(
       <MockedProvider addTypename={false}>
