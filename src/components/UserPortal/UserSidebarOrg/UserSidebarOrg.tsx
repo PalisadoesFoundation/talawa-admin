@@ -161,7 +161,7 @@ const UserSidebarOrg = ({
                 {({ isActive }) => (
                   <Button
                     key={name}
-                    variant={isActive === true ? '' : ''}
+                    variant=""
                     className={isActive === true ? styles.activeItem : ''}
                   >
                     <div className={styles.iconWrapper}>

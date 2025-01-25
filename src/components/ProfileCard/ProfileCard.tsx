@@ -49,6 +49,10 @@ const ProfileCard = (): JSX.Element => {
               src={userImage}
               alt={`profile picture`}
               data-testid="display-img"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.style.display = 'none';
+              }}
             />
           ) : (
             <Avatar
