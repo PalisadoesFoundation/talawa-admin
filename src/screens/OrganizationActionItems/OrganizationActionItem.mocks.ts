@@ -215,6 +215,7 @@ export const MOCKS = [
         actionItemCategoryId: 'categoryId2',
         postCompletionNotes: 'Cmp Notes 2',
         allottedHours: 19,
+        isCompleted: true,
       },
     },
     result: {
@@ -255,6 +256,7 @@ export const MOCKS = [
         preCompletionNotes: 'Notes 3',
         allottedHours: 19,
         dueDate: '2044-01-02',
+        isCompleted: false,
       },
     },
     result: {
@@ -292,6 +294,7 @@ export const MOCKS = [
         assigneeType: 'EventVolunteer',
         actionItemCategoryId: 'categoryId1',
         allottedHours: 19,
+        isCompleted: false,
       },
     },
     result: {
@@ -311,6 +314,7 @@ export const MOCKS = [
         assigneeType: 'EventVolunteerGroup',
         actionItemCategoryId: 'categoryId1',
         allottedHours: 19,
+        isCompleted: false,
       },
     },
     result: {
@@ -467,6 +471,7 @@ export const MOCKS_ERROR = [
         assigneeId: 'userId1',
         assigneeType: 'User',
         postCompletionNotes: 'Cmp Notes 2',
+        isCompleted: false,
       },
     },
     error: new Error('Mock Graphql Error'),
