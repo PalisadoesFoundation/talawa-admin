@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -48,9 +48,9 @@ const MOCKS = [
                     },
                     likeCount: 0,
                     commentCount: 0,
-                    comments: [],
                     pinned: true,
                     likedBy: [],
+                    comments: [],
                   },
                   cursor: '6411e53835d7ba2344a78e21',
                 },
@@ -1013,15 +1013,14 @@ describe('Organisation Post Page', () => {
     expect(previousButton).toHaveAttribute('disabled');
   });
 
-  test('handleNextPage sets correct pagination variables', async () => {
-    const mockPostEdges =
-      MOCKS[0]?.result?.data?.organizations[0].posts.edges ?? [];
-    const paginationMock = {
+  test('handleNextPage updates pagination variables correctly', async () => {
+    // Initial load mock
+    const initialMock = {
       request: {
         query: ORGANIZATION_POST_LIST,
         variables: {
           id: undefined,
-          after: 'endCursor123',
+          after: null,
           before: null,
           first: 6,
           last: null,
@@ -1032,10 +1031,10 @@ describe('Organisation Post Page', () => {
           organizations: [
             {
               posts: {
-                edges: mockPostEdges,
+                edges: [],
                 pageInfo: {
-                  startCursor: 'startCursor123',
-                  endCursor: 'endCursor123',
+                  startCursor: 'startCursor1',
+                  endCursor: 'endCursor1',
                   hasNextPage: true,
                   hasPreviousPage: false,
                 },
@@ -1047,45 +1046,16 @@ describe('Organisation Post Page', () => {
       },
     };
 
-    const customMocks = [...MOCKS, paginationMock];
-    const customLink = new StaticMockLink(customMocks, true);
-
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const nextButton = screen.getByTestId('nextButton');
-    await act(async () => {
-      fireEvent.click(nextButton);
-    });
-
-    // Verify that the next query is made with correct variables
-    await wait();
-    expect(nextButton).toBeInTheDocument();
-  });
-
-  test('handlePreviousPage sets correct pagination variables', async () => {
-    const mockPostEdges =
-      MOCKS[0]?.result?.data?.organizations[0].posts.edges ?? [];
-    const paginationMock = {
+    // Next page mock
+    const nextPageMock = {
       request: {
         query: ORGANIZATION_POST_LIST,
         variables: {
           id: undefined,
-          after: null,
-          before: 'startCursor123',
-          first: null,
-          last: 6,
+          after: 'endCursor1',
+          before: null,
+          first: 6,
+          last: null,
         },
       },
       result: {
@@ -1093,10 +1063,10 @@ describe('Organisation Post Page', () => {
           organizations: [
             {
               posts: {
-                edges: mockPostEdges,
+                edges: [],
                 pageInfo: {
-                  startCursor: 'startCursor123',
-                  endCursor: 'endCursor123',
+                  startCursor: 'startCursor2',
+                  endCursor: 'endCursor2',
                   hasNextPage: false,
                   hasPreviousPage: true,
                 },
@@ -1108,11 +1078,8 @@ describe('Organisation Post Page', () => {
       },
     };
 
-    const customMocks = [...MOCKS, paginationMock];
-    const customLink = new StaticMockLink(customMocks, true);
-
     render(
-      <MockedProvider addTypename={false} link={customLink}>
+      <MockedProvider mocks={[initialMock, nextPageMock]} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1123,15 +1090,78 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    const previousButton = screen.getByTestId('previousButton');
-    await act(async () => {
-      fireEvent.click(previousButton);
+    // Wait for initial load
+    await waitFor(() => {
+      expect(screen.getByTestId('nextButton')).not.toBeDisabled();
     });
 
-    // Verify that the previous query is made with correct variables
-    await wait();
-    expect(previousButton).toBeInTheDocument();
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('previousButton'));
+    });
+
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('nextButton'));
+      expect(screen.getByTestId('nextButton')).toBeDisabled();
+    });
+  });
+  test('handlePreviousPage updates pagination variables correctly', async () => {
+    const prevPageMock = {
+      request: {
+        query: ORGANIZATION_POST_LIST,
+        variables: {
+          id: undefined,
+          after: null,
+          before: 'startCursor1',
+          first: null,
+          last: 6,
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              posts: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'startCursor1',
+                  endCursor: 'endCursor1',
+                  hasNextPage: false,
+                  hasPreviousPage: true,
+                },
+                totalCount: 10,
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[MOCKS[0], prevPageMock]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for initial load
+    await waitFor(() => {
+      expect(screen.getByTestId('previousButton')).toBeDisabled();
+    });
+
+    // Enable previous page (simulate having previous page)
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('nextButton')); // First go to next page
+    });
+
+    // Then click previous
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('previousButton'));
+      expect(screen.getByTestId('previousButton')).toBeDisabled();
+    });
   });
 });
