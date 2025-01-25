@@ -157,10 +157,13 @@ function OrganizationCard({
   }
 
   async function withdrawMembershipRequest(): Promise<void> {
+    if (!userId) {
+      toast.error(t('UserIdNotFound') as string);
+      return;
+    }
     const membershipRequest = membershipRequests.find(
       (request) => request.user._id === userId,
     );
-    console.log('Membership Request:', membershipRequest); // Add this log
 
     try {
       if (!membershipRequest) {
@@ -174,10 +177,11 @@ function OrganizationCard({
         },
       });
 
-      console.log('Mutation executed successfully'); // Log mutation success
       toast.success(t('MembershipRequestWithdrawn') as string); // Ensure this gets called
     } catch (error: unknown) {
-      console.error('Failed to withdraw membership request:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to withdraw membership request:', error);
+      }
       toast.error(t('errorOccured') as string);
     }
   }
