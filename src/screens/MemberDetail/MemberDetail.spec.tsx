@@ -104,19 +104,13 @@ describe('MemberDetail', () => {
 
   test('should render the elements', async () => {
     renderMemberDetailScreen(link1);
-
     await wait();
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
     expect(screen.getAllByText(/First name/i)).toBeTruthy();
     expect(screen.getAllByText(/Last name/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Language/i)).toBeTruthy();
-    // expect(screen.getByText(/Plugin creation allowed/i)).toBeInTheDocument();
-    // expect(screen.getAllByText(/Joined on/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Joined On/i)).toHaveLength(1);
     expect(screen.getAllByText(/Profile Details/i)).toHaveLength(1);
-    // expect(screen.getAllByText(/Actions/i)).toHaveLength(1);
     expect(screen.getAllByText(/Contact Information/i)).toHaveLength(1);
     expect(screen.getAllByText(/Events Attended/i)).toHaveLength(2);
   });
@@ -253,6 +247,25 @@ describe('MemberDetail', () => {
     const userImage = await screen.findByTestId('userImagePresent');
     expect(userImage).toBeInTheDocument();
     expect(userImage.getAttribute('src')).toBe(user?.image);
+  });
+
+  test('image upload and display works correctly', async () => {
+    renderMemberDetailScreen(link2);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
+    });
+    const file = new File(['hello'], 'hello.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+      const userImage = screen.getByTestId('userImagePresent');
+      expect(userImage).toBeInTheDocument();
+      expect(userImage.getAttribute('src')).toContain('data:image/png;base64');
+    });
   });
 
   test('resetChangesBtn works properly', async () => {
