@@ -53,7 +53,15 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
       git checkout develop
       ```
       - **Note:** Make sure to check out the `develop` branch
-   1. You now have a local copy of the code files. For more detailed instructions on contributing code, and managing the versions of this repository with `git`, checkout our [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+   1. You now have a local copy of the code files.
+   1. For more detailed instructions on contributing code, please review the following documents in the root directory of the code:
+      1. CONTRIBUTING.md
+      2. CODE_OF_CONDUCT.md
+      3. CODE_STYLE.md
+      4. DOCUMENTATION.md
+      5. INSTALLATION.md
+      6. ISSUE_GUIDELINES.md
+      7. PR_GUIDELINES.md
 
 4. **Talawa Administrators:**
 
