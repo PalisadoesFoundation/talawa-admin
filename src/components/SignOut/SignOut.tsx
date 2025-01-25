@@ -22,7 +22,7 @@ const SignOut = (): JSX.Element => {
   const navigate = useNavigate();
 
   const logout = async (): Promise<void> => {
-    const handleSignOut = () => {
+    const handleSignOut = (): void => {
       localStorage.clear();
       endSession();
       navigate('/');
