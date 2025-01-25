@@ -65,7 +65,7 @@
   --blue-color: #0000ff;
   --light-blue-color: #286fe0;
   --dimp-white: #b5b5b5;
-  --gray-white: #808080;
+  --background-primary: #808080;
   --dropdown-hover-color: #eff1f7;
   --grey-bg-color: #eaebef;
   --light-dark-green: #08780b;
@@ -1502,7 +1502,7 @@ hr {
 
 .startDate,
 .endDate {
-  color: var(--gray-white);
+  color: var(--background-primary);
   font-size: 14px;
 }
 
@@ -1518,7 +1518,7 @@ hr {
 }
 
 .description {
-  color: var(--gray-white);
+  color: var(--background-primary);
   font-weight: 300;
   font-size: 14px;
   word-wrap: break-word;
@@ -1532,7 +1532,7 @@ hr {
 }
 
 .toporgloc span {
-  color: var(--gray-white);
+  color: var(--background-primary);
 }
 
 .eventAgendaItemContainer h2 {
@@ -2355,8 +2355,8 @@ input[type='radio']:checked + label:hover {
 }
 
 .sampleHover:hover {
-  border-color: var(--gray-white);
-  color: var(--gray-white);
+  border-color: var(--background-primary);
+  color: var(--background-primary);
 }
 
 .sampleModalTitle {
@@ -5829,7 +5829,7 @@ button[data-testid='createPostBtn'] {
   justify-content: center;
   align-items: center;
   background-color: var(--white);
-  color: var(--gray-white);
+  color: var(--background-primary);
   font-size: medium;
   font-weight: 600;
 }
@@ -7476,7 +7476,7 @@ button[data-testid='createPostBtn'] {
   text-decoration: none;
   font-size: 10px;
   font-weight: 100;
-  color: var(--gray-white);
+  color: var(--background-primary);
 }
 
 .organizationCard_divider {
