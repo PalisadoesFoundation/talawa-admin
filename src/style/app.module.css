@@ -7450,7 +7450,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .box :hover {
-  color: #b85c00; /* Example of a darker, accessible orange */
+  color: var(--hover-shadow); /* Example of a darker, accessible orange */
 }
 
 .organizationCard_header {
