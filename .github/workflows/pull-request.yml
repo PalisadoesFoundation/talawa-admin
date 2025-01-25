@@ -55,7 +55,7 @@ jobs:
         run: |
           # Pass all modified files as arguments to the script
           python3 ./.github/workflows/scripts/css_check.py \
-            --directories ${{ steps.changed-ts-files.outputs.modified_files }} \
+            --files ${{ steps.changed-ts-files.outputs.modified_files }} \
             --allowed_css_patterns app.module.css
 
       - name: Get changed TypeScript files
