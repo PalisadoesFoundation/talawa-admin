@@ -124,27 +124,6 @@ describe('ProfileDropdown Component', () => {
 });
 
 describe('Member screen routing testing', () => {
-  test('member screen', async () => {
-    setItem('SuperAdmin', false);
-    setItem('AdminFor', []);
-
-    render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <ProfileCard />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
-    });
-
-    expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
-  });
-
   test('navigates to /user/settings for a user', async () => {
     setItem('SuperAdmin', false);
     setItem('AdminFor', []);
