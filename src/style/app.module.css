@@ -41,7 +41,7 @@
   /* Neutral Colors */
   --grey-light: #eaebef;
   --grey-dark: #707070;
-  --grey-border: #e8e5e5;
+  --border-color: #e8e5e5;
   --input-shadow: #dddddd;
 
   /* Blue Shades */
@@ -55,6 +55,7 @@
   /* Red Shades */
   --red-delete-bg: #f8d6dc;
   --red-delete-text: #ff4d4f;
+  --current-hour-indicator-color: #ff0000;
 
   /* Yellow/Orange Shades */
   --loader-color: #febc59;
@@ -64,7 +65,7 @@
   --blue-color: #0000ff;
   --light-blue-color: #286fe0;
   --dimp-white: #b5b5b5;
-  --gray-white: #808080;
+  --background-primary: #808080;
   --dropdown-hover-color: #eff1f7;
   --grey-bg-color: #eaebef;
   --light-dark-green: #08780b;
@@ -74,12 +75,12 @@
   --off-light-green: #31bb6a60;
   --dark-emerald-green: #23864c;
   --light-neon-green: #afffe8;
-  --white-color: #ffffff;
+  --primary-bg-color: #ffffff;
   --off-white-color: #ffffff97;
   --black-color: #000000;
   --black-shadow-color: #00000029;
   --white-shadow-color: #ffffff33;
-  --light-orange: #febc59;
+  --warning-text-color: #febc59;
   --grey-border-box-color: #e8e5e5;
   --subtle-blue-grey: #7c9beb;
   --subtle-blue-grey-hover: #5f7e91;
@@ -89,12 +90,14 @@
   --events-card-background-color: #eaebef;
   --organization-indicator-color: #a8c7fa;
   --white: #fff;
-  --black: black;
+  --primary-text-color: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+
+  --input-text-color: #737373;
   --info-button-text: var(--davys-grey);
   --close-button-text: var(--remove-button-color);
-  --close-button-bg: var(--white-color);
+  --close-button-bg: var(--primary-bg-color);
   --checkbox-focus-border: var(--bs-gray-300);
   --checkbox-bg: var(--dark-blue);
   --checkbox-border: var(--dark-blue);
@@ -109,6 +112,8 @@
   --tablerow-bg-color: #ffffff;
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
+  --create-button-bg-color: #fcfcfc;
+
   --sort-bg: #fcfcfc;
   --sidebar-option-bg: #eaebef;
   --sidebar-icon-stroke-active: #000000;
@@ -141,6 +146,9 @@
 
   --dropdown-button-bg: #555555;
   --dropdown-button-fill: #555555;
+  --dropdown-border-color: #555555;
+  --dropdown-font-color: #555555;
+  --dropdownItem-focus-bg: #e0e9ff;
 
   /* Font Sizes */
   --font-size-header: 16px;
@@ -205,7 +213,7 @@
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
   --table-head-bg: #eaebef;
-  --table-head-color: var(--bs-white, var(--white-color));
+  --table-head-color: var(--bs-white, var(--primary-bg-color));
   --table-header-color: #000000;
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
@@ -215,7 +223,18 @@
   --light-blue: #a8c7fa;
   --dark-blue: #1778f2;
   --remove-button-color: #c8102e;
+  --dropdown-item-bg: #fff;
+  --dropdown-item-text: #000000;
+  --action-button-text: #555555;
+  --eventManagement-button-text: #808080;
+  --eventManagement-button-border: #dddddd;
+  --eventManagement-button-bg: #ffffff;
+  --create_button-text: #555555;
+  --create-button-border: #dddddd;
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  --dorpdownItem-hover-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
+
   --drop-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
   /* breakpoints */
@@ -267,7 +286,7 @@
 
 .capacityLabel {
   background-color: var(--bs-primary);
-  color: var(--white-color);
+  color: var(--primary-bg-color);
   height: 22.19px;
   font-size: 12px;
   font-weight: bolder;
@@ -279,6 +298,28 @@
 
 .capacityLabel svg {
   margin-bottom: 3px;
+}
+
+.currentHourIndicator_container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  top: -8px;
+  left: -9px;
+}
+
+.currentHourIndicator_round {
+  background-color: var(--current-hour-indicator-color);
+  border-radius: 100%;
+  width: 15px;
+  height: 15px;
+}
+
+.currentHourIndicator_line {
+  width: 100%;
+  height: 1px;
+  background-color: var(--current-hour-indicator-color);
+  margin: auto;
 }
 
 .sidebar {
@@ -397,8 +438,8 @@
 .dropdown {
   background-color: var(--bs-white) !important;
   min-width: 150px;
-  border: 1px solid var(--davys-grey);
-  color: var(--davys-grey) !important;
+  border: 1px solid var(--dropdown-border-color);
+  color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
   margin-top: 10px;
@@ -435,9 +476,10 @@
 }
 
 .dropdownItem {
-  background-color: var(--bs-white) !important;
-  color: var(--davys-grey) !important;
+  background-color: var(--dropdown-item-bg) !important;
+  color: var(--dropdown-item-text) !important;
   border: none !important;
+  box-shadow: var(--dorpdownItem-hover-shadow);
 }
 
 .dropdownItem:focus,
@@ -448,20 +490,28 @@
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(
-    --dropdown-hover-color,
-    var(--grey-border-box-color)
-  ) !important;
-  color: var(--davys-grey) !important;
+  background-color: var(--dropdownItem-focus-bg) !important;
+  color: var(--dropdown-item-text) !important;
   outline: none !important;
-  box-shadow: 0 0 4px var(--highlight-color, var(--search-button-bg));
 }
 
 .input {
   flex: 1;
   position: relative;
   margin-right: 80px;
-  max-width: 473px !important;
+  width: 425px;
+}
+
+.input:active {
+  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3) !important;
+  background-color: var(--create-button-bg-color);
+  border-color: var(--input-shadow) !important;
+  color: var(--input-text-color);
+}
+
+.input:focus {
+  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3) !important;
+  border-color: var(--input-shadow) !important;
 }
 
 .eventCreatebtn {
@@ -543,19 +593,60 @@
   box-shadow: var(--drop-shadow);
 }
 
+.actionsButton {
+  background-color: var(--search-button-bg);
+  color: var(--action-button-text);
+  border: 1px solid var(--search-button-bg) !important;
+}
+
+.actionsButton:hover {
+  box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
+  background-color: var(--search-button-bg) !important;
+  color: var(--brown-color) !important;
+  border: 1px solid var(--search-button-bg) !important;
+}
+
+.eventManagementBtn {
+  color: var(--eventManagement-button-text);
+  background-color: var(--eventManagement-button-bg) !important;
+  border-color: var(--eventManagement-button-border) !important;
+}
+
+.eventManagementBtn:hover {
+  color: var(--eventManagement-button-text) !important;
+  border-color: var(--eventManagement-button-border);
+}
+
+.eventManagementSelectedBtn {
+  color: var(--action-button-text);
+  background-color: var(--sidebar-option-bg) !important;
+  border: 1px solid var(--eventManagement-button-text) !important;
+}
+
+.eventManagementSelectedBtn:hover {
+  color: var(--action-button-text) !important;
+  border: 1px solid var(--eventManagement-button-text);
+}
+
 .createButton {
-  background-color: var(--grey-bg-color) !important;
-  color: var(--black-color) !important;
-  margin-top: 10px;
+  background-color: var(--create-button-bg-color) !important;
+  color: var(--create_button-text) !important;
+  /* margin-top: 10px; */
   /* margin-left: 5px; */
-  border: 1px solid var(--davys-grey);
+  border: 1px solid var(--create-button-border) !important;
 }
 
 .createButton:hover {
-  background-color: var(--grey-bg-color) !important;
-  color: var(--black-color) !important;
-  border: 1px solid var(--davys-grey) !important;
-  box-shadow: var(--drop-shadow);
+  box-shadow: var(--dorpdownItem-hover-shadow);
+  background-color: var(--create-button-bg-color) !important;
+  color: var(--create_button-text) !important;
+  border: 1px solid var(--create-button-border) !important;
+}
+
+.createButton:active {
+  color: var(--eventManagement-button-text) !important;
+  background-color: var(--table-bg) !important;
+  border: 1px solid var(--eventManagement-button-text) !important;
 }
 
 .visuallyHidden {
@@ -572,7 +663,8 @@
 .inputField {
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: var(--bs-white);
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
 }
 
 .inputField:focus {
@@ -599,9 +691,9 @@
   --bs-btn-active-bg: var(--search-button-bg);
   --bs-btn-active-border-color: var(--search-button-bg);
   margin-bottom: 10px;
-  color: var(--search-button-fill);
-  background-color: var(--search-button-bg);
-  border-color: var(--search-button-bg);
+  background-color: var(--search-button-bg) !important;
+  border-color: var(--search-button-bg) !important;
+  color: var(--action-button-text);
   position: absolute;
   z-index: 10;
   bottom: 0;
@@ -704,7 +796,8 @@
 }
 
 .rowBackground {
-  background-color: var(--row-background) !important;
+  background-color: var(--eventManagement-button-bg);
+  color: var(--dropdown-item-text);
   max-height: 120px;
   overflow-y: auto;
 }
@@ -832,7 +925,7 @@ input[type='checkbox']:checked + label {
 }
 
 input[type='radio']:checked + label:hover {
-  color: var(--black-color) !important;
+  color: var(--table-header-color) !important;
 }
 
 .actionItemsContainer {
@@ -913,7 +1006,9 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: var(--search-button-bg); */
+  background-color: var(--create-button-bg-color) !important;
+  color: var(--eventManagement-button-text) !important;
+  border: 1px solid var(--create-button-border) !important;
 }
 
 .switch input {
@@ -1269,11 +1364,11 @@ hr {
 .eventDetailsBox {
   position: relative;
   box-sizing: border-box;
-  background: var(--white-color);
+  background: var(--primary-bg-color);
   width: 66%;
   padding: 0.3rem;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
+  border: 1px solid var(--create-button-border);
+  border-radius: 8px;
   margin-bottom: 0;
   margin-top: 20px;
 }
@@ -1281,12 +1376,12 @@ hr {
   padding: 20px;
   width: 100%;
   display: flex;
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
   margin: 0 4px;
   justify-content: space-between;
-  box-shadow: 0 3px 8px var(--black-shadow-color);
   align-items: center;
-  border-radius: 20px;
+  border: 1px solid var(--create-button-border);
+  border-radius: 8px;
 }
 .ctacards span {
   color: var(--dimp-white);
@@ -1313,13 +1408,13 @@ hr {
   color: var(--delete-button-color);
   margin-right: 5px;
   background-color: var(--delete-button-bg);
-  border: var(--white-color);
+  border: var(--primary-bg-color);
 }
 
 .closeButtonOrganizationEvents:hover {
   color: var(--delete-button-bg) !important;
   background-color: var(--delete-button-color) !important;
-  border: var(--white-color);
+  border: var(--primary-bg-color);
 }
 
 .datedivOrganizationEvents {
@@ -1379,7 +1474,7 @@ hr {
 
 .createButtonOrganizationEvents:hover {
   background-color: var(--bs-primary) !important;
-  color: var(--white-color) !important;
+  color: var(--primary-bg-color) !important;
   border: 1px solid var(--search-button-border) !important;
 }
 
@@ -1389,11 +1484,13 @@ hr {
   padding: 15px;
   padding-bottom: 0px;
   width: 33%;
-
+  border: 1px solid var(--input-shadow);
   box-sizing: border-box;
-  background: var(--white-color);
+  background: var(--primary-bg-color);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+  background: var(--white-color);
+  border-radius: 8px;
   margin-bottom: 0;
   margin-top: 20px;
   margin-left: 10px;
@@ -1411,7 +1508,7 @@ hr {
 
 .startDate,
 .endDate {
-  color: var(--gray-white);
+  color: var(--background-primary);
   font-size: 14px;
 }
 
@@ -1427,7 +1524,7 @@ hr {
 }
 
 .description {
-  color: var(--gray-white);
+  color: var(--background-primary);
   font-weight: 300;
   font-size: 14px;
   word-wrap: break-word;
@@ -1441,7 +1538,7 @@ hr {
 }
 
 .toporgloc span {
-  color: var(--gray-white);
+  color: var(--background-primary);
 }
 
 .eventAgendaItemContainer h2 {
@@ -1463,12 +1560,12 @@ hr {
 }
 
 .customcell {
-  background-color: var(--light-blue) !important;
-  color: var(--bs-white) !important;
+  background-color: var(--sidebar-option-bg) !important;
+  color: var(--table-header-color) !important;
   font-size: medium !important;
   font-weight: 500 !important;
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
 }
 
 .eventsAttended,
@@ -1476,7 +1573,7 @@ hr {
   color: var(--blue-color);
 }
 .actionBtn {
-  background-color: var(--white-color) !important;
+  background-color: var(--primary-bg-color) !important;
 }
 .actionBtn:hover,
 .actionBtn:focus,
@@ -1485,7 +1582,7 @@ hr {
 }
 
 .table-body > .table-row {
-  background-color: var(--white-color) !important;
+  background-color: var(--primary-bg-color) !important;
 }
 
 .table-body > .table-row:nth-child(2n) {
@@ -1856,7 +1953,7 @@ hr {
 .modalHeader {
   border: none;
   padding-bottom: 0;
-  background-color: var(--white-color) !important;
+  background-color: var(--primary-bg-color) !important;
   padding: 1rem 1rem;
   color: #000000;
 }
@@ -1906,6 +2003,10 @@ hr {
   background-color: var(--bs-white);
   max-height: 120px;
   overflow-y: auto; /* Handle content overflow */
+}
+
+.noBorderRow td {
+  border: none !important;
 }
 
 .subTagsLink {
@@ -1959,15 +2060,17 @@ hr {
 }
 
 .toggleBtn:hover {
-  color: var(--light-blue) !important;
+  color: var(--dropdown-font-color) !important;
+  border: 1px solid var(--create-button-border) !important;
 }
 
 input[type='radio']:checked + label {
-  background-color: var(--brand-primary-light) !important;
+  color: var(--table-header-color) !important;
+  background-color: var(--table-bg-color) !important;
 }
 
 input[type='radio']:checked + label:hover {
-  color: var(--black-color) !important;
+  color: var(--table-header-color) !important;
 }
 
 .dropdownToggle {
@@ -2065,7 +2168,19 @@ input[type='radio']:checked + label:hover {
 }
 
 .inputFields {
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--create-button-border);
+  color: var(--eventManagement-button-bg);
   box-shadow: 0 1px 1px var(--brand-primary);
+  width: 375px;
+  padding-right: 40px; /* Make room for the button */
+  border-radius: 8px; /* Match the image's rounded corners */
+}
+
+.inputFields:focus {
+  background-color: var(--eventManagement-button-bg) !important;
+  border: 1px solid var(--create-button-border) !important;
+  box-shadow: var(--dorpdownItem-hover-shadow);
 }
 
 .dropdowns {
@@ -2246,8 +2361,8 @@ input[type='radio']:checked + label:hover {
 }
 
 .sampleHover:hover {
-  border-color: var(--gray-white);
-  color: var(--gray-white);
+  border-color: var(--background-primary);
+  color: var(--background-primary);
 }
 
 .sampleModalTitle {
@@ -2477,7 +2592,7 @@ input[type='radio']:checked + label:hover {
   flex-direction: column;
   width: 30%;
   padding: 40px 30px;
-  background: var(--white-color);
+  background: var(--primary-bg-color);
   border-color: var(--grey-border-box-color);
   border-width: 5px;
   border-radius: 10px;
@@ -2666,14 +2781,14 @@ input[type='radio']:checked + label:hover {
 .activeBtn {
   width: 100%;
   display: flex;
-  color: var(--white-color);
+  color: var(--primary-bg-color);
   border: 1px solid var(--black-color);
   background-color: var(--grey-bg-color);
   transition: 0.5s;
 }
 
 .activeBtn:hover {
-  color: var(--white-color);
+  color: var(--primary-bg-color);
   background: var(--dark-emerald-green);
   transition: 0.5s;
 }
@@ -2683,12 +2798,12 @@ input[type='radio']:checked + label:hover {
   display: flex;
   color: var(--grey-bg-color-dark);
   border: 1px solid var(--off-light-green);
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
   transition: 0.5s;
 }
 
 .inactiveBtn:hover {
-  color: var(--white-color);
+  color: var(--primary-bg-color);
   background: var(--grey-bg-color);
   transition: 0.5s;
 }
@@ -2715,7 +2830,7 @@ input[type='radio']:checked + label:hover {
 }
 
 .activeBtn .bgFill {
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
 }
 
 .activeBtn i {
@@ -2727,11 +2842,11 @@ input[type='radio']:checked + label:hover {
 }
 
 .inactiveBtn:hover .bgFill {
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
 }
 
 .inactiveBtn i {
-  color: var(--white-color);
+  color: var(--primary-bg-color);
 }
 
 .inactiveBtn:hover i {
@@ -3384,7 +3499,7 @@ form > input {
 
 .cardTemplate {
   padding: 2rem;
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
   border-radius: 0.8rem;
   border: 1px solid var(--bs-gray-200, var(--bs-gray-300));
 }
@@ -3937,7 +4052,7 @@ button[data-testid='createPostBtn'] {
 .leftDrawer .titleHeader {
   margin: 2rem 0 1rem 0;
   font-weight: 600;
-  color: var(--black) !important;
+  color: var(--primary-text-color) !important;
 }
 
 .leftDrawer .optionList button {
@@ -3983,7 +4098,7 @@ button[data-testid='createPostBtn'] {
 
 .leftDrawer .profileContainer:focus {
   outline: none;
-  background-color: var(--bs-gray-100, var(--white-color));
+  background-color: var(--bs-gray-100, var(--primary-bg-color));
 }
 
 .leftDrawer .imageContainer {
@@ -4910,7 +5025,7 @@ button[data-testid='createPostBtn'] {
 
 .updateTimeoutCard {
   width: 700px;
-  background: var(--white-color);
+  background: var(--primary-bg-color);
   border: none;
   border-radius: 16px;
   filter: drop-shadow(0px 4px 15.3px rgba(0, 0, 0, 0.08));
@@ -4982,7 +5097,7 @@ button[data-testid='createPostBtn'] {
   font-family: 'Lato', sans-serif;
   font-weight: 500;
   font-size: 16px;
-  color: var(--white-color);
+  color: var(--primary-bg-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5058,7 +5173,7 @@ button[data-testid='createPostBtn'] {
   border-radius: 7px;
   border-color: var(--light-green);
   background-color: var(--light-green);
-  color: var(--white-color);
+  color: var(--primary-bg-color);
   padding-right: 10px;
   padding-left: 10px;
   justify-content: flex-end;
@@ -5088,11 +5203,11 @@ button[data-testid='createPostBtn'] {
 /* UserPasswordUpdate.tsx */
 
 .userupdatediv {
-  border: 1px solid var(--grey-border);
-  box-shadow: 2px 1px var(--grey-border);
+  border: 1px solid var(--border-color);
+  box-shadow: 2px 1px var(--border-color);
   padding: 25px 16px;
   border-radius: 5px;
-  background: var(--white-color);
+  background: var(--primary-bg-color);
 }
 
 .dispflexUserPasswordUpdate {
@@ -5115,8 +5230,8 @@ button[data-testid='createPostBtn'] {
 .whitebtn {
   margin: 1rem 0 0;
   margin-top: 10px;
-  border: 1px solid var(--grey-border);
-  box-shadow: 0 2px 2px var(--grey-border);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 2px var(--border-color);
   padding: 10px 20px;
   border-radius: 5px;
   background: none;
@@ -5202,7 +5317,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .yearlyCalender {
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
   box-sizing: border-box;
 }
 
@@ -5250,7 +5365,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
   font-weight: 600;
 }
 
@@ -5290,7 +5405,7 @@ button[data-testid='createPostBtn'] {
   overflow: auto;
   padding: 10px 4px 0px 4px;
   background-color: var(--grey-bg-color);
-  border: 1px solid var(--grey-border);
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   margin: 5px;
 }
@@ -5440,14 +5555,14 @@ button[data-testid='createPostBtn'] {
 }
 
 .agendaItemRow {
-  border: 1px solid var(--grey-border);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   transition: box-shadow 0.2s ease;
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
 }
 
 .agendaItemRow:hover {
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
 }
 
 .dragging {
@@ -5649,7 +5764,7 @@ button[data-testid='createPostBtn'] {
 
 .editHeader {
   background-color: var(--light-green);
-  color: var(--white-color);
+  color: var(--primary-bg-color);
 }
 
 .link_check {
@@ -5664,7 +5779,7 @@ button[data-testid='createPostBtn'] {
   font-family: sans-serif;
   font-size: 1.2rem;
   margin-bottom: 10px;
-  background: var(--white-color);
+  background: var(--primary-bg-color);
   border-radius: 10px;
   padding-left: 70px;
   padding-right: 70px;
@@ -5727,7 +5842,7 @@ button[data-testid='createPostBtn'] {
   justify-content: center;
   align-items: center;
   background-color: var(--white);
-  color: var(--gray-white);
+  color: var(--background-primary);
   font-size: medium;
   font-weight: 600;
 }
@@ -5736,7 +5851,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  border-right: 1px solid var(--grey-border);
+  border-right: 1px solid var(--border-color);
   width: 40px;
 }
 
@@ -5751,7 +5866,7 @@ button[data-testid='createPostBtn'] {
 .calendar_hour_block {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid var(--grey-border);
+  border-bottom: 1px solid var(--border-color);
   position: relative;
   height: 50px;
   border-bottom-right-radius: 5px;
@@ -5761,7 +5876,7 @@ button[data-testid='createPostBtn'] {
   border: 0px;
   font-size: 14px;
   background-color: initial;
-  color: var(--black);
+  color: var(--primary-text-color);
   font-weight: 600;
   transition: all 200ms;
   position: relative;
@@ -5795,7 +5910,7 @@ button[data-testid='createPostBtn'] {
   border-radius: 10px;
   margin: 5px;
   background-color: var(--white);
-  border: 1px solid var(--grey-border);
+  border: 1px solid var(--border-color);
   color: var(--grey-dark);
   font-weight: 600;
   height: 9rem;
@@ -5845,8 +5960,8 @@ button[data-testid='createPostBtn'] {
   right: auto;
   overflow: auto;
   padding: 10px 4px 0px 4px;
-  background-color: var(--white-color);
-  border: 1px solid var(--grey-border);
+  background-color: var(--primary-bg-color);
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   margin: 5px;
 }
@@ -6148,7 +6263,7 @@ button[data-testid='createPostBtn'] {
   background: var(--subtle-blue-grey) !important;
   padding: 2px 3px;
   border-radius: 5px;
-  border: 1px solid var(--grey-border);
+  border: 1px solid var(--border-color);
   box-shadow: 0 3px 2px var(--grey-border-box-color);
   color: var(--grey-dark);
   box-sizing: border-box;
@@ -6175,7 +6290,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .cardsEventListCard a {
-  color: var(--white-color);
+  color: var(--primary-bg-color);
   font-weight: 600;
 }
 
@@ -6357,7 +6472,7 @@ button[data-testid='createPostBtn'] {
   right: 10px;
   padding: 4px;
   background-color: var(--red-delete-bg);
-  color: var(--white-color);
+  color: var(--primary-bg-color);
   border: none;
   cursor: pointer;
 }
@@ -6421,7 +6536,7 @@ button[data-testid='createPostBtn'] {
   cursor: pointer;
   border: none;
   font-size: 12px;
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
 }
 
 .toggleClickBtnNone {
@@ -6432,7 +6547,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--white-color);
+  background-color: var(--primary-bg-color);
   padding-top: 20px;
   max-width: 700px;
   max-height: 500px;
@@ -6448,7 +6563,7 @@ button[data-testid='createPostBtn'] {
 
 .menuOptions li {
   padding: 10px;
-  border-bottom: 1px solid var(--grey-border);
+  border-bottom: 1px solid var(--border-color);
   padding-left: 100px;
   padding-right: 100px;
   cursor: pointer;
@@ -7844,4 +7959,53 @@ button[data-testid='createPostBtn'] {
   height: 2rem;
   width: 2rem;
   border-width: 0.2rem;
+}
+
+.organizationCard_avatar {
+  border-radius: 50%;
+  background-blend-mode: darken;
+  background-color: var(--primary-bg-color);
+  height: 65px;
+  width: 65px;
+}
+
+.organizationCard_warning {
+  color: var(--warning-text-color);
+}
+
+.box:hover {
+  box-shadow: var(--hover-shadow);
+  transition: box-shadow 0.2s ease;
+}
+
+.organizationCard_header {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.organizationCard_content {
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+.second_box > h4 {
+  font-size: 0.625rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--primary-text-color);
+}
+
+.second_box > h5 {
+  text-decoration: none;
+  font-size: 0.625rem;
+  font-weight: 100;
+  color: var(--background-primary);
+}
+
+.organizationCard_divider {
+  border: 1px solid var(--border-color);
+  width: 65vw;
+  height: 0px !important;
 }

@@ -18,6 +18,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from './Attendance.mocks';
 import { vi, describe, beforeEach, afterEach, expect, it } from 'vitest';
+import styles from '../../../style/app.module.css';
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -149,6 +150,77 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => {
       expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
+    });
+  });
+});
+
+describe('EventAttendance CSS Tests', () => {
+  const renderEventAttendance = (): RenderResult => {
+    return render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <EventAttendance />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  beforeEach(() => {
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
+    }));
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should apply correct styles to member name links', async () => {
+    renderEventAttendance();
+    const memberLinks = await screen.findAllByRole('link');
+    memberLinks.forEach((link) => {
+      expect(link).toHaveClass(styles.membername);
+    });
+  });
+
+  it('should style events attended count correctly', async () => {
+    renderEventAttendance();
+    const eventsAttendedCells = await screen.findAllByTestId(
+      /attendee-events-attended-\d+/,
+    );
+    eventsAttendedCells.forEach((cell) => {
+      const countSpan = cell.querySelector(`.${styles.eventsAttended}`);
+      expect(countSpan).toBeInTheDocument();
+    });
+  });
+
+  it('should maintain consistent row spacing in table body', async () => {
+    renderEventAttendance();
+
+    const tableRows = await screen.findAllByTestId(/attendee-row-\d+/);
+    tableRows.forEach((row) => {
+      expect(row).toHaveClass('my-6');
+    });
+  });
+
+  it('should apply tooltip styles correctly', async () => {
+    renderEventAttendance();
+    const tooltipCells = await screen.findAllByTestId(
+      /attendee-events-attended-\d+/,
+    );
+    tooltipCells.forEach((cell) => {
+      const tooltip = cell.closest('[role="tooltip"]');
+      if (tooltip) {
+        expect(tooltip).toHaveStyle({
+          backgroundColor: 'var(--bs-white)',
+          fontSize: '2em',
+          maxHeight: '170px',
+        });
+      }
     });
   });
 });
