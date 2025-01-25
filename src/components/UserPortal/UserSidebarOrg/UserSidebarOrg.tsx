@@ -168,7 +168,7 @@ const UserSidebarOrg = ({
                       <IconComponent
                         name={name}
                         fill={
-                          isActive === true ? '#00000' : 'var(--bs-secondary)'
+                          isActive === true ? '#000000' : 'var(--bs-secondary)'
                         }
                       />
                     </div>
