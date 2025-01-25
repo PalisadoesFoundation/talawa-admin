@@ -17,4 +17,4 @@ The logout function revokes the refresh token and clears local storage before re
 
 `Element`
 
-JSX.Element - The profile card .
+JSX.Element - The sign-out button.
