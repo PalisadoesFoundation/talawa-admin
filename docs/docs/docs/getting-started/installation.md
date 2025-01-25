@@ -354,7 +354,7 @@ git commit -m "commit message" --no-verify
 
 We are also running a post-merge(post-pull) hook which will automatically run "npm install" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
 
-If you don't want this hook to run, you can manually opt out of this using the `--no-verify` flag while using the merge command(git pull):
+If you don't want this hook to run, you can manually opt out of this using the `--no-verify` flag while using the merge command `git pull`:
 
 ```bash
 git pull --no-verify
