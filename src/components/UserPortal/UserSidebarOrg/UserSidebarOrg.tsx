@@ -14,7 +14,7 @@ import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from '../../../style/app.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
-import SignOut from 'components/UserPortal/OrganizationCard/SignOut/SignOut';
+import SignOut from './../../SignOut/SignOut';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;

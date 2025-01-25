@@ -37,8 +37,7 @@ const profileCard = (): JSX.Element => {
   const fullName = `${firstName} ${lastName}`;
   const displayedName =
     fullName.length > MAX_NAME_LENGTH
-      ? /*istanbul ignore next*/
-        fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
+      ? fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
       : fullName;
 
   return (

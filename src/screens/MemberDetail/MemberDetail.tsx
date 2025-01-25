@@ -42,8 +42,7 @@ type MemberDetailProps = {
 /**
  * MemberDetail component is used to display the details of a user.
  * It also allows the user to update the details. It uses the UPDATE_USER_MUTATION to update the user details.
- * It uses the USER_DETAILS query to get the user details. It uses the useLocalStorage hook to store the user
- *  details in the local storage.
+ * It uses the USER_DETAILS query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
  * @param id - The id of the user whose details are to be displayed.
  * @returns  React component
  *
@@ -87,6 +86,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
   const handleDateChange = (date: Dayjs | null): void => {
     if (date) {
+      console.log('formated', dayjs(date).format('YYYY-MM-DD'));
       setisUpdated(true);
       setFormState((prevState) => ({
         ...prevState,
@@ -95,7 +95,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
 
-  /*istanbul ignore next*/
   const handleEditIconClick = (): void => {
     fileInputRef.current?.click();
   };
@@ -143,19 +142,16 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const tagsAssigned =
     userData?.user?.tagsAssignedWith.edges.map(
       (edge: { node: InterfaceTagData; cursor: string }) => edge.node,
-    ) ?? /* istanbul ignore next */ [];
+    ) ?? [];
 
   const loadMoreAssignedTags = (): void => {
     fetchMoreAssignedTags({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          user?.user?.user?.tagsAssignedWith?.pageInfo?.endCursor ??
-          /* istanbul ignore next */
-          null,
+        after: user?.user?.user?.tagsAssignedWith?.pageInfo?.endCursor ?? null,
       },
       updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           user: {
@@ -193,7 +189,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned'));
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -211,7 +206,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ): Promise<void> => {
     const { name, value } = e.target;
-    /*istanbul ignore next*/
     if (
       name === 'photo' &&
       'files' in e.target &&
@@ -251,7 +245,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             ...formState,
           },
         });
-        /* istanbul ignore next */
         if (data) {
           setisUpdated(false);
           if (getItem('id') === currentUrl) {
@@ -264,18 +257,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
+          console.log('the error is ', error.message);
           errorHandler(t, error);
         }
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         errorHandler(t, error);
       }
     }
   };
   const resetChanges = (): void => {
-    /*istanbul ignore next*/
     setFormState({
       firstName: userData?.user?.firstName || '',
       lastName: userData?.user?.lastName || '',
@@ -351,9 +343,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       role="button"
                       aria-label="Edit profile picture"
                       tabIndex={0}
-                      onKeyDown={
-                        /*istanbul ignore next*/
-                        (e) => e.key === 'Enter' && handleEditIconClick()
+                      onKeyDown={(e) =>
+                        e.key === 'Enter' && handleEditIconClick()
                       }
                     />
                   </div>
@@ -416,7 +407,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder={tCommon('lastName')}
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={6} data-testid="gender">
                   <label htmlFor="gender" className="form-label">
                     {t('gender')}
                   </label>
@@ -633,7 +624,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   next={loadMoreAssignedTags}
                   hasMore={
                     userData?.user?.tagsAssignedWith.pageInfo.hasNextPage ??
-                    /* istanbul ignore next */
                     false
                   }
                   loader={<InfiniteScrollLoader />}
