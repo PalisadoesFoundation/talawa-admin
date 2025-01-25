@@ -119,7 +119,7 @@ const MOCKS = [
             },
             createdAt: '1234567890',
             userRegistrationRequired: true,
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            creator: { __typename: 'User', name: 'John Doe' },
             members: [
               {
                 _id: '56gheqyr7deyfuiwfewifruy8',
@@ -344,8 +344,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
   /**
    * Test to ensure the screen is rendered properly.
    */
+  const TEST_USER_NAME = 'Noble Mittal';
   beforeEach(() => {
-    setItem('name', 'Noble Mittal');
+    setItem('name', TEST_USER_NAME);
   });
   test('Screen should be rendered properly', async () => {
     render(
