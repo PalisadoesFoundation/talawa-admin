@@ -18,28 +18,21 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
  *
  * @returns JSX.Element - The profile card .
  */
-interface UserStorage {
-  SuperAdmin?: string;
-  AdminFor?: string[];
-  FirstName?: string;
-  LastName?: string;
-  UserImage?: string;
-}
-
 const ProfileCard = (): JSX.Element => {
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem<UserStorage['SuperAdmin']>('SuperAdmin');
-  const adminFor = getItem<UserStorage['AdminFor']>('AdminFor') ?? [];
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
   const userRole = superAdmin
     ? 'SuperAdmin'
-    : adminFor.length > 0
+    : adminFor?.length > 0
       ? 'Admin'
       : 'User';
-  const firstName = getItem<string>('FirstName') ?? 'Anonymous';
-  const lastName = getItem<string>('LastName') ?? 'User';
-  const userImage = getItem<string>('UserImage') ?? null;
+  const firstName = getItem('FirstName');
+  const lastName = getItem('LastName');
+  const userImage = getItem('UserImage');
   const navigate = useNavigate();
   const { orgId } = useParams();
+
   const MAX_NAME_LENGTH = 20;
   const fullName = `${firstName} ${lastName}`;
   const displayedName =
