@@ -48,8 +48,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
-  setItem('FirstName', 'John');
-  setItem('LastName', 'Doe');
+  setItem('name', 'John Doe');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
