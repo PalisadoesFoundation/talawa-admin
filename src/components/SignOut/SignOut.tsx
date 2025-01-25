@@ -21,16 +21,22 @@ const SignOut = (): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
 
-  const logout = async (): Promise<void> => {
-    try {
-      await revokeRefreshToken();
-    } catch (error) {
-      console.error('Error revoking refresh token:', error);
-    }
+const logout = async (): Promise<void> => {
+  const handleSignOut = () => {
     localStorage.clear();
     endSession();
     navigate('/');
   };
+
+  try {
+    await revokeRefreshToken();
+    handleSignOut();
+  } catch (error) {
+    console.error('Error revoking refresh token:', error);
+    // Still sign out the user locally even if token revocation fails
+    handleSignOut();
+  }
+};
   return (
     <div className={styles.signOutContainer}>
       <LogoutIcon />
