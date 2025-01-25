@@ -18,7 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
  *
  * @returns JSX.Element - The profile card .
  */
-const profileCard = (): JSX.Element => {
+const ProfileCard = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
