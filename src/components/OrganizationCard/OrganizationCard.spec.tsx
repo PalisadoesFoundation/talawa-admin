@@ -325,4 +325,46 @@ describe('OrganizationCard Component', () => {
       });
     });
   });
+
+  it('should handle membership withdrawal successfully', async () => {
+    const props = {
+      ...defaultProps,
+      membershipRequestStatus: 'pending',
+      membershipRequests: [{ _id: 'requestId', user: { _id: 'mockUserId' } }],
+    };
+
+    render(
+      <TestWrapper mocks={successMocks}>
+        <OrganizationCard {...props} isJoined={false} />
+      </TestWrapper>,
+    );
+
+    const withdrawButton = screen.getByTestId('withdrawBtn');
+    await fireEvent.click(withdrawButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('MembershipRequestWithdrawn');
+    });
+  });
+
+  it('should handle membership withdrawal error when request not found', async () => {
+    const props = {
+      ...defaultProps,
+      membershipRequestStatus: 'pending',
+      membershipRequests: [], // Empty requests to trigger error
+    };
+
+    render(
+      <TestWrapper mocks={errorMocks}>
+        <OrganizationCard {...props} isJoined={false} />
+      </TestWrapper>,
+    );
+
+    const withdrawButton = screen.getByTestId('withdrawBtn');
+    await fireEvent.click(withdrawButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('MembershipRequestNotFound');
+    });
+  });
 });
