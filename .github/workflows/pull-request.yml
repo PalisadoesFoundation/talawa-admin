@@ -40,27 +40,19 @@ jobs:
           chmod +x ./.github/workflows/scripts/countline.py
           ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
 
-      # Get Changed .ts and .tsx Files
-      - name: Get changed TypeScript files
-        id: changed-ts-files
-        uses: tj-actions/changed-files@v45
-        with:
-          files: |
-            **/*.ts
-            **/*.tsx
-
-      # Run the CSS import check script on changed .ts and .tsx files
-      - name: Check for CSS violations and print correct imports
-        if: ${{ steps.changed-ts-files.outputs.any_changed == 'true' }}
-        run: |
-          # Pass all modified files as arguments to the script
-          python3 ./.github/workflows/scripts/css_check.py \
-            --files ${{ steps.changed-ts-files.outputs.modified_files }} \
-            --allowed_css_patterns app.module.css
-
       - name: Get changed TypeScript files
         id: changed-files
         uses: tj-actions/changed-files@v45
+        
+        # Run the CSS import check script on changed .ts and .tsx files
+      - name: Check for CSS violations and print correct imports
+        if: ${{ steps.changed-files.outputs.any_changed == 'true' }}
+        run: |
+          # Pass all modified files as arguments to the script
+          python3 ./.github/workflows/scripts/css_check.py \
+            --files ${{ steps.changed-files.outputs.modified_files }} \
+            --allowed_css_patterns app.module.css
+
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run format:check
