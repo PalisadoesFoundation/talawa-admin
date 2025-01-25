@@ -844,6 +844,107 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('handles empty and null form values correctly', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    await waitFor(async () => {
+      const allottedHours = screen.getByLabelText(t.allottedHours);
+      const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
+
+      fireEvent.change(allottedHours, { target: { value: '' } });
+      expect(allottedHours).toHaveValue('');
+
+      fireEvent.change(preCompletionNotes, { target: { value: '' } });
+      expect(preCompletionNotes).toHaveValue('');
+
+      fireEvent.change(allottedHours, { target: { value: null } });
+      expect(allottedHours).toHaveValue('');
+    });
+  });
+
+  it('validates category selection', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    await waitFor(async () => {
+      const categorySelect = await screen.findByTestId('categorySelect');
+      const inputField = within(categorySelect).getByRole('combobox');
+
+      const submitButton = screen.getByTestId('submitBtn');
+      fireEvent.click(submitButton);
+      expect(inputField).toBeRequired();
+
+      fireEvent.mouseDown(inputField);
+      const categoryOption = await screen.findByText('Category 1');
+      fireEvent.click(categoryOption);
+      expect(inputField).toHaveValue('Category 1');
+
+      fireEvent.change(inputField, { target: { value: '' } });
+      expect(inputField).toHaveValue('');
+    });
+  });
+
+  it('handles assignee type changes correctly', async () => {
+    renderItemModal(link1, itemProps[1]);
+
+    await waitFor(async () => {
+      const groupRadio = await screen.findByText(t.groups);
+      const individualRadio = await screen.findByText(t.individuals);
+
+      fireEvent.click(individualRadio);
+      expect(await screen.findByTestId('volunteerSelect')).toBeInTheDocument();
+
+      fireEvent.click(groupRadio);
+      expect(
+        await screen.findByTestId('volunteerGroupSelect'),
+      ).toBeInTheDocument();
+
+      fireEvent.click(individualRadio);
+      expect(await screen.findByTestId('volunteerSelect')).toBeInTheDocument();
+    });
+  });
+
+  it('validates due date handling', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    await waitFor(async () => {
+      const dateInput = screen.getByLabelText(t.dueDate);
+
+      fireEvent.change(dateInput, { target: { value: 'invalid date' } });
+      expect(dateInput).toHaveValue('');
+
+      fireEvent.change(dateInput, { target: { value: '01/01/2020' } });
+      expect(dateInput).toHaveValue('01/01/2020');
+
+      fireEvent.change(dateInput, { target: { value: '01/01/2025' } });
+      expect(dateInput).toHaveValue('01/01/2025');
+    });
+  });
+
+  it('handles network errors gracefully', async () => {
+    renderItemModal(link2, itemProps[0]);
+
+    await waitFor(async () => {
+      const categorySelect = await screen.findByTestId('categorySelect');
+      const inputField = within(categorySelect).getByRole('combobox');
+      fireEvent.mouseDown(inputField);
+      const categoryOption = await screen.findByText('Category 1');
+      fireEvent.click(categoryOption);
+
+      const memberSelect = await screen.findByTestId('memberSelect');
+      const memberInput = within(memberSelect).getByRole('combobox');
+      fireEvent.mouseDown(memberInput);
+      const memberOption = await screen.findByText('Harve Lance');
+      fireEvent.click(memberOption);
+
+      const submitButton = screen.getByTestId('submitBtn');
+      fireEvent.click(submitButton);
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+    });
+  });
+
   it('handles null date change', async () => {
     renderItemModal(link1, itemProps[0]);
 
@@ -852,6 +953,29 @@ describe('Testing ItemModal', () => {
 
     await waitFor(() => {
       expect(dateInput).toHaveValue('');
+    });
+  });
+
+  it('handles timezone edge cases', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    await waitFor(async () => {
+      const dateInput = screen.getByLabelText(t.dueDate);
+
+      // Test dates around DST changes
+      const dstDates = [
+        '03/12/2025', // Spring forward
+        '11/05/2025', // Fall back
+      ];
+
+      for (const date of dstDates) {
+        fireEvent.change(dateInput, { target: { value: date } });
+        expect(dateInput).toHaveValue(date);
+      }
+
+      // Test midnight boundary dates
+      fireEvent.change(dateInput, { target: { value: '01/01/2025' } });
+      expect(dateInput).toHaveValue('01/01/2025');
     });
   });
 
