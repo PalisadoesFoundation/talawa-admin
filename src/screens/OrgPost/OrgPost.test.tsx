@@ -179,6 +179,122 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
+// Centralized Mocks
+const initialMock = {
+  request: {
+    query: ORGANIZATION_POST_LIST,
+    variables: {
+      id: undefined,
+      after: null,
+      before: null,
+      first: 6,
+      last: null,
+    },
+  },
+  result: {
+    data: {
+      organizations: [
+        {
+          posts: {
+            edges: [],
+            pageInfo: {
+              startCursor: 'startCursor1',
+              endCursor: 'endCursor1',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 10,
+          },
+        },
+      ],
+    },
+  },
+};
+
+const nextPageMock = {
+  request: {
+    query: ORGANIZATION_POST_LIST,
+    variables: {
+      id: undefined,
+      after: 'endCursor1',
+      before: null,
+      first: 6,
+      last: null,
+    },
+  },
+  result: {
+    data: {
+      organizations: [
+        {
+          posts: {
+            edges: [],
+            pageInfo: {
+              startCursor: 'startCursor2',
+              endCursor: 'endCursor2',
+              hasNextPage: false,
+              hasPreviousPage: true,
+            },
+            totalCount: 10,
+          },
+        },
+      ],
+    },
+  },
+};
+
+const prevPageMock = {
+  request: {
+    query: ORGANIZATION_POST_LIST,
+    variables: {
+      id: undefined,
+      after: null,
+      before: 'startCursor2',
+      first: null,
+      last: 6,
+    },
+  },
+  result: {
+    data: {
+      organizations: [
+        {
+          posts: {
+            edges: [],
+            pageInfo: {
+              startCursor: 'startCursor1',
+              endCursor: 'endCursor1',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 10,
+          },
+        },
+      ],
+    },
+  },
+};
+
+const successMock = {
+  request: {
+    query: CREATE_POST_MUTATION,
+    variables: {
+      title: 'Test Post',
+      text: 'Test Content',
+      organizationId: undefined,
+      file: '',
+      pinned: false,
+    },
+  },
+  result: {
+    data: {
+      createPost: {
+        _id: '123',
+        title: 'Test Post',
+        text: 'Test Content',
+      },
+    },
+  },
+};
+
 describe('Organisation Post Page', () => {
   const formData = {
     posttitle: 'dummy post',
@@ -808,28 +924,6 @@ describe('Organisation Post Page', () => {
   });
 
   test('successful post creation should reset form and close modal', async () => {
-    const successMock = {
-      request: {
-        query: CREATE_POST_MUTATION,
-        variables: {
-          title: 'Test Post',
-          text: 'Test Content',
-          organizationId: undefined,
-          file: '',
-          pinned: false,
-        },
-      },
-      result: {
-        data: {
-          createPost: {
-            _id: '123',
-            title: 'Test Post',
-            text: 'Test Content',
-          },
-        },
-      },
-    };
-
     const customMocks = [...MOCKS, successMock];
     const customLink = new StaticMockLink(customMocks, true);
 
@@ -1014,70 +1108,6 @@ describe('Organisation Post Page', () => {
   });
 
   test('handleNextPage updates pagination variables correctly', async () => {
-    // Initial load mock
-    const initialMock = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          id: undefined,
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: {
-          organizations: [
-            {
-              posts: {
-                edges: [],
-                pageInfo: {
-                  startCursor: 'startCursor1',
-                  endCursor: 'endCursor1',
-                  hasNextPage: true,
-                  hasPreviousPage: false,
-                },
-                totalCount: 10,
-              },
-            },
-          ],
-        },
-      },
-    };
-
-    // Next page mock
-    const nextPageMock = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          id: undefined,
-          after: 'endCursor1',
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: {
-          organizations: [
-            {
-              posts: {
-                edges: [],
-                pageInfo: {
-                  startCursor: 'startCursor2',
-                  endCursor: 'endCursor2',
-                  hasNextPage: false,
-                  hasPreviousPage: true,
-                },
-                totalCount: 10,
-              },
-            },
-          ],
-        },
-      },
-    };
-
     render(
       <MockedProvider mocks={[initialMock, nextPageMock]} addTypename={false}>
         <BrowserRouter>
@@ -1104,40 +1134,13 @@ describe('Organisation Post Page', () => {
       expect(screen.getByTestId('nextButton')).toBeDisabled();
     });
   });
-  test('handlePreviousPage updates pagination variables correctly', async () => {
-    const prevPageMock = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          id: undefined,
-          after: null,
-          before: 'startCursor1',
-          first: null,
-          last: 6,
-        },
-      },
-      result: {
-        data: {
-          organizations: [
-            {
-              posts: {
-                edges: [],
-                pageInfo: {
-                  startCursor: 'startCursor1',
-                  endCursor: 'endCursor1',
-                  hasNextPage: false,
-                  hasPreviousPage: true,
-                },
-                totalCount: 10,
-              },
-            },
-          ],
-        },
-      },
-    };
 
+  test('handlePreviousPage updates pagination variables correctly', async () => {
     render(
-      <MockedProvider mocks={[MOCKS[0], prevPageMock]} addTypename={false}>
+      <MockedProvider
+        mocks={[initialMock, nextPageMock, prevPageMock]}
+        addTypename={false}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1150,18 +1153,29 @@ describe('Organisation Post Page', () => {
 
     // Wait for initial load
     await waitFor(() => {
-      expect(screen.getByTestId('previousButton')).toBeDisabled();
+      expect(screen.getByTestId('nextButton')).not.toBeDisabled();
     });
 
-    // Enable previous page (simulate having previous page)
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('nextButton')); // First go to next page
+    // Click next button and wait for update
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('nextButton'));
     });
 
-    // Then click previous
     await waitFor(() => {
+      expect(screen.getByTestId('previousButton')).not.toBeDisabled();
+    });
+
+    // Click previous button and wait for update
+    await act(async () => {
       fireEvent.click(screen.getByTestId('previousButton'));
+    });
+
+    // Verify the state after navigation
+    await waitFor(() => {
       expect(screen.getByTestId('previousButton')).toBeDisabled();
+      expect(screen.getByTestId('nextButton')).not.toBeDisabled();
     });
   });
+
+  // ...existing tests...
 });
