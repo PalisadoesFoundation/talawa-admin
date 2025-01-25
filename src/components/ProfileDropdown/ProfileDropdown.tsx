@@ -33,7 +33,7 @@ const profileDropdown = (): JSX.Element => {
     : adminFor?.length > 0
       ? 'Admin'
       : 'User';
-  const name = getItem('name');
+  const name = getItem('name') || '';
   const userImage = getItem('UserImage');
   const navigate = useNavigate();
   const { orgId } = useParams();
