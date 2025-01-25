@@ -11,6 +11,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it, describe, beforeEach, afterEach, expect } from 'vitest';
+import '../../style/app.module.css';
 
 const { setItem } = useLocalStorage();
 

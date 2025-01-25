@@ -14,9 +14,9 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import './assets/css/app.css';
-import 'bootstrap/dist/js/bootstrap.min.js';
-import 'react-datepicker/dist/react-datepicker.css';
-import 'flag-icons/css/flag-icons.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
+import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
+import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import { Provider } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
