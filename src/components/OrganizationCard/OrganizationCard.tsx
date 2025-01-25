@@ -115,7 +115,7 @@ function OrganizationCard({
 
   useEffect(() => {
     try {
-      // Use the custom hook to retrieve the userId
+      // Use the custom Hook to retrieve the userId
       const id = getItem('userId'); // Adjust this line based on your actual localStorage key
       setUserId(id);
     } catch (error) {
