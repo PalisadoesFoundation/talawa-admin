@@ -179,7 +179,6 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-// Centralized Mocks
 const initialMock = {
   request: {
     query: ORGANIZATION_POST_LIST,
@@ -383,7 +382,6 @@ describe('Organisation Post Page', () => {
     fireEvent.click(createPostBtn);
 
     await wait();
-    // Add assertions to verify post creation and error handling
 
     userEvent.click(screen.getByTestId('closeOrganizationModal'));
   });
@@ -595,7 +593,7 @@ describe('Organisation Post Page', () => {
     const refetchMock = jest.fn();
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS} link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -610,8 +608,6 @@ describe('Organisation Post Page', () => {
     await wait();
 
     userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    // Fill in post form fields...
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
@@ -674,22 +670,18 @@ describe('Organisation Post Page', () => {
       target: { value: 'Test post information' },
     });
 
-    // Simulate uploading an image
     const imageFile = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
     const imageInput = screen.getByTestId('addMediaField');
     userEvent.upload(imageInput, imageFile);
 
-    // Check if the image is displayed
     const imagePreview = await screen.findByAltText('Post Image Preview');
     expect(imagePreview).toBeInTheDocument();
 
-    // Check if the close button for the image works
     const closeButton = screen.getByTestId('mediaCloseButton');
     fireEvent.click(closeButton);
 
-    // Check if the image is removed from the preview
     expect(imagePreview).not.toBeInTheDocument();
   }, 15000);
 
@@ -741,7 +733,6 @@ describe('Organisation Post Page', () => {
     await wait();
     userEvent.click(screen.getByTestId('createPostModalBtn'));
 
-    // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
     expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
     expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
@@ -764,7 +755,6 @@ describe('Organisation Post Page', () => {
     await wait();
     userEvent.click(screen.getByTestId('createPostModalBtn'));
 
-    // Simulate user input
     fireEvent.change(screen.getByTestId('modalTitle'), {
       target: { value: 'Test Title' },
     });
@@ -772,7 +762,6 @@ describe('Organisation Post Page', () => {
       target: { value: 'Test Info' },
     });
 
-    // Check if input values are set correctly
     expect(screen.getByTestId('modalTitle')).toHaveValue('Test Title');
     expect(screen.getByTestId('modalinfo')).toHaveValue('Test Info');
   });
@@ -855,11 +844,9 @@ describe('Organisation Post Page', () => {
       userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
     });
 
-    // Check if the video is displayed
     const videoPreview = await screen.findByTestId('videoPreview');
     expect(videoPreview).toBeInTheDocument();
 
-    // Check if the close button for the video works
     const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
     await act(async () => {
       fireEvent.click(closeVideoPreviewButton);
@@ -868,7 +855,6 @@ describe('Organisation Post Page', () => {
   });
 
   test('Sorting posts by pinned status', async () => {
-    // Mocked data representing posts with different pinned statuses
     const mockedPosts = [
       {
         _id: '1',
@@ -892,7 +878,6 @@ describe('Organisation Post Page', () => {
       },
     ];
 
-    // Render the OrgPost component and pass the mocked data to it
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -910,7 +895,6 @@ describe('Organisation Post Page', () => {
 
     const sortedPosts = screen.getAllByTestId('post-item');
 
-    // Assert that the posts are sorted correctly
     expect(sortedPosts).toHaveLength(mockedPosts.length);
     expect(sortedPosts[0]).toHaveTextContent(
       'postoneThis is the first po... Aditya Shelke',
@@ -942,32 +926,26 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    // Open modal
     userEvent.click(screen.getByTestId('createPostModalBtn'));
 
-    // Fill form
     userEvent.type(screen.getByTestId('modalTitle'), 'Test Post');
     userEvent.type(screen.getByTestId('modalinfo'), 'Test Content');
 
-    // Submit form
     await act(async () => {
       fireEvent.click(screen.getByTestId('createPostBtn'));
     });
 
     await wait();
 
-    // Verify modal is closed
     expect(
       screen.queryByTestId('modalOrganizationHeader'),
     ).not.toBeInTheDocument();
 
-    // Verify form fields are reset - try to open modal again
     userEvent.click(screen.getByTestId('createPostModalBtn'));
     expect(screen.getByTestId('modalTitle')).toHaveValue('');
     expect(screen.getByTestId('modalinfo')).toHaveValue('');
     expect(screen.getByTestId('pinPost')).not.toBeChecked();
 
-    // Using data-testid for toast notification instead of text content
     const toastContainer = screen.getByRole('alert');
     expect(toastContainer).toBeInTheDocument();
   });
@@ -1023,26 +1001,22 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    // Find pagination buttons using className
     const nextButton = screen.getByRole('button', { name: /next/i });
     const previousButton = screen.getByRole('button', { name: /previous/i });
 
     expect(nextButton).toBeInTheDocument();
     expect(previousButton).toBeInTheDocument();
 
-    // Test Next Page
     await act(async () => {
       fireEvent.click(nextButton);
     });
     await wait();
 
-    // Test Previous Page
     await act(async () => {
       fireEvent.click(previousButton);
     });
     await wait();
 
-    // Verify the buttons remain in the document
     expect(nextButton).toBeInTheDocument();
     expect(previousButton).toBeInTheDocument();
   });
@@ -1098,11 +1072,9 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    // Find pagination buttons using className and role
     const nextButton = screen.getByRole('button', { name: /next/i });
     const previousButton = screen.getByRole('button', { name: /previous/i });
 
-    // Verify buttons are disabled
     expect(nextButton).toHaveAttribute('disabled');
     expect(previousButton).toHaveAttribute('disabled');
   });
@@ -1120,7 +1092,6 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial load
     await waitFor(() => {
       expect(screen.getByTestId('nextButton')).not.toBeDisabled();
     });
@@ -1151,12 +1122,10 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial load
     await waitFor(() => {
       expect(screen.getByTestId('nextButton')).not.toBeDisabled();
     });
 
-    // Click next button and wait for update
     await act(async () => {
       fireEvent.click(screen.getByTestId('nextButton'));
     });
@@ -1165,17 +1134,103 @@ describe('Organisation Post Page', () => {
       expect(screen.getByTestId('previousButton')).not.toBeDisabled();
     });
 
-    // Click previous button and wait for update
     await act(async () => {
       fireEvent.click(screen.getByTestId('previousButton'));
     });
 
-    // Verify the state after navigation
     await waitFor(() => {
       expect(screen.getByTestId('previousButton')).toBeDisabled();
       expect(screen.getByTestId('nextButton')).not.toBeDisabled();
     });
   });
 
-  // ...existing tests...
+  test('handles create post error cases', async () => {
+    const errorMock = {
+      request: {
+        query: CREATE_POST_MUTATION,
+        variables: {
+          title: '',
+          text: '',
+          organizationId: undefined,
+          file: '',
+          pinned: false,
+        },
+      },
+      error: new Error('Text fields cannot be empty strings'),
+    };
+
+    render(
+      <MockedProvider mocks={[...MOCKS, errorMock]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createPostBtn'));
+    });
+
+    await wait();
+
+    const toastContainer = screen.getByRole('alert');
+    expect(toastContainer).toBeInTheDocument();
+  });
+
+  test('handles empty search input', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const searchInput = screen.getByTestId('searchByName');
+    fireEvent.change(searchInput, { target: { value: '' } });
+
+    await wait();
+
+    expect(searchInput).toHaveValue('');
+  });
+
+  test('handles file input change with no file selected', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const fileInput = screen.getByTestId('addMediaField');
+    fireEvent.change(fileInput, { target: { files: [] } });
+
+    await wait();
+
+    expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
+  });
 });

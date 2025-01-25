@@ -126,8 +126,6 @@ function orgPost(): JSX.Element {
       [],
   );
 
-  // ...
-
   useEffect(() => {
     if (orgPostListData && orgPostListData.organizations) {
       const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
