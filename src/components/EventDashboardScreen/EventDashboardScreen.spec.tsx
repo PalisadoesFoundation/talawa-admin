@@ -122,6 +122,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
   });
   it('Testing LeftDrawer in page functionality', async () => {
     setItem('IsLoggedIn', true);
+    setItem('name', 'John Doe');
     setItem('AdminFor', [
       { _id: '6637904485008f171cf29924', __typename: 'Organization' },
     ]);
