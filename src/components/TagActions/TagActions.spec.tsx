@@ -11,7 +11,6 @@ import {
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import { store } from 'state/store';
@@ -22,8 +21,10 @@ import type { ApolloLink } from '@apollo/client';
 import type { InterfaceTagActionsProps } from './TagActions';
 import TagActions from './TagActions';
 import i18n from 'utils/i18nForTest';
+import { vi } from 'vitest';
 import {
   MOCKS,
+  MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS,
   MOCKS_ERROR_ORGANIZATION_TAGS_QUERY,
   MOCKS_ERROR_SUBTAGS_QUERY,
 } from './TagActionsMocks';
@@ -32,7 +33,7 @@ import type { TFunction } from 'i18next';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
-
+const link4 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS);
 async function wait(ms = 500): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -41,10 +42,10 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -109,14 +110,16 @@ const renderTagActionsModal = (
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actualModule = await vi.importActual('react-router-dom');
+      return {
+        ...actualModule,
+      };
+    });
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
@@ -141,7 +144,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('Component calls hideTagActionsModal when modal is closed', async () => {
-    const hideTagActionsModalMock = jest.fn();
+    const hideTagActionsModalMock = vi.fn();
 
     const props2: InterfaceTagActionsProps = {
       tagActionsModalIsOpen: true,
@@ -350,6 +353,18 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
+    });
+  });
+  test('Toasts error when something wrong happen while assigning/removing tag', async () => {
+    renderTagActionsModal(props[0], link4);
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
     });
   });
 
