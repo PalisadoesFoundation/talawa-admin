@@ -25,8 +25,8 @@ def check_embedded_css(content: str) -> list:
     Returns:
         list: A list of embedded CSS violations found.
     """
-    embedded_css_pattern = r"#([0-9a-fA-F]{3}){1,2}"  # Matches CSS color codes
-    return re.findall(embedded_css_pattern, content)
+    embedded_css_pattern = r"\{[^{}]*#[0-9a-fA-F]{3,6}\b.*?}"
+    return re.findall(embedded_css_pattern, content, re.DOTALL)
 
 
 def process_typescript_file(
@@ -59,6 +59,7 @@ def process_typescript_file(
 
     # Check for CSS imports with an improved regex pattern
     css_imports = re.findall(r'import\s+.*?["\'](.+?\.css)["\']', content)
+    found_correct_import = False
     for css_file in css_imports:
         base_path = os.path.dirname(file_path)
         css_file_path = os.path.normpath(os.path.join(base_path, css_file))
@@ -72,8 +73,15 @@ def process_typescript_file(
             css_file.endswith(pattern) for pattern in allowed_css_patterns
         ):
             correct_css_imports.append(CorrectImport(file_path, css_file))
+            found_correct_import = True
         else:
             violations.append(Violation(file_path, css_file, "Invalid import"))
+
+    # Fail if no correct import of app.module.css is found
+    if not found_correct_import:
+        violations.append(
+            Violation(file_path, "app.module.css", "Missing required import")
+        )
 
     # Check for embedded CSS
     embedded_css = check_embedded_css(content)
@@ -85,16 +93,18 @@ def process_typescript_file(
 
 def check_files(
     directories: list,
+    files: list,
     exclude_files: list,
     exclude_directories: list,
     allowed_css_patterns: list,
 ) -> CSSCheckResult:
-    """Scan directories for TypeScript files and check for CSS violations.
+    """Scan directories and specific files for TS files and their violations.
 
-    This function checks TypeScriptfiles in given directories for violations.
+    This function checks TypeScript files in given directories for violations.
 
     Args:
         directories: List of directories to scan for TypeScript files.
+        files: List of specific files to check.
         exclude_files: List of file paths to exclude from the scan.
         exclude_directories: List of directories to exclude from the scan.
         allowed_css_patterns: List of allowed CSS patterns for validation.
@@ -117,14 +127,14 @@ def check_files(
     for directory in directories:
         directory = os.path.abspath(directory)
 
-        for root, _, files in os.walk(directory):
+        for root, _, files_in_dir in os.walk(directory):
             if any(
                 root.startswith(exclude_dir)
                 for exclude_dir in exclude_directories
             ):
                 continue
 
-            for file in files:
+            for file in files_in_dir:
                 file_path = os.path.abspath(os.path.join(root, file))
                 if file_path in exclude_files:
                     continue
@@ -139,9 +149,49 @@ def check_files(
                         embedded_css_violations,
                     )
 
+                # Fail if CSS file exists in the same directory
+                if file.endswith(".css") and root == os.path.dirname(
+                    file_path
+                ):
+                    violations.append(
+                        Violation(
+                            file_path, file, "CSS file in same directory"
+                        )
+                    )
+
+    # Process individual files explicitly listed
+    for file_path in files:
+        file_path = os.path.abspath(file_path)
+        if file_path not in exclude_files and file_path.endswith(
+            (".ts", ".tsx")
+        ):
+            process_typescript_file(
+                file_path,
+                os.path.dirname(file_path),
+                allowed_css_patterns,
+                violations,
+                correct_css_imports,
+                embedded_css_violations,
+            )
+
     return CSSCheckResult(
         violations, correct_css_imports, embedded_css_violations
     )
+
+
+def validate_directories_input(input_directories):
+    """Validate that the --directories input is correctly formatted."""
+    validated_dirs = []
+    for path in input_directories:
+        if os.path.isdir(path):
+            validated_dirs.append(path)
+        elif os.path.isfile(path):
+            validated_dirs.append(os.path.dirname(path))
+        else:
+            raise ValueError(
+                f"Invalid path: {path}. Must be an existing file or directory."
+            )
+    return validated_dirs
 
 
 def main():
@@ -151,15 +201,7 @@ def main():
     directories and files, checks for CSS violations, and prints the results.
 
     Args:
-        None: This function does not directly accept arguments but uses argparse
-        to handle command-line inputs.
-
-    Command-line Arguments:
-        --directories: List of directories or files to check for CSS violations.
-        --exclude_files: Specific files to exclude from analysis.
-        --exclude_directories: Directories to exclude from analysis.
-        --allowed_css_patterns: Allowed CSS file patterns.
-        --show_success: Flag to show successful CSS imports.
+        None
 
     Returns:
         None: This function does not return any value. It prints the results
@@ -171,8 +213,14 @@ def main():
     parser.add_argument(
         "--directories",
         nargs="+",
-        required=True,
-        help="List of directories or files to check for CSS violations.",
+        required=False,
+        help="List of directories to check for CSS violations.",
+    )
+    parser.add_argument(
+        "--files",
+        nargs="*",
+        default=[],
+        help="Specific files to check for CSS violations.",
     )
     parser.add_argument(
         "--exclude_files",
@@ -199,8 +247,24 @@ def main():
     )
     args = parser.parse_args()
 
+    if not args.directories and not args.files:
+        parser.error(
+            "At least one of --directories or --files must be provided."
+        )
+
+    try:
+        directories = (
+            validate_directories_input(args.directories)
+            if args.directories
+            else []
+        )
+    except ValueError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
     result = check_files(
-        directories=args.directories,
+        directories=directories,
+        files=args.files,
         exclude_files=args.exclude_files,
         exclude_directories=args.exclude_directories,
         allowed_css_patterns=args.allowed_css_patterns,
@@ -237,7 +301,11 @@ def main():
             "3. Make sure to use only the allowed CSS patterns\n"
             "   as specified in the script arguments.\n"
             "4. Check that all imported CSS files\n"
-            "   exist in the specified locations."
+            "   exist in the specified locations.\n"
+            "5. Ensure each TypeScript file has exactly\n"
+            "   one import of the allowed CSS file.\n"
+            "6. Remove any CSS files from the same\n"
+            "   directory as TypeScript files."
         )
 
     if args.show_success and result.correct_imports:
