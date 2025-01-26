@@ -398,8 +398,20 @@
     .show,
     :disabled,
     :checked
+  )
+  .dropdown:is(
+    :hover,
+    :focus,
+    :active,
+    :focus-visible,
+    .show,
+    :disabled,
+    :checked
   ) {
   background-color: transparent !important;
+  border: 1px solid var(--davys-grey);
+  color: var(--dropdown-button-bg) !important;
+  border-color: var(--davys-grey) !important;
   border: 1px solid var(--davys-grey);
   color: var(--dropdown-button-bg) !important;
   border-color: var(--davys-grey) !important;
@@ -414,10 +426,18 @@
   background-color: var(--bs-white);
   border: 1px solid var(--davys-grey);
   color: var(--davys-grey) !important;
+  border: 1px solid var(--davys-grey);
+}
+
+.dropdown:not(:focus) {
+  background-color: var(--bs-white);
+  border: 1px solid var(--davys-grey);
+  color: var(--davys-grey) !important;
 }
 
 .dropdownItem {
   background-color: var(--bs-white) !important;
+  color: var(--davys-grey) !important;
   color: var(--davys-grey) !important;
   border: none !important;
 }
@@ -435,6 +455,7 @@
     var(--grey-border-box-color)
   ) !important;
   color: var(--davys-grey) !important;
+  color: var(--davys-grey) !important;
   outline: none !important;
   box-shadow: 0 0 4px var(--highlight-color, var(--search-button-bg));
 }
@@ -442,6 +463,14 @@
 .input {
   flex: 1;
   position: relative;
+  margin-right: 80px;
+  max-width: 473px !important;
+}
+
+.eventCreatebtn {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
   margin-right: 80px;
   max-width: 473px !important;
 }
@@ -516,6 +545,11 @@
   color: white;
 }
 
+.deleteButton:is(:hover, :active) {
+  background-color: var(--delete-button-color) !important;
+  color: white;
+}
+
 .actionItemDeleteButton {
   background-color: var(--delete-button-bg);
   color: var(--delete-button-color);
@@ -528,11 +562,13 @@
   /* margin-top: 10px; */
   /* margin-left: 5px; */
   border: 1px solid var(--davys-grey);
+  border: 1px solid var(--davys-grey);
 }
 
 .createButton:hover {
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
+  border: 1px solid var(--davys-grey) !important;
   border: 1px solid var(--davys-grey) !important;
 }
 
@@ -559,6 +595,10 @@
   box-shadow: var(--hover-shadow);
 }
 
+.inputField:focus {
+  box-shadow: var(--hover-shadow);
+}
+
 .inputFieldModal {
   margin-bottom: 10px;
   background-color: var(--bs-white);
@@ -574,9 +614,14 @@
   --bs-btn-active-color: var(--search-button-bg);
   --bs-btn-active-bg: var(--search-button-bg);
   --bs-btn-active-border-color: var(--search-button-bg);
+  --bs-btn-active-color: var(--search-button-bg);
+  --bs-btn-active-bg: var(--search-button-bg);
+  --bs-btn-active-border-color: var(--search-button-bg);
   margin-bottom: 10px;
   color: var(--search-button-fill);
+  color: var(--search-button-fill);
   background-color: var(--search-button-bg);
+  border-color: var(--search-button-bg);
   border-color: var(--search-button-bg);
   position: absolute;
   z-index: 10;
@@ -588,9 +633,16 @@
   transition:
     box-shadow 0.2s ease,
     transform 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .searchButton:hover {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-bg);
+  box-shadow: var(--hover-shadow);
+  color: var(--davys-grey) !important;
   background-color: var(--search-button-bg);
   border-color: var(--search-button-bg);
   box-shadow: var(--hover-shadow);
@@ -601,10 +653,14 @@
   transform: scale(0.95);
   background-color: var(--search-button-bg) !important;
   border-color: transparent !important;
+  background-color: var(--search-button-bg) !important;
+  border-color: transparent !important;
 }
 
 .addButton {
   margin-bottom: 10px;
+  color: var(--davys-grey);
+  background-color: var(--light-blue);
   color: var(--davys-grey);
   background-color: var(--light-blue);
   border-color: var(--grey-bg-color);
@@ -613,6 +669,20 @@
 .addButton:is(:hover, :active) {
   background-color: var(--dark-blue) !important;
   border-color: var(--search-button-border);
+}
+
+.removeButton {
+  margin-bottom: 10px;
+  background-color: var(--delete-button-bg);
+  color: var(--remove-button-color);
+  margin-right: 10px;
+  --bs-btn-border-color: #dc3545;
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--delete-button-color) !important;
+  border-color: var(--delete-button-color);
+  color: white;
 }
 
 .removeButton {
@@ -644,13 +714,25 @@
   border-color: var(--search-button-border) !important;
 }
 
+.regularBtn {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+}
+
+.regularBtn:is(:hover, :active) {
+  background-color: #286fe0 !important;
+  border-color: var(--search-button-border) !important;
+}
+
 .searchIcon {
+  color: var(--davys-grey);
   color: var(--davys-grey);
 }
 
 .infoButton {
   background-color: var(--search-button-bg);
   border-color: var(--search-button-border);
+  color: var(--davys-grey);
   color: var(--davys-grey);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
@@ -681,6 +763,37 @@
   background-color: var(--row-background);
   max-height: 120px;
   overflow-y: auto;
+}
+
+.scrollContainer {
+  height: 100px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.memberBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
+}
+
+.loadingDiv {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tagBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
 }
 
 .scrollContainer {

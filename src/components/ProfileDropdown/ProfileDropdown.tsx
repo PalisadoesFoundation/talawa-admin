@@ -81,13 +81,6 @@ const profileDropdown = (): JSX.Element => {
           role="button"
           tabIndex={0}
           aria-label="View Profile"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              userRole === 'User'
-                ? navigate(`/user/settings`)
-                : navigate(`/member/${orgId || ''}`);
-            }
-          }}
           data-testid="profileBtn"
           onClick={() =>
             userRole === 'User'

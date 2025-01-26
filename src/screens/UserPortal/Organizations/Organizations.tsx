@@ -38,12 +38,14 @@ interface InterfaceOrganizationCardProps {
       _id: string;
     };
   }[];
+  isJoined: boolean;
 }
 
 /**
  * Interface defining the structure of organization properties.
  */
 interface InterfaceOrganization {
+  isJoined: boolean;
   _id: string;
   name: string;
   image: string;
@@ -180,7 +182,6 @@ export default function organizations(): JSX.Element {
   /**
    * Updates the list of organizations based on query results and selected mode.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (data) {
       const organizations = data.organizationsConnection.map(
@@ -228,7 +229,11 @@ export default function organizations(): JSX.Element {
               )
             )
               membershipRequestStatus = 'pending';
-            return { ...organization, membershipRequestStatus };
+            return {
+              ...organization,
+              membershipRequestStatus,
+              isJoined: false,
+            };
           },
         );
         setOrganizations(organizations);
@@ -236,7 +241,13 @@ export default function organizations(): JSX.Element {
     } else if (mode === 1) {
       if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
         const organizations =
-          joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
+          joinedOrganizationsData.users[0]?.user?.joinedOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
         setOrganizations(organizations);
       }
     } else if (mode === 2) {
@@ -245,8 +256,13 @@ export default function organizations(): JSX.Element {
         createdOrganizationsData.users.length > 0
       ) {
         const organizations =
-          createdOrganizationsData.users[0]?.appUserProfile
-            ?.createdOrganizations || [];
+          createdOrganizationsData.users[0]?.appUserProfile?.createdOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
         setOrganizations(organizations);
       }
     }
@@ -281,8 +297,8 @@ export default function organizations(): JSX.Element {
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expand
-              : styles.contract
+              ? styles.expandOrg
+              : styles.contractOrg
         }`}
       >
         <div className={`${styles.mainContainer2}`}>
@@ -345,7 +361,7 @@ export default function organizations(): JSX.Element {
           </div>
           <div className={`d-flex flex-row  ${styles.content}`}>
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-column  ${styles.gap} ${styles.paddingY}`}
             >
               {loadingOrganizations ? (
                 <div className={`d-flex flex-row justify-content-center`}>
@@ -370,6 +386,7 @@ export default function organizations(): JSX.Element {
                             userRegistrationRequired:
                               organization.userRegistrationRequired,
                             membershipRequests: organization.membershipRequests,
+                            isJoined: organization.isJoined || false,
                           };
 
                           return (
