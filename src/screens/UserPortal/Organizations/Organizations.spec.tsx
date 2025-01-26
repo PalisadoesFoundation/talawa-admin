@@ -56,8 +56,7 @@ const MOCKS = [
                   userRegistrationRequired: true,
                   creator: {
                     __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
+                    name: 'John Doe',
                   },
                   members: [
                     {
@@ -163,7 +162,7 @@ const MOCKS = [
             },
             description: 'desc',
             userRegistrationRequired: true,
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            creator: { __typename: 'User', name: 'John Doe' },
             members: [
               {
                 _id: '56gheqyr7deyfuiwfewifruy8',
@@ -226,8 +225,7 @@ const MOCKS = [
                   userRegistrationRequired: true,
                   creator: {
                     __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
+                    name: 'John Doe',
                   },
                   members: [
                     {
@@ -289,7 +287,7 @@ const MOCKS = [
             },
             userRegistrationRequired: true,
             createdAt: '1234567890',
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            creator: { __typename: 'User', name: 'John Doe' },
             members: [
               {
                 _id: '56gheqyr7deyfuiwfewifruy8',

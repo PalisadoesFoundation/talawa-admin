@@ -333,8 +333,24 @@ export default function settings(): JSX.Element {
                         ): Promise<void> => {
                           const file = e.target?.files?.[0];
                           if (file) {
-                            const image = await convertToBase64(file);
-                            setUserDetails({ ...userDetails, image });
+                            try {
+                              // Validate file size (e.g., 5MB limit)
+                              if (file.size > 5 * 1024 * 1024) {
+                                alert('File size should not exceed 5MB');
+                                return;
+                              }
+
+                              // Validate file type
+                              if (!file.type.startsWith('image/')) {
+                                toast.error('Only image files are allowed');
+                                return;
+                              }
+                              const image = await convertToBase64(file);
+                              setUserDetails({ ...userDetails, image });
+                            } catch (error) {
+                              toast.error('Failed to process image');
+                              console.error('Image processing error:', error);
+                            }
                           }
                         }}
                         style={{ display: 'none' }}

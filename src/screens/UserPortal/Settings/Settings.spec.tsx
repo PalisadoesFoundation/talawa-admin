@@ -16,7 +16,6 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import '../../../style/app.module.css';
-const { setItem } = useLocalStorage();
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -65,7 +64,7 @@ const Mocks1 = [
     },
     result: {
       data: {
-        checkAuth: {
+        currentUser: {
           email: 'johndoe@gmail.com',
           firstName: 'John',
           lastName: 'Doe',
@@ -205,6 +204,7 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing Settings Screen [User Portal]', () => {
   beforeAll(() => {
+    const { setItem } = useLocalStorage();
     setItem('name', 'John Doe');
     vi.useFakeTimers();
     Object.defineProperty(window, 'matchMedia', {
@@ -455,8 +455,8 @@ describe('Testing Settings Screen [User Portal]', () => {
         ...Mocks1[0],
         result: {
           data: {
-            checkAuth: {
-              ...Mocks1[0].result.data.checkAuth,
+            currentUser: {
+              ...Mocks1[0].result.data.currentUser,
               eventsAttended: mockEventsAttended,
             },
           },

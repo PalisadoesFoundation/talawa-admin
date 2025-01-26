@@ -8,9 +8,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';
 import { describe, test, expect } from 'vitest';
-import useLocalStorage from 'utils/useLocalstorage';
 import '../../style/app.module.css';
-const { setItem } = useLocalStorage();
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
@@ -23,7 +21,7 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 
 describe('Testing LeftDrawer in SuperAdminScreen', () => {
   beforeAll(() => {
-    setItem('name', 'John Doe');
+    localStorage.setItem('name', 'John Doe');
   });
   afterAll(() => {
     localStorage.clear();

@@ -56,6 +56,9 @@ describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
     setItem('name', 'John Doe');
   });
+  afterAll(() => {
+    localStorage.clear();
+  });
   const renderComponent = (): void => {
     render(
       <MockedProvider addTypename={false} link={link} mocks={MOCKS}>

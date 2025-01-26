@@ -65,8 +65,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   it('Component should be rendered properly', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
-    setItem('FirstName', 'John');
-    setItem('LastName', 'Doe');
+    setItem('name', 'John Doe');
 
     await act(async () => {
       render(

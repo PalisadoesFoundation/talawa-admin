@@ -39,16 +39,11 @@ const MOCKS = [
     },
     result: {
       data: {
-        login: {
+        signIn: {
           user: {
-            _id: '1',
+            id: '1',
           },
-          appUserProfile: {
-            isSuperAdmin: false,
-            adminFor: ['123', '456'],
-          },
-          accessToken: 'accessToken',
-          refreshToken: 'refreshToken',
+          authenticationToken: 'authenticationToken',
         },
       },
     },
