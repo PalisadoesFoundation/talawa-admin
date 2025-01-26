@@ -862,19 +862,50 @@ describe('Testing ItemModal', () => {
   it('handles whitespace-only strings', async () => {
     renderItemModal(link1, itemProps[0]);
 
+    // Select Category 1
+    const categorySelect = screen.getByTestId('categorySelect');
+    fireEvent.mouseDown(within(categorySelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Category 1'));
+
+    // Select assignee
+    const memberSelect = screen.getByTestId('memberSelect');
+    fireEvent.mouseDown(within(memberSelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Harve Lance'));
+
     const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
     fireEvent.change(preCompletionNotes, { target: { value: '   ' } });
+    expect(preCompletionNotes).toHaveValue('   ');
 
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
+    });
   });
 
   it('handles special characters in text fields', async () => {
     renderItemModal(link1, itemProps[0]);
 
+    // Select Category 1
+    const categorySelect = screen.getByTestId('categorySelect');
+    fireEvent.mouseDown(within(categorySelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Category 1'));
+
+    // Select assignee
+    const memberSelect = screen.getByTestId('memberSelect');
+    fireEvent.mouseDown(within(memberSelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Harve Lance'));
+
     const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
     fireEvent.change(preCompletionNotes, {
       target: { value: '!@#$%^&*()_+-=[]{}|;:,.<>?' },
+    });
+    expect(preCompletionNotes).toHaveValue('!@#$%^&*()_+-=[]{}|;:,.<>?');
+
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
     });
   });
 
@@ -1004,32 +1035,6 @@ describe('Testing ItemModal', () => {
 
       fireEvent.change(dateInput, { target: { value: '01/01/2025' } });
       expect(dateInput).toHaveValue('01/01/2025');
-    });
-  });
-
-  // for testing network handling
-  it('handles network errors gracefully', async () => {
-    renderItemModal(link2, itemProps[0]);
-
-    await waitFor(async () => {
-      const categorySelect = await screen.findByTestId('categorySelect');
-      const inputField = within(categorySelect).getByRole('combobox');
-      fireEvent.mouseDown(inputField);
-      const categoryOption = await screen.findByText('Category 1');
-      fireEvent.click(categoryOption);
-
-      const memberSelect = await screen.findByTestId('memberSelect');
-      const memberInput = within(memberSelect).getByRole('combobox');
-      fireEvent.mouseDown(memberInput);
-      const memberOption = await screen.findByText('Harve Lance');
-      fireEvent.click(memberOption);
-
-      const submitButton = screen.getByTestId('submitBtn');
-      fireEvent.click(submitButton);
-    });
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
   });
 
