@@ -1,7 +1,6 @@
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,6 +12,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgPost from './OrgPost';
+import { vi } from 'vitest';
 const MOCKS = [
   {
     request: {
@@ -359,7 +359,7 @@ describe('Organisation Post Page', () => {
     expect(searchInput).toBeInTheDocument();
   });
   test('After creating a post, the data should be refetched', async () => {
-    const refetchMock = jest.fn();
+    const refetchMock = vi.fn();
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS} link={link}>

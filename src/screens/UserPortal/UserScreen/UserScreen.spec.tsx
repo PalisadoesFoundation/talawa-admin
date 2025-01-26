@@ -22,7 +22,9 @@ import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/jest-dom';
+import useLocalStorage from 'utils/useLocalstorage';
 
+const { setItem } = useLocalStorage();
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
@@ -90,6 +92,7 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 
 describe('UserScreen tests with LeftDrawer functionality', () => {
   beforeEach(() => {
+    setItem('name', 'John Doe');
     mockID = '123';
     mockLocation = '/user/organization/123';
   });

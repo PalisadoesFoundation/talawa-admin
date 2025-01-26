@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_INSTALL\_STATUS\_PLUGIN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:434](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L434)
+Defined in: [src/GraphQl/Mutations/mutations.ts:396](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L396)
 
 ## Remarks
 

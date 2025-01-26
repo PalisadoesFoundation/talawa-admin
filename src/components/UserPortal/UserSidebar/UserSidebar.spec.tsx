@@ -297,8 +297,7 @@ const MOCKS = [
           user: {
             _id: 'orgEmpty',
             image: null,
-            firstName: 'Noble',
-            lastName: 'Mittal',
+            name: 'Noble Mittal',
             email: 'noble@mittal.com',
             createdAt: '2023-02-18T09:22:27.969Z',
             joinedOrganizations: [],
@@ -384,6 +383,7 @@ const renderUserSidebar = (
 
 describe('UserSidebar Component Tests in User Portal', () => {
   beforeEach(() => {
+    setItem('name', 'Noble Mittal');
     vi.clearAllMocks();
   });
 
@@ -430,6 +430,14 @@ describe('UserSidebar Component Tests in User Portal', () => {
     expectedLinks.forEach((link) => {
       expect(screen.getByText(link)).toBeInTheDocument();
     });
+  });
+
+  it('displays the user name from localStorage correctly', async () => {
+    await act(async () => {
+      renderUserSidebar('properId', link);
+      await wait();
+    });
+    expect(screen.getByText('Noble Mittal')).toBeInTheDocument();
   });
 
   it('UserSidebar renders correctly on smaller screens and toggles drawer visibility', async () => {

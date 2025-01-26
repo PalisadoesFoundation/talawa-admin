@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -10,7 +10,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import '../../style/app.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   BACKEND_URL,
@@ -18,18 +18,17 @@ import {
   RECAPTCHA_SITE_KEY,
 } from 'Constant/constant';
 import {
-  LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, SIGNIN_QUERY } from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import { socialMediaLinks } from '../../constants';
+// import { socialMediaLinks } from '../../constants';
 import styles from 'style/app.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
@@ -68,8 +67,7 @@ const loginPage = (): JSX.Element => {
   const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
-    signfirstName: '',
-    signlastName: '',
+    signName: '',
     signEmail: '',
     signPassword: '',
     cPassword: '',
@@ -122,12 +120,12 @@ const loginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, refetch } = useQuery(GET_COMMUNITY_DATA);
-  useEffect(() => {
-    // refetching the data if the pre-login data updates
-    refetch();
-  }, [data]);
-  const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
+  // const { data, refetch } = useQuery(GET_COMMUNITY_DATA);
+  // useEffect(() => {
+  //   // refetching the data if the pre-login data updates
+  //   refetch();
+  // }, [data]);
+  const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
@@ -188,14 +186,8 @@ const loginPage = (): JSX.Element => {
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const {
-      signfirstName,
-      signlastName,
-      signEmail,
-      signPassword,
-      cPassword,
-      signOrg,
-    } = signformState;
+    const { signName, signEmail, signPassword, cPassword, signOrg } =
+      signformState;
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
@@ -221,10 +213,8 @@ const loginPage = (): JSX.Element => {
     };
 
     if (
-      isValidName(signfirstName) &&
-      isValidName(signlastName) &&
-      signfirstName.trim().length > 1 &&
-      signlastName.trim().length > 1 &&
+      isValidName(signName) &&
+      signName.trim().length > 1 &&
       signEmail.length >= 8 &&
       signPassword.length > 1 &&
       validatePassword(signPassword)
@@ -233,8 +223,7 @@ const loginPage = (): JSX.Element => {
         try {
           const { data: signUpData } = await signup({
             variables: {
-              firstName: signfirstName,
-              lastName: signlastName,
+              name: signName,
               email: signEmail,
               password: signPassword,
               orgId: signOrg,
@@ -249,8 +238,7 @@ const loginPage = (): JSX.Element => {
             );
             setShowTab('LOGIN');
             setSignFormState({
-              signfirstName: '',
-              signlastName: '',
+              signName: '',
               signEmail: '',
               signPassword: '',
               cPassword: '',
@@ -266,11 +254,8 @@ const loginPage = (): JSX.Element => {
         toast.warn(t('passwordMismatches') as string);
       }
     } else {
-      if (!isValidName(signfirstName)) {
-        toast.warn(t('firstName_invalid') as string);
-      }
-      if (!isValidName(signlastName)) {
-        toast.warn(t('lastName_invalid') as string);
+      if (!isValidName(signName)) {
+        toast.warn(t('name_invalid') as string);
       }
       if (!validatePassword(signPassword)) {
         toast.warn(t('password_invalid') as string);
@@ -291,39 +276,39 @@ const loginPage = (): JSX.Element => {
     }
 
     try {
-      const { data: loginData } = await login({
+      const { data: signInData } = await signin({
         variables: {
           email: formState.email,
           password: formState.password,
         },
       });
+      console.log(signInData);
 
-      if (loginData) {
-        i18n.changeLanguage(loginData.login.appUserProfile.appLanguageCode);
-        const { login } = loginData;
-        const { user, appUserProfile } = login;
-        const isAdmin: boolean =
-          appUserProfile.isSuperAdmin || appUserProfile.adminFor.length !== 0;
+      if (signInData) {
+        if (signInData.signIn.user.countryCode !== null) {
+          i18n.changeLanguage(signInData.signIn.user.countryCode);
+        }
+
+        const { signIn } = signInData;
+        const { user, authenticationToken } = signIn;
+        const isAdmin: boolean = user.role === 'administrator';
 
         if (role === 'admin' && !isAdmin) {
           toast.warn(tErrors('notAuthorised') as string);
           return;
         }
-        const loggedInUserId = user._id;
+        const loggedInUserId = user.id;
 
-        setItem('token', login.accessToken);
-        setItem('refreshToken', login.refreshToken);
+        setItem('token', authenticationToken);
         setItem('IsLoggedIn', 'TRUE');
-        setItem('name', `${user.firstName} ${user.lastName}`);
-        setItem('email', user.email);
-        setItem('FirstName', user.firstName);
-        setItem('LastName', user.lastName);
-        setItem('UserImage', user.image);
+        setItem('name', user.name);
+        setItem('email', user.emailAddress);
+        // setItem('FirstName', user.firstName);
+        // setItem('LastName', user.lastName);
+        // setItem('UserImage', user.avatarURL);
 
         if (role === 'admin') {
           setItem('id', loggedInUserId);
-          setItem('SuperAdmin', appUserProfile.isSuperAdmin);
-          setItem('AdminFor', appUserProfile.adminFor);
         } else {
           setItem('userId', loggedInUserId);
         }
@@ -339,31 +324,31 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
-    data?.getCommunityData ? (
-      data.getCommunityData?.socialMediaUrls?.[tag] && (
-        <a
-          key={index}
-          href={data.getCommunityData?.socialMediaUrls?.[tag]}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-testid="preLoginSocialMedia"
-        >
-          <img src={logo} />
-        </a>
-      )
-    ) : (
-      <a
-        key={index}
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-testid="PalisadoesSocialMedia"
-      >
-        <img src={logo} />
-      </a>
-    ),
-  );
+  // const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
+  //   data?.getCommunityData ? (
+  //     data.getCommunityData?.socialMediaUrls?.[tag] && (
+  //       <a
+  //         key={index}
+  //         href={data.getCommunityData?.socialMediaUrls?.[tag]}
+  //         target="_blank"
+  //         rel="noopener noreferrer"
+  //         data-testid="preLoginSocialMedia"
+  //       >
+  //         <img src={logo} />
+  //       </a>
+  //     )
+  //   ) : (
+  //     <a
+  //       key={index}
+  //       href={href}
+  //       target="_blank"
+  //       rel="noopener noreferrer"
+  //       data-testid="PalisadoesSocialMedia"
+  //     >
+  //       <img src={logo} />
+  //     </a>
+  //   ),
+  // );
 
   return (
     <>
@@ -371,7 +356,7 @@ const loginPage = (): JSX.Element => {
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
-              {data?.getCommunityData ? (
+              {/* {data?.getCommunityData ? (
                 <a
                   href={data.getCommunityData.websiteLink}
                   target="_blank"
@@ -385,21 +370,21 @@ const loginPage = (): JSX.Element => {
                   />
                   <p className="text-center">{data.getCommunityData.name}</p>
                 </a>
-              ) : (
-                <a
-                  href="https://www.palisadoes.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <PalisadoesLogo
-                    className={styles.palisadoes_logo}
-                    data-testid="PalisadoesLogo"
-                  />
-                  <p className="text-center">{t('fromPalisadoes')}</p>
-                </a>
-              )}
+              ) : ( */}
+              <a
+                href="https://www.palisadoes.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <PalisadoesLogo
+                  className={styles.palisadoes_logo}
+                  data-testid="PalisadoesLogo"
+                />
+                <p className="text-center">{t('fromPalisadoes')}</p>
+              </a>
+              {/* )} */}
             </div>
-            <div className={styles.socialIcons}>{socialIconsList}</div>
+            {/* <div className={styles.socialIcons}>{socialIconsList}</div> */}
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
@@ -539,27 +524,27 @@ const loginPage = (): JSX.Element => {
                     {tCommon('register')}
                   </h1>
                   <Row>
-                    <Col sm={6}>
-                      <div>
-                        <Form.Label>{tCommon('firstName')}</Form.Label>
-                        <Form.Control
-                          disabled={signinLoading}
-                          type="text"
-                          id="signfirstname"
-                          className="mb-3"
-                          placeholder={tCommon('firstName')}
-                          required
-                          value={signformState.signfirstName}
-                          onChange={(e): void => {
-                            setSignFormState({
-                              ...signformState,
-                              signfirstName: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                    </Col>
-                    <Col sm={6}>
+                    {/* <Col sm={6}> */}
+                    <div>
+                      <Form.Label>{tCommon('Name')}</Form.Label>
+                      <Form.Control
+                        disabled={signinLoading}
+                        type="text"
+                        id="signname"
+                        className="mb-3"
+                        placeholder={tCommon('Name')}
+                        required
+                        value={signformState.signName}
+                        onChange={(e): void => {
+                          setSignFormState({
+                            ...signformState,
+                            signName: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    {/* </Col> */}
+                    {/* <Col sm={6}>
                       <div>
                         <Form.Label>{tCommon('lastName')}</Form.Label>
                         <Form.Control
@@ -576,9 +561,9 @@ const loginPage = (): JSX.Element => {
                               signlastName: e.target.value,
                             });
                           }}
-                        />
+                        />dwdwdw
                       </div>
-                    </Col>
+                    </Col> */}
                   </Row>
                   <div className="position-relative">
                     <Form.Label>{tCommon('email')}</Form.Label>

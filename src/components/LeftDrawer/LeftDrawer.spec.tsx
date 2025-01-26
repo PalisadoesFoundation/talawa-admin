@@ -11,6 +11,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it, describe, beforeEach, afterEach, expect } from 'vitest';
+import '../../style/app.module.css';
 
 const { setItem } = useLocalStorage();
 
@@ -48,8 +49,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
-  setItem('FirstName', 'John');
-  setItem('LastName', 'Doe');
+  setItem('name', 'John Doe');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
@@ -65,8 +65,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   it('Component should be rendered properly', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
-    setItem('FirstName', 'John');
-    setItem('LastName', 'Doe');
+    setItem('name', 'John Doe');
 
     await act(async () => {
       render(

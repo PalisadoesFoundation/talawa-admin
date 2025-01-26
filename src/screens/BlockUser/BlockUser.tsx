@@ -235,8 +235,6 @@ const Requests = (): JSX.Element => {
                 <Search />
               </Button>
             </div>
-            {/* <div className={styles.btnsBlockBlockAndUnblock}> */}
-            {/* <div className={styles.largeBtnsWrapper}> */}
             <div className={styles.btnsBlock}>
               <SortingButton
                 title={t('sortOrganizations')}
@@ -275,8 +273,6 @@ const Requests = (): JSX.Element => {
               />
             </div>
           </div>
-          {/* </div> */}
-          {/* </div> */}
         </div>
         {/* Table */}
         {loadingMembers === false &&
