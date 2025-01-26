@@ -11,7 +11,7 @@ import EventDashboardScreen from './EventDashboardScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import '../../style/app.module.css';
 const { setItem } = useLocalStorage();
 
 Object.defineProperty(window, 'matchMedia', {
@@ -122,6 +122,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
   });
   it('Testing LeftDrawer in page functionality', async () => {
     setItem('IsLoggedIn', true);
+    setItem('name', 'John Doe');
     setItem('AdminFor', [
       { _id: '6637904485008f171cf29924', __typename: 'Organization' },
     ]);
