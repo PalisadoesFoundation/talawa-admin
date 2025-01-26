@@ -10,6 +10,7 @@ import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
+import styles from '../../style/app.module.css';
 
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
@@ -18,44 +19,6 @@ import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventA
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
 import EventRegistrants from 'components/EventManagement/EventRegistrant/EventRegistrants';
-/**
- * List of tabs for the event dashboard.
- *
- * Each tab is associated with an icon and value.
- */
-const eventDashboardTabs: {
-  value: TabOptions;
-  icon: JSX.Element;
-}[] = [
-  {
-    value: 'dashboard',
-    icon: <MdOutlineDashboard size={18} className="me-1" />,
-  },
-  {
-    value: 'registrants',
-    icon: <EventRegistrantsIcon width={23} height={23} className="me-1" />,
-  },
-  {
-    value: 'attendance',
-    icon: <BsPersonCheck size={20} className="me-1" />,
-  },
-  {
-    value: 'agendas',
-    icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
-  },
-  {
-    value: 'actions',
-    icon: <FaTasks size={16} className="me-1" />,
-  },
-  {
-    value: 'volunteers',
-    icon: <IoIosHand size={20} className="me-1" />,
-  },
-  {
-    value: 'statistics',
-    icon: <IoMdStats size={20} className="me-2" />,
-  },
-];
 
 /**
  * Tab options for the event management component.
@@ -68,6 +31,12 @@ type TabOptions =
   | 'actions'
   | 'volunteers'
   | 'statistics';
+
+interface InterfaceTabConfig {
+  value: TabOptions;
+  icon: JSX.Element;
+  component: JSX.Element;
+}
 
 /**
  * `EventManagement` component handles the display and navigation of different event management sections.
@@ -97,6 +66,19 @@ const EventManagement = (): JSX.Element => {
   // Custom hook for accessing local storage
   const { getItem } = useLocalStorage();
 
+  // Hook for navigation
+  const navigate = useNavigate();
+
+  // State hook for managing the currently selected tab
+  const [tab, setTab] = useState<TabOptions>('dashboard');
+
+  // Extract event and organization IDs from URL parameters
+  const { eventId, orgId } = useParams();
+  if (!eventId || !orgId) {
+    // Redirect if event ID or organization ID is missing
+    return <Navigate to={'/orglist'} />;
+  }
+
   // Determine user role based on local storage
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
@@ -106,18 +88,74 @@ const EventManagement = (): JSX.Element => {
       ? 'ADMIN'
       : 'USER';
 
-  // Extract event and organization IDs from URL parameters
-  const { eventId, orgId } = useParams();
-  if (!eventId || !orgId) {
-    // Redirect if event ID or organization ID is missing
-    return <Navigate to={'/orglist'} />;
-  }
-
-  // Hook for navigation
-  const navigate = useNavigate();
-
-  // State hook for managing the currently selected tab
-  const [tab, setTab] = useState<TabOptions>('dashboard');
+  /**
+   * List of tabs for the event dashboard.
+   *
+   * Each tab is associated with an icon, value, and its corresponding component.
+   */
+  const eventDashboardTabs: InterfaceTabConfig[] = [
+    {
+      value: 'dashboard',
+      icon: <MdOutlineDashboard size={18} className="me-1" />,
+      component: (
+        <div data-testid="eventDashboardTab" className="mx-4 p-4 pt-2 mt-5">
+          <EventDashboard eventId={eventId} />
+        </div>
+      ),
+    },
+    {
+      value: 'registrants',
+      icon: <EventRegistrantsIcon width={23} height={23} className="me-1" />,
+      component: (
+        <div data-testid="eventRegistrantsTab" className="mx-4 p-4 pt-2 mt-5">
+          <EventRegistrants />
+        </div>
+      ),
+    },
+    {
+      value: 'attendance',
+      icon: <BsPersonCheck size={20} className="me-1" />,
+      component: (
+        <div data-testid="eventAttendanceTab" className="mx-4 p-4 pt-2 mt-5">
+          <EventAttendance />
+        </div>
+      ),
+    },
+    {
+      value: 'agendas',
+      icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
+      component: (
+        <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2 mt-5">
+          <EventAgendaItems eventId={eventId} />
+        </div>
+      ),
+    },
+    {
+      value: 'actions',
+      icon: <FaTasks size={16} className="me-1" />,
+      component: (
+        <div data-testid="eventActionsTab" className="mx-4 p-4 pt-2">
+          <OrganizationActionItems />
+        </div>
+      ),
+    },
+    {
+      value: 'volunteers',
+      icon: <IoIosHand size={20} className="me-1" />,
+      component: (
+        <div data-testid="eventVolunteersTab" className="mx-4 p-4 pt-2">
+          <VolunteerContainer />
+        </div>
+      ),
+    },
+    {
+      value: 'statistics',
+      icon: <IoMdStats size={20} className="me-2" />,
+      component: (
+        <div data-testid="eventStatsTab" className="mx-4 p-4 pt-2 mt-5"></div>
+      ),
+    },
+  ];
 
   /**
    * Renders a button for each tab with the appropriate icon and label.
@@ -126,20 +164,14 @@ const EventManagement = (): JSX.Element => {
    * @param icon - The icon to display for the tab
    * @returns JSX.Element - The rendered button component
    */
-  const renderButton = ({
-    value,
-    icon,
-  }: {
-    value: TabOptions;
-    icon: React.ReactNode;
-  }): JSX.Element => {
+  const renderButton = ({ value, icon }: InterfaceTabConfig): JSX.Element => {
     const selected = tab === value;
     const variant = selected ? 'success' : 'light';
     const translatedText = t(value);
 
     const className = selected
-      ? 'px-4 d-flex align-items-center rounded-3 shadow-sm'
-      : 'text-secondary bg-white px-4 d-flex align-items-center rounded-3 shadow-sm';
+      ? `px-4 d-flex align-items-center rounded-3 shadow-sm ${styles.eventManagementSelectedBtn}`
+      : `text-secondary bg-white px-4 d-flex align-items-center rounded-3 shadow-sm ${styles.eventManagementBtn}`;
     const props = {
       variant,
       className,
@@ -164,15 +196,17 @@ const EventManagement = (): JSX.Element => {
     }
   };
 
+  const currentTab = eventDashboardTabs.find((t) => t.value === tab);
+
   return (
-    <div className="d-flex flex-column">
+    <div className="d-flex flex-column bg-white rounded-4 min-vh-75">
       <Row className="mx-3 mt-4">
         <Col>
           <div className="d-none d-md-flex gap-3">
             <Button
               size="sm"
               variant="light"
-              className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3"
+              className="d-flex text-secondary bg-white align-items-center"
             >
               <FaChevronLeft
                 cursor={'pointer'}
@@ -210,69 +244,12 @@ const EventManagement = (): JSX.Element => {
             </Dropdown.Menu>
           </Dropdown>
         </Col>
-
-        <Row className="mt-3">
-          <hr />
-        </Row>
       </Row>
 
-      {/* Render content based on the selected settings category */}
-      {(() => {
-        switch (tab) {
-          case 'dashboard':
-            return (
-              <div data-testid="eventDashboardTab">
-                <EventDashboard eventId={eventId} />
-              </div>
-            );
-          case 'registrants':
-            return (
-              <div data-testid="eventRegistrantsTab">
-                <EventRegistrants />
-              </div>
-            );
-          case 'attendance':
-            return (
-              <div data-testid="eventAttendanceTab" className="mx-4">
-                <EventAttendance />
-              </div>
-            );
-          case 'actions':
-            return (
-              <div
-                data-testid="eventActionsTab"
-                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
-              >
-                <OrganizationActionItems />
-              </div>
-            );
-          case 'volunteers':
-            return (
-              <div
-                data-testid="eventVolunteersTab"
-                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
-              >
-                <VolunteerContainer />
-              </div>
-            );
-          case 'agendas':
-            return (
-              <div data-testid="eventAgendasTab">
-                <EventAgendaItems eventId={eventId} />
-              </div>
-            );
-          case 'statistics':
-            return (
-              <div data-testid="eventStatsTab">
-                <h2>Statistics</h2>
-              </div>
-            );
-          // no use of default here as the default tab is the dashboard selected in useState code wont reach here
-          // default:
-          //   return null;
-        }
-      })()}
+      {/* Render content based on the selected tab */}
+      {currentTab?.component}
     </div>
   );
 };
+
 export default EventManagement;

@@ -66,3 +66,33 @@ describe('Testing CheckIn Wrapper', () => {
     );
   });
 });
+
+describe('CheckInWrapper CSS Tests', () => {
+  const props = {
+    eventId: 'event123',
+  };
+
+  const renderComponent = (): ReturnType<typeof render> => {
+    return render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <CheckInWrapper {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  it('should render the options-outline SVG image with correct dimensions', () => {
+    renderComponent();
+    const image = screen.getByAltText('Sort');
+    expect(image).toHaveAttribute('src', '/images/svg/options-outline.svg');
+    expect(image).toHaveAttribute('width', '30.63');
+    expect(image).toHaveAttribute('height', '30.63');
+  });
+});

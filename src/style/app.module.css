@@ -109,6 +109,15 @@
   --editImgBtn-border: #959595;
   --editImgBtn: #959595;
   --editChatNameContainer-input: rgb(171, 171, 171);
+
+  --input-text-color: #737373;
+  --info-button-text: var(--davys-grey);
+  --close-button-text: var(--remove-button-color);
+  --close-button-bg: var(--white-color);
+  --checkbox-focus-border: var(--bs-gray-300);
+  --checkbox-bg: var(--dark-blue);
+  --checkbox-border: var(--dark-blue);
+
   /* Background and Border */
   --table-bg: #eaebef;
   --profile-bg: #f6f8fc;
@@ -7412,6 +7421,33 @@ button[data-testid='createPostBtn'] {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+/* Loader.tsx */
+.spinner_wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerXl {
+  width: 6rem;
+  height: 6rem;
+  border-width: 0.5rem;
+}
+
+.spinnerLg {
+  height: 4rem;
+  width: 4rem;
+  border-width: 0.3rem;
+}
+
+.spinnerSm {
+  height: 2rem;
+  width: 2rem;
+  border-width: 0.2rem;
 }
 
 /* GroupChatDetails */
