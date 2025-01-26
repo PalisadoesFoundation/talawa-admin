@@ -171,7 +171,7 @@ export default function settings(): JSX.Element {
         employmentStatus,
         maritalStatus,
         address,
-      } = data.checkAuth;
+      } = data.currentUser;
 
       setUserDetails({
         ...userDetails,
@@ -207,7 +207,7 @@ export default function settings(): JSX.Element {
         address,
         image,
         eventsAttended,
-      } = data.checkAuth;
+      } = data.currentUser;
 
       setUserDetails({
         firstName,

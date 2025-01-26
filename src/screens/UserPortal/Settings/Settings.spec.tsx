@@ -98,7 +98,7 @@ const Mocks2 = [
     },
     result: {
       data: {
-        checkAuth: {
+        currentUser: {
           email: 'johndoe@gmail.com',
           firstName: '',
           lastName: '',

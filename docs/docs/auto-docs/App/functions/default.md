@@ -13,7 +13,7 @@ defining how the user can navigate through the app. The function uses React Rout
 and `Route`  components to map different URL paths to corresponding screens and components.
 
 ## Important Details
-- **UseEffect Hook**: This hook checks user authentication status using the `CURRENT_USER` GraphQL query.
+- **UseEffect Hook**: This hook checks user authentication status using the `CHECK_AUTH` GraphQL query.
 - **Plugins**: It dynamically loads additional routes for any installed plugins.
 - **Routes**:
   - The root route ("/") takes the user to the `LoginPage`.
