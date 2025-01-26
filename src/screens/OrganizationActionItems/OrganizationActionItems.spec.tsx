@@ -690,7 +690,7 @@ describe('OrganizationActionItems CSS Styles', () => {
   it('should apply correct styles to action buttons', async () => {
     renderComponent();
     const createButton = await screen.findByTestId('createActionItemBtn');
-    expect(createButton).toHaveClass(styles.actionsButton);
+    expect(createButton).toHaveClass(styles.createButton);
     const infoButton = await screen.findByTestId('viewItemBtn1');
     expect(infoButton).toHaveClass(styles.infoButton);
     const deleteButton = await screen.findByTestId('deleteItemBtn1');
