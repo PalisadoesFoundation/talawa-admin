@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded, Search } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
@@ -29,6 +29,7 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
@@ -325,26 +326,12 @@ function OrganizationTags(): JSX.Element {
       <Row>
         <div>
           <div className={styles.btnsContainer}>
-            <div className={styles.input}>
-              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
-              <Form.Control
-                type="text"
-                id="tagName"
-                className={styles.inputField}
-                placeholder={tCommon('searchByName')}
-                data-testid="searchByName"
-                onChange={(e) => setTagSearchName(e.target.value.trim())}
-                autoComplete="off"
-              />
-
-              <Button
-                tabIndex={-1}
-                className={` ${styles.searchButton} `}
-                onClick={handleSearchButtonClick}
-              >
-                <Search className={styles.searchIcon} />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              onSearch={(term) => setTagSearchName(term.trim())}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
             <div className={styles.btnsBlock}>
               <SortingButton
                 title="Sort Tags"
