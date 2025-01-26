@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTags.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTags.tsx#L59)
+Defined in: [src/screens/OrganizationTags/OrganizationTags.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTags.tsx#L60)
 
 Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
 

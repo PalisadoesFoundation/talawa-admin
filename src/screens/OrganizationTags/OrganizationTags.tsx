@@ -173,10 +173,6 @@ function OrganizationTags(): JSX.Element {
     }
   };
 
-  const handleSearchButtonClick = (): void => {
-    orgUserTagsRefetch();
-  };
-
   if (orgUserTagsError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
