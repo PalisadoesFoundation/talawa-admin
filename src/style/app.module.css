@@ -37,6 +37,45 @@
  *   --dark-blue (for dark blue contrast)
  */
 
+/**
+ * CSS Methodology for Common Styles:
+ *
+ * This project aims to reduce CSS duplication by merging similar styles across components
+ * into reusable global classes. This ensures consistency and simplifies maintenance.
+ *
+ * Steps for contributors:
+ * 1. Identify duplicate or similar styles in different components (e.g., buttons, modals).
+ * 2. Create a global class with a clear, descriptive name (e.g., .addButton, .removeButton).
+ * 3. Use the new global class in all components requiring that style.
+ *
+ * Naming Convention:
+ * - Use lowercase, descriptive names for global classes (e.g., .addButton, .removeButton).
+ * - Keep names generic enough for reuse but clear in their purpose.
+ *
+ * Example:
+ * Instead of component-specific classes like:
+ *   `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge` (used in two different components for same functionality)
+ * Use:
+ *   `.addButton` (a single reusable class in the global CSS file that is used for functionalities that add/create tasks)
+ *
+ * Global Classes:
+ *   `.inputField` (for form input fields)
+ *   `.searchButton` (for form input field search button)
+ *   `.addButton` (for buttons that add/create task)
+ *   `.removeButton` (for buttons that remove/delete task)
+ *   `.modalHeader` (for header section of any modal)
+ *   `.editButton` (for buttons inside table)
+ *   `.switch` (for form toggles)
+ *   `.regularBtn` (for a simple blue button)
+ *   `.tableHeader` (for header section of any table component)
+ *   `.subtleBlueGrey` (for blue Text)
+ *
+ *
+ * GLobal Varibles:
+ *   --light-blue (for light blue contrast)
+ *   --dark-blue (for dark blue contrast)
+ */
+
 :root {
   /* Neutral Colors */
   --grey-light: #eaebef;
@@ -62,6 +101,7 @@
   --loader-color: #febc59;
 
   /* Miscellaneous */
+  --davys-grey: #555555;
   --davys-grey: #555555;
   --blue-color: #0000ff;
   --light-blue-color: #286fe0;
@@ -90,6 +130,11 @@
   --holidays-card-date-color: #3771c8;
   --events-card-background-color: #eaebef;
   --organization-indicator-color: #a8c7fa;
+  --search-bar-icon-blue: #a8c7fa;
+  --holidays-card-background-color: #e0e9ff;
+  --holidays-card-date-color: #3771c8;
+  --events-card-background-color: #eaebef;
+  --organization-indicator-color: #a8c7fa;
   --white: #fff;
   --black: black;
   --rating-star-filled: #ff6d75;
@@ -99,12 +144,41 @@
   --table-bg: #eaebef;
   --profile-bg: #f6f8fc;
   --screen-bg: #f2f7ff;
+  --profile-bg: #f6f8fc;
+  --screen-bg: #f2f7ff;
   --tablerow-bg: #eff1f7;
   --date-picker-bg: #f2f2f2;
   --table-bg-color: var(--grey-bg-color);
   --tablerow-bg-color: #ffffff;
+  --tablerow-bg-color: #ffffff;
   --row-background: var(--bs-white, var(--bs-white));
   --modal-background: rgba(0, 0, 0, 0.7);
+  --sort-bg: #fcfcfc;
+  --sidebar-option-bg: #eaebef;
+  --sidebar-icon-stroke-active: #000000;
+  --sidebar-icon-stroke-inactive: #808080;
+  --sidebar-option-text-active: #000000;
+  --sidebar-option-text-inactive: #808080;
+  --forgot-password-fill: #555555;
+  --input-field-border: var(--dimp-white);
+  --input-field-bg: #fff;
+  --input-field-shadow: var(--black-shadow-color);
+  --search-button-shadow: #0000001a;
+  --people-card-header-bg: #eaebef;
+  --people-card-header-border: #e8e5e5;
+  --people-role-border: #dee2e6;
+  --shadow: #d9d9d9;
+  --placeholder-color: #737373;
+  --people-card-container-border: #eaebef;
+  --people-card-container-bg: #fff;
+  --background-color: #fff;
+  --dropdown-shadow: #0000004c;
+  --dropdown-color: #555555;
+  --loader-border: #ffffff33;
+  --loader-border-left: #febc59;
+
+  --dropdown-button-bg: #555555;
+  --dropdown-button-fill: #555555;
   --sort-bg: #fcfcfc;
   --sidebar-option-bg: #eaebef;
   --sidebar-icon-stroke-active: #000000;
@@ -153,12 +227,42 @@
   /* Hover style */
   --hover-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
     0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  /* Hover style */
+  --hover-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
+    0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   /* Additional Variables */
   --input-shadow-color: #dddddd;
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
   --search-button-bg: #a8c7fa;
+  --search-button-border: #555555;
+  --search-outline: #555555;
+  --search-button-fill: #555555;
+  --createorgdropdown-button-bg: #eaebef;
+  --createorgdropdown-button-border: #555555;
+  --langChange-button-bg: #a8c7fa;
+  --langChange-button-text: #1778f2;
+  --login-button-fill: #555555;
+  --login-button-bg: #a8c7fa;
+  --register-button-bg: #eaebef;
+  --buttonList-bg: #a8c7fa;
+  --leftDrawer-option-hover-focus-bg: #eaebef;
+  --leftDrawer-option-text: black;
+  --leftDrawer-bg: #fff;
+  --collapse-Sidebar-Button-fill: black;
+  --joined-button-color: #555555;
+  --joined-button-bg: #a8c7fa;
+  --org-desc-color: #4b5563;
+  --orgCard-bg: #fff;
+  --orgCard-outline: #e9ecef;
+  --orgCard-Image-bg: #e9ecef;
+  --profileContainer-focus-bg: #f8f9fa;
+  --organization-bg: #a8c7fa;
+  --organization-color: #555555;
+  --LoginToggle-button-color: #555555;
+  --LoginToggle-button-bg: #eaebef;
+  --LoginToggle-button-active: #a8c7fa;
   --search-button-border: #555555;
   --search-outline: #555555;
   --search-button-fill: #555555;
@@ -194,13 +298,18 @@
   --bs-gray-300: #d1d5db;
   --toggle-button-bg: #1e4e8c;
   --table-head-bg: #eaebef;
+  --table-head-bg: #eaebef;
   --table-head-color: var(--bs-white, var(--white-color));
+  --table-header-color: #000000;
   --table-header-color: #000000;
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
+  --light-blue: #a8c7fa;
+  --dark-blue: #1778f2;
+  --remove-button-color: #c8102e;
   --light-blue: #a8c7fa;
   --dark-blue: #1778f2;
   --remove-button-color: #c8102e;
@@ -562,13 +671,11 @@
   /* margin-top: 10px; */
   /* margin-left: 5px; */
   border: 1px solid var(--davys-grey);
-  border: 1px solid var(--davys-grey);
 }
 
 .createButton:hover {
   background-color: var(--grey-bg-color) !important;
   color: var(--black-color) !important;
-  border: 1px solid var(--davys-grey) !important;
   border: 1px solid var(--davys-grey) !important;
 }
 
@@ -614,14 +721,9 @@
   --bs-btn-active-color: var(--search-button-bg);
   --bs-btn-active-bg: var(--search-button-bg);
   --bs-btn-active-border-color: var(--search-button-bg);
-  --bs-btn-active-color: var(--search-button-bg);
-  --bs-btn-active-bg: var(--search-button-bg);
-  --bs-btn-active-border-color: var(--search-button-bg);
   margin-bottom: 10px;
   color: var(--search-button-fill);
-  color: var(--search-button-fill);
   background-color: var(--search-button-bg);
-  border-color: var(--search-button-bg);
   border-color: var(--search-button-bg);
   position: absolute;
   z-index: 10;
@@ -633,16 +735,9 @@
   transition:
     box-shadow 0.2s ease,
     transform 0.2s ease;
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
 }
 
 .searchButton:hover {
-  background-color: var(--search-button-bg);
-  border-color: var(--search-button-bg);
-  box-shadow: var(--hover-shadow);
-  color: var(--davys-grey) !important;
   background-color: var(--search-button-bg);
   border-color: var(--search-button-bg);
   box-shadow: var(--hover-shadow);
@@ -653,14 +748,10 @@
   transform: scale(0.95);
   background-color: var(--search-button-bg) !important;
   border-color: transparent !important;
-  background-color: var(--search-button-bg) !important;
-  border-color: transparent !important;
 }
 
 .addButton {
   margin-bottom: 10px;
-  color: var(--davys-grey);
-  background-color: var(--light-blue);
   color: var(--davys-grey);
   background-color: var(--light-blue);
   border-color: var(--grey-bg-color);
@@ -669,20 +760,6 @@
 .addButton:is(:hover, :active) {
   background-color: var(--dark-blue) !important;
   border-color: var(--search-button-border);
-}
-
-.removeButton {
-  margin-bottom: 10px;
-  background-color: var(--delete-button-bg);
-  color: var(--remove-button-color);
-  margin-right: 10px;
-  --bs-btn-border-color: #dc3545;
-}
-
-.removeButton:is(:hover, :active, :focus) {
-  background-color: var(--delete-button-color) !important;
-  border-color: var(--delete-button-color);
-  color: white;
 }
 
 .removeButton {
@@ -714,25 +791,13 @@
   border-color: var(--search-button-border) !important;
 }
 
-.regularBtn {
-  background-color: var(--search-button-bg);
-  border-color: var(--search-button-border);
-}
-
-.regularBtn:is(:hover, :active) {
-  background-color: #286fe0 !important;
-  border-color: var(--search-button-border) !important;
-}
-
 .searchIcon {
-  color: var(--davys-grey);
   color: var(--davys-grey);
 }
 
 .infoButton {
   background-color: var(--search-button-bg);
   border-color: var(--search-button-border);
-  color: var(--davys-grey);
   color: var(--davys-grey);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
@@ -763,37 +828,6 @@
   background-color: var(--row-background);
   max-height: 120px;
   overflow-y: auto;
-}
-
-.scrollContainer {
-  height: 100px;
-  overflow-y: auto;
-  margin-bottom: 1rem;
-}
-
-.memberBadge {
-  display: flex;
-  align-items: center;
-  padding: 5px 10px;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px var(--bs-gray-400);
-  max-width: calc(100% - 2rem);
-}
-
-.loadingDiv {
-  min-height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.tagBadge {
-  display: flex;
-  align-items: center;
-  padding: 5px 10px;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px var(--bs-gray-400);
-  max-width: calc(100% - 2rem);
 }
 
 .scrollContainer {
