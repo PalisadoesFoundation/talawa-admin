@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.6.3">
 <title data-rh="true">default | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/auto-docs/screens/UserPortal/Donate/Donate/functions/default"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="default | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="Admin Docs"><meta data-rh="true" property="og:description" content="Admin Docs"><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/auto-docs/screens/UserPortal/Donate/Donate/functions/default"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/auto-docs/screens/UserPortal/Donate/Donate/functions/default" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/auto-docs/screens/UserPortal/Donate/Donate/functions/default" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.64886b53.css">
-<script src="/assets/js/runtime~main.1fba9b9c.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.a9eb5361.js" defer="defer"></script>
 <script src="/assets/js/main.a63de829.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -14,7 +14,7 @@
 <blockquote>
 <p><strong>default</strong>(): <code>JSX.Element</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L65" target="_blank" rel="noopener noreferrer">src/screens/UserPortal/Donate/Donate.tsx:65</a></p>
+<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Donate/Donate.tsx#L84" target="_blank" rel="noopener noreferrer">src/screens/UserPortal/Donate/Donate.tsx:84</a></p>
 <p><code>donate</code> component allows users to make donations to an organization and view their previous donations.</p>
 <p>This component fetches donation-related data using GraphQL queries and allows users to make donations
 using a mutation. It supports currency selection, donation amount input, and displays a paginated list
@@ -39,6 +39,24 @@ of previous donations.</p>
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="returns">Returns<a href="#returns" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns">​</a></h2>
 <p><code>JSX.Element</code></p>
-<p>The rendered component.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/auto-docs/screens/UserPortal/Donate/Donate/functions/default.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/auto-docs/screens/UserPortal/Chat/Chat/type-aliases/Chat"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Chat</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/auto-docs/screens/UserPortal/Donate/Donate/interfaces/InterfaceDonationCardProps"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">InterfaceDonationCardProps</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#graphql-queries" class="table-of-contents__link toc-highlight">GraphQL Queries</a></li><li><a href="#graphql-mutations" class="table-of-contents__link toc-highlight">GraphQL Mutations</a></li><li><a href="#returns" class="table-of-contents__link toc-highlight">Returns</a></li></ul></div></div></div></div></main></div></div></div></div>
+<p>The rendered component.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="css-strategy-explanation">CSS Strategy Explanation:<a href="#css-strategy-explanation" class="hash-link" aria-label="Direct link to CSS Strategy Explanation:" title="Direct link to CSS Strategy Explanation:">​</a></h2>
+<p>To ensure consistency across the application and reduce duplication, common styles
+(such as button styles) have been moved to the global CSS file. Instead of using
+component-specific classes (e.g., <code>.greenregbtnOrganizationFundCampaign</code>, <code>.greenregbtnPledge</code>), a single reusable
+class (e.g., .addButton) is now applied.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="benefits">Benefits:<a href="#benefits" class="hash-link" aria-label="Direct link to Benefits:" title="Direct link to Benefits:">​</a></h3>
+<ul>
+<li>**Reduces redundant CSS code.</li>
+<li>**Improves maintainability by centralizing common styles.</li>
+<li>**Ensures consistent styling across components.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="global-css-classes-used">Global CSS Classes used:<a href="#global-css-classes-used" class="hash-link" aria-label="Direct link to Global CSS Classes used:" title="Direct link to Global CSS Classes used:">​</a></h3>
+<ul>
+<li><code>.inputField</code></li>
+<li><code>.searchButton</code></li>
+<li><code>.addButton</code></li>
+</ul>
+<p>For more details on the reusable classes, refer to the global CSS file.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/auto-docs/screens/UserPortal/Donate/Donate/functions/default.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/auto-docs/screens/UserPortal/Chat/Chat/type-aliases/Chat"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Chat</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/auto-docs/screens/UserPortal/Donate/Donate/interfaces/InterfaceDonationCardProps"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">InterfaceDonationCardProps</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#graphql-queries" class="table-of-contents__link toc-highlight">GraphQL Queries</a></li><li><a href="#graphql-mutations" class="table-of-contents__link toc-highlight">GraphQL Mutations</a></li><li><a href="#returns" class="table-of-contents__link toc-highlight">Returns</a></li><li><a href="#css-strategy-explanation" class="table-of-contents__link toc-highlight">CSS Strategy Explanation:</a><ul><li><a href="#benefits" class="table-of-contents__link toc-highlight">Benefits:</a></li><li><a href="#global-css-classes-used" class="table-of-contents__link toc-highlight">Global CSS Classes used:</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>
