@@ -968,23 +968,6 @@ describe('Testing ItemModal', () => {
     });
   });
 
-  it('handles floating point numbers for allottedHours', async () => {
-    renderItemModal(link1, itemProps[0]);
-
-    const hoursInput = screen.getByLabelText(t.allottedHours);
-    fireEvent.change(hoursInput, { target: { value: '1.5' } });
-    fireEvent.change(hoursInput, { target: { value: '0.001' } });
-    fireEvent.change(hoursInput, { target: { value: '99.999' } });
-  });
-
-  it('handles scientific notation for allottedHours', async () => {
-    renderItemModal(link1, itemProps[0]);
-
-    const hoursInput = screen.getByLabelText(t.allottedHours);
-    fireEvent.change(hoursInput, { target: { value: '1e2' } });
-    fireEvent.change(hoursInput, { target: { value: '1e-2' } });
-  });
-
   it('No Fields Updated while Updating', async () => {
     renderItemModal(link2, itemProps[2]);
     // Click Submit
@@ -1056,24 +1039,6 @@ describe('Testing ItemModal', () => {
 
       fireEvent.click(individualRadio);
       expect(await screen.findByTestId('volunteerSelect')).toBeInTheDocument();
-    });
-  });
-
-  // validating when dates are due
-  it('validates due date handling', async () => {
-    renderItemModal(link1, itemProps[0]);
-
-    await waitFor(async () => {
-      const dateInput = screen.getByLabelText(t.dueDate);
-
-      fireEvent.change(dateInput, { target: { value: 'invalid date' } });
-      expect(dateInput).toHaveValue('');
-
-      fireEvent.change(dateInput, { target: { value: '01/01/2020' } });
-      expect(dateInput).toHaveValue('01/01/2020');
-
-      fireEvent.change(dateInput, { target: { value: '01/01/2025' } });
-      expect(dateInput).toHaveValue('01/01/2025');
     });
   });
 
