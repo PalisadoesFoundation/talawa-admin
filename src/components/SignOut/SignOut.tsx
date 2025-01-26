@@ -34,7 +34,7 @@ const SignOut = (): JSX.Element => {
     } catch (error) {
       console.error('Error revoking refresh token:', error);
       const retryRevocation = window.confirm(
-        'Failed to revoke session. Retry?'
+        'Failed to revoke session. Retry?',
       );
       if (retryRevocation) {
         try {
