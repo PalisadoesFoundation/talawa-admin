@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, ProgressBar } from 'react-bootstrap';
+import { Button, ProgressBar } from 'react-bootstrap';
 import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -20,6 +20,7 @@ import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import Loader from 'components/Loader/Loader';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * The `Campaigns` component displays a list of fundraising campaigns for a specific organization.
@@ -153,60 +154,48 @@ const Campaigns = (): JSX.Element => {
     <>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchCampaigns"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className={`${styles.btnsBlock}`}>
-          <SortingButton
-            sortingOptions={[
-              { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
-              { label: t('highestGoal'), value: 'fundingGoal_DESC' },
-              { label: t('latestEndDate'), value: 'endDate_DESC' },
-              { label: t('earliestEndDate'), value: 'endDate_ASC' },
-            ]}
-            selectedOption={sortBy}
-            onSortChange={(value) =>
-              setSortBy(
-                value as
-                  | 'fundingGoal_ASC'
-                  | 'fundingGoal_DESC'
-                  | 'endDate_ASC'
-                  | 'endDate_DESC',
-              )
-            }
-            dataTestIdPrefix="filter"
-            buttonLabel={tCommon('sort')}
-          />
-        </div>
-        <div className={`${styles.btnsBlock}`}>
-          {/* Button to navigate to the user's pledges */}
-          <Button
-            variant="success"
-            data-testid="myPledgesBtn"
-            onClick={() =>
-              navigate(`/user/pledges/${orgId}`, { replace: true })
-            }
-            className={styles.regularBtn}
-          >
-            {t('myPledges')}
-            <i className="fa fa-angle-right ms-2" />
-          </Button>
+        <SearchBar
+          placeholder={t('searchByName')}
+          onSearch={setSearchTerm}
+          inputTestId="searchCampaigns"
+          buttonTestId="searchBtn"
+        />
+        <div className="d-flex gap-4 mb-1">
+          <div className="d-flex justify-space-between">
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
+                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              selectedOption={sortBy}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'fundingGoal_ASC'
+                    | 'fundingGoal_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
+          </div>
+          <div>
+            {/* Button to navigate to the user's pledges */}
+            <Button
+              variant="success"
+              data-testid="myPledgesBtn"
+              onClick={() =>
+                navigate(`/user/pledges/${orgId}`, { replace: true })
+              }
+            >
+              {t('myPledges')}
+              <i className="fa fa-angle-right ms-2" />
+            </Button>
+          </div>
         </div>
       </div>
       {campaigns.length < 1 ? (
@@ -234,7 +223,11 @@ const Campaigns = (): JSX.Element => {
                       }
                       variant="outlined"
                       color="primary"
-                      className={`${styles.chip} ${new Date(campaign.endDate) < new Date() ? styles.pending : styles.active}`}
+                      className={`${styles.chip} ${
+                        new Date(campaign.endDate) < new Date()
+                          ? styles.pending
+                          : styles.active
+                      }`}
                     />
                   </div>
 

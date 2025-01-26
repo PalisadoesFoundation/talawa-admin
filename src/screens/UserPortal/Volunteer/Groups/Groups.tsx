@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import { debounce, Stack } from '@mui/material';
 
@@ -20,6 +20,7 @@ import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/Vol
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ModalState {
   EDIT = 'edit',
@@ -87,7 +88,6 @@ function groups(): JSX.Element {
   }
 
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<
     'volunteers_ASC' | 'volunteers_DESC' | null
@@ -302,31 +302,14 @@ function groups(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton

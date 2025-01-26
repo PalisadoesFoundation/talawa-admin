@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.tsx#L49)
+Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.tsx#L50)
 
 The `Invitations` component displays list of invites for the user to volunteer.
 It allows the user to search, sort, and accept/reject invites.

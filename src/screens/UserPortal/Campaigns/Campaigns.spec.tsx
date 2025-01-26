@@ -324,6 +324,7 @@ describe('Testing User Campaigns Screen', () => {
     fireEvent.change(searchCampaigns, {
       target: { value: 'Hospital' },
     });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.queryByText('School Campaign')).toBeNull();

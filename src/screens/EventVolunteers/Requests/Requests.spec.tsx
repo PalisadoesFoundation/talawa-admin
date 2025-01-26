@@ -169,6 +169,7 @@ describe('Testing Requests Screen', () => {
     // Search by name on press of ENTER
     userEvent.type(searchInput, 'T');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       const volunteerName = screen.getAllByTestId('volunteerName');

@@ -1,14 +1,13 @@
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
-
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
   DataGrid,
   type GridCellParams,
@@ -18,6 +17,7 @@ import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
 import CategoryModal from './CategoryModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ModalState {
   SAME = 'same',
@@ -70,7 +70,6 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   const [category, setCategory] =
     useState<InterfaceActionItemCategoryInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
@@ -277,33 +276,12 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       <div
         className={`${styles.btnsContainerOrgActionItemCategories} gap-4 flex-wrap`}
       >
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
-            }}
-            data-testid="searchByName"
-          />
-          <Button
-            tabIndex={-1}
-            className={styles.searchButton}
-            onClick={() => setSearchTerm(searchValue)}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchByName')}
+          onSearch={setSearchTerm}
+          inputTestId="searchByName"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-4">
             <SortingButton

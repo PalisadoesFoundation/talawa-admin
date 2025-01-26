@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Form, Row } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -21,6 +21,7 @@ import type {
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -366,25 +367,12 @@ const orgFundCampaign = (): JSX.Element => {
 
       <Row className={styles.head}>
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <div className={`${styles.input} mb-1`}>
-            <Form.Control
-              type="name"
-              placeholder={tCommon('searchByName')}
-              autoComplete="off"
-              required
-              className={styles.inputField}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              data-testid="searchFullName"
-            />
-            <Button
-              className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center ${styles.searchButton}`}
-              data-testid="searchBtn"
-            >
-              <Search />
-            </Button>
-          </div>
-          {/* <div className={styles.btnsBbtnsBlockOrganizationFundCampaignlock}> */}
+          <SearchBar
+            placeholder={tCommon('searchByName')}
+            onSearch={setSearchTerm}
+            inputTestId="searchFullName"
+            buttonTestId="searchBtn"
+          />
           <div className={styles.btnsBlock}>
             <SortingButton
               sortingOptions={[
@@ -418,7 +406,6 @@ const orgFundCampaign = (): JSX.Element => {
               {t('addCampaign')}
             </Button>
           </div>
-          {/* </div> */}
         </div>
       </Row>
 
@@ -448,7 +435,7 @@ const orgFundCampaign = (): JSX.Element => {
         isRowSelectable={() => false}
       />
 
-      {/* Create Campaign ModalState */}
+      {/* Create Campaign Modal */}
       <CampaignModal
         isOpen={modalState}
         hide={() => setModalState(false)}

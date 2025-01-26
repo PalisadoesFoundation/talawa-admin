@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router-dom';
@@ -29,6 +29,7 @@ import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
@@ -297,24 +298,12 @@ function SubTags(): JSX.Element {
       <Row>
         <div>
           <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-            <div className={`${styles.input} mb-1`}>
-              <Form.Control
-                type="text"
-                id="tagName"
-                className={`${styles.inputField} `}
-                placeholder={tCommon('searchByName')}
-                onChange={(e) => setTagSearchName(e.target.value.trim())}
-                data-testid="searchByName"
-                autoComplete="off"
-              />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              onSearch={(term) => setTagSearchName(term.trim())}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
 
             <SortingButton
               sortingOptions={[
