@@ -28,7 +28,7 @@ import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
 import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
 import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
-import Leaderboard from 'screens/OrganizationDashboard/Leaderboard/Leaderboard';
+import Leaderboard from 'screens/Leaderboard/Leaderboard';
 
 import React, { useEffect } from 'react';
 // User Portal Components
