@@ -50,7 +50,6 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
         }, 2000);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };

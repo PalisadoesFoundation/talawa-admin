@@ -186,7 +186,7 @@ function organizationActionItems(): JSX.Element {
                       className={styles.TableImage}
                     />
                   ) : (
-                    <div className={styles.avatarContainer}>
+                    <div className={styles.TableImage}>
                       <Avatar
                         key={_id + '1'}
                         containerStyle={styles.imageContainer}
@@ -367,7 +367,7 @@ function organizationActionItems(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} `}>
+        <div className={`${styles.input}`}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -387,7 +387,7 @@ function organizationActionItems(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 mb-1">
+        <div className="d-flex gap-3">
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[
@@ -443,7 +443,7 @@ function organizationActionItems(): JSX.Element {
             <Button
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
-              className={styles.createButton}
+              className={`mt-2 ${styles.actionsButton}`}
               data-testid="createActionItemBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -456,38 +456,29 @@ function organizationActionItems(): JSX.Element {
       {/* Table with Action Items */}
       <DataGrid
         disableColumnMenu
+        disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
         getRowId={(row) => row._id}
+        sx={{
+          backgroundColor: 'white',
+          borderRadius: '16px',
+          '& .MuiDataGrid-columnHeaders': {
+            border: 'none',
+          },
+          '& .MuiDataGrid-cell': {
+            border: 'none',
+          },
+          '& .MuiDataGrid-columnSeparator': {
+            display: 'none',
+          },
+        }}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
               {t('noActionItems')}
             </Stack>
           ),
-        }}
-        sx={{
-          borderRadius: '20px',
-          backgroundColor: 'EAEBEF)',
-          '& .MuiDataGrid-row': {
-            backgroundColor: '#eff1f7',
-            '&:focus-within': {
-              // outline: '2px solid #000',
-              outlineOffset: '-2px',
-            },
-          },
-          '& .MuiDataGrid-row:hover': {
-            backgroundColor: '#EAEBEF',
-            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiDataGrid-row.Mui-hovered': {
-            backgroundColor: '#EAEBEF',
-            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiDataGrid-cell:focus': {
-            // outline: '2px solid #000',
-            // outlineOffset: '-2px',
-          },
         }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight

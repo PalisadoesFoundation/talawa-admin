@@ -152,6 +152,14 @@ describe('Testing StartPostModal Component: User Portal', () => {
     );
   });
 
+  it('should display correct username', async () => {
+    renderStartPostModal(true, null);
+    await wait();
+
+    const userFullName = screen.getByText('Glen dsza');
+    expect(userFullName).toBeInTheDocument();
+  });
+
   it('If user image is null then default image should be shown', async () => {
     renderStartPostModal(true, null);
     await wait();

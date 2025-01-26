@@ -30,6 +30,31 @@ import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
 import SortingButton from 'subComponents/SortingButton';
 
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ * - `.modalHeader`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
@@ -329,12 +354,12 @@ function orgList(): JSX.Element {
   return (
     <>
       {/* Buttons Container */}
-      <div className={styles.btnsContainerOrgList}>
+      <div className={styles.btnsContainer}>
         <div className={styles.input}>
           <Form.Control
             type="name"
             id="searchOrgname"
-            className={'bg-white'}
+            className={styles.inputField}
             placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
@@ -343,14 +368,15 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={styles.searchButtonOrgList}
+            // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            className={styles.searchButton}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className={styles.btnsBlockOrgList}>
+        <div className={styles.btnsBlock}>
           <SortingButton
             title="Sort organizations"
             sortingOptions={[
@@ -362,9 +388,11 @@ function orgList(): JSX.Element {
             dataTestIdPrefix="sortOrgs"
             dropdownTestId="sort"
           />
+        </div>
+        <div className={styles.btnsBlock}>
           {superAdmin && (
             <Button
-              variant="success"
+              className={`${styles.dropdown} ${styles.createorgdropdown}`}
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
             >
@@ -507,7 +535,7 @@ function orgList(): JSX.Element {
       {/* Plugin Notification Modal after Org is Created */}
       <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
-          className={`bg-primary`}
+          className={styles.modalHeader}
           closeButton
           data-testid="pluginNotificationHeader"
         >

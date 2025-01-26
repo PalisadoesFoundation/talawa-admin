@@ -49,7 +49,7 @@ describe('EventHeader Component', () => {
     fireEvent.click(getByTestId('selectViewType'));
 
     await act(async () => {
-      fireEvent.click(getByTestId('selectDay'));
+      fireEvent.click(getByTestId('Day'));
     });
 
     // Expect handleChangeView to be called with the new view type

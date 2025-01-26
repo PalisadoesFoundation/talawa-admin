@@ -8,6 +8,26 @@ import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutatio
 import { toast } from 'react-toastify';
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
 
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
 export interface InterfaceItemUpdateStatusModalProps {
   isOpen: boolean;
   hide: () => void;
@@ -113,17 +133,24 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
 
           {isCompleted ? (
             <div className="d-flex gap-3 justify-content-end">
-              <Button type="submit" variant="primary" data-testid="yesBtn">
+              <Button
+                type="submit"
+                className={styles.addButton}
+                data-testid="yesBtn"
+              >
                 {tCommon('yes')}
               </Button>
-              <Button variant="secondary" onClick={hide}>
+              <Button
+                className={`btn btn-danger ${styles.removeButton}`}
+                onClick={hide}
+              >
                 {tCommon('no')}
               </Button>
             </div>
           ) : (
             <Button
               type="submit"
-              className={styles.addButton}
+              className={`${styles.addButton}`}
               data-testid="createBtn"
             >
               {t('markCompletion')}

@@ -29,6 +29,7 @@ import { vi } from 'vitest';
  * GraphQL mock data is used for testing user registration functionality.
  */
 
+// GraphQL Mock Data
 const MOCKS = [
   {
     request: {
@@ -54,6 +55,7 @@ const MOCKS = [
   },
 ];
 
+// Form Data
 const formData = {
   firstName: 'John',
   lastName: 'Doe',
@@ -62,16 +64,26 @@ const formData = {
   confirmPassword: 'johnDoe',
 };
 
+// Additional GraphQL Mock Data for Error Handling
+const ERROR_MOCKS = [
+  {
+    request: {
+      query: SIGNUP_MUTATION,
+      variables: {
+        firstName: 'Error',
+        lastName: 'Test',
+        email: 'error@test.com',
+        password: 'password',
+      },
+    },
+    error: new Error('GraphQL error occurred'),
+  },
+];
+
+// Static Mock Link
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
+// Mock toast
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -80,11 +92,17 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+// Mock setCurrentMode function
 const setCurrentMode: React.Dispatch<SetStateAction<string>> = vi.fn();
 
+// Test setup props
 const props = {
   setCurrentMode,
 };
+
+async function waitForAsync(): Promise<void> {
+  await act(() => new Promise((resolve) => setTimeout(resolve, 100)));
+}
 
 describe('Testing Register Component [User Portal]', () => {
   it('Component should be rendered properly', async () => {
@@ -100,7 +118,7 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
   });
 
   it('Expect the mode to be changed to Login', async () => {
@@ -116,7 +134,7 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.click(screen.getByTestId('setLoginBtn'));
 
@@ -136,7 +154,7 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.click(screen.getByTestId('registerBtn'));
 
@@ -156,7 +174,7 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
     userEvent.click(screen.getByTestId('registerBtn'));
@@ -177,12 +195,10 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
-
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
@@ -201,20 +217,17 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
-
     userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
-  test("Expect toast.error to be called if confirmPassword doesn't match with password", async () => {
+  it("Expect toast.error to be called if confirmPassword doesn't match with password", async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -227,16 +240,12 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
-
     userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-
     userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
-
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
@@ -257,27 +266,52 @@ describe('Testing Register Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-
     userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
       formData.confirmPassword,
     );
-
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
-
     userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-
     userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
-
     userEvent.click(screen.getByTestId('registerBtn'));
 
-    await wait();
+    await waitForAsync();
 
     expect(toast.success).toHaveBeenCalledWith(
       'Successfully registered. Please wait for admin to approve your request.',
     );
+  });
+
+  // Error Test Case
+  it('Expect toast.error to be called if GraphQL mutation fails', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={ERROR_MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Register {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitForAsync();
+
+    // Fill out the form with error-triggering values
+    userEvent.type(screen.getByTestId('passwordInput'), 'password');
+    userEvent.type(screen.getByTestId('confirmPasswordInput'), 'password');
+    userEvent.type(screen.getByTestId('emailInput'), 'error@test.com');
+    userEvent.type(screen.getByTestId('firstNameInput'), 'Error');
+    userEvent.type(screen.getByTestId('lastNameInput'), 'Test');
+    userEvent.click(screen.getByTestId('registerBtn'));
+
+    await waitForAsync();
+
+    // Assert that toast.error is called with the error message
+    expect(toast.error).toHaveBeenCalledWith('GraphQL error occurred');
   });
 });

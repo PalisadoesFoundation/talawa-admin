@@ -30,6 +30,17 @@ enum ModalState {
 }
 
 const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-cell': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-columnSeparator': {
+    display: 'none',
+  },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
@@ -162,7 +173,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -182,7 +193,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.leader;
         return (
@@ -220,7 +231,7 @@ function volunteerGroups(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
@@ -236,7 +247,7 @@ function volunteerGroups(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
@@ -253,7 +264,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -294,8 +305,8 @@ function volunteerGroups(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+        <div className={`${styles.input}`} style={{ marginRight: '275px' }}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -303,7 +314,7 @@ function volunteerGroups(): JSX.Element {
             })}
             autoComplete="off"
             required
-            className={styles.inputFields}
+            className={styles.inputField}
             value={searchValue}
             onChange={(e) => {
               setSearchValue(e.target.value);
@@ -311,12 +322,7 @@ function volunteerGroups(): JSX.Element {
             }}
             data-testid="searchBy"
           />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
+          <Button className={`${styles.searchButton}`} data-testid="searchBtn">
             <Search />
           </Button>
         </div>
@@ -351,6 +357,7 @@ function volunteerGroups(): JSX.Element {
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
               style={{ marginTop: '11px' }}
+              className={styles.actionsButton}
               data-testid="createGroupBtn"
             >
               <i className={'fa fa-plus me-2'} />

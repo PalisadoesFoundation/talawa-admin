@@ -58,6 +58,24 @@ const StyledTableRow = styled(TableRow)(() => ({
  *  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
  *  USERS_CONNECTION_LIST,
  *  ADD_MEMBER_MUTATION,SIGNUP_MUTATION.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.removeButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function AddMember(): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
@@ -528,35 +546,29 @@ function AddMember(): JSX.Element {
               />
             </InputGroup>
           </div>
+        </Modal.Body>
+        <Modal.Footer>
           <div className={styles.createUserActionBtns}>
             <Button
-              className={`${styles.borderNone}`}
+              className={`${styles.removeButton}`}
               variant="danger"
               onClick={closeCreateNewUserModal}
               data-testid="closeBtn"
-              style={{
-                backgroundColor: 'var(--delete-button-bg)',
-                color: 'var(--delete-button-color)',
-              }}
             >
               <Close className={styles.closeButton} />
               {translateOrgPeople('cancel')}
             </Button>
             <Button
-              className={`${styles.colorPrimary} ${styles.borderNone}`}
+              className={`${styles.addButton}`}
               variant="success"
               onClick={handleCreateUser}
               data-testid="createBtn"
-              style={{
-                backgroundColor: 'var(--search-button-bg)',
-                border: '1px solid var(--dropdown-border-color)',
-              }}
             >
               <Check className={styles.searchIcon} />
               {translateOrgPeople('create')}
             </Button>
           </div>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
     </>
   );

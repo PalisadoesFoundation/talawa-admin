@@ -1,12 +1,13 @@
 """Script to encourage more efficient coding practices.
+
 Methodology:
 
     Utility for comparing translations between default and other languages.
 
     This module defines a function to compare two translations
     and print any missing keys in the other language's translation.
-Attributes:
 
+Attributes:
     FileTranslation : Named tuple to represent a combination
                         of file and missing translations.
 
@@ -37,7 +38,8 @@ Usage:
 
 Example:
     python compare_translations.py
-NOTE:
+
+Note:
     This script complies with our python3 coding and documentation standards
     and should be used as a reference guide. It complies with:
 
@@ -47,6 +49,7 @@ NOTE:
         4) Flake8
 
 """
+
 # standard imports
 import argparse
 import json
@@ -56,19 +59,21 @@ from collections import namedtuple
 
 # Named tuple for file and missing
 #   translations combination
-FileTranslation = namedtuple("FileTranslation",
-                    ["file", "missing_translations"])
+FileTranslation = namedtuple(
+    "FileTranslation", ["file", "missing_translations"]
+)
 
 
-def compare_translations(default_translation,
-    other_translation, default_file, other_file):
-    """Compare two translations and return detailed info about missing/mismatched keys.
+def compare_translations(
+    default_translation, other_translation, default_file, other_file
+):
+    """Compare two translations for missing and/or mismatched keys.
 
     Args:
         default_translation (dict): The default translation (en.json).
         other_translation (dict): The other language translation.
         default_file (str): The name of the default translation file.
-        other_file (str): The name of the other 
+        other_file (str): The name of the other
                             translation file.
 
     Returns:
@@ -79,22 +84,27 @@ def compare_translations(default_translation,
     # Check for missing keys in other_translation
     for key in default_translation:
         if key not in other_translation:
-            error_msg = f"Missing Key: '{key}' - This key from '{default_file}' is missing in '{other_file}'."
+            error_msg = f"""\
+Missing Key: '{key}' - This key from '{default_file}' \
+is missing in '{other_file}'."""
             errors.append(error_msg)
-    # Check for keys in other_translation that don't match any in default_translation
+    # Check for keys in other_translation that don't
+    # match any in default_translation
     for key in other_translation:
         if key not in default_translation:
-            error_msg = f"Error Key: '{key}' - This key in '{other_file}' does not match any key in '{default_file}'."
+            error_msg = f"""\
+Error Key: '{key}' - This key in '{other_file}' \
+does not match any key in '{default_file}'."""
             errors.append(error_msg)
     return errors
 
+
 def flatten_json(nested_json, parent_key=""):
-    """
-    Flattens a nested JSON, concatenating keys to represent the hierarchy.
+    """Flattens a nested JSON, concatenating keys to represent the hierarchy.
 
     Args:
         nested_json (dict): The JSON object to flatten.
-        parent_key (str): The base key for recursion (used to track key hierarchy).
+        parent_key (str): The base key for recursion to track key hierarchy.
 
     Returns:
         dict: A flattened dictionary with concatenated keys.
@@ -104,7 +114,7 @@ def flatten_json(nested_json, parent_key=""):
     for key, value in nested_json.items():
         # Create the new key by concatenating parent and current key
         new_key = f"{parent_key}.{key}" if parent_key else key
-        
+
         if isinstance(value, dict):
             # Recursively flatten the nested dictionary
             flat_dict.update(flatten_json(value, new_key))
@@ -113,6 +123,7 @@ def flatten_json(nested_json, parent_key=""):
             flat_dict[new_key] = value
 
     return flat_dict
+
 
 def load_translation(filepath):
     """Load translation from a file.
@@ -154,7 +165,6 @@ def check_translations(directory):
     languages = os.listdir(directory)
     languages.remove("en")  # Exclude default language directory
 
-
     error_found = False
 
     for language in languages:
@@ -166,14 +176,16 @@ def check_translations(directory):
 
             # Compare translations and get detailed error messages
             errors = compare_translations(
-                default_translation, other_translation, f"en/{file}", f"{language}/{file}"
+                default_translation,
+                other_translation,
+                f"en/{file}",
+                f"{language}/{file}",
             )
             if errors:
                 error_found = True
                 print(f"File {language}/{file} has missing translations for:")
                 for error in errors:
                     print(f"  - {error}")
-
 
     if error_found:
         sys.exit(1)  # Exit with an error status code
@@ -183,26 +195,38 @@ def check_translations(directory):
 
 
 def main():
-    """
+    """Compare translations.
 
-    Parse command-line arguments, check for the existence of the specified directory 
-    and call check_translations with the provided or default directory.
+    Parse command-line arguments, check for the existence of the specified
+    directory and call check_translations with the provided or default
+    directory.
+
+    Args:
+        None
+
+    Returns:
+        None
 
     """
+    # Initialize key variables
     parser = argparse.ArgumentParser(
-        description="Check and print missing translations for all non-default languages."
+        description="""\
+Check and print missing translations for all non-default languages."""
     )
     parser.add_argument(
         "--directory",
         type=str,
         nargs="?",
         default=os.path.join(os.getcwd(), "public/locales"),
-        help="Directory containing translation files(relative to the root directory).",
+        help="""\
+Directory containing translation files(relative to the root directory).""",
     )
     args = parser.parse_args()
 
     if not os.path.exists(args.directory):
-        print(f"Error: The specified directory '{args.directory}' does not exist.")
+        print(
+            f"Error: The specified directory '{args.directory}' does not exist."
+        )
         sys.exit(1)
 
     check_translations(args.directory)

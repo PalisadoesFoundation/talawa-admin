@@ -30,18 +30,23 @@ const config: Config = {
   presets: [
     [
       'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
       {
         docs: {
-          sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          sidebarPath: require.resolve('./sidebars.js'),
+          editUrl: ({ docPath }) => {
+            return `https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/${docPath}`;
+          },
+        },
+        blog: {
+          showReadingTime: true,
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/PalisadoesFoundation/talawa-admin/tree/develop/docs/docs',
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: [require.resolve('./src/css/custom.css')],
         },
-      } satisfies Preset.Options,
+      },
     ],
   ],
 
@@ -54,7 +59,7 @@ const config: Config = {
         },
       },
       navbar: {
-        title: 'Talawa Admin Documentation',
+        title: 'Talawa',
         logo: {
           alt: 'Talawa Logo',
           src: 'img/icons/favicon_palisadoes.ico',
@@ -62,27 +67,27 @@ const config: Config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
             label: 'General',
             position: 'left',
+            href: 'https://docs.talawa.io/docs',
+            target: '_self',
           },
           {
             label: 'Mobile Guide',
             position: 'left',
-            href: 'https://docs-mobile.talawa.io/',
+            href: 'https://docs-mobile.talawa.io/docs',
             target: '_self',
           },
           {
             label: 'Admin Guide',
             position: 'left',
-            href: 'https://docs-admin.talawa.io/',
+            href: '/docs',
             target: '_self',
           },
           {
             label: 'API Guide',
             position: 'left',
-            href: 'https://docs-api.talawa.io/',
+            href: 'https://docs-api.talawa.io/docs',
             target: '_self',
           },
 
@@ -109,62 +114,6 @@ const config: Config = {
         defaultMode: 'light',
         disableSwitch: false,
         respectPrefersColorScheme: false,
-      },
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Community',
-            items: [
-              {
-                label: ' Slack',
-                to: 'https://github.com/PalisadoesFoundation',
-                className: 'footer__icon footer__slack',
-              },
-              {
-                label: ' News',
-                to: 'https://www.palisadoes.org/news/',
-                className: 'footer__icon footer__news',
-              },
-              {
-                label: ' Contact Us',
-                to: 'https://www.palisadoes.org/contact/',
-                className: 'footer__icon footer__contact',
-              },
-            ],
-          },
-          {
-            title: 'Social Media',
-            items: [
-              {
-                label: ' Twitter',
-                to: 'https://twitter.com/palisadoesorg?lang=en',
-                className: 'footer__icon footer__twitter',
-              },
-              {
-                label: ' Facebook',
-                to: 'https://www.facebook.com/palisadoesproject/',
-                className: 'footer__icon footer__facebook',
-              },
-              {
-                label: ' Instagram',
-                to: 'https://www.instagram.com/palisadoes/?hl=en',
-                className: 'footer__icon footer__instagram',
-              },
-            ],
-          },
-          {
-            title: 'Development',
-            items: [
-              {
-                label: ' GitHub',
-                to: 'https://github.com/PalisadoesFoundation',
-                className: 'footer__icon footer__github',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} The Palisadoes Foundation, LLC. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,

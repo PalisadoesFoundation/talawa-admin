@@ -65,6 +65,23 @@ interface InterfaceCommentCardProps {
  *
  * @param props - The properties passed to the component including post details, comments, and related actions.
  * @returns JSX.Element representing a post card with interactive features.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function postCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -196,6 +213,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   // Create a new comment
   const createComment = async (): Promise<void> => {
     try {
+      // Ensure the input is not empty
+      if (!commentInput.trim()) {
+        toast.error(t('emptyCommentError'));
+        return;
+      }
+
       const { data: createEventData } = await create({
         variables: {
           postId: props.id,
@@ -225,7 +248,21 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setComments([...comments, newComment]);
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      // Handle errors
+      // Log error with context for debugging
+      console.error('Error creating comment:', error);
+
+      // Show user-friendly translated message based on error type
+      if (error instanceof Error) {
+        const isValidationError = error.message.includes(
+          'Comment validation failed',
+        );
+        toast.error(
+          isValidationError ? t('emptyCommentError') : t('unexpectedError'),
+        );
+      } else {
+        toast.error(t('unexpectedError'));
+      }
     }
   };
 
@@ -324,8 +361,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           <div className={`${styles.cardActions}`}>
             <Button
               size="sm"
-              variant="success"
-              className="px-4"
+              className={`px-4 ${styles.addButton}`}
               data-testid={'viewPostBtn'}
               onClick={toggleViewPost}
             >
@@ -440,7 +476,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         </Modal.Body>
       </Modal>
       <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
-        <Modal.Header closeButton className="py-2 ">
+        <Modal.Header closeButton className={`py-2`}>
           <p className="fs-3" data-testid={'editPostModalTitle'}>
             {t('editPost')}
           </p>
@@ -461,8 +497,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         <ModalFooter>
           <Button
             size="sm"
-            variant="success"
-            className="px-4"
+            className={`px-4 ${styles.addButton}`}
             data-testid={'editPostBtn'}
             onClick={handleEditPost}
           >

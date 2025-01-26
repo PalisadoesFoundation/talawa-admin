@@ -10,6 +10,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
+import { errorHandler } from 'utils/errorHandler'; // Make sure this import is available
 
 const MOCKS = [
   {
@@ -26,6 +27,7 @@ const MOCKS = [
     },
   },
 ];
+
 const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -58,6 +60,7 @@ const renderOrgAdminListCard = (props: {
     </MockedProvider>,
   );
 };
+
 vi.mock('i18next-browser-languagedetector', async () => ({
   ...(await vi.importActual('i18next-browser-languagedetector')),
   init: vi.fn(),
@@ -65,6 +68,12 @@ vi.mock('i18next-browser-languagedetector', async () => ({
   detect: vi.fn(() => 'en'),
   cacheUserLanguage: vi.fn(),
 }));
+
+// Add the mock for errorHandler
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
 describe('Testing Organization Admin List Card', () => {
   global.alert = vi.fn();
 
@@ -105,6 +114,95 @@ describe('Testing Organization Admin List Card', () => {
     await waitFor(() => {
       const orgListScreen = screen.getByTestId('orgListScreen');
       expect(orgListScreen).toBeInTheDocument();
+    });
+  });
+
+  it('should not call toast or reload if no data is returned from mutation', async () => {
+    // Simulate a failure or empty response from the mutation
+    const noDataMocks = [
+      {
+        request: {
+          query: REMOVE_ADMIN_MUTATION,
+          variables: { userid: '456', orgid: '987' },
+        },
+        result: {
+          data: null, // Simulating no data returned
+        },
+      },
+    ];
+
+    const noDataLink = new StaticMockLink(noDataMocks, true);
+
+    const props = {
+      toggleRemoveModal: vi.fn(),
+      id: '456',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={noDataLink}>
+        <MemoryRouter initialEntries={['/orgpeople/987']}>
+          <Routes>
+            <Route
+              path="/orgpeople/:orgId"
+              element={<OrgAdminListCard {...props} />}
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Simulate user click on "Yes"
+    userEvent.click(screen.getByTestId('removeAdminBtn'));
+
+    await waitFor(() => {
+      // Verify that neither toast.success nor window.location.reload are called
+      expect(global.alert).not.toHaveBeenCalled();
+      expect(window.location.reload).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should call errorHandler when mutation fails', async () => {
+    // Override the mock to simulate a failure
+    const failingMocks = [
+      {
+        request: {
+          query: REMOVE_ADMIN_MUTATION,
+          variables: { userid: '456', orgid: '987' },
+        },
+        error: new Error('Failed to remove admin'),
+      },
+    ];
+
+    const failingLink = new StaticMockLink(failingMocks, true);
+
+    const props = {
+      toggleRemoveModal: vi.fn(),
+      id: '456',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={failingLink}>
+        <MemoryRouter initialEntries={['/orgpeople/987']}>
+          <Routes>
+            <Route
+              path="/orgpeople/:orgId"
+              element={<OrgAdminListCard {...props} />}
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Simulate user click on "Yes"
+    userEvent.click(screen.getByTestId('removeAdminBtn'));
+
+    // Wait for the errorHandler to be called
+    await waitFor(() => {
+      // Verify that errorHandler was called with the expected arguments
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Error),
+      );
     });
   });
 });

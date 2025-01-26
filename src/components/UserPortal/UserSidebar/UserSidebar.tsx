@@ -5,7 +5,8 @@ import { NavLink } from 'react-router-dom';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './UserSidebar.module.css';
+import styles from '../../../style/app.module.css';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean | null;
@@ -61,53 +62,70 @@ const userSidebar = ({
         <h5 className={`${styles.titleHeader} text-secondary`}>
           {tCommon('menu')}
         </h5>
-        <div className={styles.optionList}>
-          {/* Link to "My Organizations" page */}
-          <NavLink to={'/user/organizations'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <Button
-                variant={isActive === true ? 'success' : ''}
-                className={`${
-                  isActive === true ? 'text-white' : 'text-secondary'
-                }`}
-                data-testid="orgsBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <OrganizationsIcon
-                    stroke={`${
-                      isActive === true
-                        ? 'var(--bs-white)'
-                        : 'var(--bs-secondary)'
-                    }`}
-                  />
-                </div>
-                {t('my organizations')}
-              </Button>
-            )}
-          </NavLink>
-          {/* Link to "Settings" page */}
-          <NavLink to={'/user/settings'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <Button
-                variant={isActive === true ? 'success' : ''}
-                className={`${
-                  isActive === true ? 'text-white' : 'text-secondary'
-                }`}
-                data-testid="settingsBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <SettingsIcon
-                    stroke={`${
-                      isActive === true
-                        ? 'var(--bs-white)'
-                        : 'var(--bs-secondary)'
-                    }`}
-                  />
-                </div>
-                {tCommon('settings')}
-              </Button>
-            )}
-          </NavLink>
+        <div
+          className={`d-flex align-items  flex-column ${styles.leftbarcompheight}`}
+        >
+          <div className={styles.optionList}>
+            {/* Link to "My Organizations" page */}
+
+            <NavLink to={'/user/organizations'} onClick={handleLinkClick}>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive ? 'success' : ''}
+                  style={{
+                    backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    color: isActive
+                      ? 'var(--sidebar-option-text-active)'
+                      : 'var(--sidebar-option-text-inactive)',
+                  }}
+                  data-testid="orgsBtn"
+                >
+                  <div className={styles.iconWrapper}>
+                    <OrganizationsIcon
+                      stroke={`${
+                        isActive === true
+                          ? 'var(--sidebar-icon-stroke-active)'
+                          : 'var(--sidebar-icon-stroke-inactive)'
+                      }`}
+                    />
+                  </div>
+                  {t('my organizations')}
+                </Button>
+              )}
+            </NavLink>
+            {/* Link to "Settings" page */}
+            <NavLink to={'/user/settings'} onClick={handleLinkClick}>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive ? 'success' : ''}
+                  style={{
+                    backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    boxShadow: isActive ? 'none' : '',
+                    color: isActive
+                      ? 'var(--sidebar-option-text-active)'
+                      : 'var(--sidebar-option-text-inactive)',
+                  }}
+                  data-testid="settingsBtn"
+                >
+                  <div className={styles.iconWrapper}>
+                    <SettingsIcon
+                      stroke={`${
+                        isActive === true
+                          ? 'var(--sidebar-icon-stroke-active)'
+                          : 'var(--sidebar-icon-stroke-inactive)'
+                      }`}
+                    />
+                  </div>
+                  {tCommon('settings')}
+                </Button>
+              )}
+            </NavLink>
+          </div>
+          <div className="mt-auto">
+            <ProfileDropdown />
+          </div>
         </div>
       </div>
     </>

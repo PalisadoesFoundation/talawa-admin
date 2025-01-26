@@ -93,13 +93,9 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       orgsBtn.click();
     });
 
-    expect(
-      orgsBtn.className.includes('text-black btn btn-success'),
-    ).toBeTruthy();
-    expect(rolesBtn.className.includes('text-secondary btn')).toBeTruthy();
-    expect(
-      communityProfileBtn.className.includes('text-secondary btn'),
-    ).toBeTruthy();
+    expect(orgsBtn.className.includes('btn btn-success')).toBeTruthy();
+    expect(rolesBtn.className.includes('btn')).toBeTruthy();
+    expect(communityProfileBtn.className.includes('btn')).toBeTruthy();
 
     await act(async () => {
       userEvent.click(rolesBtn);
@@ -171,14 +167,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-
-    const orgsBtn = screen.getByTestId(/orgsBtn/i);
-
-    await act(async () => {
-      orgsBtn.click();
-    });
-
-    expect(orgsBtn.className.includes('text-black')).toBeTruthy();
   });
 });
 
@@ -207,9 +195,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
       orgsBtn.click();
     });
 
-    expect(
-      orgsBtn.className.includes('text-black btn btn-success'),
-    ).toBeTruthy();
+    expect(orgsBtn.className.includes('btn btn-success')).toBeTruthy();
 
     // These screens aren't meant for admins, so they should not be present
     expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
@@ -219,5 +205,41 @@ describe('Testing Left Drawer component for ADMIN', () => {
     });
 
     expect(global.window.location.pathname).toContain('/orglist');
+  });
+
+  it('Should set hideDrawer to false when initially null', async () => {
+    const mockSetHideDrawer = vi.fn();
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawer hideDrawer={null} setHideDrawer={mockSetHideDrawer} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+    expect(mockSetHideDrawer).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should not call setHideDrawer when hideDrawer has a value', async () => {
+    const mockSetHideDrawer = vi.fn();
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawer
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    expect(mockSetHideDrawer).not.toHaveBeenCalled();
   });
 });
