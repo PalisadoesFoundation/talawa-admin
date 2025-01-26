@@ -39,6 +39,8 @@ interface InterfaceEventHeaderProps {
  *
  * ### Global CSS Classes used:
  * - `.dropdown`
+ * - `.btnsContainer`
+ * - `.btnsBlock`
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
@@ -67,15 +69,17 @@ function eventHeader({
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
-              { label: ViewType.MONTH, value: 'selectMonth' },
-              { label: ViewType.DAY, value: 'selectDay' },
-              { label: ViewType.YEAR, value: 'selectYear' },
+              { label: 'Select Month', value: ViewType.MONTH },
+              { label: 'Select Day', value: ViewType.DAY },
+              { label: 'Select Year', value: ViewType.YEAR },
             ]}
             selectedOption={viewType}
             onSortChange={handleChangeView}
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
+        </div>
+        <div className={styles.btnsBlock}>
           <SortingButton
             title={t('eventType')}
             sortingOptions={[
@@ -88,9 +92,10 @@ function eventHeader({
             className={styles.dropdown}
             buttonLabel={t('eventType')}
           />
+        </div>
+        <div className={styles.btnsBlock}>
           <div className={styles.selectTypeEventHeader}>
             <Button
-              variant="success"
               className={styles.dropdown}
               onClick={showInviteModal}
               data-testid="createEventModalBtn"

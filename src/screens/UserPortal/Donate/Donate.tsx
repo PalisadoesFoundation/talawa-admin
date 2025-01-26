@@ -12,7 +12,7 @@ import {
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import styles from './Donate.module.css';
+import styles from '../../../style/app.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
@@ -61,6 +61,25 @@ interface InterfaceDonation {
  * - `DONATE_TO_ORGANIZATION`: Performs the donation action.
  *
  * @returns The rendered component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function donate(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -169,7 +188,7 @@ export default function donate(): JSX.Element {
   return (
     <>
       <div className={`d-flex flex-row mt-4`}>
-        <div className={`${styles.mainContainer} me-4`}>
+        <div className={`${styles.mainContainer50} me-4`}>
           <div className={styles.inputContainer}>
             <SearchBar
               placeholder={t('searchDonations')}
@@ -183,7 +202,7 @@ export default function donate(): JSX.Element {
               {t('donateForThe')} {organizationDetails.name}
             </div>
             <div className={styles.donationInputContainer}>
-              <InputGroup className={styles.maxWidth}>
+              <InputGroup className={styles.width100}>
                 <Dropdown drop="down-centered">
                   <Dropdown.Toggle
                     className={`${styles.colorPrimary} ${styles.dropdown}`}
@@ -211,7 +230,7 @@ export default function donate(): JSX.Element {
                 </Dropdown>
                 <Form.Control
                   type="text"
-                  className={styles.inputArea}
+                  className={styles.inputField}
                   data-testid="donationAmount"
                   placeholder={t('amount')}
                   value={amount}
@@ -229,7 +248,7 @@ export default function donate(): JSX.Element {
                 size="sm"
                 data-testid={'donateBtn'}
                 onClick={donateToOrg}
-                className={`${styles.donateBtn}`}
+                className={`${styles.addButton} ${styles.donateBtn}`}
               >
                 {t('donate')} <SendIcon />
               </Button>
@@ -238,7 +257,7 @@ export default function donate(): JSX.Element {
           <div className={styles.donationsContainer}>
             <h5>{t('yourPreviousDonations')}</h5>
             <div
-              className={`d-flex flex-column justify-content-between ${styles.content}`}
+              className={`d-flex flex-column justify-content-between ${styles.contentDonate}`}
             >
               <div className={` ${styles.donationCardsContainer}`}>
                 {loading ? (

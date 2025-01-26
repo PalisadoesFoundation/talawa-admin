@@ -24,6 +24,17 @@ import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-cell': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-columnSeparator': {
+    display: 'none',
+  },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
@@ -155,7 +166,7 @@ function requests(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return params.row.id;
       },
@@ -168,7 +179,7 @@ function requests(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { firstName, lastName, image } = params.row.volunteer.user;
         return (
@@ -206,7 +217,7 @@ function requests(): JSX.Element {
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return dayjs(params.row.createdAt).format('DD/MM/YYYY');
@@ -220,7 +231,7 @@ function requests(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>

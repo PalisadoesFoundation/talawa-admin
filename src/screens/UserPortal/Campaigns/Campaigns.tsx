@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
-import styles from './Campaigns.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
@@ -27,6 +27,29 @@ import SearchBar from 'subComponents/SearchBar';
  * It allows users to search, sort, and view details about each campaign. Users can also add pledges to active campaigns.
  *
  * @returns The rendered component displaying the campaigns.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ * - `.regularBtn`
+ * - `.outlineBtn`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const Campaigns = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -186,7 +209,7 @@ const Campaigns = (): JSX.Element => {
             <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
               <div className={styles.accordionSummary}>
                 <div
-                  className={styles.titleContainer}
+                  className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
                 >
                   <div className="d-flex">
@@ -237,6 +260,7 @@ const Campaigns = (): JSX.Element => {
                     data-testid="addPledgeBtn"
                     disabled={new Date(campaign.endDate) < new Date()}
                     onClick={() => openModal(campaign)}
+                    className={styles.outlineBtn}
                   >
                     <i className={'fa fa-plus me-2'} />
                     {t('addPledge')}
@@ -246,13 +270,13 @@ const Campaigns = (): JSX.Element => {
             </AccordionSummary>
             <AccordionDetails className="d-flex gap-3 ms-2">
               <span className="fw-bold">Amount Raised: </span>
-              <div className={styles.progress}>
+              <div className={styles.progressAccordion}>
                 <span>$0</span>
                 <ProgressBar
                   now={0}
                   label={`${(200 / 1000) * 100}%`}
                   max={1000}
-                  className={styles.progressBar}
+                  className={styles.progressBarAccordion}
                   data-testid="progressBar"
                 />
                 <span>$1000</span>

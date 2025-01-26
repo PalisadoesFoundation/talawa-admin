@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import styles from '../VolunteerManagement.module.css';
+import styles from '../../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -39,6 +39,29 @@ import SearchBar from 'subComponents/SearchBar';
  * It allows the user to search, sort, and volunteer for events/volunteer groups.
  *
  * @returns The rendered component displaying the upcoming events.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ * - `.outlineBtn`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const UpcomingEvents = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -195,7 +218,7 @@ const UpcomingEvents = (): JSX.Element => {
               <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
                 <div className={styles.accordionSummary}>
                   <div
-                    className={styles.titleContainer}
+                    className={styles.titleContainerVolunteer}
                     data-testid={`detailContainer${index + 1}`}
                   >
                     <div className="d-flex">
@@ -231,6 +254,7 @@ const UpcomingEvents = (): JSX.Element => {
                       data-testid="volunteerBtn"
                       disabled={isVolunteered || new Date(endDate) < new Date()}
                       onClick={() => handleVolunteer(_id, null, 'requested')}
+                      className={styles.outlineBtn}
                     >
                       {isVolunteered ? (
                         <FaCheck className="me-1" />
@@ -244,15 +268,12 @@ const UpcomingEvents = (): JSX.Element => {
                 </div>
               </AccordionSummary>
               <AccordionDetails className="d-flex gap-3 flex-column">
-                {
-                  /*istanbul ignore next*/
-                  description && (
-                    <div className="d-flex gap-3">
-                      <span>Description: </span>
-                      <span>{description}</span>
-                    </div>
-                  )
-                }
+                {description && (
+                  <div className="d-flex gap-3">
+                    <span>Description: </span>
+                    <span>{description}</span>
+                  </div>
+                )}
                 {volunteerGroups && volunteerGroups.length > 0 && (
                   <Form.Group>
                     <Form.Label

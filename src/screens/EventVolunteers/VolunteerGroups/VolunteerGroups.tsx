@@ -31,6 +31,17 @@ enum ModalState {
 }
 
 const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-cell': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-columnSeparator': {
+    display: 'none',
+  },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
@@ -162,7 +173,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -182,7 +193,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.leader;
         return (
@@ -220,7 +231,7 @@ function volunteerGroups(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
@@ -236,7 +247,7 @@ function volunteerGroups(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
@@ -253,7 +264,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -334,6 +345,7 @@ function volunteerGroups(): JSX.Element {
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
               style={{ marginTop: '11px' }}
+              className={styles.actionsButton}
               data-testid="createGroupBtn"
             >
               <i className={'fa fa-plus me-2'} />

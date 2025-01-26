@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './DonationCard.module.css';
+import styles from '../../../style/app.module.css';
 import { type InterfaceDonationCardProps } from 'screens/UserPortal/Donate/Donate';
 import { Button } from 'react-bootstrap';
 
@@ -15,6 +15,23 @@ import { Button } from 'react-bootstrap';
  * @param  updatedAt - The date of the donation, in ISO format.
  *
  * @returns The rendered donation card component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function donationCard(props: InterfaceDonationCardProps): JSX.Element {
   // Create a date object from the donation date string
@@ -29,7 +46,7 @@ function donationCard(props: InterfaceDonationCardProps): JSX.Element {
   }).format(date);
 
   return (
-    <div className={`${styles.mainContainer}`}>
+    <div className={`${styles.mainContainerDonateCard}`}>
       <div className={styles.img}></div>
       <div className={styles.personDetails}>
         <span>
@@ -38,8 +55,8 @@ function donationCard(props: InterfaceDonationCardProps): JSX.Element {
         <span>Amount: {props.amount}</span>
         <span>Date: {formattedDate}</span>
       </div>
-      <div className={styles.btn}>
-        <Button size="sm" variant="success">
+      <div className={styles.btnDonate}>
+        <Button size="sm" className={styles.addButton}>
           View
         </Button>
       </div>

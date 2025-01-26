@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/Pledges/Pledges.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Pledges/Pledges.tsx#L71)
+Defined in: [src/screens/UserPortal/Pledges/Pledges.tsx:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Pledges/Pledges.tsx#L90)
 
 The `Pledges` component is responsible for rendering a user's pledges within a campaign.
 It fetches pledges data using Apollo Client's `useQuery` hook and displays the data
@@ -28,3 +28,22 @@ Key functionalities include:
 `Element`
 
 The rendered Pledges component.
+
+## CSS Strategy Explanation:
+
+To ensure consistency across the application and reduce duplication, common styles
+(such as button styles) have been moved to the global CSS file. Instead of using
+component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+class (e.g., .addButton) is now applied.
+
+### Benefits:
+- **Reduces redundant CSS code.
+- **Improves maintainability by centralizing common styles.
+- **Ensures consistent styling across components.
+
+### Global CSS Classes used:
+- `.editButton`
+- `.searchButton`
+- `.btnsBlock`
+
+For more details on the reusable classes, refer to the global CSS file.

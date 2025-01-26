@@ -103,12 +103,10 @@ function app(): JSX.Element {
     if (!loading && data?.checkAuth) {
       const auth = data.checkAuth;
       setItem('IsLoggedIn', 'TRUE');
-      setItem('id', auth._id);
       setItem('name', `${auth.firstName} ${auth.lastName}`);
       setItem('FirstName', auth.firstName);
       setItem('LastName', auth.lastName);
       setItem('email', auth.email);
-      setItem('Email', auth.email);
       setItem('UserImage', auth.image);
     }
   }, [data, loading, setItem]);

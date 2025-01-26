@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrgList/OrgList.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrgList.tsx#L52)
+Defined in: [src/screens/OrgList/OrgList.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrgList.tsx#L57)
 
 ## CSS Strategy Explanation:
 
@@ -23,6 +23,11 @@ class (e.g., .addButton) is now applied.
 ### Global CSS Classes used:
 - `.inputField`
 - `.searchButton`
+- `.btnsContainer`
+- `.input`
+- `.btnsBlock`
+- `.dropdown`
+- `.modalHeader`
 
 For more details on the reusable classes, refer to the global CSS file.
 
