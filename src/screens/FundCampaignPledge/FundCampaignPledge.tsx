@@ -1,11 +1,11 @@
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
@@ -22,8 +22,8 @@ import type {
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * ## CSS Strategy Explanation:
@@ -494,25 +494,12 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       </div>
       <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchPledger')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchPledger"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={t('searchPledger')}
+          onSearch={setSearchTerm}
+          inputTestId="searchPledger"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
             <SortingButton
