@@ -5715,6 +5715,14 @@ button[data-testid='createPostBtn'] {
   padding: 0 1rem;
 }
 
+.mainContainerEventDashboard {
+  width: 50%;
+  flex-grow: 3;
+  padding: 20px;
+  max-height: 100%;
+  overflow: auto;
+}
+
 .selectType {
   border-radius: 10px;
 }
@@ -7689,19 +7697,23 @@ button[data-testid='createPostBtn'] {
 /* ProfileDropdown */
 
 .profileContainer {
-  border: none;
+  border: 1px solid var(--create-button-border);
   padding: 2.1rem 0.5rem;
   height: 52px;
-  border-radius: 8px 0px 0px 8px;
+  border-radius: 16px 0px 0px 16px;
   display: flex;
   align-items: center;
-  background-color: var(--profile-bg) !important;
+  background-color: var(--tablerow-bg-color) !important;
   justify-content: space-between;
   width: 100%;
   /* Add focus styles for keyboard navigation */
   &:focus-within {
     @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
   }
+}
+
+.angleDown {
+  margin-left: 4px;
 }
 
 .profileContainer:focus {
@@ -7751,10 +7763,20 @@ button[data-testid='createPostBtn'] {
   background-color: transparent !important;
 }
 .dropdownToggle {
-  background-image: url(../../../public/images/svg/angleRight.svg);
+  background-image: url(../../../public/images/svg/angleDown.svg);
   background-repeat: no-repeat;
   background-position: center;
-  background-color: var(--profile-bg) !important;
+  background-color: var(--tablerow-bg-color) !important;
+  border: 1px solid var(--create-button-border);
+  border-left: none;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  color: var(--eventManagement-button-text);
+}
+
+.dropdownToggle:hover {
+  border: 1px solid var(--create-button-border);
+  border-left: none;
 }
 
 .dropdownToggle::after {
@@ -7833,6 +7855,29 @@ button[data-testid='createPostBtn'] {
   }
   .collapseSidebarButton {
     width: calc(250px + 2rem);
+  }
+}
+
+@media (max-height: 900px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(300px + 2rem);
+  }
+  .collapseSidebarButton {
+    height: 30px;
+    width: calc(300px + 1rem);
+  }
+}
+
+@media (max-height: 650px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(270px);
+  }
+  .collapseSidebarButton {
+    width: 250px;
+    height: 20px;
+  }
+  .opendrawer {
+    width: 30px;
   }
 }
 
@@ -8125,6 +8170,14 @@ button[data-testid='createPostBtn'] {
   background-color: var(--profile-bg) !important;
   min-height: 100vh;
   padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
+}
+
+.containerHeightEventDash {
+  height: calc(100vh - 66px);
+}
+
+.colorLight {
+  background-color: var(--input-area-color);
 }
 
 .expandOrg {
