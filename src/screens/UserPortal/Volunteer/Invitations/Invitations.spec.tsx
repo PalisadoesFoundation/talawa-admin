@@ -229,6 +229,7 @@ describe('Testing Invvitations Screen', () => {
     // Search by name on press of ENTER
     userEvent.type(searchInput, '1');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       const inviteSubject = screen.getAllByTestId('inviteSubject');
