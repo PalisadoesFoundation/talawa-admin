@@ -962,6 +962,45 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('handles all form state changes and validations', async () => {
+    renderItemModal(link1, itemProps[1]);
+
+    // Test category selection
+    const categorySelect = screen.getByTestId('categorySelect');
+    fireEvent.mouseDown(within(categorySelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Category 1'));
+
+    // Test assignee type changes
+    const groupRadio = screen.getByLabelText(t.groups);
+    fireEvent.click(groupRadio);
+
+    const groupSelect = await screen.getByTestId('volunteerGroupSelect');
+    fireEvent.mouseDown(within(groupSelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('group1'));
+
+    // Test date changes
+    const dateInput = screen.getByLabelText(t.dueDate);
+    fireEvent.change(dateInput, { target: { value: '' } });
+    fireEvent.change(dateInput, { target: { value: '01/01/2024' } });
+
+    // Test allotted hours with various inputs
+    const hoursInput = screen.getByLabelText(t.allottedHours);
+    ['abc', '-5', '', '0', '10'].forEach((value) => {
+      fireEvent.change(hoursInput, { target: { value } });
+    });
+
+    // Test notes
+    const notesInput = screen.getByLabelText(t.preCompletionNotes);
+    fireEvent.change(notesInput, { target: { value: 'Test notes' } });
+
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
+    });
+  });
+
   // for handling edge cases in timezone
   it('handles timezone edge cases', async () => {
     renderItemModal(link1, itemProps[0]);
