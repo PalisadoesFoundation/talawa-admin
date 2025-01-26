@@ -6,9 +6,7 @@ Welcome to our documentation guide. Here are some useful tips you need to know!
 
 <!-- toc -->
 
-- [Documentation](#documentation)
-- [Table of Contents](#table-of-contents)
-  - [Where to find our documentation](#where-to-find-our-documentation)
+- [Where to find our documentation](#where-to-find-our-documentation)
 
 <!-- tocstop -->
 
