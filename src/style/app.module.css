@@ -239,6 +239,14 @@
 
   --drop-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
+  --groupMemberList-p-color: #959595;
+  --editImgBtn-color: white;
+  --editImgBtn-border: #959595;
+  --editImgBtn: #959595;
+  --editChatNameContainer-input: rgb(171, 171, 171);
+  --icon-cancel: rgb(197, 42, 42);
+  --icon-check: rgb(42, 197, 42);
+
   /* breakpoints */
   --breakpoint-mobile: 576px;
   --breakpoint-tablet: 768px;
@@ -8995,4 +9003,101 @@ button[data-testid='createPostBtn'] {
   border: 1px solid var(--border-color);
   width: 65vw;
   height: 0px !important;
+}
+
+/* GroupChatDetails */
+
+.groupInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.memberList {
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.memberList::-webkit-scrollbar {
+  display: none;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.groupMembersList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupMembersList p {
+  margin: 0;
+  color: var(--groupMemberList-p-color);
+}
+
+.membersImage {
+  width: 40px !important;
+}
+
+.groupImage {
+  margin-bottom: 10px;
+}
+
+.editImgBtn {
+  padding: 2px 6px 6px 8px;
+  border-radius: 100%;
+  background-color: var(--editImgBtn-color);
+  border: 1px solid var(--editImgBtn-border);
+  color: var(--editImgBtn);
+  outline: none;
+  position: relative;
+  top: -40px;
+  left: 40px;
+}
+
+.chatImage {
+  height: 120px;
+  border-radius: 100%;
+  width: 120px;
+}
+
+.editChatNameContainer {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.editChatNameContainer input {
+  border: none;
+  border-bottom: 1px solid var(--editChatNameContainer-input);
+  outline: none;
+  padding: 0px 5px;
+}
+
+.editChatNameContainer h3 {
+  margin: 0;
+}
+
+.cancelIcon {
+  color: var(--icon-cancel);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.checkIcon {
+  color: var(--icon-check);
+  cursor: pointer;
+}
+
+.chatUserDetails {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
