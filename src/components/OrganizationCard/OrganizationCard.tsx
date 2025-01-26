@@ -47,7 +47,7 @@ interface InterfaceOrganizationCardProps {
   isJoined: boolean;
 }
 /**
- * Component to display an organization's card with its image and owner details.
+ * Component to display an Organization's card with its image and owner details.
  * Displays an organization card with options to join or manage membership.
  *
  * Shows the organization's name, image, description, address, number of admins and members,
