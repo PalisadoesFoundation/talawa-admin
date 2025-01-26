@@ -41,6 +41,28 @@ interface InterfaceMember {
  * ```tsx
  * <Requests />
  * ```
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const Requests = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -185,13 +207,13 @@ const Requests = (): JSX.Element => {
     <>
       <div>
         {/* Buttons Container */}
-        <div className={styles.btnsContainerBlockAndUnblock}>
-          <div className={styles.inputContainerBlockAndUnblock}>
-            <div className={styles.inputBlockAndUnblock}>
+        <div className={styles.head}>
+          <div className={styles.btnsContainer}>
+            <div className={styles.input}>
               <Form.Control
                 type="name"
                 id="searchBlockedUsers"
-                className="bg-white"
+                className={styles.inputField}
                 placeholder={
                   searchByFirstName
                     ? t('searchByFirstName')
@@ -206,16 +228,16 @@ const Requests = (): JSX.Element => {
               />
               <Button
                 tabIndex={-1}
-                className={styles.search}
+                className={styles.searchButton}
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
               >
                 <Search />
               </Button>
             </div>
-          </div>
-          <div className={styles.btnsBlockBlockAndUnblock}>
-            <div className={styles.largeBtnsWrapper}>
+            {/* <div className={styles.btnsBlockBlockAndUnblock}> */}
+            {/* <div className={styles.largeBtnsWrapper}> */}
+            <div className={styles.btnsBlock}>
               <SortingButton
                 title={t('sortOrganizations')}
                 sortingOptions={[
@@ -231,7 +253,9 @@ const Requests = (): JSX.Element => {
                 dataTestIdPrefix="userFilter"
                 className={`${styles.createButton} mt-2`}
               />
+            </div>
 
+            <div className={styles.btnsBlock}>
               <SortingButton
                 title={t('sortByName')}
                 sortingOptions={[
@@ -251,6 +275,8 @@ const Requests = (): JSX.Element => {
               />
             </div>
           </div>
+          {/* </div> */}
+          {/* </div> */}
         </div>
         {/* Table */}
         {loadingMembers === false &&

@@ -52,6 +52,25 @@ export enum ViewType {
  *  The component uses the useLocalStorage hook to get the user details from the local storage.
  *
  * @returns  JSX.Element to display the Organization Events Page
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.switch`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -302,6 +321,7 @@ function organizationEvents(): JSX.Element {
               autoComplete="off"
               required
               value={formState.title}
+              className={styles.inputField}
               onChange={(e): void => {
                 setFormState({
                   ...formState,
@@ -317,6 +337,7 @@ function organizationEvents(): JSX.Element {
               autoComplete="off"
               required
               value={formState.eventdescrip}
+              className={styles.inputField}
               onChange={(e): void => {
                 setFormState({
                   ...formState,
@@ -424,7 +445,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="allday">{t('allDay')}?</label>
                 <Form.Switch
-                  className="me-4"
+                  className={`me-4 ${styles.switch}`}
                   id="allday"
                   type="checkbox"
                   checked={alldaychecked}
@@ -435,7 +456,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="ispublic">{t('isPublic')}?</label>
                 <Form.Switch
-                  className="me-4"
+                  className={`me-4 ${styles.switch}`}
                   id="ispublic"
                   type="checkbox"
                   data-testid="ispublicCheck"
@@ -448,7 +469,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="recurring">{t('recurringEvent')}?</label>
                 <Form.Switch
-                  className="me-4"
+                  className={`me-4 ${styles.switch}`}
                   id="recurring"
                   type="checkbox"
                   data-testid="recurringCheck"
@@ -461,7 +482,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="registrable">{t('isRegistrable')}?</label>
                 <Form.Switch
-                  className="me-4"
+                  className={`me-4 ${styles.switch}`}
                   id="registrable"
                   type="checkbox"
                   data-testid="registrableCheck"
@@ -476,7 +497,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflex}>
                 <label htmlFor="createChat">{t('createChat')}?</label>
                 <Form.Switch
-                  className="me-4"
+                  className={`me-4 ${styles.switch}`}
                   id="chat"
                   type="checkbox"
                   data-testid="createChat"
@@ -500,7 +521,7 @@ function organizationEvents(): JSX.Element {
 
             <Button
               type="submit"
-              className={styles.createButtonOrganizationEvents}
+              className={styles.addButton}
               value="createevent"
               data-testid="createEventBtn"
             >

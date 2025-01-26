@@ -30,6 +30,26 @@ import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
 import SortingButton from 'subComponents/SortingButton';
 
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
@@ -325,7 +345,6 @@ function orgList(): JSX.Element {
       orderBy,
     });
   };
-
   return (
     <>
       {/* Buttons Container */}
@@ -334,7 +353,7 @@ function orgList(): JSX.Element {
           <Form.Control
             type="name"
             id="searchOrgname"
-            className={'bg-white'}
+            className={styles.inputField}
             placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
@@ -343,7 +362,8 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={styles.searchButtonOrgList}
+            // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            className={styles.searchButton}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
@@ -367,6 +387,7 @@ function orgList(): JSX.Element {
               variant="success"
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
+              className={styles.createorgdropdown}
             >
               <i className={'fa fa-plus me-2'} />
               {t('createOrganization')}
