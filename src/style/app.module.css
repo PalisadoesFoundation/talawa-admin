@@ -789,10 +789,9 @@
 }
 
 .inputField {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: var(--eventManagement-button-bg);
-  border: 1px solid var(--input-shadow);
+  margin: 0;
+  background-color: white;
+  box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
 .inputField:focus {
@@ -815,17 +814,14 @@
 }
 
 .searchButton {
-  --bs-btn-active-color: var(--search-button-bg);
-  --bs-btn-active-bg: var(--search-button-bg);
-  --bs-btn-active-border-color: var(--search-button-bg);
-  margin-bottom: 10px;
+  margin: 0;
   background-color: var(--search-button-bg) !important;
   border-color: var(--search-button-bg) !important;
   color: var(--action-button-text);
   position: absolute;
   z-index: 10;
-  bottom: 0;
-  right: 0;
+  bottom: 0px; /* Ensure it aligns properly with the input field */
+  right: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
