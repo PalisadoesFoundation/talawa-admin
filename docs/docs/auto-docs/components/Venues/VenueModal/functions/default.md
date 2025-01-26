@@ -11,7 +11,7 @@ Defined in: [src/components/Venues/VenueModal.tsx:56](https://github.com/Palisad
 A modal component for creating or updating venue information.
 
 This component displays a modal window where users can enter details for a venue, such as name, description, capacity, and an image.
-It also handles submitting the form data to create or update a venue based on whether the `edit` prop is true or false.
+It also handles submitting the form data to create or update a venue based on whether the edit prop is true or false.
 
 ## Parameters
 
