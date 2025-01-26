@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './OrganizationCard.module.css';
+import styles from '../../../style/app.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -121,7 +121,6 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       }
       refetch();
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         if (error.message === 'User is already a member') {
           toast.error(t('AlreadyJoined') as string);
@@ -181,20 +180,23 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
               </div>
             )}
             <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{props.admins?.length}</span> &nbsp;
-              &nbsp; &nbsp; {tCommon('members')}:{' '}
-              <span>{props.members?.length}</span>
+              <div>
+                {tCommon('admins')}: <span>{props.admins?.length}</span>
+              </div>
+              <div>
+                {tCommon('members')}: <span>{props.members?.length}</span>
+              </div>
             </h6>
           </div>
         </div>
         {props.membershipRequestStatus === 'accepted' && (
           <Button
-            variant="success"
             data-testid="manageBtn"
-            className={styles.joinedBtn}
+            className={styles.addButton}
             onClick={() => {
               navigate(`/user/organization/${props.id}`);
             }}
+            style={{ width: '8rem' }}
           >
             {t('visit')}
           </Button>
@@ -214,8 +216,8 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
           <Button
             onClick={joinOrganization}
             data-testid="joinBtn"
-            className={styles.joinBtn}
-            variant="outline-success"
+            className={styles.outlineBtn}
+            style={{ width: '8rem' }}
           >
             {t('joinNow')}
           </Button>

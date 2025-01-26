@@ -41,6 +41,27 @@ enum Role {
  * Converts a time string to a Dayjs object representing the current date with the specified time.
  * @param time - A string representing the time in 'HH:mm:ss' format.
  * @returns A Dayjs object with the current date and specified time.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.switch`
+ * - `.addButton`
+ * - `.removeButton`
+ * - `.modalHeader`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;

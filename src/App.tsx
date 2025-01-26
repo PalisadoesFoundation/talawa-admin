@@ -28,7 +28,7 @@ import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
 import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
 import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
-import Leaderboard from 'screens/Leaderboard/Leaderboard';
+import Leaderboard from 'screens/OrganizationDashboard/Leaderboard/Leaderboard';
 
 import React, { useEffect } from 'react';
 // User Portal Components
@@ -103,12 +103,10 @@ function app(): JSX.Element {
     if (!loading && data?.checkAuth) {
       const auth = data.checkAuth;
       setItem('IsLoggedIn', 'TRUE');
-      setItem('id', auth._id);
       setItem('name', `${auth.firstName} ${auth.lastName}`);
       setItem('FirstName', auth.firstName);
       setItem('LastName', auth.lastName);
       setItem('email', auth.email);
-      setItem('Email', auth.email);
       setItem('UserImage', auth.image);
     }
   }, [data, loading, setItem]);

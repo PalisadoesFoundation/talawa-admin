@@ -10,6 +10,23 @@ import styles from '../../style/app.module.css';
  * @param onHide - Callback invoked when the modal is dismissed.
  * @param onDelete - Callback invoked to actually delete the post.
  * @returns A rendered React Bootstrap Modal for post deletion.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 
 interface InterfaceDeletePostModalProps {

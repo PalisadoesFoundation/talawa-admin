@@ -9,6 +9,26 @@ import HolidayCard from '../HolidayCards/HolidayCard';
 import { holidays, months, weekdays } from './constants';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import YearlyEventCalender from './YearlyEventCalender';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
 interface InterfaceEventListCardProps {
   userRole?: string;
   key?: string;
@@ -224,10 +244,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       events
         ?.filter((datas) => {
           const currDate = new Date(currentYear, currentMonth, currentDate);
-          if (
-            datas.startTime == undefined &&
-            datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
-          ) {
+          if (datas.startDate == dayjs(currDate).format('YYYY-MM-DD')) {
             return datas;
           }
         })
@@ -266,12 +283,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           );
         }) || [];
 
-    const shouldShowViewMore = useMemo(() => {
-      return (
-        allDayEventsList.length > 2 ||
-        (windowWidth <= 700 && allDayEventsList.length > 0)
-      );
-    }, [allDayEventsList.length, windowWidth]);
+    const shouldShowViewMore =
+      allDayEventsList.length > 2 ||
+      (windowWidth <= 700 && allDayEventsList.length > 0);
 
     const handleExpandClick: () => void = () => {
       toggleExpand(-100);
@@ -279,7 +293,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
     return (
       <>
-        <div className={styles.calendar_hour_block}>
+        <div className={styles.calendar_hour_block} data-testid="hour">
           <div className={styles.calendar_hour_text_container}>
             <p className={styles.calendar_timezone_text}>{timezoneString}</p>
           </div>
@@ -348,7 +362,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
                     {holiday.date.slice(3)}
                   </span>
-                  <span>{holiday.name}</span>
+                  <span className={styles.holiday_name}>{holiday.name}</span>
                 </li>
               ))}
             </ul>
@@ -357,21 +371,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.events_card} role="region" aria-label="Events">
             <h3 className={styles.card_title}>Events</h3>
             <div className={styles.legend}>
-              <div className={styles.list_container}>
-                <span className={styles.holidayIndicator}></span>
-                <span className={styles.holidayText}>Holidays</span>
-              </div>
               <div className={styles.eventsLegend}>
                 <span className={styles.organizationIndicator}></span>
                 <span className={styles.legendText}>
                   Events Created by Organization
                 </span>
               </div>
-              <div className={styles.eventsLegend}>
-                <span className={styles.userEvents__color}></span>
-                <span className={styles.legendText}>
-                  Events Created by User
-                </span>
+              <div className={styles.list_container_holidays}>
+                <span className={styles.holidayIndicator}></span>
+                <span className={styles.holidayText}>Holidays</span>
               </div>
             </div>
           </div>
@@ -519,34 +527,36 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     <div className={styles.calendar}>
       {viewType != ViewType.YEAR && (
         <div className={styles.calendar__header}>
-          <Button
-            variant="outlined"
-            className={styles.buttonEventCalendar}
-            onClick={
-              viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
-            }
-            data-testid="prevmonthordate"
-          >
-            <ChevronLeft />
-          </Button>
+          <div className={styles.calender_month}>
+            <Button
+              variant="outlined"
+              className={styles.buttonEventCalendar}
+              onClick={
+                viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
+              }
+              data-testid="prevmonthordate"
+            >
+              <ChevronLeft />
+            </Button>
 
-          <div
-            className={styles.calendar__header_month}
-            data-testid="current-date"
-          >
-            {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
-            <div>{months[currentMonth]}</div>
+            <div
+              className={styles.calendar__header_month}
+              data-testid="current-date"
+            >
+              {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
+              <div>{months[currentMonth]}</div>
+            </div>
+            <Button
+              variant="outlined"
+              className={styles.buttonEventCalendar}
+              onClick={
+                viewType == ViewType.DAY ? handleNextDate : handleNextMonth
+              }
+              data-testid="nextmonthordate"
+            >
+              <ChevronRight />
+            </Button>
           </div>
-          <Button
-            variant="outlined"
-            className={styles.buttonEventCalendar}
-            onClick={
-              viewType == ViewType.DAY ? handleNextDate : handleNextMonth
-            }
-            data-testid="nextmonthordate"
-          >
-            <ChevronRight />
-          </Button>
           <div>
             <Button
               className={styles.editButton}
@@ -558,7 +568,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </div>
         </div>
       )}
-      <div className={`${styles.calendar__scroll} customScroll`}>
+      <div>
         {viewType == ViewType.MONTH ? (
           <>
             <div className={styles.calendar__weekdays}>
@@ -571,14 +581,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <div className={styles.calendar__days}>{renderDays()}</div>
           </>
         ) : viewType == ViewType.YEAR ? (
-          <YearlyEventCalender eventData={eventData} />
-        ) : (
-          <div className={styles.calendar__hours}>{renderHours()}</div>
-        )}
-      </div>
-
-      <div>
-        {viewType == ViewType.YEAR ? (
           <YearlyEventCalender eventData={eventData} />
         ) : (
           <div className={styles.calendar__hours}>{renderHours()}</div>
