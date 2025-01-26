@@ -75,10 +75,6 @@ afterEach(() => {
   vi.clearAllMocks();
   localStorage.clear();
 });
-afterEach(() => {
-  vi.clearAllMocks();
-  localStorage.clear();
-});
 
 describe('ProfileDropdown Component', () => {
   test('renders with user information', () => {
