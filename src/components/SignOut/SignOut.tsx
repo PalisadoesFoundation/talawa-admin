@@ -33,8 +33,21 @@ const SignOut = (): JSX.Element => {
       handleSignOut();
     } catch (error) {
       console.error('Error revoking refresh token:', error);
-      // Still sign out the user locally even if token revocation fails
-      handleSignOut();
+      const retryRevocation = window.confirm(
+        'Failed to revoke session. Retry?'
+      );
+      if (retryRevocation) {
+        try {
+          await revokeRefreshToken();
+          handleSignOut();
+        } catch {
+          // Proceed with local logout if retry fails
+          console.error('Token revocation retry failed');
+          handleSignOut();
+        }
+      } else {
+        handleSignOut();
+      }
     }
   };
   return (
