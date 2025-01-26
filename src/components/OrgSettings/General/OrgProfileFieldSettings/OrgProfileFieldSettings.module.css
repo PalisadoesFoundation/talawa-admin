@@ -1,0 +1,24 @@
+.customDataTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.customDataTable th,
+.customDataTable td {
+  padding: 8px;
+  text-align: left;
+}
+
+.customDataTable th {
+  background-color: #f2f2f2;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.saveButton {
+  width: 10em;
+  align-self: self-end;
+}
