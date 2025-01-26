@@ -191,12 +191,12 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
         </div>
         {props.membershipRequestStatus === 'accepted' && (
           <Button
-            variant="success"
             data-testid="manageBtn"
-            className={styles.joinedBtn}
+            className={styles.addButton}
             onClick={() => {
               navigate(`/user/organization/${props.id}`);
             }}
+            style={{ width: '8rem' }}
           >
             {t('visit')}
           </Button>
@@ -216,8 +216,8 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
           <Button
             onClick={joinOrganization}
             data-testid="joinBtn"
-            className={styles.joinBtn}
-            variant="outline-success"
+            className={styles.outlineBtn}
+            style={{ width: '8rem' }}
           >
             {t('joinNow')}
           </Button>

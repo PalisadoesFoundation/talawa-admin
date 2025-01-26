@@ -11,6 +11,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
+import styles from '../../style/app.module.css';
 
 import {
   MOCKS,
@@ -659,5 +660,38 @@ describe('Testing Organization Action Items Screen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
     });
+  });
+});
+
+describe('OrganizationActionItems CSS Styles', () => {
+  const renderComponent = (): ReturnType<typeof render> => {
+    return render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <MemoryRouter initialEntries={['/orgactionitems/orgId']}>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                <Routes>
+                  <Route
+                    path="/orgactionitems/:orgId"
+                    element={<OrganizationActionItems />}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </LocalizationProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+  };
+
+  it('should apply correct styles to action buttons', async () => {
+    renderComponent();
+    const createButton = await screen.findByTestId('createActionItemBtn');
+    expect(createButton).toHaveClass(styles.actionsButton);
+    const infoButton = await screen.findByTestId('viewItemBtn1');
+    expect(infoButton).toHaveClass(styles.infoButton);
+    const deleteButton = await screen.findByTestId('deleteItemBtn1');
+    expect(deleteButton).toHaveClass(styles.actionItemDeleteButton);
   });
 });
