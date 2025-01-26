@@ -950,6 +950,7 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  // for handling null change of date
   it('handles null date change', async () => {
     renderItemModal(link1, itemProps[0]);
 
