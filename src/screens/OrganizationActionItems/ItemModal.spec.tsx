@@ -1045,6 +1045,7 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  // for handling form state changes and validations
   it('handles all form state changes and validations', async () => {
     renderItemModal(link1, itemProps[1]);
 
