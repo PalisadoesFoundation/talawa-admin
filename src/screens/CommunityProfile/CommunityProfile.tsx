@@ -36,6 +36,25 @@ import UpdateSession from '../../components/UpdateSession/UpdateSession';
  * ```tsx
  * <CommunityProfile />
  * ```
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.outlineButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -226,7 +245,7 @@ const CommunityProfile = (): JSX.Element => {
                 name="name"
                 value={profileVariable.name}
                 onChange={handleOnChange}
-                className="mb-3"
+                className={`mb-3 ${styles.inputField}`}
                 placeholder={t('communityName')}
                 autoComplete="off"
                 required
@@ -242,7 +261,7 @@ const CommunityProfile = (): JSX.Element => {
                 name="websiteLink"
                 value={profileVariable.websiteLink}
                 onChange={handleOnChange}
-                className="mb-3"
+                className={`mb-3 ${styles.inputField}`}
                 placeholder={t('wesiteLink')}
                 autoComplete="off"
                 required
@@ -272,7 +291,7 @@ const CommunityProfile = (): JSX.Element => {
                     logoUrl: base64file ?? '',
                   });
                 }}
-                className="mb-3"
+                className={`mb-3 ${styles.inputField}`}
                 autoComplete="off"
                 required
               />
@@ -289,7 +308,7 @@ const CommunityProfile = (): JSX.Element => {
                   id="facebook"
                   name="facebook"
                   data-testid="facebook"
-                  className={styles.socialInput}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.facebook}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -303,7 +322,7 @@ const CommunityProfile = (): JSX.Element => {
                   id="instagram"
                   name="instagram"
                   data-testid="instagram"
-                  className={styles.socialInput}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.instagram}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -317,7 +336,7 @@ const CommunityProfile = (): JSX.Element => {
                   id="X"
                   name="X"
                   data-testid="X"
-                  className={styles.socialInput}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.X}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -331,7 +350,7 @@ const CommunityProfile = (): JSX.Element => {
                   id="linkedIn"
                   name="linkedIn"
                   data-testid="linkedIn"
-                  className={styles.socialInput}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.linkedIn}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -345,7 +364,7 @@ const CommunityProfile = (): JSX.Element => {
                   id="github"
                   name="github"
                   data-testid="github"
-                  className={styles.socialInput}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.github}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -359,7 +378,7 @@ const CommunityProfile = (): JSX.Element => {
                   id="youtube"
                   name="youtube"
                   data-testid="youtube"
-                  className={styles.socialInput}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.youtube}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -373,7 +392,7 @@ const CommunityProfile = (): JSX.Element => {
                   id="reddit"
                   name="reddit"
                   data-testid="reddit"
-                  className={styles.socialInput}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.reddit}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -387,7 +406,7 @@ const CommunityProfile = (): JSX.Element => {
                   id="slack"
                   name="slack"
                   data-testid="slack"
-                  className={styles.socialInput}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.slack}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -399,7 +418,7 @@ const CommunityProfile = (): JSX.Element => {
               className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
             >
               <Button
-                variant="outline-success"
+                className={styles.outlineBtn}
                 onClick={resetData}
                 data-testid="resetChangesBtn"
                 disabled={isDisabled()}
@@ -410,6 +429,7 @@ const CommunityProfile = (): JSX.Element => {
                 type="submit"
                 data-testid="saveChangesBtn"
                 disabled={isDisabled()}
+                className={styles.addButton}
               >
                 {tCommon('saveChanges')}
               </Button>

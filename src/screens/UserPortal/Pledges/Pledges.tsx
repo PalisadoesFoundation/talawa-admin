@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Form, Button, ProgressBar } from 'react-bootstrap';
-import styles from './Pledges.module.css';
+import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -65,6 +65,25 @@ enum ModalState {
  * - Displaying additional pledgers in a popup when the list of pledgers exceeds a certain limit.
  *
  * @returns  The rendered Pledges component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 
 const Pledges = (): JSX.Element => {
@@ -348,7 +367,7 @@ const Pledges = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={`me-2 rounded ${styles.editButton}`}
               data-testid="editPledgeBtn"
               onClick={() => handleOpenModal(params.row as InterfacePledgeInfo)}
             >
@@ -388,13 +407,13 @@ const Pledges = (): JSX.Element => {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            className={`${styles.searchButton}`}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-4 ">
+        <div className={styles.btnsBlock}>
           <SortingButton
             sortingOptions={[
               { label: t('pledgers'), value: 'pledgers' },
@@ -407,7 +426,8 @@ const Pledges = (): JSX.Element => {
             dataTestIdPrefix="searchByDrpdwn"
             buttonLabel={t('searchBy')}
           />
-
+        </div>
+        <div className={styles.btnsBlock}>
           <SortingButton
             sortingOptions={[
               { label: t('lowestAmount'), value: 'amount_ASC' },

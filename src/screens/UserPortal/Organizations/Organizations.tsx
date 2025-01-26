@@ -15,6 +15,30 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app.module.css';
 
+/**
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 const { getItem } = useLocalStorage();
 
 interface InterfaceOrganizationCardProps {
@@ -327,48 +351,54 @@ export default function organizations(): JSX.Element {
             </div>
           </div>
 
-          <div className="mt-4  d-flex justify-content-between gap-4">
-            <InputGroup className={styles.maxWidth}>
-              <Form.Control
-                placeholder={t('searchOrganizations')}
-                id="searchOrganizations"
-                type="text"
-                className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
-              />
-              <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <SearchOutlined className={`${styles.colorWhite}`} />
-              </InputGroup.Text>
-            </InputGroup>
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                variant="success"
-                id="dropdown-basic"
-                data-testid={`modeChangeBtn`}
-              >
-                {modes[mode]}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {modes.map((value, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid={`modeBtn${index}`}
-                      onClick={(): void => setMode(index)}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
+          <div className={styles.head}>
+            <div className={styles.btnsContainer}>
+              <div className={styles.input}>
+                <InputGroup className={styles.maxWidth}>
+                  <Form.Control
+                    placeholder={t('searchOrganizations')}
+                    id="searchUserOrgs"
+                    type="text"
+                    className={`${styles.inputField}`}
+                    onKeyUp={handleSearchByEnter}
+                    data-testid="searchInput"
+                  />
+                  <InputGroup.Text
+                    className={`${styles.searchButton}`}
+                    style={{ cursor: 'pointer' }}
+                    onClick={handleSearchByBtnClick}
+                    data-testid="searchBtn"
+                  >
+                    <SearchOutlined className={`${styles.colorWhite}`} />
+                  </InputGroup.Text>
+                </InputGroup>
+              </div>
+              <div className={styles.btnsBlock}>
+                <Dropdown drop="down-centered">
+                  <Dropdown.Toggle
+                    className={`${styles.dropdown}`}
+                    variant="success"
+                    id="dropdown-basic"
+                    data-testid={`modeChangeBtn`}
+                  >
+                    {modes[mode]}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {modes.map((value, index) => {
+                      return (
+                        <Dropdown.Item
+                          key={index}
+                          data-testid={`modeBtn${index}`}
+                          onClick={(): void => setMode(index)}
+                        >
+                          {value}
+                        </Dropdown.Item>
+                      );
+                    })}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
           </div>
 
           <div
