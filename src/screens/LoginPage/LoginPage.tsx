@@ -21,10 +21,7 @@ import {
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import {
-  ORGANIZATION_LIST,
-  SIGNIN_QUERY,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, SIGNIN_QUERY } from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
