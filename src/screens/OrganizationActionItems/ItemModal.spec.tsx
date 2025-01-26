@@ -778,6 +778,19 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('handles infinite for allottedHours', async () => {
+    renderItemModal(link1, itemProps[0]);
+    const hoursInput = screen.getByLabelText(t.allottedHours);
+
+    // Test Infinity
+    fireEvent.change(hoursInput, { target: { value: Infinity } });
+    expect(hoursInput).toHaveValue('');
+
+    // Test -Infinity
+    fireEvent.change(hoursInput, { target: { value: -Infinity } });
+    expect(hoursInput).toHaveValue('');
+  });
+
   it('should not allow letters or negative values in allotted hours', async () => {
     renderItemModal(link1, itemProps[0]);
 
@@ -830,6 +843,76 @@ describe('Testing ItemModal', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
+  });
+
+  it('handles empty strings in all text fields', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
+    fireEvent.change(preCompletionNotes, { target: { value: '' } });
+
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
+    });
+  });
+
+  it('handles whitespace-only strings', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
+    fireEvent.change(preCompletionNotes, { target: { value: '   ' } });
+
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+  });
+
+  it('handles special characters in text fields', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
+    fireEvent.change(preCompletionNotes, {
+      target: { value: '!@#$%^&*()_+-=[]{}|;:,.<>?' },
+    });
+  });
+
+  it('handles extremely long text input', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
+    fireEvent.change(preCompletionNotes, {
+      target: { value: 'a'.repeat(1000) },
+    });
+  });
+
+  it('handles rapid form field changes', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const hoursInput = screen.getByLabelText(t.allottedHours);
+    const values = ['1', '2', '3', '4', '5'];
+
+    values.forEach((value) => {
+      fireEvent.change(hoursInput, { target: { value } });
+    });
+  });
+
+  it('handles floating point numbers for allottedHours', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const hoursInput = screen.getByLabelText(t.allottedHours);
+    fireEvent.change(hoursInput, { target: { value: '1.5' } });
+    fireEvent.change(hoursInput, { target: { value: '0.001' } });
+    fireEvent.change(hoursInput, { target: { value: '99.999' } });
+  });
+
+  it('handles scientific notation for allottedHours', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    const hoursInput = screen.getByLabelText(t.allottedHours);
+    fireEvent.change(hoursInput, { target: { value: '1e2' } });
+    fireEvent.change(hoursInput, { target: { value: '1e-2' } });
   });
 
   it('No Fields Updated while Updating', async () => {
