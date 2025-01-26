@@ -912,20 +912,59 @@ describe('Testing ItemModal', () => {
   it('handles extremely long text input', async () => {
     renderItemModal(link1, itemProps[0]);
 
+    // Select Category
+    const categorySelect = screen.getByTestId('categorySelect');
+    fireEvent.mouseDown(within(categorySelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Category 1'));
+
+    // Select assignee
+    const memberSelect = screen.getByTestId('memberSelect');
+    fireEvent.mouseDown(within(memberSelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Harve Lance'));
+
     const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
     fireEvent.change(preCompletionNotes, {
       target: { value: 'a'.repeat(1000) },
+    });
+    expect(preCompletionNotes).toHaveValue('a'.repeat(1000));
+
+    // Verify form submission with long text
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
     });
   });
 
   it('handles rapid form field changes', async () => {
     renderItemModal(link1, itemProps[0]);
 
+    // Required fields setup
+    const categorySelect = screen.getByTestId('categorySelect');
+    fireEvent.mouseDown(within(categorySelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Category 1'));
+
+    const memberSelect = screen.getByTestId('memberSelect');
+    fireEvent.mouseDown(within(memberSelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Harve Lance'));
+
     const hoursInput = screen.getByLabelText(t.allottedHours);
     const values = ['1', '2', '3', '4', '5'];
 
     values.forEach((value) => {
       fireEvent.change(hoursInput, { target: { value } });
+      expect(hoursInput).toHaveValue(value);
+    });
+
+    // Verify final value persists
+    await waitFor(() => {
+      expect(hoursInput).toHaveValue('5');
+    });
+
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
     });
   });
 
