@@ -247,6 +247,7 @@ describe('Organisation Tags Page', () => {
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
     fireEvent.change(input, { target: { value: 'searchSubTag' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     // should render the two searched tags from the mock data
     // where name starts with "searchUserTag"
@@ -268,6 +269,7 @@ describe('Organisation Tags Page', () => {
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
     fireEvent.change(input, { target: { value: 'searchSubTag' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     // should render the two searched tags from the mock data
     // where name starts with "searchUserTag"

@@ -3,7 +3,7 @@ import { Form, Button, ProgressBar } from 'react-bootstrap';
 import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -20,6 +20,7 @@ import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import Loader from 'components/Loader/Loader';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * The `Campaigns` component displays a list of fundraising campaigns for a specific organization.
@@ -130,25 +131,12 @@ const Campaigns = (): JSX.Element => {
     <>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchCampaigns"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={t('searchByName')}
+          onSearch={setSearchTerm}
+          inputTestId="searchCampaigns"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
             <SortingButton
@@ -212,7 +200,11 @@ const Campaigns = (): JSX.Element => {
                       }
                       variant="outlined"
                       color="primary"
-                      className={`${styles.chip} ${new Date(campaign.endDate) < new Date() ? styles.pending : styles.active}`}
+                      className={`${styles.chip} ${
+                        new Date(campaign.endDate) < new Date()
+                          ? styles.pending
+                          : styles.active
+                      }`}
                     />
                   </div>
 
