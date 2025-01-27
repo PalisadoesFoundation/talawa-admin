@@ -141,7 +141,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           file: formState.orgImage,
         },
       });
-      // istanbul ignore next
+
       if (data) {
         refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
