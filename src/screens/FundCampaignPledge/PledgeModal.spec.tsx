@@ -30,7 +30,7 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+vi.mock('@mui/x-date-pickers/DesktopDateTimePicker', async () => {
   const actual = await vi.importActual(
     '@mui/x-date-pickers/DesktopDateTimePicker',
   );
