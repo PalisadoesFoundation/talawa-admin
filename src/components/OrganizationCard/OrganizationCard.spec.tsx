@@ -266,7 +266,6 @@ describe('OrganizationCard Component', () => {
     });
   });
 
-  
   // Mutation Tests
   describe('Mutations', () => {
     it('should handle joining a private organization successfully', async () => {
@@ -349,19 +348,21 @@ describe('OrganizationCard Component', () => {
   });
 
   it('should log development error and show generic error toast', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
     // Mock process.env.NODE_ENV to 'development'
     const originalNodeEnv = process.env.NODE_ENV;
     process.env.NODE_ENV = 'development';
-  
+
     const props = {
       ...defaultProps,
       userId: 'mockUserId',
       membershipRequestStatus: 'pending',
       membershipRequests: [{ _id: 'requestId', user: { _id: 'mockUserId' } }],
     };
-  
+
     const errorMocks: MockedResponse[] = [
       {
         request: {
@@ -371,29 +372,29 @@ describe('OrganizationCard Component', () => {
         error: new Error('Withdrawal failed'),
       },
     ];
-  
+
     render(
       <TestWrapper mocks={errorMocks}>
         <OrganizationCard {...props} isJoined={false} />
-      </TestWrapper>
+      </TestWrapper>,
     );
-  
+
     const withdrawButton = screen.getByTestId('withdrawBtn');
     await fireEvent.click(withdrawButton);
-  
+
     await waitFor(() => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Failed to withdraw membership request:', 
-        expect.any(Error)
+        'Failed to withdraw membership request:',
+        expect.any(Error),
       );
       expect(toast.error).toHaveBeenCalledWith('errorOccured');
     });
-  
+
     // Restore original environment
     process.env.NODE_ENV = originalNodeEnv;
     consoleErrorSpy.mockRestore();
   });
-  
+
   it('should handle already joined error when joining organization', async () => {
     const errorMocksWithAlreadyJoined: MockedResponse[] = [
       {
@@ -411,94 +412,92 @@ describe('OrganizationCard Component', () => {
         },
       },
     ];
-  
+
     render(
       <TestWrapper mocks={errorMocksWithAlreadyJoined}>
-        <OrganizationCard 
-          {...defaultProps} 
-          userRegistrationRequired={false} 
-          isJoined={false} 
+        <OrganizationCard
+          {...defaultProps}
+          userRegistrationRequired={false}
+          isJoined={false}
         />
-      </TestWrapper>
+      </TestWrapper>,
     );
-  
+
     const joinButton = screen.getByText('joinNow');
     await fireEvent.click(joinButton);
-  
+
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('AlreadyJoined');
     });
   });
-    it('should handle membership request not found', async () => {
-      // Mock getItem to return a userId that exists
-      mockGetItem.mockReturnValue('testUserId');
-      
-      const props = {
-        ...defaultProps,
-        membershipRequestStatus: 'pending',
-        // Create a membership requests array with a different user ID
-        membershipRequests: [
-          { 
-            _id: 'requestId', 
-            user: { 
-              _id: 'differentUserId'  // Different from the mocked userId
-            } 
-          }
-        ],
-      };
-      
-      render(
-        <TestWrapper mocks={successMocks}>
-          <OrganizationCard {...props} isJoined={false} />
-        </TestWrapper>
-      );
-      
-      // Find and click the withdraw button
-      const withdrawButton = screen.getByTestId('withdrawBtn');
-      await fireEvent.click(withdrawButton);
-      
-      // Verify that the error toast is shown
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('MembershipRequestNotFound');
-      });
-      
-      // Verify the mutation was not called
-      const cancelMutation = successMocks.find(
-        mock => mock.request.query === CANCEL_MEMBERSHIP_REQUEST
-      );
-      expect(cancelMutation?.result).not.toHaveBeenCalled;
+  it('should handle membership request not found', async () => {
+    // Mock getItem to return a userId that exists
+    mockGetItem.mockReturnValue('testUserId');
+
+    const props = {
+      ...defaultProps,
+      membershipRequestStatus: 'pending',
+      // Create a membership requests array with a different user ID
+      membershipRequests: [
+        {
+          _id: 'requestId',
+          user: {
+            _id: 'differentUserId', // Different from the mocked userId
+          },
+        },
+      ],
+    };
+
+    render(
+      <TestWrapper mocks={successMocks}>
+        <OrganizationCard {...props} isJoined={false} />
+      </TestWrapper>,
+    );
+
+    // Find and click the withdraw button
+    const withdrawButton = screen.getByTestId('withdrawBtn');
+    await fireEvent.click(withdrawButton);
+
+    // Verify that the error toast is shown
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('MembershipRequestNotFound');
     });
 
-  
+    // Verify the mutation was not called
+    const cancelMutation = successMocks.find(
+      (mock) => mock.request.query === CANCEL_MEMBERSHIP_REQUEST,
+    );
+    expect(cancelMutation?.result).not.toHaveBeenCalled();
+  });
 
   it('should handle withdrawal attempt with no userId', async () => {
     // Mock getItem to return null to simulate no userId
     mockGetItem.mockReturnValue(null);
-    
+
     const props = {
       ...defaultProps,
       membershipRequestStatus: 'pending',
       membershipRequests: [{ _id: 'requestId', user: { _id: 'mockUserId' } }],
     };
-    
+
     render(
       <TestWrapper mocks={successMocks}>
         <OrganizationCard {...props} isJoined={false} />
-      </TestWrapper>
+      </TestWrapper>,
     );
-    
+
     const withdrawButton = screen.getByTestId('withdrawBtn');
     await fireEvent.click(withdrawButton);
-    
+
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('UserIdNotFound');
     });
-    
+
     // Verify that the cancelMembershipRequest mutation was not called
     expect(
       successMocks.find(
-        mock => mock.request.query === CANCEL_MEMBERSHIP_REQUEST
-      )?.result
-    ).not.toHaveBeenCalled;
+        (mock) => mock.request.query === CANCEL_MEMBERSHIP_REQUEST,
+      )?.result,
+    ).not.toHaveBeenCalled();
   });
 });
