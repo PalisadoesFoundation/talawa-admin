@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './OrganizationCard.module.css';
+import styles from '../../../style/app.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -121,7 +121,6 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       }
       refetch();
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         if (error.message === 'User is already a member') {
           toast.error(t('AlreadyJoined') as string);
@@ -181,15 +180,16 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
               </div>
             )}
             <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{props.admins?.length}</span> &nbsp;
-              &nbsp; &nbsp; {tCommon('members')}:{' '}
-              <span>{props.members?.length}</span>
+              {tCommon('admins')}: <span>{props.admins?.length}</span>
+            </h6>
+            <h6 className={styles.orgmember}>
+              {tCommon('members')}: <span>{props.members?.length}</span>
             </h6>
           </div>
         </div>
         {props.membershipRequestStatus === 'accepted' && (
           <Button
-            variant="success"
+            variant="outline-success"
             data-testid="manageBtn"
             className={styles.joinedBtn}
             onClick={() => {
@@ -197,17 +197,6 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             }}
           >
             {t('visit')}
-          </Button>
-        )}
-
-        {props.membershipRequestStatus === 'pending' && (
-          <Button
-            variant="danger"
-            onClick={withdrawMembershipRequest}
-            data-testid="withdrawBtn"
-            className={styles.withdrawBtn}
-          >
-            {t('withdraw')}
           </Button>
         )}
         {props.membershipRequestStatus === '' && (
@@ -218,6 +207,16 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             variant="outline-success"
           >
             {t('joinNow')}
+          </Button>
+        )}
+        {props.membershipRequestStatus === 'pending' && (
+          <Button
+            variant="danger"
+            onClick={withdrawMembershipRequest}
+            data-testid="withdrawBtn"
+            className={styles.withdrawBtn}
+          >
+            {t('withdraw')}
           </Button>
         )}
       </div>
