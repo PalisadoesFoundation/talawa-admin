@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button, Collapse } from 'react-bootstrap';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from '../../../style/app.module.css';
+import styles from '../../style/app.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
