@@ -318,7 +318,65 @@ const MOCKS = [
     },
   },
 ];
+// Error mocks
+const ERROR_MOCKS = [
+  {
+    request: {
+      query: USER_ORGANIZATION_CONNECTION,
+      variables: { filter: '' },
+    },
+    error: new Error('Failed to fetch organizations'),
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS,
+      variables: { id: getItem('userId') },
+    },
+    error: new Error('Failed to fetch joined organizations'),
+  },
+];
 
+// Empty data mocks
+const EMPTY_MOCKS = [
+  {
+    request: {
+      query: USER_ORGANIZATION_CONNECTION,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS,
+      variables: { id: getItem('userId') },
+    },
+    result: {
+      data: {
+        users: [],
+      },
+    },
+  },
+];
+
+// Loading state mock
+const LOADING_MOCKS = [
+  {
+    request: {
+      query: USER_ORGANIZATION_CONNECTION,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+    delay: 2000, // Simulates loading state
+  },
+];
 /**
  * Custom Mock Link for handling static GraphQL mocks.
  */
@@ -592,5 +650,102 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     const searchInput = screen.getByPlaceholderText('Search Organization');
     expect(searchInput).toBeInTheDocument();
+  });
+  // New test cases
+  test('handles pagination changes correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const rowsPerPageSelect = screen.getByTestId('table-pagination');
+    fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
+    expect(screen.getByText('10')).toBeInTheDocument();
+
+    const nextPageButton = screen.getByLabelText('Go to next page');
+    fireEvent.click(nextPageButton);
+  });
+
+  test('handles loading state correctly', async () => {
+    const loadingLink = new StaticMockLink(LOADING_MOCKS, true);
+    render(
+      <MockedProvider addTypename={false} link={loadingLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
+  test('handles empty state correctly', async () => {
+    const emptyLink = new StaticMockLink(EMPTY_MOCKS, true);
+    render(
+      <MockedProvider addTypename={false} link={emptyLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.getByText('nothingToShow')).toBeInTheDocument();
+  });
+
+  test('handles error state correctly', async () => {
+    const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+    render(
+      <MockedProvider addTypename={false} link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(
+      screen.getByText('Failed to fetch organizations'),
+    ).toBeInTheDocument();
+  });
+
+  test('handles window resize events correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    resizeWindow(1000);
+    expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+    resizeWindow(800);
+    expect(screen.getByTestId('openMenu')).toBeInTheDocument();
   });
 });
