@@ -841,6 +841,33 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('validates allotted hours maximum values', async () => {
+    renderItemModal(link1, itemProps[0]);
+    const hoursInput = screen.getByLabelText(t.allottedHours);
+
+    // Test various large values
+    const testCases = [
+      { input: '9007199254740991', expected: '9007199254740991' }, // MAX_SAFE_INTEGER
+      { input: '9007199254740992', expected: '9007199254740992' }, // MAX_SAFE_INTEGER + 1
+    ];
+
+    for (const { input, expected } of testCases) {
+      fireEvent.change(hoursInput, { target: { value: input } });
+      await waitFor(() => {
+        expect(hoursInput).toHaveValue(expected);
+      });
+    }
+
+    // Test that reasonable large values are still accepted
+    const validLargeValues = ['1000', '9999', '99999'];
+    for (const value of validLargeValues) {
+      fireEvent.change(hoursInput, { target: { value } });
+      await waitFor(() => {
+        expect(hoursInput).toHaveValue(value);
+      });
+    }
+  });
+
   it('validates allottedHours edge cases', async () => {
     renderItemModal(link1, itemProps[0]);
     const allottedHours = screen.getByLabelText(t.allottedHours);
@@ -1431,6 +1458,57 @@ describe('Testing ItemModal', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+    });
+  });
+
+  it('handles potentially malicious input patterns correctly', async () => {
+    renderItemModal(link1, itemProps[0]);
+
+    // Select required fields
+    const categorySelect = screen.getByTestId('categorySelect');
+    fireEvent.mouseDown(within(categorySelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Category 1'));
+
+    const memberSelect = screen.getByTestId('memberSelect');
+    fireEvent.mouseDown(within(memberSelect).getByRole('combobox'));
+    fireEvent.click(await screen.findByText('Harve Lance'));
+
+    const preCompletionNotes = screen.getByLabelText(t.preCompletionNotes);
+
+    // Test HTML-like content
+    fireEvent.change(preCompletionNotes, {
+      target: { value: '<div>Test</div> <script>alert("test")</script>' },
+    });
+    expect(preCompletionNotes).toHaveValue(
+      '<div>Test</div> <script>alert("test")</script>',
+    );
+
+    // Test common XSS patterns
+    const xssPatterns = [
+      '<img src="x" onerror="alert(1)">',
+      'javascript:alert(1)',
+      '"><script>alert(1)</script>',
+      '<svg onload="alert(1)">',
+      '\'--"<script>alert(1)</script>',
+      '"; DROP TABLE users; --',
+      '${alert(1)}',
+      "{{constructor.constructor('alert(1)')()}}",
+    ];
+
+    for (const pattern of xssPatterns) {
+      fireEvent.change(preCompletionNotes, { target: { value: pattern } });
+      expect(preCompletionNotes).toHaveValue(pattern);
+    }
+
+    // Test form submission with special characters
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
+      // Verify the last input value persists after submission
+      expect(preCompletionNotes).toHaveValue(
+        xssPatterns[xssPatterns.length - 1],
+      );
     });
   });
 });
