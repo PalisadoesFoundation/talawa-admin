@@ -7887,8 +7887,8 @@ button[data-testid='createPostBtn'] {
 
   /* Add focus styles for keyboard navigation */
   &:focus-within {
-    @extend .reusable-focus-visible;
-    /* Referencing the reusable class from the general section */
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
   }
 }
 
@@ -9045,7 +9045,8 @@ button[data-testid='createPostBtn'] {
 }
 
 .profileContainer:focus {
-  outline: none;
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
   background-color: var(--bs-gray-100);
 }
 
@@ -9076,8 +9077,6 @@ button[data-testid='createPostBtn'] {
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  /* number of lines to show */
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
