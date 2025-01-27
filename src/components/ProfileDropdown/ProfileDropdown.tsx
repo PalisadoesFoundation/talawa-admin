@@ -1,9 +1,9 @@
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
-import { ButtonGroup, Dropdown } from 'react-bootstrap';
+import { ButtonGroup } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './ProfileDropdown.module.css';
+import styles from '../../style/app.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -43,7 +43,6 @@ const profileDropdown = (): JSX.Element => {
     try {
       await revokeRefreshToken();
     } catch (error) {
-      /*istanbul ignore next*/
       console.error('Error revoking refresh token:', error);
     }
     localStorage.clear();
@@ -54,16 +53,14 @@ const profileDropdown = (): JSX.Element => {
   const fullName = `${firstName} ${lastName}`;
   const displayedName =
     fullName.length > MAX_NAME_LENGTH
-      ? /*istanbul ignore next*/
-        fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
+      ? fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
       : fullName;
 
   return (
-    <Dropdown as={ButtonGroup} variant="none">
-      <div className={styles.profileContainer}>
-        <div className={styles.imageContainer}>
+    <div>
+      <div className={styles.profileContainerarrowright}>
+        <div className={styles.imageContainerSidebar}>
           {userImage && userImage !== 'null' ? (
-            /*istanbul ignore next*/
             <img
               src={userImage}
               alt={`profile picture`}
@@ -79,45 +76,50 @@ const profileDropdown = (): JSX.Element => {
             />
           )}
         </div>
-        <div className={styles.profileText}>
+        <div
+          className={styles.profileTextTitle}
+          role="button"
+          tabIndex={0}
+          aria-label="View Profile"
+          data-testid="profileBtn"
+          onClick={() => {
+            if (userRole === 'User') {
+              navigate(`/user/settings`);
+            } else {
+              navigate(`/member/${orgId || ''}`);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              if (userRole === 'User') {
+                navigate(`/user/settings`);
+              } else {
+                navigate(`/member/${orgId || ''}`);
+              }
+            }
+          }}
+        >
           <span className={styles.primaryText} data-testid="display-name">
             {displayedName}
+            <span className={styles.arrowbtn}>
+              <i className="fa fa-angle-right" aria-hidden="true"></i>
+            </span>
           </span>
           <span className={styles.secondaryText} data-testid="display-type">
-            {`${userRole}`}
+            {userRole}
           </span>
         </div>
       </div>
-      <Dropdown.Toggle
-        split
-        variant="none"
-        style={{ backgroundColor: 'white' }}
-        data-testid="togDrop"
-        id="dropdown-split-basic"
-        className={styles.dropdownToggle}
-        aria-label="User Profile Menu"
-      />
-      <Dropdown.Menu>
-        <Dropdown.Item
-          data-testid="profileBtn"
-          onClick={() =>
-            userRole === 'User'
-              ? navigate(`/user/settings`)
-              : navigate(`/member/${orgId || ''}`)
-          }
-          aria-label="View Profile"
-        >
-          {tCommon('viewProfile')}
-        </Dropdown.Item>
-        <Dropdown.Item
-          style={{ color: 'red' }}
+      <div>
+        <ButtonGroup
+          className={styles.logoutBtn}
           onClick={logout}
           data-testid="logoutBtn"
         >
           {tCommon('logout')}
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+        </ButtonGroup>
+      </div>
+    </div>
   );
 };
 
