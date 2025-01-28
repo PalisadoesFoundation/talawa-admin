@@ -9135,7 +9135,7 @@ button[data-testid='createPostBtn'] {
   max-width: 80vw;
 }
 
-.titlemodalAgendaCategory {
+.titleModalAgendaCategory {
   color: var(--bs-gray-600);
   font-weight: 600;
   font-size: 20px;
