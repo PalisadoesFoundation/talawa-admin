@@ -16,8 +16,8 @@ import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import Organizations from './Organizations';
 import React, { act } from 'react';
-const { getItem } = useLocalStorage();
-
+const { getItem, setItem } = useLocalStorage();
+import '../../../style/app.module.css';
 /**
  * Mock data for GraphQL queries.
  */
@@ -56,8 +56,7 @@ const MOCKS = [
                   userRegistrationRequired: true,
                   creator: {
                     __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
+                    name: 'John Doe',
                   },
                   members: [
                     {
@@ -119,7 +118,7 @@ const MOCKS = [
             },
             createdAt: '1234567890',
             userRegistrationRequired: true,
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            creator: { __typename: 'User', name: 'John Doe' },
             members: [
               {
                 _id: '56gheqyr7deyfuiwfewifruy8',
@@ -163,7 +162,7 @@ const MOCKS = [
             },
             description: 'desc',
             userRegistrationRequired: true,
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            creator: { __typename: 'User', name: 'John Doe' },
             members: [
               {
                 _id: '56gheqyr7deyfuiwfewifruy8',
@@ -226,8 +225,7 @@ const MOCKS = [
                   userRegistrationRequired: true,
                   creator: {
                     __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
+                    name: 'John Doe',
                   },
                   members: [
                     {
@@ -289,7 +287,7 @@ const MOCKS = [
             },
             userRegistrationRequired: true,
             createdAt: '1234567890',
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            creator: { __typename: 'User', name: 'John Doe' },
             members: [
               {
                 _id: '56gheqyr7deyfuiwfewifruy8',
@@ -344,6 +342,10 @@ describe('Testing Organizations Screen [User Portal]', () => {
   /**
    * Test to ensure the screen is rendered properly.
    */
+  const TEST_USER_NAME = 'Noble Mittal';
+  beforeEach(() => {
+    setItem('name', TEST_USER_NAME);
+  });
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>

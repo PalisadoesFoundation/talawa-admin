@@ -184,6 +184,7 @@ describe('Testing Campaign Pledge Screen', () => {
     fireEvent.change(searchPledger, {
       target: { value: 'John' },
     });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import styles from '../VolunteerManagement.module.css';
+import styles from '../../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -19,7 +19,7 @@ import {
   Stack,
   debounce,
 } from '@mui/material';
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -32,12 +32,36 @@ import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMut
 import { toast } from 'react-toastify';
 import { FaCheck } from 'react-icons/fa';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * The `UpcomingEvents` component displays list of upcoming events for the user to volunteer.
  * It allows the user to search, sort, and volunteer for events/volunteer groups.
  *
  * @returns The rendered component displaying the upcoming events.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ * - `.outlineBtn`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const UpcomingEvents = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -57,7 +81,6 @@ const UpcomingEvents = (): JSX.Element => {
     // Redirects to the homepage if orgId or userId is missing
     return <Navigate to={'/'} replace />;
   }
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
 
@@ -144,30 +167,14 @@ const UpcomingEvents = (): JSX.Element => {
     <>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
@@ -211,7 +218,7 @@ const UpcomingEvents = (): JSX.Element => {
               <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
                 <div className={styles.accordionSummary}>
                   <div
-                    className={styles.titleContainer}
+                    className={styles.titleContainerVolunteer}
                     data-testid={`detailContainer${index + 1}`}
                   >
                     <div className="d-flex">
@@ -247,6 +254,7 @@ const UpcomingEvents = (): JSX.Element => {
                       data-testid="volunteerBtn"
                       disabled={isVolunteered || new Date(endDate) < new Date()}
                       onClick={() => handleVolunteer(_id, null, 'requested')}
+                      className={styles.outlineBtn}
                     >
                       {isVolunteered ? (
                         <FaCheck className="me-1" />
@@ -260,15 +268,12 @@ const UpcomingEvents = (): JSX.Element => {
                 </div>
               </AccordionSummary>
               <AccordionDetails className="d-flex gap-3 flex-column">
-                {
-                  /*istanbul ignore next*/
-                  description && (
-                    <div className="d-flex gap-3">
-                      <span>Description: </span>
-                      <span>{description}</span>
-                    </div>
-                  )
-                }
+                {description && (
+                  <div className="d-flex gap-3">
+                    <span>Description: </span>
+                    <span>{description}</span>
+                  </div>
+                )}
                 {volunteerGroups && volunteerGroups.length > 0 && (
                   <Form.Group>
                     <Form.Label

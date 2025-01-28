@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';
@@ -10,6 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
+import '../../style/app.module.css';
 
 const { setItem } = useLocalStorage();
 
@@ -60,8 +61,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
-  setItem('FirstName', 'John');
-  setItem('LastName', 'Doe');
+  setItem('name', 'John Doe');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
@@ -165,52 +165,6 @@ describe('ProfileDropdown Component', () => {
 
       expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
     });
-  });
-
-  test('handles error when revoking refresh token during logout', async () => {
-    // Mock the revokeRefreshToken mutation to throw an error
-    const MOCKS_WITH_ERROR = [
-      {
-        request: {
-          query: REVOKE_REFRESH_TOKEN,
-        },
-        error: new Error('Failed to revoke refresh token'),
-      },
-    ];
-
-    const consoleErrorMock = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
-    render(
-      <MockedProvider mocks={MOCKS_WITH_ERROR} addTypename={false}>
-        <BrowserRouter>
-          <ProfileDropdown />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Open the dropdown
-    await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
-    });
-
-    // Click the logout button
-    await act(async () => {
-      userEvent.click(screen.getByTestId('logoutBtn'));
-    });
-
-    // Wait for any pending promises
-    await waitFor(() => {
-      // Assert that console.error was called
-      expect(consoleErrorMock).toHaveBeenCalledWith(
-        'Error revoking refresh token:',
-        expect.any(Error),
-      );
-    });
-
-    // Cleanup mock
-    consoleErrorMock.mockRestore();
   });
 
   test('navigates to /user/settings for a user', async () => {

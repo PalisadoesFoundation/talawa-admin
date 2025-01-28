@@ -13,7 +13,31 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from './UsersTableItem.module.css';
+import styles from '../../style/app.module.css';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.removeButton`
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
 type Props = {
   user: InterfaceQueryUserListItem;
   index: number;
@@ -161,7 +185,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>{user.user.email}</td>
         <td>
           <Button
-            className="btn btn-success"
+            className={`btn ${styles.editButton}`}
             onClick={() => setShowJoinedOrganizations(true)}
             data-testid={`showJoinedOrgsBtn${user.user._id}`}
           >
@@ -170,7 +194,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         </td>
         <td>
           <Button
-            variant="danger"
+            className={`btn btn-danger ${styles.removeButton}`}
             data-testid={`showBlockedByOrgsBtn${user.user._id}`}
             onClick={() => setShowBlockedOrganizations(true)}
           >
@@ -185,7 +209,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         data-testid={`modal-joined-org-${user.user._id}`}
         onHide={() => setShowJoinedOrganizations(false)}
       >
-        <Modal.Header className="bg-primary" closeButton>
+        <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className="text-white">
             {t('orgJoinedBy')} {`${user.user.firstName}`}{' '}
             {`${user.user.lastName}`} ({user.user.joinedOrganizations.length})
@@ -196,7 +220,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 id="orgname-joined-orgs"
-                className="bg-white"
+                className={styles.inputField}
                 defaultValue={searchByNameJoinedOrgs}
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameJoinedOrgs"
@@ -205,7 +229,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               />
               <Button
                 tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                className={styles.searchButton}
                 onClick={handleSearchButtonClickJoinedOrgs}
                 data-testid="searchBtnJoinedOrgs"
               >
@@ -334,8 +358,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         </td>
                         <td colSpan={1.5}>
                           <Button
-                            className={styles.button}
-                            variant="danger"
+                            className={`btn btn-danger ${styles.removeButton}`}
                             size="sm"
                             data-testid={`removeUserFromOrgBtn${org._id}`}
                             onClick={() => {
@@ -388,7 +411,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 id="orgname-blocked-by"
-                className="bg-white"
+                className={styles.inputField}
                 defaultValue={searchByNameOrgsBlockedBy}
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameOrgsBlockedBy"
@@ -558,11 +581,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
         data-testid={`modal-remove-user-${user.user._id}`}
         onHide={() => onHideRemoveUserModal()}
       >
-        <Modal.Header className="bg-danger" closeButton>
+        <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className="text-white">
             {t('removeUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
+        <hr style={{ margin: 0 }}></hr>
         <Modal.Body>
           <p>
             {t('removeConfirmation', {
@@ -580,7 +604,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {tCommon('close')}
           </Button>
           <Button
-            variant="danger"
+            className={`btn btn-danger ${styles.removeButton}`}
             onClick={() => confirmRemoveUser()}
             data-testid={`confirmRemoveUser${user.user._id}`}
           >

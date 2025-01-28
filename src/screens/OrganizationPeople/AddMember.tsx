@@ -229,7 +229,7 @@ function AddMember(): JSX.Element {
             orgId: currentUrl,
           },
         });
-        const createdUserId = registeredUser?.data.signUp.user._id;
+        const createdUserId = registeredUser?.data.signUp.user.id;
 
         await createMember(createdUserId);
 

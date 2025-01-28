@@ -256,6 +256,7 @@ describe('Testing Leaderboard Screen', () => {
     // Search by name on press of ENTER
     userEvent.type(searchInput, 'T');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');

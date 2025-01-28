@@ -33,8 +33,7 @@ const profileDropdown = (): JSX.Element => {
     : adminFor?.length > 0
       ? 'Admin'
       : 'User';
-  const firstName = getItem('FirstName');
-  const lastName = getItem('LastName');
+  const name = getItem('name') || '';
   const userImage = getItem('UserImage');
   const navigate = useNavigate();
   const { orgId } = useParams();
@@ -50,18 +49,13 @@ const profileDropdown = (): JSX.Element => {
     navigate('/');
   };
   const MAX_NAME_LENGTH = 20;
-  const fullName = `${firstName} ${lastName}`;
   const displayedName =
-    fullName.length > MAX_NAME_LENGTH
-      ? fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
-      : fullName;
+    name.length > MAX_NAME_LENGTH
+      ? name.substring(0, MAX_NAME_LENGTH - 3) + '...'
+      : name;
 
   return (
-    <Dropdown
-      className={`${styles.profilebutton}`}
-      as={ButtonGroup}
-      variant="none"
-    >
+    <Dropdown as={ButtonGroup} variant="none">
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
@@ -75,7 +69,7 @@ const profileDropdown = (): JSX.Element => {
               data-testid="display-img"
               size={45}
               avatarStyle={styles.avatarStyle}
-              name={`${firstName} ${lastName}`}
+              name={name}
               alt={`dummy picture`}
             />
           )}
@@ -92,7 +86,6 @@ const profileDropdown = (): JSX.Element => {
       <Dropdown.Toggle
         split
         variant="none"
-        style={{ backgroundColor: 'white' }}
         data-testid="togDrop"
         id="dropdown-split-basic"
         className={styles.dropdownToggle}

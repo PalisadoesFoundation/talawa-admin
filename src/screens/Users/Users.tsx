@@ -1,11 +1,9 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Form, Table } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { Search } from '@mui/icons-material';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
@@ -18,6 +16,7 @@ import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
@@ -60,6 +59,26 @@ import SortingButton from 'subComponents/SortingButton';
  * - Shows appropriate messages when no users are found or when search yields no results.
  *
  * @returns  The rendered `Users` component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -195,22 +214,6 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.target as HTMLInputElement;
-      handleSearch(value);
-    }
-  };
-
-  const handleSearchByBtnClick = (): void => {
-    const inputElement = document.getElementById(
-      'searchUsers',
-    ) as HTMLInputElement;
-    const inputValue = inputElement?.value || '';
-    handleSearch(inputValue);
-  };
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
@@ -341,33 +344,12 @@ const Users = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <div className={styles.inputContainer}>
-          <div
-            className={styles.input}
-            style={{
-              display: userType === 'SUPERADMIN' ? 'block' : 'none',
-            }}
-          >
-            <Form.Control
-              type="name"
-              id="searchUsers"
-              className="bg-white"
-              placeholder={t('enterName')}
-              data-testid="searchByName"
-              autoComplete="off"
-              required
-              onKeyUp={handleSearchByEnter}
-            />
-            <Button
-              tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-              data-testid="searchButton"
-              onClick={handleSearchByBtnClick}
-            >
-              <Search />
-            </Button>
-          </div>
-        </div>
+        <SearchBar
+          placeholder={t('enterName')}
+          onSearch={handleSearch}
+          inputTestId="searchByName"
+          buttonTestId="searchButton"
+        />
         <div className={styles.btnsBlock}>
           <div className="d-flex">
             <SortingButton

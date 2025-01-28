@@ -333,6 +333,7 @@ describe('Manage Tag Page', () => {
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
     fireEvent.change(input, { target: { value: 'assigned user' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     // should render the two users from the mock data
     // where firstName starts with "assigned" and lastName starts with "user"
@@ -354,6 +355,7 @@ describe('Manage Tag Page', () => {
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
     fireEvent.change(input, { target: { value: 'assigned user' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     // should render the two searched tags from the mock data
     // where name starts with "searchUserTag"

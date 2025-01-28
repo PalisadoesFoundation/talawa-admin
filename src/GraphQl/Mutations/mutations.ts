@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-
+import '../../style/app.module.css';
 export const UNBLOCK_USER_MUTATION = gql`
   mutation UnblockUser($userId: ID!, $orgId: ID!) {
     unblockUser(organizationId: $orgId, userId: $userId) {
@@ -145,55 +145,17 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
 // to sign up in the talawa admin
 
 export const SIGNUP_MUTATION = gql`
-  mutation SignUp(
-    $firstName: String!
-    $lastName: String!
-    $email: EmailAddress!
-    $password: String!
-    $orgId: ID!
-  ) {
-    signUp(
-      data: {
-        firstName: $firstName
-        lastName: $lastName
-        email: $email
-        password: $password
-        selectedOrganization: $orgId
-      }
-    ) {
+  mutation SignUp($name: String!, $email: String!, $password: String!) {
+    signUp(input: { name: $name, emailAddress: $email, password: $password }) {
       user {
-        _id
+        id
       }
-      accessToken
-      refreshToken
+      authenticationToken
     }
   }
 `;
 
 // to login in the talawa admin
-
-export const LOGIN_MUTATION = gql`
-  mutation Login($email: EmailAddress!, $password: String!) {
-    login(data: { email: $email, password: $password }) {
-      user {
-        _id
-        firstName
-        lastName
-        image
-        email
-      }
-      appUserProfile {
-        adminFor {
-          _id
-        }
-        isSuperAdmin
-        appLanguageCode
-      }
-      accessToken
-      refreshToken
-    }
-  }
-`;
 
 // to get the refresh token
 
