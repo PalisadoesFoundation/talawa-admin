@@ -9126,3 +9126,20 @@ button[data-testid='createPostBtn'] {
     font-style: oblique;
   }
 }
+
+/* CollapsibleDropdown */
+
+.collapsibleDropdownIconWrapper {
+  width: 36px;
+}
+
+.collapsibleDropdownCollapseBtn {
+  height: 48px;
+}
+
+.collapsibleDropdownIconWrapperSm {
+  width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
