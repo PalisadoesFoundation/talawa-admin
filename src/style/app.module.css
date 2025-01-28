@@ -216,6 +216,7 @@
   --input-area-color: #f1f3f6;
   --date-picker-background: #f2f2f2;
   --grey-bg-color-dark: #707070;
+  --gret-bg-color: #4b5563;
   --dropdown-border-color: #cccccc;
   --primary-border-solid: 1px solid var(--dropdown-border-color);
   --disabled-btn: #e7f0fe;
@@ -9142,7 +9143,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .titlemodalAgendaCategory {
-  color: var(--bs-gray-600);
+  color: var(--grey-bg-color);
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
