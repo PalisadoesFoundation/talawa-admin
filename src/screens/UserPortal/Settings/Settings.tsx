@@ -7,7 +7,7 @@ import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   educationGradeEnum,
@@ -23,7 +23,7 @@ import Avatar from 'components/Avatar/Avatar';
 import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
 import { EventsAttendedByUser } from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
-
+import '../../../style/app.module.css';
 /**
  * The Settings component allows users to view and update their profile settings.
  * It includes functionality to handle image uploads, reset changes, and save updated user details.
@@ -57,7 +57,7 @@ export default function settings(): JSX.Element {
   }, []);
 
   const { setItem } = useLocalStorage();
-  const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
+  const { data } = useQuery(CURRENT_USER, { fetchPolicy: 'network-only' });
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
   const [userDetails, setUserDetails] = React.useState({
     firstName: '',
@@ -158,7 +158,7 @@ export default function settings(): JSX.Element {
    */
   const handleResetChanges = (): void => {
     setisUpdated(false);
-    /* istanbul ignore next */
+
     if (data) {
       const {
         firstName,
@@ -171,7 +171,7 @@ export default function settings(): JSX.Element {
         employmentStatus,
         maritalStatus,
         address,
-      } = data.checkAuth;
+      } = data.currentUser;
 
       setUserDetails({
         ...userDetails,
@@ -192,7 +192,6 @@ export default function settings(): JSX.Element {
   };
 
   useEffect(() => {
-    /* istanbul ignore next */
     if (data) {
       const {
         firstName,
@@ -208,7 +207,7 @@ export default function settings(): JSX.Element {
         address,
         image,
         eventsAttended,
-      } = data.checkAuth;
+      } = data.currentUser;
 
       setUserDetails({
         firstName,
@@ -314,9 +313,8 @@ export default function settings(): JSX.Element {
                             role="button"
                             aria-label="Edit profile picture"
                             tabIndex={0}
-                            onKeyDown={
-                              /*istanbul ignore next*/
-                              (e) => e.key === 'Enter' && handleImageUpload()
+                            onKeyDown={(e) =>
+                              e.key === 'Enter' && handleImageUpload()
                             }
                           />
                         </div>
@@ -330,18 +328,31 @@ export default function settings(): JSX.Element {
                         data-testid="fileInput"
                         multiple={false}
                         ref={fileInputRef}
-                        onChange={
-                          /* istanbul ignore next */
-                          async (
-                            e: React.ChangeEvent<HTMLInputElement>,
-                          ): Promise<void> => {
-                            const file = e.target?.files?.[0];
-                            if (file) {
+                        onChange={async (
+                          e: React.ChangeEvent<HTMLInputElement>,
+                        ): Promise<void> => {
+                          const file = e.target?.files?.[0];
+                          if (file) {
+                            try {
+                              // Validate file size (e.g., 5MB limit)
+                              if (file.size > 5 * 1024 * 1024) {
+                                alert('File size should not exceed 5MB');
+                                return;
+                              }
+
+                              // Validate file type
+                              if (!file.type.startsWith('image/')) {
+                                toast.error('Only image files are allowed');
+                                return;
+                              }
                               const image = await convertToBase64(file);
                               setUserDetails({ ...userDetails, image });
+                            } catch (error) {
+                              toast.error('Failed to process image');
+                              console.error('Image processing error:', error);
                             }
                           }
-                        }
+                        }}
                         style={{ display: 'none' }}
                       />
                     </Col>

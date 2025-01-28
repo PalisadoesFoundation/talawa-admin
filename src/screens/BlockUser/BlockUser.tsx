@@ -1,10 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { Form, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 
-import { Search } from '@mui/icons-material';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
@@ -16,6 +15,7 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app.module.css';
 import { useParams } from 'react-router-dom';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfaceMember {
   _id: string;
@@ -178,23 +178,6 @@ const Requests = (): JSX.Element => {
     [searchByFirstName, memberRefetch, currentUrl],
   );
 
-  // Search by Enter key
-  const handleSearchByEnter = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>): void => {
-      if (e.key === 'Enter') {
-        const { value } = e.currentTarget;
-        handleSearch(value);
-      }
-    },
-    [handleSearch],
-  );
-
-  // Search button click handler
-  const handleSearchByBtnClick = useCallback((): void => {
-    const inputValue = searchByName;
-    handleSearch(inputValue);
-  }, [handleSearch, searchByName]);
-
   // Header titles for the table
   const headerTitles: string[] = [
     '#',
@@ -209,34 +192,16 @@ const Requests = (): JSX.Element => {
         {/* Buttons Container */}
         <div className={styles.head}>
           <div className={styles.btnsContainer}>
-            <div className={styles.input}>
-              <Form.Control
-                type="name"
-                id="searchBlockedUsers"
-                className={styles.inputField}
-                placeholder={
-                  searchByFirstName
-                    ? t('searchByFirstName')
-                    : t('searchByLastName')
-                }
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                value={searchByName}
-                onChange={(e) => setSearchByName(e.target.value)}
-                onKeyUp={handleSearchByEnter}
-              />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
-            {/* <div className={styles.btnsBlockBlockAndUnblock}> */}
-            {/* <div className={styles.largeBtnsWrapper}> */}
+            <SearchBar
+              placeholder={
+                searchByFirstName
+                  ? t('searchByFirstName')
+                  : t('searchByLastName')
+              }
+              onSearch={handleSearch}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
             <div className={styles.btnsBlock}>
               <SortingButton
                 title={t('sortOrganizations')}
@@ -275,8 +240,6 @@ const Requests = (): JSX.Element => {
               />
             </div>
           </div>
-          {/* </div> */}
-          {/* </div> */}
         </div>
         {/* Table */}
         {loadingMembers === false &&

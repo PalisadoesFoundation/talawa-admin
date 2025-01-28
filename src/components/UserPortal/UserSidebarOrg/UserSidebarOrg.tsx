@@ -11,8 +11,10 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './UserSidebarOrg.module.css';
+import styles from '../../../style/app.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import ProfileCard from 'components/ProfileCard/ProfileCard';
+import SignOut from './../../SignOut/SignOut';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
@@ -36,6 +38,7 @@ export interface InterfaceUserSidebarOrgProps {
  *
  * @returns JSX.Element - The rendered sidebar component.
  */
+
 const UserSidebarOrg = ({
   targets,
   orgId,
@@ -150,28 +153,22 @@ const UserSidebarOrg = ({
         </div>
 
         {/* Options List */}
+        <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>
         <div className={styles.optionList}>
-          <h5 className={`${styles.titleHeader} text-secondary`}>
-            {tCommon('menu')}
-          </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
               <NavLink to={url} key={name} onClick={handleLinkClick}>
                 {({ isActive }) => (
                   <Button
                     key={name}
-                    variant={isActive === true ? 'success' : ''}
-                    className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
-                    }`}
+                    variant=""
+                    className={isActive === true ? styles.activeItem : ''}
                   >
                     <div className={styles.iconWrapper}>
                       <IconComponent
                         name={name}
                         fill={
-                          isActive === true
-                            ? 'var(--bs-white)'
-                            : 'var(--bs-secondary)'
+                          isActive === true ? '#000000' : 'var(--bs-secondary)'
                         }
                       />
                     </div>
@@ -188,6 +185,10 @@ const UserSidebarOrg = ({
               />
             );
           })}
+        </div>
+        <div className={styles.userSidebarOrgFooter}>
+          <ProfileCard />
+          <SignOut />
         </div>
       </div>
     </>

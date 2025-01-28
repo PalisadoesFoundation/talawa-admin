@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
@@ -23,6 +23,7 @@ import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ItemUpdateSta
 import { ACTION_ITEMS_BY_USER } from 'GraphQl/Queries/ActionItemQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ModalState {
   VIEW = 'view',
@@ -56,6 +57,25 @@ const dataGridStyle = {
  * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
  *
  * @returns The rendered component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.switch`
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function actions(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -76,7 +96,6 @@ function actions(): JSX.Element {
   const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
     null,
   );
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
     null,
@@ -309,7 +328,7 @@ function actions(): JSX.Element {
               variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`me-2 rounded ${styles.editButton}`}
               data-testid={`viewItemBtn`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
@@ -336,6 +355,7 @@ function actions(): JSX.Element {
               data-testid={`statusCheckbox`}
               checked={params.row.isCompleted}
               onChange={() => handleModalClick(params.row, ModalState.STATUS)}
+              className={styles.switch}
             />
           </div>
         );
@@ -347,31 +367,14 @@ function actions(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton

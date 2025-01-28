@@ -7,9 +7,10 @@ import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App';
 import { store } from 'state/store';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import './style/app.module.css';
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
@@ -27,17 +28,16 @@ vi.mock('/src/assets/svgs/talawa.svg?react', () => ({
 const MOCKS = [
   {
     request: {
-      query: CHECK_AUTH,
+      query: CURRENT_USER,
     },
     result: {
       data: {
-        checkAuth: {
-          _id: '123',
-          firstName: 'John',
-          lastName: 'Doe',
+        currentUser: {
+          id: '123',
+          name: 'John Doe',
           createdAt: '2023-04-13T04:53:17.742+00:00',
           image: 'john.jpg',
-          email: 'johndoe@gmail.com',
+          emailAddress: 'johndoe@gmail.com',
           birthDate: '1990-01-01',
           educationGrade: 'NO_GRADE',
           employmentStatus: 'EMPLOYED',

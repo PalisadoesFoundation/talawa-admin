@@ -183,6 +183,7 @@ describe('FundCampaigns Screen', () => {
     fireEvent.change(searchField, {
       target: { value: '2' },
     });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Campaign 2')).toBeInTheDocument();

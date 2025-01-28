@@ -165,6 +165,7 @@ describe('OrganizationFunds Screen =>', () => {
       target: { value: '2' },
     });
 
+    fireEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Fund 2')).toBeInTheDocument();
       expect(screen.queryByText('Fund 1')).toBeNull();

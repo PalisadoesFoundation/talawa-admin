@@ -3,12 +3,12 @@ import styles from '../../../../style/app.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import { useQuery } from '@apollo/client';
 import { PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
-import { Col, Dropdown, Form, Row, Tab, Tabs, Button } from 'react-bootstrap';
+import { Col, Dropdown, Row, Tab, Tabs } from 'react-bootstrap';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Search } from '@mui/icons-material';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfacePluginHelper {
   _id: string;
@@ -52,7 +52,6 @@ function addOnStore(): JSX.Element {
   /**
    * Fetches store plugins and updates the Redux store with the plugin data.
    */
-  /* istanbul ignore next */
   const getStorePlugins = async (): Promise<void> => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
@@ -68,7 +67,6 @@ function addOnStore(): JSX.Element {
   /**
    * Sets the list of installed plugins in the component's state.
    */
-  /* istanbul ignore next */
   const getInstalledPlugins: () => void = () => {
     setDataList(data?.getPlugins ?? []);
   };
@@ -80,7 +78,6 @@ function addOnStore(): JSX.Element {
    */
   const updateSelectedTab = (tab: string): void => {
     setIsStore(tab === 'available');
-    /* istanbul ignore next */
     if (tab === 'available') {
       getStorePlugins();
     } else {
@@ -111,7 +108,6 @@ function addOnStore(): JSX.Element {
   };
 
   // Show a loader while the data is being fetched
-  /* istanbul ignore next */
   if (loading) {
     return (
       <>
@@ -124,28 +120,18 @@ function addOnStore(): JSX.Element {
     <>
       <Row className={styles.containerAddOnStore}>
         <Col className={styles.colAddOnStore}>
-          <div className={styles.inputAddOnStore}>
-            <Form.Control
-              type="name"
-              id="searchname"
-              className={styles.inputField}
-              placeholder={t('searchName')}
-              autoComplete="off"
-              required
-              onChange={(e): void => setSearchText(e.target.value)}
-            />
-            <Button className={styles.searchButton}>
-              <Search />
-            </Button>
-          </div>
+          <SearchBar
+            placeholder={t('searchName')}
+            onSearch={setSearchText}
+            inputTestId="searchByName"
+            buttonTestId="searchBtn"
+          />
           {!isStore && (
             <Dropdown
-              onSelect={
-                /* istanbul ignore next */
-                (e) =>
-                  filterChange(
-                    e as unknown as React.ChangeEvent<HTMLSelectElement>,
-                  )
+              onSelect={(e) =>
+                filterChange(
+                  e as unknown as React.ChangeEvent<HTMLSelectElement>,
+                )
               }
             >
               <Dropdown.Toggle

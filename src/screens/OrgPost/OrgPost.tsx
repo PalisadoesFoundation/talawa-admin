@@ -1,5 +1,4 @@
 import { useMutation, useQuery, type ApolloError } from '@apollo/client';
-import { Search } from '@mui/icons-material';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
@@ -19,6 +18,7 @@ import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import SortingButton from '../../subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfaceOrgPost {
   _id: string;
@@ -145,8 +145,6 @@ function orgPost(): JSX.Element {
       [],
   );
 
-  // ...
-
   useEffect(() => {
     if (orgPostListData && orgPostListData.organizations) {
       const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
@@ -233,12 +231,11 @@ function orgPost(): JSX.Element {
     }
   };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = e.target;
+  const handleSearch = (term: string): void => {
     const filterData = {
       id: currentUrl,
-      title_contains: showTitle ? value : null,
-      text_contains: !showTitle ? value : null,
+      title_contains: showTitle ? term : null,
+      text_contains: !showTitle ? term : null,
       after: after || null,
       before: before || null,
       first: first || null,
@@ -246,8 +243,6 @@ function orgPost(): JSX.Element {
     };
     refetch(filterData);
   };
-
-  const debouncedHandleSearch = handleSearch;
 
   const handleSorting = (option: string): void => {
     setSortingOption(option);
@@ -264,7 +259,7 @@ function orgPost(): JSX.Element {
     setFirst(null);
     setLast(6);
   };
-  // console.log(orgPostListData?.organizations[0].posts);
+
   const sortPosts = (
     posts: InterfaceOrgPost[],
     sortingOption: string,
@@ -303,21 +298,11 @@ function orgPost(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpagerightOrgPost}>
           <div className={styles.btnsContainerOrgPost}>
-            <div className={styles.inputOrgPost}>
-              <Form.Control
-                type="text"
-                id="posttitle"
-                className={styles.inputField}
-                placeholder={showTitle ? t('searchTitle') : t('searchText')}
-                data-testid="searchByName"
-                autoComplete="off"
-                onChange={debouncedHandleSearch}
-                required
-              />
-              <Button tabIndex={-1} className={`${styles.searchButton} `}>
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={showTitle ? t('searchTitle') : t('searchText')}
+              onSearch={handleSearch}
+              inputTestId="searchByName"
+            />
             <div className={styles.btnsBlockOrgPost}>
               <div className="d-flex">
                 <SortingButton

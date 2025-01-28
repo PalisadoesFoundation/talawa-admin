@@ -188,6 +188,7 @@ describe('Testing Actions Screen', () => {
       userEvent.type(searchInput, '1');
     });
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(async () => {
       const assigneeName = await screen.findAllByTestId('assigneeName');

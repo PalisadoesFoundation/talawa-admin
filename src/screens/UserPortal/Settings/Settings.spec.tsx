@@ -11,10 +11,11 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
 import userEvent from '@testing-library/user-event';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-
+import useLocalStorage from 'utils/useLocalstorage';
+import '../../../style/app.module.css';
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -59,11 +60,11 @@ const MOCKS = [
 const Mocks1 = [
   {
     request: {
-      query: CHECK_AUTH,
+      query: CURRENT_USER,
     },
     result: {
       data: {
-        checkAuth: {
+        currentUser: {
           email: 'johndoe@gmail.com',
           firstName: 'John',
           lastName: 'Doe',
@@ -93,11 +94,11 @@ const Mocks1 = [
 const Mocks2 = [
   {
     request: {
-      query: CHECK_AUTH,
+      query: CURRENT_USER,
     },
     result: {
       data: {
-        checkAuth: {
+        currentUser: {
           email: 'johndoe@gmail.com',
           firstName: '',
           lastName: '',
@@ -203,6 +204,8 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing Settings Screen [User Portal]', () => {
   beforeAll(() => {
+    const { setItem } = useLocalStorage();
+    setItem('name', 'John Doe');
     vi.useFakeTimers();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -452,8 +455,8 @@ describe('Testing Settings Screen [User Portal]', () => {
         ...Mocks1[0],
         result: {
           data: {
-            checkAuth: {
-              ...Mocks1[0].result.data.checkAuth,
+            currentUser: {
+              ...Mocks1[0].result.data.currentUser,
               eventsAttended: mockEventsAttended,
             },
           },

@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { Search } from '@mui/icons-material';
 import {
   CREATE_ORGANIZATION_MUTATION,
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
@@ -11,8 +11,6 @@ import {
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
-import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +27,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * ## CSS Strategy Explanation:
@@ -46,6 +45,11 @@ import SortingButton from 'subComponents/SortingButton';
  * ### Global CSS Classes used:
  * - `.inputField`
  * - `.searchButton`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ * - `.modalHeader`
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
@@ -280,23 +284,6 @@ function orgList(): JSX.Element {
     });
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
-      handleSearch(value);
-    }
-  };
-
-  const handleSearchByBtnClick = (): void => {
-    const inputElement = document.getElementById(
-      'searchOrgname',
-    ) as HTMLInputElement;
-    const inputValue = inputElement?.value || '';
-    handleSearch(inputValue);
-  };
-
   const loadMoreOrganizations = (): void => {
     setIsLoadingMore(true);
     fetchMore({
@@ -349,29 +336,14 @@ function orgList(): JSX.Element {
   return (
     <>
       {/* Buttons Container */}
-      <div className={styles.btnsContainerOrgList}>
-        <div className={styles.input}>
-          <Form.Control
-            type="name"
-            id="searchOrgname"
-            className={styles.inputField}
-            placeholder={tCommon('searchByName')}
-            data-testid="searchByName"
-            autoComplete="off"
-            required
-            onKeyUp={handleSearchByEnter}
-          />
-          <Button
-            tabIndex={-1}
-            // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-            className={styles.searchButton}
-            onClick={handleSearchByBtnClick}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className={styles.btnsBlockOrgList}>
+      <div className={styles.btnsContainerSearchBar}>
+        <SearchBar
+          placeholder={tCommon('searchByName')}
+          onSearch={handleSearch}
+          inputTestId="searchByName"
+          buttonTestId="searchBtn"
+        />
+        <div className={styles.btnsBlockSearchBar}>
           <SortingButton
             title="Sort organizations"
             sortingOptions={[
@@ -383,9 +355,11 @@ function orgList(): JSX.Element {
             dataTestIdPrefix="sortOrgs"
             dropdownTestId="sort"
           />
+        </div>
+        <div className={styles.btnsBlock}>
           {superAdmin && (
             <Button
-              variant="success"
+              className={`${styles.dropdown} ${styles.createorgdropdown}`}
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
             >
@@ -528,7 +502,7 @@ function orgList(): JSX.Element {
       {/* Plugin Notification Modal after Org is Created */}
       <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
-          className={`bg-primary`}
+          className={styles.modalHeader}
           closeButton
           data-testid="pluginNotificationHeader"
         >
