@@ -9160,7 +9160,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .titlemodalAgendaCategory {
-  color: var( --grey-bg-color-agenda-category);
+  color: var(--grey-bg-color-agenda-category);
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
