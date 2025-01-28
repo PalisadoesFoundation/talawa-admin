@@ -180,7 +180,6 @@ export default function organizations(): JSX.Element {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
-
     setRowsPerPage(parseInt(newRowsPerPage, 10));
     setPage(0);
   };
@@ -248,66 +247,42 @@ export default function organizations(): JSX.Element {
       );
       setOrganizations(organizations);
     }
-  }, [data]);
+  }, [data, userId]);
 
   /**
    * Updates the list of organizations based on the selected mode and query results.
    */
   useEffect(() => {
-    if (mode === 0) {
-      if (data) {
-        const organizations = data.organizationsConnection.map(
-          (organization: InterfaceOrganization) => {
-            let membershipRequestStatus = '';
-            if (
-              organization.members.find(
-                (member: { _id: string }) => member._id === userId,
-              )
+    if (mode === 0 && data) {
+      const organizations = data.organizationsConnection.map(
+        (organization: InterfaceOrganization) => {
+          let membershipRequestStatus = '';
+          if (
+            organization.members.find(
+              (member: { _id: string }) => member._id === userId,
             )
-              membershipRequestStatus = 'accepted';
-            else if (
-              organization.membershipRequests.find(
-                (request: { user: { _id: string } }) =>
-                  request.user._id === userId,
-              )
+          )
+            membershipRequestStatus = 'accepted';
+          else if (
+            organization.membershipRequests.find(
+              (request: { user: { _id: string } }) =>
+                request.user._id === userId,
             )
-              membershipRequestStatus = 'pending';
-            return {
-              ...organization,
-              membershipRequestStatus,
-              isJoined: false,
-            };
-          },
-        );
-        setOrganizations(organizations);
-      }
-    } else if (mode === 1) {
-      if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
-        const organizations =
-          joinedOrganizationsData.users[0]?.user?.joinedOrganizations.map(
-            (org: InterfaceOrganization) => ({
-              ...org,
-              membershipRequestStatus: 'accepted',
-              isJoined: true,
-            }),
-          ) || [];
-        setOrganizations(organizations);
-      }
-    } else if (mode === 2) {
-      if (
-        createdOrganizationsData &&
-        createdOrganizationsData.users.length > 0
-      ) {
-        const organizations =
-          createdOrganizationsData.users[0]?.appUserProfile?.createdOrganizations.map(
-            (org: InterfaceOrganization) => ({
-              ...org,
-              membershipRequestStatus: 'accepted',
-              isJoined: true,
-            }),
-          ) || [];
-        setOrganizations(organizations);
-      }
+          )
+            membershipRequestStatus = 'pending';
+          return { ...organization, membershipRequestStatus };
+        },
+      );
+      setOrganizations(organizations);
+    } else if (mode === 1 && joinedOrganizationsData?.users?.length > 0) {
+      const organizations =
+        joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
+      setOrganizations(organizations);
+    } else if (mode === 2 && createdOrganizationsData?.users?.length > 0) {
+      const organizations =
+        createdOrganizationsData.users[0]?.appUserProfile
+          ?.createdOrganizations || [];
+      setOrganizations(organizations);
     }
   }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
 
