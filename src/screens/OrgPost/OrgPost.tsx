@@ -1,4 +1,5 @@
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
+import type { ApolloError } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
@@ -383,6 +384,7 @@ function orgPost(): JSX.Element {
                 !orgPostListData?.organizations[0].posts.pageInfo
                   .hasPreviousPage
               }
+              data-testid="previousButton"
             >
               {t('Previous')}
             </Button>
@@ -394,6 +396,7 @@ function orgPost(): JSX.Element {
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
               }
+              data-testid="nextButton"
             >
               {t('Next')}
             </Button>
