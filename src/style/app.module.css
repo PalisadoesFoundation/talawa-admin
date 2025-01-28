@@ -9130,12 +9130,18 @@ button[data-testid='createPostBtn'] {
 /* AgendaCategory.tsx */
 
 .createModalAgendaCategory {
-  margin-top: 20vh;
-  margin-left: 13vw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   max-width: 80vw;
+
+  @media (max-width: 768px) {
+    max-width: 95vw;
+  }
 }
 
-.titleModalAgendaCategory {
+.titlemodalAgendaCategory {
   color: var(--bs-gray-600);
   font-weight: 600;
   font-size: 20px;
@@ -9145,7 +9151,18 @@ button[data-testid='createPostBtn'] {
   width: 65%;
 }
 
-.agendaCategoryOptionsButton {
-  width: 24px;
-  height: 24px;
+.agenda-category-options-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.agenda-category-options-button:hover {
+  transform: scale(1.1);
+}
+
+.agenda-category-options-button:focus-visible {
+  outline: 2px solid var(--light-blue);
+  outline-offset: 2px;
 }
