@@ -9101,20 +9101,3 @@ button[data-testid='createPostBtn'] {
   gap: 10px;
   align-items: center;
 }
-
-/* CollapsibleDropdown */
-
-.collapsibleDropdownIconWrapper {
-  width: 36px;
-}
-
-.collapsibleDropdownCollapseBtn {
-  height: 48px;
-}
-
-.collapsibleDropdownIconWrapperSm {
-  width: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
