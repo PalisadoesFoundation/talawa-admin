@@ -9126,3 +9126,43 @@ button[data-testid='createPostBtn'] {
     font-style: oblique;
   }
 }
+
+/* AgendaCategory.tsx */
+
+.createModalAgendaCategory {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80vw;
+
+  @media (max-width: 768px) {
+    max-width: 95vw;
+  }
+}
+
+.titlemodalAgendaCategory {
+  color: var(--bs-gray-600);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--bs-primary);
+  width: 65%;
+}
+
+.agenda-category-options-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.agenda-category-options-button:hover {
+  transform: scale(1.1);
+}
+
+.agenda-category-options-button:focus-visible {
+  outline: 2px solid var(--light-blue);
+  outline-offset: 2px;
+}
