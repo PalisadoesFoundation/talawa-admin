@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Form, Button, ProgressBar } from 'react-bootstrap';
+import { Button, ProgressBar } from 'react-bootstrap';
 import styles from '../../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfacePledgeInfo, InterfaceUserInfo } from 'utils/interfaces';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
@@ -22,6 +22,7 @@ import PledgeDeleteModal from 'screens/FundCampaignPledge/PledgeDeleteModal';
 import { Navigate, useParams } from 'react-router-dom';
 import PledgeModal from '../Campaigns/PledgeModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -394,26 +395,13 @@ const Pledges = (): JSX.Element => {
   return (
     <div>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchPledges"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className={styles.btnsBlock}>
+        <SearchBar
+          placeholder={t('searchBy') + ' ' + t(searchBy)}
+          onSearch={setSearchTerm}
+          inputTestId="searchPledges"
+          buttonTestId="searchBtn"
+        />
+        <div className="d-flex gap-4 ">
           <SortingButton
             sortingOptions={[
               { label: t('pledgers'), value: 'pledgers' },

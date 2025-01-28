@@ -239,6 +239,14 @@
 
   --drop-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
+  --groupMemberList-p-color: #959595;
+  --editImgBtn-color: white;
+  --editImgBtn-border: #959595;
+  --editImgBtn: #959595;
+  --editChatNameContainer-input: rgb(171, 171, 171);
+  --icon-cancel: rgb(197, 42, 42);
+  --icon-check: rgb(42, 197, 42);
+
   /* breakpoints */
   --breakpoint-mobile: 576px;
   --breakpoint-tablet: 768px;
@@ -3103,14 +3111,14 @@ input[type='radio']:checked + label:hover {
 
 /* * Refortoring css for OrgList */
 
-.btnsContainerOrgList {
+.btnsContainerSearchBar {
   display: flex;
   width: 100%;
   justify-content: space-between;
   margin: 2.5rem 0 2.5rem 0;
 }
 
-.btnsContainerOrgList .btnsBlockOrgList {
+.btnsContainerSearchBar .btnsBlockSearchBar {
   display: flex;
 }
 
@@ -3194,23 +3202,23 @@ input[type='radio']:checked + label:hover {
   background-color: var(--bs-primary);
 }
 
-.btnsContainerOrgList .btnsBlockOrgList button {
+.btnsContainerSearchBar .btnsBlockSearchBar button {
   margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.btnsContainerOrgList .inputOrgList {
+.btnsContainerSearchBar .inputOrgList {
   flex: 1;
   position: relative;
 }
 
-/* .btnsContainerOrgList input {
+.btnsContainerSearchBar input {
   outline: 1px solid var(--bs-gray-400);
-} */
+}
 
-.btnsContainerOrgList .inputOrgList button {
+.btnsContainerSearchBar .inputOrgList button {
   width: 52px;
 }
 
@@ -3802,21 +3810,21 @@ input::file-selector-button {
 }
 
 @media (max-width: 1020px) {
-  .btnsContainerOrgList {
+  .btnsContainerSearchBar {
     flex-direction: column;
     margin: 1.5rem 0;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList {
+  .btnsContainerSearchBar .btnsBlockSearchBar {
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList button {
+  .btnsContainerSearchBar .btnsBlockSearchBar button {
     margin: 0;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList div button {
+  .btnsContainerSearchBar .btnsBlockSearchBar div button {
     margin-right: 1.5rem;
   }
 }
@@ -3824,25 +3832,25 @@ input::file-selector-button {
 /* For mobile devices  */
 
 @media (max-width: 520px) {
-  .btnsContainerOrgList {
+  .btnsContainerSearchBar {
     margin-bottom: 0;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList {
+  .btnsContainerSearchBar .btnsBlockSearchBar {
     display: block;
     margin-top: 1rem;
     margin-right: 0;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList div {
+  .btnsContainerSearchBar .btnsBlockSearchBar div {
     flex: 1;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList div[title='Sort organizations'] {
+  .btnsContainerSearchBar .btnsBlockSearchBar div[title='Sort organizations'] {
     margin-right: 0.5rem;
   }
 
-  .btnsContainerOrgList .btnsBlockOrgList button {
+  .btnsContainerSearchBar .btnsBlockSearchBar button {
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
@@ -5713,6 +5721,14 @@ button[data-testid='createPostBtn'] {
   max-height: 90vh;
   overflow: auto;
   padding: 0 1rem;
+}
+
+.mainContainerEventDashboard {
+  width: 50%;
+  flex-grow: 3;
+  padding: 20px;
+  max-height: 100%;
+  overflow: auto;
 }
 
 .selectType {
@@ -7689,19 +7705,23 @@ button[data-testid='createPostBtn'] {
 /* ProfileDropdown */
 
 .profileContainer {
-  border: none;
+  border: 1px solid var(--create-button-border);
   padding: 2.1rem 0.5rem;
   height: 52px;
-  border-radius: 8px 0px 0px 8px;
+  border-radius: 16px 0px 0px 16px;
   display: flex;
   align-items: center;
-  background-color: var(--profile-bg) !important;
+  background-color: var(--tablerow-bg-color) !important;
   justify-content: space-between;
   width: 100%;
   /* Add focus styles for keyboard navigation */
   &:focus-within {
     @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
   }
+}
+
+.angleDown {
+  margin-left: 4px;
 }
 
 .profileContainer:focus {
@@ -7751,10 +7771,20 @@ button[data-testid='createPostBtn'] {
   background-color: transparent !important;
 }
 .dropdownToggle {
-  background-image: url(../../../public/images/svg/angleRight.svg);
+  background-image: url(../../../public/images/svg/angleDown.svg);
   background-repeat: no-repeat;
   background-position: center;
-  background-color: var(--profile-bg) !important;
+  background-color: var(--tablerow-bg-color) !important;
+  border: 1px solid var(--create-button-border);
+  border-left: none;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  color: var(--eventManagement-button-text);
+}
+
+.dropdownToggle:hover {
+  border: 1px solid var(--create-button-border);
+  border-left: none;
 }
 
 .dropdownToggle::after {
@@ -7833,6 +7863,29 @@ button[data-testid='createPostBtn'] {
   }
   .collapseSidebarButton {
     width: calc(250px + 2rem);
+  }
+}
+
+@media (max-height: 900px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(300px + 2rem);
+  }
+  .collapseSidebarButton {
+    height: 30px;
+    width: calc(300px + 1rem);
+  }
+}
+
+@media (max-height: 650px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(270px);
+  }
+  .collapseSidebarButton {
+    width: 250px;
+    height: 20px;
+  }
+  .opendrawer {
+    width: 30px;
   }
 }
 
@@ -8125,6 +8178,14 @@ button[data-testid='createPostBtn'] {
   background-color: var(--profile-bg) !important;
   min-height: 100vh;
   padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
+}
+
+.containerHeightEventDash {
+  height: calc(100vh - 66px);
+}
+
+.colorLight {
+  background-color: var(--input-area-color);
 }
 
 .expandOrg {
@@ -8942,4 +9003,126 @@ button[data-testid='createPostBtn'] {
   border: 1px solid var(--border-color);
   width: 65vw;
   height: 0px !important;
+}
+
+/* GroupChatDetails */
+
+.groupInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.memberList {
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.memberList::-webkit-scrollbar {
+  display: none;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.groupMembersList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupMembersList p {
+  margin: 0;
+  color: var(--groupMemberList-p-color);
+}
+
+.membersImage {
+  width: 40px !important;
+}
+
+.groupImage {
+  margin-bottom: 10px;
+}
+
+.editImgBtn {
+  padding: 2px 6px 6px 8px;
+  border-radius: 100%;
+  background-color: var(--editImgBtn-color);
+  border: 1px solid var(--editImgBtn-border);
+  color: var(--editImgBtn);
+  outline: none;
+  position: relative;
+  top: -40px;
+  left: 40px;
+}
+
+.chatImage {
+  height: 120px;
+  border-radius: 100%;
+  width: 120px;
+}
+
+.editChatNameContainer {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.editChatNameContainer input {
+  border: none;
+  border-bottom: 1px solid var(--editChatNameContainer-input);
+  outline: none;
+  padding: 0px 5px;
+}
+
+.editChatNameContainer h3 {
+  margin: 0;
+}
+
+.cancelIcon {
+  color: var(--icon-cancel);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.checkIcon {
+  color: var(--icon-check);
+  cursor: pointer;
+}
+
+.chatUserDetails {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* NotFound.tsx */
+
+.section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.error {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+@media (min-width: 440px) and (max-width: 570px) {
+  .section {
+    margin-left: 50px;
+  }
+  .error {
+    font-size: 1.1rem;
+    font-style: oblique;
+  }
 }

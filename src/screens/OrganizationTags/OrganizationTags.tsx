@@ -29,6 +29,8 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+
 /**
  * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
  *
@@ -170,13 +172,14 @@ function OrganizationTags(): JSX.Element {
       toast.error((error as Error).message);
     }
   };
+
   if (orgUserTagsError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Organization Tags Data
+            Error occurred while loading Organization Tags Data
             <br />
             {orgUserTagsError.message}
           </h6>
@@ -189,6 +192,7 @@ function OrganizationTags(): JSX.Element {
     orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
       (edge) => edge.node,
     ) || [];
+
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
@@ -318,18 +322,12 @@ function OrganizationTags(): JSX.Element {
       <Row>
         <div>
           <div className={styles.btnsContainer}>
-            <div className={styles.input}>
-              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
-              <Form.Control
-                type="text"
-                id="tagName"
-                className={styles.inputField}
-                placeholder={tCommon('searchByName')}
-                data-testid="searchByName"
-                onChange={(e) => setTagSearchName(e.target.value.trim())}
-                autoComplete="off"
-              />
-            </div>
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              onSearch={(term) => setTagSearchName(term.trim())}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
             <div className={styles.btnsBlock}>
               <SortingButton
                 title="Sort Tags"
@@ -351,7 +349,7 @@ function OrganizationTags(): JSX.Element {
               <Button
                 onClick={showCreateTagModal}
                 data-testid="createTagBtn"
-                className={`${styles.createButton} mb-2`}
+                className={`${styles.createButton}`}
               >
                 <i className={'fa fa-plus me-2'} />
                 {t('createTag')}

@@ -1,11 +1,9 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Form, Table } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { Search } from '@mui/icons-material';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
@@ -18,6 +16,7 @@ import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
@@ -215,22 +214,6 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.target as HTMLInputElement;
-      handleSearch(value);
-    }
-  };
-
-  const handleSearchByBtnClick = (): void => {
-    const inputElement = document.getElementById(
-      'searchUsers',
-    ) as HTMLInputElement;
-    const inputValue = inputElement?.value || '';
-    handleSearch(inputValue);
-  };
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
@@ -361,32 +344,12 @@ const Users = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <div
-          className={styles.input}
-          style={{
-            display: userType === 'SUPERADMIN' ? 'block' : 'none',
-          }}
-        >
-          <Form.Control
-            type="name"
-            id="searchUsers"
-            className={styles.inputField}
-            placeholder={t('enterName')}
-            data-testid="searchByName"
-            autoComplete="off"
-            required
-            onKeyUp={handleSearchByEnter}
-          />
-          <Button
-            tabIndex={-1}
-            className={styles.searchButton}
-            data-testid="searchButton"
-            onClick={handleSearchByBtnClick}
-          >
-            <Search />
-          </Button>
-        </div>
-
+        <SearchBar
+          placeholder={t('enterName')}
+          onSearch={handleSearch}
+          inputTestId="searchByName"
+          buttonTestId="searchButton"
+        />
         <div className={styles.btnsBlock}>
           <div className="d-flex">
             <SortingButton

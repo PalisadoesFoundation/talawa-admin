@@ -21,19 +21,21 @@ import { toast } from 'react-toastify';
 import type { InterfacePledgeModal } from './PledgeModal';
 import PledgeModal from './PledgeModal';
 import React from 'react';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DesktopDateTimePicker', async () => {
+  const actual = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
 
@@ -45,7 +47,7 @@ const translations = JSON.parse(
 const pledgeProps: InterfacePledgeModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     pledge: {
       _id: '1',
       amount: 100,
@@ -61,7 +63,7 @@ const pledgeProps: InterfacePledgeModal[] = [
         },
       ],
     },
-    refetchPledge: jest.fn(),
+    refetchPledge: vi.fn(),
     campaignId: 'campaignId',
     orgId: 'orgId',
     endDate: new Date(),
@@ -69,7 +71,7 @@ const pledgeProps: InterfacePledgeModal[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     pledge: {
       _id: '1',
       amount: 100,
@@ -85,7 +87,7 @@ const pledgeProps: InterfacePledgeModal[] = [
         },
       ],
     },
-    refetchPledge: jest.fn(),
+    refetchPledge: vi.fn(),
     campaignId: 'campaignId',
     orgId: 'orgId',
     endDate: new Date(),
@@ -113,14 +115,18 @@ const renderPledgeModal = (
 
 describe('PledgeModal', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId', fundCampaignId: 'fundCampaignId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: () => ({ orgId: 'orgId', fundCampaignId: 'fundCampaignId' }),
+        useNavigate: vi.fn(),
+      };
+    });
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {

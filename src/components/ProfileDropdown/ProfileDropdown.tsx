@@ -86,7 +86,6 @@ const profileDropdown = (): JSX.Element => {
       <Dropdown.Toggle
         split
         variant="none"
-        style={{ backgroundColor: 'white' }}
         data-testid="togDrop"
         id="dropdown-split-basic"
         className={styles.dropdownToggle}

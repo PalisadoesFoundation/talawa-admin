@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/Users/Users.tsx:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Users.tsx#L84)
+Defined in: [src/screens/Users/Users.tsx:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Users.tsx#L83)
 
 The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
 It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL

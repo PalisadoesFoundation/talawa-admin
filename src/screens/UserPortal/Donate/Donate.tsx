@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@apollo/client';
-import { Search } from '@mui/icons-material';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +18,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PaginationList from 'components/PaginationList/PaginationList';
+import SearchBar from 'subComponents/SearchBar';
 
 export interface InterfaceDonationCardProps {
   id: string;
@@ -190,27 +190,12 @@ export default function donate(): JSX.Element {
       <div className={`d-flex flex-row mt-4`}>
         <div className={`${styles.mainContainer50} me-4`}>
           <div className={styles.inputContainer}>
-            <div className={styles.input}>
-              <Form.Control
-                type="name"
-                id="searchUsers"
-                className={styles.inputField}
-                placeholder={t('searchDonations')}
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                // onKeyUp={handleSearchByEnter}
-              />
-              <Button
-                tabIndex={-1}
-                className={`${styles.searchButton} `}
-                data-testid="searchButton"
-                // onClick={handleSearchByBtnClick}
-                style={{ bottom: '-10px' }}
-              >
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={t('searchDonations')}
+              onSearch={(value) => console.log(value)} // Replace with actual search handler
+              inputTestId="searchByName"
+              buttonTestId="searchButton"
+            />
           </div>
           <div className={`${styles.box}`}>
             <div className={`${styles.heading}`}>

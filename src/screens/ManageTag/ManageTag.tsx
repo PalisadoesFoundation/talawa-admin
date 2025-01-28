@@ -1,11 +1,11 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { Col, Form } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +38,7 @@ import EditUserTagModal from './EditUserTagModal';
 import RemoveUserTagModal from './RemoveUserTagModal';
 import UnassignUserTagModal from './UnassignUserTagModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/manageTag/:tagId'.
@@ -371,26 +372,12 @@ function ManageTag(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
-            <div className={styles.input}>
-              <Form.Control
-                type="text"
-                id="userName"
-                className={`${styles.inputField} `}
-                placeholder={tCommon('searchByName')}
-                onChange={(e) =>
-                  setAssignedMemberSearchInput(e.target.value.trim())
-                }
-                data-testid="searchByName"
-                autoComplete="off"
-              />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              onSearch={(term) => setAssignedMemberSearchInput(term.trim())}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
             <div className={styles.btnsBlock}>
               <SortingButton
                 title="Sort People"

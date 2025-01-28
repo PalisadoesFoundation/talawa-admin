@@ -7,7 +7,7 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from './EventDashboardScreen.module.css';
+import styles from '../../style/app.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
@@ -37,8 +37,10 @@ const EventDashboardScreen = (): JSX.Element => {
   if (adminFor === null) {
     return (
       <>
-        <div className={`d-flex flex-row ${styles.containerHeight}`}>
-          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+        <div className={`d-flex flex-row ${styles.containerHeightEventDash}`}>
+          <div
+            className={`${styles.colorLight} ${styles.mainContainerEventDashboard}`}
+          >
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
