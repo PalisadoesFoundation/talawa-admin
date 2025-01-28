@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button, Collapse } from 'react-bootstrap';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from '../../style/app.module.css';
+import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -48,7 +48,7 @@ const collapsibleDropdown = ({
         aria-expanded={showDropdown}
         data-testid="collapsible-dropdown"
       >
-        <div className={styles.collapsibleDropdownIconWrapper}>
+        <div className={styles.iconWrapper}>
           <IconComponent
             name={name}
             fill={showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
@@ -73,7 +73,7 @@ const collapsibleDropdown = ({
                       key={name}
                       variant={isActive === true ? 'success' : 'light'}
                       size="sm"
-                      className={`${styles.collapsibleDropdownCollapseBtn} ${
+                      className={`${styles.collapseBtn} ${
                         isActive === true ? 'text-white' : 'text-secondary'
                       }`}
                       onClick={(): void => {
@@ -81,7 +81,7 @@ const collapsibleDropdown = ({
                       }}
                       data-testid={`collapsible-dropdown-btn-${index}`}
                     >
-                      <div className={styles.collapsibleDropdownIconWrapperSm}>
+                      <div className={styles.iconWrapperSm}>
                         <i className={`fa ${stringIcon}`} />
                       </div>
                       {tCommon(name || '')}
