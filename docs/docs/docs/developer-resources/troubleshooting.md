@@ -1,6 +1,6 @@
 ---
 id: troubleshooting
-title: Operation
+title: Troubleshooting
 slug: /developer-resources/troubleshooting
 sidebar_position: 5
 ---

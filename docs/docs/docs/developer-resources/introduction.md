@@ -5,4 +5,4 @@ slug: /developer-resources/introduction
 sidebar_position: 1
 ---
 
-Welcome to the Talawa-Admin
+Welcome to Talawa-Admin
