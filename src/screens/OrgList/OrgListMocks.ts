@@ -34,49 +34,47 @@ const organizations: InterfaceOrgConnectionInfoTypePG[] = [
     id: 'xyz',
     name: 'Dogs Care',
     avatarURL: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-    description: "Dog care center",
+    description: 'Dog care center',
     members: {
-      edges: [
-        
-      ]
+      edges: [],
     },
-    addressLine1: "Texas, USA"
+    addressLine1: 'Texas, USA',
   },
 ];
 
-for (let x = 0; x < 1; x++) {
-  organizations.push({
-    _id: 'a' + x,
-    image: '',
-    name: 'name',
-    creator: {
-      _id: '123',
-      firstName: 'firstName',
-      lastName: 'lastName',
-    },
-    admins: [
-      {
-        _id: x + '1',
-      },
-    ],
-    members: [
-      {
-        _id: x + '2',
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    address: {
-      city: 'Kingston',
-      countryCode: 'JM',
-      dependentLocality: 'Sample Dependent Locality',
-      line1: '123 Jamaica Street',
-      line2: 'Apartment 456',
-      postalCode: 'JM12345',
-      sortingCode: 'ABC-123',
-      state: 'Kingston Parish',
-    },
-  });
-}
+// for (let x = 0; x < 1; x++) {
+//   organizations.push({
+//     _id: 'a' + x,
+//     image: '',
+//     name: 'name',
+//     creator: {
+//       _id: '123',
+//       firstName: 'firstName',
+//       lastName: 'lastName',
+//     },
+//     admins: [
+//       {
+//         _id: x + '1',
+//       },
+//     ],
+//     members: [
+//       {
+//         _id: x + '2',
+//       },
+//     ],
+//     createdAt: new Date().toISOString(),
+//     address: {
+//       city: 'Kingston',
+//       countryCode: 'JM',
+//       dependentLocality: 'Sample Dependent Locality',
+//       line1: '123 Jamaica Street',
+//       line2: 'Apartment 456',
+//       postalCode: 'JM12345',
+//       sortingCode: 'ABC-123',
+//       state: 'Kingston Parish',
+//     },
+//   });
+// }
 
 // MOCKS FOR SUPERADMIN
 const MOCKS = [

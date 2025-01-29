@@ -21,7 +21,7 @@ import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceCurrentUserTypePG,
   InterfaceOrgConnectionInfoType,
-  InterfaceOrgConnectionTypePG
+  InterfaceOrgConnectionTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../style/app.module.css';
@@ -157,7 +157,6 @@ function orgList(): JSX.Element {
     },
     notifyOnNetworkStatusChange: true,
   });
-
 
   const orgsData = UsersOrgsData?.user.organizationsWhereMember;
 
@@ -308,13 +307,19 @@ function orgList(): JSX.Element {
         skip: orgsData?.edges?.length || 0,
       },
       updateQuery: (
-        prev: { organizationsConnection: InterfaceOrgConnectionTypePG[] } | undefined,
+        prev:
+          | { organizationsConnection: InterfaceOrgConnectionTypePG[] }
+          | undefined,
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult: { organizationsConnection: InterfaceOrgConnectionTypePG[] } | undefined;
+          fetchMoreResult:
+            | { organizationsConnection: InterfaceOrgConnectionTypePG[] }
+            | undefined;
         },
-      ): { organizationsConnection: InterfaceOrgConnectionTypePG[] } | undefined => {
+      ):
+        | { organizationsConnection: InterfaceOrgConnectionTypePG[] }
+        | undefined => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         if (fetchMoreResult.organizationsConnection.length < perPageResult) {

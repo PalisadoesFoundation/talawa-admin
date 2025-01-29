@@ -3,7 +3,10 @@ import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from '../../style/app.module.css';
-import type { InterfaceAddress, InterfaceCurrentUserTypePG } from 'utils/interfaces';
+import type {
+  InterfaceAddress,
+  InterfaceCurrentUserTypePG,
+} from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -38,7 +41,6 @@ interface InterfaceFormStateType {
   address: InterfaceAddress;
   image: string;
 }
-
 
 /**
  * Represents the properties of the OrganizationModal component.

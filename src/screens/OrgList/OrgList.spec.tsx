@@ -145,7 +145,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
     setItem('id', '123');
-    setItem('role', "administrator");
+    setItem('role', 'administrator');
 
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -168,7 +168,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
   test('Testing Organization data is not present', async () => {
     setItem('id', '123');
-    setItem('role', "administrator");
+    setItem('role', 'administrator');
 
     render(
       <MockedProvider addTypename={false} link={link2}>

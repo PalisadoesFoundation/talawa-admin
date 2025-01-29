@@ -99,7 +99,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('renders Super admin', () => {
-    setItem('role', "API Administrator");
+    setItem('role', 'API Administrator');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -110,7 +110,7 @@ describe('ProfileDropdown Component', () => {
     expect(screen.getByText('API Administrator')).toBeInTheDocument();
   });
   test('renders Admin', () => {
-    setItem('role', "administrator");
+    setItem('role', 'administrator');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -141,7 +141,7 @@ describe('ProfileDropdown Component', () => {
 
   describe('Member screen routing testing', () => {
     test('member screen', async () => {
-      setItem('role', "regular")
+      setItem('role', 'regular');
 
       render(
         <MockedProvider mocks={MOCKS} addTypename={false}>
@@ -166,7 +166,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('navigates to /user/settings for a user', async () => {
-    setItem('role', "regular");
+    setItem('role', 'regular');
 
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>

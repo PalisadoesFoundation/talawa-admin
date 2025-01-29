@@ -37,7 +37,8 @@ export interface InterfaceOrgListCardPropsPG {
  */
 function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
   // Destructure data from props
-  const { id, avatarURL, addressLine1, name, description, members } = props.data;
+  const { id, avatarURL, addressLine1, name, description, members } =
+    props.data;
 
   // Query to check if the organization is a sample organization
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
@@ -63,7 +64,6 @@ function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
   // Handle click event to navigate to the organization dashboard
   function handleClick(): void {
     // const url = '/orgdash/' + id;
-
     // Dont change the below two lines
     // navigate(url);
   }
@@ -97,17 +97,13 @@ function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
             </Tooltip>
             {/* Description of the organization */}
             <div className={`${styles.orgdesc} fw-semibold`}>
-              <TruncatedText
-                text={description || ''}
-              />
+              <TruncatedText text={description || ''} />
             </div>
 
             {/* Display the organization address if available */}
             {addressLine1 && (
               <div className={styles.address}>
-                <TruncatedText
-                  text={`${addressLine1}`}
-                />
+                <TruncatedText text={`${addressLine1}`} />
               </div>
             )}
             {/* Display the number of admins and members */}
