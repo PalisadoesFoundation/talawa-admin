@@ -106,7 +106,7 @@ function app(): JSX.Element {
       setItem('id', auth.id);
       setItem('name', auth.name);
       setItem('email', auth.emailAddress);
-      setItem('UserImage', auth.image);
+      // setItem('UserImage', auth.avatraURL|| "");
     }
   }, [data, loading, setItem]);
 

@@ -282,7 +282,6 @@ const loginPage = (): JSX.Element => {
           password: formState.password,
         },
       });
-      console.log(signInData);
 
       if (signInData) {
         if (signInData.signIn.user.countryCode !== null) {
@@ -303,6 +302,8 @@ const loginPage = (): JSX.Element => {
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);
+        setItem('role', user.role)
+        setItem('UserImage', user.avatraURL|| "")                                                                                                                                                                                                                                                      
         // setItem('FirstName', user.firstName);
         // setItem('LastName', user.lastName);
         // setItem('UserImage', user.avatarURL);

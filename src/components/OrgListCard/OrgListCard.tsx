@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import styles from '../../style/app.module.css';
 import { useNavigate } from 'react-router-dom';
 import type {
-  InterfaceOrgConnectionInfoType,
+  InterfaceOrgConnectionInfoTypePG,
   InterfaceQueryOrganizationsListObject,
 } from 'utils/interfaces';
 import {
@@ -21,28 +21,28 @@ import Avatar from 'components/Avatar/Avatar';
 /**
  * Props for the OrgListCard component
  */
-export interface InterfaceOrgListCardProps {
-  data: InterfaceOrgConnectionInfoType;
+export interface InterfaceOrgListCardPropsPG {
+  data: InterfaceOrgConnectionInfoTypePG;
 }
 
 /**
  * Component for displaying a list card for an organization
  *
  * This component renders a card that displays information about an organization,
- * including its name, address, members, and admins. It also provides a button
+ * including its name, addressLine1, members, and admins. It also provides a button
  * to manage the organization, navigating to the organization's dashboard.
  *
  * @param props - The properties passed to the component
  * @returns JSX.Element representing an organization list card
  */
-function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
+function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
   // Destructure data from props
-  const { _id, admins, image, address, members, name } = props.data;
+  const { id, avatarURL, addressLine1, name, description, members } = props.data;
 
   // Query to check if the organization is a sample organization
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
-      isSampleOrganizationId: _id,
+      isSampleOrganizationId: id,
     },
   });
 
@@ -57,15 +57,15 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
       organizations: InterfaceQueryOrganizationsListObject[];
     };
   } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: _id },
+    variables: { id: id },
   });
 
   // Handle click event to navigate to the organization dashboard
   function handleClick(): void {
-    const url = '/orgdash/' + _id;
+    // const url = '/orgdash/' + id;
 
     // Dont change the below two lines
-    navigate(url);
+    // navigate(url);
   }
 
   const { t } = useTranslation('translation', {
@@ -80,8 +80,8 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
         <div className={styles.innerContainer}>
           {/* Container for the organization image */}
           <div className={styles.orgImgContainer}>
-            {image ? (
-              <img src={image} alt={`${name} image`} />
+            {avatarURL ? (
+              <img src={avatarURL} alt={`${name} image`} />
             ) : (
               <Avatar
                 name={name}
@@ -98,25 +98,25 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             {/* Description of the organization */}
             <div className={`${styles.orgdesc} fw-semibold`}>
               <TruncatedText
-                text={userData?.organizations[0]?.description || ''}
+                text={description || ''}
               />
             </div>
 
             {/* Display the organization address if available */}
-            {address?.city && (
+            {addressLine1 && (
               <div className={styles.address}>
                 <TruncatedText
-                  text={`${address?.line1}, ${address?.city}, ${address?.countryCode}`}
+                  text={`${addressLine1}`}
                 />
               </div>
             )}
             {/* Display the number of admins and members */}
             <h6 className={styles.orgadmin}>
-              <div>
+              {/* <div>
                 {tCommon('admins')}: <span>{admins.length}</span>
-              </div>
+              </div> */}
               <div>
-                {tCommon('members')}: <span>{members.length}</span>
+                {tCommon('members')}: <span>{members.edges.length}</span>
               </div>
             </h6>
           </div>

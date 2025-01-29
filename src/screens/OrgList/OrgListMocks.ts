@@ -3,11 +3,14 @@ import {
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
+  CURRENT_USER,
   ORGANIZATION_CONNECTION_LIST,
+  USER_JOINED_ORGANIZATIONS_PG,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import type {
   InterfaceOrgConnectionInfoType,
+  InterfaceOrgConnectionInfoTypePG,
   InterfaceUserType,
 } from 'utils/interfaces';
 
@@ -26,33 +29,18 @@ const adminUser: InterfaceUserType = {
   },
 };
 
-const organizations: InterfaceOrgConnectionInfoType[] = [
+const organizations: InterfaceOrgConnectionInfoTypePG[] = [
   {
-    _id: '1',
-    creator: { _id: 'xyz', firstName: 'John', lastName: 'Doe' },
-    image: '',
-    name: 'Palisadoes Foundation',
-    createdAt: '02/02/2022',
-    admins: [
-      {
-        _id: '123',
-      },
-    ],
-    members: [
-      {
-        _id: '234',
-      },
-    ],
-    address: {
-      city: 'Kingston',
-      countryCode: 'JM',
-      dependentLocality: 'Sample Dependent Locality',
-      line1: '123 Jamaica Street',
-      line2: 'Apartment 456',
-      postalCode: 'JM12345',
-      sortingCode: 'ABC-123',
-      state: 'Kingston Parish',
+    id: 'xyz',
+    name: 'Dogs Care',
+    avatarURL: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+    description: "Dog care center",
+    members: {
+      edges: [
+        
+      ]
     },
+    addressLine1: "Texas, USA"
   },
 ];
 
@@ -94,7 +82,7 @@ for (let x = 0; x < 1; x++) {
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         first: 8,
         skip: 0,
@@ -111,7 +99,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
+      query: CURRENT_USER,
       variables: { userId: '123' },
     },
     result: {
@@ -164,7 +152,7 @@ const MOCKS = [
 const MOCKS_EMPTY = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         first: 8,
         skip: 0,
@@ -181,7 +169,7 @@ const MOCKS_EMPTY = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
+      query: CURRENT_USER,
       variables: { userId: '123' },
     },
     result: {
@@ -192,7 +180,7 @@ const MOCKS_EMPTY = [
 const MOCKS_WITH_ERROR = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         first: 8,
         skip: 0,
@@ -209,7 +197,7 @@ const MOCKS_WITH_ERROR = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
+      query: CURRENT_USER,
       variables: { userId: '123' },
     },
     result: {
