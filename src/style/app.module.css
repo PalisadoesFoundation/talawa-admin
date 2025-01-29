@@ -9181,6 +9181,6 @@ button[data-testid='createPostBtn'] {
 }
 
 .agenda-category-options-button:focus-visible {
-  outline: 2px solid var(--light-blue);
+  outline: 2px solid var(--outlineBtn-color);
   outline-offset: 2px;
 }
