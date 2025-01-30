@@ -13,7 +13,6 @@
   on:
     pull_request:
       branches:
-        - "**"
         - develop-postgres
   env:
     CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
@@ -254,8 +253,15 @@
   
             touch coverage/jest-coverage/lcov.info coverage/vitest/lcov.info
   
-            if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
+            if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info' 2>/dev/null; then
               echo "Failed to merge coverage reports"
+              echo "Checking individual coverage files..."
+              for f in coverage/*/lcov.info; do
+                echo "Checking $f"
+                if [ ! -s "$f" ]; then
+                  echo "Warning: $f is empty"
+                fi
+              done
               exit 1
             fi     
         - name: TypeScript compilation for changed files
@@ -298,10 +304,12 @@
         - name: Install dependencies
           run: npm install
         - name: Clone API Repository
+          env:
+            BASE_REF: ${{ github.base_ref }}
           run: >
             # Retrieve the complete branch name directly from the GitHub context
   
-            FULL_BRANCH_NAME=${{ github.base_ref }}
+            FULL_BRANCH_NAME="$BASE_REF"
   
             echo "FULL_BRANCH_NAME: $FULL_BRANCH_NAME"
   
