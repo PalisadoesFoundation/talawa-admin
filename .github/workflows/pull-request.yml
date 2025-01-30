@@ -56,8 +56,9 @@
           run: npm run check-tsdoc
         - name: Check for localStorage Usage
           run: |
+            npm install ts-node
             chmod +x scripts/githooks/check-localstorage-usage.ts
-            node ts-node scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
+            npx ts-node scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
         - name: Compare translation files
           run: >
             chmod +x .github/workflows/scripts/compare_translations.py
@@ -493,4 +494,3 @@
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             PR_NUMBER: ${{ github.event.pull_request.number }}
             GITHUB_REPOSITORY: ${{ github.repository }}
-  
