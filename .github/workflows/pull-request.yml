@@ -15,7 +15,6 @@ on:
   pull_request:
     branches:
       - '**'
-      - main
 
 env:
   CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
@@ -245,7 +244,7 @@ jobs:
       - name: Run Jest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
-          NODE_V8_COVERAGE: './coverage/jest'
+          NODE_V8_COVERAGE: './coverage/jest-coverage'
         run: |
           npm run test -- --watchAll=false --coverage
 
@@ -260,6 +259,9 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
           mkdir -p coverage
+          # Create empty coverage files if directories don't exist
+          mkdir -p coverage/jest-coverage coverage/vitest
+          touch coverage/jest-coverage/lcov.info coverage/vitest/lcov.info
           if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
             echo "Failed to merge coverage reports"
             exit 1
@@ -274,12 +276,11 @@ jobs:
           done
 
       - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
-        if: github.event.pull_request.head.repo.full_name == github.repository && secrets.CODECOV_TOKEN != ''
+        if: github.event.pull_request.head.repo.full_name == github.repository && vars.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
-          # gcov_ignore: 'docs/'
           fail_ci_if_error: false
           files: './coverage/lcov.info'
           name: '${{env.CODECOV_UNIQUE_NAME}}'
