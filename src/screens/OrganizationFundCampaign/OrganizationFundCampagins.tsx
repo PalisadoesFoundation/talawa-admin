@@ -24,23 +24,25 @@ import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
+  borderRadius: 'var(--table-head-radius)',
+  backgroundColor: 'var(--row-background)',
+  '& .MuiDataGrid-row': {
+    backgroundColor: 'var(--row-background)',
+    '&:focus-within': {
+      outline: 'none',
+    },
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
+    backgroundColor: 'var(--row-background)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
+    backgroundColor: 'var(--row-background)',
   },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
+  '& .MuiDataGrid-cell:focus': {
+    outline: 'none',
   },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
+  '& .MuiDataGrid-cell:focus-within': {
+    outline: 'none',
   },
 };
 
@@ -185,7 +187,7 @@ const orgFundCampaign = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'id',
-      headerName: 'Sr. No.',
+      headerName: '#',
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -207,7 +209,7 @@ const orgFundCampaign = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={styles.hyperlinkText}
             data-testid="campaignName"
             onClick={() => handleClick(params.row.campaign._id as string)}
           >
