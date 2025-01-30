@@ -14,6 +14,7 @@
     pull_request:
       branches:
         - "**"
+        - develop-postgres
   env:
     CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
   jobs:
@@ -66,16 +67,16 @@
         - name: Check if the source and target branches are different
           if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref
             }}
+          env:
+            SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
+            TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}
           run: >
-            echo "Source Branch ${{ github.event.pull_request.head.ref }}"
-  
-            echo "Target Branch ${{ github.event.pull_request.base.ref }}"
-  
+            echo "Source Branch $SOURCE_BRANCH"
+            echo "Target Branch $TARGET_BRANCH"
             echo "Error: Source and Target Branches are the same. Please ensure they are different."
-  
             echo "Error: Close this PR and try again."
-  
             exit 1
+
     Check-Sensitive-Files:
       if: ${{ github.actor != 'dependabot[bot]' &&
         !contains(github.event.pull_request.labels.*.name,
