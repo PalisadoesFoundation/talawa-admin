@@ -58,7 +58,7 @@
           run: |
             npm install ts-node
             chmod +x scripts/githooks/check-localstorage-usage.ts
-            npx ts-node scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
+            npx ts-node --esm scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
         - name: Compare translation files
           run: >
             chmod +x .github/workflows/scripts/compare_translations.py
