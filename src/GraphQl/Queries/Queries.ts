@@ -864,6 +864,14 @@ export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
     }
   }
 `;
+export const VERIFY_ROLE = gql`
+  query verifyRole {
+    verifyRole {
+      isAuthorized
+      role
+    }
+  }
+`;
 
 // get the list of Action Item Categories
 export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';

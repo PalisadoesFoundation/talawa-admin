@@ -1,4 +1,6 @@
-import React from 'react';
+import { useQuery } from '@apollo/client';
+import { VERIFY_ROLE } from 'GraphQl/Queries/Queries';
+import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
@@ -14,14 +16,40 @@ const { getItem, setItem } = useLocalStorage();
  * @returns The JSX element representing the secured route.
  */
 const SecuredRoute = (): JSX.Element => {
-  const isLoggedIn = getItem('IsLoggedIn');
-  const adminFor = getItem('AdminFor');
+  const { data, loading, error, refetch } = useQuery(VERIFY_ROLE, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${getItem('token')}`,
+      },
+    },
+  });
+  useEffect(() => {
+    refetch(); // Refetch when token updates
+  }, [getItem('token')]);
 
-  return isLoggedIn === 'TRUE' ? (
-    <>{adminFor != null ? <Outlet /> : <PageNotFound />}</>
-  ) : (
-    <Navigate to="/" replace />
-  );
+  if (loading) {
+    return <div> Loading.....</div>;
+  } else if (error) {
+    return <div>Error During Routing ...</div>;
+  } else {
+    const isLoggedIn = data.verifyRole.isAuthorized;
+    const role = data.verifyRole.role;
+    const restrictedRoutesForAdmin = ['/member', '/users', '/communityProfile'];
+    if (isLoggedIn) {
+      if (role == 'superAdmin') {
+        return <Outlet />;
+      } else if (role == 'admin') {
+        if (restrictedRoutesForAdmin.includes(location.pathname)) {
+          return <PageNotFound />;
+        }
+        return <Outlet />;
+      } else {
+        return <PageNotFound />;
+      }
+    } else {
+      return <Navigate to="/" replace />;
+    }
+  }
 };
 
 // Time constants for session timeout and inactivity interval
