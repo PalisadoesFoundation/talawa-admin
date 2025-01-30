@@ -289,7 +289,12 @@
         - name: Install GraphQL Inspector
           run: npm install @graphql-inspector/cli
         - name: Validate GraphQL schema
-          run: npx graphql-inspector validate schema.graphql src/**/*.graphql
+          run: |
+            if [ ! -f "schema.graphql" ]; then
+              echo "Error: schema.graphql not found"
+              exit 1
+            fi
+            npx graphql-inspector validate schema.graphql src/**/*.graphql
     Graphql-Inspector:
       if: ${{ github.actor != 'dependabot[bot]' }}
       name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
