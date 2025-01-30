@@ -57,7 +57,7 @@
         - name: Check for localStorage Usage
           run: |
             chmod +x scripts/githooks/check-localstorage-usage.ts
-            node scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
+            # Use npx ts-node to run the TypeScript script
             npx ts-node scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
         - name: Compare translation files
           run: >
@@ -227,7 +227,9 @@
           with:
             node-version: 20.x
         - name: Install Dependencies
-          run: npm install
+          run: |
+            npm install ts-node typescript --save-dev
+            npm install
         - name: Get changed TypeScript files
           id: changed-files
           uses: tj-actions/changed-files@v45
