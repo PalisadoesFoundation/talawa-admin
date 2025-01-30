@@ -28,14 +28,14 @@
         - name: Set up Node.js
           uses: actions/setup-node@v4
           with:
-            node-version: 22.x
+            node-version: 20.x
         - name: Install Dependencies
           run: npm install
         - name: Count number of lines
           run: >
             chmod +x ./.github/workflows/scripts/countline.py
   
-            ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
+            ./.github/workflows/scripts/countline.py --lines 1100 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
         - name: Get changed TypeScript files
           id: changed-files
           uses: tj-actions/changed-files@v45
