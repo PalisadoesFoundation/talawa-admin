@@ -162,7 +162,7 @@
         "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@graphql-eslint/known-type-names": "error",
-        "@graphql-eslint/no-unreachable-types": "off", // turned off since unreachable can perhaps be used in future
+        "@graphql-eslint/no-unreachable-types": "off",
         "prettier/prettier": [
           "error",
           {
