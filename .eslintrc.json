@@ -31,7 +31,8 @@
     "@typescript-eslint",
     "import",
     "eslint-plugin-tsdoc",
-    "prettier"
+    "prettier",
+    "@graphql-eslint"
   ],
   "rules": {
     "react/destructuring-assignment": "error",
@@ -150,5 +151,25 @@
     "docs/src/**",
     "docs/blog/**",
     "pyproject.toml"
+  ],
+  "overrides": [
+    {
+      "files": ["*.graphql"],
+      "parser": "@graphql-eslint/eslint-plugin",
+      "plugins": ["@graphql-eslint"],
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@graphql-eslint/known-type-names": "error",
+        "@graphql-eslint/no-unreachable-types": "off", // turned off since unreachable can perhaps be used in future
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ]
+      }
+    }
   ]
 }
