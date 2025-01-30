@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
 
 const args = process.argv.slice(2);
 const scanEntireRepo = args.includes('--scan-entire-repo');
@@ -51,7 +51,7 @@ const checkLocalStorageUsage = (file) => {
 
   // Skip files with specific names or containing a skip comment
   if (
-    fileName === 'check-localstorage-usage.js' || // Updated extension
+    fileName === 'check-localstorage-usage.mjs' || // Updated extension
     fileName === 'useLocalstorage.test.js' ||
     fileName === 'useLocalstorage.js' ||
     containsSkipComment(file)
