@@ -91,6 +91,7 @@
   --primary-text-color: black;
   --rating-star-filled: #ff6d75;
   --rating-star-hover: #ff3d47;
+  --hyperlink-text-color: #1778f2;
 
   --input-text-color: #737373;
   --info-button-text: var(--davys-grey);
@@ -557,6 +558,16 @@
 .subtleBlueGrey:hover {
   color: var(--subtle-blue-grey-hover);
   text-decoration: underline;
+}
+
+.hyperlinkText {
+  color: var(--hyperlink-text-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hyperlinkText:hover {
+  color: var(--subtle-blue-grey-hover);
 }
 
 .closeButton {

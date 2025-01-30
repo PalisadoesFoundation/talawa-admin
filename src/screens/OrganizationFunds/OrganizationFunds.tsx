@@ -37,6 +37,9 @@ const dataGridStyle = {
   '& .MuiDataGrid-cell:focus': {
     outline: 'none',
   },
+  '& .MuiDataGrid-cell:focus-within': {
+    outline: 'none',
+  },
 };
 
 /**
@@ -179,7 +182,7 @@ const organizationFunds = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'id',
-      headerName: 'Sr. No.',
+      headerName: '#',
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -202,7 +205,7 @@ const organizationFunds = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className={`d-flex justify-content-center fw-bold ${styles.subtleBlueGrey}`}
+            className={styles.hyperlinkText}
             data-testid="fundName"
             onClick={() => handleClick(params.row._id as string)}
           >
