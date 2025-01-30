@@ -23,11 +23,15 @@ const containsSkipComment = (file) => {
 const getModifiedFiles = () => {
   try {
     if (scanEntireRepo) {
-      const result = execSync('git ls-files | grep ".tsx\\?$"', { encoding: 'utf-8' });
+      const result = execSync('git ls-files | grep ".tsx\\?$"', {
+        encoding: 'utf-8',
+      });
       return result.trim().split('\n');
     }
 
-    const result = execSync('git diff --cached --name-only', { encoding: 'utf-8' });
+    const result = execSync('git diff --cached --name-only', {
+      encoding: 'utf-8',
+    });
     return result.trim().split('\n');
   } catch (error) {
     console.error(
