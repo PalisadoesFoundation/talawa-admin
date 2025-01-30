@@ -5,15 +5,8 @@ import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from '../../style/app.module.css';
-import { useNavigate } from 'react-router-dom';
-import type {
-  InterfaceOrgConnectionInfoTypePG,
-  InterfaceQueryOrganizationsListObject,
-} from 'utils/interfaces';
-import {
-  IS_SAMPLE_ORGANIZATION_QUERY,
-  ORGANIZATIONS_LIST,
-} from 'GraphQl/Queries/Queries';
+import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
+import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
@@ -22,7 +15,7 @@ import Avatar from 'components/Avatar/Avatar';
  * Props for the OrgListCard component
  */
 export interface InterfaceOrgListCardPropsPG {
-  data: InterfaceOrgConnectionInfoTypePG;
+  data: InterfaceOrgInfoTypePG;
 }
 
 /**
@@ -48,18 +41,17 @@ function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
   });
 
   // Use navigate hook from react-router-dom to navigate to the organization dashboard
-  const navigate = useNavigate();
 
   // Query to get the organization list
-  const {
-    data: userData,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationsListObject[];
-    };
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: id },
-  });
+  // const {
+  //   data: userData,
+  // }: {
+  //   data?: {
+  //     organizations: InterfaceQueryOrganizationsListObject[];
+  //   };
+  // } = useQuery(ORGANIZATIONS_LIST, {
+  //   variables: { id: id },
+  // });
 
   // Handle click event to navigate to the organization dashboard
   function handleClick(): void {

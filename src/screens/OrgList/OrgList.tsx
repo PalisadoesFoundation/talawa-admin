@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import {
-  CREATE_ORGANIZATION_MUTATION,
-  CREATE_SAMPLE_ORGANIZATION_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { useQuery } from '@apollo/client';
+// import {
+//   CREATE_ORGANIZATION_MUTATION,
+//   CREATE_SAMPLE_ORGANIZATION_MUTATION,
+// } from 'GraphQl/Mutations/mutations';
 import {
   USER_JOINED_ORGANIZATIONS_PG,
   CURRENT_USER,
 } from 'GraphQl/Queries/Queries';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
-import type { ChangeEvent } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type {
-  InterfaceCurrentUserTypePG,
-  InterfaceOrgConnectionInfoType,
+  InterfaceOrgConnectionInfoTypePG,
   InterfaceOrgConnectionTypePG,
+  InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../style/app.module.css';
-import OrganizationModal from './OrganizationModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
@@ -57,24 +51,24 @@ import SearchBar from 'subComponents/SearchBar';
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
-  const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
-  const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+  // const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
+  // const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
 
-  function openDialogModal(redirectOrgId: string): void {
-    setDialogRedirectOrgId(redirectOrgId);
-    setdialogModalIsOpen(true);
-  }
+  // function openDialogModal(redirectOrgId: string): void {
+  //   setDialogRedirectOrgId(redirectOrgId);
+  //   setdialogModalIsOpen(true);
+  // }
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
 
-  function closeDialogModal(): void {
-    setdialogModalIsOpen(false);
-  }
+  // function closeDialogModal(): void {
+  //   setdialogModalIsOpen(false);
+  // }
 
-  const toggleDialogModal = (): void =>
-    setdialogModalIsOpen(!dialogModalisOpen);
+  // const toggleDialogModal = (): void =>
+  //   setdialogModalIsOpen(!dialogModalisOpen);
 
   document.title = t('title');
 
@@ -88,30 +82,30 @@ function orgList(): JSX.Element {
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [formState, setFormState] = useState({
-    name: '',
-    descrip: '',
-    userRegistrationRequired: true,
-    visible: false,
-    address: {
-      city: '',
-      countryCode: '',
-      dependentLocality: '',
-      line1: '',
-      line2: '',
-      postalCode: '',
-      sortingCode: '',
-      state: '',
-    },
-    image: '',
-  });
+  // const [showModal, setShowModal] = useState(false);
+  // const [formState, setFormState] = useState({
+  //   name: '',
+  //   descrip: '',
+  //   userRegistrationRequired: true,
+  //   visible: false,
+  //   address: {
+  //     city: '',
+  //     countryCode: '',
+  //     dependentLocality: '',
+  //     line1: '',
+  //     line2: '',
+  //     postalCode: '',
+  //     sortingCode: '',
+  //     state: '',
+  //   },
+  //   image: '',
+  // });
 
-  const toggleModal = (): void => setShowModal(!showModal);
-  const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
-  const [createSampleOrganization] = useMutation(
-    CREATE_SAMPLE_ORGANIZATION_MUTATION,
-  );
+  // const toggleModal = (): void => setShowModal(!showModal);
+  // const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
+  // const [createSampleOrganization] = useMutation(
+  //   CREATE_SAMPLE_ORGANIZATION_MUTATION,
+  // );
 
   const {
     data: userData,
@@ -161,116 +155,116 @@ function orgList(): JSX.Element {
   const orgsData = UsersOrgsData?.user.organizationsWhereMember;
 
   // To clear the search field and form fields on unmount
-  useEffect(() => {
-    return () => {
-      setSearchByName('');
-      setFormState({
-        name: '',
-        descrip: '',
-        userRegistrationRequired: true,
-        visible: false,
-        address: {
-          city: '',
-          countryCode: '',
-          dependentLocality: '',
-          line1: '',
-          line2: '',
-          postalCode: '',
-          sortingCode: '',
-          state: '',
-        },
-        image: '',
-      });
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     setSearchByName('');
+  //     setFormState({
+  //       name: '',
+  //       descrip: '',
+  //       userRegistrationRequired: true,
+  //       visible: false,
+  //       address: {
+  //         city: '',
+  //         countryCode: '',
+  //         dependentLocality: '',
+  //         line1: '',
+  //         line2: '',
+  //         postalCode: '',
+  //         sortingCode: '',
+  //         state: '',
+  //       },
+  //       image: '',
+  //     });
+  //   };
+  // }, []);
 
   useEffect(() => {
     setIsLoading(loading && isLoadingMore);
   }, [loading]);
 
-  const isAdminForCurrentOrg = (
-    currentOrg: InterfaceOrgConnectionInfoType,
-  ): boolean => {
-    if (adminFor.length === 1) {
-      // If user is admin for one org only then check if that org is current org
-      return adminFor[0]._id === currentOrg._id;
-    } else {
-      // If user is admin for more than one org then check if current org is present in adminFor array
-      return (
-        adminFor.some(
-          (org: { _id: string; name: string; image: string | null }) =>
-            org._id === currentOrg._id,
-        ) ?? false
-      );
-    }
-  };
+  // const isAdminForCurrentOrg = (
+  //   currentOrg: InterfaceOrgConnectionInfoType,
+  // ): boolean => {
+  //   if (adminFor.length === 1) {
+  //     // If user is admin for one org only then check if that org is current org
+  //     return adminFor[0]._id === currentOrg._id;
+  //   } else {
+  //     // If user is admin for more than one org then check if current org is present in adminFor array
+  //     return (
+  //       adminFor.some(
+  //         (org: { _id: string; name: string; image: string | null }) =>
+  //           org._id === currentOrg._id,
+  //       ) ?? false
+  //     );
+  //   }
+  // };
 
-  const triggerCreateSampleOrg = (): void => {
-    createSampleOrganization()
-      .then(() => {
-        toast.success(t('sampleOrgSuccess') as string);
-        window.location.reload();
-      })
-      .catch(() => {
-        toast.error(t('sampleOrgDuplicate') as string);
-      });
-  };
+  // const triggerCreateSampleOrg = (): void => {
+  //   createSampleOrganization()
+  //     .then(() => {
+  //       toast.success(t('sampleOrgSuccess') as string);
+  //       window.location.reload();
+  //     })
+  //     .catch(() => {
+  //       toast.error(t('sampleOrgDuplicate') as string);
+  //     });
+  // };
 
-  const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
+  // const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  //   e.preventDefault();
 
-    const {
-      name: _name,
-      descrip: _descrip,
-      address: _address,
-      visible,
-      userRegistrationRequired,
-      image,
-    } = formState;
+  //   const {
+  //     name: _name,
+  //     descrip: _descrip,
+  //     address: _address,
+  //     visible,
+  //     userRegistrationRequired,
+  //     image,
+  //   } = formState;
 
-    const name = _name.trim();
-    const descrip = _descrip.trim();
-    const address = _address;
+  //   const name = _name.trim();
+  //   const descrip = _descrip.trim();
+  //   const address = _address;
 
-    try {
-      const { data } = await create({
-        variables: {
-          name: name,
-          description: descrip,
-          address: address,
-          visibleInSearch: visible,
-          userRegistrationRequired: userRegistrationRequired,
-          image: image,
-        },
-      });
-      toggleModal;
-      if (data) {
-        toast.success('Congratulation the Organization is created');
-        refetchOrgs();
-        openDialogModal(data.createOrganization._id);
-        setFormState({
-          name: '',
-          descrip: '',
-          userRegistrationRequired: true,
-          visible: false,
-          address: {
-            city: '',
-            countryCode: '',
-            dependentLocality: '',
-            line1: '',
-            line2: '',
-            postalCode: '',
-            sortingCode: '',
-            state: '',
-          },
-          image: '',
-        });
-        toggleModal();
-      }
-    } catch (error: unknown) {
-      errorHandler(t, error);
-    }
-  };
+  //   try {
+  //     const { data } = await create({
+  //       variables: {
+  //         name: name,
+  //         description: descrip,
+  //         address: address,
+  //         visibleInSearch: visible,
+  //         userRegistrationRequired: userRegistrationRequired,
+  //         image: image,
+  //       },
+  //     });
+  //     toggleModal;
+  //     if (data) {
+  //       toast.success('Congratulation the Organization is created');
+  //       refetchOrgs();
+  //       openDialogModal(data.createOrganization._id);
+  //       setFormState({
+  //         name: '',
+  //         descrip: '',
+  //         userRegistrationRequired: true,
+  //         visible: false,
+  //         address: {
+  //           city: '',
+  //           countryCode: '',
+  //           dependentLocality: '',
+  //           line1: '',
+  //           line2: '',
+  //           postalCode: '',
+  //           sortingCode: '',
+  //           state: '',
+  //         },
+  //         image: '',
+  //       });
+  //       toggleModal();
+  //     }
+  //   } catch (error: unknown) {
+  //     errorHandler(t, error);
+  //   }
+  // };
 
   if (errorList || errorUser) {
     errorHandler(t, errorList || errorUser);
@@ -441,24 +435,34 @@ function orgList(): JSX.Element {
             }
           >
             {userData && superAdmin
-              ? orgsData?.edges.map((item: any) => {
-                  return (
-                    <div key={item.node.id} className={styles.itemCardOrgList}>
-                      <OrgListCard data={item.node} />
-                    </div>
-                  );
-                })
+              ? orgsData?.edges.map(
+                  (item: InterfaceOrgConnectionInfoTypePG) => {
+                    return (
+                      <div
+                        key={item.node.id}
+                        className={styles.itemCardOrgList}
+                      >
+                        <OrgListCard data={item.node} />
+                      </div>
+                    );
+                  },
+                )
               : // userData &&
                 // adminFor.length > 0 &&
-                orgsData?.edges.map((item: any) => {
-                  // if (isAdminForCurrentOrg(item)) {
-                  return (
-                    <div key={item.node._id} className={styles.itemCardOrgList}>
-                      <OrgListCard data={item.node} />
-                    </div>
-                  );
-                  // }
-                })}
+                orgsData?.edges.map(
+                  (item: InterfaceOrgConnectionInfoTypePG) => {
+                    // if (isAdminForCurrentOrg(item)) {
+                    return (
+                      <div
+                        key={item.node.id}
+                        className={styles.itemCardOrgList}
+                      >
+                        <OrgListCard data={item.node} />
+                      </div>
+                    );
+                    // }
+                  },
+                )}
           </InfiniteScroll>
           {isLoading && (
             <>
@@ -511,7 +515,7 @@ function orgList(): JSX.Element {
         triggerCreateSampleOrg={triggerCreateSampleOrg}
       /> */}
       {/* Plugin Notification Modal after Org is Created */}
-      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
+      {/* <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
           className={styles.modalHeader}
           closeButton
@@ -536,7 +540,6 @@ function orgList(): JSX.Element {
                 >
                   {t('goToStore')}
                 </Link>
-                {/* </button> */}
                 <Button
                   type="submit"
                   className={styles.enableEverythingBtn}
@@ -550,7 +553,7 @@ function orgList(): JSX.Element {
             </div>
           </section>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

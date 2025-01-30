@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserInfo
 
-Defined in: [src/utils/interfaces.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L10)
+Defined in: [src/utils/interfaces.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L28)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:10](https://github.com/PalisadoesFoundation
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L11)
+Defined in: [src/utils/interfaces.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L29)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:11](https://github.com/PalisadoesFoundation
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L12)
+Defined in: [src/utils/interfaces.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L30)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:12](https://github.com/PalisadoesFoundation
 
 > `optional` **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L14)
+Defined in: [src/utils/interfaces.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L32)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/utils/interfaces.ts:14](https://github.com/PalisadoesFoundation
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L13)
+Defined in: [src/utils/interfaces.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L31)

@@ -9,8 +9,7 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import type {
-  InterfaceOrgConnectionInfoType,
-  InterfaceOrgConnectionInfoTypePG,
+  InterfaceOrgInfoTypePG,
   InterfaceUserType,
 } from 'utils/interfaces';
 
@@ -29,7 +28,7 @@ const adminUser: InterfaceUserType = {
   },
 };
 
-const organizations: InterfaceOrgConnectionInfoTypePG[] = [
+const organizations: InterfaceOrgInfoTypePG[] = [
   {
     id: 'xyz',
     name: 'Dogs Care',

@@ -18,13 +18,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
 
-import {
-  MOCKS,
-  MOCKS_ADMIN,
-  MOCKS_EMPTY,
-  MOCKS_WITH_ERROR,
-} from './OrgListMocks';
-import { ToastContainer, toast } from 'react-toastify';
+import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 
@@ -54,23 +48,23 @@ describe('Organisations Page testing as SuperAdmin', () => {
   setItem('id', '123');
   const link = new StaticMockLink(MOCKS, true);
   const link2 = new StaticMockLink(MOCKS_EMPTY, true);
-  const link3 = new StaticMockLink(MOCKS_WITH_ERROR, true);
+  // const link3 = new StaticMockLink(MOCKS_WITH_ERROR, true);
 
-  const formData = {
-    name: 'Dummy Organization',
-    description: 'This is a dummy organization',
-    address: {
-      city: 'Kingston',
-      countryCode: 'JM',
-      dependentLocality: 'Sample Dependent Locality',
-      line1: '123 Jamaica Street',
-      line2: 'Apartment 456',
-      postalCode: 'JM12345',
-      sortingCode: 'ABC-123',
-      state: 'Kingston Parish',
-    },
-    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
-  };
+  // const formData = {
+  //   name: 'Dummy Organization',
+  //   description: 'This is a dummy organization',
+  //   address: {
+  //     city: 'Kingston',
+  //     countryCode: 'JM',
+  //     dependentLocality: 'Sample Dependent Locality',
+  //     line1: '123 Jamaica Street',
+  //     line2: 'Apartment 456',
+  //     postalCode: 'JM12345',
+  //     sortingCode: 'ABC-123',
+  //     state: 'Kingston Parish',
+  //   },
+  //   image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+  // };
   // test('Should display organisations for superAdmin even if admin For field is empty', async () => {
   //   window.location.assign('/');
   //   setItem('id', '123');
