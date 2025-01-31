@@ -244,7 +244,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             data: {
               id: currentUrl,
               ...formState,
-            }
+            },
           },
         });
         if (data) {
