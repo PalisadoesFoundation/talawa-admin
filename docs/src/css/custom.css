@@ -816,7 +816,7 @@ a:hover {
 /* Large Screens */
 @media (min-width: 1200px) {
   .HeaderHero {
-    height: 50vh;
+    height: 500px;
     overflow: hidden;
   }
 }
