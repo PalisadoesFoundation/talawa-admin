@@ -581,10 +581,6 @@ html[data-theme='dark'] .header-youtube-link:before {
   }
 }
 
-.Section {
-  margin-bottom: 0 !important;
-}
-
 .Heading {
   font-size: 1.5rem;
   font-weight: 700;
