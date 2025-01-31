@@ -258,12 +258,13 @@ export default function settings(): JSX.Element {
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`d-flex flex-row ${styles.containerHeight} ${hideDrawer === null
+        className={`d-flex flex-row ${styles.containerHeight} ${
+          hideDrawer === null
             ? ''
             : hideDrawer
               ? styles.expand
               : styles.contract
-          }`}
+        }`}
       >
         <div className={`${styles.mainContainer}`}>
           <div className="d-flex justify-content-between align-items-center">
