@@ -150,10 +150,12 @@
 
   /* Font Sizes */
   --font-size-header: 16px;
+  --font-size-table-body: 14px;
 
   /* Borders and Radius */
   --primary-border-solid: 1px solid var(--dropdown-border-color);
   --table-head-radius: 20px;
+  --table-row-border: 0;
 
   /* Loader Sizes */
   --loader-size: 10em;
