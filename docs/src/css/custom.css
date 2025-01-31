@@ -63,11 +63,9 @@
   --next-prev-border-color: #e5e7eb;
   --ifm-color-emphasis-100: #f4f8fb;
   --ifm-color-emphasis-0: #fff;
-  --ifm-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
-    Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  --ifm-font-family-monospace: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco,
-    Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ifm-font-family-base: 'Optimistic Display', system-ui, -apple-system,
+  sans-serif;
+--ifm-font-size-base: 17px;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -188,13 +186,6 @@ h1 {
 .menu__link--sublist {
   text-transform: uppercase;
 }
-
-.navbar__brand img {
-  max-height: 50px;
-  width: auto;
-  padding: 5px;
-}
-
 .menu {
   background-color: var(--sidebar-bg-color);
 }
@@ -301,7 +292,7 @@ h1 {
 }
 
 .navbar__item {
-  font-size: 0.99rem;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
