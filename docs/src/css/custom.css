@@ -195,6 +195,7 @@ h1 {
   line-height: 1.5;
   font-size: 0.7rem;
   padding-bottom: 0;
+  padding-left: 0;
   font-weight: 800;
   background: transparent !important;
 }
@@ -219,7 +220,6 @@ h1 {
   overflow-wrap: break-word !important;
   width: 100% !important;
   max-width: 100% !important;
-  line-height: 1.2 !important;
   padding-right: 1rem !important;
 }
 
@@ -571,10 +571,6 @@ html[data-theme='dark'] .header-youtube-link:before {
 @media (max-width: 768px) {
   .container > div > div:first-child {
     padding: 1rem !important;
-  }
-
-  .breadcrumbs__link {
-    padding: 0.25rem;
   }
 }
 
