@@ -822,41 +822,22 @@ a:hover {
 }
 
 /* Responsive Navbar & Buttons */
-@media (max-width: 996px) {
-  .navbar__item.github-button,
-  .navbar__item.youtube-button {
-    display: none;
-  }
-  .github-button,
-  .youtube-button {
-    margin: var(--ifm-menu-link-padding-vertical)
-      var(--ifm-menu-link-padding-horizontal);
-  }
-  .center {
-    text-align: center;
-  }
-}
-
-@media (max-width: 1000px) {
-  .navbar__items--right > .navbar__item:not(:first-of-type) {
-    margin-left: 0.25rem;
-  }
-  .github-button,
-  .youtube-button {
-    margin-right: 0.5rem;
-  }
-  .hero__title {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 1049px) and (min-width: 1001px),
-  (max-width: 1149px) and (min-width: 1050px) {
-  .navbar__items--right > .navbar__item:not(:first-of-type) {
-    margin-left: 0.5rem;
-  }
-  .github-button,
-  .youtube-button {
-    margin-right: 0.5rem;
-  }
-}
+ @media (max-width: 1149px) {
+     .navbar__items--right > .navbar__item:not(:first-of-type) {
+       margin-left: 0.25rem;
+     }
+     .github-button,
+     .youtube-button {
+       margin-right: 0.5rem;
+     }
+   }
+   
+   @media (max-width: 996px) {
+     .navbar__item.github-button,
+     .navbar__item.youtube-button {
+       display: none;
+     }
+     .center {
+       text-align: center;
+     }
+   }
