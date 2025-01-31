@@ -99,7 +99,9 @@ export default function settings(): JSX.Element {
         updatedUserDetails = { ...updatedUserDetails, image: '' };
       }
       const { data } = await updateUserDetails({
-        variables: updatedUserDetails,
+        variables: {
+          data: updatedUserDetails,
+        },
       });
       if (data) {
         toast.success(
@@ -112,6 +114,7 @@ export default function settings(): JSX.Element {
         setItem('name', userFullName);
       }
     } catch (error: unknown) {
+      console.log(error);
       errorHandler(t, error);
     }
   };
@@ -255,13 +258,12 @@ export default function settings(): JSX.Element {
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`d-flex flex-row ${styles.containerHeight} ${
-          hideDrawer === null
+        className={`d-flex flex-row ${styles.containerHeight} ${hideDrawer === null
             ? ''
             : hideDrawer
               ? styles.expand
               : styles.contract
-        }`}
+          }`}
       >
         <div className={`${styles.mainContainer}`}>
           <div className="d-flex justify-content-between align-items-center">
@@ -455,9 +457,9 @@ export default function settings(): JSX.Element {
                         type="date"
                         id="birthDate"
                         value={userDetails.birthDate}
-                        onChange={(e) =>
-                          handleFieldChange('birthDate', e.target.value)
-                        }
+                        onChange={(e) => {
+                          handleFieldChange('birthDate', e.target.value);
+                        }}
                         className={`${styles.cardControl}`}
                         max={new Date().toISOString().split('T')[0]}
                       />
