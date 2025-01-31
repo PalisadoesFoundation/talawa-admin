@@ -80,10 +80,10 @@ const config: Config = {
             target: '_self',
           },
           {
-            label: 'Admin Guide',
-            position: 'left',
-            href: '/docs',
-            target: '_self',
+            to: "/docs",
+            activeBasePath: "docs",
+            label: "Admin Guide",
+            position: "left",
           },
           {
             label: 'API Guide',
