@@ -272,6 +272,14 @@ jobs:
         with:
           path: "./coverage/vitest/lcov.info"
           min_coverage: 0
+        
+      - name: Validate GraphQL schema
+        run: |
+          if [ ! -f "schema.graphql" ]; then
+            echo "Error: schema.graphql not found"
+            exit 1
+          fi
+          npx graphql-inspector validate schema.graphql src/**/*.graphql
 
   Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}
@@ -290,17 +298,42 @@ jobs:
         run: npm install -g @graphql-inspector/cli
       
       - name: Clone API Repository
-        run: |
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: >
           # Retrieve the complete branch name directly from the GitHub context
-          FULL_BRANCH_NAME=${{ github.base_ref }}
-          echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
-          
+          FULL_BRANCH_NAME="$BASE_REF"
+          echo "FULL_BRANCH_NAME: $FULL_BRANCH_NAME"
           # Clone the specified repository using the extracted branch name
-          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+          if ! git ls-remote --heads https://github.com/PalisadoesFoundation/talawa-api.git $FULL_BRANCH_NAME | grep -q .; then
+            echo "Error: Branch '$FULL_BRANCH_NAME' does not exist in talawa-api repository"
+            echo "Please ensure the branch exists and you have the correct permissions"
+            exit 1
+          fi
+          if ! git clone --branch $FULL_BRANCH_NAME --depth 1 https://github.com/PalisadoesFoundation/talawa-api; then
+            echo "Error: Failed to clone talawa-api repository from branch '$FULL_BRANCH_NAME'"
+            echo "This could be due to network issues or repository permissions"
+            exit 1
+          fi
+          # Verify clone was successful
+          if [ ! -d "talawa-api" ]; then
+          echo "Error: talawa-api directory not found after clone"
+          exit 1
+          fi
 
       - name: Validate Documents
-        run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
-        
+        run: >
+          if [ ! -f './talawa-api/schema.graphql' ]; then
+            echo "Error: schema.graphql not found in talawa-api"
+            exit 1
+          fi
+          GRAPHQL_FILES=$(find ./src/GraphQl -name "*.ts" -type f)
+          if [ -z "$GRAPHQL_FILES" ]; then
+            echo "Error: No GraphQL TypeScript files found"
+            exit 1
+          fi
+          graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
