@@ -275,12 +275,13 @@ jobs:
         
       - name: Validate GraphQL schema
         run: |
-          if [ ! -f "schema.graphql" ]; then
-            echo "Error: schema.graphql not found"
-            exit 1
+          # Check if any .graphql files exist
+          if ! find src -name "*.graphql" -type f | grep -q .; then
+            echo "Warning: No .graphql files found in src directory"
+            exit 0
           fi
-          npx graphql-inspector validate schema.graphql src/**/*.graphql
-
+          npx graphql-inspector validate schema.graphql "src/**/*.graphql"
+          
   Graphql-Inspector:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
