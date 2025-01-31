@@ -64,8 +64,8 @@
   --ifm-color-emphasis-100: #f4f8fb;
   --ifm-color-emphasis-0: #fff;
   --ifm-font-family-base: 'Optimistic Display', system-ui, -apple-system,
-  sans-serif;
---ifm-font-size-base: 17px;
+    sans-serif;
+  --ifm-font-size-base: 17px;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -211,7 +211,6 @@ h1 {
 .menu__list-item {
   padding: 0.5rem 0;
 }
-
 
 /* Target specifically the link text */
 .menu__link {
@@ -626,7 +625,6 @@ a:hover {
   fill: var(--secondary-blue-900);
 }
 
-
 /* Hide external link svg on Navbar */
 
 .navbar__item > svg,
@@ -723,7 +721,7 @@ a:hover {
 }
 
 .ActionButton.secondary::after {
-  content: "›";
+  content: '›';
   font-size: 24px;
   margin-left: 5px;
 }
@@ -752,52 +750,114 @@ a:hover {
 }
 /* Small Screens */
 @media only screen and (max-width: 480px) {
-  .ActionButton { max-width: 100%; width: 100%; display: block; white-space: nowrap; }
-  .ActionButton.secondary { margin-top: 1rem; margin-left: auto; }
-  .custom-image { width: 80%; padding-top: 60px; }
+  .ActionButton {
+    max-width: 100%;
+    width: 100%;
+    display: block;
+    white-space: nowrap;
+  }
+  .ActionButton.secondary {
+    margin-top: 1rem;
+    margin-left: auto;
+  }
+  .custom-image {
+    width: 80%;
+    padding-top: 60px;
+  }
 }
 
 /* Small to Medium Screens */
 @media only screen and (max-width: 768px) {
-  .container > div > div:first-child { padding: 1rem !important; }
-  .center { text-align: center; }
-  .HeaderHero .title { font-size: 60px; }
-  .HeaderHero .tagline { font-size: 30px; }
+  .container > div > div:first-child {
+    padding: 1rem !important;
+  }
+  .center {
+    text-align: center;
+  }
+  .HeaderHero .title {
+    font-size: 60px;
+  }
+  .HeaderHero .tagline {
+    font-size: 30px;
+  }
 }
 
 /* Medium Screens */
 @media (min-width: 481px) and (max-width: 960px) {
-  .ActionButton { max-width: 100%; width: 100%; display: block; white-space: nowrap; }
-  .ActionButton.secondary { margin-top: 1rem; }
-  .HeaderHero .ActionButton { margin: auto; margin-top: 1rem; }
-  .HeaderHero { margin-top: 2rem; }
-  .Section { margin-bottom: 2rem; padding-top: 1rem; }
+  .ActionButton {
+    max-width: 100%;
+    width: 100%;
+    display: block;
+    white-space: nowrap;
+  }
+  .ActionButton.secondary {
+    margin-top: 1rem;
+  }
+  .HeaderHero .ActionButton {
+    margin: auto;
+    margin-top: 1rem;
+  }
+  .HeaderHero {
+    margin-top: 2rem;
+  }
+  .Section {
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+  }
 }
 
 /* Medium to Large Screens */
 @media (min-width: 997px) and (max-width: 1327px) {
-  .container > div > div:first-child { padding-left: 4rem !important; padding-right: 4rem !important; }
+  .container > div > div:first-child {
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+  }
 }
 
 /* Large Screens */
 @media (min-width: 1200px) {
-  .HeaderHero { height: 50vh; overflow: hidden; }
+  .HeaderHero {
+    height: 50vh;
+    overflow: hidden;
+  }
 }
 
 /* Responsive Navbar & Buttons */
 @media (max-width: 996px) {
-  .navbar__item.github-button, .navbar__item.youtube-button { display: none; }
-  .github-button, .youtube-button { margin: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal); }
-  .center { text-align: center; }
+  .navbar__item.github-button,
+  .navbar__item.youtube-button {
+    display: none;
+  }
+  .github-button,
+  .youtube-button {
+    margin: var(--ifm-menu-link-padding-vertical)
+      var(--ifm-menu-link-padding-horizontal);
+  }
+  .center {
+    text-align: center;
+  }
 }
 
 @media (max-width: 1000px) {
-  .navbar__items--right > .navbar__item:not(:first-of-type) { margin-left: 0.25rem; }
-  .github-button, .youtube-button { margin-right: 0.5rem; }
-  .hero__title { font-size: 2rem; }
+  .navbar__items--right > .navbar__item:not(:first-of-type) {
+    margin-left: 0.25rem;
+  }
+  .github-button,
+  .youtube-button {
+    margin-right: 0.5rem;
+  }
+  .hero__title {
+    font-size: 2rem;
+  }
 }
 
-@media (max-width: 1049px) and (min-width: 1001px), (max-width: 1149px) and (min-width: 1050px) {
-  .navbar__items--right > .navbar__item:not(:first-of-type) { margin-left: 0.5rem; }
-  .github-button, .youtube-button { margin-right: 0.5rem; }
+@media (max-width: 1049px) and (min-width: 1001px),
+  (max-width: 1149px) and (min-width: 1050px) {
+  .navbar__items--right > .navbar__item:not(:first-of-type) {
+    margin-left: 0.5rem;
+  }
+  .github-button,
+  .youtube-button {
+    margin-right: 0.5rem;
+  }
 }

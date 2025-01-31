@@ -1,7 +1,6 @@
-import React from "react";
-import  Section  from "../../utils/Section";
-import  HomeCallToAction  from "../../utils/HomeCallToAction";
-
+import React from 'react';
+import Section from '../../utils/Section';
+import HomeCallToAction from '../../utils/HomeCallToAction';
 
 function HeaderHero() {
   return (
@@ -9,7 +8,7 @@ function HeaderHero() {
       <h1 className="title">Talawa</h1>
       <h2 className="tagline">Admin Docs</h2>
       <p className="description">
-      Web based administrative dashboard for the Talawa mobile app
+        Web based administrative dashboard for the Talawa mobile app
       </p>
       <div className="buttons">
         <HomeCallToAction />
@@ -18,4 +17,4 @@ function HeaderHero() {
   );
 }
 
-export default HeaderHero
+export default HeaderHero;
