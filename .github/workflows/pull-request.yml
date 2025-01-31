@@ -38,7 +38,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 1100 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx
+          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -282,7 +282,7 @@ jobs:
           npx graphql-inspector validate schema.graphql src/**/*.graphql
 
   Graphql-Inspector:
-  #   if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
     runs-on: ubuntu-latest
     steps:
@@ -295,12 +295,12 @@ jobs:
           node-version: '22.x'
 
       - name: resolve dependency
-        run: npm install -g @graphql-inspector/cli
+        run: npm install -g @graphql-inspector/cli@latest
       
       - name: Clone API Repository
         env:
-          BASE_REF: ${{ github.base_ref }}
-        run: >
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
           # Retrieve the complete branch name directly from the GitHub context
           FULL_BRANCH_NAME="$BASE_REF"
           echo "FULL_BRANCH_NAME: $FULL_BRANCH_NAME"
@@ -317,22 +317,24 @@ jobs:
           fi
           # Verify clone was successful
           if [ ! -d "talawa-api" ]; then
-          echo "Error: talawa-api directory not found after clone"
-          exit 1
+            echo "Error: talawa-api directory not found after clone"
+            exit 1
           fi
 
       - name: Validate Documents
-        run: >
+        run: |
           if [ ! -f './talawa-api/schema.graphql' ]; then
             echo "Error: schema.graphql not found in talawa-api"
             exit 1
           fi
-          GRAPHQL_FILES=$(find ./src/GraphQl -name "*.ts" -type f)
+          GRAPHQL_FILES=$(find ./src/GraphQl -type f \( -name "*.ts" -o -name "*.tsx" \))
           if [ -z "$GRAPHQL_FILES" ]; then
             echo "Error: No GraphQL TypeScript files found"
             exit 1
           fi
-          graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+          echo "Found GraphQL files:"
+          echo "$GRAPHQL_FILES"
+          graphql-inspector validate './src/GraphQl/**/*.{ts,tsx}' './talawa-api/schema.graphql'
 
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
