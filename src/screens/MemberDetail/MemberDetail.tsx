@@ -73,7 +73,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     appLanguageCode: '',
     image: '',
     gender: '',
-    birthDate: '2024-03-14',
+    birthDate: '',
     grade: '',
     empStatus: '',
     maritalStatus: '',
@@ -241,8 +241,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       try {
         const { data } = await updateUser({
           variables: {
-            id: currentUrl,
-            ...formState,
+            data: {
+              id: currentUrl,
+              ...formState,
+            },
           },
         });
         if (data) {
