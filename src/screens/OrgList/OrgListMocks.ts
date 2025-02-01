@@ -41,40 +41,6 @@ const organizations: InterfaceOrgInfoTypePG[] = [
   },
 ];
 
-// for (let x = 0; x < 1; x++) {
-//   organizations.push({
-//     _id: 'a' + x,
-//     image: '',
-//     name: 'name',
-//     creator: {
-//       _id: '123',
-//       firstName: 'firstName',
-//       lastName: 'lastName',
-//     },
-//     admins: [
-//       {
-//         _id: x + '1',
-//       },
-//     ],
-//     members: [
-//       {
-//         _id: x + '2',
-//       },
-//     ],
-//     createdAt: new Date().toISOString(),
-//     address: {
-//       city: 'Kingston',
-//       countryCode: 'JM',
-//       dependentLocality: 'Sample Dependent Locality',
-//       line1: '123 Jamaica Street',
-//       line2: 'Apartment 456',
-//       postalCode: 'JM12345',
-//       sortingCode: 'ABC-123',
-//       state: 'Kingston Parish',
-//     },
-//   });
-// }
-
 // MOCKS FOR SUPERADMIN
 const MOCKS = [
   {
@@ -178,35 +144,6 @@ const MOCKS = [
                       },
                     ],
                   },
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: '123',
-        first: 8,
-      },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            edges: [
-              {
-                node: {
-                  id: 'org3',
-                  name: 'Organization 3',
-                  image: 'image3.jpg',
-                  address: 'Address 3',
-                  members: [{ id: 'm3' }],
-                  admins: [{ id: 'a3' }],
                 },
               },
             ],
