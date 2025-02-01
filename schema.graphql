@@ -551,7 +551,6 @@ type MinimumValueError implements FieldError {
   path: [String!]!
 }
 
-
 input CreateAdvertisementInput {
   endDate: Date!
   name: String!
@@ -688,7 +687,12 @@ type Mutation {
   revokeRefreshTokenForUser: Boolean!
   saveFcmToken(token: String): Boolean!
   sendMembershipRequest(organizationId: ID!): MembershipRequest!
-  sendMessageToChat(chatId: ID!, messageContent: String!, type: String!, replyTo: ID): ChatMessage!
+  sendMessageToChat(
+    chatId: ID!
+    messageContent: String!
+    type: String!
+    replyTo: ID
+  ): ChatMessage!
   signUp(input: UserInput!, file: String): AuthData!
   togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
@@ -774,7 +778,6 @@ type OrganizationCustomField {
   type: String!
 }
 
-
 type OrganizationInfoNode {
   _id: ID!
   apiUrl: URL!
@@ -787,7 +790,7 @@ type OrganizationInfoNode {
 }
 
 type AuthenticationPayload {
-  authenticationToken: String,
+  authenticationToken: String
   user: User
 }
 input OrganizationInput {
@@ -996,7 +999,7 @@ input PostWhereInput {
 }
 
 type Query {
-  signIn(input: LoginInput!) : AuthenticationPayload
+  signIn(input: LoginInput!): AuthenticationPayload
   actionItem(id: ID!): ActionItem
   actionItemCategoriesByOrganization(organizationId: ID!): [ActionItemCategory]
   actionItemCategory(id: ID!): ActionItemCategory
@@ -1019,7 +1022,12 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  advertisementsConnection(after: String, before: String, first: PositiveInt, last: PositiveInt): AdvertisementsConnection
+  advertisementsConnection(
+    after: String
+    before: String
+    first: PositiveInt
+    last: PositiveInt
+  ): AdvertisementsConnection
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(
@@ -1077,7 +1085,7 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): [UserData]!
-  venue(id:ID!):[Venue]
+  venue(id: ID!): [Venue]
 }
 
 input RecaptchaVerification {
@@ -1336,7 +1344,12 @@ type UserPg {
   mobilePhoneNumber: PhoneNumber
   name: String
   natalSex: UserNatalSex
-  organizationsWhereMember(after: String, before: String, first: Int, last: Int): UserOrganizationsWhereMemberConnection
+  organizationsWhereMember(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserOrganizationsWhereMemberConnection
   postalCode: String
   role: UserRole
   state: String
@@ -1346,7 +1359,7 @@ type UserPg {
 }
 
 type QueryUserInput {
-id: String!
+  id: String!
 }
 
 enum Iso3166Alpha2CountryCode {
@@ -1722,7 +1735,7 @@ input UserInput {
   firstName: String!
   lastName: String!
   password: String!
-  selectedOrganization : ID!
+  selectedOrganization: ID!
 }
 
 enum UserOrderByInput {
