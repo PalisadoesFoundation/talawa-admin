@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrgList/OrgList.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrgList.tsx#L50)
+Defined in: [src/screens/OrgList/OrgList.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrgList.tsx#L56)
 
 ## CSS Strategy Explanation:
 
