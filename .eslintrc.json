@@ -8,7 +8,6 @@
   "extends": [
     "plugin:react/recommended",
     "eslint:recommended",
-    "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
     "eslint-config-prettier",
@@ -30,10 +29,10 @@
   "plugins": [
     "react",
     "@typescript-eslint",
-    "jest",
     "import",
     "eslint-plugin-tsdoc",
-    "prettier"
+    "prettier",
+    "@graphql-eslint"
   ],
   "rules": {
     "react/destructuring-assignment": "error",
@@ -128,8 +127,6 @@
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
 
-    "jest/expect-expect": 0,
-
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
       0,
@@ -154,5 +151,25 @@
     "docs/src/**",
     "docs/blog/**",
     "pyproject.toml"
+  ],
+  "overrides": [
+    {
+      "files": ["*.graphql"],
+      "parser": "@graphql-eslint/eslint-plugin",
+      "plugins": ["@graphql-eslint"],
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@graphql-eslint/known-type-names": "error",
+        "@graphql-eslint/no-unreachable-types": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ]
+      }
+    }
   ]
 }

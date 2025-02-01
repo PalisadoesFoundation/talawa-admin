@@ -2,8 +2,6 @@ import React from 'react';
 import {
   render,
   screen,
-  // fireEvent,
-  // waitFor,
   act,
   fireEvent,
   waitFor,
@@ -18,6 +16,7 @@ import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import { useLocalStorage } from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -432,10 +431,10 @@ describe('GroupChatDetails', () => {
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
-            toggleGroupChatDetailsModal={jest.fn()}
+            toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
             chat={chat}
-            chatRefetch={jest.fn()}
+            chatRefetch={vi.fn()}
           />
         </MockedProvider>
       </I18nextProvider>,
@@ -456,10 +455,10 @@ describe('GroupChatDetails', () => {
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
-            toggleGroupChatDetailsModal={jest.fn()}
+            toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
             chat={mockChat}
-            chatRefetch={jest.fn()}
+            chatRefetch={vi.fn()}
           />
         </MockedProvider>
       </I18nextProvider>,
@@ -518,10 +517,10 @@ describe('GroupChatDetails', () => {
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
-            toggleGroupChatDetailsModal={jest.fn()}
+            toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
             chat={mockChat}
-            chatRefetch={jest.fn()}
+            chatRefetch={vi.fn()}
           />
         </MockedProvider>
       </I18nextProvider>,
@@ -558,8 +557,6 @@ describe('GroupChatDetails', () => {
     await act(async () => {
       fireEvent.click(await screen.findByTestId('addUserBtn'));
     });
-
-    await wait(10000);
   });
   // test case for updating group chat image
   it('update group chat image', async () => {
@@ -567,10 +564,10 @@ describe('GroupChatDetails', () => {
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
-            toggleGroupChatDetailsModal={jest.fn()}
+            toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
             chat={mockChat}
-            chatRefetch={jest.fn()}
+            chatRefetch={vi.fn()}
           />
         </MockedProvider>
       </I18nextProvider>,
@@ -597,7 +594,5 @@ describe('GroupChatDetails', () => {
     });
 
     fireEvent.change(fileInput);
-
-    await wait(10000);
   });
 });
