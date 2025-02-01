@@ -315,9 +315,8 @@ export default function settings(): JSX.Element {
                             role="button"
                             aria-label="Edit profile picture"
                             tabIndex={0}
-                            onKeyDown={
-                              /*istanbul ignore next*/
-                              (e) => e.key === 'Enter' && handleImageUpload()
+                            onKeyDown={(e) =>
+                              e.key === 'Enter' && handleImageUpload()
                             }
                           />
                         </div>
