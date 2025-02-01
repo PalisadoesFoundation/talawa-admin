@@ -114,7 +114,6 @@ export default function settings(): JSX.Element {
         setItem('name', userFullName);
       }
     } catch (error: unknown) {
-      console.log(error);
       errorHandler(t, error);
     }
   };
