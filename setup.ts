@@ -1,7 +1,10 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
 import inquirer from 'inquirer';
-import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
+import {
+  checkEnvFile,
+  modifyEnvFile,
+} from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import askAndSetDockerOption from './src/setup/askAndSetDockerOption/askAndSetDockerOption';
 import updateEnvFile from './src/setup/updateEnvFile/updateEnvFile';
@@ -59,9 +62,13 @@ const askAndSetLogErrors = async (): Promise<void> => {
 // Main function to run the setup process
 export async function main(): Promise<void> {
   try {
+    if (!checkEnvFile()) {
+      return;
+    }
+
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
-    checkEnvFile();
+    modifyEnvFile();
     await askAndSetDockerOption();
     const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
     const useDocker = envConfig.USE_DOCKER === 'YES';
