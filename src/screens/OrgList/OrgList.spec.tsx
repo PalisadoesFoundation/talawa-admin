@@ -177,6 +177,33 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
   });
 
+  test('testing scroll', async () => {
+    setItem('id', '123');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText(/Create Organization/i)).toBeNull();
+    });
+
+    // Wait for initial organizations to load
+    expect(await screen.findByText('Organization 1')).toBeInTheDocument();
+    expect(await screen.findByText('Organization 2')).toBeInTheDocument();
+
+    // Simulate infinite scroll trigger (fetchMore)
+    fireEvent.scroll(window, { target: { scrollY: 2000 } });
+  });
+
   // test('Testing create organization modal', async () => {
   //   setItem('id', '123');
   //   setItem('SuperAdmin', true);

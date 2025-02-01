@@ -79,23 +79,6 @@ const organizations: InterfaceOrgInfoTypePG[] = [
 const MOCKS = [
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        first: 8,
-        skip: 0,
-        filter: '',
-        orderBy: 'createdAt_ASC',
-      },
-      notifyOnNetworkStatusChange: true,
-    },
-    result: {
-      data: {
-        organizationsConnection: organizations,
-      },
-    },
-  },
-  {
-    request: {
       query: CURRENT_USER,
       variables: { userId: '123' },
     },
@@ -141,6 +124,93 @@ const MOCKS = [
       data: {
         createOrganization: {
           _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: '123',
+        first: 8,
+      },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: {
+              hasNextPage: true,
+            },
+            edges: [
+              {
+                node: {
+                  id: 'org1',
+                  name: 'Organization 1',
+                  avatarURL: 'image1.jpg',
+                  addressLine1: 'Address 1',
+                  description: 'Description 1',
+                  members: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'abc',
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                node: {
+                  id: 'org2',
+                  name: 'Organization 2',
+                  avatarURL: 'image2.jpg',
+                  addressLine1: 'Address 2',
+                  description: 'Description 2',
+                  members: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'def',
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: '123',
+        first: 8,
+      },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            edges: [
+              {
+                node: {
+                  id: 'org3',
+                  name: 'Organization 3',
+                  image: 'image3.jpg',
+                  address: 'Address 3',
+                  members: [{ id: 'm3' }],
+                  admins: [{ id: 'a3' }],
+                },
+              },
+            ],
+          },
         },
       },
     },
