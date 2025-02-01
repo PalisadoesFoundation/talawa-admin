@@ -75,7 +75,6 @@ const MOCKS = [
       variables: {
         orgId: '',
         firstName_contains: '',
-        lastName_contains: '',
       },
     },
     result: {
@@ -147,7 +146,7 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATION_ADMINS_LIST,
-      variables: { orgId: '' },
+      variables: { id: '' },
     },
     result: {
       data: {
@@ -337,6 +336,7 @@ describe('Testing People Screen Pagination [User Portal]', () => {
         variables: {
           orgId: '',
           firstName_contains: '',
+          lastName_contains: '',
         },
       },
       result: {
@@ -483,7 +483,11 @@ describe('People Component Mode Switch Coverage', () => {
       {
         request: {
           query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-          variables: { orgId: '', firstName_contains: '' },
+          variables: {
+            orgId: '',
+            firstName_contains: '',
+            lastName_contains: '',
+          },
         },
         result: {
           data: {
@@ -596,7 +600,11 @@ describe('People Component Mode Switch Coverage', () => {
       {
         request: {
           query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-          variables: { orgId: '', firstName_contains: '' },
+          variables: {
+            orgId: '',
+            firstName_contains: '',
+            lastName_contains: '',
+          },
         },
         result: {
           data: {
@@ -713,7 +721,6 @@ describe('People Additional Flow Tests', () => {
       },
     },
   };
-
   it('handles full name search correctly', async () => {
     const fullNameMock = {
       request: {
@@ -741,17 +748,14 @@ describe('People Additional Flow Tests', () => {
         },
       },
     };
-
     renderComponent([fullNameMock, defaultAdminMock]);
     await wait();
-
     const searchInput = screen.getByTestId('searchInput');
     await act(async () => {
       userEvent.clear(searchInput);
       userEvent.type(searchInput, 'Noble Mittal');
       userEvent.click(screen.getByTestId('searchBtn'));
     });
-
     await waitFor(() => {
       expect(screen.getByText('Noble Mittal')).toBeInTheDocument();
     });
@@ -801,7 +805,11 @@ describe('People Additional Flow Tests', () => {
       {
         request: {
           query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-          variables: { orgId: '', firstName_contains: '' },
+          variables: {
+            orgId: '',
+            firstName_contains: '',
+            lastName_contains: '',
+          },
         },
         result: {
           data: {
@@ -1023,7 +1031,7 @@ describe('People Component Additional Coverage Tests', () => {
     const membersMock = {
       request: {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: { orgId: '', firstName_contains: '' },
+        variables: { orgId: '', firstName_contains: '', lastName_contains: '' },
       },
       result: {
         data: {
@@ -1059,7 +1067,7 @@ describe('People Component Pagination Tests', () => {
   const mockData = {
     request: {
       query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-      variables: { orgId: '', firstName_contains: '' },
+      variables: { orgId: '', firstName_contains: '', lastName_contains: '' },
     },
     result: {
       data: {

@@ -88,6 +88,7 @@ export default function people(): JSX.Element {
       variables: {
         orgId: organizationId,
         firstName_contains: '',
+        lastName_contains: '',
       },
     },
   );
@@ -113,15 +114,10 @@ export default function people(): JSX.Element {
   };
 
   const handleSearch = (userName: string): void => {
-    // Split input into firstName and lastName
     const [firstName = '', lastName = ''] = userName.trim().split(' ');
-
-    const newFilterData = {
+    refetch({
       firstName_contains: firstName,
       lastName_contains: lastName,
-    };
-    refetch({
-      ...newFilterData,
     });
   };
 
