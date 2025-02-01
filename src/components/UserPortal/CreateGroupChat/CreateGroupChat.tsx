@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from './CreateGroupChat.module.css';
+import styles from '../../../style/app.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -35,16 +35,27 @@ interface InterfaceCreateGroupChatProps {
 }
 
 /**
+ * Styled table container with custom styles.
+ */
+
+const StyledTableContainer = styled(TableContainer)<{
+  component?: React.ElementType;
+}>(() => ({
+  borderRadius: 'var(--table-head-radius)',
+}));
+
+/**
  * Styled table cell with custom styles.
  */
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
+    backgroundColor: 'var(--table-head-bg)',
+    color: 'var(--table-header-color)',
+    fontSize: 'var(--font-size-header)',
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    fontSize: 'var(--font-size-table-body)',
   },
 }));
 
@@ -54,7 +65,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
-    border: 0,
+    border: 'var(--table-row-border)',
   },
 }));
 
@@ -82,7 +93,7 @@ export default function CreateGroupChat({
     setAddUserModalisOpen(true);
   }
 
-  const toggleAddUserModal = /* istanbul ignore next */ (): void =>
+  const toggleAddUserModal = (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
   const { orgId: currentOrg } = useParams();
@@ -127,7 +138,6 @@ export default function CreateGroupChat({
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    /* istanbul ignore next */
     const [firstName, lastName] = userName.split(' ');
 
     const newFilterData = {
@@ -256,7 +266,7 @@ export default function CreateGroupChat({
                     data-testid="searchUser"
                     placeholder="searchFullName"
                     autoComplete="off"
-                    className={styles.inputFieldModal}
+                    className={styles.inputField}
                     value={userName}
                     onChange={(e): void => {
                       const { value } = e.target;
@@ -266,14 +276,14 @@ export default function CreateGroupChat({
                   <Button
                     type="submit"
                     data-testid="submitBtn"
-                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
+                    className={styles.searchButton}
                   >
                     <Search />
                   </Button>
                 </Form>
               </div>
 
-              <TableContainer className={styles.userData} component={Paper}>
+              <StyledTableContainer component={Paper}>
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
@@ -320,6 +330,7 @@ export default function CreateGroupChat({
                                 </Button>
                               ) : (
                                 <Button
+                                  className={`${styles.colorPrimary} ${styles.borderNone}`}
                                   onClick={() => {
                                     setUserIds([
                                       ...userIds,
@@ -337,7 +348,7 @@ export default function CreateGroupChat({
                       )}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </StyledTableContainer>
             </>
           )}
           <Button
