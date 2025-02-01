@@ -42,6 +42,7 @@ const MOCKS = [
         signIn: {
           user: {
             id: '1',
+            role: 'administrator',
           },
           authenticationToken: 'authenticationToken',
         },
@@ -52,20 +53,16 @@ const MOCKS = [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
-        name: 'John Patrick',
+        name: 'John Doe',
         email: 'johndoe@gmail.com',
-        password: 'johnDoe',
+        password: 'Johndoe@123',
       },
     },
     result: {
       data: {
-        register: {
+        signUp: {
           user: {
             id: '1',
-            name: 'John Patrick',
-            emailAddress: 'johndoe@gmail.com',
-            role: 'User',
-            countryCode: '12',
           },
           authenticationToken: 'authenticationToken',
         },
@@ -200,9 +197,24 @@ const MOCKS3 = [
   },
 ];
 
+const MOCKS4 = [
+  {
+    request: {
+      query: SIGNIN_QUERY,
+      variables: {
+        email: 'johndoe@gmail.com',
+        password: 'johndoe1',
+        id: 'yttyt',
+      },
+    },
+    error: new Error('Invalid credentials'),
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
 // const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS3, true);
+const link4 = new StaticMockLink(MOCKS4, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -539,6 +551,50 @@ describe('Testing Login Page Screen', () => {
     expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
   });
 
+  it('switches to login tab on successful registration correct data', async () => {
+    const formData = {
+      name: 'John Doe',
+      email: 'johndoe@gmail.com',
+      password: 'Johndoe@123',
+      confirmPassword: 'Johndoe@123',
+      orgId: 'abc',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+    await wait();
+    userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword,
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+
+    await wait();
+
+    // Check if the login tab is now active by checking for elements that only appear in the login tab
+    expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
+  });
+
   it('Testing toggle login register portion', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -569,6 +625,37 @@ describe('Testing Login Page Screen', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      formData.password,
+    );
+
+    userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+  });
+
+  it('Testing wrong login functionality', async () => {
+    const formData = {
+      email: 'johndoe@gmail.com',
+      password: 'johndoe1',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link4}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1063,4 +1150,50 @@ describe('Talawa-API server fetch check', () => {
 
     expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
   });
+
+  // it('Testing ReCaptcha functionality, it should fail', async () => {
+  //   const formData = {
+  //     name: 'John Doe',
+  //     email: 'johndoe@gmail.com',
+  //     password: 'johnDoe@1',
+  //     confirmPassword: 'johnDoe@1',
+  //   };
+
+  //   vi.mock('Constant/constant.ts', async () => ({
+  //     ...(await vi.importActual('Constant/constant.ts')),
+  //     REACT_APP_USE_RECAPTCHA: 'No',
+  //     RECAPTCHA_SITE_KEY: 'xxx',
+  //   }));
+
+  //   render(
+  //     <MockedProvider addTypename={false} link={link}>
+  //       <BrowserRouter>
+  //         <Provider store={store}>
+  //           <I18nextProvider i18n={i18nForTest}>
+  //             <LoginPage />
+  //           </I18nextProvider>
+  //         </Provider>
+  //       </BrowserRouter>
+  //     </MockedProvider>,
+  //   );
+
+  //   await wait();
+
+  //   userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+  //   userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+
+  //   userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+  //   userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+  //   userEvent.type(
+  //     screen.getByPlaceholderText('Confirm Password'),
+  //     formData.confirmPassword,
+  //   );
+
+  //   userEvent.click(screen.getByTestId('registrationBtn'));
+
+  //   await waitFor(() => {
+  //     expect(resetReCAPTCHA).toBeCalled();
+  //   });
+  // });
 });

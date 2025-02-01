@@ -186,8 +186,7 @@ const loginPage = (): JSX.Element => {
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const { signName, signEmail, signPassword, cPassword, signOrg } =
-      signformState;
+    const { signName, signEmail, signPassword, cPassword } = signformState;
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
@@ -226,7 +225,6 @@ const loginPage = (): JSX.Element => {
               name: signName,
               email: signEmail,
               password: signPassword,
-              orgId: signOrg,
             },
           });
 
@@ -282,7 +280,6 @@ const loginPage = (): JSX.Element => {
           password: formState.password,
         },
       });
-      console.log(signInData);
 
       if (signInData) {
         if (signInData.signIn.user.countryCode !== null) {
@@ -292,7 +289,6 @@ const loginPage = (): JSX.Element => {
         const { signIn } = signInData;
         const { user, authenticationToken } = signIn;
         const isAdmin: boolean = user.role === 'administrator';
-
         if (role === 'admin' && !isAdmin) {
           toast.warn(tErrors('notAuthorised') as string);
           return;
@@ -303,10 +299,11 @@ const loginPage = (): JSX.Element => {
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);
+        setItem('role', user.role);
+        setItem('UserImage', user.avatarURL || '');
         // setItem('FirstName', user.firstName);
         // setItem('LastName', user.lastName);
         // setItem('UserImage', user.avatarURL);
-
         if (role === 'admin') {
           setItem('id', loggedInUserId);
         } else {

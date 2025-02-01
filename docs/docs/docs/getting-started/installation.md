@@ -267,3 +267,117 @@ REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 #### Setting up Compiletime and Runtime logs
 
 Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
+
+## First Time SignIn as Admin
+
+After setting up **`talawa-admin`** and **`talawa-api`**, your PostgreSQL database will have only one user: **Administrator**.  
+To sign in as an **Admin**, you need to **register a user** and then manually grant them **Administrator** privileges.
+
+---
+
+## 📌 Steps to Sign In as an Administrator
+
+### 1️⃣ Register as an Admin
+
+You can register using the **frontend**.
+
+> **Optional:** If needed, insert an image showing the registration page here:  
+> ![Registering a new user](../../../static/img/markdown/installation/Register.png)
+
+---
+
+### 2️⃣ Grant Administrator Role to the Registered User
+
+> 🔹 **Note:** Since the **Super Admin** is not yet configured, we will use the **GraphQL frontend** for this.
+ > 🔹 **Note**: Replace **"user-id"** with the actual ID of the registered user and **org-id** with organization ID wherever necessary. You can obtain this form the postgres database via cloudbeaver.
+
+1. Open **GraphiQL** in your browser:
+
+2. **Sign in as Administrator**
+
+   - Use the following GraphQL **query** to get an **authentication token** for authorization in later queries:
+
+   ```graphql
+   mutation {
+     signIn(
+       input: { emailAddress: "administrator@email.com", password: "password" }
+     ) {
+       authenticationToken
+       user {
+         id
+         name
+       }
+     }
+   }
+   ```
+
+2) **Make the registered user an Administrator**
+
+   - Use the following GraphQL **mutation** to assign **administrator** role to user:
+
+   ```graphql
+   mutation {
+     updateUser(input: { id: "user-id", role: administrator }) {
+       id
+       name
+     }
+   }
+   ```
+
+3) **Next create an organization**
+
+   - Use the following GraphQL **mutation** to create an organization:
+
+   ```graphql
+   mutation {
+     createOrganization(
+       input: {
+         addressLine1: "Los Angeles"
+         addressLine2: "USA"
+         city: "Los Angeles"
+         countryCode: in
+         description: "testing"
+         name: "Test Org 7"
+         postalCode: "876876"
+         state: "California"
+       }
+     ) {
+       id
+     }
+   }
+   ```
+
+4) **Make user an administrator of the organization**
+
+   - Use the following GraphQL **mutation** to assign **administrator** role to user:
+
+   ```graphql
+     createOrganizationMembership(
+    input: {
+      memberId: "user-id"
+      organizationId: "org-id"
+      role: administrator
+    }
+   ) {
+    id
+    name
+    addressLine1
+    createdAt
+    members(first: 5) {
+      pageInfo {
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+        }
+      }
+    }
+   }
+   }
+   ```
+
+Now sign successfully in with your registered ADMIN.
