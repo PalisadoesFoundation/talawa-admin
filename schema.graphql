@@ -1882,3 +1882,36 @@ input chatInput {
   userIds: [ID!]!
   name: String
 }
+
+type DefaultConnectionPageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type SocialMediaUrls {
+  facebook: String
+  instagram: String
+  twitter: String
+  linkedin: String
+  youtube: String
+  website: String
+}
+
+type FundraisingCampaign {
+  _id: ID!
+  name: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  fundingGoal: Float!
+  description: String
+  creator: User
+  organization: Organization!
+  members: [User]
+  isPublic: Boolean!
+  isArchived: Boolean!
+  refrenceNumber: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

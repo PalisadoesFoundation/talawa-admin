@@ -516,6 +516,36 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('should preserve the assignee when updating other fields', async () => {
+    renderItemModal(link1, itemProps[2]);
+
+    // Update category
+    const categorySelect = await screen.findByTestId('categorySelect');
+    const inputField = within(categorySelect).getByRole('combobox');
+    fireEvent.mouseDown(inputField);
+    const categoryOption = await screen.findByText('Category 2');
+    fireEvent.click(categoryOption);
+
+    // Update allotted hours to match mock
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    fireEvent.change(allottedHours, { target: { value: '19' } });
+
+    // Update post completion notes to match mock
+    const postCompletionNotes = screen.getByLabelText(t.postCompletionNotes);
+    fireEvent.change(postCompletionNotes, { target: { value: 'Cmp Notes 2' } });
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    // Verify successful update
+    await waitFor(() => {
+      expect(itemProps[2].actionItemsRefetch).toHaveBeenCalled();
+      expect(itemProps[2].hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
+    });
+  });
+
   it('Update Action Item (Volunteer)', async () => {
     renderItemModal(link1, itemProps[4]);
     expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2);
