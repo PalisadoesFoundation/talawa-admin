@@ -908,7 +908,7 @@
 
 .slider .MuiSlider-track {
   background-color: var(--slider-bg) !important;
-  border: 'none';
+  border: none;
 }
 
 .slider .MuiSlider-thumb {
