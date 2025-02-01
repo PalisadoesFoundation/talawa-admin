@@ -210,6 +210,56 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
+export const CREATE_ORGANIZATION_MUTATION_PG = gql`
+  mutation createOrganization(
+    $name: String!
+    $addressLine1: String
+    $addressLine2: String
+    $avatar: Upload
+    $city: String
+    $countryCode: Iso3166Alpha2CountryCode
+    $description: String
+    $postalCode: String
+    $state: String
+  ) {
+    createOrganization(
+      input: {
+        addressLine1: $addressLine1
+        addressLine2: $addressLine2
+        avatar: $avatar
+        city: $city
+        countryCode: $countryCode
+        description: $description
+        name: $name
+        postalCode: $postalCode
+        state: $state
+      }
+    ) {
+      id
+    }
+  }
+`;
+
+// to create organization membership
+
+export const CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG = gql`
+  mutation CreateOrganizationMembership(
+    $memberId: ID!
+    $organizationId: ID!
+    $role: OrganizationMembershipRole
+  ) {
+    createOrganizationMembership(
+      input: {
+        memberId: $memberId
+        organizationId: $organizationId
+        role: $role
+      }
+    ) {
+      id
+    }
+  }
+`;
+
 // to delete the organization
 
 export const DELETE_ORGANIZATION_MUTATION = gql`

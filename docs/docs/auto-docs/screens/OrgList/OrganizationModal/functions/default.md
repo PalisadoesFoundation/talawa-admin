@@ -14,7 +14,7 @@ Represents the organization modal component.
 
 ### props
 
-`InterfaceOrganizationModalProps`
+[`InterfaceOrganizationModalProps`](../interfaces/InterfaceOrganizationModalProps.md)
 
 ### deprecatedLegacyContext?
 

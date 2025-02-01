@@ -146,6 +146,8 @@
     "city": "City",
     "countryCode": "Country Code",
     "dependentLocality": "Dependent Locality",
+    "addressLine1": "Address Line 1",
+    "addressLine2": "Address Line 2",
     "line1": "Line 1",
     "line2": "Line 2",
     "postalCode": "Postal Code",
