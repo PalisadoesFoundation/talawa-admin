@@ -18,6 +18,7 @@ const { getItem, setItem } = useLocalStorage();
 const SecuredRoute = (): JSX.Element => {
   const location = useLocation();
   const { data, loading, error, refetch } = useQuery(VERIFY_ROLE, {
++  skip: !getItem('token'),
     context: {
       headers: {
         Authorization: `Bearer ${getItem('token')}`,
