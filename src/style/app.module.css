@@ -370,6 +370,7 @@
   --createButtonEventHeader-border: var(--dark-grey);
   --createButtonEventHeader-hover-color: var(--black-color);
   --createButtonEventHeader-boxshadow: rgba(0, 0, 0, 0.3);
+  --slider-rail-bg: #e6e6e6;
 }
 
 .fonts {
@@ -895,6 +896,15 @@
 
 .slider .MuiSlider-track {
   background-color: var(--slider-bg) !important;
+  border: 'none';
+}
+
+.slider .MuiSlider-thumb {
+  background-color: var(--slider-bg) !important;
+}
+
+.slider .MuiSlider-rail {
+  background-color: var(--slider-rail-bg) !important;
 }
 
 .removeButton {
