@@ -289,6 +289,7 @@ You can register using the **frontend**.
 ### 2️⃣ Grant Administrator Role to the Registered User
 
 > 🔹 **Note:** Since the **Super Admin** is not yet configured, we will use the **GraphQL frontend** for this.
+ > 🔹 **Note**: Replace **"user-id"** with the actual ID of the registered user and **org-id** with organization ID wherever necessary. You can obtain this form the postgres database via cloudbeaver.
 
 1. Open **GraphiQL** in your browser:
 

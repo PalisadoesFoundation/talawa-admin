@@ -4,11 +4,10 @@ import { render, screen } from '@testing-library/react';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { setItem } = useLocalStorage();
-
 describe('SecuredRoute', () => {
   it('for administrator', () => {
-    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and do not set 'AdminFor' so that it remains undefined.
+    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and role administrator to simulate admin login.
+    const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
     setItem('role', 'administrator');
 
@@ -23,8 +22,9 @@ describe('SecuredRoute', () => {
     );
   });
 
-  it('for administrator', () => {
-    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and do not set 'AdminFor' so that it remains undefined.
+  it('for regular user', () => {
+    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and role regular to simulare a non admin user.
+    const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
     setItem('role', 'regular');
 

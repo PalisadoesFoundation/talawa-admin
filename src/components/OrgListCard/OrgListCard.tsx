@@ -1,13 +1,10 @@
 import React from 'react';
 import TruncatedText from './TruncatedText';
 // import {useState} from 'react';
-import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from '../../style/app.module.css';
 import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
-import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 
@@ -28,29 +25,15 @@ export interface InterfaceOrgListCardPropsPG {
  * @param props - The properties passed to the component
  * @returns JSX.Element representing an organization list card
  */
-function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
+function OrgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
   // Destructure data from props
-  const { id, avatarURL, addressLine1, name, description, members } =
-    props.data;
+  const { avatarURL, addressLine1, name, description, members } = props.data;
 
   // Query to check if the organization is a sample organization
-  const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
-    variables: {
-      isSampleOrganizationId: id,
-    },
-  });
-
-  // Use navigate hook from react-router-dom to navigate to the organization dashboard
-
-  // Query to get the organization list
-  // const {
-  //   data: userData,
-  // }: {
-  //   data?: {
-  //     organizations: InterfaceQueryOrganizationsListObject[];
-  //   };
-  // } = useQuery(ORGANIZATIONS_LIST, {
-  //   variables: { id: id },
+  // const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
+  //   variables: {
+  //     isSampleOrganizationId: id,
+  //   },
   // });
 
   // Handle click event to navigate to the organization dashboard
@@ -100,9 +83,6 @@ function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
             )}
             {/* Display the number of admins and members */}
             <h6 className={styles.orgadmin}>
-              {/* <div>
-                {tCommon('admins')}: <span>{admins.length}</span>
-              </div> */}
               <div>
                 {tCommon('members')}: <span>{members.edges.length}</span>
               </div>
@@ -116,7 +96,7 @@ function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
           className={styles.manageBtn}
         >
           {/* Show flask icon if the organization is a sample organization */}
-          {data && data?.isSampleOrganization && (
+          {/* {data && data?.isSampleOrganization && (
             <FlaskIcon
               fill="var(--bs-white)"
               width={12}
@@ -125,11 +105,11 @@ function orgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
               data-testid="flaskIcon"
             />
           )}
-          {'  '}
+          {'  '} */}
           {t('manage')}
         </Button>
       </div>
     </>
   );
 }
-export default orgListCard;
+export default OrgListCard;
