@@ -15,15 +15,16 @@ function ActionButton({
   target,
   children,
   buttonClassName,
+  ariaLabel,
 }: ActionButtonProps) {
   return (
     <a
-      className={`ActionButton ${type} ${buttonClassName}`}
+    className={`ActionButton ${type}${buttonClassName ? ` ${buttonClassName}` : ''}`}
       rel={target === '_blank' ? 'noopener noreferrer' : undefined}
       href={href}
       target={target}
       role="button"
-      aria-label={typeof children === 'string' ? children : undefined}
+      aria-label={ariaLabel}
     >
       {children}
     </a>
