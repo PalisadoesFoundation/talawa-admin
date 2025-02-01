@@ -114,6 +114,7 @@ export default function settings(): JSX.Element {
         setItem('name', userFullName);
       }
     } catch (error: unknown) {
+      console.log(error);
       errorHandler(t, error);
     }
   };
@@ -160,7 +161,6 @@ export default function settings(): JSX.Element {
    */
   const handleResetChanges = (): void => {
     setisUpdated(false);
-    /* istanbul ignore next */
     if (data) {
       const {
         firstName,
@@ -194,7 +194,6 @@ export default function settings(): JSX.Element {
   };
 
   useEffect(() => {
-    /* istanbul ignore next */
     if (data) {
       const {
         firstName,
@@ -332,18 +331,15 @@ export default function settings(): JSX.Element {
                         data-testid="fileInput"
                         multiple={false}
                         ref={fileInputRef}
-                        onChange={
-                          /* istanbul ignore next */
-                          async (
-                            e: React.ChangeEvent<HTMLInputElement>,
-                          ): Promise<void> => {
-                            const file = e.target?.files?.[0];
-                            if (file) {
-                              const image = await convertToBase64(file);
-                              setUserDetails({ ...userDetails, image });
-                            }
+                        onChange={async (
+                          e: React.ChangeEvent<HTMLInputElement>,
+                        ): Promise<void> => {
+                          const file = e.target?.files?.[0];
+                          if (file) {
+                            const image = await convertToBase64(file);
+                            setUserDetails({ ...userDetails, image });
                           }
-                        }
+                        }}
                         style={{ display: 'none' }}
                       />
                     </Col>
