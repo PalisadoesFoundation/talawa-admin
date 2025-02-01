@@ -350,6 +350,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           assigneeId: assigneeId,
           assigneeType: assigneeType,
           ...updatedFields,
+          isCompleted: actionItem?.isCompleted,
         },
       });
 

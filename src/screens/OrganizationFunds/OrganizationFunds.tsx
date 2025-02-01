@@ -20,26 +20,25 @@ import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
-  borderRadius: '20px',
-  backgroundColor: '#EAEBEF',
+  borderRadius: 'var(--table-head-radius)',
+  backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
-    backgroundColor: '#eff1f7',
+    backgroundColor: 'var(--row-background)',
     '&:focus-within': {
-      outline: '2px solid #000',
-      outlineOffset: '-2px',
+      outline: 'none',
     },
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: '#EAEBEF',
-    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'var(--row-background)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: '#EAEBEF',
-    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'var(--row-background)',
   },
   '& .MuiDataGrid-cell:focus': {
-    outline: '2px solid #000',
-    outlineOffset: '-2px',
+    outline: 'none',
+  },
+  '& .MuiDataGrid-cell:focus-within': {
+    outline: 'none',
   },
 };
 
@@ -105,6 +104,9 @@ const organizationFunds = (): JSX.Element => {
     keyPrefix: 'funds',
   });
   const { t: tCommon } = useTranslation('common');
+
+  // Set the document title based on the translation
+  document.title = t('title');
 
   const { orgId } = useParams();
   const navigate = useNavigate();
@@ -180,7 +182,7 @@ const organizationFunds = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'id',
-      headerName: 'Sr. No.',
+      headerName: '#',
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -203,7 +205,7 @@ const organizationFunds = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className={`d-flex justify-content-center fw-bold ${styles.subtleBlueGrey}`}
+            className={styles.hyperlinkText}
             data-testid="fundName"
             onClick={() => handleClick(params.row._id as string)}
           >
@@ -335,6 +337,7 @@ const organizationFunds = (): JSX.Element => {
               }
               dataTestIdPrefix="filter"
               buttonLabel={tCommon('sort')}
+              className={styles.dropdown}
             />
             <Button
               variant="success"
