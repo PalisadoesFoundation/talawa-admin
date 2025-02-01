@@ -451,9 +451,9 @@ export default function settings(): JSX.Element {
                         type="date"
                         id="birthDate"
                         value={userDetails.birthDate}
-                        onChange={(e) => {
-                          handleFieldChange('birthDate', e.target.value);
-                        }}
+                        onChange={(e) =>
+                          handleFieldChange('birthDate', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         max={new Date().toISOString().split('T')[0]}
                       />
