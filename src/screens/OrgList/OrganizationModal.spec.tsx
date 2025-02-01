@@ -411,7 +411,6 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
-    setup();
     expect(screen.getByTestId('modalOrganizationHeader')).toBeVisible();
   });
 
@@ -434,7 +433,6 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
-    setup();
     expect(
       screen.queryByTestId('modalOrganizationHeader'),
     ).not.toBeInTheDocument();
