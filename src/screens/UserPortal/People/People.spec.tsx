@@ -75,6 +75,7 @@ const MOCKS = [
       variables: {
         orgId: '',
         firstName_contains: '',
+        lastName_contains: '',
       },
     },
     result: {
@@ -146,7 +147,7 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATION_ADMINS_LIST,
-      variables: { id: '' },
+      variables: { orgId: '' },
     },
     result: {
       data: {
@@ -165,6 +166,7 @@ const MOCKS = [
       variables: {
         orgId: '',
         firstName_contains: 'j',
+        lastName_contains: 'c',
       },
     },
     result: {
@@ -252,7 +254,7 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
+    userEvent.type(screen.getByTestId('searchInput'), 'j c{enter}');
     await wait();
 
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
@@ -277,7 +279,7 @@ describe('Testing People Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('searchInput'), '');
     userEvent.click(searchBtn);
     await wait();
-    userEvent.type(screen.getByTestId('searchInput'), 'j');
+    userEvent.type(screen.getByTestId('searchInput'), 'j c');
     userEvent.click(searchBtn);
     await wait();
 
@@ -694,11 +696,76 @@ describe('People Additional Flow Tests', () => {
   const setupWithMocks = (mocks: MockData[]): RenderResult =>
     renderComponent(mocks);
 
+  const defaultAdminMock = {
+    request: {
+      query: ORGANIZATION_ADMINS_LIST,
+      variables: { orgId: '' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            __typename: 'Organization',
+            _id: 'org-1',
+            admins: [],
+          },
+        ],
+      },
+    },
+  };
+
+  it('handles full name search correctly', async () => {
+    const fullNameMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: '',
+          firstName_contains: 'Noble',
+          lastName_contains: 'Mittal',
+        },
+      },
+      result: {
+        data: {
+          organizationsMemberConnection: {
+            edges: [
+              {
+                _id: 'user-3',
+                firstName: 'Noble',
+                lastName: 'Mittal',
+                image: null,
+                email: 'noble@test.com',
+                createdAt: '2023-03-02T03:22:08.101Z',
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    renderComponent([fullNameMock, defaultAdminMock]);
+    await wait();
+
+    const searchInput = screen.getByTestId('searchInput');
+    await act(async () => {
+      userEvent.clear(searchInput);
+      userEvent.type(searchInput, 'Noble Mittal');
+      userEvent.click(screen.getByTestId('searchBtn'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Noble Mittal')).toBeInTheDocument();
+    });
+  });
+
   it('searches partial user name correctly and displays matching results', async (): Promise<void> => {
     const aliMembersMock: MockData = {
       request: {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: { orgId: '', firstName_contains: 'Ali' },
+        variables: {
+          orgId: '',
+          firstName_contains: 'Ali',
+          lastName_contains: '',
+        },
       },
       result: {
         data: {
@@ -840,7 +907,7 @@ describe('Testing People Screen Edge Cases [User Portal]', () => {
     const membersMock = {
       request: {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: { orgId: '', firstName_contains: '' },
+        variables: { orgId: '', firstName_contains: '', lastName_contains: '' },
       },
       result: {
         data: {

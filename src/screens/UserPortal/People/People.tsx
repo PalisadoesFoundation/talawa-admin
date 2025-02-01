@@ -112,9 +112,16 @@ export default function people(): JSX.Element {
     setPage(0);
   };
 
-  const handleSearch = (newFilter: string): void => {
+  const handleSearch = (userName: string): void => {
+    // Split input into firstName and lastName
+    const [firstName = '', lastName = ''] = userName.trim().split(' ');
+
+    const newFilterData = {
+      firstName_contains: firstName,
+      lastName_contains: lastName,
+    };
     refetch({
-      firstName_contains: newFilter,
+      ...newFilterData,
     });
   };
 
