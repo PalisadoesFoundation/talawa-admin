@@ -34,6 +34,25 @@ describe('askForTalawaApiUrl', () => {
     expect(result).toBe('http://example.com/graphql');
   });
 
+  it('should return the corrected endpoint when user enters with trailing slash', async () => {
+    const mockPrompt = vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      endpoint: 'http://example.com/graphql/',
+    });
+
+    const result = await askForTalawaApiUrl();
+
+    expect(mockPrompt).toHaveBeenCalledWith([
+      {
+        type: 'input',
+        name: 'endpoint',
+        message: 'Enter your talawa-api endpoint:',
+        default: 'http://localhost:4000/graphql',
+      },
+    ]);
+
+    expect(result).toBe('http://example.com/graphql');
+  });
+
   it('should return the default endpoint when the user does not enter anything', async () => {
     const mockPrompt = vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       endpoint: 'http://localhost:4000/graphql',
