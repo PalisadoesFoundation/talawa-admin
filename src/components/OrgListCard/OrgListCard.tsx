@@ -25,10 +25,9 @@ export interface InterfaceOrgListCardPropsPG {
  * @param props - The properties passed to the component
  * @returns JSX.Element representing an organization list card
  */
-function OrgListCard(props: InterfaceOrgListCardPropsPG): JSX.Element {
-  // Destructure data from props
-  const { avatarURL, addressLine1, name, description, members } = props.data;
-
+function OrgListCard({
+  data: { avatarURL, addressLine1, name, description, members },
+}: InterfaceOrgListCardPropsPG): JSX.Element {
   // Query to check if the organization is a sample organization
   // const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
   //   variables: {
