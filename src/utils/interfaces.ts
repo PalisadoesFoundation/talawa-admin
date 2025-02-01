@@ -7,6 +7,24 @@ export interface InterfaceUserType {
   };
 }
 
+export interface InterfaceUserTypePG {
+  user: {
+    id: string;
+    name: string;
+    role: string;
+    emailAddress: string;
+  };
+}
+
+export interface InterfaceCurrentUserTypePG {
+  currentUser: {
+    id: string;
+    name: string;
+    role: string;
+    emailAddress: string;
+  };
+}
+
 export interface InterfaceUserInfo {
   _id: string;
   firstName: string;
@@ -106,8 +124,42 @@ export interface InterfaceOrgConnectionInfoType {
   createdAt: string;
   address: InterfaceAddress;
 }
+
+export interface InterfaceOrgConnectionInfoTypePG {
+  node: InterfaceOrgInfoTypePG;
+}
+
+export interface InterfaceOrgInfoTypePG {
+  id: string;
+  avatarURL: string | null;
+  name: string;
+  members: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        addressLine1: string;
+        description: string;
+        avatarURL: string;
+        members: {
+          edges: {
+            node: {
+              id: string;
+            };
+          }[];
+        };
+      };
+    }[];
+  };
+  description: string;
+  addressLine1: string;
+}
 export interface InterfaceOrgConnectionType {
   organizationsConnection: InterfaceOrgConnectionInfoType[];
+}
+
+export interface InterfaceOrgConnectionTypePG {
+  organizationsConnection: InterfaceOrgInfoTypePG[];
 }
 
 export interface InterfaceQueryOrganizationsListObject {

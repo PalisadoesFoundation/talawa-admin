@@ -3,7 +3,10 @@ import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from '../../style/app.module.css';
-import type { InterfaceAddress } from 'utils/interfaces';
+import type {
+  InterfaceAddress,
+  InterfaceCurrentUserTypePG,
+} from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -40,20 +43,6 @@ interface InterfaceFormStateType {
 }
 
 /**
- * Represents a user type.
- */
-interface InterfaceUserType {
-  user: {
-    firstName: string;
-    lastName: string;
-    image: string | null;
-    email: string;
-  };
-
-  // Add more properties if needed
-}
-
-/**
  * Represents the properties of the OrganizationModal component.
  */
 interface InterfaceOrganizationModalProps {
@@ -64,7 +53,7 @@ interface InterfaceOrganizationModalProps {
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   tCommon: (key: string) => string;
-  userData: InterfaceUserType | undefined;
+  userData: InterfaceCurrentUserTypePG | undefined;
   triggerCreateSampleOrg: () => void;
 }
 

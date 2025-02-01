@@ -3,11 +3,13 @@ import {
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
+  CURRENT_USER,
   ORGANIZATION_CONNECTION_LIST,
+  USER_JOINED_ORGANIZATIONS_PG,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import type {
-  InterfaceOrgConnectionInfoType,
+  InterfaceOrgInfoTypePG,
   InterfaceUserType,
 } from 'utils/interfaces';
 
@@ -26,92 +28,24 @@ const adminUser: InterfaceUserType = {
   },
 };
 
-const organizations: InterfaceOrgConnectionInfoType[] = [
+const organizations: InterfaceOrgInfoTypePG[] = [
   {
-    _id: '1',
-    creator: { _id: 'xyz', firstName: 'John', lastName: 'Doe' },
-    image: '',
-    name: 'Palisadoes Foundation',
-    createdAt: '02/02/2022',
-    admins: [
-      {
-        _id: '123',
-      },
-    ],
-    members: [
-      {
-        _id: '234',
-      },
-    ],
-    address: {
-      city: 'Kingston',
-      countryCode: 'JM',
-      dependentLocality: 'Sample Dependent Locality',
-      line1: '123 Jamaica Street',
-      line2: 'Apartment 456',
-      postalCode: 'JM12345',
-      sortingCode: 'ABC-123',
-      state: 'Kingston Parish',
+    id: 'xyz',
+    name: 'Dogs Care',
+    avatarURL: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+    description: 'Dog care center',
+    members: {
+      edges: [],
     },
+    addressLine1: 'Texas, USA',
   },
 ];
-
-for (let x = 0; x < 1; x++) {
-  organizations.push({
-    _id: 'a' + x,
-    image: '',
-    name: 'name',
-    creator: {
-      _id: '123',
-      firstName: 'firstName',
-      lastName: 'lastName',
-    },
-    admins: [
-      {
-        _id: x + '1',
-      },
-    ],
-    members: [
-      {
-        _id: x + '2',
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    address: {
-      city: 'Kingston',
-      countryCode: 'JM',
-      dependentLocality: 'Sample Dependent Locality',
-      line1: '123 Jamaica Street',
-      line2: 'Apartment 456',
-      postalCode: 'JM12345',
-      sortingCode: 'ABC-123',
-      state: 'Kingston Parish',
-    },
-  });
-}
 
 // MOCKS FOR SUPERADMIN
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-      variables: {
-        first: 8,
-        skip: 0,
-        filter: '',
-        orderBy: 'createdAt_ASC',
-      },
-      notifyOnNetworkStatusChange: true,
-    },
-    result: {
-      data: {
-        organizationsConnection: organizations,
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_ORGANIZATION_LIST,
+      query: CURRENT_USER,
       variables: { userId: '123' },
     },
     result: {
@@ -160,11 +94,110 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: '123',
+        first: 8,
+      },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: {
+              hasNextPage: true,
+            },
+            edges: [
+              {
+                node: {
+                  id: 'org1',
+                  name: 'Organization 1',
+                  avatarURL: 'image1.jpg',
+                  addressLine1: 'Address 1',
+                  description: 'Description 1',
+                  members: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'abc',
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                node: {
+                  id: 'org2',
+                  name: 'Organization 2',
+                  avatarURL: 'image2.jpg',
+                  addressLine1: 'Address 2',
+                  description: 'Description 2',
+                  members: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'def',
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: '123',
+        first: 8,
+        skip: 2,
+      },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: {
+              hasNextPage: false,
+            },
+            edges: [
+              {
+                node: {
+                  id: 'org3',
+                  name: 'Organization 3',
+                  avatarURL: 'image3.jpg',
+                  addressLine1: 'Address 3',
+                  description: 'Description 3',
+                  members: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'def',
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
 ];
 const MOCKS_EMPTY = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         first: 8,
         skip: 0,
@@ -181,7 +214,7 @@ const MOCKS_EMPTY = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
+      query: CURRENT_USER,
       variables: { userId: '123' },
     },
     result: {
@@ -192,7 +225,7 @@ const MOCKS_EMPTY = [
 const MOCKS_WITH_ERROR = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         first: 8,
         skip: 0,
@@ -209,7 +242,7 @@ const MOCKS_WITH_ERROR = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
+      query: CURRENT_USER,
       variables: { userId: '123' },
     },
     result: {

@@ -94,13 +94,12 @@ describe('ProfileDropdown Component', () => {
 
     expect(screen.getByTestId('display-name')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('User')).toBeInTheDocument();
     expect(screen.getByTestId('display-type')).toBeInTheDocument();
     expect(screen.getByAltText('profile picture')).toBeInTheDocument();
   });
 
   test('renders Super admin', () => {
-    setItem('SuperAdmin', true);
+    setItem('role', 'API Administrator');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -108,10 +107,10 @@ describe('ProfileDropdown Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(screen.getByText('SuperAdmin')).toBeInTheDocument();
+    expect(screen.getByText('API Administrator')).toBeInTheDocument();
   });
   test('renders Admin', () => {
-    setItem('AdminFor', ['123']);
+    setItem('role', 'administrator');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -119,7 +118,7 @@ describe('ProfileDropdown Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(screen.getByText('Admin')).toBeInTheDocument();
+    expect(screen.getByText('administrator')).toBeInTheDocument();
   });
 
   test('logout functionality clears local storage and redirects to home', async () => {
@@ -142,8 +141,7 @@ describe('ProfileDropdown Component', () => {
 
   describe('Member screen routing testing', () => {
     test('member screen', async () => {
-      setItem('SuperAdmin', false);
-      setItem('AdminFor', []);
+      setItem('role', 'regular');
 
       render(
         <MockedProvider mocks={MOCKS} addTypename={false}>
@@ -168,8 +166,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('navigates to /user/settings for a user', async () => {
-    setItem('SuperAdmin', false);
-    setItem('AdminFor', []);
+    setItem('role', 'regular');
 
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>

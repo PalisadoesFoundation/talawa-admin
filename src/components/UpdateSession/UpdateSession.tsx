@@ -177,18 +177,6 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
                 step={5}
                 min={15}
                 max={60}
-                sx={{
-                  '& .MuiSlider-track': {
-                    backgroundColor: '#1778f2',
-                    border: 'none',
-                  },
-                  '& .MuiSlider-thumb': {
-                    backgroundColor: '#1778f2',
-                  },
-                  '& .MuiSlider-rail': {
-                    backgroundColor: '#E6E6E6',
-                  },
-                }}
                 className={styles.slider}
               />
             </Box>

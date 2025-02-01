@@ -46,6 +46,34 @@ export const ORGANIZATION_LIST = gql`
   }
 `;
 
+export const USER_JOINED_ORGANIZATIONS_PG = gql`
+  query UserJoinedOrganizations($id: String!, $first: Int) {
+    user(input: { id: $id }) {
+      organizationsWhereMember(first: $first) {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            name
+            addressLine1
+            description
+            avatarURL
+            members(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 // Query to take the Organization list with filter  and sort option
 export const ORGANIZATION_CONNECTION_LIST = gql`
   query OrganizationsConnection(
