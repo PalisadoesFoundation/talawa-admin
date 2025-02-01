@@ -6,7 +6,7 @@ interface ActionButtonProps {
   target?: string;
   children: React.ReactNode;
   buttonClassName?: string;
-  ariaLabel?: string;
+  ariaLabel: string;
 }
 
 function ActionButton({

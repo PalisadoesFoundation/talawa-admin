@@ -1,16 +1,14 @@
 import React from 'react';
 import ActionButton from './ActionButton';
 
-interface HomeCallToActionProps {}
-
-const HomeCallToAction: React.FC = () => {
+const HomeCallToAction = () => {
   return (
     <>
       <ActionButton
         type="primary"
         href="/docs"
         buttonClassName="custom-button"
-        aria-label="Learn more about Talawa Admin"
+        ariaLabel="Learn more about Talawa Admin"
       >
         Learn More
       </ActionButton>
