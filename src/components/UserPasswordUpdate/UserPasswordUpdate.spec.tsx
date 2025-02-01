@@ -9,6 +9,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast as mockToast } from 'react-toastify';
 import { MOCKS } from './UserPasswordUpdateMocks';
 import { vi } from 'vitest';
+import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -121,6 +122,12 @@ describe('Testing User Password Update', () => {
   });
 
   it('Successfully update old password', async () => {
+    const mockReload = vi.fn();
+    Object.defineProperty(window, 'location', {
+      value: { reload: mockReload },
+      writable: true,
+    });
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -145,8 +152,18 @@ describe('Testing User Password Update', () => {
     );
 
     userEvent.click(screen.getByText(/Save Changes/i));
-    expect(mockToast.success).toHaveBeenCalledWith(
-      'Password updated Successfully',
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalledWith(
+        'Password updated Successfully',
+      );
+    });
+
+    await waitFor(
+      () => {
+        expect(mockReload).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
     );
   });
 
@@ -181,5 +198,76 @@ describe('Testing User Password Update', () => {
         'ApolloError: Invalid previous password',
       ),
     );
+  });
+
+  it('network error', async () => {
+    // Create a separate MockedProvider for this test with only the network error mock
+    const networkErrorMock = [
+      {
+        request: {
+          query: UPDATE_USER_PASSWORD_MUTATION,
+          variables: {
+            previousPassword: 'NetworkErrorTest',
+            newPassword: 'ThePalisadoesFoundation',
+            confirmNewPassword: 'ThePalisadoesFoundation',
+          },
+        },
+        error: new Error('Network error'),
+      },
+    ];
+
+    render(
+      <MockedProvider addTypename={false} mocks={networkErrorMock}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UserPasswordUpdate id="1" key="123" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Fill in the form with values matching our network error mock
+    userEvent.type(
+      screen.getByPlaceholderText(/Previous Password/i),
+      'NetworkErrorTest',
+    );
+    userEvent.type(
+      screen.getAllByPlaceholderText(/New Password/i)[0],
+      'ThePalisadoesFoundation',
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Confirm New Password/i),
+      'ThePalisadoesFoundation',
+    );
+
+    userEvent.click(screen.getByText(/Save Changes/i));
+
+    await waitFor(
+      () => {
+        expect(mockToast.error).toHaveBeenCalledWith(
+          'ApolloError: Network error',
+        );
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  it('reloads page when cancel button is clicked', async () => {
+    const mockReload = vi.fn();
+    Object.defineProperty(window, 'location', {
+      value: { reload: mockReload },
+      writable: true,
+    });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UserPasswordUpdate id="1" key="123" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    userEvent.click(screen.getByText(/Cancel/i));
+    expect(mockReload).toHaveBeenCalled();
   });
 });
