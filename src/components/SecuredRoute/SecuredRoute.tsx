@@ -18,25 +18,25 @@ const { getItem, setItem } = useLocalStorage();
 const SecuredRoute = (): JSX.Element => {
   const location = useLocation();
   const { data, loading, error, refetch } = useQuery(VERIFY_ROLE, {
-+  skip: !getItem('token'),
+    skip: !getItem('token'),
     context: {
       headers: {
         Authorization: `Bearer ${getItem('token')}`,
       },
     },
   });
-const [token, setToken] = React.useState(getItem('token'));
+  const [token, setToken] = React.useState(getItem('token'));
 
-useEffect(() => {
-  const newToken = getItem('token');
-  if (newToken !== token) {
-    setToken(newToken);
-  }
-}, []);
+  useEffect(() => {
+    const newToken = getItem('token');
+    if (newToken !== token) {
+      setToken(newToken);
+    }
+  }, []);
 
-useEffect(() => {
-  refetch(); // Refetch when token updates
-}, [token]);
+  useEffect(() => {
+    refetch(); // Refetch when token updates
+  }, [token]);
 
   if (loading) {
     return <div> Loading.....</div>;
