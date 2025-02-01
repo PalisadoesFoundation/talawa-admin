@@ -294,7 +294,7 @@ function orgList(): JSX.Element {
   };
 
   const loadMoreOrganizations = (): void => {
-    // if (isLoadingMore || !hasMore) setIsLoadingMore(true);
+    if (!isLoadingMore || hasMore) setIsLoadingMore(true);
     fetchMore({
       variables: {
         skip: orgsData?.edges?.length || 0,

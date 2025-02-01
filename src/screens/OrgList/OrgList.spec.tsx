@@ -136,6 +136,27 @@ describe('Organisations Page testing as SuperAdmin', () => {
     fireEvent.click(searchBtn);
   });
 
+  test('Testing search functionality by with empty search bar', async () => {
+    setItem('id', '123');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const searchBar = screen.getByTestId('searchByName');
+    const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(searchBar, '');
+    fireEvent.click(searchBtn);
+  });
+
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
     setItem('id', '123');
