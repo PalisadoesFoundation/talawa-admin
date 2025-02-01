@@ -1,10 +1,9 @@
 import React from 'react';
-import Section from '../../utils/Section';
 import HomeCallToAction from '../../utils/HomeCallToAction';
 
 function HeaderHero() {
   return (
-    <Section background="light" className="HeaderHero" role="banner">
+    <section className="HeaderHero" role="banner">
       <h1 className="title" id="main-title">
         Talawa
       </h1>
@@ -17,7 +16,7 @@ function HeaderHero() {
       <div className="buttons" role="navigation" aria-label="Quick links">
         <HomeCallToAction />
       </div>
-    </Section>
+    </section>
   );
 }
 
