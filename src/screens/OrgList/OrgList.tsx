@@ -53,6 +53,18 @@ import type { ChangeEvent } from 'react';
  * For more details on the reusable classes, refer to the global CSS file.
  */
 
+interface InterfaceFormStateType {
+  addressLine1: string;
+  addressLine2: string;
+  avatar: string | null;
+  city: string;
+  countryCode: string;
+  description: string;
+  name: string;
+  postalCode: string;
+  state: string;
+}
+
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
@@ -89,7 +101,7 @@ function orgList(): JSX.Element {
   const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<InterfaceFormStateType>({
     addressLine1: '',
     addressLine2: '',
     avatar: null,

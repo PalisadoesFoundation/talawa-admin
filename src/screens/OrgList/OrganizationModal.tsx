@@ -5,6 +5,7 @@ import type { ChangeEvent } from 'react';
 import styles from '../../style/app.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
+
 // import useLocalStorage from 'utils/useLocalstorage';
 
 /**
@@ -34,7 +35,7 @@ import { countryOptions } from 'utils/formEnumFields';
 interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
-  avatar: string;
+  avatar: string | null;
   city: string;
   countryCode: string;
   description: string;
@@ -277,7 +278,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               if (file)
                 setFormState({
                   ...formState,
-                  avatar: await convertToBase64(file),
+                  avatar: (await convertToBase64(file)) || null,
                 });
             }}
             data-testid="organisationImage"
