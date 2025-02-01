@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { checkEnvFile } from './checkEnvFile';
+import { checkEnvFile, modifyEnvFile } from './checkEnvFile';
 import { vi } from 'vitest';
 
 /**
- * This file contains unit tests for the `checkEnvFile` function.
+ * This file contains unit tests for the `modifyEnvFile` function.
  *
  * The tests cover:
  * - Behavior when the `.env` file is missing required keys and appending them appropriately.
@@ -14,7 +14,7 @@ import { vi } from 'vitest';
 
 vi.mock('fs');
 
-describe('checkEnvFile', () => {
+describe('modifyEnvFile', () => {
   beforeEach(() => {
     vi.resetAllMocks();
   });
@@ -31,7 +31,7 @@ describe('checkEnvFile', () => {
 
     vi.spyOn(fs, 'appendFileSync');
 
-    checkEnvFile();
+    modifyEnvFile();
 
     expect(fs.appendFileSync).toHaveBeenCalledWith(
       '.env',
@@ -49,8 +49,52 @@ describe('checkEnvFile', () => {
 
     vi.spyOn(fs, 'appendFileSync');
 
-    checkEnvFile();
+    modifyEnvFile();
 
     expect(fs.appendFileSync).not.toHaveBeenCalled();
+  });
+});
+
+describe('checkEnvFile', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it('should return true if .env file already exists', () => {
+    vi.spyOn(fs, 'existsSync').mockImplementation((file) => file === '.env');
+
+    const result = checkEnvFile();
+
+    expect(result).toBe(true);
+  });
+
+  it('should create .env if it does not exist but .env.example exists', () => {
+    vi.spyOn(fs, 'existsSync').mockImplementation(
+      (file) => file === '.env.example',
+    );
+
+    const writeFileSyncMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    const result = checkEnvFile();
+
+    expect(writeFileSyncMock).toHaveBeenCalledWith('.env', '', 'utf8');
+    expect(result).toBe(true);
+  });
+
+  it('should return false and log an error if .env and .env.example do not exist', () => {
+    vi.spyOn(fs, 'existsSync').mockImplementation(() => false);
+    const consoleErrorMock = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const result = checkEnvFile();
+
+    expect(consoleErrorMock).toHaveBeenCalledWith(
+      'Setup requires .env.example to proceed.\n',
+    );
+    expect(result).toBe(false);
+    expect(fs.writeFileSync).not.toHaveBeenCalled();
   });
 });

@@ -202,21 +202,21 @@ Add a custom port number for Talawa-Admin development purposes to the variable n
 Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
 
 ```
-REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
+REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql"
 
 ```
 
 If you are a software developer working on your local system, then the URL would be:
 
 ```
-REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
+REACT_APP_TALAWA_URL="http://localhost:4000/graphql"
 
 ```
 
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
-REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
+REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql"
 
 ```
 
@@ -225,21 +225,21 @@ REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
 The endpoint for accessing talawa-api WebSocket graphql service for handling subscriptions is automatically added to the variable named `REACT_APP_BACKEND_WEBSOCKET_URL` in the `.env` file.
 
 ```
-REACT_APP_BACKEND_WEBSOCKET_URL="ws://API-IP-ADRESS:4000/graphql/"
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://API-IP-ADRESS:4000/graphql"
 
 ```
 
 If you are a software developer working on your local system, then the URL would be:
 
 ```
-REACT_APP_BACKEND_WEBSOCKET_URL="ws://localhost:4000/graphql/"
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://localhost:4000/graphql"
 
 ```
 
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
-REACT_APP_BACKEND_WEBSOCKET_URL="ws://YOUR-REMOTE-ADDRESS:4000/graphql/"
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://YOUR-REMOTE-ADDRESS:4000/graphql"
 
 ```
 

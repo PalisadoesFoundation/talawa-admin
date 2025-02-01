@@ -33,7 +33,7 @@ describe('WebSocket URL Configuration', () => {
 
   test('should retain default WebSocket URL if no new endpoint is provided', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      endpoint: 'http://localhost:4000/graphql/',
+      endpoint: 'http://localhost:4000/graphql',
     });
     await askForTalawaApiUrl();
 
