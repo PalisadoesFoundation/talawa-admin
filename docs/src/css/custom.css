@@ -671,7 +671,7 @@ a:hover {
   line-height: 1.3;
   font-weight: 500;
   margin-top: -7px;
-  opacity: 1.1;
+  opacity: 1;
   left: -250px;
 }
 
@@ -679,7 +679,7 @@ a:hover {
   font-size: 1.2rem;
   line-height: 1.3;
   color: var(--primary-neutral-800);
-  opacity: 1.1;
+  opacity: 1;
   text-align: center;
 }
 
@@ -704,7 +704,7 @@ a:hover {
   color: var(--base-neutral-0);
   background-color: var(--ifm-button-background-color);
   border: var(--ifm-button-border-width) solid var(--ifm-button-border-color);
-  text-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .ActionButton.primary:hover {
