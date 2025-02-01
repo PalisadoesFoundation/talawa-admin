@@ -201,7 +201,6 @@ describe('Testing User Password Update', () => {
   });
 
   it('network error', async () => {
-    // Create a separate MockedProvider for this test with only the network error mock
     const networkErrorMock = [
       {
         request: {
@@ -224,9 +223,6 @@ describe('Testing User Password Update', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Fill in the form with values matching our network error mock
     userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
       'NetworkErrorTest',
