@@ -25,9 +25,18 @@ const SecuredRoute = (): JSX.Element => {
       },
     },
   });
-  useEffect(() => {
-    refetch(); // Refetch when token updates
-  }, [getItem('token')]);
+const [token, setToken] = React.useState(getItem('token'));
+
+useEffect(() => {
+  const newToken = getItem('token');
+  if (newToken !== token) {
+    setToken(newToken);
+  }
+}, []);
+
+useEffect(() => {
+  refetch(); // Refetch when token updates
+}, [token]);
 
   if (loading) {
     return <div> Loading.....</div>;
