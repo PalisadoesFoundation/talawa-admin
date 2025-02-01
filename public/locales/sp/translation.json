@@ -147,7 +147,7 @@
     "createOrganization": "Crear organización",
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
-		"addressLine1": "Dirección Línea 1",
+    "addressLine1": "Dirección Línea 1",
     "addressLine2": "Dirección Línea 2",
     "location": "Ubicación",
     "address": "Dirección",

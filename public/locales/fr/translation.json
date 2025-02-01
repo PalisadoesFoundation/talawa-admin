@@ -146,7 +146,7 @@
     "city": "Ville",
     "countryCode": "Code postal",
     "dependentLocality": "Localité dépendante",
-		"addressLine1": "Adresse Ligne 1",
+    "addressLine1": "Adresse Ligne 1",
     "addressLine2": "Adresse Ligne 2",
     "line1": "Ligne 1",
     "line2": "Ligne 2",
