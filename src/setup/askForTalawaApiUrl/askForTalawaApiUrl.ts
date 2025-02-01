@@ -9,5 +9,8 @@ export async function askForTalawaApiUrl(): Promise<string> {
       default: 'http://localhost:4000/graphql',
     },
   ]);
-  return endpoint;
+
+  const correctEndpoint = endpoint.replace(/\/graphql\/$/, '/graphql');
+
+  return correctEndpoint;
 }
