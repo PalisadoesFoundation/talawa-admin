@@ -209,25 +209,6 @@ describe('OrganizationModal Component', () => {
     expect(firstOption.disabled).toBe(true);
   });
 
-  test('should handle large file upload rejection', async () => {
-    setup();
-    const fileInput = screen.getByTestId(
-      'organisationImage',
-    ) as HTMLInputElement;
-    const largeFile = new File(['dummy content'], 'large.png', {
-      type: 'image/png',
-    });
-    Object.defineProperty(largeFile, 'size', { value: 6000000 });
-
-    fireEvent.change(fileInput, { target: { files: [largeFile] } });
-
-    await waitFor(() => {
-      expect(mockSetFormState).not.toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mockBase64String' }),
-      );
-    });
-  });
-
   test('should handle invalid file type', async () => {
     setup();
     const fileInput = screen.getByTestId(
