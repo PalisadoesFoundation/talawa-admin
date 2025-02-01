@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { VERIFY_ROLE } from 'GraphQl/Queries/Queries';
 import React, { useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -16,6 +16,7 @@ const { getItem, setItem } = useLocalStorage();
  * @returns The JSX element representing the secured route.
  */
 const SecuredRoute = (): JSX.Element => {
+  const location = useLocation();
   const { data, loading, error, refetch } = useQuery(VERIFY_ROLE, {
     context: {
       headers: {
