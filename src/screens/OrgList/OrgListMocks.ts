@@ -152,6 +152,47 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: '123',
+        first: 8,
+        skip: 2,
+      },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: {
+              hasNextPage: false,
+            },
+            edges: [
+              {
+                node: {
+                  id: 'org3',
+                  name: 'Organization 3',
+                  avatarURL: 'image3.jpg',
+                  addressLine1: 'Address 3',
+                  description: 'Description 3',
+                  members: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'def',
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
 ];
 const MOCKS_EMPTY = [
   {

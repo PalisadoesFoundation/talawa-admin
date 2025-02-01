@@ -199,6 +199,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // Wait for initial organizations to load
     expect(await screen.findByText('Organization 1')).toBeInTheDocument();
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
+
+    fireEvent.scroll(window, { target: { scrollY: 1000 } });
   });
 
   // test('Testing create organization modal', async () => {

@@ -15,7 +15,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceOrgConnectionInfoTypePG,
-  InterfaceOrgConnectionTypePG,
   InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -300,30 +299,23 @@ function orgList(): JSX.Element {
       variables: {
         skip: orgsData?.edges?.length || 0,
       },
-      updateQuery: (
-        prev:
-          | { organizationsConnection: InterfaceOrgConnectionTypePG[] }
-          | undefined,
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult:
-            | { organizationsConnection: InterfaceOrgConnectionTypePG[] }
-            | undefined;
-        },
-      ):
-        | { organizationsConnection: InterfaceOrgConnectionTypePG[] }
-        | undefined => {
+      updateQuery: (prev, { fetchMoreResult }) => {
         setIsLoadingMore(false);
-        if (!fetchMoreResult) return prev;
-        if (fetchMoreResult.organizationsConnection.length < perPageResult) {
-          sethasMore(false);
+
+        if (!fetchMoreResult || !fetchMoreResult.user) {
+          return prev; // Prevents breaking the UI
         }
+
         return {
-          organizationsConnection: [
-            ...(prev?.organizationsConnection || []),
-            ...(fetchMoreResult.organizationsConnection || []),
-          ],
+          user: {
+            organizationsWhereMember: {
+              pageInfo: fetchMoreResult.user.organizationsWhereMember.pageInfo,
+              edges: [
+                ...(prev?.user.organizationsWhereMember.edges || []),
+                ...fetchMoreResult.user.organizationsWhereMember.edges,
+              ],
+            },
+          },
         };
       },
     });
