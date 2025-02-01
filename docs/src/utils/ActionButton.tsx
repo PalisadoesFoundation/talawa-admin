@@ -19,7 +19,7 @@ function ActionButton({
 }: ActionButtonProps) {
   return (
     <a
-    className={`ActionButton ${type}${buttonClassName ? ` ${buttonClassName}` : ''}`}
+      className={`ActionButton ${type}${buttonClassName ? ` ${buttonClassName}` : ''}`}
       rel={target === '_blank' ? 'noopener noreferrer' : undefined}
       href={href}
       target={target}
