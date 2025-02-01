@@ -981,7 +981,8 @@
   },
   "people": {
     "title": "Gente",
-    "searchUsers": "Buscar usuarios"
+    "searchUsers": "Buscar usuarios",
+    "nothingToShow": "Nada que mostrar aquí."
   },
   "userRegister": {
     "register": "Registro",

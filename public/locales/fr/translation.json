@@ -966,7 +966,8 @@
   },
   "people": {
     "title": "Personnes",
-    "searchUsers": "Rechercher des utilisateurs"
+    "searchUsers": "Rechercher des utilisateurs",
+    "nothingToShow": "Rien à afficher ici."
   },
   "userLogin": {
     "login": "Se connecter",

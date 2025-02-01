@@ -980,7 +980,8 @@
   },
   "people": {
     "title": "人们",
-    "searchUsers": "搜索用户"
+    "searchUsers": "搜索用户",
+    "nothingToShow": "这里没有可显示的内容。"
   },
   "userRegister": {
     "enterFirstName": "输入您的名字",
