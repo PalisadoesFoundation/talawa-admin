@@ -52,6 +52,10 @@ const MOCKS = [
             mobile: '+8912313112',
           },
         },
+        verifyRole: {
+          isAuthorized: false, // Ensure this field exists
+          role: 'user', // Adjust this based on the expected role
+        },
       },
     },
   },
