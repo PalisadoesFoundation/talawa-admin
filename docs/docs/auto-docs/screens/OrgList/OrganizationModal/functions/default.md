@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrgList/OrganizationModal.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrganizationModal.tsx#L64)
+Defined in: [src/screens/OrgList/OrganizationModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrganizationModal.tsx#L65)
 
 Represents the organization modal component.
 
