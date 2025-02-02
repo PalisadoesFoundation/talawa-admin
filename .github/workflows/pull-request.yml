@@ -412,6 +412,17 @@ jobs:
           echo "Starting Docker container for production..."
           docker compose -f docker-compose.prod.yaml up -d
           echo "Production Docker container started successfully"
+      
+      - name: Check if Talawa Admin App is running (Production)
+        run: |
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
+
+      - name: Stop prod Docker Containers
+        if: always()
+        run: |
+          docker compose -f docker-compose.prod.yaml down
+          echo "Prod Docker container stopped and removed"
 
       - name: Run Docker Containers (Development)
         run: |
@@ -420,22 +431,16 @@ jobs:
           docker compose -f docker-compose.dev.yaml up -d
           echo "Development Docker container started successfully"
 
-      - name: Check if Talawa Admin App is running (Production)
-        run: |
-          chmod +x .github/workflows/scripts/app_health_check.sh
-          .github/workflows/scripts/app_health_check.sh 4321 120 true
-
       - name: Check if Talawa Admin App is running (Development)
         run: |
           chmod +x .github/workflows/scripts/app_health_check.sh
           .github/workflows/scripts/app_health_check.sh 4321 120 true
 
-      - name: Stop Docker Containers
+      - name: Stop dev Docker Containers
         if: always()
         run: |
-          docker compose -f docker-compose.prod.yaml down
           docker compose -f docker-compose.dev.yaml down
-          echo "Docker containers stopped and removed"
+          echo "Dev Docker containers stopped and removed"
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
