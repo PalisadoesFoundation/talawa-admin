@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx#L63)
+Defined in: [src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx#L74)
 
 ## Parameters
 

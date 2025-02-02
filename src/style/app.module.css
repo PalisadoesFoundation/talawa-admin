@@ -150,10 +150,12 @@
 
   /* Font Sizes */
   --font-size-header: 16px;
+  --font-size-table-body: 14px;
 
   /* Borders and Radius */
   --primary-border-solid: 1px solid var(--dropdown-border-color);
   --table-head-radius: 20px;
+  --table-row-border: 0;
 
   /* Loader Sizes */
   --loader-size: 10em;
@@ -372,6 +374,7 @@
   --createButtonEventHeader-border: var(--dark-grey);
   --createButtonEventHeader-hover-color: var(--black-color);
   --createButtonEventHeader-boxshadow: rgba(0, 0, 0, 0.3);
+  --slider-rail-bg: #e6e6e6;
 }
 
 .fonts {
@@ -905,6 +908,15 @@
 
 .slider .MuiSlider-track {
   background-color: var(--slider-bg) !important;
+  border: none;
+}
+
+.slider .MuiSlider-thumb {
+  background-color: var(--slider-bg) !important;
+}
+
+.slider .MuiSlider-rail {
+  background-color: var(--slider-rail-bg) !important;
 }
 
 .removeButton {

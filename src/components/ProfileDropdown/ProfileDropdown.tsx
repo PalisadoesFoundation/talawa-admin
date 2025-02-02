@@ -26,13 +26,7 @@ const profileDropdown = (): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
-  const userRole = superAdmin
-    ? 'SuperAdmin'
-    : adminFor?.length > 0
-      ? 'Admin'
-      : 'User';
+  const userRole = getItem('role');
   const name = getItem('name') || '';
   const userImage = getItem('UserImage');
   const navigate = useNavigate();
@@ -95,7 +89,7 @@ const profileDropdown = (): JSX.Element => {
         <Dropdown.Item
           data-testid="profileBtn"
           onClick={() =>
-            userRole === 'User'
+            userRole === 'regular'
               ? navigate(`/user/settings`)
               : navigate(`/member/${orgId || ''}`)
           }

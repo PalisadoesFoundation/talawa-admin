@@ -6,4 +6,4 @@
 
 > `const` **DELETE\_EVENT\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L283)
+Defined in: [src/GraphQl/Mutations/mutations.ts:333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L333)
