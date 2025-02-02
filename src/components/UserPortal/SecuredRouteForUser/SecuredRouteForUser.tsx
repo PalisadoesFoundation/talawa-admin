@@ -35,7 +35,7 @@ const SecuredRouteForUser = (): JSX.Element => {
     const isLoggedIn = data.verifyRole.isAuthorized;
     const role = data.verifyRole.role;
     if (isLoggedIn) {
-      if (role == 'user') {
+      if (role == 'user' || role == 'admin' || role == 'superAdmin') {
         return <Outlet />;
       } else {
         return <PageNotFound />;
