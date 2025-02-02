@@ -290,33 +290,34 @@ jobs:
       - name: resolve dependency
         run: npm install -g @graphql-inspector/cli@latest
       
-      - name: Clone API Repository
-        env:
-          BASE_REF: ${{ github.event.pull_request.base.ref }}
-        run: |
-          # Retrieve the complete branch name directly from the GitHub context
-          FULL_BRANCH_NAME="$BASE_REF"
-          echo "FULL_BRANCH_NAME: $FULL_BRANCH_NAME"
-          # Clone the specified repository using the extracted branch name
-          if ! git ls-remote --heads https://github.com/PalisadoesFoundation/talawa-api.git $FULL_BRANCH_NAME | grep -q .; then
-            echo "Error: Branch '$FULL_BRANCH_NAME' does not exist in talawa-api repository"
-            echo "Please ensure the branch exists and you have the correct permissions"
-            exit 1
-          fi
-          if ! git clone --branch $FULL_BRANCH_NAME --depth 1 https://github.com/PalisadoesFoundation/talawa-api; then
-            echo "Error: Failed to clone talawa-api repository from branch '$FULL_BRANCH_NAME'"
-            echo "This could be due to network issues or repository permissions"
-            exit 1
-          fi
-          # Verify clone was successful
-          if [ ! -d "talawa-api" ]; then
-            echo "Error: talawa-api directory not found after clone"
-            exit 1
-          fi
+      # Using local schema.graphql file instead of cloning from API repository
+      # - name: Clone API Repository
+      #   env:
+      #     BASE_REF: ${{ github.event.pull_request.base.ref }}
+      #   run: |
+      #     # Retrieve the complete branch name directly from the GitHub context
+      #     FULL_BRANCH_NAME="$BASE_REF"
+      #     echo "FULL_BRANCH_NAME: $FULL_BRANCH_NAME"
+      #     # Clone the specified repository using the extracted branch name
+      #     if ! git ls-remote --heads https://github.com/PalisadoesFoundation/talawa-api.git $FULL_BRANCH_NAME | grep -q .; then
+      #       echo "Error: Branch '$FULL_BRANCH_NAME' does not exist in talawa-api repository"
+      #       echo "Please ensure the branch exists and you have the correct permissions"
+      #       exit 1
+      #     fi
+      #     if ! git clone --branch $FULL_BRANCH_NAME --depth 1 https://github.com/PalisadoesFoundation/talawa-api; then
+      #       echo "Error: Failed to clone talawa-api repository from branch '$FULL_BRANCH_NAME'"
+      #       echo "This could be due to network issues or repository permissions"
+      #       exit 1
+      #     fi
+      #     # Verify clone was successful
+      #     if [ ! -d "talawa-api" ]; then
+      #       echo "Error: talawa-api directory not found after clone"
+      #       exit 1
+      #     fi
 
       - name: Validate Documents
         run: |
-          if [ ! -f './talawa-api/schema.graphql' ]; then
+          if [ ! -f './schema.graphql' ]; then
             echo "Error: schema.graphql not found in talawa-api"
             exit 1
           fi
@@ -327,7 +328,7 @@ jobs:
           fi
           echo "Found GraphQL files:"
           echo "$GRAPHQL_FILES"
-          graphql-inspector validate './src/GraphQl/**/*.{ts,tsx}' './talawa-api/schema.graphql'
+          graphql-inspector validate './src/GraphQl/**/*.{ts,tsx}' './schema.graphql'
 
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
