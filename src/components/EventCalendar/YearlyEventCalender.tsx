@@ -140,7 +140,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const data: InterfaceEventListCardProps[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
     // Hard to test all the cases
-    /* istanbul ignore next */
     if (userRole === Role.ADMIN) {
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);
@@ -218,7 +217,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           currentDate.getFullYear(),
           currentDate.getMonth(),
           currentDate.getDate() + 1,
-        );
+        )
       }
 
       const renderedDays = days.map((date, dayIndex) => {
@@ -227,6 +226,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             ? styles.day__today
             : '',
           date.getMonth() !== monthInx ? styles.day__outside : '',
+          /* istanbul ignore next */
           selectedDate?.getTime() === date.getTime()
             ? styles.day__selected
             : '',
