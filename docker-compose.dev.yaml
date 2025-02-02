@@ -2,12 +2,13 @@ services:
   app:
     build:
       context: .
+      dockerfile: Dockerfile.dev
     ports:
-      - '${PORT:-4321}:4321'
+      - '${PORT}:4321'
     environment:
-      - REACT_APP_TALAWA_URL=${REACT_APP_DOCKER_TALAWA_URL}
+      - REACT_APP_TALAWA_URL=${REACT_APP_TALAWA_URL}
       - REACT_APP_BACKEND_WEBSOCKET_URL=${REACT_APP_BACKEND_WEBSOCKET_URL}
-      - PORT=${PORT:-4321}
+      - PORT=${PORT}
       - REACT_APP_USE_RECAPTCHA=${REACT_APP_USE_RECAPTCHA}
       - REACT_APP_RECAPTCHA_SITE_KEY=${REACT_APP_RECAPTCHA_SITE_KEY}
     volumes:
