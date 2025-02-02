@@ -8,5 +8,13 @@ fix-repo-url.js
 # Ignore the Docusaurus website subdirectory
 docs/**
 
-#Ignore markdown files from linting
+# Ignore markdown files from linting
 *.md
+
+# Ignore dockerfile and related configs
+docker-compose.prod.yaml
+docker-compose.dev.yaml
+Dockerfile.prod
+Dockerfile.dev
+nginx.conf
+nginx.prod.conf
