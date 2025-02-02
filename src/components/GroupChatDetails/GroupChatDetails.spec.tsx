@@ -595,4 +595,23 @@ describe('GroupChatDetails', () => {
 
     fireEvent.change(fileInput);
   });
+
+  it('renders chat name correctly', async () => {
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={mockChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await wait();
+
+    expect(screen.getByText('Test Group')).toBeInTheDocument();
+  });
 });
