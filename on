@@ -1,0 +1,414 @@
+[1mdiff --git a/package-lock.json b/package-lock.json[m
+[1mindex 3b7c816..3cc80d8 100644[m
+[1m--- a/package-lock.json[m
+[1m+++ b/package-lock.json[m
+[36m@@ -27,7 +27,7 @@[m
+         "@pdfme/generator": "^5.2.3",[m
+         "@pdfme/schemas": "^5.1.6",[m
+         "@reduxjs/toolkit": "^2.3.0",[m
+[31m-        "@vitejs/plugin-react": "^4.3.3",[m
+[32m+[m[32m        "@vitejs/plugin-react": "^4.3.4",[m
+         "babel-plugin-transform-import-meta": "^2.2.1",[m
+         "bootstrap": "^5.3.3",[m
+         "chart.js": "^4.4.6",[m
+[36m@@ -69,7 +69,7 @@[m
+         "typedoc": "^0.26.10",[m
+         "typedoc-plugin-markdown": "^4.2.10",[m
+         "typescript": "^5.6.3",[m
+[31m-        "vite": "^5.4.8",[m
+[32m+[m[32m        "vite": "^6.0.11",[m
+         "vite-plugin-environment": "^1.1.3",[m
+         "vite-plugin-node-polyfills": "^0.22.0",[m
+         "vite-tsconfig-paths": "^5.1.3",[m
+[36m@@ -369,28 +369,30 @@[m
+       }[m
+     },[m
+     "node_modules/@babel/compat-data": {[m
+[31m-      "version": "7.26.2",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.26.2.tgz",[m
+[31m-      "integrity": "sha512-Z0WgzSEa+aUcdiJuCIqgujCshpMWgUpgOxXotrYPSA53hA3qopNaqcJpyr0hVb1FeWdnqFA35/fUtXgBK8srQg==",[m
+[32m+[m[32m      "version": "7.26.5",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.26.5.tgz",[m
+[32m+[m[32m      "integrity": "sha512-XvcZi1KWf88RVbF9wn8MN6tYFloU5qX8KjuF3E1PVBmJ9eypXfs4GRiJwLuTZL0iSnJUKn1BFPa5BPZZJyFzPg==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "engines": {[m
+         "node": ">=6.9.0"[m
+       }[m
+     },[m
+     "node_modules/@babel/core": {[m
+[31m-      "version": "7.25.2",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/core/-/core-7.25.2.tgz",[m
+[31m-      "integrity": "sha512-BBt3opiCOxUr9euZ5/ro/Xv8/V7yJ5bjYMqG/C1YAo8MIKAnumZalCN+msbci3Pigy4lIQfPUpfMM27HMGaYEA==",[m
+[32m+[m[32m      "version": "7.26.7",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/core/-/core-7.26.7.tgz",[m
+[32m+[m[32m      "integrity": "sha512-SRijHmF0PSPgLIBYlWnG0hyeJLwXE2CgpsXaMOrtt2yp9/86ALw6oUlj9KYuZ0JN07T4eBMVIW4li/9S1j2BGA==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+         "@ampproject/remapping": "^2.2.0",[m
+[31m-        "@babel/code-frame": "^7.24.7",[m
+[31m-        "@babel/generator": "^7.25.0",[m
+[31m-        "@babel/helper-compilation-targets": "^7.25.2",[m
+[31m-        "@babel/helper-module-transforms": "^7.25.2",[m
+[31m-        "@babel/helpers": "^7.25.0",[m
+[31m-        "@babel/parser": "^7.25.0",[m
+[31m-        "@babel/template": "^7.25.0",[m
+[31m-        "@babel/traverse": "^7.25.2",[m
+[31m-        "@babel/types": "^7.25.2",[m
+[32m+[m[32m        "@babel/code-frame": "^7.26.2",[m
+[32m+[m[32m        "@babel/generator": "^7.26.5",[m
+[32m+[m[32m        "@babel/helper-compilation-targets": "^7.26.5",[m
+[32m+[m[32m        "@babel/helper-module-transforms": "^7.26.0",[m
+[32m+[m[32m        "@babel/helpers": "^7.26.7",[m
+[32m+[m[32m        "@babel/parser": "^7.26.7",[m
+[32m+[m[32m        "@babel/template": "^7.25.9",[m
+[32m+[m[32m        "@babel/traverse": "^7.26.7",[m
+[32m+[m[32m        "@babel/types": "^7.26.7",[m
+         "convert-source-map": "^2.0.0",[m
+         "debug": "^4.1.0",[m
+         "gensync": "^1.0.0-beta.2",[m
+[36m@@ -419,12 +421,13 @@[m
+       }[m
+     },[m
+     "node_modules/@babel/generator": {[m
+[31m-      "version": "7.26.2",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/generator/-/generator-7.26.2.tgz",[m
+[31m-      "integrity": "sha512-zevQbhbau95nkoxSq3f/DC/SC+EEOUZd3DYqfSkMhY2/wfSeaHV1Ew4vk8e+x8lja31IbyuUa2uQ3JONqKbysw==",[m
+[32m+[m[32m      "version": "7.26.5",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/generator/-/generator-7.26.5.tgz",[m
+[32m+[m[32m      "integrity": "sha512-2caSP6fN9I7HOe6nqhtft7V4g7/V/gfDsC3Ag4W7kEzzvRGKqiv0pu0HogPiZ3KaVSoNDhUws6IJjDjpfmYIXw==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+[31m-        "@babel/parser": "^7.26.2",[m
+[31m-        "@babel/types": "^7.26.0",[m
+[32m+[m[32m        "@babel/parser": "^7.26.5",[m
+[32m+[m[32m        "@babel/types": "^7.26.5",[m
+         "@jridgewell/gen-mapping": "^0.3.5",[m
+         "@jridgewell/trace-mapping": "^0.3.25",[m
+         "jsesc": "^3.0.2"[m
+[36m@@ -459,11 +462,12 @@[m
+       }[m
+     },[m
+     "node_modules/@babel/helper-compilation-targets": {[m
+[31m-      "version": "7.25.9",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/helper-compilation-targets/-/helper-compilation-targets-7.25.9.tgz",[m
+[31m-      "integrity": "sha512-j9Db8Suy6yV/VHa4qzrj9yZfZxhLWQdVnRlXxmKLYlhWUVB1sB2G5sxuWYXk/whHD9iW76PmNzxZ4UCnTQTVEQ==",[m
+[32m+[m[32m      "version": "7.26.5",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/helper-compilation-targets/-/helper-compilation-targets-7.26.5.tgz",[m
+[32m+[m[32m      "integrity": "sha512-IXuyn5EkouFJscIDuFF5EsiSolseme1s0CZB+QxVugqJLYmKdxI1VfIBOst0SUu4rnk2Z7kqTwmoO1lp3HIfnA==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+[31m-        "@babel/compat-data": "^7.25.9",[m
+[32m+[m[32m        "@babel/compat-data": "^7.26.5",[m
+         "@babel/helper-validator-option": "^7.25.9",[m
+         "browserslist": "^4.24.0",[m
+         "lru-cache": "^5.1.1",[m
+[36m@@ -713,23 +717,25 @@[m
+       }[m
+     },[m
+     "node_modules/@babel/helpers": {[m
+[31m-      "version": "7.25.6",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/helpers/-/helpers-7.25.6.tgz",[m
+[31m-      "integrity": "sha512-Xg0tn4HcfTijTwfDwYlvVCl43V6h4KyVVX2aEm4qdO/PC6L2YvzLHFdmxhoeSA3eslcE6+ZVXHgWwopXYLNq4Q==",[m
+[32m+[m[32m      "version": "7.26.7",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/helpers/-/helpers-7.26.7.tgz",[m
+[32m+[m[32m      "integrity": "sha512-8NHiL98vsi0mbPQmYAGWwfcFaOy4j2HY49fXJCfuDcdE7fMIsH9a7GdaeXpIBsbT7307WU8KCMp5pUVDNL4f9A==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+[31m-        "@babel/template": "^7.25.0",[m
+[31m-        "@babel/types": "^7.25.6"[m
+[32m+[m[32m        "@babel/template": "^7.25.9",[m
+[32m+[m[32m        "@babel/types": "^7.26.7"[m
+       },[m
+       "engines": {[m
+         "node": ">=6.9.0"[m
+       }[m
+     },[m
+     "node_modules/@babel/parser": {[m
+[31m-      "version": "7.26.2",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/parser/-/parser-7.26.2.tgz",[m
+[31m-      "integrity": "sha512-DWMCZH9WA4Maitz2q21SRKHo9QXZxkDsbNZoVD62gusNtNBBqDg9i7uOhASfTfIGNzW+O+r7+jAlM8dwphcJKQ==",[m
+[32m+[m[32m      "version": "7.26.7",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/parser/-/parser-7.26.7.tgz",[m
+[32m+[m[32m      "integrity": "sha512-kEvgGGgEjRUutvdVvZhbn/BxVt+5VSpwXz1j3WYXQbXDo8KzFOPNG2GQbdAiNq8g6wn1yKk7C/qrke03a84V+w==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+[31m-        "@babel/types": "^7.26.0"[m
+[32m+[m[32m        "@babel/types": "^7.26.7"[m
+       },[m
+       "bin": {[m
+         "parser": "bin/babel-parser.js"[m
+[36m@@ -1729,11 +1735,12 @@[m
+       }[m
+     },[m
+     "node_modules/@babel/plugin-transform-react-jsx-self": {[m
+[31m-      "version": "7.24.7",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-self/-/plugin-transform-react-jsx-self-7.24.7.tgz",[m
+[31m-      "integrity": "sha512-fOPQYbGSgH0HUp4UJO4sMBFjY6DuWq+2i8rixyUMb3CdGixs/gccURvYOAhajBdKDoGajFr3mUq5rH3phtkGzw==",[m
+[32m+[m[32m      "version": "7.25.9",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-self/-/plugin-transform-react-jsx-self-7.25.9.tgz",[m
+[32m+[m[32m      "integrity": "sha512-y8quW6p0WHkEhmErnfe58r7x0A70uKphQm8Sp8cV7tjNQwK56sNVK0M73LK3WuYmsuyrftut4xAkjjgU0twaMg==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+[31m-        "@babel/helper-plugin-utils": "^7.24.7"[m
+[32m+[m[32m        "@babel/helper-plugin-utils": "^7.25.9"[m
+       },[m
+       "engines": {[m
+         "node": ">=6.9.0"[m
+[36m@@ -1743,11 +1750,12 @@[m
+       }[m
+     },[m
+     "node_modules/@babel/plugin-transform-react-jsx-source": {[m
+[31m-      "version": "7.24.7",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-source/-/plugin-transform-react-jsx-source-7.24.7.tgz",[m
+[31m-      "integrity": "sha512-J2z+MWzZHVOemyLweMqngXrgGC42jQ//R0KdxqkIz/OrbVIIlhFI3WigZ5fO+nwFvBlncr4MGapd8vTyc7RPNQ==",[m
+[32m+[m[32m      "version": "7.25.9",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-source/-/plugin-transform-react-jsx-source-7.25.9.tgz",[m
+[32m+[m[32m      "integrity": "sha512-+iqjT8xmXhhYv4/uiYd8FNQsraMFZIfxVSqxxVSZP0WbbSAWvBXAul0m/zu+7Vv4O/3WtApy9pmaTMiumEZgfg==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+[31m-        "@babel/helper-plugin-utils": "^7.24.7"[m
+[32m+[m[32m        "@babel/helper-plugin-utils": "^7.25.9"[m
+       },[m
+       "engines": {[m
+         "node": ">=6.9.0"[m
+[36m@@ -2166,15 +2174,16 @@[m
+       }[m
+     },[m
+     "node_modules/@babel/traverse": {[m
+[31m-      "version": "7.25.9",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/traverse/-/traverse-7.25.9.tgz",[m
+[31m-      "integrity": "sha512-ZCuvfwOwlz/bawvAuvcj8rrithP2/N55Tzz342AkTvq4qaWbGfmCk/tKhNaV2cthijKrPAA8SRJV5WWe7IBMJw==",[m
+[32m+[m[32m      "version": "7.26.7",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/traverse/-/traverse-7.26.7.tgz",[m
+[32m+[m[32m      "integrity": "sha512-1x1sgeyRLC3r5fQOM0/xtQKsYjyxmFjaOrLJNtZ81inNjyJHGIolTULPiSc/2qe1/qfpFLisLQYFnnZl7QoedA==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+[31m-        "@babel/code-frame": "^7.25.9",[m
+[31m-        "@babel/generator": "^7.25.9",[m
+[31m-        "@babel/parser": "^7.25.9",[m
+[32m+[m[32m        "@babel/code-frame": "^7.26.2",[m
+[32m+[m[32m        "@babel/generator": "^7.26.5",[m
+[32m+[m[32m        "@babel/parser": "^7.26.7",[m
+         "@babel/template": "^7.25.9",[m
+[31m-        "@babel/types": "^7.25.9",[m
+[32m+[m[32m        "@babel/types": "^7.26.7",[m
+         "debug": "^4.3.1",[m
+         "globals": "^11.1.0"[m
+       },[m
+[36m@@ -2183,9 +2192,10 @@[m
+       }[m
+     },[m
+     "node_modules/@babel/types": {[m
+[31m-      "version": "7.26.0",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.26.0.tgz",[m
+[31m-      "integrity": "sha512-Z/yiTPj+lDVnF7lWeKCIJzaIkI0vYO87dMpZ4bg4TDrFe4XXLFWL1TbXU27gBP3QccxV9mZICCrnjnYlJjXHOA==",[m
+[32m+[m[32m      "version": "7.26.7",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.26.7.tgz",[m
+[32m+[m[32m      "integrity": "sha512-t8kDRGrKXyp6+tjUh7hw2RLyclsW4TRoRvRHtSyAX9Bb5ldlFh+90YAYY6awRXrlB4G5G2izNeGySpATlFzmOg==",[m
+[32m+[m[32m      "license": "MIT",[m
+       "dependencies": {[m
+         "@babel/helper-string-parser": "^7.25.9",[m
+         "@babel/helper-validator-identifier": "^7.25.9"[m
+[36m@@ -2734,258 +2744,307 @@[m
+       "license": "MIT"[m
+     },[m
+     "node_modules/@esbuild/aix-ppc64": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-thpVCb/rhxE/BnMLQ7GReQLLN8q9qbHmI55F4489/ByVg2aQaQ6kbcLb6FHkocZzQhxc4gx0sCk0tJkKBFzDhA==",[m
+       "cpu": [[m
+         "ppc64"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "aix"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/android-arm": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-vCPvzSjpPHEi1siZdlvAlsPxXl7WbOVUBBAowWug4rJHb68Ox8KualB+1ocNvT5fjv6wpkX6o/iEpbDrf68zcg==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-tmwl4hJkCfNHwFB3nBa8z1Uy3ypZpxqxfTQOcHX+xRByyYgunVbZ9MzUUfb0RxaHIMnbHagwAxuTL+tnNM+1/Q==",[m
+       "cpu": [[m
+         "arm"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "android"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/android-arm64": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-c0uX9VAUBQ7dTDCjq+wdyGLowMdtR/GoC2U5IYk/7D1H1JYC0qseD7+11iMP2mRLN9RcCMRcjC4YMclCzGwS/A==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-cNLgeqCqV8WxfcTIOeL4OAtSmL8JjcN6m09XIgro1Wi7cF4t/THaWEa7eL5CMoMBdjoHOTh/vwTO/o2TRXIyzg==",[m
+       "cpu": [[m
+         "arm64"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "android"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/android-x64": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-D7aPRUUNHRBwHxzxRvp856rjUHRFW1SdQATKXH2hqA0kAZb1hKmi02OpYRacl0TxIGz/ZmXWlbZgjwWYaCakTA==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-B6Q0YQDqMx9D7rvIcsXfmJfvUYLoP722bgfBlO5cGvNVb5V/+Y7nhBE3mHV9OpxBf4eAS2S68KZztiPaWq4XYw==",[m
+       "cpu": [[m
+         "x64"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "android"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/@esbuild/darwin-arm64": {[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-kj3AnYWc+CekmZnS5IPu9D+HWtUI49hbnyqk0FLEJDbzCIQt7hg7ucF1SQAilhtYpIujfaHr6O0UHlzzSPdOeA==",[m
+[32m+[m[32m      "cpu": [[m
+[32m+[m[32m        "arm64"[m
+[32m+[m[32m      ],[m
+[32m+[m[32m      "license": "MIT",[m
+[32m+[m[32m      "optional": true,[m
+[32m+[m[32m      "os": [[m
+[32m+[m[32m        "darwin"[m
+[32m+[m[32m      ],[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/darwin-x64": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-se/JjF8NlmKVG4kNIuyWMV/22ZaerB+qaSi5MdrXtd6R08kvs2qCN4C09miupktDitvh8jRFflwGFBQcxZRjbw==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-WeSrmwwHaPkNR5H3yYfowhZcbriGqooyu3zI/3GGpF8AyUdsrrP0X6KumITGA9WOyiJavnGZUwPGvxvwfWPHIA==",[m
+       "cpu": [[m
+         "x64"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "darwin"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/freebsd-arm64": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/freebsd-arm64/-/freebsd-arm64-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-5JcRxxRDUJLX8JXp/wcBCy3pENnCgBR9bN6JsY4OmhfUtIHe3ZW0mawA7+RDAcMLrMIZaf03NlQiX9DGyB8h4g==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/freebsd-arm64/-/freebsd-arm64-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-UN8HXjtJ0k/Mj6a9+5u6+2eZ2ERD7Edt1Q9IZiB5UZAIdPnVKDoG7mdTVGhHJIeEml60JteamR3qhsr1r8gXvg==",[m
+       "cpu": [[m
+         "arm64"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "freebsd"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/freebsd-x64": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-J95kNBj1zkbMXtHVH29bBriQygMXqoVQOQYA+ISs0/2l3T9/kj42ow2mpqerRBxDJnmkUDCaQT/dfNXWX/ZZCQ==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-TvW7wE/89PYW+IevEJXZ5sF6gJRDY/14hyIGFXdIucxCsbRmLUcjseQu1SyTko+2idmCw94TgyaEZi9HUSOe3Q==",[m
+       "cpu": [[m
+         "x64"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "freebsd"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/linux-arm": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-bPb5AHZtbeNGjCKVZ9UGqGwo8EUu4cLq68E95A53KlxAPRmUyYv2D6F0uUI65XisGOL1hBP5mTronbgo+0bFcA==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-n0WRM/gWIdU29J57hJyUdIsk0WarGd6To0s+Y+LwvlC55wt+GT/OgkwoXCXvIue1i1sSNWblHEig00GBWiJgfA==",[m
+       "cpu": [[m
+         "arm"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "linux"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/linux-arm64": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-ibKvmyYzKsBeX8d8I7MH/TMfWDXBF3db4qM6sy+7re0YXya+K1cem3on9XgdT2EQGMu4hQyZhan7TeQ8XkGp4Q==",[m
+[32m+[m[32m      "version": "0.24.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.24.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-7HnAD6074BW43YvvUmE/35Id9/NB7BeX5EoNkK9obndmZBUk8xmJJeU7DwmUeN7tkysslb2eSl6CTrYz6oEMQg==",[m
+       "cpu": [[m
+         "arm64"[m
+       ],[m
+[32m+[m[32m      "license": "MIT",[m
+       "optional": true,[m
+       "os": [[m
+         "linux"[m
+       ],[m
+       "engines": {[m
+[31m-        "node": ">=12"[m
+[32m+[m[32m        "node": ">=18"[m
+       }[m
+     },[m
+     "node_modules/@esbuild/linux-ia32": {[m
+[31m-      "version": "0.21.5",[m
+[31m-      "resolved": "https://registry.npmjs.org/@esbuild/linux-ia32/-/linux-ia32-0.21.5.tgz",[m
+[31m-      "integrity": "sha512-YvjXDqLRqPDl2dvRODYmmhz4rPeVKYvppfGYK
