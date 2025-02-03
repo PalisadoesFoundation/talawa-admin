@@ -1162,3 +1162,350 @@ describe('People Component Pagination Tests', () => {
     expect(screen.queryByText('User14 Test')).not.toBeInTheDocument();
   });
 });
+
+describe('People Component Error Handling and Edge Cases', () => {
+  // Mock for failed GraphQL query
+  const errorMock = {
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: {
+        orgId: '',
+        firstName_contains: '',
+        lastName_contains: '',
+      },
+    },
+    error: new Error('Failed to fetch'),
+  };
+
+  const adminMock = {
+    request: {
+      query: ORGANIZATION_ADMINS_LIST,
+      variables: { id: '' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            __typename: 'Organization',
+            _id: 'org-1',
+            admins: [],
+          },
+        ],
+      },
+    },
+  };
+
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: () => ({ orgId: '' }),
+      };
+    });
+  });
+
+  it('handles GraphQL query errors gracefully', async () => {
+    render(
+      <MockedProvider mocks={[errorMock, adminMock]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Nothing to show')).toBeInTheDocument();
+  });
+
+  it('handles empty search results correctly', async () => {
+    const emptySearchMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: '',
+          firstName_contains: 'NonexistentUser',
+          lastName_contains: '',
+        },
+      },
+      result: {
+        data: {
+          organizationsMemberConnection: {
+            edges: [],
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[emptySearchMock, adminMock]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+    await act(async () => {
+      userEvent.type(searchInput, 'NonexistentUser{enter}');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Nothing to show')).toBeInTheDocument();
+    });
+  });
+
+  it('handles rapid mode switching correctly', async () => {
+    const membersMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: '',
+          firstName_contains: '',
+          lastName_contains: '',
+        },
+      },
+      result: {
+        data: {
+          organizationsMemberConnection: {
+            edges: [
+              {
+                _id: 'user1',
+                firstName: 'Test',
+                lastName: 'User',
+                image: null,
+                email: 'test@example.com',
+                createdAt: new Date().toISOString(),
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    const adminWithDataMock = {
+      request: {
+        query: ORGANIZATION_ADMINS_LIST,
+        variables: { id: '' },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              __typename: 'Organization',
+              _id: 'org-1',
+              admins: [
+                {
+                  _id: 'admin1',
+                  firstName: 'Admin',
+                  lastName: 'User',
+                  image: null,
+                  email: 'admin@example.com',
+                  createdAt: new Date().toISOString(),
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+
+    render(
+      <MockedProvider
+        mocks={[membersMock, adminWithDataMock]}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+
+    // Rapid mode switches
+    const modeButton = screen.getByTestId('modeChangeBtn');
+
+    // First switch to admin
+    await act(async () => {
+      userEvent.click(modeButton);
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('modeBtn1')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('modeBtn1'));
+
+    // Switch to all members
+    await act(async () => {
+      userEvent.click(modeButton);
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('modeBtn0')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('modeBtn0'));
+
+    // Switch back to admin
+    await act(async () => {
+      userEvent.click(modeButton);
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('modeBtn1')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('modeBtn1'));
+
+    // Verify final state
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    });
+  });
+
+  it('handles pagination with changing data', async () => {
+    const initialDataMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: '',
+          firstName_contains: '',
+          lastName_contains: '',
+        },
+      },
+      result: {
+        data: {
+          organizationsMemberConnection: {
+            edges: Array(7)
+              .fill(null)
+              .map((_, index) => ({
+                _id: `user${index}`,
+                firstName: `User${index}`,
+                lastName: 'Test',
+                image: null,
+                email: `user${index}@test.com`,
+                createdAt: new Date().toISOString(),
+              })),
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[initialDataMock, adminMock]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for initial data load
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+
+    // Test changing rows per page to All
+    const rowsPerPageSelect = screen.getByRole('combobox');
+    await act(async () => {
+      userEvent.selectOptions(rowsPerPageSelect, 'All');
+    });
+
+    // Verify all items are shown
+    await waitFor(() => {
+      expect(screen.getAllByText(/User\d Test/).length).toBe(7);
+    });
+
+    // Change back to 5 per page
+    await act(async () => {
+      userEvent.selectOptions(rowsPerPageSelect, '5');
+    });
+
+    // Verify pagination is restored
+    await waitFor(() => {
+      expect(screen.getAllByText(/User\d Test/).length).toBe(5);
+    });
+  });
+
+  it('handles empty search input edge case', async () => {
+    const emptySearchMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: '',
+          firstName_contains: '',
+          lastName_contains: '',
+        },
+      },
+      result: {
+        data: {
+          organizationsMemberConnection: {
+            edges: [],
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[emptySearchMock, adminMock]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchBtn = screen.getByTestId('searchBtn');
+    const searchInput = screen.getByTestId('searchInput');
+
+    // Test with empty string
+    await act(async () => {
+      userEvent.clear(searchInput);
+      userEvent.click(searchBtn);
+    });
+
+    // Test with whitespace only
+    await act(async () => {
+      userEvent.type(searchInput, '   ');
+      userEvent.click(searchBtn);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Nothing to show')).toBeInTheDocument();
+    });
+  });
+});
