@@ -1046,8 +1046,18 @@ type AgendaFolderPg {
   updatedAt: DateTime
   updater: UserPg
   parentFolder: AgendaFolderPg
-  childFolders(after: String, before: String, first: Int, last: Int): AgendaFolderChildFoldersConnectionPg
-  items(after: String, before: String, first: Int, last: Int): AgendaFolderItemsConnectionPg
+  childFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AgendaFolderChildFoldersConnectionPg
+  items(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AgendaFolderItemsConnectionPg
 }
 
 type EventPg {
@@ -1078,7 +1088,6 @@ type EventPg {
   ): EventVenuesConnectionPg
 }
 
-
 type OrganizationFundsConnectionPg {
   edges: [OrganizationFundsConnectionEdgePg]
   pageInfo: PageInfoPg!
@@ -1090,7 +1099,12 @@ type OrganizationFundsConnectionEdgePg {
 }
 
 type FundPg {
-  campaigns(after: String, before: String, first: Int, last: Int): FundCampaignsConnectionPg
+  campaigns(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FundCampaignsConnectionPg
   createdAt: DateTime
   creator: User
   id: ID!
@@ -1100,7 +1114,6 @@ type FundPg {
   updatedAt: DateTime
   updater: User
 }
-
 
 type OrganizationMembersConnectionPg {
   edges: [OrganizationMembersConnectionEdgePg]
@@ -1125,22 +1138,35 @@ type OrganizationPinnedPostsConnectionEdgePg {
 type PostPg {
   attachments: [PostAttachmentPg!]
   caption: String
-  comments(after: String, before: String, first: Int, last: Int): PostCommentsConnectionPg
+  comments(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostCommentsConnectionPg
   commentsCount: Int
   createdAt: DateTime
   creator: UserPg
-  downVoters(after: String, before: String, first: Int, last: Int): PostDownVotersConnectionPg
+  downVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostDownVotersConnectionPg
   downVotesCount: Int
   id: ID!
   organization: OrganizationPg
   pinnedAt: DateTime
-  upVoters(after: String, before: String, first: Int, last: Int): PostUpVotersConnectionPg
+  upVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostUpVotersConnectionPg
   upVotesCount: Int
   updatedAt: DateTime
   updater: UserPg
 }
-
-
 
 type OrganizationPostsConnectionPg {
   edges: [OrganizationPostsConnectionEdgePg]
@@ -1181,10 +1207,19 @@ type TagFolderPg {
   updater: UserPg
   organization: OrganizationPg
   parentFolder: TagFolderPg
-  childFolders(after: String, before: String, first: Int, last: Int): TagFolderChildFoldersConnectionPg
-  tags(after: String, before: String, first: Int, last: Int): TagFolderTagsConnectionPg
+  childFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagFolderChildFoldersConnectionPg
+  tags(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagFolderTagsConnectionPg
 }
-
 
 type OrganizationTagsConnectionPg {
   edges: [OrganizationTagsConnectionEdgePg]
@@ -1206,7 +1241,6 @@ type TagAssigneesConnectionEdgePg {
   node: UserPg
 }
 
-
 type TagPg {
   id: ID!
   name: String
@@ -1215,10 +1249,14 @@ type TagPg {
   creator: UserPg
   updater: UserPg
   folder: TagFolderPg
-  assignees(after: String, before: String, first: Int, last: Int): TagAssigneesConnectionPg
+  assignees(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagAssigneesConnectionPg
   organization: OrganizationPg
 }
-
 
 type OrganizationVenuesConnectionPg {
   edges: [OrganizationVenuesConnectionEdgePg]
@@ -1255,9 +1293,13 @@ type VenuePg {
   description: String
   organization: OrganizationPg
   attachments: [VenueAttachmentPg!]
-  events(after: String, before: String, first: Int, last: Int): VenueEventsConnectionPg
+  events(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): VenueEventsConnectionPg
 }
-
 
 type OrganizationCustomField {
   _id: ID!
