@@ -12,9 +12,9 @@ docs/**
 *.md
 
 # Ignore dockerfile and related configs
-docker-compose.prod.yaml
-docker-compose.dev.yaml
-Dockerfile.prod
-Dockerfile.dev
-nginx.conf
-nginx.prod.conf
+docker/docker-compose.prod.yaml
+docker/docker-compose.dev.yaml
+docker/Dockerfile.prod
+docker/Dockerfile.dev
+config/docker/setup/nginx.conf
+config/docker/setup/nginx.prod.conf
