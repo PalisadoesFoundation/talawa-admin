@@ -43,8 +43,8 @@ const SecuredRoute = (): JSX.Element => {
   } else if (error) {
     return <div>Error During Routing ...</div>;
   } else {
-    const isLoggedIn = data.verifyRole.isAuthorized;
-    const role = data.verifyRole.role;
+    const role = data?.verifyRole?.role || '';
+    const isLoggedIn = data?.verifyRole?.isAuthorized ?? false;
     const restrictedRoutesForAdmin = ['/member', '/users', '/communityProfile'];
     if (isLoggedIn) {
       if (role == 'superAdmin') {

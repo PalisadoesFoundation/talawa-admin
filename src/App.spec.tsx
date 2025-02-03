@@ -72,7 +72,19 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink([], true);
+const link2 = new StaticMockLink(
+  [
+    {
+      request: { query: CHECK_AUTH },
+      result: { data: { checkAuth: null } }, // Simulating logged-out state
+    },
+    {
+      request: { query: VERIFY_ROLE },
+      result: { data: { verifyRole: null } }, // Ensure verifyRole exists, even if null
+    },
+  ],
+  true,
+);
 
 const wait = (ms = 100): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));

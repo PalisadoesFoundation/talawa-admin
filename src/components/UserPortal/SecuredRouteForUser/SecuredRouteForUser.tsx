@@ -32,8 +32,9 @@ const SecuredRouteForUser = (): JSX.Element => {
   } else if (error) {
     return <div>Error During Routing ...</div>;
   } else {
-    const isLoggedIn = data.verifyRole.isAuthorized;
-    const role = data.verifyRole.role;
+    const role = data?.verifyRole?.role || '';
+    const isLoggedIn = data?.verifyRole?.isAuthorized ?? false;
+
     if (isLoggedIn) {
       if (role == 'user' || role == 'admin' || role == 'superAdmin') {
         return <Outlet />;
