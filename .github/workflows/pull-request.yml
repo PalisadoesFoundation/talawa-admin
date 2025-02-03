@@ -402,15 +402,15 @@ jobs:
         run: |
           set -e
           echo "Building Docker images..."
-          docker compose -f docker-compose.prod.yaml build
-          docker compose -f docker-compose.dev.yaml build
+          docker compose -f docker/docker-compose.prod.yaml build
+          docker compose -f docker/docker-compose.dev.yaml build
           echo "Docker images built successfully"
 
       - name: Run Docker Containers (Production)
         run: |
           set -e
           echo "Starting Docker container for production..."
-          docker compose -f docker-compose.prod.yaml up -d
+          docker compose -f docker/docker-compose.prod.yaml up -d
           echo "Production Docker container started successfully"
       
       - name: Check if Talawa Admin App is running (Production)
@@ -421,14 +421,14 @@ jobs:
       - name: Stop prod Docker Containers
         if: always()
         run: |
-          docker compose -f docker-compose.prod.yaml down
+          docker compose -f docker/docker-compose.prod.yaml down
           echo "Prod Docker container stopped and removed"
 
       - name: Run Docker Containers (Development)
         run: |
           set -e
           echo "Starting Docker container for development..."
-          docker compose -f docker-compose.dev.yaml up -d
+          docker compose -f docker/docker-compose.dev.yaml up -d
           echo "Development Docker container started successfully"
 
       - name: Check if Talawa Admin App is running (Development)
@@ -439,7 +439,7 @@ jobs:
       - name: Stop dev Docker Containers
         if: always()
         run: |
-          docker compose -f docker-compose.dev.yaml down
+          docker compose -f docker/docker-compose.dev.yaml down
           echo "Dev Docker containers stopped and removed"
 
   Test-Docusaurus-Deployment:
