@@ -140,23 +140,44 @@ You now need to setup the environment. This follows next.
 
 If you prefer to use Docker, you can install the app using the following command:
 
-1.  Create a `.env` file as described in the Configuration section
+1. Create a `.env` file as described in the Configuration section
 
-2.  Build the Docker Image:
+2. Build and Run the Docker Image:
 
-Run the following command to build the Docker image:
+   Run the following command to run the Docker image:
 
-```bash
-docker build -t talawa-admin .
-```
+   ```bash
+   docker-compose -f docker/docker-compose.dev.yaml --env-file .env up
+   ```
 
-3.  Run the Docker container:
+3. To stop the container run the following command:
 
-After the build is complete, run the Docker container using this command:
+   ```bash
+   docker-compose -f docker/docker-compose.dev.yaml down
+   ```
 
-```bash
-docker run -p 4321:4321 talawa-admin
-```
+The application will be accessible at `http://localhost:4321`
+
+#### Production Setup
+
+If you prefer to use Docker, you can install the app using the following command:
+
+1. Create a `.env` file as described in the Configuration section
+
+2. Configure `nginx.conf` file located at `config/docker/setup`. Modify it to fit your preferences before running the application.
+
+3. Build and Run the Docker Image:
+
+   Run the following command to run the Docker image:
+
+   ```bash
+   docker-compose -f docker/docker-compose.prod.yaml --env-file .env up
+   ```
+4. To stop the container run the following command:
+
+   ```bash
+   docker-compose -f docker/docker-compose.prod.yaml down
+   ```
 
 The application will be accessible at `http://localhost:4321`
 
