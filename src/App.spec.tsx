@@ -4,13 +4,14 @@ import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import App from './App';
 import { store } from 'state/store';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CHECK_AUTH, VERIFY_ROLE } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
+// Mock external dependencies
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
   PieChart: vi.fn().mockImplementation(() => <>Test</>),
@@ -52,9 +53,18 @@ const MOCKS = [
             mobile: '+8912313112',
           },
         },
+      },
+    },
+  },
+  {
+    request: {
+      query: VERIFY_ROLE,
+    },
+    result: {
+      data: {
         verifyRole: {
-          isAuthorized: false, // Ensure this field exists
-          role: 'user', // Adjust this based on the expected role
+          isAuthorized: false,
+          role: 'user',
         },
       },
     },
@@ -64,14 +74,15 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink([], true);
 
-async function wait(ms = 100): Promise<void> {
-  await new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+const wait = (ms = 100): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
-describe('Testing the App Component', () => {
-  it('Component should be rendered properly and user is logged in', async () => {
+describe('App Component Tests', () => {
+  beforeEach(() => {
+    window.history.pushState({}, '', '/');
+  });
+
+  it('should render properly when user is logged in', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -88,15 +99,16 @@ describe('Testing the App Component', () => {
 
     window.history.pushState({}, '', '/orglist');
     await wait();
+
     expect(window.location.pathname).toBe('/orglist');
     expect(
       screen.getByText(
         'An open source application by Palisadoes Foundation volunteers',
       ),
-    ).toBeTruthy();
+    ).toBeInTheDocument();
   });
 
-  it('Component should be rendered properly and user is logged out', async () => {
+  it('should render properly when user is logged out', async () => {
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
