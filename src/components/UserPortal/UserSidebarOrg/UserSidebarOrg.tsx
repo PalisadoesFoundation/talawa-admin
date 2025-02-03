@@ -1,18 +1,19 @@
-import { useQuery } from '@apollo/client';
-import { WarningAmberOutlined } from '@mui/icons-material';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+// import { useQuery } from '@apollo/client';
+// import { WarningAmberOutlined } from '@mui/icons-material';
+// import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+// import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
+// import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+// import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from '../../../style/app.module.css';
-import Avatar from 'components/Avatar/Avatar';
+// import Avatar from 'components/Avatar/Avatar';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from './../../SignOut/SignOut';
 
@@ -41,7 +42,7 @@ export interface InterfaceUserSidebarOrgProps {
 
 const UserSidebarOrg = ({
   targets,
-  orgId,
+  // orgId,
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
@@ -53,32 +54,32 @@ const UserSidebarOrg = ({
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   // State for organization data
-  const [organization, setOrganization] =
-    useState<InterfaceQueryOrganizationsListObject>();
+  // const [organization, setOrganization] =
+  // useState<InterfaceQueryOrganizationsListObject>();
 
   // Query to fetch organization data
-  const {
-    data,
-    loading,
-  }: {
-    data:
-      | { organizations: InterfaceQueryOrganizationsListObject[] }
-      | undefined;
-    loading: boolean;
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: orgId },
-  });
+  // const {
+  //   data,
+  //   loading,
+  // }: {
+  //   data:
+  //     | { organizations: InterfaceQueryOrganizationsListObject[] }
+  //     | undefined;
+  //   loading: boolean;
+  // } = useQuery(ORGANIZATIONS_LIST, {
+  //   variables: { id: orgId },
+  // });
 
   // Set organization data once the query is complete
-  useEffect(() => {
-    let isMounted = true;
-    if (data && isMounted) {
-      setOrganization(data?.organizations[0]);
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [data]);
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   if (data && isMounted) {
+  //     setOrganization(data?.organizations[0]);
+  //   }
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [data]);
 
   /**
    * Handles click events on navigation links.
@@ -109,7 +110,7 @@ const UserSidebarOrg = ({
         </div>
 
         {/* Organization Section */}
-        <div className={styles.organizationContainer}>
+        {/* <div className={styles.organizationContainer}>
           {loading ? (
             <>
               <button
@@ -150,7 +151,7 @@ const UserSidebarOrg = ({
               <AngleRightIcon fill={'var(--bs-secondary)'} />
             </button>
           )}
-        </div>
+        </div> */}
 
         {/* Options List */}
         <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>

@@ -771,6 +771,494 @@ type Organization {
   venues: [Venue]
 }
 
+type OrganizationPg {
+  id: ID!
+  name: String
+  description: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  postalCode: String
+  countryCode: Iso3166Alpha2CountryCode
+  avatarMimeType: String
+  avatarURL: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  postsCount: Int
+  pinnedPostsCount: Int
+
+  advertisements(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationAdvertisementsConnectionPg
+
+  chats(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationChatsConnectionPg
+
+  events(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationEventsConnectionPg
+
+  funds(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationFundsConnectionPg
+
+  members(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationMembersConnectionPg
+
+  pinnedPosts(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationPinnedPostsConnectionPg
+
+  posts(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationPostsConnectionPg
+
+  tagFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationTagFoldersConnectionPg
+
+  tags(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationTagsConnectionPg
+
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationVenuesConnectionPg
+}
+
+type PageInfoPg {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type OrganizationAdvertisementsConnectionPg {
+  edges: [OrganizationAdvertisementsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationAdvertisementsConnectionEdgePg {
+  cursor: String!
+  node: AdvertisementPg
+}
+
+enum AdvertisementTypePg {
+  banner
+  menu
+  pop_up
+}
+
+type AdvertisementAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type AdvertisementPg {
+  id: ID!
+  name: String
+  description: String
+  type: AdvertisementTypePg
+  startAt: DateTime
+  endAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [AdvertisementAttachmentPg!]
+}
+
+type OrganizationChatsConnectionPg {
+  edges: [OrganizationChatsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationChatsConnectionEdgePg {
+  cursor: String!
+  node: ChatPg
+}
+
+type ChatMembersConnectionPg {
+  edges: [ChatMembersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type ChatMembersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type ChatMessagesConnectionPg {
+  edges: [ChatMessagesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type ChatMessagePg {
+  id: ID!
+  body: String
+  chat: ChatPg
+  createdAt: DateTime
+  creator: UserPg
+  parentMessage: ChatMessagePg
+  updatedAt: DateTime
+}
+
+type ChatMessagesConnectionEdgePg {
+  cursor: String!
+  node: ChatMessagePg
+}
+
+type ChatPg {
+  id: ID!
+  name: String
+  description: String
+  avatarMimeType: String
+  avatarURL: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  members(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ChatMembersConnectionPg
+
+  messages(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ChatMessagesConnectionPg
+}
+
+type OrganizationEventsConnectionPg {
+  edges: [OrganizationEventsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationEventsConnectionEdgePg {
+  cursor: String!
+  node: EventPg
+}
+
+type EventAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type EventAgendaFoldersConnectionPg {
+  edges: [EventAgendaFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventAgendaFoldersConnectionEdgePg {
+  cursor: String!
+  node: AgendaFolderPg
+}
+
+type AgendaFolderChildFoldersConnectionPg {
+  edges: [AgendaFolderChildFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type AgendaFolderChildFoldersConnectionEdgePg {
+  cursor: String!
+  node: AgendaFolderPg
+}
+
+type AgendaFolderItemsConnectionPg {
+  edges: [AgendaFolderItemsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type AgendaFolderItemsConnectionEdgePg {
+  cursor: String!
+  node: AgendaItemPg
+}
+
+enum AgendaItemTypePg {
+  general
+  note
+  scripture
+  song
+}
+
+type AgendaItemPg {
+  id: ID!
+  name: String
+  description: String
+  duration: String
+  event: AgendaFolderPg
+  key: String
+  type: AgendaItemTypePg
+  createdAt: DateTime
+  creator: UserPg
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+type AgendaFolderPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  creator: UserPg
+  event: EventPg
+  isAgendaItemFolder: Boolean
+  updatedAt: DateTime
+  updater: UserPg
+  parentFolder: AgendaFolderPg
+  childFolders(after: String, before: String, first: Int, last: Int): AgendaFolderChildFoldersConnectionPg
+  items(after: String, before: String, first: Int, last: Int): AgendaFolderItemsConnectionPg
+}
+
+type EventPg {
+  id: ID!
+  name: String
+  description: String
+  startAt: DateTime
+  endAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [EventAttachmentPg!]
+
+  agendaFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventAgendaFoldersConnectionPg
+
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventVenuesConnectionPg
+}
+
+
+type OrganizationFundsConnectionPg {
+  edges: [OrganizationFundsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationFundsConnectionEdgePg {
+  cursor: String!
+  node: FundPg
+}
+
+type FundPg {
+  campaigns(after: String, before: String, first: Int, last: Int): FundCampaignsConnectionPg
+  createdAt: DateTime
+  creator: User
+  id: ID!
+  isTaxDeductible: Boolean
+  name: String
+  organization: Organization
+  updatedAt: DateTime
+  updater: User
+}
+
+
+type OrganizationMembersConnectionPg {
+  edges: [OrganizationMembersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationMembersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type OrganizationPinnedPostsConnectionPg {
+  edges: [OrganizationPinnedPostsConnectionEdgePg]
+  pageInfo: PageInfo!
+}
+
+type OrganizationPinnedPostsConnectionEdgePg {
+  cursor: String!
+  node: PostPg
+}
+
+type PostPg {
+  attachments: [PostAttachmentPg!]
+  caption: String
+  comments(after: String, before: String, first: Int, last: Int): PostCommentsConnectionPg
+  commentsCount: Int
+  createdAt: DateTime
+  creator: UserPg
+  downVoters(after: String, before: String, first: Int, last: Int): PostDownVotersConnectionPg
+  downVotesCount: Int
+  id: ID!
+  organization: OrganizationPg
+  pinnedAt: DateTime
+  upVoters(after: String, before: String, first: Int, last: Int): PostUpVotersConnectionPg
+  upVotesCount: Int
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+
+
+type OrganizationPostsConnectionPg {
+  edges: [OrganizationPostsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationPostsConnectionEdgePg {
+  cursor: String!
+  node: PostPg
+}
+
+type OrganizationTagFoldersConnectionPg {
+  edges: [OrganizationTagFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationTagFoldersConnectionEdgePg {
+  cursor: String!
+  node: TagFolderPg
+}
+
+type TagFolderChildFoldersConnectionPg {
+  edges: [TagFolderChildFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagFolderChildFoldersConnectionEdgePg {
+  cursor: String!
+  node: TagFolderPg
+}
+
+type TagFolderPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  parentFolder: TagFolderPg
+  childFolders(after: String, before: String, first: Int, last: Int): TagFolderChildFoldersConnectionPg
+  tags(after: String, before: String, first: Int, last: Int): TagFolderTagsConnectionPg
+}
+
+
+type OrganizationTagsConnectionPg {
+  edges: [OrganizationTagsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationTagsConnectionEdgePg {
+  cursor: String!
+  node: TagPg
+}
+
+type TagAssigneesConnectionPg {
+  edges: [TagAssigneesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagAssigneesConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+
+type TagPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  folder: TagFolderPg
+  assignees(after: String, before: String, first: Int, last: Int): TagAssigneesConnectionPg
+  organization: OrganizationPg
+}
+
+
+type OrganizationVenuesConnectionPg {
+  edges: [OrganizationVenuesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationVenuesConnectionEdgePg {
+  cursor: String!
+  node: VenuePg
+}
+
+type VenueAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type VenueEventsConnectionPg {
+  edges: [VenueEventsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type VenueEventsConnectionEdgePg {
+  cursor: String!
+  node: EventPg
+}
+
+type VenuePg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  description: String
+  organization: OrganizationPg
+  attachments: [VenueAttachmentPg!]
+  events(after: String, before: String, first: Int, last: Int): VenueEventsConnectionPg
+}
+
+
 type OrganizationCustomField {
   _id: ID!
   name: String!

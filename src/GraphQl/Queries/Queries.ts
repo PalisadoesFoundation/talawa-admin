@@ -384,9 +384,97 @@ export const EVENT_FEEDBACKS = gql`
 `;
 
 // Query to take the Organization with data
+
+export const GET_ORGANIZATION_POSTS_COUNT_PG = gql`
+  query getOrganizationPostsCount($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      postsCount
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_MEMBERS_PG = gql`
+  query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      members(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_EVENTS_PG = gql`
+  query GetOrganizationEvents($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      events(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            creator {
+              id
+              name
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_POSTS_PG = gql`
+  query GetOrganizationPosts($id: String!, $first: Int) {
+    organization(input: { id: $id }) {
+      posts(first: $first) {
+        edges {
+          node {
+            id
+            caption
+            createdAt
+            creator {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_DATA_PG = gql`
+  query getOrganizationData($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      avatarURL
+      name
+      city
+    }
+  }
+`;
+
 export const ORGANIZATIONS_LIST = gql`
   query Organizations($id: ID!) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       image
       creator {

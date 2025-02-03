@@ -3,7 +3,7 @@ import { vi, describe, beforeEach, it, expect } from 'vitest';
 vi.mock('node-fetch');
 
 global.fetch = vi.fn((url) => {
-  if (url === 'http://example.com/graphql/') {
+  if (url === 'http://example.com/graphql') {
     const responseInit: ResponseInit = {
       status: 200,
       statusText: 'OK',
@@ -27,7 +27,7 @@ describe('checkConnection', () => {
 
   test('should return true and log success message if the connection is successful', async () => {
     vi.spyOn(console, 'log').mockImplementation((string) => string);
-    const result = await checkConnection('http://example.com/graphql/');
+    const result = await checkConnection('http://example.com/graphql');
 
     expect(result).toBe(true);
     expect(console.log).toHaveBeenCalledWith(
@@ -41,7 +41,7 @@ describe('checkConnection', () => {
   it('should return false and log error message if the connection fails', async () => {
     vi.spyOn(console, 'log').mockImplementation((string) => string);
     const result = await checkConnection(
-      'http://example_not_working.com/graphql/',
+      'http://example_not_working.com/graphql',
     );
 
     expect(result).toBe(false);

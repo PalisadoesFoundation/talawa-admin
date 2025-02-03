@@ -3,7 +3,8 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-global.fetch = jest.fn();
+import { vi } from 'vitest';
+global.fetch = vi.fn();
 
 import { format } from 'util';
 
@@ -31,4 +32,5 @@ jestPreviewConfigure({
   autoPreview: true,
 });
 
-jest.setTimeout(18000);
+vi.useFakeTimers();
+vi.advanceTimersByTime(18000);
