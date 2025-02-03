@@ -142,18 +142,18 @@ If you prefer to use Docker, you can install the app using the following command
 
 1. Create a `.env` file as described in the Configuration section
 
-2. Run the Docker Image:
+2. Build and Run the Docker Image:
 
    Run the following command to run the Docker image:
 
    ```bash
-   docker-compose -f docker-compose.dev.yaml up
+   docker-compose -f docker/docker-compose.dev.yaml --env-file .env up
    ```
 
 3. To stop the container run the following command:
 
    ```bash
-   docker-compose -f docker-compose.dev.yaml down
+   docker-compose -f docker/docker-compose.dev.yaml down
    ```
 
 The application will be accessible at `http://localhost:4321`
@@ -166,17 +166,17 @@ If you prefer to use Docker, you can install the app using the following command
 
 2. Configure `nginx.conf` file located at `config/docker/setup`. Modify it to fit your preferences before running the application.
 
-3. Run the Docker Image:
+3. Build and Run the Docker Image:
 
    Run the following command to run the Docker image:
 
    ```bash
-   docker-compose -f docker-compose.prod.yaml up
+   docker-compose -f docker/docker-compose.prod.yaml --env-file .env up
    ```
 4. To stop the container run the following command:
 
    ```bash
-   docker-compose -f docker-compose.prod.yaml down
+   docker-compose -f docker/docker-compose.prod.yaml down
    ```
 
 The application will be accessible at `http://localhost:4321`

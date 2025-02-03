@@ -1,8 +1,8 @@
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: docker/Dockerfile.dev
     ports:
       - '${PORT:-4321}:4321'
     environment:
@@ -12,7 +12,7 @@ services:
       - REACT_APP_USE_RECAPTCHA=${REACT_APP_USE_RECAPTCHA}
       - REACT_APP_RECAPTCHA_SITE_KEY=${REACT_APP_RECAPTCHA_SITE_KEY}
     volumes:
-      - .:/usr/src/app
+      - ..:/usr/src/app
       - /usr/src/app/node_modules
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:4321"]
