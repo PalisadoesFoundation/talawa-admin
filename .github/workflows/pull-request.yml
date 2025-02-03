@@ -117,11 +117,12 @@ jobs:
             .prettierrc
             .prettierignore
             vite.config.ts
-            docker-compose.prod.yaml
-            docker-compose.dev.yaml
-            Dockerfile.dev
-            Dockerfile.prod
-            nginx.conf
+            docker/docker-compose.prod.yaml
+            docker/docker-compose.dev.yaml
+            docker/Dockerfile.dev
+            docker/Dockerfile.prod
+            config/docker/setup/nginx.conf
+            config/docker/setup/nginx.prod.conf
             CODEOWNERS
             LICENSE
             setup.ts
