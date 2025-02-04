@@ -441,6 +441,187 @@ enum Gender {
   OTHER
 }
 
+enum Iso4217CurrencyCode {
+  AED
+  AFN
+  ALL
+  AMD
+  ANG
+  AOA
+  ARS
+  AUD
+  AWG
+  AZN
+  BAM
+  BBD
+  BDT
+  BGN
+  BHD
+  BIF
+  BMD
+  BND
+  BOB
+  BOV
+  BRL
+  BSD
+  BTN
+  BWP
+  BYN
+  BZD
+  CAD
+  CDF
+  CHE
+  CHF
+  CHW
+  CLF
+  CLP
+  CNY
+  COP
+  COU
+  CRC
+  CUP
+  CVE
+  CZK
+  DJF
+  DKK
+  DOP
+  DZD
+  EGP
+  ERN
+  ETB
+  EUR
+  FJD
+  FKP
+  GBP
+  GEL
+  GHS
+  GIP
+  GMD
+  GNF
+  GTQ
+  GYD
+  HKD
+  HNL
+  HTG
+  HUF
+  IDR
+  ILS
+  INR
+  IQD
+  IRR
+  ISK
+  JMD
+  JOD
+  JPY
+  KES
+  KGS
+  KHR
+  KMF
+  KPW
+  KRW
+  KWD
+  KYD
+  KZT
+  LAK
+  LBP
+  LKR
+  LRD
+  LSL
+  LYD
+  MAD
+  MDL
+  MGA
+  MKD
+  MMK
+  MNT
+  MOP
+  MRU
+  MUR
+  MVR
+  MWK
+  MXN
+  MXV
+  MYR
+  MZN
+  NAD
+  NGN
+  NIO
+  NOK
+  NPR
+  NZD
+  OMR
+  PAB
+  PEN
+  PGK
+  PHP
+  PKR
+  PLN
+  PYG
+  QAR
+  RON
+  RSD
+  RUB
+  RWF
+  SAR
+  SBD
+  SCR
+  SDG
+  SEK
+  SGD
+  SHP
+  SLE
+  SOS
+  SRD
+  SSP
+  STN
+  SVC
+  SYP
+  SZL
+  THB
+  TJS
+  TMT
+  TND
+  TOP
+  TRY
+  TTD
+  TWD
+  TZS
+  UAH
+  UGX
+  USD
+  USN
+  UYI
+  UYU
+  UYW
+  UZS
+  VED
+  VES
+  VND
+  VUV
+  WST
+  XAF
+  XAG
+  XAU
+  XBA
+  XBB
+  XBC
+  XBD
+  XCD
+  XDR
+  XOF
+  XPD
+  XPF
+  XPT
+  XSU
+  XTS
+  XUA
+  XXX
+  YER
+  ZAR
+  ZMW
+  ZWG
+}
+
 type Group {
   _id: ID!
   admins: [User!]!
@@ -1088,6 +1269,34 @@ type EventPg {
   ): EventVenuesConnectionPg
 }
 
+type VenuePg {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  creator: UserPg!
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [VenueAttachmentPg!]!
+  events(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): VenueEventsConnectionPg
+}
+
+type VenueEventsConnectionPg {
+  edges: [VenueEventsConnectionEdgePg!]!
+  pageInfo: PageInfoPg!
+}
+
+type VenueEventsConnectionEdgePg {
+  node: EventPg!
+  cursor: String!
+}
+
 type OrganizationFundsConnectionPg {
   edges: [OrganizationFundsConnectionEdgePg]
   pageInfo: PageInfoPg!
@@ -1115,6 +1324,60 @@ type FundPg {
   updater: User
 }
 
+type FundCampaignsConnectionPg {
+  edges: [FundCampaignsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type FundCampaignsConnectionEdgePg {
+  cursor: String!
+  node: FundCampaignPg
+}
+
+type FundCampaignPg {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  startAt: DateTime!
+  endAt: DateTime!
+  goalAmount: Int!
+  pledgedAmount: BigInt!
+  currencyCode: Iso4217CurrencyCode!
+  creator: UserPg!
+  updater: UserPg
+  fund: FundPg!
+  pledges(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FundCampaignPledgesConnectionPg
+}
+
+type FundCampaignPledgesConnectionPg {
+  edges: [FundCampaignPledgesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type FundCampaignPledgesConnectionEdgePg {
+  cursor: String!
+  node: FundCampaignPledgePg
+}
+
+type FundCampaignPledgePg {
+  id: ID!
+  amount: Int!
+  note: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  campaign: FundCampaignPg!
+  creator: UserPg!
+  pledger: UserPg!
+  updater: UserPg
+}
+
 type OrganizationMembersConnectionPg {
   edges: [OrganizationMembersConnectionEdgePg]
   pageInfo: PageInfoPg!
@@ -1127,7 +1390,7 @@ type OrganizationMembersConnectionEdgePg {
 
 type OrganizationPinnedPostsConnectionPg {
   edges: [OrganizationPinnedPostsConnectionEdgePg]
-  pageInfo: PageInfo!
+  pageInfo: PageInfoPg!
 }
 
 type OrganizationPinnedPostsConnectionEdgePg {
@@ -1166,6 +1429,84 @@ type PostPg {
   upVotesCount: Int
   updatedAt: DateTime
   updater: UserPg
+}
+
+type PostCommentsConnectionPg {
+  edges: [PostCommentsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostCommentsConnectionEdgePg {
+  cursor: String!
+  node: CommentPg
+}
+
+type CommentPg {
+  id: ID!
+  body: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  creator: UserPg!
+  post: PostPg!
+  downVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CommentDownVotersConnectionPg
+  downVotesCount: Int!
+  upVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CommentUpVotersConnectionPg
+  upVotesCount: Int!
+}
+
+type CommentDownVotersConnectionPg {
+  edges: [CommentDownVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type CommentDownVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type CommentUpVotersConnectionPg {
+  cursor: String!
+  node: UserPg
+}
+
+type PostUpVotersConnectionPg {
+  edges: [PostUpVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostDownVotersConnectionPg {
+  edges: [PostDownVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostDownVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type PostDownVotersConnectionPg {
+  cursor: String!
+  node: UserPg
+}
+
+type CommentUpVotersConnectionPg {
+  edges: [CommentUpVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostAttachmentPg {
+  mimeType: String
+  url: String
 }
 
 type OrganizationPostsConnectionPg {
@@ -1219,6 +1560,16 @@ type TagFolderPg {
     first: Int
     last: Int
   ): TagFolderTagsConnectionPg
+}
+
+type TagFolderTagsConnectionPg {
+  edges: [TagFolderTagsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagFolderTagsConnectionEdgePg {
+  cursor: String!
+  node: TagPg
 }
 
 type OrganizationTagsConnectionPg {
