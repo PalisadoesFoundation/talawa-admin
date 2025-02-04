@@ -54,7 +54,7 @@ const SecuredRouteForUser = (): JSX.Element => {
       if (
         role == UserRole.USER ||
         role == UserRole.ADMIN ||
-        UserRole.SUPER_ADMIN
+        role == UserRole.SUPER_ADMIN
       ) {
         return <Outlet />;
       } else {
