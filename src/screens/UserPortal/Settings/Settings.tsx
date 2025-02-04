@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
-import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
@@ -20,28 +20,57 @@ import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import Avatar from 'components/Avatar/Avatar';
-import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
-import { EventsAttendedByUser } from 'components/UserPortal/UserProfile/EventsAttendedByUser';
-import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 import '../../../style/app.module.css';
+import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
+import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttendedByUser';
+import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 /**
  * The Settings component allows users to view and update their profile settings.
  * It includes functionality to handle image uploads, reset changes, and save updated user details.
  *
  * @returns The Settings component.
  */
-export default function settings(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'settings',
-  });
+export default function Settings(): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
-  const [isUpdated, setisUpdated] = useState<boolean>(false);
+  const [isUpdated, setIsUpdated] = useState<boolean>(false);
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
 
-  /**
-   * Handler to adjust sidebar visibility based on window width.
-   * This function is invoked on window resize and when the component mounts.
-   */
+  const { setItem } = useLocalStorage();
+
+  // get details about current user
+  const { data } = useQuery(CURRENT_USER, { fetchPolicy: 'network-only' });
+
+  // mutation to update current user details
+  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
+
+  const [userDetails, setUserDetails] = useState({
+    addressLine1: '',
+    addressLine2: '',
+    emailAddress: '',
+    birthDate: null,
+    city: '',
+    avatar: selectedAvatar,
+    countryCode: '',
+    description: '',
+    educationGrade: '',
+    employmentStatus: '',
+    homePhoneNumber: '',
+    maritalStatus: '',
+    mobilePhoneNumber: '',
+    name: '',
+    natalSex: '',
+    naturalLanguageCode: '',
+    password: '',
+    postalCode: '',
+    state: '',
+    workPhoneNumber: '',
+  });
+
+  const originalImageState = React.useRef<string>('');
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
@@ -56,179 +85,99 @@ export default function settings(): JSX.Element {
     };
   }, []);
 
-  const { setItem } = useLocalStorage();
-  const { data } = useQuery(CURRENT_USER, { fetchPolicy: 'network-only' });
-  const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
-  const [userDetails, setUserDetails] = React.useState({
-    firstName: '',
-    lastName: '',
-    createdAt: '',
-    gender: '',
-    email: '',
-    phoneNumber: '',
-    birthDate: '',
-    grade: '',
-    empStatus: '',
-    maritalStatus: '',
-    address: '',
-    state: '',
-    country: '',
-    image: '',
-    eventsAttended: [] as InterfaceEvent[],
-  });
-
-  /**
-   * Ref to store the original image URL for comparison during updates.
-   */
-  const originalImageState = React.useRef<string>('');
-  /**
-   * Ref to access the file input element for image uploads.
-   */
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
-
-  /**
-   * Handles the update of user details.
-   * This function sends a mutation request to update the user details
-   * and reloads the page on success.
-   */
-
   const handleUpdateUserDetails = async (): Promise<void> => {
+
+    // takes an object and removes all the empty fields
+    function removeEmptyFields(obj: typeof userDetails) {
+      return Object.fromEntries(
+        Object.entries(obj).filter(([_, value]) =>
+          value !== null && value !== undefined &&
+          (typeof value !== "string" || value.trim() !== "")
+        )
+      );
+    }
+
     try {
-      let updatedUserDetails = { ...userDetails };
-      if (updatedUserDetails.image === originalImageState.current) {
-        updatedUserDetails = { ...updatedUserDetails, image: '' };
-      }
-      const { data } = await updateUserDetails({
-        variables: updatedUserDetails,
+      const data = {
+        addressLine1: userDetails.addressLine1,
+        addressLine2: userDetails.addressLine2,
+        birthDate: userDetails.birthDate,
+        emailAddress: '', // do not update email
+        city: userDetails.city,
+        countryCode: userDetails.countryCode,
+        description: userDetails.description,
+        educationGrade: userDetails.educationGrade,
+        employmentStatus: userDetails.employmentStatus,
+        homePhoneNumber: userDetails.homePhoneNumber,
+        maritalStatus: userDetails.maritalStatus,
+        mobilePhoneNumber: userDetails.mobilePhoneNumber,
+        name: userDetails.name,
+        natalSex: userDetails.natalSex,
+        naturalLanguageCode: userDetails.naturalLanguageCode,
+        password: userDetails.password,
+        postalCode: userDetails.postalCode,
+        state: userDetails.state,
+        workPhoneNumber: userDetails.workPhoneNumber,
+        avatar: userDetails.avatar instanceof File ? userDetails.avatar : null
+      };
+
+      const input = removeEmptyFields(data);
+
+      const { data: updateData } = await updateUser({
+        variables: { input }
       });
-      if (data) {
-        toast.success(
-          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
-        );
+
+      if (updateData) {
+        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }) as string);
+        setItem('name', userDetails.name);
         setTimeout(() => {
           window.location.reload();
         }, 500);
-        const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
-        setItem('name', userFullName);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
 
-  /**
-   * Handles the change of a specific field in the user details state.
-   *
-   * @param fieldName - The name of the field to be updated.
-   * @param value - The new value for the field.
-   */
   const handleFieldChange = (fieldName: string, value: string): void => {
-    // If the field is 'birthDate', validate the date
     if (fieldName === 'birthDate') {
       const today = new Date();
       const selectedDate = new Date(value);
-
-      // Prevent updating the state if the selected date is in the future
       if (selectedDate > today) {
-        console.error('Future dates are not allowed for the birth date.');
-        return; // Exit without updating the state
+        console.error('Future dates are not allowed for birth date.');
+        return;
       }
     }
 
-    // Update state if the value passes validation
-    setisUpdated(true);
+    setIsUpdated(true);
     setUserDetails((prevState) => ({
       ...prevState,
       [fieldName]: value,
     }));
   };
 
-  /**
-   * Triggers the file input click event to open the file picker dialog.
-   */
   const handleImageUpload = (): void => {
-    setisUpdated(true);
-    if (fileInputRef.current) {
-      (fileInputRef.current as HTMLInputElement).click();
-    }
+    setIsUpdated(true);
+    fileInputRef.current?.click();
   };
 
-  /**
-   * Resets the user details to the values fetched from the server.
-   */
   const handleResetChanges = (): void => {
-    setisUpdated(false);
-
-    if (data) {
-      const {
-        firstName,
-        lastName,
-        createdAt,
-        gender,
-        phone,
-        birthDate,
-        educationGrade,
-        employmentStatus,
-        maritalStatus,
-        address,
-      } = data.currentUser;
-
+    setIsUpdated(false);
+    if (data?.currentUser) {
       setUserDetails({
-        ...userDetails,
-        firstName: firstName || '',
-        lastName: lastName || '',
-        createdAt: createdAt || '',
-        gender: gender || '',
-        phoneNumber: phone?.mobile || '',
-        birthDate: birthDate || '',
-        grade: educationGrade || '',
-        empStatus: employmentStatus || '',
-        maritalStatus: maritalStatus || '',
-        address: address?.line1 || '',
-        state: address?.state || '',
-        country: address?.countryCode || '',
+        ...data.currentUser,
+        avataar: originalImageState.current
       });
     }
   };
 
   useEffect(() => {
-    if (data) {
-      const {
-        firstName,
-        lastName,
-        createdAt,
-        gender,
-        email,
-        phone,
-        birthDate,
-        educationGrade,
-        employmentStatus,
-        maritalStatus,
-        address,
-        image,
-        eventsAttended,
-      } = data.currentUser;
-
-      setUserDetails({
-        firstName,
-        lastName,
-        createdAt,
-        gender,
-        email,
-        phoneNumber: phone?.mobile || '',
-        birthDate,
-        grade: educationGrade || '',
-        empStatus: employmentStatus || '',
-        maritalStatus: maritalStatus || '',
-        address: address?.line1 || '',
-        state: address?.state || '',
-        country: address?.countryCode || '',
-        eventsAttended,
-        image,
-      });
-      originalImageState.current = image;
+    if (data?.currentUser) {
+      setUserDetails(data.currentUser);
+      originalImageState.current = data.currentUser.avatar || '';
     }
   }, [data]);
+
   return (
     <>
       {hideDrawer ? (
@@ -254,13 +203,12 @@ export default function settings(): JSX.Element {
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`d-flex flex-row ${styles.containerHeight} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
-        }`}
+        className={`d-flex flex-row ${styles.containerHeight} ${hideDrawer === null
+          ? ''
+          : hideDrawer
+            ? styles.expand
+            : styles.contract
+          }`}
       >
         <div className={`${styles.mainContainer}`}>
           <div className="d-flex justify-content-between align-items-center">
@@ -283,7 +231,7 @@ export default function settings(): JSX.Element {
                     <Col lg={12} className="mb-2">
                       <div className="text-center mb-3">
                         <div className="position-relative d-inline-block">
-                          {userDetails?.image ? (
+                          {userDetails.avatar ? (
                             <img
                               className="rounded-circle"
                               style={{
@@ -291,13 +239,13 @@ export default function settings(): JSX.Element {
                                 height: '60px',
                                 objectFit: 'cover',
                               }}
-                              src={userDetails.image}
+                              src={URL.createObjectURL(selectedAvatar)}
                               alt="User"
                               data-testid="profile-picture"
                             />
                           ) : (
                             <Avatar
-                              name={`${userDetails.firstName} ${userDetails.lastName}`}
+                              name={userDetails.name}
                               alt="User Image"
                               size={60}
                               dataTestId="profile-picture"
@@ -334,19 +282,23 @@ export default function settings(): JSX.Element {
                           const file = e.target?.files?.[0];
                           if (file) {
                             try {
-                              // Validate file size (e.g., 5MB limit)
-                              if (file.size > 5 * 1024 * 1024) {
-                                alert('File size should not exceed 5MB');
+                              // Validate file type and size
+                              const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                              const maxSize = 5 * 1024 * 1024; // 5MB
+
+                              setUserDetails({ ...userDetails, avatar: file });
+
+                              if (!validTypes.includes(file.type)) {
+                                alert('Invalid file type. Please upload a JPEG, PNG, or GIF.');
                                 return;
                               }
 
-                              // Validate file type
-                              if (!file.type.startsWith('image/')) {
-                                toast.error('Only image files are allowed');
+                              if (file.size > maxSize) {
+                                alert('File is too large. Maximum size is 5MB.');
                                 return;
                               }
-                              const image = await convertToBase64(file);
-                              setUserDetails({ ...userDetails, image });
+
+                              setSelectedAvatar(file);
                             } catch (error) {
                               toast.error('Failed to process image');
                               console.error('Image processing error:', error);
@@ -358,38 +310,20 @@ export default function settings(): JSX.Element {
                     </Col>
                     <Col lg={4}>
                       <Form.Label
-                        htmlFor="inputFirstName"
+                        htmlFor="inputName"
                         className={`${styles.cardLabel}`}
                       >
-                        {tCommon('firstName')}
+                        {tCommon('name')}
                       </Form.Label>
                       <Form.Control
                         type="text"
-                        id="inputFirstName"
-                        value={userDetails.firstName}
+                        id="inputName"
+                        value={userDetails.name}
                         onChange={(e) =>
-                          handleFieldChange('firstName', e.target.value)
+                          handleFieldChange('name', e.target.value)
                         }
                         className={`${styles.cardControl}`}
-                        data-testid="inputFirstName"
-                      />
-                    </Col>
-                    <Col lg={4}>
-                      <Form.Label
-                        htmlFor="inputLastName"
-                        className={`${styles.cardLabel}`}
-                      >
-                        {tCommon('lastName')}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="inputLastName"
-                        value={userDetails.lastName}
-                        onChange={(e) =>
-                          handleFieldChange('lastName', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                        data-testid="inputLastName"
+                        data-testid="inputName"
                       />
                     </Col>
                     <Col lg={4}>
@@ -402,9 +336,9 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         as="select"
                         id="gender"
-                        value={userDetails.gender}
+                        value={userDetails.natalSex}
                         onChange={(e) =>
-                          handleFieldChange('gender', e.target.value)
+                          handleFieldChange('natalSex', e.target.value)
                         }
                         className={`${styles.cardControl}`}
                         data-testid="inputGender"
@@ -419,6 +353,24 @@ export default function settings(): JSX.Element {
                         ))}
                       </Form.Control>
                     </Col>
+                    <Col lg={4}>
+                      <Form.Label
+                        htmlFor="inputPassword"
+                        className={`${styles.cardLabel}`}
+                      >
+                        {tCommon('password')}
+                      </Form.Label>
+                      <Form.Control
+                        type="password"
+                        id="inputPassword"
+                        placeholder='enter new password'
+                        onChange={(e) =>
+                          handleFieldChange('password', e.target.value)
+                        }
+                        className={`${styles.cardControl}`}
+                        data-testid="inputPassword"
+                      />
+                    </Col>
                   </Row>
                   <Row className="mb-1">
                     <Col lg={4}>
@@ -431,7 +383,7 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         type="email"
                         id="inputEmail"
-                        value={userDetails.email}
+                        value={userDetails.emailAddress}
                         className={`${styles.cardControl}`}
                         disabled
                       />
@@ -447,12 +399,50 @@ export default function settings(): JSX.Element {
                         type="tel"
                         id="phoneNo"
                         placeholder="1234567890"
-                        value={userDetails.phoneNumber}
+                        value={userDetails.mobilePhoneNumber}
                         onChange={(e) =>
-                          handleFieldChange('phoneNumber', e.target.value)
+                          handleFieldChange('mobilePhoneNumber', e.target.value)
                         }
                         className={`${styles.cardControl}`}
                         data-testid="inputPhoneNumber"
+                      />
+                    </Col>
+                    <Col lg={4}>
+                      <Form.Label
+                        htmlFor="phoneNo"
+                        className={`${styles.cardLabel}`}
+                      >
+                        {t('homePhoneNumber')}
+                      </Form.Label>
+                      <Form.Control
+                        type="tel"
+                        id="homePhoneNo"
+                        placeholder="1234567890"
+                        value={userDetails.homePhoneNumber}
+                        onChange={(e) =>
+                          handleFieldChange('homePhoneNumber', e.target.value)
+                        }
+                        className={`${styles.cardControl}`}
+                        data-testid="inputHomePhoneNumber"
+                      />
+                    </Col>
+                    <Col lg={4}>
+                      <Form.Label
+                        htmlFor="workPhoneNo"
+                        className={`${styles.cardLabel}`}
+                      >
+                        {t('workPhoneNumber')}
+                      </Form.Label>
+                      <Form.Control
+                        type="tel"
+                        id="workPhoneNo"
+                        placeholder="1234567890"
+                        value={userDetails.workPhoneNumber}
+                        onChange={(e) =>
+                          handleFieldChange('workPhoneNumber', e.target.value)
+                        }
+                        className={`${styles.cardControl}`}
+                        data-testid="inputWorkPhoneNumber"
                       />
                     </Col>
                     <Col lg={4}>
@@ -473,8 +463,6 @@ export default function settings(): JSX.Element {
                         max={new Date().toISOString().split('T')[0]}
                       />
                     </Col>
-                  </Row>
-                  <Row className="mb-1">
                     <Col lg={4}>
                       <Form.Label
                         htmlFor="grade"
@@ -485,9 +473,9 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         as="select"
                         id="grade"
-                        value={userDetails.grade}
+                        value={userDetails.educationGrade}
                         onChange={(e) =>
-                          handleFieldChange('grade', e.target.value)
+                          handleFieldChange('educationGrade', e.target.value)
                         }
                         className={`${styles.cardControl}`}
                         data-testid="inputGrade"
@@ -505,6 +493,8 @@ export default function settings(): JSX.Element {
                         ))}
                       </Form.Control>
                     </Col>
+                  </Row>
+                  <Row className="mb-1">
                     <Col lg={4}>
                       <Form.Label
                         htmlFor="empStatus"
@@ -515,9 +505,9 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         as="select"
                         id="empStatus"
-                        value={userDetails.empStatus}
+                        value={userDetails.employmentStatus}
                         onChange={(e) =>
-                          handleFieldChange('empStatus', e.target.value)
+                          handleFieldChange('employmentStatus', e.target.value)
                         }
                         className={`${styles.cardControl}`}
                         data-testid="inputEmpStatus"
@@ -566,12 +556,36 @@ export default function settings(): JSX.Element {
                       </Form.Control>
                     </Col>
                   </Row>
+                  <br />
+                  <h5>{tCommon('address')} :-</h5>
                   <UserAddressFields
                     tCommon={tCommon}
                     t={t}
                     handleFieldChange={handleFieldChange}
                     userDetails={userDetails}
                   />
+                  <Row className="mb-1">
+                    <Col lg={12}>
+                      <Form.Label
+                        htmlFor="description"
+                        className={`${styles.cardLabel}`}
+                      >
+                        {t('description')}
+                      </Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        id="description"
+                        placeholder={t('enterDescription')}
+                        value={userDetails.description}
+                        onChange={(e) =>
+                          handleFieldChange('description', e.target.value)
+                        }
+                        className={`${styles.cardControl}`}
+                        rows={3}
+                        data-testid="inputDescription"
+                      />
+                    </Col>
+                  </Row>
                   {isUpdated && (
                     <div
                       style={{
