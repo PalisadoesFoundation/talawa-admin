@@ -146,6 +146,8 @@
     "city": "शहर",
     "countryCode": "देश कोड",
     "dependentLocality": "निर्भर स्थान",
+    "addressLine1": "पता पंक्ति 1",
+    "addressLine2": "पता पंक्ति 2",
     "line1": "लाइन 1",
     "line2": "लाइन 2",
     "postalCode": "पोस्टल कोड",
@@ -1052,7 +1054,9 @@
     "comments": "टिप्पणियाँ",
     "viewPost": "पोस्ट देखें",
     "editPost": "पोस्ट संपादित करें",
-    "postedOn": "{{date}} को पोस्ट किया गया"
+    "postedOn": "{{date}} को पोस्ट किया गया",
+    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
+    "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।"
   },
   "home": {
     "title": "पदों",

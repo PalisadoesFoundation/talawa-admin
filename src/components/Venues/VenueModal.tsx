@@ -25,7 +25,7 @@ export interface InterfaceVenueModalProps {
  * A modal component for creating or updating venue information.
  *
  * This component displays a modal window where users can enter details for a venue, such as name, description, capacity, and an image.
- * It also handles submitting the form data to create or update a venue based on whether the `edit` prop is true or false.
+ * It also handles submitting the form data to create or update a venue based on whether the edit prop is true or false.
  *
  * @param show - A flag indicating if the modal should be visible.
  * @param onHide - A function to call when the modal should be closed.
@@ -35,6 +35,23 @@ export interface InterfaceVenueModalProps {
  * @param edit - A flag indicating if the modal is in edit mode. If true, the component will update an existing venue; if false, it will create a new one.
  *
  * @returns The rendered modal component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const VenueModal = ({
   show,
@@ -75,56 +92,105 @@ const VenueModal = ({
    *
    * @returns A promise that resolves when the submission is complete.
    */
+  // Update the handleSubmit function in VenueModal.tsx
+
   const handleSubmit = useCallback(async () => {
+    // Validate name
     if (formState.name.trim().length === 0) {
       toast.error(t('venueTitleError') as string);
       return;
     }
 
-    const capacityNum = parseInt(formState.capacity);
-    if (isNaN(capacityNum) || capacityNum <= 0) {
+    // Only validate name uniqueness if it has changed
+    if (edit && formState.name.trim() === venueData?.name) {
+      // If name hasn't changed, only update other fields
+      const variables = {
+        id: venueData._id,
+        capacity: parseInt(formState.capacity, 10),
+        description: formState.description?.trim() || '',
+        file: formState.imageURL || '',
+        // Don't include name if it hasn't changed
+      };
+
+      console.log('Sending update mutation without name:', variables);
+
+      try {
+        const result = await mutate({
+          variables,
+        });
+
+        if (result?.data?.editVenue) {
+          toast.success(t('venueUpdated'));
+          refetchVenues();
+          onHide();
+        }
+      } catch (error) {
+        console.error('Mutation error:', error);
+        errorHandler(t, error);
+      }
+      return;
+    }
+
+    // Validate capacity
+    const capacityNum = parseInt(formState.capacity, 10);
+    if (Number.isNaN(capacityNum) || capacityNum <= 0) {
       toast.error(t('venueCapacityError') as string);
       return;
     }
 
     try {
-      const { data } = await mutate({
-        variables: {
+      if (edit && venueData?._id) {
+        // If name has changed, include all fields
+        const variables = {
+          id: venueData._id,
+          name: formState.name.trim(),
           capacity: capacityNum,
-          file: formState.imageURL,
-          description: formState.description,
-          name: formState.name,
-          organizationId: orgId,
-          ...(edit && { id: venueData?._id }),
-        },
-      });
-      if (data) {
-        toast.success(
-          edit ? (t('venueUpdated') as string) : (t('venueAdded') as string),
-        );
-        refetchVenues();
-        onHide();
-        setFormState({
-          name: '',
-          description: '',
-          capacity: '',
-          imageURL: '',
+          description: formState.description?.trim() || '',
+          file: formState.imageURL || '',
+        };
+
+        console.log('Sending update mutation with name:', variables);
+
+        const result = await mutate({
+          variables,
         });
-        setVenueImage(false);
+
+        if (result?.data?.editVenue) {
+          toast.success(t('venueUpdated'));
+          refetchVenues();
+          onHide();
+        }
+      } else {
+        // Create venue case
+        const variables = {
+          name: formState.name.trim(),
+          capacity: capacityNum,
+          description: formState.description?.trim() || '',
+          file: formState.imageURL || '',
+          organizationId: orgId,
+        };
+
+        const result = await mutate({
+          variables,
+        });
+
+        if (result?.data?.createVenue) {
+          toast.success(t('venueCreated'));
+          refetchVenues();
+          onHide();
+        }
       }
     } catch (error) {
-      errorHandler(t, error);
+      console.error('Mutation error:', error);
+      if (error instanceof Error && error.message.includes('alreadyExists')) {
+        toast.error(
+          t('venueNameExists') || 'A venue with this name already exists',
+        );
+      } else {
+        errorHandler(t, error);
+      }
     }
-  }, [
-    edit,
-    formState,
-    mutate,
-    onHide,
-    orgId,
-    refetchVenues,
-    t,
-    venueData?._id,
-  ]);
+  }, [formState, mutate, onHide, refetchVenues, t, venueData, edit, orgId]);
 
   /**
    * Clears the selected image and resets the image preview.
@@ -142,12 +208,12 @@ const VenueModal = ({
   // Update form state when venueData changes
   useEffect(() => {
     setFormState({
-      name: venueData?.name || '',
-      description: venueData?.description || '',
-      capacity: venueData?.capacity || '',
-      imageURL: venueData?.image || '',
+      name: venueData?.name || '', // Prefill name or set as empty
+      description: venueData?.description || '', // Prefill description
+      capacity: venueData?.capacity?.toString() || '', // Prefill capacity as a string
+      imageURL: venueData?.image || '', // Prefill image
     });
-    setVenueImage(venueData?.image ? true : false);
+    setVenueImage(!!venueData?.image); // Set preview if image exists
   }, [venueData]);
 
   const { name, description, capacity, imageURL } = formState;
@@ -181,6 +247,7 @@ const VenueModal = ({
                 name: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <label htmlFor="venuedescrip">{tCommon('description')}</label>
           <Form.Control
@@ -198,6 +265,7 @@ const VenueModal = ({
                 description: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <label htmlFor="venuecapacity">{t('capacity')}</label>
           <Form.Control
@@ -213,6 +281,7 @@ const VenueModal = ({
                 capacity: e.target.value,
               });
             }}
+            className={styles.inputField}
           />
           <Form.Label htmlFor="venueImg">{t('image')}</Form.Label>
           <Form.Control
@@ -240,6 +309,7 @@ const VenueModal = ({
                 });
               }
             }}
+            className={styles.inputField}
           />
           {venueImage && (
             <div className={styles.previewVenueModal}>

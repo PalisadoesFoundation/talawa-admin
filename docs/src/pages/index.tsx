@@ -1,37 +1,24 @@
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import React from 'react';
+import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
+import HeaderHero from '../components/layout/HeaderHero';
 
-import styles from './index.module.css';
+const Index = () => {
+  const pageTitle = 'Talawa-Docs: Powered by The Palisadoes';
 
-function HomepageHeader() {
-  const { siteConfig } = useDocusaurusContext();
-  return (
-    <header className={styles.heroBanner}>
-      <div className="container">
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-      </div>
-    </header>
-  );
-}
-
-export default function Home(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      description="Powering Closer Communities"
+      wrapperClassName="homepage"
     >
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-      </main>
+      <Head>
+        <title>{pageTitle}</title>
+        <meta property="og:title" content={pageTitle} />
+        <meta property="twitter:title" content={pageTitle} />
+      </Head>
+      <HeaderHero />
     </Layout>
   );
-}
+};
+
+export default Index;

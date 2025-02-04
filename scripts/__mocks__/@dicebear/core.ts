@@ -1,5 +1,7 @@
-export const createAvatar = jest.fn(() => {
+import { vi } from 'vitest';
+
+export const createAvatar = vi.fn(() => {
   return {
-    toDataUri: jest.fn(() => 'mocked-data-uri'),
+    toDataUri: vi.fn(() => 'mocked-data-uri'),
   };
 });

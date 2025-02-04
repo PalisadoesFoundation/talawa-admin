@@ -29,7 +29,7 @@ import Users from 'screens/Users/Users';
 import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
 import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
 import Leaderboard from 'screens/Leaderboard/Leaderboard';
-
+import './style/app.module.css';
 import React, { useEffect } from 'react';
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
@@ -38,9 +38,9 @@ import Posts from 'screens/UserPortal/Posts/Posts';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
-// import Chat from 'screens/UserPortal/Chat/Chat';
+import Chat from 'screens/UserPortal/Chat/Chat';
 import { useQuery } from '@apollo/client';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 
@@ -57,7 +57,7 @@ const { setItem } = useLocalStorage();
 /**
  * This is the main function for our application. It sets up all the routes and components,
  * defining how the user can navigate through the app. The function uses React Router's `Routes`
- * and `Route` components to map different URL paths to corresponding screens and components.
+ * and `Route`  components to map different URL paths to corresponding screens and components.
  *
  * ## Important Details
  * - **UseEffect Hook**: This hook checks user authentication status using the `CHECK_AUTH` GraphQL query.
@@ -97,19 +97,16 @@ function app(): JSX.Element {
 
   // TODO: Fetch Installed plugin extras and store for use within MainContent and Side Panel Components.
 
-  const { data, loading } = useQuery(CHECK_AUTH);
+  const { data, loading } = useQuery(CURRENT_USER);
 
   useEffect(() => {
-    if (!loading && data?.checkAuth) {
-      const auth = data.checkAuth;
+    if (!loading && data?.currentUser) {
+      const auth = data.currentUser;
       setItem('IsLoggedIn', 'TRUE');
-      setItem('id', auth._id);
-      setItem('name', `${auth.firstName} ${auth.lastName}`);
-      setItem('FirstName', auth.firstName);
-      setItem('LastName', auth.lastName);
-      setItem('email', auth.email);
-      setItem('Email', auth.email);
-      setItem('UserImage', auth.image);
+      setItem('id', auth.id);
+      setItem('name', auth.name);
+      setItem('email', auth.emailAddress);
+      // setItem('UserImage', auth.avatarURL|| "");
     }
   }, [data, loading, setItem]);
 
@@ -191,8 +188,8 @@ function app(): JSX.Element {
         <Route element={<SecuredRouteForUser />}>
           <Route path="/user/organizations" element={<Organizations />} />
           <Route path="/user/settings" element={<Settings />} />
-          {/* <Route path="/user/chat" element={<Chat />} /> */}
           <Route element={<UserScreen />}>
+            <Route path="/user/chat/:orgId" element={<Chat />} />
             <Route path="/user/organizations" element={<Organizations />} />
             <Route path="/user/organization/:orgId" element={<Posts />} />
             <Route path="/user/people/:orgId" element={<People />} />

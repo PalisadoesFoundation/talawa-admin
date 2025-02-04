@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -21,6 +21,7 @@ import VolunteerCreateModal from './VolunteerCreateModal';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import VolunteerViewModal from './VolunteerViewModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum VolunteerStatus {
   All = 'all',
@@ -35,6 +36,17 @@ enum ModalState {
 }
 
 const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-cell': {
+    border: 'none',
+  },
+  '& .MuiDataGrid-columnSeparator': {
+    display: 'none',
+  },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
@@ -78,7 +90,6 @@ function volunteers(): JSX.Element {
 
   const [volunteer, setVolunteer] =
     useState<InterfaceEventVolunteerInfo | null>(null);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<
     'hoursVolunteered_ASC' | 'hoursVolunteered_DESC' | null
@@ -174,7 +185,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.user;
         return (
@@ -214,7 +225,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <Chip
@@ -234,7 +245,7 @@ function volunteers(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -252,7 +263,7 @@ function volunteers(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
@@ -273,7 +284,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -306,31 +317,14 @@ function volunteers(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: 'Name',
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputFields}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: 'Name',
+          })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
@@ -372,6 +366,7 @@ function volunteers(): JSX.Element {
               variant="success"
               onClick={() => handleOpenModal(null, ModalState.ADD)}
               style={{ marginTop: '11px' }}
+              className={styles.actionsButton}
               data-testid="addVolunteerBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -384,6 +379,7 @@ function volunteers(): JSX.Element {
       {/* Table with Volunteers */}
       <DataGrid
         disableColumnMenu
+        disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
         getRowId={(row) => row._id}

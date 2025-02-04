@@ -294,6 +294,8 @@ describe('Testing AddOnStore Component', () => {
       target: { value: searchText },
     });
 
+    fireEvent.click(screen.getByTestId('searchBtn'));
+
     const message = screen.getAllByText('Plugin does not exists');
     expect(message.length).toBeGreaterThanOrEqual(1);
   });

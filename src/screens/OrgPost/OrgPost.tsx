@@ -1,5 +1,5 @@
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
-import { Search } from '@mui/icons-material';
+import type { ApolloError } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
@@ -19,6 +19,7 @@ import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import SortingButton from '../../subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfaceOrgPost {
   _id: string;
@@ -47,6 +48,25 @@ interface InterfaceOrgPost {
  * It also provides the functionality to create a new post. The user can also sort the posts based on the date of creation.
  * The user can also search for a post based on the title of the post.
  * @returns JSX.Element which contains the posts of the organization.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.removeButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -126,8 +146,6 @@ function orgPost(): JSX.Element {
       [],
   );
 
-  // ...
-
   useEffect(() => {
     if (orgPostListData && orgPostListData.organizations) {
       const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
@@ -167,7 +185,6 @@ function orgPost(): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('postCreatedSuccess') as string);
         refetch();
@@ -215,12 +232,11 @@ function orgPost(): JSX.Element {
     }
   };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = e.target;
+  const handleSearch = (term: string): void => {
     const filterData = {
       id: currentUrl,
-      title_contains: showTitle ? value : null,
-      text_contains: !showTitle ? value : null,
+      title_contains: showTitle ? term : null,
+      text_contains: !showTitle ? term : null,
       after: after || null,
       before: before || null,
       first: first || null,
@@ -228,8 +244,6 @@ function orgPost(): JSX.Element {
     };
     refetch(filterData);
   };
-
-  const debouncedHandleSearch = handleSearch;
 
   const handleSorting = (option: string): void => {
     setSortingOption(option);
@@ -246,7 +260,7 @@ function orgPost(): JSX.Element {
     setFirst(null);
     setLast(6);
   };
-  // console.log(orgPostListData?.organizations[0].posts);
+
   const sortPosts = (
     posts: InterfaceOrgPost[],
     sortingOption: string,
@@ -273,7 +287,7 @@ function orgPost(): JSX.Element {
     if (a.pinned === b.pinned) {
       return 0;
     }
-    /* istanbul ignore next */
+
     if (a.pinned) {
       return -1;
     }
@@ -285,21 +299,11 @@ function orgPost(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpagerightOrgPost}>
           <div className={styles.btnsContainerOrgPost}>
-            <div className={styles.inputOrgPost}>
-              <Form.Control
-                type="text"
-                id="posttitle"
-                className={styles.inputField}
-                placeholder={showTitle ? t('searchTitle') : t('searchText')}
-                data-testid="searchByName"
-                autoComplete="off"
-                onChange={debouncedHandleSearch}
-                required
-              />
-              <Button tabIndex={-1} className={`${styles.searchButton} `}>
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={showTitle ? t('searchTitle') : t('searchText')}
+              onSearch={handleSearch}
+              inputTestId="searchByName"
+            />
             <div className={styles.btnsBlockOrgPost}>
               <div className="d-flex">
                 <SortingButton
@@ -380,6 +384,7 @@ function orgPost(): JSX.Element {
                 !orgPostListData?.organizations[0].posts.pageInfo
                   .hasPreviousPage
               }
+              data-testid="previousButton"
             >
               {t('Previous')}
             </Button>
@@ -391,6 +396,7 @@ function orgPost(): JSX.Element {
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
               }
+              data-testid="nextButton"
             >
               {t('Next')}
             </Button>
@@ -413,7 +419,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('postTitle1')}
               data-testid="modalTitle"
               autoComplete="off"
@@ -430,7 +436,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="descrip"
               id="descrip"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('information1')}
               data-testid="modalinfo"
               autoComplete="off"
@@ -455,6 +461,7 @@ function orgPost(): JSX.Element {
               multiple={false}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
+              className={`mb-3 ${styles.inputField}`}
             />
 
             {postformState.addMedia && file && (
@@ -506,13 +513,14 @@ function orgPost(): JSX.Element {
                   pinPost: !postformState.pinPost,
                 })
               }
+              className={styles.switch}
             />
           </Modal.Body>
 
           <Modal.Footer>
             <Button
               variant="secondary"
-              className={styles.closeButtonOrgPost}
+              className={styles.removeButton}
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
@@ -522,7 +530,7 @@ function orgPost(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createPostBtn"
-              className={`${styles.addButtonOrgPost} mt-2`}
+              className={`${styles.addButton} mt-2`}
             >
               {t('addPost')}
             </Button>

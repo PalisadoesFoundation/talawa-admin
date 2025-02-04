@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -17,28 +17,28 @@ import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from '../../style/app.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
-  borderRadius: '20px',
-  backgroundColor: '#EAEBEF',
+  borderRadius: 'var(--table-head-radius)',
+  backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
-    backgroundColor: '#eff1f7',
+    backgroundColor: 'var(--row-background)',
     '&:focus-within': {
-      outline: '2px solid #000',
-      outlineOffset: '-2px',
+      outline: 'none',
     },
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: '#EAEBEF',
-    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'var(--row-background)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: '#EAEBEF',
-    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'var(--row-background)',
   },
   '& .MuiDataGrid-cell:focus': {
-    outline: '2px solid #000',
-    outlineOffset: '-2px',
+    outline: 'none',
+  },
+  '& .MuiDataGrid-cell:focus-within': {
+    outline: 'none',
   },
 };
 
@@ -75,12 +75,38 @@ const dataGridStyle = {
  * - `handleClick(fundId: string)`: Navigates to the campaign page for the specified fund.
  *
  * @returns The rendered component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.tableHeader`
+ * - `.subtleBlueGrey`
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'funds',
   });
   const { t: tCommon } = useTranslation('common');
+
+  // Set the document title based on the translation
+  document.title = t('title');
 
   const { orgId } = useParams();
   const navigate = useNavigate();
@@ -156,12 +182,12 @@ const organizationFunds = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'id',
-      headerName: 'Sr. No.',
+      headerName: '#',
       flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return <div>{params.row.id}</div>;
@@ -175,11 +201,11 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            className={styles.hyperlinkText}
             data-testid="fundName"
             onClick={() => handleClick(params.row._id as string)}
           >
@@ -196,7 +222,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return params.row.creator.firstName + ' ' + params.row.creator.lastName;
       },
@@ -208,7 +234,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       flex: 2,
       renderCell: (params: GridCellParams) => {
         return (
@@ -226,7 +252,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return params.row.isArchived ? 'Archived' : 'Active';
       },
@@ -239,7 +265,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -267,7 +293,7 @@ const organizationFunds = (): JSX.Element => {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <Button
@@ -286,46 +312,33 @@ const organizationFunds = (): JSX.Element => {
 
   return (
     <div>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
+      <div className={styles.head}>
+        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+          <SearchBar
             placeholder={tCommon('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputFields}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchByName"
+            onSearch={setSearchTerm}
+            inputTestId="searchByName"
+            buttonTestId="searchBtn"
           />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton} `}
-            style={{ marginBottom: '0px' }}
-            data-testid="searchBtn"
-          >
-            <Search className={styles.searchIcon} />
-          </Button>
-        </div>
-        <div className="d-flex gap-4 mb-1">
-          <SortingButton
-            title={tCommon('sort')}
-            sortingOptions={[
-              { label: t('createdLatest'), value: 'createdAt_DESC' },
-              { label: t('createdEarliest'), value: 'createdAt_ASC' },
-            ]}
-            selectedOption={
-              sortBy === 'createdAt_DESC'
-                ? t('createdLatest')
-                : t('createdEarliest')
-            }
-            onSortChange={(value) =>
-              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
-            }
-            dataTestIdPrefix="filter"
-            buttonLabel={tCommon('sort')}
-          />
-          <div>
+          <div className="d-flex gap-4 mb-1">
+            <SortingButton
+              title={tCommon('sort')}
+              sortingOptions={[
+                { label: t('createdLatest'), value: 'createdAt_DESC' },
+                { label: t('createdEarliest'), value: 'createdAt_ASC' },
+              ]}
+              selectedOption={
+                sortBy === 'createdAt_DESC'
+                  ? t('createdLatest')
+                  : t('createdEarliest')
+              }
+              onSortChange={(value) =>
+                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+              className={styles.dropdown}
+            />
             <Button
               variant="success"
               onClick={() => handleOpenModal(null, 'create')}

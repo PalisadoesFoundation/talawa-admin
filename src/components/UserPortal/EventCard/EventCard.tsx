@@ -96,13 +96,12 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
             eventId: props.id,
           },
         });
-        /* istanbul ignore next */
         if (data) {
           setIsRegistered(true);
           toast.success(`Successfully registered for ${props.title}`);
         }
-      } catch (error: unknown) {
-        /* istanbul ignore next */
+      } catch (error) {
+        toast.error(`Failed to register for the event`);
         toast.error(error as string);
       }
     }

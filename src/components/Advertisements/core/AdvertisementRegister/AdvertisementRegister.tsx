@@ -16,6 +16,25 @@ import { useParams } from 'react-router-dom';
 
 /**
  * Props for the `advertisementRegister` component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.dropdown`
+ * - `.inputField`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 interface InterfaceAddOnRegisterProps {
   id?: string; // Optional organization ID
@@ -249,7 +268,7 @@ function advertisementRegister({
     <>
       {formStatus === 'register' ? (
         <Button
-          className={styles.modalbtn}
+          className={styles.dropdown}
           variant="primary"
           onClick={handleShow}
           data-testid="createAdvertisement"
@@ -286,6 +305,7 @@ function advertisementRegister({
                     name: e.target.value,
                   });
                 }}
+                className={styles.inputField}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -312,6 +332,7 @@ function advertisementRegister({
                     });
                   }
                 }}
+                className={styles.inputField}
               />
               {formState.advertisementMedia && (
                 <div
@@ -367,6 +388,7 @@ function advertisementRegister({
                     type: e.target.value,
                   });
                 }}
+                className={styles.inputField}
               >
                 <option value="POPUP">Popup Ad</option>
                 <option value="BANNER">Banner Ad </option>
@@ -385,6 +407,7 @@ function advertisementRegister({
                     startDate: new Date(e.target.value),
                   });
                 }}
+                className={styles.inputField}
               />
             </Form.Group>
 
@@ -400,6 +423,7 @@ function advertisementRegister({
                     endDate: new Date(e.target.value),
                   });
                 }}
+                className={styles.inputField}
               />
             </Form.Group>
           </Form>
@@ -408,14 +432,13 @@ function advertisementRegister({
           <Button
             variant="secondary"
             onClick={handleClose}
-            className={styles.closeButtonAdvertisementRegister}
+            className={`btn btn-danger ${styles.removeButton}`}
             data-testid="addonclose"
           >
             {tCommon('close')}
           </Button>
           {formStatus === 'register' ? (
             <Button
-              variant="primary"
               onClick={handleRegister}
               data-testid="addonregister"
               className={styles.addButton}
@@ -424,9 +447,9 @@ function advertisementRegister({
             </Button>
           ) : (
             <Button
-              variant="primary"
               onClick={handleUpdate}
               data-testid="addonupdate"
+              className={styles.addButton}
             >
               {tCommon('saveChanges')}
             </Button>

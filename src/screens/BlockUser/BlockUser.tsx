@@ -1,10 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { Form, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 
-import { Search } from '@mui/icons-material';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
@@ -16,6 +15,7 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app.module.css';
 import { useParams } from 'react-router-dom';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfaceMember {
   _id: string;
@@ -41,6 +41,28 @@ interface InterfaceMember {
  * ```tsx
  * <Requests />
  * ```
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const Requests = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -156,23 +178,6 @@ const Requests = (): JSX.Element => {
     [searchByFirstName, memberRefetch, currentUrl],
   );
 
-  // Search by Enter key
-  const handleSearchByEnter = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>): void => {
-      if (e.key === 'Enter') {
-        const { value } = e.currentTarget;
-        handleSearch(value);
-      }
-    },
-    [handleSearch],
-  );
-
-  // Search button click handler
-  const handleSearchByBtnClick = useCallback((): void => {
-    const inputValue = searchByName;
-    handleSearch(inputValue);
-  }, [handleSearch, searchByName]);
-
   // Header titles for the table
   const headerTitles: string[] = [
     '#',
@@ -185,37 +190,19 @@ const Requests = (): JSX.Element => {
     <>
       <div>
         {/* Buttons Container */}
-        <div className={styles.btnsContainerBlockAndUnblock}>
-          <div className={styles.inputContainerBlockAndUnblock}>
-            <div className={styles.inputBlockAndUnblock}>
-              <Form.Control
-                type="name"
-                id="searchBlockedUsers"
-                className="bg-white"
-                placeholder={
-                  searchByFirstName
-                    ? t('searchByFirstName')
-                    : t('searchByLastName')
-                }
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                value={searchByName}
-                onChange={(e) => setSearchByName(e.target.value)}
-                onKeyUp={handleSearchByEnter}
-              />
-              <Button
-                tabIndex={-1}
-                className={styles.search}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
-          </div>
-          <div className={styles.btnsBlockBlockAndUnblock}>
-            <div className={styles.largeBtnsWrapper}>
+        <div className={styles.head}>
+          <div className={styles.btnsContainer}>
+            <SearchBar
+              placeholder={
+                searchByFirstName
+                  ? t('searchByFirstName')
+                  : t('searchByLastName')
+              }
+              onSearch={handleSearch}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
+            <div className={styles.btnsBlock}>
               <SortingButton
                 title={t('sortOrganizations')}
                 sortingOptions={[
@@ -231,7 +218,9 @@ const Requests = (): JSX.Element => {
                 dataTestIdPrefix="userFilter"
                 className={`${styles.createButton} mt-2`}
               />
+            </div>
 
+            <div className={styles.btnsBlock}>
               <SortingButton
                 title={t('sortByName')}
                 sortingOptions={[

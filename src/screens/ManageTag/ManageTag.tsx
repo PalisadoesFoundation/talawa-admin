@@ -1,11 +1,11 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { Col, Form } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -38,9 +38,28 @@ import EditUserTagModal from './EditUserTagModal';
 import RemoveUserTagModal from './RemoveUserTagModal';
 import UnassignUserTagModal from './UnassignUserTagModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 /**
  * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/manageTag/:tagId'.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.tableHeader`
+ * - `.editButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 
 function ManageTag(): JSX.Element {
@@ -131,7 +150,6 @@ function ManageTag(): JSX.Element {
           };
         },
       ) => {
-        /* istanbul ignore next -- @preserve */
         if (!fetchMoreResult) return prevResult;
 
         return {
@@ -174,7 +192,6 @@ function ManageTag(): JSX.Element {
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned') as string);
     } catch (error: unknown) {
-      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -209,14 +226,12 @@ function ManageTag(): JSX.Element {
         },
       });
 
-      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('tagUpdationSuccess'));
         userTagAssignedMembersRefetch();
         setEditUserTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -236,7 +251,6 @@ function ManageTag(): JSX.Element {
       toggleRemoveUserTagModal();
       toast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
-      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -259,7 +273,7 @@ function ManageTag(): JSX.Element {
   const userTagAssignedMembers =
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
       (edge) => edge.node,
-    ) ?? /* istanbul ignore next -- @preserve */ [];
+    ) ?? [];
 
   // get the ancestorTags array and push the current tag in it
   // used for the tag breadcrumbs
@@ -291,7 +305,7 @@ function ManageTag(): JSX.Element {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return <div>{params.row.id}</div>;
@@ -303,7 +317,7 @@ function ManageTag(): JSX.Element {
       flex: 2,
       minWidth: 100,
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="memberName">
@@ -320,7 +334,7 @@ function ManageTag(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div>
@@ -329,7 +343,9 @@ function ManageTag(): JSX.Element {
               state={{ id: params.row._id }}
               data-testid="viewProfileBtn"
             >
-              <div className="btn btn-sm btn-primary me-3">
+              <div
+                className={`btn btn-sm btn-primary me-3 ${styles.editButton}`}
+              >
                 {t('viewProfile')}
               </div>
             </Link>
@@ -356,26 +372,12 @@ function ManageTag(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
-            <div className={styles.input}>
-              <Form.Control
-                type="text"
-                id="userName"
-                className={`${styles.inputField} `}
-                placeholder={tCommon('searchByName')}
-                onChange={(e) =>
-                  setAssignedMemberSearchInput(e.target.value.trim())
-                }
-                data-testid="searchByName"
-                autoComplete="off"
-              />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              onSearch={(term) => setAssignedMemberSearchInput(term.trim())}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
             <div className={styles.btnsBlock}>
               <SortingButton
                 title="Sort People"
@@ -436,7 +438,6 @@ function ManageTag(): JSX.Element {
                     >
                       {tag.name}
                       {orgUserTagAncestors.length - 1 !== index && (
-                        /* istanbul ignore next -- @preserve */
                         <i className={'mx-2 fa fa-caret-right'} />
                       )}
                     </div>
@@ -452,8 +453,7 @@ function ManageTag(): JSX.Element {
                     next={loadMoreAssignedMembers}
                     hasMore={
                       userTagAssignedMembersData?.getAssignedUsers
-                        .usersAssignedTo.pageInfo.hasNextPage ??
-                      /* istanbul ignore next -- @preserve */ false
+                        .usersAssignedTo.pageInfo.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="manageTagScrollableDiv"
@@ -464,16 +464,15 @@ function ManageTag(): JSX.Element {
                       hideFooter={true}
                       getRowId={(row) => row.id}
                       slots={{
-                        noRowsOverlay:
-                          /* istanbul ignore next -- @preserve */ () => (
-                            <Stack
-                              height="100%"
-                              alignItems="center"
-                              justifyContent="center"
-                            >
-                              {t('noAssignedMembersFound')}
-                            </Stack>
-                          ),
+                        noRowsOverlay: () => (
+                          <Stack
+                            height="100%"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            {t('noAssignedMembersFound')}
+                          </Stack>
+                        ),
                       }}
                       sx={dataGridStyle}
                       getRowClassName={() => `${styles.rowBackgrounds}`}
@@ -501,7 +500,7 @@ function ManageTag(): JSX.Element {
                       setTagActionType('assignToTags');
                       showTagActionsModal();
                     }}
-                    className="my-2 btn btn-primary btn-sm w-75"
+                    className={`my-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="assignToTags"
                   >
                     {t('assignToTags')}
@@ -525,7 +524,7 @@ function ManageTag(): JSX.Element {
                   />
                   <div
                     onClick={showEditUserTagModal}
-                    className="mt-1 mb-2 btn btn-primary btn-sm w-75"
+                    className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="editUserTag"
                   >
                     {tCommon('edit')}

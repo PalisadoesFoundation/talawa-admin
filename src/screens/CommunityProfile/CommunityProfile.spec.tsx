@@ -11,6 +11,11 @@ import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { RESET_COMMUNITY, UPDATE_COMMUNITY } from 'GraphQl/Mutations/mutations';
+import { errorHandler } from 'utils/errorHandler';
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
 
 const MOCKS1 = [
   {
@@ -137,6 +142,146 @@ const MOCKS3 = [
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS3, true);
+
+const LOADING_MOCK = [
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: null,
+      },
+    },
+    delay: 100, // Add delay to ensure loading state is rendered
+  },
+];
+
+const ERROR_MOCK = [
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: null,
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_COMMUNITY,
+      variables: {
+        data: {
+          name: 'Test Name',
+          websiteLink: 'https://test.com',
+          logo: '',
+          socialMediaUrls: {
+            facebook: '',
+            instagram: '',
+            X: '',
+            linkedIn: '',
+            gitHub: '',
+            youTube: '',
+            reddit: '',
+            slack: '',
+          },
+        },
+      },
+    },
+    error: new Error('Mutation error'),
+  },
+];
+
+const RESET_ERROR_MOCKS = [
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: {
+          _id: 'test-id-123',
+          name: 'Test Community',
+          websiteLink: 'https://test.com',
+          logoUrl: 'test-logo.png',
+          socialMediaUrls: {
+            facebook: 'https://facebook.com/test',
+            instagram: 'https://instagram.com/test',
+            X: 'https://twitter.com/test',
+            linkedIn: 'https://linkedin.com/test',
+            gitHub: 'https://github.com/test',
+            youTube: 'https://youtube.com/test',
+            reddit: 'https://reddit.com/test',
+            slack: 'https://slack.com/test',
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: RESET_COMMUNITY,
+      variables: {
+        resetPreLoginImageryId: 'test-id-123',
+      },
+    },
+    error: new Error('Failed to reset community profile'),
+  },
+];
+
+const BASE64_MOCKS = [
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: null,
+      },
+    },
+  },
+];
+
+const UPDATE_SUCCESS_MOCKS = [
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: null,
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_COMMUNITY,
+      variables: {
+        data: {
+          name: 'Test Name',
+          websiteLink: 'https://test.com',
+          logo: '',
+          socialMediaUrls: {
+            facebook: '',
+            instagram: '',
+            X: '',
+            linkedIn: '',
+            gitHub: '',
+            youTube: '',
+            reddit: '',
+            slack: '',
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        updateCommunity: true,
+      },
+    },
+  },
+];
 
 const profileVariables = {
   name: 'Name',
@@ -328,5 +473,147 @@ describe('Testing Community Profile Screen', () => {
     expect(screen.getByTestId(/youtube/i)).toHaveValue('');
     expect(screen.getByTestId(/reddit/i)).toHaveValue('');
     expect(screen.getByTestId(/slack/i)).toHaveValue('');
+  });
+
+  test('should show loader while data is being fetched', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={LOADING_MOCK}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Loader should be present during loading state
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+  });
+
+  test('should handle mutation error correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={ERROR_MOCK}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const nameInput = screen.getByPlaceholderText(/Community Name/i);
+    const websiteInput = screen.getByPlaceholderText(/Website Link/i);
+    const logoInput = screen.getByTestId('fileInput');
+
+    userEvent.type(nameInput, 'Test Name');
+    userEvent.type(websiteInput, 'https://test.com');
+    userEvent.upload(
+      logoInput,
+      new File([''], 'test.png', { type: 'image/png' }),
+    );
+
+    const submitButton = screen.getByTestId('saveChangesBtn');
+    userEvent.click(submitButton);
+    await wait();
+
+    expect(errorHandler).toHaveBeenCalled();
+    expect(errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.any(Error),
+    );
+  });
+
+  test('should handle error during reset operation', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={RESET_ERROR_MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const nameInput = await screen.findByPlaceholderText(
+      /Community Name/i,
+      {},
+      { timeout: 2000 },
+    );
+    const websiteInput = await screen.findByPlaceholderText(
+      /Website Link/i,
+      {},
+      { timeout: 2000 },
+    );
+
+    expect(nameInput).toHaveValue('Test Community');
+    expect(websiteInput).toHaveValue('https://test.com');
+
+    const resetButton = screen.getByTestId('resetChangesBtn');
+    userEvent.click(resetButton);
+    await wait();
+
+    // Verify error handler was called
+    expect(errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.any(Error),
+    );
+    // Verify toast success was not called (since there was an error)
+    expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  test('should handle null base64 conversion when updating logo', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={BASE64_MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const mockFile = new File([''], 'test.png', { type: 'image/png' });
+    vi.mock('utils/convertToBase64', () => ({
+      default: vi.fn().mockResolvedValue(null),
+    }));
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    userEvent.upload(fileInput, mockFile);
+    await wait();
+
+    // Ensure state or UI behavior when base64 conversion fails
+    expect(fileInput.value).toBe('');
+
+    // Ensure no success toast is shown for null conversion
+    expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  test('should show success toast when profile is updated successfully', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const nameInput = screen.getByPlaceholderText(/Community Name/i);
+    const websiteInput = screen.getByPlaceholderText(/Website Link/i);
+    const logoInput = screen.getByTestId('fileInput');
+
+    userEvent.type(nameInput, 'Test Name');
+    userEvent.type(websiteInput, 'https://test.com');
+    userEvent.upload(
+      logoInput,
+      new File([''], 'test.png', { type: 'image/png' }),
+    );
+
+    const submitButton = screen.getByTestId('saveChangesBtn');
+    userEvent.click(submitButton);
+    await wait();
+
+    expect(toast.success).toHaveBeenCalledWith(expect.any(String));
   });
 });

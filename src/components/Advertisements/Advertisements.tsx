@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styles from '../../style/app.module.css';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
-import { Button, Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
+import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 import { useParams } from 'react-router-dom';
 import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Search } from '@mui/icons-material';
+import SearchBar from 'subComponents/SearchBar';
 
 export default function advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams();
@@ -82,20 +82,12 @@ export default function advertisements(): JSX.Element {
         <Col col={8} className={styles.containerAdvertisements}>
           <div className={styles.justifyspAdvertisements}>
             <Col className={styles.colAdvertisements}>
-              <div className={styles.inputAdvertisements}>
-                <Form.Control
-                  type="name"
-                  id="searchname"
-                  className={styles.inputField}
-                  placeholder={'Search..'}
-                  autoComplete="off"
-                  required
-                  // onChange={(e): void => setSearchText("search")}
-                />
-                <Button className={styles.searchButton}>
-                  <Search />
-                </Button>
-              </div>
+              <SearchBar
+                placeholder={'Search..'}
+                onSearch={(value) => console.log(value)} // Replace with actual search handler
+                inputTestId="searchname"
+                buttonTestId="searchButton"
+              />
               <AdvertisementRegister setAfter={setAfter} />
             </Col>
 
@@ -184,7 +176,11 @@ export default function advertisements(): JSX.Element {
                   )}
                 </InfiniteScroll>
               </Tab>
-              <Tab eventKey="archievedAds" title={t('archievedAds')}>
+              <Tab
+                eventKey="archievedAds"
+                title={t('archievedAds')}
+                className="pt-4 m-2"
+              >
                 <InfiniteScroll
                   dataLength={advertisements?.length ?? 0}
                   next={loadMoreAdvertisements}
@@ -219,7 +215,7 @@ export default function advertisements(): JSX.Element {
                       (ad: Ad) => new Date(ad.endDate) < new Date(),
                     ).length !== 0 && (
                       <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{t('endOfResults')}</h5>
+                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                       </div>
                     )
                   }

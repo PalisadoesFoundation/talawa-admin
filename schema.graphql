@@ -482,7 +482,7 @@ type LanguageModel {
 scalar Latitude
 
 input LoginInput {
-  email: EmailAddress!
+  email: String!
   password: String!
 }
 
@@ -549,12 +549,6 @@ type MinimumLengthError implements FieldError {
 type MinimumValueError implements FieldError {
   message: String!
   path: [String!]!
-}
-
-enum AdvertisementType {
-  BANNER
-  MENU
-  POPUP
 }
 
 input CreateAdvertisementInput {
@@ -663,7 +657,6 @@ type Mutation {
   leaveOrganization(organizationId: ID!): User!
   likeComment(id: ID!): Comment
   likePost(id: ID!): Post
-  login(data: LoginInput!): AuthData!
   logout: Boolean!
   otp(data: OTPInput!): OtpData!
   recaptcha(data: RecaptchaVerification!): Boolean!
@@ -694,8 +687,13 @@ type Mutation {
   revokeRefreshTokenForUser: Boolean!
   saveFcmToken(token: String): Boolean!
   sendMembershipRequest(organizationId: ID!): MembershipRequest!
-  sendMessageToChat(chatId: ID!, messageContent: String!, type: String!, replyTo: ID): ChatMessage!
-  signUp(data: UserInput!, file: String): AuthData!
+  sendMessageToChat(
+    chatId: ID!
+    messageContent: String!
+    type: String!
+    replyTo: ID
+  ): ChatMessage!
+  signUp(input: UserInput!, file: String): AuthData!
   togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
   unblockUser(organizationId: ID!, userId: ID!): User!
@@ -780,13 +778,6 @@ type OrganizationCustomField {
   type: String!
 }
 
-type OrganizationCustomField {
-  _id: ID!
-  name: String!
-  organizationId: String!
-  type: String!
-}
-
 type OrganizationInfoNode {
   _id: ID!
   apiUrl: URL!
@@ -798,6 +789,10 @@ type OrganizationInfoNode {
   visibleInSearch: Boolean!
 }
 
+type AuthenticationPayload {
+  authenticationToken: String
+  user: User
+}
 input OrganizationInput {
   address: AddressInput!
   apiUrl: URL
@@ -1004,6 +999,7 @@ input PostWhereInput {
 }
 
 type Query {
+  signIn(input: LoginInput!): AuthenticationPayload
   actionItem(id: ID!): ActionItem
   actionItemCategoriesByOrganization(organizationId: ID!): [ActionItemCategory]
   actionItemCategory(id: ID!): ActionItemCategory
@@ -1011,7 +1007,7 @@ type Query {
   actionItemsByOrganization(organizationId: ID!): [ActionItem]
   adminPlugin(orgId: ID!): [Plugin]
   agendaCategory(id: ID!): AgendaCategory!
-  checkAuth: User!
+  currentUser: User!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
   customFieldsByOrganization(id: ID!): [OrganizationCustomField]
   chatById(id: ID!): Chat!
@@ -1026,7 +1022,12 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  advertisementsConnection(after: String, before: String, first: PositiveInt, last: PositiveInt): AdvertisementsConnection
+  advertisementsConnection(
+    after: String
+    before: String
+    first: PositiveInt
+    last: PositiveInt
+  ): AdvertisementsConnection
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(
@@ -1070,7 +1071,7 @@ type Query {
   ): PostConnection
   registeredEventsByUser(id: ID, orderBy: EventOrderByInput): [Event]
   registrantsByEvent(id: ID!): [User]
-  user(id: ID!): UserData!
+  user(input: QueryUserInput!): UserPg!
   userLanguage(userId: ID!): String
   users(
     first: Int
@@ -1084,7 +1085,7 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): [UserData]!
-  venue(id:ID!):[Venue]
+  venue(id: ID!): [Venue]
 }
 
 input RecaptchaVerification {
@@ -1322,6 +1323,352 @@ type User {
   updatedAt: DateTime!
 }
 
+type UserPg {
+  addressLine1: String
+  addressLine2: String
+  avatarMimeType: String
+  avatarURL: String
+  birthDate: Date
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  createdAt: DateTime
+  creator: UserPg
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: String
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  id: ID!
+  isEmailAddressVerified: Boolean
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  organizationsWhereMember(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserOrganizationsWhereMemberConnection
+  postalCode: String
+  role: UserRole
+  state: String
+  updatedAt: DateTime
+  updater: User
+  workPhoneNumber: PhoneNumber
+}
+
+input QueryUserInput {
+  id: String!
+}
+
+enum Iso3166Alpha2CountryCode {
+  ad
+  ae
+  af
+  ag
+  ai
+  al
+  am
+  ao
+  aq
+  ar
+  as
+  at
+  au
+  aw
+  ax
+  az
+  ba
+  bb
+  bd
+  be
+  bf
+  bg
+  bh
+  bi
+  bj
+  bl
+  bm
+  bn
+  bo
+  bq
+  br
+  bs
+  bt
+  bv
+  bw
+  by
+  bz
+  ca
+  cc
+  cd
+  cf
+  cg
+  ch
+  ci
+  ck
+  cl
+  cm
+  cn
+  co
+  cr
+  cu
+  cv
+  cw
+  cx
+  cy
+  cz
+  de
+  dj
+  dk
+  dm
+  do
+  dz
+  ec
+  ee
+  eg
+  eh
+  er
+  es
+  et
+  fi
+  fj
+  fk
+  fm
+  fo
+  fr
+  ga
+  gb
+  gd
+  ge
+  gf
+  gg
+  gh
+  gi
+  gl
+  gm
+  gn
+  gp
+  gq
+  gr
+  gs
+  gt
+  gu
+  gw
+  gy
+  hk
+  hm
+  hn
+  hr
+  ht
+  hu
+  id
+  ie
+  il
+  im
+  in
+  io
+  iq
+  ir
+  is
+  it
+  je
+  jm
+  jo
+  jp
+  ke
+  kg
+  kh
+  ki
+  km
+  kn
+  kp
+  kr
+  kw
+  ky
+  kz
+  la
+  lb
+  lc
+  li
+  lk
+  lr
+  ls
+  lt
+  lu
+  lv
+  ly
+  ma
+  mc
+  md
+  me
+  mf
+  mg
+  mh
+  mk
+  ml
+  mm
+  mn
+  mo
+  mp
+  mq
+  mr
+  ms
+  mt
+  mu
+  mv
+  mw
+  mx
+  my
+  mz
+  na
+  nc
+  ne
+  nf
+  ng
+  ni
+  nl
+  no
+  np
+  nr
+  nu
+  nz
+  om
+  pa
+  pe
+  pf
+  pg
+  ph
+  pk
+  pl
+  pm
+  pn
+  pr
+  ps
+  pt
+  pw
+  py
+  qa
+  re
+  ro
+  rs
+  ru
+  rw
+  sa
+  sb
+  sc
+  sd
+  se
+  sg
+  sh
+  si
+  sj
+  sk
+  sl
+  sm
+  sn
+  so
+  sr
+  ss
+  st
+  sv
+  sx
+  sy
+  sz
+  tc
+  td
+  tf
+  tg
+  th
+  tj
+  tk
+  tl
+  tm
+  tn
+  to
+  tr
+  tt
+  tv
+  tw
+  tz
+  ua
+  ug
+  um
+  us
+  uy
+  uz
+  va
+  vc
+  ve
+  vg
+  vi
+  vn
+  vu
+  wf
+  ws
+  ye
+  yt
+  za
+  zm
+  zw
+}
+
+enum UserEducationGrade {
+  grade_1
+  grade_2
+  grade_3
+  grade_4
+  grade_5
+  grade_6
+  grade_7
+  grade_8
+  grade_9
+  grade_10
+  grade_11
+  grade_12
+  graduate
+  kg
+  no_grade
+  pre_kg
+}
+
+enum UserEmploymentStatus {
+  full_time
+  part_time
+  unemployed
+}
+
+enum UserMaritalStatus {
+  divorced
+  engaged
+  married
+  seperated
+  single
+  widowed
+}
+
+enum UserNatalSex {
+  female
+  intersex
+  male
+}
+
+type UserOrganizationsWhereMemberConnection {
+  edges: [UserOrganizationsWhereMemberConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+type UserOrganizationsWhereMemberConnectionEdge {
+  cursor: String!
+  node: Organization
+}
+
+enum UserRole {
+  administrator
+  regular
+}
+
 type Fund {
   _id: ID!
   campaigns: [FundraisingCampaign!]
@@ -1388,7 +1735,7 @@ input UserInput {
   firstName: String!
   lastName: String!
   password: String!
-  selectedOrganization : ID!
+  selectedOrganization: ID!
 }
 
 enum UserOrderByInput {
@@ -1534,4 +1881,37 @@ input chatInput {
   organizationId: ID
   userIds: [ID!]!
   name: String
+}
+
+type DefaultConnectionPageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type SocialMediaUrls {
+  facebook: String
+  instagram: String
+  twitter: String
+  linkedin: String
+  youtube: String
+  website: String
+}
+
+type FundraisingCampaign {
+  _id: ID!
+  name: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  fundingGoal: Float!
+  description: String
+  creator: User
+  organization: Organization!
+  members: [User]
+  isPublic: Boolean!
+  isArchived: Boolean!
+  refrenceNumber: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

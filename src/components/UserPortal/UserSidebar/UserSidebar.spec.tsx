@@ -3,7 +3,7 @@ import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import styles from './UserSidebar.module.css';
+import styles from '../../../style/app.module.css';
 import {
   USER_DETAILS,
   USER_JOINED_ORGANIZATIONS,
@@ -297,8 +297,7 @@ const MOCKS = [
           user: {
             _id: 'orgEmpty',
             image: null,
-            firstName: 'Noble',
-            lastName: 'Mittal',
+            name: 'Noble Mittal',
             email: 'noble@mittal.com',
             createdAt: '2023-02-18T09:22:27.969Z',
             joinedOrganizations: [],
@@ -384,6 +383,7 @@ const renderUserSidebar = (
 
 describe('UserSidebar Component Tests in User Portal', () => {
   beforeEach(() => {
+    setItem('name', 'Noble Mittal');
     vi.clearAllMocks();
   });
 
@@ -432,6 +432,14 @@ describe('UserSidebar Component Tests in User Portal', () => {
     });
   });
 
+  it('displays the user name from localStorage correctly', async () => {
+    await act(async () => {
+      renderUserSidebar('properId', link);
+      await wait();
+    });
+    expect(screen.getByText('Noble Mittal')).toBeInTheDocument();
+  });
+
   it('UserSidebar renders correctly on smaller screens and toggles drawer visibility', async () => {
     await act(async () => {
       resizeWindow(800);
@@ -462,9 +470,9 @@ describe('UserSidebar Component Tests in User Portal', () => {
     const settingsBtn = screen.getByTestId('settingsBtn');
 
     fireEvent.click(orgsBtn);
-    expect(orgsBtn).toHaveClass('text-white btn btn-success');
+    expect(orgsBtn).toHaveClass('btn btn-success');
     fireEvent.click(settingsBtn);
-    expect(settingsBtn).toHaveClass('text-white btn btn-success');
+    expect(settingsBtn).toHaveClass('btn btn-success');
   });
 
   it('Translation hook displays expected text in UserSidebar', async () => {

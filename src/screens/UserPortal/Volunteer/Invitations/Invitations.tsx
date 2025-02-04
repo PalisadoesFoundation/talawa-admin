@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import styles from '../VolunteerManagement.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaUserGroup } from 'react-icons/fa6';
 import { debounce, Stack } from '@mui/material';
@@ -17,6 +17,7 @@ import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ItemFilter {
   Group = 'group',
@@ -28,6 +29,23 @@ enum ItemFilter {
  * It allows the user to search, sort, and accept/reject invites.
  *
  * @returns The rendered component displaying the upcoming events.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
 const Invitations = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -54,7 +72,6 @@ const Invitations = (): JSX.Element => {
   );
 
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [filter, setFilter] = useState<ItemFilter | null>(null);
   const [sortBy, setSortBy] = useState<
     'createdAt_ASC' | 'createdAt_DESC' | null
@@ -134,28 +151,12 @@ const Invitations = (): JSX.Element => {
     <>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchByEventName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={t('searchByEventName')}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex gap-3 justify-space-between">
             <SortingButton

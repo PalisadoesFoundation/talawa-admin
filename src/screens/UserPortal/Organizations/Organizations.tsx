@@ -13,9 +13,32 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Organizations.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import styles from '../../../style/app.module.css';
 
+/**
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 const { getItem } = useLocalStorage();
 
 interface InterfaceOrganizationCardProps {
@@ -40,12 +63,14 @@ interface InterfaceOrganizationCardProps {
       _id: string;
     };
   }[];
+  isJoined: boolean;
 }
 
 /**
  * Interface defining the structure of organization properties.
  */
 interface InterfaceOrganization {
+  isJoined: boolean;
   _id: string;
   name: string;
   image: string;
@@ -139,7 +164,6 @@ export default function organizations(): JSX.Element {
    * @param _event - The event triggering the page change.
    * @param  newPage - The new page number.
    */
-  /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -152,7 +176,6 @@ export default function organizations(): JSX.Element {
    *
    * @param  event - The event triggering the change.
    */
-  /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -202,7 +225,6 @@ export default function organizations(): JSX.Element {
   /**
    * Updates the list of organizations based on query results and selected mode.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (data) {
       const organizations = data.organizationsConnection.map(
@@ -231,7 +253,6 @@ export default function organizations(): JSX.Element {
   /**
    * Updates the list of organizations based on the selected mode and query results.
    */
-  /* istanbul ignore next */
   useEffect(() => {
     if (mode === 0) {
       if (data) {
@@ -251,7 +272,11 @@ export default function organizations(): JSX.Element {
               )
             )
               membershipRequestStatus = 'pending';
-            return { ...organization, membershipRequestStatus };
+            return {
+              ...organization,
+              membershipRequestStatus,
+              isJoined: false,
+            };
           },
         );
         setOrganizations(organizations);
@@ -259,7 +284,13 @@ export default function organizations(): JSX.Element {
     } else if (mode === 1) {
       if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
         const organizations =
-          joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
+          joinedOrganizationsData.users[0]?.user?.joinedOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
         setOrganizations(organizations);
       }
     } else if (mode === 2) {
@@ -268,8 +299,13 @@ export default function organizations(): JSX.Element {
         createdOrganizationsData.users.length > 0
       ) {
         const organizations =
-          createdOrganizationsData.users[0]?.appUserProfile
-            ?.createdOrganizations || [];
+          createdOrganizationsData.users[0]?.appUserProfile?.createdOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
         setOrganizations(organizations);
       }
     }
@@ -304,67 +340,72 @@ export default function organizations(): JSX.Element {
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expand
-              : styles.contract
+              ? styles.expandOrg
+              : styles.contractOrg
         }`}
       >
-        <div className={`${styles.mainContainer}`}>
+        <div className={`${styles.mainContainerOrganization}`}>
           <div className="d-flex justify-content-between align-items-center">
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
             </div>
-            <ProfileDropdown />
           </div>
 
-          <div className="mt-4">
-            <InputGroup className={styles.maxWidth}>
-              <Form.Control
-                placeholder={t('searchOrganizations')}
-                id="searchOrganizations"
-                type="text"
-                className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
-              />
-              <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <SearchOutlined className={`${styles.colorWhite}`} />
-              </InputGroup.Text>
-            </InputGroup>
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                variant="success"
-                id="dropdown-basic"
-                data-testid={`modeChangeBtn`}
-              >
-                {modes[mode]}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {modes.map((value, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid={`modeBtn${index}`}
-                      onClick={(): void => setMode(index)}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
+          <div className={styles.head}>
+            <div className={styles.btnsContainer}>
+              <div className={styles.input}>
+                <InputGroup className={styles.maxWidth}>
+                  <Form.Control
+                    placeholder={t('searchOrganizations')}
+                    id="searchUserOrgs"
+                    type="text"
+                    className={`${styles.inputField}`}
+                    onKeyUp={handleSearchByEnter}
+                    data-testid="searchInput"
+                  />
+                  <InputGroup.Text
+                    className={`${styles.searchButton}`}
+                    style={{ cursor: 'pointer' }}
+                    onClick={handleSearchByBtnClick}
+                    data-testid="searchBtn"
+                  >
+                    <SearchOutlined className={`${styles.colorWhite}`} />
+                  </InputGroup.Text>
+                </InputGroup>
+              </div>
+              <div className={styles.btnsBlock}>
+                <Dropdown drop="down-centered">
+                  <Dropdown.Toggle
+                    className={`${styles.dropdown}`}
+                    variant="success"
+                    id="dropdown-basic"
+                    data-testid={`modeChangeBtn`}
+                  >
+                    {modes[mode]}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {modes.map((value, index) => {
+                      return (
+                        <Dropdown.Item
+                          key={index}
+                          data-testid={`modeBtn${index}`}
+                          onClick={(): void => setMode(index)}
+                        >
+                          {value}
+                        </Dropdown.Item>
+                      );
+                    })}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
           </div>
 
           <div
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-column  ${styles.gap} ${styles.paddingY}`}
             >
               {loadingOrganizations ? (
                 <div className={`d-flex flex-row justify-content-center`}>
@@ -372,32 +413,37 @@ export default function organizations(): JSX.Element {
                 </div>
               ) : (
                 <>
-                  {' '}
                   {organizations && organizations.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? organizations.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
-                      : /* istanbul ignore next */
-                        organizations
-                    ).map((organization: InterfaceOrganization, index) => {
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name: organization.name,
-                        image: organization.image,
-                        id: organization._id,
-                        description: organization.description,
-                        admins: organization.admins,
-                        members: organization.members,
-                        address: organization.address,
-                        membershipRequestStatus:
-                          organization.membershipRequestStatus,
-                        userRegistrationRequired:
-                          organization.userRegistrationRequired,
-                        membershipRequests: organization.membershipRequests,
-                      };
-                      return <OrganizationCard key={index} {...cardProps} />;
-                    })
+                    <div className="row">
+                      {(rowsPerPage > 0
+                        ? organizations.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
+                        : organizations
+                      ).map((organization: InterfaceOrganization, index) => {
+                        const cardProps: InterfaceOrganizationCardProps = {
+                          name: organization.name,
+                          image: organization.image,
+                          id: organization._id,
+                          description: organization.description,
+                          admins: organization.admins,
+                          members: organization.members,
+                          address: organization.address,
+                          membershipRequestStatus:
+                            organization.membershipRequestStatus,
+                          userRegistrationRequired:
+                            organization.userRegistrationRequired,
+                          membershipRequests: organization.membershipRequests,
+                          isJoined: organization.isJoined,
+                        };
+                        return (
+                          <div key={index} className="col-md-6 mb-4">
+                            <OrganizationCard {...cardProps} />
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
                     <span>{t('nothingToShow')}</span>
                   )}
@@ -408,10 +454,7 @@ export default function organizations(): JSX.Element {
               <tbody>
                 <tr>
                   <PaginationList
-                    count={
-                      /* istanbul ignore next */
-                      organizations ? organizations.length : 0
-                    }
+                    count={organizations ? organizations.length : 0}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

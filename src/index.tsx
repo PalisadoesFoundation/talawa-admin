@@ -14,9 +14,9 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import './assets/css/app.css';
-import 'bootstrap/dist/js/bootstrap.min.js';
-import 'react-datepicker/dist/react-datepicker.css';
-import 'flag-icons/css/flag-icons.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
+import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
+import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import { Provider } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -29,16 +29,17 @@ import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
-import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
-import '../src/assets/css/scrollStyles.css';
-
+import './assets/css/scrollStyles.css';
+import './style/app.module.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#31bb6b',
+      main: getComputedStyle(document.documentElement)
+        .getPropertyValue('--primary-theme-color')
+        .trim(),
     },
   },
 });
@@ -58,38 +59,23 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(
-  ({ graphQLErrors, networkError, operation, forward }) => {
-    if (graphQLErrors) {
-      graphQLErrors.map(({ message }) => {
-        if (message === 'User is not authenticated') {
-          refreshToken().then((success) => {
-            if (success) {
-              const oldHeaders = operation.getContext().headers;
-              operation.setContext({
-                headers: {
-                  ...oldHeaders,
-                  authorization: 'Bearer ' + getItem('token'),
-                },
-              });
-              return forward(operation);
-            } else {
-              localStorage.clear();
-            }
-          });
-        }
-      });
-    } else if (networkError) {
-      console.log(`[Network error]: ${networkError}`);
-      toast.error(
-        'API server unavailable. Check your connection or try again later',
-        {
-          toastId: 'apiServer',
-        },
-      );
-    }
-  },
-);
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message }) => {
+      if (message === 'You must be authenticated to perform this action.') {
+        localStorage.clear();
+      }
+    });
+  } else if (networkError) {
+    console.log(`[Network error]: ${networkError}`);
+    toast.error(
+      'API server unavailable. Check your connection or try again later',
+      {
+        toastId: 'apiServer',
+      },
+    );
+  }
+});
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -139,7 +125,11 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const fallbackLoader = <div className="loader"></div>;
 
 const container = document.getElementById('root');
-const root = createRoot(container!); // Note the use of '!' is to assert the container is not null
+
+if (!container) {
+  throw new Error('Root container missing in the DOM');
+}
+const root = createRoot(container);
 
 root.render(
   <Suspense fallback={fallbackLoader}>

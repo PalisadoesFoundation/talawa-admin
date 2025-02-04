@@ -1,11 +1,11 @@
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
@@ -22,8 +22,31 @@ import type {
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 interface InterfaceCampaignInfo {
   name: string;
@@ -359,7 +382,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={`me-2 ${styles.editButton}`}
               data-testid="editPledgeBtn"
               onClick={() =>
                 handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
@@ -392,10 +415,7 @@ const fundCampaignPledge = (): JSX.Element => {
           underline="hover"
           color="inherit"
           component="button"
-          onClick={
-            /* istanbul ignore next */
-            () => history.go(-2)
-          }
+          onClick={() => history.go(-2)}
         >
           {fundName}
         </Link>
@@ -403,10 +423,7 @@ const fundCampaignPledge = (): JSX.Element => {
           underline="hover"
           color="inherit"
           component="button"
-          onClick={
-            /* istanbul ignore next */
-            () => history.back()
-          }
+          onClick={() => history.back()}
         >
           {campaignInfo?.name}
         </Link>
@@ -432,7 +449,9 @@ const fundCampaignPledge = (): JSX.Element => {
                 name="btnradio"
                 id="pledgedRadio"
                 checked={progressIndicator === 'pledged'}
-                onChange={() => setProgressIndicator('pledged')}
+                onChange={() => {
+                  setProgressIndicator('pledged');
+                }}
               />
               <label
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
@@ -443,7 +462,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
               <input
                 type="radio"
-                className={`btn-check`}
+                className={`btn-check ${styles.toggleBtnPledge}`}
                 name="btnradio"
                 id="raisedRadio"
                 onChange={() => setProgressIndicator('raised')}
@@ -465,6 +484,7 @@ const fundCampaignPledge = (): JSX.Element => {
               max={campaignInfo?.goal}
               style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
+              className={`${styles.progressBar}`}
             />
             <div className={styles.endpoints}>
               <div className={styles.start}>$0</div>
@@ -474,25 +494,12 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       </div>
       <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
-        <div className={`${styles.inputPledge} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchPledger')}
-            autoComplete="off"
-            required
-            className={styles.inputFieldPledge}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchPledger"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={t('searchPledger')}
+          onSearch={setSearchTerm}
+          inputTestId="searchPledger"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
             <SortingButton
@@ -519,7 +526,7 @@ const fundCampaignPledge = (): JSX.Element => {
           <div>
             <Button
               variant="success"
-              className={styles.orgFundCampaignButton}
+              className={styles.dropdown}
               disabled={endDate < new Date()}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"

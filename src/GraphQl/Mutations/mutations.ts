@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-
+import '../../style/app.module.css';
 export const UNBLOCK_USER_MUTATION = gql`
   mutation UnblockUser($userId: ID!, $orgId: ID!) {
     unblockUser(organizationId: $orgId, userId: $userId) {
@@ -145,55 +145,17 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
 // to sign up in the talawa admin
 
 export const SIGNUP_MUTATION = gql`
-  mutation SignUp(
-    $firstName: String!
-    $lastName: String!
-    $email: EmailAddress!
-    $password: String!
-    $orgId: ID!
-  ) {
-    signUp(
-      data: {
-        firstName: $firstName
-        lastName: $lastName
-        email: $email
-        password: $password
-        selectedOrganization: $orgId
-      }
-    ) {
+  mutation SignUp($name: String!, $email: String!, $password: String!) {
+    signUp(input: { name: $name, emailAddress: $email, password: $password }) {
       user {
-        _id
+        id
       }
-      accessToken
-      refreshToken
+      authenticationToken
     }
   }
 `;
 
 // to login in the talawa admin
-
-export const LOGIN_MUTATION = gql`
-  mutation Login($email: EmailAddress!, $password: String!) {
-    login(data: { email: $email, password: $password }) {
-      user {
-        _id
-        firstName
-        lastName
-        image
-        email
-      }
-      appUserProfile {
-        adminFor {
-          _id
-        }
-        isSuperAdmin
-        appLanguageCode
-      }
-      accessToken
-      refreshToken
-    }
-  }
-`;
 
 // to get the refresh token
 
@@ -244,6 +206,56 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
       file: $image
     ) {
       _id
+    }
+  }
+`;
+
+export const CREATE_ORGANIZATION_MUTATION_PG = gql`
+  mutation createOrganization(
+    $name: String!
+    $addressLine1: String
+    $addressLine2: String
+    $avatar: Upload
+    $city: String
+    $countryCode: Iso3166Alpha2CountryCode
+    $description: String
+    $postalCode: String
+    $state: String
+  ) {
+    createOrganization(
+      input: {
+        addressLine1: $addressLine1
+        addressLine2: $addressLine2
+        avatar: $avatar
+        city: $city
+        countryCode: $countryCode
+        description: $description
+        name: $name
+        postalCode: $postalCode
+        state: $state
+      }
+    ) {
+      id
+    }
+  }
+`;
+
+// to create organization membership
+
+export const CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG = gql`
+  mutation CreateOrganizationMembership(
+    $memberId: ID!
+    $organizationId: ID!
+    $role: OrganizationMembershipRole
+  ) {
+    createOrganizationMembership(
+      input: {
+        memberId: $memberId
+        organizationId: $organizationId
+        role: $role
+      }
+    ) {
+      id
     }
   }
 `;

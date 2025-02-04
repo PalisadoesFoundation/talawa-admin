@@ -29,6 +29,7 @@ import {
   UNREAD_CHAT_LIST,
 } from 'GraphQl/Queries/PlugInQueries';
 import useLocalStorage from 'utils/useLocalstorage';
+import { StaticMockLink } from 'utils/StaticMockLink';
 // import userEvent from '@testing-library/user-event';
 
 /**
@@ -4289,9 +4290,27 @@ describe('Testing Chat Screen [User Portal]', () => {
         {
           _id: '1',
           isGroup: false,
-          users: [{ _id: '1', firstName: 'John', lastName: 'Doe' }],
+          users: [
+            {
+              _id: '1',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@example.com',
+              image: null,
+            },
+          ],
           messages: [],
+          name: null,
+          image: null,
           unseenMessagesByUsers: '{}',
+          creator: {
+            _id: '1',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'johndoe@example.com',
+          },
+          organization: null,
+          admins: [],
         },
       ],
     };
@@ -4319,13 +4338,44 @@ describe('Testing Chat Screen [User Portal]', () => {
           },
         },
       },
+      {
+        request: {
+          query: UNREAD_CHAT_LIST,
+        },
+        result: {
+          data: {
+            getUnreadChatsByUserId: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: GROUP_CHAT_LIST,
+        },
+        result: {
+          data: {
+            getGroupChatsByUserId: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: CHATS_LIST,
+          variables: { id: '1' },
+        },
+        result: {
+          data: mockChatsData,
+        },
+      },
     ];
-
+    const link = new StaticMockLink(mocks, true);
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider link={link} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
-            <Chat />
+            <I18nextProvider i18n={i18nForTest}>
+              <Chat />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -4387,6 +4437,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     const contactCards = await screen.findAllByTestId('contactCardContainer');
     expect(contactCards).toHaveLength(1);
   });
+
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} mocks={mock}>
@@ -4514,6 +4565,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       fireEvent.click(await screen.findByTestId('allChat'));
     });
   });
+
   it('should fetch and set group chats when filterType is "group"', async () => {
     setItem('userId', '1');
 

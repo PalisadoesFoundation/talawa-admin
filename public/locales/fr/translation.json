@@ -146,6 +146,8 @@
     "city": "Ville",
     "countryCode": "Code postal",
     "dependentLocality": "Localité dépendante",
+    "addressLine1": "Adresse Ligne 1",
+    "addressLine2": "Adresse Ligne 2",
     "line1": "Ligne 1",
     "line2": "Ligne 2",
     "postalCode": "Code Postal",
@@ -1052,7 +1054,9 @@
     "comments": "commentaires",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
-    "postedOn": "Publié le {{date}}"
+    "postedOn": "Publié le {{date}}",
+    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
   },
   "home": {
     "posts": "Des postes",

@@ -3,7 +3,7 @@ import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './ProfileDropdown.module.css';
+import styles from '../../style/app.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -26,15 +26,8 @@ const profileDropdown = (): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
-  const userRole = superAdmin
-    ? 'SuperAdmin'
-    : adminFor?.length > 0
-      ? 'Admin'
-      : 'User';
-  const firstName = getItem('FirstName');
-  const lastName = getItem('LastName');
+  const userRole = getItem('role');
+  const name = getItem('name') || '';
   const userImage = getItem('UserImage');
   const navigate = useNavigate();
   const { orgId } = useParams();
@@ -43,7 +36,6 @@ const profileDropdown = (): JSX.Element => {
     try {
       await revokeRefreshToken();
     } catch (error) {
-      /*istanbul ignore next*/
       console.error('Error revoking refresh token:', error);
     }
     localStorage.clear();
@@ -51,19 +43,16 @@ const profileDropdown = (): JSX.Element => {
     navigate('/');
   };
   const MAX_NAME_LENGTH = 20;
-  const fullName = `${firstName} ${lastName}`;
   const displayedName =
-    fullName.length > MAX_NAME_LENGTH
-      ? /*istanbul ignore next*/
-        fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
-      : fullName;
+    name.length > MAX_NAME_LENGTH
+      ? name.substring(0, MAX_NAME_LENGTH - 3) + '...'
+      : name;
 
   return (
     <Dropdown as={ButtonGroup} variant="none">
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
-            /*istanbul ignore next*/
             <img
               src={userImage}
               alt={`profile picture`}
@@ -74,7 +63,7 @@ const profileDropdown = (): JSX.Element => {
               data-testid="display-img"
               size={45}
               avatarStyle={styles.avatarStyle}
-              name={`${firstName} ${lastName}`}
+              name={name}
               alt={`dummy picture`}
             />
           )}
@@ -91,7 +80,6 @@ const profileDropdown = (): JSX.Element => {
       <Dropdown.Toggle
         split
         variant="none"
-        style={{ backgroundColor: 'white' }}
         data-testid="togDrop"
         id="dropdown-split-basic"
         className={styles.dropdownToggle}
@@ -101,7 +89,7 @@ const profileDropdown = (): JSX.Element => {
         <Dropdown.Item
           data-testid="profileBtn"
           onClick={() =>
-            userRole === 'User'
+            userRole === 'regular'
               ? navigate(`/user/settings`)
               : navigate(`/member/${orgId || ''}`)
           }
