@@ -241,31 +241,31 @@ input DonationWhereInput {
   name_of_user_starts_with: String
 }
 
-enum EducationGrade {
-  GRADE_1
-  GRADE_2
-  GRADE_3
-  GRADE_4
-  GRADE_5
-  GRADE_6
-  GRADE_7
-  GRADE_8
-  GRADE_9
-  GRADE_10
-  GRADE_11
-  GRADE_12
-  GRADUATE
-  KG
-  NO_GRADE
-  PRE_KG
+enum UserEducationGrade {
+  grade_1
+  grade_2
+  grade_3
+  grade_4
+  grade_5
+  grade_6
+  grade_7
+  grade_8
+  grade_9
+  grade_10
+  grade_11
+  grade_12
+  graduate
+  kg
+  no_grade
+  pre_kg
 }
 
 scalar EmailAddress
 
-enum EmploymentStatus {
-  FULL_TIME
-  PART_TIME
-  UNEMPLOYED
+enum UserEmploymentStatus {
+  full_time
+  part_time
+  unemployed
 }
 
 interface Error {
@@ -488,13 +488,13 @@ input LoginInput {
 
 scalar Longitude
 
-enum MaritalStatus {
-  DIVORCED
-  ENGAGED
-  MARRIED
-  SEPERATED
-  SINGLE
-  WIDOWED
+enum UserMaritalStatus {
+  divorced
+  engaged
+  married
+  seperated
+  single
+  widowed
 }
 
 type Chat {
@@ -712,6 +712,7 @@ type Mutation {
     id: ID!
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
+  updateCurrentUser(input: MutationUpdateCurrentUserInput!): User
   updateEvent(data: UpdateEventInput, id: ID!): Event!
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
@@ -1252,13 +1253,13 @@ enum Gender {
   OTHER
 }
 
-enum MaritalStatus {
-  DIVORCED
-  ENGAGED
-  MARRIED
-  SEPERATED
-  SINGLE
-  WIDOWED
+enum UserMaritalStatus {
+  divorced
+  engaged
+  married
+  seperated
+  single
+  widowed
 }
 
 input UpdateUserInput {
