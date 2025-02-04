@@ -4,14 +4,35 @@ import '../../style/app.module.css';
 // Check Auth
 
 export const CURRENT_USER = gql`
-  query {
+  query CurrentUser {
     currentUser {
-      id
-      name
-      role
-      emailAddress
+        addressLine1
+        addressLine2
+        avatarMimeType
+        avatarURL
+        birthDate
+        city
+        countryCode
+        createdAt
+        description
+        educationGrade
+        emailAddress
+        employmentStatus
+        homePhoneNumber
+        id
+        isEmailAddressVerified
+        maritalStatus
+        mobilePhoneNumber
+        name
+        natalSex
+        naturalLanguageCode
+        postalCode
+        role
+        state
+        updatedAt
+        workPhoneNumber
     }
-  }
+}
 `;
 
 // Query to take the Organization list
