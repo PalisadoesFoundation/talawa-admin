@@ -239,7 +239,7 @@ export default function Settings(): JSX.Element {
                                 height: '60px',
                                 objectFit: 'cover',
                               }}
-                              src={URL.createObjectURL(selectedAvatar)}
+                              src={userdetails.avatar}
                               alt="User"
                               data-testid="profile-picture"
                             />
