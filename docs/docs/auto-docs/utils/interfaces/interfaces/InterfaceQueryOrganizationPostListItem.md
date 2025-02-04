@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationPostListItem
 
-Defined in: [src/utils/interfaces.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L232)
+Defined in: [src/utils/interfaces.ts:875](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L875)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:232](https://github.com/PalisadoesFoundatio
 
 > **posts**: `object`
 
-Defined in: [src/utils/interfaces.ts:233](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L233)
+Defined in: [src/utils/interfaces.ts:876](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L876)
 
 #### edges
 
@@ -37,7 +37,3 @@ Defined in: [src/utils/interfaces.ts:233](https://github.com/PalisadoesFoundatio
 ##### pageInfo.startCursor
 
 > **startCursor**: `string`
-
-#### totalCount
-
-> **totalCount**: `number`

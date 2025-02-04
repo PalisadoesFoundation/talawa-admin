@@ -3,8 +3,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import NotFound from 'components/NotFound/NotFound';
-import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
+// import NotFound from 'components/NotFound/NotFound';
+// import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -21,27 +21,27 @@ import styles from '../../style/app.module.css';
 import SortingButton from '../../subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
-interface InterfaceOrgPost {
-  _id: string;
-  title: string;
-  text: string;
-  imageUrl: string | null;
-  videoUrl: string | null;
-  creator: { _id: string; firstName: string; lastName: string; email: string };
-  pinned: boolean;
-  createdAt: string;
-  likeCount: number;
-  commentCount: number;
-  likedBy: { _id: string }[];
-  comments: {
-    _id: string;
-    text: string;
-    creator: { _id: string };
-    createdAt: string;
-    likeCount: number;
-    likedBy: { _id: string }[];
-  }[];
-}
+// interface InterfaceOrgPost {
+//   _id: string;
+//   title: string;
+//   text: string;
+//   imageUrl: string | null;
+//   videoUrl: string | null;
+//   creator: { _id: string; firstName: string; lastName: string; email: string };
+//   pinned: boolean;
+//   createdAt: string;
+//   likeCount: number;
+//   commentCount: number;
+//   likedBy: { _id: string }[];
+//   comments: {
+//     _id: string;
+//     text: string;
+//     creator: { _id: string };
+//     createdAt: string;
+//     likeCount: number;
+//     likedBy: { _id: string }[];
+//   }[];
+// }
 
 /**
  * This function is used to display the posts of the organization. It displays the posts in a card format.
@@ -141,20 +141,20 @@ function orgPost(): JSX.Element {
   });
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
-  const [displayedPosts, setDisplayedPosts] = useState(
-    orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) ||
-      [],
-  );
+  // const [displayedPosts, setDisplayedPosts] = useState(
+  //   orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) ||
+  //     [],
+  // );
 
-  useEffect(() => {
-    if (orgPostListData && orgPostListData.organizations) {
-      const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
-        orgPostListData.organizations[0].posts.edges.map((edge) => edge.node),
-        sortingOption,
-      );
-      setDisplayedPosts(newDisplayedPosts);
-    }
-  }, [orgPostListData, sortingOption]);
+  // useEffect(() => {
+  //   if (orgPostListData && orgPostListData.organizations) {
+  //     const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
+  //       orgPostListData.organizations[0].posts.edges.map((edge) => edge.node),
+  //       sortingOption,
+  //     );
+  //     setDisplayedPosts(newDisplayedPosts);
+  //   }
+  // }, [orgPostListData, sortingOption]);
 
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -261,38 +261,38 @@ function orgPost(): JSX.Element {
     setLast(6);
   };
 
-  const sortPosts = (
-    posts: InterfaceOrgPost[],
-    sortingOption: string,
-  ): InterfaceOrgPost[] => {
-    const sortedPosts = [...posts];
+  // const sortPosts = (
+  //   posts: InterfaceOrgPost[],
+  //   sortingOption: string,
+  // ): InterfaceOrgPost[] => {
+  //   const sortedPosts = [...posts];
 
-    if (sortingOption === 'latest') {
-      sortedPosts.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-    } else if (sortingOption === 'oldest') {
-      sortedPosts.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
-    }
+  //   if (sortingOption === 'latest') {
+  //     sortedPosts.sort(
+  //       (a, b) =>
+  //         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  //     );
+  //   } else if (sortingOption === 'oldest') {
+  //     sortedPosts.sort(
+  //       (a, b) =>
+  //         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  //     );
+  //   }
 
-    return sortedPosts;
-  };
+  //   return sortedPosts;
+  // };
 
-  const sortedPostsList: InterfaceOrgPost[] = [...displayedPosts];
-  sortedPostsList.sort((a: InterfaceOrgPost, b: InterfaceOrgPost) => {
-    if (a.pinned === b.pinned) {
-      return 0;
-    }
+  // const sortedPostsList: InterfaceOrgPost[] = [...displayedPosts];
+  // sortedPostsList.sort((a: InterfaceOrgPost, b: InterfaceOrgPost) => {
+  //   if (a.pinned === b.pinned) {
+  //     return 0;
+  //   }
 
-    if (a.pinned) {
-      return -1;
-    }
-    return 1;
-  });
+  //   if (a.pinned) {
+  //     return -1;
+  //   }
+  //   return 1;
+  // });
 
   return (
     <>
@@ -345,7 +345,7 @@ function orgPost(): JSX.Element {
             </div>
           </div>
           <div className={`row ${styles.list_box}`}>
-            {sortedPostsList && sortedPostsList.length > 0 ? (
+            {/* {sortedPostsList && sortedPostsList.length > 0 ? (
               sortedPostsList.map(
                 (datas: {
                   _id: string;
@@ -372,7 +372,7 @@ function orgPost(): JSX.Element {
               )
             ) : (
               <NotFound title="post" keyPrefix="postNotFound" />
-            )}
+            )} */}
           </div>
         </div>
         <div className="row m-lg-1 d-flex justify-content-center w-100">

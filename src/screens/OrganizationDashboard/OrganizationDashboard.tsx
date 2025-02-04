@@ -47,7 +47,7 @@ import styles from 'style/app.module.css';
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
-  // const { t: tErrors } = useTranslation('errors');
+  const { t: tErrors } = useTranslation('errors');
   document.title = t('title');
   const { orgId } = useParams();
 
@@ -82,6 +82,7 @@ function OrganizationDashboard(): JSX.Element {
   const {
     data: orgMemberData,
     loading: orgMemberLoading,
+    error: orgMemberError,
     fetchMore,
   } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_MEMBERS_PG, {
     variables: { id: orgId, first: 32, after: null },
@@ -119,19 +120,21 @@ function OrganizationDashboard(): JSX.Element {
     }
   }, [orgMemberData, fetchMore, orgId]);
 
-  const { data: orgPostsData, loading: orgPostsLoading } = useQuery(
-    GET_ORGANIZATION_POSTS_COUNT_PG,
-    {
-      variables: { id: orgId },
-    },
-  );
+  const {
+    data: orgPostsData,
+    loading: orgPostsLoading,
+    error: orgPostsError,
+  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
+    variables: { id: orgId },
+  });
 
-  const { data: orgEventsData, loading: orgEventsLoading } = useQuery(
-    GET_ORGANIZATION_EVENTS_PG,
-    {
-      variables: { id: orgId, first: 32, after: null },
-    },
-  );
+  const {
+    data: orgEventsData,
+    loading: orgEventsLoading,
+    error: orgEventsError,
+  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+    variables: { id: orgId, first: 32, after: null },
+  });
 
   useEffect(() => {
     if (orgEventsData && !hasFetchedAllEvents.current) {
@@ -194,22 +197,23 @@ function OrganizationDashboard(): JSX.Element {
   /**
    * Query to fetch posts for the organization.
    */
-  const { data: postData, loading: loadingPost } = useQuery(
-    GET_ORGANIZATION_POSTS_PG,
-    {
-      variables: { id: orgId, first: 5 },
-    },
-  );
+  const {
+    data: postData,
+    loading: loadingPost,
+    error: errorPost,
+  } = useQuery(GET_ORGANIZATION_POSTS_PG, {
+    variables: { id: orgId, first: 5 },
+  });
 
   /**
    * UseEffect to handle errors and navigate if necessary.
    */
-  // useEffect(() => {
-  //   if (errorOrg || errorPost || errorEvent || errorRankings) {
-  //     toast.error(tErrors('errorLoading', { entity: '' }));
-  //     navigate('/');
-  //   }
-  // }, [errorOrg, errorPost, errorEvent, errorRankings]);
+  useEffect(() => {
+    if (errorPost || orgPostsError || orgMemberError || orgEventsError) {
+      toast.error(tErrors('errorLoading', { entity: '' }));
+      navigate('/');
+    }
+  }, [orgPostsError, errorPost, orgMemberError, orgEventsError]);
 
   return (
     <>

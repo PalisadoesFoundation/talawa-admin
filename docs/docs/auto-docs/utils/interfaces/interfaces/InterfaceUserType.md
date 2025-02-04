@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserType
 
-Defined in: [src/utils/interfaces.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1)
+Defined in: [src/utils/interfaces.ts:306](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L306)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1](https://github.com/PalisadoesFoundation/
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2)
+Defined in: [src/utils/interfaces.ts:307](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L307)
 
 #### email
 
