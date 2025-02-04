@@ -80,6 +80,39 @@ export const ADDRESS_DETAILS_FRAGMENT = gql`
   }
 `;
 
+// to update the details of the current user
+export const UPDATE_CURRENT_USER_MUTATION = gql`
+  mutation UpdateCurrentUser($input: MutationUpdateCurrentUserInput!) {
+    updateCurrentUser(input: $input) {
+      addressLine1
+      addressLine2
+      avatarMimeType
+      avatarURL
+      birthDate
+      city
+      countryCode
+      createdAt
+      description
+      educationGrade
+      emailAddress
+      employmentStatus
+      homePhoneNumber
+      id
+      isEmailAddressVerified
+      maritalStatus
+      mobilePhoneNumber
+      name
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      updatedAt
+      workPhoneNumber
+    }
+  }
+`;
+
 // to update the details of the user
 
 export const UPDATE_USER_MUTATION = gql`
@@ -206,56 +239,6 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
       file: $image
     ) {
       _id
-    }
-  }
-`;
-
-export const CREATE_ORGANIZATION_MUTATION_PG = gql`
-  mutation createOrganization(
-    $name: String!
-    $addressLine1: String
-    $addressLine2: String
-    $avatar: Upload
-    $city: String
-    $countryCode: Iso3166Alpha2CountryCode
-    $description: String
-    $postalCode: String
-    $state: String
-  ) {
-    createOrganization(
-      input: {
-        addressLine1: $addressLine1
-        addressLine2: $addressLine2
-        avatar: $avatar
-        city: $city
-        countryCode: $countryCode
-        description: $description
-        name: $name
-        postalCode: $postalCode
-        state: $state
-      }
-    ) {
-      id
-    }
-  }
-`;
-
-// to create organization membership
-
-export const CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG = gql`
-  mutation CreateOrganizationMembership(
-    $memberId: ID!
-    $organizationId: ID!
-    $role: OrganizationMembershipRole
-  ) {
-    createOrganizationMembership(
-      input: {
-        memberId: $memberId
-        organizationId: $organizationId
-        role: $role
-      }
-    ) {
-      id
     }
   }
 `;
