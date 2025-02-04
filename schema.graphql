@@ -121,6 +121,8 @@ type AuthData {
   user: User!
 }
 
+scalar BigInt
+
 type CheckIn {
   _id: ID!
   allotedRoom: String
@@ -1269,6 +1271,16 @@ type EventPg {
   ): EventVenuesConnectionPg
 }
 
+type EventVenuesConnectionPg {
+  edges: [EventVenuesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventVenuesConnectionEdgePg {
+  node: VenuePg!
+  cursor: String!
+}
+
 type VenuePg {
   id: ID!
   name: String!
@@ -1484,6 +1496,11 @@ type PostUpVotersConnectionPg {
   pageInfo: PageInfoPg!
 }
 
+type PostUpVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
 type PostDownVotersConnectionPg {
   edges: [PostDownVotersConnectionEdgePg]
   pageInfo: PageInfoPg!
@@ -1502,6 +1519,16 @@ type PostDownVotersConnectionPg {
 type CommentUpVotersConnectionPg {
   edges: [CommentUpVotersConnectionEdgePg]
   pageInfo: PageInfoPg!
+}
+
+type CommentDownVotersConnectionPg {
+  edges: [CommentDownVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type CommentDownVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
 }
 
 type PostAttachmentPg {
