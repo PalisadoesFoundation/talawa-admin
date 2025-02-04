@@ -10,7 +10,9 @@ from collections import namedtuple
 # Define namedtuples for storing results
 Violation = namedtuple("Violation", ["file_path", "css_file", "reason"])
 CorrectImport = namedtuple("CorrectImport", ["file_path", "css_file"])
-EmbeddedViolation = namedtuple("EmbeddedViolation", ["file_path", "css_codes"])
+EmbeddedViolation = namedtuple(
+    "EmbeddedViolation", ["file_path", "css_codes", "line_numbers"]
+)
 CSSCheckResult = namedtuple(
     "CSSCheckResult", ["violations", "correct_imports", "embedded_violations"]
 )
@@ -93,8 +95,10 @@ def process_typescript_file(
     # Check for embedded CSS
     embedded_css = check_embedded_css(content)
     if embedded_css:
+        line_numbers = [violation[0] for violation in embedded_css]
+        css_codes = [violation[1] for violation in embedded_css]
         embedded_css_violations.append(
-            EmbeddedViolation(file_path, embedded_css)
+            EmbeddedViolation(file_path, css_codes, line_numbers)
         )
 
 
@@ -313,11 +317,15 @@ def main():
     if result.embedded_violations:
         output.append("\nEmbedded CSS Violations:")
         for violation in result.embedded_violations:
+            for line_number, css_code in zip(
+                violation.line_numbers, violation.css_codes
+            ):
+                relative_file_path = os.path.relpath(violation.file_path)
             for css_code in violation.css_codes:
                 output.append(
-                    f"- {violation.file_path}: "
-                    f"has embedded color code `{css_code}`. use CSS variable "
-                    f"in src/style/app.module.css."
+                    f"- File: {relative_file_path}, Line: {line_number}: "
+                    f"Embedded color code `{css_code}` detected.Please replace"
+                    f" it with a CSS variable in `src/style/app.module.css`."
                 )
         exit_code = 1
 
