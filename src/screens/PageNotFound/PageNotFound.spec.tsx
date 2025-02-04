@@ -9,19 +9,38 @@ import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { it, expect, describe } from 'vitest';
+import type { NormalizedCacheObject } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+  InMemoryCache,
+} from '@apollo/client';
 const { setItem } = useLocalStorage();
+
+const link = new ApolloLink((operation, forward) => {
+  return forward(operation);
+});
+
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.from([link]),
+});
 
 describe('Testing Page not found component', () => {
   it('should render component properly for User', () => {
-    //setItem('AdminFor', undefined);
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PageNotFound />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>,
+      <ApolloProvider client={client}>
+        {' '}
+        {/* ✅ Add ApolloProvider */}
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PageNotFound />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </ApolloProvider>,
     );
 
     expect(screen.getByText(/Talawa User/i)).toBeInTheDocument();
@@ -40,13 +59,15 @@ describe('Testing Page not found component', () => {
       },
     ]);
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PageNotFound />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>,
+      <ApolloProvider client={client}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PageNotFound />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </ApolloProvider>,
     );
 
     expect(screen.getByText(/Talawa Admin Portal/i)).toBeInTheDocument();

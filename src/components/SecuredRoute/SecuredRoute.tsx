@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import { UserRole, type VerifyRoleResponse } from 'components/CheckIn/types';
 import { VERIFY_ROLE } from 'GraphQl/Queries/Queries';
 import React, { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
@@ -17,14 +18,17 @@ const { getItem, setItem } = useLocalStorage();
  */
 const SecuredRoute = (): JSX.Element => {
   const location = useLocation();
-  const { data, loading, error, refetch } = useQuery(VERIFY_ROLE, {
-    skip: !getItem('token'),
-    context: {
-      headers: {
-        Authorization: `Bearer ${getItem('token')}`,
+  const { data, loading, error, refetch } = useQuery<VerifyRoleResponse>(
+    VERIFY_ROLE,
+    {
+      skip: !getItem('token'),
+      context: {
+        headers: {
+          Authorization: `Bearer ${getItem('token')}`,
+        },
       },
     },
-  });
+  );
   const [token, setToken] = React.useState(getItem('token'));
 
   useEffect(() => {
@@ -43,13 +47,13 @@ const SecuredRoute = (): JSX.Element => {
   } else if (error) {
     return <div>Error During Routing ...</div>;
   } else {
-    const role = data?.verifyRole?.role || '';
-    const isLoggedIn = data?.verifyRole?.isAuthorized ?? false;
+    const { isAuthorized = false, role = '' } = (data as VerifyRoleResponse)
+      .verifyRole;
     const restrictedRoutesForAdmin = ['/member', '/users', '/communityProfile'];
-    if (isLoggedIn) {
-      if (role == 'superAdmin') {
+    if (isAuthorized) {
+      if (role == UserRole.SUPER_ADMIN) {
         return <Outlet />;
-      } else if (role == 'admin') {
+      } else if (role == UserRole.ADMIN) {
         if (restrictedRoutesForAdmin.includes(location.pathname)) {
           return <PageNotFound />;
         }

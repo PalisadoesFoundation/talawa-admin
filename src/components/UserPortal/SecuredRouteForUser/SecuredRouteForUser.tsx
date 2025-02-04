@@ -1,4 +1,6 @@
 import { useQuery } from '@apollo/client';
+import type { VerifyRoleResponse } from 'components/CheckIn/types';
+import { UserRole } from 'components/CheckIn/types';
 import { VERIFY_ROLE } from 'GraphQl/Queries/Queries';
 import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
@@ -16,27 +18,44 @@ import useLocalStorage from 'utils/useLocalstorage';
 const SecuredRouteForUser = (): JSX.Element => {
   // Custom hook to interact with local storage
   const { getItem } = useLocalStorage();
-  const { data, loading, error, refetch } = useQuery(VERIFY_ROLE, {
-    context: {
-      headers: {
-        Authorization: `Bearer ${getItem('token')}`,
+  const { data, loading, error, refetch } = useQuery<VerifyRoleResponse>(
+    VERIFY_ROLE,
+    {
+      skip: !getItem('token'),
+      context: {
+        headers: {
+          Authorization: `Bearer ${getItem('token')}`,
+        },
       },
     },
-  });
+  );
+  const [token, setToken] = React.useState(getItem('token'));
+
+  useEffect(() => {
+    const newToken = getItem('token');
+    if (newToken !== token) {
+      setToken(newToken);
+    }
+  }, []);
+
   useEffect(() => {
     refetch(); // Refetch when token updates
-  }, [getItem('token')]);
+  }, [token]);
 
   if (loading) {
     return <div> Loading.....</div>;
   } else if (error) {
     return <div>Error During Routing ...</div>;
   } else {
-    const role = data?.verifyRole?.role || '';
-    const isLoggedIn = data?.verifyRole?.isAuthorized ?? false;
+    const { isAuthorized = false, role = '' } = (data as VerifyRoleResponse)
+      .verifyRole;
 
-    if (isLoggedIn) {
-      if (role == 'user' || role == 'admin' || role == 'superAdmin') {
+    if (isAuthorized) {
+      if (
+        role == UserRole.USER ||
+        role == UserRole.ADMIN ||
+        UserRole.SUPER_ADMIN
+      ) {
         return <Outlet />;
       } else {
         return <PageNotFound />;
