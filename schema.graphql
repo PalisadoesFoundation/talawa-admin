@@ -1521,6 +1521,11 @@ type CommentUpVotersConnectionPg {
   pageInfo: PageInfoPg!
 }
 
+type CommentUpVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
 type CommentDownVotersConnectionPg {
   edges: [CommentDownVotersConnectionEdgePg]
   pageInfo: PageInfoPg!
