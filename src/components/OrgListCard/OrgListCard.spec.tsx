@@ -41,8 +41,8 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
+  await act(async () => {
+    await new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   });
