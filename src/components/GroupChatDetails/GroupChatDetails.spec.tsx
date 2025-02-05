@@ -588,7 +588,6 @@ const mocks = [
       },
     },
   },
-
   {
     request: {
       query: ADD_USER_TO_GROUP_CHAT,
@@ -603,10 +602,11 @@ const mocks = [
       },
     },
   },
+
   {
     request: {
       query: UPDATE_CHAT,
-      variables: { input: { _id: 'chat1', image: '', name: 'New Group name' } },
+      variables: { input: { _id: 'chat1', image: '', name: 'Group name' } },
     },
     result: {
       data: {
@@ -620,7 +620,13 @@ const mocks = [
   {
     request: {
       query: UPDATE_CHAT,
-      variables: { input: { _id: 'chat1', image: '', name: 'Group name' } },
+      variables: {
+        input: {
+          _id: 'chat1',
+          image: 'https://example.com/group_image.jpg',
+          name: 'New Group name',
+        },
+      },
     },
     result: {
       data: {
@@ -639,7 +645,7 @@ const mocks = [
     result: {
       data: {
         updateChat: {
-          _id: 'chat1',
+          _id: 'chat3',
           success: true,
         },
       },
@@ -1030,5 +1036,7 @@ describe('GroupChatDetails', () => {
     });
 
     fireEvent.change(fileInput);
+
+    await wait();
   });
 });

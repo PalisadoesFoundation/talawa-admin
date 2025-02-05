@@ -160,7 +160,7 @@ export default function groupChatDetails({
   const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
-  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedImage, setSelectedImage] = useState(chat?.image || '');
 
   //mutations
 
