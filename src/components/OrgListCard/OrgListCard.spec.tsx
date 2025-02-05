@@ -1,6 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
@@ -42,8 +41,8 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
+  await act(async () => {
+    await new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   });
