@@ -1,5 +1,5 @@
 import { Paper, TableBody } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import styles from '../../style/app.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
@@ -24,8 +24,9 @@ import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX } from 'react-icons/fa6';
 import convertToBase64 from 'utils/convertToBase64';
 import useLocalStorage from 'utils/useLocalstorage';
+import { toast } from 'react-toastify';
 
-type DirectMessage = {
+export type DirectMessage = {
   _id: string;
   createdAt: Date;
   sender: {
@@ -56,7 +57,7 @@ type DirectMessage = {
   media: string;
 };
 
-type Chat = {
+export type Chat = {
   _id: string;
   isGroup: boolean;
   name?: string;
@@ -127,15 +128,46 @@ export default function groupChatDetails({
     keyPrefix: 'userChat',
   });
 
-  const [userName, setUserName] = useState('');
-  const { getItem } = useLocalStorage();
+  //storage
 
+  const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
+  useEffect(() => {
+    if (!userId) {
+      toast.error(t('userNotFound'));
+    }
+  }, [userId, t]);
+
+  if (!userId) {
+    return (
+      <Modal
+        data-testid="groupChatDetailsModal"
+        show={groupChatDetailsModalisOpen}
+        onHide={toggleGroupChatDetailsModal}
+        contentClassName={styles.modalContent}
+      >
+        <Modal.Header closeButton data-testid="groupChatDetails">
+          <Modal.Title>{t('Error')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>User not found</Modal.Body>
+      </Modal>
+    );
+  }
+
+  //states
+
+  const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
+  const [selectedImage, setSelectedImage] = useState('');
+
+  //mutations
 
   const [addUser] = useMutation(ADD_USER_TO_GROUP_CHAT);
+  const [updateChat] = useMutation(UPDATE_CHAT);
+
+  //modal
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 
@@ -180,10 +212,6 @@ export default function groupChatDetails({
     });
   };
 
-  const [selectedImage, setSelectedImage] = useState('');
-
-  const [updateChat] = useMutation(UPDATE_CHAT);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = (): void => {
@@ -199,6 +227,8 @@ export default function groupChatDetails({
       setSelectedImage(base64);
       await updateChat();
       await chatRefetch();
+      setSelectedImage('');
+    } else {
       setSelectedImage('');
     }
   };
