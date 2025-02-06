@@ -146,7 +146,7 @@ function OrganizationDashboard(): JSX.Element {
 
       const upcomingEvents = allEvents.filter(
         (event: InterfaceOrganizationEventsConnectionEdgePg) =>
-          new Date(event.node.event.startAt) > now,
+          new Date(event?.node?.event?.startAt) > now,
       );
 
       setEventCount((prevCount) => prevCount + newTotalEventCount);
@@ -228,6 +228,7 @@ function OrganizationDashboard(): JSX.Element {
                     sm={4}
                     className="mb-4"
                     key={`orgLoading_${index}`}
+                    data-testid="fallback-ui"
                   >
                     <DashboardCardLoading />
                   </Col>
@@ -241,6 +242,7 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
+                data-testid="membersCount"
                 onClick={(): void => {
                   // navigate(peopleLink);
                 }}
@@ -256,6 +258,7 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
+                data-testid="adminsCount"
                 onClick={(): void => {
                   // navigate(peopleLink);
                 }}
@@ -271,6 +274,7 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
+                data-testid="postsCount"
                 onClick={(): void => {
                   navigate(postsLink);
                 }}
@@ -286,6 +290,7 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
+                data-testid="eventsCount"
                 onClick={(): void => {
                   navigate(eventsLink);
                 }}
@@ -316,9 +321,9 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
-                onClick={(): void => {
-                  // navigate(requestLink);
-                }}
+                // onClick={(): void => {
+                //   navigate(requestLink);
+                // }}
               >
                 {/* <DashBoardCard
                   count={data?.organizations[0].membershipRequests?.length}
@@ -353,9 +358,9 @@ function OrganizationDashboard(): JSX.Element {
                           data-testid="cardItem"
                           type="Event"
                           key={event.event.id}
-                          startdate={event.event.startAt}
-                          enddate={event.event.endAt}
-                          title={event.event.name}
+                          startdate={event?.event?.startAt}
+                          enddate={event?.event?.endAt}
+                          title={event.event?.name}
                         />
                       );
                     })
