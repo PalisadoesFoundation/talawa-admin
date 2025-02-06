@@ -47,6 +47,10 @@ const SecuredRoute = (): JSX.Element => {
   } else if (error) {
     return <div>Error During Routing ...</div>;
   } else {
+    console.log('Mocked Data:', data);
+    if (!data || !data.verifyRole) {
+      return <div>Error During Routing ...</div>;
+    }
     const { isAuthorized = false, role = '' } = (data as VerifyRoleResponse)
       .verifyRole;
     const restrictedRoutesForAdmin = ['/member', '/users', '/communityProfile'];

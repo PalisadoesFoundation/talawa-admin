@@ -63,7 +63,7 @@ const MOCKS = [
     result: {
       data: {
         verifyRole: {
-          isAuthorized: false,
+          isAuthorized: true,
           role: 'user',
         },
       },
@@ -80,8 +80,8 @@ const link2 = new StaticMockLink(
     },
     {
       request: { query: VERIFY_ROLE },
-      result: { data: { verifyRole: null } }, // Ensure verifyRole exists, even if null
-    },
+      result: { data: { verifyRole: { isAuthorized: false, role: '' } } },
+    }, // Ensure verifyRole exists, even if null
   ],
   true,
 );

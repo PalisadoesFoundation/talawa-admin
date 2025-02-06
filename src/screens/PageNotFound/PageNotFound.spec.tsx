@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-
 import { store } from 'state/store';
 import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
@@ -16,23 +15,24 @@ import {
   ApolloProvider,
   InMemoryCache,
 } from '@apollo/client';
+
 const { setItem } = useLocalStorage();
 
-const link = new ApolloLink((operation, forward) => {
-  return forward(operation);
-});
+const link = ApolloLink.from([
+  new ApolloLink((operation, forward) => {
+    return forward ? forward(operation) : null; // ✅ Fix the issue
+  }),
+]);
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  link: ApolloLink.from([link]),
+  link: link,
 });
 
 describe('Testing Page not found component', () => {
   it('should render component properly for User', () => {
     render(
       <ApolloProvider client={client}>
-        {' '}
-        {/* ✅ Add ApolloProvider */}
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
