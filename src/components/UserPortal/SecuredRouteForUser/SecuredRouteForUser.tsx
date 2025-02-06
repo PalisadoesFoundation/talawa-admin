@@ -47,14 +47,17 @@ const SecuredRouteForUser = (): JSX.Element => {
   } else if (error) {
     return <div>Error During Routing ...</div>;
   } else {
-    const { isAuthorized = false, role = '' } = (data as VerifyRoleResponse)
-      .verifyRole;
+    if (!data?.verifyRole) {
+      return <Navigate to="/" replace />;
+    }
+    
+    const { isAuthorized, role } = data.verifyRole;
 
     if (isAuthorized) {
       if (
-        role == UserRole.USER ||
-        role == UserRole.ADMIN ||
-        role == UserRole.SUPER_ADMIN
+        role === UserRole.USER ||
+        role === UserRole.ADMIN ||
+        role === UserRole.SUPER_ADMIN
       ) {
         return <Outlet />;
       } else {
