@@ -14,12 +14,14 @@ import { askAndUpdateTalawaApiUrl } from './src/setup/askForDocker/askForDocker'
 // Ask and set up reCAPTCHA
 const askAndSetRecaptcha = async (): Promise<void> => {
   try {
-    const { shouldUseRecaptcha } = await inquirer.prompt({
-      type: 'confirm',
-      name: 'shouldUseRecaptcha',
-      message: 'Would you like to set up reCAPTCHA?',
-      default: true,
-    });
+    const { shouldUseRecaptcha } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'shouldUseRecaptcha',
+        message: 'Would you like to set up reCAPTCHA?',
+        default: true,
+      },
+    ]);
 
     if (shouldUseRecaptcha) {
       const { recaptchaSiteKeyInput } = await inquirer.prompt([

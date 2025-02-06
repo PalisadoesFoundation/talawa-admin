@@ -32,12 +32,14 @@ export const askForDocker = async (): Promise<string> => {
 // Function to ask and update Talawa API URL
 export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
   try {
-    const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt({
-      type: 'confirm',
-      name: 'shouldSetTalawaApiUrlResponse',
-      message: 'Would you like to set up Talawa API endpoint?',
-      default: true,
-    });
+    const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'shouldSetTalawaApiUrlResponse',
+        message: 'Would you like to set up Talawa API endpoint?',
+        default: true,
+      },
+    ]);
 
     if (shouldSetTalawaApiUrlResponse) {
       let endpoint = '';

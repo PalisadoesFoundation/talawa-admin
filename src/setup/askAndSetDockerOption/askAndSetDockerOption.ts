@@ -4,12 +4,14 @@ import { askForDocker } from 'setup/askForDocker/askForDocker';
 
 // Function to manage Docker setup
 const askAndSetDockerOption = async (): Promise<void> => {
-  const { useDocker } = await inquirer.prompt({
-    type: 'confirm',
-    name: 'useDocker',
-    message: 'Would you like to set up with Docker?',
-    default: false,
-  });
+  const { useDocker } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'useDocker',
+      message: 'Would you like to set up with Docker?',
+      default: false,
+    },
+  ]);
 
   if (useDocker) {
     console.log('Setting up with Docker...');
