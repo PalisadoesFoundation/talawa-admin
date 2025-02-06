@@ -206,19 +206,19 @@ const MOCKS_WITH_IMAGE = [
   },
 ];
 
-const MOCKS_EMPTY = [
-  {
-    request: {
-      query: ORGANIZATIONS_LIST,
-      variables: { id: '123' },
-    },
-    result: {
-      data: {
-        organizations: [],
-      },
-    },
-  },
-];
+// const MOCKS_EMPTY = [
+//   {
+//     request: {
+//       query: ORGANIZATIONS_LIST,
+//       variables: { id: '123' },
+//     },
+//     result: {
+//       data: {
+//         organizations: [],
+//       },
+//     },
+//   },
+// ];
 
 const defaultScreens = [
   'People',
