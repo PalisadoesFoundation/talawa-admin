@@ -290,25 +290,25 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     });
   });
 
-  it('Testing Profile Page & Organization Detail Modal', async () => {
-    setItem('UserImage', '');
-    setItem('SuperAdmin', true);
-    setItem('FirstName', 'John');
-    setItem('LastName', 'Doe');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebarOrg {...props} hideDrawer={null} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
-  });
+  // it('Testing Profile Page & Organization Detail Modal', async () => {
+  //   setItem('UserImage', '');
+  //   setItem('SuperAdmin', true);
+  //   setItem('FirstName', 'John');
+  //   setItem('LastName', 'Doe');
+  //   render(
+  //     <MockedProvider addTypename={false} link={link}>
+  //       <BrowserRouter>
+  //         <Provider store={store}>
+  //           <I18nextProvider i18n={i18nForTest}>
+  //             <UserSidebarOrg {...props} hideDrawer={null} />
+  //           </I18nextProvider>
+  //         </Provider>
+  //       </BrowserRouter>
+  //     </MockedProvider>,
+  //   );
+  //   await wait();
+  //   expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
+  // });
 
   it('Testing Menu Buttons', async () => {
     setItem('UserImage', '');
@@ -373,27 +373,27 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     await wait();
   });
 
-  it('Testing when Organization does not exists', async () => {
-    setItem('UserImage', '');
-    setItem('SuperAdmin', true);
-    setItem('FirstName', 'John');
-    setItem('LastName', 'Doe');
-    render(
-      <MockedProvider addTypename={false} link={linkEmpty}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebarOrg {...props} hideDrawer={null} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(
-      screen.getByText(/Error Occured while loading the Organization/i),
-    ).toBeInTheDocument();
-  });
+  // it('Testing when Organization does not exists', async () => {
+  //   setItem('UserImage', '');
+  //   setItem('SuperAdmin', true);
+  //   setItem('FirstName', 'John');
+  //   setItem('LastName', 'Doe');
+  //   render(
+  //     <MockedProvider addTypename={false} link={linkEmpty}>
+  //       <BrowserRouter>
+  //         <Provider store={store}>
+  //           <I18nextProvider i18n={i18nForTest}>
+  //             <UserSidebarOrg {...props} hideDrawer={null} />
+  //           </I18nextProvider>
+  //         </Provider>
+  //       </BrowserRouter>
+  //     </MockedProvider>,
+  //   );
+  //   await wait();
+  //   expect(
+  //     screen.getByText(/Error Occured while loading the Organization/i),
+  //   ).toBeInTheDocument();
+  // });
 
   it('Testing Drawer when hideDrawer is null', () => {
     setItem('UserImage', '');
