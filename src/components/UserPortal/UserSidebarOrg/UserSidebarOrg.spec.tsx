@@ -265,7 +265,7 @@ afterEach(() => {
 
 const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
-const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
+// const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Component should be rendered properly', async () => {

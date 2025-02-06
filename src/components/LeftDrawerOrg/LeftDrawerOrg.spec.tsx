@@ -206,19 +206,19 @@ const MOCKS_WITH_IMAGE = [
   },
 ];
 
-const MOCKS_EMPTY = [
-  {
-    request: {
-      query: ORGANIZATIONS_LIST,
-      variables: { id: '123' },
-    },
-    result: {
-      data: {
-        organizations: [],
-      },
-    },
-  },
-];
+// const MOCKS_EMPTY = [
+//   {
+//     request: {
+//       query: ORGANIZATIONS_LIST,
+//       variables: { id: '123' },
+//     },
+//     result: {
+//       data: {
+//         organizations: [],
+//       },
+//     },
+//   },
+// ];
 
 const MOCKS_EMPTY_ORGID = [
   {
@@ -282,7 +282,7 @@ afterEach(() => {
 
 const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
-const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
+// const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 const linkEmptyOrgId = new StaticMockLink(MOCKS_EMPTY_ORGID, true);
 
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
