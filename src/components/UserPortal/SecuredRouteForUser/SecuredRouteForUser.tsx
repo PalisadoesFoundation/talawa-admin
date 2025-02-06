@@ -50,7 +50,7 @@ const SecuredRouteForUser = (): JSX.Element => {
     if (!data?.verifyRole) {
       return <Navigate to="/" replace />;
     }
-    
+
     const { isAuthorized, role } = data.verifyRole;
 
     if (isAuthorized) {

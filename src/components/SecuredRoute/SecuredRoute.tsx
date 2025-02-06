@@ -47,9 +47,8 @@ const SecuredRoute = (): JSX.Element => {
   } else if (error) {
     return <div>Error During Routing ...</div>;
   } else {
-    console.log('Mocked Data:', data);
-    if (!data || !data.verifyRole) {
-      return <div>Error During Routing ...</div>;
+    if (!data?.verifyRole) {
+      return <Navigate to="/" replace />;
     }
     const { isAuthorized = false, role = '' } = (data as VerifyRoleResponse)
       .verifyRole;

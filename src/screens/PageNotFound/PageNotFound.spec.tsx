@@ -14,15 +14,29 @@ import {
   ApolloLink,
   ApolloProvider,
   InMemoryCache,
+  Observable,
 } from '@apollo/client';
 
 const { setItem } = useLocalStorage();
 
-const link = ApolloLink.from([
-  new ApolloLink((operation, forward) => {
-    return forward ? forward(operation) : null; // ✅ Fix the issue
-  }),
-]);
+const link = new ApolloLink((operation, forward) => {
+  // Mock responses based on the operation
+  if (operation.operationName === 'VERIFY_ROLE') {
+    return new Observable((observer) => {
+      // Simulate different authorization scenarios
+      observer.next({
+        data: {
+          verifyRole: {
+            isAuthorized: true, // or false for different test cases
+            role: 'ADMIN', // or other roles
+          },
+        },
+      });
+      observer.complete();
+    });
+  }
+  return forward(operation);
+});
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
