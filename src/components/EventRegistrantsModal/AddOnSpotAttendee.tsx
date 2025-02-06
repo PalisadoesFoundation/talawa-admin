@@ -4,7 +4,6 @@ import { Modal, Form, Button, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
@@ -95,7 +94,6 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         handleClose();
       }
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error as Error);
     } finally {
       setIsSubmitting(false);

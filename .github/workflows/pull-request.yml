@@ -117,8 +117,12 @@ jobs:
             .prettierrc
             .prettierignore
             vite.config.ts
-            docker-compose.yaml
-            Dockerfile
+            docker/docker-compose.prod.yaml
+            docker/docker-compose.dev.yaml
+            docker/Dockerfile.dev
+            docker/Dockerfile.prod
+            config/docker/setup/nginx.conf
+            config/docker/setup/nginx.prod.conf
             CODEOWNERS
             LICENSE
             setup.ts
@@ -363,27 +367,50 @@ jobs:
         with:
           driver-opts: |
             image=moby/buildkit:latest
-      - name: Build Docker image
+
+      - name: Build Docker images
         run: |
           set -e
-          echo "Building Docker image..."
-          docker build -t talawa-admin-app .
-          echo "Docker image built successfully"
-      - name: Run Docker Container
+          echo "Building Docker images..."
+          docker compose -f docker/docker-compose.prod.yaml build
+          docker compose -f docker/docker-compose.dev.yaml build
+          echo "Docker images built successfully"
+
+      - name: Run Docker Containers (Production)
         run: |
           set -e
-          echo "Started Docker container..."
-          docker run -d --name talawa-admin-app-container -p 4321:4321 talawa-admin-app
-          echo "Docker container started successfully"
-      - name: Check if Talawa Admin App is running
+          echo "Starting Docker container for production..."
+          docker compose -f docker/docker-compose.prod.yaml up -d
+          echo "Production Docker container started successfully"
+      
+      - name: Check if Talawa Admin App is running (Production)
         run: |
           chmod +x .github/workflows/scripts/app_health_check.sh
           .github/workflows/scripts/app_health_check.sh 4321 120 true
-      - name: Stop Docker Container
+
+      - name: Stop prod Docker Containers
         if: always()
         run: |
-          docker stop talawa-admin-app-container
-          docker rm talawa-admin-app-container
+          docker compose -f docker/docker-compose.prod.yaml down
+          echo "Prod Docker container stopped and removed"
+
+      - name: Run Docker Containers (Development)
+        run: |
+          set -e
+          echo "Starting Docker container for development..."
+          docker compose -f docker/docker-compose.dev.yaml up -d
+          echo "Development Docker container started successfully"
+
+      - name: Check if Talawa Admin App is running (Development)
+        run: |
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
+
+      - name: Stop dev Docker Containers
+        if: always()
+        run: |
+          docker compose -f docker/docker-compose.dev.yaml down
+          echo "Dev Docker containers stopped and removed"
   
 
   Test-Docusaurus-Deployment:
@@ -395,16 +422,13 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x' 
-
       - name: Install dependencies
         working-directory: ./docs
         run: npm install
-
       - name: Test building the website
         working-directory: ./docs
         run: npm run build
