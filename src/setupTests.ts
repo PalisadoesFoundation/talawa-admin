@@ -1,4 +1,3 @@
-import vitestPreviewConfigure from 'vitest-preview';
 import '@testing-library/dom';
 import { vi } from 'vitest';
 global.fetch = vi.fn();
@@ -15,6 +14,8 @@ global.console.warn = function (...args): void {
 Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
   set: () => ({}),
 });
+
+import vitestPreviewConfigure from 'vitest-preview';
 
 // Global CSS here
 import 'bootstrap/dist/css/bootstrap.css';
