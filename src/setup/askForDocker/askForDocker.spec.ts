@@ -2,7 +2,16 @@ import inquirer from 'inquirer';
 import { askForDocker } from './askForDocker';
 import { describe, test, expect, vi } from 'vitest';
 
-vi.mock('inquirer');
+// ✅ Fix Inquirer Mocking for v12+
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual('inquirer');
+  return {
+    default: {
+      ...actual,
+      prompt: vi.fn(),
+    },
+  };
+});
 
 describe('askForDocker', () => {
   test('should return default Docker port if user provides no input', async () => {
