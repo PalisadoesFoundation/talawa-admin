@@ -253,7 +253,7 @@ jobs:
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
         run: |
-          npm run test:vitest:coverage
+          npm run test:coverage
   
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4

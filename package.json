@@ -70,10 +70,9 @@
     "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts",
     "build": "tsc && vite build --config config/vite.config.ts",
     "preview": "vite preview --config config/vite.config.ts",
-    "test:vitest": "vitest run",
-    "test:vitest:watch": "vitest",
-    "test:vitest:coverage": "vitest run --coverage",
-    "test": "cross-env NODE_ENV=test jest --env=./scripts/custom-test-env.js --watchAll --coverage",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0 && python .github/workflows/eslint_disable_check.py",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\"",
@@ -163,6 +162,7 @@
     "vite": "^6.0.11",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.0.4",
+    "vitest-preview": "^0.0.1",
     "whatwg-fetch": "^3.6.20"
   },
   "resolutions": {
