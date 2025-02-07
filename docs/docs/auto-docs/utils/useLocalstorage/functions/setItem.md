@@ -6,7 +6,7 @@
 
 > **setItem**(`prefix`, `key`, `value`): `void`
 
-Defined in: [src/utils/useLocalstorage.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L41)
+Defined in: [src/utils/useLocalstorage.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L49)
 
 Sets the value for the given key in local storage.
 

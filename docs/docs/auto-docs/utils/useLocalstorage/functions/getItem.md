@@ -6,7 +6,7 @@
 
 > **getItem**(`prefix`, `key`): `any`
 
-Defined in: [src/utils/useLocalstorage.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L29)
+Defined in: [src/utils/useLocalstorage.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L36)
 
 Retrieves the stored value for the given key from local storage.
 
