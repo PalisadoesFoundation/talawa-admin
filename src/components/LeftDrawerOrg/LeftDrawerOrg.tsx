@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -8,7 +8,6 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './../../style/app.module.css'; // Import the global CSS file
@@ -53,18 +52,8 @@ const leftDrawerOrg = ({
   };
   const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [organization, setOrganization] = useState<
-    InterfaceQueryOrganizationsListObject | undefined
-  >(undefined);
-  const {
-    data,
-    loading,
-  }: {
-    data:
-      | { organizations: InterfaceQueryOrganizationsListObject[] }
-      | undefined;
-    loading: boolean;
-  } = useQuery(ORGANIZATIONS_LIST, {
+  // const [organization, setOrganization] = useState<InterfaceOrganizationPg>();
+  const { data, loading } = useQuery(GET_ORGANIZATION_DATA_PG, {
     variables: { id: orgId },
   });
 
@@ -89,17 +78,17 @@ const leftDrawerOrg = ({
   }, [location, userId]);
 
   // Set organization data when query data is available
-  useEffect(() => {
-    let isMounted = true;
-    if (data && isMounted) {
-      setOrganization(data?.organizations[0]);
-    } else {
-      setOrganization(undefined);
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [data]);
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   if (data && isMounted) {
+  //     setOrganization(data?.organization);
+  //   } else {
+  //     setOrganization(undefined);
+  //   }
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [data]);
   /**
    * Handles link click to hide the drawer on smaller screens.
    */
@@ -136,7 +125,7 @@ const leftDrawerOrg = ({
               className={`${styles.profileContainer} shimmer`}
               data-testid="orgBtn"
             />
-          ) : organization == undefined ? (
+          ) : data == undefined ? (
             !isProfilePage && (
               <button
                 className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
@@ -151,20 +140,25 @@ const leftDrawerOrg = ({
           ) : (
             <button className={styles.profileContainer} data-testid="OrgBtn">
               <div className={styles.imageContainer}>
-                {organization.image ? (
-                  <img src={organization.image} alt={`profile picture`} />
+                {data.organization?.avatarURL ? (
+                  <img
+                    src={data.organization?.avatarURL}
+                    alt={`profile picture`}
+                  />
                 ) : (
                   <Avatar
-                    name={organization.name}
+                    name={data.organization?.name}
                     containerStyle={styles.avatarContainer}
                     alt={'Dummy Organization Picture'}
                   />
                 )}
               </div>
               <div className={styles.profileText}>
-                <span className={styles.primaryText}>{organization.name}</span>
+                <span className={styles.primaryText}>
+                  {data.organization?.name}
+                </span>
                 <span className={styles.secondaryText}>
-                  {organization.address.city}
+                  {data.organization?.city}
                 </span>
               </div>
               <AngleRightIcon fill={'var(--bs-secondary)'} />

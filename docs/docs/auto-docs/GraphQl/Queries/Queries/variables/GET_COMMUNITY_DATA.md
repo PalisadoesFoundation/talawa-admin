@@ -6,4 +6,4 @@
 
 > `const` **GET\_COMMUNITY\_DATA**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:850](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L850)
+Defined in: [src/GraphQl/Queries/Queries.ts:938](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L938)

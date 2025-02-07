@@ -4,7 +4,7 @@ import { initials } from '@dicebear/collection';
 import styles from 'components/Avatar/Avatar.module.css';
 
 interface InterfaceAvatarProps {
-  name: string;
+  name?: string;
   alt?: string;
   size?: number;
   containerStyle?: string;

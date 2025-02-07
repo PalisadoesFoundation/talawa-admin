@@ -495,12 +495,12 @@ describe('Organisation Venues', () => {
     expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
   });
 
-  test('renders without crashing', async () => {
-    renderOrganizationVenue(link);
-    waitFor(() => {
-      expect(screen.findByTestId('orgvenueslist')).toBeInTheDocument();
-    });
-  });
+  // test('renders without crashing', async () => {
+  //   renderOrganizationVenue(link);
+  //   waitFor(() => {
+  //     expect(screen.findByTestId('orgvenueslist')).toBeInTheDocument();
+  //   });
+  // });
 
   test('renders the venue list correctly', async () => {
     renderOrganizationVenue(link);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/dom';
 import { describe, test, expect, vi } from 'vitest';
 import Avatar from './Avatar';
 
