@@ -33,10 +33,8 @@ describe('Testing the Organization Card', () => {
       title: 'Post Title',
       time: '2023-09-03',
       creator: {
-        email: 'johndoe@example.com',
-        firstName: 'John',
-        lastName: 'Doe',
-        _id: '1',
+        id: '1',
+        name: 'John Doe',
       },
     };
 

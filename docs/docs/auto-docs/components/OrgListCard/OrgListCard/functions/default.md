@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/OrgListCard/OrgListCard.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgListCard/OrgListCard.tsx#L28)
+Defined in: [src/components/OrgListCard/OrgListCard.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgListCard/OrgListCard.tsx#L29)
 
 Component for displaying a list card for an organization
 

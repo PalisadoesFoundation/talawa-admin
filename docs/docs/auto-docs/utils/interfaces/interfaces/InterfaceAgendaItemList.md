@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemList
 
-Defined in: [src/utils/interfaces.ts:644](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L644)
+Defined in: [src/utils/interfaces.ts:1268](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1268)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/utils/interfaces.ts:644](https://github.com/PalisadoesFoundatio
 
 > **agendaItemByEvent**: [`InterfaceAgendaItemInfo`](InterfaceAgendaItemInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:645](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L645)
+Defined in: [src/utils/interfaces.ts:1269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1269)

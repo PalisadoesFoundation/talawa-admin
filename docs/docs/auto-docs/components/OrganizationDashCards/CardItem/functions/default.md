@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem.tsx#L35)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem.tsx#L33)
 
 Component to display a card item with various types such as Event, Post, or MembershipRequest.
 

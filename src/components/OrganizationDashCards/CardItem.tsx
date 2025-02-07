@@ -18,10 +18,8 @@ export interface InterfaceCardItem {
   startdate?: string;
   enddate?: string;
   creator?: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
+    id: string | number;
+    name: string;
   };
   location?: string;
 }
@@ -67,9 +65,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                 height={20}
               />{' '}
               {'  '}
-              <a>
-                {creator.firstName} {creator.lastName}
-              </a>
+              <a>{creator.name}</a>
             </small>
           )}
 

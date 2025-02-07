@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryBlockPageMemberListItem
 
-Defined in: [src/utils/interfaces.ts:438](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L438)
+Defined in: [src/utils/interfaces.ts:1062](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1062)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:438](https://github.com/PalisadoesFoundatio
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:439](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L439)
+Defined in: [src/utils/interfaces.ts:1063](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1063)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:439](https://github.com/PalisadoesFoundatio
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:442](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L442)
+Defined in: [src/utils/interfaces.ts:1066](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1066)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:442](https://github.com/PalisadoesFoundatio
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:440](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L440)
+Defined in: [src/utils/interfaces.ts:1064](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1064)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:440](https://github.com/PalisadoesFoundatio
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:441](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L441)
+Defined in: [src/utils/interfaces.ts:1065](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1065)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:441](https://github.com/PalisadoesFoundatio
 
 > **organizationsBlockedBy**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:443](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L443)
+Defined in: [src/utils/interfaces.ts:1067](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1067)
 
 #### \_id
 
