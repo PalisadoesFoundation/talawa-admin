@@ -3,25 +3,58 @@ import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-
 import { store } from 'state/store';
 import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { it, expect, describe } from 'vitest';
+import type { NormalizedCacheObject } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+  InMemoryCache,
+  Observable,
+} from '@apollo/client';
+
 const { setItem } = useLocalStorage();
+
+const link = new ApolloLink((operation, forward) => {
+  // Mock responses based on the operation
+  if (operation.operationName === 'VERIFY_ROLE') {
+    return new Observable((observer) => {
+      // Simulate different authorization scenarios
+      observer.next({
+        data: {
+          verifyRole: {
+            isAuthorized: true, // or false for different test cases
+            role: 'ADMIN', // or other roles
+          },
+        },
+      });
+      observer.complete();
+    });
+  }
+  return forward(operation);
+});
+
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: link,
+});
 
 describe('Testing Page not found component', () => {
   it('should render component properly for User', () => {
-    //setItem('AdminFor', undefined);
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PageNotFound />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>,
+      <ApolloProvider client={client}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PageNotFound />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </ApolloProvider>,
     );
 
     expect(screen.getByText(/Talawa User/i)).toBeInTheDocument();
@@ -40,13 +73,15 @@ describe('Testing Page not found component', () => {
       },
     ]);
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PageNotFound />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>,
+      <ApolloProvider client={client}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PageNotFound />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </ApolloProvider>,
     );
 
     expect(screen.getByText(/Talawa Admin Portal/i)).toBeInTheDocument();

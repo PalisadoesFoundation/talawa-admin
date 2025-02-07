@@ -42,3 +42,15 @@ export interface InterfaceTableData {
   id: string;
   checkInData: InterfaceTableCheckIn;
 }
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+  SUPER_ADMIN = 'superAdmin',
+}
+
+export type VerifyRoleResponse = {
+  verifyRole: {
+    isAuthorized: boolean;
+    role: UserRole;
+  };
+};

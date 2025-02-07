@@ -5,6 +5,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 import styles from '../../style/app.module.css';
 import Logo from 'assets/images/talawa-logo-600x600.png';
+import SignOut from 'components/SignOut/SignOut';
 
 /**
  * The `PageNotFound` component displays a 404 error page when a user navigates to a non-existent route.
@@ -29,6 +30,9 @@ const PageNotFound = (): JSX.Element => {
 
   return (
     <section className={styles.pageNotFound}>
+      <div className="position-absolute top-0 end-0 w-10 mt-3 me-3">
+        <SignOut />
+      </div>
       <div className="container text-center">
         <div className="brand">
           <img src={Logo} alt="Logo" className="img-fluid" />

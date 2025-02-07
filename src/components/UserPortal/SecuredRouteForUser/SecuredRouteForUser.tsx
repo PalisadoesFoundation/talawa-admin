@@ -1,4 +1,8 @@
-import React from 'react';
+import { useQuery } from '@apollo/client';
+import type { VerifyRoleResponse } from 'components/CheckIn/types';
+import { UserRole } from 'components/CheckIn/types';
+import { VERIFY_ROLE } from 'GraphQl/Queries/Queries';
+import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -14,17 +18,55 @@ import useLocalStorage from 'utils/useLocalstorage';
 const SecuredRouteForUser = (): JSX.Element => {
   // Custom hook to interact with local storage
   const { getItem } = useLocalStorage();
-
-  // Check if the user is logged in and the role of the user
-  const isLoggedIn = getItem('IsLoggedIn');
-  const adminFor = getItem('AdminFor');
-
-  // Conditional rendering based on authentication status and role
-  return isLoggedIn === 'TRUE' ? (
-    <>{adminFor == undefined ? <Outlet /> : <PageNotFound />}</>
-  ) : (
-    <Navigate to="/" replace />
+  const { data, loading, error, refetch } = useQuery<VerifyRoleResponse>(
+    VERIFY_ROLE,
+    {
+      skip: !getItem('token'),
+      context: {
+        headers: {
+          Authorization: `Bearer ${getItem('token')}`,
+        },
+      },
+    },
   );
+  const [token, setToken] = React.useState(getItem('token'));
+
+  useEffect(() => {
+    const newToken = getItem('token');
+    if (newToken !== token) {
+      setToken(newToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    refetch(); // Refetch when token updates
+  }, [token]);
+
+  if (loading) {
+    return <div> Loading.....</div>;
+  } else if (error) {
+    return <div>Error During Routing ...</div>;
+  } else {
+    if (!data?.verifyRole) {
+      return <Navigate to="/" replace />;
+    }
+
+    const { isAuthorized, role } = data.verifyRole;
+
+    if (isAuthorized) {
+      if (
+        role === UserRole.USER ||
+        role === UserRole.ADMIN ||
+        role === UserRole.SUPER_ADMIN
+      ) {
+        return <Outlet />;
+      } else {
+        return <PageNotFound />;
+      }
+    } else {
+      return <Navigate to="/" replace />;
+    }
+  }
 };
 
 export default SecuredRouteForUser;

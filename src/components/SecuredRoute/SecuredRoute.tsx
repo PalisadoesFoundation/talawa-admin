@@ -1,5 +1,8 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import { UserRole, type VerifyRoleResponse } from 'components/CheckIn/types';
+import { VERIFY_ROLE } from 'GraphQl/Queries/Queries';
+import React, { useEffect } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -14,14 +17,57 @@ const { getItem, setItem } = useLocalStorage();
  * @returns The JSX element representing the secured route.
  */
 const SecuredRoute = (): JSX.Element => {
-  const isLoggedIn = getItem('IsLoggedIn');
-  const adminFor = getItem('AdminFor');
-
-  return isLoggedIn === 'TRUE' ? (
-    <>{adminFor != null ? <Outlet /> : <PageNotFound />}</>
-  ) : (
-    <Navigate to="/" replace />
+  const location = useLocation();
+  const { data, loading, error, refetch } = useQuery<VerifyRoleResponse>(
+    VERIFY_ROLE,
+    {
+      skip: !getItem('token'),
+      context: {
+        headers: {
+          Authorization: `Bearer ${getItem('token')}`,
+        },
+      },
+    },
   );
+  const [token, setToken] = React.useState(getItem('token'));
+
+  useEffect(() => {
+    const newToken = getItem('token');
+    if (newToken !== token) {
+      setToken(newToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    refetch(); // Refetch when token updates
+  }, [token]);
+
+  if (loading) {
+    return <div> Loading.....</div>;
+  } else if (error) {
+    return <div>Error During Routing ...</div>;
+  } else {
+    if (!data?.verifyRole) {
+      return <Navigate to="/" replace />;
+    }
+    const { isAuthorized = false, role = '' } = (data as VerifyRoleResponse)
+      .verifyRole;
+    const restrictedRoutesForAdmin = ['/member', '/users', '/communityProfile'];
+    if (isAuthorized) {
+      if (role == UserRole.SUPER_ADMIN) {
+        return <Outlet />;
+      } else if (role == UserRole.ADMIN) {
+        if (restrictedRoutesForAdmin.includes(location.pathname)) {
+          return <PageNotFound />;
+        }
+        return <Outlet />;
+      } else {
+        return <PageNotFound />;
+      }
+    } else {
+      return <Navigate to="/" replace />;
+    }
+  }
 };
 
 // Time constants for session timeout and inactivity interval
