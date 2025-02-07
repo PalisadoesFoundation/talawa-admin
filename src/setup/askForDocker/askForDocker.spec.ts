@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { askForDocker } from './askForDocker';
+import { askAndUpdateTalawaApiUrl, askForDocker } from './askForDocker';
 import { describe, test, expect, vi } from 'vitest';
 
 // ✅ Fix Inquirer Mocking for v12+
@@ -74,5 +74,33 @@ describe('askForDocker', () => {
 
     const result = await askForDocker();
     expect(result).toBe('1024');
+  });
+});
+
+vi.mock('../askForTalawaApiUrl/askForTalawaApiUrl', () => ({
+  askForTalawaApiUrl: vi
+    .fn()
+    .mockResolvedValue('https://talawa-api.example.com'),
+}));
+
+vi.mock('../updateEnvFile/updateEnvFile', () => ({
+  default: vi.fn(),
+}));
+
+describe('askAndUpdateTalawaApiUrl', () => {
+  test('should proceed with API setup when user confirms', async () => {
+    vi.spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldSetTalawaApiUrlResponse: true }) // ✅ Covers line 35
+      .mockResolvedValueOnce({ dockerAppPort: '4321' });
+
+    await expect(askAndUpdateTalawaApiUrl()).resolves.not.toThrow();
+  });
+
+  test('should skip API setup when user declines', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldSetTalawaApiUrlResponse: false,
+    });
+
+    await expect(askAndUpdateTalawaApiUrl()).resolves.not.toThrow();
   });
 });
