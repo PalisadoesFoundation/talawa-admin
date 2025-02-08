@@ -22,7 +22,8 @@ import type {
 } from 'types/Tag/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
 
-/*
+/** TSDOC
+ *
  * ## CSS Strategy Explanation:
  *
  * To ensure consistency across the application and reduce duplication, common styles
