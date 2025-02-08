@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L54)
+Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L57)
 
 Component for registering or editing an advertisement.
 

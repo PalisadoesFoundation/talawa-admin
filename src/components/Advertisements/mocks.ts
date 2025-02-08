@@ -37,484 +37,94 @@ export async function wait(ms = 100): Promise<void> {
   });
 }
 
-export const ADVERTISEMENTS_LIST_MOCK: {
-  request:
-    | {
-        query: DocumentNode;
-        variables: { id: string; first: number; after: null };
-      }
-    | {
-        query: DocumentNode;
-        variables: {
-          id: string;
-          first: number;
-          after: null;
-          before: null;
-          last: null;
-        };
-      };
-  result:
-    | {
-        data: {
-          organizations: {
-            _id: string;
-            advertisements: {
-              edges: {
+type AdvertisementNode = {
+  _id: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  mediaUrl: string;
+};
+
+type PageInfo = {
+  startCursor: string;
+  endCursor: string;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+};
+
+type AdvertisementResponse = {
+  organizations: {
+    _id: string;
+    advertisements: {
+      edges: { node: AdvertisementNode; cursor: string }[];
+      pageInfo: PageInfo;
+      totalCount: number;
+    };
+  }[];
+};
+
+type MockRequest = {
+  request: {
+    query: DocumentNode;
+    variables: Record<string, unknown>;
+  };
+  result: {
+    data: AdvertisementResponse;
+  };
+};
+
+const createMock = (variables: Record<string, unknown>): MockRequest => ({
+  request: {
+    query: ORGANIZATION_ADVERTISEMENT_LIST,
+    variables,
+  },
+  result: {
+    data: {
+      organizations: [
+        {
+          _id: '1',
+          advertisements: {
+            edges: [
+              {
                 node: {
-                  _id: string;
-                  name: string;
-                  startDate: string;
-                  endDate: string;
-                  mediaUrl: string;
-                };
-                cursor: string;
-              }[];
-              pageInfo: {
-                startCursor: string;
-                endCursor: string;
-                hasNextPage: boolean;
-                hasPreviousPage: boolean;
-              };
-              totalCount: number;
-            };
-          }[];
-        };
-      }
-    | {
-        data: {
-          organizations: {
-            _id: string;
-            advertisements: {
-              edges: {
+                  _id: '1',
+                  name: 'Advertisement1',
+                  startDate: '2022-01-01',
+                  endDate: '2023-01-01',
+                  mediaUrl: 'http://example1.com',
+                },
+                cursor: 'cursor1',
+              },
+              {
                 node: {
-                  _id: string;
-                  name: string;
-                  startDate: string;
-                  endDate: string;
-                  mediaUrl: string;
-                };
-                cursor: string;
-              }[];
-              pageInfo: {
-                startCursor: string;
-                endCursor: string;
-                hasNextPage: boolean;
-                hasPreviousPage: boolean;
-              };
-              totalCount: number;
-            };
-          }[];
-        };
-      };
-}[] = [
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: 'cursor1',
+                  _id: '2',
+                  name: 'Advertisement2',
+                  startDate: '2024-02-01',
+                  endDate: '2025-02-01',
+                  mediaUrl: 'http://example2.com',
                 },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: 'cursor2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: true,
-                hasPreviousPage: false,
+                cursor: 'cursor2',
               },
-              totalCount: 2,
+            ],
+            pageInfo: {
+              startCursor: 'cursor1',
+              endCursor: 'cursor2',
+              hasNextPage: true,
+              hasPreviousPage: false,
             },
+            totalCount: 2,
           },
-        ],
-      },
+        },
+      ],
     },
   },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-        before: null,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: 'cursor1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: 'cursor2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: 'cursor1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: 'cursor2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-        before: null,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: 'cursor1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: 'cursor2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: 'cursor1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: 'cursor2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-        before: null,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: 'cursor1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: 'cursor2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: 'cursor1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: 'cursor2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-        before: null,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: 'cursor1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: 'cursor2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
+});
+
+export const ADVERTISEMENTS_LIST_MOCK: MockRequest[] = [
+  ...Array(4).fill(createMock({ id: '1', first: 6, after: null })),
+  ...Array(4).fill(
+    createMock({ id: '1', first: 6, after: null, before: null, last: null }),
+  ),
 ];
 
 export const PLUGIN_GET_MOCK = {

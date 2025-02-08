@@ -6,7 +6,7 @@
 
 > `const` **PLUGIN\_GET\_MOCK**: `object`
 
-Defined in: [src/components/Advertisements/mocks.ts:521](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/mocks.ts#L521)
+Defined in: [src/components/Advertisements/mocks.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/mocks.ts#L130)
 
 ## Type declaration
 
