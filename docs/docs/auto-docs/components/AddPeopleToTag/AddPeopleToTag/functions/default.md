@@ -6,13 +6,13 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L63)
+Defined in: [src/components/AddPeopleToTag/AddPeopleToTag.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTag.tsx#L48)
 
 ## Parameters
 
 ### props
 
-[`InterfaceAddPeopleToTagProps`](../interfaces/InterfaceAddPeopleToTagProps.md)
+[`InterfaceAddPeopleToTagProps`](../../../../types/Tag/interface/interfaces/InterfaceAddPeopleToTagProps.md)
 
 ### deprecatedLegacyContext?
 

@@ -12,15 +12,13 @@ import {
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-
 import { I18nextProvider } from 'react-i18next';
-
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
-import type { InterfaceAddPeopleToTagProps } from './AddPeopleToTag';
+import type { InterfaceAddPeopleToTagProps } from 'types/Tag/interface';
 import AddPeopleToTag from './AddPeopleToTag';
 import i18n from 'utils/i18nForTest';
 import {

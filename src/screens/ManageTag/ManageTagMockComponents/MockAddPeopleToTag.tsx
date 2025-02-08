@@ -1,5 +1,5 @@
 import React from 'react';
-import type { InterfaceAddPeopleToTagProps } from '../../../components/AddPeopleToTag/AddPeopleToTag';
+import type { InterfaceAddPeopleToTagProps } from 'types/Tag/interface';
 
 /**
  * Component that mocks the AddPeopleToTag component for the Manage Tag screen.

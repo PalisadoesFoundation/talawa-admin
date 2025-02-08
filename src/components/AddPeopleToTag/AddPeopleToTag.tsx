@@ -6,13 +6,7 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
-import type { InterfaceTagUsersToAssignToQuery } from 'utils/organizationTagsUtils';
-import {
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-  dataGridStyle,
-} from 'utils/organizationTagsUtils';
 import { Stack } from '@mui/material';
 import { toast } from 'react-toastify';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
@@ -20,10 +14,15 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import type { TFunction } from 'i18next';
+import type {
+  InterfaceAddPeopleToTagProps,
+  InterfaceMemberData,
+  InterfaceTagUsersToAssignToQuery,
+  InterfaceQueryUserTagsMembersToAssignTo,
+} from 'types/Tag/interface';
+import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
 
-/** * Props for the `AddPeopleToTag` component.
- *
+/*
  * ## CSS Strategy Explanation:
  *
  * To ensure consistency across the application and reduce duplication, common styles
@@ -45,20 +44,6 @@ import type { TFunction } from 'i18next';
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-
-export interface InterfaceAddPeopleToTagProps {
-  addPeopleToTagModalIsOpen: boolean;
-  hideAddPeopleToTagModal: () => void;
-  refetchAssignedMembersData: () => void;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
-}
-
-interface InterfaceMemberData {
-  _id: string;
-  firstName: string;
-  lastName: string;
-}
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
