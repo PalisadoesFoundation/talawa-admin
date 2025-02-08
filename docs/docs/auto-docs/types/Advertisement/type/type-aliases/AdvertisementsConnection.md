@@ -6,7 +6,7 @@
 
 > **AdvertisementsConnection**: `object`
 
-Defined in: [src/types/advertisement.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L32)
+Defined in: [src/types/Advertisement/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L32)
 
 ## Type declaration
 
@@ -16,7 +16,7 @@ Defined in: [src/types/advertisement.ts:32](https://github.com/PalisadoesFoundat
 
 ### pageInfo?
 
-> `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../pagination/type-aliases/DefaultConnectionPageInfo.md)
+> `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../../pagination/type-aliases/DefaultConnectionPageInfo.md)
 
 ### totalCount?
 

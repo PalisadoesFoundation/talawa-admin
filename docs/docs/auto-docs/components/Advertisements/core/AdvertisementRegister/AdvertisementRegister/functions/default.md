@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L79)
+Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L54)
 
 Component for registering or editing an advertisement.
 
@@ -14,7 +14,7 @@ Component for registering or editing an advertisement.
 
 ### props
 
-`InterfaceAddOnRegisterProps`
+[`InterfaceAddOnRegisterProps`](../../../../../../types/Advertisement/interface/interfaces/InterfaceAddOnRegisterProps.md)
 
 Contains form status, advertisement details, and a function to update parent state.
 

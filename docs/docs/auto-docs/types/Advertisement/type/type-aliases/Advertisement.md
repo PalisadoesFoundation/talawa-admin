@@ -6,7 +6,7 @@
 
 > **Advertisement**: `object`
 
-Defined in: [src/types/advertisement.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L14)
+Defined in: [src/types/Advertisement/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L14)
 
 ## Type declaration
 
@@ -20,7 +20,7 @@ Defined in: [src/types/advertisement.ts:14](https://github.com/PalisadoesFoundat
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../../user/type-aliases/User.md)
 
 ### endDate
 

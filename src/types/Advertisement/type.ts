@@ -1,5 +1,5 @@
-import type { User } from './user';
-import type { DefaultConnectionPageInfo } from './pagination';
+import type { User } from '../user';
+import type { DefaultConnectionPageInfo } from '../pagination';
 import type { URL } from 'url';
 
 export const AdvertisementType = {
