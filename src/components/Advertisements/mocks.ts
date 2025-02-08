@@ -99,8 +99,8 @@ const createMock = (variables: Record<string, unknown>): MockRequest => ({
                 node: {
                   _id: '2',
                   name: 'Advertisement2',
-                  startDate: '2024-02-01',
-                  endDate: '2025-02-01',
+                  startDate: '2021-02-01',
+                  endDate: '2035-02-01',
                   mediaUrl: 'http://example2.com',
                 },
                 cursor: 'cursor2',
