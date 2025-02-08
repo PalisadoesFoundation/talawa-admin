@@ -2,11 +2,15 @@ import type { Mock } from 'vitest';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock modules
-vi.mock('inquirer', () => ({
-  default: {
-    prompt: vi.fn(),
-  },
-}));
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual('inquirer');
+  return {
+    default: {
+      ...actual,
+      prompt: vi.fn(),
+    },
+  };
+});
 
 vi.mock('setup/updateEnvFile/updateEnvFile', () => ({
   default: vi.fn(),
