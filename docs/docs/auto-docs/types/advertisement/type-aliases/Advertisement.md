@@ -6,7 +6,7 @@
 
 > **Advertisement**: `object`
 
-Defined in: [src/types/advertisement.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L13)
+Defined in: [src/types/advertisement.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L14)
 
 ## Type declaration
 

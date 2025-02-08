@@ -6,7 +6,7 @@
 
 > **PostWhereInput**: `object`
 
-Defined in: [src/types/post.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/post.ts#L60)
+Defined in: [src/types/post.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/post.ts#L61)
 
 ## Type declaration
 

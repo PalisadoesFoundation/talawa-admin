@@ -6,7 +6,7 @@
 
 > **CreateAdvertisementInput**: `object`
 
-Defined in: [src/types/advertisement.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L37)
+Defined in: [src/types/advertisement.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L38)
 
 ## Type declaration
 

@@ -7,21 +7,10 @@ import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-
-/**
- * Interface defining the form state for the `addOnRegister` component.
- */
-interface InterfaceFormStateTypes {
-  pluginName: string;
-  pluginCreatedBy: string;
-  pluginDesc: string;
-  pluginInstallStatus: boolean;
-  installedOrgs: [string] | [];
-}
-
-interface InterfaceAddOnRegisterProps {
-  createdBy?: string;
-}
+import type {
+  InterfaceFormStateTypes,
+  InterfaceAddOnRegisterProps,
+} from 'types/AddOn/interface';
 
 /**
  * A React component for registering a new add-on plugin.

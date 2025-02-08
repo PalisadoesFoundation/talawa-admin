@@ -6,7 +6,7 @@
 
 > **AdvertisementEdge**: `object`
 
-Defined in: [src/types/advertisement.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L26)
+Defined in: [src/types/advertisement.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L27)
 
 ## Type declaration
 

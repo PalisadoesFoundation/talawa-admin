@@ -6,7 +6,7 @@
 
 > `const` **ADD\_ON\_ENTRY\_MOCK**: `object`[]
 
-Defined in: [src/components/AddOn/core/AddOnEntry/AddOnEntryMocks.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnEntry/AddOnEntryMocks.ts#L13)
+Defined in: [src/components/AddOn/mocks.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/mocks.ts#L53)
 
 ## Type declaration
 

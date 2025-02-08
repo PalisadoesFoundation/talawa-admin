@@ -13,7 +13,6 @@ import { I18nextProvider } from 'react-i18next';
 import '@testing-library/jest-dom';
 import { describe, test, expect, vi } from 'vitest';
 import { store } from 'state/store';
-
 import AddOn from './AddOn';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';

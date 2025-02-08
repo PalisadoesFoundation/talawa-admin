@@ -6,7 +6,7 @@
 
 > **CreateAdvertisementPayload**: `object`
 
-Defined in: [src/types/advertisement.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L46)
+Defined in: [src/types/advertisement.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/advertisement.ts#L47)
 
 ## Type declaration
 

@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AddOn/support/components/SidePanel/SidePanel.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/components/SidePanel/SidePanel.tsx#L30)
+Defined in: [src/components/AddOn/support/components/SidePanel/SidePanel.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/components/SidePanel/SidePanel.tsx#L19)
 
 A React component that renders a side panel with an optional collapse state.
 
@@ -14,7 +14,7 @@ A React component that renders a side panel with an optional collapse state.
 
 ### props
 
-`InterfaceSidePanelProps`
+[`InterfaceSidePanelProps`](../../../../../../../types/AddOn/interface/interfaces/InterfaceSidePanelProps.md)
 
 The properties for the component.
 

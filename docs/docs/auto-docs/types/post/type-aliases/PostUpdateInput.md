@@ -6,7 +6,7 @@
 
 > **PostUpdateInput**: `object`
 
-Defined in: [src/types/post.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/post.ts#L53)
+Defined in: [src/types/post.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/post.ts#L54)
 
 ## Type declaration
 
