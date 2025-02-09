@@ -113,7 +113,7 @@ describe('Testing Organization People List Card', () => {
 
     // Click remove button
     const removeButton = screen.getByTestId('removeMemberBtn');
-    await userEvent.click(removeButton);
+    await await userEvent.click(removeButton);
 
     // Verify that success toast and toggleRemoveModal were not called
     await waitFor(() => {
@@ -153,7 +153,7 @@ describe('Testing Organization People List Card', () => {
 
     // Click remove button
     const removeButton = screen.getByTestId('removeMemberBtn');
-    await userEvent.click(removeButton);
+    await await userEvent.click(removeButton);
 
     // Wait for mutation to complete
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -183,7 +183,7 @@ describe('Testing Organization People List Card', () => {
 
     // Click remove button
     const removeButton = screen.getByTestId('removeMemberBtn');
-    await userEvent.click(removeButton);
+    await await userEvent.click(removeButton);
 
     // Check error handling
     await waitFor(
@@ -207,12 +207,12 @@ describe('Testing Organization People List Card', () => {
 
     // Close via No button
     const noButton = screen.getByRole('button', { name: /no/i });
-    await userEvent.click(noButton);
+    await await userEvent.click(noButton);
     expect(props.toggleRemoveModal).toHaveBeenCalled();
 
     // Close via close button
     const closeButton = screen.getByRole('button', { name: '' }); // Close icon button
-    await userEvent.click(closeButton);
+    await await userEvent.click(closeButton);
     expect(props.toggleRemoveModal).toHaveBeenCalled();
   });
 

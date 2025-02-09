@@ -177,15 +177,15 @@ describe('AttendanceStatisticsModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const genderButton = screen.getByTestId('gender-button');
       const ageButton = screen.getByTestId('age-button');
 
-      userEvent.click(ageButton);
+      await userEvent.click(ageButton);
       expect(ageButton).toHaveClass('btn-success');
       expect(genderButton).toHaveClass('btn-light');
 
-      userEvent.click(genderButton);
+      await userEvent.click(genderButton);
       expect(genderButton).toHaveClass('btn-success');
       expect(ageButton).toHaveClass('btn-light');
     });
@@ -215,12 +215,12 @@ describe('AttendanceStatisticsModal', () => {
 
     await act(async () => {
       const exportButton = screen.getByRole('button', { name: 'Export Data' });
-      await userEvent.click(exportButton);
+      await await userEvent.click(exportButton);
     });
 
     await act(async () => {
       const demographicsExport = screen.getByTestId('demographics-export');
-      await userEvent.click(demographicsExport);
+      await await userEvent.click(demographicsExport);
     });
 
     expect(mockExportToCSV).toHaveBeenCalled();
@@ -249,12 +249,12 @@ describe('AttendanceStatisticsModal', () => {
 
     await act(async () => {
       const exportButton = screen.getByRole('button', { name: 'Export Data' });
-      await userEvent.click(exportButton);
+      await await userEvent.click(exportButton);
     });
 
     await act(async () => {
       const demographicsExport = screen.getByTestId('trends-export');
-      await userEvent.click(demographicsExport);
+      await await userEvent.click(demographicsExport);
     });
 
     expect(mockExportToCSV).toHaveBeenCalled();
@@ -298,18 +298,18 @@ describe('AttendanceStatisticsModal', () => {
     // Test pagination
     await act(async () => {
       const nextButton = screen.getByAltText('right-arrow');
-      await userEvent.click(nextButton);
+      await await userEvent.click(nextButton);
     });
 
     await act(async () => {
       const prevButton = screen.getByAltText('left-arrow');
-      await userEvent.click(prevButton);
+      await await userEvent.click(prevButton);
     });
 
     // Test today button
     await act(async () => {
       const todayButton = screen.getByTestId('today-button');
-      await userEvent.click(todayButton);
+      await await userEvent.click(todayButton);
     });
 
     // Verify buttons are present and interactive
@@ -331,12 +331,12 @@ describe('AttendanceStatisticsModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const nextButton = screen.getByAltText('right-arrow');
       const prevButton = screen.getByAltText('left-arrow');
 
-      userEvent.click(nextButton);
-      userEvent.click(prevButton);
+      await userEvent.click(nextButton);
+      await userEvent.click(prevButton);
     });
   });
 
@@ -354,9 +354,9 @@ describe('AttendanceStatisticsModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const closeButton = screen.getByTestId('close-button');
-      userEvent.click(closeButton);
+      await userEvent.click(closeButton);
       expect(handleClose).toHaveBeenCalled();
     });
   });

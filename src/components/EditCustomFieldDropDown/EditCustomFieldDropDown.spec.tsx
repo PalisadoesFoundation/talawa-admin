@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { act } from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import EditOrgCustomFieldDropDown from './EditCustomFieldDropDown';
 import userEvent from '@testing-library/user-event';
@@ -49,15 +49,15 @@ describe('Testing Custom Field Dropdown', () => {
 
     expect(getByText('Number')).toBeInTheDocument();
 
-    act(() => {
-      userEvent.click(getByTestId('toggleBtn'));
+    await act(async () => {
+      await userEvent.click(getByTestId('toggleBtn'));
     });
 
     await wait();
 
     availableFieldTypes.forEach(async (_, index) => {
-      act(() => {
-        userEvent.click(getByTestId(`dropdown-btn-${index}`));
+      await act(async () => {
+        fireEvent.click(getByTestId(`dropdown-btn-${index}`));
       });
     });
   });

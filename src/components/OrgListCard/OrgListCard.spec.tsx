@@ -88,7 +88,7 @@ describe('Testing the Super Dash List', () => {
     expect(screen.getByText(/Texas/i)).toBeDefined();
     expect(screen.getByTestId(/manageBtn/i)).toBeDefined();
 
-    await userEvent.click(screen.getByTestId(/manageBtn/i));
+    await await userEvent.click(screen.getByTestId(/manageBtn/i));
     removeItem('id');
   });
 
@@ -137,6 +137,6 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>,
     );
 
-    await userEvent.click(screen.getByTestId('manageBtn'));
+    await await userEvent.click(screen.getByTestId('manageBtn'));
   });
 });

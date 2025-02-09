@@ -330,7 +330,7 @@ describe('VenueModal', () => {
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
       const file = new File(['test'], 'test.png', { type: 'image/png' });
       const fileInput = screen.getByTestId('venueImgUrl');
-      await userEvent.upload(fileInput, file);
+      await await userEvent.upload(fileInput, file);
 
       expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
       expect(screen.getByTestId('closeimage')).toBeInTheDocument();
@@ -340,7 +340,7 @@ describe('VenueModal', () => {
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
       const file = new File(['test'], 'test.png', { type: 'image/png' });
       const fileInput = screen.getByTestId('venueImgUrl');
-      await userEvent.upload(fileInput, file);
+      await await userEvent.upload(fileInput, file);
 
       fireEvent.click(screen.getByTestId('closeimage'));
       expect(
@@ -661,15 +661,15 @@ describe('VenueModal', () => {
       );
 
       await act(async () => {
-        await userEvent.type(
+        await await userEvent.type(
           screen.getByPlaceholderText('Enter Venue Name'),
           'Duplicate Venue',
         );
-        await userEvent.type(
+        await await userEvent.type(
           screen.getByPlaceholderText('Enter Venue Description'),
           'Test Description',
         );
-        await userEvent.type(
+        await await userEvent.type(
           screen.getByPlaceholderText('Enter Venue Capacity'),
           '100',
         );
@@ -703,15 +703,15 @@ describe('VenueModal', () => {
         renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
 
         await act(async () => {
-          await userEvent.type(
+          await await userEvent.type(
             screen.getByPlaceholderText('Enter Venue Name'),
             'Test Venue',
           );
-          await userEvent.type(
+          await await userEvent.type(
             screen.getByPlaceholderText('Enter Venue Description'),
             'Test Description',
           );
-          await userEvent.type(
+          await await userEvent.type(
             screen.getByPlaceholderText('Enter Venue Capacity'),
             '100',
           );
@@ -764,9 +764,9 @@ describe('VenueModal', () => {
         );
         const capInput = screen.getByPlaceholderText('Enter Venue Capacity');
 
-        await userEvent.type(nameInput, 'Test Venue');
-        await userEvent.type(descInput, 'Test Description');
-        await userEvent.type(capInput, '100');
+        await await userEvent.type(nameInput, 'Test Venue');
+        await await userEvent.type(descInput, 'Test Description');
+        await await userEvent.type(capInput, '100');
 
         expect(nameInput).toHaveValue('Test Venue');
         expect(descInput).toHaveValue('Test Description');
@@ -818,7 +818,7 @@ describe('VenueModal', () => {
           );
 
           await act(async () => {
-            await userEvent.type(descInput, 'New Description');
+            await await userEvent.type(descInput, 'New Description');
           });
 
           expect(descInput).toHaveValue('New Description');
@@ -832,7 +832,7 @@ describe('VenueModal', () => {
           const longText = 'a'.repeat(501); // Exceeds 500 char limit
 
           await act(async () => {
-            await userEvent.type(descInput, longText);
+            await await userEvent.type(descInput, longText);
           });
 
           expect(descInput).toHaveValue(longText.slice(0, 500));
@@ -851,7 +851,7 @@ describe('VenueModal', () => {
           ];
 
           await act(async () => {
-            await userEvent.upload(fileInput, files);
+            await await userEvent.upload(fileInput, files);
           });
 
           // Should only use the first file
@@ -907,11 +907,11 @@ describe('VenueModal', () => {
             renderVenueModal(defaultProps, mockLink);
 
             await act(async () => {
-              await userEvent.type(
+              await await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Name'),
                 'Test Venue',
               );
-              await userEvent.type(
+              await await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Capacity'),
                 '100',
               );
@@ -997,15 +997,15 @@ describe('VenueModal', () => {
             renderVenueModal(defaultProps, mockLink);
 
             await act(async () => {
-              await userEvent.type(
+              await await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Name'),
                 'Test Venue',
               );
-              await userEvent.type(
+              await await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Description'),
                 'Test Description',
               );
-              await userEvent.type(
+              await await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Capacity'),
                 '100',
               );
@@ -1043,15 +1043,15 @@ describe('VenueModal', () => {
             renderVenueModal(defaultProps, mockLink);
 
             await act(async () => {
-              await userEvent.type(
+              await await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Name'),
                 'Duplicate Venue',
               );
-              await userEvent.type(
+              await await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Description'),
                 'Test Description',
               );
-              await userEvent.type(
+              await await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Capacity'),
                 '100',
               );
@@ -1072,7 +1072,7 @@ describe('VenueModal', () => {
           const nameInput = screen.getByPlaceholderText('Enter Venue Name');
 
           await act(async () => {
-            await userEvent.type(nameInput, '!@#$%^&*()');
+            await await userEvent.type(nameInput, '!@#$%^&*()');
           });
 
           expect(nameInput).toHaveValue('!@#$%^&*()');
@@ -1085,7 +1085,7 @@ describe('VenueModal', () => {
           );
 
           await act(async () => {
-            await userEvent.type(capacityInput, 'abc');
+            await await userEvent.type(capacityInput, 'abc');
           });
 
           await act(async () => {
@@ -1144,15 +1144,15 @@ describe('VenueModal', () => {
           );
 
           await act(async () => {
-            await userEvent.type(
+            await await userEvent.type(
               screen.getByPlaceholderText('Enter Venue Name'),
               'Test Venue',
             );
-            await userEvent.type(
+            await await userEvent.type(
               screen.getByPlaceholderText('Enter Venue Description'),
               '   ', // Only whitespace
             );
-            await userEvent.type(
+            await await userEvent.type(
               screen.getByPlaceholderText('Enter Venue Capacity'),
               '100',
             );
@@ -1240,7 +1240,7 @@ describe('VenueModal', () => {
           const longDescription = 'a'.repeat(600); // More than 500 characters
 
           await act(async () => {
-            await userEvent.type(descInput, longDescription);
+            await await userEvent.type(descInput, longDescription);
           });
 
           // Verify that the description is truncated to 500 characters
@@ -1265,15 +1265,15 @@ describe('VenueModal', () => {
           renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
 
           await act(async () => {
-            await userEvent.type(
+            await await userEvent.type(
               screen.getByPlaceholderText('Enter Venue Name'),
               'Test Venue',
             );
-            await userEvent.type(
+            await await userEvent.type(
               screen.getByPlaceholderText('Enter Venue Description'),
               'Test Description',
             );
-            await userEvent.type(
+            await await userEvent.type(
               screen.getByPlaceholderText('Enter Venue Capacity'),
               '100',
             );

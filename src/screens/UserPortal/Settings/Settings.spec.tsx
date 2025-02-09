@@ -311,11 +311,10 @@ describe('Testing Settings Screen [User Portal]', () => {
         </MockedProvider>,
       );
     });
-
-    await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
-    await wait();
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    fireEvent.change(screen.getByTestId('inputAddress'), {
+      target: { value: 'random' },
+    });
+    fireEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputFirstName')).toHaveValue('John');
     expect(screen.getByTestId('inputLastName')).toHaveValue('Doe');
@@ -346,9 +345,11 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    fireEvent.change(screen.getByTestId('inputAddress'), {
+      target: { value: 'random' },
+    });
     await wait();
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    fireEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputFirstName')).toHaveValue('');
     expect(screen.getByTestId('inputLastName')).toHaveValue('');

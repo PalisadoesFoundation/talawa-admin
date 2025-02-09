@@ -8,7 +8,6 @@ import {
   render,
   screen,
   waitFor,
-  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -128,17 +127,19 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('closeCreateTagModal'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('closeCreateTagModal'));
+    await userEvent.click(screen.getByTestId('closeCreateTagModal'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeCreateTagModal'),
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId('closeCreateTagModal'),
+      ).not.toBeInTheDocument(),
     );
   });
   test('navigates to sub tags screen after clicking on a tag', async () => {
@@ -149,7 +150,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('tagName')[0]);
+    await userEvent.click(screen.getAllByTestId('tagName')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
@@ -163,7 +164,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
@@ -216,12 +217,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
       expect(screen.getByTestId('oldest')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('oldest'));
+    await userEvent.click(screen.getByTestId('oldest'));
 
     // returns the tags in reverse order
     await waitFor(() => {
@@ -233,12 +234,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
       expect(screen.getByTestId('latest')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('latest'));
+    await userEvent.click(screen.getByTestId('latest'));
 
     // reverse the order again
     await waitFor(() => {
@@ -283,20 +284,20 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
     });
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 12',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -309,14 +310,14 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTagE',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
@@ -386,14 +387,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 13',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Tag creation failed');

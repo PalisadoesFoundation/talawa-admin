@@ -390,8 +390,8 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText('Create Advertisement'));
-    userEvent.type(
+    await userEvent.click(screen.getByText('Create Advertisement'));
+    await userEvent.type(
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop',
     );
@@ -407,14 +407,19 @@ describe('Testing Advertisement Component', () => {
     });
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
-    userEvent.selectOptions(
-      screen.getByLabelText('Select type of Advertisement'),
-      'POPUP',
-    );
-    userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
-    userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
+    fireEvent.change(screen.getByLabelText('Select type of Advertisement'), {
+      target: { value: 'POPUP' },
+    });
 
-    userEvent.click(screen.getByTestId('addonregister'));
+    fireEvent.change(screen.getByLabelText('Select Start Date'), {
+      target: { value: '2023-01-01' },
+    });
+
+    fireEvent.change(screen.getByLabelText('Select End Date'), {
+      target: { value: '2023-02-02' },
+    });
+
+    await userEvent.click(screen.getByTestId('addonregister'));
     expect(
       await screen.findByText('Advertisement created successfully.'),
     ).toBeInTheDocument();
@@ -443,10 +448,10 @@ describe('Testing Advertisement Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Active Campaigns'));
+    await userEvent.click(screen.getByText('Active Campaigns'));
 
     await wait();
-    userEvent.click(screen.getByText('Completed Campaigns'));
+    await userEvent.click(screen.getByText('Completed Campaigns'));
   });
 
   test('if the component renders correctly and ads are correctly categorized date wise', async () => {
