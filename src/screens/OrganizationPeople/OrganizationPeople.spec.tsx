@@ -934,22 +934,16 @@ describe('Organization People Page', () => {
     });
 
     // Fill in the form
-    await await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
-    await await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
-    await await userEvent.type(
-      screen.getByTestId('emailInput'),
-      'john@example.com',
-    );
-    await await userEvent.type(
-      screen.getByTestId('passwordInput'),
-      'password123',
-    );
-    await await userEvent.type(
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
+    await userEvent.type(screen.getByTestId('emailInput'), 'john@example.com');
+    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
+    await userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
       'password123',
     );
     const createButton = screen.getByTestId('createBtn');
-    await await userEvent.click(createButton);
+    await userEvent.click(createButton);
   });
 
   test('handles signup error gracefully', async () => {
@@ -999,23 +993,17 @@ describe('Organization People Page', () => {
       expect(screen.getByTestId('createUser')).toBeInTheDocument();
     });
 
-    await await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
-    await await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
-    await await userEvent.type(
-      screen.getByTestId('emailInput'),
-      'john@example.com',
-    );
-    await await userEvent.type(
-      screen.getByTestId('passwordInput'),
-      'password123',
-    );
-    await await userEvent.type(
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
+    await userEvent.type(screen.getByTestId('emailInput'), 'john@example.com');
+    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
+    await userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
       'password123',
     );
 
     const createButton = screen.getByTestId('createBtn');
-    await await userEvent.click(createButton);
+    await userEvent.click(createButton);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Failed to create user');
@@ -1084,24 +1072,18 @@ describe('Organization People Page', () => {
       expect(screen.getByTestId('createUser')).toBeInTheDocument();
     });
 
-    await await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
-    await await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
-    await await userEvent.type(
-      screen.getByTestId('emailInput'),
-      'john@example.com',
-    );
-    await await userEvent.type(
-      screen.getByTestId('passwordInput'),
-      'password123',
-    );
-    await await userEvent.type(
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
+    await userEvent.type(screen.getByTestId('emailInput'), 'john@example.com');
+    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
+    await userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
       'password123',
     );
 
     // Submit form
     const createButton = screen.getByTestId('createBtn');
-    await await userEvent.click(createButton);
+    await userEvent.click(createButton);
 
     // Verify error handling
     await waitFor(() => {
@@ -1794,9 +1776,9 @@ describe('Organization People Page', () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     const dropdownButton = screen.getByTestId('role');
-    await await userEvent.click(dropdownButton);
+    await userEvent.click(dropdownButton);
     const adminsOption = screen.getByTestId('admins');
-    await await userEvent.click(adminsOption);
+    await userEvent.click(adminsOption);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -1854,9 +1836,9 @@ describe('Organization People Page', () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     const dropdownButton = screen.getByTestId('role');
-    await await userEvent.click(dropdownButton);
+    await userEvent.click(dropdownButton);
     const usersOption = screen.getByTestId('users');
-    await await userEvent.click(usersOption);
+    await userEvent.click(usersOption);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -2183,7 +2165,7 @@ test('createMember handles error and shows toast notification', async () => {
   expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
 
   const addBtn = screen.getAllByTestId('createBtn');
-  await await userEvent.click(addBtn[0]);
+  await userEvent.click(addBtn[0]);
 
   expect(toast.error).toHaveBeenCalled();
   expect(mockMemberRefetch).not.toHaveBeenCalled();

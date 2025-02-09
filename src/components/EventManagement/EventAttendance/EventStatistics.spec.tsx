@@ -215,12 +215,12 @@ describe('AttendanceStatisticsModal', () => {
 
     await act(async () => {
       const exportButton = screen.getByRole('button', { name: 'Export Data' });
-      await await userEvent.click(exportButton);
+      await userEvent.click(exportButton);
     });
 
     await act(async () => {
       const demographicsExport = screen.getByTestId('demographics-export');
-      await await userEvent.click(demographicsExport);
+      await userEvent.click(demographicsExport);
     });
 
     expect(mockExportToCSV).toHaveBeenCalled();
@@ -249,12 +249,12 @@ describe('AttendanceStatisticsModal', () => {
 
     await act(async () => {
       const exportButton = screen.getByRole('button', { name: 'Export Data' });
-      await await userEvent.click(exportButton);
+      await userEvent.click(exportButton);
     });
 
     await act(async () => {
       const demographicsExport = screen.getByTestId('trends-export');
-      await await userEvent.click(demographicsExport);
+      await userEvent.click(demographicsExport);
     });
 
     expect(mockExportToCSV).toHaveBeenCalled();
@@ -298,18 +298,18 @@ describe('AttendanceStatisticsModal', () => {
     // Test pagination
     await act(async () => {
       const nextButton = screen.getByAltText('right-arrow');
-      await await userEvent.click(nextButton);
+      await userEvent.click(nextButton);
     });
 
     await act(async () => {
       const prevButton = screen.getByAltText('left-arrow');
-      await await userEvent.click(prevButton);
+      await userEvent.click(prevButton);
     });
 
     // Test today button
     await act(async () => {
       const todayButton = screen.getByTestId('today-button');
-      await await userEvent.click(todayButton);
+      await userEvent.click(todayButton);
     });
 
     // Verify buttons are present and interactive

@@ -163,7 +163,7 @@ describe('OrganizationModal Component', () => {
     ) as HTMLInputElement;
     const longText = 'a'.repeat(60);
 
-    await await userEvent.type(nameInput, longText);
+    await userEvent.type(nameInput, longText);
 
     // Since the component limits input at 50 chars, we check the last setFormState call
     const lastCall =
@@ -178,7 +178,7 @@ describe('OrganizationModal Component', () => {
     ) as HTMLInputElement;
     const longText = 'a'.repeat(250);
 
-    await await userEvent.type(descInput, longText);
+    await userEvent.type(descInput, longText);
 
     // Check the last setFormState call
     const lastCall =
@@ -280,7 +280,7 @@ describe('OrganizationModal Component', () => {
     setup();
     const submitButton = screen.getByTestId('submitOrganizationForm');
 
-    await await userEvent.click(submitButton);
+    await userEvent.click(submitButton);
     expect(mockCreateOrg).toHaveBeenCalled();
   });
 
@@ -329,7 +329,7 @@ describe('OrganizationModal Component', () => {
       const longText = 'a'.repeat(maxLength + 10);
       // const expectedText = 'a'.repeat(maxLength - 1);
 
-      await await userEvent.type(input, longText);
+      await userEvent.type(input, longText);
 
       const lastCall =
         mockSetFormState.mock.calls[mockSetFormState.mock.calls.length - 1];
@@ -344,7 +344,7 @@ describe('OrganizationModal Component', () => {
     });
     const fileInput = screen.getByTestId('organisationImage');
 
-    await await userEvent.upload(fileInput, file);
+    await userEvent.upload(fileInput, file);
 
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -422,14 +422,14 @@ describe('OrganizationModal Component', () => {
   test('should call toggleModal when close button is clicked', async () => {
     setup();
     const closeButton = screen.getByRole('button', { name: /close/i });
-    await await userEvent.click(closeButton);
+    await userEvent.click(closeButton);
     expect(mockToggleModal).toHaveBeenCalled();
   });
   test('should handle country selection change', async () => {
     setup();
     const countrySelect = screen.getByTestId('modalOrganizationCountryCode');
 
-    await await userEvent.selectOptions(countrySelect, 'us');
+    await userEvent.selectOptions(countrySelect, 'us');
 
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -458,7 +458,7 @@ describe('OrganizationModal Component', () => {
     });
 
     if (form) {
-      await await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+      await userEvent.click(screen.getByTestId('submitOrganizationForm'));
       expect(mockCreateOrg).toHaveBeenCalled();
     }
   });
