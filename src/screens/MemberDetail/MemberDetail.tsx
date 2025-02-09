@@ -1,752 +1,323 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
-import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import styles from '../../style/app.module.css';
-import { languages } from 'utils/languages';
-import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import { toast } from 'react-toastify';
-import { errorHandler } from 'utils/errorHandler';
-import { Card, Row, Col } from 'react-bootstrap';
-import Loader from 'components/Loader/Loader';
-import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
-import EventsAttendedByMember from '../../components/MemberDetail/EventsAttendedByMember';
-import MemberAttendedEventsModal from '../../components/MemberDetail/EventsAttendedMemberModal';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import convertToBase64 from 'utils/convertToBase64';
-import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
+import React from 'react';
+import type { RenderResult } from '@testing-library/react';
 import {
-  educationGradeEnum,
-  maritalStatusEnum,
-  genderEnum,
-  employmentStatusEnum,
-} from 'utils/formEnumFields';
-import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
-import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
-import type { InterfaceTagData } from 'utils/interfaces';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import UnassignUserTagModal from 'screens/ManageTag/UnassignUserTagModal';
-import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
+import { MockedProvider } from '@apollo/react-testing';
+import userEvent from '@testing-library/user-event';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from 'state/store';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
+import { MOCKS1, MOCKS2 } from './MemberDetailMocks';
+import type { ApolloLink } from '@apollo/client';
+import { vi } from 'vitest';
 
-type MemberDetailProps = {
-  id?: string;
+const link1 = new StaticMockLink(MOCKS1, true);
+const link2 = new StaticMockLink(MOCKS2, true);
+
+async function wait(ms = 500): Promise<void> {
+  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
+}
+
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18nForTest.getDataByLanguage('en')?.translation.memberDetail ?? {},
+    ),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
+  ),
 };
 
-/**
- * MemberDetail component is used to display the details of a user.
- * It also allows the user to update the details. It uses the UPDATE_USER_MUTATION to update the user details.
- * It uses the USER_DETAILS query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
- * @param id - The id of the user whose details are to be displayed.
- * @returns  React component
- *
- */
-const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'memberDetail',
-  });
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { t: tCommon } = useTranslation('common');
-  const location = useLocation();
-  const isMounted = useRef(true);
-  const { getItem, setItem } = useLocalStorage();
-  const [show, setShow] = useState(false);
-  const currentUrl = location.state?.id || getItem('id') || id;
-
-  const { orgId } = useParams();
-  const navigate = useNavigate();
-
-  const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
-    useState(false);
-
-  document.title = t('title');
-  const [formState, setFormState] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    appLanguageCode: '',
-    image: '',
-    gender: '',
-    birthDate: '2024-03-14',
-    grade: '',
-    empStatus: '',
-    maritalStatus: '',
-    phoneNumber: '',
-    address: '',
-    state: '',
-    city: '',
-    country: '',
-    pluginCreationAllowed: false,
-  });
-  const handleDateChange = (date: Dayjs | null): void => {
-    if (date) {
-      console.log('formated', dayjs(date).format('YYYY-MM-DD'));
-      setisUpdated(true);
-      setFormState((prevState) => ({
-        ...prevState,
-        birthDate: dayjs(date).format('YYYY-MM-DD'),
-      }));
-    }
+vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+  const actual = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
+  return {
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
+});
 
-  const handleEditIconClick = (): void => {
-    fileInputRef.current?.click();
-  };
-  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  const {
-    data: user,
-    loading,
-    refetch: refetchUserDetails,
-    fetchMore: fetchMoreAssignedTags,
-  } = useQuery(USER_DETAILS, {
-    variables: { id: currentUrl, first: TAGS_QUERY_DATA_CHUNK_SIZE },
-  });
-  const userData = user?.user;
-  const [isUpdated, setisUpdated] = useState(false);
-  useEffect(() => {
-    if (userData && isMounted.current) {
-      setFormState({
-        ...formState,
-        firstName: userData?.user?.firstName,
-        lastName: userData?.user?.lastName,
-        email: userData?.user?.email,
-        appLanguageCode: userData?.appUserProfile?.appLanguageCode,
-        gender: userData?.user?.gender,
-        birthDate: userData?.user?.birthDate || ' ',
-        grade: userData?.user?.educationGrade,
-        empStatus: userData?.user?.employmentStatus,
-        maritalStatus: userData?.user?.maritalStatus,
-        phoneNumber: userData?.user?.phone?.mobile,
-        address: userData.user?.address?.line1,
-        state: userData?.user?.address?.state,
-        city: userData?.user?.address?.city,
-        country: userData?.user?.address?.countryCode,
-        pluginCreationAllowed: userData?.appUserProfile?.pluginCreationAllowed,
-        image: userData?.user?.image || '',
-      });
-    }
-  }, [userData, user]);
-  useEffect(() => {
-    // check component is mounted or not
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
 
-  const tagsAssigned =
-    userData?.user?.tagsAssignedWith.edges.map(
-      (edge: { node: InterfaceTagData; cursor: string }) => edge.node,
-    ) ?? [];
+vi.mock('@dicebear/core', () => ({
+  createAvatar: vi.fn(() => ({
+    toDataUri: vi.fn(() => 'mocked-data-uri'),
+  })),
+}));
 
-  const loadMoreAssignedTags = (): void => {
-    fetchMoreAssignedTags({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: user?.user?.user?.tagsAssignedWith?.pageInfo?.endCursor ?? null,
-      },
-      updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prevResult;
+const props = {
+  id: 'rishav-jha-mech',
+};
 
-        return {
-          user: {
-            ...prevResult.user,
-            user: {
-              ...prevResult.user.user,
-              tagsAssignedWith: {
-                edges: [
-                  ...prevResult.user.user.tagsAssignedWith.edges,
-                  ...fetchMoreResult.user.user.tagsAssignedWith.edges,
-                ],
-                pageInfo: fetchMoreResult.user.user.tagsAssignedWith.pageInfo,
-                totalCount: fetchMoreResult.user.user.tagsAssignedWith.pageInfo,
-              },
-            },
-          },
-        };
-      },
-    });
-  };
-
-  const [unassignUserTag] = useMutation(UNASSIGN_USER_TAG);
-  const [unassignTagId, setUnassignTagId] = useState<string | null>(null);
-
-  const handleUnassignUserTag = async (): Promise<void> => {
-    try {
-      await unassignUserTag({
-        variables: {
-          tagId: unassignTagId,
-          userId: currentUrl,
-        },
-      });
-
-      refetchUserDetails();
-      toggleUnassignUserTagModal();
-      toast.success(t('successfullyUnassigned'));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  };
-
-  const toggleUnassignUserTagModal = (): void => {
-    if (unassignUserTagModalIsOpen) {
-      setUnassignTagId(null);
-    }
-    setUnassignUserTagModalIsOpen(!unassignUserTagModalIsOpen);
-  };
-
-  const handleChange = async (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ): Promise<void> => {
-    const { name, value } = e.target;
-    if (
-      name === 'photo' &&
-      'files' in e.target &&
-      e.target.files &&
-      e.target.files[0]
-    ) {
-      const file = e.target.files[0];
-      const base64 = await convertToBase64(file);
-      setFormState((prevState) => ({
-        ...prevState,
-        image: base64 as string,
-      }));
-    } else {
-      setFormState((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-    setisUpdated(true);
-  };
-  const handleEventsAttendedModal = (): void => {
-    setShow(!show);
-  };
-
-  const loginLink = async (): Promise<void> => {
-    try {
-      const firstName = formState.firstName;
-      const lastName = formState.lastName;
-      const email = formState.email;
-      // const appLanguageCode = formState.appLanguageCode;
-      const image = formState.image;
-      // const gender = formState.gender;
-      try {
-        const { data } = await updateUser({
-          variables: {
-            id: currentUrl,
-            ...formState,
-          },
-        });
-        if (data) {
-          setisUpdated(false);
-          if (getItem('id') === currentUrl) {
-            setItem('FirstName', firstName);
-            setItem('LastName', lastName);
-            setItem('Email', email);
-            setItem('UserImage', image);
-          }
-          toast.success(tCommon('successfullyUpdated') as string);
-        }
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.log('the error is ', error.message);
-          errorHandler(t, error);
-        }
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        errorHandler(t, error);
-      }
-    }
-  };
-  const resetChanges = (): void => {
-    setFormState({
-      firstName: userData?.user?.firstName || '',
-      lastName: userData?.user?.lastName || '',
-      email: userData?.user?.email || '',
-      appLanguageCode: userData?.appUserProfile?.appLanguageCode || '',
-      image: userData?.user?.image || '',
-      gender: userData?.user?.gender || '',
-      empStatus: userData?.user?.employmentStatus || '',
-      maritalStatus: userData?.user?.maritalStatus || '',
-      phoneNumber: userData?.user?.phone?.mobile || '',
-      address: userData?.user?.address?.line1 || '',
-      country: userData?.user?.address?.countryCode || '',
-      city: userData?.user?.address?.city || '',
-      state: userData?.user?.address?.state || '',
-      birthDate: userData?.user?.birthDate || '',
-      grade: userData?.user?.educationGrade || '',
-      pluginCreationAllowed:
-        userData?.appUserProfile?.pluginCreationAllowed || false,
-    });
-    setisUpdated(false);
-  };
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {show && (
-        <MemberAttendedEventsModal
-          eventsAttended={userData?.user?.eventsAttended}
-          show={show}
-          setShow={setShow}
-        />
-      )}
-      <Row className="g-4 mt-1">
-        <Col md={6}>
-          <Card className={`${styles.allRound}`}>
-            <Card.Header
-              className={`bg-success text-white py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
-            >
-              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
-              <Button
-                variant="light"
-                size="sm"
-                disabled
-                className="rounded-pill fw-bolder"
-              >
-                {userData?.appUserProfile?.isSuperAdmin
-                  ? 'Super Admin'
-                  : userData?.appUserProfile?.adminFor.length > 0
-                    ? 'Admin'
-                    : 'User'}
-              </Button>
-            </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <div className="text-center mb-3">
-                {formState?.image ? (
-                  <div className="position-relative d-inline-block">
-                    <img
-                      className="rounded-circle"
-                      style={{ width: '55px', aspectRatio: '1/1' }}
-                      src={formState.image}
-                      alt="User"
-                      data-testid="userImagePresent"
-                    />
-                    <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
-                      onClick={handleEditIconClick}
-                      style={{ cursor: 'pointer' }}
-                      data-testid="editImage"
-                      title="Edit profile picture"
-                      role="button"
-                      aria-label="Edit profile picture"
-                      tabIndex={0}
-                      onKeyDown={(e) =>
-                        e.key === 'Enter' && handleEditIconClick()
-                      }
-                    />
-                  </div>
-                ) : (
-                  <div className="position-relative d-inline-block">
-                    <Avatar
-                      name={`${formState.firstName} ${formState.lastName}`}
-                      alt="User Image"
-                      size={55}
-                      dataTestId="userImageAbsent"
-                      radius={150}
-                    />
-                    <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
-                      onClick={handleEditIconClick}
-                      data-testid="editImage"
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </div>
-                )}
-                <input
-                  type="file"
-                  id="orgphoto"
-                  name="photo"
-                  accept="image/*"
-                  onChange={handleChange}
-                  data-testid="organisationImage"
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                />
-              </div>
-              <Row className="g-3">
-                <Col md={6}>
-                  <label htmlFor="firstName" className="form-label">
-                    {tCommon('firstName')}
-                  </label>
-                  <input
-                    id="firstName"
-                    value={formState.firstName}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="firstName"
-                    onChange={handleChange}
-                    required
-                    placeholder={tCommon('firstName')}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="lastName" className="form-label">
-                    {tCommon('lastName')}
-                  </label>
-                  <input
-                    id="lastName"
-                    value={formState.lastName}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="lastName"
-                    onChange={handleChange}
-                    required
-                    placeholder={tCommon('lastName')}
-                  />
-                </Col>
-                <Col md={6} data-testid="gender">
-                  <label htmlFor="gender" className="form-label">
-                    {t('gender')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={genderEnum}
-                    fieldName="gender"
-                    handleChange={handleChange}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="birthDate" className="form-label">
-                    {t('birthDate')}
-                  </label>
-                  <DatePicker
-                    className={`${styles.dateboxMemberDetail} w-100`}
-                    value={dayjs(formState.birthDate)}
-                    onChange={handleDateChange}
-                    data-testid="birthDate"
-                    slotProps={{
-                      textField: {
-                        inputProps: {
-                          'data-testid': 'birthDate',
-                          'aria-label': t('birthDate'),
-                        },
-                      },
-                    }}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="grade" className="form-label">
-                    {t('educationGrade')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={educationGradeEnum}
-                    fieldName="grade"
-                    handleChange={handleChange}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="empStatus" className="form-label">
-                    {t('employmentStatus')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={employmentStatusEnum}
-                    fieldName="empStatus"
-                    handleChange={handleChange}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="maritalStatus" className="form-label">
-                    {t('maritalStatus')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={maritalStatusEnum}
-                    fieldName="maritalStatus"
-                    handleChange={handleChange}
-                  />
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={6}>
-          <Card className={`${styles.allRound}`}>
-            <Card.Header
-              className={`bg-success text-white py-3 px-4 ${styles.topRadius}`}
-            >
-              <h3 className="m-0">{t('contactInfoHeading')}</h3>
-            </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <Row className="g-3">
-                <Col md={12}>
-                  <label htmlFor="email" className="form-label">
-                    {tCommon('email')}
-                  </label>
-                  <input
-                    id="email"
-                    value={formState.email}
-                    className={`form-control ${styles.inputColor}`}
-                    type="email"
-                    name="email"
-                    onChange={handleChange}
-                    required
-                    placeholder={tCommon('email')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
-                    {t('phone')}
-                  </label>
-                  <input
-                    id="phoneNumber"
-                    value={formState.phoneNumber}
-                    className={`form-control ${styles.inputColor}`}
-                    type="tel"
-                    name="phoneNumber"
-                    onChange={handleChange}
-                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                    placeholder={t('phone')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="address" className="form-label">
-                    {tCommon('address')}
-                  </label>
-                  <input
-                    id="address"
-                    value={formState.address}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="address"
-                    onChange={handleChange}
-                    placeholder={tCommon('address')}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="city" className="form-label">
-                    {t('city')}
-                  </label>
-                  <input
-                    id="city"
-                    value={formState.city}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="city"
-                    onChange={handleChange}
-                    placeholder={t('city')}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="state" className="form-label">
-                    {t('state')}
-                  </label>
-                  <input
-                    id="state"
-                    value={formState.state}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="state"
-                    onChange={handleChange}
-                    placeholder={tCommon('state')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="country" className="form-label">
-                    {t('countryCode')}
-                  </label>
-                  <input
-                    id="country"
-                    value={formState.country}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="country"
-                    onChange={handleChange}
-                    placeholder={t('countryCode')}
-                  />
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Col>
-        {isUpdated && (
-          <Col md={12}>
-            <Card.Footer className="bg-white border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
-              <Button
-                variant="outline-secondary"
-                onClick={resetChanges}
-                data-testid="resetChangesBtn"
-              >
-                {tCommon('resetChanges')}
-              </Button>
-              <Button
-                variant="success"
-                onClick={loginLink}
-                data-testid="saveChangesBtn"
-              >
-                {tCommon('saveChanges')}
-              </Button>
-            </Card.Footer>
-          </Col>
-        )}
-      </Row>
-
-      <Row className="mb-4">
-        <Col xs={12} lg={6}>
-          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
-            <Card.Header
-              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-            >
-              <h3 className="text-white m-0" data-testid="eventsAttended-title">
-                {t('tagsAssigned')}
-              </h3>
-            </Card.Header>
-            <Card.Body
-              id="tagsAssignedScrollableDiv"
-              data-testid="tagsAssignedScrollableDiv"
-              className={`${styles.cardBody} pe-0`}
-            >
-              {!tagsAssigned.length ? (
-                <div className="w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary">
-                  {t('noTagsAssigned')}
-                </div>
-              ) : (
-                <InfiniteScroll
-                  dataLength={tagsAssigned?.length ?? 0}
-                  next={loadMoreAssignedTags}
-                  hasMore={
-                    userData?.user?.tagsAssignedWith.pageInfo.hasNextPage ??
-                    false
-                  }
-                  loader={<InfiniteScrollLoader />}
-                  scrollableTarget="tagsAssignedScrollableDiv"
-                >
-                  {tagsAssigned.map((tag: InterfaceTagData, index: number) => (
-                    <div key={tag._id}>
-                      <div className="d-flex justify-content-between my-2 ms-2">
-                        <div
-                          className={styles.tagLink}
-                          data-testid="tagName"
-                          onClick={() =>
-                            navigate(`/orgtags/${orgId}/manageTag/${tag._id}`)
-                          }
-                        >
-                          {tag.parentTag ? (
-                            <>
-                              <i className={'fa fa-angle-double-right'} />
-                              <span className="me-2">...</span>
-                            </>
-                          ) : (
-                            <i className={'me-2 fa fa-angle-right'} />
-                          )}
-                          {tag.name}
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="danger"
-                          onClick={() => {
-                            setUnassignTagId(tag._id);
-                            toggleUnassignUserTagModal();
-                          }}
-                          className="me-2"
-                          data-testid="unassignTagBtn"
-                        >
-                          {'Unassign'}
-                        </Button>
-                      </div>
-                      {index + 1 !== tagsAssigned.length && (
-                        <hr className="mx-0" />
-                      )}
-                    </div>
-                  ))}
-                </InfiniteScroll>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-
-        <Col>
-          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
-            <Card.Header
-              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-            >
-              <h3 className="text-white m-0" data-testid="eventsAttended-title">
-                {t('eventsAttended')}
-              </h3>
-              <Button
-                style={{ borderRadius: '20px' }}
-                size="sm"
-                variant="light"
-                data-testid="viewAllEvents"
-                onClick={handleEventsAttendedModal}
-              >
-                {t('viewAll')}
-              </Button>
-            </Card.Header>
-            <Card.Body
-              className={`${styles.cardBody} ${styles.scrollableCardBody}`}
-            >
-              {!userData?.user.eventsAttended?.length ? (
-                <div
-                  className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
-                >
-                  {t('noeventsAttended')}
-                </div>
-              ) : (
-                userData.user.eventsAttended.map(
-                  (event: InterfaceEvent, index: number) => (
-                    <span data-testid="membereventsCard" key={index}>
-                      <EventsAttendedByMember
-                        eventsId={event._id}
-                        key={index}
-                      />
-                    </span>
-                  ),
-                )
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-
-      {/* Unassign User Tag Modal */}
-      <UnassignUserTagModal
-        unassignUserTagModalIsOpen={unassignUserTagModalIsOpen}
-        toggleUnassignUserTagModal={toggleUnassignUserTagModal}
-        handleUnassignUserTag={handleUnassignUserTag}
-        t={t}
-        tCommon={tCommon}
-      />
-    </LocalizationProvider>
+const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgtags/123']}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route
+                path="/orgtags/:orgId"
+                element={<MemberDetail {...props} />}
+              />
+              <Route
+                path="/orgtags/:orgId/manageTag/:tagId"
+                element={<div data-testid="manageTagScreen"></div>}
+              />
+            </Routes>
+          </I18nextProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
   );
 };
 
-export const prettyDate = (param: string): string => {
-  const date = new Date(param);
-  if (date?.toDateString() === 'Invalid Date') {
-    return 'Unavailable';
-  }
-  const day = date.getDate();
-  const month = date.toLocaleString('default', { month: 'long' });
-  const year = date.getFullYear();
-  return `${day} ${month} ${year}`;
-};
-export const getLanguageName = (code: string): string => {
-  let language = 'Unavailable';
-  languages.map((data) => {
-    if (data.code == code) {
-      language = data.name;
-    }
-  });
-  return language;
-};
+describe('MemberDetail', () => {
+  global.alert = vi.fn();
 
-export default MemberDetail;
+  afterEach(() => {
+    vi.clearAllMocks();
+    cleanup();
+  });
+
+  test('should render the elements', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    expect(screen.getAllByText(/Email/i)).toBeTruthy();
+    expect(screen.getAllByText(/name/i)).toBeTruthy();
+    expect(screen.getAllByText(/Birth Date/i)).toBeTruthy();
+    expect(screen.getAllByText(/Gender/i)).toBeTruthy();
+    expect(screen.getAllByText(/Profile Details/i)).toBeTruthy();
+    expect(screen.getAllByText(/Profile Details/i)).toHaveLength(1);
+    expect(screen.getAllByText(/Contact Information/i)).toHaveLength(1);
+  });
+
+  test('prettyDate function should work properly', () => {
+    // If the date is provided
+    const datePretty = vi.fn(prettyDate);
+    expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
+      prettyDate('2023-02-18T09:22:27.969Z'),
+    );
+    // If there's some error in formatting the date
+    expect(datePretty('')).toBe('Unavailable');
+  });
+
+  test('getLanguageName function should work properly', () => {
+    const getLangName = vi.fn(getLanguageName);
+    // If the language code is provided
+    expect(getLangName('en')).toBe('English');
+    // If the language code is not provided
+    expect(getLangName('')).toBe('Unavailable');
+  });
+
+  test('should render props and text elements test for the page component', async () => {
+    const formData = {
+      addressLine1: 'Line 1',
+      addressLine2: 'Line 2',
+      avatarMimeType: 'image/jpeg',
+      avatarURL: 'http://example.com/avatar.jpg',
+      birthDate: '2000-01-01',
+      city: 'nyc',
+      countryCode: 'bb',
+      createdAt: '2025-02-06T03:10:50.254',
+      description: 'This is a description',
+      educationGrade: 'grade_8',
+      emailAddress: 'test221@gmail.com',
+      employmentStatus: 'employed',
+      homePhoneNumber: '+9999999998',
+      id: '0194d80f-03cd-79cd-8135-683494b187a1',
+      isEmailAddressVerified: false,
+      maritalStatus: 'engaged',
+      mobilePhoneNumber: '+9999999999',
+      name: 'Rishav Jha',
+      natalSex: 'male',
+      naturalLanguageCode: 'en',
+      postalCode: '111111',
+      role: 'regular',
+      state: 'State1',
+      updatedAt: '2025-02-06T03:22:17.808',
+      workPhoneNumber: '+9999999998',
+    };
+
+    renderMemberDetailScreen(link2);
+
+    await wait();
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    expect(screen.getAllByText(/Email/i)).toBeTruthy();
+    expect(screen.getByText('User')).toBeInTheDocument();
+    const birthDateDatePicker = screen.getByTestId('birthDate');
+    fireEvent.change(birthDateDatePicker, {
+      target: { value: formData.birthDate },
+    });
+
+    userEvent.type(screen.getByTestId(/inputName/i), formData.name);
+
+    userEvent.clear(screen.getByTestId(/inputName/i));
+    userEvent.clear(screen.getByTestId(/addressLine1/i));
+    userEvent.clear(screen.getByTestId(/addressLine2/i));
+    userEvent.clear(screen.getByTestId(/inputCity/i));
+    userEvent.clear(screen.getByTestId(/inputState/i));
+    userEvent.clear(screen.getByTestId(/inputPostalCode/i));
+    userEvent.clear(screen.getByTestId(/inputDescription/i));
+    userEvent.clear(screen.getByTestId(/inputEmail/i));
+    userEvent.clear(screen.getByTestId(/inputMobilePhoneNumber/i));
+    userEvent.clear(screen.getByTestId(/inputHomePhoneNumber/i));
+    userEvent.clear(screen.getByTestId(/workPhoneNumber/i));
+
+    userEvent.type(screen.getByTestId(/inputName/i), formData.name);
+    userEvent.type(screen.getByTestId(/addressLine1/i), formData.addressLine1);
+    userEvent.type(screen.getByTestId(/addressLine2/i), formData.addressLine2);
+    userEvent.type(screen.getByTestId(/inputCity/i), formData.city);
+    userEvent.type(screen.getByTestId(/inputState/i), formData.state);
+    userEvent.type(screen.getByTestId(/inputPostalCode/i), formData.postalCode);
+    userEvent.type(
+      screen.getByTestId(/inputDescription/i),
+      formData.description,
+    );
+    userEvent.type(screen.getByTestId(/inputCountry/i), formData.countryCode);
+    userEvent.type(screen.getByTestId(/inputEmail/i), formData.emailAddress);
+    userEvent.type(
+      screen.getByTestId(/inputMobilePhoneNumber/i),
+      formData.mobilePhoneNumber,
+    );
+    userEvent.type(
+      screen.getByTestId(/inputHomePhoneNumber/i),
+      formData.homePhoneNumber,
+    );
+    userEvent.type(
+      screen.getByTestId(/workPhoneNumber/i),
+      formData.workPhoneNumber,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByText(/Save Changes/i));
+
+    expect(screen.getByTestId(/inputName/i)).toHaveValue(formData.name);
+    expect(screen.getByTestId(/addressLine1/i)).toHaveValue(
+      formData.addressLine1,
+    );
+    expect(screen.getByTestId(/addressLine2/i)).toHaveValue(
+      formData.addressLine2,
+    );
+    expect(screen.getByTestId(/inputCity/i)).toHaveValue(formData.city);
+    expect(screen.getByTestId(/inputState/i)).toHaveValue(formData.state);
+    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue(
+      formData.postalCode,
+    );
+    expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
+      formData.description,
+    );
+    expect(screen.getByTestId(/inputCountry/i)).toHaveValue(
+      formData.countryCode,
+    );
+    expect(screen.getByTestId(/inputEmail/i)).toHaveValue(
+      formData.emailAddress,
+    );
+    expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
+      formData.mobilePhoneNumber,
+    );
+    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
+      formData.homePhoneNumber,
+    );
+    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue(
+      formData.workPhoneNumber,
+    );
+  });
+
+  test('display admin', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    expect(screen.getByText('Admin')).toBeInTheDocument();
+  });
+
+  test('Should display dicebear image if image is null', async () => {
+    renderMemberDetailScreen(link1);
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+
+    const dicebearUrl = 'mocked-data-uri';
+
+    const userImage = await screen.findByTestId('userImageAbsent');
+    expect(userImage).toBeInTheDocument();
+    expect(userImage.getAttribute('src')).toBe(dicebearUrl);
+  });
+
+  test('resetChangesBtn works properly', async () => {
+    renderMemberDetailScreen(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId(/AddressLine1/i)).toBeInTheDocument();
+    });
+
+    userEvent.type(screen.getByTestId(/addressLine1/i), 'random');
+    userEvent.type(screen.getByTestId(/inputState/i), 'random');
+
+    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    await wait();
+
+    expect(screen.getByTestId(/Name/i)).toHaveValue('Rishav Jha');
+    expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
+      '+9999999999',
+    );
+    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
+      '+9999999998',
+    );
+    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue('+9999999998');
+    expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
+      'This is a description',
+    );
+    expect(screen.getByTestId(/inputCity/i)).toHaveValue('');
+    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue('111111');
+    expect(screen.getByTestId(/inputCountry/i)).toHaveValue('');
+    expect(screen.getByTestId(/inputState/i)).toHaveValue('');
+    expect(screen.getByTestId(/addressLine1/i)).toHaveValue('Line 1');
+    expect(screen.getByTestId(/addressLine2/i)).toHaveValue('Line 2');
+  });
+
+  test('should be redirected to / if member id is undefined', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(window.location.pathname).toEqual('/');
+  });
+
+  test('display tags Assigned', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    expect(screen.getByText('Tags Assigned')).toBeInTheDocument();
+  });
+});
