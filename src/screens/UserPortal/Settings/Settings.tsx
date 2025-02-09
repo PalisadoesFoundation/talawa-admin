@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
-import convertToBase64 from 'utils/convertToBase64';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
@@ -15,13 +14,11 @@ import {
   genderEnum,
   maritalStatusEnum,
 } from 'utils/formEnumFields';
-import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import Avatar from 'components/Avatar/Avatar';
 import '../../../style/app.module.css';
-import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
 import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 /**
@@ -40,7 +37,7 @@ export default function Settings(): JSX.Element {
   const { setItem } = useLocalStorage();
 
   // get details about current user
-  const { data } = useQuery(CURRENT_USER, { fetchPolicy: 'network-only' });
+  const { data } = useQuery(CURRENT_USER);
 
   // mutation to update current user details
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
@@ -86,53 +83,57 @@ export default function Settings(): JSX.Element {
   }, []);
 
   const handleUpdateUserDetails = async (): Promise<void> => {
-
     // takes an object and removes all the empty fields
     function removeEmptyFields(obj: typeof userDetails) {
       return Object.fromEntries(
-        Object.entries(obj).filter(([_, value]) =>
-          value !== null && value !== undefined &&
-          (typeof value !== "string" || value.trim() !== "")
-        )
+        Object.entries(obj).filter(
+          ([_, value]) =>
+            value !== null &&
+            value !== undefined &&
+            (typeof value !== 'string' || value.trim() !== ''),
+        ),
       );
     }
 
+    const data = {
+      addressLine1: userDetails.addressLine1,
+      addressLine2: userDetails.addressLine2,
+      birthDate: userDetails.birthDate,
+      emailAddress: '', // do not update email
+      city: userDetails.city,
+      countryCode: userDetails.countryCode,
+      description: userDetails.description,
+      educationGrade: userDetails.educationGrade,
+      employmentStatus: userDetails.employmentStatus,
+      homePhoneNumber: userDetails.homePhoneNumber,
+      maritalStatus: userDetails.maritalStatus,
+      mobilePhoneNumber: userDetails.mobilePhoneNumber,
+      name: userDetails.name,
+      natalSex: userDetails.natalSex,
+      naturalLanguageCode: userDetails.naturalLanguageCode,
+      password: userDetails.password,
+      postalCode: userDetails.postalCode,
+      state: userDetails.state,
+      workPhoneNumber: userDetails.workPhoneNumber,
+      avatar: userDetails.avatar instanceof File ? userDetails.avatar : null,
+    };
+
+    // Clean the data by removing empty fields
+    const input = removeEmptyFields(data);
+
     try {
-      const data = {
-        addressLine1: userDetails.addressLine1,
-        addressLine2: userDetails.addressLine2,
-        birthDate: userDetails.birthDate,
-        emailAddress: '', // do not update email
-        city: userDetails.city,
-        countryCode: userDetails.countryCode,
-        description: userDetails.description,
-        educationGrade: userDetails.educationGrade,
-        employmentStatus: userDetails.employmentStatus,
-        homePhoneNumber: userDetails.homePhoneNumber,
-        maritalStatus: userDetails.maritalStatus,
-        mobilePhoneNumber: userDetails.mobilePhoneNumber,
-        name: userDetails.name,
-        natalSex: userDetails.natalSex,
-        naturalLanguageCode: userDetails.naturalLanguageCode,
-        password: userDetails.password,
-        postalCode: userDetails.postalCode,
-        state: userDetails.state,
-        workPhoneNumber: userDetails.workPhoneNumber,
-        avatar: userDetails.avatar instanceof File ? userDetails.avatar : null
-      };
-
-      const input = removeEmptyFields(data);
-
       const { data: updateData } = await updateUser({
-        variables: { input }
+        variables: { input: input },
       });
-
       if (updateData) {
-        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }) as string);
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+        );
         setItem('name', userDetails.name);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+
+        // wait for the toast to complete
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        window.location.reload();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -140,6 +141,7 @@ export default function Settings(): JSX.Element {
   };
 
   const handleFieldChange = (fieldName: string, value: string): void => {
+    // check if the birth date is not in the future
     if (fieldName === 'birthDate') {
       const today = new Date();
       const selectedDate = new Date(value);
@@ -156,9 +158,31 @@ export default function Settings(): JSX.Element {
     }));
   };
 
-  const handleImageUpload = (): void => {
-    setIsUpdated(true);
-    fileInputRef.current?.click();
+  const fileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files?.[0];
+
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      const maxSize = 5 * 1024 * 1024; // 5MB
+
+      if (!validTypes.includes(file.type)) {
+        toast.error('Invalid file type. Please upload a JPEG, PNG, or GIF.');
+        return;
+      }
+
+      if (file.size > maxSize) {
+        toast.error('File is too large. Maximum size is 5MB.');
+        return;
+      }
+
+      // Update all states properly
+      setUserDetails((prevState) => ({
+        ...prevState,
+        avatar: file,
+      }));
+      setSelectedAvatar(file);
+      setIsUpdated(true);
+    }
   };
 
   const handleResetChanges = (): void => {
@@ -166,7 +190,7 @@ export default function Settings(): JSX.Element {
     if (data?.currentUser) {
       setUserDetails({
         ...data.currentUser,
-        avataar: originalImageState.current
+        avataar: originalImageState.current,
       });
     }
   };
@@ -203,12 +227,13 @@ export default function Settings(): JSX.Element {
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`d-flex flex-row ${styles.containerHeight} ${hideDrawer === null
-          ? ''
-          : hideDrawer
-            ? styles.expand
-            : styles.contract
-          }`}
+        className={`d-flex flex-row ${styles.containerHeight} ${
+          hideDrawer === null
+            ? ''
+            : hideDrawer
+              ? styles.expand
+              : styles.contract
+        }`}
       >
         <div className={`${styles.mainContainer}`}>
           <div className="d-flex justify-content-between align-items-center">
@@ -231,7 +256,7 @@ export default function Settings(): JSX.Element {
                     <Col lg={12} className="mb-2">
                       <div className="text-center mb-3">
                         <div className="position-relative d-inline-block">
-                          {userDetails.avatar ? (
+                          {userDetails?.avatar ? (
                             <img
                               className="rounded-circle"
                               style={{
@@ -239,7 +264,11 @@ export default function Settings(): JSX.Element {
                                 height: '60px',
                                 objectFit: 'cover',
                               }}
-                              src={userdetails.avatar}
+                              src={
+                                userDetails.avatar instanceof File
+                                  ? URL.createObjectURL(userDetails.avatar)
+                                  : userDetails.avatar
+                              }
                               alt="User"
                               data-testid="profile-picture"
                             />
@@ -254,7 +283,7 @@ export default function Settings(): JSX.Element {
                           )}
                           <i
                             className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
-                            onClick={handleImageUpload}
+                            onClick={(e) => fileInputRef.current?.click()}
                             data-testid="uploadImageBtn"
                             style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                             title="Edit profile picture"
@@ -262,7 +291,7 @@ export default function Settings(): JSX.Element {
                             aria-label="Edit profile picture"
                             tabIndex={0}
                             onKeyDown={(e) =>
-                              e.key === 'Enter' && handleImageUpload()
+                              e.key === 'Enter' && fileInputRef.current?.click()
                             }
                           />
                         </div>
@@ -276,35 +305,7 @@ export default function Settings(): JSX.Element {
                         data-testid="fileInput"
                         multiple={false}
                         ref={fileInputRef}
-                        onChange={async (
-                          e: React.ChangeEvent<HTMLInputElement>,
-                        ): Promise<void> => {
-                          const file = e.target?.files?.[0];
-                          if (file) {
-                            try {
-                              // Validate file type and size
-                              const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                              const maxSize = 5 * 1024 * 1024; // 5MB
-
-                              setUserDetails({ ...userDetails, avatar: file });
-
-                              if (!validTypes.includes(file.type)) {
-                                alert('Invalid file type. Please upload a JPEG, PNG, or GIF.');
-                                return;
-                              }
-
-                              if (file.size > maxSize) {
-                                alert('File is too large. Maximum size is 5MB.');
-                                return;
-                              }
-
-                              setSelectedAvatar(file);
-                            } catch (error) {
-                              toast.error('Failed to process image');
-                              console.error('Image processing error:', error);
-                            }
-                          }
-                        }}
+                        onChange={fileUploadHandler}
                         style={{ display: 'none' }}
                       />
                     </Col>
@@ -363,12 +364,12 @@ export default function Settings(): JSX.Element {
                       <Form.Control
                         type="password"
                         id="inputPassword"
-                        placeholder='enter new password'
+                        data-testid="inputPassword"
+                        placeholder="enter new password"
                         onChange={(e) =>
                           handleFieldChange('password', e.target.value)
                         }
                         className={`${styles.cardControl}`}
-                        data-testid="inputPassword"
                       />
                     </Col>
                   </Row>
@@ -383,6 +384,7 @@ export default function Settings(): JSX.Element {
                       <Form.Control
                         type="email"
                         id="inputEmail"
+                        data-testid="inputEmail"
                         value={userDetails.emailAddress}
                         className={`${styles.cardControl}`}
                         disabled
@@ -398,7 +400,7 @@ export default function Settings(): JSX.Element {
                       <Form.Control
                         type="tel"
                         id="phoneNo"
-                        placeholder="1234567890"
+                        placeholder={t('phone')}
                         value={userDetails.mobilePhoneNumber}
                         onChange={(e) =>
                           handleFieldChange('mobilePhoneNumber', e.target.value)
@@ -417,7 +419,7 @@ export default function Settings(): JSX.Element {
                       <Form.Control
                         type="tel"
                         id="homePhoneNo"
-                        placeholder="1234567890"
+                        placeholder={t('phone')}
                         value={userDetails.homePhoneNumber}
                         onChange={(e) =>
                           handleFieldChange('homePhoneNumber', e.target.value)
@@ -436,7 +438,7 @@ export default function Settings(): JSX.Element {
                       <Form.Control
                         type="tel"
                         id="workPhoneNo"
-                        placeholder="1234567890"
+                        placeholder={t('phone')}
                         value={userDetails.workPhoneNumber}
                         onChange={(e) =>
                           handleFieldChange('workPhoneNumber', e.target.value)
@@ -455,7 +457,7 @@ export default function Settings(): JSX.Element {
                       <Form.Control
                         type="date"
                         id="birthDate"
-                        value={userDetails.birthDate}
+                        value={userDetails.birthDate || ''}
                         onChange={(e) =>
                           handleFieldChange('birthDate', e.target.value)
                         }
@@ -614,11 +616,9 @@ export default function Settings(): JSX.Element {
               </Card>
             </Col>
             <Col lg={5} className="d-none d-lg-block">
-              <DeleteUser />
               <OtherSettings />
             </Col>
             <Col lg={5} className="d-lg-none">
-              <DeleteUser />
               <OtherSettings />
             </Col>
           </Row>
