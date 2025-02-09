@@ -1,323 +1,693 @@
-import React from 'react';
-import type { RenderResult } from '@testing-library/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import Button from 'react-bootstrap/Button';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+import styles from '../../style/app.module.css';
+import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import { toast } from 'react-toastify';
+import { languages } from 'utils/languages';
+import { errorHandler } from 'utils/errorHandler';
+import { Card, Row, Col, Form } from 'react-bootstrap';
+import Loader from 'components/Loader/Loader';
+import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
+import MemberAttendedEventsModal from '../../components/MemberDetail/EventsAttendedMemberModal';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
-  act,
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import { I18nextProvider } from 'react-i18next';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
-import { MOCKS1, MOCKS2 } from './MemberDetailMocks';
-import type { ApolloLink } from '@apollo/client';
-import { vi } from 'vitest';
+  countryOptions,
+  educationGradeEnum,
+  maritalStatusEnum,
+  genderEnum,
+  employmentStatusEnum,
+} from 'utils/formEnumFields';
+import dayjs from 'dayjs';
+import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 
-const link1 = new StaticMockLink(MOCKS1, true);
-const link2 = new StaticMockLink(MOCKS2, true);
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
-}
-
-const translations = {
-  ...JSON.parse(
-    JSON.stringify(
-      i18nForTest.getDataByLanguage('en')?.translation.memberDetail ?? {},
-    ),
-  ),
-  ...JSON.parse(
-    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
-  ),
-  ...JSON.parse(
-    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
-  ),
+type MemberDetailProps = {
+  id?: string;
 };
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const actual = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return {
-    DateTimePicker: actual.DesktopDateTimePicker,
+/**
+ * MemberDetail component is used to display the details of a user.
+ * It also allows the user to update the details. It uses the UPDATE_USER_MUTATION to update the user details.
+ * It uses the USER_DETAILS query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
+ * @param id - The id of the user whose details are to be displayed.
+ * @returns  React component
+ *
+ */
+const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'memberDetail',
+  });
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t: tCommon } = useTranslation('common');
+  const location = useLocation();
+  const isMounted = useRef(true);
+  const { getItem, setItem } = useLocalStorage();
+  const [show, setShow] = useState(false);
+  const currentId = location.state?.id || getItem('id') || id;
+  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
+
+  document.title = t('title');
+  const [formState, setFormState] = useState({
+    addressLine1: '',
+    addressLine2: '',
+    birthDate: null,
+    city: '',
+    avatar: selectedAvatar,
+    countryCode: '',
+    description: '',
+    educationGrade: '',
+    employmentStatus: '',
+    homePhoneNumber: '',
+    maritalStatus: '',
+    mobilePhoneNumber: '',
+    name: '',
+    natalSex: '',
+    naturalLanguageCode: '',
+    password: '',
+    postalCode: '',
+    state: '',
+    workPhoneNumber: '',
+  });
+
+  const handleEditIconClick = (): void => {
+    fileInputRef.current?.click();
   };
-});
+  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
+  const {
+    data: userData,
+    loading,
+    refetch: refetchUserDetails,
+    fetchMore: fetchMoreAssignedTags,
+  } = useQuery(CURRENT_USER, {
+    variables: { id: currentId },
+  });
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
+  const [isUpdated, setisUpdated] = useState(false);
+  useEffect(() => {
+    if (userData && isMounted.current) {
+      setFormState({
+        ...formState,
+        name: userData?.currentUser?.name,
+        naturalLanguageCode: userData?.naturalLanguageCode,
+        natalSex: userData?.currentUser?.natalSex,
+        birthDate: userData?.currentUser?.birthDate,
+        educationGrade: userData?.currentUser?.educationGrade,
+        employmentStatus: userData?.currentUser?.employmentStatus,
+        maritalStatus: userData?.currentUser?.maritalStatus,
+        mobilePhoneNumber: userData?.currentUser?.mobilePhoneNumber,
+        homePhoneNumber: userData?.currentUser?.homePhoneNumber,
+        workPhoneNumber: userData?.currentUser?.workPhoneNumber,
+        addressLine1: userData.currentUser?.addressLine1,
+        addressLine2: userData.currentUser?.addressLine2,
+        state: userData?.currentUser?.state,
+        city: userData?.currentUser?.city,
+        countryCode: userData?.currentUser?.countryCode,
+        avatar: userData?.currentUser?.avatar,
+        postalCode: userData?.currentUser?.postalCode,
+        description: userData?.currentUser?.description,
+      });
+    }
+  }, [userData]);
+  useEffect(() => {
+    // check component is mounted or not
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
-vi.mock('@dicebear/core', () => ({
-  createAvatar: vi.fn(() => ({
-    toDataUri: vi.fn(() => 'mocked-data-uri'),
-  })),
-}));
+  const handleFieldChange = (fieldName: string, value: string): void => {
+    if (fieldName === 'birthDate') {
+      const today = new Date();
+      const selectedDate = new Date(value);
+      if (selectedDate > today) {
+        console.error('Future dates are not allowed for birth date.');
+        return;
+      }
+    }
 
-const props = {
-  id: 'rishav-jha-mech',
-};
+    setisUpdated(true);
+    setFormState((prevState) => ({
+      ...prevState,
+      [fieldName]: value,
+    }));
+  };
 
-const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
-  return render(
-    <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123']}>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Routes>
-              <Route
-                path="/orgtags/:orgId"
-                element={<MemberDetail {...props} />}
-              />
-              <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
-                element={<div data-testid="manageTagScreen"></div>}
-              />
-            </Routes>
-          </I18nextProvider>
-        </Provider>
-      </MemoryRouter>
-    </MockedProvider>,
+  const handleUserUpdate = async (): Promise<void> => {
+    // Remove empty fields from the form state
+    function removeEmptyFields(obj: typeof formState) {
+      return Object.fromEntries(
+        Object.entries(obj).filter(
+          ([_, value]) =>
+            value !== null &&
+            value !== undefined &&
+            (typeof value !== 'string' || value.trim() !== ''),
+        ),
+      );
+    }
+
+    const input = removeEmptyFields(formState);
+
+    try {
+      const name = formState.name;
+      const emailAddress = userData?.currentUser?.emailAddress;
+      const avatar = formState.avatar;
+
+      try {
+        const { data } = await updateUser({
+          variables: { input },
+        });
+
+        if (data) {
+          setisUpdated(false);
+          if (getItem('id') === currentId) {
+            setItem('Name', name);
+            setItem('Email', emailAddress);
+            setItem('Avatar', avatar);
+          }
+          toast.success(tCommon('successfullyUpdated') as string);
+
+          // wait for 2 seconds to complete the update
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          // refresh the screen
+          window.location.reload();
+        }
+      } catch (error: unknown) {
+        console.log('Error is: ', error);
+        if (error instanceof Error) {
+          errorHandler(t, error);
+        }
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        errorHandler(t, error);
+      }
+    }
+  };
+  const resetChanges = (): void => {
+    setFormState({
+      name: userData?.currentUser?.name || '',
+      naturalLanguageCode: userData?.currentUser?.naturalLanguageCode || '',
+      avatar: userData?.currentUser?.avatar || '',
+      natalSex: userData?.currentUser?.natalSex || '',
+      employmentStatus: userData?.currentUser?.employmentStatus || '',
+      maritalStatus: userData?.currentUser?.maritalStatus || '',
+      mobilePhoneNumber: userData?.currentUser?.mobilePhoneNumber || '',
+      addressLine1: userData?.currentUser?.addressLine1 || '',
+      addressLine2: userData?.currentUser?.addressLine2 || '',
+      countryCode: userData?.currentUser?.address?.countryCode || '',
+      city: userData?.currentUser?.address?.city || '',
+      state: userData?.currentUser?.address?.state || '',
+      birthDate: userData?.currentUser?.birthDate || '',
+      educationGrade: userData?.currentUser?.educationGrade || '',
+      postalCode: userData?.currentUser?.postalCode || '',
+      description: userData?.currentUser?.description || '',
+      workPhoneNumber: userData?.currentUser?.workPhoneNumber || '',
+      homePhoneNumber: userData?.currentUser?.homePhoneNumber || '',
+      password: '',
+    });
+    setisUpdated(false);
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      {show && (
+        <MemberAttendedEventsModal
+          eventsAttended={userData?.user?.eventsAttended}
+          show={show}
+          setShow={setShow}
+        />
+      )}
+      <Row className="g-4 mt-1">
+        <Col md={6}>
+          <Card className={`${styles.allRound}`}>
+            <Card.Header
+              className={`bg-success text-white py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+            >
+              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
+              <Button
+                variant="light"
+                size="sm"
+                disabled
+                className="rounded-pill fw-bolder"
+              >
+                {userData?.currentUser?.role === 'administrator'
+                  ? 'Admin'
+                  : 'User'}
+              </Button>
+            </Card.Header>
+            <Card.Body className="py-3 px-3">
+              <div className="text-center mb-3">
+                {formState?.avatar ? (
+                  <div className="position-relative d-inline-block">
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '55px', aspectRatio: '1/1' }}
+                      src={
+                        formState.avatar instanceof File
+                          ? URL.createObjectURL(formState.avatar)
+                          : formState.avatar
+                      }
+                      alt="User"
+                      data-testid="userImagePresent"
+                    />
+                    <i
+                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
+                      onClick={handleEditIconClick}
+                      style={{ cursor: 'pointer' }}
+                      data-testid="editImage"
+                      title="Edit profile picture"
+                      role="button"
+                      aria-label="Edit profile picture"
+                      tabIndex={0}
+                      onKeyDown={(e) =>
+                        e.key === 'Enter' && handleEditIconClick()
+                      }
+                    />
+                  </div>
+                ) : (
+                  <div className="position-relative d-inline-block">
+                    <Avatar
+                      name={formState.name}
+                      alt="User Image"
+                      size={55}
+                      dataTestId="userImageAbsent"
+                      radius={150}
+                    />
+                    <i
+                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
+                      onClick={handleEditIconClick}
+                      data-testid="editImage"
+                      style={{ cursor: 'pointer' }}
+                    />
+                  </div>
+                )}
+                <input
+                  type="file"
+                  id="orgphoto"
+                  name="photo"
+                  accept="image/*"
+                  onChange={(e) => handleFieldChange('avatar', e.target.value)}
+                  data-testid="organisationImage"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                />
+              </div>
+              <Row className="g-3">
+                <Col md={6}>
+                  <label htmlFor="name" className="form-label">
+                    {tCommon('name')}
+                  </label>
+                  <input
+                    id="name"
+                    value={formState.name}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="name"
+                    data-testid="inputName"
+                    onChange={(e) => handleFieldChange('name', e.target.value)}
+                    required
+                    placeholder={tCommon('name')}
+                  />
+                </Col>
+                <Col md={6} data-testid="gender">
+                  <label htmlFor="gender" className="form-label">
+                    {t('gender')}
+                  </label>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={genderEnum}
+                    fieldName="natalSex"
+                    handleChange={(e) =>
+                      handleFieldChange('natalSex', e.target.value)
+                    }
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="birthDate" className="form-label">
+                    {t('birthDate')}
+                  </label>
+                  <DatePicker
+                    className={`${styles.dateboxMemberDetail} w-100`}
+                    value={dayjs(formState.birthDate)}
+                    onChange={(e) =>
+                      handleFieldChange('birthDate', e?.target.value || '')
+                    }
+                    data-testid="birthDate"
+                    slotProps={{
+                      textField: {
+                        inputProps: {
+                          'data-testid': 'birthDate',
+                          'aria-label': t('birthDate'),
+                        },
+                      },
+                    }}
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="grade" className="form-label">
+                    {t('educationGrade')}
+                  </label>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={educationGradeEnum}
+                    fieldName="educationGrade"
+                    handleChange={(e) =>
+                      handleFieldChange('educationGrade', e.target.value)
+                    }
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="empStatus" className="form-label">
+                    {t('employmentStatus')}
+                  </label>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={employmentStatusEnum}
+                    fieldName="employmentStatus"
+                    handleChange={(e) =>
+                      handleFieldChange('employmentStatus', e.target.value)
+                    }
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="maritalStatus" className="form-label">
+                    {t('maritalStatus')}
+                  </label>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={maritalStatusEnum}
+                    fieldName="maritalStatus"
+                    handleChange={(e) =>
+                      handleFieldChange('maritalStatus', e.target.value)
+                    }
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="password" className="form-label">
+                    {tCommon('password')}
+                  </label>
+                  <input
+                    id="password"
+                    value={formState.password}
+                    className={`form-control ${styles.inputColor}`}
+                    type="password"
+                    name="password"
+                    onChange={(e) =>
+                      handleFieldChange('password', e.target.value)
+                    }
+                    placeholder="* * * * * * * *"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="description" className="form-label">
+                    {tCommon('description')}
+                  </label>
+                  <input
+                    id="description"
+                    value={formState.description}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="description"
+                    data-testid="inputDescription"
+                    onChange={(e) =>
+                      handleFieldChange('description', e.target.value)
+                    }
+                    required
+                    placeholder="Enter description"
+                  />
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={6}>
+          <Card className={`${styles.allRound}`}>
+            <Card.Header
+              className={`bg-success text-white py-3 px-4 ${styles.topRadius}`}
+            >
+              <h3 className="m-0">{t('contactInfoHeading')}</h3>
+            </Card.Header>
+            <Card.Body className="py-3 px-3">
+              <Row className="g-3">
+                <Col md={12}>
+                  <label htmlFor="email" className="form-label">
+                    {tCommon('email')}
+                  </label>
+                  <input
+                    id="email"
+                    value={userData?.currentUser?.emailAddress}
+                    className={`form-control ${styles.inputColor}`}
+                    type="email"
+                    name="email"
+                    data-testid="inputEmail"
+                    disabled
+                    onChange={(e) =>
+                      handleFieldChange('emailAddress', e.target.value)
+                    }
+                    placeholder={tCommon('email')}
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="phoneNumber" className="form-label">
+                    {t('mobilePhoneNumber')}
+                  </label>
+                  <input
+                    id="mobilePhoneNumber"
+                    value={formState.mobilePhoneNumber}
+                    className={`form-control ${styles.inputColor}`}
+                    type="tel"
+                    name="mobilePhoneNumber"
+                    data-testid="inputMobilePhoneNumber"
+                    onChange={(e) =>
+                      handleFieldChange('mobilePhoneNumber', e.target.value)
+                    }
+                    placeholder="Ex. +1234567890"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="phoneNumber" className="form-label">
+                    {t('workPhoneNumber')}
+                  </label>
+                  <input
+                    id="workPhoneNumber"
+                    value={formState.workPhoneNumber}
+                    className={`form-control ${styles.inputColor}`}
+                    type="tel"
+                    data-testid="inputWorkPhoneNumber"
+                    name="workPhoneNumber"
+                    onChange={(e) =>
+                      handleFieldChange('workPhoneNumber', e.target.value)
+                    }
+                    placeholder="Ex. +1234567890"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="phoneNumber" className="form-label">
+                    {t('homePhoneNumber')}
+                  </label>
+                  <input
+                    id="homePhoneNumber"
+                    value={formState.homePhoneNumber}
+                    className={`form-control ${styles.inputColor}`}
+                    type="tel"
+                    data-testid="inputHomePhoneNumber"
+                    name="homePhoneNumber"
+                    onChange={(e) =>
+                      handleFieldChange('homePhoneNumber', e.target.value)
+                    }
+                    placeholder="Ex. +1234567890"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="address" className="form-label">
+                    {t('addressLine1')}
+                  </label>
+                  <input
+                    id="addressLine1"
+                    value={formState.addressLine1}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="addressLine1"
+                    data-testid="addressLine1"
+                    onChange={(e) =>
+                      handleFieldChange('addressLine1', e.target.value)
+                    }
+                    placeholder="Ex. Lane 2"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="address" className="form-label">
+                    {t('addressLine2')}
+                  </label>
+                  <input
+                    id="addressLine2"
+                    value={formState.addressLine2}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="addressLine2"
+                    data-testid="addressLine2"
+                    onChange={(e) =>
+                      handleFieldChange('addressLine2', e.target.value)
+                    }
+                    placeholder="Ex. Lane 2"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="address" className="form-label">
+                    {t('postalCode')}
+                  </label>
+                  <input
+                    id="postalCode"
+                    value={formState.postalCode}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="postalCode"
+                    data-testid="inputPostalCode"
+                    onChange={(e) =>
+                      handleFieldChange('postalCode', e.target.value)
+                    }
+                    placeholder="Ex. 12345"
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="city" className="form-label">
+                    {t('city')}
+                  </label>
+                  <input
+                    id="city"
+                    value={formState.city}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="city"
+                    data-testid="inputCity"
+                    onChange={(e) => handleFieldChange('city', e.target.value)}
+                    placeholder="Enter city name"
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="state" className="form-label">
+                    {t('state')}
+                  </label>
+                  <input
+                    id="state"
+                    value={formState.state}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="state"
+                    data-testid="inputState"
+                    onChange={(e) => handleFieldChange('state', e.target.value)}
+                    placeholder="Enter state name"
+                  />
+                </Col>
+                <Col md={12}>
+                  <Form.Label htmlFor="country" className="form-label">
+                    {tCommon('country')}
+                  </Form.Label>
+                  <Form.Select
+                    id="country"
+                    value={formState.countryCode}
+                    className={`${styles.inputColor}`}
+                    data-testid="inputCountry"
+                    onChange={(e) =>
+                      handleFieldChange('countryCode', e.target.value)
+                    }
+                  >
+                    <option value="" disabled>
+                      Select {tCommon('country')}
+                    </option>
+                    {[...countryOptions]
+                      .sort((a, b) => a.label.localeCompare(b.label))
+                      .map((country) => (
+                        <option
+                          key={country.value.toUpperCase()}
+                          value={country.value.toLowerCase()}
+                          aria-label={`Select ${country.label} as your country`}
+                        >
+                          {country.label}
+                        </option>
+                      ))}
+                  </Form.Select>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+        {isUpdated && (
+          <Col md={12}>
+            <Card.Footer className="bg-white border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
+              <Button
+                variant="outline-secondary"
+                onClick={resetChanges}
+                data-testid="resetChangesBtn"
+              >
+                {tCommon('resetChanges')}
+              </Button>
+              <Button
+                variant="success"
+                onClick={handleUserUpdate}
+                data-testid="saveChangesBtn"
+              >
+                {tCommon('saveChanges')}
+              </Button>
+            </Card.Footer>
+          </Col>
+        )}
+      </Row>
+
+      <Row className="mb-4">
+        <Col xs={12} lg={6}>
+          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+            <Card.Header
+              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+            >
+              <h3 className="text-white m-0" data-testid="eventsAttended-title">
+                {t('tagsAssigned')}
+              </h3>
+            </Card.Header>
+            <Card.Body
+              id="tagsAssignedScrollableDiv"
+              data-testid="tagsAssignedScrollableDiv"
+              className={`${styles.cardBody} pe-0`}
+            ></Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </LocalizationProvider>
   );
 };
 
-describe('MemberDetail', () => {
-  global.alert = vi.fn();
-
-  afterEach(() => {
-    vi.clearAllMocks();
-    cleanup();
+export const prettyDate = (param: string): string => {
+  const date = new Date(param);
+  if (date?.toDateString() === 'Invalid Date') {
+    return 'Unavailable';
+  }
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'long' });
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+};
+export const getLanguageName = (code: string): string => {
+  let language = 'Unavailable';
+  languages.map((data) => {
+    if (data.code == code) {
+      language = data.name;
+    }
   });
+  return language;
+};
 
-  test('should render the elements', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    expect(screen.getAllByText(/name/i)).toBeTruthy();
-    expect(screen.getAllByText(/Birth Date/i)).toBeTruthy();
-    expect(screen.getAllByText(/Gender/i)).toBeTruthy();
-    expect(screen.getAllByText(/Profile Details/i)).toBeTruthy();
-    expect(screen.getAllByText(/Profile Details/i)).toHaveLength(1);
-    expect(screen.getAllByText(/Contact Information/i)).toHaveLength(1);
-  });
-
-  test('prettyDate function should work properly', () => {
-    // If the date is provided
-    const datePretty = vi.fn(prettyDate);
-    expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
-      prettyDate('2023-02-18T09:22:27.969Z'),
-    );
-    // If there's some error in formatting the date
-    expect(datePretty('')).toBe('Unavailable');
-  });
-
-  test('getLanguageName function should work properly', () => {
-    const getLangName = vi.fn(getLanguageName);
-    // If the language code is provided
-    expect(getLangName('en')).toBe('English');
-    // If the language code is not provided
-    expect(getLangName('')).toBe('Unavailable');
-  });
-
-  test('should render props and text elements test for the page component', async () => {
-    const formData = {
-      addressLine1: 'Line 1',
-      addressLine2: 'Line 2',
-      avatarMimeType: 'image/jpeg',
-      avatarURL: 'http://example.com/avatar.jpg',
-      birthDate: '2000-01-01',
-      city: 'nyc',
-      countryCode: 'bb',
-      createdAt: '2025-02-06T03:10:50.254',
-      description: 'This is a description',
-      educationGrade: 'grade_8',
-      emailAddress: 'test221@gmail.com',
-      employmentStatus: 'employed',
-      homePhoneNumber: '+9999999998',
-      id: '0194d80f-03cd-79cd-8135-683494b187a1',
-      isEmailAddressVerified: false,
-      maritalStatus: 'engaged',
-      mobilePhoneNumber: '+9999999999',
-      name: 'Rishav Jha',
-      natalSex: 'male',
-      naturalLanguageCode: 'en',
-      postalCode: '111111',
-      role: 'regular',
-      state: 'State1',
-      updatedAt: '2025-02-06T03:22:17.808',
-      workPhoneNumber: '+9999999998',
-    };
-
-    renderMemberDetailScreen(link2);
-
-    await wait();
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    expect(screen.getByText('User')).toBeInTheDocument();
-    const birthDateDatePicker = screen.getByTestId('birthDate');
-    fireEvent.change(birthDateDatePicker, {
-      target: { value: formData.birthDate },
-    });
-
-    userEvent.type(screen.getByTestId(/inputName/i), formData.name);
-
-    userEvent.clear(screen.getByTestId(/inputName/i));
-    userEvent.clear(screen.getByTestId(/addressLine1/i));
-    userEvent.clear(screen.getByTestId(/addressLine2/i));
-    userEvent.clear(screen.getByTestId(/inputCity/i));
-    userEvent.clear(screen.getByTestId(/inputState/i));
-    userEvent.clear(screen.getByTestId(/inputPostalCode/i));
-    userEvent.clear(screen.getByTestId(/inputDescription/i));
-    userEvent.clear(screen.getByTestId(/inputEmail/i));
-    userEvent.clear(screen.getByTestId(/inputMobilePhoneNumber/i));
-    userEvent.clear(screen.getByTestId(/inputHomePhoneNumber/i));
-    userEvent.clear(screen.getByTestId(/workPhoneNumber/i));
-
-    userEvent.type(screen.getByTestId(/inputName/i), formData.name);
-    userEvent.type(screen.getByTestId(/addressLine1/i), formData.addressLine1);
-    userEvent.type(screen.getByTestId(/addressLine2/i), formData.addressLine2);
-    userEvent.type(screen.getByTestId(/inputCity/i), formData.city);
-    userEvent.type(screen.getByTestId(/inputState/i), formData.state);
-    userEvent.type(screen.getByTestId(/inputPostalCode/i), formData.postalCode);
-    userEvent.type(
-      screen.getByTestId(/inputDescription/i),
-      formData.description,
-    );
-    userEvent.type(screen.getByTestId(/inputCountry/i), formData.countryCode);
-    userEvent.type(screen.getByTestId(/inputEmail/i), formData.emailAddress);
-    userEvent.type(
-      screen.getByTestId(/inputMobilePhoneNumber/i),
-      formData.mobilePhoneNumber,
-    );
-    userEvent.type(
-      screen.getByTestId(/inputHomePhoneNumber/i),
-      formData.homePhoneNumber,
-    );
-    userEvent.type(
-      screen.getByTestId(/workPhoneNumber/i),
-      formData.workPhoneNumber,
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByText(/Save Changes/i));
-
-    expect(screen.getByTestId(/inputName/i)).toHaveValue(formData.name);
-    expect(screen.getByTestId(/addressLine1/i)).toHaveValue(
-      formData.addressLine1,
-    );
-    expect(screen.getByTestId(/addressLine2/i)).toHaveValue(
-      formData.addressLine2,
-    );
-    expect(screen.getByTestId(/inputCity/i)).toHaveValue(formData.city);
-    expect(screen.getByTestId(/inputState/i)).toHaveValue(formData.state);
-    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue(
-      formData.postalCode,
-    );
-    expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
-      formData.description,
-    );
-    expect(screen.getByTestId(/inputCountry/i)).toHaveValue(
-      formData.countryCode,
-    );
-    expect(screen.getByTestId(/inputEmail/i)).toHaveValue(
-      formData.emailAddress,
-    );
-    expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
-      formData.mobilePhoneNumber,
-    );
-    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
-      formData.homePhoneNumber,
-    );
-    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue(
-      formData.workPhoneNumber,
-    );
-  });
-
-  test('display admin', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getByText('Admin')).toBeInTheDocument();
-  });
-
-  test('Should display dicebear image if image is null', async () => {
-    renderMemberDetailScreen(link1);
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-
-    const dicebearUrl = 'mocked-data-uri';
-
-    const userImage = await screen.findByTestId('userImageAbsent');
-    expect(userImage).toBeInTheDocument();
-    expect(userImage.getAttribute('src')).toBe(dicebearUrl);
-  });
-
-  test('resetChangesBtn works properly', async () => {
-    renderMemberDetailScreen(link1);
-
-    await waitFor(() => {
-      expect(screen.getByTestId(/AddressLine1/i)).toBeInTheDocument();
-    });
-
-    userEvent.type(screen.getByTestId(/addressLine1/i), 'random');
-    userEvent.type(screen.getByTestId(/inputState/i), 'random');
-
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
-    await wait();
-
-    expect(screen.getByTestId(/Name/i)).toHaveValue('Rishav Jha');
-    expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
-      '+9999999999',
-    );
-    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
-      '+9999999998',
-    );
-    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue('+9999999998');
-    expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
-      'This is a description',
-    );
-    expect(screen.getByTestId(/inputCity/i)).toHaveValue('');
-    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue('111111');
-    expect(screen.getByTestId(/inputCountry/i)).toHaveValue('');
-    expect(screen.getByTestId(/inputState/i)).toHaveValue('');
-    expect(screen.getByTestId(/addressLine1/i)).toHaveValue('Line 1');
-    expect(screen.getByTestId(/addressLine2/i)).toHaveValue('Line 2');
-  });
-
-  test('should be redirected to / if member id is undefined', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    expect(window.location.pathname).toEqual('/');
-  });
-
-  test('display tags Assigned', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getByText('Tags Assigned')).toBeInTheDocument();
-  });
-});
+export default MemberDetail;
