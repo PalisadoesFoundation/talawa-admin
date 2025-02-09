@@ -88,7 +88,7 @@ describe('Testing Actions Screen', () => {
       const actual = await vi.importActual('react-router-dom'); // Import the actual implementation
       return {
         ...actual,
-        useNavigate: () => mockNavigate, // Replace useNavigate with the mock
+        useNavigate: () => mockNavigate, // Replace useNavigate hook with the mock
       };
     });
   });
