@@ -1,9 +1,14 @@
 import React from 'react';
 import { describe, expect, beforeAll, vi } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -11,11 +16,11 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
 import userEvent from '@testing-library/user-event';
-import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import '../../../style/app.module.css';
+import { errorMock, MOCKS, Mocks1, Mocks2, updateMock } from './SettingsMocks';
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -27,163 +32,6 @@ vi.mock('react-toastify', () => ({
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
-
-const MOCKS = [
-  {
-    request: {
-      query: UPDATE_USER_MUTATION,
-      variables: {
-        firstName: 'Noble',
-        lastName: 'Mittal',
-        createdAt: '2021-03-01',
-        gender: 'MALE',
-        phoneNumber: '+174567890',
-        birthDate: '2024-03-01',
-        grade: 'GRADE_1',
-        empStatus: 'UNEMPLOYED',
-        maritalStatus: 'SINGLE',
-        address: 'random',
-        state: 'random',
-        country: 'IN',
-      },
-      result: {
-        data: {
-          updateUserProfile: {
-            _id: '453',
-          },
-        },
-      },
-    },
-  },
-];
-
-const Mocks1 = [
-  {
-    request: {
-      query: CURRENT_USER,
-    },
-    result: {
-      data: {
-        currentUser: {
-          email: 'johndoe@gmail.com',
-          firstName: 'John',
-          lastName: 'Doe',
-          createdAt: '2021-03-01T00:00:00.000Z',
-          gender: 'MALE',
-          maritalStatus: 'SINGLE',
-          educationGrade: 'GRADUATE',
-          employmentStatus: 'PART_TIME',
-          birthDate: '2024-03-01',
-          address: {
-            state: 'random',
-            countryCode: 'IN',
-            line1: 'random',
-          },
-          eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
-          phone: {
-            mobile: '+174567890',
-          },
-          image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-          _id: '65ba1621b7b00c20e5f1d8d2',
-        },
-      },
-    },
-  },
-];
-
-const Mocks2 = [
-  {
-    request: {
-      query: CURRENT_USER,
-    },
-    result: {
-      data: {
-        currentUser: {
-          email: 'johndoe@gmail.com',
-          firstName: '',
-          lastName: '',
-          createdAt: '',
-          gender: '',
-          maritalStatus: '',
-          educationGrade: '',
-          employmentStatus: '',
-          eventsAttended: [],
-          birthDate: '',
-          address: {
-            state: '',
-            countryCode: '',
-            line1: '',
-          },
-          phone: {
-            mobile: '',
-          },
-          image: '',
-          _id: '65ba1621b7b00c20e5f1d8d2',
-        },
-      },
-    },
-  },
-];
-
-const updateMock = [
-  {
-    request: {
-      query: UPDATE_USER_MUTATION,
-      variables: {
-        firstName: 'John',
-        lastName: 'randomUpdated',
-        createdAt: '2021-03-01T00:00:00.000Z',
-        gender: 'MALE',
-        email: 'johndoe@gmail.com',
-        phoneNumber: '+174567890',
-        birthDate: '2024-03-01',
-        grade: 'GRADUATE',
-        empStatus: 'PART_TIME',
-        maritalStatus: 'SINGLE',
-        address: 'random',
-        state: 'random',
-        country: 'IN',
-        eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
-        image: '',
-      },
-    },
-    result: {
-      data: {
-        updateUserProfile: {
-          _id: '65ba1621b7b00c20e5f1d8d2',
-        },
-      },
-    },
-  },
-  ...Mocks1,
-];
-
-const errorMock = [
-  {
-    request: {
-      query: UPDATE_USER_MUTATION,
-      variables: {
-        firstName: 'John',
-        lastName: 'Doe2',
-        createdAt: '2021-03-01T00:00:00.000Z',
-        gender: 'MALE',
-        email: 'johndoe@gmail.com',
-        phoneNumber: '4567890',
-        birthDate: '2024-03-01',
-        grade: 'GRADUATE',
-        empStatus: 'PART_TIME',
-        maritalStatus: 'SINGLE',
-        address: 'random',
-        state: 'random',
-        country: 'IN',
-        eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
-        image: '',
-      },
-    },
-    error: new Error('Please enter a valid phone number'),
-  },
-  ...Mocks1,
-];
 
 const link = new StaticMockLink(MOCKS, true);
 const link1 = new StaticMockLink(Mocks1, true);
@@ -205,7 +53,7 @@ async function wait(ms = 100): Promise<void> {
 describe('Testing Settings Screen [User Portal]', () => {
   beforeAll(() => {
     const { setItem } = useLocalStorage();
-    setItem('name', 'John Doe');
+    setItem('name', 'Bandhan Majumder');
     vi.useFakeTimers();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -241,6 +89,10 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   it('input works properly', async () => {
+    vi.mock('URL', () => ({
+      createObjectURL: vi.fn(),
+    }));
+
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -257,44 +109,57 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('inputFirstName'), 'Noble');
-    await wait();
-    userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
-    await wait();
+    userEvent.type(screen.getByTestId('inputName'), 'Noble Mittal');
     userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
-    await wait();
+    userEvent.type(screen.getByTestId('inputPassword'), '12qw!@QW');
     userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
-    await wait();
+    userEvent.type(screen.getByTestId('inputHomePhoneNumber'), '1234567890');
+    userEvent.type(screen.getByTestId('inputWorkPhoneNumber'), '1234567890');
     userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
-    await wait();
     userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Unemployed');
-    await wait();
     userEvent.selectOptions(screen.getByTestId('inputMaritalStatus'), 'Single');
-    await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
-    await wait();
+    userEvent.type(screen.getByTestId('inputAddress1'), 'random');
+    userEvent.type(screen.getByTestId('inputAddress2'), 'random');
     userEvent.type(screen.getByTestId('inputState'), 'random');
-    await wait();
-    userEvent.selectOptions(screen.getByTestId('inputCountry'), 'IN');
-    await wait();
+    userEvent.type(screen.getByTestId('inputCity'), 'random');
+    userEvent.selectOptions(screen.getByTestId('inputCountry'), 'in');
+    userEvent.type(screen.getByTestId('postalCode'), '1212121');
+    userEvent.type(
+      screen.getByTestId('inputDescription'),
+      'This is a random description by Bandhan',
+    );
     expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
-    await wait();
     fireEvent.change(screen.getByLabelText('Birth Date'), {
       target: { value: '2024-03-01' },
     });
+
     expect(screen.getByLabelText('Birth Date')).toHaveValue('2024-03-01');
-    await wait();
-    const fileInp = screen.getByTestId('fileInput');
-    fileInp.style.display = 'block';
-    userEvent.click(screen.getByTestId('uploadImageBtn'));
-    await wait();
-    const imageFile = new File(['(⌐□_□)'], 'profile-image.jpg', {
-      type: 'image/jpeg',
-    });
-    const files = [imageFile];
-    userEvent.upload(fileInp, files);
-    await wait();
-    expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+    expect(screen.getByTestId('updateUserBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('inputName')).toHaveValue('Noble Mittal');
+    expect(screen.getByTestId('inputGender')).toHaveValue('male');
+    expect(screen.getByTestId('inputPhoneNumber')).toHaveValue('1234567890');
+    expect(screen.getByTestId('inputHomePhoneNumber')).toHaveValue(
+      '1234567890',
+    );
+    expect(screen.getByTestId('inputWorkPhoneNumber')).toHaveValue(
+      '1234567890',
+    );
+    expect(screen.getByTestId('inputGrade')).toHaveValue('grade_1');
+    expect(screen.getByTestId('inputEmpStatus')).toHaveValue('unemployed');
+    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue('single');
+    expect(screen.getByTestId('inputAddress1')).toHaveValue('random');
+    expect(screen.getByTestId('inputAddress2')).toHaveValue('random');
+    expect(screen.getByTestId('inputState')).toHaveValue('random');
+    expect(screen.getByTestId('inputCity')).toHaveValue('random');
+    expect(screen.getByTestId('inputCountry')).toHaveValue('in');
+    expect(screen.getByTestId('postalCode')).toHaveValue('1212121');
+    expect(screen.getByTestId('inputDescription')).toHaveValue(
+      'This is a random description by Bandhan',
+    );
+    expect(screen.getByLabelText('Birth Date')).toHaveValue('2024-03-01');
+    expect(screen.getByTestId('inputPassword')).toHaveValue('12qw!@QW');
+    expect(screen.getByTestId('postalCode')).toHaveValue('1212121');
   });
 
   it('resetChangesBtn works properly', async () => {
@@ -313,21 +178,36 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    userEvent.type(screen.getByTestId('inputName'), 'Majumder');
     await wait();
+
     userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
-    expect(screen.getByTestId('inputFirstName')).toHaveValue('John');
-    expect(screen.getByTestId('inputLastName')).toHaveValue('Doe');
-    expect(screen.getByTestId('inputGender')).toHaveValue('MALE');
-    expect(screen.getByTestId('inputPhoneNumber')).toHaveValue('+174567890');
-    expect(screen.getByTestId('inputGrade')).toHaveValue('GRADUATE');
-    expect(screen.getByTestId('inputEmpStatus')).toHaveValue('PART_TIME');
-    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue('SINGLE');
-    expect(screen.getByTestId('inputAddress')).toHaveValue('random');
-    expect(screen.getByTestId('inputState')).toHaveValue('random');
-    expect(screen.getByTestId('inputCountry')).toHaveValue('IN');
-    expect(screen.getByLabelText('Birth Date')).toHaveValue('2024-03-01');
+
+    expect(screen.getByTestId('inputName')).toHaveValue('Bandhan Majumder');
+    expect(screen.getByTestId('inputGender')).toHaveValue('male');
+    expect(screen.getByTestId('inputPhoneNumber')).toHaveValue('+9999999999');
+    expect(screen.getByTestId('inputHomePhoneNumber')).toHaveValue(
+      '+9999999998',
+    );
+    expect(screen.getByTestId('inputWorkPhoneNumber')).toHaveValue(
+      '+9999999998',
+    );
+    expect(screen.getByTestId('inputGrade')).toHaveValue('grade_8');
+    expect(screen.getByTestId('inputEmpStatus')).toHaveValue('full_time');
+    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue('engaged');
+    expect(screen.getByTestId('inputAddress1')).toHaveValue('Line 1');
+    expect(screen.getByTestId('inputAddress2')).toHaveValue('Line 2');
+    expect(screen.getByTestId('inputState')).toHaveValue('State1');
+    expect(screen.getByTestId('inputCity')).toHaveValue('nyc');
+    expect(screen.getByTestId('inputCountry')).toHaveValue('bb');
+    expect(screen.getByTestId('postalCode')).toHaveValue('11111111f');
+    expect(screen.getByTestId('inputDescription')).toHaveValue(
+      'This is a description',
+    );
+    expect(screen.getByLabelText('Birth Date')).toHaveValue('2000-01-01');
+    expect(screen.getByTestId('inputPassword')).toHaveValue('');
+    expect(screen.getByTestId('postalCode')).toHaveValue('11111111f');
   });
 
   it('resetChangesBtn works properly when the details are empty', async () => {
@@ -346,20 +226,25 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    userEvent.type(screen.getByTestId('inputName'), 'Bandhan Majumder');
     await wait();
     userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
-    expect(screen.getByTestId('inputFirstName')).toHaveValue('');
-    expect(screen.getByTestId('inputLastName')).toHaveValue('');
+    expect(screen.getByTestId('inputName')).toHaveValue('');
     expect(screen.getByTestId('inputGender')).toHaveValue('');
     expect(screen.getByTestId('inputPhoneNumber')).toHaveValue('');
+    expect(screen.getByTestId('inputHomePhoneNumber')).toHaveValue('');
+    expect(screen.getByTestId('inputWorkPhoneNumber')).toHaveValue('');
     expect(screen.getByTestId('inputGrade')).toHaveValue('');
     expect(screen.getByTestId('inputEmpStatus')).toHaveValue('');
     expect(screen.getByTestId('inputMaritalStatus')).toHaveValue('');
-    expect(screen.getByTestId('inputAddress')).toHaveValue('');
+    expect(screen.getByTestId('inputAddress1')).toHaveValue('');
+    expect(screen.getByTestId('inputAddress2')).toHaveValue('');
     expect(screen.getByTestId('inputState')).toHaveValue('');
+    expect(screen.getByTestId('inputCity')).toHaveValue('');
     expect(screen.getByTestId('inputCountry')).toHaveValue('');
+    expect(screen.getByTestId('postalCode')).toHaveValue('');
+    expect(screen.getByTestId('inputDescription')).toHaveValue('');
     expect(screen.getByLabelText('Birth Date')).toHaveValue('');
   });
 
@@ -405,10 +290,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
-    screen.debug();
-
     const openMenuBtn = screen.queryByTestId('openMenu');
-    console.log('Open Menu Button:', openMenuBtn);
     expect(openMenuBtn).toBeInTheDocument();
 
     if (openMenuBtn) {
@@ -416,7 +298,6 @@ describe('Testing Settings Screen [User Portal]', () => {
     }
 
     const closeMenuBtn = screen.queryByTestId('closeMenu');
-    console.log('Close Menu Button:', closeMenuBtn);
     expect(closeMenuBtn).toBeInTheDocument();
 
     if (closeMenuBtn) {
@@ -437,165 +318,115 @@ describe('Testing Settings Screen [User Portal]', () => {
       </MockedProvider>,
     );
     await wait();
-    // Check if the card title is rendered
+
     expect(screen.getByText('Events Attended')).toBeInTheDocument();
     await wait(1000);
-    // Check for empty state immediately
+
     expect(screen.getByText('No Events Attended')).toBeInTheDocument();
   });
 
-  it('renders events attended card correctly with events', async () => {
-    const mockEventsAttended = [
-      { _id: '1', title: 'Event 1' },
-      { _id: '2', title: 'Event 2' },
-    ];
+  it('prevents selecting future dates for birth date', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
-    const MocksWithEvents = [
-      {
-        ...Mocks1[0],
-        result: {
-          data: {
-            currentUser: {
-              ...Mocks1[0].result.data.currentUser,
-              eventsAttended: mockEventsAttended,
-            },
-          },
-        },
-      },
-    ];
+    const birthDateInput = screen.getByLabelText(
+      'Birth Date',
+    ) as HTMLInputElement;
+    const today = new Date().toISOString().split('T')[0];
+    const futureDate = new Date();
+    futureDate.setFullYear(futureDate.getFullYear() + 100);
+    const futureDateString = futureDate.toISOString().split('T')[0];
 
-    const linkWithEvents = new StaticMockLink(MocksWithEvents, true);
+    fireEvent.change(birthDateInput, { target: { value: futureDateString } });
 
-    render(
-      <MockedProvider addTypename={false} link={linkWithEvents}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    expect(birthDateInput.value).not.toBe(futureDateString);
 
-    await wait(1000);
+    fireEvent.change(birthDateInput, { target: { value: today } });
+    expect(birthDateInput.value).toBe(today);
+  });
 
-    expect(screen.getByText('Events Attended')).toBeInTheDocument();
-    const eventsCards = screen.getAllByTestId('usereventsCard');
-    expect(eventsCards.length).toBe(2);
+  it('should update user profile successfully', async () => {
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
 
-    eventsCards.forEach((card) => {
-      expect(card).toBeInTheDocument();
-      expect(card.children.length).toBe(1);
+    await act(async () => {
+      render(
+        <MockedProvider link={link3} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(screen.getByTestId('inputName')).toBeInTheDocument();
+
+    const nameInput = screen.getByTestId('inputName');
+
+    expect(nameInput).toHaveValue('');
+
+    await act(async () => {
+      fireEvent.change(nameInput, { target: { value: 'Bandhan Majumder' } });
+    });
+
+    const saveButton = screen.getByTestId('updateUserBtn');
+
+    userEvent.click(saveButton);
+
+    vi.runAllTimersAsync();
+
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Profile updated Successfully',
+      );
     });
   });
-});
 
-it('prevents selecting future dates for birth date', async () => {
-  await act(async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  it('should call errorHandler when updating profile with an invalid phone number', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider link={link4} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await wait(200);
+
+    const phoneNumberInput = screen.getByTestId('inputPhoneNumber');
+
+    await act(async () => {
+      fireEvent.change(phoneNumberInput, { target: { value: '12000' } });
+    });
+    await wait(200);
+
+    const saveButton = screen.getByTestId('updateUserBtn');
+    expect(saveButton).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(saveButton);
+    });
+    await wait();
+    expect(errorHandler).toHaveBeenCalled();
   });
-
-  const birthDateInput = screen.getByLabelText(
-    'Birth Date',
-  ) as HTMLInputElement;
-  const today = new Date().toISOString().split('T')[0];
-  const futureDate = new Date();
-  futureDate.setFullYear(futureDate.getFullYear() + 100);
-  const futureDateString = futureDate.toISOString().split('T')[0];
-
-  // Trying future date
-  fireEvent.change(birthDateInput, { target: { value: futureDateString } });
-  // Checking if value is not updated to future date
-  expect(birthDateInput.value).not.toBe(futureDateString);
-
-  // Checking if value set correctly
-  fireEvent.change(birthDateInput, { target: { value: today } });
-  expect(birthDateInput.value).toBe(today);
-});
-
-it('should update user profile successfully', async () => {
-  const toastSuccessSpy = vi.spyOn(toast, 'success');
-  await act(async () => {
-    render(
-      <MockedProvider link={link3} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  });
-
-  await wait();
-
-  const lastNameInput = screen.getByTestId('inputLastName');
-  expect(lastNameInput).toHaveValue('Doe');
-  await act(async () => {
-    fireEvent.change(lastNameInput, { target: { value: 'randomUpdated' } });
-  });
-
-  const saveButton = screen.getByTestId('updateUserBtn');
-  expect(saveButton).toBeInTheDocument();
-  await act(async () => {
-    fireEvent.click(saveButton);
-  });
-  await wait();
-
-  expect(lastNameInput).toHaveValue('randomUpdated');
-  expect(toastSuccessSpy).toHaveBeenCalledWith('Profile updated Successfully');
-
-  toastSuccessSpy.mockRestore();
-});
-
-it('should call errorHandler when updating profile with an invalid phone number', async () => {
-  await act(async () => {
-    render(
-      <MockedProvider link={link4} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  });
-
-  await wait(200);
-
-  const lastNameInput = screen.getByTestId('inputLastName');
-  await act(async () => {
-    fireEvent.change(lastNameInput, { target: { value: 'Doe2' } });
-  });
-
-  const phoneNumberInput = screen.getByTestId('inputPhoneNumber');
-
-  await act(async () => {
-    fireEvent.change(phoneNumberInput, { target: { value: '4567890' } });
-  });
-  await wait(200);
-
-  const saveButton = screen.getByTestId('updateUserBtn');
-  expect(saveButton).toBeInTheDocument();
-
-  await act(async () => {
-    fireEvent.click(saveButton);
-  });
-  await wait();
-  expect(errorHandler).toHaveBeenCalled();
 });
