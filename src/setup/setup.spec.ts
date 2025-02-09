@@ -141,23 +141,6 @@ describe('Talawa Admin Setup', () => {
   it('should handle errors during reCAPTCHA setup', async () => {
     const mockError = new Error('ReCAPTCHA setup failed');
 
-    // Mock user accepting reCAPTCHA setup but encountering an error
-    vi.mocked(inquirer.prompt).mockRejectedValue(mockError);
-
-    await expect(askAndSetRecaptcha()).rejects.toThrow(
-      'Failed to set up reCAPTCHA: ReCAPTCHA setup failed',
-    );
-
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error setting up reCAPTCHA:',
-      mockError,
-    );
-    expect(updateEnvFile).not.toHaveBeenCalled();
-  });
-
-  it('should handle errors during reCAPTCHA setup', async () => {
-    const mockError = new Error('ReCAPTCHA setup failed');
-
     vi.mocked(inquirer.prompt).mockRejectedValue(mockError);
 
     await expect(askAndSetRecaptcha()).rejects.toThrow(
