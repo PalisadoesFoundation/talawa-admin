@@ -10,21 +10,26 @@ import EventsAttendedByMember from 'components/MemberDetail/EventsAttendedByMemb
  */
 interface InterfaceUser {
   userDetails: {
-    firstName: string;
-    lastName: string;
-    createdAt: string;
-    gender: string;
-    email: string;
-    phoneNumber: string;
-    birthDate: string;
-    grade: string;
-    empStatus: string;
+    addressLine1: string;
+    addressLine2: string;
+    emailAddress: string;
+    birthDate: null | string;
+    city: string;
+    avatar: File | null;
+    countryCode: string;
+    description: string;
+    educationGrade: string;
+    employmentStatus: string;
+    homePhoneNumber: string;
     maritalStatus: string;
-    address: string;
+    mobilePhoneNumber: string;
+    name: string;
+    natalSex: string;
+    naturalLanguageCode: string;
+    password: string;
+    postalCode: string;
     state: string;
-    country: string;
-    image: string;
-    eventsAttended: { _id: string }[];
+    workPhoneNumber: string;
   };
   t: (key: string) => string;
 }
