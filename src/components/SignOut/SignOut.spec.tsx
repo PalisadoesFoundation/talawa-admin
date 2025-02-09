@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
+import type { Mock } from 'vitest';
 import { vi } from 'vitest';
 import SignOut from './SignOut';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -48,7 +49,7 @@ describe('SignOut Component', () => {
 
   test('calls logout functionality when sign out button is clicked', async () => {
     const mockEndSession = vi.fn();
-    (useSession as jest.Mock).mockReturnValue({
+    (useSession as Mock).mockReturnValue({
       endSession: mockEndSession,
     });
 
@@ -90,7 +91,7 @@ describe('SignOut Component', () => {
     };
 
     const mockEndSession = vi.fn();
-    (useSession as jest.Mock).mockReturnValue({
+    (useSession as Mock).mockReturnValue({
       endSession: mockEndSession,
     });
 
