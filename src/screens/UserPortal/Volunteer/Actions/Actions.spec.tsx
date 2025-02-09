@@ -88,7 +88,7 @@ describe('Testing Actions Screen', () => {
       const actual = await vi.importActual('react-router-dom'); // Import the actual implementation
       return {
         ...actual,
-        useNavigate: () => mockNavigate, // Replace useNavigate with the mock
+        useNavigate: () => mockNavigate, // Replace useNavigate hook with the mock
       };
     });
   });
@@ -179,13 +179,13 @@ describe('Testing Actions Screen', () => {
 
       const searchToggle = await screen.findByTestId('searchByToggle');
       expectVitestToBeInTheDocument(searchToggle);
-      userEvent.click(searchToggle);
+      await userEvent.click(searchToggle);
 
       const searchByAssignee = await screen.findByTestId('assignee');
       expectVitestToBeInTheDocument(searchByAssignee);
-      userEvent.click(searchByAssignee);
+      await userEvent.click(searchByAssignee);
 
-      userEvent.type(searchInput, '1');
+      await userEvent.type(searchInput, '1');
     });
     await debounceWait();
     fireEvent.click(screen.getByTestId('searchBtn'));
@@ -204,13 +204,13 @@ describe('Testing Actions Screen', () => {
 
       const searchToggle = await screen.findByTestId('searchByToggle');
       expectVitestToBeInTheDocument(searchToggle);
-      userEvent.click(searchToggle);
+      await userEvent.click(searchToggle);
 
       const searchByCategory = await screen.findByTestId('category');
       expectVitestToBeInTheDocument(searchByCategory);
-      userEvent.click(searchByCategory);
+      await userEvent.click(searchByCategory);
 
-      userEvent.type(searchInput, '1');
+      await userEvent.type(searchInput, '1');
     });
     await debounceWait();
 
@@ -241,25 +241,25 @@ describe('Testing Actions Screen', () => {
     renderActions(link1);
 
     const checkbox = await screen.findAllByTestId('statusCheckbox');
-    userEvent.click(checkbox[0]);
+    await userEvent.click(checkbox[0]);
 
     await waitFor(async () => {
       const element = await screen.findByText(t.actionItemStatus); // Resolve the promise
       expectVitestToBeInTheDocument(element); // Now assert the resolved element
     });
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and close ItemViewModal', async () => {
     renderActions(link1);
 
     const viewItemBtn = await screen.findAllByTestId('viewItemBtn');
-    userEvent.click(viewItemBtn[0]);
+    await userEvent.click(viewItemBtn[0]);
 
     await waitFor(() => {
       expectVitestToBeInTheDocument(screen.getByText(t.actionItemDetails));
     });
 
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 });

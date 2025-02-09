@@ -98,7 +98,7 @@ describe('Testing Organization Admin List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
+    await userEvent.click(screen.getByTestId(/removeAdminBtn/i));
 
     await wait(2000);
   });
@@ -152,7 +152,7 @@ describe('Testing Organization Admin List Card', () => {
     );
 
     // Simulate user click on "Yes"
-    userEvent.click(screen.getByTestId('removeAdminBtn'));
+    await userEvent.click(screen.getByTestId('removeAdminBtn'));
 
     await waitFor(() => {
       // Verify that neither toast.success nor window.location.reload are called
@@ -194,7 +194,7 @@ describe('Testing Organization Admin List Card', () => {
     );
 
     // Simulate user click on "Yes"
-    userEvent.click(screen.getByTestId('removeAdminBtn'));
+    await userEvent.click(screen.getByTestId('removeAdminBtn'));
 
     // Wait for the errorHandler to be called
     await waitFor(() => {

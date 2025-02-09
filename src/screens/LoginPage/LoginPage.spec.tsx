@@ -315,7 +315,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
     const adminLink = screen.getByText(/Admin/i);
-    userEvent.click(adminLink);
+    await userEvent.click(adminLink);
     await wait();
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
     expect(window.location.pathname).toBe('/orglist');
@@ -388,19 +388,22 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
 
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
-    userEvent.type(
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      formData.password,
+    );
+    await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
       formData.confirmPassword,
     );
 
-    userEvent.click(screen.getByTestId('registrationBtn'));
+    await userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
   it('Testing registration functionality when all inputs are invalid', async () => {
@@ -425,18 +428,21 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
 
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
-    userEvent.type(
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      formData.password,
+    );
+    await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
       formData.confirmPassword,
     );
-    userEvent.click(screen.getByTestId('registrationBtn'));
+    await userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
   it('Testing registration functionality, when password and confirm password is not same', async () => {
@@ -461,17 +467,20 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
 
-    userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
-    userEvent.type(
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      formData.password,
+    );
+    await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
       formData.confirmPassword,
     );
 
-    userEvent.click(screen.getByTestId('registrationBtn'));
+    await userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
   it('Testing registration functionality, when input is not filled correctly', async () => {
@@ -496,18 +505,21 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
 
-    userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
 
-    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
-    userEvent.type(
+    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      formData.password,
+    );
+    await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
       formData.confirmPassword,
     );
 
-    userEvent.click(screen.getByTestId('registrationBtn'));
+    await userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
   it('switches to login tab on successful registration', async () => {
@@ -532,17 +544,20 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
-    userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
 
-    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
-    userEvent.type(
+    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      formData.password,
+    );
+    await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
       formData.confirmPassword,
     );
 
-    userEvent.click(screen.getByTestId('registrationBtn'));
+    await userEvent.click(screen.getByTestId('registrationBtn'));
 
     await wait();
 
@@ -574,19 +589,22 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
 
     await wait();
-    userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
 
-    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
-    userEvent.type(
+    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      formData.password,
+    );
+    await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
       formData.confirmPassword,
     );
 
-    userEvent.click(screen.getByTestId('registrationBtn'));
+    await userEvent.click(screen.getByTestId('registrationBtn'));
 
     await wait();
 
@@ -610,9 +628,9 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
-    userEvent.click(screen.getByTestId('goToLoginPortion'));
+    await userEvent.click(screen.getByTestId('goToLoginPortion'));
 
     await wait();
   });
@@ -637,13 +655,13 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    userEvent.type(
+    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    userEvent.click(screen.getByTestId('loginBtn'));
+    await userEvent.click(screen.getByTestId('loginBtn'));
 
     await wait();
   });
@@ -668,13 +686,13 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    userEvent.type(
+    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    userEvent.click(screen.getByTestId('loginBtn'));
+    await userEvent.click(screen.getByTestId('loginBtn'));
 
     await wait();
   });
@@ -701,18 +719,21 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
 
-    userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
 
-    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
-    userEvent.type(
+    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      formData.password,
+    );
+    await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
       formData.confirmPassword,
     );
 
-    userEvent.click(screen.getByTestId('registrationBtn'));
+    await userEvent.click(screen.getByTestId('registrationBtn'));
 
     await waitFor(() => {
       expect(resetReCAPTCHA).toBeCalled();
@@ -739,13 +760,13 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    userEvent.type(
+    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    userEvent.click(screen.getByTestId('loginBtn'));
+    await userEvent.click(screen.getByTestId('loginBtn'));
 
     await waitFor(() => {
       expect(resetReCAPTCHA).toBeCalled();
@@ -772,10 +793,10 @@ describe('Testing Login Page Screen', () => {
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
-    userEvent.click(toggleText);
+    await userEvent.click(toggleText);
     expect(input.type).toBe('text');
     // click the toggle button to hide password
-    userEvent.click(toggleText);
+    await userEvent.click(toggleText);
     expect(input.type).toBe('password');
 
     await wait();
@@ -796,17 +817,17 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
     const input = screen.getByTestId('passwordField') as HTMLInputElement;
     const toggleText = screen.getByTestId('showPassword');
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
-    userEvent.click(toggleText);
+    await userEvent.click(toggleText);
     expect(input.type).toBe('text');
     // click the toggle button to hide password
-    userEvent.click(toggleText);
+    await userEvent.click(toggleText);
     expect(input.type).toBe('password');
 
     await wait();
@@ -827,17 +848,17 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
     const input = screen.getByTestId('cpassword') as HTMLInputElement;
     const toggleText = screen.getByTestId('showPasswordCon');
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
-    userEvent.click(toggleText);
+    await userEvent.click(toggleText);
     expect(input.type).toBe('text');
     // click the toggle button to hide password
-    userEvent.click(toggleText);
+    await userEvent.click(toggleText);
     expect(input.type).toBe('password');
 
     await wait();
@@ -878,9 +899,12 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
-    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      password.password,
+    );
 
     expect(screen.getByTestId('passwordField')).toHaveFocus();
 
@@ -907,9 +931,12 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
-    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      password.password,
+    );
 
     expect(screen.getByTestId('passwordField')).toHaveFocus();
 
@@ -936,11 +963,14 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
     expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
-    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      password.password,
+    );
 
     expect(password.password.length).toBeLessThan(8);
 
@@ -965,13 +995,16 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
     await wait();
 
     expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
-    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      password.password,
+    );
 
     expect(password.password.length).toBeGreaterThanOrEqual(8);
 
@@ -1003,7 +1036,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
     const userLink = screen.getByText(/User/i);
-    userEvent.click(userLink);
+    await userEvent.click(userLink);
     await wait();
     expect(screen.getByText(/User Login/i)).toBeInTheDocument();
     expect(window.location.pathname).toBe('/user/organizations');
@@ -1093,7 +1126,7 @@ it('Render the Select Organization list and change the option', async () => {
   );
 
   await wait();
-  userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+  await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
   await wait();
   const autocomplete = screen.getByTestId('selectOrg');
   const input = within(autocomplete).getByRole('combobox');
@@ -1179,18 +1212,18 @@ describe('Talawa-API server fetch check', () => {
 
   //   await wait();
 
-  //   userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+  //   await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
 
-  //   userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+  //   await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
 
-  //   userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-  //   userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
-  //   userEvent.type(
+  //   await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+  //   await userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+  //   await userEvent.type(
   //     screen.getByPlaceholderText('Confirm Password'),
   //     formData.confirmPassword,
   //   );
 
-  //   userEvent.click(screen.getByTestId('registrationBtn'));
+  //   await userEvent.click(screen.getByTestId('registrationBtn'));
 
   //   await waitFor(() => {
   //     expect(resetReCAPTCHA).toBeCalled();

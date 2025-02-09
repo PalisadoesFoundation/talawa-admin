@@ -214,7 +214,7 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(
@@ -222,7 +222,7 @@ describe('Organisation Events Page', () => {
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -254,19 +254,25 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
     });
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Title/i),
+      formData.title,
+    );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
+    await userEvent.type(
+      screen.getByPlaceholderText(/Location/i),
+      formData.location,
+    );
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -278,8 +284,8 @@ describe('Organisation Events Page', () => {
       target: { value: formData.startDate },
     });
 
-    userEvent.click(screen.getByTestId('ispublicCheck'));
-    userEvent.click(screen.getByTestId('registrableCheck'));
+    await userEvent.click(screen.getByTestId('ispublicCheck'));
+    await userEvent.click(screen.getByTestId('registrableCheck'));
 
     await wait();
 
@@ -295,7 +301,7 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
@@ -345,19 +351,28 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
     });
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Title/i),
+      formData.title,
+    );
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
+    await userEvent.type(
+      screen.getByPlaceholderText(/Location/i),
+      formData.location,
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText(/Location/i),
+      formData.location,
+    );
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -369,10 +384,10 @@ describe('Organisation Events Page', () => {
       target: { value: formData.startDate },
     });
 
-    userEvent.click(screen.getByTestId('alldayCheck'));
-    userEvent.click(screen.getByTestId('recurringCheck'));
-    userEvent.click(screen.getByTestId('ispublicCheck'));
-    userEvent.click(screen.getByTestId('registrableCheck'));
+    await userEvent.click(screen.getByTestId('alldayCheck'));
+    await userEvent.click(screen.getByTestId('recurringCheck'));
+    await userEvent.click(screen.getByTestId('ispublicCheck'));
+    await userEvent.click(screen.getByTestId('registrableCheck'));
 
     await wait();
 
@@ -386,12 +401,12 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
     expect(toast.warning).toHaveBeenCalledWith('Title can not be blank!');
     expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
     expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
 
-    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -423,20 +438,26 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
     });
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Title/i),
+      formData.title,
+    );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
 
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
+    await userEvent.type(
+      screen.getByPlaceholderText(/Location/i),
+      formData.location,
+    );
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -448,7 +469,7 @@ describe('Organisation Events Page', () => {
       target: { value: formData.startDate },
     });
 
-    userEvent.click(screen.getByTestId('alldayCheck'));
+    await userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
       expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument();
@@ -465,7 +486,7 @@ describe('Organisation Events Page', () => {
       target: { value: formData.endTime },
     });
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);

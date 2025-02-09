@@ -118,8 +118,8 @@
     "@graphql-tools/schema": "^10.0.16",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.0.1",
-    "@testing-library/user-event": "^12.1.10",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^26.0.24",
     "@types/js-cookie": "^3.0.6",
@@ -175,6 +175,7 @@
     "node": ">=20.x"
   },
   "overrides": {
+    "whatwg-url": "^14.0.0",
     "core-js": "^3.40.0",
     "rc-color-picker": {
       "react": "^18.3.1",

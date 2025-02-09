@@ -104,10 +104,10 @@ describe('Event Attendance Component', () => {
     await wait();
 
     const sortDropdown = screen.getByTestId('sort-dropdown');
-    userEvent.click(sortDropdown); // Open the sort dropdown
+    await userEvent.click(sortDropdown); // Open the sort dropdown
 
     const sortOption = screen.getByText('Ascending'); // Assuming 'Ascending' is the option you choose for sorting
-    userEvent.click(sortOption);
+    await userEvent.click(sortOption);
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId('attendee-name-0');
@@ -122,10 +122,10 @@ describe('Event Attendance Component', () => {
     await wait();
 
     const filterDropdown = screen.getByTestId('filter-dropdown');
-    userEvent.click(filterDropdown); // Open the filter dropdown
+    await userEvent.click(filterDropdown); // Open the filter dropdown
 
     const filterOption = screen.getByText('This Month'); // Assuming 'This Month' is the option you choose for filtering
-    userEvent.click(filterOption);
+    await userEvent.click(filterOption);
 
     await waitFor(() => {
       // Check if the message 'Attendees not Found' is displayed
@@ -139,14 +139,14 @@ describe('Event Attendance Component', () => {
     expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
 
     const statsButton = screen.getByTestId('stats-modal');
-    userEvent.click(statsButton);
+    await userEvent.click(statsButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
     });
 
     const closeButton = screen.getByTestId('close-button');
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
     await waitFor(() => {
       expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();

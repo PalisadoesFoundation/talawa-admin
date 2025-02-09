@@ -49,20 +49,20 @@ describe('Testing User Password Update', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
       formData.previousPassword,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
       formData.newPassword,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
       formData.confirmNewPassword,
     );
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await userEvent.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     expect(
@@ -82,7 +82,7 @@ describe('Testing User Password Update', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await userEvent.click(screen.getByText(/Save Changes/i));
 
     await wait();
     expect(mockToast.error).toHaveBeenCalledWith(`Password can't be empty`);
@@ -99,20 +99,20 @@ describe('Testing User Password Update', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
       formData.previousPassword,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
       formData.wrongPassword,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
       formData.confirmNewPassword,
     );
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await userEvent.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     await wait();
@@ -138,20 +138,20 @@ describe('Testing User Password Update', () => {
 
     await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
       formData.previousPassword,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
       formData.newPassword,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
       formData.confirmNewPassword,
     );
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await userEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
@@ -178,20 +178,20 @@ describe('Testing User Password Update', () => {
 
     // await wait();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
       formData.wrongPassword,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
       formData.newPassword,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
       formData.confirmNewPassword,
     );
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await userEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(() =>
       expect(mockToast.error).toHaveBeenCalledWith(
@@ -223,20 +223,20 @@ describe('Testing User Password Update', () => {
       </MockedProvider>,
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
       'NetworkErrorTest',
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
       'ThePalisadoesFoundation',
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
       'ThePalisadoesFoundation',
     );
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await userEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(
       () => {
@@ -263,7 +263,7 @@ describe('Testing User Password Update', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByText(/Cancel/i));
+    await userEvent.click(screen.getByText(/Cancel/i));
     expect(mockReload).toHaveBeenCalled();
   });
 });

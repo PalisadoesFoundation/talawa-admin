@@ -131,10 +131,10 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
-    userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
 
     expect(global.window.location.pathname).toBe('/');
   });
@@ -154,11 +154,11 @@ describe('ProfileDropdown Component', () => {
       );
 
       await act(async () => {
-        userEvent.click(screen.getByTestId('togDrop'));
+        await userEvent.click(screen.getByTestId('togDrop'));
       });
 
       await act(async () => {
-        userEvent.click(screen.getByTestId('profileBtn'));
+        await userEvent.click(screen.getByTestId('profileBtn'));
       });
 
       expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -179,11 +179,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -207,11 +207,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/');
@@ -235,11 +235,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');
