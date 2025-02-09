@@ -35,22 +35,22 @@ describe('Pagination component tests', () => {
 
     // Simulate button clicks and verify callback invocation
     await act(async () => {
-      userEvent.click(screen.getByTestId('nextPage'));
+      await userEvent.click(screen.getByTestId('nextPage'));
     });
     expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 3); // Next page
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('previousPage'));
+      await userEvent.click(screen.getByTestId('previousPage'));
     });
     expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 1); // Previous page
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('firstPage'));
+      await userEvent.click(screen.getByTestId('firstPage'));
     });
     expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 0); // First page
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('lastPage'));
+      await userEvent.click(screen.getByTestId('lastPage'));
     });
     expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 3); // Last page
   });
@@ -92,7 +92,7 @@ describe('Pagination component tests', () => {
 
     // Simulate a button click in RTL mode
     await act(async () => {
-      userEvent.click(screen.getByTestId('nextPage'));
+      await userEvent.click(screen.getByTestId('nextPage'));
     });
     expect(mockOnPageChange).toHaveBeenCalledWith(expect.anything(), 3); // Next page
   });

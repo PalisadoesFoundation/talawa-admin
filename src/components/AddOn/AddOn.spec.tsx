@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import '@testing-library/jest-dom';
+import '@testing-library/dom';
 import { describe, test, expect, vi } from 'vitest';
 import { store } from 'state/store';
 

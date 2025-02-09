@@ -7,6 +7,7 @@ import styles from '../../style/app.module.css';
 import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Props for the OrgListCard component
@@ -26,8 +27,9 @@ export interface InterfaceOrgListCardPropsPG {
  * @returns JSX.Element representing an organization list card
  */
 function OrgListCard({
-  data: { avatarURL, addressLine1, name, description, members },
+  data: { id, avatarURL, addressLine1, name, description, members },
 }: InterfaceOrgListCardPropsPG): JSX.Element {
+  const navigate = useNavigate();
   // Query to check if the organization is a sample organization
   // const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
   //   variables: {
@@ -37,9 +39,9 @@ function OrgListCard({
 
   // Handle click event to navigate to the organization dashboard
   function handleClick(): void {
-    // const url = '/orgdash/' + id;
-    // Dont change the below two lines
-    // navigate(url);
+    const url = `/orgdash/${id}`;
+    // // Dont change the below two lines
+    navigate(url);
   }
 
   const { t } = useTranslation('translation', {

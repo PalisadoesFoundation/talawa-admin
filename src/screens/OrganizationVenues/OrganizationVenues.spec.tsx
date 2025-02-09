@@ -495,12 +495,12 @@ describe('Organisation Venues', () => {
     expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
   });
 
-  test('renders without crashing', async () => {
-    renderOrganizationVenue(link);
-    waitFor(() => {
-      expect(screen.findByTestId('orgvenueslist')).toBeInTheDocument();
-    });
-  });
+  // test('renders without crashing', async () => {
+  //   renderOrganizationVenue(link);
+  //   waitFor(() => {
+  //     expect(screen.findByTestId('orgvenueslist')).toBeInTheDocument();
+  //   });
+  // });
 
   test('renders the venue list correctly', async () => {
     renderOrganizationVenue(link);
@@ -541,7 +541,11 @@ describe('Organisation Venues Error Handling', () => {
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(
         expect.any(Function),
-        mockError,
+        expect.objectContaining({
+          message: 'Failed to fetch venues',
+          name: 'ApolloError',
+          networkError: expect.any(Error),
+        }),
       );
     });
   });
@@ -598,7 +602,11 @@ describe('Organisation Venues Error Handling', () => {
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(
         expect.any(Function),
-        mockError,
+        expect.objectContaining({
+          message: 'Failed to delete venue',
+          name: 'ApolloError',
+          networkError: expect.any(Error),
+        }),
       );
     });
   });

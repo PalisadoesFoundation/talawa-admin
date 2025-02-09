@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L44)
+Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L47)
 
 Component for displaying the organization dashboard.
 

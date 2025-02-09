@@ -7,7 +7,6 @@ import {
   render,
   screen,
   waitFor,
-  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
@@ -214,7 +213,7 @@ describe('MemberDetail', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await userEvent.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByTestId(/inputName/i)).toHaveValue(formData.name);
     expect(screen.getByTestId(/addressLine1/i)).toHaveValue(
@@ -277,7 +276,7 @@ describe('MemberDetail', () => {
     userEvent.type(screen.getByTestId(/addressLine1/i), 'random');
     userEvent.type(screen.getByTestId(/inputState/i), 'random');
 
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    await userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
 
     expect(screen.getByTestId(/Name/i)).toHaveValue('Rishav Jha');

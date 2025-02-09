@@ -4,13 +4,15 @@ import inquirer from 'inquirer';
 
 // Ask and update the custom port
 const askAndUpdatePort = async (): Promise<void> => {
-  const { shouldSetCustomPortResponse } = await inquirer.prompt({
-    type: 'confirm',
-    name: 'shouldSetCustomPortResponse',
-    message:
-      'Would you like to set up a custom port for running Talawa Admin without Docker?',
-    default: true,
-  });
+  const { shouldSetCustomPortResponse } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'shouldSetCustomPortResponse',
+      message:
+        'Would you like to set up a custom port for running Talawa Admin without Docker?',
+      default: true,
+    },
+  ]);
 
   if (shouldSetCustomPortResponse) {
     const customPort = await askForCustomPort();

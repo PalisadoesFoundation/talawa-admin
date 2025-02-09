@@ -132,7 +132,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
     } else {
       setRecurrenceRuleState({
         ...recurrenceRuleState,
-        weekDays: [...(weekDays ?? []), day],
+        weekDays: [...weekDays, day],
         weekDayOccurenceInMonth: undefined,
       });
     }
@@ -376,7 +376,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                             recurrenceEndDate ?? dayjs().add(1, 'month'),
                           )}
                           onChange={(date: Dayjs | null): void => {
-                            /* istanbul ignore next */
                             if (date) {
                               setRecurrenceRuleState({
                                 ...recurrenceRuleState,

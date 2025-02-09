@@ -16,21 +16,13 @@ Interface for the CardItem component's props.
 
 Defined in: [src/components/OrganizationDashCards/CardItem.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem.tsx#L20)
 
-#### \_id
+#### id
 
-> **\_id**: `string`
+> **id**: `string` \| `number`
 
-#### email
+#### name
 
-> **email**: `string`
-
-#### firstName
-
-> **firstName**: `string`
-
-#### lastName
-
-> **lastName**: `string`
+> **name**: `string`
 
 ***
 
@@ -46,7 +38,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem.tsx:19](https://githu
 
 > `optional` **location**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem.tsx#L26)
+Defined in: [src/components/OrganizationDashCards/CardItem.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem.tsx#L24)
 
 ***
 

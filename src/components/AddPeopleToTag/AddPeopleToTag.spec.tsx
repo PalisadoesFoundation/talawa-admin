@@ -199,24 +199,24 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(
         screen.getAllByTestId('clearSelectedMember')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('clearSelectedMember')[0]);
+    await userEvent.click(screen.getAllByTestId('clearSelectedMember')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('deselectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
   });
 
   it('searchs for tags where the firstName matches the provided firstName search input', async () => {
@@ -322,7 +322,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.noOneSelected);
@@ -338,19 +338,19 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[2]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[2]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[2]);
 
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -421,8 +421,8 @@ describe('Organisation Tags Page', () => {
       expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
     });
 
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -459,8 +459,8 @@ describe('Organisation Tags Page', () => {
       expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
     });
 
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.success).not.toHaveBeenCalled();

@@ -21,7 +21,7 @@ import i18nForTest from 'utils/i18nForTest';
 import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import '@testing-library/jest-dom';
+import '@testing-library/dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();

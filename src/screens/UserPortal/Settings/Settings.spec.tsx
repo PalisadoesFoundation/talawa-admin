@@ -182,6 +182,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
 
     userEvent.click(screen.getByTestId('resetChangesBtn'));
+        
     await wait();
 
     expect(screen.getByTestId('inputName')).toHaveValue('Bandhan Majumder');
@@ -226,9 +227,11 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
+
     userEvent.type(screen.getByTestId('inputName'), 'Bandhan Majumder');
+
     await wait();
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    fireEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputName')).toHaveValue('');
     expect(screen.getByTestId('inputGender')).toHaveValue('');
