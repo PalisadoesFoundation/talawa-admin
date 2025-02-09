@@ -42,13 +42,13 @@ const ChangeLanguageDropDown = (
     // format it to match the input type
     const input = {
       naturalLanguageCode: languageCode,
-    }
-    
+    };
+
     if (userId) {
       try {
         await updateUser({
           variables: {
-            input
+            input,
           },
         });
         await i18next.changeLanguage(languageCode);
