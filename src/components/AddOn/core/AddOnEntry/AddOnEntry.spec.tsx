@@ -9,42 +9,22 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/dom';
 import { BrowserRouter } from 'react-router-dom';
 import AddOnEntry from './AddOnEntry';
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  ApolloLink,
-  HttpLink,
-} from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { describe, test, vi, expect } from 'vitest';
-import type { NormalizedCacheObject } from '@apollo/client';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
-import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, wait } from '@apollo/react-testing';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { ADD_ON_ENTRY_MOCK } from './AddOnEntryMocks';
 import { ToastContainer } from 'react-toastify';
-import useLocalStorage from 'utils/useLocalstorage';
-
-const { getItem } = useLocalStorage();
+import { client, ADD_ON_ENTRY_MOCK } from 'components/AddOn/mocks';
 
 const link = new StaticMockLink(ADD_ON_ENTRY_MOCK, true);
 
-const httpLink = new HttpLink({
-  uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + getItem('token') || '',
-  },
-});
 console.error = vi.fn();
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: ApolloLink.from([httpLink]),
-});
+
 let mockID: string | undefined = '1';
 
 vi.mock('react-router-dom', async () => ({

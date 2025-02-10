@@ -1235,7 +1235,7 @@
   "advertisement": {
     "title": "Advertisements",
     "activeAds": "Active Campaigns",
-    "archievedAds": "Completed Campaigns",
+    "archivedAds": "Completed Campaigns",
     "pMessage": "Ads not present for this campaign.",
     "validLink": "Link is valid",
     "invalidLink": "Link is invalid",

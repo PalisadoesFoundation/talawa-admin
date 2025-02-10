@@ -9,17 +9,7 @@ import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
-
-interface InterfaceAddOnEntryProps {
-  id: string;
-  name?: string;
-  mediaUrl?: string;
-  type?: string;
-  organizationId?: string;
-  startDate?: Date;
-  endDate?: Date;
-  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
-}
+import type { InterfaceAddOnEntryProps } from 'types/Advertisement/interface';
 
 /**
  * Component for displaying an advertisement entry.

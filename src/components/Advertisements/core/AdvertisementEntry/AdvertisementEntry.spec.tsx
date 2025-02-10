@@ -1,47 +1,26 @@
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  ApolloLink,
-  HttpLink,
-} from '@apollo/client';
-import type { NormalizedCacheObject } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AdvertisementEntry from './AdvertisementEntry';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
-import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
-import useLocalStorage from 'utils/useLocalstorage';
 import { MockedProvider } from '@apollo/client/testing';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
+import { client } from 'components/Advertisements/mocks';
 
-const { getItem } = useLocalStorage();
-
-const httpLink = new HttpLink({
-  uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + getItem('token') || '',
-  },
-});
 const translations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null,
   ),
 );
-
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: ApolloLink.from([httpLink]),
-});
 
 const mockUseMutation = vi.fn();
 vi.mock('@apollo/client', async () => {
