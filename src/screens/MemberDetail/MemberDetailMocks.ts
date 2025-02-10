@@ -145,3 +145,47 @@ export const MOCKS3 = [
     },
   },
 ];
+
+export const updateMock = [
+  {
+    request: {
+      query: UPDATE_CURRENT_USER_MUTATION,
+      variables: {
+        input: {
+          name: 'Bandhan Majumder',
+        },
+      },
+    },
+    result: {
+      data: {
+        updateCurrentUser: {
+          addressLine1: '',
+          addressLine2: '',
+          avatarMimeType: null,
+          avatarURL: null,
+          birthDate: null,
+          city: '',
+          countryCode: null,
+          createdAt: '2023-04-13T04:53:17.742Z',
+          description: '',
+          educationGrade: null,
+          emailAddress: 'testadmin1@example.com',
+          employmentStatus: null,
+          homePhoneNumber: '',
+          id: '65378abd-8500-8f17-1cf2-990d00000002',
+          isEmailAddressVerified: true,
+          maritalStatus: null,
+          mobilePhoneNumber: '',
+          name: 'Bandhan Majumder',
+          natalSex: null,
+          naturalLanguageCode: null,
+          postalCode: '',
+          role: 'administrator',
+          state: '',
+          updatedAt: '2025-02-09T06:26:51.209Z',
+          workPhoneNumber: '',
+        },
+      },
+    },
+  },
+];
