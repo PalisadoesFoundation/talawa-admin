@@ -2174,23 +2174,30 @@ enum UserMaritalStatus {
   widowed
 }
 
-input UpdateUserInput {
-  address: AddressInput
+input MutationUpdateUserInput {
+  addressLine1: String
+  addressLine2: String
+  avatar: Upload
   birthDate: Date
-  educationGrade: EducationGrade
-  email: EmailAddress
-  employmentStatus: EmploymentStatus
-  firstName: String
-  gender: Gender
-  lastName: String
-  maritalStatus: MaritalStatus
-  phone: UserPhoneInput
-}
-
-input UpdateUserPasswordInput {
-  confirmNewPassword: String!
-  newPassword: String!
-  previousPassword: String!
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: EmailAddress
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  id: ID!
+  isEmailAddressVerified: Boolean
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  naturalLanguageCode: Iso639Set1LanguageCode
+  password: String
+  postalCode: String
+  role: UserRole
+  state: String
+  workPhoneNumber: PhoneNumber
 }
 
 input UpdateUserTagInput {
