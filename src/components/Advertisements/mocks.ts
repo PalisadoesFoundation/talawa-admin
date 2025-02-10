@@ -37,43 +37,44 @@ export async function wait(ms = 100): Promise<void> {
   });
 }
 
-type AdvertisementNode = {
-  _id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  mediaUrl: string;
-};
-
-type PageInfo = {
-  startCursor: string;
-  endCursor: string;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-};
-
-type AdvertisementResponse = {
-  organizations: {
-    _id: string;
-    advertisements: {
-      edges: { node: AdvertisementNode; cursor: string }[];
-      pageInfo: PageInfo;
-      totalCount: number;
-    };
-  }[];
-};
+type VariablesType =
+  | { id: string; first: number; after: null }
+  | { id: string; first: number; after: null; before: null; last: null };
 
 type MockRequest = {
   request: {
     query: DocumentNode;
-    variables: Record<string, unknown>;
+    variables: VariablesType;
   };
   result: {
-    data: AdvertisementResponse;
+    data: {
+      organizations: {
+        _id: string;
+        advertisements: {
+          edges: {
+            node: {
+              _id: string;
+              name: string;
+              startDate: string;
+              endDate: string;
+              mediaUrl: string;
+            };
+            cursor: string;
+          }[];
+          pageInfo: {
+            startCursor: string;
+            endCursor: string;
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+          };
+          totalCount: number;
+        };
+      }[];
+    };
   };
 };
 
-const createMock = (variables: Record<string, unknown>): MockRequest => ({
+const createMock = (variables: VariablesType): MockRequest => ({
   request: {
     query: ORGANIZATION_ADVERTISEMENT_LIST,
     variables,
