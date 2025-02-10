@@ -53,7 +53,7 @@ async function wait(ms = 100): Promise<void> {
 describe('Testing Settings Screen [User Portal]', () => {
   beforeAll(() => {
     const { setItem } = useLocalStorage();
-    setItem('name', 'Bandhan Majumder');
+    setItem('Talawa-admin', 'name', 'Bandhan Majumder');
     vi.useFakeTimers();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
