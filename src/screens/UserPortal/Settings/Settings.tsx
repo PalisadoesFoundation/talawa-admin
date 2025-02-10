@@ -580,7 +580,7 @@ export default function Settings(): JSX.Element {
                         as="textarea"
                         id="description"
                         placeholder={t('enterDescription')}
-                        value={DOMPurify.sanitize(userDetails.description)}
+                        value={userDetails.description}
                         onChange={(e) =>
                           handleFieldChange('description', e.target.value)
                         }
