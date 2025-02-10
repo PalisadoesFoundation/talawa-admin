@@ -115,7 +115,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   }, []);
 
   // Function to handle the click on the edit icon
-  const handleEditIconClick = (e: React.MouseEvent): void => {
+  const handleEditIconClick = (e: React.MouseEvent<HTMLElement>): void => {
     const input = e.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       setAvatar(input.files[0]);
