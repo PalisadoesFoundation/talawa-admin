@@ -6,7 +6,7 @@
 
 > **AgendaCategory**: `object`
 
-Defined in: [src/types/agenda.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/agenda.ts#L4)
+Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L4)
 
 ## Type declaration
 
@@ -20,7 +20,7 @@ Defined in: [src/types/agenda.ts:4](https://github.com/PalisadoesFoundation/tala
 
 ### createdBy
 
-> **createdBy**: [`User`](../../user/type-aliases/User.md)
+> **createdBy**: [`User`](../../../user/type-aliases/User.md)
 
 ### description?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/agenda.ts:4](https://github.com/PalisadoesFoundation/tala
 
 ### organization
 
-> **organization**: [`Organization`](../../organization/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../../organization/type-aliases/Organization.md)
 
 ### updatedAt?
 
@@ -40,4 +40,4 @@ Defined in: [src/types/agenda.ts:4](https://github.com/PalisadoesFoundation/tala
 
 ### updatedBy?
 
-> `optional` **updatedBy**: [`User`](../../user/type-aliases/User.md)
+> `optional` **updatedBy**: [`User`](../../../user/type-aliases/User.md)

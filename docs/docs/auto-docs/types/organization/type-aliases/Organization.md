@@ -28,7 +28,7 @@ Defined in: [src/types/organization.ts:24](https://github.com/PalisadoesFoundati
 
 ### agendaCategories?
 
-> `optional` **agendaCategories**: [`AgendaCategory`](../../agenda/type-aliases/AgendaCategory.md)[]
+> `optional` **agendaCategories**: [`AgendaCategory`](../../Agenda/type/type-aliases/AgendaCategory.md)[]
 
 ### apiUrl
 

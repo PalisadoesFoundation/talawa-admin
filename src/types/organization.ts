@@ -1,7 +1,7 @@
 import type { Address, AddressInput } from './address';
 import type { User } from './user';
 import type { ActionItemCategory } from './actionItem';
-import type { AgendaCategory } from './agenda';
+import type { AgendaCategory } from './Agenda/type';
 import type { MembershipRequest } from './membership';
 import type { Post } from './post';
 import type { Venue } from './venue';

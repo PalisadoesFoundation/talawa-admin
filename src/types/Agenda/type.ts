@@ -1,5 +1,5 @@
-import type { User } from './user';
-import type { Organization } from './organization';
+import type { User } from '../user';
+import type { Organization } from '../organization';
 
 export type AgendaCategory = {
   _id: string;
