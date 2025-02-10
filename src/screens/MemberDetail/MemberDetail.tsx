@@ -138,7 +138,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const handleUserUpdate = async (): Promise<void> => {
     // Remove empty fields from the form state
-    function removeEmptyFields(obj: typeof formState) {
+    function removeEmptyFields(obj: typeof formState): Record<string, unknown> {
       return Object.fromEntries(
         Object.entries(obj).filter(
           ([_, value]) =>
