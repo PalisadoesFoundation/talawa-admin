@@ -84,7 +84,9 @@ export default function Settings(): JSX.Element {
 
   const handleUpdateUserDetails = async (): Promise<void> => {
     // takes an object and removes all the empty fields
-    function removeEmptyFields(obj: typeof userDetails): Partial<typeof userDetails> {
+    function removeEmptyFields(
+      obj: typeof userDetails,
+    ): Partial<typeof userDetails> {
       return Object.fromEntries(
         Object.entries(obj).filter(
           ([_, value]) =>
