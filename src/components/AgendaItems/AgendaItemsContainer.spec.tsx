@@ -13,8 +13,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
-import { props, props2 } from './AgendaItemsContainerProps';
-import { MOCKS, MOCKS_ERROR } from './AgendaItemsContainerMocks';
+import { MOCKS, MOCKS_ERROR, props, props2 } from './AgendaItemsMocks';
 import AgendaItemsContainer from './AgendaItemsContainer';
 import { describe, test, expect, vi } from 'vitest';
 const link = new StaticMockLink(MOCKS, true);
