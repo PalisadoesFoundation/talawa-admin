@@ -32,8 +32,8 @@ type MemberDetailProps = {
 
 /**
  * MemberDetail component is used to display the details of a user.
- * It also allows the user to update the details. It uses the UPDATE_USER_MUTATION to update the user details.
- * It uses the USER_DETAILS query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
+ * It also allows the user to update the details. It uses the UPDATE_CURRENT_USER_MUTATION to update the user details.
+ * It uses the CURRENT_USER query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
  * @param id - The id of the user whose details are to be displayed.
  * @returns  React component
  *
@@ -48,15 +48,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
   const [show, setShow] = useState(false);
+  const [isUpdated, setisUpdated] = useState(false);
   const currentId = location.state?.id || getItem('id') || id;
+  const [avatar, setAvatar] = useState<File | null>(null);
 
   document.title = t('title');
+
   const [formState, setFormState] = useState({
     addressLine1: '',
     addressLine2: '',
     birthDate: null,
     city: '',
-    avatar: selectedAvatar,
+    avatar,
     countryCode: '',
     description: '',
     educationGrade: '',
@@ -73,20 +76,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     workPhoneNumber: '',
   });
 
-  const handleEditIconClick = (): void => {
-    fileInputRef.current?.click();
-  };
+  // Mutation to update the user details
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
-  const {
-    data: userData,
-    loading,
-    refetch: refetchUserDetails,
-    fetchMore: fetchMoreAssignedTags,
-  } = useQuery(CURRENT_USER, {
+  const { data: userData, loading } = useQuery(CURRENT_USER, {
     variables: { id: currentId },
   });
 
-  const [isUpdated, setisUpdated] = useState(false);
   useEffect(() => {
     if (userData && isMounted.current) {
       setFormState({
@@ -119,6 +114,15 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     };
   }, []);
 
+  // Function to handle the click on the edit icon
+  const handleEditIconClick = (e: React.MouseEvent): void => {
+    const input = e.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      setAvatar(input.files[0]);
+    }
+  };
+
+  // to handle the change in the form fields
   const handleFieldChange = (fieldName: string, value: string): void => {
     if (fieldName === 'birthDate') {
       const today = new Date();
@@ -136,12 +140,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }));
   };
 
+  // Function to handle the update of the user details
   const handleUserUpdate = async (): Promise<void> => {
     // Remove empty fields from the form state
     function removeEmptyFields(obj: typeof formState): Record<string, unknown> {
       return Object.fromEntries(
         Object.entries(obj).filter(
-          ([_, value]) =>
+          ([, value]) =>
             value !== null &&
             value !== undefined &&
             (typeof value !== 'string' || value.trim() !== ''),
@@ -252,7 +257,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       className="rounded-circle"
                       style={{ width: '55px', aspectRatio: '1/1' }}
                       src={
-                        formState.avatar instanceof File
+                        formState?.avatar instanceof File
                           ? URL.createObjectURL(formState.avatar)
                           : formState.avatar
                       }
@@ -268,9 +273,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       role="button"
                       aria-label="Edit profile picture"
                       tabIndex={0}
-                      onKeyDown={(e) =>
-                        e.key === 'Enter' && handleEditIconClick()
-                      }
                     />
                   </div>
                 ) : (
@@ -339,8 +341,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <DatePicker
                     className={`${styles.dateboxMemberDetail} w-100`}
                     value={dayjs(formState.birthDate)}
-                    onChange={(e) =>
-                      handleFieldChange('birthDate', e?.target.value || '')
+                    onChange={(date) =>
+                      handleFieldChange(
+                        'birthDate',
+                        date ? date.toISOString().split('T')[0] : '',
+                      )
                     }
                     data-testid="birthDate"
                     slotProps={{
