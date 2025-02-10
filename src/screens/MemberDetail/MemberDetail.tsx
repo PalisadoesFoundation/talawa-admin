@@ -182,7 +182,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           window.location.reload();
         }
       } catch (error: unknown) {
-        console.log('Error is: ', error);
         if (error instanceof Error) {
           errorHandler(t, error);
         }
