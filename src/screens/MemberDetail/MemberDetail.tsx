@@ -49,7 +49,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
   const [show, setShow] = useState(false);
   const currentId = location.state?.id || getItem('id') || id;
-  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
 
   document.title = t('title');
   const [formState, setFormState] = useState({
