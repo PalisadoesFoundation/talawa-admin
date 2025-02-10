@@ -15,6 +15,14 @@ import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router-dom';
 import SearchBar from 'subComponents/SearchBar';
+import {
+  Paper,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 
 interface InterfaceRequestsListItem {
   _id: string;
@@ -269,34 +277,47 @@ const Requests = (): JSX.Element => {
                 </div>
               }
             >
-              <Table className={styles.requestsTable} responsive borderless>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data &&
-                    displayedRequests.map(
-                      (request: InterfaceRequestsListItem, index: number) => {
+              <TableContainer
+                component={Paper}
+                className="mt-3"
+                sx={{ borderRadius: '16px' }}
+              >
+                <Table aria-label={t('membershipRequestsTable')} role="grid">
+                  <TableHead>
+                    <TableRow role="row">
+                      {headerTitles.map((title: string, index: number) => {
                         return (
-                          <RequestsTableItem
-                            key={request?._id}
-                            index={index}
-                            resetAndRefetch={resetAndRefetch}
-                            request={request}
-                          />
+                          <TableCell
+                            key={index}
+                            data-testid="table-header-serial"
+                            role="columnheader"
+                            aria-sort="none"
+                            className={styles.customcell}
+                            scope="col"
+                          >
+                            {title}
+                          </TableCell>
                         );
-                      },
-                    )}
-                </tbody>
-              </Table>
+                      })}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {data &&
+                      displayedRequests.map(
+                        (request: InterfaceRequestsListItem, index: number) => {
+                          return (
+                            <RequestsTableItem
+                              key={request?._id}
+                              index={index}
+                              resetAndRefetch={resetAndRefetch}
+                              request={request}
+                            />
+                          );
+                        },
+                      )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </InfiniteScroll>
           )}
         </div>
