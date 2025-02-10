@@ -158,7 +158,7 @@ export default function Settings(): JSX.Element {
     }));
   };
 
-  const fileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const fileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file = e.target?.files?.[0];
 
     if (file) {
