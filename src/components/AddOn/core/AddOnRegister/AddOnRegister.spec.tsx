@@ -11,7 +11,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
-import { client, mocks, wait, pluginData } from 'components/AddOn/mocks';
+import { client, mocks, wait, pluginData } from 'components/AddOn/AddOnMocks';
 
 vi.mock('react-toastify', () => ({
   toast: {

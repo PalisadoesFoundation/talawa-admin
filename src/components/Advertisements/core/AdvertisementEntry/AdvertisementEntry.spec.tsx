@@ -14,7 +14,7 @@ import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/OrganizationQue
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { client } from 'components/Advertisements/mocks';
+import { client } from 'components/Advertisements/AdvertisementsMocks';
 
 const translations = JSON.parse(
   JSON.stringify(

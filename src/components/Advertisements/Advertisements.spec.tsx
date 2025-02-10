@@ -19,7 +19,7 @@ import {
   ADD_ADVERTISEMENT_MUTATION_MOCK,
   PLUGIN_GET_MOCK,
   ADVERTISEMENTS_LIST_MOCK,
-} from './mocks';
+} from './AdvertisementsMocks';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,

@@ -19,7 +19,7 @@ import userEvent from '@testing-library/user-event';
 import { MockedProvider, wait } from '@apollo/react-testing';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
-import { client, ADD_ON_ENTRY_MOCK } from 'components/AddOn/mocks';
+import { client, ADD_ON_ENTRY_MOCK } from 'components/AddOn/AddOnMocks';
 
 const link = new StaticMockLink(ADD_ON_ENTRY_MOCK, true);
 

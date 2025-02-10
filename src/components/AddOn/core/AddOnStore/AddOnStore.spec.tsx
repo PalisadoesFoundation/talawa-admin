@@ -16,7 +16,7 @@ import {
   wait,
   ORGANIZATIONS_LIST_MOCK,
   PLUGIN_GET_MOCK,
-} from 'components/AddOn/mocks';
+} from 'components/AddOn/AddOnMocks';
 import type { InterfacePlugin } from 'types/AddOn/interface';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({

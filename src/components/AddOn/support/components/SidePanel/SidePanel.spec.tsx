@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import SidePanel from './SidePanel';
 import { ApolloProvider } from '@apollo/client';
-import { client } from 'components/AddOn/mocks';
+import { client } from 'components/AddOn/AddOnMocks';
 
 describe('Testing Contribution Stats', () => {
   /**

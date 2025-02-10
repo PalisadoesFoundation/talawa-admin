@@ -6,7 +6,7 @@
 
 > `const` **updatePluginStatus**: `object`
 
-Defined in: [src/components/AddOn/mocks.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/mocks.ts#L39)
+Defined in: [src/components/AddOn/AddOnMocks.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/AddOnMocks.ts#L39)
 
 ## Type declaration
 

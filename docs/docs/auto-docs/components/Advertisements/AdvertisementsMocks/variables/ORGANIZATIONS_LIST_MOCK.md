@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATIONS\_LIST\_MOCK**: `object`
 
-Defined in: [src/components/AddOn/mocks.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/mocks.ts#L113)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L180)
 
 ## Type declaration
 
@@ -24,7 +24,7 @@ Defined in: [src/components/AddOn/mocks.ts:113](https://github.com/PalisadoesFou
 
 #### request.variables.id
 
-> **id**: `string` = `'undefined'`
+> **id**: `string` = `'1'`
 
 ### result
 

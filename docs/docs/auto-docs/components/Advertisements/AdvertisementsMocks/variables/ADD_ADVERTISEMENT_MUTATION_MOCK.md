@@ -6,7 +6,7 @@
 
 > `const` **ADD\_ADVERTISEMENT\_MUTATION\_MOCK**: `object`
 
-Defined in: [src/components/Advertisements/mocks.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/mocks.ts#L157)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L157)
 
 ## Type declaration
 

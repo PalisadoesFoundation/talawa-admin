@@ -12,7 +12,10 @@ import { toast } from 'react-toastify';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import { client, REGISTER_MOCKS } from 'components/Advertisements/mocks';
+import {
+  client,
+  REGISTER_MOCKS,
+} from 'components/Advertisements/AdvertisementsMocks';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');

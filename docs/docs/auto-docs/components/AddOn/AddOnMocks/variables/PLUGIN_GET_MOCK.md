@@ -6,7 +6,7 @@
 
 > `const` **PLUGIN\_GET\_MOCK**: `object`
 
-Defined in: [src/components/AddOn/mocks.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/mocks.ts#L67)
+Defined in: [src/components/AddOn/AddOnMocks.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/AddOnMocks.ts#L67)
 
 ## Type declaration
 
