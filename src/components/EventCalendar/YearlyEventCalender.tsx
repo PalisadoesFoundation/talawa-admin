@@ -226,7 +226,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             ? styles.day__today
             : '',
           date.getMonth() !== monthInx ? styles.day__outside : '',
-          /* istanbul ignore next */
           selectedDate?.getTime() === date.getTime()
             ? styles.day__selected
             : '',
