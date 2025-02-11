@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L24)
+Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L18)
 
 A collapsible dropdown component that toggles visibility of sub-targets.
 
@@ -14,7 +14,7 @@ A collapsible dropdown component that toggles visibility of sub-targets.
 
 ### \_\_namedParameters
 
-[`InterfaceCollapsibleDropdown`](../interfaces/InterfaceCollapsibleDropdown.md)
+[`InterfaceCollapsibleDropdown`](../../../../types/DropDown/interface/interfaces/InterfaceCollapsibleDropdown.md)
 
 ## Returns
 
