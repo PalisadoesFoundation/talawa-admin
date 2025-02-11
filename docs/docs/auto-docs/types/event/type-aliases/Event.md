@@ -32,7 +32,7 @@ Defined in: [src/types/event.ts:8](https://github.com/PalisadoesFoundation/talaw
 
 ### attendeesCheckInStatus
 
-> **attendeesCheckInStatus**: [`CheckInStatus`](../../checkIn/type-aliases/CheckInStatus.md)[]
+> **attendeesCheckInStatus**: [`CheckInStatus`](../../CheckIn/type/type-aliases/CheckInStatus.md)[]
 
 ### averageFeedbackScore?
 

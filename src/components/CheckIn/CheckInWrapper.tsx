@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckInModal } from './CheckInModal';
+import { CheckInModal } from './Modal/CheckInModal';
 import { Button } from 'react-bootstrap';
 import style from '../../style/app.module.css';
 
