@@ -20,7 +20,7 @@ Defined in: [src/types/feedback.ts:3](https://github.com/PalisadoesFoundation/ta
 
 ### event
 
-> **event**: [`Event`](../../event/type-aliases/Event.md)
+> **event**: [`Event`](../../Event/type/type-aliases/Event.md)
 
 ### rating
 

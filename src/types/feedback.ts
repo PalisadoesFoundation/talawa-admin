@@ -1,4 +1,4 @@
-import type { Event } from './event';
+import type { Event } from './Event/type';
 
 export type Feedback = {
   _id: string;

@@ -28,7 +28,7 @@ Defined in: [src/types/CheckIn/type.ts:4](https://github.com/PalisadoesFoundatio
 
 ### event
 
-> **event**: [`Event`](../../../event/type-aliases/Event.md)
+> **event**: [`Event`](../../../Event/type/type-aliases/Event.md)
 
 ### feedbackSubmitted
 

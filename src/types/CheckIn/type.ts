@@ -1,4 +1,4 @@
-import type { Event } from '../event';
+import type { Event } from '../Event/type';
 import type { User } from '../user';
 
 export type CheckIn = {
