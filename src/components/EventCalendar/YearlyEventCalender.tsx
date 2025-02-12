@@ -217,7 +217,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           currentDate.getFullYear(),
           currentDate.getMonth(),
           currentDate.getDate() + 1,
-        )
+        );
       }
 
       const renderedDays = days.map((date, dayIndex) => {
