@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-auto-docs/types/language/variables/Iso4217CurrencyCode" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.7.0">
+<title data-rh="true">Iso4217CurrencyCode | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/auto-docs/types/language/variables/Iso4217CurrencyCode"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Iso4217CurrencyCode | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="Admin Docs"><meta data-rh="true" property="og:description" content="Admin Docs"><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/auto-docs/types/language/variables/Iso4217CurrencyCode"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/auto-docs/types/language/variables/Iso4217CurrencyCode" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/auto-docs/types/language/variables/Iso4217CurrencyCode" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.29f168c5.css">
+<script src="/assets/js/runtime~main.bf0dea22.js" defer="defer"></script>
+<script src="/assets/js/main.125185b6.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a href="https://docs.talawa.io/" target="_blank" rel="noopener noreferrer" class="navbar__brand"><div class="navbar__logo"><img src="/img/icons/logo.png" alt="Talawa Logo" class="LogoAnimation themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/icons/logo.png" alt="Talawa Logo" class="LogoAnimation themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Talawa</b></a><a href="https://docs.talawa.io/docs" target="_self" rel="noopener noreferrer" class="navbar__item navbar__link">General<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><a href="https://docs-mobile.talawa.io/docs" target="_self" rel="noopener noreferrer" class="navbar__item navbar__link">Mobile Guide<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs">Admin Guide</a><a href="https://docs-api.talawa.io/docs" target="_self" rel="noopener noreferrer" class="navbar__item navbar__link">API Guide<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><a href="http://admin-demo.talawa.io/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Demo<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link" aria-label="GitHub repository"></a><a href="https://www.youtube.com/@PalisadoesOrganization" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-youtube-link" aria-label="Palisadoes Youtube channel"></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite" aria-pressed="false"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/">Introduction</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/docs/installation">Getting Started</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/installation">Installation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/operation">Operation, Registration &amp; Login</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/developer-resources/introduction">Developer Resources</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/docs/auto-docs/App/functions/default">Code Documentation</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/App/functions/default">App</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/Constant/constant/variables/AUTH_TOKEN">Constant</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/GraphQl/Mutations/ActionItemCategoryMutations/variables/CREATE_ACTION_ITEM_CATEGORY_MUTATION">GraphQl</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/components/AddOn/AddOn/functions/default">components</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/constants/variables/socialMediaLinks">constants</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/reportWebVitals/functions/default">reportWebVitals</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/screens/BlockUser/BlockUser/functions/default">screens</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/setup/askAndSetDockerOption/askAndSetDockerOption/functions/default">setup</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/state/action-creators/functions/installPlugin">state</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/subComponents/SearchBar/functions/default">subComponents</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/docs/auto-docs/types/AddOn/interface/interfaces/InterfaceActionProps">types</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/AddOn/interface/interfaces/InterfaceActionProps">AddOn</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/Advertisement/interface/interfaces/InterfaceAddOnEntryProps">Advertisement</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/Agenda/interface/interfaces/InterfaceAgendaItemCategoryInfo">Agenda</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/Avatar/interface/interfaces/InterfaceAvatarProps">Avatar</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/CheckIn/interface/interfaces/InterfaceAttendeeCheckIn">CheckIn</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/Contribution/interface/interfaces/InterfaceContriStatsProps">Contribution</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/DropDown/interface/interfaces/InterfaceCollapsibleDropdown">DropDown</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/Event/interface/interfaces/InterfaceCalendarProps">Event</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/Tag/interface/interfaces/InterfaceAddPeopleToTagProps">Tag</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/actionItem/type-aliases/ActionItem">actionItem</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/address/type-aliases/Address">address</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/aggregate/type-aliases/AggregatePost">aggregate</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/auth/type-aliases/AuthData">auth</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/chat/type-aliases/Chat">chat</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/comment/type-aliases/Comment">comment</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/community/type-aliases/Community">community</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/connection/type-aliases/ConnectionError">connection</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/createInputs/type-aliases/CreateActionItemInput">createInputs</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/donation/type-aliases/Donation">donation</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/education/type-aliases/EducationGrade">education</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/feedback/type-aliases/Feedback">feedback</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/fieldError/type-aliases/FieldError">fieldError</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/fundRaising/type-aliases/FundraisingCampaign">fundRaising</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/group/type-aliases/Group">group</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/docs/auto-docs/types/language/type-aliases/Iso4217CurrencyCode">language</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/language/type-aliases/Iso4217CurrencyCode">type-aliases</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/docs/auto-docs/types/language/variables/Iso4217CurrencyCode">variables</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/auto-docs/types/language/variables/Iso4217CurrencyCode">Iso4217CurrencyCode</a></li></ul></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/membership/type-aliases/MembershipRequest">membership</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/organization/type-aliases/Organization">organization</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/others/type-aliases/CountryCode">others</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/pagination/type-aliases/DefaultConnectionPageInfo">pagination</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/plugin/type-aliases/Plugin">plugin</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/post/type-aliases/Post">post</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/socialmedia/type-aliases/SocialMediaUrls">socialmedia</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/user/type-aliases/Address">user</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/types/venue/type-aliases/EditVenueInput">venue</a></div></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/auto-docs/utils/StaticMockLink/classes/StaticMockLink">utils</a></div></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Code Documentation</span><meta itemprop="position" content="1"></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">types</span><meta itemprop="position" content="2"></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">language</span><meta itemprop="position" content="3"></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">variables</span><meta itemprop="position" content="4"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Iso4217CurrencyCode</span><meta itemprop="position" content="5"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Iso4217CurrencyCode</h1></header><p><a href="/">Admin Docs</a></p>
+<hr>
+<h1>Variable: Iso4217CurrencyCode</h1>
+<blockquote>
+<p><code>const</code> <strong>Iso4217CurrencyCode</strong>: <code>object</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/language.ts#L22" target="_blank" rel="noopener noreferrer">src/types/language.ts:22</a></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="type-declaration">Type declaration<a href="#type-declaration" class="hash-link" aria-label="Direct link to Type declaration" title="Direct link to Type declaration">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aed">AED<a href="#aed" class="hash-link" aria-label="Direct link to AED" title="Direct link to AED">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>AED</strong>: <code>&quot;AED&quot;</code> = <code>&#x27;AED&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="afn">AFN<a href="#afn" class="hash-link" aria-label="Direct link to AFN" title="Direct link to AFN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>AFN</strong>: <code>&quot;AFN&quot;</code> = <code>&#x27;AFN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="all">ALL<a href="#all" class="hash-link" aria-label="Direct link to ALL" title="Direct link to ALL">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ALL</strong>: <code>&quot;ALL&quot;</code> = <code>&#x27;ALL&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="amd">AMD<a href="#amd" class="hash-link" aria-label="Direct link to AMD" title="Direct link to AMD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>AMD</strong>: <code>&quot;AMD&quot;</code> = <code>&#x27;AMD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ang">ANG<a href="#ang" class="hash-link" aria-label="Direct link to ANG" title="Direct link to ANG">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ANG</strong>: <code>&quot;ANG&quot;</code> = <code>&#x27;ANG&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aoa">AOA<a href="#aoa" class="hash-link" aria-label="Direct link to AOA" title="Direct link to AOA">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>AOA</strong>: <code>&quot;AOA&quot;</code> = <code>&#x27;AOA&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ars">ARS<a href="#ars" class="hash-link" aria-label="Direct link to ARS" title="Direct link to ARS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ARS</strong>: <code>&quot;ARS&quot;</code> = <code>&#x27;ARS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aud">AUD<a href="#aud" class="hash-link" aria-label="Direct link to AUD" title="Direct link to AUD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>AUD</strong>: <code>&quot;AUD&quot;</code> = <code>&#x27;AUD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="awg">AWG<a href="#awg" class="hash-link" aria-label="Direct link to AWG" title="Direct link to AWG">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>AWG</strong>: <code>&quot;AWG&quot;</code> = <code>&#x27;AWG&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="azn">AZN<a href="#azn" class="hash-link" aria-label="Direct link to AZN" title="Direct link to AZN">  ​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>AZN</strong>: <code>&quot;AZN&quot;</code> = <code>&#x27;AZN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bam">BAM<a href="#bam" class="hash-link" aria-label="Direct link to BAM" title="Direct link to BAM">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BAM</strong>: <code>&quot;BAM&quot;</code> = <code>&#x27;BAM&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bbd">BBD<a href="#bbd" class="hash-link" aria-label="Direct link to BBD" title="Direct link to BBD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BBD</strong>: <code>&quot;BBD&quot;</code> = <code>&#x27;BBD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bdt">BDT<a href="#bdt" class="hash-link" aria-label="Direct link to BDT" title="Direct link to BDT">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BDT</strong>: <code>&quot;BDT&quot;</code> = <code>&#x27;BDT&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bgn">BGN<a href="#bgn" class="hash-link" aria-label="Direct link to BGN" title="Direct link to BGN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BGN</strong>: <code>&quot;BGN&quot;</code> = <code>&#x27;BGN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bhd">BHD<a href="#bhd" class="hash-link" aria-label="Direct link to BHD" title="Direct link to BHD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BHD</strong>: <code>&quot;BHD&quot;</code> = <code>&#x27;BHD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bif">BIF<a href="#bif" class="hash-link" aria-label="Direct link to BIF" title="Direct link to BIF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BIF</strong>: <code>&quot;BIF&quot;</code> = <code>&#x27;BIF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bmd">BMD<a href="#bmd" class="hash-link" aria-label="Direct link to BMD" title="Direct link to BMD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BMD</strong>: <code>&quot;BMD&quot;</code> = <code>&#x27;BMD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bnd">BND<a href="#bnd" class="hash-link" aria-label="Direct link to BND" title="Direct link to BND">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BND</strong>: <code>&quot;BND&quot;</code> = <code>&#x27;BND&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bob">BOB<a href="#bob" class="hash-link" aria-label="Direct link to BOB" title="Direct link to BOB">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BOB</strong>: <code>&quot;BOB&quot;</code> = <code>&#x27;BOB&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bov">BOV<a href="#bov" class="hash-link" aria-label="Direct link to BOV" title="Direct link to BOV">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BOV</strong>: <code>&quot;BOV&quot;</code> = <code>&#x27;BOV&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="brl">BRL<a href="#brl" class="hash-link" aria-label="Direct link to BRL" title="Direct link to BRL">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BRL</strong>: <code>&quot;BRL&quot;</code> = <code>&#x27;BRL&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bsd">BSD<a href="#bsd" class="hash-link" aria-label="Direct link to BSD" title="Direct link to BSD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BSD</strong>: <code>&quot;BSD&quot;</code> = <code>&#x27;BSD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="btn">BTN<a href="#btn" class="hash-link" aria-label="Direct link to BTN" title="Direct link to BTN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BTN</strong>: <code>&quot;BTN&quot;</code> = <code>&#x27;BTN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bwp">BWP<a href="#bwp" class="hash-link" aria-label="Direct link to BWP" title="Direct link to BWP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BWP</strong>: <code>&quot;BWP&quot;</code> = <code>&#x27;BWP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="byn">BYN<a href="#byn" class="hash-link" aria-label="Direct link to BYN" title="Direct link to BYN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BYN</strong>: <code>&quot;BYN&quot;</code> = <code>&#x27;BYN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bzd">BZD<a href="#bzd" class="hash-link" aria-label="Direct link to BZD" title="Direct link to BZD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>BZD</strong>: <code>&quot;BZD&quot;</code> = <code>&#x27;BZD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cad">CAD<a href="#cad" class="hash-link" aria-label="Direct link to CAD" title="Direct link to CAD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CAD</strong>: <code>&quot;CAD&quot;</code> = <code>&#x27;CAD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cdf">CDF<a href="#cdf" class="hash-link" aria-label="Direct link to CDF" title="Direct link to CDF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CDF</strong>: <code>&quot;CDF&quot;</code> = <code>&#x27;CDF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="che">CHE<a href="#che" class="hash-link" aria-label="Direct link to CHE" title="Direct link to CHE">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CHE</strong>: <code>&quot;CHE&quot;</code> = <code>&#x27;CHE&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="chf">CHF<a href="#chf" class="hash-link" aria-label="Direct link to CHF" title="Direct link to CHF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CHF</strong>: <code>&quot;CHF&quot;</code> = <code>&#x27;CHF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="chw">CHW<a href="#chw" class="hash-link" aria-label="Direct link to CHW" title="Direct link to CHW">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CHW</strong>: <code>&quot;CHW&quot;</code> = <code>&#x27;CHW&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="clf">CLF<a href="#clf" class="hash-link" aria-label="Direct link to CLF" title="Direct link to CLF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CLF</strong>: <code>&quot;CLF&quot;</code> = <code>&#x27;CLF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="clp">CLP<a href="#clp" class="hash-link" aria-label="Direct link to CLP" title="Direct link to CLP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CLP</strong>: <code>&quot;CLP&quot;</code> = <code>&#x27;CLP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cny">CNY<a href="#cny" class="hash-link" aria-label="Direct link to CNY" title="Direct link to CNY">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CNY</strong>: <code>&quot;CNY&quot;</code> = <code>&#x27;CNY&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cop">COP<a href="#cop" class="hash-link" aria-label="Direct link to COP" title="Direct link to COP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>COP</strong>: <code>&quot;COP&quot;</code> = <code>&#x27;COP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cou">COU<a href="#cou" class="hash-link" aria-label="Direct link to COU" title="Direct link to COU">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>COU</strong>: <code>&quot;COU&quot;</code> = <code>&#x27;COU&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="crc">CRC<a href="#crc" class="hash-link" aria-label="Direct link to CRC" title="Direct link to CRC">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CRC</strong>: <code>&quot;CRC&quot;</code> = <code>&#x27;CRC&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cup">CUP<a href="#cup" class="hash-link" aria-label="Direct link to CUP" title="Direct link to CUP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CUP</strong>: <code>&quot;CUP&quot;</code> = <code>&#x27;CUP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cve">CVE<a href="#cve" class="hash-link" aria-label="Direct link to CVE" title="Direct link to CVE">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CVE</strong>: <code>&quot;CVE&quot;</code> = <code>&#x27;CVE&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="czk">CZK<a href="#czk" class="hash-link" aria-label="Direct link to CZK" title="Direct link to CZK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>CZK</strong>: <code>&quot;CZK&quot;</code> = <code>&#x27;CZK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="djf">DJF<a href="#djf" class="hash-link" aria-label="Direct link to DJF" title="Direct link to DJF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>DJF</strong>: <code>&quot;DJF&quot;</code> = <code>&#x27;DJF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="dkk">DKK<a href="#dkk" class="hash-link" aria-label="Direct link to DKK" title="Direct link to DKK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>DKK</strong>: <code>&quot;DKK&quot;</code> = <code>&#x27;DKK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="dop">DOP<a href="#dop" class="hash-link" aria-label="Direct link to DOP" title="Direct link to DOP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>DOP</strong>: <code>&quot;DOP&quot;</code> = <code>&#x27;DOP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="dzd">DZD<a href="#dzd" class="hash-link" aria-label="Direct link to DZD" title="Direct link to DZD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>DZD</strong>: <code>&quot;DZD&quot;</code> = <code>&#x27;DZD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="egp">EGP<a href="#egp" class="hash-link" aria-label="Direct link to EGP" title="Direct link to EGP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>EGP</strong>: <code>&quot;EGP&quot;</code> = <code>&#x27;EGP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ern">ERN<a href="#ern" class="hash-link" aria-label="Direct link to ERN" title="Direct link to ERN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ERN</strong>: <code>&quot;ERN&quot;</code> = <code>&#x27;ERN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="etb">ETB<a href="#etb" class="hash-link" aria-label="Direct link to ETB" title="Direct link to ETB">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ETB</strong>: <code>&quot;ETB&quot;</code> = <code>&#x27;ETB&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="eur">EUR<a href="#eur" class="hash-link" aria-label="Direct link to EUR" title="Direct link to EUR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>EUR</strong>: <code>&quot;EUR&quot;</code> = <code>&#x27;EUR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="fjd">FJD<a href="#fjd" class="hash-link" aria-label="Direct link to FJD" title="Direct link to FJD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>FJD</strong>: <code>&quot;FJD&quot;</code> = <code>&#x27;FJD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="fkp">FKP<a href="#fkp" class="hash-link" aria-label="Direct link to FKP" title="Direct link to FKP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>FKP</strong>: <code>&quot;FKP&quot;</code> = <code>&#x27;FKP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gbp">GBP<a href="#gbp" class="hash-link" aria-label="Direct link to GBP" title="Direct link to GBP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>GBP</strong>: <code>&quot;GBP&quot;</code> = <code>&#x27;GBP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gel">GEL<a href="#gel" class="hash-link" aria-label="Direct link to GEL" title="Direct link to GEL">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>GEL</strong>: <code>&quot;GEL&quot;</code> = <code>&#x27;GEL&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ghs">GHS<a href="#ghs" class="hash-link" aria-label="Direct link to GHS" title="Direct link to GHS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>GHS</strong>: <code>&quot;GHS&quot;</code> = <code>&#x27;GHS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gip">GIP<a href="#gip" class="hash-link" aria-label="Direct link to GIP" title="Direct link to GIP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>GIP</strong>: <code>&quot;GIP&quot;</code> = <code>&#x27;GIP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gmd">GMD<a href="#gmd" class="hash-link" aria-label="Direct link to GMD" title="Direct link to GMD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>GMD</strong>: <code>&quot;GMD&quot;</code> = <code>&#x27;GMD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gnf">GNF<a href="#gnf" class="hash-link" aria-label="Direct link to GNF" title="Direct link to GNF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>GNF</strong>: <code>&quot;GNF&quot;</code> = <code>&#x27;GNF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gtq">GTQ<a href="#gtq" class="hash-link" aria-label="Direct link to GTQ" title="Direct link to GTQ">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>GTQ</strong>: <code>&quot;GTQ&quot;</code> = <code>&#x27;GTQ&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gyd">GYD<a href="#gyd" class="hash-link" aria-label="Direct link to GYD" title="Direct link to GYD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>GYD</strong>: <code>&quot;GYD&quot;</code> = <code>&#x27;GYD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="hkd">HKD<a href="#hkd" class="hash-link" aria-label="Direct link to HKD" title="Direct link to HKD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>HKD</strong>: <code>&quot;HKD&quot;</code> = <code>&#x27;HKD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="hnl">HNL<a href="#hnl" class="hash-link" aria-label="Direct link to HNL" title="Direct link to HNL">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>HNL</strong>: <code>&quot;HNL&quot;</code> = <code>&#x27;HNL&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="htg">HTG<a href="#htg" class="hash-link" aria-label="Direct link to HTG" title="Direct link to HTG">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>HTG</strong>: <code>&quot;HTG&quot;</code> = <code>&#x27;HTG&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="huf">HUF<a href="#huf" class="hash-link" aria-label="Direct link to HUF" title="Direct link to HUF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>HUF</strong>: <code>&quot;HUF&quot;</code> = <code>&#x27;HUF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="idr">IDR<a href="#idr" class="hash-link" aria-label="Direct link to IDR" title="Direct link to IDR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>IDR</strong>: <code>&quot;IDR&quot;</code> = <code>&#x27;IDR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ils">ILS<a href="#ils" class="hash-link" aria-label="Direct link to ILS" title="Direct link to ILS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ILS</strong>: <code>&quot;ILS&quot;</code> = <code>&#x27;ILS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="inr">INR<a href="#inr" class="hash-link" aria-label="Direct link to INR" title="Direct link to INR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>INR</strong>: <code>&quot;INR&quot;</code> = <code>&#x27;INR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="iqd">IQD<a href="#iqd" class="hash-link" aria-label="Direct link to IQD" title="Direct link to IQD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>IQD</strong>: <code>&quot;IQD&quot;</code> = <code>&#x27;IQD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="irr">IRR<a href="#irr" class="hash-link" aria-label="Direct link to IRR" title="Direct link to IRR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>IRR</strong>: <code>&quot;IRR&quot;</code> = <code>&#x27;IRR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="isk">ISK<a href="#isk" class="hash-link" aria-label="Direct link to ISK" title="Direct link to ISK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ISK</strong>: <code>&quot;ISK&quot;</code> = <code>&#x27;ISK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="jmd">JMD<a href="#jmd" class="hash-link" aria-label="Direct link to JMD" title="Direct link to JMD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>JMD</strong>: <code>&quot;JMD&quot;</code> = <code>&#x27;JMD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="jod">JOD<a href="#jod" class="hash-link" aria-label="Direct link to JOD" title="Direct link to JOD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>JOD</strong>: <code>&quot;JOD&quot;</code> = <code>&#x27;JOD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="jpy">JPY<a href="#jpy" class="hash-link" aria-label="Direct link to JPY" title="Direct link to JPY">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>JPY</strong>: <code>&quot;JPY&quot;</code> = <code>&#x27;JPY&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="kes">KES<a href="#kes" class="hash-link" aria-label="Direct link to KES" title="Direct link to KES">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KES</strong>: <code>&quot;KES&quot;</code> = <code>&#x27;KES&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="kgs">KGS<a href="#kgs" class="hash-link" aria-label="Direct link to KGS" title="Direct link to KGS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KGS</strong>: <code>&quot;KGS&quot;</code> = <code>&#x27;KGS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="khr">KHR<a href="#khr" class="hash-link" aria-label="Direct link to KHR" title="Direct link to KHR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KHR</strong>: <code>&quot;KHR&quot;</code> = <code>&#x27;KHR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="kmf">KMF<a href="#kmf" class="hash-link" aria-label="Direct link to KMF" title="Direct link to KMF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KMF</strong>: <code>&quot;KMF&quot;</code> = <code>&#x27;KMF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="kpw">KPW<a href="#kpw" class="hash-link" aria-label="Direct link to KPW" title="Direct link to KPW">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KPW</strong>: <code>&quot;KPW&quot;</code> = <code>&#x27;KPW&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="krw">KRW<a href="#krw" class="hash-link" aria-label="Direct link to KRW" title="Direct link to KRW">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KRW</strong>: <code>&quot;KRW&quot;</code> = <code>&#x27;KRW&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="kwd">KWD<a href="#kwd" class="hash-link" aria-label="Direct link to KWD" title="Direct link to KWD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KWD</strong>: <code>&quot;KWD&quot;</code> = <code>&#x27;KWD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="kyd">KYD<a href="#kyd" class="hash-link" aria-label="Direct link to KYD" title="Direct link to KYD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KYD</strong>: <code>&quot;KYD&quot;</code> = <code>&#x27;KYD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="kzt">KZT<a href="#kzt" class="hash-link" aria-label="Direct link to KZT" title="Direct link to KZT">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>KZT</strong>: <code>&quot;KZT&quot;</code> = <code>&#x27;KZT&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="lak">LAK<a href="#lak" class="hash-link" aria-label="Direct link to LAK" title="Direct link to LAK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>LAK</strong>: <code>&quot;LAK&quot;</code> = <code>&#x27;LAK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="lbp">LBP<a href="#lbp" class="hash-link" aria-label="Direct link to LBP" title="Direct link to LBP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>LBP</strong>: <code>&quot;LBP&quot;</code> = <code>&#x27;LBP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="lkr">LKR<a href="#lkr" class="hash-link" aria-label="Direct link to LKR" title="Direct link to LKR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>LKR</strong>: <code>&quot;LKR&quot;</code> = <code>&#x27;LKR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="lrd">LRD<a href="#lrd" class="hash-link" aria-label="Direct link to LRD" title="Direct link to LRD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>LRD</strong>: <code>&quot;LRD&quot;</code> = <code>&#x27;LRD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="lsl">LSL<a href="#lsl" class="hash-link" aria-label="Direct link to LSL" title="Direct link to LSL">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>LSL</strong>: <code>&quot;LSL&quot;</code> = <code>&#x27;LSL&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="lyd">LYD<a href="#lyd" class="hash-link" aria-label="Direct link to LYD" title="Direct link to LYD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>LYD</strong>: <code>&quot;LYD&quot;</code> = <code>&#x27;LYD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mad">MAD<a href="#mad" class="hash-link" aria-label="Direct link to MAD" title="Direct link to MAD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MAD</strong>: <code>&quot;MAD&quot;</code> = <code>&#x27;MAD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mdl">MDL<a href="#mdl" class="hash-link" aria-label="Direct link to MDL" title="Direct link to MDL">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MDL</strong>: <code>&quot;MDL&quot;</code> = <code>&#x27;MDL&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mga">MGA<a href="#mga" class="hash-link" aria-label="Direct link to MGA" title="Direct link to MGA">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MGA</strong>: <code>&quot;MGA&quot;</code> = <code>&#x27;MGA&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mkd">MKD<a href="#mkd" class="hash-link" aria-label="Direct link to MKD" title="Direct link to MKD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MKD</strong>: <code>&quot;MKD&quot;</code> = <code>&#x27;MKD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mmk">MMK<a href="#mmk" class="hash-link" aria-label="Direct link to MMK" title="Direct link to MMK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MMK</strong>: <code>&quot;MMK&quot;</code> = <code>&#x27;MMK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mnt">MNT<a href="#mnt" class="hash-link" aria-label="Direct link to MNT" title="Direct link to MNT">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MNT</strong>: <code>&quot;MNT&quot;</code> = <code>&#x27;MNT&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mop">MOP<a href="#mop" class="hash-link" aria-label="Direct link to MOP" title="Direct link to MOP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MOP</strong>: <code>&quot;MOP&quot;</code> = <code>&#x27;MOP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mru">MRU<a href="#mru" class="hash-link" aria-label="Direct link to MRU" title="Direct link to MRU">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MRU</strong>: <code>&quot;MRU&quot;</code> = <code>&#x27;MRU&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mur">MUR<a href="#mur" class="hash-link" aria-label="Direct link to MUR" title="Direct link to MUR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MUR</strong>: <code>&quot;MUR&quot;</code> = <code>&#x27;MUR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mvr">MVR<a href="#mvr" class="hash-link" aria-label="Direct link to MVR" title="Direct link to MVR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MVR</strong>: <code>&quot;MVR&quot;</code> = <code>&#x27;MVR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mwk">MWK<a href="#mwk" class="hash-link" aria-label="Direct link to MWK" title="Direct link to MWK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MWK</strong>: <code>&quot;MWK&quot;</code> = <code>&#x27;MWK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mxn">MXN<a href="#mxn" class="hash-link" aria-label="Direct link to MXN" title="Direct link to MXN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MXN</strong>: <code>&quot;MXN&quot;</code> = <code>&#x27;MXN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mxv">MXV<a href="#mxv" class="hash-link" aria-label="Direct link to MXV" title="Direct link to MXV">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MXV</strong>: <code>&quot;MXV&quot;</code> = <code>&#x27;MXV&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="myr">MYR<a href="#myr" class="hash-link" aria-label="Direct link to MYR" title="Direct link to MYR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MYR</strong>: <code>&quot;MYR&quot;</code> = <code>&#x27;MYR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mzn">MZN<a href="#mzn" class="hash-link" aria-label="Direct link to MZN" title="Direct link to MZN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>MZN</strong>: <code>&quot;MZN&quot;</code> = <code>&#x27;MZN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="nad">NAD<a href="#nad" class="hash-link" aria-label="Direct link to NAD" title="Direct link to NAD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>NAD</strong>: <code>&quot;NAD&quot;</code> = <code>&#x27;NAD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ngn">NGN<a href="#ngn" class="hash-link" aria-label="Direct link to NGN" title="Direct link to NGN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>NGN</strong>: <code>&quot;NGN&quot;</code> = <code>&#x27;NGN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="nio">NIO<a href="#nio" class="hash-link" aria-label="Direct link to NIO" title="Direct link to NIO">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>NIO</strong>: <code>&quot;NIO&quot;</code> = <code>&#x27;NIO&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="nok">NOK<a href="#nok" class="hash-link" aria-label="Direct link to NOK" title="Direct link to NOK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>NOK</strong>: <code>&quot;NOK&quot;</code> = <code>&#x27;NOK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="npr">NPR<a href="#npr" class="hash-link" aria-label="Direct link to NPR" title="Direct link to NPR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>NPR</strong>: <code>&quot;NPR&quot;</code> = <code>&#x27;NPR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="nzd">NZD<a href="#nzd" class="hash-link" aria-label="Direct link to NZD" title="Direct link to NZD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>NZD</strong>: <code>&quot;NZD&quot;</code> = <code>&#x27;NZD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="omr">OMR<a href="#omr" class="hash-link" aria-label="Direct link to OMR" title="Direct link to OMR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>OMR</strong>: <code>&quot;OMR&quot;</code> = <code>&#x27;OMR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="pab">PAB<a href="#pab" class="hash-link" aria-label="Direct link to PAB" title="Direct link to PAB">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>PAB</strong>: <code>&quot;PAB&quot;</code> = <code>&#x27;PAB&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="pen">PEN<a href="#pen" class="hash-link" aria-label="Direct link to PEN" title="Direct link to PEN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>PEN</strong>: <code>&quot;PEN&quot;</code> = <code>&#x27;PEN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="pgk">PGK<a href="#pgk" class="hash-link" aria-label="Direct link to PGK" title="Direct link to PGK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>PGK</strong>: <code>&quot;PGK&quot;</code> = <code>&#x27;PGK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="php">PHP<a href="#php" class="hash-link" aria-label="Direct link to PHP" title="Direct link to PHP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>PHP</strong>: <code>&quot;PHP&quot;</code> = <code>&#x27;PHP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="pkr">PKR<a href="#pkr" class="hash-link" aria-label="Direct link to PKR" title="Direct link to PKR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>PKR</strong>: <code>&quot;PKR&quot;</code> = <code>&#x27;PKR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="pln">PLN<a href="#pln" class="hash-link" aria-label="Direct link to PLN" title="Direct link to PLN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>PLN</strong>: <code>&quot;PLN&quot;</code> = <code>&#x27;PLN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="pyg">PYG<a href="#pyg" class="hash-link" aria-label="Direct link to PYG" title="Direct link to PYG">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>PYG</strong>: <code>&quot;PYG&quot;</code> = <code>&#x27;PYG&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="qar">QAR<a href="#qar" class="hash-link" aria-label="Direct link to QAR" title="Direct link to QAR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>QAR</strong>: <code>&quot;QAR&quot;</code> = <code>&#x27;QAR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ron">RON<a href="#ron" class="hash-link" aria-label="Direct link to RON" title="Direct link to RON">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>RON</strong>: <code>&quot;RON&quot;</code> = <code>&#x27;RON&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="rsd">RSD<a href="#rsd" class="hash-link" aria-label="Direct link to RSD" title="Direct link to RSD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>RSD</strong>: <code>&quot;RSD&quot;</code> = <code>&#x27;RSD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="rub">RUB<a href="#rub" class="hash-link" aria-label="Direct link to RUB" title="Direct link to RUB">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>RUB</strong>: <code>&quot;RUB&quot;</code> = <code>&#x27;RUB&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="rwf">RWF<a href="#rwf" class="hash-link" aria-label="Direct link to RWF" title="Direct link to RWF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>RWF</strong>: <code>&quot;RWF&quot;</code> = <code>&#x27;RWF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sar">SAR<a href="#sar" class="hash-link" aria-label="Direct link to SAR" title="Direct link to SAR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SAR</strong>: <code>&quot;SAR&quot;</code> = <code>&#x27;SAR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sbd">SBD<a href="#sbd" class="hash-link" aria-label="Direct link to SBD" title="Direct link to SBD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SBD</strong>: <code>&quot;SBD&quot;</code> = <code>&#x27;SBD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="scr">SCR<a href="#scr" class="hash-link" aria-label="Direct link to SCR" title="Direct link to SCR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SCR</strong>: <code>&quot;SCR&quot;</code> = <code>&#x27;SCR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sdg">SDG<a href="#sdg" class="hash-link" aria-label="Direct link to SDG" title="Direct link to SDG">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SDG</strong>: <code>&quot;SDG&quot;</code> = <code>&#x27;SDG&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sek">SEK<a href="#sek" class="hash-link" aria-label="Direct link to SEK" title="Direct link to SEK">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SEK</strong>: <code>&quot;SEK&quot;</code> = <code>&#x27;SEK&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sgd">SGD<a href="#sgd" class="hash-link" aria-label="Direct link to SGD" title="Direct link to SGD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SGD</strong>: <code>&quot;SGD&quot;</code> = <code>&#x27;SGD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="shp">SHP<a href="#shp" class="hash-link" aria-label="Direct link to SHP" title="Direct link to SHP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SHP</strong>: <code>&quot;SHP&quot;</code> = <code>&#x27;SHP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sle">SLE<a href="#sle" class="hash-link" aria-label="Direct link to SLE" title="Direct link to SLE">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SLE</strong>: <code>&quot;SLE&quot;</code> = <code>&#x27;SLE&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="sos">SOS<a href="#sos" class="hash-link" aria-label="Direct link to SOS" title="Direct link to SOS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SOS</strong>: <code>&quot;SOS&quot;</code> = <code>&#x27;SOS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="srd">SRD<a href="#srd" class="hash-link" aria-label="Direct link to SRD" title="Direct link to SRD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SRD</strong>: <code>&quot;SRD&quot;</code> = <code>&#x27;SRD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ssp">SSP<a href="#ssp" class="hash-link" aria-label="Direct link to SSP" title="Direct link to SSP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SSP</strong>: <code>&quot;SSP&quot;</code> = <code>&#x27;SSP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="stn">STN<a href="#stn" class="hash-link" aria-label="Direct link to STN" title="Direct link to STN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>STN</strong>: <code>&quot;STN&quot;</code> = <code>&#x27;STN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="svc">SVC<a href="#svc" class="hash-link" aria-label="Direct link to SVC" title="Direct link to SVC">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SVC</strong>: <code>&quot;SVC&quot;</code> = <code>&#x27;SVC&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="syp">SYP<a href="#syp" class="hash-link" aria-label="Direct link to SYP" title="Direct link to SYP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SYP</strong>: <code>&quot;SYP&quot;</code> = <code>&#x27;SYP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="szl">SZL<a href="#szl" class="hash-link" aria-label="Direct link to SZL" title="Direct link to SZL">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>SZL</strong>: <code>&quot;SZL&quot;</code> = <code>&#x27;SZL&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="thb">THB<a href="#thb" class="hash-link" aria-label="Direct link to THB" title="Direct link to THB">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>THB</strong>: <code>&quot;THB&quot;</code> = <code>&#x27;THB&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="tjs">TJS<a href="#tjs" class="hash-link" aria-label="Direct link to TJS" title="Direct link to TJS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>TJS</strong>: <code>&quot;TJS&quot;</code> = <code>&#x27;TJS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="tmt">TMT<a href="#tmt" class="hash-link" aria-label="Direct link to TMT" title="Direct link to TMT">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>TMT</strong>: <code>&quot;TMT&quot;</code> = <code>&#x27;TMT&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="tnd">TND<a href="#tnd" class="hash-link" aria-label="Direct link to TND" title="Direct link to TND">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>TND</strong>: <code>&quot;TND&quot;</code> = <code>&#x27;TND&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="top">TOP<a href="#top" class="hash-link" aria-label="Direct link to TOP" title="Direct link to TOP">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>TOP</strong>: <code>&quot;TOP&quot;</code> = <code>&#x27;TOP&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="try">TRY<a href="#try" class="hash-link" aria-label="Direct link to TRY" title="Direct link to TRY">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>TRY</strong>: <code>&quot;TRY&quot;</code> = <code>&#x27;TRY&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ttd">TTD<a href="#ttd" class="hash-link" aria-label="Direct link to TTD" title="Direct link to TTD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>TTD</strong>: <code>&quot;TTD&quot;</code> = <code>&#x27;TTD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="twd">TWD<a href="#twd" class="hash-link" aria-label="Direct link to TWD" title="Direct link to TWD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>TWD</strong>: <code>&quot;TWD&quot;</code> = <code>&#x27;TWD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="tzs">TZS<a href="#tzs" class="hash-link" aria-label="Direct link to TZS" title="Direct link to TZS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>TZS</strong>: <code>&quot;TZS&quot;</code> = <code>&#x27;TZS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="uah">UAH<a href="#uah" class="hash-link" aria-label="Direct link to UAH" title="Direct link to UAH">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>UAH</strong>: <code>&quot;UAH&quot;</code> = <code>&#x27;UAH&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ugx">UGX<a href="#ugx" class="hash-link" aria-label="Direct link to UGX" title="Direct link to UGX">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>UGX</strong>: <code>&quot;UGX&quot;</code> = <code>&#x27;UGX&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="usd">USD<a href="#usd" class="hash-link" aria-label="Direct link to USD" title="Direct link to USD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>USD</strong>: <code>&quot;USD&quot;</code> = <code>&#x27;USD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="usn">USN<a href="#usn" class="hash-link" aria-label="Direct link to USN" title="Direct link to USN">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>USN</strong>: <code>&quot;USN&quot;</code> = <code>&#x27;USN&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="uyi">UYI<a href="#uyi" class="hash-link" aria-label="Direct link to UYI" title="Direct link to UYI">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>UYI</strong>: <code>&quot;UYI&quot;</code> = <code>&#x27;UYI&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="uyu">UYU<a href="#uyu" class="hash-link" aria-label="Direct link to UYU" title="Direct link to UYU">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>UYU</strong>: <code>&quot;UYU&quot;</code> = <code>&#x27;UYU&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="uyw">UYW<a href="#uyw" class="hash-link" aria-label="Direct link to UYW" title="Direct link to UYW">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>UYW</strong>: <code>&quot;UYW&quot;</code> = <code>&#x27;UYW&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="uzs">UZS<a href="#uzs" class="hash-link" aria-label="Direct link to UZS" title="Direct link to UZS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>UZS</strong>: <code>&quot;UZS&quot;</code> = <code>&#x27;UZS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ved">VED<a href="#ved" class="hash-link" aria-label="Direct link to VED" title="Direct link to VED">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>VED</strong>: <code>&quot;VED&quot;</code> = <code>&#x27;VED&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ves">VES<a href="#ves" class="hash-link" aria-label="Direct link to VES" title="Direct link to VES">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>VES</strong>: <code>&quot;VES&quot;</code> = <code>&#x27;VES&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="vnd">VND<a href="#vnd" class="hash-link" aria-label="Direct link to VND" title="Direct link to VND">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>VND</strong>: <code>&quot;VND&quot;</code> = <code>&#x27;VND&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="vuv">VUV<a href="#vuv" class="hash-link" aria-label="Direct link to VUV" title="Direct link to VUV">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>VUV</strong>: <code>&quot;VUV&quot;</code> = <code>&#x27;VUV&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="wst">WST<a href="#wst" class="hash-link" aria-label="Direct link to WST" title="Direct link to WST">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>WST</strong>: <code>&quot;WST&quot;</code> = <code>&#x27;WST&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xaf">XAF<a href="#xaf" class="hash-link" aria-label="Direct link to XAF" title="Direct link to XAF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XAF</strong>: <code>&quot;XAF&quot;</code> = <code>&#x27;XAF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xag">XAG<a href="#xag" class="hash-link" aria-label="Direct link to XAG" title="Direct link to XAG">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XAG</strong>: <code>&quot;XAG&quot;</code> = <code>&#x27;XAG&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xau">XAU<a href="#xau" class="hash-link" aria-label="Direct link to XAU" title="Direct link to XAU">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XAU</strong>: <code>&quot;XAU&quot;</code> = <code>&#x27;XAU&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xba">XBA<a href="#xba" class="hash-link" aria-label="Direct link to XBA" title="Direct link to XBA">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XBA</strong>: <code>&quot;XBA&quot;</code> = <code>&#x27;XBA&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xbb">XBB<a href="#xbb" class="hash-link" aria-label="Direct link to XBB" title="Direct link to XBB">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XBB</strong>: <code>&quot;XBB&quot;</code> = <code>&#x27;XBB&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xbc">XBC<a href="#xbc" class="hash-link" aria-label="Direct link to XBC" title="Direct link to XBC">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XBC</strong>: <code>&quot;XBC&quot;</code> = <code>&#x27;XBC&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xbd">XBD<a href="#xbd" class="hash-link" aria-label="Direct link to XBD" title="Direct link to XBD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XBD</strong>: <code>&quot;XBD&quot;</code> = <code>&#x27;XBD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xcd">XCD<a href="#xcd" class="hash-link" aria-label="Direct link to XCD" title="Direct link to XCD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XCD</strong>: <code>&quot;XCD&quot;</code> = <code>&#x27;XCD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xdr">XDR<a href="#xdr" class="hash-link" aria-label="Direct link to XDR" title="Direct link to XDR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XDR</strong>: <code>&quot;XDR&quot;</code> = <code>&#x27;XDR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xof">XOF<a href="#xof" class="hash-link" aria-label="Direct link to XOF" title="Direct link to XOF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XOF</strong>: <code>&quot;XOF&quot;</code> = <code>&#x27;XOF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xpd">XPD<a href="#xpd" class="hash-link" aria-label="Direct link to XPD" title="Direct link to XPD">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XPD</strong>: <code>&quot;XPD&quot;</code> = <code>&#x27;XPD&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xpf">XPF<a href="#xpf" class="hash-link" aria-label="Direct link to XPF" title="Direct link to XPF">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XPF</strong>: <code>&quot;XPF&quot;</code> = <code>&#x27;XPF&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xpt">XPT<a href="#xpt" class="hash-link" aria-label="Direct link to XPT" title="Direct link to XPT">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XPT</strong>: <code>&quot;XPT&quot;</code> = <code>&#x27;XPT&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xsu">XSU<a href="#xsu" class="hash-link" aria-label="Direct link to XSU" title="Direct link to XSU">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XSU</strong>: <code>&quot;XSU&quot;</code> = <code>&#x27;XSU&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xts">XTS<a href="#xts" class="hash-link" aria-label="Direct link to XTS" title="Direct link to XTS">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XTS</strong>: <code>&quot;XTS&quot;</code> = <code>&#x27;XTS&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xua">XUA<a href="#xua" class="hash-link" aria-label="Direct link to XUA" title="Direct link to XUA">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XUA</strong>: <code>&quot;XUA&quot;</code> = <code>&#x27;XUA&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="xxx">XXX<a href="#xxx" class="hash-link" aria-label="Direct link to XXX" title="Direct link to XXX">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>XXX</strong>: <code>&quot;XXX&quot;</code> = <code>&#x27;XXX&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="yer">YER<a href="#yer" class="hash-link" aria-label="Direct link to YER" title="Direct link to YER">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>YER</strong>: <code>&quot;YER&quot;</code> = <code>&#x27;YER&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="zar">ZAR<a href="#zar" class="hash-link" aria-label="Direct link to ZAR" title="Direct link to ZAR">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ZAR</strong>: <code>&quot;ZAR&quot;</code> = <code>&#x27;ZAR&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="zmw">ZMW<a href="#zmw" class="hash-link" aria-label="Direct link to ZMW" title="Direct link to ZMW">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ZMW</strong>: <code>&quot;ZMW&quot;</code> = <code>&#x27;ZMW&#x27;</code></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="zwg">ZWG<a href="#zwg" class="hash-link" aria-label="Direct link to ZWG" title="Direct link to ZWG">​</a></h3>
+<blockquote>
+<p><code>readonly</code> <strong>ZWG</strong>: <code>&quot;ZWG&quot;</code> = <code>&#x27;ZWG&#x27;</code></p>
+</blockquote></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/auto-docs/types/language/variables/Iso4217CurrencyCode.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/auto-docs/types/language/type-aliases/LanguageModel"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">LanguageModel</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/auto-docs/types/membership/type-aliases/MembershipRequest"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">MembershipRequest</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#type-declaration" class="table-of-contents__link toc-highlight">Type declaration</a><ul><li><a href="#aed" class="table-of-contents__link toc-highlight">AED</a></li><li><a href="#afn" class="table-of-contents__link toc-highlight">AFN</a></li><li><a href="#all" class="table-of-contents__link toc-highlight">ALL</a></li><li><a href="#amd" class="table-of-contents__link toc-highlight">AMD</a></li><li><a href="#ang" class="table-of-contents__link toc-highlight">ANG</a></li><li><a href="#aoa" class="table-of-contents__link toc-highlight">AOA</a></li><li><a href="#ars" class="table-of-contents__link toc-highlight">ARS</a></li><li><a href="#aud" class="table-of-contents__link toc-highlight">AUD</a></li><li><a href="#awg" class="table-of-contents__link toc-highlight">AWG</a></li><li><a href="#azn" class="table-of-contents__link toc-highlight">AZN</a></li><li><a href="#bam" class="table-of-contents__link toc-highlight">BAM</a></li><li><a href="#bbd" class="table-of-contents__link toc-highlight">BBD</a></li><li><a href="#bdt" class="table-of-contents__link toc-highlight">BDT</a></li><li><a href="#bgn" class="table-of-contents__link toc-highlight">BGN</a></li><li><a href="#bhd" class="table-of-contents__link toc-highlight">BHD</a></li><li><a href="#bif" class="table-of-contents__link toc-highlight">BIF</a></li><li><a href="#bmd" class="table-of-contents__link toc-highlight">BMD</a></li><li><a href="#bnd" class="table-of-contents__link toc-highlight">BND</a></li><li><a href="#bob" class="table-of-contents__link toc-highlight">BOB</a></li><li><a href="#bov" class="table-of-contents__link toc-highlight">BOV</a></li><li><a href="#brl" class="table-of-contents__link toc-highlight">BRL</a></li><li><a href="#bsd" class="table-of-contents__link toc-highlight">BSD</a></li><li><a href="#btn" class="table-of-contents__link toc-highlight">BTN</a></li><li><a href="#bwp" class="table-of-contents__link toc-highlight">BWP</a></li><li><a href="#byn" class="table-of-contents__link toc-highlight">BYN</a></li><li><a href="#bzd" class="table-of-contents__link toc-highlight">BZD</a></li><li><a href="#cad" class="table-of-contents__link toc-highlight">CAD</a></li><li><a href="#cdf" class="table-of-contents__link toc-highlight">CDF</a></li><li><a href="#che" class="table-of-contents__link toc-highlight">CHE</a></li><li><a href="#chf" class="table-of-contents__link toc-highlight">CHF</a></li><li><a href="#chw" class="table-of-contents__link toc-highlight">CHW</a></li><li><a href="#clf" class="table-of-contents__link toc-highlight">CLF</a></li><li><a href="#clp" class="table-of-contents__link toc-highlight">CLP</a></li><li><a href="#cny" class="table-of-contents__link toc-highlight">CNY</a></li><li><a href="#cop" class="table-of-contents__link toc-highlight">COP</a></li><li><a href="#cou" class="table-of-contents__link toc-highlight">COU</a></li><li><a href="#crc" class="table-of-contents__link toc-highlight">CRC</a></li><li><a href="#cup" class="table-of-contents__link toc-highlight">CUP</a></li><li><a href="#cve" class="table-of-contents__link toc-highlight">CVE</a></li><li><a href="#czk" class="table-of-contents__link toc-highlight">CZK</a></li><li><a href="#djf" class="table-of-contents__link toc-highlight">DJF</a></li><li><a href="#dkk" class="table-of-contents__link toc-highlight">DKK</a></li><li><a href="#dop" class="table-of-contents__link toc-highlight">DOP</a></li><li><a href="#dzd" class="table-of-contents__link toc-highlight">DZD</a></li><li><a href="#egp" class="table-of-contents__link toc-highlight">EGP</a></li><li><a href="#ern" class="table-of-contents__link toc-highlight">ERN</a></li><li><a href="#etb" class="table-of-contents__link toc-highlight">ETB</a></li><li><a href="#eur" class="table-of-contents__link toc-highlight">EUR</a></li><li><a href="#fjd" class="table-of-contents__link toc-highlight">FJD</a></li><li><a href="#fkp" class="table-of-contents__link toc-highlight">FKP</a></li><li><a href="#gbp" class="table-of-contents__link toc-highlight">GBP</a></li><li><a href="#gel" class="table-of-contents__link toc-highlight">GEL</a></li><li><a href="#ghs" class="table-of-contents__link toc-highlight">GHS</a></li><li><a href="#gip" class="table-of-contents__link toc-highlight">GIP</a></li><li><a href="#gmd" class="table-of-contents__link toc-highlight">GMD</a></li><li><a href="#gnf" class="table-of-contents__link toc-highlight">GNF</a></li><li><a href="#gtq" class="table-of-contents__link toc-highlight">GTQ</a></li><li><a href="#gyd" class="table-of-contents__link toc-highlight">GYD</a></li><li><a href="#hkd" class="table-of-contents__link toc-highlight">HKD</a></li><li><a href="#hnl" class="table-of-contents__link toc-highlight">HNL</a></li><li><a href="#htg" class="table-of-contents__link toc-highlight">HTG</a></li><li><a href="#huf" class="table-of-contents__link toc-highlight">HUF</a></li><li><a href="#idr" class="table-of-contents__link toc-highlight">IDR</a></li><li><a href="#ils" class="table-of-contents__link toc-highlight">ILS</a></li><li><a href="#inr" class="table-of-contents__link toc-highlight">INR</a></li><li><a href="#iqd" class="table-of-contents__link toc-highlight">IQD</a></li><li><a href="#irr" class="table-of-contents__link toc-highlight">IRR</a></li><li><a href="#isk" class="table-of-contents__link toc-highlight">ISK</a></li><li><a href="#jmd" class="table-of-contents__link toc-highlight">JMD</a></li><li><a href="#jod" class="table-of-contents__link toc-highlight">JOD</a></li><li><a href="#jpy" class="table-of-contents__link toc-highlight">JPY</a></li><li><a href="#kes" class="table-of-contents__link toc-highlight">KES</a></li><li><a href="#kgs" class="table-of-contents__link toc-highlight">KGS</a></li><li><a href="#khr" class="table-of-contents__link toc-highlight">KHR</a></li><li><a href="#kmf" class="table-of-contents__link toc-highlight">KMF</a></li><li><a href="#kpw" class="table-of-contents__link toc-highlight">KPW</a></li><li><a href="#krw" class="table-of-contents__link toc-highlight">KRW</a></li><li><a href="#kwd" class="table-of-contents__link toc-highlight">KWD</a></li><li><a href="#kyd" class="table-of-contents__link toc-highlight">KYD</a></li><li><a href="#kzt" class="table-of-contents__link toc-highlight">KZT</a></li><li><a href="#lak" class="table-of-contents__link toc-highlight">LAK</a></li><li><a href="#lbp" class="table-of-contents__link toc-highlight">LBP</a></li><li><a href="#lkr" class="table-of-contents__link toc-highlight">LKR</a></li><li><a href="#lrd" class="table-of-contents__link toc-highlight">LRD</a></li><li><a href="#lsl" class="table-of-contents__link toc-highlight">LSL</a></li><li><a href="#lyd" class="table-of-contents__link toc-highlight">LYD</a></li><li><a href="#mad" class="table-of-contents__link toc-highlight">MAD</a></li><li><a href="#mdl" class="table-of-contents__link toc-highlight">MDL</a></li><li><a href="#mga" class="table-of-contents__link toc-highlight">MGA</a></li><li><a href="#mkd" class="table-of-contents__link toc-highlight">MKD</a></li><li><a href="#mmk" class="table-of-contents__link toc-highlight">MMK</a></li><li><a href="#mnt" class="table-of-contents__link toc-highlight">MNT</a></li><li><a href="#mop" class="table-of-contents__link toc-highlight">MOP</a></li><li><a href="#mru" class="table-of-contents__link toc-highlight">MRU</a></li><li><a href="#mur" class="table-of-contents__link toc-highlight">MUR</a></li><li><a href="#mvr" class="table-of-contents__link toc-highlight">MVR</a></li><li><a href="#mwk" class="table-of-contents__link toc-highlight">MWK</a></li><li><a href="#mxn" class="table-of-contents__link toc-highlight">MXN</a></li><li><a href="#mxv" class="table-of-contents__link toc-highlight">MXV</a></li><li><a href="#myr" class="table-of-contents__link toc-highlight">MYR</a></li><li><a href="#mzn" class="table-of-contents__link toc-highlight">MZN</a></li><li><a href="#nad" class="table-of-contents__link toc-highlight">NAD</a></li><li><a href="#ngn" class="table-of-contents__link toc-highlight">NGN</a></li><li><a href="#nio" class="table-of-contents__link toc-highlight">NIO</a></li><li><a href="#nok" class="table-of-contents__link toc-highlight">NOK</a></li><li><a href="#npr" class="table-of-contents__link toc-highlight">NPR</a></li><li><a href="#nzd" class="table-of-contents__link toc-highlight">NZD</a></li><li><a href="#omr" class="table-of-contents__link toc-highlight">OMR</a></li><li><a href="#pab" class="table-of-contents__link toc-highlight">PAB</a></li><li><a href="#pen" class="table-of-contents__link toc-highlight">PEN</a></li><li><a href="#pgk" class="table-of-contents__link toc-highlight">PGK</a></li><li><a href="#php" class="table-of-contents__link toc-highlight">PHP</a></li><li><a href="#pkr" class="table-of-contents__link toc-highlight">PKR</a></li><li><a href="#pln" class="table-of-contents__link toc-highlight">PLN</a></li><li><a href="#pyg" class="table-of-contents__link toc-highlight">PYG</a></li><li><a href="#qar" class="table-of-contents__link toc-highlight">QAR</a></li><li><a href="#ron" class="table-of-contents__link toc-highlight">RON</a></li><li><a href="#rsd" class="table-of-contents__link toc-highlight">RSD</a></li><li><a href="#rub" class="table-of-contents__link toc-highlight">RUB</a></li><li><a href="#rwf" class="table-of-contents__link toc-highlight">RWF</a></li><li><a href="#sar" class="table-of-contents__link toc-highlight">SAR</a></li><li><a href="#sbd" class="table-of-contents__link toc-highlight">SBD</a></li><li><a href="#scr" class="table-of-contents__link toc-highlight">SCR</a></li><li><a href="#sdg" class="table-of-contents__link toc-highlight">SDG</a></li><li><a href="#sek" class="table-of-contents__link toc-highlight">SEK</a></li><li><a href="#sgd" class="table-of-contents__link toc-highlight">SGD</a></li><li><a href="#shp" class="table-of-contents__link toc-highlight">SHP</a></li><li><a href="#sle" class="table-of-contents__link toc-highlight">SLE</a></li><li><a href="#sos" class="table-of-contents__link toc-highlight">SOS</a></li><li><a href="#srd" class="table-of-contents__link toc-highlight">SRD</a></li><li><a href="#ssp" class="table-of-contents__link toc-highlight">SSP</a></li><li><a href="#stn" class="table-of-contents__link toc-highlight">STN</a></li><li><a href="#svc" class="table-of-contents__link toc-highlight">SVC</a></li><li><a href="#syp" class="table-of-contents__link toc-highlight">SYP</a></li><li><a href="#szl" class="table-of-contents__link toc-highlight">SZL</a></li><li><a href="#thb" class="table-of-contents__link toc-highlight">THB</a></li><li><a href="#tjs" class="table-of-contents__link toc-highlight">TJS</a></li><li><a href="#tmt" class="table-of-contents__link toc-highlight">TMT</a></li><li><a href="#tnd" class="table-of-contents__link toc-highlight">TND</a></li><li><a href="#top" class="table-of-contents__link toc-highlight">TOP</a></li><li><a href="#try" class="table-of-contents__link toc-highlight">TRY</a></li><li><a href="#ttd" class="table-of-contents__link toc-highlight">TTD</a></li><li><a href="#twd" class="table-of-contents__link toc-highlight">TWD</a></li><li><a href="#tzs" class="table-of-contents__link toc-highlight">TZS</a></li><li><a href="#uah" class="table-of-contents__link toc-highlight">UAH</a></li><li><a href="#ugx" class="table-of-contents__link toc-highlight">UGX</a></li><li><a href="#usd" class="table-of-contents__link toc-highlight">USD</a></li><li><a href="#usn" class="table-of-contents__link toc-highlight">USN</a></li><li><a href="#uyi" class="table-of-contents__link toc-highlight">UYI</a></li><li><a href="#uyu" class="table-of-contents__link toc-highlight">UYU</a></li><li><a href="#uyw" class="table-of-contents__link toc-highlight">UYW</a></li><li><a href="#uzs" class="table-of-contents__link toc-highlight">UZS</a></li><li><a href="#ved" class="table-of-contents__link toc-highlight">VED</a></li><li><a href="#ves" class="table-of-contents__link toc-highlight">VES</a></li><li><a href="#vnd" class="table-of-contents__link toc-highlight">VND</a></li><li><a href="#vuv" class="table-of-contents__link toc-highlight">VUV</a></li><li><a href="#wst" class="table-of-contents__link toc-highlight">WST</a></li><li><a href="#xaf" class="table-of-contents__link toc-highlight">XAF</a></li><li><a href="#xag" class="table-of-contents__link toc-highlight">XAG</a></li><li><a href="#xau" class="table-of-contents__link toc-highlight">XAU</a></li><li><a href="#xba" class="table-of-contents__link toc-highlight">XBA</a></li><li><a href="#xbb" class="table-of-contents__link toc-highlight">XBB</a></li><li><a href="#xbc" class="table-of-contents__link toc-highlight">XBC</a></li><li><a href="#xbd" class="table-of-contents__link toc-highlight">XBD</a></li><li><a href="#xcd" class="table-of-contents__link toc-highlight">XCD</a></li><li><a href="#xdr" class="table-of-contents__link toc-highlight">XDR</a></li><li><a href="#xof" class="table-of-contents__link toc-highlight">XOF</a></li><li><a href="#xpd" class="table-of-contents__link toc-highlight">XPD</a></li><li><a href="#xpf" class="table-of-contents__link toc-highlight">XPF</a></li><li><a href="#xpt" class="table-of-contents__link toc-highlight">XPT</a></li><li><a href="#xsu" class="table-of-contents__link toc-highlight">XSU</a></li><li><a href="#xts" class="table-of-contents__link toc-highlight">XTS</a></li><li><a href="#xua" class="table-of-contents__link toc-highlight">XUA</a></li><li><a href="#xxx" class="table-of-contents__link toc-highlight">XXX</a></li><li><a href="#yer" class="table-of-contents__link toc-highlight">YER</a></li><li><a href="#zar" class="table-of-contents__link toc-highlight">ZAR</a></li><li><a href="#zmw" class="table-of-contents__link toc-highlight">ZMW</a></li><li><a href="#zwg" class="table-of-contents__link toc-highlight">ZWG</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__slack">Slack</a></li><li class="footer__item"><a href="https://www.palisadoes.org/news/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__news">News</a></li><li class="footer__item"><a href="https://www.palisadoes.org/contact/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__contact">Contact Us</a></li></ul></div><div class="col footer__col"><div class="footer__title">Social Media</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://twitter.com/palisadoesorg?lang=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__twitter"> Twitter</a></li><li class="footer__item"><a href="https://www.facebook.com/palisadoesproject/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__facebook"> Facebook</a></li><li class="footer__item"><a href="https://www.instagram.com/palisadoes/?hl=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__instagram"> Instagram</a></li></ul></div><div class="col footer__col"><div class="footer__title">Development</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__github"> GitHub</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 The Palisadoes Foundation, LLC. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
