@@ -8,6 +8,10 @@ import {
 
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 
+/**
+ * DeleteModal: A modal displaying events with the ability to delete.
+ */
+
 const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   eventListCardProps,
   eventDeleteModalIsOpen,

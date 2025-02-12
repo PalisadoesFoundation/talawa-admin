@@ -8,6 +8,7 @@ import type { InterfaceUpdateEventModalProps } from 'types/Event/interface';
 /**
  * UpdateModal: A modal displaying the recurring event update options.
  */
+
 const UpdateModal: React.FC<InterfaceUpdateEventModalProps> = ({
   eventListCardProps,
   recurringEventUpdateModalIsOpen,
