@@ -76,7 +76,6 @@ describe('Testing Volunteer Container', () => {
   });
 
   it('Testing Volunteer Container Screen -> Toggle screens', async () => {
-    // Remove the setup() call
     mockedUseParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
 
     renderVolunteerContainer();
@@ -92,4 +91,4 @@ describe('Testing Volunteer Container', () => {
     expect(await screen.findByTestId('requestsRadio')).toBeInTheDocument();
     await userEvent.click(individualLabel);
   });
-  });
+});
