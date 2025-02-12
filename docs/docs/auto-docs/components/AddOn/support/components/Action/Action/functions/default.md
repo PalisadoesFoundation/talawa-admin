@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AddOn/support/components/Action/Action.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/components/Action/Action.tsx#L29)
+Defined in: [src/components/AddOn/support/components/Action/Action.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/components/Action/Action.tsx#L15)
 
 A React component that renders a labeled container for embedded actions.
 
@@ -14,7 +14,7 @@ A React component that renders a labeled container for embedded actions.
 
 ### props
 
-`InterfaceActionProps`
+[`InterfaceActionProps`](../../../../../../../types/AddOn/interface/interfaces/InterfaceActionProps.md)
 
 The properties for the component.
 

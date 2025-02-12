@@ -20,8 +20,12 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 import AgendaCategoryContainer from './AgendaCategoryContainer';
-import { props, props2 } from './AgendaCategoryContainerProps';
-import { MOCKS, MOCKS_ERROR_MUTATIONS } from './AgendaCategoryContainerMocks';
+import {
+  props,
+  props2,
+  MOCKS,
+  MOCKS_ERROR_MUTATIONS,
+} from './AgendaCategoryContainerMocks';
 import { vi, describe, test, expect } from 'vitest';
 
 const link = new StaticMockLink(MOCKS, true);

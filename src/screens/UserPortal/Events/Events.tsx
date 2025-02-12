@@ -5,8 +5,8 @@ import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENTS_CONNECTION,
 } from 'GraphQl/Queries/Queries';
-import EventCalendar from 'components/EventCalendar/EventCalendar';
-import EventHeader from 'components/EventCalendar/EventHeader';
+import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
+import EventHeader from 'components/EventCalender/Header/EventHeader';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';

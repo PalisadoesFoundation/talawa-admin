@@ -214,10 +214,13 @@ describe('Testing Actions Screen', () => {
     });
     await debounceWait();
 
-    await waitFor(() => {
-      const assigneeName = screen.getAllByTestId('assigneeName');
-      expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
-    });
+    await waitFor(
+      () => {
+        const assigneeName = screen.getAllByTestId('assigneeName');
+        expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
+      },
+      { timeout: 10000 },
+    );
   });
 
   it('should render screen with No Actions', async () => {

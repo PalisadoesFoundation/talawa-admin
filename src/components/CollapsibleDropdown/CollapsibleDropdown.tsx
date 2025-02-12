@@ -1,16 +1,10 @@
 import React, { useEffect } from 'react';
 import { Button, Collapse } from 'react-bootstrap';
-import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from '../../style/app.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-export interface InterfaceCollapsibleDropdown {
-  showDropdown: boolean;
-  target: TargetsType;
-  setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
 
 /**
  * A collapsible dropdown component that toggles visibility of sub-targets.

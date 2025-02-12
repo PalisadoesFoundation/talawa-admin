@@ -1244,7 +1244,7 @@
     "title": "Anuncios",
     "pHeading": "Gestionar anuncios",
     "activeAds": "Campañas activas",
-    "archievedAds": "Campañas completadas",
+    "archivedAds": "Campañas completadas",
     "pMessage": "No hay anuncios disponibles para esta campaña.",
     "delete": "Eliminar",
     "validLink": "El enlace es válido.",

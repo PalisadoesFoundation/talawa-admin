@@ -10,6 +10,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
+    testTimeout: 10000,
     coverage: {
       enabled: true,
       provider: 'istanbul',

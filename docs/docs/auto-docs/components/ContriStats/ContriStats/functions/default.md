@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/ContriStats/ContriStats.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ContriStats/ContriStats.tsx#L22)
+Defined in: [src/components/ContriStats/ContriStats.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ContriStats/ContriStats.tsx#L16)
 
 A component that displays contribution statistics.
 
@@ -14,7 +14,7 @@ A component that displays contribution statistics.
 
 ### \_\_namedParameters
 
-`InterfaceContriStatsProps`
+[`InterfaceContriStatsProps`](../../../../types/Contribution/interface/interfaces/InterfaceContriStatsProps.md)
 
 ## Returns
 

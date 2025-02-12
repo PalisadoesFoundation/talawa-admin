@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L49)
+Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L39)
 
 Component for displaying an advertisement entry.
 Allows viewing, editing, and deleting of the advertisement.
@@ -15,7 +15,7 @@ Allows viewing, editing, and deleting of the advertisement.
 
 ### props
 
-`InterfaceAddOnEntryProps`
+[`InterfaceAddOnEntryProps`](../../../../../../types/Advertisement/interface/interfaces/InterfaceAddOnEntryProps.md)
 
 Component properties
 
