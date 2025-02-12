@@ -1404,11 +1404,6 @@ enum UserOrderByInput {
   createdAt_DESC
 }
 
-type UserPhone {
-  home: PhoneNumber
-  mobile: PhoneNumber
-  work: PhoneNumber
-}
 
 input UserPhoneInput {
   home: PhoneNumber
