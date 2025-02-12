@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-interface InterfaceAddOnProps {
-  extras?: any;
-  name?: string;
-  children?: React.ReactNode;
-}
+import type { InterfaceAddOnProps } from 'types/AddOn/interface';
 
 /**
  * The AddOn component is used to wrap children within a plugin container.
@@ -21,8 +16,8 @@ interface InterfaceAddOnProps {
  */
 function AddOn({
   children = 'Default text',
-  extras = {},
-  name = '',
+  // extras = {},
+  // name = '',
 }: InterfaceAddOnProps): JSX.Element {
   return (
     <div className="plugin-container" data-testid="pluginContainer">

@@ -6,8 +6,8 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 import { Edit } from '@mui/icons-material';
-import EventListCardModals from 'components/EventListCard/EventListCardModals';
-import type { InterfaceEventListCardProps } from 'components/EventListCard/EventListCard';
+import EventListCardModals from 'components/EventListCard/Modal/EventListCardModals';
+import type { InterfaceEventListCardProps } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 
 /**
@@ -57,10 +57,10 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const eventListCardProps: InterfaceEventListCardProps = {
     userRole: '',
     key: eventData.event._id,
-    id: eventData.event._id,
-    eventLocation: eventData.event.location,
-    eventName: eventData.event.title,
-    eventDescription: eventData.event.description,
+    _id: eventData.event._id,
+    location: eventData.event.location,
+    title: eventData.event.title,
+    description: eventData.event.description,
     startDate: eventData.event.startDate,
     endDate: eventData.event.endDate,
     startTime: eventData.event.startTime,
@@ -71,7 +71,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     isRecurringEventException: eventData.event.isRecurringEventException,
     isPublic: eventData.event.isPublic,
     isRegisterable: eventData.event.isRegisterable,
-    registrants: eventData.event.attendees,
+    attendees: eventData.event.attendees,
     creator: eventData.event.creator,
   };
 

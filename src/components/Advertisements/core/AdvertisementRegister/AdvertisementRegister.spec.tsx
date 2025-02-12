@@ -1,33 +1,21 @@
 import React, { act } from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  ApolloLink,
-  HttpLink,
-} from '@apollo/client';
-
-import type { NormalizedCacheObject } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AdvertisementRegister from './AdvertisementRegister';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
-import { BACKEND_URL } from 'Constant/constant';
-// import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
 import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
-import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
-import useLocalStorage from 'utils/useLocalstorage';
-import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
-
-const { getItem } = useLocalStorage();
+import {
+  client,
+  REGISTER_MOCKS,
+} from 'components/Advertisements/AdvertisementsMocks';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -46,105 +34,13 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const MOCKS = [
-  {
-    request: {
-      query: ADD_ADVERTISEMENT_MUTATION,
-      variables: {
-        organizationId: '1',
-        name: 'Ad1',
-        type: 'BANNER',
-        startDate: '2023-01-01',
-        endDate: '2023-02-01',
-        file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
-      },
-    },
-    result: {
-      data: {
-        createAdvertisement: {
-          _id: '1',
-          advertisement: null,
-          __typename: 'Advertisement',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: '5rdiyr3iwfhwaify',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: '5rdiyr3iwfhwaify',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'erdftgyhujkerty',
-                endCursor: 'edrftgyhujikl',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-];
-
-const link = new StaticMockLink(MOCKS, true);
-
-const httpLink = new HttpLink({
-  uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + getItem('token') || '',
-  },
-});
+const link = new StaticMockLink(REGISTER_MOCKS, true);
 
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
     getItem: vi.fn().mockReturnValue('token'),
   }),
 }));
-
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: ApolloLink.from([httpLink]),
-});
-
-// const client: ApolloClient<any> = new ApolloClient({
-//   cache: new InMemoryCache(),
-//   link,
-// });
 
 const translations = {
   ...JSON.parse(

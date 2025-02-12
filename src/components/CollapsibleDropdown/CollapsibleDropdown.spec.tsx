@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
-import type { InterfaceCollapsibleDropdown } from './CollapsibleDropdown';
+import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
 import { store } from 'state/store';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';

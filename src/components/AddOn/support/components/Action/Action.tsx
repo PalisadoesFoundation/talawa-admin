@@ -1,19 +1,5 @@
 import React, { useRef } from 'react';
-
-/**
- * Props for the `action` component.
- */
-interface InterfaceActionProps {
-  /**
-   * The child elements to be rendered inside the action component.
-   */
-  children: any;
-
-  /**
-   * The label to be displayed above the child elements.
-   */
-  label: string;
-}
+import type { InterfaceActionProps } from 'types/AddOn/interface';
 
 /**
  * A React component that renders a labeled container for embedded actions.

@@ -1,15 +1,6 @@
 import React from 'react';
 import styles from './MainContent.module.css';
-
-/**
- * Props for the `mainContent` component.
- */
-interface InterfaceMainContentProps {
-  /**
-   * The child elements to be rendered inside the main content container.
-   */
-  children: any;
-}
+import type { InterfaceMainContentProps } from 'types/AddOn/interface';
 
 /**
  * A React component that renders a main content container with additional styles.

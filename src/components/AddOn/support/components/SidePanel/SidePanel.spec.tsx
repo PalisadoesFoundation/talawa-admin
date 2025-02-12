@@ -1,14 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import SidePanel from './SidePanel';
-import type { NormalizedCacheObject } from '@apollo/client';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { BACKEND_URL } from 'Constant/constant';
-
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: BACKEND_URL,
-});
+import { ApolloProvider } from '@apollo/client';
+import { client } from 'components/AddOn/AddOnMocks';
 
 describe('Testing Contribution Stats', () => {
   /**

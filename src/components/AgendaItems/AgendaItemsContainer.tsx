@@ -17,9 +17,9 @@ import type {
 } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 
-import AgendaItemsPreviewModal from 'components/AgendaItems/AgendaItemsPreviewModal';
-import AgendaItemsDeleteModal from 'components/AgendaItems/AgendaItemsDeleteModal';
-import AgendaItemsUpdateModal from 'components/AgendaItems/AgendaItemsUpdateModal';
+import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsPreviewModal';
+import AgendaItemsDeleteModal from 'components/AgendaItems/Delete/AgendaItemsDeleteModal';
+import AgendaItemsUpdateModal from 'components/AgendaItems/Update/AgendaItemsUpdateModal';
 
 /**
  * Component for displaying and managing agenda items.

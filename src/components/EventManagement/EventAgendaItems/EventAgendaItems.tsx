@@ -18,7 +18,7 @@ import type {
   InterfaceAgendaItemList,
 } from 'utils/interfaces';
 import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
-import AgendaItemsCreateModal from 'components/AgendaItems/AgendaItemsCreateModal';
+import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
 
 import styles from '../../../style/app.module.css';
 import Loader from 'components/Loader/Loader';

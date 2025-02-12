@@ -5,7 +5,7 @@ import { Form, Popover } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import EventCalendar from 'components/EventCalendar/EventCalendar';
+import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import { TimePicker, DatePicker } from '@mui/x-date-pickers';
 import styles from '../../style/app.module.css';
 import {
@@ -19,7 +19,7 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
-import EventHeader from 'components/EventCalendar/EventHeader';
+import EventHeader from 'components/EventCalender/Header/EventHeader';
 import {
   Frequency,
   Days,
