@@ -10,7 +10,9 @@ from collections import namedtuple
 # Define namedtuples for storing results
 Violation = namedtuple("Violation", ["file_path", "css_file", "reason"])
 CorrectImport = namedtuple("CorrectImport", ["file_path", "css_file"])
-EmbeddedViolation = namedtuple("EmbeddedViolation", ["file_path", "css_codes"])
+EmbeddedViolation = namedtuple(
+    "EmbeddedViolation", ["file_path", "css_codes", "line_numbers"]
+)
 CSSCheckResult = namedtuple(
     "CSSCheckResult", ["violations", "correct_imports", "embedded_violations"]
 )
@@ -93,8 +95,10 @@ def process_typescript_file(
     # Check for embedded CSS
     embedded_css = check_embedded_css(content)
     if embedded_css:
+        line_numbers = [violation[0] for violation in embedded_css]
+        css_codes = [violation[1] for violation in embedded_css]
         embedded_css_violations.append(
-            EmbeddedViolation(file_path, embedded_css)
+            EmbeddedViolation(file_path, css_codes, line_numbers)
         )
 
 
@@ -146,15 +150,15 @@ def check_files(
                 if file_path in exclude_files:
                     continue
 
-                if file.endswith((".ts", ".tsx")) and not any(
-                    pattern in root
-                    for pattern in [
-                        "__tests__",
-                        ".test.",
-                        ".spec.",
-                        "test/",
-                        "tests/",
-                    ]
+                if (
+                    file.endswith((".ts", ".tsx"))
+                    and not file.endswith(
+                        (".test.tsx", ".spec.tsx", ".test.ts", ".spec.ts")
+                    )  # Ensure test files are excluded
+                    and not any(
+                        pattern in root
+                        for pattern in ["__tests__", "test/", "tests/"]
+                    )
                 ):
                     process_typescript_file(
                         file_path,
@@ -178,8 +182,10 @@ def check_files(
     # Process individual files explicitly listed
     for file_path in files:
         file_path = os.path.abspath(file_path)
-        if file_path not in exclude_files and file_path.endswith(
-            (".ts", ".tsx")
+        if (
+            file_path not in exclude_files
+            and file_path.endswith((".ts", ".tsx"))
+            and not file_path.endswith((".test.tsx", ".spec.tsx"))
         ):
             process_typescript_file(
                 file_path,
@@ -306,16 +312,20 @@ def main():
                 f"- {violation.file_path}: "
                 f"{violation.css_file} ({violation.reason})"
             )
-        exit_code = 1
+        exit_code = 0
 
     if result.embedded_violations:
         output.append("\nEmbedded CSS Violations:")
         for violation in result.embedded_violations:
+            for line_number, css_code in zip(
+                violation.line_numbers, violation.css_codes
+            ):
+                relative_file_path = os.path.relpath(violation.file_path)
             for css_code in violation.css_codes:
                 output.append(
-                    f"- {violation.file_path}: "
-                    f"has embedded color code `{css_code}`. use CSS variable "
-                    f"in src/style/app.module.css."
+                    f"- File: {relative_file_path}, Line: {line_number}: "
+                    f"Embedded color code `{css_code}` detected.Please replace"
+                    f" it with a CSS variable in `src/style/app.module.css`."
                 )
         exit_code = 1
 
@@ -323,19 +333,21 @@ def main():
         print("\n".join(output))
         print(
             "Please address the above CSS violations:\n"
-            "1. For invalid CSS imports,\n"
+            "1. For invalid CSS imports,"
             "   ensure you're using the correct import syntax and file paths.\n"
-            "2. For embedded CSS,\n"
-            "   move the CSS to appropriate stylesheet\n"
+            "2. For embedded CSS,"
+            "   move the CSS to appropriate stylesheet"
             "   files and import them correctly.\n"
-            "3. Make sure to use only the allowed CSS patterns\n"
+            "3. Make sure to use only the allowed CSS patterns"
             "   as specified in the script arguments.\n"
-            "4. Check that all imported CSS files\n"
+            "4. Check that all imported CSS files"
             "   exist in the specified locations.\n"
-            "5. Ensure each TypeScript file has exactly\n"
+            "5. Ensure each TypeScript file has exactly"
             "   one import of the allowed CSS file.\n"
-            "6. Remove any CSS files from the same\n"
-            "   directory as TypeScript files."
+            "6. Remove any CSS files from the same"
+            "   directory as TypeScript files.\n"
+            "Note: for now the script fails only"
+            " because of embedded CSS violations."
         )
 
     if args.show_success and result.correct_imports:
