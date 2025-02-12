@@ -147,18 +147,18 @@ const orgFundCampaign = (): JSX.Element => {
     refetch: () => void;
   } = useQuery(FUND_CAMPAIGN, {
     variables: {
-      input: { id: fundId },  // Updated to use 'input'
+      input: { id: fundId }, // Updated to use 'input'
     },
     skip: !fundId,
-    onCompleted: (data) => console.log("GraphQL Data Received:", data),
-    onError: (error) => console.error("GraphQL Error:", error),
+    onCompleted: (data) => console.log('GraphQL Data Received:', data),
+    onError: (error) => console.error('GraphQL Error:', error),
   });
 
   const compaignsData = useMemo(() => {
-    return campaignData?.fund?.campaigns?.edges.map(edge => edge.node) ?? [];
+    return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
   }, [campaignData]);
 
-  console.log("compaignsData", compaignsData);
+  console.log('compaignsData', compaignsData);
 
   const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
@@ -313,7 +313,9 @@ const orgFundCampaign = (): JSX.Element => {
           size="sm"
           className={styles.editButton}
           data-testid="editCampaignBtn"
-          onClick={() => handleOpenModal(params.row as InterfaceCampaignInfo, 'edit',)}
+          onClick={() =>
+            handleOpenModal(params.row as InterfaceCampaignInfo, 'edit')
+          }
         >
           <i className="fa fa-edit" />
         </Button>

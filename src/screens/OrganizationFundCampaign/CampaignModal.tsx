@@ -112,13 +112,17 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
     // Ensure the end date is in the future
     if (dayjs(formState.campaignEndDate).isBefore(dayjs())) {
-      toast.error("End date must be in the future.");
+      toast.error('End date must be in the future.');
       return;
     }
 
     // Ensure the end date is different from the start date
-    if (dayjs(formState.campaignEndDate).isSame(dayjs(formState.campaignStartDate))) {
-      toast.error("End date must be different from the start date.");
+    if (
+      dayjs(formState.campaignEndDate).isSame(
+        dayjs(formState.campaignStartDate),
+      )
+    ) {
+      toast.error('End date must be different from the start date.');
       return;
     }
 
@@ -162,13 +166,17 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
     // Ensure the end date is in the future
     if (dayjs(formState.campaignEndDate).isBefore(dayjs())) {
-      toast.error("End date must be in the future.");
+      toast.error('End date must be in the future.');
       return;
     }
 
     // Ensure the end date is different from the start date
-    if (dayjs(formState.campaignEndDate).isSame(dayjs(formState.campaignStartDate))) {
-      toast.error("End date must be different from the start date.");
+    if (
+      dayjs(formState.campaignEndDate).isSame(
+        dayjs(formState.campaignStartDate),
+      )
+    ) {
+      toast.error('End date must be different from the start date.');
       return;
     }
     try {
@@ -185,7 +193,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (campaign?.endDate !== formState.campaignEndDate) {
         const endAt = dayjs(formState.campaignEndDate);
         if (endAt.isBefore(dayjs())) {
-          toast.error("End date must be in the future.");
+          toast.error('End date must be in the future.');
           return;
         }
         updatedFields.endAt = endAt.toISOString();

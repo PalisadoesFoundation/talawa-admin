@@ -142,15 +142,14 @@ const fundCampaignPledge = (): JSX.Element => {
         getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
       }>
     >;
-  }
-    = useQuery(FUND_CAMPAIGN_PLEDGE, {
-      variables: {
-        input: {
-          id: fundCampaignId,
-        },
-        pledgeOrderBy: sortBy,
+  } = useQuery(FUND_CAMPAIGN_PLEDGE, {
+    variables: {
+      input: {
+        id: fundCampaignId,
       },
-    });
+      pledgeOrderBy: sortBy,
+    },
+  });
 
   const endDate = dayjs(
     pledgeData?.getFundraisingCampaigns[0]?.endDate,

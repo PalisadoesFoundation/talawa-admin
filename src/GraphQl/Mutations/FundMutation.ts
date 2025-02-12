@@ -15,7 +15,8 @@ export const CREATE_FUND_MUTATION = gql`
     $isTaxDeductible: Boolean!
   ) {
     createFund(
-      input: {  # ✅ Ensure correct field names
+      input: {
+        # ✅ Ensure correct field names
         name: $name
         organizationId: $organizationId
         isTaxDeductible: $isTaxDeductible
@@ -25,7 +26,6 @@ export const CREATE_FUND_MUTATION = gql`
     }
   }
 `;
-
 
 /**
  * GraphQL mutation to update a fund.
