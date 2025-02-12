@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal, Popover } from 'react-bootstrap';
-import styles from '../../style/app.module.css';
+import styles from '../../../style/app.module.css';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import type { InterfaceEventListCardProps } from './EventListCard';
+import type { InterfaceEventListCardProps } from 'types/Event/interface';
+import { Role } from 'types/Event/interface';
 import {
   type InterfaceRecurrenceRuleState,
   type RecurringEventMutationType,
@@ -31,10 +32,8 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 
-enum Role {
-  USER = 'USER',
-  SUPERADMIN = 'SUPERADMIN',
-  ADMIN = 'ADMIN',
+interface InterfaceEventListCard extends InterfaceEventListCardProps {
+  refetchEvents?: () => void;
 }
 
 /**
@@ -77,7 +76,7 @@ const timeToDayJs = (time: string): Dayjs => {
  * tCommon - Function for translation of common text.
  */
 interface InterfaceEventListCardModalProps {
-  eventListCardProps: InterfaceEventListCardProps;
+  eventListCardProps: InterfaceEventListCard;
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   t: (key: string) => string;
@@ -149,9 +148,9 @@ function EventListCardModals({
   const recurrenceRuleText = getRecurrenceRuleText(recurrenceRuleState);
 
   const [formState, setFormState] = useState({
-    title: eventListCardProps.eventName,
-    eventdescrip: eventListCardProps.eventDescription,
-    location: eventListCardProps.eventLocation,
+    title: eventListCardProps.title,
+    eventdescrip: eventListCardProps.description,
+    location: eventListCardProps.location,
     startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
     endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
   });
@@ -263,7 +262,7 @@ function EventListCardModals({
     try {
       const { data } = await updateEvent({
         variables: {
-          id: eventListCardProps.id,
+          id: eventListCardProps._id,
           title: formState.title,
           description: formState.eventdescrip,
           isPublic: publicchecked,
@@ -335,7 +334,7 @@ function EventListCardModals({
     try {
       const { data } = await deleteEvent({
         variables: {
-          id: eventListCardProps.id,
+          id: eventListCardProps._id,
           recurringEventDeleteType: eventListCardProps.recurring
             ? recurringEventDeleteType
             : undefined,
@@ -359,8 +358,8 @@ function EventListCardModals({
     setEventDeleteModalIsOpen(!eventDeleteModalIsOpen);
   };
 
-  const isInitiallyRegistered = eventListCardProps?.registrants?.some(
-    (registrant) => registrant._id === userId,
+  const isInitiallyRegistered = eventListCardProps?.attendees?.some(
+    (attendee) => attendee._id === userId,
   );
   const [registerEventMutation] = useMutation(REGISTER_EVENT);
   const [isRegistered, setIsRegistered] = useState(isInitiallyRegistered);
@@ -370,13 +369,13 @@ function EventListCardModals({
       try {
         const { data } = await registerEventMutation({
           variables: {
-            eventId: eventListCardProps.id,
+            eventId: eventListCardProps._id,
           },
         });
 
         if (data) {
           toast.success(
-            `Successfully registered for ${eventListCardProps.eventName}`,
+            `Successfully registered for ${eventListCardProps.title}`,
           );
           setIsRegistered(true);
           hideViewModal();
@@ -393,8 +392,8 @@ function EventListCardModals({
 
   const openEventDashboard = (): void => {
     const userPath = eventListCardProps.userRole === Role.USER ? 'user/' : '';
-    console.log(`/${userPath}event/${orgId}/${eventListCardProps.id}`);
-    navigate(`/${userPath}event/${orgId}/${eventListCardProps.id}`);
+    console.log(`/${userPath}event/${orgId}/${eventListCardProps._id}`);
+    navigate(`/${userPath}event/${orgId}/${eventListCardProps._id}`);
   };
 
   const popover = (
@@ -479,7 +478,7 @@ function EventListCardModals({
             </p>
             <Form.Control
               type="text"
-              id="eventLocation"
+              id="location"
               className={`mb-3 ${styles.inputField}`}
               autoComplete="off"
               data-testid="updateLocation"
@@ -726,7 +725,7 @@ function EventListCardModals({
       {/* recurring event update options modal */}
       <Modal
         size="sm"
-        id={`recurringEventUpdateOptions${eventListCardProps.id}`}
+        id={`recurringEventUpdateOptions${eventListCardProps._id}`}
         show={recurringEventUpdateModalIsOpen}
         onHide={toggleRecurringEventUpdateModal}
         backdrop="static"
@@ -736,7 +735,7 @@ function EventListCardModals({
         <Modal.Header closeButton className={`${styles.modalHeader}`}>
           <Modal.Title
             className="text-white"
-            id={`recurringEventUpdateOptionsLabel${eventListCardProps.id}`}
+            id={`recurringEventUpdateOptionsLabel${eventListCardProps._id}`}
           >
             {t('editEvent')}
           </Modal.Title>
@@ -788,7 +787,7 @@ function EventListCardModals({
       {/* delete modal */}
       <Modal
         size="sm"
-        id={`deleteEventModal${eventListCardProps.id}`}
+        id={`deleteEventModal${eventListCardProps._id}`}
         show={eventDeleteModalIsOpen}
         onHide={toggleDeleteModal}
         backdrop="static"
@@ -798,7 +797,7 @@ function EventListCardModals({
         <Modal.Header closeButton className={`${styles.modalHeader}`}>
           <Modal.Title
             className="text-white"
-            id={`deleteEventModalLabel${eventListCardProps.id}`}
+            id={`deleteEventModalLabel${eventListCardProps._id}`}
           >
             {t('deleteEvent')}
           </Modal.Title>

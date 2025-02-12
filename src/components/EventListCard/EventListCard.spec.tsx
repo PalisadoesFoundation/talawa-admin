@@ -4,7 +4,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import type { InterfaceEventListCardProps } from './EventListCard';
+import type { InterfaceEventListCardProps } from 'types/Event/interface';
 import EventListCard from './EventListCard';
 import i18n from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -16,7 +16,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import useLocalStorage from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
-import { ERROR_MOCKS, MOCKS } from './EventListCardMocks';
+import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, expect, it } from 'vitest';
 
 const { setItem } = useLocalStorage();
@@ -136,10 +136,10 @@ describe('Testing Event List Card', () => {
           <BrowserRouter>
             <EventListCard
               key="123"
-              id="1"
-              eventName=""
-              eventLocation=""
-              eventDescription=""
+              _id="1"
+              title=""
+              location=""
+              description=""
               startDate="19/03/2022"
               endDate="26/03/2022"
               startTime="02:00"
@@ -174,7 +174,7 @@ describe('Testing Event List Card', () => {
   it('should render props and text elements test for the screen', async () => {
     renderEventListCard(props[1]);
 
-    expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
+    expect(screen.getByText(props[1].title)).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -183,11 +183,9 @@ describe('Testing Event List Card', () => {
     });
 
     expect(screen.getByTestId('updateDescription')).toHaveValue(
-      props[1].eventDescription,
+      props[1].description,
     );
-    expect(screen.getByTestId('updateLocation')).toHaveValue(
-      props[1].eventLocation,
-    );
+    expect(screen.getByTestId('updateLocation')).toHaveValue(props[1].location);
 
     await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
@@ -200,7 +198,7 @@ describe('Testing Event List Card', () => {
 
   it('Should render truncated event name when length is more than 100', async () => {
     const longEventName = 'a'.repeat(101);
-    renderEventListCard({ ...props[1], eventName: longEventName });
+    renderEventListCard({ ...props[1], title: longEventName });
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -223,7 +221,7 @@ describe('Testing Event List Card', () => {
 
   it('Should render full event name when length is less than or equal to 100', async () => {
     const shortEventName = 'a'.repeat(100);
-    renderEventListCard({ ...props[1], eventName: shortEventName });
+    renderEventListCard({ ...props[1], title: shortEventName });
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -247,7 +245,7 @@ describe('Testing Event List Card', () => {
 
     renderEventListCard({
       ...props[1],
-      eventDescription: longEventDescription,
+      description: longEventDescription,
     });
 
     await userEvent.click(screen.getByTestId('card'));
@@ -273,7 +271,7 @@ describe('Testing Event List Card', () => {
 
     renderEventListCard({
       ...props[1],
-      eventDescription: shortEventDescription,
+      description: shortEventDescription,
     });
 
     await userEvent.click(screen.getByTestId('card'));
@@ -338,9 +336,9 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventTitle, { target: { value: '' } });
     await userEvent.type(eventTitle, updateData.title);
 
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    await userEvent.type(eventDescription, updateData.description);
+    const description = screen.getByTestId('updateDescription');
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, updateData.description);
 
     const eventLocation = screen.getByTestId('updateLocation');
     fireEvent.change(eventLocation, { target: { value: '' } });
@@ -381,9 +379,9 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventTitle, { target: { value: '' } });
     await userEvent.type(eventTitle, updateData.title);
 
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    await userEvent.type(eventDescription, updateData.description);
+    const description = screen.getByTestId('updateDescription');
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, updateData.description);
 
     const eventLocation = screen.getByTestId('updateLocation');
     fireEvent.change(eventLocation, { target: { value: '' } });
@@ -434,9 +432,9 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventTitle, { target: { value: '' } });
     await userEvent.type(eventTitle, updateData.title);
 
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    await userEvent.type(eventDescription, updateData.description);
+    const description = screen.getByTestId('updateDescription');
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, updateData.description);
 
     const eventLocation = screen.getByTestId('updateLocation');
     fireEvent.change(eventLocation, { target: { value: '' } });
@@ -679,9 +677,9 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventTitle, { target: { value: '' } });
     await userEvent.type(eventTitle, updateData.title);
 
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    await userEvent.type(eventDescription, updateData.description);
+    const description = screen.getByTestId('updateDescription');
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, updateData.description);
 
     const eventLocation = screen.getByTestId('updateLocation');
     fireEvent.change(eventLocation, { target: { value: '' } });
@@ -939,7 +937,7 @@ describe('Testing Event List Card', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        `Successfully registered for ${props[2].eventName}`,
+        `Successfully registered for ${props[2].title}`,
       );
     });
 

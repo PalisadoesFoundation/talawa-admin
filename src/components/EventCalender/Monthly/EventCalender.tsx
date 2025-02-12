@@ -222,10 +222,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               refetchEvents={refetchEvents}
               userRole={userRole}
               key={datas._id}
-              id={datas._id}
-              eventLocation={datas.location}
-              eventName={datas.title}
-              eventDescription={datas.description}
+              _id={datas._id}
+              location={datas.location}
+              title={datas.title}
+              description={datas.description}
               startDate={datas.startDate}
               endDate={datas.endDate}
               startTime={datas.startTime}
@@ -236,7 +236,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               isRecurringEventException={datas.isRecurringEventException}
               isPublic={datas.isPublic}
               isRegisterable={datas.isRegisterable}
-              registrants={attendees}
+              attendees={attendees}
               creator={datas.creator}
             />
           );
@@ -410,10 +410,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 refetchEvents={refetchEvents}
                 userRole={userRole}
                 key={datas._id}
-                id={datas._id}
-                eventLocation={datas.location}
-                eventName={datas.title}
-                eventDescription={datas.description}
+                _id={datas._id}
+                location={datas.location}
+                title={datas.title}
+                description={datas.description}
                 startDate={datas.startDate}
                 endDate={datas.endDate}
                 startTime={datas.startTime}
@@ -424,7 +424,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 isRecurringEventException={datas.isRecurringEventException}
                 isPublic={datas.isPublic}
                 isRegisterable={datas.isRegisterable}
-                registrants={attendees}
+                attendees={attendees}
                 creator={datas.creator}
               />
             );

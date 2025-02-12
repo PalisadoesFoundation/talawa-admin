@@ -3,80 +3,13 @@ import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from '../../../style/app.module.css';
-import type { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
-
-/**
- * Interface for event data used in the calendar.
- */
-interface InterfaceEventListCardProps {
-  userRole?: string;
-  key?: string;
-  _id: string;
-  location: string;
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  startTime: string | null;
-  endTime: string | null;
-  allDay: boolean;
-  recurring: boolean;
-  recurrenceRule: InterfaceRecurrenceRule | null;
-  isRecurringEventException: boolean;
-  isPublic: boolean;
-  isRegisterable: boolean;
-  attendees?: {
-    _id: string;
-  }[];
-  creator?: {
-    firstName: string;
-    lastName: string;
-    _id: string;
-  };
-}
-
-interface InterfaceCalendarProps {
-  eventData: InterfaceEventListCardProps[];
-  refetchEvents?: () => void;
-  orgData?: InterfaceIOrgList;
-  userRole?: string;
-  userId?: string;
-  viewType?: ViewType;
-}
-
-// enum Status {
-//   ACTIVE = 'ACTIVE',
-//   BLOCKED = 'BLOCKED',
-//   DELETED = 'DELETED',
-// }
-
-/**
- * Enum for different user roles.
- */
-enum Role {
-  USER = 'USER',
-  SUPERADMIN = 'SUPERADMIN',
-  ADMIN = 'ADMIN',
-}
-
-/**
- * Interface for event attendees.
-//  */
-// interface InterfaceIEventAttendees {
-//   userId: string;
-//   user?: string;
-//   status?: Status;
-//   createdAt?: Date;
-// }
-
-/**
- * Interface for organization list.
- */
-interface InterfaceIOrgList {
-  admins: { _id: string }[];
-}
+import {
+  InterfaceEventListCardProps,
+  InterfaceCalendarProps,
+  Role,
+  InterfaceIOrgList,
+} from 'types/Event/interface';
 
 /**
  * Calendar component to display events for a selected year.
@@ -252,10 +185,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 refetchEvents={refetchEvents}
                 userRole={userRole}
                 key={datas._id}
-                id={datas._id}
-                eventLocation={datas.location}
-                eventName={datas.title}
-                eventDescription={datas.description}
+                _id={datas._id}
+                location={datas.location}
+                title={datas.title}
+                description={datas.description}
                 startDate={datas.startDate}
                 endDate={datas.endDate}
                 startTime={datas.startTime}
@@ -266,7 +199,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 isRecurringEventException={datas.isRecurringEventException}
                 isPublic={datas.isPublic}
                 isRegisterable={datas.isRegisterable}
-                registrants={attendees}
+                attendees={attendees}
                 creator={datas.creator}
               />
             );
