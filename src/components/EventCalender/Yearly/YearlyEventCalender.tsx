@@ -5,10 +5,10 @@ import React, { useState, useEffect } from 'react';
 import styles from '../../../style/app.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
-  InterfaceEventListCardProps,
-  InterfaceCalendarProps,
+  type InterfaceEventListCardProps,
+  type InterfaceCalendarProps,
+  type InterfaceIOrgList,
   Role,
-  InterfaceIOrgList,
 } from 'types/Event/interface';
 
 /**
