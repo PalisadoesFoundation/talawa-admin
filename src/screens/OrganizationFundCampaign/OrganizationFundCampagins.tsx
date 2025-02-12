@@ -147,13 +147,18 @@ const orgFundCampaign = (): JSX.Element => {
     refetch: () => void;
   } = useQuery(FUND_CAMPAIGN, {
     variables: {
-      id: fundId,
-      orderBy: sortBy,
-      where: {
-        name_contains: searchTerm,
-      },
+      input: { id: fundId },  // Updated to use 'input'
     },
+    skip: !fundId,
+    onCompleted: (data) => console.log("GraphQL Data Received:", data),
+    onError: (error) => console.error("GraphQL Error:", error),
   });
+
+  const compaignsData = useMemo(() => {
+    return campaignData?.fund?.campaigns?.edges.map(edge => edge.node) ?? [];
+  }, [campaignData]);
+
+  console.log("compaignsData", compaignsData);
 
   const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
@@ -206,17 +211,15 @@ const orgFundCampaign = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className={styles.hyperlinkText}
-            data-testid="campaignName"
-            onClick={() => handleClick(params.row.campaign._id as string)}
-          >
-            {params.row.campaign.name}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className={styles.hyperlinkText}
+          data-testid="campaignName"
+          onClick={() => handleClick(params.row.id as string)}
+        >
+          {params.row.name}
+        </div>
+      ),
     },
     {
       field: 'startDate',
@@ -226,9 +229,8 @@ const orgFundCampaign = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.campaign.startDate).format('DD/MM/YYYY');
-      },
+      renderCell: (params: GridCellParams) =>
+        dayjs(params.row.startAt).format('DD/MM/YYYY'),
     },
     {
       field: 'endDate',
@@ -241,7 +243,7 @@ const orgFundCampaign = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="endDateCell">
-            {dayjs(params.row.campaign.endDate).format('DD/MM/YYYY')}{' '}
+            {dayjs(params.row.endAt).format('DD/MM/YYYY')}{' '}
           </div>
         );
       },
@@ -263,10 +265,10 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.campaign.currency as keyof typeof currencySymbols
+                params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
-            {params.row.campaign.fundingGoal}
+            {params.row.goalAmount}
           </div>
         );
       },
@@ -288,7 +290,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.campaign.currency as keyof typeof currencySymbols
+                params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             0
@@ -305,26 +307,17 @@ const orgFundCampaign = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              className={styles.editButton}
-              data-testid="editCampaignBtn"
-              onClick={() =>
-                handleOpenModal(
-                  params.row.campaign as InterfaceCampaignInfo,
-                  'edit',
-                )
-              }
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <Button
+          variant="success"
+          size="sm"
+          className={styles.editButton}
+          data-testid="editCampaignBtn"
+          onClick={() => handleOpenModal(params.row as InterfaceCampaignInfo, 'edit',)}
+        >
+          <i className="fa fa-edit" />
+        </Button>
+      ),
     },
     {
       field: 'assocPledge',
@@ -342,7 +335,7 @@ const orgFundCampaign = (): JSX.Element => {
             size="sm"
             className={styles.editButton}
             data-testid="viewBtn"
-            onClick={() => handleClick(params.row.campaign._id as string)}
+            onClick={() => handleClick(params.row.id as string)}
           >
             <i className="fa fa-eye me-1" />
             {t('viewPledges')}
@@ -415,7 +408,7 @@ const orgFundCampaign = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={8}
         hideFooter={true}
-        getRowId={(row) => row.campaign._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -429,10 +422,7 @@ const orgFundCampaign = (): JSX.Element => {
         }
         autoHeight
         rowHeight={65}
-        rows={campaigns.map((campaign, index) => ({
-          id: index + 1,
-          campaign,
-        }))}
+        rows={compaignsData}
         columns={columns}
         isRowSelectable={() => false}
       />
