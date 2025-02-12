@@ -39,24 +39,24 @@ const ChangeLanguageDropDown = (
    * @param languageCode - The code of the language to switch to.
    */
   const changeLanguage = async (languageCode: string): Promise<void> => {
-    if (userId) {
-      try {
+    try {
+      if (userId) {
         await updateUser({
           variables: {
             appLanguageCode: languageCode,
           },
         });
-        await i18next.changeLanguage(languageCode);
-        cookies.set('i18next', languageCode);
-      } catch (error) {
-        console.log('Error in changing language', error);
       }
+      await i18next.changeLanguage(languageCode);
+      cookies.set('i18next', languageCode);
+    } catch (error) {
+      console.log('Error in changing language', error);
     }
   };
 
   return (
     <Dropdown
-      title="Change Langauge"
+      title="Change Language"
       className={`${props?.parentContainerStyle ?? ''}`}
       data-testid="language-dropdown-container"
     >
