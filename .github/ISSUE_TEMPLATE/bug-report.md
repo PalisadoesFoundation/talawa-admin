@@ -28,7 +28,7 @@ A clear and concise description of how the code performed w.r.t expectations.
 If applicable, add screenshots to help explain your problem.
 
 **Additional details**
-Add any other context or screenshots about the feature request here.
+Add any other context or screenshots about the bug report here.
 
 **Potential internship candidates**
 
