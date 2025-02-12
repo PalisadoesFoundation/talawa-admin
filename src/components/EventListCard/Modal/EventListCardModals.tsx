@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal, Popover } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { Popover } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
 import type { InterfaceEventListCardProps } from 'types/Event/interface';
 import { Role } from 'types/Event/interface';
 import {
@@ -13,15 +10,12 @@ import {
   Frequency,
   allInstances,
   getRecurrenceRuleText,
-  getWeekDayOccurenceInMonth,
-  recurringEventMutationOptions,
   thisAndFollowingInstances,
   thisInstance,
   haveInstanceDatesChanged,
   hasRecurrenceRuleChanged,
 } from 'utils/recurrenceUtils';
 import useLocalStorage from 'utils/useLocalstorage';
-import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   DELETE_EVENT_MUTATION,
@@ -31,6 +25,10 @@ import {
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+
+import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
+import EventListCardUpdateModal from './Update/EventListCardUpdateModal';
+import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 
 interface InterfaceEventListCard extends InterfaceEventListCardProps {
   refetchEvents?: () => void;
@@ -62,10 +60,6 @@ interface InterfaceEventListCard extends InterfaceEventListCardProps {
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-const timeToDayJs = (time: string): Dayjs => {
-  const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
-  return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
-};
 
 /**
  * Properties for the `EventListCardModals` component.
@@ -408,448 +402,63 @@ function EventListCardModals({
   return (
     <>
       {/* preview modal */}
-      <Modal show={eventModalIsOpen} centered dialogClassName="" scrollable>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('eventDetails')}</p>
-          <Button
-            variant="danger"
-            onClick={hideViewModal}
-            data-testid="eventModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <p className={styles.previewEventListCardModals}>
-              {t('eventTitle')}
-            </p>
-            <Form.Control
-              type="title"
-              id="eventitle"
-              className={`mb-3 ${styles.inputField}`}
-              autoComplete="off"
-              data-testid="updateTitle"
-              required
-              value={
-                formState.title.length > 100
-                  ? formState.title.substring(0, 100) + '...'
-                  : formState.title
-              }
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  title: e.target.value,
-                });
-              }}
-              disabled={
-                !(eventListCardProps.creator?._id === userId) &&
-                eventListCardProps.userRole === Role.USER
-              }
-            />
-            <p className={styles.previewEventListCardModals}>
-              {tCommon('description')}
-            </p>
-            <Form.Control
-              type="eventdescrip"
-              id="eventdescrip"
-              className={`mb-3 ${styles.inputField}`}
-              autoComplete="off"
-              data-testid="updateDescription"
-              required
-              value={
-                formState.eventdescrip.length > 256
-                  ? formState.eventdescrip.substring(0, 256) + '...'
-                  : formState.eventdescrip
-              }
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  eventdescrip: e.target.value,
-                });
-              }}
-              disabled={
-                !(eventListCardProps.creator?._id === userId) &&
-                eventListCardProps.userRole === Role.USER
-              }
-            />
-            <p className={styles.previewEventListCardModals}>
-              {tCommon('location')}
-            </p>
-            <Form.Control
-              type="text"
-              id="location"
-              className={`mb-3 ${styles.inputField}`}
-              autoComplete="off"
-              data-testid="updateLocation"
-              required
-              value={formState.location}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  location: e.target.value,
-                });
-              }}
-              disabled={
-                !(eventListCardProps.creator?._id === userId) &&
-                eventListCardProps.userRole === Role.USER
-              }
-            />
-            <div className={styles.datediv}>
-              <div>
-                <DatePicker
-                  label={tCommon('startDate')}
-                  className={styles.datebox}
-                  value={dayjs(eventStartDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setEventStartDate(date?.toDate());
-                      setEventEndDate(
-                        eventEndDate < date?.toDate()
-                          ? date?.toDate()
-                          : eventEndDate,
-                      );
-                      if (!eventListCardProps.recurring) {
-                        setRecurrenceRuleState({
-                          ...recurrenceRuleState,
-                          recurrenceStartDate: date?.toDate(),
-                          weekDays: [Days[date?.toDate().getDay()]],
-                          weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                            ? getWeekDayOccurenceInMonth(date?.toDate())
-                            : undefined,
-                        });
-                      }
-                    }
-                  }}
-                />
-              </div>
-              <div>
-                <DatePicker
-                  label={tCommon('endDate')}
-                  className={styles.datebox}
-                  value={dayjs(eventEndDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setEventEndDate(date?.toDate());
-                    }
-                  }}
-                  minDate={dayjs(eventStartDate)}
-                />
-              </div>
-            </div>
-            {!alldaychecked && (
-              <div className={styles.datediv}>
-                <div>
-                  <TimePicker
-                    label={tCommon('startTime')}
-                    className={styles.datebox}
-                    timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                    value={timeToDayJs(formState.startTime)}
-                    onChange={(time): void => {
-                      if (time) {
-                        setFormState({
-                          ...formState,
-                          startTime: time?.format('HH:mm:ss'),
-                          endTime:
-                            timeToDayJs(formState.endTime) < time
-                              ? time?.format('HH:mm:ss')
-                              : formState.endTime,
-                        });
-                      }
-                    }}
-                    disabled={alldaychecked}
-                  />
-                </div>
-                <div>
-                  <TimePicker
-                    label={tCommon('endTime')}
-                    className={styles.datebox}
-                    timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                    value={timeToDayJs(formState.endTime)}
-                    onChange={(time): void => {
-                      if (time) {
-                        setFormState({
-                          ...formState,
-                          endTime: time?.format('HH:mm:ss'),
-                        });
-                      }
-                    }}
-                    minTime={timeToDayJs(formState.startTime)}
-                    disabled={alldaychecked}
-                  />
-                </div>
-              </div>
-            )}
-            <div className={styles.checkboxContainer}>
-              <div className={styles.checkboxdivEventListCardModals}>
-                <div className={styles.dispflexEventListCardModals}>
-                  <label htmlFor="allday">{t('allDay')}?</label>
-                  <Form.Switch
-                    id="allday"
-                    type="checkbox"
-                    data-testid="updateAllDay"
-                    className={styles.switch}
-                    checked={alldaychecked}
-                    onChange={(): void => {
-                      setAllDayChecked(!alldaychecked);
-                    }}
-                    disabled={
-                      !(eventListCardProps.creator?._id === userId) &&
-                      eventListCardProps.userRole === Role.USER
-                    }
-                  />
-                </div>
-                <div className={styles.dispflexEventListCardModals}>
-                  <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                  <Form.Switch
-                    id="recurring"
-                    type="checkbox"
-                    data-testid="updateRecurring"
-                    className={styles.switch}
-                    checked={recurringchecked}
-                    onChange={(): void => {
-                      setRecurringChecked(!recurringchecked);
-                    }}
-                    disabled={
-                      !(eventListCardProps.creator?._id === userId) &&
-                      eventListCardProps.userRole === Role.USER
-                    }
-                  />
-                </div>
-              </div>
-              <div className={styles.checkboxdivEventListCardModals}>
-                <div className={styles.dispflexEventListCardModals}>
-                  <label htmlFor="ispublic">{t('isPublic')}?</label>
-                  <Form.Switch
-                    id="ispublic"
-                    type="checkbox"
-                    data-testid="updateIsPublic"
-                    className={styles.switch}
-                    checked={publicchecked}
-                    onChange={(): void => {
-                      setPublicChecked(!publicchecked);
-                    }}
-                    disabled={
-                      !(eventListCardProps.creator?._id === userId) &&
-                      eventListCardProps.userRole === Role.USER
-                    }
-                  />
-                </div>
-                <div className={styles.dispflexEventListCardModals}>
-                  <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                  <Form.Switch
-                    id="registrable"
-                    type="checkbox"
-                    data-testid="updateRegistrable"
-                    className={styles.switch}
-                    checked={registrablechecked}
-                    onChange={(): void => {
-                      setRegistrableChecked(!registrablechecked);
-                    }}
-                    disabled={
-                      !(eventListCardProps.creator?._id === userId) &&
-                      eventListCardProps.userRole === Role.USER
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Recurrence Options */}
-            {recurringchecked && (
-              <RecurrenceOptions
-                recurrenceRuleState={recurrenceRuleState}
-                recurrenceRuleText={recurrenceRuleText}
-                setRecurrenceRuleState={setRecurrenceRuleState}
-                popover={popover}
-                t={t}
-                tCommon={tCommon}
-              />
-            )}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          {(eventListCardProps.userRole !== Role.USER ||
-            eventListCardProps.creator?._id === userId) && (
-            <Button
-              variant="success"
-              onClick={openEventDashboard}
-              data-testid="showEventDashboardBtn"
-              className={styles.addButton}
-            >
-              {' '}
-              Show Event Dashboard{' '}
-            </Button>
-          )}
-          {(eventListCardProps.userRole !== Role.USER ||
-            eventListCardProps.creator?._id === userId) && (
-            <Button
-              variant="success"
-              className={styles.addButton}
-              data-testid="updateEventBtn"
-              onClick={handleEventUpdate}
-            >
-              {t('editEvent')}
-            </Button>
-          )}
-          {(eventListCardProps.userRole !== Role.USER ||
-            eventListCardProps.creator?._id === userId) && (
-            <Button
-              variant="danger"
-              data-testid="deleteEventModalBtn"
-              className={styles.removeButton}
-              onClick={toggleDeleteModal}
-            >
-              {t('deleteEvent')}
-            </Button>
-          )}
-          {eventListCardProps.userRole === Role.USER &&
-            !(eventListCardProps.creator?._id === userId) &&
-            (isRegistered ? (
-              <Button className={styles.addButton} variant="success" disabled>
-                {t('alreadyRegistered')}
-              </Button>
-            ) : (
-              <Button
-                className={styles.addButton}
-                variant="success"
-                onClick={registerEventHandler}
-                data-testid="registerEventBtn"
-              >
-                {tCommon('register')}
-              </Button>
-            ))}
-        </Modal.Footer>
-      </Modal>
+      <EventListCardPreviewModal
+        eventListCardProps={eventListCardProps}
+        eventModalIsOpen={eventModalIsOpen}
+        hideViewModal={hideViewModal}
+        toggleDeleteModal={toggleDeleteModal}
+        t={t}
+        tCommon={tCommon}
+        popover={popover}
+        weekDayOccurenceInMonth={weekDayOccurenceInMonth}
+        isRegistered={isRegistered}
+        userId={userId}
+        eventStartDate={eventStartDate}
+        eventEndDate={eventEndDate}
+        setEventStartDate={setEventStartDate}
+        setEventEndDate={setEventEndDate}
+        alldaychecked={alldaychecked}
+        setAllDayChecked={setAllDayChecked}
+        recurringchecked={recurringchecked}
+        setRecurringChecked={setRecurringChecked}
+        publicchecked={publicchecked}
+        setPublicChecked={setPublicChecked}
+        registrablechecked={registrablechecked}
+        setRegistrableChecked={setRegistrableChecked}
+        recurrenceRuleState={recurrenceRuleState}
+        setRecurrenceRuleState={setRecurrenceRuleState}
+        recurrenceRuleText={recurrenceRuleText}
+        formState={formState}
+        setFormState={setFormState}
+        registerEventHandler={registerEventHandler}
+        handleEventUpdate={handleEventUpdate}
+        openEventDashboard={openEventDashboard}
+      />
 
       {/* recurring event update options modal */}
-      <Modal
-        size="sm"
-        id={`recurringEventUpdateOptions${eventListCardProps._id}`}
-        show={recurringEventUpdateModalIsOpen}
-        onHide={toggleRecurringEventUpdateModal}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header closeButton className={`${styles.modalHeader}`}>
-          <Modal.Title
-            className="text-white"
-            id={`recurringEventUpdateOptionsLabel${eventListCardProps._id}`}
-          >
-            {t('editEvent')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form className="mt-3">
-            {recurringEventUpdateOptions.map((option, index) => (
-              <div key={index} className="my-0 d-flex align-items-center">
-                <Form.Check
-                  type="radio"
-                  id={`radio-${index}`}
-                  label={t(option)}
-                  name="recurringEventUpdateType"
-                  value={option}
-                  onChange={(e) =>
-                    setRecurringEventUpdateType(
-                      e.target.value as RecurringEventMutationType,
-                    )
-                  }
-                  defaultChecked={option === recurringEventUpdateType}
-                  data-testid={`update-${option}`}
-                  className={styles.switch}
-                />
-              </div>
-            ))}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
-            data-dismiss="modal"
-            onClick={toggleRecurringEventUpdateModal}
-            data-testid="eventUpdateOptionsModalCloseBtn"
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className={`btn ${styles.addButton}`}
-            onClick={updateEventHandler}
-            data-testid="recurringEventUpdateOptionSubmitBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <EventListCardUpdateModal
+        eventListCardProps={eventListCardProps}
+        recurringEventUpdateModalIsOpen={recurringEventUpdateModalIsOpen}
+        toggleRecurringEventUpdateModal={toggleRecurringEventUpdateModal}
+        t={t}
+        tCommon={tCommon}
+        recurringEventUpdateType={recurringEventUpdateType}
+        setRecurringEventUpdateType={setRecurringEventUpdateType}
+        recurringEventUpdateOptions={recurringEventUpdateOptions}
+        updateEventHandler={updateEventHandler}
+      />
 
       {/* delete modal */}
-      <Modal
-        size="sm"
-        id={`deleteEventModal${eventListCardProps._id}`}
-        show={eventDeleteModalIsOpen}
-        onHide={toggleDeleteModal}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header closeButton className={`${styles.modalHeader}`}>
-          <Modal.Title
-            className="text-white"
-            id={`deleteEventModalLabel${eventListCardProps._id}`}
-          >
-            {t('deleteEvent')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {!eventListCardProps.recurring && t('deleteEventMsg')}
-          {eventListCardProps.recurring && (
-            <>
-              <Form className="mt-3">
-                {recurringEventMutationOptions.map((option, index) => (
-                  <div key={index} className="my-0 d-flex align-items-center">
-                    <Form.Check
-                      type="radio"
-                      id={`radio-${index}`}
-                      label={t(option)}
-                      name="recurringEventDeleteType"
-                      value={option}
-                      onChange={(e) =>
-                        setRecurringEventDeleteType(
-                          e.target.value as RecurringEventMutationType,
-                        )
-                      }
-                      defaultChecked={option === recurringEventDeleteType}
-                      data-testid={`delete-${option}`}
-                      className={styles.switch}
-                    />
-                  </div>
-                ))}
-              </Form>
-            </>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
-            data-dismiss="modal"
-            onClick={toggleDeleteModal}
-            data-testid="eventDeleteModalCloseBtn"
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className={`btn ${styles.addButton}`}
-            onClick={deleteEventHandler}
-            data-testid="deleteEventBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <EventListCardDeleteModal
+        eventListCardProps={eventListCardProps}
+        eventDeleteModalIsOpen={eventDeleteModalIsOpen}
+        toggleDeleteModal={toggleDeleteModal}
+        t={t}
+        tCommon={tCommon}
+        recurringEventDeleteType={recurringEventDeleteType}
+        setRecurringEventDeleteType={setRecurringEventDeleteType}
+        deleteEventHandler={deleteEventHandler}
+      />
     </>
   );
 }

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventListCardProps
 
-Defined in: [src/types/Event/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L10)
+Defined in: [src/types/Event/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L14)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:10](https://github.com/PalisadoesFound
 
 > **\_id**: `string`
 
-Defined in: [src/types/Event/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L13)
+Defined in: [src/types/Event/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L17)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:13](https://github.com/PalisadoesFound
 
 > **allDay**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L21)
+Defined in: [src/types/Event/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L25)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:21](https://github.com/PalisadoesFound
 
 > `optional` **attendees**: `object`[]
 
-Defined in: [src/types/Event/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L27)
+Defined in: [src/types/Event/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L31)
 
 #### \_id
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/interface.ts:27](https://github.com/PalisadoesFound
 
 > `optional` **creator**: `object`
 
-Defined in: [src/types/Event/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L30)
+Defined in: [src/types/Event/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L34)
 
 #### \_id
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Event/interface.ts:30](https://github.com/PalisadoesFound
 
 > **description**: `string`
 
-Defined in: [src/types/Event/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L16)
+Defined in: [src/types/Event/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L20)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Event/interface.ts:16](https://github.com/PalisadoesFound
 
 > **endDate**: `string`
 
-Defined in: [src/types/Event/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L18)
+Defined in: [src/types/Event/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L22)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Event/interface.ts:18](https://github.com/PalisadoesFound
 
 > **endTime**: `string`
 
-Defined in: [src/types/Event/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L20)
+Defined in: [src/types/Event/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L24)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/Event/interface.ts:20](https://github.com/PalisadoesFound
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L25)
+Defined in: [src/types/Event/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L29)
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: [src/types/Event/interface.ts:25](https://github.com/PalisadoesFound
 
 > **isRecurringEventException**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L24)
+Defined in: [src/types/Event/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L28)
 
 ***
 
@@ -100,7 +100,7 @@ Defined in: [src/types/Event/interface.ts:24](https://github.com/PalisadoesFound
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L26)
+Defined in: [src/types/Event/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L30)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/types/Event/interface.ts:26](https://github.com/PalisadoesFound
 
 > `optional` **key**: `string`
 
-Defined in: [src/types/Event/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L12)
+Defined in: [src/types/Event/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L16)
 
 ***
 
@@ -116,7 +116,7 @@ Defined in: [src/types/Event/interface.ts:12](https://github.com/PalisadoesFound
 
 > **location**: `string`
 
-Defined in: [src/types/Event/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L14)
+Defined in: [src/types/Event/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L18)
 
 ***
 
@@ -124,7 +124,7 @@ Defined in: [src/types/Event/interface.ts:14](https://github.com/PalisadoesFound
 
 > **recurrenceRule**: [`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/Event/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L23)
+Defined in: [src/types/Event/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L27)
 
 ***
 
@@ -132,7 +132,7 @@ Defined in: [src/types/Event/interface.ts:23](https://github.com/PalisadoesFound
 
 > **recurring**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L22)
+Defined in: [src/types/Event/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L26)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [src/types/Event/interface.ts:22](https://github.com/PalisadoesFound
 
 > **startDate**: `string`
 
-Defined in: [src/types/Event/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L17)
+Defined in: [src/types/Event/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L21)
 
 ***
 
@@ -148,7 +148,7 @@ Defined in: [src/types/Event/interface.ts:17](https://github.com/PalisadoesFound
 
 > **startTime**: `string`
 
-Defined in: [src/types/Event/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L19)
+Defined in: [src/types/Event/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L23)
 
 ***
 
@@ -156,7 +156,7 @@ Defined in: [src/types/Event/interface.ts:19](https://github.com/PalisadoesFound
 
 > **title**: `string`
 
-Defined in: [src/types/Event/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L15)
+Defined in: [src/types/Event/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L19)
 
 ***
 
@@ -164,4 +164,4 @@ Defined in: [src/types/Event/interface.ts:15](https://github.com/PalisadoesFound
 
 > `optional` **userRole**: `string`
 
-Defined in: [src/types/Event/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L11)
+Defined in: [src/types/Event/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L15)
