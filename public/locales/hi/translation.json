@@ -786,7 +786,7 @@
     "title": "404 नहीं मिला",
     "talawaAdmin": "तलावा प्रशासन",
     "talawaUser": "तलावा उपयोगकर्ता",
-    "notFoundMsg": "उफ़! ",
+    "notFoundMsg": "उफ़! यह पृष्ठ नहीं मिला।",
     "backToHome": "घर वापिस जा रहा हूँ"
   },
   "orgContribution": {
