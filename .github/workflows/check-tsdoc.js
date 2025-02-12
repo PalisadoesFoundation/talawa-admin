@@ -39,7 +39,7 @@ async function findTsxFiles(dir) {
 async function containsTsDocComment(filePath) {
   try {
     const content = await fs.readFile(filePath, 'utf8');
-    return /\/\*\*[\s\S]*?\*\//.test(content);
+    return /\/\*\*\s*\n\s*\*[\s\S]*?\*\//.test(content);
   } catch (err) {
     console.error(`Error reading file ${filePath}: ${err.message}`);
     return false;
