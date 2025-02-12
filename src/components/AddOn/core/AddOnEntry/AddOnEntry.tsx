@@ -6,21 +6,7 @@ import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Navigate, useParams } from 'react-router-dom';
-
-/**
- * Props for the `addOnEntry` component..
- */
-interface InterfaceAddOnEntryProps {
-  id: string;
-  enabled?: boolean; // Optional props
-  title?: string; // Optional props
-  description?: string; // Optional props
-  createdBy: string;
-  component?: string; // Optional props
-  modified?: boolean; // Optional props
-  uninstalledOrgs: string[];
-  getInstalledPlugins: () => void;
-}
+import type { InterfaceAddOnEntryProps } from 'types/AddOn/interface';
 
 /**
  * A React component that represents an add-on entry, displaying its details and allowing installation or uninstallation.

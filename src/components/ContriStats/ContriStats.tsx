@@ -2,13 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styles from '../../style/app.module.css';
-
-interface InterfaceContriStatsProps {
-  id: string;
-  recentAmount: string;
-  highestAmount: string;
-  totalAmount: string;
-}
+import type { InterfaceContriStatsProps } from 'types/Contribution/interface';
 
 /**
  * A component that displays contribution statistics.

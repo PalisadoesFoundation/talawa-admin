@@ -131,10 +131,10 @@ describe('AddOnSpotAttendee Component', () => {
       </MockedProvider>,
     );
 
-    userEvent.type(screen.getByLabelText('First Name'), 'John');
-    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
     const genderSelect = screen.getByLabelText('Gender');
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
@@ -162,10 +162,10 @@ describe('AddOnSpotAttendee Component', () => {
     );
 
     // Fill the form
-    userEvent.type(screen.getByLabelText('First Name'), 'John');
-    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
     const genderSelect = screen.getByLabelText('Gender');
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
@@ -183,10 +183,10 @@ describe('AddOnSpotAttendee Component', () => {
   it('submits form successfully and calls necessary callbacks', async () => {
     renderAddOnSpotAttendee();
 
-    userEvent.type(screen.getByLabelText('First Name'), 'John');
-    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
     const genderSelect = screen.getByLabelText('Gender');
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
@@ -236,8 +236,8 @@ describe('AddOnSpotAttendee Component', () => {
       </MockedProvider>,
     );
 
-    userEvent.type(screen.getByLabelText('First Name'), 'John');
-    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {

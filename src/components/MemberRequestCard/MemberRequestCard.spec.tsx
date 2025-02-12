@@ -164,8 +164,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
@@ -194,8 +194,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
@@ -230,7 +230,7 @@ describe('Testing Member Request Card', () => {
       );
 
       await wait();
-      userEvent.click(screen.getByText(/Accept/i));
+      await userEvent.click(screen.getByText(/Accept/i));
       await wait(2100);
       expect(window.location.reload).toHaveBeenCalled();
     } finally {
@@ -262,7 +262,7 @@ describe('Testing Member Request Card', () => {
         </MockedProvider>,
       );
       await wait();
-      userEvent.click(screen.getByText(/Accept/i));
+      await userEvent.click(screen.getByText(/Accept/i));
       await wait(2100);
       expect(window.location.reload).not.toHaveBeenCalled();
     } finally {
@@ -288,7 +288,7 @@ describe('Testing Member Request Card', () => {
       );
 
       await wait();
-      userEvent.click(screen.getByText(/Reject/i));
+      await userEvent.click(screen.getByText(/Reject/i));
       await wait();
       expect(window.confirm).toHaveBeenCalled();
       expect(window.location.reload).toHaveBeenCalled();
@@ -315,7 +315,7 @@ describe('Testing Member Request Card', () => {
       );
 
       await wait();
-      userEvent.click(screen.getByText(/Reject/i));
+      await userEvent.click(screen.getByText(/Reject/i));
       await wait();
       expect(window.confirm).toHaveBeenCalled();
       expect(window.location.reload).not.toHaveBeenCalled();

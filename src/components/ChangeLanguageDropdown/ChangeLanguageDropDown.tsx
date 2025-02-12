@@ -6,14 +6,8 @@ import cookies from 'js-cookie';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 const { getItem } = useLocalStorage();
-
-interface InterfaceChangeLanguageDropDownProps {
-  parentContainerStyle?: string;
-  btnStyle?: string;
-  btnTextStyle?: string;
-}
 
 /**
  * A dropdown component that allows users to change the application's language.
@@ -26,9 +20,7 @@ interface InterfaceChangeLanguageDropDownProps {
  *
  * @returns JSX.Element - The rendered dropdown component for changing languages.
  */
-const ChangeLanguageDropDown = (
-  props: InterfaceChangeLanguageDropDownProps,
-): JSX.Element => {
+const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
   const userId = getItem('userId');
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);

@@ -261,7 +261,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     const peoplePlugin = screen.getByText('People');
     expect(peoplePlugin).toBeInTheDocument();
 
-    userEvent.click(peoplePlugin);
+    await userEvent.click(peoplePlugin);
 
     await wait();
     expect(history.location.pathname).toBe(`/user/people/${organizationId}`);
@@ -282,9 +282,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn0'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn0'));
 
     await wait();
 
@@ -312,9 +312,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn1'));
 
     await wait();
 
@@ -336,9 +336,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn2'));
 
     await wait();
 
@@ -360,9 +360,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn3'));
 
     await wait();
 
@@ -384,9 +384,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn4'));
 
     await wait();
 
@@ -514,8 +514,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByTestId('personIcon'));
-    userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('personIcon'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
     expect(mockStorage.clear).toHaveBeenCalled();
     expect(mockLocation.replace).toHaveBeenCalledWith('/');
   });
@@ -537,7 +537,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     );
     const homeLink = screen.getByText('Home');
     expect(homeLink).toBeInTheDocument();
-    userEvent.click(homeLink);
+    await userEvent.click(homeLink);
     await wait();
     expect(history.location.pathname).toBe(
       `/user/organization/${organizationId}`,

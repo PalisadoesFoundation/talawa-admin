@@ -1235,7 +1235,7 @@
   "advertisement": {
     "title": "广告",
     "activeAds": "活跃活动",
-    "archievedAds": "已完成的活动",
+    "archivedAds": "已完成的活动",
     "pMessage": "此活动中不存在广告。",
     "validLink": "链接有效",
     "invalidLink": "链接无效",

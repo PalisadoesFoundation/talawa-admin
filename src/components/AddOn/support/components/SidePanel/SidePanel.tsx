@@ -1,20 +1,9 @@
 import React from 'react';
 import styles from './SidePanel.module.css';
-
+import type { InterfaceSidePanelProps } from 'types/AddOn/interface';
 /**
  * Props for the `sidePanel` component.
  */
-interface InterfaceSidePanelProps {
-  /**
-   * Whether the side panel should be collapsed.
-   */
-  collapse?: boolean;
-
-  /**
-   * The child elements to be rendered inside the side panel.
-   */
-  children: any;
-}
 
 /**
  * A React component that renders a side panel with an optional collapse state.

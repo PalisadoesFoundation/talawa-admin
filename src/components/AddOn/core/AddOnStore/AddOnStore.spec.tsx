@@ -1,32 +1,24 @@
-import React, { act } from 'react';
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  ApolloLink,
-  HttpLink,
-} from '@apollo/client';
-import type { NormalizedCacheObject } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AddOnStore from './AddOnStore';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
-import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
-import { ORGANIZATIONS_LIST, PLUGIN_GET } from 'GraphQl/Queries/Queries';
+import { PLUGIN_GET } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
-import useLocalStorage from 'utils/useLocalstorage';
 import { MockedProvider } from '@apollo/react-testing';
 import { vi, describe, test, expect } from 'vitest';
+import {
+  client,
+  wait,
+  ORGANIZATIONS_LIST_MOCK,
+  PLUGIN_GET_MOCK,
+} from 'components/AddOn/AddOnMocks';
+import type { InterfacePlugin } from 'types/AddOn/interface';
 
-const { getItem } = useLocalStorage();
-interface InterfacePlugin {
-  enabled: boolean;
-  pluginName: string;
-  component: string;
-}
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
   default: vi.fn().mockImplementation(() => ({
@@ -77,26 +69,6 @@ vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   })),
 }));
 
-const httpLink = new HttpLink({
-  uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + getItem('token') || '',
-  },
-});
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: ApolloLink.from([httpLink]),
-});
-
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
   default: vi.fn().mockImplementation(() => ({
@@ -109,52 +81,6 @@ const today = new Date();
 const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
 
-const PLUGIN_GET_MOCK = {
-  request: {
-    query: PLUGIN_GET,
-  },
-  result: {
-    data: {
-      getPlugins: [
-        {
-          _id: '6581be50e88e74003aab436c',
-          pluginName: 'Plugin 1',
-          pluginCreatedBy: 'Talawa Team',
-          pluginDesc:
-            'User can share messages with other users in a chat user interface.',
-          uninstalledOrgs: [
-            '62ccfccd3eb7fd2a30f41601',
-            '62ccfccd3eb7fd2a30f41601',
-          ],
-          __typename: 'Plugin',
-        },
-        {
-          _id: '6581be50e88e74003aab436d',
-          pluginName: 'Plugin 2',
-          pluginCreatedBy: 'Talawa Team',
-          pluginDesc:
-            'User can share messages with other users in a chat user interface.',
-          uninstalledOrgs: ['6537904485008f171cf29924'],
-          __typename: 'Plugin',
-        },
-        {
-          _id: '6581be50e88e74003aab436e',
-          pluginName: 'Plugin 3',
-          pluginCreatedBy: 'Talawa Team',
-          pluginDesc:
-            'User can share messages with other users in a chat user interface.',
-          uninstalledOrgs: [
-            '62ccfccd3eb7fd2a30f41601',
-            '62ccfccd3eb7fd2a30f41601',
-          ],
-          __typename: 'Plugin',
-        },
-      ],
-    },
-    loading: false,
-  },
-};
-
 vi.mock('react-router-dom', async () => {
   const actualModule = await vi.importActual('react-router-dom');
   return {
@@ -162,71 +88,6 @@ vi.mock('react-router-dom', async () => {
     useParams: () => ({ orgId: 'undefined' }),
   };
 });
-
-const ORGANIZATIONS_LIST_MOCK = {
-  request: {
-    query: ORGANIZATIONS_LIST,
-    variables: {
-      id: 'undefined',
-    },
-  },
-  result: {
-    data: {
-      organizations: [
-        {
-          _id: 'undefined',
-          image: '',
-          creator: {
-            firstName: 'firstName',
-            lastName: 'lastName',
-            email: 'email',
-          },
-          name: 'name',
-          description: 'description',
-          userRegistrationRequired: true,
-
-          visibleInSearch: true,
-          address: {
-            city: 'Kingston',
-            countryCode: 'JM',
-            dependentLocality: 'Sample Dependent Locality',
-            line1: '123 Jamaica Street',
-            line2: 'Apartment 456',
-            postalCode: 'JM12345',
-            sortingCode: 'ABC-123',
-            state: 'Kingston Parish',
-          },
-          members: {
-            _id: 'id',
-            firstName: 'firstName',
-            lastName: 'lastName',
-            email: 'email',
-          },
-          admins: {
-            _id: 'id',
-            firstName: 'firstName',
-            lastName: 'lastName',
-            email: 'email',
-          },
-          membershipRequests: {
-            _id: 'id',
-            user: {
-              firstName: 'firstName',
-              lastName: 'lastName',
-              email: 'email',
-            },
-          },
-          blockedUsers: {
-            _id: 'id',
-            firstName: 'firstName',
-            lastName: 'lastName',
-            email: 'email',
-          },
-        },
-      ],
-    },
-  },
-};
 
 describe('Testing AddOnStore Component', () => {
   test('for the working of the tabs', async () => {
@@ -247,10 +108,10 @@ describe('Testing AddOnStore Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Installed'));
+    await userEvent.click(screen.getByText('Installed'));
 
     await wait();
-    userEvent.click(screen.getByText('Available'));
+    await userEvent.click(screen.getByText('Available'));
   });
 
   test('check the working search bar when on Available tab', async () => {
@@ -271,7 +132,7 @@ describe('Testing AddOnStore Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Available'));
+    await userEvent.click(screen.getByText('Available'));
 
     await wait();
     let searchText = '';

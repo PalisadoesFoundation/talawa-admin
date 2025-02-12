@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AddOn/support/components/MainContent/MainContent.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/components/MainContent/MainContent.tsx#L25)
+Defined in: [src/components/AddOn/support/components/MainContent/MainContent.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/components/MainContent/MainContent.tsx#L16)
 
 A React component that renders a main content container with additional styles.
 
@@ -14,7 +14,7 @@ A React component that renders a main content container with additional styles.
 
 ### props
 
-`InterfaceMainContentProps`
+[`InterfaceMainContentProps`](../../../../../../../types/AddOn/interface/interfaces/InterfaceMainContentProps.md)
 
 The properties for the component.
 

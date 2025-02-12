@@ -1235,7 +1235,7 @@
   "advertisement": {
     "title": "विज्ञापनों",
     "activeAds": "सक्रिय अभियान",
-    "archievedAds": "पूर्ण अभियान",
+    "archivedAds": "पूर्ण अभियान",
     "pMessage": "इस अभियान के लिए विज्ञापन मौजूद नहीं हैं.",
     "validLink": "लिंक मान्य है",
     "invalidLink": "लिंक अमान्य है",

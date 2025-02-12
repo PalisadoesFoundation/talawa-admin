@@ -12,7 +12,7 @@ Defined in: [src/screens/ManageTag/ManageTagMockComponents/MockAddPeopleToTag.ts
 
 ### props
 
-[`InterfaceAddPeopleToTagProps`](../../../../../components/AddPeopleToTag/AddPeopleToTag/interfaces/InterfaceAddPeopleToTagProps.md)
+[`InterfaceAddPeopleToTagProps`](../../../../../types/Tag/interface/interfaces/InterfaceAddPeopleToTagProps.md)
 
 ### deprecatedLegacyContext?
 

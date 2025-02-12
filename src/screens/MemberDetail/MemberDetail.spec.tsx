@@ -7,7 +7,6 @@ import {
   render,
   screen,
   waitFor,
-  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
@@ -158,45 +157,51 @@ describe('MemberDetail', () => {
       target: { value: formData.birthDate },
     });
 
-    userEvent.clear(screen.getByPlaceholderText(/First Name/i));
-    userEvent.type(
+    await userEvent.clear(screen.getByPlaceholderText(/First Name/i));
+    await userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
       formData.firstName,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
-    userEvent.type(
+    await userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
+    await userEvent.type(
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/Address/i));
-    userEvent.type(screen.getByPlaceholderText(/Address/i), formData.address);
+    await userEvent.clear(screen.getByPlaceholderText(/Address/i));
+    await userEvent.type(
+      screen.getByPlaceholderText(/Address/i),
+      formData.address,
+    );
 
-    userEvent.clear(screen.getByPlaceholderText(/Country Code/i));
-    userEvent.type(
+    await userEvent.clear(screen.getByPlaceholderText(/Country Code/i));
+    await userEvent.type(
       screen.getByPlaceholderText(/Country Code/i),
       formData.countryCode,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/State/i));
-    userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
+    await userEvent.clear(screen.getByPlaceholderText(/State/i));
+    await userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
 
-    userEvent.clear(screen.getByPlaceholderText(/City/i));
-    userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
+    await userEvent.clear(screen.getByPlaceholderText(/City/i));
+    await userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
 
-    userEvent.clear(screen.getByPlaceholderText(/Email/i));
-    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    await userEvent.clear(screen.getByPlaceholderText(/Email/i));
+    await userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
 
-    userEvent.clear(screen.getByPlaceholderText(/Phone/i));
-    userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phoneNumber);
+    await userEvent.clear(screen.getByPlaceholderText(/Phone/i));
+    await userEvent.type(
+      screen.getByPlaceholderText(/Phone/i),
+      formData.phoneNumber,
+    );
 
-    // userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
-    // userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
-    // userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+    // await userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
+    // await userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
+    // await userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
     await wait();
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await userEvent.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue(
       formData.firstName,
@@ -275,10 +280,10 @@ describe('MemberDetail', () => {
       expect(screen.getByPlaceholderText(/Address/i)).toBeInTheDocument();
     });
 
-    userEvent.type(screen.getByPlaceholderText(/Address/i), 'random');
-    userEvent.type(screen.getByPlaceholderText(/State/i), 'random');
+    await userEvent.type(screen.getByPlaceholderText(/Address/i), 'random');
+    await userEvent.type(screen.getByPlaceholderText(/State/i), 'random');
 
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    await userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue('Aditya');
     expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue('Agarwal');
@@ -320,7 +325,7 @@ describe('MemberDetail', () => {
 
     // Find and click the "View All" button
     const viewAllButton = screen.getByText('View All');
-    userEvent.click(viewAllButton);
+    await userEvent.click(viewAllButton);
 
     // Check if the modal with the title "Events Attended List" is now visible
     const modalTitle = await screen.findByText('Events Attended List');
@@ -345,7 +350,7 @@ describe('MemberDetail', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('tagName')[0]);
+    await userEvent.click(screen.getAllByTestId('tagName')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
@@ -386,17 +391,19 @@ describe('MemberDetail', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('unassignTagModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('unassignTagModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('unassignTagModalCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('unassignTagModalCloseBtn'),
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId('unassignTagModalCloseBtn'),
+      ).not.toBeInTheDocument(),
     );
   });
 
@@ -408,9 +415,9 @@ describe('MemberDetail', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
-    userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+    await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

@@ -1,14 +1,11 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import styles from './DynamicDropDown.module.css';
-
+import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 /**
  * Props for the DynamicDropDown component.
  */
-interface InterfaceChangeDropDownProps<T> {
-  parentContainerStyle?: string;
-  btnStyle?: string;
-  btnTextStyle?: string;
+interface InterfaceChangeDropDownProps<T> extends InterfaceDropDownProps {
   setFormState: React.Dispatch<React.SetStateAction<T>>;
   formState: T;
   fieldOptions: { value: string; label: string }[];
