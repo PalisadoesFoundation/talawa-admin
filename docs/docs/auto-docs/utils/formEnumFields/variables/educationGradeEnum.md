@@ -16,4 +16,4 @@ Defined in: [src/utils/formEnumFields.ts:202](https://github.com/PalisadoesFound
 
 ### value
 
-> **value**: `string` = `'NO_GRADE'`
+> **value**: `string` = `'no_grade'`

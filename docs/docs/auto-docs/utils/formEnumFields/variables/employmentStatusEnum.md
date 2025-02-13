@@ -16,4 +16,4 @@ Defined in: [src/utils/formEnumFields.ts:311](https://github.com/PalisadoesFound
 
 ### value
 
-> **value**: `string` = `'FULL_TIME'`
+> **value**: `string` = `'full_time'`

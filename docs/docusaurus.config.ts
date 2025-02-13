@@ -95,7 +95,7 @@ const config: Config = {
           {
             label: 'Demo',
             position: 'left',
-            to: "https://demo.talawa.io/",
+            to: 'https://demo.talawa.io/',
           },
           {
             to: 'https://github.com/PalisadoesFoundation',

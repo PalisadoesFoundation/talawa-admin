@@ -16,4 +16,4 @@ Defined in: [src/utils/formEnumFields.ts:269](https://github.com/PalisadoesFound
 
 ### value
 
-> **value**: `string` = `'SINGLE'`
+> **value**: `string` = `'single'`
