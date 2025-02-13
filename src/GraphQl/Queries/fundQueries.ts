@@ -27,12 +27,12 @@ export const FUND_LIST = gql`
 
 /**
  * Query to fetch a specific fund by its ID, along with its associated campaigns.
- * @params id - The ID of the fund campaign to be fetched.
- * @params name - The name of the fund campaign to be fetched.
- * @params startAt - The start date of the fund campaign to be fetched.
- * @params endAt - The end date of the fund campaign to be fetched.
- * @params currencyCode - The currency code of the fund campaign to be fetched.
- * @params goalAmount - The goal amount of the fund campaign to be fetched.
+ * @param id - The ID of the fund campaign to be fetched.
+ * @param name - The name of the fund campaign to be fetched.
+ * @param startAt - The start date of the fund campaign to be fetched.
+ * @param endAt - The end date of the fund campaign to be fetched.
+ * @param currencyCode - The currency code of the fund campaign to be fetched.
+ * @param goalAmount - The goal amount of the fund campaign to be fetched.
  * @returns The fund campaign with the specified ID.
  */
 export const FUND_CAMPAIGN = gql`
