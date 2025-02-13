@@ -7,15 +7,15 @@ import {
   ADD_EVENT_ATTENDEE,
   REMOVE_EVENT_ATTENDEE,
 } from 'GraphQl/Mutations/mutations';
-import styles from '../../style/app.module.css';
+import styles from '../../../style/app.module.css';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
-import AddOnSpotAttendee from './AddOnSpotAttendee';
-
+import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
+import type { InterfaceUser } from 'types/User/interface';
 // Props for the EventRegistrantsModal component
 type ModalPropType = {
   show: boolean;
@@ -23,13 +23,6 @@ type ModalPropType = {
   orgId: string;
   handleClose: () => void;
 };
-
-// User information interface
-interface InterfaceUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-}
 
 /**
  * Modal component for managing event registrants.

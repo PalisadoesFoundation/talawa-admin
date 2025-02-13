@@ -3,7 +3,7 @@ import type { Organization } from '../organization';
 
 export type User = {
   _id: string;
-  address: Address;
+  address?: Address;
   birthDate?: Date;
   createdAt: Date;
   email: string;
@@ -11,7 +11,7 @@ export type User = {
   lastName: string;
   gender?: string;
   image?: string;
-  updatedAt: Date;
+  updatedAt?: Date;
 };
 
 export type Address = {

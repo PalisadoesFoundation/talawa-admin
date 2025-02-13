@@ -14,9 +14,9 @@ Defined in: [src/types/User/type.ts:4](https://github.com/PalisadoesFoundation/t
 
 > **\_id**: `string`
 
-### address
+### address?
 
-> **address**: [`Address`](Address.md)
+> `optional` **address**: [`Address`](Address.md)
 
 ### birthDate?
 
@@ -46,6 +46,6 @@ Defined in: [src/types/User/type.ts:4](https://github.com/PalisadoesFoundation/t
 
 > **lastName**: `string`
 
-### updatedAt
+### updatedAt?
 
-> **updatedAt**: `Date`
+> `optional` **updatedAt**: `Date`
