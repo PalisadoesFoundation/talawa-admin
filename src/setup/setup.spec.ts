@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { MockInstance } from 'vitest';
-import inquirer from 'inquirer';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import { main, askAndSetRecaptcha } from './setup';
@@ -10,6 +9,8 @@ import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption
 import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
+import inquirer from 'inquirer';
+
 vi.mock('inquirer');
 vi.mock('dotenv');
 vi.mock('fs');
@@ -60,7 +61,6 @@ describe('Talawa Admin Setup', () => {
 
   it('should skip port and API URL setup when Docker is used', async () => {
     vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
-
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
@@ -85,7 +85,6 @@ describe('Talawa Admin Setup', () => {
 
   it('should exit if env file check fails', async () => {
     vi.mocked(checkEnvFile).mockReturnValue(false);
-
     const consoleSpy = vi.spyOn(console, 'error');
 
     await main();
@@ -118,6 +117,7 @@ describe('Talawa Admin Setup', () => {
       .mockResolvedValueOnce({ shouldLogErrors: false });
 
     const mockEnvContent = 'MOCK_ENV_CONTENT';
+
     vi.mocked(fs.readFileSync).mockReturnValue(mockEnvContent);
 
     await main();
@@ -126,7 +126,6 @@ describe('Talawa Admin Setup', () => {
     expect(dotenv.parse).toHaveBeenCalledWith(mockEnvContent);
   });
   it('should handle user opting out of reCAPTCHA setup', async () => {
-    // Mock user declining reCAPTCHA setup
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({
       shouldUseRecaptcha: false,
     });
@@ -136,6 +135,31 @@ describe('Talawa Admin Setup', () => {
     expect(inquirer.prompt).toHaveBeenCalledTimes(1);
     expect(updateEnvFile).not.toHaveBeenCalled();
     expect(validateRecaptcha).not.toHaveBeenCalled();
+  });
+
+  it('should validate reCAPTCHA key input', async () => {
+    const mockInvalidKey = 'invalid-key';
+
+    vi.mocked(inquirer.prompt)
+      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+      .mockImplementationOnce((questions) => {
+        const question = Array.isArray(questions) ? questions[0] : questions;
+
+        const validationResult = question.validate(mockInvalidKey);
+
+        expect(validationResult).toBe(
+          'Invalid reCAPTCHA site key. Please try again.',
+        );
+        return Object.assign(
+          Promise.resolve({ recaptchaSiteKeyInput: mockInvalidKey }),
+        );
+      });
+
+    vi.mocked(validateRecaptcha).mockReturnValue(false);
+
+    await askAndSetRecaptcha();
+
+    expect(validateRecaptcha).toHaveBeenCalledWith(mockInvalidKey);
   });
 
   it('should handle errors during reCAPTCHA setup', async () => {
