@@ -243,31 +243,31 @@ input DonationWhereInput {
   name_of_user_starts_with: String
 }
 
-enum EducationGrade {
-  GRADE_1
-  GRADE_2
-  GRADE_3
-  GRADE_4
-  GRADE_5
-  GRADE_6
-  GRADE_7
-  GRADE_8
-  GRADE_9
-  GRADE_10
-  GRADE_11
-  GRADE_12
-  GRADUATE
-  KG
-  NO_GRADE
-  PRE_KG
+enum UserEducationGrade {
+  grade_1
+  grade_2
+  grade_3
+  grade_4
+  grade_5
+  grade_6
+  grade_7
+  grade_8
+  grade_9
+  grade_10
+  grade_11
+  grade_12
+  graduate
+  kg
+  no_grade
+  pre_kg
 }
 
 scalar EmailAddress
 
-enum EmploymentStatus {
-  FULL_TIME
-  PART_TIME
-  UNEMPLOYED
+enum UserEmploymentStatus {
+  full_time
+  part_time
+  unemployed
 }
 
 interface Error {
@@ -671,13 +671,13 @@ input LoginInput {
 
 scalar Longitude
 
-enum MaritalStatus {
-  DIVORCED
-  ENGAGED
-  MARRIED
-  SEPERATED
-  SINGLE
-  WIDOWED
+enum UserMaritalStatus {
+  divorced
+  engaged
+  married
+  seperated
+  single
+  widowed
 }
 
 type Chat {
@@ -895,6 +895,7 @@ type Mutation {
     id: ID!
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
+  updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
   updateEvent(data: UpdateEventInput, id: ID!): Event!
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
@@ -909,8 +910,7 @@ type Mutation {
   updatePluginStatus(id: ID!, orgId: ID!): Plugin!
   updatePost(data: PostUpdateInput, id: ID!): Post!
   updateSessionTimeout(timeout: Int!): Boolean!
-  updateUserPassword(data: UpdateUserPasswordInput!): UserData!
-  updateUserProfile(data: UpdateUserInput, file: String): User!
+  updateUser(input: MutationUpdateUserInput!): UserPg
   updateUserRoleInOrganization(
     organizationId: ID!
     role: String!
@@ -1920,7 +1920,7 @@ type Query {
   actionItemsByOrganization(organizationId: ID!): [ActionItem]
   adminPlugin(orgId: ID!): [Plugin]
   agendaCategory(id: ID!): AgendaCategory!
-  currentUser: User!
+  currentUser: UserPg!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
   customFieldsByOrganization(id: ID!): [OrganizationCustomField]
   chatById(id: ID!): Chat!
@@ -2165,32 +2165,39 @@ enum Gender {
   OTHER
 }
 
-enum MaritalStatus {
-  DIVORCED
-  ENGAGED
-  MARRIED
-  SEPERATED
-  SINGLE
-  WIDOWED
+enum UserMaritalStatus {
+  divorced
+  engaged
+  married
+  seperated
+  single
+  widowed
 }
 
-input UpdateUserInput {
-  address: AddressInput
+input MutationUpdateUserInput {
+  addressLine1: String
+  addressLine2: String
+  avatar: Upload
   birthDate: Date
-  educationGrade: EducationGrade
-  email: EmailAddress
-  employmentStatus: EmploymentStatus
-  firstName: String
-  gender: Gender
-  lastName: String
-  maritalStatus: MaritalStatus
-  phone: UserPhoneInput
-}
-
-input UpdateUserPasswordInput {
-  confirmNewPassword: String!
-  newPassword: String!
-  previousPassword: String!
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: EmailAddress
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  id: ID!
+  isEmailAddressVerified: Boolean
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  naturalLanguageCode: Iso639Set1LanguageCode
+  password: String
+  postalCode: String
+  role: UserRole
+  state: String
+  workPhoneNumber: PhoneNumber
 }
 
 input UpdateUserTagInput {

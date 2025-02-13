@@ -3,13 +3,35 @@ import '../../style/app.module.css';
 //Query List
 // Check Auth
 
+// Query to get info about current user
 export const CURRENT_USER = gql`
-  query {
+  query CurrentUser {
     currentUser {
-      id
-      name
-      role
+      addressLine1
+      addressLine2
+      avatarMimeType
+      avatarURL
+      birthDate
+      city
+      countryCode
+      createdAt
+      description
+      educationGrade
       emailAddress
+      employmentStatus
+      homePhoneNumber
+      id
+      isEmailAddressVerified
+      maritalStatus
+      mobilePhoneNumber
+      name
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      updatedAt
+      workPhoneNumber
     }
   }
 `;

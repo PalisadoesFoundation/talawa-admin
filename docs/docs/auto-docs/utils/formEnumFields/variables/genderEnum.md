@@ -16,4 +16,4 @@ Defined in: [src/utils/formEnumFields.ts:296](https://github.com/PalisadoesFound
 
 ### value
 
-> **value**: `string` = `'MALE'`
+> **value**: `string` = `'male'`
