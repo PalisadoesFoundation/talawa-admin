@@ -42,7 +42,7 @@ const MOCKS = [
     result: {
       data: {
         community: {
-          inactivityTimeoutDuration: 30,
+          inactivityTimeoutDuration: 1800,
         },
       },
     },
@@ -51,14 +51,14 @@ const MOCKS = [
     request: {
       query: UPDATE_SESSION_TIMEOUT_PG,
       variables: {
-        inactivityTimeoutDuration: 30,
+        inactivityTimeoutDuration: 1800,
       },
     },
     result: {
       data: {
         updateCommunity: {
           community: {
-            inactivityTimeoutDuration: 30,
+            inactivityTimeoutDuration: 1800,
           },
         },
       },
@@ -206,13 +206,9 @@ describe('Testing UpdateTimeout Component', () => {
   });
 
   it('Should update session timeout', async () => {
-    // Setup user-event instance
     const user = userEvent.setup();
 
-    // Setup toast spy
     const toastSpy = vi.spyOn(toast, 'success');
-
-    // Set up the mocks properly with the exact mutation and query
 
     const { container } = render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
