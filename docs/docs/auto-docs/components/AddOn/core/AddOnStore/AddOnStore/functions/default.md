@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/components/AddOn/core/AddOnStore/AddOnStore.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnStore/AddOnStore.tsx#L37)
+Defined in: [src/components/AddOn/core/AddOnStore/AddOnStore.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnStore/AddOnStore.tsx#L25)
 
 Component for managing and displaying plugins in the store.
 

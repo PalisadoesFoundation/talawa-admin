@@ -137,7 +137,7 @@ describe('Testing Event Card In User portal', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    userEvent.click(screen.getByText('Register'));
+    await userEvent.click(screen.getByText('Register'));
     await waitFor(() =>
       expect(
         queryByText('Successfully registered for Test Event'),
@@ -172,7 +172,7 @@ describe('Testing Event Card In User portal', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByText('Register'));
+    await userEvent.click(screen.getByText('Register'));
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(

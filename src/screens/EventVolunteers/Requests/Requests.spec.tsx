@@ -167,7 +167,7 @@ describe('Testing Requests Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, 'T');
+    await userEvent.type(searchInput, 'T');
     await debounceWait();
     fireEvent.click(screen.getByTestId('searchBtn'));
 
@@ -204,7 +204,7 @@ describe('Testing Requests Screen', () => {
     expect(acceptBtn).toHaveLength(2);
 
     // Accept Request
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.requestAccepted);
@@ -221,7 +221,7 @@ describe('Testing Requests Screen', () => {
     expect(rejectBtn).toHaveLength(2);
 
     // Reject Request
-    userEvent.click(rejectBtn[0]);
+    await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.requestRejected);
@@ -238,7 +238,7 @@ describe('Testing Requests Screen', () => {
     expect(acceptBtn).toHaveLength(2);
 
     // Accept Request
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

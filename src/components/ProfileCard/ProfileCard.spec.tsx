@@ -135,7 +135,7 @@ describe('Member screen routing testing', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -156,7 +156,7 @@ describe('Member screen routing testing', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -180,7 +180,7 @@ describe('Member screen routing testing', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/');
@@ -204,7 +204,7 @@ describe('Member screen routing testing', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');

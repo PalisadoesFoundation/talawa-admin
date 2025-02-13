@@ -9,19 +9,7 @@ import { store } from './../../../../state/store';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import SearchBar from 'subComponents/SearchBar';
-
-interface InterfacePluginHelper {
-  _id: string;
-  pluginName?: string;
-  pluginDesc?: string;
-  pluginCreatedBy: string;
-  pluginInstallStatus?: boolean;
-  uninstalledOrgs: string[];
-  installed: boolean;
-  enabled: boolean;
-  name: string;
-  component: string;
-}
+import type { InterfacePluginHelper } from 'types/AddOn/interface';
 
 /**
  * Component for managing and displaying plugins in the store.

@@ -4,7 +4,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import type { InterfaceEventListCardProps } from './EventListCard';
+import type { InterfaceEventListCardProps } from 'types/Event/interface';
 import EventListCard from './EventListCard';
 import i18n from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -16,7 +16,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import useLocalStorage from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
-import { ERROR_MOCKS, MOCKS } from './EventListCardMocks';
+import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, expect, it } from 'vitest';
 
 const { setItem } = useLocalStorage();
@@ -115,12 +115,12 @@ describe('Testing Event List Card', () => {
   it('Testing for event modal', async () => {
     renderEventListCard(props[1]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -136,10 +136,10 @@ describe('Testing Event List Card', () => {
           <BrowserRouter>
             <EventListCard
               key="123"
-              id="1"
-              eventName=""
-              eventLocation=""
-              eventDescription=""
+              _id="1"
+              title=""
+              location=""
+              description=""
               startDate="19/03/2022"
               endDate="26/03/2022"
               startTime="02:00"
@@ -174,22 +174,20 @@ describe('Testing Event List Card', () => {
   it('should render props and text elements test for the screen', async () => {
     renderEventListCard(props[1]);
 
-    expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
+    expect(screen.getByText(props[1].title)).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
     });
 
     expect(screen.getByTestId('updateDescription')).toHaveValue(
-      props[1].eventDescription,
+      props[1].description,
     );
-    expect(screen.getByTestId('updateLocation')).toHaveValue(
-      props[1].eventLocation,
-    );
+    expect(screen.getByTestId('updateLocation')).toHaveValue(props[1].location);
 
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -200,9 +198,9 @@ describe('Testing Event List Card', () => {
 
   it('Should render truncated event name when length is more than 100', async () => {
     const longEventName = 'a'.repeat(101);
-    renderEventListCard({ ...props[1], eventName: longEventName });
+    renderEventListCard({ ...props[1], title: longEventName });
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
@@ -212,7 +210,7 @@ describe('Testing Event List Card', () => {
       `${longEventName.substring(0, 100)}...`,
     );
 
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -223,9 +221,9 @@ describe('Testing Event List Card', () => {
 
   it('Should render full event name when length is less than or equal to 100', async () => {
     const shortEventName = 'a'.repeat(100);
-    renderEventListCard({ ...props[1], eventName: shortEventName });
+    renderEventListCard({ ...props[1], title: shortEventName });
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
@@ -233,7 +231,7 @@ describe('Testing Event List Card', () => {
 
     expect(screen.getByTestId('updateTitle')).toHaveValue(shortEventName);
 
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -247,10 +245,10 @@ describe('Testing Event List Card', () => {
 
     renderEventListCard({
       ...props[1],
-      eventDescription: longEventDescription,
+      description: longEventDescription,
     });
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
@@ -259,7 +257,7 @@ describe('Testing Event List Card', () => {
       `${longEventDescription.substring(0, 256)}...`,
     );
 
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -273,10 +271,10 @@ describe('Testing Event List Card', () => {
 
     renderEventListCard({
       ...props[1],
-      eventDescription: shortEventDescription,
+      description: shortEventDescription,
     });
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
@@ -285,7 +283,7 @@ describe('Testing Event List Card', () => {
       shortEventDescription,
     );
 
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -297,13 +295,13 @@ describe('Testing Event List Card', () => {
   it('Should navigate to event dashboard when clicked (For Admin)', async () => {
     renderEventListCard(props[1]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('showEventDashboardBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('showEventDashboardBtn'));
+    await userEvent.click(screen.getByTestId('showEventDashboardBtn'));
 
     await waitFor(() => {
       expect(screen.queryByTestId('card')).not.toBeInTheDocument();
@@ -315,13 +313,13 @@ describe('Testing Event List Card', () => {
     setItem('userId', '123');
     renderEventListCard(props[2]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('showEventDashboardBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('showEventDashboardBtn'));
+    await userEvent.click(screen.getByTestId('showEventDashboardBtn'));
 
     await waitFor(() => {
       expect(screen.queryByTestId('card')).not.toBeInTheDocument();
@@ -332,19 +330,19 @@ describe('Testing Event List Card', () => {
   it('Should update a non-recurring event', async () => {
     renderEventListCard(props[1]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     const eventTitle = screen.getByTestId('updateTitle');
     fireEvent.change(eventTitle, { target: { value: '' } });
-    userEvent.type(eventTitle, updateData.title);
+    await userEvent.type(eventTitle, updateData.title);
 
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    userEvent.type(eventDescription, updateData.description);
+    const description = screen.getByTestId('updateDescription');
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, updateData.description);
 
     const eventLocation = screen.getByTestId('updateLocation');
     fireEvent.change(eventLocation, { target: { value: '' } });
-    userEvent.type(eventLocation, updateData.location);
+    await userEvent.type(eventLocation, updateData.location);
 
     const startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
@@ -356,10 +354,10 @@ describe('Testing Event List Card', () => {
       target: { value: updateData.endDate },
     });
 
-    userEvent.click(screen.getByTestId('updateAllDay'));
-    userEvent.click(screen.getByTestId('updateIsPublic'));
-    userEvent.click(screen.getByTestId('updateRegistrable'));
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateAllDay'));
+    await userEvent.click(screen.getByTestId('updateIsPublic'));
+    await userEvent.click(screen.getByTestId('updateRegistrable'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
@@ -375,19 +373,19 @@ describe('Testing Event List Card', () => {
   it('Should update a non all day non-recurring event', async () => {
     renderEventListCard(props[1]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     const eventTitle = screen.getByTestId('updateTitle');
     fireEvent.change(eventTitle, { target: { value: '' } });
-    userEvent.type(eventTitle, updateData.title);
+    await userEvent.type(eventTitle, updateData.title);
 
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    userEvent.type(eventDescription, updateData.description);
+    const description = screen.getByTestId('updateDescription');
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, updateData.description);
 
     const eventLocation = screen.getByTestId('updateLocation');
     fireEvent.change(eventLocation, { target: { value: '' } });
-    userEvent.type(eventLocation, updateData.location);
+    await userEvent.type(eventLocation, updateData.location);
 
     const startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
@@ -409,10 +407,10 @@ describe('Testing Event List Card', () => {
       target: { value: updateData.endTime },
     });
 
-    userEvent.click(screen.getByTestId('updateIsPublic'));
-    userEvent.click(screen.getByTestId('updateRegistrable'));
+    await userEvent.click(screen.getByTestId('updateIsPublic'));
+    await userEvent.click(screen.getByTestId('updateRegistrable'));
 
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
@@ -428,19 +426,19 @@ describe('Testing Event List Card', () => {
   it('should update a single event to be recurring', async () => {
     renderEventListCard(props[1]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     const eventTitle = screen.getByTestId('updateTitle');
     fireEvent.change(eventTitle, { target: { value: '' } });
-    userEvent.type(eventTitle, updateData.title);
+    await userEvent.type(eventTitle, updateData.title);
 
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    userEvent.type(eventDescription, updateData.description);
+    const description = screen.getByTestId('updateDescription');
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, updateData.description);
 
     const eventLocation = screen.getByTestId('updateLocation');
     fireEvent.change(eventLocation, { target: { value: '' } });
-    userEvent.type(eventLocation, updateData.location);
+    await userEvent.type(eventLocation, updateData.location);
 
     const startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
@@ -452,11 +450,11 @@ describe('Testing Event List Card', () => {
       target: { value: updateData.endDate },
     });
 
-    userEvent.click(screen.getByTestId('updateAllDay'));
-    userEvent.click(screen.getByTestId('updateRecurring'));
-    userEvent.click(screen.getByTestId('updateIsPublic'));
-    userEvent.click(screen.getByTestId('updateRegistrable'));
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateAllDay'));
+    await userEvent.click(screen.getByTestId('updateRecurring'));
+    await userEvent.click(screen.getByTestId('updateIsPublic'));
+    await userEvent.click(screen.getByTestId('updateRegistrable'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
@@ -472,12 +470,12 @@ describe('Testing Event List Card', () => {
   it('should show different update options for a recurring event based on different conditions', async () => {
     renderEventListCard(props[5]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.queryByTestId('updateEventBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     // shows options to update thisInstance and thisAndFollowingInstances, and allInstances
     await waitFor(() => {
@@ -488,7 +486,9 @@ describe('Testing Event List Card', () => {
       expect(screen.getByTestId('update-allInstances')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('eventUpdateOptionsModalCloseBtn'));
+    await userEvent.click(
+      screen.getByTestId('eventUpdateOptionsModalCloseBtn'),
+    );
 
     await waitFor(() => {
       expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
@@ -505,7 +505,7 @@ describe('Testing Event List Card', () => {
       target: { value: updateData.endDate },
     });
 
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     // shows options to update thisInstance and thisAndFollowingInstances only
     await waitFor(() => {
@@ -518,7 +518,9 @@ describe('Testing Event List Card', () => {
       ).not.toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('eventUpdateOptionsModalCloseBtn'));
+    await userEvent.click(
+      screen.getByTestId('eventUpdateOptionsModalCloseBtn'),
+    );
 
     await waitFor(() => {
       expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
@@ -539,36 +541,38 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customRecurrence'));
+    await userEvent.click(screen.getByTestId('customRecurrence'));
 
     await waitFor(() => {
       expect(
         screen.getByTestId('customRecurrenceFrequencyDropdown'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await userEvent.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customDailyRecurrence'));
+    await userEvent.click(screen.getByTestId('customDailyRecurrence'));
 
     await waitFor(() => {
       expect(
         screen.getByTestId('customRecurrenceSubmitBtn'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
+    await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateEventBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     // shows options to update thisAndFollowingInstances and allInstances only
     await waitFor(() => {
@@ -581,12 +585,14 @@ describe('Testing Event List Card', () => {
       expect(screen.queryByTestId('update-allInstances')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('eventUpdateOptionsModalCloseBtn'));
+    await userEvent.click(
+      screen.getByTestId('eventUpdateOptionsModalCloseBtn'),
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -598,17 +604,17 @@ describe('Testing Event List Card', () => {
   it('should show recurrenceRule as changed if the recurrence weekdays have changed', async () => {
     renderEventListCard(props[4]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customRecurrence'));
+    await userEvent.click(screen.getByTestId('customRecurrence'));
 
     // since the current recurrence weekDay for the current recurring event is "SATURDAY",
     // let's first deselect it, and then we'll select a different day
@@ -619,17 +625,17 @@ describe('Testing Event List Card', () => {
     });
 
     // deselect saturday, which is the 7th day in recurrenceWeekDay options
-    userEvent.click(screen.getAllByTestId('recurrenceWeekDay')[6]);
+    await userEvent.click(screen.getAllByTestId('recurrenceWeekDay')[6]);
 
     // select a different day, say wednesday, the 4th day in recurrenceWeekDay options
-    userEvent.click(screen.getAllByTestId('recurrenceWeekDay')[3]);
+    await userEvent.click(screen.getAllByTestId('recurrenceWeekDay')[3]);
 
-    userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
+    await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateEventBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     // shows options to update thisInstance and thisAndFollowingInstances, and allInstances
     await waitFor(() => {
@@ -642,12 +648,14 @@ describe('Testing Event List Card', () => {
       expect(screen.getByTestId('update-allInstances')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('eventUpdateOptionsModalCloseBtn'));
+    await userEvent.click(
+      screen.getByTestId('eventUpdateOptionsModalCloseBtn'),
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -659,7 +667,7 @@ describe('Testing Event List Card', () => {
   it('should update all instances of a recurring event', async () => {
     renderEventListCard(props[6]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
@@ -667,17 +675,17 @@ describe('Testing Event List Card', () => {
 
     const eventTitle = screen.getByTestId('updateTitle');
     fireEvent.change(eventTitle, { target: { value: '' } });
-    userEvent.type(eventTitle, updateData.title);
+    await userEvent.type(eventTitle, updateData.title);
 
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    userEvent.type(eventDescription, updateData.description);
+    const description = screen.getByTestId('updateDescription');
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, updateData.description);
 
     const eventLocation = screen.getByTestId('updateLocation');
     fireEvent.change(eventLocation, { target: { value: '' } });
-    userEvent.type(eventLocation, updateData.location);
+    await userEvent.type(eventLocation, updateData.location);
 
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     // shows options to update thisInstance and thisAndFollowingInstances, and allInstances
     await waitFor(() => {
@@ -687,9 +695,12 @@ describe('Testing Event List Card', () => {
       ).toBeInTheDocument();
       expect(screen.getByTestId('update-allInstances')).toBeInTheDocument();
     });
-
-    userEvent.click(screen.getByTestId('update-allInstances'));
-    userEvent.click(screen.getByTestId('recurringEventUpdateOptionSubmitBtn'));
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('update-allInstances'));
+      fireEvent.click(
+        screen.getByTestId('recurringEventUpdateOptionSubmitBtn'),
+      );
+    });
 
     await waitFor(() => {
       expect(screen.getByTestId('updateEventBtn')).toBeInTheDocument();
@@ -709,7 +720,7 @@ describe('Testing Event List Card', () => {
   it('should update thisAndFollowingInstances of a recurring event', async () => {
     renderEventListCard(props[5]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
@@ -730,36 +741,38 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customRecurrence'));
+    await userEvent.click(screen.getByTestId('customRecurrence'));
 
     await waitFor(() => {
       expect(
         screen.getByTestId('customRecurrenceFrequencyDropdown'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await userEvent.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customDailyRecurrence'));
+    await userEvent.click(screen.getByTestId('customDailyRecurrence'));
 
     await waitFor(() => {
       expect(
         screen.getByTestId('customRecurrenceSubmitBtn'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
+    await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('updateEventBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
@@ -775,19 +788,19 @@ describe('Testing Event List Card', () => {
   it('should render the delete modal', async () => {
     renderEventListCard(props[1]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
     await waitFor(() => {
       expect(
         screen.getByTestId('eventDeleteModalCloseBtn'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('eventDeleteModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventDeleteModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -798,7 +811,7 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -810,17 +823,17 @@ describe('Testing Event List Card', () => {
   it('should call the delete event mutation when the "Yes" button is clicked', async () => {
     renderEventListCard(props[1]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('deleteEventBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('deleteEventBtn'));
+    await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
@@ -842,12 +855,12 @@ describe('Testing Event List Card', () => {
       expect(screen.getByTestId('card')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
     await waitFor(() => {
       expect(
@@ -855,12 +868,14 @@ describe('Testing Event List Card', () => {
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('delete-thisAndFollowingInstances'));
+    await userEvent.click(
+      screen.getByTestId('delete-thisAndFollowingInstances'),
+    );
 
-    userEvent.click(screen.getByTestId('delete-allInstances'));
-    userEvent.click(screen.getByTestId('delete-thisInstance'));
+    await userEvent.click(screen.getByTestId('delete-allInstances'));
+    await userEvent.click(screen.getByTestId('delete-thisInstance'));
 
-    userEvent.click(screen.getByTestId('deleteEventBtn'));
+    await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
@@ -899,9 +914,9 @@ describe('Testing Event List Card', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByTestId('card'));
-    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-    userEvent.click(screen.getByTestId('deleteEventBtn'));
+    await userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -913,16 +928,16 @@ describe('Testing Event List Card', () => {
 
     renderEventListCard(props[2]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
       expect(screen.getByTestId('registerEventBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('registerEventBtn'));
+    await userEvent.click(screen.getByTestId('registerEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        `Successfully registered for ${props[2].eventName}`,
+        `Successfully registered for ${props[2].title}`,
       );
     });
 
@@ -936,7 +951,7 @@ describe('Testing Event List Card', () => {
   it('should show already registered text when the user is registered for an event', async () => {
     renderEventListCard(props[3]);
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
 
     expect(
       screen.getByText(translations.alreadyRegistered),

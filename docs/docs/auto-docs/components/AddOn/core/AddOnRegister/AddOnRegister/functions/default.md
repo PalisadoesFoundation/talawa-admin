@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx#L38)
+Defined in: [src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx#L27)
 
 A React component for registering a new add-on plugin.
 
@@ -21,7 +21,7 @@ This component:
 
 ### \_\_namedParameters
 
-`InterfaceAddOnRegisterProps`
+[`InterfaceAddOnRegisterProps`](../../../../../../types/AddOn/interface/interfaces/InterfaceAddOnRegisterProps.md)
 
 ## Returns
 

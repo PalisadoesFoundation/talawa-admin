@@ -4,16 +4,13 @@ import { Dropdown } from 'react-bootstrap';
 import availableFieldTypes from 'utils/fieldTypes';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCustomFieldData } from 'utils/interfaces';
-
+import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 /**
  * Props for the EditOrgCustomFieldDropDown component.
  */
-interface InterfaceEditCustomFieldDropDownProps {
+interface InterfaceEditCustomFieldDropDownProps extends InterfaceDropDownProps {
   customFieldData: InterfaceCustomFieldData;
   setCustomFieldData: Dispatch<SetStateAction<InterfaceCustomFieldData>>;
-  parentContainerStyle?: string;
-  btnStyle?: string;
-  btnTextStyle?: string;
 }
 
 /**

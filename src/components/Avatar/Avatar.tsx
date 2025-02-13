@@ -2,16 +2,7 @@ import React, { useMemo } from 'react';
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
 import styles from 'components/Avatar/Avatar.module.css';
-
-interface InterfaceAvatarProps {
-  name?: string;
-  alt?: string;
-  size?: number;
-  containerStyle?: string;
-  avatarStyle?: string;
-  dataTestId?: string;
-  radius?: number;
-}
+import type { InterfaceAvatarProps } from 'types/Avatar/interface';
 
 /**
  * A component that generates and displays an avatar based on the provided name.

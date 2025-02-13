@@ -2,38 +2,13 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from '../../style/app.module.css';
 import { Navigate, useParams } from 'react-router-dom';
-import EventListCardModals from './EventListCardModals';
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
-
+import EventListCardModals from './Modal/EventListCardModals';
+import type { InterfaceEventListCardProps } from 'types/Event/interface';
 /**
  * Props for the EventListCard component.
  */
-export interface InterfaceEventListCardProps {
+interface InterfaceEventListCard extends InterfaceEventListCardProps {
   refetchEvents?: () => void;
-  userRole?: string;
-  key: string;
-  id: string;
-  eventLocation: string;
-  eventName: string;
-  eventDescription: string;
-  startDate: string;
-  endDate: string;
-  startTime: string | null;
-  endTime: string | null;
-  allDay: boolean;
-  recurring: boolean;
-  recurrenceRule: InterfaceRecurrenceRule | null;
-  isRecurringEventException: boolean;
-  isPublic: boolean;
-  isRegisterable: boolean;
-  registrants?: {
-    _id: string;
-  }[];
-  creator?: {
-    firstName: string;
-    lastName: string;
-    _id: string;
-  };
 }
 
 /**
@@ -42,7 +17,7 @@ export interface InterfaceEventListCardProps {
  * @param props - The props for the EventListCard component.
  * @returns  The rendered EventListCard component.
  */
-function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
+function eventListCard(props: InterfaceEventListCard): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
@@ -80,7 +55,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       >
         <div className={styles.dispflexEventListCard}>
           <h2 className={styles.eventtitle}>
-            {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}
+            {props.title ? <>{props.title}</> : <>Dogs Care</>}
           </h2>
         </div>
       </div>

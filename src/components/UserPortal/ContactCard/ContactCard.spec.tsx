@@ -101,7 +101,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('contactContainer'));
+    await userEvent.click(screen.getByTestId('contactContainer'));
 
     await wait();
   });
@@ -126,7 +126,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('contactContainer'));
+    await userEvent.click(screen.getByTestId('contactContainer'));
 
     await wait();
   });

@@ -95,7 +95,7 @@ describe('Testing VolunteerCreateModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerAdded);
@@ -120,7 +120,7 @@ describe('Testing VolunteerCreateModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
