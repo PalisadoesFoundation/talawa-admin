@@ -15,10 +15,12 @@ const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
 
 describe('AgendaItemsDeleteModal', () => {
+  // Clear all mock function calls before each test
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
+  // Helper function to render the component with necessary providers and props
   const renderComponent = (isOpen = true): RenderResult => {
     return render(
       <Provider store={store}>
@@ -37,8 +39,10 @@ describe('AgendaItemsDeleteModal', () => {
     );
   };
 
+  // Test case: Verify that all expected elements are rendered when modal is open
   test('renders modal correctly when open', () => {
     renderComponent();
+    // Check for presence of modal title, message, and buttons
     expect(screen.getByText('deleteAgendaItem')).toBeInTheDocument();
     expect(screen.getByText('deleteAgendaItemMsg')).toBeInTheDocument();
     expect(screen.getByTestId('deleteAgendaItemCloseBtn')).toBeInTheDocument();
@@ -47,6 +51,7 @@ describe('AgendaItemsDeleteModal', () => {
     expect(screen.getByText('yes')).toBeInTheDocument();
   });
 
+  // Test case: Verify that close button click triggers toggleDeleteModal
   test('calls toggleDeleteModal when close button is clicked', () => {
     renderComponent();
     const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
@@ -54,6 +59,7 @@ describe('AgendaItemsDeleteModal', () => {
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
+  // Test case: Verify that confirm button click triggers deleteAgendaItemHandler
   test('calls deleteAgendaItemHandler when confirm button is clicked', () => {
     renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
@@ -61,6 +67,7 @@ describe('AgendaItemsDeleteModal', () => {
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
   });
 
+  // Test case: Verify that modal header close button click triggers toggleDeleteModal
   test('calls toggleDeleteModal when modal header close button is clicked', () => {
     renderComponent();
     const closeButton = screen.getByRole('button', { name: /close/i });
@@ -68,6 +75,7 @@ describe('AgendaItemsDeleteModal', () => {
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
+  // Test case: Verify that modal is not rendered when isOpen is false
   test('modal should not be rendered when agendaItemDeleteModalIsOpen is false', () => {
     renderComponent(false);
     const modalTitle = screen.queryByText('deleteAgendaItem');
