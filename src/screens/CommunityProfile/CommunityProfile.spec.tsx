@@ -573,34 +573,6 @@ describe('Testing Community Profile Screen', () => {
     expect(toast.success).not.toHaveBeenCalled();
   });
 
-  // test('should show success toast when profile is updated successfully', async () => {
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
-  //       <BrowserRouter>
-  //         <I18nextProvider i18n={i18n}>
-  //           <CommunityProfile />
-  //         </I18nextProvider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-
-  //   const nameInput = screen.getByPlaceholderText(/Community Name/i);
-  //   const websiteInput = screen.getByPlaceholderText(/Website Link/i);
-  //   const logoInput = screen.getByTestId('fileInput');
-
-  //   await userEvent.type(nameInput, 'Test Name');
-  //   await userEvent.type(websiteInput, 'https://test.com');
-  //   await userEvent.upload(
-  //     logoInput,
-  //     new File([''], 'test.png', { type: 'image/png' }),
-  //   );
-
-  //   const submitButton = screen.getByTestId('saveChangesBtn');
-  //   await userEvent.click(submitButton);
-  //   await wait();
-
-  //   expect(toast.success).toHaveBeenCalledWith(expect.any(String));
-  // });
   test('should show success toast when profile is updated successfully', async () => {
     render(
       <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
