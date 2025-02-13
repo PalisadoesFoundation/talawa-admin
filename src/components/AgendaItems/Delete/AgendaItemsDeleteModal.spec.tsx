@@ -75,7 +75,7 @@ describe('AgendaItemsDeleteModal', () => {
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
-  // Test case: Verify that modal is not rendered when isOpen is false
+  // Test case: Verifies that modal is not rendered when isOpen is false
   test('modal should not be rendered when agendaItemDeleteModalIsOpen is false', () => {
     renderComponent(false);
     const modalTitle = screen.queryByText('deleteAgendaItem');
