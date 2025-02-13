@@ -1,18 +1,15 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
 import inquirer from 'inquirer';
-import {
-  checkEnvFile,
-  modifyEnvFile,
-} from './src/setup/checkEnvFile/checkEnvFile';
-import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
-import askAndSetDockerOption from './src/setup/askAndSetDockerOption/askAndSetDockerOption';
-import updateEnvFile from './src/setup/updateEnvFile/updateEnvFile';
-import askAndUpdatePort from './src/setup/askAndUpdatePort/askAndUpdatePort';
-import { askAndUpdateTalawaApiUrl } from './src/setup/askForDocker/askForDocker';
+import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
+import { validateRecaptcha } from './validateRecaptcha/validateRecaptcha';
+import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
+import updateEnvFile from './updateEnvFile/updateEnvFile';
+import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
+import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 
 // Ask and set up reCAPTCHA
-const askAndSetRecaptcha = async (): Promise<void> => {
+export const askAndSetRecaptcha = async (): Promise<void> => {
   try {
     const { shouldUseRecaptcha } = await inquirer.prompt([
       {
