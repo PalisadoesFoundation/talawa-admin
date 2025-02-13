@@ -993,18 +993,23 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 }
 
 export interface InterfaceQueryOrganizationFundCampaigns {
+  id: string;
   name: string;
   isArchived: boolean;
   campaigns: {
-    _id: string;
-    name: string;
-    fundingGoal: number;
-    startDate: Date;
-    endDate: Date;
-    createdAt: string;
-    currency: string;
-  }[];
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        startAt: string;
+        endAt: string;
+        currencyCode: string;
+        goalAmount: number;
+      };
+    }[];
+  };
 }
+
 export interface InterfaceUserCampaign {
   _id: string;
   name: string;
@@ -1025,7 +1030,7 @@ export interface InterfaceQueryFundCampaignsPledges {
   pledges: InterfacePledgeInfo[];
 }
 export interface InterfaceFundInfo {
-  _id: string;
+  id: string;
   name: string;
   refrenceNumber: string;
   taxDeductible: boolean;
@@ -1036,13 +1041,13 @@ export interface InterfaceFundInfo {
   creator: { _id: string; firstName: string; lastName: string };
 }
 export interface InterfaceCampaignInfo {
-  _id: string;
+  id: string;
   name: string;
-  fundingGoal: number;
-  startDate: Date;
-  endDate: Date;
+  goalAmount: number;
+  startAt: Date;
+  endAt: Date;
   createdAt: string;
-  currency: string;
+  currencyCode: string;
 }
 export interface InterfacePledgeInfo {
   _id: string;

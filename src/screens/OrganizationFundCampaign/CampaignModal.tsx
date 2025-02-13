@@ -74,19 +74,19 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
   const [formState, setFormState] = useState({
     campaignName: campaign?.name ?? '',
-    campaignCurrency: campaign?.currency ?? 'USD',
-    campaignGoal: campaign?.fundingGoal ?? 0,
-    campaignStartDate: campaign?.startDate ?? new Date(),
-    campaignEndDate: campaign?.endDate ?? new Date(),
+    campaignCurrency: campaign?.currencyCode ?? 'USD',
+    campaignGoal: campaign?.goalAmount ?? 0,
+    campaignStartDate: campaign?.startAt ?? new Date(),
+    campaignEndDate: campaign?.endAt ?? new Date(),
   });
 
   useEffect(() => {
     setFormState({
-      campaignCurrency: campaign?.currency ?? 'USD',
-      campaignEndDate: campaign?.endDate ?? new Date(),
-      campaignGoal: campaign?.fundingGoal ?? 0,
+      campaignCurrency: campaign?.currencyCode ?? 'USD',
+      campaignEndDate: campaign?.endAt ?? new Date(),
+      campaignGoal: campaign?.goalAmount ?? 0,
       campaignName: campaign?.name ?? '',
-      campaignStartDate: campaign?.startDate ?? new Date(),
+      campaignStartDate: campaign?.startAt ?? new Date(),
     });
   }, [campaign]);
 
@@ -107,19 +107,33 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
    * @param e - The form event.
    * @returns Promise<void>
    */
-  const createCampaignHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
+  const createCampaignHandler = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Ensure the end date is in the future
+    if (dayjs(formState.campaignEndDate).isBefore(dayjs())) {
+      toast.error('End date must be in the future.');
+      return;
+    }
+
+    // Ensure the end date is different from the start date
+    if (
+      dayjs(formState.campaignEndDate).isSame(
+        dayjs(formState.campaignStartDate),
+      )
+    ) {
+      toast.error('End date must be different from the start date.');
+      return;
+    }
+
     try {
       await createCampaign({
         variables: {
           name: formState.campaignName,
-          currency: formState.campaignCurrency,
-          fundingGoal: formState.campaignGoal,
-          organizationId: orgId,
-          startDate: dayjs(formState.campaignStartDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.campaignEndDate).format('YYYY-MM-DD'),
+          currencyCode: formState.campaignCurrency,
+          goalAmount: formState.campaignGoal,
+          startAt: dayjs(formState.campaignStartDate).toISOString(),
+          endAt: dayjs(formState.campaignEndDate).toISOString(),
           fundId,
         },
       });
@@ -129,7 +143,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         campaignCurrency: 'USD',
         campaignGoal: 0,
         campaignStartDate: new Date(),
-        campaignEndDate: new Date(),
+        campaignEndDate: dayjs().add(1, 'day').toDate(),
       });
       refetchCampaign();
       hide();
@@ -149,29 +163,59 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    // Ensure the end date is in the future
+    if (dayjs(formState.campaignEndDate).isBefore(dayjs())) {
+      toast.error('End date must be in the future.');
+      return;
+    }
+
+    // Ensure the end date is different from the start date
+    if (
+      dayjs(formState.campaignEndDate).isSame(
+        dayjs(formState.campaignStartDate),
+      )
+    ) {
+      toast.error('End date must be different from the start date.');
+      return;
+    }
     try {
       const updatedFields: { [key: string]: string | number | undefined } = {};
       if (campaign?.name !== campaignName) {
         updatedFields.name = campaignName;
       }
-      if (campaign?.currency !== campaignCurrency) {
-        updatedFields.currency = campaignCurrency;
+      if (campaign?.goalAmount !== campaignGoal) {
+        updatedFields.goalAmount = campaignGoal;
       }
-      if (campaign?.fundingGoal !== campaignGoal) {
-        updatedFields.fundingGoal = campaignGoal;
+      if (campaign?.startAt !== campaignStartDate) {
+        updatedFields.startAt = dayjs(campaignStartDate).toISOString();
       }
-      if (campaign?.startDate !== campaignStartDate) {
-        updatedFields.startDate = dayjs(campaignStartDate).format('YYYY-MM-DD');
+      if (campaign?.endAt !== formState.campaignEndDate) {
+        const endAt = dayjs(formState.campaignEndDate);
+        if (endAt.isBefore(dayjs())) {
+          toast.error('End date must be in the future.');
+          return;
+        }
+        updatedFields.endAt = endAt.toISOString();
       }
-      if (campaign?.endDate !== formState.campaignEndDate) {
-        updatedFields.endDate = dayjs(formState.campaignEndDate).format(
-          'YYYY-MM-DD',
-        );
+
+      // In mutation, the currencyCode is not updated
+      // if (campaign?.currencyCode !== campaignCurrency) {
+      //   updatedFields.currencyCode = campaignCurrency;
+      // }
+
+      // Check if there are any updated fields
+      if (Object.keys(updatedFields).length === 0) {
+        toast.error('No changes detected.');
+        return;
       }
+
       await updateCampaign({
         variables: {
-          id: campaign?._id,
-          ...updatedFields,
+          input: {
+            id: campaign?.id,
+            ...updatedFields,
+          },
         },
       });
       setFormState({

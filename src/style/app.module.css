@@ -8494,7 +8494,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .leftDrawer .optionList {
-  height: 45%;
+  height: 100%;
   overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--table-bg) transparent;
