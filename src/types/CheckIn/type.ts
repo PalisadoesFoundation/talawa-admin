@@ -1,5 +1,5 @@
 import type { Event } from '../Event/type';
-import type { User } from '../user';
+import type { User } from '../User/type';
 
 export type CheckIn = {
   _id: string;

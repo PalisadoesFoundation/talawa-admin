@@ -17,7 +17,7 @@ import OrganizationActionItems from 'screens/OrganizationActionItems/Organizatio
 import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
-import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
+import EventAttendance from 'components/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/EventManagement/EventRegistrant/EventRegistrants';
 
 /**

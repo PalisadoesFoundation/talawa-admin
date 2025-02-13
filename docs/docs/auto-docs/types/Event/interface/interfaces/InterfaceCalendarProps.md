@@ -4,15 +4,15 @@
 
 # Interface: InterfaceCalendarProps
 
-Defined in: [src/types/Event/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L45)
+Defined in: [src/types/Event/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L87)
 
 ## Properties
 
 ### eventData
 
-> **eventData**: [`InterfaceEventListCardProps`](InterfaceEventListCardProps.md)[]
+> **eventData**: [`InterfaceEvent`](InterfaceEvent.md)[]
 
-Defined in: [src/types/Event/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L46)
+Defined in: [src/types/Event/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L88)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:46](https://github.com/PalisadoesFound
 
 > `optional` **orgData**: [`InterfaceIOrgList`](InterfaceIOrgList.md)
 
-Defined in: [src/types/Event/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L48)
+Defined in: [src/types/Event/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L90)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:48](https://github.com/PalisadoesFound
 
 > `optional` **refetchEvents**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L47)
+Defined in: [src/types/Event/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L89)
 
 #### Returns
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/interface.ts:47](https://github.com/PalisadoesFound
 
 > `optional` **userId**: `string`
 
-Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L50)
+Defined in: [src/types/Event/interface.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L92)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFound
 
 > `optional` **userRole**: `string`
 
-Defined in: [src/types/Event/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L49)
+Defined in: [src/types/Event/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L91)
 
 ***
 
@@ -56,4 +56,4 @@ Defined in: [src/types/Event/interface.ts:49](https://github.com/PalisadoesFound
 
 > `optional` **viewType**: [`ViewType`](../../../../screens/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
 
-Defined in: [src/types/Event/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L51)
+Defined in: [src/types/Event/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L93)

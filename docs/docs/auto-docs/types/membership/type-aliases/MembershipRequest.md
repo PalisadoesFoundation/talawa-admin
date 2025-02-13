@@ -20,4 +20,4 @@ Defined in: [src/types/membership.ts:4](https://github.com/PalisadoesFoundation/
 
 ### user
 
-> **user**: [`User`](../../user/type-aliases/User.md)
+> **user**: [`User`](../../User/type/type-aliases/User.md)

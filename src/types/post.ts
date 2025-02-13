@@ -1,5 +1,5 @@
 import type { Comment } from './comment';
-import type { User } from './user';
+import type { User } from './User/type';
 import type { Organization } from './organization';
 
 export type Post = {

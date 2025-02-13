@@ -21,6 +21,8 @@ export const eventData = [
     isPublic: true,
     isRegisterable: true,
     viewType: ViewType.DAY,
+    attendees: [],
+    creator: {},
   },
   {
     _id: '2',
@@ -37,6 +39,8 @@ export const eventData = [
     isRecurringEventException: false,
     isPublic: true,
     isRegisterable: true,
+    attendees: [],
+    creator: {},
   },
 ];
 

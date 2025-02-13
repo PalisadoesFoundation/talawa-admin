@@ -9,11 +9,12 @@ import HolidayCard from '../../HolidayCards/HolidayCard';
 import { holidays, months, weekdays } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
 import type {
-  InterfaceEventListCardProps,
+  InterfaceEvent,
   InterfaceCalendarProps,
   InterfaceIOrgList,
 } from 'types/Event/interface';
 import { Role } from 'types/Event/interface';
+import { type User } from 'types/User/type';
 
 /**
  * ## CSS Strategy Explanation:
@@ -47,9 +48,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const [currentDate, setCurrentDate] = useState(today.getDate());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [events, setEvents] = useState<InterfaceEventListCardProps[] | null>(
-    null,
-  );
+  const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
   useEffect(() => {
@@ -61,12 +60,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   }, []);
 
   const filterData = (
-    eventData: InterfaceEventListCardProps[],
+    eventData: InterfaceEvent[],
     orgData?: InterfaceIOrgList,
     userRole?: string,
     userId?: string,
-  ): InterfaceEventListCardProps[] => {
-    const data: InterfaceEventListCardProps[] = [];
+  ): InterfaceEvent[] => {
+    const data: InterfaceEvent[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
     // Hard to test all the cases
 
@@ -207,13 +206,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             return datas;
           }
         })
-        .map((datas: InterfaceEventListCardProps) => {
-          const attendees: { _id: string }[] = [];
-          datas.attendees?.forEach((attendee: { _id: string }) => {
+        .map((datas: InterfaceEvent) => {
+          const attendees: Partial<User>[] = [];
+          datas.attendees?.forEach((attendee) => {
             const r = {
               _id: attendee._id,
             };
-
             attendees.push(r);
           });
 
@@ -395,13 +393,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
               return datas;
           })
-          .map((datas: InterfaceEventListCardProps) => {
-            const attendees: { _id: string }[] = [];
-            datas.attendees?.forEach((attendee: { _id: string }) => {
+          .map((datas: InterfaceEvent) => {
+            const attendees: Partial<User>[] = [];
+            datas.attendees?.forEach((attendee) => {
               const r = {
                 _id: attendee._id,
               };
-
               attendees.push(r);
             });
 

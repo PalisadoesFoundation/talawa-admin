@@ -20,4 +20,4 @@ Defined in: [src/types/CheckIn/type.ts:23](https://github.com/PalisadoesFoundati
 
 ### user
 
-> **user**: [`User`](../../../user/type-aliases/User.md)
+> **user**: [`User`](../../../User/type/type-aliases/User.md)

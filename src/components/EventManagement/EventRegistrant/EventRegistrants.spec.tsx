@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { REGISTRANTS_MOCKS } from './Registrations.mocks';
-import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/Attendance.mocks';
+import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/EventAttendanceMocks';
 import { vi } from 'vitest';
 import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import styles from '../../../style/app.module.css';

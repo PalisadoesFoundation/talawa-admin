@@ -24,7 +24,7 @@ Defined in: [src/types/chat.ts:18](https://github.com/PalisadoesFoundation/talaw
 
 ### deletedBy?
 
-> `optional` **deletedBy**: [`User`](../../user/type-aliases/User.md)[]
+> `optional` **deletedBy**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### messageContent
 
@@ -36,7 +36,7 @@ Defined in: [src/types/chat.ts:18](https://github.com/PalisadoesFoundation/talaw
 
 ### sender
 
-> **sender**: [`User`](../../user/type-aliases/User.md)
+> **sender**: [`User`](../../User/type/type-aliases/User.md)
 
 ### type
 

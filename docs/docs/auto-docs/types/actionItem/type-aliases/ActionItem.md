@@ -20,11 +20,11 @@ Defined in: [src/types/actionItem.ts:5](https://github.com/PalisadoesFoundation/
 
 ### assignee?
 
-> `optional` **assignee**: [`User`](../../user/type-aliases/User.md)
+> `optional` **assignee**: [`User`](../../User/type/type-aliases/User.md)
 
 ### assigner?
 
-> `optional` **assigner**: [`User`](../../user/type-aliases/User.md)
+> `optional` **assigner**: [`User`](../../User/type/type-aliases/User.md)
 
 ### assignmentDate
 
@@ -40,7 +40,7 @@ Defined in: [src/types/actionItem.ts:5](https://github.com/PalisadoesFoundation/
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../User/type/type-aliases/User.md)
 
 ### dueDate
 

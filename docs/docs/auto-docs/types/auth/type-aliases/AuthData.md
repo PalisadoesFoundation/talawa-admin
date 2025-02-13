@@ -16,7 +16,7 @@ Defined in: [src/types/auth.ts:3](https://github.com/PalisadoesFoundation/talawa
 
 ### appUserProfile
 
-> **appUserProfile**: [`AppUserProfile`](../../user/type-aliases/AppUserProfile.md)
+> **appUserProfile**: [`AppUserProfile`](../../User/type/type-aliases/AppUserProfile.md)
 
 ### refreshToken
 
@@ -24,4 +24,4 @@ Defined in: [src/types/auth.ts:3](https://github.com/PalisadoesFoundation/talawa
 
 ### user
 
-> **user**: [`User`](../../user/type-aliases/User.md)
+> **user**: [`User`](../../User/type/type-aliases/User.md)

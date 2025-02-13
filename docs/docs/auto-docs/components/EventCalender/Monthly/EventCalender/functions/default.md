@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventCalender/Monthly/EventCalender.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Monthly/EventCalender.tsx#L37)
+Defined in: [src/components/EventCalender/Monthly/EventCalender.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Monthly/EventCalender.tsx#L38)
 
 ## CSS Strategy Explanation:
 

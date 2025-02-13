@@ -16,7 +16,7 @@ Defined in: [src/types/group.ts:4](https://github.com/PalisadoesFoundation/talaw
 
 ### admins
 
-> **admins**: [`User`](../../user/type-aliases/User.md)[]
+> **admins**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### createdAt
 

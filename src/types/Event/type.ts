@@ -1,5 +1,5 @@
 import type { ActionItem } from '../actionItem';
-import type { User } from '../user';
+import type { User } from '../User/type';
 import type { Organization } from '../organization';
 import type { CheckInStatus } from '../CheckIn/type';
 import type { Feedback } from '../feedback';

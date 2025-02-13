@@ -44,4 +44,4 @@ Defined in: [src/types/CheckIn/type.ts:4](https://github.com/PalisadoesFoundatio
 
 ### user
 
-> **user**: [`User`](../../../user/type-aliases/User.md)
+> **user**: [`User`](../../../User/type/type-aliases/User.md)

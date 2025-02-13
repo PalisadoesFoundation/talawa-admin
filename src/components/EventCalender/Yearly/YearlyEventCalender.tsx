@@ -5,11 +5,12 @@ import React, { useState, useEffect } from 'react';
 import styles from '../../../style/app.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
-  type InterfaceEventListCardProps,
+  type InterfaceEvent,
   type InterfaceCalendarProps,
   type InterfaceIOrgList,
   Role,
 } from 'types/Event/interface';
+import type { User } from 'types/User/type';
 
 /**
  * Calendar component to display events for a selected year.
@@ -50,9 +51,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   ];
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [events, setEvents] = useState<InterfaceEventListCardProps[] | null>(
-    null,
-  );
+  const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expandedY, setExpandedY] = useState<string | null>(null);
 
   /**
@@ -65,12 +64,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * @returns Filtered array of event data.
    */
   const filterData = (
-    eventData: InterfaceEventListCardProps[],
+    eventData: InterfaceEvent[],
     orgData?: InterfaceIOrgList,
     userRole?: string,
     userId?: string,
-  ): InterfaceEventListCardProps[] => {
-    const data: InterfaceEventListCardProps[] = [];
+  ): InterfaceEvent[] => {
+    const data: InterfaceEvent[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
 
     if (userRole === Role.ADMIN) {
@@ -170,13 +169,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         });
 
         const renderedEvents =
-          eventsForCurrentDate?.map((datas: InterfaceEventListCardProps) => {
-            const attendees: { _id: string }[] = [];
-            datas.attendees?.forEach((attendee: { _id: string }) => {
+          eventsForCurrentDate?.map((datas: InterfaceEvent) => {
+            const attendees: Partial<User>[] = [];
+            datas.attendees?.forEach((attendee) => {
               const r = {
                 _id: attendee._id,
               };
-
               attendees.push(r);
             });
 

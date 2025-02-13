@@ -16,4 +16,4 @@ Defined in: [src/types/auth.ts:10](https://github.com/PalisadoesFoundation/talaw
 
 ### user
 
-> **user**: [`User`](../../user/type-aliases/User.md)
+> **user**: [`User`](../../User/type/type-aliases/User.md)
