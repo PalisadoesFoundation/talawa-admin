@@ -16,7 +16,6 @@ export const CREATE_FUND_MUTATION = gql`
   ) {
     createFund(
       input: {
-        # ✅ Ensure correct field names
         name: $name
         organizationId: $organizationId
         isTaxDeductible: $isTaxDeductible

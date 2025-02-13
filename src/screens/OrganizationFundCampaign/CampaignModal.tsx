@@ -74,19 +74,19 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
   const [formState, setFormState] = useState({
     campaignName: campaign?.name ?? '',
-    campaignCurrency: campaign?.currency ?? 'USD',
-    campaignGoal: campaign?.fundingGoal ?? 0,
-    campaignStartDate: campaign?.startDate ?? new Date(),
-    campaignEndDate: campaign?.endDate ?? new Date(),
+    campaignCurrency: campaign?.currencyCode ?? 'USD',
+    campaignGoal: campaign?.goalAmount ?? 0,
+    campaignStartDate: campaign?.startAt ?? new Date(),
+    campaignEndDate: campaign?.endAt ?? new Date(),
   });
 
   useEffect(() => {
     setFormState({
-      campaignCurrency: campaign?.currency ?? 'USD',
-      campaignEndDate: campaign?.endDate ?? new Date(),
-      campaignGoal: campaign?.fundingGoal ?? 0,
+      campaignCurrency: campaign?.currencyCode ?? 'USD',
+      campaignEndDate: campaign?.endAt ?? new Date(),
+      campaignGoal: campaign?.goalAmount ?? 0,
       campaignName: campaign?.name ?? '',
-      campaignStartDate: campaign?.startDate ?? new Date(),
+      campaignStartDate: campaign?.startAt ?? new Date(),
     });
   }, [campaign]);
 
@@ -131,7 +131,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         variables: {
           name: formState.campaignName,
           currencyCode: formState.campaignCurrency,
-          goalAmount: parseInt(formState.campaignGoal, 10),
+          goalAmount: formState.campaignGoal,
           startAt: dayjs(formState.campaignStartDate).toISOString(),
           endAt: dayjs(formState.campaignEndDate).toISOString(),
           fundId,
@@ -184,13 +184,13 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (campaign?.name !== campaignName) {
         updatedFields.name = campaignName;
       }
-      if (campaign?.fundingGoal !== campaignGoal) {
+      if (campaign?.goalAmount !== campaignGoal) {
         updatedFields.goalAmount = campaignGoal;
       }
-      if (campaign?.startDate !== campaignStartDate) {
+      if (campaign?.startAt !== campaignStartDate) {
         updatedFields.startAt = dayjs(campaignStartDate).toISOString();
       }
-      if (campaign?.endDate !== formState.campaignEndDate) {
+      if (campaign?.endAt !== formState.campaignEndDate) {
         const endAt = dayjs(formState.campaignEndDate);
         if (endAt.isBefore(dayjs())) {
           toast.error('End date must be in the future.');
@@ -198,10 +198,22 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         }
         updatedFields.endAt = endAt.toISOString();
       }
+
+      // In mutation, the currencyCode is not updated
+      // if (campaign?.currencyCode !== campaignCurrency) {
+      //   updatedFields.currencyCode = campaignCurrency;
+      // }
+
+      // Check if there are any updated fields
+      if (Object.keys(updatedFields).length === 0) {
+        toast.error('No changes detected.');
+        return;
+      }
+
       await updateCampaign({
         variables: {
           input: {
-            id: campaign?.id, // Ensure the id field is the campaign id
+            id: campaign?.id,
             ...updatedFields,
           },
         },

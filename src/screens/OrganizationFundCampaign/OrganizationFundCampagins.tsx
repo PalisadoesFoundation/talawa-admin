@@ -165,9 +165,9 @@ const orgFundCampaign = (): JSX.Element => {
   };
 
   const { campaigns, fundName, isArchived } = useMemo(() => {
-    const fundName = campaignData?.getFundById?.name || 'Fund';
-    const isArchived = campaignData?.getFundById?.isArchived || false;
-    const campaigns = campaignData?.getFundById?.campaigns || [];
+    const fundName = campaignData?.fund?.name || 'Fund';
+    const isArchived = campaignData?.fund?.isArchived || false;
+    const campaigns = campaignData?.fund?.campaigns || [];
     return { fundName, campaigns, isArchived };
   }, [campaignData]);
 

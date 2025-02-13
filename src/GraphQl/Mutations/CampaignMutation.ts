@@ -44,7 +44,7 @@ export const CREATE_CAMPAIGN_MUTATION = gql`
  * @param goalAmount - The funding goal of the campaign.
  * @param startAt - The start date of the campaign.
  * @param endAt - The end date of the campaign.
- * @param currencyCode - The currency of the campaign.
+//  * @param currencyCode - The currency of the campaign.
  * @returns The ID of the updated campaign.
  */
 
