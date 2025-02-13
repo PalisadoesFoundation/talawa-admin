@@ -196,46 +196,6 @@ const ERROR_MOCK = [
   },
 ];
 
-const RESET_ERROR_MOCKS = [
-  {
-    request: {
-      query: GET_COMMUNITY_DATA_PG,
-    },
-    result: {
-      data: {
-        community: {
-          createdAt: '2022-01-01T12:00:00Z',
-          updatedAt: '2022-01-01T12:00:00Z',
-          logoURL: 'https://logo.com',
-          logoMimeType: 'image/png',
-          id: 'test-id-123',
-          name: 'Test Community',
-          websiteURL: 'https://test.com',
-          facebookURL: 'https://facebook.com/test',
-          instagramURL: 'https://instagram.com/test',
-          xURL: 'https://twitter.com/test',
-          linkedInURL: 'https://linkedin.com/test',
-          githubURL: 'https://github.com/test',
-          youtubeURL: 'https://youtube.com/test',
-          redditURL: 'https://reddit.com/test',
-          slackURL: 'https://slack.com/test',
-          inactivityTimeoutDuration: 30,
-          updater: null,
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: RESET_COMMUNITY,
-      variables: {
-        resetPreLoginImageryId: 'test-id-123',
-      },
-    },
-    error: new Error('Failed to reset community profile'),
-  },
-];
-
 const BASE64_MOCKS = [
   {
     request: {
@@ -572,35 +532,6 @@ describe('Testing Community Profile Screen', () => {
     // Ensure no success toast is shown for null conversion
     expect(toast.success).not.toHaveBeenCalled();
   });
-
-  // test('should show success toast when profile is updated successfully', async () => {
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
-  //       <BrowserRouter>
-  //         <I18nextProvider i18n={i18n}>
-  //           <CommunityProfile />
-  //         </I18nextProvider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-
-  //   const nameInput = screen.getByPlaceholderText(/Community Name/i);
-  //   const websiteInput = screen.getByPlaceholderText(/Website Link/i);
-  //   const logoInput = screen.getByTestId('fileInput');
-
-  //   await userEvent.type(nameInput, 'Test Name');
-  //   await userEvent.type(websiteInput, 'https://test.com');
-  //   await userEvent.upload(
-  //     logoInput,
-  //     new File([''], 'test.png', { type: 'image/png' }),
-  //   );
-
-  //   const submitButton = screen.getByTestId('saveChangesBtn');
-  //   await userEvent.click(submitButton);
-  //   await wait();
-
-  //   expect(toast.success).toHaveBeenCalledWith(expect.any(String));
-  // });
   test('should show success toast when profile is updated successfully', async () => {
     render(
       <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>

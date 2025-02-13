@@ -50,7 +50,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     keyPrefix: 'communityProfile',
   });
 
-  const [timeout, setTimeout] = useState<number | undefined>(30);
+  const [timeout, setTimeout] = useState<number>(30);
   const [communityTimeout, setCommunityTimeout] = useState<number | undefined>(
     30,
   ); // Timeout from database for the community
@@ -81,10 +81,13 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
       SessionTimeoutData &&
       SessionTimeoutData.inactivityTimeoutDuration !== null
     ) {
-      setCommunityTimeout(SessionTimeoutData.inactivityTimeoutDuration);
-      setTimeout(SessionTimeoutData.inactivityTimeoutDuration);
+      const timeoutInMinutes = Math.floor(
+        SessionTimeoutData.inactivityTimeoutDuration / 60,
+      );
+      setCommunityTimeout(timeoutInMinutes);
+      setTimeout(timeoutInMinutes);
     } else {
-      setCommunityTimeout(undefined); // Handle null or undefined data
+      setCommunityTimeout(undefined);
     }
   }, [data, queryError]);
 
@@ -126,7 +129,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     try {
       await uploadSessionTimeout({
         variables: {
-          inactivityTimeoutDuration: timeout,
+          inactivityTimeoutDuration: timeout * 60,
         },
       });
 

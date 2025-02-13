@@ -174,22 +174,22 @@ type Community {
 
 type CommunityPg {
   createdAt: String
-	facebookURL: String
-	githubURL: String
-	id: ID!
-	inactivityTimeoutDuration: Int
-	instagramURL: String
+  facebookURL: String
+  githubURL: String
+  id: ID!
+  inactivityTimeoutDuration: Int
+  instagramURL: String
   linkedInURL: String
   logoMimeType: String
-	logoURL: String
-	name: String
-	redditURL: String
-	slackURL: String
-	updatedAt: String
-	updater: User
-	websiteURL: String
-	xURL: String
-	youtubeURL: String
+  logoURL: String
+  name: String
+  redditURL: String
+  slackURL: String
+  updatedAt: String
+  updater: User
+  websiteURL: String
+  xURL: String
+  youtubeURL: String
 }
 
 union ConnectionError = InvalidCursor | MaximumValueError

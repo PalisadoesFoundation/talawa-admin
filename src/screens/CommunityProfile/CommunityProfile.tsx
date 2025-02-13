@@ -273,7 +273,7 @@ const CommunityProfile = (): JSX.Element => {
                 multiple={false}
                 type="file"
                 id="logo"
-                name="logoURL"
+                name="logo"
                 data-testid="fileInput"
                 onChange={async (
                   e: React.ChangeEvent<HTMLInputElement>,
