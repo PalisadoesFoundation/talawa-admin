@@ -205,49 +205,6 @@ describe('Testing UpdateTimeout Component', () => {
     expect(screen.getByRole('button', { name: /Update/i })).toBeInTheDocument();
   });
 
-  // it('Should update session timeout', async () => {
-  //   // Setup user-event instance
-  //   const user = userEvent.setup();
-
-  //   // Setup toast spy
-  //   const toastSpy = vi.spyOn(toast, 'success');
-
-  //   render(
-  //     <MockedProvider mocks={MOCKS} addTypename={false}>
-  //       <BrowserRouter>
-  //         <I18nextProvider i18n={i18n}>
-  //           <UpdateTimeout />
-  //         </I18nextProvider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-
-  //   // Wait for the initial query to complete and component to render
-  //   await waitFor(() => {
-  //     expect(screen.getByTestId('timeout-value')).toBeInTheDocument();
-  //   });
-
-  //   // Get and verify submit button
-  //   const submitButton = screen.getByTestId('update-button');
-  //   expect(submitButton).toBeInTheDocument();
-
-  //   // Click the button using user-event
-  //   await user.click(submitButton);
-
-  //   // Wait for and verify the success toast
-  //   await waitFor(
-  //     () => {
-  //       expect(toastSpy).toHaveBeenCalledWith(
-  //         expect.stringContaining('Successfully updated the Profile Details.'),
-  //       );
-  //     },
-  //     { timeout: 3000 },
-  //   );
-
-  //   // Verify the toast was only called once
-  //   expect(toastSpy).toHaveBeenCalledTimes(1);
-  // });
-
   it('Should update session timeout', async () => {
     // Setup user-event instance
     const user = userEvent.setup();

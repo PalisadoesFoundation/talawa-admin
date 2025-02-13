@@ -532,6 +532,7 @@ describe('Testing Community Profile Screen', () => {
     // Ensure no success toast is shown for null conversion
     expect(toast.success).not.toHaveBeenCalled();
   });
+
   test('should show success toast when profile is updated successfully', async () => {
     render(
       <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
