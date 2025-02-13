@@ -284,8 +284,10 @@ describe('Testing UpdateTimeout Component', () => {
 
     // Click the button and submit the form
     await user.click(submitButton);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    fireEvent.submit(form!);
+    if (form) {
+      // Perform actions on the form
+      fireEvent.submit(form);
+    }
 
     // Wait for the mutation and toast
     await waitFor(
