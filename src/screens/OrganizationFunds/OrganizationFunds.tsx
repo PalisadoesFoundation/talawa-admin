@@ -142,7 +142,7 @@ const organizationFunds = (): JSX.Element => {
     refetch: refetchFunds,
   }: {
     data?: {
-      fundsByOrganization: InterfaceFundInfo[];
+      organization: InterfaceFundInfo[];
     };
     loading: boolean;
     error?: Error | undefined;

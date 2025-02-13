@@ -140,14 +140,14 @@ const orgFundCampaign = (): JSX.Element => {
     refetch: refetchCampaign,
   }: {
     data?: {
-      getFundById: InterfaceQueryOrganizationFundCampaigns;
+      fund: InterfaceQueryOrganizationFundCampaigns;
     };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(FUND_CAMPAIGN, {
     variables: {
-      input: { id: fundId }, // Updated to use 'input'
+      input: { id: fundId },
     },
     skip: !fundId,
     onCompleted: (data) => console.log('GraphQL Data Received:', data),
@@ -157,8 +157,6 @@ const orgFundCampaign = (): JSX.Element => {
   const compaignsData = useMemo(() => {
     return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
   }, [campaignData]);
-
-  console.log('compaignsData', compaignsData);
 
   const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);

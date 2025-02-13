@@ -1,14 +1,10 @@
 import gql from 'graphql-tag';
 
 /**
- * GraphQL query to retrieve the list of members for a specific organization.
+ * GraphQL query to retrieve the list of funds for a specific organization.
  *
- * @param id - The ID of the organization for which members are being retrieved.
- * @params name - The name of the organization for which members are being retrieved.
- * @params creatorId - The ID of the creator of the organization.
- * @params updaterId - The ID of the user who last updated the organization.
- * @params isTaxDeductible - A boolean value indicating whether the organization is tax deductible.
- * @returns The list of members associated with the organization.
+ * @param id - The ID of the organization for which funds are being retrieved.
+ * @returns The list of funds associated with the organization.
  */
 export const FUND_LIST = gql`
   query FundsByOrganization($input: QueryOrganizationInput!) {
@@ -16,18 +12,12 @@ export const FUND_LIST = gql`
       funds(first: 32) {
         edges {
           node {
+            id
+            name
             creator {
               id
             }
-            id
-            isTaxDeductible
-            name
-            organization {
-              id
-            }
-            updater {
-              id
-            }
+            createdAt
           }
         }
       }
@@ -39,13 +29,12 @@ export const FUND_LIST = gql`
  * Query to fetch a specific fund by its ID, along with its associated campaigns.
  * @params id - The ID of the fund campaign to be fetched.
  * @params name - The name of the fund campaign to be fetched.
- * @params sratAt - The start date of the fund campaign to be fetched.
+ * @params startAt - The start date of the fund campaign to be fetched.
  * @params endAt - The end date of the fund campaign to be fetched.
  * @params currencyCode - The currency code of the fund campaign to be fetched.
  * @params goalAmount - The goal amount of the fund campaign to be fetched.
  * @returns The fund campaign with the specified ID.
  */
-
 export const FUND_CAMPAIGN = gql`
   query GetFundById($input: QueryFundInput!) {
     fund(input: $input) {
