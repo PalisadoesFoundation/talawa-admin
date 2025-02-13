@@ -20,7 +20,7 @@ Defined in: [src/types/Event/type.ts:60](https://github.com/PalisadoesFoundation
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../../User/type/type-aliases/User.md)
 
 ### event?
 
@@ -44,4 +44,4 @@ Defined in: [src/types/Event/type.ts:60](https://github.com/PalisadoesFoundation
 
 ### user
 
-> **user**: [`User`](../../../user/type-aliases/User.md)
+> **user**: [`User`](../../../User/type/type-aliases/User.md)

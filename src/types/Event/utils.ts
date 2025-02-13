@@ -16,6 +16,12 @@ export const holidays: InterfaceHoliday[] = [
   { name: 'Christmas Day', date: '12-25', month: 'December' },
 ];
 
+export const FilterPeriod = {
+  ThisMonth: 'This Month',
+  ThisYear: 'This Year',
+  All: 'All',
+} as const;
+
 export const weekdays: string[] = [
   'Sunday',
   'Monday',

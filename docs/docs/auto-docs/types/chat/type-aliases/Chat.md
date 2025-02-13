@@ -16,7 +16,7 @@ Defined in: [src/types/chat.ts:4](https://github.com/PalisadoesFoundation/talawa
 
 ### admins?
 
-> `optional` **admins**: [`User`](../../user/type-aliases/User.md)[]
+> `optional` **admins**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### createdAt
 
@@ -24,7 +24,7 @@ Defined in: [src/types/chat.ts:4](https://github.com/PalisadoesFoundation/talawa
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../User/type/type-aliases/User.md)
 
 ### isGroup
 
@@ -52,4 +52,4 @@ Defined in: [src/types/chat.ts:4](https://github.com/PalisadoesFoundation/talawa
 
 ### users
 
-> **users**: [`User`](../../user/type-aliases/User.md)[]
+> **users**: [`User`](../../User/type/type-aliases/User.md)[]

@@ -24,7 +24,7 @@ Defined in: [src/types/organization.ts:24](https://github.com/PalisadoesFoundati
 
 ### admins?
 
-> `optional` **admins**: [`User`](../../user/type-aliases/User.md)[]
+> `optional` **admins**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### agendaCategories?
 
@@ -36,7 +36,7 @@ Defined in: [src/types/organization.ts:24](https://github.com/PalisadoesFoundati
 
 ### blockedUsers?
 
-> `optional` **blockedUsers**: [`User`](../../user/type-aliases/User.md)[]
+> `optional` **blockedUsers**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### createdAt
 
@@ -44,7 +44,7 @@ Defined in: [src/types/organization.ts:24](https://github.com/PalisadoesFoundati
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../User/type/type-aliases/User.md)
 
 ### customFields
 
@@ -60,7 +60,7 @@ Defined in: [src/types/organization.ts:24](https://github.com/PalisadoesFoundati
 
 ### members?
 
-> `optional` **members**: [`User`](../../user/type-aliases/User.md)[]
+> `optional` **members**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### membershipRequests?
 

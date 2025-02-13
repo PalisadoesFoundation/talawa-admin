@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import styles from '../../style/app.module.css';
 import { Navigate, useParams } from 'react-router-dom';
 import EventListCardModals from './Modal/EventListCardModals';
-import type { InterfaceEventListCardProps } from 'types/Event/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 /**
  * Props for the EventListCard component.
  */
-interface InterfaceEventListCard extends InterfaceEventListCardProps {
+interface InterfaceEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 

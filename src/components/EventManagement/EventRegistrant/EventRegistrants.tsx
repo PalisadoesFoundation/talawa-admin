@@ -13,19 +13,10 @@ import styles from '../../../style/app.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES, EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
-import type { InterfaceMember } from '../EventAttendance/InterfaceEvents';
+import type { InterfaceMember } from 'types/Event/interface';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
-/**
- * Interface for user data
- */
-interface InterfaceUser {
-  _id: string;
-  userId: string;
-  isRegistered: boolean;
-  __typename: string;
-  time: string;
-}
+import type { InterfaceUser } from 'types/User/interface';
 /**
  * Component to manage and display event registrant information
  * Includes adding new registrants and check-in functionality for registrants

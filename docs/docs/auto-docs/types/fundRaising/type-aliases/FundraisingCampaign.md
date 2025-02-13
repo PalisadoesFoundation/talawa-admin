@@ -20,7 +20,7 @@ Defined in: [src/types/fundRaising.ts:4](https://github.com/PalisadoesFoundation
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../User/type/type-aliases/User.md)
 
 ### description?
 
@@ -44,7 +44,7 @@ Defined in: [src/types/fundRaising.ts:4](https://github.com/PalisadoesFoundation
 
 ### members?
 
-> `optional` **members**: [`User`](../../user/type-aliases/User.md)[]
+> `optional` **members**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### name
 
