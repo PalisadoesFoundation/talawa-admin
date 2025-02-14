@@ -23,6 +23,7 @@ import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFiel
 import { urlToFile } from 'utils/urlToFile';
 import sanitizeHtml from 'sanitize-html';
 import { validatePassword } from 'utils/passwordValidator';
+import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 
 /**
  * The Settings component allows users to view and update their profile settings.
@@ -311,11 +312,10 @@ export default function Settings(): JSX.Element {
                                 height: '60px',
                                 objectFit: 'cover',
                               }}
-                              src={
-                                selectedAvatar
-                                  ? URL.createObjectURL(selectedAvatar)
-                                  : encodeURI(userDetails.avatarURL)
-                              }
+                              src={sanitizeAvatars(
+                                selectedAvatar,
+                                userDetails.avatarURL,
+                              )}
                               alt="User"
                               data-testid="profile-picture"
                               crossOrigin="anonymous" // to avoid Cors

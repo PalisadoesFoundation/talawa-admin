@@ -27,6 +27,7 @@ import dayjs from 'dayjs';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
+import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 
 type MemberDetailProps = {
   id?: string;
@@ -289,11 +290,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           height: '60px',
                           objectFit: 'cover',
                         }}
-                        src={
-                          selectedAvatar
-                            ? URL.createObjectURL(selectedAvatar)
-                            : encodeURI(formState.avatarURL)
-                        }
+                        src={sanitizeAvatars(
+                          selectedAvatar,
+                          formState.avatarURL,
+                        )}
                         alt="User"
                         data-testid="profile-picture"
                         crossOrigin="anonymous" // to avoid Cors
