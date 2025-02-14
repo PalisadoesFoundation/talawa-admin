@@ -70,13 +70,13 @@ const config: Config = {
           {
             label: 'General',
             position: 'left',
-            href: 'https://docs.talawa.io/docs',
+            to: 'https://docs.talawa.io/docs',
             target: '_self',
           },
           {
             label: 'Mobile Guide',
             position: 'left',
-            href: 'https://docs-mobile.talawa.io/docs',
+            to: 'https://docs-mobile.talawa.io/docs',
             target: '_self',
           },
           {
@@ -88,14 +88,14 @@ const config: Config = {
           {
             label: 'API Guide',
             position: 'left',
-            href: 'https://docs-api.talawa.io/docs',
+            to: 'https://docs-api.talawa.io/docs',
             target: '_self',
           },
 
           {
             label: 'Demo',
             position: 'left',
-            href: 'http://admin-demo.talawa.io/',
+            to: "https://demo.talawa.io/",
           },
           {
             to: 'https://github.com/PalisadoesFoundation',
