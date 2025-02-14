@@ -103,8 +103,6 @@ export default function Settings(): JSX.Element {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  console.log('Data is: ', data);
-
   const handleUpdateUserDetails = async (): Promise<void> => {
     // Function to remove empty fields from the object
     function removeEmptyFields<T extends Record<string, string | File | null>>(
