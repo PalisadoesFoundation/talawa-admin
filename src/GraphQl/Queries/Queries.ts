@@ -937,26 +937,49 @@ export const USERS_CONNECTION_LIST = gql`
 
 export const GET_COMMUNITY_DATA = gql`
   query getCommunityData {
-    getCommunityData {
-      _id
-      websiteLink
+    community {
+      id
+      websiteURL
       name
-      logoUrl
-      socialMediaUrls {
-        facebook
-        gitHub
-        instagram
-        X
-        linkedIn
-        youTube
-        reddit
-        slack
-      }
+      logoURL
+      facebookURL
+      githubURL
+      instagramURL
+      xURL
+      linkedInURL
+      youtubeURL
+      redditURL
+      slackURL
     }
   }
 `;
+
+export const GET_COMMUNITY_DATA_PG = gql`
+  query getCommunityData {
+    community {
+      createdAt
+      facebookURL
+      githubURL
+      id
+      inactivityTimeoutDuration
+      instagramURL
+      linkedInURL
+      logoMimeType
+      logoURL
+      name
+      redditURL
+      slackURL
+      updatedAt
+      updater
+      websiteURL
+      xURL
+      youtubeURL
+    }
+  }
+`;
+
 export const SIGNIN_QUERY = gql`
-  query SignIn($email: EmailAddress!, $password: String!) {
+  query SignIn($email: String!, $password: String!) {
     signIn(input: { emailAddress: $email, password: $password }) {
       user {
         id
@@ -971,10 +994,10 @@ export const SIGNIN_QUERY = gql`
   }
 `;
 
-export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
+export const GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG = gql`
   query getCommunityData {
-    getCommunityData {
-      timeout
+    community {
+      inactivityTimeoutDuration
     }
   }
 `;

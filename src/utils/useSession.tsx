@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { t } from 'i18next';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -40,16 +40,16 @@ const useSession = (): UseSessionReturnType => {
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { data, error: queryError } = useQuery(
-    GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+    GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   );
 
   useEffect(() => {
     if (queryError) {
       errorHandler(t, queryError as Error);
     } else {
-      const sessionTimeoutData = data?.getCommunityData;
+      const sessionTimeoutData = data?.community;
       if (sessionTimeoutData) {
-        setSessionTimeout(sessionTimeoutData.timeout);
+        setSessionTimeout(sessionTimeoutData.inactivityTimeoutDuration);
       }
     }
   }, [data, queryError]);
