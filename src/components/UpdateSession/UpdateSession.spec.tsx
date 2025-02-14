@@ -17,10 +17,11 @@ import { toast } from 'react-toastify';
 import UpdateTimeout from './UpdateSession';
 
 import i18n from 'utils/i18nForTest';
-import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
-import { UPDATE_SESSION_TIMEOUT } from 'GraphQl/Mutations/mutations';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
+import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { vi } from 'vitest';
+
 /**
  * This file contains unit tests for the `UpdateSession` component.
  *
@@ -36,36 +37,30 @@ import { vi } from 'vitest';
 const MOCKS = [
   {
     request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: {
-          timeout: 30,
+        community: {
+          inactivityTimeoutDuration: 1800,
         },
       },
     },
   },
   {
     request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
-    },
-    result: {
-      data: {
-        getCommunityData: null,
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_SESSION_TIMEOUT,
+      query: UPDATE_SESSION_TIMEOUT_PG,
       variables: {
-        timeout: 30,
+        inactivityTimeoutDuration: 1800,
       },
     },
     result: {
       data: {
-        updateSessionTimeout: true,
+        updateCommunity: {
+          community: {
+            inactivityTimeoutDuration: 1800,
+          },
+        },
       },
     },
   },
@@ -211,7 +206,11 @@ describe('Testing UpdateTimeout Component', () => {
   });
 
   it('Should update session timeout', async () => {
-    render(
+    const user = userEvent.setup();
+
+    const toastSpy = vi.spyOn(toast, 'success');
+
+    const { container } = render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
@@ -221,25 +220,47 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    // Wait for the initial query to complete
+    await waitFor(() => {
+      expect(screen.getByTestId('timeout-value')).toHaveTextContent(
+        '30 minutes',
+      );
+    });
 
+    // Get the form using querySelector
+    const form = container.querySelector('form');
+    expect(form).toBeInTheDocument();
+
+    // Get and verify submit button
     const submitButton = screen.getByTestId('update-button');
-    await userEvent.click(submitButton);
+    expect(submitButton).toBeInTheDocument();
 
-    // Wait for the toast success call
+    // Click the button and submit the form
+    await user.click(submitButton);
+    if (form) {
+      // Perform actions on the form
+      fireEvent.submit(form);
+    }
 
-    await wait();
-
-    expect(toast.success).toHaveBeenCalledWith(
-      expect.stringContaining('Successfully updated the Profile Details.'),
+    // Wait for the mutation and toast
+    await waitFor(
+      () => {
+        expect(toastSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Successfully updated the Profile Details.'),
+        );
+      },
+      { timeout: 3000 },
     );
+
+    // Verify toast was called once
+    expect(toastSpy).toHaveBeenCalledTimes(1);
   });
 
   it('Should handle query errors', async () => {
     const errorMocks = [
       {
         request: {
-          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
         },
         error: new Error('An error occurred'),
       },
@@ -264,29 +285,29 @@ describe('Testing UpdateTimeout Component', () => {
     const errorMocks = [
       {
         request: {
-          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
         },
         result: {
           data: {
-            getCommunityData: {
-              timeout: 30,
+            community: {
+              inactivityTimeoutDuration: 1800,
             },
           },
         },
       },
       {
         request: {
-          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
         },
         result: {
           data: {
-            getCommunityData: null,
+            community: null,
           },
         },
       },
       {
         request: {
-          query: UPDATE_SESSION_TIMEOUT,
+          query: UPDATE_SESSION_TIMEOUT_PG,
           variables: { timeout: 30 },
         },
         error: new Error('An error occurred'),

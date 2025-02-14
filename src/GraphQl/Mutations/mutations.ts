@@ -640,15 +640,47 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
-export const UPDATE_COMMUNITY = gql`
-  mutation updateCommunity($data: UpdateCommunityInput!) {
-    updateCommunity(data: $data)
+export const UPDATE_COMMUNITY_PG = gql`
+  mutation updateCommunity(
+    $facebookURL: String
+    $githubURL: String
+    $instagramURL: String
+    $inactivityTimeoutDuration: Int
+    $linkedinURL: String
+    $name: String
+    $redditURL: String
+    $slackURL: String
+    $websiteURL: String
+    $xURL: String
+    $youtubeURL: String
+  ) {
+    updateCommunity(
+      input: {
+        facebookURL: $facebookURL
+        githubURL: $githubURL
+        inactivityTimeoutDuration: $inactivityTimeoutDuration
+        instagramURL: $instagramURL
+        linkedinURL: $linkedinURL
+        name: $name
+        redditURL: $redditURL
+        slackURL: $slackURL
+        websiteURL: $websiteURL
+        xURL: $xURL
+        youtubeURL: $youtubeURL
+      }
+    ) {
+      id
+    }
   }
 `;
 
-export const UPDATE_SESSION_TIMEOUT = gql`
-  mutation updateSessionTimeout($timeout: Int!) {
-    updateSessionTimeout(timeout: $timeout)
+export const UPDATE_SESSION_TIMEOUT_PG = gql`
+  mutation updateCommunity($inactivityTimeoutDuration: Int!) {
+    updateCommunity(
+      input: { inactivityTimeoutDuration: $inactivityTimeoutDuration }
+    ) {
+      inactivityTimeoutDuration
+    }
   }
 `;
 

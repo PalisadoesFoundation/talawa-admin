@@ -953,8 +953,9 @@ export const GET_COMMUNITY_DATA = gql`
   }
 `;
 
+
 export const SIGNIN_QUERY = gql`
-  query SignIn($email: EmailAddress!, $password: String!) {
+  query SignIn($email: String!, $password: String!) {
     signIn(input: { emailAddress: $email, password: $password }) {
       user {
         id
@@ -968,6 +969,7 @@ export const SIGNIN_QUERY = gql`
     }
   }
 `;
+
 
 export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
   query CommunitySessionTimeout {
