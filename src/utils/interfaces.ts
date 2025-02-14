@@ -1038,7 +1038,7 @@ export interface InterfaceFundInfo {
   isDefault: boolean;
   createdAt: string;
   organizationId: string;
-  creator: { id: string};
+  creator: { id: string };
 }
 export interface InterfaceCampaignInfo {
   id: string;
