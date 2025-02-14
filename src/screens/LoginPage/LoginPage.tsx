@@ -21,14 +21,18 @@ import {
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATION_LIST, SIGNIN_QUERY } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_LIST,
+  SIGNIN_QUERY,
+  GET_COMMUNITY_DATA_PG,
+} from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-// import { socialMediaLinks } from '../../constants';
+import { socialMediaLinks } from '../../constants';
 import styles from 'style/app.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
@@ -120,11 +124,11 @@ const loginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  // const { data, refetch } = useQuery(GET_COMMUNITY_DATA);
-  // useEffect(() => {
-  //   // refetching the data if the pre-login data updates
-  //   refetch();
-  // }, [data]);
+  const { data, refetch } = useQuery(GET_COMMUNITY_DATA_PG);
+  useEffect(() => {
+    // refetching the data if the pre-login data updates
+    refetch();
+  }, [data]);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
@@ -321,31 +325,31 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  // const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
-  //   data?.getCommunityData ? (
-  //     data.getCommunityData?.socialMediaUrls?.[tag] && (
-  //       <a
-  //         key={index}
-  //         href={data.getCommunityData?.socialMediaUrls?.[tag]}
-  //         target="_blank"
-  //         rel="noopener noreferrer"
-  //         data-testid="preLoginSocialMedia"
-  //       >
-  //         <img src={logo} />
-  //       </a>
-  //     )
-  //   ) : (
-  //     <a
-  //       key={index}
-  //       href={href}
-  //       target="_blank"
-  //       rel="noopener noreferrer"
-  //       data-testid="PalisadoesSocialMedia"
-  //     >
-  //       <img src={logo} />
-  //     </a>
-  //   ),
-  // );
+  const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
+    data?.community ? (
+      data.community?.[tag] && (
+        <a
+          key={index}
+          href={data.community?.[tag]}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="preLoginSocialMedia"
+        >
+          <img src={logo} />
+        </a>
+      )
+    ) : (
+      <a
+        key={index}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-testid="PalisadoesSocialMedia"
+      >
+        <img src={logo} />
+      </a>
+    ),
+  );
 
   return (
     <>
@@ -353,35 +357,35 @@ const loginPage = (): JSX.Element => {
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
-              {/* {data?.getCommunityData ? (
+              {data?.community ? (
                 <a
-                  href={data.getCommunityData.websiteLink}
+                  href={data.community.websiteURL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${styles.communityLogo}`}
                 >
                   <img
-                    src={data.getCommunityData.logoUrl}
+                    src={data.community.logoURL}
                     alt="Community Logo"
                     data-testid="preLoginLogo"
                   />
-                  <p className="text-center">{data.getCommunityData.name}</p>
+                  <p className="text-center">{data.community.name}</p>
                 </a>
-              ) : ( */}
-              <a
-                href="https://www.palisadoes.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <PalisadoesLogo
-                  className={styles.palisadoes_logo}
-                  data-testid="PalisadoesLogo"
-                />
-                <p className="text-center">{t('fromPalisadoes')}</p>
-              </a>
-              {/* )} */}
+              ) : (
+                <a
+                  href="https://www.palisadoes.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <PalisadoesLogo
+                    className={styles.palisadoes_logo}
+                    data-testid="PalisadoesLogo"
+                  />
+                  <p className="text-center">{t('fromPalisadoes')}</p>
+                </a>
+              )}
             </div>
-            {/* <div className={styles.socialIcons}>{socialIconsList}</div> */}
+            <div className={styles.socialIcons}>{socialIconsList}</div>
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
