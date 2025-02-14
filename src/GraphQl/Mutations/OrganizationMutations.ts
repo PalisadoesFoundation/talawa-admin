@@ -235,14 +235,14 @@ export const TOGGLE_PINNED_POST = gql`
  */
 
 export const ADD_CUSTOM_FIELD = gql`
-  mutation ($organizationId: ID!, $type: String!, $name: String!) {
-    addOrganizationCustomField(
-      organizationId: $organizationId
-      type: $type
-      name: $name
-    ) {
-      name
-      type
+  mutation CreateCustomField($input: CreateCustomFieldInput!) {
+    createCustomField(input: $input) {
+      customField {
+        id
+        name
+        type
+        organizationId
+      }
     }
   }
 `;
@@ -258,13 +258,9 @@ export const ADD_CUSTOM_FIELD = gql`
  */
 
 export const REMOVE_CUSTOM_FIELD = gql`
-  mutation ($organizationId: ID!, $customFieldId: ID!) {
-    removeOrganizationCustomField(
-      organizationId: $organizationId
-      customFieldId: $customFieldId
-    ) {
-      type
-      name
+  mutation DeleteCustomField($id: ID!) {
+    deleteCustomField(id: $id) {
+      success
     }
   }
 `;

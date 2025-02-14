@@ -363,9 +363,15 @@ export const CHATS_LIST = gql`
  * @returns A boolean indicating whether the organization is a sample organization.
  */
 
+// Ensure query matches backend schema
 export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
-  query ($isSampleOrganizationId: ID!) {
-    isSampleOrganization(id: $isSampleOrganizationId)
+  query Organization($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      name
+      description
+      isSampleOrganization
+    }
   }
 `;
 

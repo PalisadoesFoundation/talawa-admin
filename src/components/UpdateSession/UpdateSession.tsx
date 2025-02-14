@@ -62,10 +62,6 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
   } = useQuery(GET_COMMUNITY_SESSION_TIMEOUT_DATA);
   const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT);
 
-  type TimeoutDataType = {
-    timeout: number;
-  };
-
   /**
    * Effect that fetches the current session timeout from the server and sets the initial state.
    * If there is an error in fetching the data, it is handled using the error handler.
@@ -75,14 +71,13 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
       errorHandler(t, queryError as Error);
     }
 
-    const SessionTimeoutData: TimeoutDataType | undefined =
-      data?.getCommunityData;
+    const sessionTimeout = data?.community?.timeout;
 
-    if (SessionTimeoutData && SessionTimeoutData.timeout !== null) {
-      setCommunityTimeout(SessionTimeoutData.timeout);
-      setTimeout(SessionTimeoutData.timeout);
+    if (sessionTimeout !== undefined && sessionTimeout !== null) {
+      setCommunityTimeout(sessionTimeout);
+      setTimeout(sessionTimeout);
     } else {
-      setCommunityTimeout(undefined); // Handle null or undefined data
+      setCommunityTimeout(undefined);
     }
   }, [data, queryError]);
 

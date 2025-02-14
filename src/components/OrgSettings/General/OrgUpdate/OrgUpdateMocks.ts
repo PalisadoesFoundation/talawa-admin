@@ -11,7 +11,7 @@ export const MOCKS = [
       data: {
         organizations: [
           {
-            _id: '123',
+            id: '123',
             image: null,
             name: 'Palisadoes',
             description: 'Equitable Access to STEM Education Jobs',
