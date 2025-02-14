@@ -118,7 +118,7 @@ const orgFundCampaign = (): JSX.Element => {
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<string | null>(null);
-  
+
   const [modalState, setModalState] = useState<boolean>(false);
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
