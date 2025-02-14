@@ -8,7 +8,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
@@ -37,12 +37,12 @@ const MOCKS = [
   },
   {
     request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: {
-          timeout: 30,
+        community: {
+          inactivityTimeoutDuration: 1800,
         },
       },
     },

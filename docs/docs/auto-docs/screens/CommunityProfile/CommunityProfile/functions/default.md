@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/CommunityProfile/CommunityProfile.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/CommunityProfile/CommunityProfile.tsx#L59)
+Defined in: [src/screens/CommunityProfile/CommunityProfile.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/CommunityProfile/CommunityProfile.tsx#L62)
 
 `CommunityProfile` component allows users to view and update their community profile details.
 
