@@ -4,7 +4,7 @@
 
 # Interface: InterfaceDeleteEventModalProps
 
-Defined in: [src/types/Event/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L106)
+Defined in: [src/types/Event/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L118)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:106](https://github.com/PalisadoesFoun
 
 > **deleteEventHandler**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L116)
+Defined in: [src/types/Event/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L128)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/interface.ts:116](https://github.com/PalisadoesFoun
 
 > **eventDeleteModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L108)
+Defined in: [src/types/Event/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L120)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Event/interface.ts:108](https://github.com/PalisadoesFoun
 
 > **eventListCardProps**: `InterfaceEventListCard`
 
-Defined in: [src/types/Event/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L107)
+Defined in: [src/types/Event/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L119)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/interface.ts:107](https://github.com/PalisadoesFoun
 
 > **recurringEventDeleteType**: [`RecurringEventMutationType`](../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/RecurringEventMutationType.md)
 
-Defined in: [src/types/Event/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L112)
+Defined in: [src/types/Event/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L124)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/interface.ts:112](https://github.com/PalisadoesFoun
 
 > **setRecurringEventDeleteType**: `Dispatch`\<`SetStateAction`\<[`RecurringEventMutationType`](../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/RecurringEventMutationType.md)\>\>
 
-Defined in: [src/types/Event/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L113)
+Defined in: [src/types/Event/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L125)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Event/interface.ts:113](https://github.com/PalisadoesFoun
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L110)
+Defined in: [src/types/Event/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L122)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [src/types/Event/interface.ts:110](https://github.com/PalisadoesFoun
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L111)
+Defined in: [src/types/Event/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L123)
 
 #### Parameters
 
@@ -92,7 +92,7 @@ Defined in: [src/types/Event/interface.ts:111](https://github.com/PalisadoesFoun
 
 > **toggleDeleteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L109)
+Defined in: [src/types/Event/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L121)
 
 #### Returns
 

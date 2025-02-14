@@ -5,24 +5,8 @@ import {
   pieArcLabelClasses,
 } from '@mui/x-charts/PieChart';
 import Card from 'react-bootstrap/Card';
-
-// Props for the FeedbackStats component
-type ModalPropType = {
-  data: {
-    event: {
-      _id: string;
-      averageFeedbackScore: number | null;
-      feedback: FeedbackType[];
-    };
-  };
-};
-
-// Type representing individual feedback
-type FeedbackType = {
-  _id: string;
-  rating: number;
-  review: string | null;
-};
+import type { Feedback } from 'types/Event/type';
+import type { InterfaceStatsModal } from 'types/Event/interface';
 
 /**
  * Component that displays a pie chart of feedback ratings for an event.
@@ -31,7 +15,7 @@ type FeedbackType = {
  * @param data - Data containing event feedback to be displayed in the chart.
  * @returns JSX element representing the feedback analysis card with a pie chart.
  */
-export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
+export const FeedbackStats = ({ data }: InterfaceStatsModal): JSX.Element => {
   // Colors for the pie chart slices, from green (high ratings) to red (low ratings)
   const ratingColors = [
     '#57bb8a', // Green
@@ -45,7 +29,7 @@ export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
   // Count the number of feedbacks for each rating
   const count: Record<number, number> = {};
 
-  data.event.feedback.forEach((feedback: FeedbackType) => {
+  data.event.feedback.forEach((feedback: Feedback) => {
     if (feedback.rating in count) count[feedback.rating]++;
     else count[feedback.rating] = 1;
   });
@@ -79,8 +63,7 @@ export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
               series={[
                 {
                   data: chartData,
-                  arcLabel: /* istanbul ignore next */ (item) =>
-                    `${item.id} (${item.value})`,
+                  arcLabel: (item) => `${item.id} (${item.value})`,
                   innerRadius: 30,
                   outerRadius: 120,
                   paddingAngle: 2,

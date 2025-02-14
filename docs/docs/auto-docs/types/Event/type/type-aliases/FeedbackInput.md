@@ -6,7 +6,7 @@
 
 > **FeedbackInput**: `object`
 
-Defined in: [src/types/feedback.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/feedback.ts#L12)
+Defined in: [src/types/Event/type.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L57)
 
 ## Type declaration
 

@@ -3,7 +3,7 @@ import { render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { EventStats } from './EventStats';
 import { BrowserRouter } from 'react-router-dom';
-import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+import { mockData } from '../EventStatsMocks';
 import { vi, describe, expect, it } from 'vitest';
 
 // Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Vitest)
@@ -14,32 +14,6 @@ vi.mock('@mui/x-charts/PieChart', async () => ({
   PieChart: vi.fn().mockImplementation(() => <>Test</>),
   pieArcClasses: vi.fn(),
 }));
-
-const mockData = [
-  {
-    request: {
-      query: EVENT_FEEDBACKS,
-      variables: {
-        id: 'eventStats123',
-      },
-    },
-    result: {
-      data: {
-        event: {
-          _id: 'eventStats123',
-          feedback: [
-            {
-              _id: 'feedback1',
-              review: 'review1',
-              rating: 5,
-            },
-          ],
-          averageFeedbackScore: 5,
-        },
-      },
-    },
-  },
-];
 
 describe('Testing Event Stats', () => {
   const props = {

@@ -4,24 +4,8 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Typography from '@mui/material/Typography';
-import styles from '../../../style/app.module.css';
-// Props for the AverageRating component
-type ModalPropType = {
-  data: {
-    event: {
-      _id: string;
-      averageFeedbackScore: number;
-      feedback: FeedbackType[];
-    };
-  };
-};
-
-// Type representing individual feedback
-type FeedbackType = {
-  _id: string;
-  rating: number;
-  review: string | null;
-};
+import styles from '../../../../style/app.module.css';
+import type { InterfaceStatsModal } from 'types/Event/interface';
 
 /**
  * Component that displays the average rating for an event.
@@ -30,7 +14,7 @@ type FeedbackType = {
  * @param data - Data containing the average feedback score to be displayed.
  * @returns JSX element representing the average rating card with a star rating.
  */
-export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
+export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
   return (
     <>
       <Card className={styles.cardContainer}>
@@ -39,7 +23,7 @@ export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
             <h4>Average Review Score</h4>
           </Card.Title>
           <Typography component="legend">
-            Rated {data.event.averageFeedbackScore.toFixed(2)} / 5
+            Rated {data.event.averageFeedbackScore?.toFixed(2)} / 5
           </Typography>
           <Rating
             name="customized-color"

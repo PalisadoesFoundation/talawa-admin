@@ -1,10 +1,10 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { FeedbackStats } from './Statistics/Feedback';
-import { ReviewStats } from './Statistics/Review';
-import { AverageRating } from './Statistics/AverageRating';
-import styles from './Loader.module.css';
-import eventStatsStyles from './EventStats.module.css';
+import { FeedbackStats } from './Feedback/Feedback';
+import { ReviewStats } from './Review/Review';
+import { AverageRating } from './AverageRating/AverageRating';
+import styles from '../css/Loader.module.css';
+import eventStatsStyles from '../css/EventStats.module.css';
 import { useQuery } from '@apollo/client';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 

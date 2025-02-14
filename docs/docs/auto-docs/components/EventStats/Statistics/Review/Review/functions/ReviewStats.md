@@ -6,7 +6,7 @@
 
 > **ReviewStats**(`data`): `Element`
 
-Defined in: [src/components/EventStats/Statistics/Review.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/Review.tsx#L30)
+Defined in: [src/components/EventStats/Statistics/Review/Review.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/Review/Review.tsx#L14)
 
 Component that displays reviews for an event.
 Shows a list of reviews with ratings and text.
@@ -15,7 +15,7 @@ Shows a list of reviews with ratings and text.
 
 ### data
 
-`ModalPropType`
+[`InterfaceStatsModal`](../../../../../../types/Event/interface/interfaces/InterfaceStatsModal.md)
 
 Data containing event feedback to be displayed.
 

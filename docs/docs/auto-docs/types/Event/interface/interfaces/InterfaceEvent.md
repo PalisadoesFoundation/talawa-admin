@@ -26,15 +26,23 @@ Defined in: [src/types/Event/interface.ts:54](https://github.com/PalisadoesFound
 
 ### attendees
 
-> **attendees**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>[]
+> **attendees**: `Partial`\<[`User`](../../type/type-aliases/User.md)\>[]
 
 Defined in: [src/types/Event/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L60)
 
 ***
 
+### averageFeedbackScore?
+
+> `optional` **averageFeedbackScore**: `number`
+
+Defined in: [src/types/Event/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L62)
+
+***
+
 ### creator
 
-> **creator**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>
+> **creator**: `Partial`\<[`User`](../../type/type-aliases/User.md)\>
 
 Defined in: [src/types/Event/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L61)
 
@@ -61,6 +69,14 @@ Defined in: [src/types/Event/interface.ts:51](https://github.com/PalisadoesFound
 > **endTime**: `string`
 
 Defined in: [src/types/Event/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L53)
+
+***
+
+### feedback?
+
+> `optional` **feedback**: [`Feedback`](../../type/type-aliases/Feedback.md)[]
+
+Defined in: [src/types/Event/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L63)
 
 ***
 

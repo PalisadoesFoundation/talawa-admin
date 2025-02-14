@@ -6,7 +6,7 @@
 
 > **EventInput**: `object`
 
-Defined in: [src/types/Event/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L37)
+Defined in: [src/types/Event/type.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L63)
 
 ## Type declaration
 

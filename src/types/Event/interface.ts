@@ -4,7 +4,7 @@ import {
   type RecurringEventMutationType,
   type InterfaceRecurrenceRule,
 } from 'utils/recurrenceUtils';
-import type { User } from 'types/User/type';
+import type { User, Feedback } from 'types/Event/type';
 
 export const Role = {
   USER: 'USER',
@@ -59,6 +59,8 @@ export interface InterfaceEvent {
   isRegisterable: boolean;
   attendees: Partial<User>[];
   creator: Partial<User>;
+  averageFeedbackScore?: number;
+  feedback?: Feedback[];
 }
 
 export interface InterfaceRecurringEvent {
@@ -82,6 +84,16 @@ export interface InterfaceRecurringEvent {
 
 export interface InterfaceIOrgList {
   admins: { _id: string }[];
+}
+
+export interface InterfaceStatsModal {
+  data: {
+    event: {
+      _id: string;
+      averageFeedbackScore: number | null;
+      feedback: Feedback[];
+    };
+  };
 }
 
 export interface InterfaceCalendarProps {

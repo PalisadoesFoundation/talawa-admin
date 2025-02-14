@@ -1,24 +1,8 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Rating from '@mui/material/Rating';
-
-// Props for the ReviewStats component
-type ModalPropType = {
-  data: {
-    event: {
-      _id: string;
-      averageFeedbackScore: number | null;
-      feedback: FeedbackType[];
-    };
-  };
-};
-
-// Type representing individual feedback
-type FeedbackType = {
-  _id: string;
-  rating: number;
-  review: string | null;
-};
+import type { Feedback } from 'types/Event/type';
+import type { InterfaceStatsModal } from 'types/Event/interface';
 
 /**
  * Component that displays reviews for an event.
@@ -27,10 +11,10 @@ type FeedbackType = {
  * @param data - Data containing event feedback to be displayed.
  * @returns JSX element representing the reviews card.
  */
-export const ReviewStats = ({ data }: ModalPropType): JSX.Element => {
+export const ReviewStats = ({ data }: InterfaceStatsModal): JSX.Element => {
   // Filter out feedback that has a review
   const reviews = data.event.feedback.filter(
-    (feedback: FeedbackType) => feedback.review != null,
+    (feedback: Feedback) => feedback.review != null,
   );
 
   return (

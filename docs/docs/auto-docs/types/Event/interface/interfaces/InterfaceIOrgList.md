@@ -4,7 +4,7 @@
 
 # Interface: InterfaceIOrgList
 
-Defined in: [src/types/Event/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L83)
+Defined in: [src/types/Event/interface.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L85)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:83](https://github.com/PalisadoesFound
 
 > **admins**: `object`[]
 
-Defined in: [src/types/Event/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L84)
+Defined in: [src/types/Event/interface.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L86)
 
 #### \_id
 
