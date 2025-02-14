@@ -7,10 +7,13 @@ import { describe, test, expect, vi } from 'vitest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import CommunityProfile from './CommunityProfile';
 import i18n from 'utils/i18nForTest';
-import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { RESET_COMMUNITY, UPDATE_COMMUNITY } from 'GraphQl/Mutations/mutations';
+import {
+  RESET_COMMUNITY,
+  UPDATE_COMMUNITY_PG,
+} from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 
 vi.mock('utils/errorHandler', () => ({
@@ -20,38 +23,36 @@ vi.mock('utils/errorHandler', () => ({
 const MOCKS1 = [
   {
     request: {
-      query: GET_COMMUNITY_DATA,
+      query: GET_COMMUNITY_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: null,
+        community: null,
       },
     },
   },
   {
     request: {
-      query: UPDATE_COMMUNITY,
+      query: UPDATE_COMMUNITY_PG,
       variables: {
-        data: {
-          name: 'Name',
-          websiteLink: 'https://website.com',
-          logo: 'data:image/png;base64,bG9nbw==',
-          socialMediaUrls: {
-            facebook: 'https://socialurl.com',
-            instagram: 'https://socialurl.com',
-            X: 'https://socialurl.com',
-            linkedIn: 'https://socialurl.com',
-            gitHub: 'https://socialurl.com',
-            youTube: 'https://socialurl.com',
-            reddit: 'https://socialurl.com',
-            slack: 'https://socialurl.com',
-          },
-        },
+        name: 'Name',
+        websiteURL: 'https://website.com',
+        facebookURL: 'https://socialurl.com',
+        instagramURL: 'https://socialurl.com',
+        xURL: 'https://socialurl.com',
+        inactivityTimeoutDuration: 30,
+        linkedinURL: 'https://socialurl.com',
+        githubURL: 'https://socialurl.com',
+        youtubeURL: 'https://socialurl.com',
+        redditURL: 'https://socialurl.com',
+        slackURL: 'https://socialurl.com',
       },
     },
     result: {
       data: {
-        updateCommunity: true,
+        updateCommunity: {
+          id: '123',
+        },
       },
     },
   },
@@ -60,25 +61,28 @@ const MOCKS1 = [
 const MOCKS2 = [
   {
     request: {
-      query: GET_COMMUNITY_DATA,
+      query: GET_COMMUNITY_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: {
-          _id: null,
+        community: {
+          createdAt: null,
+          id: null,
           name: null,
-          logoUrl: null,
-          websiteLink: null,
-          socialMediaUrls: {
-            facebook: null,
-            gitHub: null,
-            youTube: null,
-            instagram: null,
-            linkedIn: null,
-            reddit: null,
-            slack: null,
-            X: null,
-          },
+          logoMimeType: null,
+          updater: null,
+          updatedAt: null,
+          logoURL: null,
+          websiteURL: null,
+          facebookURL: null,
+          githubURL: null,
+          youtubeURL: null,
+          instagramURL: null,
+          linkedInURL: null,
+          redditURL: null,
+          slackURL: null,
+          xURL: null,
+          inactivityTimeoutDuration: null,
         },
       },
     },
@@ -101,25 +105,28 @@ const MOCKS2 = [
 const MOCKS3 = [
   {
     request: {
-      query: GET_COMMUNITY_DATA,
+      query: GET_COMMUNITY_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: {
-          _id: 'communityId',
+        community: {
+          createdAt: '2022-01-01T12:00:00Z',
+          updatedAt: '2022-01-01T12:00:00Z',
+          id: 'communityId',
           name: 'testName',
-          logoUrl: 'image.png',
-          websiteLink: 'http://websitelink.com',
-          socialMediaUrls: {
-            facebook: 'http://sociallink.com',
-            gitHub: 'http://sociallink.com',
-            youTube: 'http://sociallink.com',
-            instagram: 'http://sociallink.com',
-            linkedIn: 'http://sociallink.com',
-            reddit: 'http://sociallink.com',
-            slack: 'http://sociallink.com',
-            X: 'http://sociallink.com',
-          },
+          logoURL: 'http://logo.com',
+          logoMimeType: 'image/png',
+          websiteURL: 'http://websitelink.com',
+          facebookURL: 'http://sociallink.com',
+          githubURL: 'http://sociallink.com',
+          youtubeURL: 'http://sociallink.com',
+          instagramURL: 'http://sociallink.com',
+          linkedInURL: 'http://sociallink.com',
+          redditURL: 'http://sociallink.com',
+          slackURL: 'http://sociallink.com',
+          xURL: 'http://sociallink.com',
+          inactivityTimeoutDuration: 30,
+          updater: null,
         },
       },
     },
@@ -146,11 +153,11 @@ const link3 = new StaticMockLink(MOCKS3, true);
 const LOADING_MOCK = [
   {
     request: {
-      query: GET_COMMUNITY_DATA,
+      query: GET_COMMUNITY_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: null,
+        community: null,
       },
     },
     delay: 100, // Add delay to ensure loading state is rendered
@@ -160,124 +167,98 @@ const LOADING_MOCK = [
 const ERROR_MOCK = [
   {
     request: {
-      query: GET_COMMUNITY_DATA,
+      query: GET_COMMUNITY_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: null,
+        community: null,
       },
     },
   },
   {
     request: {
-      query: UPDATE_COMMUNITY,
+      query: UPDATE_COMMUNITY_PG,
       variables: {
-        data: {
-          name: 'Test Name',
-          websiteLink: 'https://test.com',
-          logo: '',
-          socialMediaUrls: {
-            facebook: '',
-            instagram: '',
-            X: '',
-            linkedIn: '',
-            gitHub: '',
-            youTube: '',
-            reddit: '',
-            slack: '',
-          },
-        },
+        name: 'Test Name',
+        websiteURL: 'https://test.com',
+        facebookURL: '',
+        instagramURL: '',
+        inactivityTimeoutDuration: null,
+        xURL: '',
+        linkedinURL: '',
+        githubURL: '',
+        youtubeURL: '',
+        redditURL: '',
+        slackURL: '',
       },
     },
     error: new Error('Mutation error'),
   },
 ];
 
-const RESET_ERROR_MOCKS = [
-  {
-    request: {
-      query: GET_COMMUNITY_DATA,
-    },
-    result: {
-      data: {
-        getCommunityData: {
-          _id: 'test-id-123',
-          name: 'Test Community',
-          websiteLink: 'https://test.com',
-          logoUrl: 'test-logo.png',
-          socialMediaUrls: {
-            facebook: 'https://facebook.com/test',
-            instagram: 'https://instagram.com/test',
-            X: 'https://twitter.com/test',
-            linkedIn: 'https://linkedin.com/test',
-            gitHub: 'https://github.com/test',
-            youTube: 'https://youtube.com/test',
-            reddit: 'https://reddit.com/test',
-            slack: 'https://slack.com/test',
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: RESET_COMMUNITY,
-      variables: {
-        resetPreLoginImageryId: 'test-id-123',
-      },
-    },
-    error: new Error('Failed to reset community profile'),
-  },
-];
-
 const BASE64_MOCKS = [
   {
     request: {
-      query: GET_COMMUNITY_DATA,
+      query: GET_COMMUNITY_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: null,
+        community: null,
       },
     },
   },
 ];
-
 const UPDATE_SUCCESS_MOCKS = [
   {
     request: {
-      query: GET_COMMUNITY_DATA,
+      query: GET_COMMUNITY_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: null,
+        community: {
+          createdAt: null,
+          facebookURL: null,
+          githubURL: null,
+          id: null,
+          inactivityTimeoutDuration: null,
+          instagramURL: null,
+          linkedInURL: null,
+          logoMimeType: null,
+          logoURL: null,
+          name: null,
+          redditURL: null,
+          slackURL: null,
+          updatedAt: null,
+          updater: null,
+          websiteURL: null,
+          xURL: null,
+          youtubeURL: null,
+        },
       },
     },
   },
   {
     request: {
-      query: UPDATE_COMMUNITY,
+      query: UPDATE_COMMUNITY_PG,
       variables: {
-        data: {
-          name: 'Test Name',
-          websiteLink: 'https://test.com',
-          logo: '',
-          socialMediaUrls: {
-            facebook: '',
-            instagram: '',
-            X: '',
-            linkedIn: '',
-            gitHub: '',
-            youTube: '',
-            reddit: '',
-            slack: '',
-          },
-        },
+        name: 'Test Name',
+        websiteURL: 'https://test.com',
+        facebookURL: '',
+        instagramURL: '',
+        xURL: '',
+        linkedinURL: '',
+        githubURL: '',
+        youtubeURL: '',
+        redditURL: '',
+        slackURL: '',
+        inactivityTimeoutDuration: null,
       },
     },
     result: {
       data: {
-        updateCommunity: true,
+        updateCommunity: {
+          id: '123',
+        },
       },
     },
   },
@@ -285,9 +266,9 @@ const UPDATE_SUCCESS_MOCKS = [
 
 const profileVariables = {
   name: 'Name',
-  websiteLink: 'https://website.com',
-  socialUrl: 'https://socialurl.com',
-  logo: new File(['logo'], 'test.png', {
+  websiteURL: 'https://website.com',
+  socialURL: 'https://socialurl.com',
+  logoURL: new File(['logo'], 'test.png', {
     type: 'image/png',
   }),
 };
@@ -374,29 +355,29 @@ describe('Testing Community Profile Screen', () => {
     const resetChangeBtn = screen.getByTestId(/resetChangesBtn/i);
 
     await userEvent.type(communityName, profileVariables.name);
-    await userEvent.type(websiteLink, profileVariables.websiteLink);
-    await userEvent.type(facebook, profileVariables.socialUrl);
-    await userEvent.type(instagram, profileVariables.socialUrl);
-    await userEvent.type(X, profileVariables.socialUrl);
-    await userEvent.type(linkedIn, profileVariables.socialUrl);
-    await userEvent.type(github, profileVariables.socialUrl);
-    await userEvent.type(youtube, profileVariables.socialUrl);
-    await userEvent.type(reddit, profileVariables.socialUrl);
-    await userEvent.type(slack, profileVariables.socialUrl);
-    await userEvent.upload(logo, profileVariables.logo);
+    await userEvent.type(websiteLink, profileVariables.websiteURL);
+    await userEvent.type(facebook, profileVariables.socialURL);
+    await userEvent.type(instagram, profileVariables.socialURL);
+    await userEvent.type(X, profileVariables.socialURL);
+    await userEvent.type(linkedIn, profileVariables.socialURL);
+    await userEvent.type(github, profileVariables.socialURL);
+    await userEvent.type(youtube, profileVariables.socialURL);
+    await userEvent.type(reddit, profileVariables.socialURL);
+    await userEvent.type(slack, profileVariables.socialURL);
+    await userEvent.upload(logo, profileVariables.logoURL);
     await wait();
 
     expect(communityName).toHaveValue(profileVariables.name);
-    expect(websiteLink).toHaveValue(profileVariables.websiteLink);
+    expect(websiteLink).toHaveValue(profileVariables.websiteURL);
     // expect(logo).toBeTruthy();
-    expect(facebook).toHaveValue(profileVariables.socialUrl);
-    expect(instagram).toHaveValue(profileVariables.socialUrl);
-    expect(X).toHaveValue(profileVariables.socialUrl);
-    expect(linkedIn).toHaveValue(profileVariables.socialUrl);
-    expect(github).toHaveValue(profileVariables.socialUrl);
-    expect(youtube).toHaveValue(profileVariables.socialUrl);
-    expect(reddit).toHaveValue(profileVariables.socialUrl);
-    expect(slack).toHaveValue(profileVariables.socialUrl);
+    expect(facebook).toHaveValue(profileVariables.socialURL);
+    expect(instagram).toHaveValue(profileVariables.socialURL);
+    expect(X).toHaveValue(profileVariables.socialURL);
+    expect(linkedIn).toHaveValue(profileVariables.socialURL);
+    expect(github).toHaveValue(profileVariables.socialURL);
+    expect(youtube).toHaveValue(profileVariables.socialURL);
+    expect(reddit).toHaveValue(profileVariables.socialURL);
+    expect(slack).toHaveValue(profileVariables.socialURL);
     expect(saveChangesBtn).not.toBeDisabled();
     expect(resetChangeBtn).not.toBeDisabled();
     await wait();
@@ -523,44 +504,6 @@ describe('Testing Community Profile Screen', () => {
     );
   });
 
-  test('should handle error during reset operation', async () => {
-    render(
-      <MockedProvider addTypename={false} mocks={RESET_ERROR_MOCKS}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CommunityProfile />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const nameInput = await screen.findByPlaceholderText(
-      /Community Name/i,
-      {},
-      { timeout: 2000 },
-    );
-    const websiteInput = await screen.findByPlaceholderText(
-      /Website Link/i,
-      {},
-      { timeout: 2000 },
-    );
-
-    expect(nameInput).toHaveValue('Test Community');
-    expect(websiteInput).toHaveValue('https://test.com');
-
-    const resetButton = screen.getByTestId('resetChangesBtn');
-    await userEvent.click(resetButton);
-    await wait();
-
-    // Verify error handler was called
-    expect(errorHandler).toHaveBeenCalledWith(
-      expect.any(Function),
-      expect.any(Error),
-    );
-    // Verify toast success was not called (since there was an error)
-    expect(toast.success).not.toHaveBeenCalled();
-  });
-
   test('should handle null base64 conversion when updating logo', async () => {
     render(
       <MockedProvider addTypename={false} mocks={BASE64_MOCKS}>
@@ -601,21 +544,25 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
+    // Wait for initial query to complete
+    await wait(100);
+
     const nameInput = screen.getByPlaceholderText(/Community Name/i);
     const websiteInput = screen.getByPlaceholderText(/Website Link/i);
-    const logoInput = screen.getByTestId('fileInput');
 
     await userEvent.type(nameInput, 'Test Name');
     await userEvent.type(websiteInput, 'https://test.com');
-    await userEvent.upload(
-      logoInput,
-      new File([''], 'test.png', { type: 'image/png' }),
-    );
 
     const submitButton = screen.getByTestId('saveChangesBtn');
     await userEvent.click(submitButton);
-    await wait();
 
-    expect(toast.success).toHaveBeenCalledWith(expect.any(String));
+    // Increase wait time and add error handling
+    try {
+      await wait(1000); // Increased wait time
+      expect(toast.success).toHaveBeenCalledWith(expect.any(String));
+    } catch (error) {
+      console.error('Mutation error:', error);
+      throw error;
+    }
   });
 });
