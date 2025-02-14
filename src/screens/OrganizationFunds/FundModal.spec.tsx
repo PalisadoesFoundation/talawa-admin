@@ -51,7 +51,7 @@ const fundProps: InterfaceFundModal[] = [
       organizationId: 'orgId',
       creator: {
         id: 'creatorId1',
-        firstName: 'John',
+        // firstName: 'John',
         lastName: 'Doe',
       },
     },
@@ -72,8 +72,8 @@ const fundProps: InterfaceFundModal[] = [
       createdAt: '2024-06-22',
       organizationId: 'orgId',
       creator: {
-        _id: 'creatorId1',
-        firstName: 'John',
+        id: 'creatorId1',
+        // firstName: 'John',
         lastName: 'Doe',
       },
     },
