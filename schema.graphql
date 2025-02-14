@@ -685,7 +685,7 @@ type LanguageModel {
 scalar Latitude
 
 input LoginInput {
-  email: String!
+  email: EmailAddress!
   password: String!
 }
 

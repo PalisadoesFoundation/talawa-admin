@@ -124,7 +124,11 @@ export default function Settings(): JSX.Element {
       try {
         avatarFile = await urlToFile(userDetails.avatarURL);
       } catch (error) {
-        console.error('Failed to convert avatar URL to file:', error);
+        console.log(error);
+        toast.error(
+          'Failed to process profile picture. Please try uploading again.',
+        );
+        return;
       }
     }
 
@@ -186,7 +190,7 @@ export default function Settings(): JSX.Element {
       const today = new Date();
       const selectedDate = new Date(value);
       if (selectedDate > today) {
-        console.error('Future dates are not allowed for birth date.');
+        toast.error('Future dates are not allowed for birth date.');
         return;
       }
     }
@@ -310,7 +314,7 @@ export default function Settings(): JSX.Element {
                               src={
                                 selectedAvatar
                                   ? URL.createObjectURL(selectedAvatar)
-                                  : userDetails.avatarURL
+                                  : encodeURI(userDetails.avatarURL)
                               }
                               alt="User"
                               data-testid="profile-picture"

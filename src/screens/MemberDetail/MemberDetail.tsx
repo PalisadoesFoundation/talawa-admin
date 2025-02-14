@@ -135,7 +135,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const today = new Date();
       const selectedDate = new Date(value);
       if (selectedDate > today) {
-        console.error('Future dates are not allowed for birth date.');
+        toast.error('Future dates are not allowed for birth date.');
         return;
       }
     }
@@ -177,7 +177,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       try {
         avatarFile = await urlToFile(formState.avatarURL);
       } catch (error) {
-        console.error('Failed to convert avatar URL to file:', error);
+        console.log(error);
+        toast.error(
+          'Failed to process profile picture. Please try uploading again.',
+        );
+        return;
       }
     }
 
@@ -288,7 +292,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         src={
                           selectedAvatar
                             ? URL.createObjectURL(selectedAvatar)
-                            : formState.avatarURL
+                            : encodeURI(formState.avatarURL)
                         }
                         alt="User"
                         data-testid="profile-picture"
