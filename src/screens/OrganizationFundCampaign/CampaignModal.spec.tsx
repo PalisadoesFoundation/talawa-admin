@@ -52,7 +52,7 @@ const campaignProps: InterfaceCampaignModal[] = [
     fundId: 'fundId',
     orgId: 'orgId',
     campaign: {
-      _id: 'campaignId1',
+      id: 'campaignId1',
       name: 'Campaign 1',
       fundingGoal: 100,
       startDate: new Date('2021-01-01'),
@@ -69,7 +69,7 @@ const campaignProps: InterfaceCampaignModal[] = [
     fundId: 'fundId',
     orgId: 'orgId',
     campaign: {
-      _id: 'campaignId1',
+      id: 'campaignId1',
       name: 'Campaign 1',
       fundingGoal: 100,
       startDate: new Date('2021-01-01'),
