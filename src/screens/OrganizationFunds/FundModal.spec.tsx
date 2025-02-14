@@ -52,7 +52,7 @@ const fundProps: InterfaceFundModal[] = [
       creator: {
         id: 'creatorId1',
         // firstName: 'John',
-        lastName: 'Doe',
+        // lastName: 'Doe',
       },
     },
     refetchFunds: vi.fn(),
@@ -74,7 +74,7 @@ const fundProps: InterfaceFundModal[] = [
       creator: {
         id: 'creatorId1',
         // firstName: 'John',
-        lastName: 'Doe',
+        // lastName: 'Doe',
       },
     },
     refetchFunds: vi.fn(),
