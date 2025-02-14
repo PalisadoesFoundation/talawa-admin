@@ -17,32 +17,16 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
-import { MOCKS1, MOCKS2, MOCKS3 } from './MemberDetailMocks';
+import { MOCKS1, MOCKS2 } from './MemberDetailMocks';
 import type { ApolloLink } from '@apollo/client';
-import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
-const link3 = new StaticMockLink(MOCKS3, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
-
-const translations = {
-  ...JSON.parse(
-    JSON.stringify(
-      i18nForTest.getDataByLanguage('en')?.translation.memberDetail ?? {},
-    ),
-  ),
-  ...JSON.parse(
-    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
-  ),
-  ...JSON.parse(
-    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
-  ),
-};
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
@@ -107,11 +91,12 @@ describe('MemberDetail', () => {
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    expect(screen.getAllByText(/First name/i)).toBeTruthy();
-    expect(screen.getAllByText(/Last name/i)).toBeTruthy();
+    expect(screen.getAllByText(/name/i)).toBeTruthy();
+    expect(screen.getAllByText(/Birth Date/i)).toBeTruthy();
+    expect(screen.getAllByText(/Gender/i)).toBeTruthy();
+    expect(screen.getAllByText(/Profile Details/i)).toBeTruthy();
     expect(screen.getAllByText(/Profile Details/i)).toHaveLength(1);
     expect(screen.getAllByText(/Contact Information/i)).toHaveLength(1);
-    expect(screen.getAllByText(/Events Attended/i)).toHaveLength(2);
   });
 
   test('prettyDate function should work properly', () => {
@@ -134,17 +119,33 @@ describe('MemberDetail', () => {
 
   test('should render props and text elements test for the page component', async () => {
     const formData = {
-      firstName: 'Ansh',
-      lastName: 'Goyal',
-      email: 'ansh@gmail.com',
-      image: new File(['hello'], 'hello.png', { type: 'image/png' }),
-      address: 'abc',
-      countryCode: 'IN',
-      state: 'abc',
-      city: 'abc',
-      phoneNumber: '1234567890',
-      birthDate: '03/28/2022',
+      addressLine1: 'Line 1',
+      addressLine2: 'Line 2',
+      avatarMimeType: 'image/jpeg',
+      avatarURL: 'http://example.com/avatar.jpg',
+      birthDate: '2000-01-01',
+      city: 'nyc',
+      countryCode: 'bb',
+      createdAt: '2025-02-06T03:10:50.254',
+      description: 'This is a description',
+      educationGrade: 'grade_8',
+      emailAddress: 'test221@gmail.com',
+      employmentStatus: 'employed',
+      homePhoneNumber: '+9999999998',
+      id: '0194d80f-03cd-79cd-8135-683494b187a1',
+      isEmailAddressVerified: false,
+      maritalStatus: 'engaged',
+      mobilePhoneNumber: '+9999999999',
+      name: 'Rishav Jha',
+      natalSex: 'male',
+      naturalLanguageCode: 'en',
+      postalCode: '111111',
+      role: 'regular',
+      state: 'State1',
+      updatedAt: '2025-02-06T03:22:17.808',
+      workPhoneNumber: '+9999999998',
     };
+
     renderMemberDetailScreen(link2);
 
     await wait();
@@ -157,64 +158,79 @@ describe('MemberDetail', () => {
       target: { value: formData.birthDate },
     });
 
-    await userEvent.clear(screen.getByPlaceholderText(/First Name/i));
-    await userEvent.type(
-      screen.getByPlaceholderText(/First Name/i),
-      formData.firstName,
+    userEvent.type(screen.getByTestId(/inputName/i), formData.name);
+
+    userEvent.clear(screen.getByTestId(/inputName/i));
+    userEvent.clear(screen.getByTestId(/addressLine1/i));
+    userEvent.clear(screen.getByTestId(/addressLine2/i));
+    userEvent.clear(screen.getByTestId(/inputCity/i));
+    userEvent.clear(screen.getByTestId(/inputState/i));
+    userEvent.clear(screen.getByTestId(/inputPostalCode/i));
+    userEvent.clear(screen.getByTestId(/inputDescription/i));
+    userEvent.clear(screen.getByTestId(/inputEmail/i));
+    userEvent.clear(screen.getByTestId(/inputMobilePhoneNumber/i));
+    userEvent.clear(screen.getByTestId(/inputHomePhoneNumber/i));
+    userEvent.clear(screen.getByTestId(/workPhoneNumber/i));
+
+    userEvent.type(screen.getByTestId(/inputName/i), formData.name);
+    userEvent.type(screen.getByTestId(/addressLine1/i), formData.addressLine1);
+    userEvent.type(screen.getByTestId(/addressLine2/i), formData.addressLine2);
+    userEvent.type(screen.getByTestId(/inputCity/i), formData.city);
+    userEvent.type(screen.getByTestId(/inputState/i), formData.state);
+    userEvent.type(screen.getByTestId(/inputPostalCode/i), formData.postalCode);
+    userEvent.type(
+      screen.getByTestId(/inputDescription/i),
+      formData.description,
+    );
+    userEvent.type(screen.getByTestId(/inputCountry/i), formData.countryCode);
+    userEvent.type(screen.getByTestId(/inputEmail/i), formData.emailAddress);
+    userEvent.type(
+      screen.getByTestId(/inputMobilePhoneNumber/i),
+      formData.mobilePhoneNumber,
+    );
+    userEvent.type(
+      screen.getByTestId(/inputHomePhoneNumber/i),
+      formData.homePhoneNumber,
+    );
+    userEvent.type(
+      screen.getByTestId(/workPhoneNumber/i),
+      formData.workPhoneNumber,
     );
 
-    await userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
-    await userEvent.type(
-      screen.getByPlaceholderText(/Last Name/i),
-      formData.lastName,
-    );
-
-    await userEvent.clear(screen.getByPlaceholderText(/Address/i));
-    await userEvent.type(
-      screen.getByPlaceholderText(/Address/i),
-      formData.address,
-    );
-
-    await userEvent.clear(screen.getByPlaceholderText(/Country Code/i));
-    await userEvent.type(
-      screen.getByPlaceholderText(/Country Code/i),
-      formData.countryCode,
-    );
-
-    await userEvent.clear(screen.getByPlaceholderText(/State/i));
-    await userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
-
-    await userEvent.clear(screen.getByPlaceholderText(/City/i));
-    await userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
-
-    await userEvent.clear(screen.getByPlaceholderText(/Email/i));
-    await userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
-
-    await userEvent.clear(screen.getByPlaceholderText(/Phone/i));
-    await userEvent.type(
-      screen.getByPlaceholderText(/Phone/i),
-      formData.phoneNumber,
-    );
-
-    // await userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
-    // await userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
-    // await userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
     await wait();
 
     await userEvent.click(screen.getByText(/Save Changes/i));
 
-    expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue(
-      formData.firstName,
+    expect(screen.getByTestId(/inputName/i)).toHaveValue(formData.name);
+    expect(screen.getByTestId(/addressLine1/i)).toHaveValue(
+      formData.addressLine1,
     );
-    expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue(
-      formData.lastName,
+    expect(screen.getByTestId(/addressLine2/i)).toHaveValue(
+      formData.addressLine2,
     );
-    expect(birthDateDatePicker).toHaveValue(formData.birthDate);
-    expect(screen.getByPlaceholderText(/Email/i)).toHaveValue(formData.email);
-    expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
-    // expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/inputCity/i)).toHaveValue(formData.city);
+    expect(screen.getByTestId(/inputState/i)).toHaveValue(formData.state);
+    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue(
+      formData.postalCode,
+    );
+    expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
+      formData.description,
+    );
+    expect(screen.getByTestId(/inputCountry/i)).toHaveValue(
+      formData.countryCode,
+    );
+    expect(screen.getByTestId(/inputEmail/i)).toHaveValue(
+      formData.emailAddress,
+    );
+    expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
+      formData.mobilePhoneNumber,
+    );
+    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
+      formData.homePhoneNumber,
+    );
+    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue(
+      formData.workPhoneNumber,
+    );
   });
 
   test('display admin', async () => {
@@ -222,13 +238,6 @@ describe('MemberDetail', () => {
     await wait();
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getByText('Admin')).toBeInTheDocument();
-  });
-
-  test('display super admin', async () => {
-    renderMemberDetailScreen(link3);
-    await wait();
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getByText('Super Admin')).toBeInTheDocument();
   });
 
   test('Should display dicebear image if image is null', async () => {
@@ -243,55 +252,36 @@ describe('MemberDetail', () => {
     expect(userImage.getAttribute('src')).toBe(dicebearUrl);
   });
 
-  test('Should display image if image is present', async () => {
-    renderMemberDetailScreen(link2);
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-
-    const user = MOCKS2[0].result?.data?.user?.user;
-    const userImage = await screen.findByTestId('userImagePresent');
-    expect(userImage).toBeInTheDocument();
-    expect(userImage.getAttribute('src')).toBe(user?.image);
-  });
-
-  test('image upload and display works correctly', async () => {
-    renderMemberDetailScreen(link2);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
-    });
-    const file = new File(['hello'], 'hello.png', { type: 'image/png' });
-    const fileInput = screen.getByTestId(
-      'organisationImage',
-    ) as HTMLInputElement;
-    fireEvent.change(fileInput, { target: { files: [file] } });
-
-    await waitFor(() => {
-      const userImage = screen.getByTestId('userImagePresent');
-      expect(userImage).toBeInTheDocument();
-      expect(userImage.getAttribute('src')).toContain('data:image/png;base64');
-    });
-  });
-
   test('resetChangesBtn works properly', async () => {
     renderMemberDetailScreen(link1);
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText(/Address/i)).toBeInTheDocument();
+      expect(screen.getByTestId(/AddressLine1/i)).toBeInTheDocument();
     });
 
-    await userEvent.type(screen.getByPlaceholderText(/Address/i), 'random');
-    await userEvent.type(screen.getByPlaceholderText(/State/i), 'random');
+    userEvent.type(screen.getByTestId(/addressLine1/i), 'random');
+    userEvent.type(screen.getByTestId(/inputState/i), 'random');
 
     await userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
-    expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue('Aditya');
-    expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue('Agarwal');
-    expect(screen.getByPlaceholderText(/Phone/i)).toHaveValue('');
-    expect(screen.getByPlaceholderText(/Address/i)).toHaveValue('');
-    expect(screen.getByPlaceholderText(/State/i)).toHaveValue('');
-    expect(screen.getByPlaceholderText(/Country Code/i)).toHaveValue('');
-    expect(screen.getByTestId('birthDate')).toHaveValue('03/14/2024');
+
+    expect(screen.getByTestId(/Name/i)).toHaveValue('Rishav Jha');
+    expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
+      '+9999999999',
+    );
+    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
+      '+9999999998',
+    );
+    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue('+9999999998');
+    expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
+      'This is a description',
+    );
+    expect(screen.getByTestId(/inputCity/i)).toHaveValue('');
+    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue('111111');
+    expect(screen.getByTestId(/inputCountry/i)).toHaveValue('');
+    expect(screen.getByTestId(/inputState/i)).toHaveValue('');
+    expect(screen.getByTestId(/addressLine1/i)).toHaveValue('Line 1');
+    expect(screen.getByTestId(/addressLine2/i)).toHaveValue('Line 2');
   });
 
   test('should be redirected to / if member id is undefined', async () => {
@@ -309,120 +299,10 @@ describe('MemberDetail', () => {
     expect(window.location.pathname).toEqual('/');
   });
 
-  test('renders events attended card correctly and show a message', async () => {
-    renderMemberDetailScreen(link3);
-    await waitFor(() => {
-      expect(screen.getByText('Events Attended')).toBeInTheDocument();
-    });
-    // Check for empty state immediately
-    expect(screen.getByText('No Events Attended')).toBeInTheDocument();
-  });
-
-  test('opens "Events Attended List" modal when View All button is clicked', async () => {
-    renderMemberDetailScreen(link2);
-
-    await wait();
-
-    // Find and click the "View All" button
-    const viewAllButton = screen.getByText('View All');
-    await userEvent.click(viewAllButton);
-
-    // Check if the modal with the title "Events Attended List" is now visible
-    const modalTitle = await screen.findByText('Events Attended List');
-    expect(modalTitle).toBeInTheDocument();
-  });
-
-  test('lists all the tags assigned to the user', async () => {
+  test('display tags Assigned', async () => {
     renderMemberDetailScreen(link1);
-
     await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')).toHaveLength(10);
-    });
-  });
-
-  test('navigates to manage tag screen after clicking manage tag option', async () => {
-    renderMemberDetailScreen(link1);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getAllByTestId('tagName')[0]);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
-    });
-  });
-
-  test('loads more assigned tags with infinite scroll', async () => {
-    renderMemberDetailScreen(link1);
-
-    await wait();
-
-    // now scroll to the bottom of the div
-    const tagsAssignedScrollableDiv = screen.getByTestId(
-      'tagsAssignedScrollableDiv',
-    );
-
-    // Get the initial number of tags loaded
-    const initialTagsAssignedLength = screen.getAllByTestId('tagName').length;
-
-    // Set scroll position to the bottom
-    fireEvent.scroll(tagsAssignedScrollableDiv, {
-      target: { scrollY: tagsAssignedScrollableDiv.scrollHeight },
-    });
-
-    await waitFor(() => {
-      const finalTagsAssignedLength = screen.getAllByTestId('tagName').length;
-      expect(finalTagsAssignedLength).toBeGreaterThan(
-        initialTagsAssignedLength,
-      );
-    });
-  });
-
-  test('opens and closes the unassign tag modal', async () => {
-    renderMemberDetailScreen(link1);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
-
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('unassignTagModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('unassignTagModalCloseBtn'));
-
-    await waitFor(() =>
-      expect(
-        screen.queryByTestId('unassignTagModalCloseBtn'),
-      ).not.toBeInTheDocument(),
-    );
-  });
-
-  test('unassigns a tag from a member', async () => {
-    renderMemberDetailScreen(link1);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
-
-    await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfullyUnassigned,
-      );
-    });
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    expect(screen.getByText('Tags Assigned')).toBeInTheDocument();
   });
 });

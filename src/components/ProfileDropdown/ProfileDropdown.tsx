@@ -57,6 +57,7 @@ const profileDropdown = (): JSX.Element => {
               src={userImage}
               alt={`profile picture`}
               data-testid="display-img"
+              crossOrigin="anonymous"
             />
           ) : (
             <Avatar

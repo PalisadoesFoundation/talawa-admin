@@ -147,8 +147,6 @@
     "createOrganization": "Crear organización",
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
-    "addressLine1": "Dirección Línea 1",
-    "addressLine2": "Dirección Línea 2",
     "location": "Ubicación",
     "address": "Dirección",
     "city": "Ciudad",
@@ -663,7 +661,6 @@
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido"
   },
-
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",
@@ -942,6 +939,12 @@
     "countryCode": "Código de País",
     "state": "Estado",
     "city": "Ciudad",
+    "postalCode": "Código Postal",
+    "mobilePhoneNumber": "Número de Teléfono Móvil",
+    "workPhoneNumber": "Número de Teléfono del Trabajo",
+    "homePhoneNumber": "Número de Teléfono de Casa",
+    "addressLine1": "Línea de dirección 1",
+    "addressLine2": "Línea de dirección 2",
     "personalInfoHeading": "Información Personal",
     "viewAll": "Ver todo",
     "eventsAttended": "Eventos Asistidos",
@@ -1077,7 +1080,6 @@
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
-
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
     "Search member": "Buscar miembro",
@@ -1090,7 +1092,6 @@
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes"
   },
-
   "eventRegistrant": {
     "sort": "Ordenar",
     "allRegistrants": "Todos los registrados",
@@ -1124,11 +1125,14 @@
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "No hay eventos asistidos",
     "profileSettings": "Configuración de perfil",
+    "enterPhoneNo": "Ingrese el número de teléfono",
     "firstName": "Nombre de pila",
     "lastName": "Apellido",
     "gender": "Género",
     "emailAddress": "Dirección de correo electrónico",
     "phoneNumber": "Número de teléfono",
+    "workPhoneNumber": "Número de teléfono del trabajo",
+    "homePhoneNumber": "Número de teléfono de casa",
     "displayImage": "Imagen de perfil",
     "chooseFile": "Elegir archivo",
     "birthDate": "Fecha de nacimiento",
@@ -1149,6 +1153,8 @@
     "sgender": "Seleccionar género",
     "gradePlaceholder": "Ingresar grado",
     "sEmpStatus": "Seleccionar estado de empleo",
+    "enterDescription": "Ingrese una descripción",
+    "description": "Descripción",
     "male": "Masculino",
     "female": "Femenino",
     "other": "Otro",
@@ -1239,7 +1245,7 @@
     "title": "Anuncios",
     "pHeading": "Gestionar anuncios",
     "activeAds": "Campañas activas",
-    "archivedAds": "Campañas completadas",
+    "archievedAds": "Campañas completadas",
     "pMessage": "No hay anuncios disponibles para esta campaña.",
     "delete": "Eliminar",
     "validLink": "El enlace es válido.",

@@ -3,7 +3,7 @@ import { Dropdown } from 'react-bootstrap';
 import i18next from 'i18next';
 import { languages } from 'utils/languages';
 import cookies from 'js-cookie';
-import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
@@ -23,7 +23,7 @@ const { getItem } = useLocalStorage();
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
   const userId = getItem('userId');
-  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
+  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
 
   /**
    * Changes the application's language and updates the user's language preference.
@@ -31,11 +31,16 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
    * @param languageCode - The code of the language to switch to.
    */
   const changeLanguage = async (languageCode: string): Promise<void> => {
+    // format it to match the input type
+    const input = {
+      naturalLanguageCode: languageCode,
+    };
+
     if (userId) {
       try {
         await updateUser({
           variables: {
-            appLanguageCode: languageCode,
+            input,
           },
         });
         await i18next.changeLanguage(languageCode);

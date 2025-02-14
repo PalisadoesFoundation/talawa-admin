@@ -18,13 +18,15 @@ import { vi } from 'vitest';
 
 describe('UserAddressFields', () => {
   const mockProps = {
-    tCommon: (key: string) => `translated_${key}`,
     t: (key: string) => `translated_${key}`,
     handleFieldChange: vi.fn(),
     userDetails: {
-      address: '123 Test Street',
+      addressLine1: '123 Test Street',
+      addressLine2: 'Apt 4',
       state: 'Test State',
-      country: 'US',
+      countryCode: 'US',
+      city: 'Test City',
+      postalCode: '12345',
     },
   };
 

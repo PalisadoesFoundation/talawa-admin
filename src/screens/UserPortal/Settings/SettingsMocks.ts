@@ -1,73 +1,51 @@
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 
-export const MOCKS1 = [
+export const MOCKS = [
   {
     request: {
-      query: CURRENT_USER,
+      query: UPDATE_CURRENT_USER_MUTATION,
       variables: {
-        id: 'rishav-jha-mech',
+        name: 'Noble Mittal',
+        addressLine1: 'random address 1',
+        addressLine2: 'random address 2',
+        // TODO: avatar: 'random avatar',
+        birthDate: '2004-10-14',
+        city: 'random city',
+        countryCode: 'in',
+        createdAt: '2021-03-01T00:00:00.000Z',
+        description: 'This is a random description by Bandhan',
+        educationGrade: 'grade_1',
+        emailAddress: 'random@gmail.com',
+        employmentStatus: 'employed',
+        homePhoneNumber: '1234567890',
+        id: '65ba1621b7b00c20e5f1d8d2',
+        isEmailAddressVerified: true,
+        maritalStatus: 'single',
+        mobilePhoneNumber: '1234567890',
+        natalSex: 'male',
+        naturalLanguageCode: 'en',
+        postalCode: '111111',
+        role: 'regular',
+        state: 'random state',
+        updatedAt: '2021-03-01T00:00:00.000Z',
+        workPhoneNumber: '1234567890',
       },
-    },
-    result: {
-      data: {
-        currentUser: {
-          addressLine1: 'Line 1',
-          addressLine2: 'Line 2',
-          avatarMimeType: 'image/jpeg',
-          avatarURL: 'http://example.com/avatar.jpg',
-          birthDate: '',
-          city: 'city',
-          countryCode: 'in',
-          createdAt: '2025-02-06T03:10:50.254',
-          description: 'This is a description',
-          educationGrade: 'grade_8',
-          emailAddress: 'test221@gmail.com',
-          employmentStatus: 'employed',
-          homePhoneNumber: '+9999999998',
-          id: 'rishav-jha-mech',
-          isEmailAddressVerified: false,
-          maritalStatus: 'engaged',
-          mobilePhoneNumber: '+9999999999',
-          name: 'Rishav Jha',
-          natalSex: 'male',
-          naturalLanguageCode: 'en',
-          postalCode: '111111',
-          role: 'administrator',
-          state: 'State1',
-          updatedAt: '2025-02-06T03:22:17.808',
-          workPhoneNumber: '+9999999998',
-          __typename: 'User',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UNASSIGN_USER_TAG,
-      variables: {
-        tagId: '1',
-        userId: 'rishav-jha-mech',
-      },
-    },
-    result: {
-      data: {
-        unassignUserTag: {
-          _id: '1',
+      result: {
+        data: {
+          updateCurrentUser: {
+            id: '65ba1621b7b00c20e5f1d8d2',
+          },
         },
       },
     },
   },
 ];
 
-export const MOCKS2 = [
+export const Mocks1 = [
   {
     request: {
       query: CURRENT_USER,
-      variables: {
-        id: 'rishav-jha-mech',
-      },
     },
     result: {
       data: {
@@ -89,10 +67,10 @@ export const MOCKS2 = [
           isEmailAddressVerified: false,
           maritalStatus: 'engaged',
           mobilePhoneNumber: '+9999999999',
-          name: 'Rishav Jha',
+          name: 'Bandhan Majumder',
           natalSex: 'male',
           naturalLanguageCode: 'en',
-          postalCode: '111111',
+          postalCode: '11111111f',
           role: 'regular',
           state: 'State1',
           updatedAt: '2025-02-06T03:22:17.808',
@@ -103,42 +81,40 @@ export const MOCKS2 = [
     },
   },
 ];
-export const MOCKS3 = [
+
+export const Mocks2 = [
   {
     request: {
       query: CURRENT_USER,
-      variables: {
-        id: 'rishav-jha-mech',
-      },
     },
     result: {
       data: {
         currentUser: {
-          addressLine1: 'Line 1',
-          addressLine2: 'Line 2',
-          avatarMimeType: 'image/jpeg',
-          avatarURL: 'http://example.com/avatar.jpg',
-          birthDate: '2000-01-01',
-          city: 'nyc',
-          countryCode: 'bb',
-          createdAt: '2025-02-06T03:10:50.254',
-          description: 'This is a description',
-          educationGrade: 'grade_8',
-          emailAddress: 'test221@gmail.com',
-          employmentStatus: 'employed',
-          homePhoneNumber: '+9999999998',
+          addressLine1: '',
+          addressLine2: '',
+          avatarMimeType: '',
+          avatarURL: '',
+          birthDate: '',
+          city: '',
+          countryCode: '',
+          createdAt: '',
+          description: '',
+          educationGrade: '',
+          emailAddress: '',
+          employmentStatus: '',
+          homePhoneNumber: '',
           id: '0194d80f-03cd-79cd-8135-683494b187a1',
           isEmailAddressVerified: false,
-          maritalStatus: 'engaged',
-          mobilePhoneNumber: '+9999999999',
-          name: 'Rishav Jha',
-          natalSex: 'male',
-          naturalLanguageCode: 'en',
-          postalCode: '123456',
-          role: 'regular',
-          state: 'State1',
-          updatedAt: '2025-02-06T03:22:17.808',
-          workPhoneNumber: '+9999999998',
+          maritalStatus: '',
+          mobilePhoneNumber: '',
+          name: '',
+          natalSex: '',
+          naturalLanguageCode: '',
+          postalCode: '',
+          role: '',
+          state: '',
+          updatedAt: '',
+          workPhoneNumber: '',
           __typename: 'User',
         },
       },
@@ -152,7 +128,7 @@ export const updateMock = [
       query: UPDATE_CURRENT_USER_MUTATION,
       variables: {
         input: {
-          name: 'Bandhan Majumder',
+          name: 'Bandhan Majumder', // This is the only field being changed in test
         },
       },
     },
@@ -180,7 +156,7 @@ export const updateMock = [
           natalSex: null,
           naturalLanguageCode: null,
           postalCode: '',
-          role: 'administrator',
+          role: 'regular',
           state: '',
           updatedAt: '2025-02-09T06:26:51.209Z',
           workPhoneNumber: '',
@@ -188,4 +164,20 @@ export const updateMock = [
       },
     },
   },
+];
+
+export const errorMock = [
+  {
+    request: {
+      query: UPDATE_CURRENT_USER_MUTATION,
+      variables: {
+        input: {
+          name: 'Bandhan',
+          mobilePhoneNumber: '1200',
+        },
+      },
+    },
+    error: new Error('Please enter a valid phone number'),
+  },
+  ...Mocks1,
 ];
