@@ -116,9 +116,9 @@ const orgFundCampaign = (): JSX.Element => {
   }
 
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
-  // const [searchTerm, setSearchTerm] = useState('');
-  // const [sortBy, setSortBy] = useState<string | null>(null);
-
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<string | null>(null);
+  
   const [modalState, setModalState] = useState<boolean>(false);
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
@@ -364,7 +364,7 @@ const orgFundCampaign = (): JSX.Element => {
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
           <SearchBar
             placeholder={tCommon('searchByName')}
-            // onSearch={setSearchTerm}
+            onSearch={setSearchTerm}
             inputTestId="searchFullName"
             buttonTestId="searchBtn"
           />
@@ -376,15 +376,24 @@ const orgFundCampaign = (): JSX.Element => {
                 { label: t('latestEndDate'), value: 'endDate_DESC' },
                 { label: t('earliestEndDate'), value: 'endDate_ASC' },
               ]}
-              // onSortChange={(value) =>
-              //   setSortBy(
-              //     value as
-              //       | 'fundingGoal_ASC'
-              //       | 'fundingGoal_DESC'
-              //       | 'endDate_ASC'
-              //       | 'endDate_DESC',
-              //   )
-              // }
+              selectedOption={
+                sortBy === 'fundingGoal_ASC'
+                  ? tCommon('lowestGoal')
+                  : sortBy === 'fundingGoal_DESC'
+                    ? tCommon('highestGoal')
+                    : sortBy === 'endDate_DESC'
+                      ? tCommon('latestEndDate')
+                      : tCommon('earliestEndDate')
+              }
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'fundingGoal_ASC'
+                    | 'fundingGoal_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
               dataTestIdPrefix="filter"
               buttonLabel={tCommon('sort')}
             />

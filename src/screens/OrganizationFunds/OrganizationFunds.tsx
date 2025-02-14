@@ -116,7 +116,7 @@ const organizationFunds = (): JSX.Element => {
   }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  // const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
@@ -324,7 +324,7 @@ const organizationFunds = (): JSX.Element => {
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
           <SearchBar
             placeholder={tCommon('searchByName')}
-            // onSearch={setSearchTerm}
+            onSearch={setSearchTerm}
             inputTestId="searchByName"
             buttonTestId="searchBtn"
           />
