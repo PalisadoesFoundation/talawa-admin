@@ -14,14 +14,13 @@ interface InterfaceUserAddressFieldsProps {
   };
 }
 /**
- * Form component containing address-related input fields for user profile
- * Includes fields for address, city, state, and country
- * @param {Object} props - Component props
- * @param {function} props.tCommon - Translation function for common strings
- * @param {function} props.t - Translation function for component-specific strings
- * @param {function} props.handleFieldChange - Callback for field value changes
- * @param {Object} props.userDetails - User's address information
- * @returns Form group with address input fields
+ * Form component containing address-related input fields for user profile.
+ * Includes fields for address, city, state, and country.
+ * @param tCommon - Translation function for common strings.
+ * @param t - Translation function for component-specific strings.
+ * @param handleFieldChange - Callback for field value changes.
+ * @param userDetails - User's address information.
+ * @returns Form group with address input fields.
  */
 export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
   tCommon,
@@ -78,8 +77,8 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
             .sort((a, b) => a.label.localeCompare(b.label))
             .map((country) => (
               <option
-                key={country.value.toUpperCase()}
-                value={country.value.toUpperCase()}
+                key={country.value}
+                value={country.value}
                 aria-label={`Select ${country.label} as your country`}
               >
                 {country.label}

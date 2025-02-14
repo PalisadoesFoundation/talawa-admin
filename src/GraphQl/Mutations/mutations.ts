@@ -81,44 +81,48 @@ export const ADDRESS_DETAILS_FRAGMENT = gql`
 `;
 
 // to update the details of the user
-
 export const UPDATE_USER_MUTATION = gql`
-  mutation UpdateUserProfile(
-    $firstName: String
-    $lastName: String
-    $gender: Gender
-    $email: EmailAddress
-    $phoneNumber: PhoneNumber
-    $birthDate: Date
-    $grade: EducationGrade
-    $empStatus: EmploymentStatus
-    $maritalStatus: MaritalStatus
-    $address: String
+  mutation UpdateUser(
+    $id: ID!
+    $name: String
+    $natalSex: UserNatalSex
+    $emailAddress: EmailAddress
+    $mobilePhoneNumber: PhoneNumber
+    $birth_date: Date
+    $educationGrade: UserEducationGrade
+    $employmentStatus: UserEmploymentStatus
+    $maritalStatus: UserMaritalStatus
+    $addressLine1: String
     $state: String
-    $country: String
-    $image: String
-    $appLanguageCode: String
+    $countryCode: Iso3166Alpha2CountryCode
+    $avatar: Upload
   ) {
-    updateUserProfile(
-      data: {
-        firstName: $firstName
-        lastName: $lastName
-        gender: $gender
-        email: $email
-        phone: { mobile: $phoneNumber }
-        birthDate: $birthDate
-        educationGrade: $grade
-        employmentStatus: $empStatus
+    updateUser(
+      input: {
+        id: $id
+        name: $name
+        natalSex: $natalSex
+        emailAddress: $emailAddress
+        mobilePhoneNumber: $mobilePhoneNumber
+        birthDate: $birth_date
+        educationGrade: $educationGrade
+        employmentStatus: $employmentStatus
         maritalStatus: $maritalStatus
-        address: { line1: $address, state: $state, countryCode: $country }
-        appLanguageCode: $appLanguageCode
+        addressLine1: $addressLine1
+        state: $state
+        countryCode: $countryCode
+        avatar: $avatar
       }
-      file: $image
     ) {
-      _id
+      id
     }
   }
 `;
+// these fields are not yet updated in the schema
+// $image: String
+// # naturalLanguageCode: $appLanguageCode
+// # file: $image
+// # $appLanguageCode: String
 
 // to update the password of user
 

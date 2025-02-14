@@ -68,8 +68,7 @@ const mocks = [
 describe('EventsAttendedByUser Component', () => {
   const mockUserWithEvents = {
     userDetails: {
-      firstName: 'John',
-      lastName: 'Doe',
+      name: 'John Doe',
       createdAt: '2023-01-01',
       gender: 'Male',
       email: 'john@example.com',
@@ -81,7 +80,7 @@ describe('EventsAttendedByUser Component', () => {
       address: '123 Street',
       state: 'State',
       country: 'Country',
-      image: 'image.jpg',
+      image: null,
       eventsAttended: [{ _id: '1' }, { _id: '2' }],
     },
     t: mockT,
@@ -89,8 +88,7 @@ describe('EventsAttendedByUser Component', () => {
 
   const mockUserWithoutEvents = {
     userDetails: {
-      firstName: 'Jane',
-      lastName: 'Doe',
+      name: 'Jane Doe',
       createdAt: '2023-01-01',
       gender: 'Female',
       email: 'jane@example.com',
@@ -102,7 +100,7 @@ describe('EventsAttendedByUser Component', () => {
       address: '456 Street',
       state: 'State',
       country: 'Country',
-      image: 'image.jpg',
+      image: null,
       eventsAttended: [],
     },
     t: mockT,

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
-import convertToBase64 from 'utils/convertToBase64';
+// import convertToBase64 from 'utils/convertToBase64';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
-import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   educationGradeEnum,
@@ -24,6 +24,7 @@ import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/
 import { EventsAttendedByUser } from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 import '../../../style/app.module.css';
+// import { use } from 'i18next';
 /**
  * The Settings component allows users to view and update their profile settings.
  * It includes functionality to handle image uploads, reset changes, and save updated user details.
@@ -37,6 +38,7 @@ export default function settings(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
   const [isUpdated, setisUpdated] = useState<boolean>(false);
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const { setItem, getItem } = useLocalStorage();
 
   /**
    * Handler to adjust sidebar visibility based on window width.
@@ -56,12 +58,16 @@ export default function settings(): JSX.Element {
     };
   }, []);
 
-  const { setItem } = useLocalStorage();
-  const { data } = useQuery(CURRENT_USER, { fetchPolicy: 'network-only' });
+  const getCurrentUserID = (): string => {
+    return getItem('id') || '';
+  };
+
+  const { data } = useQuery(USER_DETAILS, {
+    variables: { id: getCurrentUserID() },
+  });
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
   const [userDetails, setUserDetails] = React.useState({
-    firstName: '',
-    lastName: '',
+    name: ' ',
     createdAt: '',
     gender: '',
     email: '',
@@ -73,14 +79,14 @@ export default function settings(): JSX.Element {
     address: '',
     state: '',
     country: '',
-    image: '',
+    image: null as File | null,
     eventsAttended: [] as InterfaceEvent[],
   });
 
   /**
    * Ref to store the original image URL for comparison during updates.
    */
-  const originalImageState = React.useRef<string>('');
+  // const originalImageState = React.useRef<string>('');
   /**
    * Ref to access the file input element for image uploads.
    */
@@ -94,13 +100,27 @@ export default function settings(): JSX.Element {
 
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
-      let updatedUserDetails = { ...userDetails };
-      if (updatedUserDetails.image === originalImageState.current) {
-        updatedUserDetails = { ...updatedUserDetails, image: '' };
-      }
+      // let updatedUserDetails = { ...userDetails };
+      // if (updatedUserDetails.image === originalImageState.current) {
+      //   updatedUserDetails = { ...updatedUserDetails, image: null };
+      // }
       const { data } = await updateUserDetails({
-        variables: updatedUserDetails,
+        variables: {
+          id: getCurrentUserID(),
+          name: userDetails.name,
+          natalSex: userDetails.gender,
+          emailAddress: userDetails.email,
+          mobilePhoneNumber: userDetails.phoneNumber,
+          birth_date: userDetails.birthDate,
+          educationGrade: userDetails.grade,
+          employmentStatus: userDetails.empStatus,
+          maritalStatus: userDetails.maritalStatus,
+          addressLine1: userDetails.address,
+          state: userDetails.state,
+          countryCode: userDetails.country,
+        },
       });
+
       if (data) {
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
@@ -108,8 +128,7 @@ export default function settings(): JSX.Element {
         setTimeout(() => {
           window.location.reload();
         }, 500);
-        const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
-        setItem('name', userFullName);
+        setItem('name', userDetails.name);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -161,32 +180,37 @@ export default function settings(): JSX.Element {
 
     if (data) {
       const {
-        firstName,
-        lastName,
+        name,
         createdAt,
-        gender,
-        phone,
+        natalSex: gender,
+        emailAddress: email,
+        mobilePhoneNumber: phone,
         birthDate,
         educationGrade,
         employmentStatus,
         maritalStatus,
-        address,
-      } = data.currentUser;
+        addressLine1: address,
+        state,
+        countryCode,
+        avatarURL: image,
+        // eventsAttended,
+      } = data.user;
 
       setUserDetails({
         ...userDetails,
-        firstName: firstName || '',
-        lastName: lastName || '',
-        createdAt: createdAt || '',
-        gender: gender || '',
-        phoneNumber: phone?.mobile || '',
-        birthDate: birthDate || '',
+        name,
+        createdAt,
+        gender,
+        email,
+        phoneNumber: phone || '',
+        birthDate: birthDate?.split('T')[0] || '',
         grade: educationGrade || '',
         empStatus: employmentStatus || '',
         maritalStatus: maritalStatus || '',
-        address: address?.line1 || '',
-        state: address?.state || '',
-        country: address?.countryCode || '',
+        address: address || '',
+        state: state || '',
+        country: countryCode || '',
+        image,
       });
     }
   };
@@ -194,41 +218,41 @@ export default function settings(): JSX.Element {
   useEffect(() => {
     if (data) {
       const {
-        firstName,
-        lastName,
+        name,
         createdAt,
-        gender,
-        email,
-        phone,
+        natalSex: gender,
+        emailAddress: email,
+        mobilePhoneNumber: phone,
         birthDate,
         educationGrade,
         employmentStatus,
         maritalStatus,
-        address,
-        image,
-        eventsAttended,
-      } = data.currentUser;
+        addressLine1: address,
+        state,
+        countryCode,
+        // image,
+        // eventsAttended,
+      } = data.user;
 
       setUserDetails({
-        firstName,
-        lastName,
+        ...userDetails,
+        name,
         createdAt,
         gender,
         email,
-        phoneNumber: phone?.mobile || '',
-        birthDate,
+        phoneNumber: phone || '',
+        birthDate: birthDate?.split('T')[0] || '',
         grade: educationGrade || '',
         empStatus: employmentStatus || '',
         maritalStatus: maritalStatus || '',
-        address: address?.line1 || '',
-        state: address?.state || '',
-        country: address?.countryCode || '',
-        eventsAttended,
-        image,
+        address: address || '',
+        state: state || '',
+        country: countryCode || '',
       });
-      originalImageState.current = image;
+      // originalImageState.current = image;
     }
   }, [data]);
+
   return (
     <>
       {hideDrawer ? (
@@ -291,13 +315,13 @@ export default function settings(): JSX.Element {
                                 height: '60px',
                                 objectFit: 'cover',
                               }}
-                              src={userDetails.image}
+                              src={URL.createObjectURL(userDetails.image)}
                               alt="User"
                               data-testid="profile-picture"
                             />
                           ) : (
                             <Avatar
-                              name={`${userDetails.firstName} ${userDetails.lastName}`}
+                              name={userDetails.name}
                               alt="User Image"
                               size={60}
                               dataTestId="profile-picture"
@@ -345,8 +369,8 @@ export default function settings(): JSX.Element {
                                 toast.error('Only image files are allowed');
                                 return;
                               }
-                              const image = await convertToBase64(file);
-                              setUserDetails({ ...userDetails, image });
+                              // const image = await convertToBase64(file);
+                              setUserDetails({ ...userDetails, image: file });
                             } catch (error) {
                               toast.error('Failed to process image');
                               console.error('Image processing error:', error);
@@ -356,25 +380,25 @@ export default function settings(): JSX.Element {
                         style={{ display: 'none' }}
                       />
                     </Col>
-                    <Col lg={4}>
+                    <Col lg={8}>
                       <Form.Label
-                        htmlFor="inputFirstName"
+                        htmlFor="inputName"
                         className={`${styles.cardLabel}`}
                       >
-                        {tCommon('firstName')}
+                        {tCommon('name')}
                       </Form.Label>
                       <Form.Control
                         type="text"
-                        id="inputFirstName"
-                        value={userDetails.firstName}
+                        id="inputName"
+                        value={userDetails.name}
                         onChange={(e) =>
-                          handleFieldChange('firstName', e.target.value)
+                          handleFieldChange('name', e.target.value)
                         }
                         className={`${styles.cardControl}`}
-                        data-testid="inputFirstName"
+                        data-testid="inputName"
                       />
                     </Col>
-                    <Col lg={4}>
+                    {/* <Col lg={4}>
                       <Form.Label
                         htmlFor="inputLastName"
                         className={`${styles.cardLabel}`}
@@ -391,7 +415,7 @@ export default function settings(): JSX.Element {
                         className={`${styles.cardControl}`}
                         data-testid="inputLastName"
                       />
-                    </Col>
+                    </Col> */}
                     <Col lg={4}>
                       <Form.Label
                         htmlFor="gender"

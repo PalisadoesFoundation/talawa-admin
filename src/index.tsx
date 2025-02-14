@@ -21,7 +21,6 @@ import { Provider } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import App from './App';
 import { store } from './state/store';
 import {

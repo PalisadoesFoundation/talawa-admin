@@ -10,8 +10,7 @@ import EventsAttendedByMember from 'components/MemberDetail/EventsAttendedByMemb
  */
 interface InterfaceUser {
   userDetails: {
-    firstName: string;
-    lastName: string;
+    name: string;
     createdAt: string;
     gender: string;
     email: string;
@@ -23,7 +22,7 @@ interface InterfaceUser {
     address: string;
     state: string;
     country: string;
-    image: string;
+    image: File | null;
     eventsAttended: { _id: string }[];
   };
   t: (key: string) => string;

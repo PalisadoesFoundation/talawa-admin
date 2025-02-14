@@ -30,7 +30,7 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin');
+  const userRole = getItem('role');
 
   useEffect(() => {
     if (hideDrawer === null) {
@@ -94,7 +94,7 @@ const leftDrawer = ({
                 </Button>
               )}
             </NavLink>
-            {superAdmin && (
+            {userRole === 'administrator' && (
               <>
                 <NavLink to={'/users'} onClick={handleLinkClick}>
                   {({ isActive }) => (

@@ -40,6 +40,7 @@
     "register": "register",
     "firstName": "firstName",
     "lastName": "lastName",
+    "name": "name",
     "email": "email",
     "password": "password",
     "confirmPassword": "confirmPassword",
