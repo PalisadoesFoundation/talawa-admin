@@ -116,8 +116,8 @@ const orgFundCampaign = (): JSX.Element => {
   }
 
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<string | null>(null);
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const [sortBy, setSortBy] = useState<string | null>(null);
 
   const [modalState, setModalState] = useState<boolean>(false);
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
@@ -162,11 +162,11 @@ const orgFundCampaign = (): JSX.Element => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
-  const { campaigns, fundName, isArchived } = useMemo(() => {
+  const { fundName, isArchived } = useMemo(() => {
     const fundName = campaignData?.fund?.name || 'Fund';
     const isArchived = campaignData?.fund?.isArchived || false;
-    const campaigns = campaignData?.fund?.campaigns || [];
-    return { fundName, campaigns, isArchived };
+    // const campaigns = campaignData?.fund?.campaigns || [];
+    return { fundName, isArchived };
   }, [campaignData]);
 
   if (campaignLoading) {
@@ -364,7 +364,7 @@ const orgFundCampaign = (): JSX.Element => {
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
           <SearchBar
             placeholder={tCommon('searchByName')}
-            onSearch={setSearchTerm}
+            // onSearch={setSearchTerm}
             inputTestId="searchFullName"
             buttonTestId="searchBtn"
           />
@@ -376,15 +376,15 @@ const orgFundCampaign = (): JSX.Element => {
                 { label: t('latestEndDate'), value: 'endDate_DESC' },
                 { label: t('earliestEndDate'), value: 'endDate_ASC' },
               ]}
-              onSortChange={(value) =>
-                setSortBy(
-                  value as
-                    | 'fundingGoal_ASC'
-                    | 'fundingGoal_DESC'
-                    | 'endDate_ASC'
-                    | 'endDate_DESC',
-                )
-              }
+              // onSortChange={(value) =>
+              //   setSortBy(
+              //     value as
+              //       | 'fundingGoal_ASC'
+              //       | 'fundingGoal_DESC'
+              //       | 'endDate_ASC'
+              //       | 'endDate_DESC',
+              //   )
+              // }
               dataTestIdPrefix="filter"
               buttonLabel={tCommon('sort')}
             />

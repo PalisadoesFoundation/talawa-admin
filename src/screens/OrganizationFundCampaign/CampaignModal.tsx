@@ -62,7 +62,6 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
   hide,
   fundId,
-  orgId,
   refetchCampaign,
   mode,
   campaign,
@@ -107,7 +106,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
    * @param e - The form event.
    * @returns Promise<void>
    */
-  const createCampaignHandler = async (e: ChangeEvent<HTMLFormElement>) => {
+  const createCampaignHandler = async (
+    e: ChangeEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
 
     // Ensure the end date is in the future

@@ -80,7 +80,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: fund?.name ?? '',
-    fundRef: fund?.refrenceNumber ?? '',
     isDefault: fund?.isDefault ?? false,
     taxDeductible: fund?.taxDeductible ?? false,
     isArchived: fund?.isArchived ?? false,
@@ -89,7 +88,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   useEffect(() => {
     setFormState({
       fundName: fund?.name ?? '',
-      fundRef: fund?.refrenceNumber ?? '',
       isDefault: fund?.isDefault ?? false,
       taxDeductible: fund?.taxDeductible ?? false,
       isArchived: fund?.isArchived ?? false,
@@ -103,8 +101,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, fundRef, isDefault, taxDeductible, isArchived } =
-      formState;
+    const { fundName, isDefault, taxDeductible, isArchived } = formState;
     try {
       await createFund({
         variables: {
@@ -118,7 +115,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         taxDeductible: false,
         isArchived: false,
@@ -157,7 +153,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       });
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         taxDeductible: false,
         isArchived: false,
@@ -215,13 +210,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   label={t('fundId')}
                   variant="outlined"
                   className={`${styles.noOutline} w-100`}
-                  value={formState.fundRef}
-                  onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      fundRef: e.target.value,
-                    })
-                  }
+                  // value={formState.fundRef}
+                  // onChange={(e) =>
+                  //   setFormState({
+                  //     ...formState,
+                  //     fundRef: e.target.value,
+                  //   })
+                  // }
                 />
               </FormControl>
             </Form.Group>

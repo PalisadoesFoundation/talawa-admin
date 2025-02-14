@@ -1143,7 +1143,7 @@ export interface InterfaceAddress {
 }
 export interface InterfaceCreateFund {
   fundName: string;
-  fundRef: string;
+  // fundRef: string;
   isDefault: boolean;
   isArchived: boolean;
   taxDeductible: boolean;
