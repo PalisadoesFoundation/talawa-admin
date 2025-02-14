@@ -158,6 +158,12 @@ const orgFundCampaign = (): JSX.Element => {
     return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
   }, [campaignData]);
 
+  const filteredCampaigns = useMemo(() => {
+    return compaignsData.filter((campaign) =>
+      campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [compaignsData, searchTerm]);
+
   const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
@@ -431,7 +437,7 @@ const orgFundCampaign = (): JSX.Element => {
         }
         autoHeight
         rowHeight={65}
-        rows={compaignsData}
+        rows={filteredCampaigns}
         columns={columns}
         isRowSelectable={() => false}
       />

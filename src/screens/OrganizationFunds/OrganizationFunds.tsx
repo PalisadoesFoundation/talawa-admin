@@ -165,6 +165,13 @@ const organizationFunds = (): JSX.Element => {
     return fundData?.organization?.funds?.edges.map((edge) => edge.node) ?? [];
   }, [fundData]);
 
+  // Write now we use the search term in client side to filter the funds
+  const filteredFunds = useMemo(() => {
+    return funds.filter((fund) =>
+      fund.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [funds, searchTerm]);
+
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);
   };
@@ -377,7 +384,7 @@ const organizationFunds = (): JSX.Element => {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={funds}
+        rows={filteredFunds}
         columns={columns}
         isRowSelectable={() => false}
       />
