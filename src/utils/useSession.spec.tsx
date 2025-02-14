@@ -5,7 +5,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import { toast } from 'react-toastify';
 import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
 import useSession from './useSession';
-import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { BrowserRouter } from 'react-router-dom';
@@ -31,12 +31,12 @@ vi.mock('react-i18next', () => ({
 const MOCKS = [
   {
     request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: {
-          timeout: 30,
+        community: {
+          inactivityTimeoutDuration: 1800,
         },
       },
     },
@@ -238,12 +238,12 @@ describe('useSession Hook', () => {
     const errorMocks = [
       {
         request: {
-          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
         },
         result: {
           data: {
-            getCommunityData: {
-              timeout: 30,
+            community: {
+              inactivityTimeoutDuration: 1800,
             },
           },
         },
@@ -298,7 +298,7 @@ describe('useSession Hook', () => {
     const errorMocks = [
       {
         request: {
-          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
         },
         error: new Error('An error occurred'),
       },
@@ -545,11 +545,11 @@ test('should handle missing community data', async () => {
   const nullDataMocks = [
     {
       request: {
-        query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+        query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
       },
       result: {
         data: {
-          getCommunityData: null,
+          community: null,
         },
       },
     },
@@ -635,12 +635,12 @@ test('should handle session timeout data updates', async () => {
   const customMocks = [
     {
       request: {
-        query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+        query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
       },
       result: {
         data: {
-          getCommunityData: {
-            timeout: 45,
+          community: {
+            inactivityTimeoutDuration: 1800,
           },
         },
       },

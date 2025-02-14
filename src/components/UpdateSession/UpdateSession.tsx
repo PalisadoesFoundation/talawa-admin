@@ -4,10 +4,10 @@ import { Card, Button, Form } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import { UPDATE_SESSION_TIMEOUT } from 'GraphQl/Mutations/mutations';
+import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 
@@ -50,7 +50,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     keyPrefix: 'communityProfile',
   });
 
-  const [timeout, setTimeout] = useState<number | undefined>(30);
+  const [timeout, setTimeout] = useState<number>(30);
   const [communityTimeout, setCommunityTimeout] = useState<number | undefined>(
     30,
   ); // Timeout from database for the community
@@ -59,11 +59,11 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     data,
     loading,
     error: queryError,
-  } = useQuery(GET_COMMUNITY_SESSION_TIMEOUT_DATA);
-  const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT);
+  } = useQuery(GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG);
+  const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT_PG);
 
   type TimeoutDataType = {
-    timeout: number;
+    inactivityTimeoutDuration: number;
   };
 
   /**
@@ -75,14 +75,19 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
       errorHandler(t, queryError as Error);
     }
 
-    const SessionTimeoutData: TimeoutDataType | undefined =
-      data?.getCommunityData;
+    const SessionTimeoutData: TimeoutDataType | undefined = data?.community;
 
-    if (SessionTimeoutData && SessionTimeoutData.timeout !== null) {
-      setCommunityTimeout(SessionTimeoutData.timeout);
-      setTimeout(SessionTimeoutData.timeout);
+    if (
+      SessionTimeoutData &&
+      SessionTimeoutData.inactivityTimeoutDuration !== null
+    ) {
+      const timeoutInMinutes = Math.floor(
+        SessionTimeoutData.inactivityTimeoutDuration / 60,
+      );
+      setCommunityTimeout(timeoutInMinutes);
+      setTimeout(timeoutInMinutes);
     } else {
-      setCommunityTimeout(undefined); // Handle null or undefined data
+      setCommunityTimeout(undefined);
     }
   }, [data, queryError]);
 
@@ -124,7 +129,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     try {
       await uploadSessionTimeout({
         variables: {
-          timeout: timeout,
+          inactivityTimeoutDuration: timeout * 60,
         },
       });
 
