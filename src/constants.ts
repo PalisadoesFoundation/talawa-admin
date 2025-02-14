@@ -11,42 +11,42 @@ import {
 
 export const socialMediaLinks = [
   {
-    tag: 'facebook',
+    tag: 'facebookURL',
     href: 'https://www.facebook.com/palisadoesproject',
     logo: FacebookLogo,
   },
   {
-    tag: 'X',
+    tag: 'xURL',
     href: 'https://X.com/palisadoesorg?lang=en',
     logo: XLogo,
   },
   {
-    tag: 'linkedIn',
+    tag: 'linkedInURL',
     href: 'https://www.linkedin.com/company/palisadoes/',
     logo: LinkedInLogo,
   },
   {
-    tag: 'gitHub',
+    tag: 'githubURL',
     href: 'https://github.com/PalisadoesFoundation',
     logo: GithubLogo,
   },
   {
-    tag: 'youTube',
+    tag: 'youtubeURL',
     href: 'https://www.youtube.com/@PalisadoesOrganization',
     logo: YoutubeLogo,
   },
   {
-    tag: 'slack',
+    tag: 'slackURL',
     href: 'https://www.palisadoes.org/slack',
     logo: SlackLogo,
   },
   {
-    tag: 'instagram',
+    tag: 'instagramURL',
     href: 'https://www.instagram.com/palisadoes/',
     logo: InstagramLogo,
   },
   {
-    tag: 'reddit',
+    tag: 'redditURL',
     href: '',
     logo: RedditLogo,
   },
