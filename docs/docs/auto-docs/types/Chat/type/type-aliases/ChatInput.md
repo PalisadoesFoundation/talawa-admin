@@ -6,7 +6,7 @@
 
 > **ChatInput**: `object`
 
-Defined in: [src/types/chat.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/chat.ts#L30)
+Defined in: [src/types/Chat/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L35)
 
 ## Type declaration
 
