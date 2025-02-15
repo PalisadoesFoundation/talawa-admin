@@ -125,7 +125,7 @@ describe('Testing Change Language Dropdown', () => {
   it('Testing change language functionality', async () => {
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
-      value: 'i18next=sp',
+      value: 'i18next=fr',
     });
     setItem('userId', '1');
 

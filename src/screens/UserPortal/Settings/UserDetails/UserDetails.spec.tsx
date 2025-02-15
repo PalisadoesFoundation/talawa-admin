@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
-import { MOCKS, Mocks1, Mocks2, updateMock } from '../SettingsMocks';
+import { MOCKS, MOCKS1, MOCKS2, updateMock } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
 
 // Mock the dependencies
@@ -35,7 +35,7 @@ describe('UserDetailsForm', () => {
 
   const defaultProps = {
     userDetails: {
-      ...Mocks1[0].result.data.currentUser,
+      ...MOCKS1[0].result.data.currentUser,
       password: '', // Add a default password value
     },
     handleFieldChange: mockHandleFieldChange,
@@ -52,7 +52,7 @@ describe('UserDetailsForm', () => {
 
   it('renders all form fields with correct initial values', () => {
     render(
-      <MockedProvider mocks={Mocks1} addTypename={false}>
+      <MockedProvider mocks={MOCKS1} addTypename={false}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -206,10 +206,10 @@ describe('UserDetailsForm', () => {
 
   it('handles empty user details gracefully', () => {
     render(
-      <MockedProvider mocks={Mocks2} addTypename={false}>
+      <MockedProvider mocks={MOCKS2} addTypename={false}>
         <UserDetailsForm
           {...defaultProps}
-          userDetails={{ ...Mocks2[0].result.data.currentUser, password: '' }}
+          userDetails={{ ...MOCKS2[0].result.data.currentUser, password: '' }}
         />
       </MockedProvider>,
     );

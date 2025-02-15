@@ -42,7 +42,7 @@ export const MOCKS = [
   },
 ];
 
-export const Mocks1 = [
+export const MOCKS1 = [
   {
     request: {
       query: CURRENT_USER,
@@ -82,7 +82,7 @@ export const Mocks1 = [
   },
 ];
 
-export const Mocks2 = [
+export const MOCKS2 = [
   {
     request: {
       query: CURRENT_USER,
@@ -179,5 +179,5 @@ export const errorMock = [
     },
     error: new Error('Please enter a valid phone number'),
   },
-  ...Mocks1,
+  ...MOCKS1,
 ];

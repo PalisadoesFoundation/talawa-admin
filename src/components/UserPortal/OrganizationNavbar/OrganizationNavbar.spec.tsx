@@ -345,7 +345,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(cookies.get('i18next')).toBe('hi');
   });
 
-  it('The language is switched to sp', async () => {
+  it('The language is switched to es', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -366,7 +366,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    expect(cookies.get('i18next')).toBe('sp');
+    expect(cookies.get('i18next')).toBe('es');
   });
 
   it('The language is switched to zh', async () => {

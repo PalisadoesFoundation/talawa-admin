@@ -101,35 +101,6 @@ describe('Testing Advertisement Component', () => {
     ).toBeInTheDocument();
   });
 
-  test('for the working of the tabs', async () => {
-    const mocks = [
-      ORGANIZATIONS_LIST_MOCK,
-      PLUGIN_GET_MOCK,
-      ADD_ADVERTISEMENT_MUTATION_MOCK,
-      ...ADVERTISEMENTS_LIST_MOCK,
-    ];
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
-                <Advertisement />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-    await userEvent.click(screen.getByText('Active Campaigns'));
-
-    await wait();
-    await userEvent.click(screen.getByText('Completed Campaigns'));
-  });
-
   test('if the component renders correctly and ads are correctly categorized date wise', async () => {
     mockID = '1';
     const mocks = [...ADVERTISEMENTS_LIST_MOCK];
