@@ -50,7 +50,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
     ORGANIZATION_CUSTOM_FIELDS,
     {
       variables: {
-        customFieldsByOrganizationId: currentOrgId,
+        organizationId: currentOrgId,
       },
     },
   );
@@ -96,15 +96,16 @@ const OrgProfileFieldSettings = (): JSX.Element => {
   return (
     <div>
       {/* Display existing custom fields or a message if there are none */}
-      {data.customFieldsByOrganization.length === 0 ? (
+      {data?.organization?.customFields?.length === 0 ? (
         <p>{t('noCustomField')}</p>
       ) : (
         <table className={styles.customDataTable}>
           <tbody>
-            {data.customFieldsByOrganization.map(
+            {data?.organization?.customFields?.map(
+              // Updated data path
               (
                 field: {
-                  _id: string;
+                  id: string;
                   name: string;
                   type: string;
                 },
@@ -118,7 +119,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
                     <Button
                       variant="danger"
                       size={'sm'}
-                      onClick={() => handleRemove(field._id)}
+                      onClick={() => handleRemove(field.id)}
                       title={t('Remove Custom Field')}
                       data-testid="removeCustomFieldBtn"
                     >

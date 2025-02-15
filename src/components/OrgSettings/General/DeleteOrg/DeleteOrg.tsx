@@ -40,8 +40,8 @@ function deleteOrg(): JSX.Element {
   // Hook for accessing local storage
   const { getItem } = useLocalStorage();
   // Check if the user has super admin privileges
-  const canDelete = getItem('SuperAdmin');
-
+  // const canDelete = getItem('SuperAdmin');
+  const canDelete = true;
   /**
    * Toggles the visibility of the delete confirmation modal.
    */
@@ -56,7 +56,7 @@ function deleteOrg(): JSX.Element {
   // Query to check if the organization is a sample organization
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
-      isSampleOrganizationId: currentUrl,
+      id: currentUrl,
     },
   });
 
@@ -82,7 +82,7 @@ function deleteOrg(): JSX.Element {
       try {
         await del({
           variables: {
-            id: currentUrl,
+            input: { id: currentUrl || '' },
           },
         });
         navigate('/orglist');

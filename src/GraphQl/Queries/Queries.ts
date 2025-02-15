@@ -3,13 +3,35 @@ import '../../style/app.module.css';
 //Query List
 // Check Auth
 
+// Query to get info about current user
 export const CURRENT_USER = gql`
-  query {
+  query CurrentUser {
     currentUser {
-      id
-      name
-      role
+      addressLine1
+      addressLine2
+      avatarMimeType
+      avatarURL
+      birthDate
+      city
+      countryCode
+      createdAt
+      description
+      educationGrade
       emailAddress
+      employmentStatus
+      homePhoneNumber
+      id
+      isEmailAddressVerified
+      maritalStatus
+      mobilePhoneNumber
+      name
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      updatedAt
+      workPhoneNumber
     }
   }
 `;
@@ -86,7 +108,7 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
       where: { name_contains: $filter }
       first: $first
       skip: $skip
-      orderBy: $orderBy
+      orderBy: $order
     ) {
       _id
       image
@@ -473,55 +495,29 @@ export const GET_ORGANIZATION_DATA_PG = gql`
 `;
 
 export const ORGANIZATIONS_LIST = gql`
-  query Organizations($id: ID!) {
-    organization(id: $id) {
-      _id
-      image
-      creator {
-        firstName
-        lastName
-        email
-      }
+  query getOrganization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
       name
       description
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
+      addressLine1
+      addressLine2
+      city
+      state
+      postalCode
+      countryCode
+      avatarURL
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+        emailAddress
       }
-      userRegistrationRequired
-      visibleInSearch
-      members {
-        _id
-        firstName
-        lastName
-        email
-      }
-      admins {
-        _id
-        firstName
-        lastName
-        email
-        createdAt
-      }
-      membershipRequests {
-        _id
-        user {
-          firstName
-          lastName
-          email
-        }
-      }
-      blockedUsers {
-        _id
-        firstName
-        lastName
-        email
+      updater {
+        id
+        name
+        emailAddress
       }
     }
   }
@@ -708,20 +704,21 @@ export const USER_DETAILS = gql`
 
 // to take the organization event list
 export const ORGANIZATION_EVENT_LIST = gql`
-  query EventsByOrganization($id: ID!) {
-    eventsByOrganization(id: $id) {
-      _id
-      title
-      description
-      startDate
-      endDate
-      location
-      startTime
-      endTime
-      allDay
-      recurring
-      isPublic
-      isRegisterable
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      events {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            location
+          }
+        }
+      }
     }
   }
 `;
@@ -935,25 +932,6 @@ export const USERS_CONNECTION_LIST = gql`
   }
 `;
 
-export const GET_COMMUNITY_DATA = gql`
-  query getCommunityData {
-    community {
-      id
-      websiteURL
-      name
-      logoURL
-      facebookURL
-      githubURL
-      instagramURL
-      xURL
-      linkedInURL
-      youtubeURL
-      redditURL
-      slackURL
-    }
-  }
-`;
-
 export const GET_COMMUNITY_DATA_PG = gql`
   query getCommunityData {
     community {
@@ -974,6 +952,27 @@ export const GET_COMMUNITY_DATA_PG = gql`
       websiteURL
       xURL
       youtubeURL
+    }
+  }
+`;
+
+export const GET_COMMUNITY_DATA = gql`
+  query CommunityInfo {
+    community {
+      id
+      name
+      websiteLink
+      logoUrl
+      socialMediaUrls {
+        facebook
+        gitHub
+        instagram
+        X
+        linkedIn
+        youTube
+        reddit
+        slack
+      }
     }
   }
 `;
@@ -1035,3 +1034,18 @@ export {
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from './OrganizationQueries';
+
+export const GET_ORGANIZATION_EVENTS = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      events {
+        id
+        name
+        description
+        startAt
+        endAt
+      }
+    }
+  }
+`;
