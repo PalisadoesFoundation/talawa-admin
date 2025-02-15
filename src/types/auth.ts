@@ -1,4 +1,4 @@
-import type { AppUserProfile, User } from './user';
+import type { AppUserProfile, User } from './User/type';
 
 export type AuthData = {
   accessToken: string;

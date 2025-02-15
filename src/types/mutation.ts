@@ -1,10 +1,10 @@
 // import { MembershipRequest } from "./membership";
-// import { User } from "./user";
+// import { User } from "./User/type";
 // import { Feedback } from "./feedback";
 // import { Language } from "./language";
 // import { OrganizationCustomField } from "./organization";
-// import { UserCustomData } from "./user";
-// import { UserFamily } from "./user";
+// import { UserCustomData } from "./User/type";
+// import { UserFamily } from "./User/type";
 // import { Event } from "./event";
 // import { ActionItem } from "./actionItem";
 // import { Advertisement } from "./advertisement";
