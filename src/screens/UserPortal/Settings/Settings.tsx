@@ -16,7 +16,7 @@ import ProfileHeader from './ProfileHeader/ProfileHeader';
 import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
-        
+
 /**
  * The Settings component allows users to view and update their profile settings.
  * It includes functionality to handle image uploads, reset changes, and save updated user details.
