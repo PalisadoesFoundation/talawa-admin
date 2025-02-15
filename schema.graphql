@@ -2220,6 +2220,29 @@ input MutationUpdateUserInput {
   workPhoneNumber: PhoneNumber
 }
 
+input MutationUpdateCurrentUserInput {
+  addressLine1: String
+  addressLine2: String
+  avatar: Upload
+  birthDate: Date
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: EmailAddress
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  naturalLanguageCode: Iso639Set1LanguageCode
+  password: String
+  postalCode: String
+  state: String
+  workPhoneNumber: PhoneNumber
+}
+
 input UpdateUserTagInput {
   _id: ID!
   name: String!
@@ -2246,7 +2269,7 @@ type User {
   image: String
   joinedOrganizations: [Organization]
   lastName: String!
-  maritalStatus: MaritalStatus
+  maritalStatus: UserMaritalStatus
   membershipRequests: [MembershipRequest]
   organizationsBlockedBy: [Organization]
   phone: UserPhone
