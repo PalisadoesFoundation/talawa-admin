@@ -7,6 +7,7 @@ import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/Secur
 import * as installedPlugins from 'components/plugins/index';
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import LoginPage from 'screens/LoginPage/LoginPage';
 
 const AddOnStore = lazy(
   () => import('components/AddOn/core/AddOnStore/AddOnStore'),
@@ -24,7 +25,6 @@ const EventManagement = lazy(
 const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
-const LoginPage = lazy(() => import('screens/LoginPage/LoginPage'));
 const MemberDetail = lazy(() => import('screens/MemberDetail/MemberDetail'));
 const OrgContribution = lazy(
   () => import('screens/OrgContribution/OrgContribution'),
