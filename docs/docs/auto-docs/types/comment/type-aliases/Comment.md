@@ -20,7 +20,7 @@ Defined in: [src/types/comment.ts:4](https://github.com/PalisadoesFoundation/tal
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../User/type/type-aliases/User.md)
 
 ### likeCount?
 
@@ -28,7 +28,7 @@ Defined in: [src/types/comment.ts:4](https://github.com/PalisadoesFoundation/tal
 
 ### likedBy?
 
-> `optional` **likedBy**: [`User`](../../user/type-aliases/User.md)[]
+> `optional` **likedBy**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### post
 

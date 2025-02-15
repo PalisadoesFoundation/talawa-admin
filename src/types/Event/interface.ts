@@ -4,6 +4,7 @@ import {
   type RecurringEventMutationType,
   type InterfaceRecurrenceRule,
 } from 'utils/recurrenceUtils';
+import type { User, Feedback } from 'types/Event/type';
 
 export const Role = {
   USER: 'USER',
@@ -11,7 +12,35 @@ export const Role = {
   ADMIN: 'ADMIN',
 } as const;
 
-export interface InterfaceEventListCardProps {
+export const FilterPeriod = {
+  ThisMonth: 'This Month',
+  ThisYear: 'This Year',
+  All: 'All',
+} as const;
+
+export interface InterfaceMember {
+  createdAt: string;
+  firstName: string;
+  lastName: string;
+  email: `${string}@${string}.${string}`;
+  gender: string;
+  eventsAttended?: {
+    _id: string;
+  }[];
+  birthDate: Date;
+  __typename: string;
+  _id: string;
+  tagsAssignedWith: {
+    edges: {
+      cursor: string;
+      node: {
+        name: string;
+      };
+    }[];
+  };
+}
+
+export interface InterfaceEvent {
   userRole?: string;
   key?: string;
   _id: string;
@@ -28,22 +57,47 @@ export interface InterfaceEventListCardProps {
   isRecurringEventException: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
-  attendees?: {
+  attendees: Partial<User>[];
+  creator: Partial<User>;
+  averageFeedbackScore?: number;
+  feedback?: Feedback[];
+}
+
+export interface InterfaceRecurringEvent {
+  _id: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  frequency: InterfaceEvent['recurrenceRule'] extends null
+    ? never
+    : NonNullable<InterfaceEvent['recurrenceRule']>['frequency'];
+  interval: InterfaceEvent['recurrenceRule'] extends null
+    ? never
+    : NonNullable<InterfaceEvent['recurrenceRule']>['interval'];
+  attendees: {
     _id: string;
+    gender: 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
   }[];
-  creator?: {
-    firstName: string;
-    lastName: string;
-    _id: string;
-  };
+  isPublic: boolean;
+  isRegisterable: boolean;
 }
 
 export interface InterfaceIOrgList {
   admins: { _id: string }[];
 }
 
+export interface InterfaceStatsModal {
+  data: {
+    event: {
+      _id: string;
+      averageFeedbackScore: number | null;
+      feedback: Feedback[];
+    };
+  };
+}
+
 export interface InterfaceCalendarProps {
-  eventData: InterfaceEventListCardProps[];
+  eventData: InterfaceEvent[];
   refetchEvents?: () => void;
   orgData?: InterfaceIOrgList;
   userRole?: string;
@@ -57,7 +111,7 @@ export interface InterfaceEventHeaderProps {
   showInviteModal: () => void;
 }
 
-interface InterfaceEventListCard extends InterfaceEventListCardProps {
+interface InterfaceEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 
@@ -133,4 +187,16 @@ export interface InterfaceUpdateEventModalProps {
   >;
   recurringEventUpdateOptions: RecurringEventMutationType[];
   updateEventHandler: () => Promise<void>;
+}
+
+export interface InterfaceAttendanceStatisticsModalProps {
+  show: boolean;
+  handleClose: () => void;
+  statistics: {
+    totalMembers: number;
+    membersAttended: number;
+    attendanceRate: number;
+  };
+  memberData: InterfaceMember[];
+  t: (key: string) => string;
 }

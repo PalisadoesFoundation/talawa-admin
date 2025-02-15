@@ -6,7 +6,7 @@
 
 > **EventVolunteerInput**: `object`
 
-Defined in: [src/types/Event/type.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L72)
+Defined in: [src/types/Event/type.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L98)
 
 ## Type declaration
 

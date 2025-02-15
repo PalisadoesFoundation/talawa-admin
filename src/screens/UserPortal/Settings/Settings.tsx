@@ -20,7 +20,7 @@ import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import Avatar from 'components/Avatar/Avatar';
-import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
+import type { InterfaceEvent } from 'types/Event/interface';
 import { EventsAttendedByUser } from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 import '../../../style/app.module.css';
