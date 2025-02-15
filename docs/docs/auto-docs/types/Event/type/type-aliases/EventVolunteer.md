@@ -6,7 +6,7 @@
 
 > **EventVolunteer**: `object`
 
-Defined in: [src/types/Event/type.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L60)
+Defined in: [src/types/Event/type.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L86)
 
 ## Type declaration
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/type.ts:60](https://github.com/PalisadoesFoundation
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](User.md)
 
 ### event?
 
@@ -44,4 +44,4 @@ Defined in: [src/types/Event/type.ts:60](https://github.com/PalisadoesFoundation
 
 ### user
 
-> **user**: [`User`](../../../user/type-aliases/User.md)
+> **user**: [`User`](User.md)

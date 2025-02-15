@@ -84,7 +84,7 @@
     "jest-preview": "jest-preview",
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
-    "setup": "tsx setup.ts",
+    "setup": "tsx src/setup/setup.ts",
     "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts",
     "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node fix-repo-url.js",
     "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js"

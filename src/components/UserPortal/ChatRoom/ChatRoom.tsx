@@ -20,7 +20,7 @@ import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
 import convertToBase64 from 'utils/convertToBase64';
-
+import type { DirectMessage, GroupChat } from 'types/Chat/type';
 interface InterfaceChatRoomProps {
   selectedContact: string;
   chatListRefetch: (
@@ -29,7 +29,7 @@ interface InterfaceChatRoomProps {
           id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<{ chatList: Chat[] }>>;
+  ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
 }
 
 /**
@@ -43,60 +43,6 @@ interface InterfaceChatRoomProps {
  *
  * @returns The rendered chat room component.
  */
-
-type DirectMessage = {
-  _id: string;
-  createdAt: Date;
-  sender: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string;
-  };
-  replyTo:
-    | {
-        _id: string;
-        createdAt: Date;
-        sender: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          image: string;
-        };
-        messageContent: string;
-        receiver: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-        };
-      }
-    | undefined;
-  messageContent: string;
-  media: string;
-};
-
-type Chat = {
-  _id: string;
-  isGroup: boolean;
-  name?: string;
-  image?: string;
-  messages: DirectMessage[];
-  admins: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
-  unseenMessagesByUsers: string;
-  description: string;
-};
-
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   // Translation hook for text in different languages
   const { t } = useTranslation('translation', {
@@ -116,7 +62,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [chatSubtitle, setChatSubtitle] = useState('');
   const [chatImage, setChatImage] = useState('');
   const [newMessage, setNewMessage] = useState('');
-  const [chat, setChat] = useState<Chat>();
+  const [chat, setChat] = useState<GroupChat>();
   const [replyToDirectMessage, setReplyToDirectMessage] =
     useState<DirectMessage | null>(null);
   const [editMessage, setEditMessage] = useState<DirectMessage | null>(null);

@@ -2,7 +2,6 @@ import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import styles from '../../style/app.module.css';
-import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ADD_USER_TO_GROUP_CHAT,
@@ -25,72 +24,7 @@ import { FaCheck, FaX } from 'react-icons/fa6';
 import convertToBase64 from 'utils/convertToBase64';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
-
-export type DirectMessage = {
-  _id: string;
-  createdAt: Date;
-  sender: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string;
-  };
-  replyTo:
-    | {
-        _id: string;
-        createdAt: Date;
-        sender: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          image: string;
-        };
-        messageContent: string;
-        receiver: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-        };
-      }
-    | undefined;
-  messageContent: string;
-  media: string;
-};
-
-export type Chat = {
-  _id: string;
-  isGroup: boolean;
-  name?: string;
-  image?: string;
-  messages: DirectMessage[];
-  admins: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
-  unseenMessagesByUsers: string;
-  description: string;
-};
-
-interface InterfaceGoroupChatDetailsProps {
-  toggleGroupChatDetailsModal: () => void;
-  groupChatDetailsModalisOpen: boolean;
-  chat: Chat;
-  chatRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
-  ) => Promise<ApolloQueryResult<{ chat: Chat }>>;
-}
+import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -123,7 +57,7 @@ export default function groupChatDetails({
   groupChatDetailsModalisOpen,
   chat,
   chatRefetch,
-}: InterfaceGoroupChatDetailsProps): JSX.Element {
+}: InterfaceGroupChatDetailsProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
   });
