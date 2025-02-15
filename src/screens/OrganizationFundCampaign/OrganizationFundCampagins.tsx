@@ -158,6 +158,7 @@ const orgFundCampaign = (): JSX.Element => {
     return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
   }, [campaignData]);
 
+  // Write now we use the search term in client side to filter the campaigns, we can use the search term in the query to filter the campaigns
   const filteredCampaigns = useMemo(() => {
     return compaignsData.filter((campaign) =>
       campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
