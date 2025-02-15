@@ -145,6 +145,8 @@ describe('Calendar', () => {
         isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
+        attendees: [],
+        creator: {},
       },
     ];
     render(
@@ -224,6 +226,8 @@ describe('Calendar', () => {
         isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
+        attendees: [],
+        creator: {},
       },
       {
         _id: '2',
@@ -240,6 +244,8 @@ describe('Calendar', () => {
         isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
+        attendees: [],
+        creator: {},
       },
       {
         _id: '3',
@@ -256,6 +262,8 @@ describe('Calendar', () => {
         isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
+        attendees: [],
+        creator: {},
       },
       {
         _id: '4',
@@ -272,6 +280,8 @@ describe('Calendar', () => {
         isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
+        attendees: [],
+        creator: {},
       },
       {
         _id: '5',
@@ -288,6 +298,8 @@ describe('Calendar', () => {
         isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
+        attendees: [],
+        creator: {},
       },
     ];
     render(

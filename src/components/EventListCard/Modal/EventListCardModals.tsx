@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Popover } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import type { InterfaceEventListCardProps } from 'types/Event/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 import { Role } from 'types/Event/interface';
 import {
   type InterfaceRecurrenceRuleState,
@@ -30,7 +30,7 @@ import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
 import EventListCardUpdateModal from './Update/EventListCardUpdateModal';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 
-interface InterfaceEventListCard extends InterfaceEventListCardProps {
+interface InterfaceEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 

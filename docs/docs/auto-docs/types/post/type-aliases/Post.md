@@ -28,7 +28,7 @@ Defined in: [src/types/post.ts:5](https://github.com/PalisadoesFoundation/talawa
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../User/type/type-aliases/User.md)
 
 ### imageUrl?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/post.ts:5](https://github.com/PalisadoesFoundation/talawa
 
 ### likedBy?
 
-> `optional` **likedBy**: [`User`](../../user/type-aliases/User.md)[]
+> `optional` **likedBy**: [`User`](../../User/type/type-aliases/User.md)[]
 
 ### organization
 

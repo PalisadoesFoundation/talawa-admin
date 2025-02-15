@@ -6,7 +6,7 @@
 
 > **Event**: `object`
 
-Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L8)
+Defined in: [src/types/Event/type.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L19)
 
 ## Type declaration
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/
 
 ### admins?
 
-> `optional` **admins**: [`User`](../../../user/type-aliases/User.md)[]
+> `optional` **admins**: [`User`](User.md)[]
 
 ### allDay
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/
 
 ### attendees
 
-> **attendees**: [`User`](../../../user/type-aliases/User.md)[]
+> **attendees**: [`User`](User.md)[]
 
 ### attendeesCheckInStatus
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/
 
 ### creator
 
-> **creator**: [`User`](../../../user/type-aliases/User.md)
+> **creator**: [`User`](User.md)
 
 ### description
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/
 
 ### feedback
 
-> **feedback**: [`Feedback`](../../../feedback/type-aliases/Feedback.md)[]
+> **feedback**: [`Feedback`](Feedback.md)[]
 
 ### isPublic
 
