@@ -7,7 +7,7 @@ import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
-const { getItem } = useLocalStorage();
+import { urlToFile } from 'utils/urlToFile';
 
 /**
  * A dropdown component that allows users to change the application's language.
@@ -22,7 +22,9 @@ const { getItem } = useLocalStorage();
  */
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
+  const { getItem } = useLocalStorage();
   const userId = getItem('userId');
+  const userImage = getItem('UserImage');
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
 
   /**
@@ -31,23 +33,37 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
    * @param languageCode - The code of the language to switch to.
    */
   const changeLanguage = async (languageCode: string): Promise<void> => {
-    // format it to match the input type
+    if (!userId) return;
+
+    let avatarFile: File | null = null;
+
+    // Only process avatar if userImage exists in localStorage
+    if (userImage) {
+      try {
+        avatarFile = await urlToFile(userImage);
+      } catch (error) {
+        console.log('Error processing avatar:', error);
+        // Continue with language change even if avatar processing fails
+      }
+    }
+
+    // Prepare mutation input
     const input = {
       naturalLanguageCode: languageCode,
+      ...(avatarFile && { avatar: avatarFile }), // Only include avatar if it exists
     };
 
-    if (userId) {
-      try {
-        await updateUser({
-          variables: {
-            input,
-          },
-        });
+    try {
+      const { data } = await updateUser({
+        variables: { input },
+      });
+
+      if (data) {
         await i18next.changeLanguage(languageCode);
         cookies.set('i18next', languageCode);
-      } catch (error) {
-        console.log('Error in changing language', error);
       }
+    } catch (error) {
+      console.log('Error in changing language', error);
     }
   };
 
@@ -80,7 +96,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
         {languages.map((language, index: number) => (
           <Dropdown.Item
             key={`dropdown-item-${index}`}
-            className={`dropdown-item`}
+            className="dropdown-item"
             onClick={async (): Promise<void> => changeLanguage(language.code)}
             disabled={currentLanguageCode === language.code}
             data-testid={`change-language-btn-${language.code}`}
