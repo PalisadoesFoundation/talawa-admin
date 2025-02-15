@@ -277,9 +277,9 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       });
 
       if(createEventData){
-      props.fetchPosts(); // Refresh the posts
-      toggleEditPost();
-      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
+        props.fetchPosts(); // Refresh the posts
+        toggleEditPost();
+        toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
