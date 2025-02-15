@@ -1147,7 +1147,6 @@
     "gradePlaceholder": "输入年级",
     "sEmpStatus": "选择就业状况",
     "enterDescription": "输入描述",
-    "descripción": "描述",
     "female": "女性",
     "male": "男性",
     "employed": "就业",
@@ -1187,7 +1186,14 @@
     "displayImage": "显示图像",
     "address": "地址",
     "saveChanges": "保存更改",
-    "joined": "已加入"
+    "joined": "已加入",
+    "city": "城市",
+    "cancel": "取消",
+    "postalCode": "邮政编码",
+    "addressLine1": "地址第一行",
+    "addressLine2": "地址第二行",
+    "description": "描述",
+    "enterCity": "输入城市"
   },
   "donate": {
     "title": "捐款",
