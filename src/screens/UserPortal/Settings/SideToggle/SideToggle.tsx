@@ -7,6 +7,18 @@ interface InterfaceSidebarToggleProps {
   setHideDrawer: (value: boolean) => void;
 }
 
+/**
+ * SidebarToggle component.
+ *
+ * This component renders a button that toggles the visibility of a sidebar.
+ * It uses the `hideDrawer` state to determine the current state of the sidebar
+ * and toggles it when the button is clicked.
+ *
+ * @param hideDrawer - A boolean indicating whether the sidebar is hidden.
+ * @param setHideDrawer - A function to update the `hideDrawer` state.
+ *
+ * @returns A button element that toggles the sidebar visibility.
+ */
 const SidebarToggle: React.FC<InterfaceSidebarToggleProps> = ({
   hideDrawer,
   setHideDrawer,

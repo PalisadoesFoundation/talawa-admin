@@ -39,6 +39,18 @@ interface InterfaceUserDetailsFormProps {
   tCommon: (key: string) => string;
 }
 
+/**
+ * UserDetailsForm component renders a form for updating user details.
+ *
+ * @param userDetails - The current user details.
+ * @param handleFieldChange - Function to handle changes in form fields.
+ * @param isUpdated - Flag indicating if the user details have been updated.
+ * @param handleResetChanges - Function to reset changes made to the user details.
+ * @param handleUpdateUserDetails - Function to update the user details.
+ * @param t - Translation function for localized strings.
+ * @param tCommon - Translation function for common localized strings.
+ * @returns The UserDetailsForm component.
+ */
 const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
   userDetails,
   handleFieldChange,

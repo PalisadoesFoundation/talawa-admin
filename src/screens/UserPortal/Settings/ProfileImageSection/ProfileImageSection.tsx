@@ -4,16 +4,62 @@ import Avatar from 'components/Avatar/Avatar';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 import styles from '../Settings.module.css';
 
+/**
+ * Interface for ProfileImageSection component props
+ */
 interface InterfaceProfileImageSectionProps {
+  /**
+   * User details containing avatar URL and name
+   */
   userDetails: {
+    /**
+     * URL of the user's avatar image
+     */
     avatarURL?: string;
+    /**
+     * Name of the user
+     */
     name: string;
   };
+  /**
+   * Currently selected avatar file
+   */
   selectedAvatar: File | null;
+  /**
+   * Reference to the file input element
+   */
   fileInputRef: React.RefObject<HTMLInputElement>;
+  /**
+   * Handler function for file upload events
+   */
   handleFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * Renders the profile image section of the user settings
+ *
+ * This component displays:
+ * - The user's current avatar or a default avatar
+ * - An edit button to change the profile picture
+ * - A hidden file input for image upload
+ *
+ * @remarks
+ * The component handles two cases:
+ * 1. When an avatar URL exists - displays the actual image
+ * 2. When no avatar URL exists - displays a default avatar with user's initials
+ *
+ * The component uses Bootstrap classes and custom styling for layout and appearance.
+ *
+ * @example
+ * ```tsx
+ * <ProfileImageSection
+ *   userDetails={{ name: "John Doe", avatarURL: "https://example.com/avatar.jpg" }}
+ *   selectedAvatar={null}
+ *   fileInputRef={fileInputRef}
+ *   handleFileUpload={handleFileUpload}
+ * />
+ * ```
+ */
 const ProfileImageSection: React.FC<InterfaceProfileImageSectionProps> = ({
   userDetails,
   selectedAvatar,
