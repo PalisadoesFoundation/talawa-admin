@@ -1,4 +1,3 @@
-/* istanbul ignore next */
 const getOrganizationId = (url: string): string => {
   const id = url?.split('=')[1];
 

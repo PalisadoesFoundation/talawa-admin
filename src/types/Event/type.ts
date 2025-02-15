@@ -1,9 +1,20 @@
 import type { ActionItem } from '../actionItem';
-import type { User } from '../user';
 import type { Organization } from '../organization';
 import type { CheckInStatus } from '../CheckIn/type';
-import type { Feedback } from '../feedback';
-// types/event.ts
+import type { Address } from '../User/type';
+
+export type User = {
+  _id: string;
+  address?: Address;
+  birthDate?: Date;
+  createdAt: Date;
+  email: string;
+  firstName: string;
+  lastName: string;
+  gender?: string;
+  image?: string;
+  updatedAt?: Date;
+};
 
 export type Event = {
   _id: string;
@@ -32,6 +43,21 @@ export type Event = {
   status: string;
   title: string;
   updatedAt: Date;
+};
+
+export type Feedback = {
+  _id: string;
+  createdAt: Date;
+  event?: Event;
+  rating: number;
+  review: string | null; // Optional
+  updatedAt: Date;
+};
+
+export type FeedbackInput = {
+  eventId: string;
+  rating: number;
+  review?: string; // Optional
 };
 
 export type EventInput = {

@@ -13,19 +13,10 @@ import styles from '../../../style/app.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES, EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
-import type { InterfaceMember } from '../EventAttendance/InterfaceEvents';
+import type { InterfaceMember } from 'types/Event/interface';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
-/**
- * Interface for user data
- */
-interface InterfaceUser {
-  _id: string;
-  userId: string;
-  isRegistered: boolean;
-  __typename: string;
-  time: string;
-}
+import type { InterfaceUserAttendee } from 'types/User/interface';
 /**
  * Component to manage and display event registrant information
  * Includes adding new registrants and check-in functionality for registrants
@@ -36,10 +27,10 @@ function EventRegistrants(): JSX.Element {
     keyPrefix: 'eventRegistrant',
   });
   const { orgId, eventId } = useParams<{ orgId: string; eventId: string }>();
-  const [registrants, setRegistrants] = useState<InterfaceUser[]>([]);
+  const [registrants, setRegistrants] = useState<InterfaceUserAttendee[]>([]);
   const [attendees, setAttendees] = useState<InterfaceMember[]>([]);
   const [combinedData, setCombinedData] = useState<
-    (InterfaceUser & Partial<InterfaceMember>)[]
+    (InterfaceUserAttendee & Partial<InterfaceMember>)[]
   >([]);
   // Fetch registrants
   const [getEventRegistrants] = useLazyQuery(EVENT_REGISTRANTS, {
@@ -48,7 +39,7 @@ function EventRegistrants(): JSX.Element {
     onCompleted: (data) => {
       if (data?.getEventAttendeesByEventId) {
         const mappedData = data.getEventAttendeesByEventId.map(
-          (attendee: InterfaceUser) => ({
+          (attendee: InterfaceUserAttendee) => ({
             _id: attendee._id,
             userId: attendee.userId,
             isRegistered: attendee.isRegistered,
