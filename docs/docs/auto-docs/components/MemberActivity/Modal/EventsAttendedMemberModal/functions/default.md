@@ -6,13 +6,15 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx#L33)
+Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx#L26)
+
+Modal component to display paginated list of events attended by a member
 
 ## Parameters
 
 ### props
 
-`InterfaceEventsAttendedMemberModalProps`
+[`InterfaceEventsAttendedMemberModalProps`](../../../../../types/Event/interface/interfaces/InterfaceEventsAttendedMemberModalProps.md)
 
 ### deprecatedLegacyContext?
 
@@ -27,3 +29,5 @@ Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:3
 ## Returns
 
 `ReactNode`
+
+Modal component with paginated events list

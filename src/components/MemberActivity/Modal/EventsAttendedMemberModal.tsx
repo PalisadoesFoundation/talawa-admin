@@ -13,7 +13,7 @@ import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from '../../../style/app.module.css';
 import { CustomTableCell } from './CustomCell/customTableCell';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interface';
 /**
  * Modal component to display paginated list of events attended by a member
  * @param eventsAttended - Array of events attended by the member
@@ -22,13 +22,6 @@ import type { InterfaceEvent } from 'types/Event/interface';
  * @param eventsPerPage - Number of events to display per page
  * @returns Modal component with paginated events list
  */
-
-interface InterfaceEventsAttendedMemberModalProps {
-  eventsAttended: Partial<InterfaceEvent>[];
-  setShow: (show: boolean) => void;
-  show: boolean;
-  eventsPerPage?: number;
-}
 
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps
