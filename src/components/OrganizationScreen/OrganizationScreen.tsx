@@ -19,10 +19,7 @@ import { Button } from 'react-bootstrap';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
-interface InterfaceEvent {
-  _id: string;
-  title: string;
-}
+import type { InterfaceEvent } from 'types/Event/interface';
 
 /**
  * Component for the organization screen

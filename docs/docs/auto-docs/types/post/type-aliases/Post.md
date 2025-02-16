@@ -44,7 +44,7 @@ Defined in: [src/types/post.ts:5](https://github.com/PalisadoesFoundation/talawa
 
 ### organization
 
-> **organization**: [`Organization`](../../organization/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../Organization/type/type-aliases/Organization.md)
 
 ### pinned?
 

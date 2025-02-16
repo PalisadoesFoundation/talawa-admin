@@ -1,6 +1,6 @@
 import type { Comment } from './comment';
 import type { User } from './User/type';
-import type { Organization } from './organization';
+import type { Organization } from 'types/Organization/type';
 
 export type Post = {
   _id?: string; // Optional

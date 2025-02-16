@@ -16,7 +16,7 @@ Defined in: [src/types/User/type.ts:43](https://github.com/PalisadoesFoundation/
 
 ### adminFor
 
-> **adminFor**: [`Organization`](../../../organization/type-aliases/Organization.md)[]
+> **adminFor**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)[]
 
 ### appLanguageCode
 
@@ -28,7 +28,7 @@ Defined in: [src/types/User/type.ts:43](https://github.com/PalisadoesFoundation/
 
 ### createdOrganizations
 
-> **createdOrganizations**: [`Organization`](../../../organization/type-aliases/Organization.md)[]
+> **createdOrganizations**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)[]
 
 ### eventAdmin
 

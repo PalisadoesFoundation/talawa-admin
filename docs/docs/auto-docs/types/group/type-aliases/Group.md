@@ -28,7 +28,7 @@ Defined in: [src/types/group.ts:4](https://github.com/PalisadoesFoundation/talaw
 
 ### organization
 
-> **organization**: [`Organization`](../../organization/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../Organization/type/type-aliases/Organization.md)
 
 ### title
 
