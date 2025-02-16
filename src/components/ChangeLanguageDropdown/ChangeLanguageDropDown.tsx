@@ -8,6 +8,7 @@ import { useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 import { urlToFile } from 'utils/urlToFile';
+import { toast } from 'react-toastify';
 
 /**
  * A dropdown component that allows users to change the application's language.
@@ -33,7 +34,10 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
    * @param languageCode - The code of the language to switch to.
    */
   const changeLanguage = async (languageCode: string): Promise<void> => {
-    if (!userId) return;
+    if (!userId) {
+      toast.error('User not found');
+      return;
+    }
 
     let avatarFile: File | null = null;
 
@@ -54,14 +58,13 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     };
 
     try {
-      const { data } = await updateUser({
+      // Update user's language preference. If fails, catch error and log it
+      await updateUser({
         variables: { input },
       });
 
-      if (data) {
-        await i18next.changeLanguage(languageCode);
-        cookies.set('i18next', languageCode);
-      }
+      await i18next.changeLanguage(languageCode);
+      cookies.set('i18next', languageCode);
     } catch (error) {
       console.log('Error in changing language', error);
     }

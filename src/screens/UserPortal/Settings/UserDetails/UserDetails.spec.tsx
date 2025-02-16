@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
 import { MOCKS, MOCKS1, MOCKS2, updateMock } from '../SettingsMocks';
@@ -217,5 +217,132 @@ describe('UserDetailsForm', () => {
     expect(screen.getByTestId('inputName')).toHaveValue('');
     expect(screen.getByTestId('inputEmail')).toHaveValue('');
     expect(screen.getByTestId('inputPhoneNumber')).toHaveValue('');
+  });
+
+  it('handles address fields changes correctly', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <UserDetailsForm {...defaultProps} />
+      </MockedProvider>,
+    );
+
+    const addressInput = screen.getByTestId('mock-address-input');
+    await userEvent.type(addressInput, '123 Test St');
+
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'addressLine1',
+      '123 Test St',
+    );
+  });
+
+  it('handles all form field changes correctly', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <UserDetailsForm {...defaultProps} />
+      </MockedProvider>,
+    );
+
+    // Test name field
+    const nameInput = screen.getByTestId('inputName');
+    fireEvent.change(nameInput, { target: { value: 'New Name' } });
+    expect(mockHandleFieldChange).toHaveBeenCalledWith('name', 'New Name');
+
+    // Test gender field
+    const genderSelect = screen.getByTestId('inputGender');
+    await userEvent.selectOptions(genderSelect, 'male');
+    expect(mockHandleFieldChange).toHaveBeenCalledWith('natalSex', 'male');
+
+    // Test phone numbers
+    const mobilePhone = screen.getByTestId('inputPhoneNumber');
+    fireEvent.change(mobilePhone, { target: { value: '1234567890' } });
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'mobilePhoneNumber',
+      '1234567890',
+    );
+
+    const homePhone = screen.getByTestId('inputHomePhoneNumber');
+    fireEvent.change(homePhone, { target: { value: '1234567890' } });
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'homePhoneNumber',
+      '1234567890',
+    );
+
+    const workPhone = screen.getByTestId('inputWorkPhoneNumber');
+    fireEvent.change(workPhone, { target: { value: '1234567890' } });
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'workPhoneNumber',
+      '1234567890',
+    );
+
+    // Test birth date
+    const birthDate = screen.getByLabelText(mockT('birthDate'));
+    fireEvent.change(birthDate, { target: { value: '1990-01-01' } });
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'birthDate',
+      '1990-01-01',
+    );
+
+    // Test education grade
+    const gradeSelect = screen.getByTestId('inputGrade');
+    await userEvent.selectOptions(gradeSelect, 'graduate');
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'educationGrade',
+      'graduate',
+    );
+
+    // // Test employment status
+    const empStatusSelect = screen.getByTestId('inputEmpStatus');
+    await userEvent.selectOptions(empStatusSelect, 'unemployed');
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'employmentStatus',
+      'unemployed',
+    );
+
+    // Test marital status
+    const maritalStatusSelect = screen.getByTestId('inputMaritalStatus');
+    await userEvent.selectOptions(maritalStatusSelect, 'single');
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'maritalStatus',
+      'single',
+    );
+
+    // Test description
+    const description = screen.getByTestId('inputDescription');
+    fireEvent.change(description, { target: { value: 'New description' } }); // Fixed the fireEvent.change syntax
+    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+      'description',
+      'New description',
+    );
+  });
+
+  it('handles null birth date correctly', () => {
+    const propsWithNullBirthDate = {
+      ...defaultProps,
+      userDetails: {
+        ...defaultProps.userDetails,
+        birthDate: null,
+      },
+    };
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <UserDetailsForm {...propsWithNullBirthDate} />
+      </MockedProvider>,
+    );
+
+    const birthDateInput = screen.getByLabelText(mockT('birthDate'));
+    expect(birthDateInput).toHaveValue('');
+  });
+
+  it('renders address section with correct heading', () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <UserDetailsForm {...defaultProps} />
+      </MockedProvider>,
+    );
+
+    expect(
+      screen.getByText(`${mockTCommon('address')} :-`),
+    ).toBeInTheDocument();
   });
 });

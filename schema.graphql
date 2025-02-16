@@ -2314,6 +2314,7 @@ type UserPg {
     last: Int
   ): UserOrganizationsWhereMemberConnection
   postalCode: String
+  naturalLanguageCode: Iso639Set1LanguageCode
   role: UserRole
   state: String
   updatedAt: DateTime

@@ -9,7 +9,6 @@ export const MOCKS = [
         name: 'Noble Mittal',
         addressLine1: 'random address 1',
         addressLine2: 'random address 2',
-        // TODO: avatar: 'random avatar',
         birthDate: '2004-10-14',
         city: 'random city',
         countryCode: 'in',

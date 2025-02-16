@@ -7,9 +7,10 @@ export const sanitizeAvatars = (
     return URL.createObjectURL(file);
   }
   try {
-    // Ensure fallbackUrl is a valid and safe URL
+    if (!fallbackUrl) {
+      throw new Error('Invalid fallback URL');
+    }
     const safeUrl = new URL(fallbackUrl, window.location.origin);
-    // No need for additional encodeURI since URL object already handles encoding
     return safeUrl.toString();
   } catch {
     console.error('Invalid fallback URL provided');

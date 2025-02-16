@@ -111,4 +111,60 @@ describe('UserAddressFields', () => {
     expect(screen.getByTestId('inputState')).toHaveValue('Test State');
     expect(screen.getByTestId('inputCountry')).toHaveValue('af');
   });
+
+  it('handles postal code input change', () => {
+    render(<UserAddressFields {...mockProps} />);
+    const postalInput = screen.getByTestId('postalCode');
+    fireEvent.change(postalInput, { target: { value: '54321' } });
+
+    expect(mockProps.handleFieldChange).toHaveBeenCalledWith(
+      'postalCode',
+      '54321',
+    );
+  });
+
+  it('renders country options with correct aria-labels', () => {
+    render(<UserAddressFields {...mockProps} />);
+    const countrySelect = screen.getByTestId('inputCountry');
+
+    // Get all options except the first disabled one
+    const options = Array.from(
+      countrySelect.getElementsByTagName('option'),
+    ).slice(1);
+
+    // Test a sample of countries to verify aria-labels
+    const sampleCountry = countryOptions[0];
+    const option = options.find(
+      (opt) => opt.value === sampleCountry.value.toLowerCase(),
+    );
+
+    expect(option).toHaveAttribute(
+      'aria-label',
+      `Select ${sampleCountry.label} as your country`,
+    );
+  });
+
+  it('handles city input change and displays correctly', () => {
+    render(<UserAddressFields {...mockProps} />);
+
+    // Check if city input exists
+    const cityInput = screen.getByTestId('inputCity');
+    expect(cityInput).toBeInTheDocument();
+
+    // Check if label is rendered correctly
+    expect(screen.getByText('translated_city')).toBeInTheDocument();
+
+    // Check if initial value is displayed correctly
+    expect(cityInput).toHaveValue('Test City');
+
+    // Test input change
+    fireEvent.change(cityInput, { target: { value: 'New City' } });
+    expect(mockProps.handleFieldChange).toHaveBeenCalledWith(
+      'city',
+      'New City',
+    );
+
+    // Check if placeholder is set correctly
+    expect(cityInput).toHaveAttribute('placeholder', 'translated_enterCity');
+  });
 });
