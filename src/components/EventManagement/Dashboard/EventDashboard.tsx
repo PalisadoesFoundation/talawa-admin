@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 import { Edit } from '@mui/icons-material';
 import EventListCardModals from 'components/EventListCard/Modal/EventListCardModals';
-import type { InterfaceEventListCardProps } from 'types/Event/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 
 /**
@@ -54,7 +54,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     return <Loader data-testid="loader" />;
   }
 
-  const eventListCardProps: InterfaceEventListCardProps = {
+  const eventListCardProps: InterfaceEvent = {
     userRole: '',
     key: eventData.event._id,
     _id: eventData.event._id,

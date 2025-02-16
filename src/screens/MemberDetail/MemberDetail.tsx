@@ -27,7 +27,7 @@ import {
   employmentStatusEnum,
 } from 'utils/formEnumFields';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
-import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
+import type { InterfaceEvent } from 'types/Event/interface';
 import type { InterfaceTagData } from 'utils/interfaces';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventHeaderProps
 
-Defined in: [src/types/Event/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L54)
+Defined in: [src/types/Event/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L108)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:54](https://github.com/PalisadoesFound
 
 > **handleChangeView**: (`item`) => `void`
 
-Defined in: [src/types/Event/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L56)
+Defined in: [src/types/Event/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L110)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/interface.ts:56](https://github.com/PalisadoesFound
 
 > **showInviteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L57)
+Defined in: [src/types/Event/interface.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L111)
 
 #### Returns
 
@@ -42,4 +42,4 @@ Defined in: [src/types/Event/interface.ts:57](https://github.com/PalisadoesFound
 
 > **viewType**: [`ViewType`](../../../../screens/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
 
-Defined in: [src/types/Event/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L55)
+Defined in: [src/types/Event/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L109)

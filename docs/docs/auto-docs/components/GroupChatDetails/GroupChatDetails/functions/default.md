@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/GroupChatDetails/GroupChatDetails.tsx:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/GroupChatDetails/GroupChatDetails.tsx#L121)
+Defined in: [src/components/GroupChatDetails/GroupChatDetails.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/GroupChatDetails/GroupChatDetails.tsx#L55)
 
 Component for displaying and managing group chat details.
 
@@ -14,7 +14,7 @@ Component for displaying and managing group chat details.
 
 ### \_\_namedParameters
 
-`InterfaceGoroupChatDetailsProps`
+[`InterfaceGroupChatDetailsProps`](../../../../types/Chat/interface/interfaces/InterfaceGroupChatDetailsProps.md)
 
 ## Returns
 

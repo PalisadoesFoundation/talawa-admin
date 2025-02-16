@@ -4,7 +4,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import type { InterfaceEventListCardProps } from 'types/Event/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 import EventListCard from './EventListCard';
 import i18n from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -49,9 +49,7 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const renderEventListCard = (
-  props: InterfaceEventListCardProps,
-): RenderResult => {
+const renderEventListCard = (props: InterfaceEvent): RenderResult => {
   const { key, ...restProps } = props; // Destructure the key and separate other props
 
   return render(
@@ -150,6 +148,8 @@ describe('Testing Event List Card', () => {
               isRecurringEventException={false}
               isPublic={true}
               isRegisterable={false}
+              attendees={[]}
+              creator={{}}
             />
           </BrowserRouter>
         </I18nextProvider>
