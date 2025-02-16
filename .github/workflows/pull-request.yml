@@ -391,6 +391,19 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
+      - name: Generate `.env` File with Hardcoded Values
+        run: |
+          cat <<EOF > .env
+          PORT=4321
+          REACT_APP_TALAWA_URL=http://localhost:4000/graphql
+          REACT_APP_USE_RECAPTCHA=
+          REACT_APP_RECAPTCHA_SITE_KEY=
+          REACT_APP_BACKEND_WEBSOCKET_URL=ws://localhost:4000/graphql
+          ALLOW_LOGS=NO
+          USE_DOCKER=YES
+          DOCKER_PORT=4321
+          EOF
+
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
         with:
@@ -411,7 +424,7 @@ jobs:
           echo "Starting Docker container for production..."
           docker compose -f docker/docker-compose.prod.yaml up -d
           echo "Production Docker container started successfully"
-
+      
       - name: Check if Talawa Admin App is running (Production)
         run: |
           chmod +x .github/workflows/scripts/app_health_check.sh
