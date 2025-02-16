@@ -315,17 +315,18 @@ describe('MemberDetail', () => {
     });
 
     const birthDateInput = screen.getByTestId('birthDate');
-    // Set a future date value directly
-    const futureDate = dayjs().add(1, 'year').format('YYYY-MM-DD');
+    // Set a hardcoded future date value
+    const futureDate = '2080-02-02';
     await userEvent.type(birthDateInput, futureDate);
 
     // Click away to trigger blur/change
     userEvent.click(document.body);
 
-    expect(birthDateInput).toHaveValue('02/02/0016');
+    expect(birthDateInput).toHaveValue('02/08/0002');
   });
 
   it('validates password', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
     await waitFor(() => {
       expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
@@ -336,7 +337,7 @@ describe('MemberDetail', () => {
 
     fireEvent.change(passwordInput, { target: { value: 'weak' } });
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(toastErrorSpy).toHaveBeenCalledWith(
       'Password must be at least 8 characters long.',
     );
   });
