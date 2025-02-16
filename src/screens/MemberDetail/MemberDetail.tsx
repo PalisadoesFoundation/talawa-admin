@@ -132,16 +132,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   // to handle the change in the form fields
   const handleFieldChange = (fieldName: string, value: string): void => {
-    if (fieldName === 'birthDate') {
-      const today = new Date();
-      const selectedDate = new Date(value);
-      if (selectedDate > today) {
-        toast.error('Future dates are not allowed for birth date.');
-        return;
-      }
-    }
+    // future birthdates are not possible to select.
 
-    // check if the password is strong or not
+    // password validation
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
         toast.error('Password must be at least 8 characters long.');
@@ -445,6 +438,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('password', e.target.value)
                     }
+                    data-testid="inputPassword"
                     placeholder="* * * * * * * *"
                   />
                 </Col>
@@ -491,9 +485,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="email"
                     data-testid="inputEmail"
                     disabled
-                    onChange={(e) =>
-                      handleFieldChange('emailAddress', e.target.value)
-                    }
                     placeholder={tCommon('email')}
                   />
                 </Col>

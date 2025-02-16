@@ -146,7 +146,7 @@ export const MOCKS3 = [
   },
 ];
 
-export const updateMock = [
+export const UPDATE_MOCK = [
   {
     request: {
       query: UPDATE_CURRENT_USER_MUTATION,
@@ -184,6 +184,79 @@ export const updateMock = [
           state: '',
           updatedAt: '2025-02-09T06:26:51.209Z',
           workPhoneNumber: '',
+        },
+      },
+    },
+  },
+];
+
+export const ERROR_MOCK = [
+  {
+    request: {
+      query: UPDATE_CURRENT_USER_MUTATION,
+      variables: {
+        input: {
+          name: 'Test User',
+        },
+      },
+    },
+    error: new Error('Failed to update user'),
+  },
+];
+
+export const MOCK_FILE = [
+  {
+    request: {
+      query: CURRENT_USER,
+      variables: {
+        id: 'rishav-jha-mech',
+      },
+    },
+    result: {
+      data: {
+        currentUser: {
+          addressLine1: 'Line 1',
+          addressLine2: 'Line 2',
+          avatarMimeType: null,
+          avatarURL: null,
+          birthDate: '',
+          city: 'city',
+          countryCode: 'in',
+          createdAt: '2025-02-06T03:10:50.254',
+          description: 'This is a description',
+          educationGrade: 'grade_8',
+          emailAddress: 'test221@gmail.com',
+          employmentStatus: 'employed',
+          homePhoneNumber: '+9999999998',
+          id: 'rishav-jha-mech',
+          isEmailAddressVerified: false,
+          maritalStatus: 'engaged',
+          mobilePhoneNumber: '+9999999999',
+          name: 'Rishav Jha',
+          natalSex: 'male',
+          naturalLanguageCode: 'en',
+          postalCode: '111111',
+          role: 'administrator',
+          state: 'State1',
+          updatedAt: '2025-02-06T03:22:17.808',
+          workPhoneNumber: '+9999999998',
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UNASSIGN_USER_TAG,
+      variables: {
+        tagId: '1',
+        userId: 'rishav-jha-mech',
+      },
+    },
+    result: {
+      data: {
+        unassignUserTag: {
+          _id: '1',
         },
       },
     },
