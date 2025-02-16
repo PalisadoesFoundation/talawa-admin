@@ -18,6 +18,10 @@ vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcClasses: vi.fn(),
 }));
 
+vi.mock('components/SecuredRoute/SecuredRoute', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 vi.mock('/src/assets/svgs/palisadoes.svg?react', () => ({
   default: () => <svg>Mocked SVG</svg>,
 }));
