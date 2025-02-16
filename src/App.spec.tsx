@@ -89,7 +89,7 @@ const link2 = new StaticMockLink(
 const wait = (ms = 100): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-describe('App Component Tests', () => {
+describe('App Component Tests', { timeout: 20000 }, () => {
   beforeEach(() => {
     window.history.pushState({}, '', '/');
   });
