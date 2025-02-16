@@ -424,7 +424,7 @@ jobs:
           echo "Starting Docker container for production..."
           docker compose -f docker/docker-compose.prod.yaml up -d
           echo "Production Docker container started successfully"
-      
+
       - name: Check if Talawa Admin App is running (Production)
         run: |
           chmod +x .github/workflows/scripts/app_health_check.sh
