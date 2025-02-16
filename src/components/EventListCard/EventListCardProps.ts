@@ -1,7 +1,7 @@
 import { Frequency, WeekDays } from 'utils/recurrenceUtils';
-import type { InterfaceEventListCardProps } from 'types/Event/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 
-interface InterfaceEventListCard extends InterfaceEventListCardProps {
+interface InterfaceEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 
@@ -25,6 +25,8 @@ export const props: InterfaceEventListCard[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
   {
     key: '123',
@@ -45,6 +47,8 @@ export const props: InterfaceEventListCard[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
   {
     userRole: 'USER',
@@ -136,6 +140,8 @@ export const props: InterfaceEventListCard[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
   {
     userRole: 'ADMIN',
@@ -165,6 +171,8 @@ export const props: InterfaceEventListCard[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
   {
     userRole: 'ADMIN',
@@ -194,5 +202,7 @@ export const props: InterfaceEventListCard[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
 ];

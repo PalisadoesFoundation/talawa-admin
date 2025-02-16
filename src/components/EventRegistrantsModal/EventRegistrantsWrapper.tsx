@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EventRegistrantsModal } from './EventRegistrantsModal';
+import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
 import style from '../../style/app.module.css';
 

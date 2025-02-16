@@ -1,4 +1,4 @@
-import type { User } from '../user';
+import type { User } from '../User/type';
 import type { DefaultConnectionPageInfo } from '../pagination';
 import type { URL } from 'url';
 
