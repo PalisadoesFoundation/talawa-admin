@@ -11,8 +11,9 @@ import {
 } from '@mui/material';
 import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app.module.css';
-import { CustomTableCell } from './customTableCell';
+import styles from '../../../style/app.module.css';
+import { CustomTableCell } from './CustomCell/customTableCell';
+import type { InterfaceEvent } from 'types/Event/interface';
 /**
  * Modal component to display paginated list of events attended by a member
  * @param eventsAttended - Array of events attended by the member
@@ -21,16 +22,9 @@ import { CustomTableCell } from './customTableCell';
  * @param eventsPerPage - Number of events to display per page
  * @returns Modal component with paginated events list
  */
-interface InterfaceEvent {
-  _id: string;
-  name: string;
-  date: string;
-  isRecurring: boolean;
-  attendees: number;
-}
 
 interface InterfaceEventsAttendedMemberModalProps {
-  eventsAttended: InterfaceEvent[];
+  eventsAttended: Partial<InterfaceEvent>[];
   setShow: (show: boolean) => void;
   show: boolean;
   eventsPerPage?: number;
@@ -101,7 +95,10 @@ const EventsAttendedMemberModal: React.FC<
                 </TableHead>
                 <TableBody>
                   {paginatedEvents.map((event) => (
-                    <CustomTableCell key={event._id} eventId={event._id} />
+                    <CustomTableCell
+                      key={event._id ?? ''}
+                      eventId={event._id ?? ''}
+                    />
                   ))}
                 </TableBody>
               </Table>

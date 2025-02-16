@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/MemberActivity/EventsAttendedMemberModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/EventsAttendedMemberModal.tsx#L39)
+Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx#L33)
 
 ## Parameters
 

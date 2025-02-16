@@ -20,7 +20,7 @@ vi.mock('react-i18next', () => ({
  * Mock the `CustomTableCell` component for testing.
  */
 
-vi.mock('./customTableCell', () => ({
+vi.mock('./CustomCell/customTableCell', () => ({
   CustomTableCell: ({ eventId }: { eventId: string }) => (
     <tr data-testid="event-row">
       <td>{`Event ${eventId}`}</td>
@@ -36,7 +36,13 @@ const mockEvents = Array.from({ length: 6 }, (_, index) => ({
   name: `Event ${index + 1}`,
   date: '2024-03-14',
   isRecurring: true,
-  attendees: 5,
+  attendees: [
+    { _id: '1' },
+    { _id: '2' },
+    { _id: '3' },
+    { _id: '4' },
+    { _id: '5' },
+  ],
 }));
 
 describe('EventsAttendedMemberModal', () => {

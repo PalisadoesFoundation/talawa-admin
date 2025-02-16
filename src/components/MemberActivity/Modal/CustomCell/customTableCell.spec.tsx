@@ -5,48 +5,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { CustomTableCell } from './customTableCell';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
+import { mocks } from '../../MemberActivityMocks';
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
 }));
-
-const mocks = [
-  {
-    request: {
-      query: EVENT_DETAILS,
-      variables: { id: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          _id: 'event123',
-          title: 'Test Event',
-          description: 'This is a test event description',
-          startDate: '2023-05-01',
-          endDate: '2023-05-02',
-          startTime: '09:00:00',
-          endTime: '17:00:00',
-          allDay: false,
-          location: 'Test Location',
-          recurring: true,
-          baseRecurringEvent: {
-            _id: 'recurringEvent123',
-          },
-          organization: {
-            _id: 'org456',
-            members: [
-              { _id: 'member1', firstName: 'John', lastName: 'Doe' },
-              { _id: 'member2', firstName: 'Jane', lastName: 'Smith' },
-            ],
-          },
-          attendees: [{ _id: 'user1' }, { _id: 'user2' }],
-        },
-      },
-    },
-  },
-];
 
 describe('CustomTableCell', () => {
   it('renders event details correctly', async () => {
@@ -67,7 +32,7 @@ describe('CustomTableCell', () => {
     expect(screen.getByText('Test Event')).toBeInTheDocument();
     expect(
       screen.getByText(
-        new Date('2023-05-01').toLocaleDateString(undefined, {
+        new Date('2023-01-01').toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -79,7 +44,7 @@ describe('CustomTableCell', () => {
     expect(screen.getByText('2')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Test Event' });
-    expect(link).toHaveAttribute('href', '/event/org456/event123');
+    expect(link).toHaveAttribute('href', '/event/org123/event123');
   });
 
   it('displays loading state', () => {

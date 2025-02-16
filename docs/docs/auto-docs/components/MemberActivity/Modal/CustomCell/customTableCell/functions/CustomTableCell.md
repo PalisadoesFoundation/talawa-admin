@@ -6,7 +6,7 @@
 
 > **CustomTableCell**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/MemberActivity/customTableCell.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/customTableCell.tsx#L13)
+Defined in: [src/components/MemberActivity/Modal/CustomCell/customTableCell.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/CustomCell/customTableCell.tsx#L13)
 
 Custom table cell component to display event details
 

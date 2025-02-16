@@ -14,7 +14,7 @@ import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import EventsAttendedByMember from '../../components/MemberActivity/EventsAttendedByMember';
-import MemberAttendedEventsModal from '../../components/MemberActivity/EventsAttendedMemberModal';
+import MemberAttendedEventsModal from '../../components/MemberActivity/Modal/EventsAttendedMemberModal';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import convertToBase64 from 'utils/convertToBase64';
