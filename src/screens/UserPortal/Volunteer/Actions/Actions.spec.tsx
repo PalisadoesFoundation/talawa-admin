@@ -219,7 +219,7 @@ describe('Testing Actions Screen', () => {
         const assigneeName = screen.getAllByTestId('assigneeName');
         expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
       },
-      { timeout: 2500 },
+      { timeout: 2000 },
     );
   });
 
