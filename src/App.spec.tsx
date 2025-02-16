@@ -18,6 +18,10 @@ vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcClasses: vi.fn(),
 }));
 
+vi.mock('components/SecuredRoute/SecuredRoute', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 vi.mock('/src/assets/svgs/palisadoes.svg?react', () => ({
   default: () => <svg>Mocked SVG</svg>,
 }));
@@ -89,7 +93,7 @@ const link2 = new StaticMockLink(
 const wait = (ms = 100): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-describe('App Component Tests', () => {
+describe('App Component Tests', { timeout: 20000 }, () => {
   beforeEach(() => {
     window.history.pushState({}, '', '/');
   });

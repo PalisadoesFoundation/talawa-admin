@@ -20,22 +20,24 @@ import {
 const { setItem } = useLocalStorage();
 
 const link = new ApolloLink((operation, forward) => {
-  // Mock responses based on the operation
   if (operation.operationName === 'VERIFY_ROLE') {
     return new Observable((observer) => {
-      // Simulate different authorization scenarios
       observer.next({
         data: {
           verifyRole: {
-            isAuthorized: true, // or false for different test cases
-            role: 'ADMIN', // or other roles
+            isAuthorized: true,
+            role: 'ADMIN',
           },
         },
       });
       observer.complete();
     });
   }
-  return forward(operation);
+
+  // Ensure other operations are forwarded
+  return forward
+    ? forward(operation)
+    : new Observable((subscriber) => subscriber.complete());
 });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
