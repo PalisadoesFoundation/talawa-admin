@@ -135,7 +135,7 @@ function app(): JSX.Element {
   // const appRoutes = useSelector((state: RootState) => state.appRoutes);
   // const { components } = appRoutes;
 
-  // TODO: Fetch Installed plugin extras and store for use within MainContent and Side Panel Components.
+  // TODO: Fetch Installed plugin extras and store for use within the MainContent and Side Panel Components.
 
   const { data, loading } = useQuery(CHECK_AUTH);
 
