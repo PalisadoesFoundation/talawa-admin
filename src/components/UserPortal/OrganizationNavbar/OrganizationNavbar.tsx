@@ -140,7 +140,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
         console.log(`Plugin ${pluginName} is not present.`);
       }
     } else {
-      /* istanbul ignore else -- @preserve */
       if (pluginIndexToRemove != -1) {
         plugins[pluginIndexToRemove].view = true;
         setItem('talawaPlugins', JSON.stringify(plugins));

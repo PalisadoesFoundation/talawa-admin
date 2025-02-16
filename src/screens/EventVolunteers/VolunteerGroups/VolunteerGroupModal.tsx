@@ -246,26 +246,23 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               getOptionLabel={(member: InterfaceUserInfo): string =>
                 `${member.firstName} ${member.lastName}`
               }
-              onChange={
-                /*istanbul ignore next*/
-                (_, newLeader): void => {
-                  if (newLeader) {
-                    setFormState({
-                      ...formState,
-                      leader: newLeader,
-                      volunteerUsers: [...volunteerUsers, newLeader],
-                    });
-                  } else {
-                    setFormState({
-                      ...formState,
-                      leader: null,
-                      volunteerUsers: volunteerUsers.filter(
-                        (user) => user._id !== leader?._id,
-                      ),
-                    });
-                  }
+              onChange={(_, newLeader): void => {
+                if (newLeader) {
+                  setFormState({
+                    ...formState,
+                    leader: newLeader,
+                    volunteerUsers: [...volunteerUsers, newLeader],
+                  });
+                } else {
+                  setFormState({
+                    ...formState,
+                    leader: null,
+                    volunteerUsers: volunteerUsers.filter(
+                      (user) => user._id !== leader?._id,
+                    ),
+                  });
                 }
-              }
+              }}
               renderInput={(params) => (
                 <TextField {...params} label="Leader *" />
               )}
@@ -287,15 +284,12 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                 `${member.firstName} ${member.lastName}`
               }
               disabled={mode === 'edit'}
-              onChange={
-                /*istanbul ignore next*/
-                (_, newUsers): void => {
-                  setFormState({
-                    ...formState,
-                    volunteerUsers: newUsers,
-                  });
-                }
-              }
+              onChange={(_, newUsers): void => {
+                setFormState({
+                  ...formState,
+                  volunteerUsers: newUsers,
+                });
+              }}
               renderInput={(params) => (
                 <TextField {...params} label="Invite Volunteers *" />
               )}
