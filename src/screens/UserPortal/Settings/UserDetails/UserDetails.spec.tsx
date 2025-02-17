@@ -3,7 +3,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
-import { MOCKS, MOCKS1, MOCKS2, updateMock } from '../SettingsMocks';
+import { MOCKS, MOCKS1, MOCKS2, UPDATE_MOCK } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
 
 // Mock the dependencies
@@ -125,7 +125,7 @@ describe('UserDetailsForm', () => {
 
   it('handles form submission correctly', async () => {
     render(
-      <MockedProvider mocks={updateMock} addTypename={false}>
+      <MockedProvider mocks={UPDATE_MOCK} addTypename={false}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
