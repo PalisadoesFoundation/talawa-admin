@@ -2,7 +2,7 @@ import React from 'react';
 import { Hidden, TablePagination } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import Pagination from '../Pagination/Pagination';
+import Pagination from '../Navigator/Pagination';
 import './PaginationList.css';
 
 interface InterfacePropsInterface {
