@@ -55,7 +55,7 @@ export const MOCKS1 = [
           avatarURL: 'http://example.com/avatar.jpg',
           birthDate: '2000-01-01',
           city: 'nyc',
-          countryCode: 'bb',
+          countryCode: 'in',
           createdAt: '2025-02-06T03:10:50.254',
           description: 'This is a description',
           educationGrade: 'grade_8',
@@ -121,13 +121,13 @@ export const MOCKS2 = [
   },
 ];
 
-export const updateMock = [
+export const UPDATE_MOCK = [
   {
     request: {
       query: UPDATE_CURRENT_USER_MUTATION,
       variables: {
         input: {
-          name: 'Bandhan Majumder', // This is the only field being changed in test
+          name: 'Bandhan Majumder',
         },
       },
     },
