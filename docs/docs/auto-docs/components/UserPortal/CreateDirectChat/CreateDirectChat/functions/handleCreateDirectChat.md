@@ -16,7 +16,7 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:70]
 
 ### chats
 
-[`Chat`](../../../../../screens/UserPortal/Chat/Chat/type-aliases/Chat.md)[]
+[`GroupChat`](../../../../../types/Chat/type/type-aliases/GroupChat.md)[]
 
 ### t
 

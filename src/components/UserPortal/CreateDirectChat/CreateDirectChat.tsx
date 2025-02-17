@@ -25,9 +25,9 @@ import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from '../../../style/app.module.css';
-import type { Chat } from 'screens/UserPortal/Chat/Chat';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
+import { type GroupChat } from 'types/Chat/type';
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
@@ -38,7 +38,7 @@ interface InterfaceCreateDirectChatProps {
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
-  chats: Chat[];
+  chats: GroupChat[];
 }
 
 /**
@@ -69,7 +69,7 @@ const { getItem } = useLocalStorage();
 
 export const handleCreateDirectChat = async (
   id: string,
-  chats: Chat[],
+  chats: GroupChat[],
   t: TFunction<'translation', 'userChat'>,
   createChat: {
     (

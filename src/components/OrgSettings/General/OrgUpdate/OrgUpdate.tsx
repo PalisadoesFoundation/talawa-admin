@@ -141,7 +141,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           file: formState.orgImage,
         },
       });
-      // istanbul ignore next
+
       if (data) {
         refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
@@ -333,7 +333,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
-              /* istanbul ignore else */
+
               if (file)
                 setFormState({
                   ...formState,

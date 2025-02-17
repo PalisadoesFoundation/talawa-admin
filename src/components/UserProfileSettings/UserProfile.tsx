@@ -5,16 +5,10 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfileSettings.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import type { InterfaceUser } from 'types/User/interface';
 
-interface InterfaceUserProfile {
-  firstName: string;
-  lastName: string;
-  createdAt: string;
-  email: string;
-  image: string;
-}
-const joinedDate = (param: string): string => {
-  const date = new Date(param);
+const joinedDate = (param: string | Date): string => {
+  const date = typeof param === 'string' ? new Date(param) : param;
   if (date?.toDateString() === 'Invalid Date') {
     return 'Unavailable';
   }
@@ -35,7 +29,7 @@ const joinedDate = (param: string): string => {
  * @param image - The URL of the user's profile image.
  * @returns The JSX element for the user profile card.
  */
-const UserProfile: React.FC<InterfaceUserProfile> = ({
+const UserProfile: React.FC<Partial<InterfaceUser>> = ({
   firstName,
   lastName,
   createdAt,
@@ -71,8 +65,8 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
                 data-tooltip-id="name"
                 data-tooltip-content={`${firstName} ${lastName}`}
               >
-                {firstName.length > 10
-                  ? firstName.slice(0, 5) + '..'
+                {firstName && firstName.length > 10
+                  ? firstName?.slice(0, 5) + '..'
                   : firstName}
               </span>
               <ReactTooltip id="name" />
@@ -81,15 +75,15 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
                 data-tooltip-id="email"
                 data-tooltip-content={email}
               >
-                {email.length > 10
-                  ? email.slice(0, 4) + '..' + email.slice(email.indexOf('@'))
+                {email && email.length > 10
+                  ? email?.slice(0, 4) + '..' + email?.slice(email.indexOf('@'))
                   : email}
               </span>
               <ReactTooltip id="email" />
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
-                  {tCommon('joined')} {joinedDate(createdAt)}
+                  {tCommon('joined')} {createdAt && joinedDate(createdAt)}
                 </span>
               </span>
             </div>

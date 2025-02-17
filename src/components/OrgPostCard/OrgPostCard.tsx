@@ -15,8 +15,8 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfacePostForm } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
-import DeletePostModal from './DeletePostModal';
-
+import DeletePostModal from './DeleteModal/DeletePostModal';
+import type { InterfaceOrgPostCardProps } from 'types/Organization/interface';
 /**
  *
  * ## CSS Strategy Explanation:
@@ -40,16 +40,6 @@ import DeletePostModal from './DeletePostModal';
  * For more details on the reusable classes, refer to the global CSS file.
  */
 
-interface InterfaceOrgPostCardProps {
-  postID: string;
-  id: string;
-  postTitle: string;
-  postInfo: string;
-  postAuthor: string;
-  postPhoto: string | null;
-  postVideo: string | null;
-  pinned: boolean;
-}
 export default function OrgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {

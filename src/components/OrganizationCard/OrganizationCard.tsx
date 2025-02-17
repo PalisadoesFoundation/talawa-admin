@@ -18,34 +18,7 @@ import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { ApolloError } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-interface InterfaceOrganizationCardProps {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  admins: {
-    id: string;
-  }[];
-  members: {
-    id: string;
-  }[];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    _id: string;
-    user: {
-      _id: string;
-    };
-  }[];
-  isJoined: boolean;
-}
+import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 /**
  * Component to display an organization's card with its image and owner details.
  * Displays an organization card with options to join or manage membership.

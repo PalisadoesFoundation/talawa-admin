@@ -15,8 +15,8 @@ import {
   genderEnum,
   maritalStatusEnum,
 } from 'utils/formEnumFields';
-import DeleteUser from 'components/UserProfileSettings/DeleteUser';
-import OtherSettings from 'components/UserProfileSettings/OtherSettings';
+import DeleteUser from 'components/UserProfileSettings/Delete/DeleteUser';
+import OtherSettings from 'components/UserProfileSettings/OtherSetting/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import Avatar from 'components/Avatar/Avatar';

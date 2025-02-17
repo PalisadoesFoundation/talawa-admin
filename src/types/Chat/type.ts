@@ -1,5 +1,5 @@
 import type { User } from '../User/type';
-import type { Organization } from '../organization';
+import type { Organization } from 'types/Organization/type';
 
 export type DirectMessage = {
   _id: string;

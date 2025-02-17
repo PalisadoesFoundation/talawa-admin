@@ -11,30 +11,7 @@ import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
-
-interface InterfaceEventCardProps {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  isRegisterable: boolean;
-  isPublic: boolean;
-  endTime: string;
-  startTime: string;
-  recurring: boolean;
-  allDay: boolean;
-  creator: {
-    firstName: string;
-    lastName: string;
-    id: string;
-  };
-  registrants: {
-    id: string;
-  }[];
-}
-
+import type { InterfaceEvent } from 'types/Event/interface';
 /**
  * Displays information about an event and provides an option to register for it.
  *
@@ -56,11 +33,11 @@ interface InterfaceEventCardProps {
  * @param recurring - Indicates if the event is recurring.
  * @param allDay - Indicates if the event lasts all day.
  * @param creator - The creator of the event with their name and ID.
- * @param registrants - A list of registrants with their IDs.
+ * @param attendees - A list of attendees with their IDs.
  *
  * @returns The event card component.
  */
-function eventCard(props: InterfaceEventCardProps): JSX.Element {
+function eventCard(props: InterfaceEvent): JSX.Element {
   // Extract the translation functions
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
@@ -75,8 +52,8 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
 
   // Check if the user is initially registered for the event
-  const isInitiallyRegistered = props.registrants.some(
-    (registrant) => registrant.id === userId,
+  const isInitiallyRegistered = props.attendees.some(
+    (attendee) => attendee._id === userId,
   );
 
   // Set up the mutation for registering for the event
@@ -93,7 +70,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       try {
         const { data } = await registerEventMutation({
           variables: {
-            eventId: props.id,
+            eventId: props._id,
           },
         });
         if (data) {
