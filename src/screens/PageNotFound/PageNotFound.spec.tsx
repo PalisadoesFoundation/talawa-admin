@@ -33,11 +33,15 @@ const link = new ApolloLink((operation, forward) => {
       observer.complete();
     });
   }
-
-  // Ensure other operations are forwarded
+  if (!forward) {
+    console.warn('Last test link: Apollo link ended with last link');
+  }
   return forward
     ? forward(operation)
-    : new Observable((subscriber) => subscriber.complete());
+    : new Observable((subscribe) => {
+        subscribe.next({ data: {} });
+        subscribe.complete();
+      });
 });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
