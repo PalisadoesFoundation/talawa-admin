@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 
-import OrganizationEvents from '../../screens/OrganizationEvents/OrganizationEvents';
+import OrganizationEvents from '../../../screens/OrganizationEvents/OrganizationEvents';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
@@ -21,7 +21,7 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MOCKS } from '../../screens/OrganizationEvents/OrganizationEventsMocks';
+import { MOCKS } from '../../../screens/OrganizationEvents/OrganizationEventsMocks';
 import { describe, test, expect, vi } from 'vitest';
 
 const theme = createTheme({

@@ -6,3 +6,12 @@ export interface InterfaceMemberRequestCardProps {
   memberImage: string; // URL for the member's image
   email: string; // Email of the member
 }
+
+export interface InterfaceRequestsListItem {
+  _id: string;
+  user: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
