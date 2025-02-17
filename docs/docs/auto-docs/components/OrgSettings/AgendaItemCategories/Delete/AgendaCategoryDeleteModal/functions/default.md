@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgSettings/AgendaItemCategories/AgendaCategoryDeleteModal.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/AgendaItemCategories/AgendaCategoryDeleteModal.tsx#L25)
+Defined in: [src/components/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal.tsx#L25)
 
 AgendaCategoryDeleteModal component is used to delete the agenda category
 

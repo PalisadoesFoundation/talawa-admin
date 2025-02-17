@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/CategoryModal.tsx#L41)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L41)
 
 A modal component for creating and editing action item categories.
 

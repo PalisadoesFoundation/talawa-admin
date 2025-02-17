@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import type { ApolloLink } from '@apollo/client';
-import { MOCKS, MOCKS_ERROR } from './OrgActionItemCategoryMocks';
+import { MOCKS, MOCKS_ERROR } from '../OrgActionItemCategoryMocks';
 import type { InterfaceActionItemCategoryModal } from './CategoryModal';
 import CategoryModal from './CategoryModal';
 import { toast } from 'react-toastify';
