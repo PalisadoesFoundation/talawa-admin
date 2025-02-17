@@ -20,6 +20,20 @@ interface InterfaceLocalStorageMock {
   getItem: ReturnType<typeof vi.fn>;
 }
 
+interface InterfaceHeaders {
+  authorization: string;
+  'Accept-Language': string;
+}
+
+interface InterfaceErrorCallbackParams {
+  networkError: Error;
+}
+
+// Load test environment variables
+const getTestToken = (): string => process.env.VITE_TEST_AUTH_TOKEN || '';
+const getTestExpiredToken = (): string =>
+  process.env.VITE_TEST_EXPIRED_TOKEN || '';
+
 // Mock external dependencies
 vi.mock('react-toastify', (): { toast: InterfaceToastMock } => ({
   toast: {
@@ -27,11 +41,30 @@ vi.mock('react-toastify', (): { toast: InterfaceToastMock } => ({
   },
 }));
 
-vi.mock('utils/useLocalstorage', () => ({
-  default: (): { getItem: InterfaceLocalStorageMock['getItem'] } => ({
-    getItem: vi.fn(() => 'mock-token'),
-  }),
-}));
+// Create a factory function for localStorage mock that uses environment variables
+const createLocalStorageMock = (
+  tokenType: 'valid' | 'expired' | 'empty' = 'valid',
+): ReturnType<typeof vi.mock> => {
+  let token = '';
+
+  switch (tokenType) {
+    case 'valid':
+      token = getTestToken();
+      break;
+    case 'expired':
+      token = getTestExpiredToken();
+      break;
+    case 'empty':
+      token = '';
+      break;
+  }
+
+  return vi.mock('utils/useLocalstorage', () => ({
+    default: (): { getItem: InterfaceLocalStorageMock['getItem'] } => ({
+      getItem: vi.fn(() => token),
+    }),
+  }));
+};
 
 vi.mock('./utils/i18n', () => ({
   default: {
@@ -42,17 +75,19 @@ vi.mock('./utils/i18n', () => ({
 describe('Apollo Client Configuration', () => {
   beforeEach((): void => {
     vi.clearAllMocks();
+    // Reset localStorage mock with default test token
+    createLocalStorageMock('valid');
   });
 
   it('should create an Apollo Client with correct configuration', (): void => {
     const client = new ApolloClient({
       cache: new InMemoryCache(),
       link: ApolloLink.from([
-        vi.fn() as unknown as ApolloLink, // errorLink
-        vi.fn() as unknown as ApolloLink, // authLink
+        vi.fn() as unknown as ApolloLink,
+        vi.fn() as unknown as ApolloLink,
         requestMiddleware,
         responseMiddleware,
-        vi.fn() as unknown as ApolloLink, // splitLink
+        vi.fn() as unknown as ApolloLink,
       ]),
     });
 
@@ -81,49 +116,76 @@ describe('Apollo Client Configuration', () => {
     expect(wsLink).toBeDefined();
   });
 
-  it('should add authorization header with token', (): void => {
-    interface InterfaceHeaders {
-      authorization: string;
-      'Accept-Language': string;
-    }
+  describe('Authorization Headers', () => {
+    it('should add valid authorization header with token', (): void => {
+      createLocalStorageMock('valid');
+      const testToken = getTestToken();
 
-    const context: { headers: InterfaceHeaders } = {
-      headers: {
-        authorization: 'Bearer mock-token',
-        'Accept-Language': 'en',
-      },
-    };
+      const context: { headers: InterfaceHeaders } = {
+        headers: {
+          authorization: `Bearer ${testToken}`,
+          'Accept-Language': 'en',
+        },
+      };
 
-    expect(context.headers.authorization).toContain('Bearer');
-    expect(context.headers['Accept-Language']).toBe(i18n.language);
+      expect(context.headers.authorization).toContain('Bearer');
+      expect(context.headers.authorization).toBe(`Bearer ${testToken}`);
+      expect(context.headers['Accept-Language']).toBe(i18n.language);
+    });
+
+    it('should handle expired token', (): void => {
+      createLocalStorageMock('expired');
+      const expiredToken = getTestExpiredToken();
+
+      const context: { headers: InterfaceHeaders } = {
+        headers: {
+          authorization: `Bearer ${expiredToken}`,
+          'Accept-Language': 'en',
+        },
+      };
+
+      expect(context.headers.authorization).toContain('Bearer');
+      expect(context.headers.authorization).toBe(`Bearer ${expiredToken}`);
+    });
+
+    it('should handle missing token', (): void => {
+      createLocalStorageMock('empty');
+
+      const context: { headers: InterfaceHeaders } = {
+        headers: {
+          authorization: '',
+          'Accept-Language': 'en',
+        },
+      };
+
+      expect(context.headers.authorization).toBe('');
+    });
   });
 
-  it('should handle network errors correctly', (): void => {
-    interface InterfaceErrorCallbackParams {
-      networkError: Error;
-    }
+  describe('Error Handling', () => {
+    it('should handle network errors correctly', (): void => {
+      const errorCallback = ({
+        networkError,
+      }: InterfaceErrorCallbackParams): void => {
+        if (networkError) {
+          toast.error(
+            'API server unavailable. Check your connection or try again later',
+            {
+              toastId: 'apiServer',
+            },
+          );
+        }
+      };
 
-    const errorCallback = ({
-      networkError,
-    }: InterfaceErrorCallbackParams): void => {
-      if (networkError) {
-        toast.error(
-          'API server unavailable. Check your connection or try again later',
-          {
-            toastId: 'apiServer',
-          },
-        );
-      }
-    };
+      const mockNetworkError = new Error('Network Error');
+      errorCallback({ networkError: mockNetworkError });
 
-    const mockNetworkError = new Error('Network Error');
-    errorCallback({ networkError: mockNetworkError });
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'API server unavailable. Check your connection or try again later',
-      {
-        toastId: 'apiServer',
-      },
-    );
+      expect(toast.error).toHaveBeenCalledWith(
+        'API server unavailable. Check your connection or try again later',
+        {
+          toastId: 'apiServer',
+        },
+      );
+    });
   });
 });
