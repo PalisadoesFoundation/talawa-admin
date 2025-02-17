@@ -60,9 +60,7 @@ export default function Settings(): JSX.Element {
   // Handle window resize
   useEffect(() => {
     const handleResize = (): void => {
-      if (window.innerWidth <= 820) {
-        setHideDrawer((prev) => !prev);
-      }
+      setHideDrawer(window.innerWidth <= 820);
     };
 
     handleResize();
@@ -226,11 +224,15 @@ export default function Settings(): JSX.Element {
   // Reset the changes of form fields
   const handleResetChanges = (): void => {
     setIsUpdated(false);
+    setSelectedAvatar(null);
     if (data?.currentUser) {
       setUserDetails({
         ...data.currentUser,
         avatar: originalImageState.current,
       });
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 

@@ -102,6 +102,8 @@ type AggregateUser {
 
 scalar Any
 
+scalar Iso639Set1LanguageCode
+
 type AppUserProfile {
   _id: ID!
   adminFor: [Organization]
