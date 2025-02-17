@@ -6,4 +6,4 @@
 
 > `const` **UserConnectionListMock**: `InterfaceGQLMock`[]
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts:196](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts#L196)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts#L194)
