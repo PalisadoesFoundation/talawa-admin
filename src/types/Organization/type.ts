@@ -3,7 +3,7 @@ import type { User } from '../User/type';
 import type { ActionItemCategory } from '../actionItem';
 import type { AgendaCategory } from '../Agenda/type';
 import type { MembershipRequest } from '../membership';
-import type { Post } from '../post';
+import type { Post } from '../Post/type';
 import type { Venue } from '../venue';
 
 // export const OrganizationOrderByInput = {

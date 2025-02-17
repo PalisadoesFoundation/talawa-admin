@@ -72,9 +72,9 @@ Defined in: [src/types/Organization/interface.ts:4](https://github.com/Palisadoe
 
 ***
 
-### isJoined
+### isJoined?
 
-> **isJoined**: `boolean`
+> `optional` **isJoined**: `boolean`
 
 Defined in: [src/types/Organization/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L27)
 

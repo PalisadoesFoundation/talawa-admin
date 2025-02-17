@@ -16,7 +16,7 @@ import {
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
-
+import type { GroupChat } from 'types/Chat/type';
 interface InterfaceContactCardProps {
   id: string;
   title: string;
@@ -54,58 +54,13 @@ interface InterfaceContactCardProps {
  * @returns  The rendered `chat` component.
  */
 
-type DirectMessage = {
-  _id: string;
-  createdAt: Date;
-  sender: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string;
-  };
-  replyTo:
-    | {
-        _id: string;
-        createdAt: Date;
-        sender: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          image: string;
-        };
-        messageContent: string;
-        receiver: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-        };
-      }
-    | undefined;
-  messageContent: string;
-};
-
-export type Chat = {
-  _id: string;
-  isGroup: boolean;
-  name: string;
-  image: string;
-  messages: DirectMessage[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    image: string;
-  }[];
-  unseenMessagesByUsers: string;
-};
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [chats, setChats] = useState<Chat[]>([]);
+  const [chats, setChats] = useState<GroupChat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
   const { getItem } = useLocalStorage();
@@ -282,19 +237,19 @@ export default function chat(): JSX.Element {
                     className={styles.contactCardContainer}
                   >
                     {!!chats.length &&
-                      chats.map((chat: Chat) => {
+                      chats.map((chat: GroupChat) => {
                         const cardProps: InterfaceContactCardProps = {
                           id: chat._id,
                           title: !chat.isGroup
                             ? chat.users[0]?._id === userId
-                              ? `${chat.users[1]?.firstName} ${chat.users[1]?.lastName}`
-                              : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
-                            : chat.name,
+                              ? `${chat.users[1]?.firstName ?? ''} ${chat.users[1]?.lastName ?? ''}`
+                              : `${chat.users[0]?.firstName ?? ''} ${chat.users[0]?.lastName ?? ''}`
+                            : (chat.name ?? ''),
                           image: chat.isGroup
-                            ? chat.image
+                            ? (chat.image ?? '')
                             : userId
-                              ? chat.users[1]?.image
-                              : chat.users[0]?.image,
+                              ? (chat.users[1]?.image ?? '')
+                              : (chat.users[0]?.image ?? ''),
                           setSelectedContact,
                           selectedContact,
                           isGroup: chat.isGroup,

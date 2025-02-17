@@ -72,7 +72,7 @@ Defined in: [src/types/Organization/type.ts:24](https://github.com/PalisadoesFou
 
 ### pinnedPosts?
 
-> `optional` **pinnedPosts**: [`Post`](../../../post/type-aliases/Post.md)[]
+> `optional` **pinnedPosts**: [`Post`](../../../Post/type/type-aliases/Post.md)[]
 
 ### updatedAt
 

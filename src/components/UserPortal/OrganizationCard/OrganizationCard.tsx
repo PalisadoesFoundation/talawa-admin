@@ -19,34 +19,7 @@ import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 
 const { getItem } = useLocalStorage();
-
-interface InterfaceOrganizationCardProps {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  admins: {
-    id: string;
-  }[];
-  members: {
-    id: string;
-  }[];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    _id: string;
-    user: {
-      _id: string;
-    };
-  }[];
-}
+import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 
 /**
  * Displays an organization card with options to join or manage membership.

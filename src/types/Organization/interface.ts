@@ -24,7 +24,7 @@ export interface InterfaceOrganizationCardProps {
       _id: string;
     };
   }[];
-  isJoined: boolean;
+  isJoined?: boolean;
 }
 
 export interface InterfaceOrgPeopleListCardProps {
