@@ -20,16 +20,18 @@ import { handleCreateDirectChat } from './CreateDirectChat';
 import type { TFunction } from 'i18next';
 import type { ApolloQueryResult, FetchResult } from '@apollo/client';
 import {
-  GROUP_CHAT_BY_ID_QUERY_MOCK,
   MESSAGE_SENT_TO_CHAT_MOCK,
-  UserConnectionListMock,
-  CHATS_LIST_MOCK,
   CHAT_BY_ID_QUERY_MOCK,
-  CREATE_CHAT_MUTATION_MOCK,
-  MARK_CHAT_MESSAGES_AS_READ_MOCK,
   UNREAD_CHAT_LIST_QUERY_MOCK,
   GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
+  UserConnectionListMock,
 } from './CreateDirectChatMocks';
+import {
+  GROUP_CHAT_BY_ID_QUERY_MOCK,
+  CHATS_LIST_MOCK,
+  CREATE_CHAT_MUTATION_MOCK,
+  MARK_CHAT_MESSAGES_AS_READ_MOCK,
+} from './CreateDirectChatMocks2';
 const { setItem } = useLocalStorage();
 
 /**
