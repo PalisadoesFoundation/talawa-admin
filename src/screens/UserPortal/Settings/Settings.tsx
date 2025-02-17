@@ -8,7 +8,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
-import OtherSettings from 'components/UserProfileSettings/OtherSettings';
+import OtherSettings from 'components/UserProfileSettings/OtherSetting/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { urlToFile } from 'utils/urlToFile';
 import SidebarToggle from './SideToggle/SideToggle';
