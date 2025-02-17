@@ -76,7 +76,6 @@ describe('Testing Volunteer Container', () => {
   });
 
   it('Testing Volunteer Container Screen -> Toggle screens', async () => {
-    const user = userEvent.setup();
     mockedUseParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
 
     renderVolunteerContainer();
@@ -86,10 +85,10 @@ describe('Testing Volunteer Container', () => {
     const requestsLabel = await screen.findByTestId('requestsRadio');
 
     expect(await screen.findByTestId('individualRadio')).toBeInTheDocument();
-    await user.click(groupsLabel);
+    await userEvent.click(groupsLabel);
     expect(await screen.findByTestId('groupsRadio')).toBeInTheDocument();
-    await user.click(requestsLabel);
+    await userEvent.click(requestsLabel);
     expect(await screen.findByTestId('requestsRadio')).toBeInTheDocument();
-    await user.click(individualLabel);
+    await userEvent.click(individualLabel);
   });
 });
