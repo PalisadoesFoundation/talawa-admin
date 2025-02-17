@@ -289,16 +289,18 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   // Delete the post
-  const handleDeletePost = (): void => {
+  const handleDeletePost = async (): Promise<void> => {
     try {
-      deletePost({
+      const { data: createEventData } = await deletePost({
         variables: {
           id: props.id,
         },
       });
 
-      props.fetchPosts(); // Refresh the posts
-      toast.success('Successfully deleted the Post.');
+      if (createEventData) {
+        props.fetchPosts(); // Refresh the posts
+        toast.success('Successfully deleted the Post.');
+      }
     } catch (error: unknown) {
       errorHandler(t, error);
     }
