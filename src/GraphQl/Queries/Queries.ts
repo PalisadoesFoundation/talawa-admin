@@ -978,7 +978,7 @@ export const GET_COMMUNITY_DATA = gql`
 `;
 
 export const SIGNIN_QUERY = gql`
-  query SignIn($email: String!, $password: String!) {
+  query SignIn($email: EmailAddress!, $password: String!) {
     signIn(input: { emailAddress: $email, password: $password }) {
       user {
         id

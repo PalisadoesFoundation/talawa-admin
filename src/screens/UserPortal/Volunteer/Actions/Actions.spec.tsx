@@ -40,7 +40,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const debounceWait = async (ms = 300): Promise<void> => {
+const debounceWait = async (ms = 250): Promise<void> => {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -219,7 +219,7 @@ describe('Testing Actions Screen', () => {
         const assigneeName = screen.getAllByTestId('assigneeName');
         expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
       },
-      { timeout: 10000 },
+      { timeout: 2500 },
     );
   });
 
