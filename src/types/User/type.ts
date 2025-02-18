@@ -1,4 +1,4 @@
-import type { Organization } from '../organization';
+import type { Organization } from 'types/Organization/type';
 // types/user.ts
 
 export type User = {

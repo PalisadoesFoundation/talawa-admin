@@ -2,38 +2,32 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styles from '../../style/app.module.css';
-import { languages } from 'utils/languages';
-import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
+import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
-import { Card, Row, Col } from 'react-bootstrap';
+import { Card, Row, Col, Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import EventsAttendedByMember from '../../components/MemberDetail/EventsAttendedByMember';
-import MemberAttendedEventsModal from '../../components/MemberDetail/EventsAttendedMemberModal';
+import MemberAttendedEventsModal from 'components/MemberActivity/Modal/EventsAttendedMemberModal';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import convertToBase64 from 'utils/convertToBase64';
-import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
 import {
+  countryOptions,
   educationGradeEnum,
   maritalStatusEnum,
   genderEnum,
   employmentStatusEnum,
 } from 'utils/formEnumFields';
+import dayjs from 'dayjs';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
-import type { InterfaceEvent } from 'types/Event/interface';
-import type { InterfaceTagData } from 'utils/interfaces';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import UnassignUserTagModal from 'screens/ManageTag/UnassignUserTagModal';
-import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
+import { urlToFile } from 'utils/urlToFile';
+import { validatePassword } from 'utils/passwordValidator';
+import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 
 type MemberDetailProps = {
   id?: string;
@@ -41,8 +35,8 @@ type MemberDetailProps = {
 
 /**
  * MemberDetail component is used to display the details of a user.
- * It also allows the user to update the details. It uses the UPDATE_USER_MUTATION to update the user details.
- * It uses the USER_DETAILS query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
+ * It also allows the user to update the details. It uses the UPDATE_CURRENT_USER_MUTATION to update the user details.
+ * It uses the CURRENT_USER query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
  * @param id - The id of the user whose details are to be displayed.
  * @returns  React component
  *
@@ -57,81 +51,50 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
   const [show, setShow] = useState(false);
-  const currentUrl = location.state?.id || getItem('id') || id;
-
-  const { orgId } = useParams();
-  const navigate = useNavigate();
-
-  const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
-    useState(false);
+  const [isUpdated, setisUpdated] = useState(false);
+  const currentId = location.state?.id || getItem('id') || id;
+  const originalImageState = React.useRef<string>('');
+  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
 
   document.title = t('title');
-  const [formState, setFormState] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    appLanguageCode: '',
-    image: '',
-    gender: '',
-    birthDate: '2024-03-14',
-    grade: '',
-    empStatus: '',
-    maritalStatus: '',
-    phoneNumber: '',
-    address: '',
-    state: '',
-    city: '',
-    country: '',
-    pluginCreationAllowed: false,
-  });
-  const handleDateChange = (date: Dayjs | null): void => {
-    if (date) {
-      console.log('formated', dayjs(date).format('YYYY-MM-DD'));
-      setisUpdated(true);
-      setFormState((prevState) => ({
-        ...prevState,
-        birthDate: dayjs(date).format('YYYY-MM-DD'),
-      }));
-    }
-  };
 
-  const handleEditIconClick = (): void => {
-    fileInputRef.current?.click();
-  };
-  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  const {
-    data: user,
-    loading,
-    refetch: refetchUserDetails,
-    fetchMore: fetchMoreAssignedTags,
-  } = useQuery(USER_DETAILS, {
-    variables: { id: currentUrl, first: TAGS_QUERY_DATA_CHUNK_SIZE },
+  const [formState, setFormState] = useState({
+    addressLine1: '',
+    addressLine2: '',
+    birthDate: null,
+    emailAddress: '',
+    city: '',
+    avatar: selectedAvatar,
+    avatarURL: '',
+    countryCode: '',
+    description: '',
+    educationGrade: '',
+    employmentStatus: '',
+    homePhoneNumber: '',
+    maritalStatus: '',
+    mobilePhoneNumber: '',
+    name: '',
+    natalSex: '',
+    naturalLanguageCode: '',
+    password: '',
+    postalCode: '',
+    state: '',
+    workPhoneNumber: '',
   });
-  const userData = user?.user;
-  const [isUpdated, setisUpdated] = useState(false);
+
+  // Mutation to update the user details
+  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
+  const { data: userData, loading } = useQuery(CURRENT_USER, {
+    variables: { id: currentId },
+  });
+
   useEffect(() => {
-    if (userData && isMounted.current) {
-      setFormState({
-        ...formState,
-        firstName: userData?.user?.firstName,
-        lastName: userData?.user?.lastName,
-        email: userData?.user?.email,
-        appLanguageCode: userData?.appUserProfile?.appLanguageCode,
-        gender: userData?.user?.gender,
-        birthDate: userData?.user?.birthDate || ' ',
-        grade: userData?.user?.educationGrade,
-        empStatus: userData?.user?.employmentStatus,
-        maritalStatus: userData?.user?.maritalStatus,
-        phoneNumber: userData?.user?.phone?.mobile,
-        address: userData.user?.address?.line1,
-        state: userData?.user?.address?.state,
-        city: userData?.user?.address?.city,
-        country: userData?.user?.address?.countryCode,
-        pluginCreationAllowed: userData?.appUserProfile?.pluginCreationAllowed,
-        image: userData?.user?.image || '',
-      });
+    if (userData?.currentUser) {
+      setFormState(userData.currentUser);
+      originalImageState.current = userData.currentUser.avatarURL || '';
     }
-  }, [userData, user]);
+  }, [userData]);
+
   useEffect(() => {
     // check component is mounted or not
     return () => {
@@ -139,155 +102,142 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     };
   }, []);
 
-  const tagsAssigned =
-    userData?.user?.tagsAssignedWith.edges.map(
-      (edge: { node: InterfaceTagData; cursor: string }) => edge.node,
-    ) ?? [];
+  // Function to handle the click on the edit icon
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target?.files?.[0];
 
-  const loadMoreAssignedTags = (): void => {
-    fetchMoreAssignedTags({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: user?.user?.user?.tagsAssignedWith?.pageInfo?.endCursor ?? null,
-      },
-      updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prevResult;
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      const maxSize = 5 * 1024 * 1024; // 5MB
 
-        return {
-          user: {
-            ...prevResult.user,
-            user: {
-              ...prevResult.user.user,
-              tagsAssignedWith: {
-                edges: [
-                  ...prevResult.user.user.tagsAssignedWith.edges,
-                  ...fetchMoreResult.user.user.tagsAssignedWith.edges,
-                ],
-                pageInfo: fetchMoreResult.user.user.tagsAssignedWith.pageInfo,
-                totalCount: fetchMoreResult.user.user.tagsAssignedWith.pageInfo,
-              },
-            },
-          },
-        };
-      },
-    });
+      if (!validTypes.includes(file.type)) {
+        toast.error('Invalid file type. Please upload a JPEG, PNG, or GIF.');
+        return;
+      }
+
+      if (file.size > maxSize) {
+        toast.error('File is too large. Maximum size is 5MB.');
+        return;
+      }
+
+      // Update all states properly
+      setFormState((prevState) => ({
+        ...prevState,
+        avatar: file,
+      }));
+      setSelectedAvatar(file); // to show the image to the user before updating the avatar
+      setisUpdated(true);
+    }
   };
 
-  const [unassignUserTag] = useMutation(UNASSIGN_USER_TAG);
-  const [unassignTagId, setUnassignTagId] = useState<string | null>(null);
+  // to handle the change in the form fields
+  const handleFieldChange = (fieldName: string, value: string): void => {
+    // future birthdates are not possible to select.
 
-  const handleUnassignUserTag = async (): Promise<void> => {
+    // password validation
+    if (fieldName === 'password' && value) {
+      if (!validatePassword(value)) {
+        toast.error('Password must be at least 8 characters long.');
+        return;
+      }
+    }
+
+    setisUpdated(true);
+    setFormState((prevState) => ({
+      ...prevState,
+      [fieldName]: value,
+    }));
+  };
+
+  // Function to handle the update of the user details
+  const handleUserUpdate = async (): Promise<void> => {
+    // Remove empty fields from the form state
+    function removeEmptyFields<T extends Record<string, string | File | null>>(
+      obj: T,
+    ): Partial<T> {
+      return Object.fromEntries(
+        Object.entries(obj).filter(
+          ([, value]) =>
+            value !== null &&
+            value !== undefined &&
+            (typeof value !== 'string' || value.trim() !== ''),
+        ),
+      ) as Partial<T>;
+    }
+
+    // If no new avatar is selected but there's an avatar URL, convert it to File
+    let avatarFile: File | null = null;
+    if (!selectedAvatar && formState.avatarURL) {
+      try {
+        avatarFile = await urlToFile(formState.avatarURL);
+      } catch (error) {
+        console.log(error);
+        toast.error(
+          'Failed to process profile picture. Please try uploading again.',
+        );
+        return;
+      }
+    }
+
+    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
+      addressLine1: formState.addressLine1,
+      addressLine2: formState.addressLine2,
+      birthDate: formState.birthDate,
+      city: formState.city,
+      countryCode: formState.countryCode,
+      description: formState.description,
+      educationGrade: formState.educationGrade,
+      employmentStatus: formState.employmentStatus,
+      homePhoneNumber: formState.homePhoneNumber,
+      maritalStatus: formState.maritalStatus,
+      mobilePhoneNumber: formState.mobilePhoneNumber,
+      name: formState.name,
+      natalSex: formState.natalSex,
+      naturalLanguageCode: formState.naturalLanguageCode,
+      password: formState.password,
+      postalCode: formState.postalCode,
+      state: formState.state,
+      workPhoneNumber: formState.workPhoneNumber,
+      avatar: selectedAvatar ? selectedAvatar : avatarFile,
+    };
+
+    const input = removeEmptyFields(data);
+
+    // Update the user details
     try {
-      await unassignUserTag({
-        variables: {
-          tagId: unassignTagId,
-          userId: currentUrl,
-        },
+      const { data: updateData } = await updateUser({
+        variables: { input },
       });
 
-      refetchUserDetails();
-      toggleUnassignUserTagModal();
-      toast.success(t('successfullyUnassigned'));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  };
+      if (updateData) {
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+        );
+        setItem('UserImage', updateData.updateCurrentUser.avatarURL);
+        setItem('name', updateData.updateCurrentUser.name);
+        setItem('email', updateData.updateCurrentUser.emailAddress);
+        setItem('id', updateData.updateCurrentUser.id);
+        setItem('role', updateData.updateCurrentUser.role);
+        setSelectedAvatar(null);
 
-  const toggleUnassignUserTagModal = (): void => {
-    if (unassignUserTagModalIsOpen) {
-      setUnassignTagId(null);
-    }
-    setUnassignUserTagModalIsOpen(!unassignUserTagModalIsOpen);
-  };
+        // wait for the toast to complete
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  const handleChange = async (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ): Promise<void> => {
-    const { name, value } = e.target;
-    if (
-      name === 'photo' &&
-      'files' in e.target &&
-      e.target.files &&
-      e.target.files[0]
-    ) {
-      const file = e.target.files[0];
-      const base64 = await convertToBase64(file);
-      setFormState((prevState) => ({
-        ...prevState,
-        image: base64 as string,
-      }));
-    } else {
-      setFormState((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-    setisUpdated(true);
-  };
-  const handleEventsAttendedModal = (): void => {
-    setShow(!show);
-  };
-
-  const loginLink = async (): Promise<void> => {
-    try {
-      const firstName = formState.firstName;
-      const lastName = formState.lastName;
-      const email = formState.email;
-      // const appLanguageCode = formState.appLanguageCode;
-      const image = formState.image;
-      // const gender = formState.gender;
-      try {
-        const { data } = await updateUser({
-          variables: {
-            id: currentUrl,
-            ...formState,
-          },
-        });
-        if (data) {
-          setisUpdated(false);
-          if (getItem('id') === currentUrl) {
-            setItem('FirstName', firstName);
-            setItem('LastName', lastName);
-            setItem('Email', email);
-            setItem('UserImage', image);
-          }
-          toast.success(tCommon('successfullyUpdated') as string);
-        }
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.log('the error is ', error.message);
-          errorHandler(t, error);
-        }
+        window.location.reload();
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        errorHandler(t, error);
-      }
+      errorHandler(t, error);
     }
   };
+
   const resetChanges = (): void => {
-    setFormState({
-      firstName: userData?.user?.firstName || '',
-      lastName: userData?.user?.lastName || '',
-      email: userData?.user?.email || '',
-      appLanguageCode: userData?.appUserProfile?.appLanguageCode || '',
-      image: userData?.user?.image || '',
-      gender: userData?.user?.gender || '',
-      empStatus: userData?.user?.employmentStatus || '',
-      maritalStatus: userData?.user?.maritalStatus || '',
-      phoneNumber: userData?.user?.phone?.mobile || '',
-      address: userData?.user?.address?.line1 || '',
-      country: userData?.user?.address?.countryCode || '',
-      city: userData?.user?.address?.city || '',
-      state: userData?.user?.address?.state || '',
-      birthDate: userData?.user?.birthDate || '',
-      grade: userData?.user?.educationGrade || '',
-      pluginCreationAllowed:
-        userData?.appUserProfile?.pluginCreationAllowed || false,
-    });
     setisUpdated(false);
+    if (userData?.currentUser) {
+      setFormState({
+        ...userData.currentUser,
+        avatar: originalImageState.current,
+      });
+    }
   };
 
   if (loading) {
@@ -316,95 +266,83 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 disabled
                 className="rounded-pill fw-bolder"
               >
-                {userData?.appUserProfile?.isSuperAdmin
-                  ? 'Super Admin'
-                  : userData?.appUserProfile?.adminFor.length > 0
-                    ? 'Admin'
-                    : 'User'}
+                {userData?.currentUser?.role === 'administrator'
+                  ? 'Admin'
+                  : 'User'}
               </Button>
             </Card.Header>
             <Card.Body className="py-3 px-3">
-              <div className="text-center mb-3">
-                {formState?.image ? (
+              <Col lg={12} className="mb-2">
+                <div className="text-center mb-3">
                   <div className="position-relative d-inline-block">
-                    <img
-                      className="rounded-circle"
-                      style={{ width: '55px', aspectRatio: '1/1' }}
-                      src={formState.image}
-                      alt="User"
-                      data-testid="userImagePresent"
-                    />
+                    {formState?.avatarURL ? (
+                      <img
+                        className="rounded-circle"
+                        style={{
+                          width: '60px',
+                          height: '60px',
+                          objectFit: 'cover',
+                        }}
+                        src={sanitizeAvatars(
+                          selectedAvatar,
+                          formState.avatarURL,
+                        )}
+                        alt="User"
+                        data-testid="profile-picture"
+                        crossOrigin="anonymous" // to avoid Cors
+                      />
+                    ) : (
+                      <Avatar
+                        name={formState.name}
+                        alt="User Image"
+                        size={60}
+                        dataTestId="profile-picture"
+                        radius={150}
+                      />
+                    )}
                     <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
-                      onClick={handleEditIconClick}
-                      style={{ cursor: 'pointer' }}
-                      data-testid="editImage"
+                      className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+                      onClick={() => fileInputRef.current?.click()}
+                      data-testid="uploadImageBtn"
+                      style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                       title="Edit profile picture"
                       role="button"
                       aria-label="Edit profile picture"
                       tabIndex={0}
                       onKeyDown={(e) =>
-                        e.key === 'Enter' && handleEditIconClick()
+                        e.key === 'Enter' && fileInputRef.current?.click()
                       }
                     />
                   </div>
-                ) : (
-                  <div className="position-relative d-inline-block">
-                    <Avatar
-                      name={`${formState.firstName} ${formState.lastName}`}
-                      alt="User Image"
-                      size={55}
-                      dataTestId="userImageAbsent"
-                      radius={150}
-                    />
-                    <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
-                      onClick={handleEditIconClick}
-                      data-testid="editImage"
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </div>
-                )}
-                <input
-                  type="file"
-                  id="orgphoto"
-                  name="photo"
+                </div>
+                <Form.Control
                   accept="image/*"
-                  onChange={handleChange}
-                  data-testid="organisationImage"
+                  id="postphoto"
+                  name="photo"
+                  type="file"
+                  className={styles.cardControl}
+                  data-testid="fileInput"
+                  multiple={false}
                   ref={fileInputRef}
+                  onChange={handleFileUpload}
                   style={{ display: 'none' }}
                 />
-              </div>
+              </Col>
               <Row className="g-3">
                 <Col md={6}>
-                  <label htmlFor="firstName" className="form-label">
-                    {tCommon('firstName')}
+                  <label htmlFor="name" className="form-label">
+                    {tCommon('name')}
                   </label>
                   <input
-                    id="firstName"
-                    value={formState.firstName}
+                    id="name"
+                    value={formState.name}
                     className={`form-control ${styles.inputColor}`}
                     type="text"
-                    name="firstName"
-                    onChange={handleChange}
+                    name="name"
+                    data-testid="inputName"
+                    onChange={(e) => handleFieldChange('name', e.target.value)}
                     required
-                    placeholder={tCommon('firstName')}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="lastName" className="form-label">
-                    {tCommon('lastName')}
-                  </label>
-                  <input
-                    id="lastName"
-                    value={formState.lastName}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="lastName"
-                    onChange={handleChange}
-                    required
-                    placeholder={tCommon('lastName')}
+                    placeholder={tCommon('name')}
                   />
                 </Col>
                 <Col md={6} data-testid="gender">
@@ -415,8 +353,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     formState={formState}
                     setFormState={setFormState}
                     fieldOptions={genderEnum}
-                    fieldName="gender"
-                    handleChange={handleChange}
+                    fieldName="natalSex"
+                    handleChange={(e) =>
+                      handleFieldChange('natalSex', e.target.value)
+                    }
                   />
                 </Col>
                 <Col md={6}>
@@ -426,7 +366,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <DatePicker
                     className={`${styles.dateboxMemberDetail} w-100`}
                     value={dayjs(formState.birthDate)}
-                    onChange={handleDateChange}
+                    onChange={(date) =>
+                      handleFieldChange(
+                        'birthDate',
+                        date ? date.toISOString().split('T')[0] : '',
+                      )
+                    }
                     data-testid="birthDate"
                     slotProps={{
                       textField: {
@@ -446,8 +391,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     formState={formState}
                     setFormState={setFormState}
                     fieldOptions={educationGradeEnum}
-                    fieldName="grade"
-                    handleChange={handleChange}
+                    fieldName="educationGrade"
+                    handleChange={(e) =>
+                      handleFieldChange('educationGrade', e.target.value)
+                    }
                   />
                 </Col>
                 <Col md={6}>
@@ -458,8 +405,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     formState={formState}
                     setFormState={setFormState}
                     fieldOptions={employmentStatusEnum}
-                    fieldName="empStatus"
-                    handleChange={handleChange}
+                    fieldName="employmentStatus"
+                    handleChange={(e) =>
+                      handleFieldChange('employmentStatus', e.target.value)
+                    }
                   />
                 </Col>
                 <Col md={6}>
@@ -471,7 +420,44 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     setFormState={setFormState}
                     fieldOptions={maritalStatusEnum}
                     fieldName="maritalStatus"
-                    handleChange={handleChange}
+                    handleChange={(e) =>
+                      handleFieldChange('maritalStatus', e.target.value)
+                    }
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="password" className="form-label">
+                    {tCommon('password')}
+                  </label>
+                  <input
+                    id="password"
+                    value={formState.password}
+                    className={`form-control ${styles.inputColor}`}
+                    type="password"
+                    name="password"
+                    onChange={(e) =>
+                      handleFieldChange('password', e.target.value)
+                    }
+                    data-testid="inputPassword"
+                    placeholder="* * * * * * * *"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="description" className="form-label">
+                    {tCommon('description')}
+                  </label>
+                  <input
+                    id="description"
+                    value={formState.description}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="description"
+                    data-testid="inputDescription"
+                    onChange={(e) =>
+                      handleFieldChange('description', e.target.value)
+                    }
+                    required
+                    placeholder="Enter description"
                   />
                 </Col>
               </Row>
@@ -493,42 +479,115 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   </label>
                   <input
                     id="email"
-                    value={formState.email}
+                    value={userData?.currentUser?.emailAddress}
                     className={`form-control ${styles.inputColor}`}
                     type="email"
                     name="email"
-                    onChange={handleChange}
-                    required
+                    data-testid="inputEmail"
+                    disabled
                     placeholder={tCommon('email')}
                   />
                 </Col>
                 <Col md={12}>
                   <label htmlFor="phoneNumber" className="form-label">
-                    {t('phone')}
+                    {t('mobilePhoneNumber')}
                   </label>
                   <input
-                    id="phoneNumber"
-                    value={formState.phoneNumber}
+                    id="mobilePhoneNumber"
+                    value={formState.mobilePhoneNumber}
                     className={`form-control ${styles.inputColor}`}
                     type="tel"
-                    name="phoneNumber"
-                    onChange={handleChange}
-                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                    placeholder={t('phone')}
+                    name="mobilePhoneNumber"
+                    data-testid="inputMobilePhoneNumber"
+                    onChange={(e) =>
+                      handleFieldChange('mobilePhoneNumber', e.target.value)
+                    }
+                    placeholder="Ex. +1234567890"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="phoneNumber" className="form-label">
+                    {t('workPhoneNumber')}
+                  </label>
+                  <input
+                    id="workPhoneNumber"
+                    value={formState.workPhoneNumber}
+                    className={`form-control ${styles.inputColor}`}
+                    type="tel"
+                    data-testid="inputWorkPhoneNumber"
+                    name="workPhoneNumber"
+                    onChange={(e) =>
+                      handleFieldChange('workPhoneNumber', e.target.value)
+                    }
+                    placeholder="Ex. +1234567890"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="phoneNumber" className="form-label">
+                    {t('homePhoneNumber')}
+                  </label>
+                  <input
+                    id="homePhoneNumber"
+                    value={formState.homePhoneNumber}
+                    className={`form-control ${styles.inputColor}`}
+                    type="tel"
+                    data-testid="inputHomePhoneNumber"
+                    name="homePhoneNumber"
+                    onChange={(e) =>
+                      handleFieldChange('homePhoneNumber', e.target.value)
+                    }
+                    placeholder="Ex. +1234567890"
                   />
                 </Col>
                 <Col md={12}>
                   <label htmlFor="address" className="form-label">
-                    {tCommon('address')}
+                    {t('addressLine1')}
                   </label>
                   <input
-                    id="address"
-                    value={formState.address}
+                    id="addressLine1"
+                    value={formState.addressLine1}
                     className={`form-control ${styles.inputColor}`}
                     type="text"
-                    name="address"
-                    onChange={handleChange}
-                    placeholder={tCommon('address')}
+                    name="addressLine1"
+                    data-testid="addressLine1"
+                    onChange={(e) =>
+                      handleFieldChange('addressLine1', e.target.value)
+                    }
+                    placeholder="Ex. Lane 2"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="address" className="form-label">
+                    {t('addressLine2')}
+                  </label>
+                  <input
+                    id="addressLine2"
+                    value={formState.addressLine2}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="addressLine2"
+                    data-testid="addressLine2"
+                    onChange={(e) =>
+                      handleFieldChange('addressLine2', e.target.value)
+                    }
+                    placeholder="Ex. Lane 2"
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="address" className="form-label">
+                    {t('postalCode')}
+                  </label>
+                  <input
+                    id="postalCode"
+                    value={formState.postalCode}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="postalCode"
+                    data-testid="inputPostalCode"
+                    onChange={(e) =>
+                      handleFieldChange('postalCode', e.target.value)
+                    }
+                    placeholder="Ex. 12345"
                   />
                 </Col>
                 <Col md={6}>
@@ -541,8 +600,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     className={`form-control ${styles.inputColor}`}
                     type="text"
                     name="city"
-                    onChange={handleChange}
-                    placeholder={t('city')}
+                    data-testid="inputCity"
+                    onChange={(e) => handleFieldChange('city', e.target.value)}
+                    placeholder="Enter city name"
                   />
                 </Col>
                 <Col md={6}>
@@ -555,23 +615,39 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     className={`form-control ${styles.inputColor}`}
                     type="text"
                     name="state"
-                    onChange={handleChange}
-                    placeholder={tCommon('state')}
+                    data-testid="inputState"
+                    onChange={(e) => handleFieldChange('state', e.target.value)}
+                    placeholder="Enter state name"
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="country" className="form-label">
-                    {t('countryCode')}
-                  </label>
-                  <input
+                  <Form.Label htmlFor="country" className="form-label">
+                    {tCommon('country')}
+                  </Form.Label>
+                  <Form.Select
                     id="country"
-                    value={formState.country}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="country"
-                    onChange={handleChange}
-                    placeholder={t('countryCode')}
-                  />
+                    value={formState.countryCode}
+                    className={`${styles.inputColor}`}
+                    data-testid="inputCountry"
+                    onChange={(e) =>
+                      handleFieldChange('countryCode', e.target.value)
+                    }
+                  >
+                    <option value="" disabled>
+                      Select {tCommon('country')}
+                    </option>
+                    {[...countryOptions]
+                      .sort((a, b) => a.label.localeCompare(b.label))
+                      .map((country) => (
+                        <option
+                          key={country.value.toUpperCase()}
+                          value={country.value.toLowerCase()}
+                          aria-label={`Select ${country.label} as your country`}
+                        >
+                          {country.label}
+                        </option>
+                      ))}
+                  </Form.Select>
                 </Col>
               </Row>
             </Card.Body>
@@ -589,7 +665,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Button>
               <Button
                 variant="success"
-                onClick={loginLink}
+                onClick={handleUserUpdate}
                 data-testid="saveChangesBtn"
               >
                 {tCommon('saveChanges')}
@@ -613,118 +689,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               id="tagsAssignedScrollableDiv"
               data-testid="tagsAssignedScrollableDiv"
               className={`${styles.cardBody} pe-0`}
-            >
-              {!tagsAssigned.length ? (
-                <div className="w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary">
-                  {t('noTagsAssigned')}
-                </div>
-              ) : (
-                <InfiniteScroll
-                  dataLength={tagsAssigned?.length ?? 0}
-                  next={loadMoreAssignedTags}
-                  hasMore={
-                    userData?.user?.tagsAssignedWith.pageInfo.hasNextPage ??
-                    false
-                  }
-                  loader={<InfiniteScrollLoader />}
-                  scrollableTarget="tagsAssignedScrollableDiv"
-                >
-                  {tagsAssigned.map((tag: InterfaceTagData, index: number) => (
-                    <div key={tag._id}>
-                      <div className="d-flex justify-content-between my-2 ms-2">
-                        <div
-                          className={styles.tagLink}
-                          data-testid="tagName"
-                          onClick={() =>
-                            navigate(`/orgtags/${orgId}/manageTag/${tag._id}`)
-                          }
-                        >
-                          {tag.parentTag ? (
-                            <>
-                              <i className={'fa fa-angle-double-right'} />
-                              <span className="me-2">...</span>
-                            </>
-                          ) : (
-                            <i className={'me-2 fa fa-angle-right'} />
-                          )}
-                          {tag.name}
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="danger"
-                          onClick={() => {
-                            setUnassignTagId(tag._id);
-                            toggleUnassignUserTagModal();
-                          }}
-                          className="me-2"
-                          data-testid="unassignTagBtn"
-                        >
-                          {'Unassign'}
-                        </Button>
-                      </div>
-                      {index + 1 !== tagsAssigned.length && (
-                        <hr className="mx-0" />
-                      )}
-                    </div>
-                  ))}
-                </InfiniteScroll>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-
-        <Col>
-          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
-            <Card.Header
-              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-            >
-              <h3 className="text-white m-0" data-testid="eventsAttended-title">
-                {t('eventsAttended')}
-              </h3>
-              <Button
-                style={{ borderRadius: '20px' }}
-                size="sm"
-                variant="light"
-                data-testid="viewAllEvents"
-                onClick={handleEventsAttendedModal}
-              >
-                {t('viewAll')}
-              </Button>
-            </Card.Header>
-            <Card.Body
-              className={`${styles.cardBody} ${styles.scrollableCardBody}`}
-            >
-              {!userData?.user.eventsAttended?.length ? (
-                <div
-                  className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
-                >
-                  {t('noeventsAttended')}
-                </div>
-              ) : (
-                userData.user.eventsAttended.map(
-                  (event: InterfaceEvent, index: number) => (
-                    <span data-testid="membereventsCard" key={index}>
-                      <EventsAttendedByMember
-                        eventsId={event._id}
-                        key={index}
-                      />
-                    </span>
-                  ),
-                )
-              )}
-            </Card.Body>
+            ></Card.Body>
           </Card>
         </Col>
       </Row>
-
-      {/* Unassign User Tag Modal */}
-      <UnassignUserTagModal
-        unassignUserTagModalIsOpen={unassignUserTagModalIsOpen}
-        toggleUnassignUserTagModal={toggleUnassignUserTagModal}
-        handleUnassignUserTag={handleUnassignUserTag}
-        t={t}
-        tCommon={tCommon}
-      />
     </LocalizationProvider>
   );
 };

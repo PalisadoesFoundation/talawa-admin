@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceRequestsListItem } from './RequestsTableItem';
+import type { InterfaceRequestsListItem } from 'types/Member/interface';
 import { MOCKS } from './RequestsTableItemMocks';
 import RequestsTableItem from './RequestsTableItem';
 import { BrowserRouter } from 'react-router-dom';

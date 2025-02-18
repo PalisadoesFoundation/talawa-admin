@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/OrgAdminListCard/OrgAdminListCard.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgAdminListCard/OrgAdminListCard.tsx#L22)
+Defined in: [src/components/OrgAdminListCard/OrgAdminListCard.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgAdminListCard/OrgAdminListCard.tsx#L19)
 
 Component to confirm and handle the removal of an admin.
 
@@ -14,7 +14,7 @@ Component to confirm and handle the removal of an admin.
 
 ### props
 
-`InterfaceOrgPeopleListCardProps`
+[`InterfaceOrgPeopleListCardProps`](../../../../types/Organization/interface/interfaces/InterfaceOrgPeopleListCardProps.md)
 
 ## Returns
 
