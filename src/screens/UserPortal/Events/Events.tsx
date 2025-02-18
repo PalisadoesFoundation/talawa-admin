@@ -425,14 +425,16 @@ export default function events(): JSX.Element {
                 />
               </div>
             </div>
-            <Button
-              type="submit"
-              className={styles.addButton}
-              value="createevent"
-              data-testid="createEventBtn"
-            >
-              {t('createEvent')}
-            </Button>
+            <div className={styles.createEventBtn}>
+              <Button
+                type="submit"
+                className={styles.addButton}
+                value="createevent"
+                data-testid="createEventBtn"
+              >
+                {t('createEvent')}
+              </Button>
+            </div>
           </Form>
         </Modal.Body>
       </Modal>
