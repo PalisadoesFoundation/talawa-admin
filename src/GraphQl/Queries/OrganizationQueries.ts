@@ -12,48 +12,26 @@ import gql from 'graphql-tag';
  * @param id - Optional. The ID of a specific organization to retrieve.
  * @returns The list of organizations based on the applied filters.
  */
+
 export const ORGANIZATION_POST_LIST = gql`
-  query Organizations(
-    $id: ID!
+  query OrganizationPostList(
+    $input: QueryOrganizationInput!
     $after: String
     $before: String
-    $first: PositiveInt
-    $last: PositiveInt
+    $first: Int
+    $last: Int
   ) {
-    organizations(id: $id) {
+    organization(input: $input) {
+      id
       posts(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
-            _id
-            title
-            text
+            id
+            caption
             creator {
-              _id
-              firstName
-              lastName
-              email
+              id
             }
             createdAt
-            likeCount
-            likedBy {
-              _id
-              firstName
-              lastName
-            }
-            commentCount
-            comments {
-              _id
-              text
-              creator {
-                _id
-              }
-              createdAt
-              likeCount
-              likedBy {
-                _id
-              }
-            }
-            pinned
           }
           cursor
         }
@@ -63,12 +41,10 @@ export const ORGANIZATION_POST_LIST = gql`
           hasNextPage
           hasPreviousPage
         }
-        totalCount
       }
     }
   }
 `;
-
 /**
  * GraphQL query to retrieve the list of user tags belonging to an organization.
  *

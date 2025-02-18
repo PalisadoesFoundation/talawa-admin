@@ -1,11 +1,10 @@
-import type { ApolloError } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-// import NotFound from 'components/NotFound/NotFound';
-// import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
-import { useNavigate, useParams } from 'react-router-dom';
+import NotFound from 'components/NotFound/NotFound';
+import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
+import { useParams } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -16,65 +15,62 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import SortingButton from '../../subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
-// interface InterfaceOrgPost {
-//   _id: string;
-//   title: string;
-//   text: string;
-//   imageUrl: string | null;
-//   videoUrl: string | null;
-//   creator: { _id: string; firstName: string; lastName: string; email: string };
-//   pinned: boolean;
-//   createdAt: string;
-//   likeCount: number;
-//   commentCount: number;
-//   likedBy: { _id: string }[];
-//   comments: {
-//     _id: string;
-//     text: string;
-//     creator: { _id: string };
-//     createdAt: string;
-//     likeCount: number;
-//     likedBy: { _id: string }[];
-//   }[];
-// }
+// Define interfaces for the GraphQL response structure
+interface InterfacePostCreator {
+  id: string;
+  firstName?: string;
+  lastName?: string;
+}
 
-/**
- * This function is used to display the posts of the organization. It displays the posts in a card format.
- * It also provides the functionality to create a new post. The user can also sort the posts based on the date of creation.
- * The user can also search for a post based on the title of the post.
- * @returns JSX.Element which contains the posts of the organization.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.inputField`
- * - `.removeButton`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
-function orgPost(): JSX.Element {
+interface InterfacePostNode {
+  id: string;
+  caption: string;
+  text?: string;
+  imageUrl?: string | null;
+  videoUrl?: string | null;
+  creator?: InterfacePostCreator;
+  pinned?: boolean;
+}
+
+interface InterfacePostEdge {
+  node: InterfacePostNode;
+  cursor: string;
+}
+
+interface InterfacePageInfo {
+  startCursor: string;
+  endCursor: string;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+interface InterfacePostConnection {
+  edges: InterfacePostEdge[];
+  pageInfo: InterfacePageInfo;
+}
+
+interface InterfaceOrganization {
+  id: string;
+  posts: InterfacePostConnection;
+}
+
+interface InterfaceOrganizationPostListData {
+  organization: InterfaceOrganization;
+}
+
+function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
   });
   const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
+  console.log('Page title set to:', t('title'));
+
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
   const [postformState, setPostFormState] = useState({
     posttitle: '',
@@ -84,10 +80,15 @@ function orgPost(): JSX.Element {
     addMedia: '',
     pinPost: false,
   });
+  console.log('Initial post form state:', postformState);
+
   const [sortingOption, setSortingOption] = useState('latest');
+  console.log('Initial sorting option:', sortingOption);
+
   const [file, setFile] = useState<File | null>(null);
   const { orgId: currentUrl } = useParams();
-  const navigate = useNavigate();
+  console.log('Current organization ID:', currentUrl);
+
   const [showTitle, setShowTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
@@ -95,10 +96,12 @@ function orgPost(): JSX.Element {
   const [last, setLast] = useState<number | null>(null);
 
   const showInviteModal = (): void => {
+    console.log('Opening post modal');
     setPostModalIsOpen(true);
   };
 
   const hideInviteModal = (): void => {
+    console.log('Closing post modal');
     setPostModalIsOpen(false);
     setPostFormState({
       posttitle: '',
@@ -115,75 +118,42 @@ function orgPost(): JSX.Element {
     loading: orgPostListLoading,
     error: orgPostListError,
     refetch,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationPostListItem[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: (filterData?: {
-      id: string | undefined;
-      // title_contains: string | null;
-      // text_contains: string | null;
-      after: string | null | undefined;
-      before: string | null | undefined;
-      first: number | null;
-      last: number | null;
-    }) => void;
-  } = useQuery(ORGANIZATION_POST_LIST, {
+  } = useQuery<InterfaceOrganizationPostListData>(ORGANIZATION_POST_LIST, {
     variables: {
-      id: currentUrl as string,
+      input: { id: currentUrl as string },
       after: after ?? null,
       before: before ?? null,
       first: first,
       last: last,
     },
   });
+  console.log('Fetched organization posts:', orgPostListData);
+
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
-  // const [displayedPosts, setDisplayedPosts] = useState(
-  //   orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) ||
-  //     [],
-  // );
-
-  // useEffect(() => {
-  //   if (orgPostListData && orgPostListData.organizations) {
-  //     const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
-  //       orgPostListData.organizations[0].posts.edges.map((edge) => edge.node),
-  //       sortingOption,
-  //     );
-  //     setDisplayedPosts(newDisplayedPosts);
-  //   }
-  // }, [orgPostListData, sortingOption]);
 
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
-    const {
-      posttitle: _posttitle,
-      postinfo: _postinfo,
-      postImage,
-      postVideo,
-      pinPost,
-    } = postformState;
-
-    const posttitle = _posttitle.trim();
-    const postinfo = _postinfo.trim();
+    console.log('Creating post with form state:', postformState);
 
     try {
-      if (!posttitle || !postinfo) {
+      if (!postformState.posttitle.trim() || !postformState.postinfo.trim()) {
         throw new Error('Text fields cannot be empty strings');
       }
 
       const { data } = await create({
         variables: {
-          title: posttitle,
-          text: postinfo,
+          title: postformState.posttitle.trim(),
+          text: postformState.postinfo.trim(),
           organizationId: currentUrl,
-          file: postImage || postVideo || postformState.addMedia,
-          pinned: pinPost,
+          file:
+            postformState.postImage ||
+            postformState.postVideo ||
+            postformState.addMedia,
+          pinned: postformState.pinPost,
         },
       });
+      console.log('Post creation response:', data);
 
       if (data) {
         toast.success(t('postCreatedSuccess') as string);
@@ -199,13 +169,15 @@ function orgPost(): JSX.Element {
         setPostModalIsOpen(false);
       }
     } catch (error: unknown) {
+      console.error('Error creating post:', error);
       errorHandler(t, error);
     }
   };
 
   useEffect(() => {
     if (orgPostListError) {
-      navigate('/orglist');
+      console.error('Organization post list error:', orgPostListError);
+      // navigate('/orglist');
     }
   }, [orgPostListError]);
 
@@ -216,6 +188,7 @@ function orgPost(): JSX.Element {
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
+    console.log('Media file selected:', e.target.files?.[0]);
     setPostFormState((prevPostFormState) => ({
       ...prevPostFormState,
       addMedia: '',
@@ -233,66 +206,42 @@ function orgPost(): JSX.Element {
   };
 
   const handleSearch = (term: string): void => {
-    const filterData = {
-      id: currentUrl,
-      title_contains: showTitle ? term : null,
-      text_contains: !showTitle ? term : null,
+    console.log('Search term:', term);
+    refetch({
+      input: {
+        id: currentUrl,
+        title_contains: showTitle ? term : null,
+        text_contains: !showTitle ? term : null,
+      },
       after: after || null,
       before: before || null,
       first: first || null,
       last: last || null,
-    };
-    refetch(filterData);
+    });
   };
 
   const handleSorting = (option: string): void => {
+    console.log('Sorting option selected:', option);
     setSortingOption(option);
   };
+
   const handleNextPage = (): void => {
-    setAfter(orgPostListData?.organizations[0].posts.pageInfo.endCursor);
+    console.log('Fetching next page');
+    setAfter(orgPostListData?.organization?.posts?.pageInfo?.endCursor || null);
     setBefore(null);
     setFirst(6);
     setLast(null);
   };
+
   const handlePreviousPage = (): void => {
-    setBefore(orgPostListData?.organizations[0].posts.pageInfo.startCursor);
+    console.log('Fetching previous page');
+    setBefore(
+      orgPostListData?.organization?.posts?.pageInfo?.startCursor || null,
+    );
     setAfter(null);
     setFirst(null);
     setLast(6);
   };
-
-  // const sortPosts = (
-  //   posts: InterfaceOrgPost[],
-  //   sortingOption: string,
-  // ): InterfaceOrgPost[] => {
-  //   const sortedPosts = [...posts];
-
-  //   if (sortingOption === 'latest') {
-  //     sortedPosts.sort(
-  //       (a, b) =>
-  //         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  //     );
-  //   } else if (sortingOption === 'oldest') {
-  //     sortedPosts.sort(
-  //       (a, b) =>
-  //         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  //     );
-  //   }
-
-  //   return sortedPosts;
-  // };
-
-  // const sortedPostsList: InterfaceOrgPost[] = [...displayedPosts];
-  // sortedPostsList.sort((a: InterfaceOrgPost, b: InterfaceOrgPost) => {
-  //   if (a.pinned === b.pinned) {
-  //     return 0;
-  //   }
-
-  //   if (a.pinned) {
-  //     return -1;
-  //   }
-  //   return 1;
-  // });
 
   return (
     <>
@@ -345,34 +294,29 @@ function orgPost(): JSX.Element {
             </div>
           </div>
           <div className={`row ${styles.list_box}`}>
-            {/* {sortedPostsList && sortedPostsList.length > 0 ? (
-              sortedPostsList.map(
-                (datas: {
-                  _id: string;
-                  title: string;
-                  text: string;
-                  imageUrl: string | null;
-                  videoUrl: string | null;
-
-                  creator: { firstName: string; lastName: string };
-                  pinned: boolean;
-                }) => (
-                  <OrgPostCard
-                    key={datas._id}
-                    id={datas._id}
-                    postTitle={datas.title}
-                    postInfo={datas.text}
-                    postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                    postPhoto={datas?.imageUrl}
-                    postVideo={datas?.videoUrl}
-                    pinned={datas.pinned}
-                    postID={''}
-                  />
-                ),
+            {orgPostListData?.organization?.posts?.edges &&
+            orgPostListData.organization.posts.edges.length > 0 ? (
+              orgPostListData.organization.posts.edges.map(
+                (edge: InterfacePostEdge) => {
+                  const post = edge.node;
+                  return (
+                    <OrgPostCard
+                      key={post.id}
+                      id={post.id}
+                      postTitle={post.caption}
+                      postInfo={post.text || ''}
+                      postAuthor={`${post.creator?.firstName || ''} ${post.creator?.lastName || ''}`}
+                      postPhoto={post.imageUrl || null}
+                      postVideo={post.videoUrl || null}
+                      pinned={post.pinned || false}
+                      postID={''}
+                    />
+                  );
+                },
               )
             ) : (
               <NotFound title="post" keyPrefix="postNotFound" />
-            )} */}
+            )}
           </div>
         </div>
         <div className="row m-lg-1 d-flex justify-content-center w-100">
@@ -381,8 +325,7 @@ function orgPost(): JSX.Element {
               onClick={handlePreviousPage}
               className={`${styles.createButton} btn-sm `}
               disabled={
-                !orgPostListData?.organizations[0].posts.pageInfo
-                  .hasPreviousPage
+                !orgPostListData?.organization?.posts?.pageInfo?.hasPreviousPage
               }
               data-testid="previousButton"
             >
@@ -394,7 +337,7 @@ function orgPost(): JSX.Element {
               onClick={handleNextPage}
               className={`${styles.createButton} btn-sm `}
               disabled={
-                !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
+                !orgPostListData?.organization?.posts?.pageInfo?.hasNextPage
               }
               data-testid="nextButton"
             >
@@ -466,7 +409,6 @@ function orgPost(): JSX.Element {
 
             {postformState.addMedia && file && (
               <div className={styles.previewOrgPost} data-testid="mediaPreview">
-                {/* Display preview for both image and video */}
                 {file.type.startsWith('image') ? (
                   <img
                     src={postformState.addMedia}
@@ -541,4 +483,4 @@ function orgPost(): JSX.Element {
   );
 }
 
-export default orgPost;
+export default OrgPost;
