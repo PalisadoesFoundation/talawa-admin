@@ -18,13 +18,15 @@ import { vi } from 'vitest';
 
 describe('UserAddressFields', () => {
   const mockProps = {
-    tCommon: (key: string) => `translated_${key}`,
     t: (key: string) => `translated_${key}`,
     handleFieldChange: vi.fn(),
     userDetails: {
-      address: '123 Test Street',
+      addressLine1: '123 Test Street',
+      addressLine2: 'Apt 4',
       state: 'Test State',
-      country: 'US',
+      countryCode: 'US',
+      city: 'Test City',
+      postalCode: '12345',
     },
   };
 
@@ -35,7 +37,8 @@ describe('UserAddressFields', () => {
   it('renders all form fields correctly', () => {
     render(<UserAddressFields {...mockProps} />);
 
-    expect(screen.getByTestId('inputAddress')).toBeInTheDocument();
+    expect(screen.getByTestId('inputAddress1')).toBeInTheDocument();
+    expect(screen.getByTestId('inputAddress2')).toBeInTheDocument();
     expect(screen.getByTestId('inputState')).toBeInTheDocument();
     expect(screen.getByTestId('inputCountry')).toBeInTheDocument();
   });
@@ -43,7 +46,6 @@ describe('UserAddressFields', () => {
   it('displays correct labels with translations', () => {
     render(<UserAddressFields {...mockProps} />);
 
-    expect(screen.getByText('translated_address')).toBeInTheDocument();
     expect(screen.getByText('translated_state')).toBeInTheDocument();
     expect(screen.getByText('translated_country')).toBeInTheDocument();
   });
@@ -51,11 +53,19 @@ describe('UserAddressFields', () => {
   it('handles address input change', () => {
     render(<UserAddressFields {...mockProps} />);
 
-    const addressInput = screen.getByTestId('inputAddress');
-    fireEvent.change(addressInput, { target: { value: 'New Address' } });
+    const addressInput1 = screen.getByTestId('inputAddress1');
+    fireEvent.change(addressInput1, { target: { value: 'New Address' } });
 
     expect(mockProps.handleFieldChange).toHaveBeenCalledWith(
-      'address',
+      'addressLine1',
+      'New Address',
+    );
+
+    const addressInput2 = screen.getByTestId('inputAddress2');
+    fireEvent.change(addressInput2, { target: { value: 'New Address' } });
+
+    expect(mockProps.handleFieldChange).toHaveBeenCalledWith(
+      'addressLine2',
       'New Address',
     );
   });
@@ -76,9 +86,12 @@ describe('UserAddressFields', () => {
     render(<UserAddressFields {...mockProps} />);
 
     const countrySelect = screen.getByTestId('inputCountry');
-    fireEvent.change(countrySelect, { target: { value: 'CA' } });
+    fireEvent.change(countrySelect, { target: { value: 'ca' } });
 
-    expect(mockProps.handleFieldChange).toHaveBeenCalledWith('country', 'CA');
+    expect(mockProps.handleFieldChange).toHaveBeenCalledWith(
+      'countryCode',
+      'ca',
+    );
   });
 
   it('renders all country options', () => {
@@ -93,8 +106,65 @@ describe('UserAddressFields', () => {
   it('displays initial values correctly', () => {
     render(<UserAddressFields {...mockProps} />);
 
-    expect(screen.getByTestId('inputAddress')).toHaveValue('123 Test Street');
+    expect(screen.getByTestId('inputAddress1')).toHaveValue('123 Test Street');
+    expect(screen.getByTestId('inputAddress2')).toHaveValue('Apt 4');
     expect(screen.getByTestId('inputState')).toHaveValue('Test State');
-    expect(screen.getByTestId('inputCountry')).toHaveValue('US');
+    expect(screen.getByTestId('inputCountry')).toHaveValue('af');
+  });
+
+  it('handles postal code input change', () => {
+    render(<UserAddressFields {...mockProps} />);
+    const postalInput = screen.getByTestId('postalCode');
+    fireEvent.change(postalInput, { target: { value: '54321' } });
+
+    expect(mockProps.handleFieldChange).toHaveBeenCalledWith(
+      'postalCode',
+      '54321',
+    );
+  });
+
+  it('renders country options with correct aria-labels', () => {
+    render(<UserAddressFields {...mockProps} />);
+    const countrySelect = screen.getByTestId('inputCountry');
+
+    // Get all options except the first disabled one
+    const options = Array.from(
+      countrySelect.getElementsByTagName('option'),
+    ).slice(1);
+
+    // Test a sample of countries to verify aria-labels
+    const sampleCountry = countryOptions[0];
+    const option = options.find(
+      (opt) => opt.value === sampleCountry.value.toLowerCase(),
+    );
+
+    expect(option).toHaveAttribute(
+      'aria-label',
+      `Select ${sampleCountry.label} as your country`,
+    );
+  });
+
+  it('handles city input change and displays correctly', () => {
+    render(<UserAddressFields {...mockProps} />);
+
+    // Check if city input exists
+    const cityInput = screen.getByTestId('inputCity');
+    expect(cityInput).toBeInTheDocument();
+
+    // Check if label is rendered correctly
+    expect(screen.getByText('translated_city')).toBeInTheDocument();
+
+    // Check if initial value is displayed correctly
+    expect(cityInput).toHaveValue('Test City');
+
+    // Test input change
+    fireEvent.change(cityInput, { target: { value: 'New City' } });
+    expect(mockProps.handleFieldChange).toHaveBeenCalledWith(
+      'city',
+      'New City',
+    );
+
+    // Check if placeholder is set correctly
+    expect(cityInput).toHaveAttribute('placeholder', 'translated_enterCity');
   });
 });

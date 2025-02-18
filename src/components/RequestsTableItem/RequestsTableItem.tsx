@@ -9,23 +9,11 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './RequestsTableItem.module.css';
-
+import type { InterfaceRequestsListItem } from 'types/Member/interface';
 /**
  * Represents a membership request in the requests table.
  */
-export interface InterfaceRequestsListItem {
-  _id: string;
-  user: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-}
 
-/**
- * Props for the RequestsTableItem component.
- *
- */
 type Props = {
   request: InterfaceRequestsListItem;
   index: number;

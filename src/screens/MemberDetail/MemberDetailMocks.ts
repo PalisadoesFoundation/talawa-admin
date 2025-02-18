@@ -1,317 +1,44 @@
+import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 
 export const MOCKS1 = [
   {
     request: {
-      query: USER_DETAILS,
+      query: CURRENT_USER,
       variables: {
         id: 'rishav-jha-mech',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
       data: {
-        user: {
-          __typename: 'UserData',
-          appUserProfile: {
-            _id: '1',
-            __typename: 'AppUserProfile',
-            adminFor: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            isSuperAdmin: false,
-            appLanguageCode: 'en',
-            createdEvents: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-            createdOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            eventAdmin: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-            pluginCreationAllowed: true,
-          },
-          user: {
-            _id: '1',
-            __typename: 'User',
-            createdAt: '2024-02-26T10:36:33.098Z',
-            email: 'adi790u@gmail.com',
-            firstName: 'Aditya',
-            image: null,
-            lastName: 'Agarwal',
-            gender: '',
-            birthDate: '2024-03-14',
-            educationGrade: '',
-            employmentStatus: '',
-            maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
-            eventsAttended: [],
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            tagsAssignedWith: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'userTag 1',
-                    parentTag: null,
-                  },
-                  cursor: '1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'userTag 2',
-                    parentTag: null,
-                  },
-                  cursor: '2',
-                },
-                {
-                  node: {
-                    _id: '3',
-                    name: 'userTag 3',
-                    parentTag: null,
-                  },
-                  cursor: '3',
-                },
-                {
-                  node: {
-                    _id: '4',
-                    name: 'userTag 4',
-                    parentTag: null,
-                  },
-                  cursor: '4',
-                },
-                {
-                  node: {
-                    _id: '5',
-                    name: 'userTag 5',
-                    parentTag: null,
-                  },
-                  cursor: '5',
-                },
-                {
-                  node: {
-                    _id: '6',
-                    name: 'userTag 6',
-                    parentTag: null,
-                  },
-                  cursor: '6',
-                },
-                {
-                  node: {
-                    _id: '7',
-                    name: 'userTag 7',
-                    parentTag: null,
-                  },
-                  cursor: '7',
-                },
-                {
-                  node: {
-                    _id: '8',
-                    name: 'userTag 8',
-                    parentTag: null,
-                  },
-                  cursor: '8',
-                },
-                {
-                  node: {
-                    _id: '9',
-                    name: 'userTag 9',
-                    parentTag: null,
-                  },
-                  cursor: '9',
-                },
-                {
-                  node: {
-                    _id: '10',
-                    name: 'userTag 10',
-                    parentTag: null,
-                  },
-                  cursor: '10',
-                },
-              ],
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '10',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 12,
-            },
-            membershipRequests: [],
-            organizationsBlockedBy: [],
-            registeredEvents: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: 'rishav-jha-mech',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: '10',
-      },
-    },
-    result: {
-      data: {
-        user: {
-          __typename: 'UserData',
-          appUserProfile: {
-            _id: '1',
-            __typename: 'AppUserProfile',
-            adminFor: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            isSuperAdmin: false,
-            appLanguageCode: 'en',
-            createdEvents: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-            createdOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            eventAdmin: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-            pluginCreationAllowed: true,
-          },
-          user: {
-            _id: '1',
-            __typename: 'User',
-            createdAt: '2024-02-26T10:36:33.098Z',
-            email: 'adi790u@gmail.com',
-            firstName: 'Aditya',
-            image: null,
-            lastName: 'Agarwal',
-            gender: '',
-            birthDate: '2024-03-14',
-            educationGrade: '',
-            employmentStatus: '',
-            maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
-            eventsAttended: [],
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            tagsAssignedWith: {
-              edges: [
-                {
-                  node: {
-                    _id: '11',
-                    name: 'userTag 11',
-                    parentTag: null,
-                  },
-                  cursor: '11',
-                },
-                {
-                  node: {
-                    _id: '12',
-                    name: 'subTag 1',
-                    parentTag: { _id: '1' },
-                  },
-                  cursor: '12',
-                },
-              ],
-              pageInfo: {
-                startCursor: '11',
-                endCursor: '12',
-                hasNextPage: false,
-                hasPreviousPage: true,
-              },
-              totalCount: 12,
-            },
-            membershipRequests: [],
-            organizationsBlockedBy: [],
-            registeredEvents: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-          },
+        currentUser: {
+          addressLine1: 'Line 1',
+          addressLine2: 'Line 2',
+          avatarMimeType: 'image/jpeg',
+          avatarURL: 'http://example.com/avatar.jpg',
+          birthDate: '',
+          city: 'city',
+          countryCode: 'in',
+          createdAt: '2025-02-06T03:10:50.254',
+          description: 'This is a description',
+          educationGrade: 'grade_8',
+          emailAddress: 'test221@gmail.com',
+          employmentStatus: 'employed',
+          homePhoneNumber: '+9999999998',
+          id: 'rishav-jha-mech',
+          isEmailAddressVerified: false,
+          maritalStatus: 'engaged',
+          mobilePhoneNumber: '+9999999999',
+          name: 'Rishav Jha',
+          natalSex: 'male',
+          naturalLanguageCode: 'en',
+          postalCode: '111111',
+          role: 'administrator',
+          state: 'State1',
+          updatedAt: '2025-02-06T03:22:17.808',
+          workPhoneNumber: '+9999999998',
+          __typename: 'User',
         },
       },
     },
@@ -337,98 +64,40 @@ export const MOCKS1 = [
 export const MOCKS2 = [
   {
     request: {
-      query: USER_DETAILS,
+      query: CURRENT_USER,
       variables: {
         id: 'rishav-jha-mech',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
       data: {
-        user: {
-          __typename: 'UserData',
-          appUserProfile: {
-            _id: '1',
-            __typename: 'AppUserProfile',
-            adminFor: [],
-            isSuperAdmin: false,
-            appLanguageCode: 'en',
-            createdEvents: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-            createdOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            eventAdmin: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-            pluginCreationAllowed: true,
-          },
-          user: {
-            _id: '1',
-            __typename: 'User',
-            createdAt: '2024-02-26T10:36:33.098Z',
-            email: 'adi790u@gmail.com',
-            firstName: 'Aditya',
-            image: 'https://placeholder.com/200x200',
-            lastName: 'Agarwal',
-            gender: '',
-            birthDate: '2024-03-14',
-            educationGrade: '',
-            employmentStatus: '',
-            maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            tagsAssignedWith: {
-              edges: [],
-              pageInfo: {
-                startCursor: null,
-                endCursor: null,
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 0,
-            },
-            eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
-            membershipRequests: [],
-            organizationsBlockedBy: [],
-            registeredEvents: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-          },
+        currentUser: {
+          addressLine1: 'Line 1',
+          addressLine2: 'Line 2',
+          avatarMimeType: 'image/jpeg',
+          avatarURL: 'http://example.com/avatar.jpg',
+          birthDate: '2000-01-01',
+          city: 'nyc',
+          countryCode: 'bb',
+          createdAt: '2025-02-06T03:10:50.254',
+          description: 'This is a description',
+          educationGrade: 'grade_8',
+          emailAddress: 'test221@gmail.com',
+          employmentStatus: 'employed',
+          homePhoneNumber: '+9999999998',
+          id: '0194d80f-03cd-79cd-8135-683494b187a1',
+          isEmailAddressVerified: false,
+          maritalStatus: 'engaged',
+          mobilePhoneNumber: '+9999999999',
+          name: 'Rishav Jha',
+          natalSex: 'male',
+          naturalLanguageCode: 'en',
+          postalCode: '111111',
+          role: 'regular',
+          state: 'State1',
+          updatedAt: '2025-02-06T03:22:17.808',
+          workPhoneNumber: '+9999999998',
+          __typename: 'User',
         },
       },
     },
@@ -437,98 +106,157 @@ export const MOCKS2 = [
 export const MOCKS3 = [
   {
     request: {
-      query: USER_DETAILS,
+      query: CURRENT_USER,
       variables: {
         id: 'rishav-jha-mech',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
       data: {
-        user: {
-          __typename: 'UserData',
-          appUserProfile: {
-            _id: '1',
-            __typename: 'AppUserProfile',
-            adminFor: [],
-            isSuperAdmin: true,
-            appLanguageCode: 'en',
-            createdEvents: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-            createdOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            eventAdmin: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-            pluginCreationAllowed: true,
-          },
-          user: {
-            _id: '1',
-            __typename: 'User',
-            createdAt: '2024-02-26T10:36:33.098Z',
-            email: 'adi790u@gmail.com',
-            firstName: 'Aditya',
-            image: 'https://placeholder.com/200x200',
-            lastName: 'Agarwal',
-            gender: '',
-            birthDate: '2024-03-14',
-            educationGrade: '',
-            employmentStatus: '',
-            maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
-            tagsAssignedWith: {
-              edges: [],
-              pageInfo: {
-                startCursor: null,
-                endCursor: null,
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 0,
-            },
-            eventsAttended: [],
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '65e0df0906dd1228350cfd4a',
-              },
-              {
-                __typename: 'Organization',
-                _id: '65e0e2abb92c9f3e29503d4e',
-              },
-            ],
-            membershipRequests: [],
-            organizationsBlockedBy: [],
-            registeredEvents: [
-              {
-                __typename: 'Event',
-                _id: '65e32a5b2a1f4288ca1f086a',
-              },
-            ],
-          },
+        currentUser: {
+          addressLine1: 'Line 1',
+          addressLine2: 'Line 2',
+          avatarMimeType: 'image/jpeg',
+          avatarURL: 'http://example.com/avatar.jpg',
+          birthDate: '2000-01-01',
+          city: 'nyc',
+          countryCode: 'bb',
+          createdAt: '2025-02-06T03:10:50.254',
+          description: 'This is a description',
+          educationGrade: 'grade_8',
+          emailAddress: 'test221@gmail.com',
+          employmentStatus: 'employed',
+          homePhoneNumber: '+9999999998',
+          id: '0194d80f-03cd-79cd-8135-683494b187a1',
+          isEmailAddressVerified: false,
+          maritalStatus: 'engaged',
+          mobilePhoneNumber: '+9999999999',
+          name: 'Rishav Jha',
+          natalSex: 'male',
+          naturalLanguageCode: 'en',
+          postalCode: '123456',
+          role: 'regular',
+          state: 'State1',
+          updatedAt: '2025-02-06T03:22:17.808',
+          workPhoneNumber: '+9999999998',
+          __typename: 'User',
+        },
+      },
+    },
+  },
+];
+
+export const UPDATE_MOCK = [
+  {
+    request: {
+      query: UPDATE_CURRENT_USER_MUTATION,
+      variables: {
+        input: {
+          name: 'Bandhan Majumder',
+        },
+      },
+    },
+    result: {
+      data: {
+        updateCurrentUser: {
+          addressLine1: '',
+          addressLine2: '',
+          avatarMimeType: null,
+          avatarURL: null,
+          birthDate: null,
+          city: '',
+          countryCode: null,
+          createdAt: '2023-04-13T04:53:17.742Z',
+          description: '',
+          educationGrade: null,
+          emailAddress: 'testadmin1@example.com',
+          employmentStatus: null,
+          homePhoneNumber: '',
+          id: '65378abd-8500-8f17-1cf2-990d00000002',
+          isEmailAddressVerified: true,
+          maritalStatus: null,
+          mobilePhoneNumber: '',
+          name: 'Bandhan Majumder',
+          natalSex: null,
+          naturalLanguageCode: null,
+          postalCode: '',
+          role: 'administrator',
+          state: '',
+          updatedAt: '2025-02-09T06:26:51.209Z',
+          workPhoneNumber: '',
+        },
+      },
+    },
+  },
+];
+
+export const ERROR_MOCK = [
+  {
+    request: {
+      query: UPDATE_CURRENT_USER_MUTATION,
+      variables: {
+        input: {
+          name: 'Test User',
+        },
+      },
+    },
+    error: new Error('Failed to update user'),
+  },
+];
+
+export const MOCK_FILE = [
+  {
+    request: {
+      query: CURRENT_USER,
+      variables: {
+        id: 'rishav-jha-mech',
+      },
+    },
+    result: {
+      data: {
+        currentUser: {
+          addressLine1: 'Line 1',
+          addressLine2: 'Line 2',
+          avatarMimeType: null,
+          avatarURL: null,
+          birthDate: '',
+          city: 'city',
+          countryCode: 'in',
+          createdAt: '2025-02-06T03:10:50.254',
+          description: 'This is a description',
+          educationGrade: 'grade_8',
+          emailAddress: 'test221@gmail.com',
+          employmentStatus: 'employed',
+          homePhoneNumber: '+9999999998',
+          id: 'rishav-jha-mech',
+          isEmailAddressVerified: false,
+          maritalStatus: 'engaged',
+          mobilePhoneNumber: '+9999999999',
+          name: 'Rishav Jha',
+          natalSex: 'male',
+          naturalLanguageCode: 'en',
+          postalCode: '111111',
+          role: 'administrator',
+          state: 'State1',
+          updatedAt: '2025-02-06T03:22:17.808',
+          workPhoneNumber: '+9999999998',
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UNASSIGN_USER_TAG,
+      variables: {
+        tagId: '1',
+        userId: 'rishav-jha-mech',
+      },
+    },
+    result: {
+      data: {
+        unassignUserTag: {
+          _id: '1',
         },
       },
     },

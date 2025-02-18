@@ -2,7 +2,7 @@
 // import { User } from "./User/type";
 // import { Feedback } from "./feedback";
 // import { Language } from "./language";
-// import { OrganizationCustomField } from "./organization";
+// import { OrganizationCustomField } from "types/Organization/type";
 // import { UserCustomData } from "./User/type";
 // import { UserFamily } from "./User/type";
 // import { Event } from "./event";
@@ -13,7 +13,7 @@
 // import { Donation } from "./donation";
 // import { Venue } from "./venue";
 // import { Post } from "./post";
-// import { Organization } from "./organization";
+// import { Organization } from "types/Organization/type";
 // import { Plugin } from "./plugin";
 // import { AuthData } from "./auth";
 // import { ExtendSession } from "./others";

@@ -52,7 +52,7 @@ Defined in: [src/types/Chat/type.ts:18](https://github.com/PalisadoesFoundation/
 
 ### organization?
 
-> `optional` **organization**: [`Organization`](../../../organization/type-aliases/Organization.md)
+> `optional` **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
 
 ### unseenMessagesByUsers
 
