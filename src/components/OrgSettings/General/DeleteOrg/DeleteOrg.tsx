@@ -39,9 +39,10 @@ function deleteOrg(): JSX.Element {
 
   // Hook for accessing local storage
   const { getItem } = useLocalStorage();
+  const canDelete = getItem('SuperAdmin') || true;
+
   // Check if the user has super admin privileges
   // const canDelete = getItem('SuperAdmin');
-  const canDelete = true;
   /**
    * Toggles the visibility of the delete confirmation modal.
    */
