@@ -3541,6 +3541,8 @@ input[type='radio']:checked + label:hover {
   margin-right: 271px;
   margin-bottom: 32px;
   margin-top: 11px;
+  margin-left: 26px;
+  margin-right: 261px;
 }
 .dispflex > input {
   width: 20%;
@@ -5809,6 +5811,8 @@ button[data-testid='createPostBtn'] {
 
 .checkboxdivEvents {
   display: flex;
+  justify-content: space-between;
+  margin-right: 40px;
 }
 .checkboxdivEvents > div {
   width: 42%;
@@ -5820,6 +5824,8 @@ button[data-testid='createPostBtn'] {
   justify-content: space-between;
   margin-bottom: 25px;
   margin-top: 10px;
+  margin-left: 25px;
+  margin-right: -28px;
 }
 .dispflexEvents > input {
   border: none;
