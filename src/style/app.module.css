@@ -5833,6 +5833,11 @@ button[data-testid='createPostBtn'] {
   margin-top: 5px;
 }
 
+.createEventBtn {
+  display: flex;
+  justify-content: center;
+}
+
 .blueregbtnEvents {
   margin-top: var(--spacing-lg, 1.25rem);
   border: 1px solid var(--grey-border-box-color);
