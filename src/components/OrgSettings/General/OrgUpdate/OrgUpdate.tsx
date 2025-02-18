@@ -20,7 +20,7 @@ interface InterfaceOrgUpdateProps {
   orgId: string;
 }
 
-interface MutationUpdateOrganizationInput {
+interface InterfaceMutationUpdateOrganizationInput {
   id: string;
   name?: string;
   description?: string;
@@ -83,7 +83,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
   const [updateOrganization, { loading: updateLoading }] = useMutation<
     { updateOrganization: { organization: InterfaceOrganization } },
-    { input: MutationUpdateOrganizationInput }
+    { input: InterfaceMutationUpdateOrganizationInput }
   >(UPDATE_ORGANIZATION_MUTATION);
 
   const { t } = useTranslation('translation', {
@@ -180,7 +180,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       });
 
       if (data) {
-        refetch({ id: orgId });
+        refetch({ input: { id: orgId } });
         toast.success(t('successfulUpdated') as string);
       } else {
         toast.error('Failed to update organization');
