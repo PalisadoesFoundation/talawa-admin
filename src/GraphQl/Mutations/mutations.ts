@@ -381,27 +381,16 @@ export const ADD_MEMBER_MUTATION = gql`
 `;
 
 export const CREATE_POST_MUTATION = gql`
-  mutation CreatePost(
-    $text: String!
-    $title: String!
-    $imageUrl: URL
-    $videoUrl: URL
-    $organizationId: ID!
-    $file: String
-    $pinned: Boolean
-  ) {
-    createPost(
-      data: {
-        text: $text
-        title: $title
-        imageUrl: $imageUrl
-        videoUrl: $videoUrl
-        organizationId: $organizationId
-        pinned: $pinned
+  mutation CreatePost($input: MutationCreatePostInput!) {
+    createPost(input: $input) {
+      id
+      caption
+      pinnedAt
+      attachments {
+        url
       }
-      file: $file
-    ) {
-      _id
+      createdAt
+      updatedAt
     }
   }
 `;

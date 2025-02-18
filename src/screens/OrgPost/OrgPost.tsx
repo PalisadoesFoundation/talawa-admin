@@ -62,6 +62,52 @@ interface InterfaceOrganizationPostListData {
   organization: InterfaceOrganization;
 }
 
+// Define the proper interface for the mutation input
+interface InterfaceMutationCreatePostInput {
+  caption: string;
+  organizationId: string;
+  isPinned: boolean;
+  attachments?: File[];
+}
+
+/**
+ * OrgPost Component
+ *
+ * This component is responsible for rendering and managing organization posts.
+ * It allows users to create, view, and navigate through posts associated with an organization.
+ *
+ * Features:
+ * - Fetches and displays organization posts using GraphQL queries.
+ * - Supports creating new posts with image/video uploads.
+ * - Pagination for navigating between post pages.
+ * - Search functionality for filtering posts by title or text.
+ * - Sorting options to view the latest or oldest posts.
+ * - Allows pinning posts for priority display.
+ *
+ * Dependencies:
+ * - Apollo Client for GraphQL queries and mutations.
+ * - React Bootstrap for styling and UI components.
+ * - react-toastify for success and error notifications.
+ * - i18next for internationalization.
+ * - Utility functions like convertToBase64 and errorHandler.
+ *
+ * Props: None
+ *
+ * State:
+ * - postmodalisOpen: boolean - Controls the visibility of the create post modal.
+ * - postformState: object - Stores post form data (title, info, media, pinPost).
+ * - sortingOption: string - Stores the current sorting option ('latest', 'oldest').
+ * - file: File | null - Stores the selected media file.
+ * - after, before: string | null | undefined - Cursor values for pagination.
+ * - first, last: number | null - Number of posts to fetch for pagination.
+ * - showTitle: boolean - Controls whether to search by title or text.
+ *
+ * GraphQL Queries:
+ * - ORGANIZATION_POST_LIST: Fetches organization posts with pagination.
+ * - CREATE_POST_MUTATION: Creates a new post for the organization.
+ *
+ */
+
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
@@ -137,27 +183,39 @@ function OrgPost(): JSX.Element {
     console.log('Creating post with form state:', postformState);
 
     try {
-      if (!postformState.posttitle.trim() || !postformState.postinfo.trim()) {
-        throw new Error('Text fields cannot be empty strings');
+      if (!postformState.posttitle.trim()) {
+        throw new Error('Title field cannot be empty');
+      }
+
+      if (!currentUrl) {
+        throw new Error('Organization ID is required');
+      }
+
+      // Create the typed input object
+      const input: InterfaceMutationCreatePostInput = {
+        caption: postformState.posttitle.trim(),
+        organizationId: currentUrl,
+        isPinned: postformState.pinPost,
+      };
+
+      // Only add attachments if there's a file
+      if (file) {
+        input.attachments = [file];
       }
 
       const { data } = await create({
         variables: {
-          title: postformState.posttitle.trim(),
-          text: postformState.postinfo.trim(),
-          organizationId: currentUrl,
-          file:
-            postformState.postImage ||
-            postformState.postVideo ||
-            postformState.addMedia,
-          pinned: postformState.pinPost,
+          input,
         },
       });
+
       console.log('Post creation response:', data);
 
-      if (data) {
+      if (data?.createPost) {
         toast.success(t('postCreatedSuccess') as string);
-        refetch();
+        await refetch();
+
+        // Reset form
         setPostFormState({
           posttitle: '',
           postinfo: '',
@@ -166,11 +224,57 @@ function OrgPost(): JSX.Element {
           addMedia: '',
           pinPost: false,
         });
+        setFile(null);
         setPostModalIsOpen(false);
       }
     } catch (error: unknown) {
       console.error('Error creating post:', error);
       errorHandler(t, error);
+    }
+  };
+
+  // Updated file handling function
+  const handleAddMediaChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const selectedFile = e.target.files?.[0];
+
+    if (selectedFile) {
+      console.log('Selected file:', {
+        name: selectedFile.name,
+        type: selectedFile.type,
+        size: selectedFile.size,
+      });
+
+      // Validate file type
+      if (
+        !selectedFile.type.startsWith('image/') &&
+        !selectedFile.type.startsWith('video/')
+      ) {
+        toast.error('Please select an image or video file');
+        return;
+      }
+
+      // Store the raw file
+      setFile(selectedFile);
+
+      // Create preview
+      try {
+        const base64 = await convertToBase64(selectedFile);
+        setPostFormState((prev) => ({
+          ...prev,
+          addMedia: base64,
+        }));
+      } catch (error) {
+        console.error('Preview generation error:', error);
+        toast.error('Could not generate preview');
+      }
+    } else {
+      setFile(null);
+      setPostFormState((prev) => ({
+        ...prev,
+        addMedia: '',
+      }));
     }
   };
 
@@ -184,26 +288,6 @@ function OrgPost(): JSX.Element {
   if (createPostLoading || orgPostListLoading) {
     return <Loader />;
   }
-
-  const handleAddMediaChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    console.log('Media file selected:', e.target.files?.[0]);
-    setPostFormState((prevPostFormState) => ({
-      ...prevPostFormState,
-      addMedia: '',
-    }));
-
-    const selectedFile = e.target.files?.[0];
-
-    if (selectedFile) {
-      setFile(selectedFile);
-      setPostFormState({
-        ...postformState,
-        addMedia: await convertToBase64(selectedFile),
-      });
-    }
-  };
 
   const handleSearch = (term: string): void => {
     console.log('Search term:', term);
