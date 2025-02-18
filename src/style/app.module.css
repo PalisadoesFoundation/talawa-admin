@@ -3536,8 +3536,14 @@ input[type='radio']:checked + label:hover {
 
 .dispflex {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 271px;
+  margin-bottom: 32px;
+  margin-top: 11px;
+  margin-left: 26px;
+  margin-right: 261px;
 }
-
 .dispflex > input {
   width: 20%;
   border: none;
@@ -5797,7 +5803,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .checkboxdivEvents > label {
-  margin-right: 50px;
+  margin-right: 230px;
 }
 .checkboxdivEvents > label > input {
   margin-left: 10px;
@@ -5805,14 +5811,21 @@ button[data-testid='createPostBtn'] {
 
 .checkboxdivEvents {
   display: flex;
+  justify-content: space-between;
+  margin-right: 40px;
 }
 .checkboxdivEvents > div {
-  width: 50%;
+  width: 42%;
 }
 
 .dispflexEvents {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  margin-top: 10px;
+  margin-left: 25px;
+  margin-right: -28px;
 }
 .dispflexEvents > input {
   border: none;
