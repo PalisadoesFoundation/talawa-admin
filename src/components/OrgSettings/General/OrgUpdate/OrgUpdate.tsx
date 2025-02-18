@@ -179,8 +179,8 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         },
       });
 
-      if (data?.updateOrganization?.organization) {
-        await refetch({ input: { id: orgId } });
+      if (data) {
+        refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
       } else {
         toast.error('Failed to update organization');
@@ -372,7 +372,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
-              /* istanbul ignore else */
+
               if (file)
                 setFormState({
                   ...formState,

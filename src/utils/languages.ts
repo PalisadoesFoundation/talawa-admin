@@ -17,7 +17,7 @@ const languages = [
     country_code: 'in',
   },
   {
-    code: 'sp',
+    code: 'es',
     name: 'Español', // spanish
     country_code: 'ar',
   },
