@@ -45,6 +45,56 @@ export const ORGANIZATION_POST_LIST = gql`
     }
   }
 `;
+
+export const FILTERED_ORGANIZATION_POSTS = gql`
+  query FilteredOrganizationPosts(
+    $input: QueryOrganizationInput!
+    $title_contains: String
+    $text_contains: String
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    organization(input: $input) {
+      id
+      posts(
+        title_contains: $title_contains
+        text_contains: $text_contains
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+      ) {
+        edges {
+          node {
+            id
+            title
+            text
+            imageUrl
+            creator {
+              id
+              name
+            }
+            createdAt
+            updatedAt
+            likeCount
+            commentCount
+            pinned
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+`;
+
 /**
  * GraphQL query to retrieve the list of user tags belonging to an organization.
  *

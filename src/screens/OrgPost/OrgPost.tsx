@@ -140,6 +140,8 @@ function OrgPost(): JSX.Element {
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(6);
   const [last, setLast] = useState<number | null>(null);
+  const [filteredPosts, setFilteredPosts] = useState<InterfacePostEdge[]>([]);
+  const [isFiltering, setIsFiltering] = useState(false);
 
   const showInviteModal = (): void => {
     console.log('Opening post modal');
@@ -291,17 +293,37 @@ function OrgPost(): JSX.Element {
 
   const handleSearch = (term: string): void => {
     console.log('Search term:', term);
-    refetch({
-      input: {
-        id: currentUrl,
-        title_contains: showTitle ? term : null,
-        text_contains: !showTitle ? term : null,
-      },
-      after: after || null,
-      before: before || null,
-      first: first || null,
-      last: last || null,
-    });
+
+    if (!term.trim()) {
+      // If search term is empty, clear filters
+      setIsFiltering(false);
+      refetch({
+        input: {
+          id: currentUrl,
+        },
+        after: after || null,
+        before: before || null,
+        first: first || null,
+        last: last || null,
+      });
+      return;
+    }
+
+    // If we have data, filter it
+    if (orgPostListData?.organization?.posts?.edges) {
+      setIsFiltering(true);
+      const filtered = orgPostListData.organization.posts.edges.filter(
+        (edge) => {
+          const post = edge.node;
+          if (showTitle) {
+            return post.caption.toLowerCase().includes(term.toLowerCase());
+          }
+          // Assuming post.text exists in your data
+          return post.text?.toLowerCase().includes(term.toLowerCase());
+        },
+      );
+      setFilteredPosts(filtered);
+    }
   };
 
   const handleSorting = (option: string): void => {
@@ -378,8 +400,29 @@ function OrgPost(): JSX.Element {
             </div>
           </div>
           <div className={`row ${styles.list_box}`}>
-            {orgPostListData?.organization?.posts?.edges &&
-            orgPostListData.organization.posts.edges.length > 0 ? (
+            {isFiltering ? (
+              filteredPosts.length > 0 ? (
+                filteredPosts.map((edge: InterfacePostEdge) => {
+                  const post = edge.node;
+                  return (
+                    <OrgPostCard
+                      key={post.id}
+                      id={post.id}
+                      postTitle={post.caption}
+                      postInfo={post.text || ''}
+                      postAuthor={`${post.creator?.firstName || ''} ${post.creator?.lastName || ''}`}
+                      postPhoto={post.imageUrl || null}
+                      postVideo={post.videoUrl || null}
+                      pinned={post.pinned || false}
+                      postID={''}
+                    />
+                  );
+                })
+              ) : (
+                <NotFound title="post" keyPrefix="postNotFound" />
+              )
+            ) : orgPostListData?.organization?.posts?.edges &&
+              orgPostListData.organization.posts.edges.length > 0 ? (
               orgPostListData.organization.posts.edges.map(
                 (edge: InterfacePostEdge) => {
                   const post = edge.node;
@@ -403,32 +446,35 @@ function OrgPost(): JSX.Element {
             )}
           </div>
         </div>
-        <div className="row m-lg-1 d-flex justify-content-center w-100">
-          <div className="col-auto">
-            <Button
-              onClick={handlePreviousPage}
-              className={`${styles.createButton} btn-sm `}
-              disabled={
-                !orgPostListData?.organization?.posts?.pageInfo?.hasPreviousPage
-              }
-              data-testid="previousButton"
-            >
-              {t('Previous')}
-            </Button>
+        {!isFiltering && (
+          <div className="row m-lg-1 d-flex justify-content-center w-100">
+            <div className="col-auto">
+              <Button
+                onClick={handlePreviousPage}
+                className={`${styles.createButton} btn-sm `}
+                disabled={
+                  !orgPostListData?.organization?.posts?.pageInfo
+                    ?.hasPreviousPage
+                }
+                data-testid="previousButton"
+              >
+                {t('Previous')}
+              </Button>
+            </div>
+            <div className="col-auto">
+              <Button
+                onClick={handleNextPage}
+                className={`${styles.createButton} btn-sm `}
+                disabled={
+                  !orgPostListData?.organization?.posts?.pageInfo?.hasNextPage
+                }
+                data-testid="nextButton"
+              >
+                {t('Next')}
+              </Button>
+            </div>
           </div>
-          <div className="col-auto">
-            <Button
-              onClick={handleNextPage}
-              className={`${styles.createButton} btn-sm `}
-              disabled={
-                !orgPostListData?.organization?.posts?.pageInfo?.hasNextPage
-              }
-              data-testid="nextButton"
-            >
-              {t('Next')}
-            </Button>
-          </div>
-        </div>
+        )}
       </Row>
       <Modal
         show={postmodalisOpen}

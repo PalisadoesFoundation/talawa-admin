@@ -40,6 +40,16 @@ import type { InterfaceOrgPostCardProps } from 'types/Organization/interface';
  * For more details on the reusable classes, refer to the global CSS file.
  */
 
+export interface InterfacePostFormNew {
+  posttitle: string;
+  postinfo: string;
+  postphoto: string;
+  postvideo: string;
+  pinned: boolean;
+  postphotoMimeType?: string;
+  postvideoMimeType?: string;
+}
+
 export default function OrgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {
@@ -70,10 +80,15 @@ export default function OrgPostCard(
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [toggle] = useMutation(TOGGLE_PINNED_POST);
+
   const togglePostPin = async (id: string, pinned: boolean): Promise<void> => {
     try {
-      const { data } = await toggle({ variables: { id } });
-      if (data) {
+      const { data } = await toggle({
+        variables: {
+          input: { id }, // Wrap id in input object
+        },
+      });
+      if (data?.togglePostPin?.success) {
         setModalVisible(false);
         setMenuVisible(false);
         toast.success(`${pinned ? 'Post unpinned' : 'Post pinned'}`);
@@ -87,6 +102,7 @@ export default function OrgPostCard(
       }
     }
   };
+
   const toggleShowEditModal = (): void => {
     const { postTitle, postInfo, postPhoto, postVideo, pinned } = props;
     setPostFormState({
@@ -176,22 +192,29 @@ export default function OrgPostCard(
   const { t: tCommon } = useTranslation('common');
   const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
   const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
+
   const deletePost = async (): Promise<void> => {
     try {
       const { data } = await deletePostMutation({
-        variables: { id },
+        variables: {
+          input: {
+            id: id,
+          },
+        },
       });
-      if (data) {
+
+      if (data?.deletePost?.id) {
         toast.success(t('postDeleted') as string);
         toggleShowDeleteModal();
         setTimeout(() => {
           window.location.reload();
-        });
+        }, 2000);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
+
   const handleInputEvent = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -201,36 +224,126 @@ export default function OrgPostCard(
       [name]: value,
     }));
   };
+
   const updatePostHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    // Prepare the attachments array with correct structure including mimeType
+    const attachments = [];
+
+    if (postPhotoUpdated && postformState.postphoto) {
+      attachments.push({
+        url: postformState.postphoto,
+        mimeType: 'image/png', // Add required mimeType for images
+      });
+    }
+
+    if (postVideoUpdated && postformState.postvideo) {
+      attachments.push({
+        url: postformState.postvideo,
+        mimeType: 'video/mp4', // Add required mimeType for videos
+      });
+    }
+
+    // Prepare the update input
+    const updateInput = {
+      input: {
+        id,
+        caption: postformState.posttitle?.trim() || undefined,
+        isPinned: postformState.pinned || undefined,
+        attachments: attachments.length > 0 ? attachments : undefined,
+      },
+    };
+
+    if (
+      !updateInput.input.caption &&
+      updateInput.input.isPinned === undefined &&
+      (!updateInput.input.attachments ||
+        updateInput.input.attachments.length === 0)
+    ) {
+      toast.error('At least one field must be updated.');
+      return;
+    }
+
+    console.log('Update Input:', updateInput);
+
     try {
       const { data } = await updatePostMutation({
-        variables: {
-          id: id,
-          title: postformState.posttitle,
-          text: postformState.postinfo,
-          ...(postPhotoUpdated && {
-            imageUrl: postformState.postphoto,
-          }),
-          ...(postVideoUpdated && {
-            videoUrl: postformState.postvideo,
-          }),
-        },
+        variables: updateInput,
       });
-      if (data) {
+
+      if (data?.updatePost?.id) {
         toast.success(t('postUpdated') as string);
+        toggleShowEditModal();
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
+        console.error('Update Error:', {
+          error,
+          input: updateInput,
+        });
         toast.error(error.message);
       }
     }
   };
+
+  const getMimeTypeFromBase64 = (base64String: string): string => {
+    const match = base64String.match(
+      /^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,/,
+    );
+    return match ? match[1] : 'application/octet-stream';
+  };
+
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    setPostFormState((prevPostFormState) => ({
+      ...prevPostFormState,
+      postphoto: '',
+    }));
+    setPostPhotoUpdated(true);
+
+    const file = e.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      const mimeType = file.type || getMimeTypeFromBase64(base64 as string);
+
+      setPostFormState((prev) => ({
+        ...prev,
+        postphoto: base64 as string,
+      }));
+      // Store mimeType separately if not needed in state
+      console.log('Image MimeType:', mimeType);
+    }
+  };
+
+  const handleVideoChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    setPostFormState((prevPostFormState) => ({
+      ...prevPostFormState,
+      postvideo: '',
+    }));
+    setPostVideoUpdated(true);
+
+    const file = e.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      const mimeType = file.type || getMimeTypeFromBase64(base64 as string);
+
+      setPostFormState((prev) => ({
+        ...prev,
+        postvideo: base64 as string,
+      }));
+      console.log('Video MimeType:', mimeType);
+    }
+  };
+
   return (
     <>
       <div
@@ -504,22 +617,7 @@ export default function OrgPostCard(
                   type="file"
                   placeholder={t('image')}
                   multiple={false}
-                  onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>,
-                  ): Promise<void> => {
-                    setPostFormState((prevPostFormState) => ({
-                      ...prevPostFormState,
-                      postphoto: '',
-                    }));
-                    setPostPhotoUpdated(true);
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setPostFormState({
-                        ...postformState,
-                        postphoto: await convertToBase64(file),
-                      });
-                    }
-                  }}
+                  onChange={handleImageChange}
                   className={`mb-3 ${styles.inputField}`}
                 />
                 {postPhoto && (
@@ -554,24 +652,7 @@ export default function OrgPostCard(
                   type="file"
                   placeholder={t('video')}
                   multiple={false}
-                  onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>,
-                  ): Promise<void> => {
-                    setPostFormState((prevPostFormState) => ({
-                      ...prevPostFormState,
-                      postvideo: '',
-                    }));
-                    setPostVideoUpdated(true);
-                    const target = e.target as HTMLInputElement;
-                    const file = target.files && target.files[0];
-                    if (file) {
-                      const videoBase64 = await convertToBase64(file);
-                      setPostFormState({
-                        ...postformState,
-                        postvideo: videoBase64,
-                      });
-                    }
-                  }}
+                  onChange={handleVideoChange}
                   className={`mb-3 ${styles.inputField}`}
                 />
                 {postformState.postvideo && (
