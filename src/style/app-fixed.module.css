@@ -1,0 +1,922 @@
+/**
+ * CSS Methodology for Common Styles:
+ *
+ * This project aims to reduce CSS duplication by merging similar styles across components
+ * into reusable global classes. This ensures consistency and simplifies maintenance.
+ *
+ * Steps for contributors:
+ * 1. Identify duplicate or similar styles in different components (e.g., buttons, modals).
+ * 2. Create a global class with a clear, descriptive name (e.g., .addButton, .removeButton).
+ * 3. Use the new global class in all components requiring that style.
+ *
+ * Naming Convention:
+ * - Use lowercase, descriptive names for global classes (e.g., .addButton, .removeButton).
+ * - Keep names generic enough for reuse but clear in their purpose.
+ *
+ * Example:
+ * Instead of component-specific classes like:
+ *   `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge` (used in two different components for same functionality)
+ * Use:
+ *   `.addButton` (a single reusable class in the global CSS file that is used for functionalities that add/create tasks)
+ *
+ * Global Classes:
+ *   `.inputField` (for form input fields)
+ *   `.searchButton` (for form input field search button)
+ *   `.addButton` (for buttons that add/create task)
+ *   `.removeButton` (for buttons that remove/delete task)
+ *   `.modalHeader` (for header section of any modal)
+ *   `.editButton` (for buttons inside table)
+ *   `.switch` (for form toggles)
+ *   `.regularBtn` (for a simple blue button)
+ *   `.tableHeader` (for header section of any table component)
+ *   `.subtleBlueGrey` (for blue Text)
+ *   `.activeTab` (for tabs which are active)
+ *   `.inActiveTab` (for tabs which are not selected)
+ *
+ */
+
+:root {
+	--addButton-font: var(#555555);
+	--addButton-border: #eaebef;
+	--addButton-bg: #a8c7fa;
+	--addButton-bg-hover: #1778f2;
+	--addButton-border-hover: #555555;
+	--disabled-btn: #e7f0fe;
+
+	--removeButton-bg: #f8d6dc;
+	--removeButton-color: #c8102e;
+	--removeButton-bg-hover: #ff4d4f;
+	--removeButton-border-hover: #ff4d4f;
+	--removeButton-color-hover: #ffffff;
+	--removeButton-border: #dc3545;
+
+	--activeTab-bg: #eaebef;
+	--activeTab-color: #808080;
+	--activeTab-bg-hover: #707070;
+	--activeTab-color-hover: #ffffff;
+	--activeTab-border: #808080;
+	--activeTab-outline-focus: #808080;
+	--activeTab-border-hover: #707070;
+
+	--inactiveTab-bg: #ffffff97;
+	--inactiveTab-color: #808080;
+	--inactiveTab-border: #808080;
+	--inActiveTab-outline-focus: #808080;
+	--inactiveTab-bg-hover: #eaebef;
+	--inactiveTab-color-hover: #808080;
+	--inactiveTab-border-hover: #707070;
+
+	--searchButton-bg: #a8c7fa;
+	--searchButton-color: #555555;
+	--searchButton-border: #a8c7fa;
+	--searchButton-border-hover: #a8c7fa;
+	--searchButton-color-hover: #555555;
+	--searchButton-border-focus: #a8c7fa;
+	--searchButton-bg-hover: #a8c7fa;
+	--searchButton-bg-active: #a8c7fa;
+
+	--hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
+		0 4px 8px 3px rgba(60, 64, 67, 0.15);
+
+	--modalHeader-color: #000000;
+	--modalHeader-bg: #ffffff;
+
+	--switch-bg-checked: #1778f2;
+	--switch-border-checked: #1778f2;
+	--switch-box-shadow-checked: #a8c7fa;
+	--switch-border-focus: #d1d5db;
+
+	--editButton-bg: #a8c7fa;
+	--editButton-font: #555555;
+	--editButton-border: #eaebef;
+	--editButton-bg-active: #1778f2;
+	--editButton-border-active: #eaebef;
+	--editButton-bg-hover: #1778f2;
+	--editButton-border-hover: #555555;
+
+	--regularBtn-bg: #a8c7fa;
+	--regularBtn-border: #555555;
+	--regularBtn-bg-hover: #286fe0;
+	--regularBtn-font-hover: #555555;
+	--regularBtn-border-hover: #555555;
+
+	--font-size-header: 16px;
+	--font-size-table-body: 14px;
+
+	--tableHeader-bg: #eaebef;
+	--tableHeader-color: #000000;
+
+	--LoginToggle-button-color: #555555;
+	--LoginToggle-button-bg: #eaebef;
+	--LoginToggle-button-border: #eaebef;
+	--LoginToggle-button-bg-hover: #eaebef;
+	--LoginToggle-button-border-hover: #eaebef;
+	--LoginToggle-button-bg-active: #a8c7fa;
+	--LoginToggle-button-border-active: #a8c7fa;
+	--LoginToggle-button-color-active: #555555;
+	--LoginToggle-button-color-active-hover: #555555;
+	--LoginToggle-button-border-active-hover: #a8c7fa;
+	--LoginToggle-button-bg-active-hover: #a8c7fa;
+
+	--email-button-bg: #a8c7fa;
+	--email-button-bg: #a8c7fa;
+	--email-button-bg-hover: #a8c7fa;
+	--email-button-border-hover: #a8c7fa;
+	--email-button-bg: #a8c7fa;
+	--email-button-border: #a8c7fa;
+	--email-button-fill: #555555;
+
+	--login-button-color: #555555;
+	--login-button-bg: #a8c7fa;
+	--login-button-border: #a8c7fa;
+	--login-button-bg-hover: #a8c7fa;
+	--login-button-border-hover: #a8c7fa;
+	--login-button-color-active: #a8c7fa;
+	--login-button-bg-active: #a8c7fa;
+	--login-button-border-active: #a8c7fa;
+	--login-button-bg-disabled: #a8c7fa;
+	--login-button-border-disabled: #a8c7fa;
+	--login-button-color-hover: #555555;
+
+	--langChange-button-bg-active: #a8c7fa;
+	--langChange-button-border-active: #a8c7fa;
+	--langChange-button-color-active: #1778f2;
+	--langChange-button-color: #1778f2;
+	--langChange-button-border: #a8c7fa;
+	--langChange-button-bg-hover: #a8c7fa;
+	--langChange-button-border-hover: #a8c7fa;
+
+	--langChange-button-bg-hover: #a8c7fa;
+	--langChange-button-border-hover: #a8c7fa;
+
+	--orText-bg: #fff;
+	--orText-color: #6c757d;
+
+	--register-button-bg: #eaebef;
+	--register-button-border: #eaebef;
+	--register-button-border: #eaebef;
+	--register-button-border-hover: #eaebef;
+	--register-button-color-active: #eaebef;
+	--register-button-bg-active: #eaebef;
+	--register-button-border-active: #eaebef;
+	--register-button-color: #555555;
+	--register-button-color-hover: #555555;
+
+	--row-bg: #fff;
+	--row-bg-scroll: #00000029;
+	--row-color: #6c757d;
+}
+
+/* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
+
+/* Add Button */
+
+.addButton {
+	margin-bottom: 10px;
+	color: var(--addButton-font);
+	background-color: var(--addButton-bg);
+	border-color: var(--addButton-border);
+	--bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus-visible) {
+	background-color: var(--addButton-bg-hover) !important;
+	border-color: var(--addButton-border-hover);
+}
+
+.addButton:disabled {
+	margin-bottom: 10px;
+	background-color: var(--disabled-btn);
+	border-color: var(--addButton-bg);
+}
+
+/* Remove Button */
+
+.removeButton {
+	margin-bottom: 10px;
+	background-color: var(--removeButton-bg);
+	color: var(--removeButton-color);
+	margin-right: 10px;
+	--bs-btn-border-color: var(--removeButton-border);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+	background-color: var(--removeButton-bg-hover) !important;
+	border-color: var(--removeButton-border-hover);
+	color: var(--removeButton-color-hover);
+}
+
+/* Active Tab */
+
+.activeTab {
+	background-color: var(--activeTab-bg);
+	color: var(--activeTab-color);
+	border-color: var(--activeTab-border);
+	align-items: center;
+	position: relative;
+	outline: none;
+}
+
+.activeTab:focus-visible {
+	outline: 2px solid var(--activeTab-outline-focus);
+	outline-offset: 2px;
+}
+
+.activeTab:is(:hover, :focus, :active) {
+	background-color: var(--activeTab-bg-hover) !important;
+	color: var(--activeTab-color-hover);
+	border-color: var(--activeTab-border-hover) !important;
+	align-items: center;
+}
+
+/* Inactive Tab */
+
+.inActiveTab {
+	background-color: var(--inActiveTab-bg);
+	color: var(--inActiveTab-color);
+	border-color: var(--inActiveTab-border);
+	align-items: center;
+	position: relative;
+	outline: none;
+}
+
+.inActiveTab:focus-visible {
+	outline: 2px solid var(--inActiveTab-outline-focus);
+	outline-offset: 2px;
+}
+
+.inActiveTab:is(:hover, :focus, :active) {
+	background-color: var(--inActiveTab-bg-hover) !important;
+	color: var(--inActiveTab-color-hover);
+	border-color: var(--inActiveTab-border-hover) !important;
+	align-items: center;
+}
+
+/* Search Button */
+
+.searchButton {
+	--bs-btn-active-color: var(--searchButton-bg);
+	--bs-btn-active-bg: var(--searchButton-bg);
+	--bs-btn-active-border-color: var(--searchButton-border);
+	margin-bottom: 10px;
+	background-color: var(--searchButton-bg) !important;
+	border-color: var(--searchButton-border) !important;
+	color: var(--searchButton-color);
+	position: absolute;
+	z-index: 10;
+	bottom: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
+}
+
+.searchButton:hover {
+	background-color: var(--searchButton-bg-hover);
+	border-color: var(--searchButton-border-hover);
+	box-shadow: var(--hover-shadow);
+	color: var(--searchButton-color-hover) !important;
+}
+
+.searchButton:active {
+	transform: scale(0.95);
+	background-color: var(--searchButton-bg-active) !important;
+	border-color: transparent !important;
+}
+
+/* Modal Header*/
+
+.modalHeader {
+	border: none;
+	padding-bottom: 0;
+	background-color: var(--modalHeader-bg) !important;
+	padding: 1rem 1rem;
+	color: var(--modalHeader-color);
+}
+
+.modalHeader div {
+	color: var(--modalHeader-color) !important;
+}
+
+/* Switch */
+
+.switch input {
+	--bs-form-switch-bg: transparent;
+}
+
+.switch input:checked {
+	background-color: var(--switch-bg-checked);
+	border-color: var(--switch-border-checked);
+	box-shadow: 0 0 0.1rem 0.2rem var(--switch-box-shadow-checked);
+}
+
+.switch input:focus {
+	outline: none;
+	box-shadow: none;
+	border-color: var(--switch-border-focus);
+}
+
+/* Edit Button */
+
+.editButton {
+	background-color: var(--editButton-bg);
+	color: var(--editButton-font);
+	border-color: var(--editButton-border);
+	--bs-btn-active-bg: var(--editButton-bg-active);
+	--bs-btn-active-border-color: var(--editButton-border-active);
+}
+
+.editButton:is(:hover, :active) {
+	background-color: var(--editButton-bg-hover);
+	border-color: var(--editButton-border-hover);
+	box-shadow: none;
+}
+
+/* Regular Button */
+
+.regularBtn {
+	background-color: var(--regularBtn-bg);
+	border-color: var(--regularBtn-border);
+}
+
+.regularBtn:is(:hover, :active) {
+	background-color: var(--regularBtn-bg-hover) !important;
+	color: var(--regularBtn-font-hover);
+	border-color: var(--regularBtn-border-hover) !important;
+}
+
+/* Table Header */
+
+.tableHeader {
+	background-color: var(--tableHeader-bg);
+	color: var(--tableHeader-color);
+	font-size: var(--font-size-header);
+}
+
+.tableHeader {
+	font-weight: bold;
+}
+
+/* Add more Global CSS Classes above this */
+
+/* ----------------------------------------------------- */
+
+/* Css Class Related to a particular Component */
+
+/* -- AddOnEntry.tsx -- */
+/* -- AddOnRegister.tsx -- */
+/* -- AddOnStore.tsx -- */
+/* -- Action.tsx -- */
+/* -- MainContent.tsx -- */
+/* -- SidePanel.tsx -- */
+/* -- AddOn.tsx -- */
+/* -- AddPeopleToTag.tsx -- */
+/* -- AdvertisementEntry.tsx -- */
+/* -- AdvertisementRegister.tsx -- */
+/* -- Advertisement.tsx -- */
+/* -- AgendaCategoryContainer.tsx -- */
+/* -- AgendaItemsCreateModal.tsx -- */
+/* -- AgendaItemsDeleteModal.tsx -- */
+/* -- AgendaItemsPreviewModal.tsx -- */
+/* -- AgendaItemsUpdateModal.tsx -- */
+/* -- AgendaItemsContainer.tsx -- */
+/* -- Avatar.tsx -- */
+/* -- ChangeLanguageDropDown.tsx -- */
+/* -- TableRow.tsx -- */
+/* -- CheckInWrapper.tsx -- */
+/* -- CollapsibleDropdown.tsx -- */
+/* -- ContriStats.tsx -- */
+/* -- CurrentHourIndicator.tsx -- */
+/* -- DynamicDropDown.tsx -- */
+/* -- EditCustomFieldDropDown.tsx -- */
+/* -- EventHeader.tsx -- */
+/* -- EventCalender.tsx -- */
+/* -- YearlyEventCalender.tsx -- */
+/* -- EventDashboardSreen.tsx -- */
+/* -- EventListCardDeleteModal.tsx -- */
+/* -- EventListCardPreviewModal.tsx -- */
+/* -- EventListCardUpdateModal.tsx -- */
+/* -- EventListCardModals.tsx -- */
+/* -- EventListCard.tsx -- */
+/* -- EventDashboard.tsx -- */
+/* -- EventAgendaItems.tsx -- */
+/* -- EventAttendance.tsx -- */
+/* -- AttendedEventList.tsx -- */
+/* -- EventStatistics.tsx -- */
+/* -- EventRegistrants.tsx -- */
+/* -- AddOnSpotAttendee.tsx -- */
+/* -- EventRegistrantsModal.tsx -- */
+/* -- EventRegistrantsWrapper.tsx -- */
+/* -- AverageRating.tsx -- */
+/* -- Feedback.tsx -- */
+/* -- Review.tsx -- */
+/* -- EventStats.tsx -- */
+/* -- EventStatsWrapper.tsx -- */
+/* -- GroupChatDetails.tsx -- */
+/* -- HolidayCard.tsx -- */
+/* -- IconComponent.tsx -- */
+/* -- InfiniteScrollLoader.tsx -- */
+/* -- LeftDrawer.tsx -- */
+/* -- LeftDrawerOrg.tsx -- */
+/* -- Loader.tsx -- */
+
+/* -- LoginPortalToggle.tsx -- */
+
+.navLinkClass {
+	display: inline-block;
+	padding: 0.375rem 0.75rem;
+	font-size: 1rem;
+	line-height: 1.4;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	color: var(--LoginToggle-button-color);
+	border-radius: 0.3rem;
+	width: 100%;
+	box-sizing: border-box;
+	border: 1px solid var(--LoginToggle-button-border);
+	font-weight: 500;
+	transition: all 0.25s ease;
+	background-color: var(--LoginToggle-button-bg);
+}
+
+.navLinkClass:hover {
+	box-shadow: var(--hover-shadow);
+	background-color: var(--LoginToggle-button-bg-hover);
+	border-color: var(--LoginToggle-button-border-hover);
+}
+
+.activeLink {
+	color: var(--LoginToggle-button-color-active);
+	border: 1px solid var(--LoginToggle-button-border-active);
+	background-color: var(--LoginToggle-button-bg-active);
+}
+
+.activeLink:hover {
+	box-shadow: var(--hover-shadow);
+	color: var(--LoginToggle-button-color-active-hover);
+	border: 1px solid var(--LoginToggle-button-border-active-hover);
+	background-color: var(--LoginToggle-button-bg-active-hover);
+}
+
+/* -- customTableCell.tsx -- */
+/* -- EventsAttendedByMember.tsx -- */
+/* -- EventsAttendedCardItem.tsx -- */
+/* -- EventsAttendedMemberModal.tsx -- */
+/* -- MemberRequestCard.tsx -- */
+/* -- NotFound.tsx -- */
+/* -- OrgAdminListCard.tsx -- */
+/* -- OrganizationCard.tsx -- */
+/* -- OrganizationCardStart.tsx -- */
+/* -- CardItem.tsx -- */
+/* -- CardItemLoading.tsx -- */
+/* -- DashboardCard.tsx -- */
+/* -- DashboardCardLoading.tsx -- */
+/* -- OrganizationScreen.tsx -- */
+/* -- OrgContriCards.tsx -- */
+/* -- OrgDelete.tsx -- */
+/* -- OrgListCard.tsx -- */
+/* -- TruncatedText.tsx -- */
+/* -- useDebounce.tsx -- */
+/* -- orgPeopleListCard.tsx -- */
+/* -- DeletePostModal.tsx -- */
+/* -- OrgPostCard.tsx -- */
+/* -- CategoryModal.tsx -- */
+/* -- OrgActionItemCategories.tsx -- */
+/* -- AgendaCategoryCreateModal.tsx -- */
+/* -- AgendaCategoryCreateModal.tsx -- */
+/* -- AgendaCategoryCreateModal.tsx -- */
+/* -- AgendaCategoryUpdateModal.tsx -- */
+/* -- OrganizationAgendaCategory.tsx -- */
+/* -- GeneralSettings.tsx -- */
+/* -- DeleteOrg.tsx -- */
+/* -- OrgProfileFieldSettings.tsx -- */
+/* -- OrgUpdate.tsx -- */
+/* -- OrganizationCard.tsx -- */
+/* -- OrganizationCardStart.tsx -- */
+/* -- CardItem.tsx -- */
+/* -- CardItemLoading.tsx -- */
+/* -- DashboardCard.tsx -- */
+/* -- DashboardCardLoading.tsx -- */
+/* -- OrganizationScreen.tsx -- */
+/* -- Pagination.tsx -- */
+/* -- PaginationList.tsx -- */
+/* -- ProfileDropdown.tsx -- */
+/* -- CustomRecurrenceModal.tsx -- */
+/* -- RecurrenceOptions.tsx -- */
+/* -- RequestsTableItem.tsx -- */
+/* -- SecuredRoute.tsx -- */
+/* -- SuperAdminScreen.tsx -- */
+/* -- TableLoader.tsx -- */
+/* -- TagActions.tsx -- */
+/* -- TagNode.tsx -- */
+/* -- UpdateSession.tsx -- */
+/* -- UserListCard.tsx -- */
+/* -- UserPasswordUpdate.tsx -- */
+/* -- ChatRoom.tsx -- */
+/* -- CommentCard.tsx -- */
+/* -- ContactCard.tsx -- */
+/* -- CreateDirectChat.tsx -- */
+/* -- CreateGroupChat.tsx -- */
+/* -- DonationCard.tsx -- */
+/* -- EventCard.tsx -- */
+/* -- OrganizationCard.tsx -- */
+/* -- OrganizationNavbar.tsx -- */
+/* -- PeopleCard.tsx -- */
+/* -- PostCard.tsx -- */
+/* -- PromotedPost.tsx -- */
+/* -- Register.tsx -- */
+/* -- SecuredRouteForUser.tsx -- */
+/* -- StartPostModal.tsx -- */
+/* -- UserNavbar.tsx -- */
+/* -- EventsAttendedByUser.tsx -- */
+/* -- UserAddressFields.tsx -- */
+/* -- UserSidebar.tsx -- */
+/* -- UserSidebarOrg.tsx -- */
+/* -- DeleteUser.tsx -- */
+/* -- OtherSettings.tsx -- */
+/* -- UserProfile.tsx -- */
+/* -- UsersTableItem.tsx -- */
+/* -- VenueCard.tsx -- */
+/* -- VenueModal.tsx -- */
+
+
+/* Add more Class Related to a particular Component above this */
+
+/* ----------------------------------------------------- */
+
+/* Css Class Related to a particular Screen */
+
+/* -- BlockUser.tsx -- */
+/* -- CommunityProfile.tsx -- */
+/* -- EventManagement.tsx -- */
+/* -- VolunteerContainer.tsx -- */
+/* -- Requests.tsx -- */
+/* -- VolunteerGroupDeleteModal.tsx -- */
+/* -- VolunteerGroupModal.tsx -- */
+/* -- VolunteerGroupViewModal.tsx -- */
+/* -- VolunteerGroups.tsx -- */
+/* -- VolunteerCreateModal.tsx -- */
+/* -- VolunteerDeleteModal.tsx -- */
+/* -- VolunteerViewModal.tsx -- */
+/* -- Volunteers.tsx -- */
+/* -- ForgotPassword.tsx -- */
+/* -- FundCampaignPledge.tsx -- */
+/* -- PledgeDeleteModal.tsx -- */
+/* -- PledgeModal.tsx -- */
+/* -- Leaderboard.tsx -- */
+
+/* -- LoginPage.tsx -- */
+
+.active_tab {
+	-webkit-animation: fadeIn 0.3s ease-in-out;
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+.communityLogo {
+	object-fit: contain;
+}
+
+.email_button {
+	--bs-btn-active-bg: var(--email-button-bg);
+	--bs-btn-active-border-color: var(--email-button-border);
+	--bs-btn-hover-bg: var(--email-button-bg-hover);
+	--bs-btn-hover-border-color: var(--email-button-border-hover);
+	position: absolute;
+	z-index: 10;
+	bottom: 0;
+	right: 0;
+	height: 100%;
+	display: flex;
+	background-color: var(--email-button-bg);
+	border-color: var(--email-button-border);
+	justify-content: center;
+	align-items: center;
+	color: var(--email-button-fill);
+}
+
+.email_button:hover {
+	color: var(--email-button-fill) !important;
+	box-shadow: var(--hover-shadow);
+}
+
+.socialIcons {
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+}
+
+.login_background {
+	min-height: 100vh;
+}
+
+.login_btn {
+	font-weight: bold;
+	color: var(--login-button-color);
+	--bs-btn-bg: var(--login-button-bg);
+	--bs-btn-border-color: var(--login-button-border);
+	--bs-btn-hover-bg: var(--login-button-bg-hover);
+	--bs-btn-hover-border-color: var(--login-button-border-hover);
+	--bs-btn-active-color: var(--login-button-color-active);
+	--bs-btn-active-bg: var(--login-button-bg-active);
+	--bs-btn-active-border-color: var(--login-button-border-active);
+	--bs-btn-disabled-bg: var(--login-button-bg-disabled);
+	--bs-btn-disabled-border-color: var(--login-button-border-disabled);
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	width: 100%;
+	transition: background-color 0.2s ease;
+	cursor: pointer;
+}
+
+.login_btn:hover {
+	color: var(--login-button-color-hover) !important;
+	box-shadow: var(--hover-shadow);
+}
+
+.langChangeBtnStyle {
+	--bs-btn-active-bg: var(--langChange-button-bg-active);
+	--bs-btn-active-border-color: var(--langChange-button-border-active);
+	--bs-btn-active-color: var(--langChange-button-color-active);
+	width: 7.5rem;
+	height: 2.2rem;
+	padding: 0;
+	color: var(--langChange-button-color);
+	border-color: var(--langChange-button-border);
+	background-color: transparent;
+	/* Default transparent background */
+}
+
+
+
+.langChangeBtnStyle:hover {
+	background-color: var(--langChange-button-bg-hover) !important;
+	border-color: var(--langChange-button-border-hover) !important;
+}
+
+.talawa_logo {
+	height: clamp(3rem, 8vw, 5rem);
+	width: auto;
+	aspect-ratio: 1;
+	display: block;
+	margin: 1.5rem auto 1rem;
+
+	@media (prefers-reduced-motion: no-preference) {
+		-webkit-animation: zoomIn 0.3s ease-in-out;
+		animation: zoomIn 0.3s ease-in-out;
+	}
+}
+
+.password_checks {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-direction: column;
+	gap: var(--spacing-md, 1rem);
+}
+
+.password_check_element {
+	padding: var(--spacing-sm, 0.5rem) 0;
+}
+
+.password_check_element_top {
+	margin-top: var(--spacing-lg, 1.125rem);
+}
+
+.password_check_element_bottom {
+	margin-bottom: var(--spacing-lg, 1.25rem);
+}
+
+.reg_btn {
+	font-weight: bold;
+	background-color: var(--register-button-bg);
+	border-color: var(--register-button-border);
+	--bs-btn-hover-bg: var(--register-button-border);
+	--bs-btn-hover-border-color: var(--register-button-border-hover);
+	--bs-btn-active-color: var(--register-button-color-active);
+	--bs-btn-active-bg: var(--register-button-bg-active);
+	--bs-btn-active-border-color: var(--register-button-border-active);
+	margin-top: 1rem;
+	color: var(--register-button-color);
+	margin-bottom: 1rem;
+	width: 100%;
+	transition: background-color 0.2s ease;
+	cursor: pointer;
+}
+
+.reg_btn:hover {
+	color: var(--register-button-color-hover) !important;
+	box-shadow: var(--hover-shadow);
+}
+
+.row .left_portion {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	height: 100vh;
+}
+
+
+.row .left_portion .inner .palisadoes_logo {
+	width: 600px;
+	height: auto;
+}
+
+.row .right_portion {
+	min-height: 100vh;
+	position: relative;
+	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 1rem 2.5rem;
+	background: var(--row-bg);
+}
+
+.row .right_portion::-webkit-scrollbar {
+	width: 8px;
+}
+
+.row .right_portion::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.row .right_portion::-webkit-scrollbar-thumb {
+	background-color: var(--row-bg-scroll);
+	border-radius: 4px;
+}
+
+.row .right_portion .langChangeBtn {
+	margin: 0;
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+}
+
+.orText {
+	display: block;
+	position: absolute;
+	top: -0.2rem;
+	left: calc(50% - 2.6rem);
+	margin: 0 auto;
+	padding: 0.5rem 2rem;
+	z-index: 100;
+	background: var(--orText-bg);
+	color: var(--orText-color);
+}
+
+.row .orText {
+	display: block;
+	position: absolute;
+	top: -0.5rem;
+	left: calc(50% - 2.6rem);
+	margin: 0 auto;
+	padding: 0.35rem 2rem;
+	z-index: 100;
+	background: var(--row-bg);
+	color: var(--row-color);
+}
+
+@media (max-width: 992px) {
+	.row .left_portion {
+		padding: 0 2rem;
+	}
+
+	.row .left_portion .inner .palisadoes_logo {
+		width: 100%;
+	}
+}
+
+@media (max-width: 769px) {
+	.row {
+		flex-direction: column-reverse;
+	}
+
+	.row .right_portion,
+	.row .left_portion {
+		height: unset;
+	}
+
+	.row .right_portion {
+		min-height: 100vh;
+		overflow-y: unset;
+	}
+
+	.row .left_portion .inner {
+		display: flex;
+		justify-content: center;
+	}
+
+	.row .left_portion .inner .palisadoes_logo {
+		height: 70px;
+		width: unset;
+		position: absolute;
+		margin: 0.5rem;
+		top: 0;
+		right: 0;
+		z-index: 100;
+	}
+
+	.row .left_portion .inner p {
+		margin-bottom: 0;
+		padding: 1rem;
+	}
+
+	.socialIcons {
+		margin-bottom: 1rem;
+	}
+}
+
+@media (max-width: 577px) {
+	.row .right_portion {
+		padding: 1rem 1rem 0 1rem;
+	}
+
+	.row .right_portion .langChangeBtn {
+		position: absolute;
+		margin: 1rem;
+		left: 0;
+		top: 0;
+	}
+
+	.marginTopForReg {
+		margin-top: 4rem !important;
+	}
+
+	.row .right_portion .talawa_logo {
+		height: 120px;
+		margin: 0 auto 2rem auto;
+	}
+
+	.socialIcons {
+		margin-bottom: 1rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.talawa_logo {
+		animation: none;
+	}
+
+	.active_tab {
+		animation: none;
+	}
+}
+
+/* -- EditUserTagModal.tsx -- */
+/* -- ManageTag.tsx -- */
+/* -- RemoveUserTagModal.tsx -- */
+/* -- UnassignUserTagModal.tsx -- */
+/* -- MockAddPeopleToTag.tsx -- */
+/* -- MockTagActions.tsx -- */
+/* -- MemberDetail.tsx -- */
+/* -- OrgContribution.tsx -- */
+/* -- OrgList.tsx -- */
+/* -- OrganizationModal.tsx -- */
+/* -- OrgPost.tsx -- */
+/* -- OrgSettings.tsx -- */
+/* -- ItemDeleteModal.tsx -- */
+/* -- ItemModal.tsx -- */
+/* -- ItemUpdateStatusModal.tsx -- */
+/* -- ItemViewModal.tsx -- */
+/* -- OrganizationActionItems.tsx -- */
+/* -- OrganizationDashboard.tsx -- */
+/* -- OrganizationEvents.tsx -- */
+/* -- CampaignModal.tsx -- */
+/* -- OrganizationFundCampagins.tsx -- */
+/* -- FundModal.tsx -- */
+/* -- OrganizationFunds.tsx -- */
+/* -- AddMember.tsx -- */
+/* -- OrganizationPeople.tsx -- */
+/* -- OrganizationTags.tsx -- */
+/* -- OrganizationVenues.tsx -- */
+/* -- PageNotFound.tsx -- */
+/* -- Requests.tsx --  */
+/* -- SubTags.tsx -- */
+/* -- Campaigns.tsx -- */
+/* -- PledgeModal.tsx --  */
+/* -- Chat.tsx -- */
+/* -- Donate.tsx -- */
+/* -- Events.tsx -- */
+/* -- LeaveOrganization.tsx -- */
+/* -- Organizations.tsx -- */
+/* -- People.tsx -- */
+/* -- Pledges.tsx -- */
+/* -- Posts.tsx -- */
+/* -- Settings.tsx -- */
+/* -- UserScreen.tsx -- */
+/* -- VolunteerManagement.tsx -- */
+/* -- Actions.tsx -- */
+/* -- GroupModal.tsx -- */
+/* -- Groups.tsx -- */
+/* -- Invitations.tsx -- */
+/* -- UpcomingEvents.tsx -- */
+/* -- Users.tsx -- */
+
+/* Add more Class Related to a particular Screen above this */
+
+/* ----------------------------------------------------- */
