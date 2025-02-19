@@ -42,10 +42,12 @@ interface InterfaceMember {
  * <Requests />
  * ```
  */
+
+
 const Requests = (): JSX.Element => {
   // Translation hooks for internationalization
   const { t } = useTranslation('translation', {
-    keyPrefix: 'blockUnblockUser',
+    keyPrefix: 'blockUnblockUser', '',
   });
   const { t: tCommon } = useTranslation('common');
 
