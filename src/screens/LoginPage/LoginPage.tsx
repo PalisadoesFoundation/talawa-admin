@@ -135,16 +135,18 @@ const loginPage = (): JSX.Element => {
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
-    if (orgData) {
-      const options = orgData.organizations.map(
+    if (orgData && orgData.getAllOrganization) {
+      // console.log(orgData.getAllOrganization,'aaaaa');
+
+      const options = orgData.getAllOrganization.map(
         (org: InterfaceQueryOrganizationListObject) => {
           const tempObj: { label: string; id: string } | null = {} as {
             label: string;
             id: string;
           };
           tempObj['label'] =
-            `${org.name}(${org.address?.city},${org.address?.state},${org.address?.countryCode})`;
-          tempObj['id'] = org._id;
+            `${org.name}(${org.city},${org.state},${org.countryCode})`;
+          tempObj['id'] = org.id;
           return tempObj;
         },
       );

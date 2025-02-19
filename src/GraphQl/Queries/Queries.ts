@@ -39,31 +39,12 @@ export const CURRENT_USER = gql`
 // Query to take the Organization list
 export const ORGANIZATION_LIST = gql`
   query {
-    organizations {
-      _id
-      image
-      creator {
-        firstName
-        lastName
-      }
+    getAllOrganization {
+      id
       name
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
-      }
+      city
+      state
+      countryCode
     }
   }
 `;
