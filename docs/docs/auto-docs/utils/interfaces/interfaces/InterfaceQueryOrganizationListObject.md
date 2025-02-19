@@ -8,75 +8,27 @@ Defined in: [src/utils/interfaces.ts:850](https://github.com/PalisadoesFoundatio
 
 ## Properties
 
-### \_id
+### city
 
-> **\_id**: `string`
-
-Defined in: [src/utils/interfaces.ts:851](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L851)
-
-***
-
-### address
-
-> **address**: [`InterfaceAddress`](InterfaceAddress.md)
-
-Defined in: [src/utils/interfaces.ts:865](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L865)
-
-***
-
-### admins
-
-> **admins**: `object`[]
-
-Defined in: [src/utils/interfaces.ts:861](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L861)
-
-#### \_id
-
-> **\_id**: `string`
-
-***
-
-### createdAt
-
-> **createdAt**: `string`
-
-Defined in: [src/utils/interfaces.ts:864](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L864)
-
-***
-
-### creator
-
-> **creator**: `object`
+> **city**: `string`
 
 Defined in: [src/utils/interfaces.ts:853](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L853)
 
-#### firstName
+***
 
-> **firstName**: `string`
+### countryCode
 
-#### lastName
+> **countryCode**: `string`
 
-> **lastName**: `string`
+Defined in: [src/utils/interfaces.ts:855](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L855)
 
 ***
 
-### image
+### id
 
-> **image**: `string`
+> **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:852](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L852)
-
-***
-
-### members
-
-> **members**: `object`[]
-
-Defined in: [src/utils/interfaces.ts:858](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L858)
-
-#### \_id
-
-> **\_id**: `string`
+Defined in: [src/utils/interfaces.ts:851](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L851)
 
 ***
 
@@ -84,4 +36,12 @@ Defined in: [src/utils/interfaces.ts:858](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:857](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L857)
+Defined in: [src/utils/interfaces.ts:852](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L852)
+
+***
+
+### state
+
+> **state**: `string`
+
+Defined in: [src/utils/interfaces.ts:854](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L854)

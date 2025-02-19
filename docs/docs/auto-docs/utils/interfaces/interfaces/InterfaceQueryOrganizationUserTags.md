@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationUserTags
 
-Defined in: [src/utils/interfaces.ts:945](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L945)
+Defined in: [src/utils/interfaces.ts:935](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L935)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/utils/interfaces.ts:945](https://github.com/PalisadoesFoundatio
 
 > **userTags**: `InterfaceTagNodeData`
 
-Defined in: [src/utils/interfaces.ts:946](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L946)
+Defined in: [src/utils/interfaces.ts:936](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L936)

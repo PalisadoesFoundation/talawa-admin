@@ -29,12 +29,17 @@ const profileDropdown = (): JSX.Element => {
   const userRole = getItem('role');
   const name = getItem('name') || '';
   const userImage = getItem('UserImage');
+  const userId = getItem('id');
   const navigate = useNavigate();
   const { orgId } = useParams();
 
   const logout = async (): Promise<void> => {
     try {
-      await revokeRefreshToken();
+      await revokeRefreshToken({
+        variables: {
+          input: { id: userId },
+        },
+      });
     } catch (error) {
       console.error('Error revoking refresh token:', error);
     }
