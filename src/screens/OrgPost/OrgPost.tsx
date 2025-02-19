@@ -19,7 +19,14 @@ import styles from '../../style/app.module.css';
 import SortingButton from '../../subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
-// Define interfaces for the GraphQL response structure
+interface InterfacePostNode {
+  createdAt: string; // Ensure this matches the GraphQL response
+}
+
+interface InterfacePostEdge {
+  node: InterfacePostNode;
+}
+
 interface InterfacePostCreator {
   id: string;
   firstName?: string;
@@ -329,6 +336,49 @@ function OrgPost(): JSX.Element {
   const handleSorting = (option: string): void => {
     console.log('Sorting option selected:', option);
     setSortingOption(option);
+
+    // ✅ Accept "newest", "oldest", and "latest" as valid options
+    if (!['newest', 'oldest', 'latest'].includes(option)) {
+      console.error('Invalid sorting option:', option);
+      return;
+    }
+
+    // ✅ Treat "newest" and "latest" the same (Descending order)
+    const isAscending = option === 'oldest';
+
+    try {
+      // Ensure variables match the GraphQL schema exactly
+      const refetchVariables = {
+        input: {
+          id: currentUrl,
+        },
+        first: 6, // Pagination
+        sortField: 'createdAt', // Field to sort by
+        sortOrder: isAscending ? 'ASC' : 'DESC', // Order
+      };
+
+      console.log('Refetching with variables:', refetchVariables);
+
+      // Trigger refetch with updated sorting
+      refetch(refetchVariables)
+        .then((response) => {
+          console.log('Refetch successful:', response);
+
+          // Displaying all posts with their position and createdAt
+          const posts: InterfacePostEdge[] =
+            response?.data?.organization?.posts?.edges || [];
+          posts.forEach((post, index) => {
+            console.log(
+              `Position: ${index + 1}, Created At: ${post.node.createdAt}`,
+            );
+          });
+        })
+        .catch((error) => {
+          console.error('Refetch error:', error);
+        });
+    } catch (error) {
+      console.error('Error during sorting:', error);
+    }
   };
 
   const handleNextPage = (): void => {
