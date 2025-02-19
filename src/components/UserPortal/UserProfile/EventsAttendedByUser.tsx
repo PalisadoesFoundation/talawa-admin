@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './common.module.css';
-import EventsAttendedByMember from 'components/MemberDetail/EventsAttendedByMember';
+import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
 /**
  * Component to display events attended by a user in card format
  * @param userDetails - User information including attended events

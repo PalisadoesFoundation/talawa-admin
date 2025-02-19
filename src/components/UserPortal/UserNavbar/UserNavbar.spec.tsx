@@ -164,7 +164,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    expect(cookies.get('i18next')).toBe('sp');
+    expect(cookies.get('i18next')).toBe('es');
   });
 
   it('The language is switched to zh', async () => {

@@ -126,12 +126,9 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               getOptionLabel={(member: InterfaceUserInfo): string =>
                 `${member.firstName} ${member.lastName}`
               }
-              onChange={
-                /*istanbul ignore next*/
-                (_, newVolunteer): void => {
-                  setUserId(newVolunteer?._id ?? '');
-                }
-              }
+              onChange={(_, newVolunteer): void => {
+                setUserId(newVolunteer?._id ?? '');
+              }}
               renderInput={(params) => <TextField {...params} label="Member" />}
             />
           </Form.Group>
