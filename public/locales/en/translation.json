@@ -858,6 +858,7 @@
     "otherSettings": "Other Settings",
     "changeLanguage": "Change Language",
     "manageCustomFields": "Manage Custom Fields",
+    "orgProfileField.pleaseFillAllRequiredFields": "orgProfileField.pleaseFillAllRequiredFields",
     "agendaItemCategories": "Agenda Item Categories"
   },
   "deleteOrg": {

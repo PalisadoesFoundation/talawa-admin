@@ -1312,6 +1312,7 @@
     "Boolean": "Booléen",
     "Date": "Date",
     "Number": "Nombre",
+    "orgProfileField.pleaseFillAllRequiredFields": "orgProfileField.veuillezRemplirTousLesChampsObligatoires",
     "saveChanges": "Enregistrer les modifications"
   },
   "orgActionItemCategories": {

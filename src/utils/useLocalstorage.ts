@@ -2,8 +2,8 @@
  * Helper interface for managing localStorage operations.
  */
 interface InterfaceStorageHelper {
-  getItem: (key: string) => any;
-  setItem: (key: string, value: any) => void;
+  getItem: (key: string) => string | null;
+  setItem: (key: string, value: string) => void;
   removeItem: (key: string) => void;
   getStorageKey: (key: string) => string;
 }
@@ -26,7 +26,7 @@ export const getStorageKey = (prefix: string, key: string): string => {
  * @param key - The unique name identifying the value.
  * @returns - The stored value for the given key from local storage.
  */
-export const getItem = (prefix: string, key: string): any => {
+export const getItem = (prefix: string, key: string): string | null => {
   const prefixedKey = getStorageKey(prefix, key);
   const storedData = localStorage.getItem(prefixedKey);
   return storedData ? JSON.parse(storedData) : null;
@@ -38,7 +38,7 @@ export const getItem = (prefix: string, key: string): any => {
  * @param key - The unique name identifying the value.
  * @param value - The value for the key.
  */
-export const setItem = (prefix: string, key: string, value: any): void => {
+export const setItem = (prefix: string, key: string, value: string): void => {
   const prefixedKey = getStorageKey(prefix, key);
   localStorage.setItem(prefixedKey, JSON.stringify(value));
 };
@@ -63,7 +63,7 @@ export const useLocalStorage = (
 ): InterfaceStorageHelper => {
   return {
     getItem: (key: string) => getItem(prefix, key),
-    setItem: (key: string, value: any) => setItem(prefix, key, value),
+    setItem: (key: string, value: string) => setItem(prefix, key, value),
     removeItem: (key: string) => removeItem(prefix, key),
     getStorageKey: (key: string) => getStorageKey(prefix, key),
   };
