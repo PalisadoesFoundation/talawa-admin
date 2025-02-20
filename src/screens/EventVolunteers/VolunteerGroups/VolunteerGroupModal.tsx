@@ -322,7 +322,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           {/* Button to submit the volunteer group form */}
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.regBtn}
             data-testid="submitBtn"
           >
             {t(mode === 'edit' ? 'updateGroup' : 'createGroup')}
