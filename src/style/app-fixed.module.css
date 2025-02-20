@@ -165,6 +165,44 @@
   --row-bg: #fff;
   --row-bg-scroll: #00000029;
   --row-color: #6c757d;
+
+  --regBtn-border: #d1d5db;
+  --regBtn-box-shadow: #d1d5db;
+  --regBtn-bg: #0056b3;
+  --regBtn-color: #fff;
+
+  --titlemodal-org-event-color: #707070;
+  --titlemodal-org-event-border: #eaebef;
+
+  --inputFieldModal: #d1d5db;
+
+  --slider-bg: #1778f2;
+  --slider-rail-bg: #e6e6e6;
+
+  --updateTimeoutCard-bg: #ffffff;
+  --updateTimeoutCardTitle-color: #000000;
+  --updateTimeoutCurrent-color: #000000;
+  --updateTimeoutLabel-color: #000000;
+  --updateTimeoutValue-color: #1778f2;
+  --updateTimeoutSliderLabels: #707070;
+  --updateTimeoutButton-bg: #a8c7fa;
+  --updateTimeoutButton-color: #ffffff;
+  --updateTimeoutButton-bg-hover: #a8c7fa;
+  --updateTimeoutButton-border-hover: #a8c7fa;
+
+  --signOut-container-bg: #d3e3fd;
+  --signOutBtn-bg: #d3e3fd;
+
+  --profileContainer-bg: #ffffff;
+  --profileContainer-bg-focus: #f8f9fa;
+  --profileText-color: #6c757d;
+
+  --chevronRightbtn: #ffffff;
+  --chevronIcon-color: #808080;
+  --chevronIcon-bg: #ffffff;
+
+  --primaryText-color: #000000;
+  --secondText-color: #9fa6b2;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -360,6 +398,254 @@
   font-weight: bold;
 }
 
+/* btnsBlock & btnsContainer */
+
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.btnsContainer .btnsBlock {
+  display: flex;
+  width: max-content;
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock div[title='Sort organizations'] {
+    margin-right: 0.5rem;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .btnsContainer > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
+  }
+}
+
+.btnsContainer .btnsBlock button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btnsContainer .input {
+    width: 100%;
+  }
+
+  .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .largeBtnsWrapper {
+    flex-direction: column;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
+/* Dropdown */
+
+.dropdown {
+  background-color: var(--sortBtn-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown:is(
+    :hover,
+    :focus,
+    :active,
+    :focus-visible,
+    .show,
+    :disabled,
+    :checked
+  ) {
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  border: 1px solid var(--dropdown-border) !important;
+  color: var(--dropdown-font) !important;
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: 2px solid var(--highlight-color, var(--search-button-bg));
+  border: 1px solid var(--dropdown-border);
+}
+
+.createorgdropdown {
+  background-color: var(--createorgdropdown-button-bg);
+  border-color: var(--createorgdropdown-button-border);
+  height: 3rem;
+  margin-top: 0.7rem;
+  color: var(--dropdown-button-fill);
+}
+
+.createorgdropdown:active,
+.createorgdropdown:hover {
+  background-color: var(--createorgdropdown-button-bg) !important;
+  border-color: var(--createorgdropdown-button-border) !important;
+  color: var(--dropdown-button-fill) !important;
+  box-shadow: var(--hover-shadow);
+}
+
+/* Not Found */
+
+.notFound {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Input */
+
+.input {
+  flex: 1;
+  position: relative;
+  margin-right: 10px;
+}
+
+.input {
+  flex: 1;
+  position: relative;
+  margin-right: 80px;
+  width: 425px;
+}
+
+.input:active {
+  box-shadow: var(--dorpdownItem-hover-shadow) !important;
+  background-color: var(--create-button-bg-color);
+  border-color: var(--input-shadow) !important;
+  color: var(--input-text-color);
+}
+
+.input:focus {
+  box-shadow: var(--dorpdownItem-hover-shadow) !important;
+  border-color: var(--input-shadow) !important;
+}
+
+.btnsContainer .input button {
+  width: 52px;
+}
+
+.btnsContainer .input {
+  flex: 1;
+  position: relative;
+  max-width: 60%;
+  justify-content: space-between;
+}
+
+.btncon .btnsContainer .input {
+  flex: 1;
+  min-width: 18rem;
+  position: relative;
+}
+
+.btncon .btnsContainer input {
+  outline: 1px solid var(--btncon-input);
+}
+
+.btncon .btnsContainer .input button {
+  width: 52px;
+}
+
 /* Add more Global CSS Classes above this */
 
 /* ----------------------------------------------------- */
@@ -377,8 +663,46 @@
 /* -- AdvertisementEntry.tsx -- */
 /* -- AdvertisementRegister.tsx -- */
 /* -- Advertisement.tsx -- */
+
 /* -- AgendaCategoryContainer.tsx -- */
+
 /* -- AgendaItemsCreateModal.tsx -- */
+
+.campaignModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
+.titlemodalOrganizationEvents {
+  color: var(--titlemodal-org-event-color);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--titlemodal-org-event-border);
+  width: 65%;
+}
+
+.regBtn {
+  margin-top: 1rem;
+  border: 1px solid var(--regBtn-border);
+  box-shadow: 0 2px 2px var(--regBtn-box-shadow);
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: var(--regBtn-bg);
+  width: 100%;
+  font-size: 16px;
+  color: var(--regBtn-color);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+}
+
 /* -- AgendaItemsDeleteModal.tsx -- */
 /* -- AgendaItemsPreviewModal.tsx -- */
 /* -- AgendaItemsUpdateModal.tsx -- */
@@ -387,7 +711,24 @@
 /* -- ChangeLanguageDropDown.tsx -- */
 /* -- TableRow.tsx -- */
 /* -- CheckInWrapper.tsx -- */
+
 /* -- CollapsibleDropdown.tsx -- */
+
+.collapsibleDropdownIconWrapper {
+  width: 36px;
+}
+
+.collapsibleDropdownCollapseBtn {
+  height: 48px;
+}
+
+.collapsibleDropdownIconWrapperSm {
+  width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* -- ContriStats.tsx -- */
 /* -- CurrentHourIndicator.tsx -- */
 /* -- DynamicDropDown.tsx -- */
@@ -421,7 +762,34 @@
 /* -- InfiniteScrollLoader.tsx -- */
 /* -- LeftDrawer.tsx -- */
 /* -- LeftDrawerOrg.tsx -- */
+
 /* -- Loader.tsx -- */
+
+.spinner_wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerXl {
+  width: 6rem;
+  height: 6rem;
+  border-width: 0.5rem;
+}
+
+.spinnerLg {
+  height: 4rem;
+  width: 4rem;
+  border-width: 0.3rem;
+}
+
+.spinnerSm {
+  height: 2rem;
+  width: 2rem;
+  border-width: 0.2rem;
+}
 
 /* -- LoginPortalToggle.tsx -- */
 
@@ -467,7 +835,33 @@
 /* -- EventsAttendedCardItem.tsx -- */
 /* -- EventsAttendedMemberModal.tsx -- */
 /* -- MemberRequestCard.tsx -- */
+
 /* -- NotFound.tsx -- */
+
+.section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.error {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+@media (min-width: 440px) and (max-width: 570px) {
+  .section {
+    margin-left: 50px;
+  }
+
+  .error {
+    font-size: 1.1rem;
+    font-style: oblique;
+  }
+}
+
 /* -- OrgAdminListCard.tsx -- */
 /* -- OrganizationCard.tsx -- */
 /* -- OrganizationCardStart.tsx -- */
@@ -504,28 +898,315 @@
 /* -- OrganizationScreen.tsx -- */
 /* -- Pagination.tsx -- */
 /* -- PaginationList.tsx -- */
+
+/* -- ProfileCard.tsx -- */
+
+.profileContainer {
+  border: none;
+  padding: 2.1rem 0.5rem;
+  height: 52px;
+  border-radius: 8px 0px 0px 8px;
+  display: flex;
+  align-items: center;
+  background-color: var(--profileContainer-bg) !important;
+}
+.profileContainer:focus {
+  outline: none;
+  background-color: var(--profileContainer-bg-focus);
+}
+
+.imageContainer {
+  width: 56px;
+  height: 56px;
+  border-radius: 100%;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+
+.avatarStyle {
+  border-radius: 100%;
+}
+
+.profileContainer .profileTextUserSidebarOrg {
+  flex: 1;
+  text-align: start;
+  overflow: hidden;
+  margin-right: 4px;
+}
+.profileContainer .profileTextUserSidebarOrg .primaryText {
+  font-size: 1rem;
+  font-weight: 600;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.profileContainer .profileTextUserSidebarOrg .secondaryText {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--profileText-color);
+  display: block;
+  text-transform: capitalize;
+}
+
+.profileCardContainer {
+  margin-top: 80px !important;
+}
+
+.chevronRightbtn {
+  border: 0px;
+  background-color: var(--chevronRightbtn);
+}
+
+.chevronIcon {
+  color: var(--chevronIcon-color);
+  background: var(--chevronIcon-bg);
+  font-size: 60px;
+  stroke-width: 1;
+  margin-left: 50px;
+}
+
+.primaryText {
+  font-weight: bold;
+  color: var(--bs-emphasis-color, var(--primaryText-color));
+  @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
+}
+
+.secondaryText {
+  font-size: 0.9rem;
+  color: var(--secondText-color);
+  @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
+}
+
 /* -- ProfileDropdown.tsx -- */
 /* -- CustomRecurrenceModal.tsx -- */
 /* -- RecurrenceOptions.tsx -- */
 /* -- RequestsTableItem.tsx -- */
 /* -- SecuredRoute.tsx -- */
-/* -- SuperAdminScreen.tsx -- */
+/* -- SecuredRoute.tsx -- */
+
+/* -- SignOut.tsx -- */
+
+.signOutContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: start;
+  margin-bottom: 0.8rem;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 0.8rem;
+  padding-left: 0.8rem;
+  outline: none;
+  border: none;
+  background-color: var(--signOut-container-bg);
+  margin-top: 1rem;
+  margin-bottom: 4rem;
+}
+
+.signOutButton {
+  background-color: var(--signOutBtn-bg) !important;
+  border: none !important;
+  border-radius: 5px !important;
+  margin-left: 10px;
+}
+
 /* -- TableLoader.tsx -- */
 /* -- TagActions.tsx -- */
 /* -- TagNode.tsx -- */
+
 /* -- UpdateSession.tsx -- */
+
+.slider .MuiSlider-track {
+  background-color: var(--slider-bg) !important;
+  border: none;
+}
+
+.slider .MuiSlider-thumb {
+  background-color: var(--slider-bg) !important;
+}
+
+.slider .MuiSlider-rail {
+  background-color: var(--slider-rail-bg) !important;
+}
+
+.updateTimeoutCard {
+  width: 700px;
+  background: var(--updateTimeoutCard-bg);
+  border: none;
+  border-radius: 16px;
+  filter: drop-shadow(0px 4px 15.3px rgba(0, 0, 0, 0.08));
+  padding: 20px;
+}
+
+.updateTimeoutCardHeader {
+  background: none;
+  padding: 16px;
+  border-bottom: none;
+}
+
+.updateTimeoutCardTitle {
+  font-family: 'Lato', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--updateTimeoutCardTitle-color);
+}
+
+.updateTimeoutCardBody {
+  padding: 20px;
+}
+
+.updateTimeoutCurrent {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--updateTimeoutCurrent-color);
+  margin-bottom: 20px;
+}
+
+.updateTimeoutLabel {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--updateTimeoutLabel-color);
+  margin-bottom: 10px;
+}
+
+.updateTimeoutLabelsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.updateTimeoutValue {
+  color: var(--updateTimeoutValue-color);
+  font-weight: bold;
+}
+
+.updateTimeoutSliderLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--updateTimeoutSliderLabels);
+}
+
+.updateTimeoutButtonContainer {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
+}
+
+.updateTimeoutButton {
+  width: 112px;
+  height: 36px;
+  background: var(--updateTimeoutButton-bg);
+  border-radius: 6px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--updateTimeoutButton-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: none;
+}
+
+.updateTimeoutButton:hover {
+  background-color: var(--updateTimeoutButton-bg-hover);
+  border-color: var(--updateTimeoutButton-border-hover);
+  box-shadow: none;
+}
+
+.updateTimeoutButton:active {
+  transform: scale(0.98);
+}
+
 /* -- UserListCard.tsx -- */
 /* -- UserPasswordUpdate.tsx -- */
 /* -- ChatRoom.tsx -- */
 /* -- CommentCard.tsx -- */
 /* -- ContactCard.tsx -- */
+
 /* -- CreateDirectChat.tsx -- */
+
+.modalContent {
+  width: 530px;
+}
+
+.inputContainer {
+  position: relative;
+  flex: 1;
+  margin: 0;
+}
+
+.inputFieldModal {
+  padding-right: 40px;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--inputFieldModal);
+}
+
+.submitBtn {
+  position: absolute;
+  z-index: 10;
+  bottom: 10px;
+  right: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableContainer {
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 /* -- CreateGroupChat.tsx -- */
 /* -- DonationCard.tsx -- */
 /* -- EventCard.tsx -- */
 /* -- OrganizationCard.tsx -- */
 /* -- OrganizationNavbar.tsx -- */
+
 /* -- PeopleCard.tsx -- */
+
+.personImage_peoplecard {
+  border-radius: 50%;
+  margin-right: 25px;
+  max-width: 70px;
+}
+
+.people_card_container {
+  display: flex;
+}
+
+.display_flex {
+  display: flex;
+}
+
+.align_center {
+  align-self: center;
+}
+
+.people_role {
+  width: 75%;
+  border: 1px solid var(--people-role-border);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.25rem;
+}
+
 /* -- PostCard.tsx -- */
 /* -- PromotedPost.tsx -- */
 /* -- Register.tsx -- */
@@ -646,7 +1327,6 @@
   color: var(--langChange-button-color);
   border-color: var(--langChange-button-border);
   background-color: transparent;
-  /* Default transparent background */
 }
 
 .langChangeBtnStyle:hover {
@@ -871,7 +1551,161 @@
 /* -- MockTagActions.tsx -- */
 /* -- MemberDetail.tsx -- */
 /* -- OrgContribution.tsx -- */
+
 /* -- OrgList.tsx -- */
+
+.btnsContainerSearchBar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin: 2.5rem 0 2.5rem 0;
+}
+
+.btnsContainerSearchBar .btnsBlockSearchBar {
+  display: flex;
+}
+
+.btnsContainerSearchBar .btnsBlockSearchBar button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainerSearchBar .inputOrgList {
+  flex: 1;
+  position: relative;
+}
+
+.btnsContainerSearchBar input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainerSearchBar .inputOrgList button {
+  width: 52px;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainerSearchBar {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btnsContainerSearchBar .btnsBlockSearchBar {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainerSearchBar .btnsBlockSearchBar button {
+    margin: 0;
+  }
+
+  .btnsContainerSearchBar .btnsBlockSearchBar div button {
+    margin-right: 1.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .btnsContainerSearchBar {
+    margin-bottom: 0;
+  }
+
+  .btnsContainerSearchBar .btnsBlockSearchBar {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .btnsContainerSearchBar .btnsBlockSearchBar div {
+    flex: 1;
+  }
+
+  .btnsContainerSearchBar .btnsBlockSearchBar div[title='Sort organizations'] {
+    margin-right: 0.5rem;
+  }
+
+  .btnsContainerSearchBar .btnsBlockSearchBar button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
+.listBoxOrgList {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: unset !important;
+}
+
+.listBoxOrgList .itemCardOrgList {
+  width: 50%;
+}
+
+@media (max-width: 1440px) {
+  .contractOrgList {
+    padding-left: calc(250px + 2rem + 1.5rem);
+  }
+
+  .listBoxOrgList .itemCardOrgList {
+    width: 100%;
+  }
+}
+
+.itemCardOrgList .loadingWrapper {
+  background-color: var(--bs-white);
+  margin: 0.5rem;
+  height: calc(120px + 2rem);
+  padding: 1rem;
+  border-radius: 8px;
+  outline: 1px solid var(--bs-gray-200, var(--bs-gray-300));
+  position: relative;
+}
+
+.itemCardOrgList .loadingWrapper .innerContainer {
+  display: flex;
+}
+
+.itemCardOrgList .loadingWrapper .innerContainer .orgImgContainer {
+  width: 120px;
+  height: 120px;
+  border-radius: 4px;
+}
+
+.itemCardOrgList .loadingWrapper .innerContainer .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+}
+
+.itemCardOrgList .loadingWrapper .innerContainer .content h5 {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 0.8rem;
+}
+
+.itemCardOrgList .loadingWrapper .innerContainer .content h6[title='Location'] {
+  display: block;
+  width: 45%;
+  height: 18px;
+}
+
+.itemCardOrgList .loadingWrapper .innerContainer .content h6 {
+  display: block;
+  width: 30%;
+  height: 16px;
+  margin-bottom: 0.8rem;
+}
+
+.itemCardOrgList .loadingWrapper .button {
+  position: absolute;
+  height: 48px;
+  width: 92px;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1;
+}
+
 /* -- OrganizationModal.tsx -- */
 /* -- OrgPost.tsx -- */
 /* -- OrgSettings.tsx -- */
@@ -900,7 +1734,68 @@
 /* -- Events.tsx -- */
 /* -- LeaveOrganization.tsx -- */
 /* -- Organizations.tsx -- */
+
 /* -- People.tsx -- */
+
+.borderRounded8 {
+  border-radius: 8px;
+}
+
+.bottomRadius {
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.backgroundWhite {
+  background-color: var(--background-color);
+}
+
+.people_content {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  min-height: calc(100% - 40px);
+}
+
+.gap {
+  gap: 20px;
+}
+
+.semiBold {
+  font-weight: 500;
+}
+
+.placeholderColor::placeholder {
+  color: var(--placeholder-color);
+}
+
+.people__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 50px;
+}
+
+.people_card_main_container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--people-card-container-border);
+  padding: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-top: 0;
+  gap: var(--spacing-lg, 1.25rem);
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  background-color: var(--people-card-container-bg);
+}
+
+.custom_row_center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 /* -- Pledges.tsx -- */
 /* -- Posts.tsx -- */
 /* -- Settings.tsx -- */
