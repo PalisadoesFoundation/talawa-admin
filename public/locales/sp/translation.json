@@ -1300,7 +1300,8 @@
     "String": "Cadena",
     "Boolean": "Booleano",
     "Date": "Fecha",
-    "Number": "Número"
+    "Number": "Número",
+    "pleaseFillAllRequiredFields": "Por favor llene todos los campos requeridos"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",

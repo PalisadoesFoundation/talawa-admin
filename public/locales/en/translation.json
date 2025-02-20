@@ -1297,7 +1297,8 @@
     "Boolean": "Boolean",
     "Date": "Date",
     "Number": "Number",
-    "saveChanges": "saveChanges"
+    "saveChanges": "saveChanges",
+    "pleaseFillAllRequiredFields":"pleaseFillAllRequiredFields"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",

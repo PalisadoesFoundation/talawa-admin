@@ -1297,7 +1297,8 @@
     "Boolean": "बूलियन",
     "Date": "तारीख",
     "Number": "संख्या",
-    "saveChanges": "परिवर्तन सहेजें"
+    "saveChanges": "परिवर्तन सहेजें",
+    "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
