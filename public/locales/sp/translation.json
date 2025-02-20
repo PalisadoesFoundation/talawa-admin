@@ -818,8 +818,10 @@
     "otherSettings": "Otras configuraciones",
     "changeLanguage": "Cambiar idioma",
     "manageCustomFields": "Administrar campos personalizados",
-
-    "agendaItemCategories": "Categorías de elementos de agenda"
+    "agendaItemCategories": "Categorías de elementos de agenda",
+    "orgProfileField": {
+      "pleaseFillAllRequiredFields": "Por favor, complete todos los campos obligatorios"
+    }
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
@@ -1316,7 +1318,7 @@
     "Boolean": "Booleano",
     "Date": "Fecha",
     "Number": "Número",
-    "saveChanges": "Guardar Cambios"
+    "saveChanges": "Guardar cambios"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",

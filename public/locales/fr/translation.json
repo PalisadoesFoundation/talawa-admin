@@ -818,7 +818,10 @@
     "otherSettings": "Autres paramètres",
     "changeLanguage": "Changer de langue",
     "manageCustomFields": "Gérer les champs personnalisés",
-    "agendaItemCategories": "Catégories d'éléments d'agenda"
+    "agendaItemCategories": "Catégories d'éléments d'agenda",
+    "orgProfileField": {
+      "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires"
+    }
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",

@@ -818,7 +818,10 @@
     "otherSettings": "其他设置",
     "changeLanguage": "改变语言",
     "manageCustomFields": "管理自定义字段",
-    "agendaItemCategories": "议程项目类别"
+    "agendaItemCategories": "议程项目类别",
+    "orgProfileField": {
+      "pleaseFillAllRequiredFields": "请填写所有必填字段"
+    }
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",

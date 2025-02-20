@@ -818,7 +818,10 @@
     "otherSettings": "अन्य सेटिंग्स",
     "changeLanguage": "भाषा बदलें",
     "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
-    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ"
+    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ",
+    "orgProfileField": {
+      "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें"
+    }
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएँ",
@@ -1310,7 +1313,12 @@
     "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दी गई",
     "customFieldAdded": "कस्टम फ़ील्ड सफलतापूर्वक जोड़ा गया",
     "customFieldRemoved": "कस्टम फ़ील्ड सफलतापूर्वक हटा दी गई",
-    "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें"
+    "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें",
+    "String": "स्ट्रिंग",
+    "Boolean": "बूलियन",
+    "Date": "तारीख",
+    "Number": "संख्या",
+    "saveChanges": "परिवर्तनों को सुरक्षित करें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
