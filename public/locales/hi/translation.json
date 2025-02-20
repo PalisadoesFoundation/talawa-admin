@@ -1515,5 +1515,35 @@
     "recurring": "पुनरावृत्ति",
     "groupInvitationSubject": "स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
     "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण"
+  },
+  "orgSettings": {
+    "title": "शीर्षक",
+    "changeLanguage": "भाषा बदलें",
+    "actionItemCategories": "कार्य आइटम श्रेणियाँ",
+    "noData": "कोई डेटा नहीं",
+    "orgProfileField": {
+      "loading": "लोड हो रहा है",
+      "noCustomField": "कोई कस्टम फ़ील्ड उपलब्ध नहीं है",
+      "customFieldName": "फ़ील्ड का नाम",
+      "enterCustomFieldName": "फ़ील्ड का नाम दर्ज करें",
+      "customFieldType": "फ़ील्ड प्रकार",
+      "Remove Custom Field": "कस्टम फ़ील्ड हटाएं",
+      "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
+      "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटाया गया",
+      "String": "स्ट्रिंग",
+      "Boolean": "बूलियन",
+      "Date": "तारीख",
+      "Number": "संख्या",
+      "saveChanges": "परिवर्तनों को सुरक्षित करें",
+      "customFieldAdded": "कस्टम फ़ील्ड जोड़ा गया",
+      "customFieldRemoved": "कस्टम फ़ील्ड हटाया गया",
+      "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें"
+    },
+    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ",
+    "general": "सामान्य",
+    "otherSettings": "अन्य सेटिंग्स",
+    "updateOrganization": "संगठन अपडेट करें",
+    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
+    "seeRequest": "अनुरोध देखें"
   }
 }

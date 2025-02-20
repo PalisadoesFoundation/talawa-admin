@@ -820,6 +820,21 @@
     "manageCustomFields": "Administrar campos personalizados",
     "agendaItemCategories": "Categorías de elementos de agenda",
     "orgProfileField": {
+      "loading": "Cargando...",
+      "noCustomField": "No hay campos personalizados disponibles",
+      "customFieldName": "Nombre del campo",
+      "enterCustomFieldName": "Ingrese el nombre del campo",
+      "customFieldType": "Tipo de campo",
+      "Remove Custom Field": "Eliminar campo personalizado",
+      "fieldSuccessMessage": "Campo agregado con éxito",
+      "fieldRemovalSuccess": "Campo eliminado con éxito",
+      "String": "Cadena",
+      "Boolean": "Booleano",
+      "Date": "Fecha",
+      "Number": "Número",
+      "saveChanges": "Guardar cambios",
+      "customFieldAdded": "Campo personalizado agregado",
+      "customFieldRemoved": "Campo personalizado eliminado",
       "pleaseFillAllRequiredFields": "Por favor, complete todos los campos obligatorios"
     }
   },

@@ -823,7 +823,19 @@
       "customFieldName": "Nom du champ",
       "customFieldAdded": "Champ personnalisé ajouté",
       "customFieldRemoved": "Champ personnalisé supprimé",
-      "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires"
+      "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires",
+      "loading": "Chargement...",
+      "noCustomField": "Aucun champ personnalisé disponible",
+      "enterCustomFieldName": "Entrez le nom du champ",
+      "customFieldType": "Type de champ",
+      "Remove Custom Field": "Supprimer le champ personnalisé",
+      "fieldSuccessMessage": "Champ ajouté avec succès",
+      "fieldRemovalSuccess": "Champ supprimé avec succès",
+      "String": "Chaîne",
+      "Boolean": "Booléen",
+      "Date": "Date",
+      "Number": "Nombre",
+      "saveChanges": "Enregistrer les modifications"
     }
   },
   "deleteOrg": {
