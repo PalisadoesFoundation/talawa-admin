@@ -1306,14 +1306,17 @@
     "customFieldName": "Nombre del Campo",
     "enterCustomFieldName": "Ingrese el Nombre del Campo",
     "customFieldType": "Tipo de Campo",
-    "saveChanges": "Guardar Cambios",
     "Remove Custom Field": "Eliminar Campo Personalizado",
     "fieldSuccessMessage": "Campo añadido exitosamente",
     "fieldRemovalSuccess": "Campo eliminado exitosamente",
+    "customFieldAdded": "Campo añadido exitosamente",
+    "customFieldRemoved": "Campo eliminado exitosamente",
+    "pleaseFillAllRequiredFields": "Por favor, complete todos los campos obligatorios.",
     "String": "Cadena",
     "Boolean": "Booleano",
     "Date": "Fecha",
-    "Number": "Número"
+    "Number": "Número",
+    "saveChanges": "Guardar Cambios"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",

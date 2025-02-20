@@ -54,7 +54,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
 
   const handleSave = async (): Promise<void> => {
     if (!customFieldData.name.trim() || !customFieldData.type.trim()) {
-      toast.error(tCommon('pleaseFillAllRequiredFields'));
+      toast.error(t('pleaseFillAllRequiredFields'));
       return;
     }
 
