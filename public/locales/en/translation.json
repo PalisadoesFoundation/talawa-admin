@@ -1298,7 +1298,7 @@
     "Date": "Date",
     "Number": "Number",
     "saveChanges": "saveChanges",
-    "pleaseFillAllRequiredFields":"pleaseFillAllRequiredFields"
+    "pleaseFillAllRequiredFields": "pleaseFillAllRequiredFields"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",
