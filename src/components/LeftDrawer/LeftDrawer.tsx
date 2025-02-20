@@ -68,7 +68,7 @@ const leftDrawer = ({
                     ? 'var(--sidebar-option-text-active)'
                     : 'var(--sidebar-option-text-inactive)',
                 }}
-                data-testid="orgsBtn"
+                data-testid="organizationsBtn"
               >
                 <div className={styles.iconWrapper}>
                   <OrganizationsIcon
