@@ -1311,14 +1311,14 @@
     "Remove Custom Field": "Supprimer le champ personnalisé",
     "fieldSuccessMessage": "Champ ajouté avec succès",
     "fieldRemovalSuccess": "Champ supprimé avec succès",
-    "customFieldAdded": "Champ ajouté avec succès",
-    "customFieldRemoved": "Champ supprimé avec succès",
-    "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires",
     "String": "Chaîne",
     "Boolean": "Booléen",
     "Date": "Date",
     "Number": "Nombre",
-    "saveChanges": "Enregistrer les modifications"
+    "saveChanges": "Enregistrer les modifications",
+    "customFieldAdded": "Champ personnalisé ajouté",
+    "customFieldRemoved": "Champ personnalisé supprimé",
+    "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",

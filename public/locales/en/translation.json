@@ -1313,7 +1313,10 @@
     "Boolean": "Boolean",
     "Date": "Date",
     "Number": "Number",
-    "saveChanges": "saveChanges"
+    "saveChanges": "Save Changes",
+    "customFieldAdded": "Custom field added",
+    "customFieldRemoved": "Custom field removed",
+    "pleaseFillAllRequiredFields": "Please fill all required fields"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",

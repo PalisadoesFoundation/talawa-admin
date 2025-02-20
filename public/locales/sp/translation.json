@@ -1303,22 +1303,22 @@
     "reply": "responder"
   },
   "orgProfileField": {
-    "loading": "Cargando..",
+    "loading": "Cargando...",
     "noCustomField": "No hay campos personalizados disponibles",
-    "customFieldName": "Nombre del Campo",
-    "enterCustomFieldName": "Ingrese el Nombre del Campo",
-    "customFieldType": "Tipo de Campo",
-    "Remove Custom Field": "Eliminar Campo Personalizado",
-    "fieldSuccessMessage": "Campo añadido exitosamente",
-    "fieldRemovalSuccess": "Campo eliminado exitosamente",
-    "customFieldAdded": "Campo añadido exitosamente",
-    "customFieldRemoved": "Campo eliminado exitosamente",
-    "pleaseFillAllRequiredFields": "Por favor, complete todos los campos obligatorios.",
+    "customFieldName": "Nombre del campo",
+    "enterCustomFieldName": "Ingrese el nombre del campo",
+    "customFieldType": "Tipo de campo",
+    "Remove Custom Field": "Eliminar campo personalizado",
+    "fieldSuccessMessage": "Campo agregado con éxito",
+    "fieldRemovalSuccess": "Campo eliminado con éxito",
     "String": "Cadena",
     "Boolean": "Booleano",
     "Date": "Fecha",
     "Number": "Número",
-    "saveChanges": "Guardar cambios"
+    "saveChanges": "Guardar cambios",
+    "customFieldAdded": "Campo personalizado agregado",
+    "customFieldRemoved": "Campo personalizado eliminado",
+    "pleaseFillAllRequiredFields": "Por favor, complete todos los campos obligatorios"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
