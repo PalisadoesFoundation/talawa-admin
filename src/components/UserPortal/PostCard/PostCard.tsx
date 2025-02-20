@@ -92,7 +92,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const { getItem } = useLocalStorage();
 
   // Retrieve user ID from local storage
-  const userId = getItem('userId');
+  const userId = getItem('userId') as string;
   // Check if the post is liked by the current user
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
 
@@ -201,7 +201,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       ) {
         updatedComment = {
           ...comment,
-          likedBy: [...comment.likedBy, { id: userId }],
+          likedBy: [...comment.likedBy, { id: userId as string }],
           likeCount: comment.likeCount + 1,
         };
       }

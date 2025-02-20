@@ -47,7 +47,9 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     // Only process avatar if userImage exists in localStorage
     if (userImage) {
       try {
-        avatarFile = await urlToFile(userImage);
+        if (typeof userImage === 'string') {
+          avatarFile = await urlToFile(userImage);
+        }
       } catch (error) {
         console.log('Error processing avatar:', error);
         // Continue with language change even if avatar processing fails

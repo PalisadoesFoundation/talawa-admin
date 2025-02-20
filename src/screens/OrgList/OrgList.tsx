@@ -78,8 +78,7 @@ function orgList(): JSX.Element {
 
   const { getItem } = useLocalStorage();
   const role = getItem('role');
-  const adminFor = getItem('AdminFor');
-
+  const adminFor: { _id: string; name: string; image: string | null }[] = getItem('AdminFor') || [];
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
@@ -377,7 +376,7 @@ function orgList(): JSX.Element {
       {!isLoading &&
       (!orgsData?.edges || orgsData.edges.length === 0) &&
       searchByName.length === 0 &&
-      (!userData || adminFor?.length === 0) ? (
+      (!userData || adminFor.length === 0) ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
