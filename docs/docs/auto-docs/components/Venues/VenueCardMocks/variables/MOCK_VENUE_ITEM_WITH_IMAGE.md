@@ -24,7 +24,7 @@ Defined in: [src/components/Venues/VenueCardMocks.ts:11](https://github.com/Pali
 
 ### image
 
-> **image**: `string` = `'https://example.com/venue.jpg'`
+> **image**: `string` = `'https://surl.li/odyiad'`
 
 ### name
 

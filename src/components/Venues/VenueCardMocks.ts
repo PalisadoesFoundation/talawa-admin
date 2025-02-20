@@ -11,7 +11,7 @@ export const MOCK_VENUE_ITEM = {
 export const MOCK_VENUE_ITEM_WITH_IMAGE = {
   _id: '2',
   name: 'Conference Room',
-  image: 'https://example.com/venue.jpg',
+  image: 'https://surl.li/odyiad',
   capacity: '200',
   description: 'A modern conference room with all amenities.',
 };

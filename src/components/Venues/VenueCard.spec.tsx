@@ -64,7 +64,7 @@ describe('VenueCard Component', () => {
       'image not found',
     ) as HTMLImageElement;
     expect(imgElement).toBeInTheDocument();
-    expect(imgElement.src).toBe('https://example.com/venue.jpg');
+    expect(imgElement.src).toBe('https://surl.li/odyiad');
   });
 
   test('handles edit button click', (): void => {
