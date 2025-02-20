@@ -820,6 +820,9 @@
     "manageCustomFields": "Gérer les champs personnalisés",
     "agendaItemCategories": "Catégories d'éléments d'agenda",
     "orgProfileField": {
+      "customFieldName": "Nom du champ",
+      "customFieldAdded": "Champ personnalisé ajouté",
+      "customFieldRemoved": "Champ personnalisé supprimé",
       "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires"
     }
   },

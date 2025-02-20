@@ -808,20 +808,23 @@
     "transactionId": "लेन-देन आईडी",
     "amount": "मात्रा"
   },
-  "orgSettings": {
-    "title": "सेटिंग्स",
-    "general": "सामान्य",
-    "actionItemCategories": "कार्य आइटम श्रेणियाँ",
-    "updateOrganization": "संगठन अपडेट करें",
-    "seeRequest": "अनुरोध देखें",
-    "noData": "कोई डेटा नहीं",
-    "otherSettings": "अन्य सेटिंग्स",
-    "changeLanguage": "भाषा बदलें",
-    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
-    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ",
-    "orgProfileField": {
-      "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें"
-    }
+  "orgProfileField": {
+    "loading": "लोड हो रहा है...",
+    "noCustomField": "कोई कस्टम फ़ील्ड उपलब्ध नहीं",
+    "customFieldName": "फ़ील्ड का नाम",
+    "enterCustomFieldName": "फ़ील्ड का नाम दर्ज करें",
+    "customFieldType": "फ़ील्ड प्रकार",
+    "Remove Custom Field": "कस्टम फ़ील्ड हटाएँ",
+    "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
+    "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटाया गया",
+    "String": "स्ट्रिंग",
+    "Boolean": "बूलियन",
+    "Date": "तारीख़",
+    "Number": "संख्या",
+    "saveChanges": "परिवर्तनों को सहेजें",
+    "customFieldAdded": "कस्टम फ़ील्ड जोड़ा गया",
+    "customFieldRemoved": "कस्टम फ़ील्ड हटाया गया",
+    "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएँ",
@@ -1301,24 +1304,6 @@
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें",
     "reply": "जवाब"
-  },
-  "orgProfileField": {
-    "loading": "लोड हो रहा है...",
-    "noCustomField": "कोई कस्टम फ़ील्ड उपलब्ध नहीं",
-    "customFieldName": "फ़ील्ड नाम",
-    "enterCustomFieldName": "फ़ील्ड नाम दर्ज करें",
-    "customFieldType": "फ़ील्ड प्रकार",
-    "Remove Custom Field": "कस्टम फ़ील्ड हटाएं",
-    "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
-    "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटाया गया",
-    "String": "स्ट्रिंग",
-    "Boolean": "बूलियन",
-    "Date": "तारीख",
-    "Number": "संख्या",
-    "saveChanges": "परिवर्तन सहेजें",
-    "customFieldAdded": "कस्टम फ़ील्ड जोड़ा गया",
-    "customFieldRemoved": "कस्टम फ़ील्ड हटाया गया",
-    "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

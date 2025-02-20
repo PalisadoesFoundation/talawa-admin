@@ -820,6 +820,21 @@
     "manageCustomFields": "管理自定义字段",
     "agendaItemCategories": "议程项目类别",
     "orgProfileField": {
+      "loading": "加载中",
+      "noCustomField": "没有自定义字段",
+      "customFieldName": "自定义字段名称",
+      "enterCustomFieldName": "输入自定义字段名称",
+      "customFieldType": "自定义字段类型",
+      "Remove Custom Field": "删除自定义字段",
+      "fieldSuccessMessage": "字段成功添加",
+      "fieldRemovalSuccess": "字段成功删除",
+      "String": "字符串",
+      "Boolean": "布尔值",
+      "Date": "日期",
+      "Number": "数字",
+      "saveChanges": "保存更改",
+      "customFieldAdded": "自定义字段已添加",
+      "customFieldRemoved": "自定义字段已删除",
       "pleaseFillAllRequiredFields": "请填写所有必填字段"
     }
   },
