@@ -6,7 +6,7 @@
 
 > **default**(`onToggle`): `JSX.Element`
 
-Defined in: [src/components/LoginPortalToggle/LoginPortalToggle.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L18)
+Defined in: [src/components/LoginPortalToggle/LoginPortalToggle.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L19)
 
 Component for toggling between admin and user login portals.
 
