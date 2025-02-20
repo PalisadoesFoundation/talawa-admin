@@ -147,6 +147,8 @@
     "createOrganization": "Crear organización",
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
+    "addressLine1": "Dirección Línea 1",
+    "addressLine2": "Dirección Línea 2",
     "location": "Ubicación",
     "address": "Dirección",
     "city": "Ciudad",
@@ -661,6 +663,7 @@
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido"
   },
+
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",
@@ -809,24 +812,16 @@
     "amount": "Monto"
   },
   "orgSettings": {
-    "orgProfileField": {
-      "loading": "Cargando...",
-      "noCustomField": "No hay campos personalizados disponibles",
-      "customFieldName": "Nombre del campo",
-      "enterCustomFieldName": "Ingrese el nombre del campo",
-      "customFieldType": "Tipo de campo",
-      "removeCustomField": "Eliminar campo personalizado",
-      "fieldSuccessMessage": "Campo agregado exitosamente",
-      "fieldRemovalSuccess": "Campo eliminado exitosamente",
-      "String": "Cadena",
-      "Boolean": "Booleano",
-      "Date": "Fecha",
-      "Number": "Número",
-      "saveChanges": "Guardar cambios",
-      "customFieldAdded": "Campo personalizado agregado",
-      "customFieldRemoved": "Campo personalizado eliminado",
-      "pleaseFillAllRequiredFields": "Por favor, complete todos los campos obligatorios"
-    }
+    "title": "Configuración",
+    "general": "General",
+    "actionItemCategories": "Categorías de elementos de acción",
+    "updateOrganization": "Actualizar organización",
+    "seeRequest": "Ver solicitud",
+    "noData": "Sin datos",
+    "otherSettings": "Otras configuraciones",
+    "changeLanguage": "Cambiar idioma",
+    "manageCustomFields": "Administrar campos personalizados",
+    "agendaItemCategories": "Categorías de elementos de agenda"
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
@@ -947,12 +942,6 @@
     "countryCode": "Código de País",
     "state": "Estado",
     "city": "Ciudad",
-    "postalCode": "Código Postal",
-    "mobilePhoneNumber": "Número de Teléfono Móvil",
-    "workPhoneNumber": "Número de Teléfono del Trabajo",
-    "homePhoneNumber": "Número de Teléfono de Casa",
-    "addressLine1": "Línea de dirección 1",
-    "addressLine2": "Línea de dirección 2",
     "personalInfoHeading": "Información Personal",
     "viewAll": "Ver todo",
     "eventsAttended": "Eventos Asistidos",
@@ -1088,6 +1077,7 @@
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
+
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
     "Search member": "Buscar miembro",
@@ -1100,6 +1090,7 @@
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes"
   },
+
   "eventRegistrant": {
     "sort": "Ordenar",
     "allRegistrants": "Todos los registrados",
@@ -1133,14 +1124,11 @@
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "No hay eventos asistidos",
     "profileSettings": "Configuración de perfil",
-    "enterPhoneNo": "Ingrese el número de teléfono",
     "firstName": "Nombre de pila",
     "lastName": "Apellido",
     "gender": "Género",
     "emailAddress": "Dirección de correo electrónico",
     "phoneNumber": "Número de teléfono",
-    "workPhoneNumber": "Número de teléfono del trabajo",
-    "homePhoneNumber": "Número de teléfono de casa",
     "displayImage": "Imagen de perfil",
     "chooseFile": "Elegir archivo",
     "birthDate": "Fecha de nacimiento",
@@ -1160,15 +1148,7 @@
     "changeLanguage": "Cambiar idioma",
     "sgender": "Seleccionar género",
     "gradePlaceholder": "Ingresar grado",
-    "city": "Ciudad",
-    "cancel": "Cancelar",
-    "postalCode": "Código Postal",
-    "addressLine1": "Línea de dirección 1",
-    "addressLine2": "Línea de dirección 2",
-    "enterCity": "Ingresar ciudad",
     "sEmpStatus": "Seleccionar estado de empleo",
-    "enterDescription": "Ingrese una descripción",
-    "description": "Descripción",
     "male": "Masculino",
     "female": "Femenino",
     "other": "Otro",
@@ -1259,7 +1239,7 @@
     "title": "Anuncios",
     "pHeading": "Gestionar anuncios",
     "activeAds": "Campañas activas",
-    "archievedAds": "Campañas completadas",
+    "archivedAds": "Campañas completadas",
     "pMessage": "No hay anuncios disponibles para esta campaña.",
     "delete": "Eliminar",
     "validLink": "El enlace es válido.",
@@ -1308,22 +1288,19 @@
     "reply": "responder"
   },
   "orgProfileField": {
-    "loading": "Cargando...",
+    "loading": "Cargando..",
     "noCustomField": "No hay campos personalizados disponibles",
-    "customFieldName": "Nombre del campo",
-    "enterCustomFieldName": "Ingrese el nombre del campo",
-    "customFieldType": "Tipo de campo",
-    "Remove Custom Field": "Eliminar campo personalizado",
-    "fieldSuccessMessage": "Campo agregado con éxito",
-    "fieldRemovalSuccess": "Campo eliminado con éxito",
+    "customFieldName": "Nombre del Campo",
+    "enterCustomFieldName": "Ingrese el Nombre del Campo",
+    "customFieldType": "Tipo de Campo",
+    "saveChanges": "Guardar Cambios",
+    "Remove Custom Field": "Eliminar Campo Personalizado",
+    "fieldSuccessMessage": "Campo añadido exitosamente",
+    "fieldRemovalSuccess": "Campo eliminado exitosamente",
     "String": "Cadena",
     "Boolean": "Booleano",
     "Date": "Fecha",
-    "Number": "Número",
-    "saveChanges": "Guardar cambios",
-    "customFieldAdded": "Campo personalizado agregado",
-    "customFieldRemoved": "Campo personalizado eliminado",
-    "pleaseFillAllRequiredFields": "Por favor, complete todos los campos obligatorios"
+    "Number": "Número"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
