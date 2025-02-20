@@ -17,6 +17,11 @@ import styles from './OrgProfileFieldSettings.module.css';
 import EditOrgCustomFieldDropDown from 'components/EditCustomFieldDropDown/EditCustomFieldDropDown';
 import type { InterfaceCustomFieldData } from 'utils/interfaces';
 
+/**
+ * OrgProfileFieldSettings component that manages custom fields for an organization.
+ *
+ * @returns The rendered OrgProfileFieldSettings component.
+ */
 const OrgProfileFieldSettings = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgProfileField',
@@ -52,6 +57,11 @@ const OrgProfileFieldSettings = (): JSX.Element => {
     };
   }, []);
 
+  /**
+   * Handles saving a custom field.
+   *
+   * @returns A promise that resolves when the custom field is saved.
+   */
   const handleSave = async (): Promise<void> => {
     if (!customFieldData.name.trim() || !customFieldData.type.trim()) {
       toast.error(t('pleaseFillAllRequiredFields'));
@@ -70,7 +80,6 @@ const OrgProfileFieldSettings = (): JSX.Element => {
       toast.success(t('customFieldAdded') as string);
       setCustomFieldData({ id: '', type: '', name: '' });
     } catch (error) {
-      // Removed redundant 'orgProfileField.' prefix
       toast.error(
         t('pleaseFillAllRequiredFields', {
           error: error instanceof Error ? error.message : String(error),
@@ -79,6 +88,12 @@ const OrgProfileFieldSettings = (): JSX.Element => {
     }
   };
 
+  /**
+   * Handles removing a custom field.
+   *
+   * @param customFieldId - The ID of the custom field to remove.
+   * @returns A promise that resolves when the custom field is removed.
+   */
   const handleRemove = async (customFieldId: string): Promise<void> => {
     try {
       await removeCustomField({

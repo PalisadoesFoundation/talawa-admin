@@ -10,11 +10,27 @@ import styles from 'style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
+/**
+ * Interface for LeftDrawer component props.
+ */
 export interface InterfaceLeftDrawerProps {
+  /**
+   * Determines if the drawer should be hidden.
+   */
   hideDrawer: boolean | null;
+
+  /**
+   * Function to set the hideDrawer state.
+   */
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
+/**
+ * LeftDrawer component that displays the sidebar with navigation options.
+ *
+ * @param props - The props for the component.
+ * @returns The rendered LeftDrawer component.
+ */
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
@@ -23,7 +39,7 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin') !== null; // Convert to boolean
+  const superAdmin = getItem('SuperAdmin') !== null;
 
   useEffect(() => {
     if (hideDrawer === null) {
@@ -53,7 +69,7 @@ const leftDrawer = ({
       <h5 className={`${styles.titleHeader} text-secondary`}>
         {tCommon('menu')}
       </h5>
-      <div className={`d-flex flex-column ${styles.sidebarcompheight} `}>
+      <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         <div className={styles.optionList}>
           <NavLink to={'/orglist'} onClick={handleLinkClick}>
             {({ isActive }) => (
