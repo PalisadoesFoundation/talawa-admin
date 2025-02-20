@@ -191,7 +191,7 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
 
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.regBtn}
             value="creatActionItemCategory"
             data-testid="formSubmitButton"
           >
