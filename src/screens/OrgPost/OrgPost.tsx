@@ -20,77 +20,12 @@ import styles from '../../style/app.module.css';
 import SortingButton from '../../subComponents/SortingButton';
 import SearchingButton from 'subComponents/SearchingButton';
 import SearchBar from 'subComponents/SearchBar';
-
-interface InterfacePostNode {
-  createdAt: string;
-}
-
-interface InterfacePostCreator {
-  id: string;
-  firstName?: string;
-  lastName?: string;
-}
-
-interface InterfacePostNode {
-  id: string;
-  caption: string;
-  text?: string;
-  imageUrl?: string | null;
-  videoUrl?: string | null;
-  creator?: InterfacePostCreator;
-  pinned?: boolean;
-}
-
-interface InterfacePostEdge {
-  node: InterfacePostNode;
-  cursor: string;
-}
-
-interface InterfacePageInfo {
-  startCursor: string;
-  endCursor: string;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
-
-interface InterfacePostConnection {
-  edges: InterfacePostEdge[];
-  pageInfo: InterfacePageInfo;
-}
-
-interface InterfaceOrganization {
-  id: string;
-  posts: InterfacePostConnection;
-}
-
-interface InterfaceOrganizationPostListData {
-  organization: InterfaceOrganization;
-}
-
-// Define the proper interface for the mutation input
-interface InterfaceMutationCreatePostInput {
-  caption: string;
-  organizationId: string;
-  isPinned: boolean;
-  attachments?: File[];
-}
-
-interface InterfaceAttachment {
-  url: string;
-}
-
-interface InterfaceCreator {
-  id: string;
-}
-
-interface InterfacePost {
-  id: string;
-  caption: string;
-  createdAt: string;
-  pinnedAt?: string | null;
-  creator?: InterfaceCreator;
-  attachments?: InterfaceAttachment[];
-}
+import type {
+  InterfacePostEdge,
+  InterfaceOrganizationPostListData,
+  InterfaceMutationCreatePostInput,
+  InterfacePost,
+} from '../../types/Post/interface';
 
 /**
  * OrgPost Component
