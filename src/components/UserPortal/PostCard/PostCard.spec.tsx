@@ -389,7 +389,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: fetchPostsMock, // Pass mock function
+      fetchPosts: vi.fn(), // Pass mock function
     };
   
     render(
