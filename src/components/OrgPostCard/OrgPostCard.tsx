@@ -1,210 +1,188 @@
 import { useMutation } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
+import React, { useState, useRef } from 'react';
+import { Form, Button, Card, Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import AboutImg from 'assets/images/defaultImg.png';
+import convertToBase64 from 'utils/convertToBase64';
+import { errorHandler } from 'utils/errorHandler';
+import styles from '../../style/app.module.css';
+import DeletePostModal from './DeleteModal/DeletePostModal';
 import {
   DELETE_POST_MUTATION,
   TOGGLE_PINNED_POST,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import AboutImg from 'assets/images/defaultImg.png';
-import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
-import { Form, Button, Card, Modal } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
-import { errorHandler } from 'utils/errorHandler';
-import type { InterfacePostForm } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
-import DeletePostModal from './DeleteModal/DeletePostModal';
-import type { InterfaceOrgPostCardProps } from 'types/Organization/interface';
-/**
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.modalHeader`
- * - `.inputField`
- * - `.removeButton`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
-export interface InterfacePostFormNew {
-  posttitle: string;
-  postinfo: string;
-  postphoto: string;
-  postvideo: string;
-  pinned: boolean;
-  postphotoMimeType?: string;
-  postvideoMimeType?: string;
+interface InterfacePostAttachment {
+  id: string;
+  postId: string;
+  name: string;
+  mimeType: string;
+  createdAt: Date;
+  updatedAt?: Date | null;
+  creatorId?: string | null;
+  updaterId?: string | null;
 }
 
-export default function OrgPostCard(
-  props: InterfaceOrgPostCardProps,
-): JSX.Element {
-  const {
-    postID,
-    id,
-    postTitle,
-    postInfo,
-    postAuthor,
-    postPhoto,
-    postVideo,
-    pinned,
-  } = props;
-  const [postformState, setPostFormState] = useState<InterfacePostForm>({
-    posttitle: '',
-    postinfo: '',
-    postphoto: '',
-    postvideo: '',
-    pinned: false,
+interface InterfacePost {
+  id: string;
+  caption: string;
+  createdAt: Date;
+  updatedAt?: Date | null;
+  pinnedAt?: Date | null;
+  creatorId: string | null;
+  attachments: InterfacePostAttachment[];
+}
+
+interface InterfaceOrgPostCardProps {
+  post: InterfacePost;
+}
+
+interface InterfacePostFormState {
+  caption: string;
+  attachments: {
+    url: string;
+    mimeType: string;
+  }[];
+}
+
+export default function OrgPostCard({
+  post,
+}: InterfaceOrgPostCardProps): JSX.Element {
+  const [postFormState, setPostFormState] = useState<InterfacePostFormState>({
+    caption: post.caption,
+    attachments: [],
   });
-  const [postPhotoUpdated, setPostPhotoUpdated] = useState(false);
-  const [postVideoUpdated, setPostVideoUpdated] = useState(false);
-  const [togglePost, setPostToggle] = useState('Read more');
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [toggle] = useMutation(TOGGLE_PINNED_POST);
 
-  const togglePostPin = async (id: string, pinned: boolean): Promise<void> => {
+  const { t } = useTranslation('translation', { keyPrefix: 'orgPostCard' });
+  const { t: tCommon } = useTranslation('common');
+
+  // Get media attachments
+  const imageAttachment = post.attachments.find((a) =>
+    a.mimeType.startsWith('image/'),
+  );
+  const videoAttachment = post.attachments.find((a) =>
+    a.mimeType.startsWith('video/'),
+  );
+
+  const isPinned = !!post.pinnedAt;
+
+  const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
+  const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
+  const [togglePinMutation] = useMutation(TOGGLE_PINNED_POST);
+
+  const togglePostPin = async (): Promise<void> => {
     try {
-      const { data } = await toggle({
+      await togglePinMutation({
         variables: {
-          input: { id }, // Wrap id in input object
+          input: { id: post.id },
         },
       });
-      if (data?.togglePostPin?.success) {
-        setModalVisible(false);
-        setMenuVisible(false);
-        toast.success(`${pinned ? 'Post unpinned' : 'Post pinned'}`);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      }
+      setModalVisible(false);
+      setMenuVisible(false);
+      toast.success(isPinned ? 'Post unpinned' : 'Post pinned');
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        errorHandler(t, error);
-      }
+      errorHandler(t, error);
     }
   };
 
-  const toggleShowEditModal = (): void => {
-    const { postTitle, postInfo, postPhoto, postVideo, pinned } = props;
-    setPostFormState({
-      posttitle: postTitle,
-      postinfo: postInfo,
-      postphoto: postPhoto,
-      postvideo: postVideo,
-      pinned: pinned,
-    });
-    setPostPhotoUpdated(false);
-    setPostVideoUpdated(false);
-    setShowEditModal((prev) => !prev);
-  };
+  const handleCardClick = (): void => setModalVisible(true);
+  const handleMoreOptionsClick = (): void => setMenuVisible(true);
+  const toggleShowEditModal = (): void => setShowEditModal((prev) => !prev);
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
+
   const handleVideoPlay = (): void => {
     setPlaying(true);
     videoRef.current?.play();
   };
+
   const handleVideoPause = (): void => {
     setPlaying(false);
     videoRef.current?.pause();
   };
-  const handleCardClick = (): void => {
-    setModalVisible(true);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setPostFormState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
-  const handleMoreOptionsClick = (): void => {
-    setMenuVisible(true);
-  };
-  const clearImageInput = (): void => {
-    setPostFormState({ ...postformState, postphoto: '' });
-    setPostPhotoUpdated(true);
-    const fileInput = document.getElementById(
-      'postImageUrl',
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
+
+  const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      setPostFormState((prev) => ({
+        ...prev,
+        attachments: [
+          ...prev.attachments,
+          {
+            url: base64 as string,
+            mimeType: file.type,
+          },
+        ],
+      }));
     }
   };
-  const clearVideoInput = (): void => {
-    setPostFormState({
-      ...postformState,
-      postvideo: '',
-    });
-    setPostVideoUpdated(true);
-    const fileInput = document.getElementById(
-      'postVideoUrl',
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
+
+  const handleVideoUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      setPostFormState((prev) => ({
+        ...prev,
+        attachments: [
+          ...prev.attachments,
+          {
+            url: base64 as string,
+            mimeType: file.type,
+          },
+        ],
+      }));
     }
   };
-  function handletoggleClick(): void {
-    if (togglePost === 'Read more') {
-      setPostToggle('hide');
-    } else {
-      setPostToggle('Read more');
-    }
-  }
-  function handleEditModal(): void {
-    const { postPhoto, postVideo } = props;
-    setModalVisible(false);
-    setMenuVisible(false);
-    setShowEditModal(true);
-    setPostFormState({
-      ...postformState,
-      postphoto: postPhoto,
-      postvideo: postVideo,
-    });
-  }
-  function handleDeleteModal(): void {
-    setModalVisible(false);
-    setMenuVisible(false);
-    setShowDeleteModal(true);
-  }
-  useEffect(() => {
-    setPostFormState({
-      posttitle: postTitle,
-      postinfo: postInfo,
-      postphoto: postPhoto,
-      postvideo: postVideo,
-      pinned: pinned,
-    });
-  }, []);
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgPostCard',
-  });
-  const { t: tCommon } = useTranslation('common');
-  const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
-  const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
+
+  const clearImage = (url: string): void => {
+    setPostFormState((prev) => ({
+      ...prev,
+      attachments: prev.attachments.filter((a) => a.url !== url),
+    }));
+  };
+
+  const clearVideo = (url: string): void => {
+    setPostFormState((prev) => ({
+      ...prev,
+      attachments: prev.attachments.filter((a) => a.url !== url),
+    }));
+  };
 
   const deletePost = async (): Promise<void> => {
     try {
       const { data } = await deletePostMutation({
         variables: {
-          input: {
-            id: id,
-          },
+          input: { id: post.id },
         },
       });
 
       if (data?.deletePost?.id) {
-        toast.success(t('postDeleted') as string);
+        toast.success(t('postDeleted'));
         toggleShowDeleteModal();
         setTimeout(() => {
           window.location.reload();
@@ -214,155 +192,38 @@ export default function OrgPostCard(
       errorHandler(t, error);
     }
   };
-
-  const handleInputEvent = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    const { name, value } = e.target;
-    setPostFormState((prevPostFormState) => ({
-      ...prevPostFormState,
-      [name]: value,
-    }));
-  };
-
-  const updatePostHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
+  const updatePost = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-
-    // Prepare the attachments array with correct structure including mimeType
-    const attachments = [];
-
-    if (postPhotoUpdated && postformState.postphoto) {
-      attachments.push({
-        url: postformState.postphoto,
-        mimeType: 'image/png', // Add required mimeType for images
-      });
-    }
-
-    if (postVideoUpdated && postformState.postvideo) {
-      attachments.push({
-        url: postformState.postvideo,
-        mimeType: 'video/mp4', // Add required mimeType for videos
-      });
-    }
-
-    // Prepare the update input
-    const updateInput = {
-      input: {
-        id,
-        caption: postformState.posttitle?.trim() || undefined,
-        isPinned: postformState.pinned || undefined,
-        attachments: attachments.length > 0 ? attachments : undefined,
-      },
-    };
-
-    if (
-      !updateInput.input.caption &&
-      updateInput.input.isPinned === undefined &&
-      (!updateInput.input.attachments ||
-        updateInput.input.attachments.length === 0)
-    ) {
-      toast.error('At least one field must be updated.');
-      return;
-    }
-
-    console.log('Update Input:', updateInput);
 
     try {
       const { data } = await updatePostMutation({
-        variables: updateInput,
+        variables: {
+          input: {
+            id: post.id,
+            caption: postFormState.caption.trim(),
+            attachments: postFormState.attachments,
+          },
+        },
       });
 
       if (data?.updatePost?.id) {
-        toast.success(t('postUpdated') as string);
-        toggleShowEditModal();
+        toast.success(t('postUpdated'));
+        setShowEditModal(false);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Update Error:', {
-          error,
-          input: updateInput,
-        });
-        toast.error(error.message);
-      }
-    }
-  };
-
-  const getMimeTypeFromBase64 = (base64String: string): string => {
-    const match = base64String.match(
-      /^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,/,
-    );
-    return match ? match[1] : 'application/octet-stream';
-  };
-
-  const handleImageChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    setPostFormState((prevPostFormState) => ({
-      ...prevPostFormState,
-      postphoto: '',
-    }));
-    setPostPhotoUpdated(true);
-
-    const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      const mimeType = file.type || getMimeTypeFromBase64(base64 as string);
-
-      setPostFormState((prev) => ({
-        ...prev,
-        postphoto: base64 as string,
-      }));
-      // Store mimeType separately if not needed in state
-      console.log('Image MimeType:', mimeType);
-    }
-  };
-
-  const handleVideoChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    setPostFormState((prevPostFormState) => ({
-      ...prevPostFormState,
-      postvideo: '',
-    }));
-    setPostVideoUpdated(true);
-
-    const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      const mimeType = file.type || getMimeTypeFromBase64(base64 as string);
-
-      setPostFormState((prev) => ({
-        ...prev,
-        postvideo: base64 as string,
-      }));
-      console.log('Video MimeType:', mimeType);
+      errorHandler(t, error);
     }
   };
 
   return (
     <>
-      <div
-        key={postID}
-        className="col-xl-4 col-lg-4 col-md-6"
-        data-testid="post-item"
-      >
-        <div
-          className={styles.cardsOrgPostCard}
-          onClick={handleCardClick}
-          data-testid="cardStructure"
-        >
-          {postVideo && (
-            <Card
-              className={styles.cardOrgPostCard}
-              data-testid="cardVid"
-              onMouseEnter={handleVideoPlay}
-              onMouseLeave={handleVideoPause}
-            >
+      <div className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
+        <div className={styles.cardsOrgPostCard} onClick={handleCardClick}>
+          <Card className={styles.cardOrgPostCard}>
+            {videoAttachment ? (
               <video
                 ref={videoRef}
                 muted
@@ -370,329 +231,209 @@ export default function OrgPostCard(
                 autoPlay={playing}
                 loop={true}
                 playsInline
+                onMouseEnter={handleVideoPlay}
+                onMouseLeave={handleVideoPause}
               >
-                <source src={postVideo} type="video/mp4" />
+                <source
+                  src={videoAttachment.name}
+                  type={videoAttachment.mimeType}
+                />
               </video>
-              <Card.Body>
-                {pinned && (
-                  <PushPin
-                    color="success"
-                    fontSize="large"
-                    className="fs-5"
-                    data-testid="pin-icon"
-                  />
-                )}
-                <Card.Title
-                  className={styles.titleOrgPostCard}
-                  data-testid="card-title"
-                >
-                  {postTitle}
-                </Card.Title>
-                <Card.Text
-                  className={styles.textOrgPostCard}
-                  data-testid="card-text"
-                >
-                  {postInfo}
-                </Card.Text>
-                <Card.Link data-testid="card-authour">{postAuthor}</Card.Link>
-              </Card.Body>
-            </Card>
-          )}
-          {postPhoto ? (
-            <Card className={styles.cardOrgPostCard}>
+            ) : imageAttachment ? (
               <Card.Img
                 className={styles.postimageOrgPostCard}
                 variant="top"
-                src={postPhoto}
-                alt="image"
+                src={imageAttachment.name}
+                alt="Post image"
               />
-              <Card.Body>
-                {pinned && (
-                  <PushPin color="success" fontSize="large" className="fs-5" />
-                )}
-                <Card.Title className={styles.titleOrgPostCard}>
-                  {postTitle}
-                </Card.Title>
-                <Card.Text className={styles.textOrgPostCard}>
-                  {postInfo}
-                </Card.Text>
-                <Card.Link>{postAuthor}</Card.Link>
-              </Card.Body>
-            </Card>
-          ) : !postVideo ? (
-            <span>
-              <Card className={styles.cardOrgPostCard}>
-                <Card.Img
-                  variant="top"
-                  src={AboutImg}
-                  alt="image not found"
-                  className={styles.nopostimage}
-                />
-                <Card.Body>
-                  {pinned && (
-                    <PushPin
-                      color="success"
-                      fontSize="large"
-                      className="fs-5"
-                    />
-                  )}
-                  <Card.Title className={styles.titleOrgPostCard}>
-                    {postTitle}
-                  </Card.Title>
-                  <Card.Text className={styles.textOrgPostCard}>
-                    {postInfo && postInfo.length > 20
-                      ? postInfo.substring(0, 20) + '...'
-                      : postInfo}
-                  </Card.Text>{' '}
-                  <Card.Link className={styles.author}>{postAuthor}</Card.Link>
-                </Card.Body>
-              </Card>
-            </span>
-          ) : (
-            ''
-          )}
+            ) : (
+              <Card.Img
+                variant="top"
+                src={AboutImg}
+                alt="Default image"
+                className={styles.nopostimage}
+              />
+            )}
+
+            <Card.Body>
+              {isPinned && (
+                <PushPin color="success" fontSize="large" className="fs-5" />
+              )}
+              <Card.Title className={styles.titleOrgPostCard}>
+                {post.caption}
+              </Card.Title>
+              <Card.Text className={styles.textOrgPostCard}>
+                Created: {new Date(post.createdAt).toLocaleDateString()}
+              </Card.Text>
+              <Card.Text className={styles.creatorInfo}>
+                Created by: {post.creatorId || 'Unknown'}
+              </Card.Text>
+            </Card.Body>
+          </Card>
         </div>
+
         {modalVisible && (
-          <div
-            className={styles.modalOrgPostCard}
-            data-testid={'imagepreviewmodal'}
-          >
+          <div className={styles.modalOrgPostCard}>
             <div className={styles.modalContentOrgPostCard}>
-              {postPhoto && (
-                <div className={styles.modalImage}>
-                  <img src={postPhoto} alt="Post Image" />
-                </div>
-              )}
-              {postVideo && (
-                <div className={styles.modalImage}>
+              <div className={styles.modalImage}>
+                {videoAttachment ? (
                   <video controls autoPlay loop muted>
-                    <source src={postVideo} type="video/mp4" />
+                    <source
+                      src={videoAttachment.name}
+                      type={videoAttachment.mimeType}
+                    />
                   </video>
-                </div>
-              )}
-              {!postPhoto && !postVideo && (
-                <div className={styles.modalImage}>
-                  {' '}
-                  <img src={AboutImg} alt="Post Image" />
-                </div>
-              )}
+                ) : (
+                  <img
+                    src={imageAttachment?.name || AboutImg}
+                    alt="Post content"
+                  />
+                )}
+              </div>
+
               <div className={styles.modalInfo}>
-                <p>
-                  {t('author')}:<span> {postAuthor}</span>
-                </p>
                 <div className={styles.infodiv}>
-                  {togglePost === 'Read more' ? (
-                    <p data-testid="toggleContent">
-                      {postInfo.length > 43
-                        ? postInfo.substring(0, 40) + '...'
-                        : postInfo}
+                  <p>{post.caption}</p>
+                  <p>Created: {new Date(post.createdAt).toLocaleString()}</p>
+                  <p>Creator ID: {post.creatorId || 'Unknown'}</p>
+                  {post.updatedAt && (
+                    <p>
+                      Last updated: {new Date(post.updatedAt).toLocaleString()}
                     </p>
-                  ) : (
-                    <p data-testid="toggleContent">{postInfo}</p>
                   )}
-                  <button
-                    role="toggleBtn"
-                    data-testid="toggleBtn"
-                    className={`${
-                      postInfo.length > 43
-                        ? styles.toggleClickBtn
-                        : styles.toggleClickBtnNone
-                    }`}
-                    onClick={handletoggleClick}
-                  >
-                    {togglePost}
-                  </button>
                 </div>
               </div>
+
               <button
                 className={styles.moreOptionsButton}
                 onClick={handleMoreOptionsClick}
-                data-testid="moreiconbtn"
               >
                 <MoreVert />
               </button>
               <button
                 className={styles.closeButtonOrgPostCard}
                 onClick={(): void => setModalVisible(false)}
-                data-testid="closeiconbtn"
               >
                 <Close />
               </button>
             </div>
           </div>
         )}
+
         {menuVisible && (
           <div className={styles.menuModal}>
             <div className={styles.menuContent}>
               <ul className={styles.menuOptions}>
-                <li
-                  data-toggle="modal"
-                  data-target={`#editPostModal${id}`}
-                  onClick={handleEditModal}
-                  data-testid="editPostModalBtn"
-                >
-                  {tCommon('edit')}
+                <li onClick={toggleShowEditModal}>{tCommon('edit')}</li>
+                <li onClick={toggleShowDeleteModal}>{t('deletePost')}</li>
+                <li onClick={togglePostPin}>
+                  {isPinned ? 'Unpin post' : 'Pin post'}
                 </li>
-                <li
-                  data-toggle="modal"
-                  data-target={`#deletePostModal${id}`}
-                  onClick={handleDeleteModal}
-                  data-testid="deletePostModalBtn"
-                >
-                  {t('deletePost')}
-                </li>
-                <li
-                  data-testid="pinpostBtn"
-                  onClick={(): Promise<void> => togglePostPin(id, pinned)}
-                >
-                  {!pinned ? 'Pin post' : 'Unpin post'}
-                </li>
-                <li
-                  className={styles.list}
-                  onClick={(): void => setMenuVisible(false)}
-                  data-testid="closebtn"
-                >
+                <li onClick={(): void => setMenuVisible(false)}>
                   {tCommon('close')}
                 </li>
               </ul>
             </div>
           </div>
         )}
-      </div>
-      <DeletePostModal
-        show={showDeleteModal}
-        onHide={toggleShowDeleteModal}
-        onDelete={() => deletePost()}
-      />
-      <Modal
-        show={showEditModal}
-        onHide={toggleShowEditModal}
-        backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header
-          className={styles.modalHeader}
-          data-testid="modalOrganizationHeader"
-          closeButton
+
+        <Modal
+          show={showEditModal}
+          onHide={toggleShowEditModal}
+          backdrop="static"
+          centered
         >
-          <Modal.Title className="text-white">{t('editPost')}</Modal.Title>
-        </Modal.Header>
-        <Form onSubmitCapture={updatePostHandler}>
-          <Modal.Body>
-            <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
-            <Form.Control
-              type="text"
-              id="postTitle"
-              name="posttitle"
-              value={postformState.posttitle}
-              onChange={handleInputEvent}
-              data-testid="updateTitle"
-              required
-              className={`mb-3 ${styles.inputField}`}
-              placeholder={t('postTitle1')}
-              autoComplete="off"
-            />
-            <Form.Label htmlFor="postinfo">{t('information')}</Form.Label>
-            <Form.Control
-              type="descrip"
-              id="descrip"
-              className={`mb-3 ${styles.inputField}`}
-              name="postinfo"
-              value={postformState.postinfo}
-              placeholder={t('information1')}
-              autoComplete="off"
-              onChange={handleInputEvent}
-              data-testid="updateText"
-              required
-            />
-            {!postPhoto && (
-              <>
-                <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
+          <Modal.Header closeButton className={styles.modalHeader}>
+            <Modal.Title>{t('editPost')}</Modal.Title>
+          </Modal.Header>
+
+          <Form onSubmit={updatePost}>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Caption</Form.Label>
                 <Form.Control
+                  type="text"
+                  name="caption"
+                  value={postFormState.caption}
+                  onChange={handleInputChange}
+                  required
+                  className={styles.inputField}
+                  placeholder={t('enterCaption')}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>{t('image')}</Form.Label>
+                <Form.Control
+                  type="file"
                   accept="image/*"
-                  id="postImageUrl"
-                  data-testid="postImageUrl"
-                  name="postphoto"
-                  type="file"
-                  placeholder={t('image')}
-                  multiple={false}
-                  onChange={handleImageChange}
-                  className={`mb-3 ${styles.inputField}`}
+                  onChange={handleImageUpload}
+                  className={styles.inputField}
                 />
-                {postPhoto && (
-                  <>
-                    {postformState.postphoto && (
-                      <div className={styles.previewOrgPostCard}>
-                        <img
-                          src={postformState.postphoto}
-                          alt="Post Image Preview"
-                        />
-                        <button
-                          className={styles.closeButtonP}
-                          onClick={clearImageInput}
-                          data-testid="closeimage"
-                        >
-                          <i className="fa fa-times"></i>
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-            {!postVideo && (
-              <>
-                <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
+                {postFormState.attachments
+                  .filter((a) => a.mimeType.startsWith('image/'))
+                  .map((attachment, index) => (
+                    <div key={index} className={styles.previewOrgPostCard}>
+                      <img src={attachment.url} alt="Preview" />
+                      <button
+                        type="button"
+                        className={styles.closeButtonP}
+                        onClick={() => clearImage(attachment.url)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Video</Form.Label>
                 <Form.Control
-                  accept="video/*"
-                  id="postVideoUrl"
-                  data-testid="postVideoUrl"
-                  name="postvideo"
                   type="file"
-                  placeholder={t('video')}
-                  multiple={false}
-                  onChange={handleVideoChange}
-                  className={`mb-3 ${styles.inputField}`}
+                  accept="video/*"
+                  onChange={handleVideoUpload}
+                  className={styles.inputField}
                 />
-                {postformState.postvideo && (
-                  <div className={styles.previewOrgPostCard}>
-                    <video controls>
-                      <source src={postformState.postvideo} type="video/mp4" />
-                      {t('tag')}
-                    </video>
-                    <button
-                      className={styles.closeButtonP}
-                      data-testid="closePreview"
-                      onClick={clearVideoInput}
-                    >
-                      <i className="fa fa-times"></i>
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              className={styles.removeButton}
-              onClick={toggleShowEditModal}
-              data-testid="closeOrganizationModal"
-              type="button"
-            >
-              {tCommon('close')}
-            </Button>
-            <Button
-              type="submit"
-              value="invite"
-              data-testid="updatePostBtn"
-              className={styles.addButton}
-            >
-              {t('updatePost')}
-            </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
+                {postFormState.attachments
+                  .filter((a) => a.mimeType.startsWith('video/'))
+                  .map((attachment, index) => (
+                    <div key={index} className={styles.previewOrgPostCard}>
+                      <video controls>
+                        <source
+                          src={attachment.url}
+                          type={attachment.mimeType}
+                        />
+                        {t('videoNotSupported')}
+                      </video>
+                      <button
+                        type="button"
+                        className={styles.closeButtonP}
+                        onClick={() => clearVideo(attachment.url)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+              </Form.Group>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="secondary" onClick={toggleShowEditModal}>
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit">
+                Save
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+
+        <DeletePostModal
+          show={showDeleteModal}
+          onHide={toggleShowDeleteModal}
+          onDelete={deletePost}
+        />
+      </div>
     </>
   );
 }

@@ -46,6 +46,23 @@ export const ORGANIZATION_POST_LIST = gql`
   }
 `;
 
+export const GET_POSTS_BY_ORG = gql`
+  query GetPostsByOrganization($input: GetPostsByOrgInput!) {
+    postsByOrganization(input: $input) {
+      id
+      createdAt
+      updatedAt
+      caption
+      attachments {
+        url
+      }
+      creator {
+        id
+      }
+    }
+  }
+`;
+
 export const FILTERED_ORGANIZATION_POSTS = gql`
   query FilteredOrganizationPosts(
     $input: QueryOrganizationInput!

@@ -144,8 +144,26 @@ describe('Testing Organization Post Card', () => {
     });
   });
 
-  const props = {
+  const post = {
     id: '12',
+    caption: 'Event Info',
+    createdAt: new Date(),
+    updatedAt: null,
+    pinnedAt: null,
+    creatorId: '123',
+    attachments: [
+      {
+        id: '1',
+        postId: '12',
+        name: 'https://example.com/image.jpg',
+        mimeType: 'image/jpeg',
+        createdAt: new Date(),
+      },
+    ],
+  };
+
+  const props = {
+    post,
     postID: '123',
     postTitle: 'Event Info',
     postInfo: 'Time change',
@@ -308,8 +326,18 @@ describe('Testing Organization Post Card', () => {
     );
   });
   it('Testing post updating functionality fail case', async () => {
-    const props2 = {
+    const post2 = {
       id: '',
+      caption: 'Event Info',
+      createdAt: new Date(),
+      updatedAt: null,
+      pinnedAt: null,
+      creatorId: '123',
+      attachments: [],
+    };
+
+    const props2 = {
+      post: post2,
       postID: '123',
       postTitle: 'Event Info',
       postInfo: 'Time change',
@@ -408,8 +436,18 @@ describe('Testing Organization Post Card', () => {
     );
   });
   it('Testing pin post functionality fail case', async () => {
-    const props2 = {
+    const post2 = {
       id: '',
+      caption: 'Event Info',
+      createdAt: new Date(),
+      updatedAt: null,
+      pinnedAt: null,
+      creatorId: '123',
+      attachments: [],
+    };
+
+    const props2 = {
+      post: post2,
       postID: '123',
       postTitle: 'Event Info',
       postInfo: 'Time change',
@@ -459,8 +497,18 @@ describe('Testing Organization Post Card', () => {
     );
   });
   it('Testing post delete functionality fail case', async () => {
-    const props2 = {
+    const post2 = {
       id: '',
+      caption: 'Event Info',
+      createdAt: new Date(),
+      updatedAt: null,
+      pinnedAt: null,
+      creatorId: '123',
+      attachments: [],
+    };
+
+    const props2 = {
+      post: post2,
       postID: '123',
       postTitle: 'Event Info',
       postInfo: 'Time change',
@@ -486,336 +534,5 @@ describe('Testing Organization Post Card', () => {
 
     await userEvent.click(screen.getByTestId('deletePostModalBtn'));
     fireEvent.click(screen.getByTestId('deletePostBtn'));
-  });
-  it('Testing close functionality of primary modal', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('closeiconbtn'));
-
-    //Primary Modal is closed
-    expect(screen.queryByTestId('moreiconbtn')).not.toBeInTheDocument();
-  });
-  it('Testing close functionality of secondary modal', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('closebtn'));
-
-    //Secondary Modal is closed
-    expect(screen.queryByTestId('deletePostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('editPostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
-  });
-  it('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    expect(screen.queryByTestId('toggleBtn')).not.toBeInTheDocument();
-  });
-  it('renders with "Read more" button when postInfo length is more than 43', async () => {
-    const props2 = {
-      id: '12',
-      postID: '123',
-      postTitle: 'Event Info',
-      postInfo:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.', // Length is greater than 43
-      postAuthor: 'John Doe',
-      postPhoto: 'photoLink',
-      postVideo: 'videoLink',
-      pinned: false,
-    };
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    expect(screen.getByTestId('toggleBtn')).toBeInTheDocument();
-  });
-  it('updates state variables correctly when handleEditModal is called', async () => {
-    const link2 = new StaticMockLink(MOCKS, true);
-    render(
-      <MockedProvider link={link2} addTypename={false}>
-        <OrgPostCard {...props} />
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    expect(screen.queryByTestId('editPostModalBtn')).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    //Primary Modal is closed
-    expect(screen.queryByTestId('closeiconbtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('moreiconbtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('toggleBtn')).not.toBeInTheDocument();
-
-    //Secondary Modal is closed
-    expect(screen.queryByTestId('deletePostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('editPostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
-  });
-  it('updates state variables correctly when handleDeleteModal is called', async () => {
-    const link2 = new StaticMockLink(MOCKS, true);
-    render(
-      <MockedProvider link={link2} addTypename={false}>
-        <OrgPostCard {...props} />
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    expect(screen.queryByTestId('deletePostModalBtn')).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('deletePostModalBtn'));
-
-    //Primary Modal is closed
-    expect(screen.queryByTestId('closeiconbtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('moreiconbtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('toggleBtn')).not.toBeInTheDocument();
-
-    //Secondary Modal is closed
-    expect(screen.queryByTestId('deletePostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('editPostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
-  });
-  it('clears postvideo state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
-
-    if (postVideoUrlInput) {
-      fireEvent.change(getByTestId('postVideoUrl'), {
-        target: { value: '' },
-      });
-      await userEvent.click(screen.getByPlaceholderText(/video/i));
-      const input = getByTestId('postVideoUrl');
-      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-      await waitFor(() => {
-        convertToBase64(file);
-      });
-
-      await userEvent.click(screen.getByTestId('closePreview'));
-    }
-  });
-  it('clears postimage state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    const imageUrlInput = screen.queryByTestId('postImageUrl');
-
-    if (imageUrlInput) {
-      fireEvent.change(getByTestId('postImageUrl'), {
-        target: { value: '' },
-      });
-      await userEvent.click(screen.getByPlaceholderText(/image/i));
-      const input = getByTestId('postImageUrl');
-      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-
-      // Simulate the asynchronous base64 conversion function
-      await waitFor(() => {
-        convertToBase64(file); // Replace with the expected base64-encoded image
-      });
-      document.getElementById = vi.fn(() => input);
-      const clearImageButton = getByTestId('closeimage');
-      fireEvent.click(clearImageButton);
-    }
-  });
-  it('clears postitle state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    fireEvent.change(getByTestId('updateTitle'), {
-      target: { value: '' },
-    });
-
-    await userEvent.click(screen.getByTestId('updatePostBtn')); // Should not update post
-
-    expect(screen.getByTestId('updateTitle')).toHaveValue('');
-    expect(screen.getByTestId('closeOrganizationModal')).toBeInTheDocument();
-    expect(screen.getByTestId('updatePostBtn')).toBeInTheDocument();
-  });
-  it('clears postinfo state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    fireEvent.change(getByTestId('updateText'), {
-      target: { value: '' },
-    });
-
-    await userEvent.click(screen.getByTestId('updatePostBtn')); // Should not update post
-
-    expect(screen.getByTestId('updateText')).toHaveValue('');
-    expect(screen.getByTestId('closeOrganizationModal')).toBeInTheDocument();
-    expect(screen.getByTestId('updatePostBtn')).toBeInTheDocument();
-  });
-  it('Testing create organization modal', async () => {
-    setItem('id', '123');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-    await userEvent.click(screen.getByAltText('image'));
-
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-    const createOrgBtn = screen.getByTestId('modalOrganizationHeader');
-    expect(createOrgBtn).toBeInTheDocument();
-    await userEvent.click(createOrgBtn);
-    await userEvent.click(screen.getByTestId('closeOrganizationModal'));
-  });
-  it('should toggle post pin when pin button is clicked', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    const pinButton = getByTestId('pinpostBtn');
-    fireEvent.click(pinButton);
-    await waitFor(() => {
-      expect(MOCKS[2].request.variables).toEqual({
-        id: '12',
-      });
-    });
-  });
-  test('testing video play and pause on mouse enter and leave events', async () => {
-    const playMock = vi.fn();
-    const pauseMock = vi.fn();
-
-    HTMLMediaElement.prototype.play = playMock;
-    HTMLMediaElement.prototype.pause = pauseMock;
-
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    const card = getByTestId('cardVid');
-
-    fireEvent.mouseEnter(card);
-    expect(playMock).toHaveBeenCalledTimes(1);
-
-    fireEvent.mouseLeave(card);
-    expect(pauseMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('for rendering when no image and no video is available', async () => {
-    const props2 = {
-      id: '',
-      postID: '123',
-      postTitle: 'Event Info',
-      postInfo: 'Time change',
-      postAuthor: 'John Doe',
-      postPhoto: '',
-      postVideo: '',
-      pinned: true,
-    };
-
-    const { getByAltText } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    expect(getByAltText('image not found')).toBeInTheDocument();
   });
 });

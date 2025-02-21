@@ -6,7 +6,7 @@
 
 > `const` **USER\_ORGANIZATION\_CONNECTION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L208)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L225)
 
 GraphQL query to retrieve organizations based on user connection.
 
