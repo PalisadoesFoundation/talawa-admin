@@ -16,7 +16,8 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app.module.css';
+import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
+import styles from '../../style/app-fixed.module.css';
 import SortingButton from '../../subComponents/SortingButton';
 import SearchingButton from 'subComponents/SearchingButton';
 import SearchBar from 'subComponents/SearchBar';
@@ -26,6 +27,7 @@ import type {
   InterfaceMutationCreatePostInput,
   InterfacePost,
 } from '../../types/Post/interface';
+import styles from '../../style/app.module.css';
 
 /**
  * OrgPost Component
