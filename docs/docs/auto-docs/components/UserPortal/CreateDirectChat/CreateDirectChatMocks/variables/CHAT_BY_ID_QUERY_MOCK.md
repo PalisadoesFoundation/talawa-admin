@@ -6,4 +6,4 @@
 
 > `const` **CHAT\_BY\_ID\_QUERY\_MOCK**: `InterfaceGQLMock`[]
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts#L294)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts:292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts#L292)

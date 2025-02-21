@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Collapse } from 'react-bootstrap';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -50,8 +50,8 @@ const collapsibleDropdown = ({
         </div>
         {tCommon(name)}
         <i
-          className={`ms-auto fa  
-          ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'} 
+          className={`ms-auto fa
+          ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
           ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
           `}
         />

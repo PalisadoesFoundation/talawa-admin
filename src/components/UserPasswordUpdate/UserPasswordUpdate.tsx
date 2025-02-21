@@ -150,7 +150,7 @@ const UserUpdate: React.FC<
           <div className={styles.dispbtnflex}>
             <Button
               type="button"
-              className={styles.greenregbtn}
+              className={styles.regBtn}
               value="savechanges"
               onClick={loginLink}
             >

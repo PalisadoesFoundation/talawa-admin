@@ -131,9 +131,26 @@ describe('Testing Actions Screen', () => {
 
   it('should search by assignee name', async () => {
     renderActions(link1);
+<<<<<<< HEAD
     const searchInput = await screen.findByTestId('searchBy');
     await userEvent.type(searchInput, '1');
 
+=======
+
+    const searchInput = await screen.findByTestId('searchBy');
+    expectVitestToBeInTheDocument(searchInput);
+
+    const searchToggle = await screen.findByTestId('searchByToggle');
+    expectVitestToBeInTheDocument(searchToggle);
+    await userEvent.click(searchToggle);
+
+    const searchByAssignee = await screen.findByTestId('assignee');
+    expectVitestToBeInTheDocument(searchByAssignee);
+    await userEvent.click(searchByAssignee);
+
+    await userEvent.type(searchInput, '1');
+
+>>>>>>> 87c0c3c74b59df201ea8248bd4685367ac897517
     await debounceWait();
     fireEvent.click(screen.getByTestId('searchBtn'));
 
@@ -143,7 +160,38 @@ describe('Testing Actions Screen', () => {
     });
   });
 
+<<<<<<< HEAD
   it('should show "No Actions" screen', async () => {
+=======
+  it('Search by Category name', async () => {
+    renderActions(link1);
+
+    const searchInput = await screen.findByTestId('searchBy');
+    expectVitestToBeInTheDocument(searchInput);
+
+    const searchToggle = await screen.findByTestId('searchByToggle');
+    expectVitestToBeInTheDocument(searchToggle);
+    await userEvent.click(searchToggle);
+
+    const searchByCategory = await screen.findByTestId('category');
+    expectVitestToBeInTheDocument(searchByCategory);
+    await userEvent.click(searchByCategory);
+
+    await userEvent.type(searchInput, '1');
+
+    await debounceWait();
+
+    await waitFor(
+      () => {
+        const assigneeName = screen.getAllByTestId('assigneeName');
+        expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
+      },
+      { timeout: 2500 },
+    );
+  });
+
+  it('should render screen with No Actions', async () => {
+>>>>>>> 87c0c3c74b59df201ea8248bd4685367ac897517
     renderActions(link3);
 
     await waitFor(() => {
