@@ -22,6 +22,7 @@ export default defineConfig({
     }),
   ],
   server: {
+    allowedHosts: true,
     // this ensures that the browser opens upon server start
     open: false,
     host: '0.0.0.0',
