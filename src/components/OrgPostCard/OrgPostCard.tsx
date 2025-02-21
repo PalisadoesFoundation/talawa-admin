@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
 import React, { useState, useRef } from 'react';
 import { Form, Button, Card, Modal } from 'react-bootstrap';
@@ -14,6 +14,7 @@ import {
   TOGGLE_PINNED_POST,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 
 interface InterfacePostAttachment {
   id: string;
@@ -116,6 +117,15 @@ export default function OrgPostCard({
     setPlaying(true);
     videoRef.current?.play();
   };
+
+  const { data: userData, loading: userLoading } = useQuery(GET_USER_BY_ID, {
+    variables: {
+      input: {
+        id: post.creatorId || '',
+      },
+    },
+    skip: !post.creatorId,
+  });
 
   const handleVideoPause = (): void => {
     setPlaying(false);
@@ -275,7 +285,16 @@ export default function OrgPostCard({
                 Created: {new Date(post.createdAt).toLocaleDateString()}
               </Card.Text>
               <Card.Text className={styles.creatorInfo}>
-                Created by: {post.creatorId || 'Unknown'}
+                {t('createdBy')}:{' '}
+                {post.creatorId ? (
+                  userLoading ? (
+                    <span className="text-muted">{tCommon('loading')}</span>
+                  ) : (
+                    userData?.user?.name || 'Unknown'
+                  )
+                ) : (
+                  'Unknown'
+                )}
               </Card.Text>
             </Card.Body>
           </Card>

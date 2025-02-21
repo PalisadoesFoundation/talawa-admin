@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/OrgPostCard/OrgPostCard.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPostCard/OrgPostCard.tsx#L51)
+Defined in: [src/components/OrgPostCard/OrgPostCard.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPostCard/OrgPostCard.tsx#L52)
 
 ## Parameters
 

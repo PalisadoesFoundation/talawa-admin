@@ -8,7 +8,22 @@ import type {
   InterfacePostEdge,
 } from '../../types/Post/interface';
 
-// Define interface for organization posts data
+/**
+ * PostsRenderer component renders a list of posts based on various conditions.
+ *
+ * Props:
+ * - loading: boolean - Indicates if the data is currently loading.
+ * - error: ApolloError | undefined - Error object if the data fetching failed.
+ * - data: InterfaceOrganizationData - The data containing posts information.
+ * - isFiltering: boolean - Indicates if a filter is applied to the posts.
+ * - searchTerm: string - The term used to filter the posts by caption.
+ * - sortingOption: string - The sorting option applied to the posts.
+ * - displayPosts: InterfacePost[] - The list of posts to display after sorting/filtering.
+ *
+ * Returns:
+ * - JSX.Element | null - The rendered posts or appropriate messages based on conditions.
+ */
+
 interface InterfaceOrganizationData {
   organization?: {
     posts?: {
