@@ -14,7 +14,9 @@ docs/**
 # Ignore dockerfile and related configs
 docker/docker-compose.prod.yaml
 docker/docker-compose.dev.yaml
+docker/docker-compose.deploy.yaml
 docker/Dockerfile.prod
 docker/Dockerfile.dev
+docker/Dockerfile.deploy
 config/docker/setup/nginx.conf
 config/docker/setup/nginx.prod.conf
