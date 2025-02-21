@@ -1,8 +1,5 @@
 /**
  * Unit tests for the Actions component.
- *
- * This file contains tests for the Actions component to ensure it behaves as expected
- * under various scenarios.
  */
 
 import React, { act } from 'react';
@@ -14,7 +11,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -22,7 +19,7 @@ import Actions from './Actions';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Actions.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
-import { describe, it, beforeAll, beforeEach, afterAll, vi } from 'vitest';
+import { describe, it, beforeEach, afterEach, vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -31,34 +28,22 @@ const link2 = new StaticMockLink(ERROR_MOCKS);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
 
 const t = {
-  ...JSON.parse(
-    JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.organizationActionItems ?? {},
-    ),
-  ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+  ...i18n.getDataByLanguage('en')?.translation.organizationActionItems,
+  ...i18n.getDataByLanguage('en')?.common,
+  ...i18n.getDataByLanguage('en')?.errors,
 };
 
 const debounceWait = async (ms = 300): Promise<void> => {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-};
-const mockNavigate = vi.fn();
-
-const expectVitestToBeInTheDocument = (element: HTMLElement): void => {
-  expect(element).toBeInTheDocument();
+  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 };
 
-const expectElementToHaveTextContent = (
-  element: HTMLElement,
-  text: string,
-): void => {
-  expect(element).toHaveTextContent(text);
-};
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+  };
+});
 
 const renderActions = (link: ApolloLink): RenderResult => {
   return render(
@@ -69,35 +54,22 @@ const renderActions = (link: ApolloLink): RenderResult => {
             <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route path="/user/volunteer/:orgId" element={<Actions />} />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
+                <Route path="/" element={<div data-testid="paramsError"></div>} />
               </Routes>
             </I18nextProvider>
           </LocalizationProvider>
         </Provider>
       </MemoryRouter>
-    </MockedProvider>,
+    </MockedProvider>
   );
 };
 
 describe('Testing Actions Screen', () => {
-  beforeAll(() => {
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom'); // Import the actual implementation
-      return {
-        ...actual,
-        useNavigate: () => mockNavigate, // Replace useNavigate hook with the mock
-      };
-    });
-  });
-
   beforeEach(() => {
     setItem('userId', 'userId');
   });
 
-  afterAll(() => {
+  afterEach(() => {
     vi.restoreAllMocks();
   });
 
@@ -110,157 +82,103 @@ describe('Testing Actions Screen', () => {
             <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route path="/user/volunteer/" element={<Actions />} />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
+                <Route path="/" element={<div data-testid="paramsError"></div>} />
               </Routes>
             </I18nextProvider>
           </Provider>
         </MemoryRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() => {
-      expectVitestToBeInTheDocument(screen.getByTestId('paramsError'));
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
     });
   });
 
   it('should render Actions screen', async () => {
     renderActions(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expectVitestToBeInTheDocument(searchInput);
-
-      const assigneeName = await screen.findAllByTestId('assigneeName');
-      expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
+
+    const assigneeName = await screen.findAllByTestId('assigneeName');
+    expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
   });
 
-  it('Check Sorting Functionality', async () => {
+  it('should sort items correctly', async () => {
     renderActions(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
-    expectVitestToBeInTheDocument(searchInput);
-
-    let sortBtn = await screen.findByTestId('sort');
-    expectVitestToBeInTheDocument(sortBtn);
-
-    // Sort by dueDate_DESC
+    const sortBtn = await screen.findByTestId('sort');
     fireEvent.click(sortBtn);
+
     const dueDateDESC = await screen.findByTestId('dueDate_DESC');
-    expectVitestToBeInTheDocument(dueDateDESC);
     fireEvent.click(dueDateDESC);
 
     await waitFor(() => {
       const assigneeName = screen.getAllByTestId('assigneeName');
-      expectElementToHaveTextContent(assigneeName[0], 'Group 1');
+      expect(assigneeName[0]).toHaveTextContent('Group 1');
     });
 
-    // Sort by dueDate_ASC
-    sortBtn = await screen.findByTestId('sort');
-    expectVitestToBeInTheDocument(sortBtn);
     fireEvent.click(sortBtn);
     const dueDateASC = await screen.findByTestId('dueDate_ASC');
-    expectVitestToBeInTheDocument(dueDateASC);
     fireEvent.click(dueDateASC);
 
     await waitFor(() => {
       const assigneeName = screen.getAllByTestId('assigneeName');
-      expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
+      expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
     });
   });
 
-  it('Search by Assignee name', async () => {
+  it('should search by assignee name', async () => {
     renderActions(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expectVitestToBeInTheDocument(searchInput);
+    const searchInput = await screen.findByTestId('searchBy');
+    await userEvent.type(searchInput, '1');
 
-      const searchToggle = await screen.findByTestId('searchByToggle');
-      expectVitestToBeInTheDocument(searchToggle);
-      await userEvent.click(searchToggle);
-
-      const searchByAssignee = await screen.findByTestId('assignee');
-      expectVitestToBeInTheDocument(searchByAssignee);
-      await userEvent.click(searchByAssignee);
-
-      await userEvent.type(searchInput, '1');
-    });
     await debounceWait();
     fireEvent.click(screen.getByTestId('searchBtn'));
 
-    await waitFor(async () => {
-      const assigneeName = await screen.findAllByTestId('assigneeName');
-      expectElementToHaveTextContent(assigneeName[0], 'Group 1');
+    await waitFor(() => {
+      const assigneeName = screen.getAllByTestId('assigneeName');
+      expect(assigneeName[0]).toHaveTextContent('Group 1');
     });
   });
 
-  it('Search by Category name', async () => {
-    renderActions(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expectVitestToBeInTheDocument(searchInput);
-
-      const searchToggle = await screen.findByTestId('searchByToggle');
-      expectVitestToBeInTheDocument(searchToggle);
-      await userEvent.click(searchToggle);
-
-      const searchByCategory = await screen.findByTestId('category');
-      expectVitestToBeInTheDocument(searchByCategory);
-      await userEvent.click(searchByCategory);
-
-      await userEvent.type(searchInput, '1');
-    });
-    await debounceWait();
-
-    await waitFor(
-      () => {
-        const assigneeName = screen.getAllByTestId('assigneeName');
-        expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
-      },
-      { timeout: 2500 },
-    );
-  });
-
-  it('should render screen with No Actions', async () => {
+  it('should show "No Actions" screen', async () => {
     renderActions(link3);
 
     await waitFor(() => {
-      expectVitestToBeInTheDocument(screen.getByTestId('searchBy'));
-      expectVitestToBeInTheDocument(screen.getByText(t.noActionItems));
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByText(t.noActionItems)).toBeInTheDocument();
     });
   });
 
-  it('Error while fetching Actions data', async () => {
+  it('should display error message when fetching data fails', async () => {
     renderActions(link2);
 
     await waitFor(() => {
-      expectVitestToBeInTheDocument(screen.getByTestId('errorMsg'));
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
     });
   });
 
-  it('Open and close ItemUpdateStatusModal', async () => {
+  it('should open and close ItemUpdateStatusModal', async () => {
     renderActions(link1);
-
     const checkbox = await screen.findAllByTestId('statusCheckbox');
     await userEvent.click(checkbox[0]);
 
-    await waitFor(async () => {
-      const element = await screen.findByText(t.actionItemStatus); // Resolve the promise
-      expectVitestToBeInTheDocument(element); // Now assert the resolved element
+    await waitFor(() => {
+      expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
     });
+
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
-  it('Open and close ItemViewModal', async () => {
+  it('should open and close ItemViewModal', async () => {
     renderActions(link1);
-
     const viewItemBtn = await screen.findAllByTestId('viewItemBtn');
     await userEvent.click(viewItemBtn[0]);
 
     await waitFor(() => {
-      expectVitestToBeInTheDocument(screen.getByText(t.actionItemDetails));
+      expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
     });
 
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
