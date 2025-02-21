@@ -218,12 +218,14 @@ export const PLUGIN_SUBSCRIPTION = gql`
  */
 
 export const TOGGLE_PINNED_POST = gql`
-  mutation TogglePostPin($input: TogglePostPinInput!) {
-    togglePostPin(input: $input) {
+  mutation UpdatePost($input: MutationUpdatePostInput!) {
+    updatePost(input: $input) {
       id
+      caption
       pinnedAt
-      success
-      message
+      attachments {
+        url
+      }
     }
   }
 `;

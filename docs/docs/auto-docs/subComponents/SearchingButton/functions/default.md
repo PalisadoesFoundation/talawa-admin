@@ -6,18 +6,17 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/subComponents/SearchingButton.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchingButton.tsx#L43)
+Defined in: [src/subComponents/SearchingButton.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchingButton.tsx#L29)
 
-SortingButton component renders a Dropdown with sorting options.
-It allows users to select a sorting option and triggers a callback on selection.
+SearchingButton component that only displays a text.
 
 ## Parameters
 
 ### props
 
-`InterfaceSortingButtonProps`
+`InterfaceSearchingButtonProps`
 
-The properties for the SortingButton component.
+The properties for the SearchingButton component.
 
 ### deprecatedLegacyContext?
 
@@ -33,4 +32,4 @@ The properties for the SortingButton component.
 
 `ReactNode`
 
-The rendered SortingButton component.
+The rendered SearchingButton component.

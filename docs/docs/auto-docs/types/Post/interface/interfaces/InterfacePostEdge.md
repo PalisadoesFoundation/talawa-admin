@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostEdge
 
-Defined in: [src/types/Post/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L38)
+Defined in: [src/types/Post/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L35)
 
 ## Properties
 
@@ -12,12 +12,12 @@ Defined in: [src/types/Post/interface.ts:38](https://github.com/PalisadoesFounda
 
 > **cursor**: `string`
 
-Defined in: [src/types/Post/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L40)
+Defined in: [src/types/Post/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L37)
 
 ***
 
 ### node
 
-> **node**: [`InterfacePostNode`](InterfacePostNode.md)
+> **node**: [`InterfacePost`](InterfacePost.md)
 
-Defined in: [src/types/Post/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L39)
+Defined in: [src/types/Post/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L36)

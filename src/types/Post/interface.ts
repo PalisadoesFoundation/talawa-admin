@@ -15,10 +15,6 @@ export interface InterfacePostCard {
   fetchPosts: () => void;
 }
 
-export interface InterfacePostNode {
-  createdAt: string;
-}
-
 export interface InterfacePostCreator {
   id: string;
   firstName?: string;
@@ -33,13 +29,13 @@ export interface InterfacePostNode {
   videoUrl?: string | null;
   creator?: InterfacePostCreator;
   pinned?: boolean;
+  createdAt: string; // Added from the other interface
 }
 
 export interface InterfacePostEdge {
-  node: InterfacePostNode;
+  node: InterfacePost; // Change to InterfacePost instead of InterfacePostNode
   cursor: string;
 }
-
 export interface InterfacePageInfo {
   startCursor: string;
   endCursor: string;
@@ -54,7 +50,11 @@ export interface InterfacePostConnection {
 
 export interface InterfaceOrganization {
   id: string;
-  posts: InterfacePostConnection;
+  posts: {
+    edges: InterfacePostEdge[];
+    pageInfo: InterfacePageInfo;
+    totalCount: number; // Move totalCount inside posts
+  };
 }
 
 export interface InterfaceOrganizationPostListData {
@@ -82,6 +82,9 @@ export interface InterfacePost {
   caption: string;
   createdAt: string;
   pinnedAt?: string | null;
+  pinned?: boolean; // Add this if you're using it
   creator?: InterfaceCreator;
   attachments?: InterfaceAttachment[];
+  imageUrl?: string | null; // Add these if you're using them directly
+  videoUrl?: string | null; // in your component
 }

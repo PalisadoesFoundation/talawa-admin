@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganization
 
-Defined in: [src/types/Post/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L55)
+Defined in: [src/types/Post/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L51)
 
 ## Properties
 
@@ -12,12 +12,24 @@ Defined in: [src/types/Post/interface.ts:55](https://github.com/PalisadoesFounda
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L56)
+Defined in: [src/types/Post/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L52)
 
 ***
 
 ### posts
 
-> **posts**: [`InterfacePostConnection`](InterfacePostConnection.md)
+> **posts**: `object`
 
-Defined in: [src/types/Post/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L57)
+Defined in: [src/types/Post/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L53)
+
+#### edges
+
+> **edges**: [`InterfacePostEdge`](InterfacePostEdge.md)[]
+
+#### pageInfo
+
+> **pageInfo**: [`InterfacePageInfo`](InterfacePageInfo.md)
+
+#### totalCount
+
+> **totalCount**: `number`

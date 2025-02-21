@@ -6,7 +6,7 @@
 
 > `const` **REMOVE\_CUSTOM\_FIELD**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L263)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L265)
 
 GraphQL mutation to remove a custom field from an organization.
 
