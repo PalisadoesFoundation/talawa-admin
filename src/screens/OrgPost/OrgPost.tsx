@@ -3,8 +3,6 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { GET_POSTS_BY_ORG } from '../../GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import NotFound from 'components/NotFound/NotFound';
-import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { useParams } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -18,86 +16,20 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app.module.css';
 import SortingButton from '../../subComponents/SortingButton';
-import SearchingButton from 'subComponents/SearchingButton';
+import PostsRenderer from './Posts';
+// import SearchingButton from 'subComponents/SearchingButton';
 import SearchBar from 'subComponents/SearchBar';
-
-interface InterfacePostNode {
-  createdAt: string;
-}
-
-interface InterfacePostCreator {
-  id: string;
-  firstName?: string;
-  lastName?: string;
-}
-
-interface InterfacePostNode {
-  id: string;
-  caption: string;
-  text?: string;
-  imageUrl?: string | null;
-  videoUrl?: string | null;
-  creator?: InterfacePostCreator;
-  pinned?: boolean;
-}
-
-interface InterfacePostEdge {
-  node: InterfacePostNode;
-  cursor: string;
-}
-
-interface InterfacePageInfo {
-  startCursor: string;
-  endCursor: string;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
-
-interface InterfacePostConnection {
-  edges: InterfacePostEdge[];
-  pageInfo: InterfacePageInfo;
-}
-
-interface InterfaceOrganization {
-  id: string;
-  posts: InterfacePostConnection;
-}
-
-interface InterfaceOrganizationPostListData {
-  organization: InterfaceOrganization;
-}
-
-// Define the proper interface for the mutation input
-interface InterfaceMutationCreatePostInput {
-  caption: string;
-  organizationId: string;
-  isPinned: boolean;
-  attachments?: File[];
-}
-
-interface InterfaceAttachment {
-  url: string;
-}
-
-interface InterfaceCreator {
-  id: string;
-}
-
-interface InterfacePost {
-  id: string;
-  caption: string;
-  createdAt: string;
-  pinnedAt?: string | null;
-  creator?: InterfaceCreator;
-  attachments?: InterfaceAttachment[];
-}
+import type {
+  InterfacePostEdge,
+  InterfaceOrganizationPostListData,
+  InterfaceMutationCreatePostInput,
+  InterfacePost,
+} from '../../types/Post/interface';
 
 /**
  * OrgPost Component
- *
  * This component is responsible for rendering and managing organization posts.
  * It allows users to create, view, and navigate through posts associated with an organization.
- *
  * Features:
  * - Fetches and displays organization posts using GraphQL queries.
  * - Supports creating new posts with image/video uploads.
@@ -105,29 +37,6 @@ interface InterfacePost {
  * - Search functionality for filtering posts by title or text.
  * - Sorting options to view the latest or oldest posts.
  * - Allows pinning posts for priority display.
- *
- * Dependencies:
- * - Apollo Client for GraphQL queries and mutations.
- * - React Bootstrap for styling and UI components.
- * - react-toastify for success and error notifications.
- * - i18next for internationalization.
- * - Utility functions like convertToBase64 and errorHandler.
- *
- * Props: None
- *
- * State:
- * - postmodalisOpen: boolean - Controls the visibility of the create post modal.
- * - postformState: object - Stores post form data (title, info, media, pinPost).
- * - sortingOption: string - Stores the current sorting option ('latest', 'oldest').
- * - file: File | null - Stores the selected media file.
- * - after, before: string | null | undefined - Cursor values for pagination.
- * - first, last: number | null - Number of posts to fetch for pagination.
- * - showTitle: boolean - Controls whether to search by title or text.
- *
- * GraphQL Queries:
- * - ORGANIZATION_POST_LIST: Fetches organization posts with pagination.
- * - CREATE_POST_MUTATION: Creates a new post for the organization.
- *
  */
 
 function OrgPost(): JSX.Element {
@@ -137,7 +46,6 @@ function OrgPost(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
-  console.log('Page title set to:', t('title'));
 
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
   const [postformState, setPostFormState] = useState({
@@ -148,8 +56,6 @@ function OrgPost(): JSX.Element {
     addMedia: '',
     pinPost: false,
   });
-  console.log('Initial post form state:', postformState);
-
   const [sortingOption, setSortingOption] = useState('None');
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
@@ -157,8 +63,6 @@ function OrgPost(): JSX.Element {
 
   const [file, setFile] = useState<File | null>(null);
   const { orgId: currentUrl } = useParams();
-  console.log('Current organization ID:', currentUrl);
-
   const [showTitle, setShowTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
@@ -166,7 +70,7 @@ function OrgPost(): JSX.Element {
   const [last, setLast] = useState<number | null>(null);
   const [sortedPosts, setSortedPosts] = useState<InterfacePost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<InterfacePostEdge[]>([]);
-
+  const [searchTerm, setSearchTerm] = useState('');
   const [isFiltering, setIsFiltering] = useState(false);
   const {
     data,
@@ -183,12 +87,10 @@ function OrgPost(): JSX.Element {
   });
 
   const showInviteModal = (): void => {
-    console.log('Opening post modal');
     setPostModalIsOpen(true);
   };
 
   const hideInviteModal = (): void => {
-    console.log('Closing post modal');
     setPostModalIsOpen(false);
     setPostFormState({
       posttitle: '',
@@ -214,14 +116,12 @@ function OrgPost(): JSX.Element {
       last: last,
     },
   });
-  console.log('Fetched organization posts:', orgPostListData);
 
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
 
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    console.log('Creating post with form state:', postformState);
 
     try {
       if (!postformState.posttitle.trim()) {
@@ -248,9 +148,6 @@ function OrgPost(): JSX.Element {
           input,
         },
       });
-
-      console.log('Post creation response:', data);
-
       if (data?.createPost) {
         toast.success(t('postCreatedSuccess') as string);
         await refetch();
@@ -267,23 +164,16 @@ function OrgPost(): JSX.Element {
         setPostModalIsOpen(false);
       }
     } catch (error: unknown) {
-      console.error('Error creating post:', error);
       errorHandler(t, error);
     }
   };
-
+  console.log(setShowTitle);
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const selectedFile = e.target.files?.[0];
 
     if (selectedFile) {
-      console.log('Selected file:', {
-        name: selectedFile.name,
-        type: selectedFile.type,
-        size: selectedFile.size,
-      });
-
       // Validate file type
       if (
         !selectedFile.type.startsWith('image/') &&
@@ -291,6 +181,10 @@ function OrgPost(): JSX.Element {
       ) {
         toast.error('Please select an image or video file');
         return;
+      }
+
+      if (filteredPosts.length === 0) {
+        console.log('No filtered posts found');
       }
 
       // Store the raw file
@@ -303,8 +197,7 @@ function OrgPost(): JSX.Element {
           ...prev,
           addMedia: base64,
         }));
-      } catch (error) {
-        console.error('Preview generation error:', error);
+      } catch {
         toast.error('Could not generate preview');
       }
     } else {
@@ -327,7 +220,7 @@ function OrgPost(): JSX.Element {
   useEffect(() => {
     if (orgPostListError) {
       console.error('Organization post list error:', orgPostListError);
-      // navigate('/orglist');
+      // Add proper error handling here
     }
   }, [orgPostListError]);
 
@@ -350,42 +243,50 @@ function OrgPost(): JSX.Element {
     return <Loader />;
   }
 
-  const handleSearch = (term: string): void => {
-    console.log('Search term:', term);
+  const content = (
+    <PostsRenderer
+      loading={loading}
+      error={error}
+      data={isFiltering ? data : orgPostListData}
+      isFiltering={isFiltering}
+      searchTerm={searchTerm}
+      sortingOption={sortingOption}
+      displayPosts={displayPosts}
+    />
+  );
 
-    if (!term.trim()) {
-      setIsFiltering(false);
-      refetch({
-        input: {
-          id: currentUrl,
-        },
-        after: after || null,
-        before: before || null,
-        first: first || null,
-        last: last || null,
+  const handleSearch = async (term: string): Promise<void> => {
+    setSearchTerm(term);
+
+    try {
+      const { data: searchData } = await refetchPosts({
+        input: { organizationId: currentUrl },
       });
-      return;
-    }
 
-    if (orgPostListData?.organization?.posts?.edges) {
-      setIsFiltering(true);
-      const filtered = orgPostListData.organization.posts.edges.filter(
-        (edge) => {
-          const post = edge.node;
-          if (showTitle) {
-            return post.caption.toLowerCase().includes(term.toLowerCase());
-          }
+      if (!term.trim()) {
+        setIsFiltering(false);
+        setFilteredPosts([]);
+        return;
+      }
 
-          return post.text?.toLowerCase().includes(term.toLowerCase());
-        },
-      );
-      setFilteredPosts(filtered);
+      if (searchData?.postsByOrganization) {
+        setIsFiltering(true);
+
+        // Fix 4: Remove explicit any type
+        const filtered = searchData.postsByOrganization.filter(
+          (post: InterfacePost) =>
+            post.caption.toLowerCase().includes(term.toLowerCase()),
+        );
+        setFilteredPosts(filtered);
+      }
+    } catch (error) {
+      // Fix 5: Use error variable
+      console.error('Search error:', error);
+      toast.error('Error searching posts');
     }
   };
 
   const handleSorting = (option: string): void => {
-    console.log('Sorting option selected:', option);
-
     setCurrentPage(1);
     setSortingOption(option);
 
@@ -399,9 +300,7 @@ function OrgPost(): JSX.Element {
       });
       return;
     }
-
     if (!['latest', 'oldest'].includes(option)) {
-      console.error('Invalid sorting option:', option);
       return;
     }
 
@@ -418,154 +317,44 @@ function OrgPost(): JSX.Element {
 
     setSortedPosts(sorted);
 
-    // Set initial page of sorted posts
     const initialPosts = sorted.slice(0, postsPerPage);
     setDisplayPosts(initialPosts);
   };
 
-  const renderContent = (): JSX.Element | null | (JSX.Element | null)[] => {
-    if (loading) return <Loader />;
-    if (error) return <div>Error loading posts</div>;
+  const totalPages =
+    sortingOption === 'None'
+      ? Math.ceil(
+          (orgPostListData?.organization?.posts?.totalCount || 0) /
+            postsPerPage,
+        )
+      : Math.ceil(sortedPosts.length / postsPerPage);
 
-    // If sorting is None, show original filtered/unfiltered posts
-    if (sortingOption === 'None') {
-      if (isFiltering) {
-        if (filteredPosts.length === 0) {
-          return <NotFound title="post" keyPrefix="postNotFound" />;
-        }
+  const hasPreviousPage =
+    sortingOption === 'None'
+      ? orgPostListData?.organization?.posts?.pageInfo?.hasPreviousPage
+      : currentPage > 1;
 
-        return filteredPosts.map((edge: InterfacePostEdge) => {
-          const post = edge.node;
-          return (
-            <OrgPostCard
-              key={post.id}
-              post={{
-                id: post.id,
-                caption: post.caption,
-                createdAt: new Date(post.createdAt),
-                pinnedAt: post.pinned ? new Date() : null,
-                creatorId: post.creator?.id || null,
-                attachments: [
-                  ...(post.imageUrl
-                    ? [
-                        {
-                          id: `${post.id}-image`,
-                          postId: post.id,
-                          name: post.imageUrl,
-                          mimeType: 'image/jpeg',
-                          createdAt: new Date(post.createdAt),
-                        },
-                      ]
-                    : []),
-                  ...(post.videoUrl
-                    ? [
-                        {
-                          id: `${post.id}-video`,
-                          postId: post.id,
-                          name: post.videoUrl,
-                          mimeType: 'video/mp4',
-                          createdAt: new Date(post.createdAt),
-                        },
-                      ]
-                    : []),
-                ],
-              }}
-            />
-          );
-        });
-      }
+  const hasNextPage =
+    sortingOption === 'None'
+      ? orgPostListData?.organization?.posts?.pageInfo?.hasNextPage
+      : currentPage < totalPages;
 
-      if (!orgPostListData?.organization?.posts?.edges?.length) {
-        return <NotFound title="post" keyPrefix="postNotFound" />;
-      }
+  // Update the totalPages calculation
 
-      return orgPostListData.organization.posts.edges.map(
-        (edge: InterfacePostEdge) => {
-          const post = edge.node;
-          return (
-            <OrgPostCard
-              key={post.id}
-              post={{
-                id: post.id,
-                caption: post.caption,
-                createdAt: new Date(post.createdAt),
-                pinnedAt: post.pinned ? new Date() : null,
-                creatorId: post.creator?.id || null,
-                attachments: [
-                  ...(post.imageUrl
-                    ? [
-                        {
-                          id: `${post.id}-image`,
-                          postId: post.id,
-                          name: post.imageUrl,
-                          mimeType: 'image/jpeg',
-                          createdAt: new Date(post.createdAt),
-                        },
-                      ]
-                    : []),
-                  ...(post.videoUrl
-                    ? [
-                        {
-                          id: `${post.id}-video`,
-                          postId: post.id,
-                          name: post.videoUrl,
-                          mimeType: 'video/mp4',
-                          createdAt: new Date(post.createdAt),
-                        },
-                      ]
-                    : []),
-                ],
-              }}
-            />
-          );
-        },
-      );
-    }
-
-    if (!displayPosts.length) {
-      return <NotFound title="post" keyPrefix="postNotFound" />;
-    }
-
-    return displayPosts.map((post) => {
-      const mediaAttachments = post.attachments
-        ? post.attachments.map((attachment) => ({
-            id: `${post.id}-${attachment.url.includes('video') ? 'video' : 'image'}`,
-            postId: post.id,
-            name: attachment.url,
-            mimeType: attachment.url.includes('video')
-              ? 'video/mp4'
-              : 'image/jpeg',
-            createdAt: new Date(post.createdAt),
-          }))
-        : [];
-
-      return (
-        <OrgPostCard
-          key={post.id}
-          post={{
-            id: post.id,
-            caption: post.caption,
-            createdAt: new Date(post.createdAt),
-            pinnedAt: post.pinnedAt ? new Date(post.pinnedAt) : null,
-            creatorId: post.creator?.id || null,
-            attachments: mediaAttachments,
-          }}
-        />
-      );
-    });
-  };
-
+  // Update the handleNextPage function
   const handleNextPage = (): void => {
     if (sortingOption === 'None') {
-      // Use GraphQL pagination for unsorted posts
-      setAfter(
-        orgPostListData?.organization?.posts?.pageInfo?.endCursor || null,
-      );
-      setBefore(null);
-      setFirst(postsPerPage);
-      setLast(null);
+      const endCursor =
+        orgPostListData?.organization?.posts?.pageInfo?.endCursor;
+      if (endCursor) {
+        setAfter(endCursor);
+        setBefore(null);
+        setFirst(postsPerPage);
+        setLast(null);
+        // Reset the current page for proper tracking
+        setCurrentPage((prev) => prev + 1);
+      }
     } else {
-      // Check if there are more posts to show
       const maxPage = Math.ceil(sortedPosts.length / postsPerPage);
       if (currentPage < maxPage) {
         setCurrentPage((prev) => prev + 1);
@@ -573,31 +362,25 @@ function OrgPost(): JSX.Element {
     }
   };
 
+  // Update the handlePreviousPage function
   const handlePreviousPage = (): void => {
     if (sortingOption === 'None') {
-      // Use GraphQL pagination for unsorted posts
-      setBefore(
-        orgPostListData?.organization?.posts?.pageInfo?.startCursor || null,
-      );
-      setAfter(null);
-      setFirst(null);
-      setLast(postsPerPage);
+      const startCursor =
+        orgPostListData?.organization?.posts?.pageInfo?.startCursor;
+      if (startCursor) {
+        setBefore(startCursor);
+        setAfter(null);
+        setFirst(null);
+        setLast(postsPerPage);
+        // Reset the current page for proper tracking
+        setCurrentPage((prev) => prev - 1);
+      }
     } else {
-      // Check if we're not on the first page
       if (currentPage > 1) {
         setCurrentPage((prev) => prev - 1);
       }
     }
   };
-
-  const totalPages =
-    sortingOption === 'None'
-      ? Math.ceil(
-          (orgPostListData?.organization?.posts?.edges?.length || 0) /
-            postsPerPage,
-        )
-      : Math.ceil(sortedPosts.length / postsPerPage);
-
   return (
     <>
       <Row className={styles.head}>
@@ -610,18 +393,12 @@ function OrgPost(): JSX.Element {
             />
             <div className={styles.btnsBlockOrgPost}>
               <div className="d-flex">
-                <SearchingButton
-                  title="SearchBy"
-                  sortingOptions={[
-                    { label: t('Text'), value: 'Text' },
-                    { label: t('Title'), value: 'Title' },
-                  ]}
-                  selectedOption={showTitle ? t('Title') : t('Text')}
-                  onSortChange={(value) => setShowTitle(value === 'Title')}
-                  dataTestIdPrefix="searchBy"
-                  buttonLabel={t('searchBy')}
+                {/* <SearchingButton
+                  text="Search" 
+                  dataTestIdPrefix="sort-button"
+                  type="sort" 
                   className={`${styles.dropdown} `}
-                />
+                /> */}
                 <SortingButton
                   title="Sort Post"
                   sortingOptions={[
@@ -647,31 +424,29 @@ function OrgPost(): JSX.Element {
               </Button>
             </div>
           </div>
-          <div className={`row ${styles.list_box}`}>{renderContent()}</div>
+          <div className={`row ${styles.list_box}`}>{content}</div>
         </div>
         <div className="row m-lg-1 d-flex justify-content-center w-100">
           <div className="col-auto">
             <Button
               onClick={handlePreviousPage}
               className={`${styles.createButton} btn-sm`}
-              disabled={currentPage <= 1}
+              disabled={!hasPreviousPage}
               data-testid="previousButton"
             >
               {t('Previous')}
             </Button>
           </div>
-          {sortingOption !== 'None' && (
-            <div className="col-auto">
-              <span className="mx-3">
-                Page {currentPage} of {totalPages}
-              </span>
-            </div>
-          )}
+          <div className="col-auto">
+            {/* <span className="mx-3">
+            Page {currentPage} of {totalPages || 1}
+          </span> */}
+          </div>
           <div className="col-auto">
             <Button
               onClick={handleNextPage}
               className={`${styles.createButton} btn-sm`}
-              disabled={currentPage >= totalPages}
+              disabled={!hasNextPage}
               data-testid="nextButton"
             >
               {t('Next')}

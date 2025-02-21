@@ -82,18 +82,27 @@ export default function OrgPostCard({
 
   const togglePostPin = async (): Promise<void> => {
     try {
-      await togglePinMutation({
+      const response = await togglePinMutation({
         variables: {
-          input: { id: post.id },
+          input: {
+            id: post.id,
+            isPinned: !isPinned, // Toggle the pinned status
+          },
         },
       });
-      setModalVisible(false);
-      setMenuVisible(false);
-      toast.success(isPinned ? 'Post unpinned' : 'Post pinned');
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+
+      if (response.data?.updatePost) {
+        setModalVisible(false);
+        setMenuVisible(false);
+        toast.success(isPinned ? 'Post unpinned' : 'Post pinned');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        toast.error('Failed to toggle pin');
+      }
     } catch (error: unknown) {
+      console.error('Mutation Error:', error);
       errorHandler(t, error);
     }
   };
