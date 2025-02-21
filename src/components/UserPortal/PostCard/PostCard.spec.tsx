@@ -958,8 +958,6 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Delete post should work properly', async () => {
     setItem('userId', '2');
 
-    const fetchPostsMock = vi.fn();
-
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
