@@ -362,9 +362,9 @@ describe('Testing PostCard Component [User Portal]', () => {
 
   it('Delete post should work properly', async () => {
     setItem('userId', '2');
-  
+
     const fetchPostsMock = vi.fn();
-  
+
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
@@ -391,7 +391,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       ],
       fetchPosts: vi.fn(), // Pass mock function
     };
-  
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -403,32 +403,31 @@ describe('Testing PostCard Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-  
+
     await waitFor(() => {
       // Ensure dropdown button is available
       expect(screen.getByTestId('dropdown')).toBeInTheDocument();
     });
-  
+
     await userEvent.click(screen.getByTestId('dropdown'));
-  
+
     await waitFor(() => {
       // Ensure delete button is visible after clicking the dropdown
       expect(screen.getByTestId('deletePost')).toBeInTheDocument();
     });
-  
+
     await userEvent.click(screen.getByTestId('deletePost'));
-  
+
     await waitFor(() => {
       // Check that the success toast was called
       expect(toast.success).toHaveBeenCalledWith(
         'Successfully deleted the Post.',
       );
-  
+
       // Ensure fetchPosts function is called after deletion
       expect(fetchPostsMock).toHaveBeenCalled();
     });
   });
-  
 
   it('Component should be rendered properly if user has liked the post', async () => {
     const beforeUserId = getItem('userId');
@@ -736,7 +735,7 @@ describe('Testing PostCard Component [User Portal]', () => {
 
   test('Comment submission displays error toast when network error occurs', async () => {
     vi.clearAllMocks();
-    
+
     const cardProps = {
       id: '1',
       userImage: 'image.png',
@@ -757,7 +756,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likedBy: [],
       fetchPosts: vi.fn(),
     };
-    
+
     const mockError = {
       request: {
         query: CREATE_COMMENT_POST,
@@ -768,9 +767,9 @@ describe('Testing PostCard Component [User Portal]', () => {
       },
       error: new Error('Test error'),
     };
-    
+
     const errorLink = new StaticMockLink([mockError], false);
-    
+
     render(
       <MockedProvider link={errorLink} addTypename={false}>
         <BrowserRouter>
@@ -782,18 +781,18 @@ describe('Testing PostCard Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    
+
     await wait(100);
-    
+
     await userEvent.click(screen.getByTestId('viewPostBtn'));
-    
+
     await userEvent.type(screen.getByTestId('commentInput'), 'test');
-    
+
     const toastErrorSpy = vi.spyOn(toast, 'error');
     await userEvent.click(screen.getByTestId('createCommentBtn'));
-    
+
     await wait(300);
-    
+
     expect(toastErrorSpy).toHaveBeenCalled();
   });
 
