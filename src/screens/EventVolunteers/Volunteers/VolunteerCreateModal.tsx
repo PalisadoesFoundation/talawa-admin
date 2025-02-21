@@ -136,7 +136,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           {/* Button to submit the volunteer form */}
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.regBtn}
             data-testid="submitBtn"
           >
             {t('addVolunteer')}
