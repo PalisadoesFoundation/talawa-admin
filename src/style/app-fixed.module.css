@@ -796,7 +796,6 @@
 
 .modalHeader {
   border: none;
-  padding-bottom: 0;
   background-color: var(--primary-bg-color) !important;
   padding: 1rem 1rem;
   color: #000000;
