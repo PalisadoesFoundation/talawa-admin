@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 
 interface InterfaceNotFoundProps {
   title: string; // Title of the page or resource not found

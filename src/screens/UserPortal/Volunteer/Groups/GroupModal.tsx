@@ -304,7 +304,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             {/* Button to submit the pledge form */}
             <Button
               type="submit"
-              className={styles.greenregbtn}
+              className={styles.regBtn}
               data-testid="submitBtn"
             >
               {t('updateGroup')}
