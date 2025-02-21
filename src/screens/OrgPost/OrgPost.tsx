@@ -522,7 +522,6 @@ function OrgPost(): JSX.Element {
       );
     }
 
-    // Show sorted and paginated posts
     if (!displayPosts.length) {
       return <NotFound title="post" keyPrefix="postNotFound" />;
     }
