@@ -734,8 +734,6 @@ describe('Testing PostCard Component [User Portal]', () => {
   });
 
   test('Comment submission displays error toast when network error occurs', async () => {
-    vi.clearAllMocks();
-
     const cardProps = {
       id: '1',
       userImage: 'image.png',
@@ -748,30 +746,36 @@ describe('Testing PostCard Component [User Portal]', () => {
       postedAt: '',
       image: 'testImage',
       video: '',
-      text: 'Simple text',
-      title: 'Simple title',
+      text: 'This is post test text',
+      title: 'This is post test title',
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '1',
+        },
+      ],
       fetchPosts: vi.fn(),
     };
 
-    const mockError = {
-      request: {
-        query: CREATE_COMMENT_POST,
-        variables: {
-          postId: '1',
-          comment: 'test',
+    const errorLink = new StaticMockLink([
+      {
+        request: {
+          query: CREATE_COMMENT_POST,
+          variables: {
+            postId: '1',
+            comment: 'test comment',
+          },
         },
+        error: new Error('Network error'),
       },
-      error: new Error('Test error'),
-    };
-
-    const errorLink = new StaticMockLink([mockError], false);
+    ]);
 
     render(
-      <MockedProvider link={errorLink} addTypename={false}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -782,18 +786,15 @@ describe('Testing PostCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait(100);
-
     await userEvent.click(screen.getByTestId('viewPostBtn'));
-
-    await userEvent.type(screen.getByTestId('commentInput'), 'test');
-
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    await userEvent.type(screen.getByTestId('commentInput'), 'test comment');
     await userEvent.click(screen.getByTestId('createCommentBtn'));
 
-    await wait(300);
-
-    expect(toastErrorSpy).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        i18nForTest.t('postCard.unexpectedError'),
+      );
+    });
   });
 
   test(`Comment should be liked when like button is clicked`, async () => {
