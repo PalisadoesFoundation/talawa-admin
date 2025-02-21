@@ -434,6 +434,15 @@ export const GET_POSTS_BY_ORG = gql`
   }
 `;
 
+export const GET_USER_BY_ID = gql`
+  query GetUserById($input: QueryUserInput!) {
+    user(input: $input) {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
   query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {

@@ -29,14 +29,6 @@ import type {
 /**
  * OrgPost Component
  * This component is responsible for rendering and managing organization posts.
- * It allows users to create, view, and navigate through posts associated with an organization.
- * Features:
- * - Fetches and displays organization posts using GraphQL queries.
- * - Supports creating new posts with image/video uploads.
- * - Pagination for navigating between post pages.
- * - Search functionality for filtering posts by title or text.
- * - Sorting options to view the latest or oldest posts.
- * - Allows pinning posts for priority display.
  */
 
 function OrgPost(): JSX.Element {
@@ -83,7 +75,7 @@ function OrgPost(): JSX.Element {
         organizationId: currentUrl,
       },
     },
-    fetchPolicy: 'network-only', // Always fetch fresh data
+    fetchPolicy: 'network-only',
   });
 
   const showInviteModal = (): void => {
@@ -361,8 +353,6 @@ function OrgPost(): JSX.Element {
       }
     }
   };
-
-  // Update the handlePreviousPage function
   const handlePreviousPage = (): void => {
     if (sortingOption === 'None') {
       const startCursor =
@@ -372,7 +362,6 @@ function OrgPost(): JSX.Element {
         setAfter(null);
         setFirst(null);
         setLast(postsPerPage);
-        // Reset the current page for proper tracking
         setCurrentPage((prev) => prev - 1);
       }
     } else {
@@ -437,11 +426,7 @@ function OrgPost(): JSX.Element {
               {t('Previous')}
             </Button>
           </div>
-          <div className="col-auto">
-            {/* <span className="mx-3">
-            Page {currentPage} of {totalPages || 1}
-          </span> */}
-          </div>
+          <div className="col-auto"></div>
           <div className="col-auto">
             <Button
               onClick={handleNextPage}
