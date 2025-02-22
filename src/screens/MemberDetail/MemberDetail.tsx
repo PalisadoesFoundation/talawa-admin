@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
