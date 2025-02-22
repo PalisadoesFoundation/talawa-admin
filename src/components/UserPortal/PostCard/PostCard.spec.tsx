@@ -1018,4 +1018,71 @@ describe('Testing PostCard Component [User Portal]', () => {
       );
     });
   });
+
+  test('should handle delete post failure correctly', async () => {
+    const cardProps = {
+      id: 'postId',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      postedAt: '2023-01-01',
+      image: '',
+      text: 'test Post',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 0,
+      comments: [],
+      likedBy: [
+        {
+          id: '2',
+        },
+      ],
+      fetchPosts: vi.fn(),
+    };
+
+    const deleteErrorMock = {
+      request: {
+        query: DELETE_POST_MUTATION,
+        variables: { id: 'postId' },
+      },
+      error: new Error('Network error: Failed to delete post'),
+    };
+
+    const errorLink = new StaticMockLink([deleteErrorMock], true);
+
+    render(
+      <MockedProvider addTypename={false} link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dropdown')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('dropdown'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deletePost')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('deletePost'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Network error: Failed to delete post',
+      );
+
+      expect(cardProps.fetchPosts).not.toHaveBeenCalled();
+    });
+  });
 });
