@@ -302,7 +302,7 @@
   --manageTagScrollableDiv-color: #9ca3af;
 
   --inputColor-bg: #f1f3f6;
-  --dateboxMemberDetail-corder: #e8e5e5;
+  --dateboxMemberDetail-border: #e8e5e5;
   --cardBody-color: #495057;
   --themeOverlay-bg: #0056b3;
   --cardBody-tw-st-color: #9ca3af;
@@ -2324,7 +2324,7 @@
 
 .dateboxMemberDetail {
   border-radius: 7px;
-  border-color: var(--dateboxMemberDetail-corder);
+  border-color: var(--dateboxMemberDetail-border);
   outline: none;
   box-shadow: none;
   padding-top: 2px;
