@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 

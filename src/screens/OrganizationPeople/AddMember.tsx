@@ -30,7 +30,7 @@ import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceQueryUserListItem,
 } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import SortingButton from 'subComponents/SortingButton';
 
@@ -442,10 +442,7 @@ function AddMember(): JSX.Element {
         show={createNewUserModalisOpen}
         onHide={toggleCreateNewUserModal}
       >
-        <Modal.Header
-          className={styles.createUserModalHeader}
-          data-testid="createUser"
-        >
+        <Modal.Header className={styles.createButton} data-testid="createUser">
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -548,7 +545,7 @@ function AddMember(): JSX.Element {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div className={styles.createUserActionBtns}>
+          <div className={styles.createButton}>
             <Button
               className={`${styles.removeButton}`}
               variant="danger"
