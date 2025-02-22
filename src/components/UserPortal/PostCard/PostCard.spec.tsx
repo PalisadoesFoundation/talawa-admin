@@ -1022,14 +1022,16 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('should handle delete post failure correctly', async () => {
     const cardProps = {
       id: 'postId',
+      userImage: 'image.png',
       creator: {
         firstName: 'test',
         lastName: 'user',
         email: 'test@user.com',
-        id: '1',
+        id: '2',
       },
-      postedAt: '2023-01-01',
+      postedAt: '',
       image: '',
+      video: '',
       text: 'test Post',
       title: 'This is post test title',
       likeCount: 1,
@@ -1037,10 +1039,12 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [],
       likedBy: [
         {
+          firstName: 'test',
+          lastName: 'user',
           id: '2',
         },
       ],
-      fetchPosts: vi.fn(),
+      fetchPosts: vi.fn(), // Pass mock function
     };
 
     const deleteErrorMock = {
