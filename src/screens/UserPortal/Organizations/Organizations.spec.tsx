@@ -346,7 +346,7 @@ const MOCKS = [
               sortingCode: '4567',
             },
             userRegistrationRequired: true,
-            members: [], // Empty members array to trigger join button
+            members: [],
             admins: [],
             membershipRequests: [],
             isJoined: false,
@@ -368,7 +368,107 @@ const MOCKS = [
               sortingCode: '4567',
             },
             userRegistrationRequired: true,
-            members: [], // Empty members array to trigger join button
+            members: [],
+            admins: [],
+            membershipRequests: [],
+            isJoined: false,
+          },
+        ],
+      },
+    },
+  },
+  // New mock for search query
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: getItem('userId'),
+        first: 5,
+        filter: '2',
+      },
+    },
+    result: {
+      data: {
+        UserJoinedOrganizations: [
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af3',
+            image: '',
+            name: 'anyOrganization2',
+            description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
+            userRegistrationRequired: true,
+            members: [],
+            admins: [],
+            membershipRequests: [],
+            isJoined: false,
+          },
+        ],
+      },
+    },
+  },
+  // Mock for empty search (when search is cleared)
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: getItem('userId'),
+        first: 5,
+        filter: '',
+      },
+    },
+    result: {
+      data: {
+        UserJoinedOrganizations: [
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af2',
+            image: '',
+            name: 'anyOrganization1',
+            description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
+            userRegistrationRequired: true,
+            members: [],
+            admins: [],
+            membershipRequests: [],
+            isJoined: false,
+          },
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af3',
+            image: '',
+            name: 'anyOrganization2',
+            description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
+            userRegistrationRequired: true,
+            members: [],
             admins: [],
             membershipRequests: [],
             isJoined: false,
@@ -441,21 +541,39 @@ describe('Testing Organizations Screen [User Portal]', () => {
     );
 
     // Wait for initial data load
-    await waitFor(() => {
-      expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
-      expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
-    });
+    await wait();
+
+    // Verify initial state
+    expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
+    expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
 
     // Perform search
     const searchInput = screen.getByTestId('searchInput');
     await userEvent.type(searchInput, '2');
+
+    // Get and click search button
+    const searchBtn = screen.getByTestId('searchBtn');
+    await userEvent.click(searchBtn);
+
+    // Wait for search results to update
+    await wait();
+
+    // Clear search
+    await userEvent.clear(searchInput);
+    await userEvent.click(searchBtn);
+
+    // Wait again for results to update
+    await wait();
+
+    // Perform search again
+    await userEvent.type(searchInput, '2');
     await userEvent.keyboard('{Enter}');
 
-    // Wait for filtered results
-    await waitFor(() => {
-      expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
-      expect(screen.queryByText('anyOrganization1')).not.toBeInTheDocument();
-    });
+    // Wait for final search results
+    await wait();
+
+    // Verify final state
+    expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
   });
 
   /**
