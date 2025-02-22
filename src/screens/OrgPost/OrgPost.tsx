@@ -25,6 +25,7 @@ import type {
   InterfaceMutationCreatePostInput,
   InterfacePost,
 } from '../../types/Post/interface';
+// Add these at the top of your file if not already present
 
 /**
  * OrgPost Component
@@ -131,7 +132,9 @@ function OrgPost(): JSX.Element {
         isPinned: postformState.pinPost,
       };
 
-      if (file) {
+      // Handle file upload
+      if (file instanceof File) {
+        // With apollo-upload-client, we can directly pass the File object
         input.attachments = [file];
       }
 
@@ -139,7 +142,14 @@ function OrgPost(): JSX.Element {
         variables: {
           input,
         },
+        context: {
+          // Ensure the file upload request includes the required header
+          headers: {
+            'Apollo-Require-Preflight': 'true',
+          },
+        },
       });
+
       if (data?.createPost) {
         toast.success(t('postCreatedSuccess') as string);
         await refetch();
@@ -159,6 +169,7 @@ function OrgPost(): JSX.Element {
       errorHandler(t, error);
     }
   };
+
   console.log(setShowTitle);
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,

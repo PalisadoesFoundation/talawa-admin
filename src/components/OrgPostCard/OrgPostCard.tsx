@@ -284,7 +284,7 @@ export default function OrgPostCard({
               <Card.Text className={styles.textOrgPostCard}>
                 Created: {new Date(post.createdAt).toLocaleDateString()}
               </Card.Text>
-              <Card.Text className={styles.creatorInfo}>
+              {/* <Card.Text className={styles.creatorInfo}>
                 {t('createdBy')}:{' '}
                 {post.creatorId ? (
                   userLoading ? (
@@ -295,7 +295,7 @@ export default function OrgPostCard({
                 ) : (
                   'Unknown'
                 )}
-              </Card.Text>
+              </Card.Text> */}
             </Card.Body>
           </Card>
         </div>
@@ -321,9 +321,30 @@ export default function OrgPostCard({
 
               <div className={styles.modalInfo}>
                 <div className={styles.infodiv}>
-                  <p>{post.caption}</p>
-                  <p>Created: {new Date(post.createdAt).toLocaleString()}</p>
-                  <p>Creator ID: {post.creatorId || 'Unknown'}</p>
+                  {/* <p>{post.caption}</p> */}
+                  <p>
+                    Dated:{' '}
+                    {new Date(post.createdAt).toLocaleDateString(undefined, {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
+                  </p>
+
+                  <Card.Text className={styles.creatorInfo}>
+                    {'Author '}:{'  '}
+                    {post.creatorId ? (
+                      userLoading ? (
+                        <span className="text-muted">
+                          {tCommon(' loading ')}
+                        </span>
+                      ) : (
+                        userData?.user?.name || 'Unknown'
+                      )
+                    ) : (
+                      'Unknown'
+                    )}
+                  </Card.Text>
                   {post.updatedAt && (
                     <p>
                       Last updated: {new Date(post.updatedAt).toLocaleString()}

@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrgPost/OrgPost.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPost.tsx#L34)
+Defined in: [src/screens/OrgPost/OrgPost.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPost.tsx#L35)
 
 OrgPost Component
 This component is responsible for rendering and managing organization posts.
