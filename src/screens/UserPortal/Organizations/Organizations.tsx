@@ -264,7 +264,7 @@ export default function organizations(): JSX.Element {
             if (
               Array.isArray(organization.members) &&
               organization.members.some(
-                (member: { id: string }) => member.id === userId,
+                (member: { _id: string }) => member._id === userId,
               )
             )
               membershipRequestStatus = 'accepted';

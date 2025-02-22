@@ -379,17 +379,23 @@ describe('Testing Organizations Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
-    const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.type(screen.getByTestId('searchInput'), '2{enter}');
-    await wait();
-
-    expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
-
-    await userEvent.clear(screen.getByTestId('searchInput'));
-    await userEvent.click(searchBtn);
-    await wait();
+  
+    // Wait for initial data load
+    await waitFor(() => {
+      expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
+      expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
+    });
+  
+    // Perform search
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2');
+    await userEvent.keyboard('{Enter}');
+  
+    // Wait for filtered results
+    await waitFor(() => {
+      expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
+      expect(screen.queryByText('anyOrganization1')).not.toBeInTheDocument();
+    });
   });
 
   /**
@@ -450,7 +456,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
    * Test case to check if the "Join Now" button renders correctly on the page.
    */
 
-  test('Join Now button render correctly', async () => {
+  test('Join Now button renders correctly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -462,12 +468,17 @@ describe('Testing Organizations Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
-
-    // Assert "Join Now" button
-    const joinNowButtons = screen.getAllByTestId('joinBtn');
-    expect(joinNowButtons.length).toBeGreaterThan(0);
+  
+    // Wait for organizations to load
+    await waitFor(() => {
+      expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
+    });
+  
+    // Check for join buttons
+    await waitFor(() => {
+      const joinButtons = screen.getAllByTestId('joinBtn');
+      expect(joinButtons.length).toBe(2); // We expect 2 buttons since we have 2 organizations
+    });
   });
 
   test('Mode is changed to created organisations', async () => {
