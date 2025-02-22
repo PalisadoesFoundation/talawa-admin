@@ -1,277 +1,158 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
-import i18nForTest from 'utils/i18nForTest';
-import { languages } from 'utils/languages';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { MockedProvider } from '@apollo/client/testing';
+import { useMutation } from '@apollo/client';
 import ChangeLanguageDropDown from './ChangeLanguageDropDown';
+import i18next from 'i18next';
 import cookies from 'js-cookie';
-import { MockedProvider } from '@apollo/react-testing';
-import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
+import { urlToFile } from 'utils/urlToFile';
 
-// Mock urlToFile utility
-const { mockUrlToFile } = vi.hoisted(() => ({
-  mockUrlToFile: vi.fn(),
+// Mock external dependencies
+jest.mock('i18next', () => ({
+  changeLanguage: jest.fn().mockResolvedValue(true),
 }));
 
-vi.mock('utils/urlToFile', () => ({
-  urlToFile: mockUrlToFile,
+jest.mock('js-cookie', () => ({
+  get: jest.fn(),
+  set: jest.fn(),
 }));
 
-// Mock useLocalStorage hook
-const mockLocalStorage = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-};
-
-vi.mock('utils/useLocalstorage', () => ({
-  default: () => mockLocalStorage,
+jest.mock('@apollo/client', () => ({
+  ...jest.requireActual('@apollo/client'),
+  useMutation: jest.fn(),
 }));
 
-// Mock File
-const mockFile = new File([''], 'avatar.png', { type: 'image/png' });
-
-// Setup test delay utility
-const wait = async (ms = 100): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, ms));
-};
-
-// GraphQL mocks
-const MOCKS = [
-  {
-    request: {
-      query: UPDATE_CURRENT_USER_MUTATION,
-      variables: {
-        input: {
-          naturalLanguageCode: 'fr',
-          avatar: mockFile,
-        },
-      },
-    },
-    result: {
-      data: {
-        updateCurrentUser: {
-          id: '67378abd-8500-8f17-1cf2-990d00000006',
-          naturalLanguageCode: 'fr',
-        },
-      },
-    },
+jest.mock('react-toastify', () => ({
+  toast: {
+    error: jest.fn(),
   },
-  {
-    request: {
-      query: UPDATE_CURRENT_USER_MUTATION,
-      variables: {
-        input: {
-          naturalLanguageCode: 'fr',
-        },
-      },
-    },
-    result: {
-      data: {
-        updateCurrentUser: {
-          id: '67378abd-8500-8f17-1cf2-990d00000006',
-          naturalLanguageCode: 'fr',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_CURRENT_USER_MUTATION,
-      variables: {
-        input: {
-          naturalLanguageCode: 'hi',
-        },
-      },
-    },
-    error: new Error('An error occurred'),
-  },
-];
+}));
 
-const renderComponent = (props = {}): ReturnType<typeof render> => {
-  return render(
-    <MockedProvider mocks={MOCKS} addTypename={false}>
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <ChangeLanguageDropDown {...props} />
-        </I18nextProvider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-};
+jest.mock('utils/urlToFile', () => ({
+  urlToFile: jest.fn().mockResolvedValue(new File([''], 'avatar.png')),
+}));
 
-describe('ChangeLanguageDropDown', () => {
+jest.mock('utils/useLocalstorage', () => ({
+  __esModule: true,
+  default: () => ({
+    getItem: jest.fn(),
+  }),
+}));
+
+const mockUpdateUser = jest.fn();
+const mockUseMutation = useMutation as jest.Mock;
+
+describe('ChangeLanguageDropDown Component', async () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    localStorage.clear();
-    cookies.remove('i18next');
-
-    // Setup default localStorage mock returns
-    mockLocalStorage.getItem.mockImplementation((key) => {
-      switch (key) {
-        case 'userId':
-          return '67378abd-8500-8f17-1cf2-990d00000006';
-        case 'UserImage':
-          return null;
-        default:
-          return null;
-      }
-    });
+    mockUseMutation.mockImplementation(() => [mockUpdateUser]);
+    (cookies.get as jest.Mock).mockReturnValue('en');
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
-  it('renders correctly with default props', async () => {
-    renderComponent();
+  test('renders correctly with current language', () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
 
     expect(
       screen.getByTestId('language-dropdown-container'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('language-dropdown-btn')).toBeInTheDocument();
-
-    // Check all language options are present
-    const dropdownBtn = screen.getByTestId('language-dropdown-btn');
-    await userEvent.click(dropdownBtn);
-
-    languages.forEach((language) => {
-      expect(
-        screen.getByTestId(`change-language-btn-${language.code}`),
-      ).toBeInTheDocument();
-    });
+    expect(screen.getByText('English')).toBeInTheDocument();
   });
 
-  it('changes language successfully without avatar', async () => {
-    // Ensure no UserImage in localStorage
-    mockLocalStorage.getItem.mockImplementation((key) => {
-      switch (key) {
-        case 'userId':
-          return '67378abd-8500-8f17-1cf2-990d00000006';
-        default:
-          return null;
-      }
-    });
-
-    renderComponent();
-
-    const dropdownBtn = screen.getByTestId('language-dropdown-btn');
-    await userEvent.click(dropdownBtn);
-
-    const frenchOption = screen.getByTestId('change-language-btn-fr');
-    await userEvent.click(frenchOption);
-
-    await wait(200);
-
-    expect(cookies.get('i18next')).toBe('fr');
-  });
-
-  it('changes language successfully with avatar', async () => {
-    mockUrlToFile.mockResolvedValue(mockFile);
-    mockLocalStorage.getItem.mockImplementation((key) => {
-      switch (key) {
-        case 'userId':
-          return '67378abd-8500-8f17-1cf2-990d00000006';
-        case 'UserImage':
-          return 'data:image/png;base64,fake-image-data';
-        default:
-          return null;
-      }
-    });
-
-    renderComponent();
-
-    const dropdownBtn = screen.getByTestId('language-dropdown-btn');
-    await userEvent.click(dropdownBtn);
-
-    const frenchOption = screen.getByTestId('change-language-btn-fr');
-    await userEvent.click(frenchOption);
-
-    await wait(200);
-
-    expect(mockUrlToFile).toHaveBeenCalledWith(
-      'data:image/png;base64,fake-image-data',
+  test('displays all language options', async () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
     );
-    expect(cookies.get('i18next')).toBe('fr');
-  });
 
-  it('handles mutation error gracefully', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
+    fireEvent.click(screen.getByTestId('language-dropdown-btn'));
 
-    renderComponent();
-
-    const dropdownBtn = screen.getByTestId('language-dropdown-btn');
-    await userEvent.click(dropdownBtn);
-
-    const hindiOption = screen.getByTestId('change-language-btn-hi');
-    await userEvent.click(hindiOption);
-
-    await wait(200);
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Error in changing language',
-      expect.any(Error),
-    );
-    expect(cookies.get('i18next')).not.toBe('hi');
-  });
-
-  it('handles avatar processing error gracefully', async () => {
-    mockUrlToFile.mockRejectedValue(new Error('Failed to process image'));
-    mockLocalStorage.getItem.mockImplementation((key) => {
-      switch (key) {
-        case 'userId':
-          return '67378abd-8500-8f17-1cf2-990d00000006';
-        case 'UserImage':
-          return 'data:image/png;base64,fake-image-data';
-        default:
-          return null;
-      }
+    await waitFor(() => {
+      languages.forEach((language) => {
+        expect(screen.getByText(language.name)).toBeInTheDocument();
+      });
     });
-
-    const consoleSpy = vi.spyOn(console, 'log');
-
-    renderComponent();
-
-    const dropdownBtn = screen.getByTestId('language-dropdown-btn');
-    await userEvent.click(dropdownBtn);
-
-    const frenchOption = screen.getByTestId('change-language-btn-fr');
-    await userEvent.click(frenchOption);
-
-    await wait(200);
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Error processing avatar:',
-      expect.any(Error),
-    );
-    expect(cookies.get('i18next')).toBe('fr');
   });
 
-  it('shows error toast when userId is not found', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+  render(
+    <MockedProvider mocks={[]} addTypename={false}>
+      <ChangeLanguageDropDown />
+    </MockedProvider>,
+  );
 
-    mockLocalStorage.getItem.mockImplementation((key) => {
-      switch (key) {
-        case 'userId':
-          return null;
-        default:
-          return null;
-      }
+  fireEvent.click(screen.getByTestId('language-dropdown-btn'));
+  fireEvent.click(screen.getByTestId('change-language-btn-fr'));
+
+  await waitFor(() => {
+    expect(urlToFile).toHaveBeenCalledWith('avatar-url');
+    expect(mockUpdateUser).toHaveBeenCalledWith({
+      variables: {
+        input: {
+          naturalLanguageCode: 'fr',
+          avatar: expect.any(File),
+        },
+      },
     });
-
-    renderComponent();
-
-    const dropdownBtn = screen.getByTestId('language-dropdown-btn');
-    await userEvent.click(dropdownBtn);
-
-    const frenchOption = screen.getByTestId('change-language-btn-fr');
-    await userEvent.click(frenchOption);
-
-    expect(toastErrorSpy).toHaveBeenCalledWith('User not found');
-    expect(cookies.get('i18next')).not.toBe('fr');
+    expect(i18next.changeLanguage).toHaveBeenCalledWith('fr');
+    expect(cookies.set).toHaveBeenCalledWith('i18next', 'fr');
   });
+});
+
+render(
+  <MockedProvider mocks={[]} addTypename={false}>
+    <ChangeLanguageDropDown />
+  </MockedProvider>,
+);
+
+fireEvent.click(screen.getByTestId('language-dropdown-btn'));
+fireEvent.click(screen.getByTestId('change-language-btn-es'));
+
+await waitFor(() => {
+  expect(toast.error).toHaveBeenCalledWith('User not found');
+  expect(mockUpdateUser).not.toHaveBeenCalled();
+});
+
+(urlToFile as jest.Mock).mockRejectedValue(new Error('Conversion error'));
+
+render(
+  <MockedProvider mocks={[]} addTypename={false}>
+    <ChangeLanguageDropDown />
+  </MockedProvider>,
+);
+
+fireEvent.click(screen.getByTestId('language-dropdown-btn'));
+fireEvent.click(screen.getByTestId('change-language-btn-de'));
+
+await waitFor(() => {
+  expect(mockUpdateUser).toHaveBeenCalledWith({
+    variables: {
+      input: {
+        naturalLanguageCode: 'de',
+      },
+    },
+  });
+});
+
+test('disables current language option', async () => {
+  render(
+    <MockedProvider mocks={[]} addTypename={false}>
+      <ChangeLanguageDropDown />
+    </MockedProvider>,
+  );
+
+  fireEvent.click(screen.getByTestId('language-dropdown-btn'));
+  const currentLanguageItem = screen.getByTestId('change-language-btn-en');
+
+  expect(currentLanguageItem).toHaveAttribute('disabled');
+  expect(currentLanguageItem).toHaveClass('disabled');
 });

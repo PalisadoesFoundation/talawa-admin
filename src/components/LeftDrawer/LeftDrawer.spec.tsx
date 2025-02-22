@@ -1,244 +1,187 @@
-import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
-import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceLeftDrawerProps } from './LeftDrawer';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import LeftDrawer from './LeftDrawer';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, it, describe, beforeEach, afterEach, expect } from 'vitest';
-import '../../style/app.module.css';
 
-const { setItem } = useLocalStorage();
-
-const props = {
-  hideDrawer: true,
-  setHideDrawer: vi.fn(),
-};
-
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
-};
-
-const propsOrg: InterfaceLeftDrawerProps = {
-  ...props,
-};
-
-const MOCKS = [
-  {
-    request: {
-      query: REVOKE_REFRESH_TOKEN,
-    },
-    result: {},
-  },
-];
-
-const link = new StaticMockLink(MOCKS, true);
-
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  },
+// Mock external dependencies
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    tCommon: (key: string) => key,
+  }),
 }));
 
-beforeEach(() => {
-  setItem('name', 'John Doe');
-  setItem(
-    'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-  );
+jest.mock('utils/useLocalstorage', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    getItem: jest.fn(),
+  })),
+}));
+
+jest.mock('assets/svgs/organizations.svg?react', () => {
+  const OrganizationsIcon = (): JSX.Element => <span>OrganizationsIcon</span>;
+  OrganizationsIcon.displayName = 'OrganizationsIcon';
+  return OrganizationsIcon;
 });
 
-afterEach(() => {
-  vi.clearAllMocks();
-  localStorage.clear();
-});
+describe('LeftDrawer Component', () => {
+  const mockSetHideDrawer = jest.fn();
+  const localStorageMock = useLocalStorage as jest.Mock;
 
-describe('Testing Left Drawer component for SUPERADMIN', () => {
-  it('Component should be rendered properly', async () => {
-    setItem('UserImage', '');
-    setItem('SuperAdmin', true);
-    setItem('name', 'John Doe');
+  const defaultProps = {
+    hideDrawer: false,
+    setHideDrawer: mockSetHideDrawer,
+  };
 
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawer {...propsOrg} />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Users')).toBeInTheDocument();
-    expect(screen.getByText('Community Profile')).toBeInTheDocument();
-    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-
-    const orgsBtn = screen.getByTestId(/orgsBtn/i);
-    const rolesBtn = screen.getByTestId(/rolesBtn/i);
-    const communityProfileBtn = screen.getByTestId(/communityProfileBtn/i);
-
-    await act(async () => {
-      orgsBtn.click();
-    });
-
-    expect(orgsBtn.className.includes('btn btn-success')).toBeTruthy();
-    expect(rolesBtn.className.includes('btn')).toBeTruthy();
-    expect(communityProfileBtn.className.includes('btn')).toBeTruthy();
-
-    await act(async () => {
-      await userEvent.click(rolesBtn);
-    });
-
-    expect(global.window.location.pathname).toContain('/users');
-
-    await act(async () => {
-      await userEvent.click(communityProfileBtn);
-    });
+  beforeEach(() => {
+    localStorageMock.mockImplementation(() => ({
+      getItem: (key: string) => (key === 'SuperAdmin' ? 'true' : null),
+    }));
   });
 
-  it('Testing Drawer when hideDrawer is null', async () => {
-    const tempProps: InterfaceLeftDrawerProps = {
-      ...props,
-      hideDrawer: false,
-    };
-
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawer {...tempProps} />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('Testing Drawer when hideDrawer is false', async () => {
-    const tempProps: InterfaceLeftDrawerProps = {
-      ...props,
-      hideDrawer: false,
-    };
+  test('renders basic structure', () => {
+    render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} />
+      </MemoryRouter>,
+    );
 
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawer {...tempProps} />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
+    expect(screen.getByText('TalawaLogo')).toBeInTheDocument();
+    expect(screen.getByText('talawaAdminPortal')).toBeInTheDocument();
+    expect(screen.getByText('menu')).toBeInTheDocument();
   });
 
-  it('Testing Drawer when the screen size is less than or equal to 820px', async () => {
-    const tempProps: InterfaceLeftDrawerProps = {
-      ...props,
-      hideDrawer: false,
-    };
-    resizeWindow(800);
+  test('shows organization link', () => {
+    render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} />
+      </MemoryRouter>,
+    );
 
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawer {...tempProps} />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-  });
-});
-
-describe('Testing Left Drawer component for ADMIN', () => {
-  it('Components should be rendered properly', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawer {...propsOrg} />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-
-    expect(screen.getAllByText(/admin/i)).toHaveLength(1);
-
-    const orgsBtn = screen.getByTestId(/orgsBtn/i);
-
-    await act(async () => {
-      orgsBtn.click();
-    });
-
-    expect(orgsBtn.className.includes('btn btn-success')).toBeTruthy();
-
-    // These screens aren't meant for admins, so they should not be present
-    expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
-
-    await act(async () => {
-      await userEvent.click(orgsBtn);
-    });
-
-    expect(global.window.location.pathname).toContain('/orglist');
+    expect(screen.getByTestId('organizationsBtn')).toHaveTextContent(
+      'my organizations',
+    );
+    expect(screen.getByTestId('organizationsBtn')).toContainHTML(
+      'OrganizationsIcon',
+    );
   });
 
-  it('Should set hideDrawer to false when initially null', async () => {
-    const mockSetHideDrawer = vi.fn();
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawer hideDrawer={null} setHideDrawer={mockSetHideDrawer} />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
+  test('shows roles link for SuperAdmin', () => {
+    render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByTestId('rolesBtn')).toHaveTextContent('users');
+    expect(screen.getByTestId('rolesBtn')).toContainHTML('RolesIcon');
+  });
+
+  test('hides roles link for non-SuperAdmin', () => {
+    localStorageMock.mockImplementation(() => ({
+      getItem: () => null,
+    }));
+
+    render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.queryByTestId('rolesBtn')).not.toBeInTheDocument();
+  });
+
+  test('shows community profile link', () => {
+    render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByTestId('communityProfileBtn')).toHaveTextContent(
+      'communityProfile',
+    );
+    expect(screen.getByTestId('communityProfileBtn')).toContainHTML(
+      'SettingsIcon',
+    );
+  });
+
+  test('applies active styles for current route', () => {
+    render(
+      <MemoryRouter initialEntries={['/orglist']}>
+        <LeftDrawer {...defaultProps} />
+      </MemoryRouter>,
+    );
+
+    const orgButton = screen.getByTestId('organizationsBtn');
+    expect(orgButton).toHaveStyle('font-weight: bold');
+    expect(orgButton).toHaveStyle('color: var(--sidebar-option-text-active)');
+  });
+
+  test('handles mobile view click', () => {
+    // Set mobile view
+    Object.defineProperty(window, 'innerWidth', { value: 800 });
+
+    render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByTestId('organizationsBtn'));
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  test('initializes hideDrawer state', () => {
+    const { rerender } = render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} hideDrawer={null} />
+      </MemoryRouter>,
+    );
+
     expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+
+    // Test subsequent render
+    rerender(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} hideDrawer={false} />
+      </MemoryRouter>,
+    );
     expect(mockSetHideDrawer).toHaveBeenCalledTimes(1);
   });
 
-  it('Should not call setHideDrawer when hideDrawer has a value', async () => {
-    const mockSetHideDrawer = vi.fn();
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawer
-                hideDrawer={false}
-                setHideDrawer={mockSetHideDrawer}
-              />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-    expect(mockSetHideDrawer).not.toHaveBeenCalled();
+  test('renders profile dropdown', () => {
+    render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByTestId('profileDropdown')).toBeInTheDocument();
+  });
+
+  test('applies correct classes based on hideDrawer', () => {
+    const { rerender } = render(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} hideDrawer={false} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+      'activeDrawer',
+    );
+
+    rerender(
+      <MemoryRouter>
+        <LeftDrawer {...defaultProps} hideDrawer={true} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+      'inactiveDrawer',
+    );
   });
 });

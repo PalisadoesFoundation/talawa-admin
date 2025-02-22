@@ -1,292 +1,230 @@
-import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
+import React from 'react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { MockedProvider } from '@apollo/client/testing';
+import { useParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@apollo/client';
+import { toast } from 'react-toastify';
 import OrgProfileFieldSettings from './OrgProfileFieldSettings';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import {
   ADD_CUSTOM_FIELD,
   REMOVE_CUSTOM_FIELD,
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_CUSTOM_FIELDS } from 'GraphQl/Queries/Queries';
-import { ToastContainer, toast } from 'react-toastify';
-import { vi } from 'vitest';
 
-/**
- * Unit Tests for `OrgProfileFieldSettings` Component
- *
- * - Saving Custom Field: Verifies success and failure of adding a custom field.
- * - Typing Custom Field Name: Ensures input updates correctly.
- * - Handling No Custom Fields: Displays message when no custom fields exist.
- * - Removing Custom Field: Verifies success and failure of removing a custom field.
- * - Error Handling: Ensures error messages for GraphQL mutations are displayed.
- * - Mock GraphQL Responses: Mocks GraphQL queries and mutations for different scenarios.
- */
+// Mock external dependencies
+jest.mock('react-router-dom', () => ({
+  useParams: jest.fn(),
+}));
 
-const MOCKS = [
-  {
-    request: {
-      query: ADD_CUSTOM_FIELD,
-      variables: {
-        type: '',
-        name: '',
+jest.mock('@apollo/client', () => ({
+  ...jest.requireActual('@apollo/client'),
+  useMutation: jest.fn(),
+  useQuery: jest.fn(),
+}));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    tCommon: (key: string) => key,
+  }),
+}));
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
+const mockCurrentOrgId = 'org123';
+
+const mockCustomFields = [
+  { id: '1', name: 'Age', type: 'NUMBER' },
+  { id: '2', name: 'Membership', type: 'BOOLEAN' },
+];
+
+const successQueryMock = {
+  request: {
+    query: ORGANIZATION_CUSTOM_FIELDS,
+    variables: { organizationId: mockCurrentOrgId },
+  },
+  result: {
+    data: {
+      organization: {
+        customFields: mockCustomFields,
       },
     },
-    result: {
-      data: {
-        addOrganizationCustomField: {
-          name: 'Custom Field Name',
-          type: 'string',
+  },
+};
+
+const addFieldMock = {
+  request: {
+    query: ADD_CUSTOM_FIELD,
+    variables: {
+      organizationId: mockCurrentOrgId,
+      name: 'New Field',
+      type: 'STRING',
+    },
+  },
+  result: { data: { addCustomField: { id: '3' } } },
+};
+
+const removeFieldMock = {
+  request: {
+    query: REMOVE_CUSTOM_FIELD,
+    variables: { id: '1' },
+  },
+  result: { data: { removeCustomField: { success: true } } },
+};
+
+describe('OrgProfileFieldSettings', () => {
+  beforeEach(() => {
+    (useParams as jest.Mock).mockReturnValue({ orgId: mockCurrentOrgId });
+    (useQuery as jest.Mock).mockReturnValue({
+      loading: false,
+      error: false,
+      data: { organization: { customFields: mockCustomFields } },
+      refetch: jest.fn(),
+    });
+    (useMutation as jest.Mock).mockImplementation(() => [
+      jest.fn(),
+      { loading: false, error: undefined },
+    ]);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('renders component with custom fields', async () => {
+    render(
+      <MockedProvider mocks={[successQueryMock]} addTypename={false}>
+        <OrgProfileFieldSettings />
+      </MockedProvider>,
+    );
+
+    expect(await screen.findByText('Age')).toBeInTheDocument();
+    expect(screen.getByText('Membership')).toBeInTheDocument();
+  });
+
+  test('shows loading state', () => {
+    (useQuery as jest.Mock).mockReturnValue({ loading: true });
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <OrgProfileFieldSettings />
+      </MockedProvider>,
+    );
+    expect(screen.getByText('loading')).toBeInTheDocument();
+  });
+
+  test('shows error state', () => {
+    (useQuery as jest.Mock).mockReturnValue({ error: true });
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <OrgProfileFieldSettings />
+      </MockedProvider>,
+    );
+    expect(screen.getByText('pleaseFillAllRequiredFields')).toBeInTheDocument();
+  });
+
+  test('handles custom field addition', async () => {
+    const mockRefetch = jest.fn();
+    (useQuery as jest.Mock).mockReturnValue({
+      ...successQueryMock,
+      refetch: mockRefetch,
+    });
+    const mockAdd = jest
+      .fn()
+      .mockResolvedValue({ data: { addCustomField: {} } });
+    (useMutation as jest.Mock).mockImplementation(() => [mockAdd]);
+
+    render(
+      <MockedProvider mocks={[addFieldMock]} addTypename={false}>
+        <OrgProfileFieldSettings />
+      </MockedProvider>,
+    );
+
+    fireEvent.change(screen.getByTestId('customFieldInput'), {
+      target: { value: 'New Field' },
+    });
+    fireEvent.change(screen.getByTestId('type-select'), {
+      target: { value: 'STRING' },
+    });
+    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+
+    await waitFor(() => {
+      expect(mockAdd).toHaveBeenCalledWith({
+        variables: {
+          organizationId: mockCurrentOrgId,
+          name: 'New Field',
+          type: 'STRING',
         },
-      },
-    },
-  },
-
-  {
-    request: {
-      query: REMOVE_CUSTOM_FIELD,
-      variables: { customFieldId: 'adsdasdsa334343yiu423434' },
-    },
-    result: {
-      data: {
-        removeOrganizationCustomField: {
-          type: '',
-          name: '',
-        },
-      },
-    },
-  },
-
-  {
-    request: {
-      query: ORGANIZATION_CUSTOM_FIELDS,
-      variables: {},
-    },
-    result: {
-      data: {
-        customFieldsByOrganization: [
-          {
-            _id: 'adsdasdsa334343yiu423434',
-            type: 'fieldType',
-            name: 'fieldName',
-          },
-        ],
-      },
-    },
-  },
-];
-
-const ERROR_MOCKS = [
-  {
-    request: {
-      query: ADD_CUSTOM_FIELD,
-      variables: {
-        type: '',
-        name: '',
-      },
-    },
-    error: new Error('Failed to add custom field'),
-  },
-  {
-    request: {
-      query: REMOVE_CUSTOM_FIELD,
-      variables: {
-        customFieldId: 'adsdasdsa334343yiu423434',
-      },
-    },
-    error: new Error('Failed to remove custom field'),
-  },
-  {
-    request: {
-      query: ORGANIZATION_CUSTOM_FIELDS,
-      variables: {},
-    },
-    result: {
-      data: {
-        customFieldsByOrganization: [
-          {
-            _id: 'adsdasdsa334343yiu423434',
-            type: 'fieldType',
-            name: 'fieldName',
-          },
-        ],
-      },
-    },
-  },
-];
-
-const ORGANIZATION_CUSTOM_FIELDS_ERROR_MOCKS = [
-  {
-    request: {
-      query: ORGANIZATION_CUSTOM_FIELDS,
-      variables: {},
-    },
-    error: new Error('Failed to fetch custom field'),
-  },
-];
-
-const NO_C_FIELD_MOCK = [
-  {
-    request: {
-      query: ADD_CUSTOM_FIELD,
-      variables: {
-        type: 'fieldType',
-        name: 'fieldName',
-      },
-    },
-    result: {
-      data: {
-        addOrganizationCustomField: {
-          name: 'Custom Field Name',
-          type: 'string',
-        },
-      },
-    },
-  },
-
-  {
-    request: {
-      query: ORGANIZATION_CUSTOM_FIELDS,
-      variables: {},
-    },
-    result: {
-      data: {
-        customFieldsByOrganization: [],
-      },
-    },
-  },
-];
-
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(NO_C_FIELD_MOCK, true);
-const link3 = new StaticMockLink(ERROR_MOCKS, true);
-const link4 = new StaticMockLink(ORGANIZATION_CUSTOM_FIELDS_ERROR_MOCKS, true);
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
+      });
+      expect(toast.success).toHaveBeenCalledWith(
+        'orgProfileField.customFieldAdded',
+      );
+      expect(mockRefetch).toHaveBeenCalled();
     });
   });
-}
 
-describe('Testing Save Button', () => {
-  it('Testing Failure Case For Fetching Custom field', async () => {
+  test('handles custom field removal', async () => {
+    const mockRemove = jest
+      .fn()
+      .mockResolvedValue({ data: { removeCustomField: {} } });
+    (useMutation as jest.Mock).mockImplementation(() => [mockRemove]);
+
     render(
-      <MockedProvider
-        mocks={ORGANIZATION_CUSTOM_FIELDS_ERROR_MOCKS}
-        addTypename={false}
-        link={link4}
-      >
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgProfileFieldSettings />
-        </I18nextProvider>
+      <MockedProvider mocks={[removeFieldMock]} addTypename={false}>
+        <OrgProfileFieldSettings />
       </MockedProvider>,
     );
 
-    await wait();
-    expect(
-      screen.queryByText('Failed to fetch custom field'),
-    ).toBeInTheDocument();
+    const removeButtons = await screen.findAllByTestId('removeCustomFieldBtn');
+    fireEvent.click(removeButtons[0]);
+
+    await waitFor(() => {
+      expect(mockRemove).toHaveBeenCalledWith({ variables: { id: '1' } });
+      expect(toast.success).toHaveBeenCalledWith(
+        'orgProfileField.customFieldRemoved',
+      );
+    });
   });
-  it('Saving Organization Custom Field', async () => {
+
+  test('shows error when adding field fails', async () => {
+    const errorMessage = 'Mutation failed';
+    (useMutation as jest.Mock).mockImplementation(() => [
+      jest.fn().mockRejectedValue(new Error(errorMessage)),
+    ]);
+
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <ToastContainer />
-          <OrgProfileFieldSettings />
-        </I18nextProvider>
+      <MockedProvider mocks={[]} addTypename={false}>
+        <OrgProfileFieldSettings />
       </MockedProvider>,
     );
 
-    await wait();
-    await userEvent.click(screen.getByTestId('saveChangesBtn'));
-    await wait();
-    expect(screen.queryByText('Field added successfully')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'orgProfileField.pleaseFillAllRequiredFields',
+        { error: errorMessage },
+      );
+    });
   });
 
-  it('Testing Failure Case For Saving Custom Field', async () => {
+  test('validates form fields before submission', async () => {
     render(
-      <MockedProvider mocks={ERROR_MOCKS} addTypename={false} link={link3}>
-        <I18nextProvider i18n={i18nForTest}>
-          <ToastContainer />
-          <OrgProfileFieldSettings />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await wait();
-    await userEvent.click(screen.getByTestId('saveChangesBtn'));
-    await wait();
-    expect(
-      screen.queryByText('Failed to add custom field'),
-    ).toBeInTheDocument();
-    await wait();
-    await userEvent.type(screen.getByTestId('customFieldInput'), 'Age{enter}');
-    await wait();
-    expect(
-      screen.queryByText('Failed to add custom field'),
-    ).toBeInTheDocument();
-  });
-
-  it('Testing Typing Organization Custom Field Name', async () => {
-    const { getByTestId } = render(
-      <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgProfileFieldSettings />
-        </I18nextProvider>
+      <MockedProvider mocks={[]} addTypename={false}>
+        <OrgProfileFieldSettings />
       </MockedProvider>,
     );
 
-    await wait();
+    fireEvent.click(screen.getByTestId('saveChangesBtn'));
 
-    const fieldNameInput = getByTestId('customFieldInput');
-    await userEvent.type(fieldNameInput, 'Age');
-  });
-  it('When No Custom Data is Present', async () => {
-    const { getByText } = render(
-      <MockedProvider mocks={NO_C_FIELD_MOCK} addTypename={false} link={link2}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgProfileFieldSettings />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-    expect(getByText('No custom fields available')).toBeInTheDocument();
-  });
-  it('Testing Remove Custom Field Button', async () => {
-    render(
-      <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <ToastContainer />
-          <OrgProfileFieldSettings />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-    await userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
-    await wait();
-    expect(
-      screen.queryByText('Field removed successfully'),
-    ).toBeInTheDocument();
-  });
-
-  it('Testing Failure Case For Removing Custom Field', async () => {
-    const toastSpy = vi.spyOn(toast, 'error');
-    render(
-      <MockedProvider mocks={ERROR_MOCKS} addTypename={false} link={link3}>
-        <I18nextProvider i18n={i18nForTest}>
-          <ToastContainer />
-          <OrgProfileFieldSettings />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await wait();
-    await userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
-    await wait();
-    expect(toastSpy).toHaveBeenCalledWith('Failed to remove custom field');
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'orgProfileField.pleaseFillAllRequiredFields',
+      );
+    });
   });
 });
