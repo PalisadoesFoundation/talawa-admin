@@ -477,6 +477,64 @@ const MOCKS = [
       },
     },
   },
+
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS,
+      variables: {
+        id: getItem('userId'),
+      },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              organizationsWhereMember: {
+                edges: [
+                  {
+                    node: {
+                      __typename: 'Organization',
+                      _id: '6401ff65ce8e8406b8f07af2',
+                      image: '',
+                      name: 'Test Edge Org',
+                      description: 'Test Description',
+                      address: {
+                        city: 'Test City',
+                        countryCode: '123',
+                        postalCode: '456',
+                        state: 'Test State',
+                        dependentLocality: 'Test Locality',
+                        line1: 'Test Line 1',
+                        line2: 'Test Line 2',
+                        sortingCode: '4567',
+                      },
+                      createdAt: '1234567890',
+                      userRegistrationRequired: true,
+                      creator: {
+                        __typename: 'User',
+                        name: 'Test Creator',
+                      },
+                      members: [
+                        {
+                          _id: 'member1',
+                          user: {
+                            _id: getItem('userId'),
+                          },
+                        },
+                      ],
+                      admins: [],
+                      membershipRequests: [],
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+  },
 ];
 
 /**
@@ -762,6 +820,87 @@ describe('Testing Organizations Screen [User Portal]', () => {
     expect(screen.getByText('10')).toBeInTheDocument();
     expect(screen.getByText('30')).toBeInTheDocument();
     expect(screen.getByText('All')).toBeInTheDocument();
+  });
+
+  test('handles organizationsWhereMember edges data structure correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Change to mode 0 (all organizations) to trigger the edges mapping code
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await wait();
+    await userEvent.click(screen.getByTestId('modeBtn0'));
+    await wait();
+
+    // Verify the organization from edges structure is rendered
+    expect(screen.getByText('Test Edge Org')).toBeInTheDocument();
+
+    // Verify membership status is correctly set
+    const orgCard = screen
+      .getByText('Test Edge Org')
+      .closest('.organization-card');
+    expect(orgCard).toHaveAttribute('data-membership-status', 'accepted');
+  });
+
+  // Add test for edge cases
+  test('handles empty organizationsWhereMember edges correctly', async () => {
+    const emptyEdgesMock = {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS,
+        variables: {
+          id: getItem('userId'),
+        },
+      },
+      result: {
+        data: {
+          users: [
+            {
+              user: {
+                organizationsWhereMember: {
+                  edges: [],
+                },
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const customLink = new StaticMockLink([emptyEdgesMock], true);
+
+    render(
+      <MockedProvider addTypename={false} link={customLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Switch to all organizations mode
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await wait();
+    await userEvent.click(screen.getByTestId('modeBtn0'));
+    await wait();
+
+    // Verify empty state is handled
+    expect(screen.getByText('nothingToShow')).toBeInTheDocument();
   });
 
   test('Search input has correct placeholder text', async () => {
