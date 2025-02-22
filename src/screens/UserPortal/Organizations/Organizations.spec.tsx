@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
@@ -317,6 +318,65 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: getItem('userId'),
+        first: 5,
+      },
+    },
+    result: {
+      data: {
+        UserJoinedOrganizations: [
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af2',
+            image: '',
+            name: 'anyOrganization1',
+            description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
+            userRegistrationRequired: true,
+            members: [], // Empty members array to trigger join button
+            admins: [],
+            membershipRequests: [],
+            isJoined: false,
+          },
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af3',
+            image: '',
+            name: 'anyOrganization2',
+            description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
+            userRegistrationRequired: true,
+            members: [], // Empty members array to trigger join button
+            admins: [],
+            membershipRequests: [],
+            isJoined: false,
+          },
+        ],
+      },
+    },
+  },
 ];
 
 /**
@@ -379,18 +439,18 @@ describe('Testing Organizations Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-  
+
     // Wait for initial data load
     await waitFor(() => {
       expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
       expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
     });
-  
+
     // Perform search
     const searchInput = screen.getByTestId('searchInput');
     await userEvent.type(searchInput, '2');
     await userEvent.keyboard('{Enter}');
-  
+
     // Wait for filtered results
     await waitFor(() => {
       expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
@@ -468,12 +528,12 @@ describe('Testing Organizations Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-  
+
     // Wait for organizations to load
     await waitFor(() => {
       expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
     });
-  
+
     // Check for join buttons
     await waitFor(() => {
       const joinButtons = screen.getAllByTestId('joinBtn');
