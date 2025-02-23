@@ -215,65 +215,65 @@ describe('Testing Advertisement Component', () => {
           data: {
             organizations: [
               {
-                id: '1',
+                _id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        id: '1',
+                        _id: '1',
                         name: 'Advertisement1',
-                        startAt: '2022-01-01',
-                        endAt: '2023-01-01',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor1',
                     },
                     {
                       node: {
-                        id: '2',
+                        _id: '2',
                         name: 'Advertisement2',
-                        startAt: '2024-02-01',
-                        endAt: '2025-02-01',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor2',
                     },
                     {
                       node: {
-                        id: '3',
+                        _id: '3',
                         name: 'Advertisement1',
-                        startAt: '2022-01-01',
-                        endAt: '2023-01-01',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor3',
                     },
                     {
                       node: {
-                        id: '4',
+                        _id: '4',
                         name: 'Advertisement2',
-                        startAt: '2024-02-01',
-                        endAt: '2025-02-01',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor4',
                     },
                     {
                       node: {
-                        id: '5',
+                        _id: '5',
                         name: 'Advertisement1',
-                        startAt: '2022-01-01',
-                        endAt: '2023-01-01',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor5',
                     },
                     {
                       node: {
-                        id: '6',
+                        _id: '6',
                         name: 'Advertisement2',
-                        startAt: '2024-02-01',
-                        endAt: '2025-02-01',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor6',
@@ -307,25 +307,25 @@ describe('Testing Advertisement Component', () => {
           data: {
             organizations: [
               {
-                id: '1',
+                _id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        id: '7',
+                        _id: '7',
                         name: 'Advertisement7',
-                        startAt: '2022-01-01',
-                        endAt: '2023-01-01',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: '5rdiyruyu3hkjkjiwfhwaify',
                     },
                     {
                       node: {
-                        id: '8',
+                        _id: '8',
                         name: 'Advertisement8',
-                        startAt: '2024-02-01',
-                        endAt: '2025-02-01',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
@@ -357,25 +357,25 @@ describe('Testing Advertisement Component', () => {
           data: {
             organizations: [
               {
-                id: '1',
+                _id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        id: '7',
+                        _id: '7',
                         name: 'Advertisement7',
-                        startAt: '2022-01-01',
-                        endAt: '2023-01-01',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: '5rdiyruyu3hkjkjiwfhwaify',
                     },
                     {
                       node: {
-                        id: '8',
+                        _id: '8',
                         name: 'Advertisement8',
-                        startAt: '2024-02-01',
-                        endAt: '2025-02-01',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: '5rdiyrhgkjkjjyg3iwfhwaify',

@@ -25,38 +25,19 @@ export const PLUGIN_GET = gql`
  */
 
 export const ADVERTISEMENTS_GET = gql`
-  query GetAdvertisements(
-    $input: QueryOrganizationInput!
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
-    organization(input: $input) {
-      id
-      advertisements(
-        after: $after
-        before: $before
-        first: $first
-        last: $last
-      ) {
-        edges {
-          node {
-            id
-            name
-            startAt
-            endAt
-            attachments {
-              url
-            }
+  query getAdvertisements {
+    advertisementsConnection {
+      edges {
+        node {
+          _id
+          name
+          type
+          organization {
+            _id
           }
-          cursor
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
+          mediaUrl
+          endDate
+          startDate
         }
       }
     }

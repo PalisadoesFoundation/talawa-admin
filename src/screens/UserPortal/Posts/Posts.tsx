@@ -46,12 +46,12 @@ const responsive = {
 };
 
 type Ad = {
-  id: string;
+  _id: string;
   name: string;
-  type: 'banner' | 'menu' | 'popup';
-  attachmentUrl: string;
-  endAt: string;
-  startAt: string;
+  type: 'BANNER' | 'MENU' | 'POPUP';
+  mediaUrl: string;
+  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
 };
 
 type InterfacePostComments = {
@@ -195,16 +195,7 @@ export default function home(): JSX.Element {
     if (promotedPostsData && promotedPostsData.organizations) {
       const ads: Ad[] =
         promotedPostsData.organizations[0].advertisements?.edges.map(
-          (edge) => ({
-            id: edge.node.id,
-            name: edge.node.name,
-            startAt: edge.node.startAt,
-            endAt: edge.node.endAt,
-            type: edge.node.type,
-            // Map the attachments array to a single attachmentUrl value.
-            // Here we're using the first attachment if available.
-            attachmentUrl: edge.node.attachments?.[0]?.url ?? '',
-          }),
+          (edge) => edge.node,
         ) || [];
 
       setAdContent(ads);
@@ -364,9 +355,9 @@ export default function home(): JSX.Element {
             <div data-testid="promotedPostsContainer">
               {adContent.map((post: Ad) => (
                 <PromotedPost
-                  key={post.id}
-                  id={post.id}
-                  image={post.attachmentUrl}
+                  key={post._id}
+                  id={post._id}
+                  image={post.mediaUrl}
                   title={post.name}
                   data-testid="postid"
                 />

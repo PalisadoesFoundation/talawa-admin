@@ -4,13 +4,13 @@
 
 # Interface: InterfaceAddOnRegisterProps
 
-Defined in: [src/types/Advertisement/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L3)
+Defined in: [src/types/Advertisement/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L1)
 
 ## Properties
 
-### attachmentEdit?
+### advertisementMediaEdit?
 
-> `optional` **attachmentEdit**: `string`
+> `optional` **advertisementMediaEdit**: `string`
 
 Defined in: [src/types/Advertisement/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L9)
 
@@ -20,15 +20,15 @@ Defined in: [src/types/Advertisement/interface.ts:9](https://github.com/Palisado
 
 > `optional` **createdBy**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L11)
+Defined in: [src/types/Advertisement/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L3)
 
 ***
 
-### endAtEdit?
+### endDateEdit?
 
-> `optional` **endAtEdit**: `Date`
+> `optional` **endDateEdit**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L12)
+Defined in: [src/types/Advertisement/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L10)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Advertisement/interface.ts:4](https://github.com/Palisado
 
 > `optional` **id**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L10)
+Defined in: [src/types/Advertisement/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L2)
 
 ***
 
@@ -76,15 +76,15 @@ Defined in: [src/types/Advertisement/interface.ts:8](https://github.com/Palisado
 
 > **setAfter**: `Dispatch`\<`SetStateAction`\<`string`\>\>
 
-Defined in: [src/types/Advertisement/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L14)
+Defined in: [src/types/Advertisement/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L12)
 
 ***
 
-### startAtEdit?
+### startDateEdit?
 
-> `optional` **startAtEdit**: `Date`
+> `optional` **startDateEdit**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L13)
+Defined in: [src/types/Advertisement/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L11)
 
 ***
 

@@ -53,11 +53,11 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endAt={new Date()}
-                startAt={new Date()}
+                endDate={new Date()}
+                startDate={new Date()}
                 id="1"
                 key={1}
-                attachmentUrl="data:videos"
+                mediaUrl="data:videos"
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
@@ -134,34 +134,34 @@ describe('Testing Advertisement Entry Component', () => {
     const elements = screen.getAllByText(''); // This will return an array of matching elements
     elements.forEach((element) => expect(element).toBeInTheDocument());
 
-    // Check that the component renders with default `attachmentUrl` (empty string)
+    // Check that the component renders with default `mediaUrl` (empty string)
     const mediaElement = screen.getByTestId('media');
     expect(mediaElement).toHaveAttribute('src', '');
 
-    // Check that the component renders with default `endAt`
-    const defaultendAt = new Date().toDateString();
-    expect(screen.getByText(`Ends on ${defaultendAt}`)).toBeInTheDocument();
+    // Check that the component renders with default `endDate`
+    const defaultEndDate = new Date().toDateString();
+    expect(screen.getByText(`Ends on ${defaultEndDate}`)).toBeInTheDocument();
 
-    // Check that the component renders with default `startAt`
-    const defaultstartAt = new Date().toDateString();
-    expect(screen.getByText(`Ends on ${defaultstartAt}`)).toBeInTheDocument(); //fix text "Ends on"?
+    // Check that the component renders with default `startDate`
+    const defaultStartDate = new Date().toDateString();
+    expect(screen.getByText(`Ends on ${defaultStartDate}`)).toBeInTheDocument(); //fix text "Ends on"?
   });
 
   it('should correctly override default props when values are provided', () => {
     const mockName = 'Test Ad';
     const mockType = 'Banner';
     const mockMediaUrl = 'https://example.com/media.png';
-    const mockendAt = new Date(2025, 11, 31);
-    const mockstartAt = new Date(2024, 0, 1);
+    const mockEndDate = new Date(2025, 11, 31);
+    const mockStartDate = new Date(2024, 0, 1);
     const mockOrganizationId = 'org123';
 
     const { getByText } = render(
       <AdvertisementEntry
         name={mockName}
         type={mockType}
-        attachmentUrl={mockMediaUrl}
-        endAt={mockendAt}
-        startAt={mockstartAt}
+        mediaUrl={mockMediaUrl}
+        endDate={mockEndDate}
+        startDate={mockStartDate}
         organizationId={mockOrganizationId}
         id={''}
         setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
@@ -176,7 +176,7 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getByText(mockType)).toBeInTheDocument();
     expect(screen.getByTestId('media')).toHaveAttribute('src', mockMediaUrl);
     expect(
-      getByText(`Ends on ${mockendAt.toDateString()}`),
+      getByText(`Ends on ${mockEndDate.toDateString()}`),
     ).toBeInTheDocument();
   });
 
@@ -187,11 +187,11 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endAt={new Date()}
-                startAt={new Date()}
+                endDate={new Date()}
+                startDate={new Date()}
                 id="1"
                 key={1}
-                attachmentUrl=""
+                mediaUrl=""
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
@@ -232,11 +232,11 @@ describe('Testing Advertisement Entry Component', () => {
       data: {
         updateAdvertisement: {
           advertisement: {
-            id: '1',
+            _id: '1',
             name: 'Updated Advertisement',
-            attachmentUrl: '',
-            startAt: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
-            endAt: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
+            mediaUrl: '',
+            startDate: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
+            endDate: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
             type: 'BANNER',
           },
         },
@@ -251,12 +251,12 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endAt={new Date()}
-                startAt={new Date()}
+                endDate={new Date()}
+                startDate={new Date()}
                 type="POPUP"
                 name="Advert1"
                 organizationId="1"
-                attachmentUrl=""
+                mediaUrl=""
                 id="1"
                 setAfter={vi.fn()}
               />
@@ -283,11 +283,11 @@ describe('Testing Advertisement Entry Component', () => {
     });
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
       target: { value: dayjs().add(1, 'day').format('YYYY-MM-DD') },
     });
 
-    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
       target: { value: dayjs().add(2, 'days').format('YYYY-MM-DD') },
     });
 
@@ -298,8 +298,8 @@ describe('Testing Advertisement Entry Component', () => {
         id: '1',
         name: 'Updated Advertisement',
         type: 'BANNER',
-        startAt: dayjs().add(1, 'day').format('YYYY-MM-DD'),
-        endAt: dayjs().add(2, 'days').format('YYYY-MM-DD'),
+        startDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+        endDate: dayjs().add(2, 'days').format('YYYY-MM-DD'),
       },
     });
   });
@@ -321,12 +321,12 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endAt={new Date()}
-                startAt={new Date()}
+                endDate={new Date()}
+                startDate={new Date()}
                 type="POPUP"
                 name="Advert1"
                 organizationId="1"
-                attachmentUrl=""
+                mediaUrl=""
                 id="1"
                 setAfter={vi.fn()}
               />
@@ -412,17 +412,17 @@ describe('Testing Advertisement Entry Component', () => {
     });
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
       target: { value: '2023-01-01' },
     });
-    expect(screen.getByLabelText(translations.RstartAt)).toHaveValue(
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
       '2023-01-01',
     );
 
-    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
       target: { value: '2023-02-01' },
     });
-    expect(screen.getByLabelText(translations.RendAt)).toHaveValue(
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
       '2023-02-01',
     );
 
@@ -434,8 +434,8 @@ describe('Testing Advertisement Entry Component', () => {
         name: 'Updated Advertisement',
         file: '',
         type: 'BANNER',
-        startAt: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
-        endAt: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
+        startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
       },
     });
   });
@@ -465,9 +465,9 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         _id: '1',
                         name: 'Advertisement1',
-                        startAt: '2022-01-01',
-                        endAt: '2023-01-01',
-                        attachmentUrl: 'http://example1.com',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor1',
                     },
@@ -475,9 +475,9 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         _id: '2',
                         name: 'Advertisement2',
-                        startAt: '2024-02-01',
-                        endAt: '2025-02-01',
-                        attachmentUrl: 'http://example2.com',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor2',
                     },
@@ -485,9 +485,9 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         _id: '3',
                         name: 'Advertisement1',
-                        startAt: '2022-01-01',
-                        endAt: '2023-01-01',
-                        attachmentUrl: 'http://example1.com',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor3',
                     },
@@ -495,9 +495,9 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         _id: '4',
                         name: 'Advertisement2',
-                        startAt: '2024-02-01',
-                        endAt: '2025-02-01',
-                        attachmentUrl: 'http://example2.com',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor4',
                     },
@@ -505,9 +505,9 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         _id: '5',
                         name: 'Advertisement1',
-                        startAt: '2022-01-01',
-                        endAt: '2023-01-01',
-                        attachmentUrl: 'http://example1.com',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor5',
                     },
@@ -515,9 +515,9 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         _id: '6',
                         name: 'Advertisement2',
-                        startAt: '2024-02-01',
-                        endAt: '2025-02-01',
-                        attachmentUrl: 'http://example2.com',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor6',
                     },
@@ -559,11 +559,11 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider mocks={mocks} addTypename={false}>
                 <AdvertisementEntry
-                  endAt={new Date()}
-                  startAt={new Date()}
+                  endDate={new Date()}
+                  startDate={new Date()}
                   id="1"
                   key={1}
-                  attachmentUrl="data:videos"
+                  mediaUrl="data:videos"
                   name="Advert1"
                   organizationId="1"
                   type="POPUP"

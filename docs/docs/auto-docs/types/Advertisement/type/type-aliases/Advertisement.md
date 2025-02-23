@@ -10,13 +10,9 @@ Defined in: [src/types/Advertisement/type.ts:14](https://github.com/PalisadoesFo
 
 ## Type declaration
 
-### attachments?
+### \_id
 
-> `optional` **attachments**: [`AdvertisementAttachment`](AdvertisementAttachment.md)[]
-
-### attachmentUrl
-
-> **attachmentUrl**: `URL`
+> **\_id**: `string`
 
 ### createdAt
 
@@ -26,13 +22,13 @@ Defined in: [src/types/Advertisement/type.ts:14](https://github.com/PalisadoesFo
 
 > `optional` **creator**: [`User`](../../../User/type/type-aliases/User.md)
 
-### endAt
+### endDate
 
-> **endAt**: `Date`
+> **endDate**: `Date`
 
-### id
+### mediaUrl
 
-> **id**: `string`
+> **mediaUrl**: `URL`
 
 ### name
 
@@ -42,9 +38,9 @@ Defined in: [src/types/Advertisement/type.ts:14](https://github.com/PalisadoesFo
 
 > **orgId**: `string`
 
-### startAt
+### startDate
 
-> **startAt**: `Date`
+> **startDate**: `Date`
 
 ### type
 

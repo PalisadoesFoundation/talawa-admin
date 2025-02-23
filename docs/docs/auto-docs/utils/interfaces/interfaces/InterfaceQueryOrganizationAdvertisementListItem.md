@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:972](https://github.com/PalisadoesFoundatio
 
 > **advertisements**: `object`
 
-Defined in: [src/utils/interfaces.ts:974](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L974)
+Defined in: [src/utils/interfaces.ts:973](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L973)
 
 #### edges
 
@@ -38,10 +38,6 @@ Defined in: [src/utils/interfaces.ts:974](https://github.com/PalisadoesFoundatio
 
 > **startCursor**: `string`
 
-***
+#### totalCount
 
-### id
-
-> **id**: `string`
-
-Defined in: [src/utils/interfaces.ts:973](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L973)
+> **totalCount**: `number`

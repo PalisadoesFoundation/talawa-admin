@@ -10,14 +10,14 @@ Defined in: [src/types/Advertisement/type.ts:5](https://github.com/PalisadoesFou
 
 ## Type declaration
 
-### banner
+### BANNER
 
-> `readonly` **banner**: `"banner"` = `'banner'`
+> `readonly` **BANNER**: `"BANNER"` = `'BANNER'`
 
-### menu
+### MENU
 
-> `readonly` **menu**: `"menu"` = `'menu'`
+> `readonly` **MENU**: `"MENU"` = `'MENU'`
 
-### popup
+### POPUP
 
-> `readonly` **popup**: `"popup"` = `'popup'`
+> `readonly` **POPUP**: `"POPUP"` = `'POPUP'`

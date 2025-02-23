@@ -6,7 +6,7 @@
 
 > `const` **VENUE\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:358](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L358)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L357)
 
 GraphQL query to retrieve the list of venues for a specific organization.
 

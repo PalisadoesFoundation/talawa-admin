@@ -6,6 +6,7 @@ import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
+  HttpLink,
   split,
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
@@ -20,7 +21,6 @@ import { Provider } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 
 import App from './App';
 import { store } from './state/store';
@@ -76,11 +76,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-const uploadLink = createUploadLink({
+const httpLink = new HttpLink({
   uri: BACKEND_URL,
-  headers: {
-    'Apollo-Require-Preflight': 'true',
-  },
 });
 
 // if didnt work use /subscriptions
@@ -109,7 +106,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  uploadLink,
+  httpLink,
 );
 
 const combinedLink = ApolloLink.from([

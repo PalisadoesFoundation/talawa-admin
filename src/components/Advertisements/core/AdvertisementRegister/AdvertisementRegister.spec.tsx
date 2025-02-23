@@ -60,12 +60,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endAtEdit={new Date()}
-                startAtEdit={new Date()}
+                endDateEdit={new Date()}
+                startDateEdit={new Date()}
                 typeEdit="BANNER"
                 nameEdit="Advert1"
                 orgIdEdit="1"
-                advertisementMedia=""
+                advertisementMediaEdit=""
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -88,12 +88,12 @@ describe('Testing Advertisement Register Component', () => {
             <BrowserRouter>
               <I18nextProvider i18n={i18n}>
                 <AdvertisementRegister
-                  endAtEdit={new Date()}
-                  startAtEdit={new Date()}
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
                   typeEdit="BANNER"
                   nameEdit="Ad1"
                   orgIdEdit="1"
-                  advertisementMedia=""
+                  advertisementMediaEdit=""
                   setAfter={vi.fn()}
                 />
               </I18nextProvider>
@@ -138,21 +138,21 @@ describe('Testing Advertisement Register Component', () => {
         target: { value: 'BANNER' },
       });
 
-      fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
         target: { value: '2023-01-01' },
       });
 
-      fireEvent.change(screen.getByLabelText(translations.RendAt), {
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
         target: { value: '2023-02-01' },
       });
     });
 
     expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
-    expect(screen.getByLabelText(translations.RstartAt)).toHaveValue(
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
       '2023-01-01',
     );
-    expect(screen.getByLabelText(translations.RendAt)).toHaveValue(
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
       '2023-02-01',
     );
 
@@ -179,12 +179,12 @@ describe('Testing Advertisement Register Component', () => {
             <BrowserRouter>
               <I18nextProvider i18n={i18n}>
                 <AdvertisementRegister
-                  endAtEdit={new Date()}
-                  startAtEdit={new Date()}
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
                   typeEdit="BANNER"
                   nameEdit="Ad1"
                   orgIdEdit="1"
-                  advertisementMedia=""
+                  advertisementMediaEdit=""
                   setAfter={vi.fn()}
                   formStatus="edit"
                 />
@@ -228,21 +228,21 @@ describe('Testing Advertisement Register Component', () => {
         target: { value: 'BANNER' },
       });
 
-      fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
         target: { value: '2023-01-01' },
       });
 
-      fireEvent.change(screen.getByLabelText(translations.RendAt), {
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
         target: { value: '2023-02-01' },
       });
     });
 
     expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
-    expect(screen.getByLabelText(translations.RstartAt)).toHaveValue(
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
       '2023-01-01',
     );
-    expect(screen.getByLabelText(translations.RendAt)).toHaveValue(
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
       '2023-02-01',
     );
 
@@ -271,12 +271,12 @@ describe('Testing Advertisement Register Component', () => {
             <BrowserRouter>
               <I18nextProvider i18n={i18n}>
                 <AdvertisementRegister
-                  endAtEdit={new Date()}
-                  startAtEdit={new Date()}
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
                   typeEdit="BANNER"
                   nameEdit="Ad1"
                   orgIdEdit="1"
-                  advertisementMedia=""
+                  advertisementMediaEdit=""
                   setAfter={vi.fn()}
                 />
               </I18nextProvider>
@@ -318,12 +318,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endAtEdit={new Date()}
-                startAtEdit={new Date()}
+                endDateEdit={new Date()}
+                startDateEdit={new Date()}
                 typeEdit="BANNER"
                 nameEdit="Ad1"
                 orgIdEdit="1"
-                advertisementMedia=""
+                advertisementMediaEdit=""
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -361,15 +361,15 @@ describe('Testing Advertisement Register Component', () => {
     });
     expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.change(getByLabelText(translations.RstartAt), {
+    fireEvent.change(getByLabelText(translations.RstartDate), {
       target: { value: '2023-01-01' },
     });
-    expect(getByLabelText(translations.RstartAt)).toHaveValue('2023-01-01');
+    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
 
-    fireEvent.change(getByLabelText(translations.RendAt), {
+    fireEvent.change(getByLabelText(translations.RendDate), {
       target: { value: '2022-02-01' },
     });
-    expect(getByLabelText(translations.RendAt)).toHaveValue('2022-02-01');
+    expect(getByLabelText(translations.RendDate)).toHaveValue('2022-02-01');
 
     await waitFor(() => {
       fireEvent.click(getByText(translations.register));
@@ -388,12 +388,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endAtEdit={new Date()}
-                startAtEdit={new Date()}
+                endDateEdit={new Date()}
+                startDateEdit={new Date()}
                 typeEdit="BANNER"
                 nameEdit="Advert1"
                 orgIdEdit="1"
-                advertisementMedia="google.com"
+                advertisementMediaEdit="google.com"
                 formStatus="edit"
                 setAfter={vi.fn()}
               />
@@ -415,12 +415,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endAtEdit={new Date()}
-                startAtEdit={new Date()}
+                endDateEdit={new Date()}
+                startDateEdit={new Date()}
                 typeEdit="BANNER"
                 nameEdit="Advert1"
                 orgIdEdit="1"
-                advertisementMedia=""
+                advertisementMediaEdit=""
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -448,12 +448,12 @@ describe('Testing Advertisement Register Component', () => {
               {
                 <AdvertisementRegister
                   formStatus="edit"
-                  endAtEdit={new Date()}
-                  startAtEdit={new Date()}
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
                   typeEdit="BANNER"
                   nameEdit="Advert1"
                   orgIdEdit="1"
-                  advertisementMedia="google.com"
+                  advertisementMediaEdit="google.com"
                   setAfter={vi.fn()}
                 />
               }
@@ -486,15 +486,15 @@ describe('Testing Advertisement Register Component', () => {
     });
     expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.change(getByLabelText(translations.RstartAt), {
+    fireEvent.change(getByLabelText(translations.RstartDate), {
       target: { value: '2023-02-02' },
     });
-    expect(getByLabelText(translations.RstartAt)).toHaveValue('2023-02-02');
+    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-02-02');
 
-    fireEvent.change(getByLabelText(translations.RendAt), {
+    fireEvent.change(getByLabelText(translations.RendDate), {
       target: { value: '2023-01-01' },
     });
-    expect(getByLabelText(translations.RendAt)).toHaveValue('2023-01-01');
+    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-01-01');
 
     fireEvent.click(getByText(translations.saveChanges));
     await waitFor(() => {
@@ -512,12 +512,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endAtEdit={new Date()}
-                startAtEdit={new Date()}
+                endDateEdit={new Date()}
+                startDateEdit={new Date()}
                 typeEdit="BANNER"
                 nameEdit="Advert1"
                 orgIdEdit="1"
-                advertisementMedia="test.mp4"
+                advertisementMediaEdit="test.mp4"
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -557,10 +557,10 @@ describe('Testing Advertisement Register Component', () => {
                 idEdit="123"
                 nameEdit="Test Ad"
                 typeEdit="BANNER"
-                startAtEdit={new Date('2024-01-01')}
-                endAtEdit={new Date('2024-12-31')}
+                startDateEdit={new Date('2024-01-01')}
+                endDateEdit={new Date('2024-12-31')}
                 orgIdEdit="1"
-                advertisementMedia=""
+                advertisementMediaEdit=""
                 setAfter={setAfterMock}
               />
             </I18nextProvider>
