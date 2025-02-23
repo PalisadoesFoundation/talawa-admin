@@ -39,6 +39,9 @@ const ChangeLanguageDropDown = (
    * @param languageCode - The code of the language to switch to.
    */
   const changeLanguage = async (languageCode: string): Promise<void> => {
+    await i18next.changeLanguage(languageCode);
+
+    cookies.set('i18next', languageCode);
     if (userId) {
       try {
         await updateUser({
@@ -46,8 +49,6 @@ const ChangeLanguageDropDown = (
             appLanguageCode: languageCode,
           },
         });
-        await i18next.changeLanguage(languageCode);
-        cookies.set('i18next', languageCode);
       } catch (error) {
         console.log('Error in changing language', error);
       }

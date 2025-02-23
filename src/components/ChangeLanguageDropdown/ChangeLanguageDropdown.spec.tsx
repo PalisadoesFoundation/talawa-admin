@@ -11,7 +11,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 // import { Provider } from 'react-redux';
 // import { store } from 'state/store';
 const { setItem } = useLocalStorage();
@@ -155,5 +155,82 @@ describe('Testing Change Language Dropdown', () => {
     await wait();
     userEvent.click(changeLanguageBtnHi);
     await wait();
+  });
+
+  it('should handle mutation error gracefully', async () => {
+    Object.defineProperty(window.document, 'cookie', {
+      writable: true,
+      value: 'i18next=en',
+    });
+
+    setItem('userId', '1');
+
+    const consoleSpy = vi.spyOn(console, 'log');
+
+    const { getByTestId } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    userEvent.click(getByTestId('language-dropdown-btn'));
+    await wait();
+
+    const changeLanguageBtn = getByTestId('change-language-btn-hi');
+    userEvent.click(changeLanguageBtn);
+    await wait();
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error in changing language',
+      expect.any(Error),
+    );
+  });
+
+  it('should test both userId conditions', async () => {
+    Object.defineProperty(window.document, 'cookie', {
+      writable: true,
+      value: 'i18next=en',
+    });
+    const userId = '1';
+    const { getItem } = useLocalStorage();
+    getItem('userId');
+    setItem('userId', userId);
+
+    const { getByTestId, rerender } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    userEvent.click(getByTestId('language-dropdown-btn'));
+    await wait();
+
+    const changeLanguageBtn = getByTestId('change-language-btn-fr');
+    userEvent.click(changeLanguageBtn);
+    await wait();
+
+    expect(cookies.get('i18next')).toBe('fr');
+    setItem('userId', '');
+
+    rerender(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    userEvent.click(getByTestId('language-dropdown-btn'));
+    await wait();
+
+    const anotherLanguageBtn = getByTestId('change-language-btn-hi');
+    userEvent.click(anotherLanguageBtn);
+    await wait();
+
+    expect(cookies.get('i18next')).toBe('hi');
   });
 });
