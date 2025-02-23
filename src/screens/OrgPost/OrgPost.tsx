@@ -79,6 +79,36 @@ function OrgPost(): JSX.Element {
     fetchPolicy: 'network-only',
   });
 
+  const handleSearch = async (term: string): Promise<void> => {
+    setSearchTerm(term);
+
+    try {
+      const { data: searchData } = await refetchPosts({
+        input: { organizationId: currentUrl },
+      });
+
+      if (!term.trim()) {
+        setIsFiltering(false);
+        setFilteredPosts([]);
+        return;
+      }
+
+      if (searchData?.postsByOrganization) {
+        setIsFiltering(true);
+
+        const filtered = searchData.postsByOrganization.filter(
+          (post: InterfacePost) =>
+            post.caption.toLowerCase().includes(term.toLowerCase()),
+        );
+        setFilteredPosts(filtered);
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      toast.error('Error searching posts');
+      setIsFiltering(false);
+    }
+  };
+
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
   };
@@ -248,6 +278,10 @@ function OrgPost(): JSX.Element {
 
   const content = (
     <PostsRenderer
+      data-testid="posts-renderer"
+      data-loading={loading}
+      data-is-filtering={isFiltering}
+      data-sorting-option={sortingOption}
       loading={loading}
       error={error}
       data={isFiltering ? data : orgPostListData}
@@ -257,35 +291,6 @@ function OrgPost(): JSX.Element {
       displayPosts={displayPosts}
     />
   );
-
-  const handleSearch = async (term: string): Promise<void> => {
-    setSearchTerm(term);
-
-    try {
-      const { data: searchData } = await refetchPosts({
-        input: { organizationId: currentUrl },
-      });
-
-      if (!term.trim()) {
-        setIsFiltering(false);
-        setFilteredPosts([]);
-        return;
-      }
-
-      if (searchData?.postsByOrganization) {
-        setIsFiltering(true);
-
-        const filtered = searchData.postsByOrganization.filter(
-          (post: InterfacePost) =>
-            post.caption.toLowerCase().includes(term.toLowerCase()),
-        );
-        setFilteredPosts(filtered);
-      }
-    } catch (error) {
-      console.error('Search error:', error);
-      toast.error('Error searching posts');
-    }
-  };
 
   const handleSorting = (option: string): void => {
     setCurrentPage(1);
@@ -429,22 +434,20 @@ function OrgPost(): JSX.Element {
           <div className="col-auto">
             <Button
               onClick={handlePreviousPage}
-              className={`${styles.createButton} btn-sm`}
               disabled={!hasPreviousPage}
-              data-testid="previousButton"
+              data-testid="previous-page-button"
             >
-              {t('Previous')}
+              Previous
             </Button>
           </div>
           <div className="col-auto"></div>
           <div className="col-auto">
             <Button
               onClick={handleNextPage}
-              className={`${styles.createButton} btn-sm`}
               disabled={!hasNextPage}
-              data-testid="nextButton"
+              data-testid="next-page-button"
             >
-              {t('Next')}
+              Next
             </Button>
           </div>
         </div>
