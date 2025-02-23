@@ -17,10 +17,14 @@ vi.mock('./DeleteOrg/DeleteOrg', () => ({
 }));
 
 vi.mock('./OrgUpdate/OrgUpdate', () => ({
-  default: ({ orgId }: { orgId: string }) => (
+  default: ({ orgId }: InterfaceOrgUpdateProps) => (
     <div data-testid="org-update">OrgUpdate - {orgId}</div>
   ),
 }));
+
+interface InterfaceOrgUpdateProps {
+  orgId: string;
+}
 
 vi.mock('components/ChangeLanguageDropdown/ChangeLanguageDropDown', () => ({
   default: () => (
@@ -29,7 +33,7 @@ vi.mock('components/ChangeLanguageDropdown/ChangeLanguageDropDown', () => ({
 }));
 
 describe('GeneralSettings Component', () => {
-  const ORG_ID = '12345';
+  const ORG_ID = '123e4567-e89b-12d3-a456-426614174000';
 
   beforeEach(() => {
     render(
