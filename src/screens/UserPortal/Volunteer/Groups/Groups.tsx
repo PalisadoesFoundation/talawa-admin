@@ -14,7 +14,7 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';

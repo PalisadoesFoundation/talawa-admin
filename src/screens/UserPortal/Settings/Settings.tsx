@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './Settings.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { Card, Col, Row } from 'react-bootstrap';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';

@@ -12,7 +12,7 @@ import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { useParams } from 'react-router-dom';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
