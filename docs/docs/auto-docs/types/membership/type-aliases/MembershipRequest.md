@@ -16,8 +16,8 @@ Defined in: [src/types/membership.ts:4](https://github.com/PalisadoesFoundation/
 
 ### organization
 
-> **organization**: [`Organization`](../../organization/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../Organization/type/type-aliases/Organization.md)
 
 ### user
 
-> **user**: [`User`](../../user/type-aliases/User.md)
+> **user**: [`User`](../../User/type/type-aliases/User.md)

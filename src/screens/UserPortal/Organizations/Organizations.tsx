@@ -4,9 +4,9 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
+  USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
-import PaginationList from 'components/PaginationList/PaginationList';
+import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
@@ -125,7 +125,7 @@ export default function organizations(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [organizations, setOrganizations] = React.useState([]);
-  const [filterName, setFilterName] = React.useState('');
+  const [, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
 
   const modes = [
@@ -140,8 +140,8 @@ export default function organizations(): JSX.Element {
     data,
     refetch,
     loading: loadingOrganizations,
-  } = useQuery(USER_ORGANIZATION_CONNECTION, {
-    variables: { filter: filterName },
+  } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
+    variables: { id: userId, first: rowsPerPage, filter: '' },
   });
 
   const { data: joinedOrganizationsData } = useQuery(
@@ -227,7 +227,7 @@ export default function organizations(): JSX.Element {
    */
   useEffect(() => {
     if (data) {
-      const organizations = data.organizationsConnection.map(
+      const organizations = data?.UserJoinedOrganizations?.map(
         (organization: InterfaceOrganization) => {
           let membershipRequestStatus = '';
           if (
@@ -255,19 +255,22 @@ export default function organizations(): JSX.Element {
    */
   useEffect(() => {
     if (mode === 0) {
-      if (data) {
-        const organizations = data.organizationsConnection.map(
-          (organization: InterfaceOrganization) => {
+      if (data?.user?.organizationsWhereMember?.edges) {
+        const organizations = data.user.organizationsWhereMember.edges.map(
+          (edge: { node: InterfaceOrganization }) => {
+            const organization = edge.node;
             let membershipRequestStatus = '';
+
             if (
-              organization.members.find(
+              Array.isArray(organization.members) &&
+              organization.members.some(
                 (member: { _id: string }) => member._id === userId,
               )
             )
               membershipRequestStatus = 'accepted';
             else if (
-              organization.membershipRequests.find(
-                (request: { user: { _id: string } }) =>
+              organization.membershipRequests?.some(
+                (request: { _id: string; user: { _id: string } }) =>
                   request.user._id === userId,
               )
             )
@@ -282,9 +285,9 @@ export default function organizations(): JSX.Element {
         setOrganizations(organizations);
       }
     } else if (mode === 1) {
-      if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
+      if (joinedOrganizationsData?.users?.[0]?.user?.joinedOrganizations) {
         const organizations =
-          joinedOrganizationsData.users[0]?.user?.joinedOrganizations.map(
+          joinedOrganizationsData.users[0].user.joinedOrganizations.map(
             (org: InterfaceOrganization) => ({
               ...org,
               membershipRequestStatus: 'accepted',
@@ -295,11 +298,11 @@ export default function organizations(): JSX.Element {
       }
     } else if (mode === 2) {
       if (
-        createdOrganizationsData &&
-        createdOrganizationsData.users.length > 0
+        createdOrganizationsData?.users?.[0]?.appUserProfile
+          ?.createdOrganizations
       ) {
         const organizations =
-          createdOrganizationsData.users[0]?.appUserProfile?.createdOrganizations.map(
+          createdOrganizationsData.users[0].appUserProfile.createdOrganizations.map(
             (org: InterfaceOrganization) => ({
               ...org,
               membershipRequestStatus: 'accepted',

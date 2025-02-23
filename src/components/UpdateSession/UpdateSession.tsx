@@ -8,7 +8,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 
 /**

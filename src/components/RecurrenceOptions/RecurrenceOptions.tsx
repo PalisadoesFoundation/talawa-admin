@@ -9,7 +9,7 @@ import {
   isLastOccurenceOfWeekDay,
   mondayToFriday,
 } from 'utils/recurrenceUtils';
-import CustomRecurrenceModal from './CustomRecurrenceModal';
+import CustomRecurrenceModal from './Modal/CustomRecurrenceModal';
 
 interface InterfaceRecurrenceOptionsProps {
   recurrenceRuleState: InterfaceRecurrenceRuleState;

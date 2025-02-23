@@ -20,7 +20,7 @@ Defined in: [src/types/Advertisement/type.ts:14](https://github.com/PalisadoesFo
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../../user/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../../User/type/type-aliases/User.md)
 
 ### endDate
 

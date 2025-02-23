@@ -20,7 +20,7 @@ Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation
 
 ### createdBy
 
-> **createdBy**: [`User`](../../../user/type-aliases/User.md)
+> **createdBy**: [`User`](../../../User/type/type-aliases/User.md)
 
 ### description?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation
 
 ### organization
 
-> **organization**: [`Organization`](../../../organization/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
 
 ### updatedAt?
 
@@ -40,4 +40,4 @@ Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation
 
 ### updatedBy?
 
-> `optional` **updatedBy**: [`User`](../../../user/type-aliases/User.md)
+> `optional` **updatedBy**: [`User`](../../../User/type/type-aliases/User.md)

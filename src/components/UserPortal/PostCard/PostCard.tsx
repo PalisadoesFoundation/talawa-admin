@@ -267,18 +267,22 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   // Edit the post
-  const handleEditPost = (): void => {
+  const handleEditPost = async (): Promise<void> => {
     try {
-      editPost({
+      const { data: createEventData } = await editPost({
         variables: {
           id: props.id,
           text: postContent,
         },
       });
 
-      props.fetchPosts(); // Refresh the posts
-      toggleEditPost();
-      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
+      if (createEventData) {
+        props.fetchPosts(); // Refresh the posts
+        toggleEditPost();
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Post' }) as string,
+        );
+      }
     } catch (error: unknown) {
       errorHandler(t, error);
     }

@@ -6,7 +6,7 @@
 
 > `const` **EventOrderByInput**: `object`
 
-Defined in: [src/types/Event/type.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L85)
+Defined in: [src/types/Event/type.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L111)
 
 ## Type declaration
 

@@ -1,5 +1,5 @@
-import type { User } from './user';
-import type { Organization } from './organization';
+import type { User } from './User/type';
+import type { Organization } from 'types/Organization/type';
 // types/actionItem.ts
 
 export type ActionItem = {
