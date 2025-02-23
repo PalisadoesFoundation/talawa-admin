@@ -1,188 +1,219 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
-import { useQuery, useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
-import i18next from 'i18next';
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { type Mock, describe, it, expect, beforeEach, vi } from 'vitest';
 import OrgProfileFieldSettings from './OrgProfileFieldSettings';
-import {
-  ADD_CUSTOM_FIELD,
-  REMOVE_CUSTOM_FIELD,
-} from 'GraphQl/Mutations/mutations';
 
-// Mock external dependencies
-vi.mock('react-toastify', () => ({
-  toast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
+// --- Mocks --- //
+vi.mock('@apollo/client', () => ({
+  useQuery: vi.fn(),
+  useMutation: vi.fn(),
 }));
+import { useQuery, useMutation } from '@apollo/client';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => `orgProfileField:${key}`,
-    i18n: {
-      on: vi.fn(),
-      off: vi.fn(),
-    },
+    t: (key: string) => key,
   }),
 }));
 
-vi.mock('@apollo/client', async (importOriginal) => {
-  const actual: object = await importOriginal();
+vi.mock('react-router-dom', () => ({
+  useParams: () => ({ orgId: 'testOrgId' }),
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+import { toast } from 'react-toastify';
+
+// Mock i18next
+vi.mock('i18next', () => {
+  const listeners: Record<string, ((...args: never[]) => void)[]> = {};
   return {
-    ...actual,
-    useQuery: vi.fn(),
-    useMutation: vi.fn(),
+    default: {
+      on: vi.fn((event: string, cb: (...args: never[]) => void) => {
+        if (!listeners[event]) {
+          listeners[event] = [];
+        }
+        listeners[event].push(cb);
+      }),
+      off: vi.fn((event: string, cb: (...args: never[]) => void) => {
+        if (listeners[event]) {
+          listeners[event] = listeners[event].filter(
+            (listener) => listener !== cb,
+          );
+        }
+      }),
+      emit: vi.fn((event: string, ...args: never[]) => {
+        if (listeners[event]) {
+          listeners[event].forEach((cb) => cb(...args));
+        }
+      }),
+    },
   };
 });
+import i18next from 'i18next';
 
-// Mock data
-const mockAddField = {
-  request: {
-    query: ADD_CUSTOM_FIELD,
-    variables: {
-      organizationId: '1',
-      name: 'Test Field',
-      type: 'STRING',
-    },
-  },
-  result: { data: { addCustomField: { id: '1' } } },
-};
-
-const mockRemoveField = {
-  request: {
-    query: REMOVE_CUSTOM_FIELD,
-    variables: { id: '1' },
-  },
-  result: { data: { removeCustomField: { success: true } } },
-};
-
-const mockError = {
-  request: {
-    query: ADD_CUSTOM_FIELD,
-    variables: {
-      organizationId: '1',
-      name: 'Test Field',
-      type: 'STRING',
-    },
-  },
-  error: new Error('API Error'),
-};
+// Mock EditOrgCustomFieldDropDown component
+vi.mock(
+  'components/EditCustomFieldDropDown/EditOrgCustomFieldDropDown',
+  () => ({
+    default: ({
+      setCustomFieldData,
+      customFieldData,
+    }: {
+      setCustomFieldData: (data: {
+        type: string;
+        name: string;
+        id: string;
+      }) => void;
+      customFieldData: { type: string; name: string; id: string };
+    }) => (
+      <select
+        data-testid="customFieldTypeSelect"
+        value={customFieldData.type}
+        onChange={(e) =>
+          setCustomFieldData({ ...customFieldData, type: e.target.value })
+        }
+      >
+        <option value="">Select Type</option>
+        <option value="text">Text</option>
+      </select>
+    ),
+  }),
+);
 
 describe('OrgProfileFieldSettings', () => {
-  beforeEach(() => {
-    (useMutation as unknown as jest.Mock).mockImplementation(() => [
-      vi.fn(),
-      { loading: false },
-    ]);
+  let refetchMock: ReturnType<typeof vi.fn>;
+  let addCustomFieldMock: ReturnType<typeof vi.fn>;
+  let removeCustomFieldMock: ReturnType<typeof vi.fn>;
 
-    (useQuery as unknown as jest.Mock).mockReturnValue({
+  beforeEach(() => {
+    vi.clearAllMocks();
+    refetchMock = vi.fn().mockResolvedValue({});
+    addCustomFieldMock = vi.fn().mockResolvedValue({});
+    removeCustomFieldMock = vi.fn().mockResolvedValue({});
+
+    (useQuery as Mock).mockReturnValue({
+      loading: false,
+      error: null,
+      data: { organization: { customFields: [] } },
+      refetch: refetchMock,
+    });
+
+    // Fix: Mock both mutations properly
+    (useMutation as Mock)
+      .mockReturnValueOnce([addCustomFieldMock])
+      .mockReturnValueOnce([removeCustomFieldMock]);
+  });
+
+  it('renders loading state', () => {
+    (useQuery as Mock).mockReturnValueOnce({
+      loading: true,
+      error: null,
+      data: null,
+      refetch: refetchMock,
+    });
+    render(<OrgProfileFieldSettings />);
+    expect(screen.getByText('loading')).toBeInTheDocument();
+  });
+
+  it('renders error state', () => {
+    (useQuery as Mock).mockReturnValueOnce({
+      loading: false,
+      error: new Error('Test error'),
+      data: null,
+      refetch: refetchMock,
+    });
+    render(<OrgProfileFieldSettings />);
+    expect(screen.getByText('pleaseFillAllRequiredFields')).toBeInTheDocument();
+  });
+
+  it('renders no custom fields message', () => {
+    render(<OrgProfileFieldSettings />);
+    expect(screen.getByText('noCustomField')).toBeInTheDocument();
+  });
+
+  it('renders custom fields table', () => {
+    (useQuery as Mock).mockReturnValueOnce({
+      loading: false,
+      error: null,
       data: {
         organization: {
-          customFields: [
-            { id: '1', name: 'Field 1', type: 'STRING' },
-            { id: '2', name: 'Field 2', type: 'NUMBER' },
-          ],
+          customFields: [{ id: '1', name: 'Field1', type: 'text' }],
         },
       },
+      refetch: refetchMock,
+    });
+    render(<OrgProfileFieldSettings />);
+    expect(screen.getByText('Field1')).toBeInTheDocument();
+    expect(screen.getByText('text')).toBeInTheDocument();
+  });
+
+  it('does not call handleRemove when field id is empty', () => {
+    (useQuery as Mock).mockReturnValueOnce({
       loading: false,
-      refetch: vi.fn(),
+      error: null,
+      data: {
+        organization: {
+          customFields: [{ id: '', name: 'Field1', type: 'text' }],
+        },
+      },
+      refetch: refetchMock,
     });
+    render(<OrgProfileFieldSettings />);
+    const removeBtn = screen.getByTestId('removeCustomFieldBtn');
+    fireEvent.click(removeBtn);
+    expect(removeCustomFieldMock).not.toHaveBeenCalled();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  test('renders component with custom fields', () => {
-    render(
-      <MockedProvider addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
-    expect(screen.getByRole('table')).toBeInTheDocument();
-    expect(screen.getAllByTestId('removeCustomFieldBtn')).toHaveLength(2);
-  });
-
-  test('shows validation error for empty fields', async () => {
-    render(
-      <MockedProvider mocks={[mockAddField]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
+  it('calls toast.error on save when required fields are missing', async () => {
+    render(<OrgProfileFieldSettings />);
     fireEvent.click(screen.getByTestId('saveChangesBtn'));
-
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'orgProfileField:pleaseFillAllRequiredFields',
-      );
+      expect(toast.error).toHaveBeenCalledWith('pleaseFillAllRequiredFields');
     });
   });
 
-  test('handles add field error', async () => {
-    (useMutation as unknown as jest.Mock).mockImplementation(() => [
-      vi.fn().mockRejectedValue(new Error('API Error')),
-    ]);
-
-    render(
-      <MockedProvider mocks={[mockError]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
-    fireEvent.change(screen.getByTestId('customFieldInput'), {
-      target: { value: 'Test Field' },
+  it('successfully removes a custom field', async () => {
+    (useQuery as Mock).mockReturnValueOnce({
+      loading: false,
+      error: null,
+      data: {
+        organization: {
+          customFields: [{ id: '1', name: 'Field1', type: 'text' }],
+        },
+      },
+      refetch: refetchMock,
     });
-    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+
+    render(<OrgProfileFieldSettings />);
+
+    const removeBtn = screen.getByTestId('removeCustomFieldBtn');
+    fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
-  });
-
-  test('removes custom field successfully', async () => {
-    const removeMock = vi.fn();
-    (useMutation as unknown as jest.Mock).mockImplementation(() => [
-      removeMock,
-    ]);
-
-    render(
-      <MockedProvider mocks={[mockRemoveField]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
-    fireEvent.click(screen.getAllByTestId('removeCustomFieldBtn')[0]);
-
-    await waitFor(() => {
-      expect(removeMock).toHaveBeenCalledWith({
+      expect(removeCustomFieldMock).toHaveBeenCalledWith({
         variables: { id: '1' },
       });
-      expect(toast.success).toHaveBeenCalledWith(
-        'orgProfileField:customFieldRemoved',
-      );
+      expect(refetchMock).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith('customFieldRemoved');
     });
   });
 
-  test('handles language change refetch', async () => {
-    const refetchMock = vi.fn();
-    (useQuery as unknown as jest.Mock).mockReturnValue({
-      refetch: refetchMock,
-      loading: false,
-      data: { organization: { customFields: [] } },
-    });
-
-    render(
-      <MockedProvider addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
+  it('refetches on language change', async () => {
+    render(<OrgProfileFieldSettings />);
     i18next.emit('languageChanged');
-    expect(refetchMock).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(refetchMock).toHaveBeenCalled();
+    });
+  });
+
+  it('removes languageChanged listener on unmount', () => {
+    const { unmount } = render(<OrgProfileFieldSettings />);
+    unmount();
+    expect(i18next.off).toHaveBeenCalled();
   });
 });
