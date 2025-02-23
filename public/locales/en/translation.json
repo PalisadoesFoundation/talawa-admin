@@ -1263,7 +1263,8 @@
     "yes": "yes",
     "edit": "edit",
     "saveChanges": "saveChanges",
-    "endOfResults": "endOfResults"
+    "endOfResults": "endOfResults",
+    "endAtGreaterOrEqual": "Start Date Must be greater than End Date"
   },
   "userChat": {
     "title": "Chats",

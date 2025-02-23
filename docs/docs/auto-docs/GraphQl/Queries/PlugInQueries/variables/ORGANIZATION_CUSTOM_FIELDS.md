@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_CUSTOM\_FIELDS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L379)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:398](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L398)
 
 GraphQL query to retrieve custom fields for a specific organization.
 

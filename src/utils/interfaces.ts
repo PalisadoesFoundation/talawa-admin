@@ -298,9 +298,9 @@ enum UserRole {
 }
 
 enum AdvertisementTypePg {
-  BANNER = 'banner',
-  MENU = 'menu',
-  POP_UP = 'pop_up',
+  banner = 'banner',
+  menu = 'menu',
+  pop_up = 'pop_up',
 }
 
 export interface InterfaceUserType {
@@ -970,15 +970,18 @@ export interface InterfaceQueryUserTagsMembersToAssignTo {
 }
 
 export interface InterfaceQueryOrganizationAdvertisementListItem {
+  id: string;
   advertisements: {
     edges: {
       node: {
-        _id: string;
+        id: string;
         name: string;
-        mediaUrl: string;
-        endDate: string;
-        startDate: string;
-        type: 'BANNER' | 'MENU' | 'POPUP';
+        startAt: string;
+        endAt: string;
+        type: 'banner' | 'menu' | 'popup';
+        attachments: {
+          url: string;
+        }[];
       };
       cursor: string;
     }[];
@@ -988,9 +991,23 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
       hasNextPage: boolean;
       hasPreviousPage: boolean;
     };
-    totalCount: number;
   };
 }
+
+export type GraphQLAdvertisement = {
+  id: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+  attachments: {
+    url: string;
+  }[];
+};
+
+export type AdvertisementEdge = {
+  node: GraphQLAdvertisement;
+  cursor: string;
+};
 
 export interface InterfaceQueryOrganizationFundCampaigns {
   name: string;
