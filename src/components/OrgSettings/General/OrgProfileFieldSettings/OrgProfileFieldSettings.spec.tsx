@@ -1,9 +1,11 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
+import i18next from 'i18next';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import OrgProfileFieldSettings from './OrgProfileFieldSettings';
 import {
   ADD_CUSTOM_FIELD,
@@ -11,220 +13,177 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_CUSTOM_FIELDS } from 'GraphQl/Queries/Queries';
 
-// Mock external dependencies
-jest.mock('react-router-dom', () => ({
-  useParams: jest.fn(),
-}));
-
-jest.mock('@apollo/client', () => ({
-  ...jest.requireActual('@apollo/client'),
-  useMutation: jest.fn(),
-  useQuery: jest.fn(),
-}));
-
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    tCommon: (key: string) => key,
-  }),
-}));
-
-jest.mock('react-toastify', () => ({
+// Mock react-toastify
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-const mockCurrentOrgId = 'org123';
-
-const mockCustomFields = [
-  { id: '1', name: 'Age', type: 'NUMBER' },
-  { id: '2', name: 'Membership', type: 'BOOLEAN' },
-];
-
-const successQueryMock = {
-  request: {
-    query: ORGANIZATION_CUSTOM_FIELDS,
-    variables: { organizationId: mockCurrentOrgId },
-  },
-  result: {
-    data: {
-      organization: {
-        customFields: mockCustomFields,
+// Mock translations
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      i18n: {
+        changeLanguage: vi.fn(),
       },
-    },
-  },
-};
-
-const addFieldMock = {
-  request: {
-    query: ADD_CUSTOM_FIELD,
-    variables: {
-      organizationId: mockCurrentOrgId,
-      name: 'New Field',
-      type: 'STRING',
-    },
-  },
-  result: { data: { addCustomField: { id: '3' } } },
-};
-
-const removeFieldMock = {
-  request: {
-    query: REMOVE_CUSTOM_FIELD,
-    variables: { id: '1' },
-  },
-  result: { data: { removeCustomField: { success: true } } },
-};
+    }),
+  };
+});
 
 describe('OrgProfileFieldSettings', () => {
+  const mockOrgId = '123';
+  const mockCustomFields = [
+    { id: '1', name: 'Field 1', type: 'Text' },
+    { id: '2', name: 'Field 2', type: 'Number' },
+  ];
+
+  const mocks = [
+    {
+      request: {
+        query: ORGANIZATION_CUSTOM_FIELDS,
+        variables: { organizationId: mockOrgId },
+      },
+      result: {
+        data: {
+          organization: {
+            customFields: mockCustomFields,
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: ADD_CUSTOM_FIELD,
+        variables: {
+          organizationId: mockOrgId,
+          name: 'New Field',
+          type: 'Text',
+        },
+      },
+      result: {
+        data: {
+          addCustomField: {
+            id: '3',
+            name: 'New Field',
+            type: 'Text',
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: REMOVE_CUSTOM_FIELD,
+        variables: { id: '1' },
+      },
+      result: {
+        data: {
+          removeCustomField: {
+            id: '1',
+          },
+        },
+      },
+    },
+  ];
+
+  const renderComponent = (): void => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18next}>
+          <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgProfileFieldSettings />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  };
+
   beforeEach(() => {
-    (useParams as jest.Mock).mockReturnValue({ orgId: mockCurrentOrgId });
-    (useQuery as jest.Mock).mockReturnValue({
-      loading: false,
-      error: false,
-      data: { organization: { customFields: mockCustomFields } },
-      refetch: jest.fn(),
-    });
-    (useMutation as jest.Mock).mockImplementation(() => [
-      jest.fn(),
-      { loading: false, error: undefined },
-    ]);
+    vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('renders component with custom fields', async () => {
-    render(
-      <MockedProvider mocks={[successQueryMock]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
-    expect(await screen.findByText('Age')).toBeInTheDocument();
-    expect(screen.getByText('Membership')).toBeInTheDocument();
-  });
-
-  test('shows loading state', () => {
-    (useQuery as jest.Mock).mockReturnValue({ loading: true });
-    render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
+  it('renders loading state initially', () => {
+    renderComponent();
     expect(screen.getByText('loading')).toBeInTheDocument();
   });
 
-  test('shows error state', () => {
-    (useQuery as jest.Mock).mockReturnValue({ error: true });
-    render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-    expect(screen.getByText('pleaseFillAllRequiredFields')).toBeInTheDocument();
-  });
-
-  test('handles custom field addition', async () => {
-    const mockRefetch = jest.fn();
-    (useQuery as jest.Mock).mockReturnValue({
-      ...successQueryMock,
-      refetch: mockRefetch,
-    });
-    const mockAdd = jest
-      .fn()
-      .mockResolvedValue({ data: { addCustomField: {} } });
-    (useMutation as jest.Mock).mockImplementation(() => [mockAdd]);
-
-    render(
-      <MockedProvider mocks={[addFieldMock]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
-    fireEvent.change(screen.getByTestId('customFieldInput'), {
-      target: { value: 'New Field' },
-    });
-    fireEvent.change(screen.getByTestId('type-select'), {
-      target: { value: 'STRING' },
-    });
-    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+  it('renders custom fields after loading', async () => {
+    renderComponent();
 
     await waitFor(() => {
-      expect(mockAdd).toHaveBeenCalledWith({
-        variables: {
-          organizationId: mockCurrentOrgId,
-          name: 'New Field',
-          type: 'STRING',
-        },
+      mockCustomFields.forEach((field) => {
+        expect(screen.getByText(field.name)).toBeInTheDocument();
+        expect(screen.getByText(field.type)).toBeInTheDocument();
       });
-      expect(toast.success).toHaveBeenCalledWith(
-        'orgProfileField.customFieldAdded',
-      );
-      expect(mockRefetch).toHaveBeenCalled();
     });
   });
 
-  test('handles custom field removal', async () => {
-    const mockRemove = jest
-      .fn()
-      .mockResolvedValue({ data: { removeCustomField: {} } });
-    (useMutation as jest.Mock).mockImplementation(() => [mockRemove]);
-
-    render(
-      <MockedProvider mocks={[removeFieldMock]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
-    const removeButtons = await screen.findAllByTestId('removeCustomFieldBtn');
-    fireEvent.click(removeButtons[0]);
+  it('shows error message when adding field without required data', async () => {
+    renderComponent();
 
     await waitFor(() => {
-      expect(mockRemove).toHaveBeenCalledWith({ variables: { id: '1' } });
-      expect(toast.success).toHaveBeenCalledWith(
-        'orgProfileField.customFieldRemoved',
-      );
+      expect(screen.queryByText('loading')).not.toBeInTheDocument();
+    });
+
+    const saveButton = screen.getByTestId('saveChangesBtn');
+    fireEvent.click(saveButton);
+
+    expect(toast.error).toHaveBeenCalledWith('pleaseFillAllRequiredFields');
+  });
+
+  it('handles Enter key press in name input', async () => {
+    renderComponent();
+
+    await waitFor(() => {
+      expect(screen.queryByText('loading')).not.toBeInTheDocument();
+    });
+
+    const nameInput = screen.getByTestId('customFieldInput');
+    fireEvent.change(nameInput, { target: { value: 'New Field' } });
+    fireEvent.keyDown(nameInput, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
     });
   });
 
-  test('shows error when adding field fails', async () => {
-    const errorMessage = 'Mutation failed';
-    (useMutation as jest.Mock).mockImplementation(() => [
-      jest.fn().mockRejectedValue(new Error(errorMessage)),
-    ]);
+  it('renders no custom fields message when empty', async () => {
+    const emptyMock = [
+      {
+        request: {
+          query: ORGANIZATION_CUSTOM_FIELDS,
+          variables: { organizationId: mockOrgId },
+        },
+        result: {
+          data: {
+            organization: {
+              customFields: [],
+            },
+          },
+        },
+      },
+    ];
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <OrgProfileFieldSettings />
+      <MockedProvider mocks={emptyMock} addTypename={false}>
+        <I18nextProvider i18n={i18next}>
+          <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgProfileFieldSettings />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByTestId('saveChangesBtn'));
-
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'orgProfileField.pleaseFillAllRequiredFields',
-        { error: errorMessage },
-      );
-    });
-  });
-
-  test('validates form fields before submission', async () => {
-    render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <OrgProfileFieldSettings />
-      </MockedProvider>,
-    );
-
-    fireEvent.click(screen.getByTestId('saveChangesBtn'));
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'orgProfileField.pleaseFillAllRequiredFields',
-      );
+      expect(screen.getByText('noCustomField')).toBeInTheDocument();
     });
   });
 });

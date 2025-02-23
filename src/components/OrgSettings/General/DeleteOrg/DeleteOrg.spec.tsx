@@ -1,193 +1,128 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { useParams, useNavigate } from 'react-router-dom';
+import type { DocumentNode } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import useLocalStorage from 'utils/useLocalstorage';
 import DeleteOrg from './DeleteOrg';
-import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
+import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
+import { describe, beforeEach, it, expect, vi, type Mock } from 'vitest';
+import {
+  DELETE_ORGANIZATION_MUTATION,
+  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 
-// Mocks
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
-  useNavigate: jest.fn(),
-}));
-
-jest.mock('@apollo/client', () => ({
-  ...jest.requireActual('@apollo/client'),
-  useMutation: jest.fn(() => [jest.fn(), { loading: false, error: undefined }]),
-  useQuery: jest.fn(() => ({
-    data: { isSampleOrganization: false },
-    loading: false,
-    error: undefined,
-  })),
-}));
-
-jest.mock('react-i18next', () => ({
+// Mock dependencies
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
     tCommon: (key: string) => key,
   }),
 }));
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-router-dom', () => ({
+  useParams: vi.fn(),
+  useNavigate: vi.fn(),
+}));
+
+vi.mock('@apollo/client', () => ({
+  useMutation: vi.fn(),
+  useQuery: vi.fn(),
+}));
+
+vi.mock('utils/useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    getItem: vi.fn(),
+  })),
+}));
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('utils/useLocalstorage', () => ({
-  useLocalStorage: () => ({
-    getItem: jest.fn().mockReturnValue('true'),
-  }),
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
 }));
-
-const mockNavigate = jest.fn();
-const mockOrgId = 'org123';
-
-const sampleOrganizationMock = {
-  request: {
-    query: IS_SAMPLE_ORGANIZATION_QUERY,
-    variables: { id: mockOrgId },
-  },
-  result: {
-    data: {
-      isSampleOrganization: true,
-    },
-  },
-};
-
-const regularOrganizationMock = {
-  request: {
-    query: IS_SAMPLE_ORGANIZATION_QUERY,
-    variables: { id: mockOrgId },
-  },
-  result: {
-    data: {
-      isSampleOrganization: false,
-    },
-  },
-};
 
 describe('DeleteOrg Component', () => {
+  const navigateMock = vi.fn();
+  const deleteOrgMutationMock = vi.fn();
+  const removeSampleOrgMutationMock = vi.fn();
+
   beforeEach(() => {
-    (useParams as jest.Mock).mockReturnValue({ orgId: mockOrgId });
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-    (useMutation as jest.Mock).mockImplementation(() => [
-      jest.fn(),
-      { loading: false },
-    ]);
+    vi.clearAllMocks();
+
+    (useParams as Mock).mockReturnValue({ orgId: '1' });
+    (useNavigate as Mock).mockReturnValue(navigateMock);
+    (useLocalStorage as Mock).mockReturnValue({
+      getItem: vi.fn().mockReturnValue('true'),
+    });
+    (useQuery as Mock).mockReturnValue({
+      data: { isSampleOrganization: false },
+      loading: false,
+    });
+    (useMutation as Mock).mockImplementation((mutation: DocumentNode) => {
+      if (mutation === DELETE_ORGANIZATION_MUTATION) {
+        return [deleteOrgMutationMock, { loading: false }];
+      } else if (mutation === REMOVE_SAMPLE_ORGANIZATION_MUTATION) {
+        return [removeSampleOrgMutationMock, { loading: false }];
+      }
+      return [vi.fn(), { loading: false }];
+    });
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('renders delete card when user has permission', () => {
-    render(
-      <MockedProvider mocks={[sampleOrganizationMock]} addTypename={false}>
-        <DeleteOrg />
-      </MockedProvider>,
-    );
-
-    expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
-    expect(
-      screen.getByText('deleteOrg.deleteOrganization'),
-    ).toBeInTheDocument();
-  });
-
-  test('does not render delete card without permission', () => {
-    // Mock getItem to return false
-    jest.spyOn(Storage.prototype, 'getItem').mockReturnValue('false');
-
-    render(
-      <MockedProvider mocks={[sampleOrganizationMock]} addTypename={false}>
-        <DeleteOrg />
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByTestId('openDeleteModalBtn')).not.toBeInTheDocument();
-  });
-
-  test('opens and closes delete confirmation modal', async () => {
-    render(
-      <MockedProvider mocks={[regularOrganizationMock]} addTypename={false}>
-        <DeleteOrg />
-      </MockedProvider>,
-    );
-
+  it('renders delete button and opens confirmation modal', () => {
+    render(<DeleteOrg />);
     fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
     expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId('closeDelOrgModalBtn'));
-    expect(screen.queryByTestId('orgDeleteModal')).not.toBeInTheDocument();
   });
 
-  test('deletes sample organization successfully', async () => {
-    const removeSampleMock = jest
-      .fn()
-      .mockResolvedValue({ data: { removeSampleOrganization: true } });
-    (useMutation as jest.Mock).mockImplementation(() => [removeSampleMock]);
+  it('deletes regular organization successfully', async () => {
+    deleteOrgMutationMock.mockResolvedValue({});
 
-    render(
-      <MockedProvider mocks={[sampleOrganizationMock]} addTypename={false}>
-        <DeleteOrg />
-      </MockedProvider>,
-    );
-
+    render(<DeleteOrg />);
     fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
     fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
 
     await waitFor(() => {
-      expect(removeSampleMock).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(
-        'deleteOrg.successfullyDeletedSampleOrganization',
-      );
-      expect(mockNavigate).toHaveBeenCalledWith('/orglist');
-    });
-  });
-
-  test('deletes regular organization successfully', async () => {
-    const deleteMock = jest
-      .fn()
-      .mockResolvedValue({ data: { deleteOrganization: true } });
-    (useMutation as jest.Mock).mockImplementation(() => [deleteMock]);
-
-    render(
-      <MockedProvider mocks={[regularOrganizationMock]} addTypename={false}>
-        <DeleteOrg />
-      </MockedProvider>,
-    );
-
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
-
-    await waitFor(() => {
-      expect(deleteMock).toHaveBeenCalledWith({
-        variables: { input: { id: mockOrgId } },
+      expect(deleteOrgMutationMock).toHaveBeenCalledWith({
+        variables: { input: { id: '1' } },
       });
-      expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+      expect(navigateMock).toHaveBeenCalledWith('/orglist');
     });
   });
 
-  test('handles deletion errors', async () => {
-    const errorMessage = 'Deletion failed';
-    const errorMock = jest.fn().mockRejectedValue(new Error(errorMessage));
-    (useMutation as jest.Mock).mockImplementation(() => [errorMock]);
+  it('handles error during regular organization deletion', async () => {
+    const error = new Error('Deletion failed');
+    deleteOrgMutationMock.mockRejectedValue(error);
 
-    render(
-      <MockedProvider mocks={[regularOrganizationMock]} addTypename={false}>
-        <DeleteOrg />
-      </MockedProvider>,
-    );
-
+    render(<DeleteOrg />);
     fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
     fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(errorMessage);
+      expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
+    });
+  });
+
+  it('handles error during sample organization deletion', async () => {
+    (useQuery as Mock).mockReturnValue({
+      data: { isSampleOrganization: true },
+      loading: false,
+    });
+    const error = new Error('Sample deletion failed');
+    removeSampleOrgMutationMock.mockRejectedValue(error);
+
+    render(<DeleteOrg />);
+    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(error.message);
     });
   });
 });

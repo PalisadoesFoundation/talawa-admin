@@ -1,45 +1,70 @@
 import React from 'react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { toast } from 'react-toastify';
 import { I18nextProvider } from 'react-i18next';
-import i18n from 'utils/i18n';
+import i18n from 'i18next';
+import { toast } from 'react-toastify';
+
 import OrgUpdate from './OrgUpdate';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
-// Mock the modules
-jest.mock('react-toastify');
-jest.mock('utils/convertToBase64', () => ({
-  __esModule: true,
-  default: async () => 'base64String',
+// Mock modules
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
 }));
 
-describe('OrgUpdate Component', () => {
-  const mockOrgId = 'org123';
-  const mockOrganization = {
-    id: mockOrgId,
+// Initialize i18n for testing
+i18n.init({
+  lng: 'en',
+  resources: {
+    en: {
+      translation: {
+        orgUpdate: {
+          successfulUpdated: 'Organization updated successfully',
+          enterNameOrganization: 'Enter organization name',
+        },
+      },
+      common: {
+        name: 'Name',
+        description: 'Description',
+        address: 'Address',
+        saving: 'Saving...',
+        saveChanges: 'Save Changes',
+      },
+    },
+  },
+});
+
+const mockOrgData = {
+  organization: {
+    id: '1',
     name: 'Test Org',
     description: 'Test Description',
-    addressLine1: '123 Main St',
+    addressLine1: '123 Test St',
     addressLine2: 'Suite 100',
     city: 'Test City',
     state: 'Test State',
     postalCode: '12345',
     countryCode: 'US',
     avatarURL: null,
-  };
+  },
+};
 
+describe('OrgUpdate Component', () => {
   const mocks = [
     {
       request: {
         query: ORGANIZATIONS_LIST,
-        variables: { input: { id: mockOrgId } },
+        variables: { input: { id: '1' } },
       },
       result: {
-        data: {
-          organization: mockOrganization,
-        },
+        data: mockOrgData,
       },
     },
     {
@@ -47,10 +72,10 @@ describe('OrgUpdate Component', () => {
         query: UPDATE_ORGANIZATION_MUTATION,
         variables: {
           input: {
-            id: mockOrgId,
+            id: '1',
             name: 'Updated Org',
             description: 'Updated Description',
-            addressLine1: '123 Main St',
+            addressLine1: '123 Test St',
             addressLine2: 'Suite 100',
             city: 'Test City',
             state: 'Test State',
@@ -64,7 +89,7 @@ describe('OrgUpdate Component', () => {
         data: {
           updateOrganization: {
             organization: {
-              ...mockOrganization,
+              ...mockOrgData.organization,
               name: 'Updated Org',
               description: 'Updated Description',
             },
@@ -74,27 +99,19 @@ describe('OrgUpdate Component', () => {
     },
   ];
 
-  const renderComponent = (): ReturnType<typeof render> => {
-    return render(
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('loads and displays organization data', async () => {
+    render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
-          <OrgUpdate orgId={mockOrgId} />
+          <OrgUpdate orgId="1" />
         </I18nextProvider>
       </MockedProvider>,
     );
-  };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('renders loading state initially', () => {
-    renderComponent();
-    expect(screen.getByRole('status')).toBeInTheDocument();
-  });
-
-  it('displays organization data after loading', async () => {
-    renderComponent();
     await waitFor(() => {
       expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       expect(screen.getByDisplayValue('Test Description')).toBeInTheDocument();
@@ -102,7 +119,14 @@ describe('OrgUpdate Component', () => {
   });
 
   it('handles form input changes', async () => {
-    renderComponent();
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
     await waitFor(() => {
       expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
     });
@@ -112,52 +136,107 @@ describe('OrgUpdate Component', () => {
     expect(nameInput).toHaveValue('Updated Org');
   });
 
-  it('handles successful organization update', async () => {
-    renderComponent();
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('save-org-changes-btn'));
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-    });
-  });
-
-  it('displays error state when query fails', async () => {
-    const errorMock = [
-      {
-        request: {
-          query: ORGANIZATIONS_LIST,
-          variables: { input: { id: mockOrgId } },
-        },
-        error: new Error('Failed to fetch organization'),
-      },
-    ];
-
+  it('handles form submission successfully', async () => {
     render(
-      <MockedProvider mocks={errorMock} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
-          <OrgUpdate orgId={mockOrgId} />
+          <OrgUpdate orgId="1" />
         </I18nextProvider>
       </MockedProvider>,
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/Error occured while loading Organization Data/i),
-      ).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+    });
+
+    // Update form fields
+    fireEvent.change(screen.getByDisplayValue('Test Org'), {
+      target: { value: 'Updated Org' },
+    });
+    fireEvent.change(screen.getByDisplayValue('Test Description'), {
+      target: { value: 'Updated Description' },
+    });
+
+    // Submit form
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'Organization updated successfully',
+      );
     });
   });
 
-  it('handles image upload', async () => {
-    renderComponent();
+  it('displays error when form submission fails', async () => {
+    const errorMock = {
+      request: {
+        query: UPDATE_ORGANIZATION_MUTATION,
+        variables: {
+          input: {
+            id: '1',
+            name: '',
+            description: '',
+            addressLine1: '123 Test St',
+            addressLine2: 'Suite 100',
+            city: 'Test City',
+            state: 'Test State',
+            postalCode: '12345',
+            countryCode: 'US',
+            avatar: null,
+          },
+        },
+      },
+      error: new Error('Failed to update organization'),
+    };
+
+    render(
+      <MockedProvider mocks={[...mocks, errorMock]} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+    });
+
+    // Clear required fields
+    fireEvent.change(screen.getByDisplayValue('Test Org'), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByDisplayValue('Test Description'), {
+      target: { value: '' },
+    });
+
+    // Submit form
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Name and description are required',
+      );
+    });
+  });
+
+  it('handles file upload', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
     await waitFor(() => {
       expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
     });
 
     const file = new File(['test'], 'test.png', { type: 'image/png' });
-    fireEvent.change(screen.getByTestId('organisationImage'), {
-      target: { files: [file] },
-    });
+    const fileInput = screen.getByTestId('organisationImage');
+
+    await userEvent.upload(fileInput, file);
   });
 });

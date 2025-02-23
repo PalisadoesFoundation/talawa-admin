@@ -1,105 +1,171 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import type { InterfaceCustomFieldData } from 'utils/interfaces';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'i18next';
 import EditOrgCustomFieldDropDown from './EditCustomFieldDropDown';
-import availableFieldTypes from 'utils/fieldTypes';
 
-// Mock external dependencies
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    tCommon: (key: string) => key,
-  }),
-}));
+// Initialize i18n for testing
+i18n.init({
+  lng: 'en',
+  resources: {
+    en: {
+      translation: {
+        orgProfileField: {
+          TEXT: 'Text',
+          NUMBER: 'Number',
+          DATE: 'Date',
+          BOOLEAN: 'Boolean',
+        },
+        common: {
+          none: 'None',
+        },
+      },
+    },
+  },
+});
 
-// Mock field types
-jest.mock('utils/fieldTypes', () => ({
-  availableFieldTypes: ['TEXT', 'NUMBER', 'BOOLEAN'],
+// Mock the availableFieldTypes
+vi.mock('utils/fieldTypes', () => ({
+  default: ['TEXT', 'NUMBER', 'DATE', 'BOOLEAN'],
 }));
 
 describe('EditOrgCustomFieldDropDown Component', () => {
-  const mockSetCustomFieldData = jest.fn();
-  const initialFieldData: InterfaceCustomFieldData = {
-    id: '',
-    type: '',
-    name: '',
-  };
-
-  const baseProps = {
-    customFieldData: initialFieldData,
+  const mockSetCustomFieldData = vi.fn();
+  const defaultProps = {
+    customFieldData: {
+      type: 'TEXT',
+      name: 'Test Field',
+      required: false,
+    },
     setCustomFieldData: mockSetCustomFieldData,
+    variant: 'outline-success' as const,
   };
 
-  afterEach(() => {
-    jest.clearAllMocks();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  test('renders with default state', () => {
-    render(<EditOrgCustomFieldDropDown {...baseProps} />);
-
-    expect(screen.getByTestId('toggleBtn')).toHaveTextContent('common.none');
-    expect(screen.getByTitle('Edit Custom Field')).toBeInTheDocument();
-  });
-
-  test('displays current field type correctly', () => {
-    const props = {
-      ...baseProps,
-      customFieldData: { ...initialFieldData, type: 'TEXT' },
-    };
-
-    render(<EditOrgCustomFieldDropDown {...props} />);
-    expect(screen.getByTestId('toggleBtn')).toHaveTextContent(
-      'orgProfileField.TEXT',
+  it('renders with initial type', () => {
+    render(
+      <I18nextProvider i18n={i18n}>
+        <EditOrgCustomFieldDropDown {...defaultProps} />
+      </I18nextProvider>,
     );
+
+    expect(screen.getByTestId('toggleBtn')).toHaveTextContent('Text');
   });
 
-  test('shows all available field types in dropdown', () => {
-    render(<EditOrgCustomFieldDropDown {...baseProps} />);
-    fireEvent.click(screen.getByTestId('toggleBtn'));
-
-    availableFieldTypes.forEach((type) => {
-      expect(screen.getByText(`orgProfileField.${type}`)).toBeInTheDocument();
-    });
-  });
-
-  test('updates field type on selection', () => {
-    render(<EditOrgCustomFieldDropDown {...baseProps} />);
-    fireEvent.click(screen.getByTestId('toggleBtn'));
-    fireEvent.click(screen.getByText('orgProfileField.NUMBER'));
-
-    expect(mockSetCustomFieldData).toHaveBeenCalledWith({
-      ...initialFieldData,
-      type: 'NUMBER',
-    });
-  });
-
-  test('disables currently selected option', () => {
-    const props = {
-      ...baseProps,
-      customFieldData: { ...initialFieldData, type: 'BOOLEAN' },
-    };
-
-    render(<EditOrgCustomFieldDropDown {...props} />);
-    fireEvent.click(screen.getByTestId('toggleBtn'));
-
-    const booleanOption = screen.getByText('orgProfileField.BOOLEAN');
-    expect(booleanOption.closest('.dropdown-item')).toHaveClass('disabled');
-  });
-
-  test('applies custom styles correctly', () => {
-    const styleProps = {
-      ...baseProps,
+  it('applies custom styles when provided', () => {
+    const customStyles = {
       parentContainerStyle: 'custom-container',
       btnStyle: 'custom-button',
     };
 
-    const { container } = render(
-      <EditOrgCustomFieldDropDown {...styleProps} />,
+    render(
+      <I18nextProvider i18n={i18n}>
+        <EditOrgCustomFieldDropDown {...defaultProps} {...customStyles} />
+      </I18nextProvider>,
     );
 
-    expect(
-      container.querySelector('.dropdown.custom-container'),
-    ).toBeInTheDocument();
-    expect(screen.getByTestId('toggleBtn')).toHaveClass('custom-button');
+    const container = screen.getByTitle('Edit Custom Field');
+    const button = screen.getByTestId('toggleBtn');
+
+    expect(container).toHaveClass('custom-container');
+    expect(button).toHaveClass('custom-button');
+  });
+
+  it('displays all available field types in dropdown menu', async () => {
+    render(
+      <I18nextProvider i18n={i18n}>
+        <EditOrgCustomFieldDropDown {...defaultProps} />
+      </I18nextProvider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('toggleBtn'));
+    });
+
+    // Change to get items by their test IDs instead of role
+    const menuItems = [
+      screen.getByTestId('dropdown-btn-0'),
+      screen.getByTestId('dropdown-btn-1'),
+      screen.getByTestId('dropdown-btn-2'),
+      screen.getByTestId('dropdown-btn-3'),
+    ];
+
+    expect(menuItems).toHaveLength(4);
+    expect(menuItems[0]).toHaveTextContent('Text');
+    expect(menuItems[1]).toHaveTextContent('Number');
+    expect(menuItems[2]).toHaveTextContent('Date');
+    expect(menuItems[3]).toHaveTextContent('Boolean');
+  });
+
+  it('disables current type in dropdown menu', async () => {
+    render(
+      <I18nextProvider i18n={i18n}>
+        <EditOrgCustomFieldDropDown {...defaultProps} />
+      </I18nextProvider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('toggleBtn'));
+    });
+
+    const textOption = screen.getByTestId('dropdown-btn-0');
+    expect(textOption).toHaveClass('dropdown-item', 'disabled');
+  });
+
+  it('updates custom field data when new type is selected', async () => {
+    render(
+      <I18nextProvider i18n={i18n}>
+        <EditOrgCustomFieldDropDown {...defaultProps} />
+      </I18nextProvider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('toggleBtn'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-btn-1'));
+    });
+
+    expect(mockSetCustomFieldData).toHaveBeenCalledWith({
+      ...defaultProps.customFieldData,
+      type: 'NUMBER',
+    });
+  });
+
+  it('maintains other custom field data properties when updating type', async () => {
+    const customFieldData = {
+      type: 'TEXT',
+      name: 'Test Field',
+      required: true,
+      description: 'Test Description',
+      options: ['option1', 'option2'],
+    };
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <EditOrgCustomFieldDropDown
+          {...defaultProps}
+          customFieldData={customFieldData}
+        />
+      </I18nextProvider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('toggleBtn'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-btn-2'));
+    });
+
+    expect(mockSetCustomFieldData).toHaveBeenCalledWith({
+      ...customFieldData,
+      type: 'DATE',
+    });
   });
 });

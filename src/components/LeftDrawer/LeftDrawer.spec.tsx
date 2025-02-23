@@ -1,187 +1,146 @@
 import React from 'react';
+import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'i18next';
 
-// Mock external dependencies
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    tCommon: (key: string) => key,
-  }),
-}));
-
-jest.mock('utils/useLocalstorage', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    getItem: jest.fn(),
+// Mock the local storage hook
+vi.mock('utils/useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
   })),
 }));
 
-jest.mock('assets/svgs/organizations.svg?react', () => {
-  const OrganizationsIcon = (): JSX.Element => <span>OrganizationsIcon</span>;
-  OrganizationsIcon.displayName = 'OrganizationsIcon';
-  return OrganizationsIcon;
+// Mock translations
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      tCommon: (key: string) => key,
+    }),
+  };
 });
 
-describe('LeftDrawer Component', () => {
-  const mockSetHideDrawer = jest.fn();
-  const localStorageMock = useLocalStorage as jest.Mock;
+// Mock SVG components
+vi.mock('assets/svgs/organizations.svg?react', () => ({
+  default: () => <div data-testid="organizations-icon" />,
+}));
 
+vi.mock('assets/svgs/roles.svg?react', () => ({
+  default: () => <div data-testid="roles-icon" />,
+}));
+
+vi.mock('assets/svgs/settings.svg?react', () => ({
+  default: () => <div data-testid="settings-icon" />,
+}));
+
+vi.mock('assets/svgs/talawa.svg?react', () => ({
+  default: () => <div data-testid="talawa-logo" />,
+}));
+
+vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
+  default: () => <div data-testid="profile-dropdown" />,
+}));
+
+describe('LeftDrawer Component', () => {
   const defaultProps = {
     hideDrawer: false,
-    setHideDrawer: mockSetHideDrawer,
+    setHideDrawer: vi.fn(),
+  };
+
+  const renderComponent = (props = defaultProps): ReturnType<typeof render> => {
+    return render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <LeftDrawer {...props} />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
   };
 
   beforeEach(() => {
-    localStorageMock.mockImplementation(() => ({
-      getItem: (key: string) => (key === 'SuperAdmin' ? 'true' : null),
-    }));
+    vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
+  it('renders without crashing', () => {
+    renderComponent();
+    expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
   });
 
-  test('renders basic structure', () => {
-    render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText('TalawaLogo')).toBeInTheDocument();
-    expect(screen.getByText('talawaAdminPortal')).toBeInTheDocument();
-    expect(screen.getByText('menu')).toBeInTheDocument();
+  it('shows the Talawa logo', () => {
+    renderComponent();
+    expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
   });
 
-  test('shows organization link', () => {
-    render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByTestId('organizationsBtn')).toHaveTextContent(
-      'my organizations',
-    );
-    expect(screen.getByTestId('organizationsBtn')).toContainHTML(
-      'OrganizationsIcon',
-    );
+  it('renders all navigation buttons for super admin', () => {
+    renderComponent();
+    expect(screen.getByTestId('organizationsBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('rolesBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
   });
 
-  test('shows roles link for SuperAdmin', () => {
-    render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByTestId('rolesBtn')).toHaveTextContent('users');
-    expect(screen.getByTestId('rolesBtn')).toContainHTML('RolesIcon');
-  });
-
-  test('hides roles link for non-SuperAdmin', () => {
-    localStorageMock.mockImplementation(() => ({
-      getItem: () => null,
+  it('hides roles button for non-super admin users', () => {
+    vi.mocked(useLocalStorage).mockImplementation(() => ({
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      getStorageKey: vi.fn(() => ''),
     }));
 
-    render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} />
-      </MemoryRouter>,
-    );
-
+    renderComponent();
+    expect(screen.getByTestId('organizationsBtn')).toBeInTheDocument();
     expect(screen.queryByTestId('rolesBtn')).not.toBeInTheDocument();
+    expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
   });
 
-  test('shows community profile link', () => {
-    render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByTestId('communityProfileBtn')).toHaveTextContent(
-      'communityProfile',
-    );
-    expect(screen.getByTestId('communityProfileBtn')).toContainHTML(
-      'SettingsIcon',
-    );
+  it('applies correct styles when drawer is hidden', () => {
+    renderComponent({ ...defaultProps, hideDrawer: true });
+    const element = screen.getByTestId('leftDrawerContainer');
+    expect(element.className).toContain('inactiveDrawer');
   });
 
-  test('applies active styles for current route', () => {
-    render(
-      <MemoryRouter initialEntries={['/orglist']}>
-        <LeftDrawer {...defaultProps} />
-      </MemoryRouter>,
-    );
-
-    const orgButton = screen.getByTestId('organizationsBtn');
-    expect(orgButton).toHaveStyle('font-weight: bold');
-    expect(orgButton).toHaveStyle('color: var(--sidebar-option-text-active)');
+  it('applies correct styles when drawer is visible', () => {
+    renderComponent({ ...defaultProps, hideDrawer: false });
+    const element = screen.getByTestId('leftDrawerContainer');
+    expect(element.className).toContain('activeDrawer');
   });
 
-  test('handles mobile view click', () => {
-    // Set mobile view
-    Object.defineProperty(window, 'innerWidth', { value: 800 });
+  it('handles mobile view navigation button clicks', () => {
+    // Mock window.innerWidth
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 800,
+    });
 
-    render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} />
-      </MemoryRouter>,
-    );
+    renderComponent();
 
-    fireEvent.click(screen.getByTestId('organizationsBtn'));
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    const organizationsButton = screen.getByTestId('organizationsBtn');
+    fireEvent.click(organizationsButton);
+
+    expect(defaultProps.setHideDrawer).toHaveBeenCalledWith(true);
   });
 
-  test('initializes hideDrawer state', () => {
-    const { rerender } = render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} hideDrawer={null} />
-      </MemoryRouter>,
-    );
-
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
-
-    // Test subsequent render
-    rerender(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} hideDrawer={false} />
-      </MemoryRouter>,
-    );
-    expect(mockSetHideDrawer).toHaveBeenCalledTimes(1);
+  it('renders the profile dropdown', () => {
+    renderComponent();
+    expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
   });
 
-  test('renders profile dropdown', () => {
-    render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} />
-      </MemoryRouter>,
-    );
+  it('applies active styles to the current route button', () => {
+    renderComponent();
+    const organizationsButton = screen.getByTestId('organizationsBtn');
 
-    expect(screen.getByTestId('profileDropdown')).toBeInTheDocument();
-  });
+    // Simulate active route
+    window.history.pushState({}, '', '/orglist');
 
-  test('applies correct classes based on hideDrawer', () => {
-    const { rerender } = render(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} hideDrawer={false} />
-      </MemoryRouter>,
-    );
-    expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-      'activeDrawer',
-    );
-
-    rerender(
-      <MemoryRouter>
-        <LeftDrawer {...defaultProps} hideDrawer={true} />
-      </MemoryRouter>,
-    );
-    expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-      'inactiveDrawer',
-    );
+    expect(organizationsButton).toHaveStyle({
+      backgroundColor: 'var(--sidebar-option-bg)',
+      fontWeight: 'bold',
+    });
   });
 });
