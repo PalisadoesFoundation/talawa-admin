@@ -1241,7 +1241,9 @@
     "addNew": "Agregar nuevo",
     "EXname": "Nombre",
     "EXlink": "Enlace",
-    "createAdvertisement": "Crear publicidad"
+    "createAdvertisement": "Crear publicidad",
+    "endAtGreaterOrEqual": "La fecha de inicio debe ser anterior a la fecha de finalización"
+    
   },
   "userChat": {
     "title": "Chats",

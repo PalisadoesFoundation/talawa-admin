@@ -1238,7 +1238,8 @@
     "yes": "हाँ",
     "edit": "संपादित करें",
     "saveChanges": "परिवर्तन सहेजें",
-    "endOfResults": "परिणाम समाप्त"
+    "endOfResults": "परिणाम समाप्त",
+    "endAtGreaterOrEqual": "शुरुआत की तिथि समाप्ति की तिथि से पहले होनी चाहिए"
   },
   "userChat": {
     "title": "चैट्स",

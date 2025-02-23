@@ -1238,7 +1238,8 @@
     "yes": "Oui",
     "edit": "Modifier",
     "saveChanges": "Enregistrer les modifications",
-    "endOfResults": "Fin des résultats"
+    "endOfResults": "Fin des résultats",
+    "endAtGreaterOrEqual": "La date de début doit être antérieure à la date de fin"
   },
   "userChat": {
     "title": "Discussions",

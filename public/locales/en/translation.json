@@ -1239,7 +1239,7 @@
     "edit": "edit",
     "saveChanges": "saveChanges",
     "endOfResults": "endOfResults",
-    "endAtGreaterOrEqual": "Start Date Must be greater than End Date"
+    "endAtGreaterOrEqual": "The start date must be before the end date"
   },
   "userChat": {
     "title": "Chats",
