@@ -394,7 +394,7 @@
   --filterButton-border: #a5a5a5;
   --filterButton-border-hover: #a8c7fa;
   --filterButton-bg-hover: #a8c7fa;
-  --filterButton-border-hover: #ffffff;
+  --filterButton-color-hover: #ffffff;
   --chatContainer-border: #dcdcdc;
 
   --mainContainer50-bg: #f2f7ff;
@@ -3836,7 +3836,7 @@
 .filterButton:hover {
   border: 1px solid var(--filterButton-border-hover);
   background-color: var(--filterButton-bg-hover);
-  color: var(--filterButton-border-hover);
+  color: var(--filterButton-color-hover);
 }
 
 .contactCardContainer {

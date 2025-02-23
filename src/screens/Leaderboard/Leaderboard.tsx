@@ -8,7 +8,7 @@ import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
-import styles from '../../style/appifixed.module.css';
+import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
