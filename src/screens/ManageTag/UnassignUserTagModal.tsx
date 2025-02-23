@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 /**
  * Unassign UserTag Modal component for the Manage Tag screen.
  *
