@@ -307,7 +307,7 @@ describe('Testing Advertisement Entry Component', () => {
   it('Simulating if the mutation doesnt have data variable while updating', async () => {
     const updateAdByIdMock = vi.fn().mockResolvedValue({
       updateAdvertisement: {
-        _id: '1',
+        id: '1',
         name: 'Updated Advertisement',
         type: 'BANNER',
       },
@@ -373,7 +373,7 @@ describe('Testing Advertisement Entry Component', () => {
     const createAdByIdMock = vi.fn().mockResolvedValue({
       data1: {
         createAdvertisement: {
-          _id: '1',
+          id: '1',
         },
       },
     });
@@ -458,12 +458,12 @@ describe('Testing Advertisement Entry Component', () => {
           data: {
             organizations: [
               {
-                _id: '1',
+                id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        _id: '1',
+                        id: '1',
                         name: 'Advertisement1',
                         startAt: '2022-01-01',
                         endAt: '2023-01-01',
@@ -473,7 +473,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '2',
+                        id: '2',
                         name: 'Advertisement2',
                         startAt: '2024-02-01',
                         endAt: '2025-02-01',
@@ -483,7 +483,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '3',
+                        id: '3',
                         name: 'Advertisement1',
                         startAt: '2022-01-01',
                         endAt: '2023-01-01',
@@ -493,7 +493,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '4',
+                        id: '4',
                         name: 'Advertisement2',
                         startAt: '2024-02-01',
                         endAt: '2025-02-01',
@@ -503,7 +503,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '5',
+                        id: '5',
                         name: 'Advertisement1',
                         startAt: '2022-01-01',
                         endAt: '2023-01-01',
@@ -513,7 +513,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '6',
+                        id: '6',
                         name: 'Advertisement2',
                         startAt: '2024-02-01',
                         endAt: '2025-02-01',
@@ -545,7 +545,7 @@ describe('Testing Advertisement Entry Component', () => {
         result: {
           data: {
             advertisements: {
-              _id: null,
+              id: null,
             },
           },
         },
@@ -623,6 +623,80 @@ describe('Testing Advertisement Entry Component', () => {
         );
       });
       expect(deletionFailedText).toBeNull();
+    });
+  });
+  it('should display an error and prevent submission when start date is after end date', async () => {
+    // Render AdvertisementRegister component to test date range validation
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister setAfter={vi.fn()} formStatus="register" />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    // Simulate filling in the form with an invalid date range: start date is later than end date.
+    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+      target: { value: 'Invalid Date Range Ad' },
+    });
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+      target: { value: '2023-02-01' }, // Start date (later)
+    });
+    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+      target: { value: '2023-01-01' }, // End date (earlier)
+    });
+
+    // Attempt to submit the form.
+    fireEvent.click(screen.getByTestId('addonregister'));
+
+    // Wait for and assert that an error message is shown.
+    // Adjust the expected text to match your component's implementation.
+    expect(await screen.findByText(/invalid date range/i)).toBeInTheDocument();
+
+    // Optionally, verify that the mutation or submission is not triggered.
+  });
+
+  it('should allow submission when the date range is valid', async () => {
+    // Render AdvertisementRegister component for a valid date range scenario
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister setAfter={vi.fn()} formStatus="register" />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    // Simulate filling in the form with a valid date range: start date is before end date.
+    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+      target: { value: 'Valid Date Range Ad' },
+    });
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+      target: { value: '2023-01-01' }, // Start date (earlier)
+    });
+    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+      target: { value: '2023-02-01' }, // End date (later)
+    });
+
+    // Submit the form.
+    fireEvent.click(screen.getByTestId('addonregister'));
+
+    // Confirm that no error message is displayed.
+    await waitFor(() => {
+      expect(screen.queryByText(/invalid date range/i)).toBeNull();
     });
   });
 });
