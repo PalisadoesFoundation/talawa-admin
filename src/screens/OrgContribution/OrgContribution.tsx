@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import ContriStats from 'components/ContriStats/ContriStats';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import { Form } from 'react-bootstrap';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 
 /**
  * The `orgContribution` component displays the contributions to an organization.
