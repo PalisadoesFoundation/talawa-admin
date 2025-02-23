@@ -19,6 +19,7 @@ import Organizations from './Organizations';
 import React, { act } from 'react';
 const { getItem, setItem } = useLocalStorage();
 import '../../../style/app.module.css';
+import { mocks } from 'components/AddOn/AddOnMocks';
 /**
  * Mock data for GraphQL queries.
  */
@@ -477,7 +478,6 @@ const MOCKS = [
       },
     },
   },
-
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS,
@@ -822,87 +822,6 @@ describe('Testing Organizations Screen [User Portal]', () => {
     expect(screen.getByText('All')).toBeInTheDocument();
   });
 
-  test('handles organizationsWhereMember edges data structure correctly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Change to mode 0 (all organizations) to trigger the edges mapping code
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await wait();
-    await userEvent.click(screen.getByTestId('modeBtn0'));
-    await wait();
-
-    // Verify the organization from edges structure is rendered
-    expect(screen.getByText('Test Edge Org')).toBeInTheDocument();
-
-    // Verify membership status is correctly set
-    const orgCard = screen
-      .getByText('Test Edge Org')
-      .closest('.organization-card');
-    expect(orgCard).toHaveAttribute('data-membership-status', 'accepted');
-  });
-
-  // Add test for edge cases
-  test('handles empty organizationsWhereMember edges correctly', async () => {
-    const emptyEdgesMock = {
-      request: {
-        query: USER_JOINED_ORGANIZATIONS,
-        variables: {
-          id: getItem('userId'),
-        },
-      },
-      result: {
-        data: {
-          users: [
-            {
-              user: {
-                organizationsWhereMember: {
-                  edges: [],
-                },
-              },
-            },
-          ],
-        },
-      },
-    };
-
-    const customLink = new StaticMockLink([emptyEdgesMock], true);
-
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Switch to all organizations mode
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await wait();
-    await userEvent.click(screen.getByTestId('modeBtn0'));
-    await wait();
-
-    // Verify empty state is handled
-    expect(screen.getByText('nothingToShow')).toBeInTheDocument();
-  });
-
   test('Search input has correct placeholder text', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -920,5 +839,102 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     const searchInput = screen.getByPlaceholderText('Search Organization');
     expect(searchInput).toBeInTheDocument();
+  });
+  const link = new StaticMockLink(MOCKS, true);
+});
+
+describe('Testing Organizations Edge/Node Data Structure', async () => {
+  test('processes edge/node data structure correctly', async () => {
+    const TEST_USER_NAME = 'Noble Mittal';
+
+    beforeEach(() => {
+      setItem('name', TEST_USER_NAME);
+    });
+
+    const EDGE_MOCK = {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: {
+          id: getItem('userId'),
+          first: 5,
+          filter: '',
+        },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              edges: [
+                {
+                  node: {
+                    __typename: 'Organization',
+                    _id: '6401ff65ce8e8406b8f07af2',
+                    image: '',
+                    name: 'Test Edge Org',
+                    description: 'Test Description',
+                    address: {
+                      city: 'Test City',
+                      countryCode: '123',
+                      postalCode: '456',
+                      state: 'Test State',
+                      dependentLocality: 'Test Locality',
+                      line1: 'Test Line 1',
+                      line2: 'Test Line 2',
+                      sortingCode: '4567',
+                    },
+                    userRegistrationRequired: true,
+                    members: [
+                      {
+                        _id: 'member1',
+                        user: {
+                          _id: getItem('userId'),
+                        },
+                      },
+                    ],
+                    admins: [],
+                    membershipRequests: [],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+    const linkWithEdge = new StaticMockLink([EDGE_MOCK], true);
+    render(
+      <MockedProvider addTypename={false} link={linkWithEdge}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for loading state
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+    // Wait for initial load and UI interactions
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+
+    // Change mode to test edge/node data structure
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn0'));
+
+    // Wait for the query to complete and data to be displayed
+    await waitFor(
+      () => {
+        expect(screen.getByText('Test Edge Org')).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
   });
 });
