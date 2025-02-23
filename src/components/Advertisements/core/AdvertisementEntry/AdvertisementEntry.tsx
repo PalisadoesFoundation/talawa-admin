@@ -10,6 +10,7 @@ import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegiste
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
 import type { InterfaceAddOnEntryProps } from 'types/Advertisement/interface';
+import { useParams } from 'react-router-dom';
 
 /**
  * Component for displaying an advertisement entry.
@@ -36,16 +37,18 @@ import type { InterfaceAddOnEntryProps } from 'types/Advertisement/interface';
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
+
 function AdvertisementEntry({
   id,
   name = '',
   type = '',
-  mediaUrl = '',
-  endDate = new Date(),
+  attachmentUrl = '',
+  endAt = new Date(),
   organizationId = '',
-  startDate = new Date(),
+  startAt = new Date(),
   setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
+  const { orgId: currentOrg } = useParams();
   console.log(id, type);
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
@@ -62,7 +65,14 @@ function AdvertisementEntry({
     refetchQueries: [
       {
         query: ORGANIZATION_ADVERTISEMENT_LIST,
-        variables: { first: 6, after: null, id: organizationId },
+        variables: {
+          input: {
+            id: currentOrg,
+          },
+          first: 12,
+          after: null,
+          before: null,
+        },
       },
     ],
   });
@@ -81,7 +91,9 @@ function AdvertisementEntry({
     try {
       await deleteAdById({
         variables: {
-          id: id.toString(),
+          input: {
+            id: id,
+          },
         },
       });
       toast.success(t('advertisementDeleted') as string);
@@ -125,9 +137,9 @@ function AdvertisementEntry({
                         nameEdit={name}
                         typeEdit={type}
                         orgIdEdit={organizationId}
-                        advertisementMediaEdit={mediaUrl}
-                        endDateEdit={endDate}
-                        startDateEdit={startDate}
+                        attachmentEdit={attachmentUrl}
+                        endAtEdit={endAt}
+                        startAtEdit={startAt}
                         setAfter={setAfter}
                       />
                     </li>
@@ -137,7 +149,7 @@ function AdvertisementEntry({
                   </ul>
                 )}
               </div>
-              {mediaUrl?.includes('videos') ? (
+              {attachmentUrl?.includes('videos') ? (
                 <video
                   muted
                   className={styles.admedia}
@@ -147,23 +159,23 @@ function AdvertisementEntry({
                   data-testid="media"
                   crossOrigin="anonymous"
                 >
-                  <source src={mediaUrl} type="video/mp4" />
+                  <source src={attachmentUrl} type="video/mp4" />
                 </video>
               ) : (
                 <Card.Img
                   className={styles.admedia}
                   variant="top"
-                  src={mediaUrl}
+                  src={attachmentUrl}
                   data-testid="media"
                 />
               )}
               <Card.Body>
                 <Card.Title className="t-bold">{name}</Card.Title>
                 <Card.Text data-testid="Ad_end_date">
-                  Starts on {startDate?.toDateString()}
+                  Starts on {startAt?.toDateString()}
                 </Card.Text>
                 <Card.Text data-testid="Ad_end_date">
-                  Ends on {endDate?.toDateString()}
+                  Ends on {endAt?.toDateString()}
                 </Card.Text>
 
                 <Card.Subtitle className="mb-2 text-muted author">
@@ -208,6 +220,7 @@ function AdvertisementEntry({
                       className={`btn ${styles.addButton}`}
                       onClick={(): void => {
                         onDelete();
+                        toggleShowDeleteModal();
                       }}
                       data-testid="delete_yes"
                     >
@@ -229,9 +242,9 @@ AdvertisementEntry.propTypes = {
   name: PropTypes.string,
   type: PropTypes.string,
   organizationId: PropTypes.string,
-  mediaUrl: PropTypes.string,
-  endDate: PropTypes.instanceOf(Date),
-  startDate: PropTypes.instanceOf(Date),
+  attachmentUrl: PropTypes.string,
+  endAt: PropTypes.instanceOf(Date),
+  startAt: PropTypes.instanceOf(Date),
 };
 
 export default AdvertisementEntry;

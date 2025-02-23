@@ -10,10 +10,9 @@ import { useParams } from 'react-router-dom';
 import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchBar from 'subComponents/SearchBar';
-import type { Advertisement } from 'types/Advertisement/type';
 
-export default function Advertisements(): JSX.Element {
-  const { orgId: currentOrgId } = useParams<{ orgId: string }>();
+export default function advertisements(): JSX.Element {
+  const { orgId: currentOrgId } = useParams();
   // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
@@ -24,41 +23,72 @@ export default function Advertisements(): JSX.Element {
   // State to manage pagination cursor for infinite scrolling
   const [after, setAfter] = useState<string | null | undefined>(null);
 
-  const [advertisements, setAdvertisements] = useState<
-    Partial<Advertisement>[]
-  >([]);
+  // Type definition for an advertisement object
+  type Ad = {
+    id: string;
+    name: string;
+    type: 'banner' | 'menu' | 'popup';
+    attachmentUrl: string;
+    endAt: string;
+    startAt: string;
+  };
 
   // GraphQL query to fetch the list of advertisements
   const { data: orgAdvertisementListData, refetch } = useQuery<{
-    organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+    organization: InterfaceQueryOrganizationAdvertisementListItem;
   }>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
-      id: currentOrgId,
-      after,
-      first: 6,
+      input: {
+        id: currentOrgId,
+      },
+      after: null,
+      before: null,
+      first: 12,
     },
   });
 
-  // ✅ Update state when query data changes
+  // State to manage the list of advertisements
+  const [advertisements, setAdvertisements] = useState<Ad[]>(
+    orgAdvertisementListData?.organization?.advertisements?.edges?.map(
+      (edge) => ({
+        id: edge.node.id,
+        name: edge.node.name,
+        type: edge.node.type,
+        startAt: edge.node.startAt,
+        endAt: edge.node.endAt,
+        attachmentUrl: edge.node.attachments?.at(-1)?.url || '',
+      }),
+    ) || [],
+  );
+  console.log('1', orgAdvertisementListData);
+  // Reset advertisements when `after` is reset
   useEffect(() => {
-    if (orgAdvertisementListData?.organizations?.[0]?.advertisements) {
-      const ads =
-        orgAdvertisementListData.organizations[0].advertisements.edges.map(
+    if (!after) {
+      setAdvertisements([]); // Reset the list when `after` is reset
+    }
+  }, [after]);
+
+  // Effect hook to update advertisements list when data changes or pagination cursor changes
+  useEffect(() => {
+    if (orgAdvertisementListData?.organization?.advertisements?.edges) {
+      console.log(
+        'API Response:',
+        orgAdvertisementListData.organization.advertisements.edges,
+      );
+
+      const ads: Ad[] =
+        orgAdvertisementListData.organization.advertisements.edges.map(
           (edge) => ({
-            ...edge.node,
-            mediaUrl: edge.node.mediaUrl
-              ? new URL(edge.node.mediaUrl.toString())
-              : undefined, // ✅ Ensure correct URL type
-            startDate: edge.node.startDate
-              ? new Date(edge.node.startDate)
-              : undefined, // ✅ Ensure correct Date type
-            endDate: edge.node.endDate
-              ? new Date(edge.node.endDate)
-              : undefined, // ✅ Ensure correct Date type
+            id: edge.node.id,
+            name: edge.node.name,
+            type: 'banner', // Assuming type isn't in the API response
+            startAt: edge.node.startAt,
+            endAt: edge.node.endAt,
+            attachmentUrl: edge.node.attachments?.at(-1)?.url || '', // Extract first attachment URL safely
           }),
         );
 
-      setAdvertisements(after ? [...advertisements, ...ads] : ads);
+      setAdvertisements((prevAds) => (after ? [...prevAds, ...ads] : ads));
     }
   }, [orgAdvertisementListData, after]);
 
@@ -66,12 +96,43 @@ export default function Advertisements(): JSX.Element {
    * Fetches more advertisements for infinite scrolling.
    */
   async function loadMoreAdvertisements(): Promise<void> {
-    await refetch();
+    const { data } = await refetch({
+      variables: {
+        input: {
+          id: currentOrgId,
+        },
+        after: after, // Use the current `after` cursor
+        first: 12, // Ensure this matches the initial query
+      },
+    });
 
-    const newAfter =
-      orgAdvertisementListData?.organizations?.[0]?.advertisements?.pageInfo
-        ?.endCursor ?? null;
-    setAfter(newAfter);
+    console.log('Fetched Data:', data); // Debugging
+
+    if (data?.organization?.advertisements?.pageInfo?.endCursor) {
+      const newAfter = data.organization.advertisements.pageInfo.endCursor;
+      if (newAfter !== after) {
+        setAfter(newAfter);
+        // Append new ads to the existing list
+        const newAds: Ad[] = data.organization.advertisements.edges.map(
+          (edge) => ({
+            id: edge.node.id,
+            name: edge.node.name,
+            type: edge.node.type, // or default to "banner" if needed
+            startAt: edge.node.startAt,
+            endAt: edge.node.endAt,
+            attachmentUrl: edge.node.attachments?.at(-1)?.url || '',
+          }),
+        );
+        // Filter out duplicates based on `id`
+        const uniqueAds = newAds.filter(
+          (newAd) => !advertisements.some((ad) => ad.id === newAd.id),
+        );
+
+        setAdvertisements((prevAds) => [...prevAds, ...uniqueAds]);
+      }
+    } else {
+      console.log('No more data to fetch.');
+    }
   }
 
   return (
@@ -90,43 +151,49 @@ export default function Advertisements(): JSX.Element {
             </Col>
 
             <Tabs
-              defaultActiveKey="archivedAds"
+              defaultActiveKey="activeAds"
               id="uncontrolled-tab-example"
               className="mt-4"
             >
+              {/* Below Component Renders Active Campaigns Tab */}
               <Tab
                 eventKey="activeAds"
                 title={t('activeAds')}
                 className="pt-4 m-2"
               >
                 <InfiniteScroll
-                  dataLength={advertisements.length}
+                  dataLength={advertisements?.length ?? 0}
                   next={loadMoreAdvertisements}
-                  loader={[...Array(6)].map((_, index) => (
-                    <div key={index} className={styles.itemCard}>
-                      <div className={styles.loadingWrapper}>
-                        <div className={styles.innerContainer}>
-                          <div
-                            className={`${styles.orgImgContainer} shimmer`}
-                          />
-                          <div className={styles.content}>
-                            <h5 className="shimmer" title="Name"></h5>
+                  loader={
+                    <>
+                      {/* Skeleton loader while fetching more advertisements */}
+                      {[...Array(6)].map((_, index) => (
+                        <div key={index} className={styles.itemCard}>
+                          <div className={styles.loadingWrapper}>
+                            <div className={styles.innerContainer}>
+                              <div
+                                className={`${styles.orgImgContainer} shimmer`}
+                              ></div>
+                              <div className={styles.content}>
+                                <h5 className="shimmer" title="Name"></h5>
+                              </div>
+                            </div>
+                            <div className={`shimmer ${styles.button}`} />
                           </div>
                         </div>
-                        <div className={`shimmer ${styles.button}`} />
-                      </div>
-                    </div>
-                  ))}
+                      ))}
+                    </>
+                  }
                   hasMore={
-                    orgAdvertisementListData?.organizations?.[0]?.advertisements
+                    orgAdvertisementListData?.organization?.advertisements
                       ?.pageInfo?.hasNextPage ?? false
                   }
                   className={styles.listBoxAdvertisements}
                   data-testid="organizations-list"
                   endMessage={
-                    advertisements.some(
-                      (ad) => ad.endDate && ad.endDate > new Date(),
-                    ) && (
+                    advertisements.filter(
+                      (ad: Ad) => new Date(ad.endAt) > new Date(),
+                    ).length !== 0 && (
                       <div className={'w-100 text-center my-4'}>
                         <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                       </div>
@@ -134,88 +201,121 @@ export default function Advertisements(): JSX.Element {
                   }
                 >
                   {advertisements.filter(
-                    (ad) => ad.endDate && ad.endDate > new Date(),
+                    (ad: Ad) => new Date(ad.endAt) > new Date(),
                   ).length === 0 ? (
                     <h4>{t('pMessage')}</h4>
                   ) : (
                     advertisements
-                      .filter((ad) => ad.endDate && ad.endDate > new Date())
-                      .map((ad, i) => (
-                        <AdvertisementEntry
-                          key={i}
-                          id={ad._id ?? ''}
-                          name={ad.name ?? ''}
-                          type={ad.type ?? 'BANNER'}
-                          organizationId={ad.orgId ?? currentOrgId}
-                          startDate={ad.startDate ?? new Date()}
-                          endDate={ad.endDate ?? new Date()}
-                          mediaUrl={ad.mediaUrl ? ad.mediaUrl.toString() : ''}
-                          setAfter={setAfter}
-                        />
-                      ))
+                      .filter((ad: Ad) => new Date(ad.endAt) > new Date())
+                      .map(
+                        (
+                          ad: {
+                            id: string;
+                            name: string | undefined;
+                            type: string | undefined;
+                            attachmentUrl: string;
+                            endAt: string;
+                            startAt: string;
+                          },
+                          i: React.Key | null | undefined,
+                        ): JSX.Element => (
+                          <AdvertisementEntry
+                            id={ad.id}
+                            key={i}
+                            name={ad.name}
+                            type={ad.type}
+                            organizationId={currentOrgId}
+                            startAt={new Date(ad.startAt)}
+                            endAt={new Date(ad.endAt)}
+                            attachmentUrl={ad.attachmentUrl}
+                            data-testid="Ad"
+                            setAfter={setAfter}
+                          />
+                        ),
+                      )
                   )}
                 </InfiniteScroll>
               </Tab>
-
+              {/* Below Component Renders Completed Campaigns Tab */}
               <Tab
                 eventKey="archivedAds"
-                title={t('archivedAds')}
+                title={t('archievedAds')}
                 className="pt-4 m-2"
               >
                 <InfiniteScroll
-                  dataLength={advertisements.length}
+                  dataLength={advertisements?.length ?? 0}
                   next={loadMoreAdvertisements}
+                  loader={
+                    <>
+                      {/* Skeleton loader while fetching more advertisements */}
+                      {[...Array(6)].map((_, index) => (
+                        <div key={index} className={styles.itemCard}>
+                          <div className={styles.loadingWrapper}>
+                            <div className={styles.innerContainer}>
+                              <div
+                                className={`${styles.orgImgContainer} shimmer`}
+                              ></div>
+                              <div className={styles.content}>
+                                <h5 className="shimmer" title="Name"></h5>
+                              </div>
+                            </div>
+                            <div className={`shimmer ${styles.button}`} />
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  }
                   hasMore={
-                    orgAdvertisementListData?.organizations?.[0]?.advertisements
+                    orgAdvertisementListData?.organization?.advertisements
                       ?.pageInfo?.hasNextPage ?? false
                   }
                   className={styles.listBoxAdvertisements}
                   data-testid="organizations-list"
-                  loader={[...Array(6)].map((_, index) => (
-                    <div key={index} className={styles.itemCard}>
-                      <div className={styles.loadingWrapper}>
-                        <div className={styles.innerContainer}>
-                          <div
-                            className={`${styles.orgImgContainer} shimmer`}
-                          />
-                          <div className={styles.content}>
-                            <h5 className="shimmer" title="Name"></h5>
-                          </div>
-                        </div>
-                        <div className={`shimmer ${styles.button}`} />
-                      </div>
-                    </div>
-                  ))}
                   endMessage={
-                    advertisements.some(
-                      (ad) => ad.endDate && ad.endDate < new Date(),
-                    ) && (
-                      <div className="w-100 text-center my-4">
-                        <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                    advertisements.filter(
+                      (ad: Ad) => new Date(ad.endAt) < new Date(),
+                    ).length !== 0 && (
+                      <div className={'w-100 text-center my-4'}>
+                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                       </div>
                     )
                   }
                 >
                   {advertisements.filter(
-                    (ad) => ad.endDate && ad.endDate < new Date(),
+                    (ad: Ad) => new Date(ad.endAt) < new Date(),
                   ).length === 0 ? (
                     <h4>{t('pMessage')}</h4>
                   ) : (
                     advertisements
-                      .filter((ad) => ad.endDate && ad.endDate < new Date())
-                      .map((ad, i) => (
-                        <AdvertisementEntry
-                          key={i}
-                          id={ad._id ?? ''}
-                          name={ad.name ?? ''}
-                          type={ad.type ?? 'BANNER'}
-                          organizationId={ad.orgId ?? currentOrgId}
-                          startDate={ad.startDate ?? new Date()}
-                          endDate={ad.endDate ?? new Date()}
-                          mediaUrl={ad.mediaUrl ? ad.mediaUrl.toString() : ''}
-                          setAfter={setAfter}
-                        />
-                      ))
+                      .filter((ad: Ad) => new Date(ad.endAt) < new Date())
+                      .map(
+                        (
+                          ad: {
+                            id: string;
+                            name: string | undefined;
+                            type: string | undefined;
+                            attachmentUrl: string | undefined;
+                            // attachments: {
+                            //   url: string;
+                            // }[];
+                            endAt: string;
+                            startAt: string;
+                          },
+                          i: React.Key | null | undefined,
+                        ): JSX.Element => (
+                          <AdvertisementEntry
+                            id={ad.id}
+                            key={i}
+                            name={ad.name}
+                            type={ad.type}
+                            organizationId={currentOrgId}
+                            startAt={new Date(ad.startAt)}
+                            endAt={new Date(ad.endAt)}
+                            attachmentUrl={ad.attachmentUrl}
+                            setAfter={setAfter}
+                          />
+                        ),
+                      )
                   )}
                 </InfiniteScroll>
               </Tab>
