@@ -483,65 +483,133 @@ export const FORGOT_PASSWORD_MUTATION = gql`
   }
 `;
 
+/**
+ * {@label UPDATE_INSTALL_STATUS_PLUGIN_MUTATION}
+ * @remarks
+ * used to toggle `installStatus` (boolean value) of a Plugin
+ */
+export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
+  mutation ($id: ID!, $orgId: ID!) {
+    updatePluginStatus(id: $id, orgId: $orgId) {
+      _id
+      pluginName
+      pluginCreatedBy
+      pluginDesc
+      uninstalledOrgs
+    }
+  }
+`;
+
+/**
+ * {@label UPDATE_ORG_STATUS_PLUGIN_MUTATION}
+ * @remarks
+ * used  `updatePluginStatus`to add or remove the current Organization the in the plugin list `uninstalledOrgs`
+ */
+export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
+  mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
+    updatePluginStatus(id: $id, orgId: $orgId) {
+      _id
+      pluginName
+      pluginCreatedBy
+      pluginDesc
+      uninstalledOrgs
+    }
+  }
+`;
+
+/**
+ * {@label ADD_PLUGIN_MUTATION}
+ * @remarks
+ * used  `createPlugin` to add new Plugin in database
+ */
+export const ADD_PLUGIN_MUTATION = gql`
+  mutation add_plugin_mutation(
+    $pluginName: String!
+    $pluginCreatedBy: String!
+    $pluginDesc: String!
+  ) {
+    createPlugin(
+      pluginName: $pluginName
+      pluginCreatedBy: $pluginCreatedBy
+      pluginDesc: $pluginDesc
+    ) {
+      _id
+      pluginName
+      pluginCreatedBy
+      pluginDesc
+    }
+  }
+`;
+
 export const ADD_ADVERTISEMENT_MUTATION = gql`
-  mutation (
-    $organizationId: ID!
+  mutation CreateAdvertisement(
     $name: String!
     $type: AdvertisementType!
-    $startDate: Date!
-    $endDate: Date!
-    $file: String!
+    $organizationId: ID!
+    $startAt: DateTime!
+    $endAt: DateTime!
+    $description: String
+    $attachments: [Upload!]!
   ) {
     createAdvertisement(
       input: {
-        organizationId: $organizationId
         name: $name
         type: $type
-        startDate: $startDate
-        endDate: $endDate
-        mediaFile: $file
+        organizationId: $organizationId
+        startAt: $startAt
+        endAt: $endAt
+        description: $description
+        attachments: $attachments
       }
     ) {
-      advertisement {
-        _id
+      id
+      name
+      type
+      attachments {
+        url
       }
     }
   }
 `;
+
 export const UPDATE_ADVERTISEMENT_MUTATION = gql`
   mutation UpdateAdvertisement(
     $id: ID!
     $name: String
-    $file: String
     $type: AdvertisementType
-    $startDate: Date
-    $endDate: Date
+    $startAt: DateTime!
+    $endAt: DateTime!
+    $attachments: [Upload!]
   ) {
     updateAdvertisement(
       input: {
-        _id: $id
+        id: $id
         name: $name
-        mediaFile: $file
         type: $type
-        startDate: $startDate
-        endDate: $endDate
+        startAt: $startAt
+        endAt: $endAt
+        attachments: $attachments
       }
     ) {
-      advertisement {
-        _id
+      id
+      name
+      attachments {
+        url
       }
     }
   }
 `;
+
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
-  mutation ($id: ID!) {
-    deleteAdvertisement(id: $id) {
-      advertisement {
-        _id
-      }
+  mutation DeleteAdvertisement($input: MutationDeleteAdvertisementInput!) {
+    deleteAdvertisement(input: $input) {
+      id
+      name
+      type
     }
   }
 `;
+
 export const UPDATE_POST_MUTATION = gql`
   mutation UpdatePost($input: MutationUpdatePostInput!) {
     updatePost(input: $input) {

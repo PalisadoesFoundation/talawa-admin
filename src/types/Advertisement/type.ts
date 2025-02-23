@@ -3,47 +3,56 @@ import type { DefaultConnectionPageInfo } from '../pagination';
 import type { URL } from 'url';
 
 export const AdvertisementType = {
-  BANNER: 'BANNER',
-  MENU: 'MENU',
-  POPUP: 'POPUP',
+  banner: 'banner',
+  menu: 'menu',
+  popup: 'popup',
 } as const;
 
 type AdvertisementType =
   (typeof AdvertisementType)[keyof typeof AdvertisementType];
 
 export type Advertisement = {
-  _id: string;
+  id: string;
   createdAt: Date;
-  creator?: User; // Optional
-  endDate: Date;
-  mediaUrl: URL;
+  creator?: User;
+  endAt: Date;
+  attachmentUrl: URL;
   name: string;
   orgId: string;
-  startDate: Date;
+  startAt: Date;
   type: AdvertisementType;
   updatedAt: Date;
+  attachments?: AdvertisementAttachment[];
+};
+
+// Advertisement Attachment
+export type AdvertisementAttachment = {
+  url: string;
+  mimeType: string;
 };
 
 export type AdvertisementEdge = {
-  cursor?: string; // Optional
-  node?: Advertisement; // Optional
+  cursor?: string;
+  node?: Advertisement;
 };
 
 export type AdvertisementsConnection = {
-  edges?: AdvertisementEdge[]; // Optional
-  pageInfo?: DefaultConnectionPageInfo; // Optional
-  totalCount?: number; // Optional
+  edges?: AdvertisementEdge[];
+  pageInfo?: DefaultConnectionPageInfo;
+  totalCount?: number;
 };
 
+// Create Advertisement Input
 export type CreateAdvertisementInput = {
-  endDate: Date;
   name: string;
-  organizationId: string;
-  startDate: Date;
   type: AdvertisementType;
+  organizationId: string;
+  startAt: Date;
+  endAt: Date;
   mediaFile: string;
+  attachments: File[];
 };
 
 export type CreateAdvertisementPayload = {
-  advertisement?: Advertisement; // Optional
+  advertisement?: Advertisement;
 };

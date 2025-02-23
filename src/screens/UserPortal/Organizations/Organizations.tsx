@@ -4,7 +4,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
-  ALL_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
@@ -138,11 +138,8 @@ export default function organizations(): JSX.Element {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [organizations, setOrganizations] = React.useState<
-    InterfaceOrganization[]
-  >([]);
-  const [typedValue, setTypedValue] = React.useState('');
-  const [filterName, setFilterName] = React.useState('');
+  const [organizations, setOrganizations] = React.useState([]);
+  const [, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
 
   const modes = [
@@ -157,11 +154,11 @@ export default function organizations(): JSX.Element {
    * Queries for all 3 modes
    */
   const {
-    data: allOrganizationsData,
-    loading: loadingAll,
-    refetch: refetchAll,
-  } = useQuery(ALL_ORGANIZATIONS, {
-    variables: { filter: filterName },
+    data,
+    refetch,
+    loading: loadingOrganizations,
+  } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
+    variables: { id: userId, first: rowsPerPage, filter: '' },
   });
 
   const {
@@ -309,7 +306,134 @@ export default function organizations(): JSX.Element {
     setPage(0);
   };
 
-  const isLoading = loadingAll || loadingJoined || loadingCreated;
+  /**
+   * Searches organizations based on the provided filter value.
+   *
+   * @param  value - The search filter value.
+   */
+  const handleSearch = (value: string): void => {
+    setFilterName(value);
+
+    refetch({
+      filter: value,
+    });
+  };
+
+  /**
+   * Handles search input submission by pressing the Enter key.
+   *
+   * @param  e - The keyboard event.
+   */
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target as HTMLInputElement;
+      handleSearch(value);
+    }
+  };
+
+  /**
+   * Handles search button click to search organizations.
+   */
+  const handleSearchByBtnClick = (): void => {
+    const value =
+      (document.getElementById('searchUserOrgs') as HTMLInputElement)?.value ||
+      '';
+    handleSearch(value);
+  };
+
+  /**
+   * Updates the list of organizations based on query results and selected mode.
+   */
+  useEffect(() => {
+    if (data) {
+      const organizations = data?.UserJoinedOrganizations?.map(
+        (organization: InterfaceOrganization) => {
+          let membershipRequestStatus = '';
+          if (
+            organization.members.find(
+              (member: { _id: string }) => member._id === userId,
+            )
+          )
+            membershipRequestStatus = 'accepted';
+          else if (
+            organization.membershipRequests.find(
+              (request: { user: { _id: string } }) =>
+                request.user._id === userId,
+            )
+          )
+            membershipRequestStatus = 'pending';
+          return { ...organization, membershipRequestStatus };
+        },
+      );
+      setOrganizations(organizations);
+    }
+  }, [data]);
+
+  /**
+   * Updates the list of organizations based on the selected mode and query results.
+   */
+  useEffect(() => {
+    if (mode === 0) {
+      if (data?.user?.organizationsWhereMember?.edges) {
+        const organizations = data.user.organizationsWhereMember.edges.map(
+          (edge: { node: InterfaceOrganization }) => {
+            const organization = edge.node;
+            let membershipRequestStatus = '';
+
+            if (
+              Array.isArray(organization.members) &&
+              organization.members.some(
+                (member: { _id: string }) => member._id === userId,
+              )
+            )
+              membershipRequestStatus = 'accepted';
+            else if (
+              organization.membershipRequests?.some(
+                (request: { _id: string; user: { _id: string } }) =>
+                  request.user._id === userId,
+              )
+            )
+              membershipRequestStatus = 'pending';
+            return {
+              ...organization,
+              membershipRequestStatus,
+              isJoined: false,
+            };
+          },
+        );
+        setOrganizations(organizations);
+      }
+    } else if (mode === 1) {
+      if (joinedOrganizationsData?.users?.[0]?.user?.joinedOrganizations) {
+        const organizations =
+          joinedOrganizationsData.users[0].user.joinedOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
+        setOrganizations(organizations);
+      }
+    } else if (mode === 2) {
+      if (
+        createdOrganizationsData?.users?.[0]?.appUserProfile
+          ?.createdOrganizations
+      ) {
+        const organizations =
+          createdOrganizationsData.users[0].appUserProfile.createdOrganizations.map(
+            (org: InterfaceOrganization) => ({
+              ...org,
+              membershipRequestStatus: 'accepted',
+              isJoined: true,
+            }),
+          ) || [];
+        setOrganizations(organizations);
+      }
+    }
+  }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
 
   return (
     <>

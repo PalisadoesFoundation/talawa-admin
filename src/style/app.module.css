@@ -6790,7 +6790,7 @@ button[data-testid='createPostBtn'] {
   display: grid;
   width: 100%;
   grid-template-rows: auto;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 0.8rem 0.4rem;
 }
 

@@ -99,6 +99,35 @@ describe('Testing Advertisement Component', () => {
     ).toBeInTheDocument();
   });
 
+  test('for the working of the tabs', async () => {
+    const mocks = [
+      ORGANIZATIONS_LIST_MOCK,
+      PLUGIN_GET_MOCK,
+      ADD_ADVERTISEMENT_MUTATION_MOCK,
+      ...ADVERTISEMENTS_LIST_MOCK,
+    ];
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByText('Active Campaigns'));
+
+    await wait();
+    await userEvent.click(screen.getByText('Completed Campaigns'));
+  });
+
   test('if the component renders correctly and ads are correctly categorized date wise', async () => {
     mockID = '1';
     const mocks = [...ADVERTISEMENTS_LIST_MOCK];
@@ -184,65 +213,65 @@ describe('Testing Advertisement Component', () => {
           data: {
             organizations: [
               {
-                _id: '1',
+                id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        _id: '1',
+                        id: '1',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
+                        startAt: '2022-01-01',
+                        endAt: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor1',
                     },
                     {
                       node: {
-                        _id: '2',
+                        id: '2',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
+                        startAt: '2024-02-01',
+                        endAt: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor2',
                     },
                     {
                       node: {
-                        _id: '3',
+                        id: '3',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
+                        startAt: '2022-01-01',
+                        endAt: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor3',
                     },
                     {
                       node: {
-                        _id: '4',
+                        id: '4',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
+                        startAt: '2024-02-01',
+                        endAt: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor4',
                     },
                     {
                       node: {
-                        _id: '5',
+                        id: '5',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
+                        startAt: '2022-01-01',
+                        endAt: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor5',
                     },
                     {
                       node: {
-                        _id: '6',
+                        id: '6',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
+                        startAt: '2024-02-01',
+                        endAt: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor6',
@@ -276,25 +305,25 @@ describe('Testing Advertisement Component', () => {
           data: {
             organizations: [
               {
-                _id: '1',
+                id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        _id: '7',
+                        id: '7',
                         name: 'Advertisement7',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
+                        startAt: '2022-01-01',
+                        endAt: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: '5rdiyruyu3hkjkjiwfhwaify',
                     },
                     {
                       node: {
-                        _id: '8',
+                        id: '8',
                         name: 'Advertisement8',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
+                        startAt: '2024-02-01',
+                        endAt: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
@@ -326,25 +355,25 @@ describe('Testing Advertisement Component', () => {
           data: {
             organizations: [
               {
-                _id: '1',
+                id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        _id: '7',
+                        id: '7',
                         name: 'Advertisement7',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
+                        startAt: '2022-01-01',
+                        endAt: '2023-01-01',
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: '5rdiyruyu3hkjkjiwfhwaify',
                     },
                     {
                       node: {
-                        _id: '8',
+                        id: '8',
                         name: 'Advertisement8',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
+                        startAt: '2024-02-01',
+                        endAt: '2025-02-01',
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
