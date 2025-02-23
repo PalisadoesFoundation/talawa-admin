@@ -25,6 +25,7 @@ import type {
   InterfaceMutationCreatePostInput,
   InterfacePost,
 } from '../../types/Post/interface';
+
 // Add these at the top of your file if not already present
 
 /**
@@ -78,36 +79,6 @@ function OrgPost(): JSX.Element {
     },
     fetchPolicy: 'network-only',
   });
-
-  const handleSearch = async (term: string): Promise<void> => {
-    setSearchTerm(term);
-
-    try {
-      const { data: searchData } = await refetchPosts({
-        input: { organizationId: currentUrl },
-      });
-
-      if (!term.trim()) {
-        setIsFiltering(false);
-        setFilteredPosts([]);
-        return;
-      }
-
-      if (searchData?.postsByOrganization) {
-        setIsFiltering(true);
-
-        const filtered = searchData.postsByOrganization.filter(
-          (post: InterfacePost) =>
-            post.caption.toLowerCase().includes(term.toLowerCase()),
-        );
-        setFilteredPosts(filtered);
-      }
-    } catch (error) {
-      console.error('Search error:', error);
-      toast.error('Error searching posts');
-      setIsFiltering(false);
-    }
-  };
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
@@ -325,6 +296,36 @@ function OrgPost(): JSX.Element {
 
     const initialPosts = sorted.slice(0, postsPerPage);
     setDisplayPosts(initialPosts);
+  };
+
+  const handleSearch = async (term: string): Promise<void> => {
+    setSearchTerm(term);
+
+    try {
+      const { data: searchData } = await refetchPosts({
+        input: { organizationId: currentUrl },
+      });
+
+      if (!term.trim()) {
+        setIsFiltering(false);
+        setFilteredPosts([]);
+        return;
+      }
+
+      if (searchData?.postsByOrganization) {
+        setIsFiltering(true);
+
+        const filtered = searchData.postsByOrganization.filter(
+          (post: InterfacePost) =>
+            post.caption.toLowerCase().includes(term.toLowerCase()),
+        );
+        setFilteredPosts(filtered);
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      toast.error('Error searching posts');
+      setIsFiltering(false);
+    }
   };
 
   const totalPages =

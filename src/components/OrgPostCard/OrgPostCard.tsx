@@ -356,6 +356,8 @@ export default function OrgPostCard({
               <button
                 className={styles.moreOptionsButton}
                 onClick={handleMoreOptionsClick}
+                data-testid="more-options-button"
+                aria-label="Post options menu"
               >
                 <MoreVert />
               </button>
@@ -375,7 +377,7 @@ export default function OrgPostCard({
               <ul className={styles.menuOptions}>
                 <li onClick={toggleShowEditModal}>{tCommon('edit')}</li>
                 <li onClick={toggleShowDeleteModal}>{t('deletePost')}</li>
-                <li onClick={togglePostPin}>
+                <li onClick={togglePostPin} data-testid="pin-post-button">
                   {isPinned ? 'Unpin post' : 'Pin post'}
                 </li>
                 <li onClick={(): void => setMenuVisible(false)}>
