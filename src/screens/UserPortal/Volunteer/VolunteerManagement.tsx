@@ -11,7 +11,7 @@ import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
 import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 
 /**
  * List of tabs for the volunteer dashboard.
