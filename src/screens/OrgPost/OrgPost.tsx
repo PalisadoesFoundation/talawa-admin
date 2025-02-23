@@ -391,6 +391,7 @@ function OrgPost(): JSX.Element {
               onSearch={handleSearch}
               inputTestId="searchByName"
             />
+
             <div className={styles.btnsBlockOrgPost}>
               <div className="d-flex">
                 {/* <SearchingButton
