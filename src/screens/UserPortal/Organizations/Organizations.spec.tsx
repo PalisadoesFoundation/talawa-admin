@@ -19,7 +19,6 @@ import Organizations from './Organizations';
 import React, { act } from 'react';
 const { getItem, setItem } = useLocalStorage();
 import '../../../style/app.module.css';
-import { mocks } from 'components/AddOn/AddOnMocks';
 /**
  * Mock data for GraphQL queries.
  */
@@ -537,11 +536,6 @@ const MOCKS = [
   },
 ];
 
-/**
- * Custom Mock Link for handling static GraphQL mocks.
- */
-
-const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
