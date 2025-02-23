@@ -536,7 +536,6 @@ const MOCKS = [
   },
 ];
 
-
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
