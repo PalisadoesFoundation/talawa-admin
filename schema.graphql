@@ -755,12 +755,12 @@ type MinimumValueError implements FieldError {
 }
 
 input CreateAdvertisementInput {
-  endDate: Date!
   name: String!
-  organizationId: ID!
-  startDate: Date!
   type: AdvertisementType!
-  mediaFile: String!
+  organizationId: String!
+  startAt: Date!
+  endAt: Date!
+  attachments: [Upload!]!
 }
 
 type CreateAdvertisementPayload {

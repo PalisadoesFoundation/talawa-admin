@@ -28,9 +28,14 @@ interface InterfaceMemberRequestCardProps {
  * @param props - Properties for the member request card.
  * @returns JSX element for member request card.
  */
-function MemberRequestCard(
-  props: InterfaceMemberRequestCardProps,
-): JSX.Element {
+function MemberRequestCard({
+  id,
+  memberName,
+  memberLocation,
+  joinDate,
+  memberImage,
+  email,
+}: InterfaceMemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
@@ -47,7 +52,7 @@ function MemberRequestCard(
     try {
       await acceptMutation({
         variables: {
-          id: props.id,
+          id: id,
         },
       });
 
@@ -73,7 +78,7 @@ function MemberRequestCard(
       try {
         await rejectMutation({
           variables: {
-            userid: props.id,
+            userid: id,
           },
         });
 
@@ -90,9 +95,9 @@ function MemberRequestCard(
     <>
       <div className={styles.peoplelistdiv}>
         <Row className={styles.memberlist}>
-          {props.memberImage ? (
+          {memberImage ? (
             <img
-              src={props.memberImage}
+              src={memberImage}
               className={styles.alignimg}
               alt="userImage"
             />
@@ -106,14 +111,14 @@ function MemberRequestCard(
           <Col className={styles.singledetails}>
             <div className={styles.singledetails_data_left}>
               <p className={styles.membername}>
-                {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
+                {memberName ? <>{memberName}</> : <>Dogs Care</>}
               </p>
-              <p className={styles.memberfont}>{props.memberLocation}</p>
-              <p className={styles.memberfontcreated}>{props.email}</p>
+              <p className={styles.memberfont}>{memberLocation}</p>
+              <p className={styles.memberfontcreated}>{email}</p>
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
-                {tCommon('joined')}: <span>{props.joinDate}</span>
+                {tCommon('joined')}: <span>{joinDate}</span>
               </p>
               <Button
                 className={styles.memberfontcreatedbtn}

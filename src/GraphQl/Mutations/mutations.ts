@@ -496,61 +496,69 @@ export const ADD_PLUGIN_MUTATION = gql`
   }
 `;
 export const ADD_ADVERTISEMENT_MUTATION = gql`
-  mutation (
-    $organizationId: ID!
+  mutation CreateAdvertisement(
     $name: String!
     $type: AdvertisementType!
-    $startDate: Date!
-    $endDate: Date!
-    $file: String!
+    $organizationId: ID!
+    $startAt: DateTime!
+    $endAt: DateTime!
+    $description: String
+    $attachments: [Upload!]!
   ) {
     createAdvertisement(
       input: {
-        organizationId: $organizationId
         name: $name
         type: $type
-        startDate: $startDate
-        endDate: $endDate
-        mediaFile: $file
+        organizationId: $organizationId
+        startAt: $startAt
+        endAt: $endAt
+        description: $description
+        attachments: $attachments
       }
     ) {
-      advertisement {
-        _id
+      id
+      name
+      type
+      attachments {
+        url
       }
     }
   }
 `;
+
 export const UPDATE_ADVERTISEMENT_MUTATION = gql`
   mutation UpdateAdvertisement(
     $id: ID!
     $name: String
-    $file: String
     $type: AdvertisementType
-    $startDate: Date
-    $endDate: Date
+    $startAt: DateTime!
+    $endAt: DateTime!
+    $attachments: [Upload!]
   ) {
     updateAdvertisement(
       input: {
-        _id: $id
+        id: $id
         name: $name
-        mediaFile: $file
         type: $type
-        startDate: $startDate
-        endDate: $endDate
+        startAt: $startAt
+        endAt: $endAt
+        attachments: $attachments
       }
     ) {
-      advertisement {
-        _id
+      id
+      name
+      attachments {
+        url
       }
     }
   }
 `;
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
-  mutation ($id: ID!) {
-    deleteAdvertisement(id: $id) {
-      advertisement {
-        _id
-      }
+  mutation DeleteAdvertisement($input: MutationDeleteAdvertisementInput!) {
+    deleteAdvertisement(input: $input) {
+      id
+      name
+      type
     }
   }
 `;
@@ -571,7 +579,7 @@ export const UPDATE_POST_MUTATION = gql`
         videoUrl: $videoUrl
       }
     ) {
-      _id
+      id
     }
   }
 `;

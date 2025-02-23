@@ -6,7 +6,7 @@
 
 > `const` **USER\_JOINED\_ORGANIZATIONS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:238](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L238)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:239](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L239)
 
 GraphQL query to retrieve organizations joined by a user.
 
