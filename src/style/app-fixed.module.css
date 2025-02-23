@@ -281,6 +281,53 @@
 
   --colorPrimary-color-active: #555555;
   --colorWhite: #555555;
+
+  --errorIcon-color: #ff4d4f;
+
+  --tagsBreadCrumbs-color-hover: #0000ff;
+  --tagsBreadCrumbs-color: #808080;
+
+  --subTagsLink-color-hover: #5f7e91;
+  --subTagsLink-color: #0000ff;
+
+  --orgUserTagsScrollableDiv-color: #9ca3af;
+
+  --rowBackground-bg: #ffffff;
+  --rowBackground-color: #000000;
+
+  --hyperlink-text-color: #1778f2;
+  --hyperlink-text-color-hover: #5f7e91;
+  --rowBackgrounds-bg: #fff;
+
+  --manageTagScrollableDiv-color: #9ca3af;
+
+  --inputColor-bg: #f1f3f6;
+  --dateboxMemberDetail-border: #e8e5e5;
+  --cardBody-color: #495057;
+  --themeOverlay-bg: #0056b3;
+  --cardBody-tw-st-color: #9ca3af;
+  --cardBody-st-color: #0056b3;
+
+  --sidebar-bg: #e8e5e5;
+  --sidebarsticky-border: #e8e5e5;
+  --searchtitle-color: #707070;
+  --searchtitle-border: #a8c7fa;
+  --logintitle-color: #707070;
+  --logintitle-border: #a8c7fa;
+
+  --subTagsScrollableDiv-color: #9ca3af;
+
+  --customcell-bg: #eaebef;
+  --customcell-color: #000000;
+
+  --singledetails_dl-color: #707070;
+  --memberfontbtn-border: #e8e5e5;
+  --memberfont-bg: #eaebef;
+  --memberfont-color: #fff;
+
+  --loader-size: 10em;
+  --loader-border: #ffffff33;
+  --loader-border-left: #febc59;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -662,6 +709,32 @@
   box-shadow: var(--hover-shadow);
 }
 
+/* Error */
+
+.errorContainer {
+  min-height: 100vh;
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger, var(--errorIcon-color));
+  margin-bottom: 1rem;
+
+  /* Add error icon for non-color indication */
+  &::before {
+    content: '⚠️';
+    margin-right: 0.5rem;
+  }
+}
+
 /* Not Found */
 
 .notFound {
@@ -670,6 +743,15 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+/* Row Background */
+
+.rowBackground {
+  background-color: var(--rowBackground-bg);
+  color: var(--rowBackground-color);
+  max-height: 120px;
+  overflow-y: auto;
 }
 
 /* No outline */
@@ -792,19 +874,6 @@
   border: 1px solid var(--createButton-border-active) !important;
 }
 
-/* Miscellaneous Class used several times */
-
-.modalHeader {
-  border: none;
-  background-color: var(--primary-bg-color) !important;
-  padding: 1rem 1rem;
-  color: #000000;
-}
-
-.modalHeader div {
-  color: #000000 !important;
-}
-
 /* Add more Global CSS Classes above this */
 
 /* ----------------------------------------------------- */
@@ -912,8 +981,35 @@
 /* -- EventRegistrantsWrapper.tsx -- */
 /* -- AverageRating.tsx -- */
 /* -- Feedback.tsx -- */
+
 /* -- Review.tsx -- */
+
 /* -- EventStats.tsx -- */
+
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: var(--loader-size);
+  height: var(--loader-size);
+}
+
+.loader {
+  margin: 60px auto;
+  margin-top: 35vh !important;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid var(--loader-border);
+  border-right: 1.1em solid var(--loader-border);
+  border-bottom: 1.1em solid var(--loader-border);
+  border-left: 1.1em solid var(--loader-border-left);
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+
 /* -- EventStatsWrapper.tsx -- */
 /* -- GroupChatDetails.tsx -- */
 /* -- HolidayCard.tsx -- */
@@ -990,10 +1086,84 @@
 }
 
 /* -- customTableCell.tsx -- */
+
 /* -- EventsAttendedByMember.tsx -- */
+
 /* -- EventsAttendedCardItem.tsx -- */
+
 /* -- EventsAttendedMemberModal.tsx -- */
+
 /* -- MemberRequestCard.tsx -- */
+
+.memberlist {
+  margin-top: -1px;
+}
+
+.memberimg {
+  width: 12.5rem;
+  height: 6.25rem;
+  border-radius: 7px;
+  margin-left: 20px;
+}
+
+.singledetails {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.singledetails p {
+  margin-bottom: -5px;
+}
+
+.singledetails_data_left {
+  margin-top: 10px;
+  margin-left: 10px;
+  color: var(--singledetails_dl-color);
+}
+
+.memberfont {
+  margin-top: 3px;
+}
+
+.memberfont > span {
+  width: 80%;
+}
+
+.memberfontcreated {
+  margin-top: 18px;
+}
+
+@media only screen and (max-width: var(--breakpoint-mobile)) {
+  .singledetails {
+    margin-left: 20px;
+  }
+
+  .memberimg {
+    margin: auto;
+  }
+
+  .singledetails_data_right {
+    margin-right: -52px;
+  }
+
+  .singledetails_data_left {
+    margin-left: 0px;
+  }
+}
+
+.memberfontcreatedbtn {
+  border-radius: 7px;
+  border-color: var(--memberfontbtn-border);
+  background-color: var(--memberfont-bg);
+  color: var(--memberfont-color);
+  box-shadow: none;
+  height: 2.5rem;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 /* -- NotFound.tsx -- */
 
@@ -2122,13 +2292,218 @@
 }
 
 /* -- EditUserTagModal.tsx -- */
+
 /* -- ManageTag.tsx -- */
+
+.manageTagScrollableDiv {
+  scrollbar-width: thin;
+  scrollbar-color: var(--manageTagScrollableDiv-color);
+  max-height: calc(100vh - 18rem);
+  overflow: auto;
+  margin-top: 20px !important;
+}
+
 /* -- RemoveUserTagModal.tsx -- */
+
 /* -- UnassignUserTagModal.tsx -- */
-/* -- MockAddPeopleToTag.tsx -- */
-/* -- MockTagActions.tsx -- */
+
 /* -- MemberDetail.tsx -- */
+
+.allRound {
+  border-radius: 16px;
+}
+
+.topRadius {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+}
+
+.inputColor {
+  background: var(--inputColor-bg);
+}
+
+.dateboxMemberDetail {
+  border-radius: 7px;
+  border-color: var(--dateboxMemberDetail-border);
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.contact {
+  width: 100%;
+}
+
+.cardBody {
+  min-height: 180px;
+}
+
+.cardBody .textBox {
+  margin: 0 0 3rem 0;
+  color: var(--cardBody-color);
+}
+
+@media (max-width: 600px) {
+  .cardBody {
+    min-height: 120px;
+  }
+
+  .cardBody .iconWrapper {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .cardBody .textWrapper {
+    margin-top: calc(0.5rem + 36px);
+    text-align: right;
+  }
+
+  .cardBody .textWrapper .primaryText {
+    font-size: 1.5rem;
+  }
+
+  .cardBody .textWrapper .secondaryText {
+    font-size: 1rem;
+  }
+}
+
+.cardBody {
+  padding: 1.25rem 1.5rem;
+}
+
+.cardBody .iconWrapper {
+  position: relative;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardBody .iconWrapper .themeOverlay {
+  background: var(--themeOverlay-bg);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.12;
+  border-radius: 50%;
+}
+
+.cardBody .textWrapper .primaryText {
+  font-size: 24px;
+  font-weight: bold;
+  display: block;
+}
+
+.cardBody .textWrapper .secondaryText {
+  font-size: 14px;
+  display: block;
+  color: var(--cardBody-tw-st-color, var(--cardBody-st-color));
+}
+
 /* -- OrgContribution.tsx -- */
+
+.sidebar {
+  z-index: 0;
+  padding-top: 5px;
+  margin: 0;
+  height: 100%;
+}
+
+.sidebar:after {
+  background-color: var(--sidebar-bg);
+  position: absolute;
+  width: 2px;
+  height: 600px;
+  top: 10px;
+  left: 94%;
+  display: block;
+}
+
+@media only screen and (max-width: 600px) {
+  .sidebar {
+    position: relative;
+    bottom: 18px;
+  }
+
+  .invitebtn {
+    width: 135px;
+    position: relative;
+    right: 10px;
+  }
+
+  .form_wrapper {
+    width: 90%;
+  }
+
+  .searchtitleMemberDetail {
+    margin-top: 30px;
+  }
+}
+
+.sidebarsticky {
+  padding-left: 45px;
+  margin-top: 7px;
+}
+
+.sidebarsticky > p {
+  margin-top: -10px;
+}
+
+.sidebarsticky > input {
+  text-decoration: none;
+  margin-bottom: 50px;
+  border-color: var(--sidebarsticky-border);
+  width: 80%;
+  border-radius: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+}
+
+.searchtitle {
+  color: var(--searchtitle-color);
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--searchtitle-border);
+  width: 60%;
+}
+
+.justifysp {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 575.5px) {
+  .justifysp {
+    padding-left: 55px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+.logintitle {
+  color: var(--logintitle-color);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--logintitle-border);
+  width: 15%;
+}
 
 /* -- OrgList.tsx -- */
 
@@ -2498,10 +2873,49 @@
 /* -- OrganizationActionItems.tsx -- */
 /* -- OrganizationDashboard.tsx -- */
 /* -- OrganizationEvents.tsx -- */
+
 /* -- CampaignModal.tsx -- */
+
 /* -- OrganizationFundCampagins.tsx -- */
+
 /* -- FundModal.tsx -- */
+
+.fundModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
 /* -- OrganizationFunds.tsx -- */
+
+.container {
+  min-height: 100vh;
+}
+
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.hyperlinkText {
+  color: var(--hyperlink-text-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hyperlinkText:hover {
+  color: var(--hyperlink-text-color-hover);
+}
+
+.rowBackgrounds {
+  background-color: var(--rowBackgrounds-bg);
+  max-height: 120px;
+  overflow-y: auto;
+  /* Handle content overflow */
+}
 
 /* -- AddMember.tsx -- */
 
@@ -2555,10 +2969,111 @@
 }
 
 /* -- OrganizationPeople.tsx -- */
+
 /* -- OrganizationTags.tsx -- */
+
+.tagsBreadCrumbs:hover {
+  color: var(--tagsBreadCrumbs-color-hover);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.tagsBreadCrumbs {
+  color: var(--tagsBreadCrumbs-color);
+  cursor: pointer;
+
+  /* Prevent layout shift */
+  &::after {
+    display: block;
+    content: attr(data-text);
+    font-weight: 600;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+}
+
+.tagsBreadCrumbs:hover,
+.tagsBreadCrumbs:focus {
+  color: var(--tagsBreadCrumbs-color-hover);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.subTagsLink i {
+  visibility: hidden;
+}
+
+.subTagsLink:hover,
+.subTagsLink:focus {
+  color: var(--subTagsLink-color-hover);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.subTagsLink:hover i,
+.subTagsLink:focus i {
+  visibility: visible;
+}
+
+.subTagsLink {
+  color: var(--subTagsLink-color);
+  font-weight: 500;
+  cursor: pointer;
+
+  /* Prevent layout shift */
+  &::after {
+    display: block;
+    content: attr(data-text);
+    font-weight: 600;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+}
+
+.orgUserTagsScrollableDiv {
+  scrollbar-width: auto;
+  scrollbar-color: var(--orgUserTagsScrollableDiv-color);
+  max-height: calc(100vh - 18rem);
+  overflow: auto;
+  position: sticky;
+}
+
 /* -- OrganizationVenues.tsx -- */
 
-/* -- PageNotFound.tsx -- */
+.mainpageright > hr {
+  margin-top: 20px;
+  width: 100%;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 575.5px) {
+  .mainpageright {
+    width: 98%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .justifyspMemberDetail {
+    padding-left: 55px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .mainpageright {
+    width: 100%;
+  }
+
+  .invitebtn {
+    position: relative;
+    right: 15px;
+  }
+}
+
+/* -- PageNotFound.tsx  -- */
 
 .pageNotFound {
   position: relative;
@@ -2686,7 +3201,44 @@
 }
 
 /* -- Requests.tsx --  */
+
+@media (max-width: 1120px) {
+  .contract {
+    padding-left: calc(250px + 2rem + 1.5rem);
+  }
+
+  .listBox .itemCard {
+    width: 100%;
+  }
+
+  .collapseSidebarButton {
+    width: calc(250px + 2rem);
+  }
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+.customcell {
+  background-color: var(--customcell-bg) !important;
+  color: var(--customcell-color) !important;
+  font-size: medium !important;
+  font-weight: 500 !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}
+
 /* -- SubTags.tsx -- */
+
+.subTagsScrollableDiv {
+  scrollbar-width: auto;
+  scrollbar-color: var(--subTagsScrollableDiv-color);
+  max-height: calc(100vh - 18rem);
+  overflow: auto;
+}
+
 /* -- Campaigns.tsx -- */
 /* -- PledgeModal.tsx --  */
 /* -- Chat.tsx -- */
