@@ -12,7 +12,7 @@ import {
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
