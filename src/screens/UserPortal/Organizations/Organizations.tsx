@@ -141,7 +141,7 @@ export default function organizations(): JSX.Element {
     refetch,
     loading: loadingOrganizations,
   } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
-    variables: { id: userId, first: rowsPerPage },
+    variables: { id: userId, first: rowsPerPage, filter: '' },
   });
 
   const { data: joinedOrganizationsData } = useQuery(
