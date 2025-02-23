@@ -275,7 +275,6 @@ function OrgPost(): JSX.Element {
       if (searchData?.postsByOrganization) {
         setIsFiltering(true);
 
-        // Fix 4: Remove explicit any type
         const filtered = searchData.postsByOrganization.filter(
           (post: InterfacePost) =>
             post.caption.toLowerCase().includes(term.toLowerCase()),
@@ -283,7 +282,6 @@ function OrgPost(): JSX.Element {
         setFilteredPosts(filtered);
       }
     } catch (error) {
-      // Fix 5: Use error variable
       console.error('Search error:', error);
       toast.error('Error searching posts');
     }
