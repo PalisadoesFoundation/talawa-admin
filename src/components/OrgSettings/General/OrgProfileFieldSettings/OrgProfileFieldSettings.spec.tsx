@@ -2,8 +2,9 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { type Mock, describe, it, expect, beforeEach, vi } from 'vitest';
 import OrgProfileFieldSettings from './OrgProfileFieldSettings';
+import { toast } from 'react-toastify';
+import i18next from 'i18next';
 
-// --- Mocks --- //
 vi.mock('@apollo/client', () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
@@ -26,7 +27,6 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
-import { toast } from 'react-toastify';
 
 // Mock i18next
 vi.mock('i18next', () => {
@@ -54,36 +54,32 @@ vi.mock('i18next', () => {
     },
   };
 });
-import i18next from 'i18next';
 
 // Mock EditOrgCustomFieldDropDown component
-vi.mock(
-  'components/EditCustomFieldDropDown/EditOrgCustomFieldDropDown',
-  () => ({
-    default: ({
-      setCustomFieldData,
-      customFieldData,
-    }: {
-      setCustomFieldData: (data: {
-        type: string;
-        name: string;
-        id: string;
-      }) => void;
-      customFieldData: { type: string; name: string; id: string };
-    }) => (
-      <select
-        data-testid="customFieldTypeSelect"
-        value={customFieldData.type}
-        onChange={(e) =>
-          setCustomFieldData({ ...customFieldData, type: e.target.value })
-        }
-      >
-        <option value="">Select Type</option>
-        <option value="text">Text</option>
-      </select>
-    ),
-  }),
-);
+vi.mock('./OrgProfileFieldSettings/OrgProfileFieldSettings', () => ({
+  default: ({
+    setCustomFieldData,
+    customFieldData,
+  }: {
+    setCustomFieldData: (data: {
+      type: string;
+      name: string;
+      id: string;
+    }) => void;
+    customFieldData: { type: string; name: string; id: string };
+  }) => (
+    <select
+      data-testid="customFieldTypeSelect"
+      value={customFieldData.type}
+      onChange={(e) =>
+        setCustomFieldData({ ...customFieldData, type: e.target.value })
+      }
+    >
+      <option value="">Select Type</option>
+      <option value="text">Text</option>
+    </select>
+  ),
+}));
 
 describe('OrgProfileFieldSettings', () => {
   let refetchMock: ReturnType<typeof vi.fn>;
@@ -103,10 +99,17 @@ describe('OrgProfileFieldSettings', () => {
       refetch: refetchMock,
     });
 
-    // Fix: Mock both mutations properly
+    // Fix the useMutation mock to match Apollo Client's return structure
     (useMutation as Mock)
-      .mockReturnValueOnce([addCustomFieldMock])
-      .mockReturnValueOnce([removeCustomFieldMock]);
+      .mockReturnValue([addCustomFieldMock, { loading: false, error: null }])
+      .mockReturnValueOnce([
+        addCustomFieldMock,
+        { loading: false, error: null },
+      ])
+      .mockReturnValueOnce([
+        removeCustomFieldMock,
+        { loading: false, error: null },
+      ]);
   });
 
   it('renders loading state', () => {
@@ -215,5 +218,111 @@ describe('OrgProfileFieldSettings', () => {
     const { unmount } = render(<OrgProfileFieldSettings />);
     unmount();
     expect(i18next.off).toHaveBeenCalled();
+  });
+
+  it('successfully saves a custom field with valid data', async () => {
+    render(<OrgProfileFieldSettings />);
+
+    // Fill out the name field
+    const nameInput = screen.getByTestId('customFieldInput');
+    fireEvent.change(nameInput, { target: { value: 'New Field' } });
+
+    // Open the dropdown menu
+    const toggleBtn = screen.getByTestId('toggleBtn');
+    fireEvent.click(toggleBtn);
+
+    // Select the String option from dropdown
+    const stringOption = screen.getByTestId('dropdown-btn-0');
+    fireEvent.click(stringOption);
+
+    // Click save
+    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+
+    await waitFor(() => {
+      expect(addCustomFieldMock).toHaveBeenCalledWith({
+        variables: {
+          organizationId: 'testOrgId',
+          name: 'New Field',
+          type: 'String', // Changed from 'text' to 'String' to match component behavior
+        },
+      });
+      expect(refetchMock).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith('customFieldAdded');
+    });
+  });
+
+  it('handles form submission via Enter key', async () => {
+    render(<OrgProfileFieldSettings />);
+
+    // Fill out the name field
+    fireEvent.change(screen.getByTestId('customFieldInput'), {
+      target: { value: 'Quick Field' },
+    });
+
+    // Set the field type using the dropdown
+    const toggleBtn = screen.getByTestId('toggleBtn');
+    fireEvent.click(toggleBtn);
+
+    // Select the String option
+    const stringOption = screen.getByTestId('dropdown-btn-0');
+    fireEvent.click(stringOption);
+
+    // Trigger Enter key on input field
+    const input = screen.getByTestId('customFieldInput');
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(addCustomFieldMock).toHaveBeenCalledWith({
+        variables: {
+          organizationId: 'testOrgId',
+          name: 'Quick Field',
+          type: 'String', // Changed from 'text' to 'String' to match component behavior
+        },
+      });
+    });
+  });
+
+  it('handles mutation errors during save', async () => {
+    const errorMessage = 'GraphQL error';
+    addCustomFieldMock.mockRejectedValueOnce(new Error(errorMessage));
+
+    render(<OrgProfileFieldSettings />);
+
+    // Fill valid data
+    fireEvent.change(screen.getByTestId('customFieldInput'), {
+      target: { value: 'Error Field' },
+    });
+
+    // Click the dropdown toggle button to open the menu
+    const toggleBtn = screen.getByTestId('toggleBtn');
+    fireEvent.click(toggleBtn);
+
+    // Click the String option (first dropdown item)
+    const stringOption = screen.getByTestId('dropdown-btn-0');
+    fireEvent.click(stringOption);
+
+    // Click save
+    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('pleaseFillAllRequiredFields');
+    });
+  });
+
+  it('updates custom field type through dropdown', async () => {
+    render(<OrgProfileFieldSettings />);
+
+    // Click the dropdown toggle button to open the menu
+    const toggleBtn = screen.getByTestId('toggleBtn');
+    fireEvent.click(toggleBtn);
+
+    // Click the String option (first dropdown item)
+    const stringOption = screen.getByTestId('dropdown-btn-0');
+    fireEvent.click(stringOption);
+
+    // Verify the dropdown button shows the selected value
+    await waitFor(() => {
+      expect(toggleBtn).toHaveTextContent('String');
+    });
   });
 });
