@@ -167,6 +167,7 @@ function AdvertisementEntry({
                   variant="top"
                   src={attachmentUrl}
                   data-testid="media"
+                  crossOrigin="anonymous"
                 />
               )}
               <Card.Body>
