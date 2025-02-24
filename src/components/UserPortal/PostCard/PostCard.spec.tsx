@@ -37,6 +37,10 @@ import { vi } from 'vitest';
  * 7. **Create comment**: Ensures a comment is created successfully.
  * 8. **Like/unlike comment**: Tests liking/unliking comments.
  * 9. **Comment modal**: Verifies the comment modal appears when clicked.
+ * 10. **Comment validation**: Ensures an error toast appears when an empty comment is submitted.
+ * 11. **Comment submission error**: Ensures an error toast appears when a network error occurs.
+ * 12. **Delete post failure**: Ensures the error toast appears when post deletion fails.
+ * 13. **Post image**: Verifies post image rendering.
  *
  * Mocked GraphQL data is used for simulating backend behavior.
  */
@@ -1088,5 +1092,49 @@ describe('Testing PostCard Component [User Portal]', () => {
 
       expect(cardProps.fetchPosts).not.toHaveBeenCalled();
     });
+  });
+
+  test('Post image should render properly', async () => {
+    const cardProps = {
+      id: 'postId',
+      userImage: 'image.png',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      postedAt: '',
+      image: 'image.png',
+      video: '',
+      text: 'test Post',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 0,
+      comments: [],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '2',
+        },
+      ],
+      fetchPosts: vi.fn(), // Pass mock function
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const imageElement = await screen.findByRole('img');
+    expect(imageElement).toHaveAttribute('src', 'image.png');
   });
 });
