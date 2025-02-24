@@ -71,6 +71,107 @@ vi.mock('utils/convertToBase64', () => ({
   default: vi.fn().mockResolvedValue('base64String'),
 }));
 
+const eightPosts = Array.from({ length: 8 }, (_, i) => ({
+  id: `${i + 1}`,
+  caption: `Post ${i + 1}`,
+  createdAt: new Date(2024, 1, i + 1, 10, 0, 0).toISOString(), // For ordering
+  updatedAt: new Date(2024, 1, i + 1, 10, 0, 0).toISOString(),
+  pinned: false,
+  creator: { id: '123' },
+  imageUrl: null,
+  videoUrl: null,
+}));
+
+// First page: first 6 posts
+const firstPageOrgList = {
+  organization: {
+    posts: {
+      edges: eightPosts.slice(0, 6).map((post) => ({ node: post })),
+      pageInfo: {
+        hasNextPage: true,
+        hasPreviousPage: false,
+        startCursor: 'cursor-start',
+        endCursor: 'cursor-end',
+      },
+      totalCount: 8,
+    },
+  },
+};
+
+// Second page: remaining 2 posts
+const secondPageOrgList = {
+  organization: {
+    posts: {
+      edges: eightPosts.slice(6).map((post) => ({ node: post })),
+      pageInfo: {
+        hasNextPage: false,
+        hasPreviousPage: true,
+        startCursor: 'cursor-new-start',
+        endCursor: 'cursor-new-end',
+      },
+      totalCount: 8,
+    },
+  },
+};
+
+const getPostsMock: MockedResponse = {
+  request: {
+    query: GET_POSTS_BY_ORG,
+    variables: { input: { organizationId: '123' } },
+  },
+  result: { data: { postsByOrganization: eightPosts } },
+};
+
+const orgListFirstPageMock: MockedResponse = {
+  request: {
+    query: ORGANIZATION_POST_LIST,
+    variables: {
+      input: { id: '123' },
+      after: null,
+      before: null,
+      first: 6,
+      last: null,
+    },
+  },
+  result: { data: firstPageOrgList },
+};
+
+const orgListSecondPageMock: MockedResponse = {
+  request: {
+    query: ORGANIZATION_POST_LIST,
+    variables: {
+      input: { id: '123' },
+      after: 'cursor-end',
+      before: null,
+      first: 6,
+      last: null,
+    },
+  },
+  result: { data: secondPageOrgList },
+};
+
+// When before is set (previous page), return the first 6 posts again.
+const orgListFirstPageBackMock: MockedResponse = {
+  request: {
+    query: ORGANIZATION_POST_LIST,
+    variables: {
+      input: { id: '123' },
+      after: null,
+      before: null,
+      first: 6,
+      last: null,
+    },
+  },
+  result: { data: firstPageOrgList },
+};
+
+const paginationMocks: MockedResponse[] = [
+  getPostsMock,
+  orgListFirstPageMock, // initial load (first page)
+  orgListSecondPageMock, // next page
+  orgListFirstPageBackMock, // previous page when going back
+];
+
 const mockPosts = {
   postsByOrganization: [
     {
@@ -673,7 +774,7 @@ describe('OrgPost Component', () => {
   });
 });
 
-describe('More tests', () => {
+describe('Tests for sorting , nextpage , previousPage', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
     renderComponent();
@@ -695,6 +796,7 @@ describe('More tests', () => {
         </I18nextProvider>
       </MockedProvider>,
     );
+
   it('handles "None" option: clears sorted posts and then refetches unsorted posts', async () => {
     const toggleButton = screen.getByTestId('sortpost-toggle');
     userEvent.click(toggleButton);
@@ -874,5 +976,125 @@ describe('More tests', () => {
       },
       { timeout: 1000 },
     );
+  });
+});
+
+describe('Pagination functionality in OrgPost Component', () => {
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    renderComponent();
+    // Wait for initial queries to resolve.
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+  });
+
+  const renderComponent = (
+    mocks: MockedResponse[] = paginationMocks,
+  ): RenderResult =>
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+  it('handles next page correctly when sortingOption is "None"', async () => {
+    // Initially, the component (with sortingOption "None") should render the first page.
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+      expect(captions.length).toBe(6);
+      expect(captions[0]).toContain('Post 1');
+      expect(captions[5]).toContain('Post 6');
+    });
+
+    // Click the "Next" button.
+    const nextBtn = screen.getByTestId('next-page-button');
+    userEvent.click(nextBtn);
+
+    // Wait for the next page to be rendered.
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+      // Expect 2 posts on the second page.
+      expect(captions.length).toBe(2);
+      expect(captions[0]).toContain('Post 7');
+      expect(captions[1]).toContain('Post 8');
+    });
+  });
+
+  it('handles next page correctly when sortingOption is not "None"', async () => {
+    const toggleBtn = screen.getByTestId('sortpost-toggle');
+    userEvent.click(toggleBtn);
+    const oldestOption = await screen.findByText('Oldest');
+    userEvent.click(oldestOption);
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+      expect(captions.length).toBe(6);
+      expect(captions[0]).toContain('Post 1');
+      expect(captions[5]).toContain('Post 6');
+    });
+
+    const nextBtn = screen.getByTestId('next-page-button');
+    userEvent.click(nextBtn);
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+      expect(captions.length).toBe(2);
+      expect(captions[0]).toContain('Post 7');
+      expect(captions[1]).toContain('Post 8');
+    });
+  });
+
+  it('handles previous page correctly when sortingOption is not "None"', async () => {
+    const toggleBtn = screen.getByTestId('sortpost-toggle');
+    userEvent.click(toggleBtn);
+    const latestOption = await screen.findByText('Latest');
+    userEvent.click(latestOption);
+
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+
+      expect(captions.length).toBe(6);
+      expect(captions[0]).toContain('Post 8');
+      expect(captions[5]).toContain('Post 3');
+    });
+    // Navigate to next page.
+    const nextBtn = screen.getByTestId('next-page-button');
+    userEvent.click(nextBtn);
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+      // The next page should have the remaining posts: Post 2, Post 1.
+      expect(captions.length).toBe(2);
+      expect(captions[0]).toContain('Post 2');
+      expect(captions[1]).toContain('Post 1');
+    });
+    // Now click previous.
+    const prevBtn = screen.getByTestId('previous-page-button');
+    userEvent.click(prevBtn);
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+      // Should return to the first page of descending order.
+      expect(captions.length).toBe(6);
+      expect(captions[0]).toContain('Post 8');
+      expect(captions[5]).toContain('Post 3');
+    });
   });
 });
