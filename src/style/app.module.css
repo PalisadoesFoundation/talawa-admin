@@ -878,8 +878,14 @@
   background-color: var(--joined-button-bg);
   color: var(--black-color);
   border-color: var(--joined-button-bg);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  outline: none;
 }
-
+.outlineBtn:focus-visible {
+  outline: 2px solid var(--joined-button-bg);
+  outline-offset: 2px;
+}
 .outlineBtn:is(:hover, :active) {
   margin-bottom: 10px;
   color: var(--black-color) !important;
@@ -4998,8 +5004,15 @@ button[data-testid='createPostBtn'] {
   justify-content: flex-end;
   padding: 8px 10px;
   display: flex;
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+  outline: none;
 }
 
+.leftDrawer .profileContainer:focus-visible {
+  outline: 2px solid var(--light-blue);
+  outline-offset: 2px;
+}
 .dropdownContainer {
   position: relative;
   display: inline-block;
@@ -7963,7 +7976,6 @@ button[data-testid='createPostBtn'] {
   border-radius: 8px;
   outline: 1px solid var(--orgCard-outline);
   position: relative;
-  width: 300px + 2rem;
 }
 
 .orgCard .innerContainer {
@@ -9124,6 +9136,10 @@ button[data-testid='createPostBtn'] {
 }
 
 /* profileDropDown.tsx */
+.Profilebox {
+  width: 100% !important;
+  padding-bottom: 30px;
+}
 .profileContainerarrowright {
   border: none;
   padding: 2.1rem 0.5rem;
@@ -9131,6 +9147,9 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: var(--profile-bg);
+  border-radius: var(--border-radius-lg, 8px);
+  transition: all 0.2s ease;
 }
 
 .imageContainerSidebar {
@@ -9138,6 +9157,8 @@ button[data-testid='createPostBtn'] {
   height: 56px;
   border-radius: 100%;
   margin-right: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 .imageContainerSidebar img {
   width: 100%;
@@ -9150,6 +9171,7 @@ button[data-testid='createPostBtn'] {
   text-align: start;
   overflow: hidden;
   margin-right: 2px;
+  min-width: 0;
 }
 .profileContainerarrowright .profileTextTitle .primaryText {
   font-size: 1rem;
@@ -9160,6 +9182,7 @@ button[data-testid='createPostBtn'] {
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
+  color: var(--text-primary);
 }
 .profileContainerarrowright .profileTextTitle .primaryText .arrowbtn {
   background: none;
@@ -9168,95 +9191,11 @@ button[data-testid='createPostBtn'] {
   padding-left: 100px;
   cursor: pointer;
   color: #040404;
+  color: var(--text-primary);
+  transition: transform 0.2s ease;
 }
-.profileContainerarrowright .profileTextTitle .secondaryText {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: var(--bs-secondary);
-  display: block;
-  text-transform: capitalize;
-}
-.logoutBtn {
-  width: 100%;
-  padding: 12px;
-  padding-left: 15px;
-  background-color: #a8c7fa;
-  border: none;
-  border-radius: 13px;
-  color: #000;
-  font-size: 0.9375rem;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  cursor: pointer;
-  text-align: left;
-  transition: background-color 0.2s ease;
-}
-
-.logoutBtn::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'%3E%3C/path%3E%3Cpolyline points='16 17 21 12 16 7'%3E%3C/polyline%3E%3Cline x1='21' y1='12' x2='9' y2='12'%3E%3C/line%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.avatarStyle {
-  border-radius: 100%;
-}
-
-/* profileDropDown.tsx */
-.Profilebox {
-  width: 100% !important;
-  padding-bottom: 30px;
-}
-.profileContainerarrowright {
-  border: none;
-  padding: 2.1rem 0.5rem;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.imageContainerSidebar {
-  width: 56px;
-  height: 56px;
-  border-radius: 100%;
-  margin-right: 10px;
-}
-.imageContainerSidebar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 100%;
-}
-.profileContainerarrowright .profileTextTitle {
-  /* flex: 1; */
-  text-align: start;
-  overflow: hidden;
-  margin-right: 2px;
-}
-.profileContainerarrowright .profileTextTitle .primaryText {
-  font-size: 1rem;
-  font-weight: 600;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
-  -webkit-box-orient: vertical;
-  word-wrap: break-word;
-  white-space: normal;
-}
-.profileContainerarrowright .profileTextTitle .primaryText .arrowbtn {
-  background: none;
-  font-size: large;
-  border: none;
-  padding-left: 100px;
-  cursor: pointer;
-  color: #040404;
+.arrowbtn:hover {
+  transform: translateY(-1px);
 }
 .profileContainerarrowright .profileTextTitle .secondaryText {
   font-size: 0.8rem;
