@@ -325,4 +325,34 @@ describe('OrgProfileFieldSettings', () => {
       expect(toggleBtn).toHaveTextContent('String');
     });
   });
+
+  it('displays translated error message when mutation fails', async () => {
+    const errorMessage = 'Network error occurred';
+    removeCustomFieldMock.mockRejectedValueOnce(new Error(errorMessage));
+
+    // Mock query with a custom field
+    (useQuery as Mock).mockReturnValueOnce({
+      loading: false,
+      error: null,
+      data: {
+        organization: {
+          customFields: [{ id: '1', name: 'Test Field', type: 'String' }],
+        },
+      },
+      refetch: refetchMock,
+    });
+
+    render(<OrgProfileFieldSettings />);
+
+    // Ensure the remove button is rendered and click it
+    const removeBtn = screen.getByTestId('removeCustomFieldBtn');
+    fireEvent.click(removeBtn);
+
+    await waitFor(() => {
+      expect(removeCustomFieldMock).toHaveBeenCalledWith({
+        variables: { id: '1' },
+      });
+      expect(toast.error).toHaveBeenCalledWith('pleaseFillAllRequiredFields');
+    });
+  });
 });
