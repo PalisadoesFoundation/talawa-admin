@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import FundModal from './FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';

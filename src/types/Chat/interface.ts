@@ -13,3 +13,14 @@ export interface InterfaceGroupChatDetailsProps {
       | undefined,
   ) => Promise<ApolloQueryResult<{ chat: GroupChat }>>;
 }
+
+export interface InterfaceContactCardProps {
+  id: string;
+  title: string;
+  image: string;
+  selectedContact: string;
+  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
+  isGroup: boolean;
+  unseenMessages: number;
+  lastMessage: string;
+}

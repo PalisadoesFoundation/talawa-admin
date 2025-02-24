@@ -4,19 +4,7 @@ import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 
 import styles from '../../style/app.module.css';
-
-/**
- * Props for the OrgContriCards component
- */
-interface InterfaceOrgContriCardsProps {
-  key: string;
-  id: string;
-  userName: string;
-  contriDate: string;
-  contriAmount: string;
-  contriTransactionId: string;
-  userEmail: string;
-}
+import type { InterfaceOrgContriCardsProps } from 'types/Contribution/interface';
 
 /**
  * Component to display organization contribution cards

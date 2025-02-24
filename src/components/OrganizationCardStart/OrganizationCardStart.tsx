@@ -1,11 +1,6 @@
 import React from 'react';
 import styles from './OrganizationCardStart.module.css';
-
-interface InterfaceOrganizationCardStartProps {
-  image: string;
-  id: string;
-  name: string;
-}
+import type { InterfaceOrganizationCardStartProps } from 'types/Organization/interface';
 
 /**
  * Component to display a simplified card for an organization.

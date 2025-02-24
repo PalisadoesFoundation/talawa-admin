@@ -32,7 +32,7 @@ Defined in: [src/types/actionItem.ts:22](https://github.com/PalisadoesFoundation
 
 ### organization?
 
-> `optional` **organization**: [`Organization`](../../organization/type-aliases/Organization.md)
+> `optional` **organization**: [`Organization`](../../Organization/type/type-aliases/Organization.md)
 
 ### updatedAt
 
