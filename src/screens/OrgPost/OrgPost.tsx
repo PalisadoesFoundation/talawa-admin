@@ -26,8 +26,6 @@ import type {
   InterfacePost,
 } from '../../types/Post/interface';
 
-// Add these at the top of your file if not already present
-
 /**
  * OrgPost Component
  * This component is responsible for rendering and managing organization posts.
@@ -413,8 +411,8 @@ function OrgPost(): JSX.Element {
                   ]}
                   selectedOption={sortingOption}
                   onSortChange={handleSorting}
-                  dataTestIdPrefix="sortpost"
-                  dropdownTestId="sort"
+                  dataTestIdPrefix="sortpost-toggle"
+                  dropdownTestId="sortpost-dropdown"
                 />
               </div>
 

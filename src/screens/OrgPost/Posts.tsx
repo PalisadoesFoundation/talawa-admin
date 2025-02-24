@@ -97,22 +97,22 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
   const renderPostCard = (post: InterfacePost): JSX.Element | null => {
     if (!post || !post.id) return null;
-
     const createdAt = new Date(post.createdAt);
     const attachments = createAttachments(post, createdAt);
-
     return (
-      <OrgPostCard
-        key={post.id}
-        post={{
-          id: post.id,
-          caption: post.caption,
-          createdAt,
-          pinnedAt: post.pinned ? new Date() : null,
-          creatorId: post.creator?.id || null,
-          attachments,
-        }}
-      />
+      <div data-testid="post-caption">
+        <OrgPostCard
+          key={post.id}
+          post={{
+            id: post.id,
+            caption: post.caption,
+            createdAt,
+            pinnedAt: post.pinned ? new Date() : null,
+            creatorId: post.creator?.id || null,
+            attachments,
+          }}
+        />
+      </div>
     );
   };
 

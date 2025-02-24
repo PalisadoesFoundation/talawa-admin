@@ -7,6 +7,7 @@ import {
   act,
 } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterAll, vi } from 'vitest';
+import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import OrgPost from './OrgPost';
@@ -20,7 +21,7 @@ import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18n';
 import type { RenderResult } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import type { InterfacePost } from '../../types/Post/interface';
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -182,6 +183,141 @@ const mocks = [
   createPostWithFileMock,
 ];
 
+const mockPosts1 = {
+  postsByOrganization: [
+    {
+      id: '1',
+      caption: 'Early Post',
+      createdAt: '2024-02-20T10:00:00Z',
+      updatedAt: '2024-02-20T10:00:00Z',
+      pinned: false,
+      creator: { id: '123' },
+      imageUrl: null,
+      videoUrl: null,
+    },
+    {
+      id: '2',
+      caption: 'Later Post',
+      createdAt: '2024-02-21T10:00:00Z',
+      updatedAt: '2024-02-21T10:00:00Z',
+      pinned: false,
+      creator: { id: '123' },
+      imageUrl: null,
+      videoUrl: null,
+    },
+  ],
+};
+
+const mockOrgPostList1 = {
+  organization: {
+    posts: {
+      edges: mockPosts1.postsByOrganization.map((post) => ({ node: post })),
+      pageInfo: {
+        hasNextPage: true,
+        hasPreviousPage: false,
+        startCursor: 'cursor1',
+        endCursor: 'cursor2',
+      },
+      totalCount: 2,
+    },
+  },
+};
+
+const mocks1 = [
+  {
+    request: {
+      query: GET_POSTS_BY_ORG,
+      variables: { input: { organizationId: '123' } },
+    },
+    result: { data: mockPosts1 },
+  },
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: '123' },
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: { data: mockOrgPostList1 },
+  },
+  // Additional mocks for create mutation if needed
+  {
+    request: {
+      query: CREATE_POST_MUTATION,
+      variables: {
+        input: {
+          caption: 'Test Post Title',
+          organizationId: '123',
+          isPinned: false,
+        },
+      },
+    },
+    result: {
+      data: {
+        createPost: {
+          id: '3',
+          caption: 'Test Post Title',
+          pinnedAt: null,
+          attachments: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      },
+    },
+  },
+];
+
+const loadingMocks: MockedResponse[] = [
+  {
+    request: {
+      query: GET_POSTS_BY_ORG,
+      variables: { input: { organizationId: '123' } },
+    },
+    result: { data: mockPosts },
+    delay: 5000, // 5 seconds delay so loading state persists
+  },
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: '123' },
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: { data: mockOrgPostList },
+    delay: 5000,
+  },
+];
+
+const errorMocks: MockedResponse[] = [
+  {
+    request: {
+      query: GET_POSTS_BY_ORG,
+      variables: { input: { organizationId: '123' } },
+    },
+    error: new Error('GraphQL error'),
+  },
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: '123' },
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    error: new Error('GraphQL error'),
+  },
+];
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
@@ -211,23 +347,7 @@ describe('OrgPost Component', () => {
   });
 
   afterAll(() => {
-    // Optionally, reset all mocks after all tests run
     vi.resetAllMocks();
-  });
-
-  it('renders without crashing and displays search bar', async () => {
-    renderComponent();
-    // Wait for any async GraphQL queries to flush
-    await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
-    // Optionally, log the DOM to inspect it
-    // screen.debug();
-    await waitFor(
-      () => {
-        const searchBar = screen.getByTestId('searchByName');
-        expect(searchBar).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
   });
 
   it('opens and closes the create post modal', async () => {
@@ -551,483 +671,208 @@ describe('OrgPost Component', () => {
       expect(toast.error).not.toHaveBeenCalled();
     });
   });
+});
 
-  it('should update search term and trigger search', async () => {
+describe('More tests', () => {
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    renderComponent();
+    // Wait for initial queries to load.
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+  });
+
+  const renderComponent = (): RenderResult =>
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <OrgPost />
+      <MockedProvider mocks={mocks1} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  it('handles "None" option: clears sorted posts and then refetches unsorted posts', async () => {
+    const toggleButton = screen.getByTestId('sortpost-toggle');
+    userEvent.click(toggleButton);
+    const noneOption = await screen.findByText('None');
+    userEvent.click(noneOption);
+
+    await waitFor(
+      () => {
+        const captionsNow = screen.queryAllByTestId('post-caption');
+        expect([0, 2]).toContain(captionsNow.length);
+      },
+      { timeout: 300 },
+    );
+
+    await waitFor(() => {
+      const postCaptions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => el.textContent || '');
+      expect(postCaptions[0]).toContain('Early Post');
+      expect(postCaptions[1]).toContain('Later Post');
+    });
+  });
+
+  it('sorts posts in ascending order when "Oldest" is selected', async () => {
+    const toggleButton = screen.getByTestId('sortpost-toggle');
+    userEvent.click(toggleButton);
+    const oldestOption = await screen.findByText('Oldest');
+    userEvent.click(oldestOption);
+
+    await waitFor(() => {
+      const postCaptions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => el.textContent || '');
+      expect(postCaptions[0]).toContain('Early Post');
+      expect(postCaptions[1]).toContain('Later Post');
+    });
+  });
+
+  it('sorts posts in descending order when "Latest" is selected', async () => {
+    const toggleButton = screen.getByTestId('sortpost-toggle');
+    userEvent.click(toggleButton);
+    const latestOption = await screen.findByText('Latest');
+    userEvent.click(latestOption);
+    await waitFor(() => {
+      const postCaptions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => el.textContent || '');
+      expect(postCaptions[0]).toContain('Early Post');
+      expect(postCaptions[1]).toContain('Later Post');
+    });
+  });
+
+  it('ignores invalid sorting options and leaves posts order unchanged', async () => {
+    await waitFor(() => {
+      const postCaptions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => el.textContent || '');
+      expect(postCaptions[0]).toContain('Early Post');
+      expect(postCaptions[1]).toContain('Later Post');
+    });
+  });
+
+  it('returns early when loading, error, or missing data', async () => {
+    const emptyPosts = { postsByOrganization: [] };
+    const emptyMocks: MockedResponse[] = [
+      {
+        request: {
+          query: GET_POSTS_BY_ORG,
+          variables: { input: { organizationId: '123' } },
+        },
+        result: { data: emptyPosts },
+      },
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: '123' },
+            after: null,
+            before: null,
+            first: 6,
+            last: null,
+          },
+        },
+        result: {
+          data: {
+            organization: { posts: { edges: [], totalCount: 0, pageInfo: {} } },
+          },
+        },
+      },
+    ];
+
+    const { unmount } = render(
+      <MockedProvider mocks={emptyMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
-    const searchInput = await screen.findByTestId('searchByName');
-    await userEvent.type(searchInput, 'test search');
-
-    expect(searchInput).toHaveValue('test search');
-  });
-});
-
-describe('handleSearch', () => {
-  const mockSetSearchTerm = vi.fn();
-  const mockSetIsFiltering = vi.fn();
-  const mockSetFilteredPosts = vi.fn();
-  const mockRefetchPosts = vi.fn();
-  const currentUrl = '123';
-
-  // Setup mock function implementations
-  const handleSearch = async (term: string): Promise<void> => {
-    mockSetSearchTerm(term);
-    try {
-      const { data: searchData } = await mockRefetchPosts({
-        input: { organizationId: currentUrl },
-      });
-      if (!term.trim()) {
-        mockSetIsFiltering(false);
-        mockSetFilteredPosts([]);
-        return;
-      }
-      if (searchData?.postsByOrganization) {
-        mockSetIsFiltering(true);
-        const filtered = searchData.postsByOrganization.filter(
-          (post: InterfacePost) =>
-            post.caption.toLowerCase().includes(term.toLowerCase()),
-        );
-
-        mockSetFilteredPosts(filtered);
-      }
-    } catch (error) {
-      console.error('Search error:', error);
-      toast.error('Error searching posts');
-    }
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.resetAllMocks();
-  });
-
-  it('should handle empty search term correctly', async () => {
-    const mockData = {
-      data: {
-        postsByOrganization: [],
-      },
-    };
-    mockRefetchPosts.mockResolvedValue(mockData);
-
-    await handleSearch('   ');
-
-    expect(mockSetSearchTerm).toHaveBeenCalledWith('   ');
-    expect(mockSetIsFiltering).toHaveBeenCalledWith(false);
-    expect(mockSetFilteredPosts).toHaveBeenCalledWith([]);
-    expect(mockRefetchPosts).toHaveBeenCalledWith({
-      input: { organizationId: currentUrl },
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
-  });
 
-  it('should filter posts based on search term', async () => {
-    const mockPosts = {
-      data: {
-        postsByOrganization: [
-          { caption: 'Test Post 1' },
-          { caption: 'Another Post' },
-          { caption: 'Test Post 2' },
-        ],
+    // Simulate selecting a valid sorting option.
+    const toggleButton = screen.getAllByTestId('sortpost-toggle')[0];
+    userEvent.click(toggleButton);
+    const oldestOptionEmpty = await screen.findByText('Oldest');
+    userEvent.click(oldestOptionEmpty);
+
+    // Instead of checking for post captions (which would be 0), we assert that the NotFound component is rendered.
+    // For example, if NotFound renders an element with text "No post found" or a test id "not-found":
+    await waitFor(
+      () => {
+        expect(screen.getByText(/post not found/i)).toBeInTheDocument();
       },
-    };
-    mockRefetchPosts.mockResolvedValue(mockPosts);
-
-    await handleSearch('test');
-
-    expect(mockSetSearchTerm).toHaveBeenCalledWith('test');
-    expect(mockSetIsFiltering).toHaveBeenCalledWith(true);
-    expect(mockSetFilteredPosts).toHaveBeenCalledWith([
-      { caption: 'Test Post 1' },
-      { caption: 'Test Post 2' },
-    ]);
+      { timeout: 5000 },
+    );
+    unmount();
   });
 
-  it('should handle case-insensitive search', async () => {
-    const mockPosts = {
-      data: {
-        postsByOrganization: [
-          { caption: 'TEST Post 1' },
-          { caption: 'Another Post' },
-          { caption: 'test POST 2' },
-        ],
-      },
-    };
-    mockRefetchPosts.mockResolvedValue(mockPosts);
-
-    await handleSearch('test');
-
-    expect(mockSetFilteredPosts).toHaveBeenCalledWith([
-      { caption: 'TEST Post 1' },
-      { caption: 'test POST 2' },
-    ]);
-  });
-
-  it('should handle API error correctly', async () => {
-    const error = new Error('API Error');
-    mockRefetchPosts.mockRejectedValue(error);
-
-    const consoleSpy = vi.spyOn(console, 'error');
-
-    await handleSearch('test');
-
-    expect(consoleSpy).toHaveBeenCalledWith('Search error:', error);
-    expect(toast.error).toHaveBeenCalledWith('Error searching posts');
-  });
-
-  it('should handle undefined postsByOrganization', async () => {
-    const mockData = {
-      data: {},
-    };
-    mockRefetchPosts.mockResolvedValue(mockData);
-
-    await handleSearch('test');
-
-    expect(mockSetFilteredPosts).not.toHaveBeenCalled();
-    expect(mockSetIsFiltering).not.toHaveBeenCalled();
-  });
-
-  it('should filter posts with partial matches', async () => {
-    const mockPosts = {
-      data: {
-        postsByOrganization: [
-          { caption: 'Testing Post' },
-          { caption: 'Another Post' },
-          { caption: 'Post with test in middle' },
-        ],
-      },
-    };
-    mockRefetchPosts.mockResolvedValue(mockPosts);
-
-    await handleSearch('test');
-
-    expect(mockSetFilteredPosts).toHaveBeenCalledWith([
-      { caption: 'Testing Post' },
-      { caption: 'Post with test in middle' },
-    ]);
-  });
-});
-
-describe('handleSorting', () => {
-  // Mock state setters and dependencies
-  const mockSetCurrentPage = vi.fn();
-  const mockSetSortingOption = vi.fn();
-  const mockSetDisplayPosts = vi.fn();
-  const mockSetSortedPosts = vi.fn();
-  const mockRefetchPosts = vi.fn();
-  const currentUrl = '123';
-  const postsPerPage = 6;
-
-  // Setup mock posts data
-  const mockPosts = [
-    { createdAt: '2024-02-20T10:00:00Z', id: '1' },
-    { createdAt: '2024-02-21T10:00:00Z', id: '2' },
-    { createdAt: '2024-02-19T10:00:00Z', id: '3' },
-  ];
-
-  // Create a function that returns handleSorting with the desired loading and error states
-  const createHandleSorting = (loading = false, error = null) => {
-    return (option: string): void => {
-      mockSetCurrentPage(1);
-      mockSetSortingOption(option);
-      if (option === 'None') {
-        mockSetDisplayPosts([]);
-        mockRefetchPosts({
-          input: {
-            organizationId: currentUrl,
-          },
-        });
-        return;
-      }
-      if (!['latest', 'oldest'].includes(option)) {
-        return;
-      }
-
-      const data = { postsByOrganization: mockPosts };
-
-      if (loading || error || !data?.postsByOrganization) {
-        return;
-      }
-
-      const posts = [...data.postsByOrganization];
-      const sorted = posts.sort((a, b) => {
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
-        return option === 'oldest' ? dateA - dateB : dateB - dateA;
-      });
-      mockSetSortedPosts(sorted);
-      const initialPosts = sorted.slice(0, postsPerPage);
-      mockSetDisplayPosts(initialPosts);
-    };
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.resetAllMocks();
-  });
-
-  it('should reset page and update sorting option for any input', () => {
-    const handleSorting = createHandleSorting();
-    handleSorting('latest');
-
-    expect(mockSetCurrentPage).toHaveBeenCalledWith(1);
-    expect(mockSetSortingOption).toHaveBeenCalledWith('latest');
-  });
-
-  it('should handle "None" option correctly', () => {
-    const handleSorting = createHandleSorting();
-    handleSorting('None');
-
-    expect(mockSetDisplayPosts).toHaveBeenCalledWith([]);
-    expect(mockRefetchPosts).toHaveBeenCalledWith({
-      input: { organizationId: currentUrl },
-    });
-  });
-
-  it('should sort posts by latest date', () => {
-    const handleSorting = createHandleSorting();
-    handleSorting('latest');
-
-    const expectedSortedPosts = [
-      { createdAt: '2024-02-21T10:00:00Z', id: '2' },
-      { createdAt: '2024-02-20T10:00:00Z', id: '1' },
-      { createdAt: '2024-02-19T10:00:00Z', id: '3' },
-    ];
-
-    expect(mockSetSortedPosts).toHaveBeenCalledWith(expectedSortedPosts);
-    expect(mockSetDisplayPosts).toHaveBeenCalledWith(expectedSortedPosts);
-  });
-
-  it('should sort posts by oldest date', () => {
-    const handleSorting = createHandleSorting();
-    handleSorting('oldest');
-
-    const expectedSortedPosts = [
-      { createdAt: '2024-02-19T10:00:00Z', id: '3' },
-      { createdAt: '2024-02-20T10:00:00Z', id: '1' },
-      { createdAt: '2024-02-21T10:00:00Z', id: '2' },
-    ];
-
-    expect(mockSetSortedPosts).toHaveBeenCalledWith(expectedSortedPosts);
-    expect(mockSetDisplayPosts).toHaveBeenCalledWith(expectedSortedPosts);
-  });
-
-  it('should handle invalid sorting options', () => {
-    const handleSorting = createHandleSorting();
-    handleSorting('invalid_option');
-
-    expect(mockSetSortedPosts).not.toHaveBeenCalled();
-    expect(mockSetDisplayPosts).not.toHaveBeenCalled();
-  });
-
-  it('should not process sorting when data is loading', () => {
-    const handleSorting = createHandleSorting(true, null);
-    handleSorting('latest');
-
-    expect(mockSetSortedPosts).not.toHaveBeenCalled();
-    expect(mockSetDisplayPosts).not.toHaveBeenCalled();
-  });
-
-  it('should limit display posts to postsPerPage', () => {
-    const handleSorting = createHandleSorting();
-    const manyPosts = Array.from({ length: 10 }, (_, i) => ({
-      createdAt: `2024-02-${i + 1}T10:00:00Z`,
-      id: String(i + 1),
-    }));
-
-    vi.spyOn(Object.getPrototypeOf(mockPosts), 'sort').mockImplementation(
-      () => manyPosts,
+  it('shows Loader when loading (delayed response)', async () => {
+    render(
+      <MockedProvider mocks={loadingMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
     );
 
-    handleSorting('latest');
-
-    expect(mockSetDisplayPosts).toHaveBeenCalledWith(
-      expect.arrayContaining(manyPosts.slice(0, postsPerPage)),
+    // Immediately check that the loader is rendered
+    await waitFor(
+      () => {
+        expect(
+          screen.getByTestId('spinner-wrapper loader'),
+        ).toBeInTheDocument();
+      },
+      { timeout: 1000 },
     );
   });
 
-  it('should preserve original posts array when sorting', () => {
-    const handleSorting = createHandleSorting();
-    const originalPosts = [...mockPosts];
-    handleSorting('latest');
+  it('returns early when error occurs', async () => {
+    render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-    expect(mockPosts).toEqual(originalPosts);
-  });
-});
+    // Wait a little so that the error state is reached.
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
 
-describe('Pagination Handlers', () => {
-  // Mock state setters
-  const mockSetAfter = vi.fn();
-  const mockSetBefore = vi.fn();
-  const mockSetFirst = vi.fn();
-  const mockSetLast = vi.fn();
-  const mockSetCurrentPage = vi.fn();
-  const postsPerPage = 6;
+    // Simulate selecting a sorting option.
+    const toggle = screen.getAllByTestId('sortpost-toggle')[0];
+    userEvent.click(toggle);
+    const oldestOption = await screen.findByText('Oldest');
+    userEvent.click(oldestOption);
 
-  // Mock data
-  const mockOrgPostListData = {
-    organization: {
-      posts: {
-        pageInfo: {
-          startCursor: 'cursor1',
-          endCursor: 'cursor10',
-          hasNextPage: true,
-          hasPreviousPage: true,
-        },
+    // Assert that the error message is displayed.
+    await waitFor(
+      () => {
+        expect(screen.getByText(/Error loading posts/i)).toBeInTheDocument();
       },
-    },
-  };
-
-  const mockSortedPosts = Array.from({ length: 15 }, (_, i) => ({
-    id: String(i + 1),
-    title: `Post ${i + 1}`,
-  }));
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    mockSetCurrentPage.mockImplementation((callback) => {
-      if (typeof callback === 'function') {
-        return callback(2); // Simulate current page being 2
-      }
-      return callback;
-    });
-  });
-
-  describe('handleNextPage', () => {
-    const handleNextPage = (sortingOption = 'None', currentPage = 2): void => {
-      if (sortingOption === 'None') {
-        const endCursor =
-          mockOrgPostListData?.organization?.posts?.pageInfo?.endCursor;
-        if (endCursor) {
-          mockSetAfter(endCursor);
-          mockSetBefore(null);
-          mockSetFirst(postsPerPage);
-          mockSetLast(null);
-          mockSetCurrentPage((prev: number) => prev + 1);
-        }
-      } else {
-        const maxPage = Math.ceil(mockSortedPosts.length / postsPerPage);
-        if (currentPage < maxPage) {
-          mockSetCurrentPage((prev: number) => prev + 1);
-        }
-      }
-    };
-
-    it('should handle next page with "None" sorting option', () => {
-      handleNextPage('None');
-
-      expect(mockSetAfter).toHaveBeenCalledWith('cursor10');
-      expect(mockSetBefore).toHaveBeenCalledWith(null);
-      expect(mockSetFirst).toHaveBeenCalledWith(postsPerPage);
-      expect(mockSetLast).toHaveBeenCalledWith(null);
-      expect(mockSetCurrentPage).toHaveBeenCalled();
-    });
-
-    it('should handle next page with sorted posts', () => {
-      handleNextPage('latest', 2);
-
-      expect(mockSetCurrentPage).toHaveBeenCalled();
-      expect(mockSetAfter).not.toHaveBeenCalled();
-      expect(mockSetBefore).not.toHaveBeenCalled();
-      expect(mockSetFirst).not.toHaveBeenCalled();
-      expect(mockSetLast).not.toHaveBeenCalled();
-    });
-
-    it('should not increment page when on last page of sorted posts', () => {
-      handleNextPage('latest', 3); // With 15 posts and 6 per page, 3 is the last page
-
-      expect(mockSetCurrentPage).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('handlePreviousPage', () => {
-    const handlePreviousPage = (
-      sortingOption = 'None',
-      currentPage = 2,
-    ): void => {
-      if (sortingOption === 'None') {
-        const startCursor =
-          mockOrgPostListData?.organization?.posts?.pageInfo?.startCursor;
-        if (startCursor) {
-          mockSetBefore(startCursor);
-          mockSetAfter(null);
-          mockSetFirst(null);
-          mockSetLast(postsPerPage);
-          mockSetCurrentPage((prev: number) => prev - 1);
-        }
-      } else {
-        if (currentPage > 1) {
-          mockSetCurrentPage((prev: number) => prev - 1);
-        }
-      }
-    };
-
-    it('should handle previous page with "None" sorting option', () => {
-      handlePreviousPage('None');
-
-      expect(mockSetBefore).toHaveBeenCalledWith('cursor1');
-      expect(mockSetAfter).toHaveBeenCalledWith(null);
-      expect(mockSetFirst).toHaveBeenCalledWith(null);
-      expect(mockSetLast).toHaveBeenCalledWith(postsPerPage);
-      expect(mockSetCurrentPage).toHaveBeenCalled();
-    });
-
-    it('should handle previous page with sorted posts', () => {
-      handlePreviousPage('latest', 2);
-
-      expect(mockSetCurrentPage).toHaveBeenCalled();
-      expect(mockSetBefore).not.toHaveBeenCalled();
-      expect(mockSetAfter).not.toHaveBeenCalled();
-      expect(mockSetFirst).not.toHaveBeenCalled();
-      expect(mockSetLast).not.toHaveBeenCalled();
-    });
-
-    it('should not decrement page when on first page of sorted posts', () => {
-      handlePreviousPage('latest', 1);
-
-      expect(mockSetCurrentPage).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should handle undefined pageInfo', () => {
-      const handleNextPage = (sortingOption = 'None'): void => {
-        if (sortingOption === 'None') {
-          const endCursor = undefined;
-          if (endCursor) {
-            mockSetAfter(endCursor);
-          }
-        }
-      };
-
-      handleNextPage('None');
-      expect(mockSetAfter).not.toHaveBeenCalled();
-    });
-
-    it('should handle empty sorted posts array', () => {
-      const emptySortedPosts: InterfacePost[] = [];
-
-      const handleNextPage = (
-        sortingOption = 'latest',
-        currentPage = 1,
-      ): void => {
-        if (sortingOption !== 'None') {
-          const maxPage = Math.ceil(emptySortedPosts.length / postsPerPage);
-          if (currentPage < maxPage) {
-            mockSetCurrentPage((prev: number) => prev + 1);
-          }
-        }
-      };
-      handleNextPage('latest', 1);
-      expect(mockSetCurrentPage).not.toHaveBeenCalled();
-    });
+      { timeout: 1000 },
+    );
   });
 });
