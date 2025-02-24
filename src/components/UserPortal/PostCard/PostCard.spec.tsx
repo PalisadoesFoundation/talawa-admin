@@ -614,8 +614,6 @@ describe('Testing PostCard Component [User Portal]', () => {
   });
 
   test('Comment validation displays an error toast when an empty comment is submitted', async () => {
-    console.log('Starting empty comment validation test');
-
     const cardProps = {
       id: '1',
       userImage: 'image.png',
@@ -962,6 +960,10 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Delete post should work properly', async () => {
     setItem('userId', '2');
 
+    const mockDeletePost = vi.fn().mockResolvedValue({
+      createEventData: '', // Simulating a failed response (createEventData is missing)
+    });
+
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
@@ -987,6 +989,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
       ],
       fetchPosts: vi.fn(), // Pass mock function
+      mockDeletePost,
     };
 
     render(
@@ -1023,7 +1026,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     });
   });
 
-  test('should handle delete post failure correctly', async () => {
+  test('Should handle delete post failure correctly', async () => {
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
