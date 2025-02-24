@@ -239,8 +239,12 @@ export default function OrgPostCard({
 
   return (
     <>
-      <div className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
-        <div className={styles.cardsOrgPostCard} onClick={handleCardClick}>
+      <div
+        className="col-xl-4 col-lg-4 col-md-6"
+        data-testid="post-item"
+        onClick={handleCardClick}
+      >
+        <div className={styles.cardsOrgPostCard}>
           <Card className={styles.cardOrgPostCard}>
             {videoAttachment ? (
               <video
@@ -301,7 +305,7 @@ export default function OrgPostCard({
         </div>
 
         {modalVisible && (
-          <div className={styles.modalOrgPostCard}>
+          <div className={styles.modalOrgPostCard} data-testid="post-modal">
             <div className={styles.modalContentOrgPostCard}>
               <div className={styles.modalImage}>
                 {videoAttachment ? (
@@ -372,7 +376,7 @@ export default function OrgPostCard({
         )}
 
         {menuVisible && (
-          <div className={styles.menuModal}>
+          <div className={styles.menuModal} data-testid="post-menu">
             <div className={styles.menuContent}>
               <ul className={styles.menuOptions}>
                 <li onClick={toggleShowEditModal}>{tCommon('edit')}</li>
