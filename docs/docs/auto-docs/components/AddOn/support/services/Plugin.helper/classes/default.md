@@ -56,7 +56,7 @@ A promise that resolves to the store data in JSON format.
 
 > **generateLinks**(`plugins`): `object`[]
 
-Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/services/Plugin.helper.ts#L32)
+Defined in: [src/components/AddOn/support/services/Plugin.helper.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddOn/support/services/Plugin.helper.ts#L34)
 
 Generates an array of links for the enabled plugins.
 

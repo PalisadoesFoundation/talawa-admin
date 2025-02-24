@@ -8,14 +8,6 @@ Defined in: [src/types/AddOn/interface.ts:33](https://github.com/PalisadoesFound
 
 ## Properties
 
-### \_id
-
-> **\_id**: `string`
-
-Defined in: [src/types/AddOn/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AddOn/interface.ts#L34)
-
-***
-
 ### component
 
 > **component**: `string`
@@ -29,6 +21,14 @@ Defined in: [src/types/AddOn/interface.ts:43](https://github.com/PalisadoesFound
 > **enabled**: `boolean`
 
 Defined in: [src/types/AddOn/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AddOn/interface.ts#L41)
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/types/AddOn/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AddOn/interface.ts#L34)
 
 ***
 

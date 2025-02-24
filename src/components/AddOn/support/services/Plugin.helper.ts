@@ -19,7 +19,9 @@ class PluginHelper {
    * @returns A promise that resolves to the installed plugins data in JSON format.
    */
   fetchInstalled = async (): Promise<any> => {
-    const result = await fetch(`http://localhost:3005/installed`);
+    const result = await fetch(
+      `http://localhost:${process.env.PORT}/installed`,
+    );
     return await result.json();
   };
 

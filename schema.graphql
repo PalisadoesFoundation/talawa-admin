@@ -1811,7 +1811,7 @@ enum PaginationDirection {
 scalar PhoneNumber
 
 type Plugin {
-  _id: ID!
+  id: ID!
   pluginCreatedBy: String!
   pluginDesc: String!
   pluginName: String!

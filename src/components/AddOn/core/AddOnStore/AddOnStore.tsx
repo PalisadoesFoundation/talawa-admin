@@ -35,20 +35,27 @@ function addOnStore(): JSX.Element {
     PLUGIN_GET,
   );
 
+  console.log(data);
+
   const { orgId } = useParams<{ orgId: string }>();
 
   /**
    * Fetches store plugins and updates the Redux store with the plugin data.
    */
   const getStorePlugins = async (): Promise<void> => {
+    console.log('Entered in getStorePlugins');
     let plugins = await new PluginHelper().fetchStore();
+
+    console.log('get Store plugins is called : ', plugins);
+
     const installIds = (await new PluginHelper().fetchInstalled()).map(
-      (plugin: InterfacePluginHelper) => plugin._id,
+      (plugin: InterfacePluginHelper) => plugin.id,
     );
     plugins = plugins.map((plugin: InterfacePluginHelper) => {
-      plugin.installed = installIds.includes(plugin._id);
+      plugin.installed = installIds.includes(plugin.id);
       return plugin;
     });
+
     store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
   };
 
@@ -66,6 +73,7 @@ function addOnStore(): JSX.Element {
    */
   const updateSelectedTab = (tab: string): void => {
     setIsStore(tab === 'available');
+    console.log(tab);
     if (tab === 'available') {
       getStorePlugins();
     } else {
@@ -79,6 +87,7 @@ function addOnStore(): JSX.Element {
    * @param ev - The event object from the filter change.
    */
   const filterChange = (ev: React.ChangeEvent<HTMLSelectElement>): void => {
+    console.log(ev.target.value);
     setShowEnabled(ev.target.value === 'enabled');
   };
 
@@ -86,6 +95,7 @@ function addOnStore(): JSX.Element {
     plugins: InterfacePluginHelper[],
     searchTerm: string,
   ): InterfacePluginHelper[] => {
+    console.log('Plugin is triggered: ', plugins);
     if (!searchTerm) {
       return plugins;
     }
@@ -172,7 +182,7 @@ function addOnStore(): JSX.Element {
                       {filteredPlugins.map((plug, i) => (
                         <div className={styles.cardGridItem} key={i}>
                           <AddOnEntry
-                            id={plug._id}
+                            id={plug.id}
                             title={plug.pluginName}
                             description={plug.pluginDesc}
                             createdBy={plug.pluginCreatedBy}
@@ -210,7 +220,7 @@ function addOnStore(): JSX.Element {
                   return filteredPlugins.map((plug, i) => (
                     <div className={styles.cardGridItem} key={i}>
                       <AddOnEntry
-                        id={plug._id}
+                        id={plug.id}
                         title={plug.pluginName}
                         description={plug.pluginDesc}
                         createdBy={plug.pluginCreatedBy}
