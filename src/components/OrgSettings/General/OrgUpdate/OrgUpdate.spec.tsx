@@ -938,4 +938,107 @@ describe('OrgUpdate Component', () => {
       expect(visibilitySwitch).not.toBeChecked();
     });
   });
+
+  describe('OrgUpdate Loading and Error States', () => {
+    const mockOrgData = {
+      organization: {
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+        createdAt: '2024-02-24T00:00:00Z',
+        updatedAt: '2024-02-24T00:00:00Z',
+        creator: {
+          id: '1',
+          name: 'Test Creator',
+          emailAddress: 'creator@test.com',
+        },
+        updater: {
+          id: '1',
+          name: 'Test Updater',
+          emailAddress: 'updater@test.com',
+        },
+      },
+    };
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('handles empty response from update mutation', async () => {
+      const mocks = [
+        // Initial data fetch mock
+        {
+          request: {
+            query: ORGANIZATIONS_LIST,
+            variables: { input: { id: '1' } },
+          },
+          result: {
+            data: mockOrgData,
+          },
+        },
+        // Update mutation mock that returns empty data
+        {
+          request: {
+            query: UPDATE_ORGANIZATION_MUTATION,
+            variables: {
+              input: {
+                id: '1',
+                name: 'Updated Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatar: null,
+              },
+            },
+          },
+          result: {
+            data: null, // Simulate empty response
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for initial data to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Update organization name
+      const nameInput = screen.getByDisplayValue('Test Org');
+      fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
+
+      // Click save button
+      const saveButton = screen.getByTestId('save-org-changes-btn');
+      fireEvent.click(saveButton);
+
+      // Verify error toast is shown
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to update organization',
+        );
+      });
+
+      // Verify button is enabled after failed update
+      expect(saveButton).not.toBeDisabled();
+      expect(saveButton).toHaveTextContent('Save Changes');
+    });
+  });
 });
