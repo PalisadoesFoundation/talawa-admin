@@ -934,12 +934,9 @@ describe('Tests for sorting , nextpage , previousPage', () => {
       </MockedProvider>,
     );
 
-    // Immediately check that the loader is rendered
     await waitFor(
       () => {
-        expect(
-          screen.getByTestId('spinner-wrapper loader'),
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
       },
       { timeout: 1000 },
     );

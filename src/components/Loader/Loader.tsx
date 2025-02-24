@@ -19,7 +19,7 @@ const Loader = (props: InterfaceLoaderProps): JSX.Element => {
     <>
       <div
         className={`${props?.styles ?? styles.spinner_wrapper}`}
-        data-testid="spinner-wrapper loader"
+        data-testid="spinner-wrapper"
       >
         <Spinner
           className={`
