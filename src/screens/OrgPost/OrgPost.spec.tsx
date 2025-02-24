@@ -904,14 +904,10 @@ describe('Tests for sorting , nextpage , previousPage', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    // Simulate selecting a valid sorting option.
     const toggleButton = screen.getAllByTestId('sortpost-toggle')[0];
     userEvent.click(toggleButton);
     const oldestOptionEmpty = await screen.findByText('Oldest');
     userEvent.click(oldestOptionEmpty);
-
-    // Instead of checking for post captions (which would be 0), we assert that the NotFound component is rendered.
-    // For example, if NotFound renders an element with text "No post found" or a test id "not-found":
     await waitFor(
       () => {
         expect(screen.getByText(/post not found/i)).toBeInTheDocument();
@@ -955,18 +951,15 @@ describe('Tests for sorting , nextpage , previousPage', () => {
       </MockedProvider>,
     );
 
-    // Wait a little so that the error state is reached.
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
     });
 
-    // Simulate selecting a sorting option.
     const toggle = screen.getAllByTestId('sortpost-toggle')[0];
     userEvent.click(toggle);
     const oldestOption = await screen.findByText('Oldest');
     userEvent.click(oldestOption);
 
-    // Assert that the error message is displayed.
     await waitFor(
       () => {
         expect(screen.getByText(/Error loading posts/i)).toBeInTheDocument();
@@ -980,7 +973,6 @@ describe('Pagination functionality in OrgPost Component', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
     renderComponent();
-    // Wait for initial queries to resolve.
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
@@ -1002,7 +994,6 @@ describe('Pagination functionality in OrgPost Component', () => {
     );
 
   it('handles next page correctly when sortingOption is "None"', async () => {
-    // Initially, the component (with sortingOption "None") should render the first page.
     await waitFor(() => {
       const captions = screen
         .getAllByTestId('post-caption')
@@ -1069,26 +1060,25 @@ describe('Pagination functionality in OrgPost Component', () => {
       expect(captions[0]).toContain('Post 8');
       expect(captions[5]).toContain('Post 3');
     });
-    // Navigate to next page.
     const nextBtn = screen.getByTestId('next-page-button');
     userEvent.click(nextBtn);
     await waitFor(() => {
       const captions = screen
         .getAllByTestId('post-caption')
         .map((el) => (el.textContent || '').trim());
-      // The next page should have the remaining posts: Post 2, Post 1.
+
       expect(captions.length).toBe(2);
       expect(captions[0]).toContain('Post 2');
       expect(captions[1]).toContain('Post 1');
     });
-    // Now click previous.
+
     const prevBtn = screen.getByTestId('previous-page-button');
     userEvent.click(prevBtn);
     await waitFor(() => {
       const captions = screen
         .getAllByTestId('post-caption')
         .map((el) => (el.textContent || '').trim());
-      // Should return to the first page of descending order.
+
       expect(captions.length).toBe(6);
       expect(captions[0]).toContain('Post 8');
       expect(captions[5]).toContain('Post 3');

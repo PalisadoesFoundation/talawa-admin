@@ -34,7 +34,6 @@ const SearchingButton: React.FC<InterfaceSearchingButtonProps> = ({
   className = styles.dropdown,
   type = 'sort',
 }) => {
-  // Determine the icon based on the type
   const IconComponent = type === 'filter' ? FilterAltOutlined : SortIcon;
 
   return (
