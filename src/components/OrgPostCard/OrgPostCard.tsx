@@ -249,6 +249,7 @@ export default function OrgPostCard({
             {videoAttachment ? (
               <video
                 ref={videoRef}
+                data-testid="video"
                 muted
                 className={styles.postimageOrgPostCard}
                 autoPlay={playing}
@@ -380,7 +381,9 @@ export default function OrgPostCard({
             <div className={styles.menuContent}>
               <ul className={styles.menuOptions}>
                 <li onClick={toggleShowEditModal}>{tCommon('edit')}</li>
-                <li onClick={toggleShowDeleteModal}>{t('deletePost')}</li>
+                <li onClick={toggleShowDeleteModal} data-testid="delete-option">
+                  {t('deletePost')}
+                </li>
                 <li onClick={togglePostPin} data-testid="pin-post-button">
                   {isPinned ? 'Unpin post' : 'Pin post'}
                 </li>
@@ -402,7 +405,11 @@ export default function OrgPostCard({
             <Modal.Title>{t('editPost')}</Modal.Title>
           </Modal.Header>
 
-          <Form onSubmit={updatePost}>
+          <Form
+            onSubmit={updatePost}
+            role="form"
+            data-testid="update-post-form"
+          >
             <Modal.Body>
               <Form.Group className="mb-3">
                 <Form.Label>Caption</Form.Label>
@@ -421,6 +428,7 @@ export default function OrgPostCard({
                 <Form.Label>{t('image')}</Form.Label>
                 <Form.Control
                   type="file"
+                  data-testid="image-upload"
                   accept="image/*"
                   onChange={handleImageUpload}
                   className={styles.inputField}
@@ -448,12 +456,14 @@ export default function OrgPostCard({
                   accept="video/*"
                   onChange={handleVideoUpload}
                   className={styles.inputField}
+                  data-testid="video-upload"
                 />
+
                 {postFormState.attachments
                   .filter((a) => a.mimeType.startsWith('video/'))
                   .map((attachment, index) => (
                     <div key={index} className={styles.previewOrgPostCard}>
-                      <video controls>
+                      <video controls data-testid="video-preview">
                         <source
                           src={attachment.url}
                           type={attachment.mimeType}
@@ -476,7 +486,11 @@ export default function OrgPostCard({
               <Button variant="secondary" onClick={toggleShowEditModal}>
                 Cancel
               </Button>
-              <Button variant="primary" type="submit">
+              <Button
+                variant="primary"
+                type="submit"
+                data-testid="update-post-submit"
+              >
                 Save
               </Button>
             </Modal.Footer>
