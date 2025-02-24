@@ -6,7 +6,7 @@ import {
   USER_JOINED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+// import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
@@ -122,8 +122,8 @@ export default function organizations(): JSX.Element {
     };
   }, []);
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  // const [page, setPage] = React.useState(0);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [organizations, setOrganizations] = React.useState([]);
   const [, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
@@ -141,7 +141,7 @@ export default function organizations(): JSX.Element {
     refetch,
     loading: loadingOrganizations,
   } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
-    variables: { id: userId, first: rowsPerPage, filter: '' },
+    variables: { id: userId, first: 10, filter: '' },
   });
 
   const { data: joinedOrganizationsData } = useQuery(
@@ -157,33 +157,6 @@ export default function organizations(): JSX.Element {
       variables: { id: userId },
     },
   );
-
-  /**
-   * Handles page change in pagination.
-   *
-   * @param _event - The event triggering the page change.
-   * @param  newPage - The new page number.
-   */
-  const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ): void => {
-    setPage(newPage);
-  };
-
-  /**
-   * Handles change in the number of rows per page.
-   *
-   * @param  event - The event triggering the change.
-   */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    const newRowsPerPage = event.target.value;
-
-    setRowsPerPage(parseInt(newRowsPerPage, 10));
-    setPage(0);
-  };
 
   /**
    * Searches organizations based on the provided filter value.
@@ -416,36 +389,37 @@ export default function organizations(): JSX.Element {
                 </div>
               ) : (
                 <>
-                  {organizations && organizations.length > 0 ? (
-                    <div className="row">
-                      {(rowsPerPage > 0
-                        ? organizations.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage,
-                          )
-                        : organizations
-                      ).map((organization: InterfaceOrganization, index) => {
-                        const cardProps: InterfaceOrganizationCardProps = {
-                          name: organization.name,
-                          image: organization.image,
-                          id: organization._id,
-                          description: organization.description,
-                          admins: organization.admins,
-                          members: organization.members,
-                          address: organization.address,
-                          membershipRequestStatus:
-                            organization.membershipRequestStatus,
-                          userRegistrationRequired:
-                            organization.userRegistrationRequired,
-                          membershipRequests: organization.membershipRequests,
-                          isJoined: organization.isJoined,
-                        };
-                        return (
-                          <div key={index} className="col-md-6 mb-4">
-                            <OrganizationCard {...cardProps} />
-                          </div>
-                        );
-                      })}
+                  {Array.isArray(organizations) && organizations.length > 0 ? (
+                    <div>
+                      {organizations.map(
+                        (organization: InterfaceOrganization) => {
+                          const cardProps: InterfaceOrganizationCardProps = {
+                            name: organization.name,
+                            image: organization.image,
+                            id: organization._id,
+                            description: organization.description,
+                            admins: organization.admins,
+                            members: organization.members,
+                            address: organization.address,
+                            membershipRequestStatus:
+                              organization?.membershipRequestStatus,
+                            userRegistrationRequired:
+                              organization?.userRegistrationRequired,
+                            membershipRequests:
+                              organization?.membershipRequests,
+                            isJoined: organization?.isJoined,
+                          };
+
+                          return (
+                            <div
+                              key={organization._id}
+                              className="col-md-6 mb-4"
+                            >
+                              <OrganizationCard {...cardProps} />
+                            </div>
+                          );
+                        },
+                      )}
                     </div>
                   ) : (
                     <span>{t('nothingToShow')}</span>
@@ -453,19 +427,6 @@ export default function organizations(): JSX.Element {
                 </>
               )}
             </div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={organizations ? organizations.length : 0}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
