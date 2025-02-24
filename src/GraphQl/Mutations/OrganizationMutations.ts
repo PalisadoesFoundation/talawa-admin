@@ -235,14 +235,31 @@ export const TOGGLE_PINNED_POST = gql`
  */
 
 export const ADD_CUSTOM_FIELD = gql`
-  mutation ($organizationId: ID!, $type: String!, $name: String!) {
+  mutation addOrganizationCustomField(
+    $organizationId: String!
+    $name: String!
+    $type: String!
+  ) {
     addOrganizationCustomField(
       organizationId: $organizationId
-      type: $type
       name: $name
+      type: $type
     ) {
+      id
       name
       type
+      organizationId
+    }
+  }
+`;
+
+export const REMOVE_CUSTOM_FIELD = gql`
+  mutation removeOrganizationCustomField($id: String!) {
+    removeOrganizationCustomField(id: $id) {
+      id
+      name
+      type
+      organizationId
     }
   }
 `;
@@ -256,18 +273,6 @@ export const ADD_CUSTOM_FIELD = gql`
  * @param customFieldId - The ID of the custom field to be removed.
  * @returns The removed organization custom field object.
  */
-
-export const REMOVE_CUSTOM_FIELD = gql`
-  mutation ($organizationId: ID!, $customFieldId: ID!) {
-    removeOrganizationCustomField(
-      organizationId: $organizationId
-      customFieldId: $customFieldId
-    ) {
-      type
-      name
-    }
-  }
-`;
 
 export const SEND_MEMBERSHIP_REQUEST = gql`
   mutation ($organizationId: ID!) {

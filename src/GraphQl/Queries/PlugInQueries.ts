@@ -363,9 +363,15 @@ export const CHATS_LIST = gql`
  * @returns A boolean indicating whether the organization is a sample organization.
  */
 
+// Ensure query matches backend schema
 export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
-  query ($isSampleOrganizationId: ID!) {
-    isSampleOrganization(id: $isSampleOrganizationId)
+  query Organization($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      name
+      description
+      isSampleOrganization
+    }
   }
 `;
 
@@ -376,12 +382,17 @@ export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
  * @returns The list of custom fields associated with the organization, including details such as ID, type, and name.
  */
 
+// Ensure query matches backend schema
 export const ORGANIZATION_CUSTOM_FIELDS = gql`
-  query ($customFieldsByOrganizationId: ID!) {
-    customFieldsByOrganization(id: $customFieldsByOrganizationId) {
-      _id
-      type
-      name
+  query GetOrganizationCustomFields($organizationId: String!) {
+    organization(input: { id: $organizationId }) {
+      id
+      customFields {
+        id
+        name
+        type
+        organizationId
+      }
     }
   }
 `;
