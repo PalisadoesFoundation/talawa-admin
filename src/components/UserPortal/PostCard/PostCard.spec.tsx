@@ -41,6 +41,7 @@ import { vi } from 'vitest';
  * 11. **Comment submission error**: Ensures an error toast appears when a network error occurs.
  * 12. **Delete post failure**: Ensures the error toast appears when post deletion fails.
  * 13. **Post image**: Verifies post image rendering.
+ * 14. **Delete post success**: Ensures the success toast appears when CreateEvenData is returned.
  *
  * Mocked GraphQL data is used for simulating backend behavior.
  */
@@ -1139,5 +1140,73 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     const imageElement = await screen.findByRole('img');
     expect(imageElement).toHaveAttribute('src', 'image.png');
+  });
+
+  test('Delete post should show success toast when createEventData is returned', async () => {
+    setItem('userId', '2');
+
+    const mockDeletePostSuccess = vi.fn().mockResolvedValue({
+      createEventData: { success: true }, // Simulating success case
+    });
+
+    const cardProps = {
+      id: 'postId',
+      userImage: 'image.png',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      postedAt: '',
+      image: '',
+      video: '',
+      text: 'test Post',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 0,
+      comments: [],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '2',
+        },
+      ],
+      fetchPosts: vi.fn(),
+      mockDeletePost: mockDeletePostSuccess, // Success case
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dropdown')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('dropdown'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deletePost')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('deletePost'));
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'Successfully deleted the Post.',
+      );
+    });
+
+    expect(cardProps.fetchPosts).toHaveBeenCalled();
   });
 });
