@@ -123,7 +123,7 @@ const userSidebar = ({
               )}
             </NavLink>
           </div>
-          <div className="mt-auto">
+          <div className={styles.profileContainer}>
             <ProfileDropdown />
           </div>
         </div>

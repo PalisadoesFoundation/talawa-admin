@@ -875,16 +875,17 @@
 
 .outlineBtn {
   margin-bottom: 10px;
-  background-color: var(--outlineBtn-bg);
-  color: var(--outlineBtn-color);
-  border-color: var(--outlineBtn-border);
+  background-color: var(--joined-button-bg);
+  color: var(--black-color);
+  border-color: var(--joined-button-bg);
 }
 
 .outlineBtn:is(:hover, :active) {
   margin-bottom: 10px;
-  background-color: var(--outlineBtn-hover-bg) !important;
-  color: var(--outlineBtn-bg) !important;
-  border-color: var(--outlineBtn-hover-bg);
+  color: var(--black-color) !important;
+  background-color: var(--joined-button-bg);
+  border-color: var(--joined-button-bg);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .outlineBtn:disabled {
@@ -4990,13 +4991,18 @@ button[data-testid='createPostBtn'] {
 }
 
 .leftDrawer .profileContainer {
-  border: none;
+  background-color: transparent;
+  color: #000;
+  cursor: pointer;
   width: 100%;
-  padding: 2.1rem 0.5rem;
-  height: 52px;
+  justify-content: flex-end;
+  padding: 8px 10px;
   display: flex;
-  align-items: center;
-  background-color: var(--bs-white);
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
 }
 
 .leftDrawer .sidebarcompheight {
@@ -7672,7 +7678,7 @@ button[data-testid='createPostBtn'] {
 /* usersidebar  */
 
 .leftDrawer {
-  width: calc(300px);
+  width: calc(350px) !important;
   background-color: var(--profile-bg) !important;
   position: fixed;
   top: 0;
@@ -7698,7 +7704,7 @@ button[data-testid='createPostBtn'] {
     display: none;
   }
   .leftDrawer {
-    width: 100%;
+    width: 100% !important;
     left: 0;
     right: 0;
   }
@@ -7716,99 +7722,6 @@ button[data-testid='createPostBtn'] {
   .logout {
     margin-bottom: 2.5rem !important;
   }
-}
-
-/* ProfileDropdown */
-
-.profileContainer {
-  border: 1px solid var(--create-button-border);
-  padding: 2.1rem 0.5rem;
-  height: 52px;
-  border-radius: 16px 0px 0px 16px;
-  display: flex;
-  align-items: center;
-  background-color: var(--tablerow-bg-color) !important;
-  justify-content: space-between;
-  width: 100%;
-  /* Add focus styles for keyboard navigation */
-  &:focus-within {
-    @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
-  }
-}
-
-.angleDown {
-  margin-left: 4px;
-}
-
-.profileContainer:focus {
-  outline: none;
-  background-color: var(--profileContainer-focus-bg);
-}
-.imageContainer {
-  width: 56px;
-  height: 56px;
-  border-radius: 100%;
-  margin-right: 10px;
-}
-.imageContainer img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 100%;
-}
-.profileContainer .profileText {
-  flex: 1;
-  text-align: start;
-  overflow: hidden;
-  margin-right: 4px;
-}
-.profileContainer .profileText .primaryText {
-  font-size: 1rem;
-  font-weight: 600;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
-  -webkit-box-orient: vertical;
-  word-wrap: break-word;
-  white-space: normal;
-}
-.profileContainer .profileText .secondaryText {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: var(--bs-secondary);
-  display: block;
-  text-transform: capitalize;
-}
-.profileDropdown {
-  background-color: transparent !important;
-}
-.profileDropdown .dropdown-toggle .btn .btn-normal {
-  display: none !important;
-  background-color: transparent !important;
-}
-.dropdownToggle {
-  background-image: url(../../../public/images/svg/angleDown.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: var(--tablerow-bg-color) !important;
-  border: 1px solid var(--create-button-border);
-  border-left: none;
-  border-top-right-radius: 16px;
-  border-bottom-right-radius: 16px;
-  color: var(--eventManagement-button-text);
-}
-
-.dropdownToggle:hover {
-  border: 1px solid var(--create-button-border);
-  border-left: none;
-}
-
-.dropdownToggle::after {
-  border-top: none !important;
-  border-bottom: none !important;
-}
-.avatarStyle {
-  border-radius: 100%;
 }
 
 /* SuperAdminScreen */
@@ -7952,6 +7865,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   justify-content: space-around;
   width: 8rem;
+  color: black;
   border-width: medium;
 }
 
@@ -7959,7 +7873,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   justify-content: space-around;
   width: 8rem;
-  color: var(--joined-button-color);
+  color: black;
   font-weight: bold;
   background-color: var(--joined-button-bg) !important;
   border-color: var(--joined-button-bg) !important;
@@ -8049,6 +7963,7 @@ button[data-testid='createPostBtn'] {
   border-radius: 8px;
   outline: 1px solid var(--orgCard-outline);
   position: relative;
+  width: 300px + 2rem;
 }
 
 .orgCard .innerContainer {
@@ -8180,6 +8095,12 @@ button[data-testid='createPostBtn'] {
   max-height: 100%;
   width: 100%;
   overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Space between cards */
+  justify-content: space-between; /* Ensures cards are spread out */
+  padding-left: 20px !important;
+  margin-top: 10px;
 }
 
 .content {
@@ -8421,7 +8342,7 @@ button[data-testid='createPostBtn'] {
 /* userSideBarOrg */
 
 .leftDrawer {
-  width: calc(300px + 2rem);
+  width: calc(400px + 2rem);
   min-height: 100%;
   position: fixed;
   top: 0;
@@ -8429,6 +8350,7 @@ button[data-testid='createPostBtn'] {
   z-index: 100;
   display: flex;
   flex-direction: column;
+  /* justify-content: center !important; */
   padding: 0.8rem 1rem 0 1rem;
   background-color: var(--user-sidebar-org-bg) !important;
   transition: 0.5s;
@@ -8641,7 +8563,7 @@ button[data-testid='createPostBtn'] {
 
 @media (max-width: 1120px) {
   .leftDrawer {
-    width: calc(250px + 2rem);
+    width: calc(300px + 2rem);
     padding: 1rem 1rem 0 1rem;
   }
 }
@@ -9199,4 +9121,184 @@ button[data-testid='createPostBtn'] {
 .agenda-category-options-button:focus-visible {
   outline: 2px solid var(--outlineBtn-color);
   outline-offset: 2px;
+}
+
+/* profileDropDown.tsx */
+.profileContainerarrowright {
+  border: none;
+  padding: 2.1rem 0.5rem;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.imageContainerSidebar {
+  width: 56px;
+  height: 56px;
+  border-radius: 100%;
+  margin-right: 10px;
+}
+.imageContainerSidebar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+.profileContainerarrowright .profileTextTitle {
+  flex: 1;
+  text-align: start;
+  overflow: hidden;
+  margin-right: 2px;
+}
+.profileContainerarrowright .profileTextTitle .primaryText {
+  font-size: 1rem;
+  font-weight: 600;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.profileContainerarrowright .profileTextTitle .primaryText .arrowbtn {
+  background: none;
+  font-size: large;
+  border: none;
+  padding-left: 100px;
+  cursor: pointer;
+  color: #040404;
+}
+.profileContainerarrowright .profileTextTitle .secondaryText {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--bs-secondary);
+  display: block;
+  text-transform: capitalize;
+}
+.logoutBtn {
+  width: 100%;
+  padding: 12px;
+  padding-left: 15px;
+  background-color: #a8c7fa;
+  border: none;
+  border-radius: 13px;
+  color: #000;
+  font-size: 0.9375rem;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.logoutBtn::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'%3E%3C/path%3E%3Cpolyline points='16 17 21 12 16 7'%3E%3C/polyline%3E%3Cline x1='21' y1='12' x2='9' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.avatarStyle {
+  border-radius: 100%;
+}
+
+/* profileDropDown.tsx */
+.Profilebox {
+  width: 100% !important;
+  padding-bottom: 30px;
+}
+.profileContainerarrowright {
+  border: none;
+  padding: 2.1rem 0.5rem;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.imageContainerSidebar {
+  width: 56px;
+  height: 56px;
+  border-radius: 100%;
+  margin-right: 10px;
+}
+.imageContainerSidebar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+.profileContainerarrowright .profileTextTitle {
+  /* flex: 1; */
+  text-align: start;
+  overflow: hidden;
+  margin-right: 2px;
+}
+.profileContainerarrowright .profileTextTitle .primaryText {
+  font-size: 1rem;
+  font-weight: 600;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.profileContainerarrowright .profileTextTitle .primaryText .arrowbtn {
+  background: none;
+  font-size: large;
+  border: none;
+  padding-left: 100px;
+  cursor: pointer;
+  color: #040404;
+}
+.profileContainerarrowright .profileTextTitle .secondaryText {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--bs-secondary);
+  display: block;
+  text-transform: capitalize;
+}
+.logoutBtn {
+  width: 100%;
+  padding: 12px;
+  padding-left: 15px;
+  background-color: #a8c7fa;
+  border: none;
+  border-radius: 13px;
+  color: #000;
+  font-size: 0.9375rem;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.logoutBtn::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'%3E%3C/path%3E%3Cpolyline points='16 17 21 12 16 7'%3E%3C/polyline%3E%3Cline x1='21' y1='12' x2='9' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.avatarStyle {
+  border-radius: 100%;
+}
+
+.btnsContainer {
+  display: flex;
+  justify-items: center;
+  flex-wrap: wrap;
 }

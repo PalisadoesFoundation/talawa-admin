@@ -648,9 +648,11 @@
 
 .btnsContainer {
   display: flex;
+  padding-left: 20px !important;
   margin: 2.5rem 0;
+  /* width: 60%; */
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .btnsContainer .btnsBlock {
@@ -691,7 +693,7 @@
 
 @media (max-width: 1020px) {
   .btnsContainer {
-    flex-direction: column;
+    /* flex-direction: column; */
     margin: 1.5rem 0;
   }
 

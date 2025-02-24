@@ -6,7 +6,6 @@ import {
   USER_JOINED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
-// import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
@@ -316,16 +315,16 @@ export default function organizations(): JSX.Element {
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expandOrg
-              : styles.contractOrg
+              ? styles.expand
+              : styles.contract
         }`}
       >
         <div className={`${styles.mainContainerOrganization}`}>
-          <div className="d-flex justify-content-between align-items-center">
-            <div style={{ flex: 1 }}>
-              <h1>{t('selectOrganization')}</h1>
-            </div>
+          {/* <div className="d-flex justify-content-between align-items-center"> */}
+          <div style={{ flex: 1 }}>
+            <h1>{t('selectOrganization')}</h1>
           </div>
+          {/* </div> */}
 
           <div className={styles.head}>
             <div className={styles.btnsContainer}>
@@ -381,16 +380,16 @@ export default function organizations(): JSX.Element {
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
             <div
-              className={`d-flex flex-column  ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
               {loadingOrganizations ? (
-                <div className={`d-flex flex-row justify-content-center`}>
+                <div className="d-flex flex-row justify-content-center">
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
                 <>
                   {Array.isArray(organizations) && organizations.length > 0 ? (
-                    <div>
+                    <div className="d-flex flex-wrap justify-content-between">
                       {organizations.map(
                         (organization: InterfaceOrganization) => {
                           const cardProps: InterfaceOrganizationCardProps = {
