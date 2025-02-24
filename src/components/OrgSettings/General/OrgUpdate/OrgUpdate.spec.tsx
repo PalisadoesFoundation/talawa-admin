@@ -845,4 +845,97 @@ describe('OrgUpdate Component', () => {
       });
     });
   });
+
+  describe('OrgUpdate Form Switch Controls', () => {
+    const mockOrgData = {
+      organization: {
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+      },
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: { input: { id: '1' } },
+        },
+        result: {
+          data: mockOrgData,
+        },
+      },
+    ];
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('toggles user registration switch correctly', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Find the user registration switch
+      const userRegSwitch = screen.getByPlaceholderText(
+        i18n.t('orgUpdate.userRegistrationRequired'),
+      );
+      expect(userRegSwitch).toBeInTheDocument();
+      expect(userRegSwitch).not.toBeChecked();
+
+      // Toggle the switch
+      fireEvent.click(userRegSwitch);
+      expect(userRegSwitch).toBeChecked();
+
+      // Toggle back
+      fireEvent.click(userRegSwitch);
+      expect(userRegSwitch).not.toBeChecked();
+    });
+
+    it('toggles visibility switch correctly', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Find the visibility switch
+      const visibilitySwitch = screen.getByPlaceholderText(
+        i18n.t('orgUpdate.isVisibleInSearch'),
+      );
+      expect(visibilitySwitch).toBeInTheDocument();
+      expect(visibilitySwitch).not.toBeChecked();
+
+      // Toggle the switch
+      fireEvent.click(visibilitySwitch);
+      expect(visibilitySwitch).toBeChecked();
+
+      // Toggle back
+      fireEvent.click(visibilitySwitch);
+      expect(visibilitySwitch).not.toBeChecked();
+    });
+  });
 });
