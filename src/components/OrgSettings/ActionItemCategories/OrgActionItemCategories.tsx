@@ -15,7 +15,7 @@ import {
 } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
-import CategoryModal from './CategoryModal';
+import CategoryModal from './Modal/CategoryModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 

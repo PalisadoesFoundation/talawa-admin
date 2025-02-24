@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Navigate, useParams } from 'react-router-dom';
-import VenueModal from 'components/Venues/VenueModal';
+import VenueModal from 'components/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';

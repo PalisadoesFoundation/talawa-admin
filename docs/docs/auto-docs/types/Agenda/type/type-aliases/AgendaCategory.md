@@ -32,7 +32,7 @@ Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation
 
 ### organization
 
-> **organization**: [`Organization`](../../../organization/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
 
 ### updatedAt?
 
