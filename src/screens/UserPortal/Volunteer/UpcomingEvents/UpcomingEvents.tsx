@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { IoLocationOutline } from 'react-icons/io5';

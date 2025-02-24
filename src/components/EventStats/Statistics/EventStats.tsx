@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { FeedbackStats } from './Feedback/Feedback';
 import { ReviewStats } from './Review/Review';
 import { AverageRating } from './AverageRating/AverageRating';
-import styles from '../css/Loader.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import eventStatsStyles from '../css/EventStats.module.css';
 import { useQuery } from '@apollo/client';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
