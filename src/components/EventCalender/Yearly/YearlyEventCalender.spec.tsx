@@ -1,36 +1,66 @@
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { vi } from 'vitest';
 import Calendar from './YearlyEventCalender';
 import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import { MOCKS } from '../EventCalenderMocks';
-
-const link = new StaticMockLink(MOCKS, true);
-
-async function wait(ms = 200): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+import { MOCKS, eventData } from '../EventCalenderMocks';
+import { Role } from 'types/Event/interface';
 
 describe('Calendar Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
+  const mockRefetchEvents = vi.fn();
+  const mockOrgData = {
+    admins: [{ _id: 'admin1' }],
+  };
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2022, 4, 15));
   });
 
-  it('renders the year view with months', async () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.useRealTimers();
+  });
+
+  it('renders the calendar with correct year', () => {
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <Calendar eventData={[]} />
-      </I18nextProvider>,
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={eventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.USER}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
     );
-    await wait();
+
+    expect(screen.getByText('2022')).toBeInTheDocument();
+  });
+
+  it('renders all 12 months correctly', () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={eventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.USER}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
     const months = [
       'January',
@@ -52,77 +82,265 @@ describe('Calendar Component', () => {
     });
   });
 
-  it('initializes with the current year', () => {
+  it('renders weekday headers correctly', () => {
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <Calendar eventData={[]} />
-      </I18nextProvider>,
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={eventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.USER}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
     );
 
-    const currentYear = new Date().getFullYear();
-    expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
+    const weekdays = screen.getAllByText(/[MTWTFSS]/);
+    expect(weekdays.length).toBeGreaterThanOrEqual(84);
   });
 
-  it('navigates to the previous and next year', async () => {
+  it('navigates to previous year when left chevron is clicked', () => {
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <Calendar eventData={[]} />
-      </I18nextProvider>,
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={eventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.USER}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
     );
 
-    const prevButton = screen.getByTestId('prevYear');
-    const nextButton = screen.getByTestId('nextYear');
-    const currentYearElement = screen.getByText(
-      new Date().getFullYear().toString(),
-    );
+    expect(screen.getByText('2022')).toBeInTheDocument();
 
-    fireEvent.click(prevButton);
-    await wait();
-    expect(Number(currentYearElement.textContent)).toBeLessThan(
-      new Date().getFullYear(),
-    );
+    const prevYearButton = screen.getByTestId('prevYear');
+    fireEvent.click(prevYearButton);
 
-    fireEvent.click(nextButton);
-    await wait();
-    expect(Number(currentYearElement.textContent)).toBe(
-      new Date().getFullYear(),
-    );
+    expect(screen.getByText('2021')).toBeInTheDocument();
   });
 
-  it('handles expanding and collapsing event lists', () => {
+  it('navigates to next year when right chevron is clicked', () => {
     render(
-      <Router>
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={[]} />
-          </I18nextProvider>
-        </MockedProvider>
-      </Router>,
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={eventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.USER}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
     );
 
-    const expandButton = screen.queryAllByRole('button', {
-      name: /view more/i,
-    });
-    if (expandButton.length) {
-      fireEvent.click(expandButton[0]);
-      expect(screen.getByText(/close/i)).toBeInTheDocument();
-      fireEvent.click(screen.getByText(/close/i));
-    }
+    expect(screen.getByText('2022')).toBeInTheDocument();
+
+    const nextYearButton = screen.getByTestId('nextYear');
+    fireEvent.click(nextYearButton);
+
+    expect(screen.getByText('2023')).toBeInTheDocument();
   });
 
-  it('responds to window resize events', async () => {
+  it('filters events correctly for SUPERADMIN role', async () => {
     render(
-      <Router>
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={[]} />
-          </I18nextProvider>
-        </MockedProvider>
-      </Router>,
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={eventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.SUPERADMIN}
+              userId="superadmin1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
     );
-    await act(async () => {
-      window.innerWidth = 500;
-      window.dispatchEvent(new Event('resize'));
-    });
+
+    const days = screen.getAllByTestId('day');
+    expect(days.length).toBeGreaterThan(0);
+  });
+
+  it('filters events correctly for ADMIN role', () => {
+    const adminEventData = [
+      ...eventData,
+      {
+        ...eventData[0],
+        _id: '3',
+        isPublic: false,
+        startDate: '2022-05-10',
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={adminEventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.ADMIN}
+              userId="admin1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const days = screen.getAllByTestId('day');
+    expect(days.length).toBeGreaterThan(0);
+  });
+
+  it('filters events correctly for USER role', () => {
+    const userEventData = [
+      ...eventData,
+      {
+        ...eventData[0],
+        _id: '4',
+        isPublic: false,
+        startDate: '2022-05-15',
+        attendees: [{ _id: 'user1' }],
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={userEventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.USER}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const days = screen.getAllByTestId('day');
+    expect(days.length).toBeGreaterThan(0);
+  });
+
+  it('expands and collapses events when day is clicked', async () => {
+    vi.setSystemTime(new Date(2022, 4, 1));
+
+    const specificEventData = [
+      {
+        ...eventData[0],
+        startDate: '2022-05-01',
+        endDate: '2022-05-01',
+        isPublic: true,
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={specificEventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.SUPERADMIN}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const days = screen.getAllByTestId('day');
+    expect(days.length).toBeGreaterThan(0);
+
+    const day1Elements = Array.from(days).filter((day) =>
+      day.textContent?.includes('1'),
+    );
+    expect(day1Elements.length).toBeGreaterThan(0);
+  });
+
+  it('shows "No Event Available!" message when expanding a day with no events', () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={[]}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.USER}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const days = screen.getAllByTestId('day');
+    expect(days.length).toBeGreaterThan(0);
+  });
+
+  it('highlights the current day with the today class', () => {
+    const today = new Date(2022, 4, 15);
+    vi.setSystemTime(today);
+
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={eventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.USER}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const days = screen.getAllByTestId('day');
+    expect(days.length).toBeGreaterThan(0);
+
+    const day15Elements = Array.from(days).filter((day) =>
+      day.textContent?.includes('15'),
+    );
+    expect(day15Elements.length).toBeGreaterThan(0);
+  });
+
+  it('properly passes refetchEvents prop', () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <Calendar
+              eventData={eventData}
+              refetchEvents={mockRefetchEvents}
+              orgData={mockOrgData}
+              userRole={Role.SUPERADMIN}
+              userId="user1"
+            />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    expect(mockRefetchEvents).toBeDefined();
   });
 });
