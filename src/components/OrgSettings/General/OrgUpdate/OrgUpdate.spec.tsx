@@ -239,4 +239,208 @@ describe('OrgUpdate Component', () => {
 
     await userEvent.upload(fileInput, file);
   });
+
+  describe('OrgUpdate Address Form Fields', () => {
+    const mockOrgData = {
+      organization: {
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+      },
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: { input: { id: '1' } },
+        },
+        result: {
+          data: mockOrgData,
+        },
+      },
+    ];
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('loads and displays address fields correctly', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        // Check if address fields are populated with initial data
+        expect(screen.getByDisplayValue('Test City')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Test State')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Suite 100')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('12345')).toBeInTheDocument();
+
+        // Check if country select is present
+        expect(screen.getByTestId('countrycode')).toBeInTheDocument();
+      });
+    });
+
+    it('handles country selection change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('countrycode')).toBeInTheDocument();
+      });
+
+      const countrySelect = screen.getByTestId('countrycode');
+      fireEvent.change(countrySelect, { target: { value: 'CA' } });
+      expect(countrySelect).toHaveValue('CA');
+    });
+
+    it('handles city input change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test City')).toBeInTheDocument();
+      });
+
+      const cityInput = screen.getByDisplayValue('Test City');
+      fireEvent.change(cityInput, { target: { value: 'New City' } });
+      expect(cityInput).toHaveValue('New City');
+    });
+
+    it('handles state input change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test State')).toBeInTheDocument();
+      });
+
+      const stateInput = screen.getByDisplayValue('Test State');
+      fireEvent.change(stateInput, { target: { value: 'New State' } });
+      expect(stateInput).toHaveValue('New State');
+    });
+
+    it('handles dependent locality input change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for the component to load initial data
+      await waitFor(() => {
+        expect(
+          screen.getByPlaceholderText(i18n.t('orgUpdate.dependentLocality')),
+        ).toBeInTheDocument();
+      });
+
+      // Get and change the dependent locality input
+      const dependentLocalityInput = screen.getByPlaceholderText(
+        i18n.t('orgUpdate.dependentLocality'),
+      );
+      fireEvent.change(dependentLocalityInput, {
+        target: { value: 'District 1' },
+      });
+
+      // Verify the value was updated in the input
+      expect(dependentLocalityInput).toHaveValue('District 1');
+
+      // Verify the form state was updated
+      await waitFor(() => {
+        expect(dependentLocalityInput).toHaveValue('District 1');
+      });
+    });
+
+    it('handles address line inputs change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Suite 100')).toBeInTheDocument();
+      });
+
+      const line1Input = screen.getByDisplayValue('123 Test St');
+      const line2Input = screen.getByDisplayValue('Suite 100');
+
+      fireEvent.change(line1Input, { target: { value: '456 New St' } });
+      fireEvent.change(line2Input, { target: { value: 'Floor 2' } });
+
+      expect(line1Input).toHaveValue('456 New St');
+      expect(line2Input).toHaveValue('Floor 2');
+    });
+
+    it('handles postal code and sorting code inputs change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for component to load with initial data
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('12345')).toBeInTheDocument();
+        expect(
+          screen.getByPlaceholderText(i18n.t('orgUpdate.sortingCode')),
+        ).toBeInTheDocument();
+      });
+
+      // Get input elements using translation keys
+      const postalCodeInput = screen.getByDisplayValue('12345');
+      const sortingCodeInput = screen.getByPlaceholderText(
+        i18n.t('orgUpdate.sortingCode'),
+      );
+
+      // Change input values
+      fireEvent.change(postalCodeInput, { target: { value: '54321' } });
+      fireEvent.change(sortingCodeInput, { target: { value: 'SORT123' } });
+
+      // Verify immediate value changes
+      expect(postalCodeInput).toHaveValue('54321');
+      expect(sortingCodeInput).toHaveValue('SORT123');
+
+      // Verify the form state was updated
+      await waitFor(() => {
+        expect(postalCodeInput).toHaveValue('54321');
+        expect(sortingCodeInput).toHaveValue('SORT123');
+      });
+    });
+  });
 });
