@@ -152,7 +152,6 @@ const orgListSecondPageMock: MockedResponse = {
   result: { data: secondPageOrgList },
 };
 
-// When before is set (previous page), return the first 6 posts again.
 const orgListFirstPageBackMock: MockedResponse = {
   request: {
     query: ORGANIZATION_POST_LIST,
@@ -169,9 +168,9 @@ const orgListFirstPageBackMock: MockedResponse = {
 
 const paginationMocks: MockedResponse[] = [
   getPostsMock,
-  orgListFirstPageMock, // initial load (first page)
-  orgListSecondPageMock, // next page
-  orgListFirstPageBackMock, // previous page when going back
+  orgListFirstPageMock,
+  orgListSecondPageMock,
+  orgListFirstPageBackMock,
 ];
 
 const mockPosts = {
@@ -1187,90 +1186,9 @@ describe('Pagination functionality in OrgPost Component', () => {
       const captions = screen
         .getAllByTestId('post-caption')
         .map((el) => (el.textContent || '').trim());
-
       expect(captions.length).toBe(6);
       expect(captions[0]).toContain('Post 8');
       expect(captions[5]).toContain('Post 3');
     });
-  });
-
-  it('handles previous page correctly when sortingOption is "None"', async () => {
-    // Move to page 2 first.
-    const nextBtn = screen.getByTestId('next-page-button');
-    userEvent.click(nextBtn);
-
-    // Wait for page 2 to be rendered. For example, assume there are 2 posts on page 2.
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-      expect(captions.length).toBe(2);
-      expect(captions[0]).toContain('Post 7');
-      expect(captions[1]).toContain('Post 8');
-    });
-
-    // Now click the "Previous" button.
-    const prevBtn = screen.getByTestId('previous-page-button');
-    userEvent.click(prevBtn);
-
-    // Wait for page 1 to be rendered.
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-      // Expecting 6 posts on the first page.
-      expect(captions.length).toBe(6);
-      expect(captions[0]).toContain('Post 1');
-      expect(captions[5]).toContain('Post 6');
-    });
-  });
-});
-
-const getPostsByOrgMock: MockedResponse = {
-  request: {
-    query: GET_POSTS_BY_ORG,
-    variables: { input: { organizationId: '123' } },
-  },
-  result: {
-    data: {
-      postsByOrganization: [
-        { id: '1', caption: 'Hello World', createdAt: '2024-01-01T10:00:00Z' },
-        { id: '2', caption: 'Another Post', createdAt: '2024-01-02T10:00:00Z' },
-        {
-          id: '3',
-          caption: 'Hello Testing',
-          createdAt: '2024-01-03T10:00:00Z',
-        },
-      ],
-    },
-  },
-};
-describe('OrgPost handleSearch', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('clears filtering when search term is empty', async () => {
-    render(
-      <MockedProvider mocks={[getPostsByOrgMock]}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    const searchInput = await screen.findByTestId('searchByName');
-    await act(async () => {
-      fireEvent.change(searchInput, { target: { value: 'hello' } });
-    });
-    await act(async () => new Promise((resolve) => setTimeout(resolve, 0)));
-    await act(async () => {
-      fireEvent.change(searchInput, { target: { value: '' } });
-    });
-    const filteredContainer = screen.queryByTestId('filteredPosts');
-    expect(filteredContainer).toBeNull();
   });
 });

@@ -100,7 +100,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     const createdAt = new Date(post.createdAt);
     const attachments = createAttachments(post, createdAt);
     return (
-      <div data-testid="post-caption">
+      <div data-testid="post-caption" key={post.id}>
         <OrgPostCard
           key={post.id}
           post={{
