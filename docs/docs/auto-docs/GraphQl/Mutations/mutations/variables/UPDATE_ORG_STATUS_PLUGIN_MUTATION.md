@@ -10,4 +10,4 @@ Defined in: [src/GraphQl/Mutations/mutations.ts:463](https://github.com/Palisado
 
 ## Remarks
 
-used  `updatePluginStatus`to add or remove the current Organization the in the plugin list `uninstalledOrgs`
+Used `updatePluginStatus` to add or remove the current organization in the plugin list `uninstalledOrgs`.

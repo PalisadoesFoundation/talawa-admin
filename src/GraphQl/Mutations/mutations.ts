@@ -444,9 +444,9 @@ export const FORGOT_PASSWORD_MUTATION = gql`
  * used to toggle `installStatus` (boolean value) of a Plugin
  */
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
-  mutation ($id: ID!, $orgId: ID!) {
-    updatePluginStatus(id: $id, orgId: $orgId) {
-      _id
+  mutation ($pluginId: String!, $orgId: String!) {
+    updatePluginStatus(pluginId: $pluginId, orgId: $orgId) {
+      id
       pluginName
       pluginCreatedBy
       pluginDesc
@@ -458,12 +458,12 @@ export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
 /**
  * {@label UPDATE_ORG_STATUS_PLUGIN_MUTATION}
  * @remarks
- * used  `updatePluginStatus`to add or remove the current Organization the in the plugin list `uninstalledOrgs`
+ * Used `updatePluginStatus` to add or remove the current organization in the plugin list `uninstalledOrgs`.
  */
 export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
-  mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
-    updatePluginStatus(id: $id, orgId: $orgId) {
-      _id
+  mutation updateOrgStatusPluginMutation($pluginId: String!, $orgId: String!) {
+    updatePluginStatus(pluginId: $pluginId, orgId: $orgId) {
+      id
       pluginName
       pluginCreatedBy
       pluginDesc

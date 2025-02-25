@@ -51,6 +51,8 @@ function addOnStore(): JSX.Element {
     const installIds = (await new PluginHelper().fetchInstalled()).map(
       (plugin: InterfacePluginHelper) => plugin.id,
     );
+
+    console.log('get Installed plugins is called : ', installIds);
     plugins = plugins.map((plugin: InterfacePluginHelper) => {
       plugin.installed = installIds.includes(plugin.id);
       return plugin;
