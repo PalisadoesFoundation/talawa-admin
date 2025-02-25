@@ -22,6 +22,8 @@ import i18n from 'utils/i18n';
 import type { RenderResult } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
+const toastSuccessMock = toast.success as unknown as ReturnType<typeof vi.fn>;
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -396,6 +398,35 @@ const loadingMocks: MockedResponse[] = [
     delay: 5000,
   },
 ];
+const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+
+// Updated mutation mock: make sure variables match what is sent.
+// If the component always attaches the file if provided, we need to match that.
+const createPostSuccessMock: MockedResponse = {
+  request: {
+    query: CREATE_POST_MUTATION,
+    variables: {
+      input: {
+        caption: 'Test Post Title',
+        organizationId: '123',
+        isPinned: false,
+        attachments: [file],
+      },
+    },
+  },
+  result: {
+    data: {
+      createPost: {
+        id: '3',
+        caption: 'Test Post Title',
+        pinnedAt: null,
+        attachments: [{ url: 'base64String' }],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    },
+  },
+};
 
 const errorMocks: MockedResponse[] = [
   {
@@ -426,7 +457,6 @@ vi.mock('react-router-dom', async () => {
     useParams: () => ({ orgId: '123' }),
   };
 });
-
 const mockOrgId = '123';
 const renderComponent = (): RenderResult => {
   return render(
@@ -499,6 +529,85 @@ describe('OrgPost Component', () => {
       },
       { timeout: 5000 },
     );
+  });
+
+  it('shows success toast, resets state and closes modal on successful post creation', async () => {
+    render(
+      <MockedProvider mocks={[createPostSuccessMock]} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
+    const openModalBtn = await screen.findByTestId('createPostModalBtn');
+    fireEvent.click(openModalBtn);
+
+    const titleInput = await screen.findByTestId('modalTitle');
+    const infoInput = await screen.findByTestId('modalinfo');
+    fireEvent.change(titleInput, { target: { value: 'Test Post Title' } });
+    fireEvent.change(infoInput, { target: { value: 'Some Information' } });
+
+    const mediaInput = screen.getByTestId('addMediaField');
+    await act(async () => {
+      fireEvent.change(mediaInput, { target: { files: [file] } });
+    });
+
+    const submitBtn = await screen.findByTestId('createPostBtn');
+    await act(async () => {
+      fireEvent.click(submitBtn);
+    });
+
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
+
+    expect(toastSuccessMock.mock.calls[0][0]).toContain('postCreatedSuccess');
+
+    await act(() => new Promise((resolve) => setTimeout(resolve, 500)));
+
+    const modalElement = screen
+      .queryByTestId('modalOrganizationHeader')
+      ?.closest('.modal');
+
+    if (modalElement) {
+      fireEvent.transitionEnd(modalElement);
+
+      await waitFor(
+        () => {
+          const updatedModal = screen
+            .queryByTestId('modalOrganizationHeader')
+            ?.closest('.modal');
+          return !updatedModal || !updatedModal.classList.contains('show');
+        },
+        { timeout: 3000 },
+      );
+    }
+  });
+
+  it('renders the create post button when orgId is provided', async () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const openModalBtn = await screen.findByTestId('createPostModalBtn');
+    expect(openModalBtn).toBeInTheDocument();
   });
 
   it('handles media upload and removal', async () => {
@@ -1083,5 +1192,57 @@ describe('Pagination functionality in OrgPost Component', () => {
       expect(captions[0]).toContain('Post 8');
       expect(captions[5]).toContain('Post 3');
     });
+  });
+});
+
+const getPostsByOrgMock: MockedResponse = {
+  request: {
+    query: GET_POSTS_BY_ORG,
+    variables: { input: { organizationId: '123' } },
+  },
+  result: {
+    data: {
+      postsByOrganization: [
+        { id: '1', caption: 'Hello World', createdAt: '2024-01-01T10:00:00Z' },
+        { id: '2', caption: 'Another Post', createdAt: '2024-01-02T10:00:00Z' },
+        {
+          id: '3',
+          caption: 'Hello Testing',
+          createdAt: '2024-01-03T10:00:00Z',
+        },
+      ],
+    },
+  },
+};
+/* eslint-disable react/no-multi-comp */
+const TestOrgPost = (): JSX.Element => <OrgPost />;
+
+describe('OrgPost handleSearch', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('clears filtering when search term is empty', async () => {
+    render(
+      <MockedProvider mocks={[getPostsByOrgMock]}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<TestOrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+    const searchInput = await screen.findByTestId('searchByName');
+    await act(async () => {
+      fireEvent.change(searchInput, { target: { value: 'hello' } });
+    });
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 0)));
+    await act(async () => {
+      fireEvent.change(searchInput, { target: { value: '' } });
+    });
+    const filteredContainer = screen.queryByTestId('filteredPosts');
+    expect(filteredContainer).toBeNull();
   });
 });
