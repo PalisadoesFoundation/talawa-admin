@@ -29,7 +29,6 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const userId = getItem('id');
   const userImage = getItem('UserImage');
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
-  console.log(userId, userImage);
 
   /**
    * Changes the application's language and updates the user's language preference.
