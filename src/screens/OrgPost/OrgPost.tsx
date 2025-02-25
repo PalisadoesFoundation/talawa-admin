@@ -372,7 +372,6 @@ function OrgPost(): JSX.Element {
 
   // Update the totalPages calculation
 
-  // Update the handleNextPage function
   const handleNextPage = (): void => {
     if (sortingOption === 'None') {
       const endCursor =
@@ -382,7 +381,6 @@ function OrgPost(): JSX.Element {
         setBefore(null);
         setFirst(postsPerPage);
         setLast(null);
-        // Reset the current page for proper tracking
         setCurrentPage((prev) => prev + 1);
       }
     } else {
@@ -392,6 +390,7 @@ function OrgPost(): JSX.Element {
       }
     }
   };
+
   const handlePreviousPage = (): void => {
     if (sortingOption === 'None') {
       const startCursor =

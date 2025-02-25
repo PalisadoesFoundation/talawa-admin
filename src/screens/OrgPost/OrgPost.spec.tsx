@@ -37,6 +37,15 @@ vi.mock('react-toastify', () => ({
   ),
 }));
 
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
+vi.mock('utils/convertToBase64', () => ({
+  __esModule: true,
+  default: vi.fn().mockResolvedValue('base64-encoded-string'),
+}));
+
 vi.mock('react-i18next', () => ({
   // Include initReactI18next
   initReactI18next: {
@@ -1474,6 +1483,7 @@ describe('OrgPost SearchBar functionality', () => {
       );
     });
   });
+
   it('should correctly integrate with PostsRenderer when filtering', async () => {
     renderWithMocks([
       orgPostListMock,
@@ -1502,16 +1512,66 @@ describe('OrgPost SearchBar functionality', () => {
       ).toBeInTheDocument();
     });
   });
+
+  it('should reset filtering when search term is empty or whitespace only', async () => {
+    renderWithMocks([
+      orgPostListMock,
+      getPostsByOrgInitialMock,
+      getPostsByOrgSearchMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const postsRenderer = screen.getByTestId('posts-renderer');
+    expect(postsRenderer.getAttribute('data-is-filtering')).toBe('false');
+
+    const searchInput = screen.getByTestId('searchByName');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, '    {enter}');
+
+    await waitFor(() => {
+      expect(postsRenderer.getAttribute('data-is-filtering')).toBe('false');
+    });
+  });
+
+  it('should handle errors during search gracefully', async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    const getPostsByOrgErrorMock: MockedResponse = {
+      request: {
+        query: GET_POSTS_BY_ORG,
+        variables: { input: { organizationId: '123' } },
+      },
+      error: new Error('Network error'),
+    };
+
+    renderWithMocks([
+      orgPostListMock,
+      getPostsByOrgInitialMock,
+      getPostsByOrgErrorMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'non-empty search{enter}');
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith('Error searching posts');
+      const postsRenderer = screen.getByTestId('posts-renderer');
+      expect(postsRenderer.getAttribute('data-is-filtering')).toBe('false');
+    });
+    consoleErrorSpy.mockRestore();
+  });
 });
-
-vi.mock('utils/errorHandler', () => ({
-  errorHandler: vi.fn(),
-}));
-
-vi.mock('utils/convertToBase64', () => ({
-  __esModule: true,
-  default: vi.fn().mockResolvedValue('base64-encoded-string'),
-}));
 
 describe('OrgPost component - Post Creation Tests', () => {
   const mockOrgId = '123';
