@@ -9,31 +9,7 @@ import { useParams, Navigate } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app.module.css';
 import { Close } from '@mui/icons-material';
-
-/**
- * Props for the OrgPeopleListCard component
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.regularBtn`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
-interface InterfaceOrgPeopleListCardProps {
-  id: string | undefined;
-  toggleRemoveModal: () => void;
-}
+import type { InterfaceOrgPeopleListCardProps } from 'types/Organization/interface';
 
 /**
  * Component for displaying a modal to remove a member from an organization

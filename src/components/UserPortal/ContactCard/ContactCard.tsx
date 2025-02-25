@@ -2,17 +2,7 @@ import React from 'react';
 import styles from './ContactCard.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { Badge } from 'react-bootstrap';
-
-interface InterfaceContactCardProps {
-  id: string;
-  title: string;
-  image: string;
-  selectedContact: string;
-  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  isGroup: boolean;
-  unseenMessages: number;
-  lastMessage: string;
-}
+import type { InterfaceContactCardProps } from 'types/Chat/interface';
 
 /**
  * Displays a card for a contact in a contact list.

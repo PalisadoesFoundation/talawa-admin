@@ -4,27 +4,28 @@ import { Col, Form, Row } from 'react-bootstrap';
 import styles from './common.module.css';
 
 interface InterfaceUserAddressFieldsProps {
-  tCommon: (key: string) => string;
   t: (key: string) => string;
   handleFieldChange: (field: string, value: string) => void;
   userDetails: {
-    address: string;
+    addressLine1: string;
+    addressLine2: string;
     state: string;
-    country: string;
+    countryCode: string;
+    city: string;
+    postalCode: string;
   };
 }
+
 /**
- * Form component containing address-related input fields for user profile
- * Includes fields for address, city, state, and country
- * @param {Object} props - Component props
- * @param {function} props.tCommon - Translation function for common strings
- * @param {function} props.t - Translation function for component-specific strings
- * @param {function} props.handleFieldChange - Callback for field value changes
- * @param {Object} props.userDetails - User's address information
- * @returns Form group with address input fields
+ * Form component containing address-related input fields for user profile.
+ * Includes fields for address, city, state, and country.
+ *
+ * @param t - Translation function for component-specific strings
+ * @param handleFieldChange - Callback for field value changes
+ * @param userDetails - User's address information
+ * @returns A form group with address input fields
  */
 export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
-  tCommon,
   t,
   handleFieldChange,
   userDetails,
@@ -32,17 +33,31 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
   return (
     <Row className="mb-1">
       <Col lg={4}>
-        <Form.Label htmlFor="address" className={styles.cardLabel}>
-          {tCommon('address')}
+        <Form.Label htmlFor="addressLine1" className={styles.cardLabel}>
+          {t('addressLine1')}
         </Form.Label>
         <Form.Control
           type="text"
           placeholder="Eg: lane 123, Main Street"
-          id="address"
-          value={userDetails.address}
-          onChange={(e) => handleFieldChange('address', e.target.value)}
+          id="addressLine1"
+          value={userDetails.addressLine1}
+          onChange={(e) => handleFieldChange('addressLine1', e.target.value)}
           className={styles.cardControl}
-          data-testid="inputAddress"
+          data-testid="inputAddress1"
+        />
+      </Col>
+      <Col lg={4}>
+        <Form.Label htmlFor="addressLine2" className={styles.cardLabel}>
+          {t('addressLine2')}
+        </Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Eg: lane 123, Main Street"
+          id="addressLine2"
+          value={userDetails.addressLine2}
+          onChange={(e) => handleFieldChange('addressLine2', e.target.value)}
+          className={styles.cardControl}
+          data-testid="inputAddress2"
         />
       </Col>
       <Col lg={4}>
@@ -60,14 +75,28 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
         />
       </Col>
       <Col lg={4}>
-        <Form.Label htmlFor="country" className={styles.cardLabel}>
+        <Form.Label htmlFor="inputCity" className={styles.cardLabel}>
+          {t('city')}
+        </Form.Label>
+        <Form.Control
+          type="text"
+          id="inputCity"
+          placeholder={t('enterCity')}
+          value={userDetails.city}
+          onChange={(e) => handleFieldChange('city', e.target.value)}
+          className={styles.cardControl}
+          data-testid="inputCity"
+        />
+      </Col>
+      <Col lg={4}>
+        <Form.Label htmlFor="countrySelect" className={styles.cardLabel}>
           {t('country')}
         </Form.Label>
         <Form.Control
           as="select"
-          id="country"
-          value={userDetails.country}
-          onChange={(e) => handleFieldChange('country', e.target.value)}
+          id="countrySelect"
+          value={userDetails.countryCode}
+          onChange={(e) => handleFieldChange('countryCode', e.target.value)}
           className={styles.cardControl}
           data-testid="inputCountry"
         >
@@ -79,13 +108,28 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
             .map((country) => (
               <option
                 key={country.value.toUpperCase()}
-                value={country.value.toUpperCase()}
+                value={country.value.toLowerCase()}
                 aria-label={`Select ${country.label} as your country`}
               >
                 {country.label}
               </option>
             ))}
         </Form.Control>
+      </Col>
+      <Col lg={4}>
+        <Form.Label htmlFor="postalCode" className={styles.cardLabel}>
+          {t('postalCode')}
+        </Form.Label>
+        <Form.Control
+          type="text"
+          id="postalCode"
+          placeholder={t('postalCode')}
+          pattern="[0-9]{5,10}"
+          value={userDetails.postalCode}
+          onChange={(e) => handleFieldChange('postalCode', e.target.value)}
+          className={styles.cardControl}
+          data-testid="postalCode"
+        />
       </Col>
     </Row>
   );

@@ -80,6 +80,39 @@ export const ADDRESS_DETAILS_FRAGMENT = gql`
   }
 `;
 
+// to update the details of the current user
+export const UPDATE_CURRENT_USER_MUTATION = gql`
+  mutation UpdateCurrentUser($input: MutationUpdateCurrentUserInput!) {
+    updateCurrentUser(input: $input) {
+      addressLine1
+      addressLine2
+      avatarMimeType
+      avatarURL
+      birthDate
+      city
+      countryCode
+      createdAt
+      description
+      educationGrade
+      emailAddress
+      employmentStatus
+      homePhoneNumber
+      id
+      isEmailAddressVerified
+      maritalStatus
+      mobilePhoneNumber
+      name
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      updatedAt
+      workPhoneNumber
+    }
+  }
+`;
+
 // to update the details of the user
 
 export const UPDATE_USER_MUTATION = gql`

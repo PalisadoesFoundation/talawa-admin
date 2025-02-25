@@ -32,4 +32,4 @@ Defined in: [src/types/venue.ts:3](https://github.com/PalisadoesFoundation/talaw
 
 ### organization
 
-> **organization**: [`Organization`](../../organization/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../Organization/type/type-aliases/Organization.md)

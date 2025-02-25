@@ -6,7 +6,6 @@ import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
-  HttpLink,
   split,
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
@@ -17,6 +16,7 @@ import './assets/css/app.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -76,11 +76,13 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-const httpLink = new HttpLink({
+const uploadLink = createUploadLink({
   uri: BACKEND_URL,
+  headers: {
+    'Apollo-Require-Preflight': 'true',
+  },
 });
 
-// if didnt work use /subscriptions
 const wsLink = new GraphQLWsLink(
   createClient({
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
@@ -106,7 +108,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  httpLink,
+  uploadLink,
 );
 
 const combinedLink = ApolloLink.from([

@@ -252,6 +252,7 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
+          NODE_OPTIONS: "--max-old-space-size=6144"
         run: |
           npm run test:coverage
   
@@ -275,7 +276,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: "./coverage/vitest/lcov.info"
-          min_coverage: 85.0
+          min_coverage: 86.0
 
   # Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}

@@ -200,3 +200,10 @@ export interface InterfaceAttendanceStatisticsModalProps {
   memberData: InterfaceMember[];
   t: (key: string) => string;
 }
+
+export interface InterfaceEventsAttendedMemberModalProps {
+  eventsAttended: Partial<InterfaceEvent>[];
+  setShow: (show: boolean) => void;
+  show: boolean;
+  eventsPerPage?: number;
+}

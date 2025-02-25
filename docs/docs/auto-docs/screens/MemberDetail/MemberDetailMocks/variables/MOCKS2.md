@@ -6,7 +6,7 @@
 
 > `const` **MOCKS2**: `object`[]
 
-Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L337)
+Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L64)
 
 ## Type declaration
 
@@ -16,15 +16,11 @@ Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:337](https://github.c
 
 #### request.query
 
-> **query**: `DocumentNode` = `USER_DETAILS`
+> **query**: `DocumentNode` = `CURRENT_USER`
 
 #### request.variables
 
 > **variables**: `object`
-
-#### request.variables.first
-
-> **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
 
 #### request.variables.id
 
@@ -38,182 +34,110 @@ Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:337](https://github.c
 
 > **data**: `object`
 
-#### result.data.user
+#### result.data.currentUser
 
-> **user**: `object`
+> **currentUser**: `object`
 
-#### result.data.user.\_\_typename
-
-> **\_\_typename**: `string` = `'UserData'`
-
-#### result.data.user.appUserProfile
-
-> **appUserProfile**: `object`
-
-#### result.data.user.appUserProfile.\_\_typename
-
-> **\_\_typename**: `string` = `'AppUserProfile'`
-
-#### result.data.user.appUserProfile.\_id
-
-> **\_id**: `string` = `'1'`
-
-#### result.data.user.appUserProfile.adminFor
-
-> **adminFor**: `any`[] = `[]`
-
-#### result.data.user.appUserProfile.appLanguageCode
-
-> **appLanguageCode**: `string` = `'en'`
-
-#### result.data.user.appUserProfile.createdEvents
-
-> **createdEvents**: `object`[]
-
-#### result.data.user.appUserProfile.createdOrganizations
-
-> **createdOrganizations**: `object`[]
-
-#### result.data.user.appUserProfile.eventAdmin
-
-> **eventAdmin**: `object`[]
-
-#### result.data.user.appUserProfile.isSuperAdmin
-
-> **isSuperAdmin**: `boolean` = `false`
-
-#### result.data.user.appUserProfile.pluginCreationAllowed
-
-> **pluginCreationAllowed**: `boolean` = `true`
-
-#### result.data.user.user
-
-> **user**: `object`
-
-#### result.data.user.user.\_\_typename
+#### result.data.currentUser.\_\_typename
 
 > **\_\_typename**: `string` = `'User'`
 
-#### result.data.user.user.\_id
+#### result.data.currentUser.addressLine1
 
-> **\_id**: `string` = `'1'`
+> **addressLine1**: `string` = `'Line 1'`
 
-#### result.data.user.user.address
+#### result.data.currentUser.addressLine2
 
-> **address**: `object`
+> **addressLine2**: `string` = `'Line 2'`
 
-#### result.data.user.user.address.city
+#### result.data.currentUser.avatarMimeType
 
-> **city**: `string` = `''`
+> **avatarMimeType**: `string` = `'image/jpeg'`
 
-#### result.data.user.user.address.countryCode
+#### result.data.currentUser.avatarURL
 
-> **countryCode**: `string` = `''`
+> **avatarURL**: `string` = `'http://example.com/avatar.jpg'`
 
-#### result.data.user.user.address.line1
+#### result.data.currentUser.birthDate
 
-> **line1**: `string` = `''`
+> **birthDate**: `string` = `'2000-01-01'`
 
-#### result.data.user.user.address.state
+#### result.data.currentUser.city
 
-> **state**: `string` = `''`
+> **city**: `string` = `'nyc'`
 
-#### result.data.user.user.birthDate
+#### result.data.currentUser.countryCode
 
-> **birthDate**: `string` = `'2024-03-14'`
+> **countryCode**: `string` = `'bb'`
 
-#### result.data.user.user.createdAt
+#### result.data.currentUser.createdAt
 
-> **createdAt**: `string` = `'2024-02-26T10:36:33.098Z'`
+> **createdAt**: `string` = `'2025-02-06T03:10:50.254'`
 
-#### result.data.user.user.educationGrade
+#### result.data.currentUser.description
 
-> **educationGrade**: `string` = `''`
+> **description**: `string` = `'This is a description'`
 
-#### result.data.user.user.email
+#### result.data.currentUser.educationGrade
 
-> **email**: `string` = `'adi790u@gmail.com'`
+> **educationGrade**: `string` = `'grade_8'`
 
-#### result.data.user.user.employmentStatus
+#### result.data.currentUser.emailAddress
 
-> **employmentStatus**: `string` = `''`
+> **emailAddress**: `string` = `'test221@gmail.com'`
 
-#### result.data.user.user.eventsAttended
+#### result.data.currentUser.employmentStatus
 
-> **eventsAttended**: `object`[]
+> **employmentStatus**: `string` = `'employed'`
 
-#### result.data.user.user.firstName
+#### result.data.currentUser.homePhoneNumber
 
-> **firstName**: `string` = `'Aditya'`
+> **homePhoneNumber**: `string` = `'+9999999998'`
 
-#### result.data.user.user.gender
+#### result.data.currentUser.id
 
-> **gender**: `string` = `''`
+> **id**: `string` = `'0194d80f-03cd-79cd-8135-683494b187a1'`
 
-#### result.data.user.user.image
+#### result.data.currentUser.isEmailAddressVerified
 
-> **image**: `string` = `'https://placeholder.com/200x200'`
+> **isEmailAddressVerified**: `boolean` = `false`
 
-#### result.data.user.user.joinedOrganizations
+#### result.data.currentUser.maritalStatus
 
-> **joinedOrganizations**: `object`[]
+> **maritalStatus**: `string` = `'engaged'`
 
-#### result.data.user.user.lastName
+#### result.data.currentUser.mobilePhoneNumber
 
-> **lastName**: `string` = `'Agarwal'`
+> **mobilePhoneNumber**: `string` = `'+9999999999'`
 
-#### result.data.user.user.maritalStatus
+#### result.data.currentUser.name
 
-> **maritalStatus**: `string` = `''`
+> **name**: `string` = `'Rishav Jha'`
 
-#### result.data.user.user.membershipRequests
+#### result.data.currentUser.natalSex
 
-> **membershipRequests**: `any`[] = `[]`
+> **natalSex**: `string` = `'male'`
 
-#### result.data.user.user.organizationsBlockedBy
+#### result.data.currentUser.naturalLanguageCode
 
-> **organizationsBlockedBy**: `any`[] = `[]`
+> **naturalLanguageCode**: `string` = `'en'`
 
-#### result.data.user.user.phone
+#### result.data.currentUser.postalCode
 
-> **phone**: `object`
+> **postalCode**: `string` = `'111111'`
 
-#### result.data.user.user.phone.mobile
+#### result.data.currentUser.role
 
-> **mobile**: `string` = `''`
+> **role**: `string` = `'regular'`
 
-#### result.data.user.user.registeredEvents
+#### result.data.currentUser.state
 
-> **registeredEvents**: `object`[]
+> **state**: `string` = `'State1'`
 
-#### result.data.user.user.tagsAssignedWith
+#### result.data.currentUser.updatedAt
 
-> **tagsAssignedWith**: `object`
+> **updatedAt**: `string` = `'2025-02-06T03:22:17.808'`
 
-#### result.data.user.user.tagsAssignedWith.edges
+#### result.data.currentUser.workPhoneNumber
 
-> **edges**: `any`[] = `[]`
-
-#### result.data.user.user.tagsAssignedWith.pageInfo
-
-> **pageInfo**: `object`
-
-#### result.data.user.user.tagsAssignedWith.pageInfo.endCursor
-
-> **endCursor**: `any` = `null`
-
-#### result.data.user.user.tagsAssignedWith.pageInfo.hasNextPage
-
-> **hasNextPage**: `boolean` = `false`
-
-#### result.data.user.user.tagsAssignedWith.pageInfo.hasPreviousPage
-
-> **hasPreviousPage**: `boolean` = `false`
-
-#### result.data.user.user.tagsAssignedWith.pageInfo.startCursor
-
-> **startCursor**: `any` = `null`
-
-#### result.data.user.user.tagsAssignedWith.totalCount
-
-> **totalCount**: `number` = `0`
+> **workPhoneNumber**: `string` = `'+9999999998'`

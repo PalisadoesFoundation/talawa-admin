@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import { Dropdown, Form, Button } from 'react-bootstrap';
-import PaginationList from 'components/PaginationList/PaginationList';
+import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_ADMINS_LIST,
@@ -9,7 +9,7 @@ import {
 import { useQuery } from '@apollo/client';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { FilterAltOutlined } from '@mui/icons-material';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router-dom';
