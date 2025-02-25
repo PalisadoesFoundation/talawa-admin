@@ -1,3 +1,4 @@
+import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -21,7 +22,6 @@ import { MOCKS, MOCK_ERROR } from './OrganizationFundCampaignMocks';
 import type { InterfaceCampaignModal } from './CampaignModal';
 import CampaignModal from './CampaignModal';
 import { vi } from 'vitest';
-import userEvent from '@testing-library/user-event';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -241,6 +241,11 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
+    const campaignCurrency = screen.getByLabelText(translations.currency);
+    fireEvent.mouseDown(campaignCurrency);
+    const Option = screen.getByDisplayValue('USD');
+    fireEvent.click(Option);
+
     const startDate = screen.getByLabelText('Start Date');
     fireEvent.change(startDate, { target: { value: '02/01/2024' } });
 
@@ -266,6 +271,11 @@ describe('CampaignModal', () => {
 
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
+
+    const campaignCurrency = screen.getByLabelText(translations.currency);
+    fireEvent.mouseDown(campaignCurrency);
+    const Option = screen.getByDisplayValue('USD');
+    fireEvent.click(Option);
 
     const startDate = screen.getByLabelText('Start Date');
     fireEvent.change(startDate, { target: { value: '02/01/2023' } });
@@ -293,6 +303,11 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
+    const campaignCurrency = screen.getByLabelText(translations.currency);
+    fireEvent.mouseDown(campaignCurrency);
+    const Option = screen.getByDisplayValue('USD');
+    fireEvent.click(Option);
+
     const startDate = screen.getByLabelText('Start Date');
     fireEvent.change(startDate, { target: { value: '02/01/2024' } });
 
@@ -317,8 +332,10 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
-    const currency = screen.getByLabelText(translations.currency);
-    userEvent.selectOptions(currency, 'USD');
+    const campaignCurrency = screen.getByLabelText(translations.currency);
+    fireEvent.mouseDown(campaignCurrency);
+    const Option = screen.getByDisplayValue('USD');
+    fireEvent.click(Option);
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '400' } });
