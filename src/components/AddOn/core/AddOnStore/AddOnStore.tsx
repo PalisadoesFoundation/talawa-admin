@@ -35,8 +35,6 @@ function addOnStore(): JSX.Element {
     PLUGIN_GET,
   );
 
-  console.log(data);
-
   const { orgId } = useParams<{ orgId: string }>();
 
   /**
@@ -46,13 +44,10 @@ function addOnStore(): JSX.Element {
     console.log('Entered in getStorePlugins');
     let plugins = await new PluginHelper().fetchStore();
 
-    console.log('get Store plugins is called : ', plugins);
-
     const installIds = (await new PluginHelper().fetchInstalled()).map(
       (plugin: InterfacePluginHelper) => plugin.id,
     );
 
-    console.log('get Installed plugins is called : ', installIds);
     plugins = plugins.map((plugin: InterfacePluginHelper) => {
       plugin.installed = installIds.includes(plugin.id);
       return plugin;
@@ -75,7 +70,6 @@ function addOnStore(): JSX.Element {
    */
   const updateSelectedTab = (tab: string): void => {
     setIsStore(tab === 'available');
-    console.log(tab);
     if (tab === 'available') {
       getStorePlugins();
     } else {
@@ -89,7 +83,6 @@ function addOnStore(): JSX.Element {
    * @param ev - The event object from the filter change.
    */
   const filterChange = (ev: React.ChangeEvent<HTMLSelectElement>): void => {
-    console.log(ev.target.value);
     setShowEnabled(ev.target.value === 'enabled');
   };
 
