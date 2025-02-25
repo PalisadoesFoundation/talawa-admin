@@ -107,6 +107,7 @@ jobs:
             .husky/**
             scripts/**
             src/style/**
+            src/assets/css/**
             schema.graphql
             package.json
             package-lock.json
