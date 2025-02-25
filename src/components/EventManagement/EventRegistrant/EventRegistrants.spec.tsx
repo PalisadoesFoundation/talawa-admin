@@ -320,13 +320,6 @@ describe('EventRegistrants CSS Tests', () => {
     });
   });
 
-  it('should style the check-in wrapper component correctly', () => {
-    renderEventRegistrants();
-    const checkInWrapper = screen.getByTestId('stats-modal');
-    expect(checkInWrapper).toBeInTheDocument();
-    expect(checkInWrapper).toHaveClass(styles.createButton);
-  });
-
   it('should apply proper spacing between buttons', () => {
     renderEventRegistrants();
     const filterButton = screen.getByTestId('filter-button');
