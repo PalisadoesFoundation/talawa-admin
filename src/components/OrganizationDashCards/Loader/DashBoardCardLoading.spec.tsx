@@ -1,7 +1,7 @@
 import DashBoardCardLoading from './DashboardCardLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 describe('Testing the DashBoardCardLoading component', () => {
   beforeEach(() => {
     render(<DashBoardCardLoading />);
