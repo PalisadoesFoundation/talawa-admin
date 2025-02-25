@@ -21,9 +21,12 @@ import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18n';
 import type { RenderResult } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
+import convertToBase64 from 'utils/convertToBase64';
+import type { MockedFunction } from 'vitest';
 
 const toastSuccessMock = toast.success as unknown as ReturnType<typeof vi.fn>;
 
+vi.mock('utils/convertToBase64');
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -63,12 +66,10 @@ vi.mock('react-i18next', () => ({
       language: 'en',
     },
   }),
-  // Add other necessary exports
   Trans: ({ children }: { children: React.ReactNode }) => children,
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-// Mock convertToBase64
 vi.mock('utils/convertToBase64', () => ({
   default: vi.fn().mockResolvedValue('base64String'),
 }));
@@ -84,7 +85,6 @@ const eightPosts = Array.from({ length: 8 }, (_, i) => ({
   videoUrl: null,
 }));
 
-// First page: first 6 posts
 const firstPageOrgList = {
   organization: {
     posts: {
@@ -100,7 +100,6 @@ const firstPageOrgList = {
   },
 };
 
-// Second page: remaining 2 posts
 const secondPageOrgList = {
   organization: {
     posts: {
@@ -488,7 +487,7 @@ const loadingMocks: MockedResponse[] = [
       variables: { input: { organizationId: '123' } },
     },
     result: { data: mockPosts },
-    delay: 5000, // 5 seconds delay so loading state persists
+    delay: 5000,
   },
   {
     request: {
@@ -507,8 +506,6 @@ const loadingMocks: MockedResponse[] = [
 ];
 const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
 
-// Updated mutation mock: make sure variables match what is sent.
-// If the component always attaches the file if provided, we need to match that.
 const createPostSuccessMock: MockedResponse = {
   request: {
     query: CREATE_POST_MUTATION,
@@ -988,6 +985,117 @@ describe('OrgPost Component', () => {
       expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
       expect(toast.error).not.toHaveBeenCalled();
     });
+  });
+  const openModal = async (): Promise<void> => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <OrgPost />
+      </MockedProvider>,
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId('createPostModalBtn')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByTestId('createPostModalBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('modalOrganizationUpload')).toBeInTheDocument();
+    });
+  };
+  it('shows an error toast when a non-video file is selected in the video input', async () => {
+    await openModal();
+
+    const videoInput = screen.getByTestId('addVideoField') as HTMLInputElement;
+
+    const nonVideoFile = new File(['dummy content'], 'dummy.txt', {
+      type: 'text/plain',
+    });
+
+    fireEvent.change(videoInput, { target: { files: [nonVideoFile] } });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Please select a video file');
+    });
+  });
+
+  it('sets video preview when a valid video file is selected', async () => {
+    const mockedConvertToBase64 = convertToBase64 as MockedFunction<
+      typeof convertToBase64
+    >;
+    mockedConvertToBase64.mockResolvedValue('data:video/mp4;base64,abc123');
+
+    await openModal();
+
+    const videoInput = screen.getByTestId('addVideoField') as HTMLInputElement;
+    const videoFile = new File(['video content'], 'video.mp4', {
+      type: 'video/mp4',
+    });
+
+    fireEvent.change(videoInput, { target: { files: [videoFile] } });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('videoPreviewContainer')).toBeInTheDocument();
+      expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
+    });
+  });
+
+  it('resets video preview when no file is selected', async () => {
+    await openModal();
+
+    const videoInput = screen.getByTestId('addVideoField') as HTMLInputElement;
+    const videoFile = new File(['video content'], 'video.mp4', {
+      type: 'video/mp4',
+    });
+
+    fireEvent.change(videoInput, { target: { files: [videoFile] } });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('videoPreviewContainer')).toBeInTheDocument();
+    });
+
+    fireEvent.change(videoInput, { target: { files: [] } });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('videoPreviewContainer'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('clears video preview and resets file input when the close button is clicked', async () => {
+    const mockedConvertToBase64 = convertToBase64 as MockedFunction<
+      typeof convertToBase64
+    >;
+    mockedConvertToBase64.mockResolvedValue('data:video/mp4;base64,abc123');
+
+    await openModal();
+
+    const videoInput = screen.getByTestId('addVideoField') as HTMLInputElement;
+    const videoFile = new File(['video content'], 'video.mp4', {
+      type: 'video/mp4',
+    });
+    fireEvent.change(videoInput, { target: { files: [videoFile] } });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('videoPreviewContainer')).toBeInTheDocument();
+    });
+
+    const fileInputElement = document.getElementById(
+      'videoAddMedia',
+    ) as HTMLInputElement;
+    Object.defineProperty(fileInputElement, 'value', {
+      value: 'non-empty',
+      writable: true,
+    });
+    expect(fileInputElement.value).toBe('non-empty');
+
+    const closeButton = screen.getByTestId('videoMediaCloseButton');
+    fireEvent.click(closeButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('videoPreviewContainer'),
+      ).not.toBeInTheDocument();
+    });
+    expect(fileInputElement.value).toBe('');
   });
 });
 

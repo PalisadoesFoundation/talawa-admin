@@ -211,6 +211,29 @@ function OrgPost(): JSX.Element {
       }));
     }
   };
+
+  const handleVideoAddMediaChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      if (!selectedFile.type.startsWith('video/')) {
+        toast.error('Please select a video file');
+        return;
+      }
+      setVideoFile(selectedFile);
+      try {
+        const base64 = await convertToBase64(selectedFile);
+        setVideoPreview(base64);
+      } catch {
+        toast.error('Could not generate video preview');
+      }
+    } else {
+      setVideoFile(null);
+      setVideoPreview('');
+    }
+  };
+
   useEffect(() => {
     if (sortingOption !== 'None' && sortedPosts.length > 0) {
       const startIndex = (currentPage - 1) * postsPerPage;
@@ -384,27 +407,6 @@ function OrgPost(): JSX.Element {
       if (currentPage > 1) {
         setCurrentPage((prev) => prev - 1);
       }
-    }
-  };
-  const handleVideoAddMediaChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      if (!selectedFile.type.startsWith('video/')) {
-        toast.error('Please select a video file');
-        return;
-      }
-      setVideoFile(selectedFile);
-      try {
-        const base64 = await convertToBase64(selectedFile);
-        setVideoPreview(base64);
-      } catch {
-        toast.error('Could not generate video preview');
-      }
-    } else {
-      setVideoFile(null);
-      setVideoPreview('');
     }
   };
 
