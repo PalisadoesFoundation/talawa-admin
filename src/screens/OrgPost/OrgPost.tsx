@@ -190,10 +190,8 @@ function OrgPost(): JSX.Element {
         console.log('No filtered posts found');
       }
 
-      // Store the raw file
       setFile(selectedFile);
 
-      // Create preview
       try {
         const base64 = await convertToBase64(selectedFile);
         setPostFormState((prev) => ({

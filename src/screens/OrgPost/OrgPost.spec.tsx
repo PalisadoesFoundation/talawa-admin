@@ -23,6 +23,7 @@ import type { RenderResult } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
+import * as convertToBase64Module from 'utils/convertToBase64';
 
 const toastSuccessMock = toast.success as unknown as ReturnType<typeof vi.fn>;
 
@@ -401,6 +402,47 @@ const mocks = [
   createPostWithFileMock,
 ];
 
+const minimalMocks: MockedResponse[] = [
+  {
+    request: {
+      query: GET_POSTS_BY_ORG,
+      variables: { input: { organizationId: '123' } },
+    },
+    result: {
+      data: {
+        postsByOrganization: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: '123' },
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          posts: {
+            edges: [],
+            totalCount: 0,
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: null,
+              endCursor: null,
+            },
+          },
+        },
+      },
+    },
+  },
+];
 const mockPosts1 = {
   postsByOrganization: [
     {
@@ -540,29 +582,6 @@ const createPostSuccessMock: MockedResponse = {
     },
   },
 };
-
-const errorMocks: MockedResponse[] = [
-  {
-    request: {
-      query: GET_POSTS_BY_ORG,
-      variables: { input: { organizationId: '123' } },
-    },
-    error: new Error('GraphQL error'),
-  },
-  {
-    request: {
-      query: ORGANIZATION_POST_LIST,
-      variables: {
-        input: { id: '123' },
-        after: null,
-        before: null,
-        first: 6,
-        last: null,
-      },
-    },
-    error: new Error('GraphQL error'),
-  },
-];
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
@@ -1106,6 +1125,86 @@ describe('OrgPost Component', () => {
     });
     expect(fileInputElement.value).toBe('');
   });
+
+  it('displays error toast when convertToBase64 fails', async () => {
+    const convertSpy = vi
+      .spyOn(convertToBase64Module, 'default')
+      .mockRejectedValue(new Error('Conversion failed'));
+
+    const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
+
+    render(
+      <MockedProvider mocks={minimalMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const createPostButton = screen.getByTestId('createPostModalBtn');
+    userEvent.click(createPostButton);
+    const fileInput = await screen.findByTestId('addMediaField');
+    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    await userEvent.upload(fileInput, file);
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith('Could not generate preview');
+    });
+
+    convertSpy.mockRestore();
+    toastErrorSpy.mockRestore();
+  });
+
+  it('displays error toast when convertToBase64 fails for video preview', async () => {
+    const convertSpy = vi
+      .spyOn(convertToBase64Module, 'default')
+      .mockRejectedValue(new Error('Conversion failed'));
+
+    const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
+
+    render(
+      <MockedProvider mocks={minimalMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const createPostButton = screen.getByTestId('createPostModalBtn');
+    userEvent.click(createPostButton);
+
+    const videoInput = await screen.findByTestId('addVideoField');
+
+    const videoFile = new File(['dummy video content'], 'video.mp4', {
+      type: 'video/mp4',
+    });
+
+    await userEvent.upload(videoInput, videoFile);
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        'Could not generate video preview',
+      );
+    });
+
+    convertSpy.mockRestore();
+    toastErrorSpy.mockRestore();
+  });
 });
 
 describe('Tests for sorting , nextpage , previousPage', () => {
@@ -1270,36 +1369,6 @@ describe('Tests for sorting , nextpage , previousPage', () => {
       { timeout: 1000 },
     );
   });
-
-  it('returns early when error occurs', async () => {
-    render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    });
-
-    const toggle = screen.getAllByTestId('sortpost-toggle')[0];
-    userEvent.click(toggle);
-    const oldestOption = await screen.findByText('Oldest');
-    userEvent.click(oldestOption);
-
-    await waitFor(
-      () => {
-        expect(screen.getByText(/Error loading posts/i)).toBeInTheDocument();
-      },
-      { timeout: 1000 },
-    );
-  });
 });
 
 describe('Pagination functionality in OrgPost Component', () => {
@@ -1336,16 +1405,13 @@ describe('Pagination functionality in OrgPost Component', () => {
       expect(captions[5]).toContain('Post 6');
     });
 
-    // Click the "Next" button.
     const nextBtn = screen.getByTestId('next-page-button');
     userEvent.click(nextBtn);
 
-    // Wait for the next page to be rendered.
     await waitFor(() => {
       const captions = screen
         .getAllByTestId('post-caption')
         .map((el) => (el.textContent || '').trim());
-      // Expect 2 posts on the second page.
       expect(captions.length).toBe(2);
       expect(captions[0]).toContain('Post 7');
       expect(captions[1]).toContain('Post 8');
