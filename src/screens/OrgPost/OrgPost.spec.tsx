@@ -1192,3 +1192,178 @@ describe('Pagination functionality in OrgPost Component', () => {
     });
   });
 });
+
+const samplePosts = [
+  {
+    id: '1',
+    caption: 'First post title',
+    createdAt: '2023-01-01T12:00:00Z',
+    creator: { id: 'user1' },
+    imageUrl: 'image1.jpg',
+    videoUrl: null,
+    pinned: false,
+  },
+  {
+    id: '2',
+    caption: 'Second post about testing',
+    createdAt: '2023-01-02T12:00:00Z',
+    creator: { id: 'user2' },
+    imageUrl: null,
+    videoUrl: 'video2.mp4',
+    pinned: true,
+  },
+  {
+    id: '3',
+    caption: 'Third post with random content',
+    createdAt: '2023-01-03T12:00:00Z',
+    creator: { id: 'user1' },
+    imageUrl: 'image3.jpg',
+    videoUrl: null,
+    pinned: false,
+  },
+];
+
+// Prepare mocks for GraphQL queries
+const orgPostListMock = {
+  request: {
+    query: ORGANIZATION_POST_LIST,
+    variables: {
+      input: { id: '123' },
+      after: null,
+      before: null,
+      first: 6,
+      last: null,
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        id: '123',
+        name: 'Test Organization',
+        posts: {
+          totalCount: 3,
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: 'cursor1',
+            endCursor: 'cursor3',
+          },
+          edges: [
+            {
+              node: samplePosts[0],
+              cursor: 'cursor1',
+            },
+            {
+              node: samplePosts[1],
+              cursor: 'cursor2',
+            },
+            {
+              node: samplePosts[2],
+              cursor: 'cursor3',
+            },
+          ],
+        },
+      },
+    },
+  },
+};
+
+const getPostsByOrgInitialMock = {
+  request: {
+    query: GET_POSTS_BY_ORG,
+    variables: {
+      input: {
+        organizationId: '123',
+      },
+    },
+  },
+  result: {
+    data: {
+      postsByOrganization: samplePosts,
+    },
+  },
+};
+
+// Create mock for search query with "test" term
+const getPostsByOrgSearchMock = {
+  request: {
+    query: GET_POSTS_BY_ORG,
+    variables: {
+      input: {
+        organizationId: '123',
+      },
+    },
+  },
+  result: {
+    data: {
+      postsByOrganization: samplePosts,
+    },
+  },
+};
+
+describe('OrgPost SearchBar functionality', () => {
+  // Helper function to render the component with specified mocks
+  const renderWithMocks = (mocks: MockedResponse[]): RenderResult => {
+    return render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  };
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should filter posts when search term is entered', async () => {
+    renderWithMocks([
+      orgPostListMock,
+      getPostsByOrgInitialMock,
+      getPostsByOrgSearchMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
+    await userEvent.type(searchInput, 'test{enter}');
+
+    await waitFor(() => {
+      const postElements = screen.getAllByTestId('post-caption');
+
+      expect(postElements.length).toBe(1);
+      expect(postElements[0].textContent).toContain(
+        'Second post about testing',
+      );
+    });
+  });
+
+  it('should handle case-insensitive search correctly', async () => {
+    renderWithMocks([
+      orgPostListMock,
+      getPostsByOrgInitialMock,
+      getPostsByOrgSearchMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
+    await userEvent.type(searchInput, 'TeStInG{enter}');
+
+    await waitFor(() => {
+      const postElements = screen.getAllByTestId('post-caption');
+      expect(postElements.length).toBe(1);
+      expect(postElements[0].textContent).toContain(
+        'Second post about testing',
+      );
+    });
+  });
+});
