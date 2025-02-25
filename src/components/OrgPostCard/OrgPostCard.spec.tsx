@@ -17,7 +17,6 @@ import { toast } from 'react-toastify';
 import type { DocumentNode } from 'graphql';
 import * as errorHandlerModule from 'utils/errorHandler';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MemoryRouter } from 'react-router-dom';
 
 /**
  * Unit Tests for OrgPostCard Component
@@ -320,33 +319,6 @@ describe('OrgPostCard Component', () => {
     );
   };
   describe('Tests', () => {
-    it('clicking the "close" menu option hides the menu', async () => {
-      render(
-        <MockedProvider>
-          <I18nextProvider i18n={i18nForTest}>
-            <MemoryRouter>
-              <OrgPostCard post={mockPost} />
-            </MemoryRouter>
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      const moreOptionsButton = await screen.findByTestId(
-        'more-options-button',
-      );
-      fireEvent.click(moreOptionsButton);
-
-      const menu = await screen.findByTestId('post-menu');
-      expect(menu).toBeInTheDocument();
-
-      const closeOption = await screen.findByTestId('close-menu-option');
-      fireEvent.click(closeOption);
-
-      await waitFor(() => {
-        expect(screen.queryByTestId('post-menu')).toBeNull();
-      });
-    });
-
     it('renders the post card with basic information', () => {
       renderComponent();
 

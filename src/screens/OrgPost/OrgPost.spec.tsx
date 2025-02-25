@@ -1193,6 +1193,37 @@ describe('Pagination functionality in OrgPost Component', () => {
       expect(captions[5]).toContain('Post 3');
     });
   });
+
+  it('handles previous page correctly when sortingOption is "None"', async () => {
+    // Move to page 2 first.
+    const nextBtn = screen.getByTestId('next-page-button');
+    userEvent.click(nextBtn);
+
+    // Wait for page 2 to be rendered. For example, assume there are 2 posts on page 2.
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+      expect(captions.length).toBe(2);
+      expect(captions[0]).toContain('Post 7');
+      expect(captions[1]).toContain('Post 8');
+    });
+
+    // Now click the "Previous" button.
+    const prevBtn = screen.getByTestId('previous-page-button');
+    userEvent.click(prevBtn);
+
+    // Wait for page 1 to be rendered.
+    await waitFor(() => {
+      const captions = screen
+        .getAllByTestId('post-caption')
+        .map((el) => (el.textContent || '').trim());
+      // Expecting 6 posts on the first page.
+      expect(captions.length).toBe(6);
+      expect(captions[0]).toContain('Post 1');
+      expect(captions[5]).toContain('Post 6');
+    });
+  });
 });
 
 const getPostsByOrgMock: MockedResponse = {
