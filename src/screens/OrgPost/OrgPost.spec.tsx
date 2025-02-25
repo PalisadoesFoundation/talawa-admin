@@ -1214,9 +1214,6 @@ const getPostsByOrgMock: MockedResponse = {
     },
   },
 };
-/* eslint-disable react/no-multi-comp */
-const TestOrgPost = (): JSX.Element => <OrgPost />;
-
 describe('OrgPost handleSearch', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -1228,7 +1225,7 @@ describe('OrgPost handleSearch', () => {
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
-              <Route path="/org/:orgId" element={<TestOrgPost />} />
+              <Route path="/org/:orgId" element={<OrgPost />} />
             </Routes>
           </MemoryRouter>
         </I18nextProvider>
