@@ -243,4 +243,46 @@ describe('LeftDrawer Component', () => {
       expect(setHideDrawer).toHaveBeenCalledWith(true);
     }
   });
+
+  it('simulates different viewport widths for responsive behavior', () => {
+    // Test with exactly the breakpoint width
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 820, // Exactly the breakpoint
+    });
+
+    const setHideDrawer = vi.fn();
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
+
+    const organizationsButton = screen.getByTestId('organizationsBtn');
+    fireEvent.click(organizationsButton);
+
+    // Should hide drawer as it's exactly at the breakpoint
+    expect(setHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  it('verifies text content from translation keys', () => {
+    renderComponent();
+
+    // Check organization button text content
+    const orgButton = screen.getByTestId('organizationsBtn');
+    expect(orgButton.textContent).toContain('my organizations');
+
+    // Check users button text content (for super admin)
+    if (screen.queryByTestId('rolesBtn')) {
+      const usersButton = screen.getByTestId('rolesBtn');
+      expect(usersButton.textContent).toContain('users');
+    }
+
+    // Check community profile button text content
+    const profileButton = screen.getByTestId('communityProfileBtn');
+    expect(profileButton.textContent).toContain('communityProfile');
+  });
 });
