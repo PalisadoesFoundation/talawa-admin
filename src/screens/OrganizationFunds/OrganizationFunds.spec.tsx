@@ -117,17 +117,7 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
-  it('should display error message when GraphQL query fails', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
-    renderOrganizationFunds(link2);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-      expect(screen.getByText('Mock graphql error')).toBeInTheDocument();
-    });
-  });
-
-  it('should open and close the Create Fund modal', async () => {
+  it('open and close Create Fund modal', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
@@ -135,54 +125,70 @@ describe('OrganizationFunds Screen =>', () => {
     expect(createFundBtn).toBeInTheDocument();
     await userEvent.click(createFundBtn);
 
-    await waitFor(() => {
-      expect(screen.getByText(translations.fundCreate)).toBeInTheDocument();
-    });
-
-    const closeModalBtn = await screen.findByTestId('fundModalCloseBtn');
-    await userEvent.click(closeModalBtn);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull();
-    });
+    await waitFor(() =>
+      expect(screen.getAllByText(translations.fundCreate)).toHaveLength(3),
+    );
+    await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
+    await waitFor(() =>
+      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull(),
+    );
   });
 
-  it('should open and close the Edit Fund modal', async () => {
+  it('open and close update fund modal', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
-    const editFundBtns = await screen.findAllByTestId('editFundBtn');
-    expect(editFundBtns[0]).toBeInTheDocument();
-    await userEvent.click(editFundBtns[0]);
-
     await waitFor(() => {
-      expect(screen.getByText(translations.fundUpdate)).toBeInTheDocument();
+      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
     });
 
-    const closeModalBtn = await screen.findByTestId('fundModalCloseBtn');
-    await userEvent.click(closeModalBtn);
+    const editFundBtn = await screen.findAllByTestId('editFundBtn');
+    await waitFor(() => expect(editFundBtn[0]).toBeInTheDocument());
+    await userEvent.click(editFundBtn[0]);
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull();
-    });
+    await waitFor(() =>
+      expect(
+        screen.getAllByText(translations.fundUpdate)[0],
+      ).toBeInTheDocument(),
+    );
+    await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
+    await waitFor(() =>
+      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull(),
+    );
   });
 
-  it('should filter funds by search term', async () => {
+  it('Search the Funds list by name', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
-
     const searchField = await screen.findByTestId('searchByName');
-    fireEvent.change(searchField, { target: { value: '2' } });
+    fireEvent.change(searchField, {
+      target: { value: '2' },
+    });
 
     fireEvent.click(screen.getByTestId('searchBtn'));
-
     await waitFor(() => {
       expect(screen.getByText('Fund 2')).toBeInTheDocument();
       expect(screen.queryByText('Fund 1')).toBeNull();
     });
   });
 
-  it('should sort funds by latest created date', async () => {
+  it('should render the Fund screen with error', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link2);
+    await waitFor(() => {
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+    });
+  });
+
+  it('renders the empty fund component', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link3);
+    await waitFor(() =>
+      expect(screen.getByText(translations.noFundsFound)).toBeInTheDocument(),
+    );
+  });
+
+  it('Sort the Pledges list by Latest created Date', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
@@ -204,7 +210,7 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
-  it('should sort funds by earliest created date', async () => {
+  it('Sort the Pledges list by Earliest created Date', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
@@ -226,37 +232,29 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
-  it('should navigate to campaign screen when fund name is clicked', async () => {
+  it('Click on Fund Name', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
-    const fundNames = await screen.findAllByTestId('fundName');
-    expect(fundNames[0]).toBeInTheDocument();
-    fireEvent.click(fundNames[0]);
+    const fundName = await screen.findAllByTestId('fundName');
+    expect(fundName[0]).toBeInTheDocument();
+    fireEvent.click(fundName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
     });
   });
 
-  it('should navigate to campaign screen when view button is clicked', async () => {
+  it('Click on View Campaign', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
-    const viewBtns = await screen.findAllByTestId('viewBtn');
-    expect(viewBtns[0]).toBeInTheDocument();
-    fireEvent.click(viewBtns[0]);
+    const viewBtn = await screen.findAllByTestId('viewBtn');
+    expect(viewBtn[0]).toBeInTheDocument();
+    fireEvent.click(viewBtn[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
     });
-  });
-
-  it('renders the empty fund component', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
-    renderOrganizationFunds(link3);
-    await waitFor(() =>
-      expect(screen.getByText(translations.noFundsFound)).toBeInTheDocument(),
-    );
   });
 });

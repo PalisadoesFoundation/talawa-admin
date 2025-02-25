@@ -165,7 +165,7 @@ const organizationFunds = (): JSX.Element => {
     return fundData?.organization?.funds?.edges.map((edge) => edge.node) ?? [];
   }, [fundData]);
 
-  // Write now we use the search term in client side to filter the funds, we can use the search term in the query to filter the funds
+  // Write now we use the search term in client side to filter the funds
   const filteredFunds = useMemo(() => {
     return funds.filter((fund) =>
       fund.name.toLowerCase().includes(searchTerm.toLowerCase()),
