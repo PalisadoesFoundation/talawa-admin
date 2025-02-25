@@ -319,6 +319,36 @@ describe('OrgPostCard Component', () => {
     );
   };
   describe('Tests', () => {
+    test('clicking the "close" menu option closes the menu', async () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18n}>
+            <MemoryRouter>
+              <OrgPostCard post={mockPost} />
+            </MemoryRouter>
+          </I18nextProvider>
+        </MockedProvider>
+      );
+    
+      // Open the options menu by clicking the more-options button.
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      fireEvent.click(moreOptionsButton);
+    
+      // Verify that the menu is visible.
+      const menu = await screen.findByTestId('post-menu');
+      expect(menu).toBeInTheDocument();
+    
+      // Click the "close" option in the menu.
+      // Assuming the "close" text is rendered as provided by tCommon('close').
+      const closeOption = screen.getByText(/close/i);
+      fireEvent.click(closeOption);
+    
+      // Wait for the menu to be removed from the DOM.
+      await waitFor(() => {
+        expect(screen.queryByTestId('post-menu')).toBeNull();
+      });
+    });
+    
     it('renders the post card with basic information', () => {
       renderComponent();
 
@@ -333,6 +363,35 @@ describe('OrgPostCard Component', () => {
       const image = screen.getByAltText('Post image');
       expect(image).toBeInTheDocument();
       expect(image).toHaveAttribute('src', 'test-image.jpg');
+    });
+
+    it('closes the modal and stops event propagation when the close button is clicked', async () => {
+      render(
+        <MockedProvider>
+          <OrgPostCard post={mockPost} />
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      fireEvent.click(postItem);
+
+      const modal = await screen.findByTestId('post-modal');
+      expect(modal).toBeInTheDocument();
+
+      const closeButton = screen.getByTestId('close-modal-button');
+
+      const clickEvent = new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      });
+      const stopPropagationSpy = vi.spyOn(clickEvent, 'stopPropagation');
+      closeButton.dispatchEvent(clickEvent);
+
+      expect(stopPropagationSpy).toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('post-modal')).toBeNull();
+      });
     });
 
     it('shows default image when no image attachment is provided', () => {

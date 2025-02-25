@@ -118,7 +118,6 @@ export default function OrgPostCard({
     videoRef.current?.play();
   };
   const handleCloseModal = (e: React.MouseEvent): void => {
-    // Stop the click event from bubbling up to parent elements
     e.stopPropagation();
     setModalVisible(false);
   };
@@ -295,18 +294,6 @@ export default function OrgPostCard({
               <Card.Text className={styles.textOrgPostCard}>
                 Created: {new Date(post.createdAt).toLocaleDateString()}
               </Card.Text>
-              {/* <Card.Text className={styles.creatorInfo}>
-                {t('createdBy')}:{' '}
-                {post.creatorId ? (
-                  userLoading ? (
-                    <span className="text-muted">{tCommon('loading')}</span>
-                  ) : (
-                    userData?.user?.name || 'Unknown'
-                  )
-                ) : (
-                  'Unknown'
-                )}
-              </Card.Text> */}
             </Card.Body>
           </Card>
         </div>
@@ -332,7 +319,8 @@ export default function OrgPostCard({
 
               <div className={styles.modalInfo}>
                 <div className={styles.infodiv}>
-                  {/* <p>{post.caption}</p> */}
+                  <p>{post.caption}</p>
+                  <br />
                   <p>
                     Dated:{' '}
                     {new Date(post.createdAt).toLocaleDateString(undefined, {
@@ -341,7 +329,7 @@ export default function OrgPostCard({
                       year: 'numeric',
                     })}
                   </p>
-
+                  <br />
                   <Card.Text className={styles.creatorInfo}>
                     {'Author '}:{'  '}
                     {post.creatorId ? (
