@@ -139,6 +139,8 @@ function app(): JSX.Element {
     <>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/register" element={<LoginPage />} />
+        <Route path="/admin" element={<LoginPage />} />
         <Route element={<SecuredRoute />}>
           <Route element={<SuperAdminScreen />}>
             <Route path="/orglist" element={<OrgList />} />

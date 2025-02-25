@@ -2823,19 +2823,24 @@ form > input {
   height: 100%;
   display: flex;
   background-color: var(--search-button-bg);
-  border-color: var(--search-button-border, var(--black-color));
+  /* border-color: var(--search-button-border, var(--black-color)); */
   justify-content: center;
   align-items: center;
+  color: #555555;
 }
 
 .login_btn {
   background-color: var(--search-button-bg);
-  border-color: var(--search-button-border, var(--black-color));
+  /* border-color: var(--search-button-border, var(--black-color)); */
   margin-top: 1rem;
   margin-bottom: 1rem;
   width: 100%;
   transition: background-color 0.2s ease;
   cursor: pointer;
+  color: #555555;
+  font-weight: bold;
+  font-size: 20px;
+  border: none;
 }
 
 .reg_btn {
@@ -2847,8 +2852,55 @@ form > input {
   width: 100%;
   transition: background-color 0.2s ease;
   cursor: pointer;
+  color: #555555;
+  font-weight: bold;
+  font-size: 20px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
 }
-
+.send_otp_btn {
+  width: 100%;
+  margin-top: 40px;
+  background: #a8c7fa;
+  border: none;
+  color: #555555;
+  font-weight: bold;
+}
+.register_btn {
+  width: 100%;
+  margin-top: 40px;
+  background: #a8c7fa;
+  border: none;
+  color: #555555;
+  font-weight: bold;
+  font-size: 20px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.back_to_login {
+  border: 1px solid #808080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  margin-top: 20px;
+  border-radius: 4px;
+  color: #555555;
+  font-weight: bold;
+}
+.change_password {
+  width: 100%;
+  margin-top: 20px;
+  background: #a8c7fa;
+  border: none;
+  color: #555555;
+  font-weight: bold;
+}
 .active_tab {
   -webkit-animation: fadeIn 0.3s ease-in-out;
   animation: fadeIn 0.3s ease-in-out;

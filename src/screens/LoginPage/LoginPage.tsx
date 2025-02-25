@@ -26,7 +26,7 @@ import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
+// import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
@@ -65,7 +65,7 @@ const loginPage = (): JSX.Element => {
   const SignupRecaptchaRef = useRef<ReCAPTCHA>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
-  const [role, setRole] = useState<'admin' | 'user'>('admin');
+  const [role, setRole] = useState<'admin' | 'user'>('user');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
@@ -106,9 +106,22 @@ const loginPage = (): JSX.Element => {
     });
   };
 
-  const handleRoleToggle = (role: 'admin' | 'user'): void => {
-    setRole(role);
-  };
+  // const handleRoleToggle = (role: 'admin' | 'user'): void => {
+  //   setRole(role);
+  // };
+
+  useEffect(() => {
+    const isRegister = window.location.pathname === '/register';
+    if (isRegister) {
+      setShowTab('REGISTER');
+    }
+    const isAdmin = window.location.pathname === '/admin';
+    if (isAdmin) {
+      setRole('admin');
+    } else {
+      setRole('user');
+    }
+  }, [window.location.pathname]);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
@@ -413,7 +426,7 @@ const loginPage = (): JSX.Element => {
                 }`}
               />
 
-              <LoginPortalToggle onToggle={handleRoleToggle} />
+              {/* <LoginPortalToggle onToggle={handleRoleToggle} /> */}
 
               {/* LOGIN FORM */}
               <div
@@ -423,7 +436,7 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {role === 'admin' ? tCommon('login') : t('userLogin')}
+                    {role === 'admin' ? 'Admin Login' : 'Login'}
                   </h1>
                   <Form.Label>{tCommon('email')}</Form.Label>
                   <div className="position-relative">
@@ -452,7 +465,7 @@ const loginPage = (): JSX.Element => {
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
-                      className="input_box_second lh-1"
+                      className="input_box_second"
                       placeholder={tCommon('enterPassword')}
                       required
                       value={formState.password}
@@ -514,18 +527,18 @@ const loginPage = (): JSX.Element => {
                     <hr />
                     <span className={styles.orText}>{tCommon('OR')}</span>
                   </div>
-                  <Button
-                    variant="outline-secondary"
-                    value="Register"
+
+                  <Link
+                    to="/register"
                     className={styles.reg_btn}
-                    data-testid="goToRegisterPortion"
+                    tabIndex={-1}
                     onClick={(): void => {
                       setShowTab('REGISTER');
                       setShowPassword(false);
                     }}
                   >
                     {tCommon('register')}
-                  </Button>
+                  </Link>
                 </form>
               </div>
               {/* REGISTER FORM */}
@@ -845,7 +858,7 @@ const loginPage = (): JSX.Element => {
                   )}
                   <Button
                     type="submit"
-                    className="mt-4 w-100 mb-3"
+                    className={styles.register_btn}
                     value="Register"
                     data-testid="registrationBtn"
                     disabled={signinLoading}
@@ -856,10 +869,9 @@ const loginPage = (): JSX.Element => {
                     <hr />
                     <span className={styles.orText}>{tCommon('OR')}</span>
                   </div>
-                  <Button
-                    variant="outline-secondary"
-                    value="Register"
-                    className="mt-3 mb-5 w-100"
+                  <Link
+                    to="/"
+                    className={styles.register_btn}
                     data-testid="goToLoginPortion"
                     onClick={(): void => {
                       setShowTab('LOGIN');
@@ -867,7 +879,7 @@ const loginPage = (): JSX.Element => {
                     }}
                   >
                     {tCommon('login')}
-                  </Button>
+                  </Link>
                 </Form>
               </div>
             </div>
