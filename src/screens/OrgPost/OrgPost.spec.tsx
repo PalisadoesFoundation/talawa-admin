@@ -1366,54 +1366,6 @@ describe('OrgPost SearchBar functionality', () => {
       );
     });
   });
-
-  // it('should clear filtering when search term is empty', async () => {
-  //   // Arrange
-  //   renderWithMocks([orgPostListMock, getPostsByOrgInitialMock, getPostsByOrgEmptySearchMock]);
-
-  //   // Wait for initial load
-  //   await waitFor(() => {
-  //     expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-  //   });
-
-  //   // Act - first enter a search term and then clear it
-  //   const searchInput = screen.getByTestId('searchByName');
-  //   await userEvent.type(searchInput, 'test{enter}');
-
-  //   // Wait for filtered results
-  //   await waitFor(() => {
-  //     const postElements = screen.getAllByTestId('post-caption');
-  //     expect(postElements.length).toBe(1);
-  //   });
-
-  //   // Clear the search input and trigger search by pressing Enter
-  //   await userEvent.clear(searchInput);
-  //   fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
-
-  //   // Assert - verify that all posts are shown
-  //   await waitFor(() => {
-  //     const postElements = screen.getAllByTestId('post-caption');
-  //     expect(postElements.length).toBe(3); // All three posts should be visible
-  //   });
-  // });
-
-  // it('should show error toast when search fails', async () => {
-  //   renderWithMocks([orgPostListMock, getPostsByOrgInitialMock, getPostsByOrgErrorMock]);
-
-  //   await waitFor(() => {
-  //     expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-  //   });
-
-  //   const searchInput = screen.getByTestId('searchByName');
-  //   await userEvent.type(searchInput, 'error-trigger');
-
-  //   fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
-
-  //   await waitFor(() => {
-  //     expect(toast.error).toHaveBeenCalledWith('Error searching posts');
-  //   });
-  // });
-
   it('should correctly integrate with PostsRenderer when filtering', async () => {
     renderWithMocks([
       orgPostListMock,
@@ -1455,6 +1407,7 @@ vi.mock('utils/convertToBase64', () => ({
 
 describe('OrgPost component - Post Creation Tests', () => {
   const mockOrgId = '123';
+
   const createPostMock: MockedResponse = {
     request: {
       query: CREATE_POST_MUTATION,
