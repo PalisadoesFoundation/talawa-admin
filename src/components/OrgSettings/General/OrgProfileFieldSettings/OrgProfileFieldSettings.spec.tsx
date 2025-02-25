@@ -309,6 +309,61 @@ describe('OrgProfileFieldSettings', () => {
     });
   });
 
+  it('handles non-Error objects in error handling during save', async () => {
+    // Mock addCustomField to reject with a non-Error object
+    addCustomFieldMock.mockRejectedValueOnce('String error');
+
+    render(<OrgProfileFieldSettings />);
+
+    // Fill valid data
+    fireEvent.change(screen.getByTestId('customFieldInput'), {
+      target: { value: 'Error Field' },
+    });
+
+    // Set field type
+    const toggleBtn = screen.getByTestId('toggleBtn');
+    fireEvent.click(toggleBtn);
+    const stringOption = screen.getByTestId('dropdown-btn-0');
+    fireEvent.click(stringOption);
+
+    // Click save
+    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('pleaseFillAllRequiredFields');
+    });
+  });
+
+  it('handles non-Error objects in error handling during remove', async () => {
+    // Mock query with a custom field
+    (useQuery as Mock).mockReturnValueOnce({
+      loading: false,
+      error: null,
+      data: {
+        organization: {
+          customFields: [{ id: '1', name: 'Test Field', type: 'String' }],
+        },
+      },
+      refetch: refetchMock,
+    });
+
+    // Mock removeCustomField to reject with a non-Error object
+    removeCustomFieldMock.mockRejectedValueOnce('String error');
+
+    render(<OrgProfileFieldSettings />);
+
+    // Click remove button
+    const removeBtn = screen.getByTestId('removeCustomFieldBtn');
+    fireEvent.click(removeBtn);
+
+    await waitFor(() => {
+      expect(removeCustomFieldMock).toHaveBeenCalledWith({
+        variables: { id: '1' },
+      });
+      expect(toast.error).toHaveBeenCalledWith('pleaseFillAllRequiredFields');
+    });
+  });
+
   it('updates custom field type through dropdown', async () => {
     render(<OrgProfileFieldSettings />);
 
