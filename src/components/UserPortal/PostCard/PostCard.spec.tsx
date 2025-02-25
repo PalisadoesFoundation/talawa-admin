@@ -1152,12 +1152,31 @@ describe('Testing PostCard Component [User Portal]', () => {
     expect(imageElement).toHaveAttribute('src', 'image.png');
   });
 
-  test('Delete post should show success toast when createEventData is returned', async () => {
+  test('Delete post should execute code inside if(createEventData) conditional', async () => {
     setItem('userId', '2');
 
-    const mockDeletePostSuccess = vi.fn().mockResolvedValue({
-      createEventData: { success: true }, // Simulating success case
-    });
+    const deletePostMock = {
+      request: {
+        query: DELETE_POST_MUTATION,
+        variables: {
+          id: 'postId',
+        },
+      },
+      result: {
+        data: {
+          deletePost: {
+            // This matches the structure expected in handleDeletePost
+            id: 'postId',
+          },
+        },
+      },
+    };
+
+    const customLink = new StaticMockLink([deletePostMock], true);
+
+    const successToastSpy = vi.spyOn(toast, 'success');
+
+    const fetchPostsSpy = vi.fn();
 
     const cardProps = {
       id: 'postId',
@@ -1183,12 +1202,15 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: vi.fn(),
-      mockDeletePost: mockDeletePostSuccess, // Success case
+      fetchPosts: fetchPostsSpy, // Use our spy function
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider
+        addTypename={false}
+        link={customLink}
+        mocks={[deletePostMock]}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1199,9 +1221,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('dropdown')).toBeInTheDocument();
-    });
+    await wait(100);
 
     await userEvent.click(screen.getByTestId('dropdown'));
 
@@ -1211,12 +1231,14 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     await userEvent.click(screen.getByTestId('deletePost'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'Successfully deleted the Post.',
-      );
-    });
+    await wait(300);
 
-    expect(cardProps.fetchPosts).toHaveBeenCalled();
+    expect(successToastSpy).toHaveBeenCalledWith(
+      'Successfully deleted the Post.',
+    );
+
+    expect(fetchPostsSpy).toHaveBeenCalled();
+
+    successToastSpy.mockRestore();
   });
 });
