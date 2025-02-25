@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
