@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './SidePanel.module.css';
+import styles from '../../../../../style/app-fixed.module.css';
 import type { InterfaceSidePanelProps } from 'types/AddOn/interface';
 /**
  * Props for the `sidePanel` component.

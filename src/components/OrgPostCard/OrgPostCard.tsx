@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
 import {
   DELETE_POST_MUTATION,

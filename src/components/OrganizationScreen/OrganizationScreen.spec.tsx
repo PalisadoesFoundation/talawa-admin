@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import styles from './OrganizationScreen.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
 import '../../style/app.module.css';

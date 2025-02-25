@@ -12,7 +12,7 @@ import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './OrgUpdate.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceAddress,
