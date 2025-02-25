@@ -13,7 +13,7 @@ import {
   REMOVE_CUSTOM_FIELD,
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_CUSTOM_FIELDS } from 'GraphQl/Queries/Queries';
-import styles from './OrgProfileFieldSettings.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import EditOrgCustomFieldDropDown from 'components/EditCustomFieldDropDown/EditCustomFieldDropDown';
 import type { InterfaceCustomFieldData } from 'utils/interfaces';
 
