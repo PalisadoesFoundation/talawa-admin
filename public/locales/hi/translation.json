@@ -1298,8 +1298,7 @@
     "Date": "तारीख",
     "Number": "संख्या",
     "saveChanges": "परिवर्तन सहेजें",
-    "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें",
-    "customFieldAdded" : "कस्टम फ़ील्ड जोड़ा गया"
+    "pleaseFillAllRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

@@ -1298,8 +1298,7 @@
     "Date": "Date",
     "Number": "Nombre",
     "saveChanges": "Enregistrer les modifications",
-    "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires",
-    "customFieldAdded": "Champ personnalisé ajouté"
+    "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",
