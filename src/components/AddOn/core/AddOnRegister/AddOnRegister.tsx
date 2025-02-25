@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from './AddOnRegister.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';

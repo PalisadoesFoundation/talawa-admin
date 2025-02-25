@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
-import styles from './DynamicDropDown.module.css';
+import styles from '../../style/app-fixed.module.css';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 /**
  * Props for the DynamicDropDown component.

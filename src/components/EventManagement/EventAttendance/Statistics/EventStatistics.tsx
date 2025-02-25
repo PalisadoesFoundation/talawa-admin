@@ -30,7 +30,7 @@ import type {
   InterfaceEvent,
   InterfaceRecurringEvent,
 } from 'types/Event/interface';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 ChartJS.register(
   CategoryScale,
   LinearScale,

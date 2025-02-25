@@ -1,7 +1,7 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ADD_USER_TO_GROUP_CHAT,
