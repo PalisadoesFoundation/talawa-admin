@@ -119,3 +119,30 @@ describe('Error Handling', () => {
     ).not.toThrow();
   });
 });
+
+describe('Props Handling', () => {
+  test('passes correct props to child components', () => {
+    const customOrgId = '123e4567-e89b-12d3-a456-426614174001';
+    render(
+      <I18nextProvider i18n={i18n}>
+        <GeneralSettings orgId={customOrgId} />
+      </I18nextProvider>,
+    );
+    expect(screen.getByTestId('org-update')).toHaveTextContent(
+      `OrgUpdate - ${customOrgId}`,
+    );
+  });
+});
+
+describe('i18n Integration', () => {
+  const ORG_ID = '123e4567-e89b-12d3-a456-426614174000';
+  test('renders with different language settings', () => {
+    i18n.changeLanguage('es');
+    render(
+      <I18nextProvider i18n={i18n}>
+        <GeneralSettings orgId={ORG_ID} />
+      </I18nextProvider>,
+    );
+    i18n.changeLanguage('en');
+  });
+});
