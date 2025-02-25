@@ -246,21 +246,23 @@ function OrgPost(): JSX.Element {
   }
 
   const content = (
-    <PostsRenderer
+    <div
       data-testid="posts-renderer"
-      data-loading={loading}
-      data-is-filtering={isFiltering}
+      data-loading={String(loading)}
+      data-is-filtering={String(isFiltering)}
       data-sorting-option={sortingOption}
-      loading={loading}
-      error={error}
-      data={isFiltering ? data : orgPostListData}
-      isFiltering={isFiltering}
-      searchTerm={searchTerm}
-      sortingOption={sortingOption}
-      displayPosts={displayPosts}
-    />
+    >
+      <PostsRenderer
+        loading={loading}
+        error={error}
+        data={isFiltering ? data : orgPostListData}
+        isFiltering={isFiltering}
+        searchTerm={searchTerm}
+        sortingOption={sortingOption}
+        displayPosts={displayPosts}
+      />
+    </div>
   );
-
   const handleSorting = (option: string): void => {
     setCurrentPage(1);
     setSortingOption(option);
@@ -499,7 +501,7 @@ function OrgPost(): JSX.Element {
               }}
             />
           </Modal.Body>
-          <Modal.Body>
+          <Modal.Body data-testid="modalOrganizationUpload">
             <Form.Label htmlFor="addMedia">{t('addMedia')}</Form.Label>
             <Form.Control
               id="addMedia"
@@ -507,7 +509,7 @@ function OrgPost(): JSX.Element {
               type="file"
               accept="image/*,video/*"
               placeholder={t('addMedia')}
-              multiple={false}
+              multiple={true}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
               className={`mb-3 ${styles.inputField}`}
