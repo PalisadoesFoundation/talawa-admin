@@ -143,4 +143,104 @@ describe('LeftDrawer Component', () => {
       fontWeight: 'bold',
     });
   });
+
+  it('applies hideElemByDefault style when hideDrawer is null', () => {
+    const setHideDrawer = vi.fn();
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <LeftDrawer hideDrawer={null} setHideDrawer={setHideDrawer} />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
+
+    const element = screen.getByTestId('leftDrawerContainer');
+    expect(element.className).toContain('hideElemByDefault');
+    expect(setHideDrawer).toHaveBeenCalledWith(false);
+  });
+
+  it('calls setHideDrawer(false) in useEffect when hideDrawer is null', () => {
+    const setHideDrawer = vi.fn();
+
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <LeftDrawer hideDrawer={null} setHideDrawer={setHideDrawer} />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
+
+    expect(setHideDrawer).toHaveBeenCalledWith(false);
+  });
+
+  it('does not call setHideDrawer in useEffect when hideDrawer is not null', () => {
+    const setHideDrawer = vi.fn();
+
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
+
+    expect(setHideDrawer).not.toHaveBeenCalled();
+  });
+
+  it('does not hide drawer on desktop view navigation button clicks', () => {
+    // Mock window.innerWidth for desktop view
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1024, // Desktop size (larger than 820)
+    });
+
+    const setHideDrawer = vi.fn();
+
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
+
+    const organizationsButton = screen.getByTestId('organizationsBtn');
+    fireEvent.click(organizationsButton);
+
+    expect(setHideDrawer).not.toHaveBeenCalled();
+  });
+
+  it('hides drawer on mobile view for all navigation buttons', () => {
+    // Mock window.innerWidth for mobile view
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 800, // Mobile size (less than or equal to 820)
+    });
+
+    const setHideDrawer = vi.fn();
+
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
+
+    // Test community profile button
+    const communityProfileButton = screen.getByTestId('communityProfileBtn');
+    fireEvent.click(communityProfileButton);
+
+    expect(setHideDrawer).toHaveBeenCalledWith(true);
+    setHideDrawer.mockClear();
+
+    // Test for super admin - roles button
+    if (screen.queryByTestId('rolesBtn')) {
+      const rolesButton = screen.getByTestId('rolesBtn');
+      fireEvent.click(rolesButton);
+      expect(setHideDrawer).toHaveBeenCalledWith(true);
+    }
+  });
 });
