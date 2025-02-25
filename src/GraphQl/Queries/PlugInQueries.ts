@@ -382,7 +382,6 @@ export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
  * @returns The list of custom fields associated with the organization, including details such as ID, type, and name.
  */
 
-// Ensure query matches backend schema
 export const ORGANIZATION_CUSTOM_FIELDS = gql`
   query GetOrganizationCustomFields($organizationId: String!) {
     organization(input: { id: $organizationId }) {
