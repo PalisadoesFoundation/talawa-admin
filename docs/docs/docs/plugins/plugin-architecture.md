@@ -1,6 +1,7 @@
 ---
 id: plugin-architecture
 title: Plugin Architecture
+sidebar_position: 1
 ---
 
 # Plugin Architecture
