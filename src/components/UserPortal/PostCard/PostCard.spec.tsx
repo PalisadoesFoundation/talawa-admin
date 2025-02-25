@@ -961,9 +961,23 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Delete post should work properly', async () => {
     setItem('userId', '2');
 
-    const mockDeletePost = vi.fn().mockResolvedValue({
-      createEventData: '', // Simulating a failed response (createEventData is missing)
-    });
+    const deletePostMock = {
+      request: {
+        query: DELETE_POST_MUTATION,
+        variables: {
+          id: 'postId',
+        },
+      },
+      result: {
+        data: {
+          removePost: {
+            _id: 'postId',
+          },
+        },
+      },
+    };
+
+    const customLink = new StaticMockLink([deletePostMock], true);
 
     const cardProps = {
       id: 'postId',
@@ -989,12 +1003,11 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
-      fetchPosts: vi.fn(), // Pass mock function
-      mockDeletePost,
+      fetchPosts: vi.fn(), // Mock function to verify it's called
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={customLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1005,26 +1018,23 @@ describe('Testing PostCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      // Ensure dropdown button is available
-      expect(screen.getByTestId('dropdown')).toBeInTheDocument();
-    });
+    await wait();
 
     await userEvent.click(screen.getByTestId('dropdown'));
 
     await waitFor(() => {
-      // Ensure delete button is visible after clicking the dropdown
       expect(screen.getByTestId('deletePost')).toBeInTheDocument();
     });
 
     await userEvent.click(screen.getByTestId('deletePost'));
 
-    await waitFor(() => {
-      // Check that the success toast was called
-      expect(toast.success).toHaveBeenCalledWith(
-        'Successfully deleted the Post.',
-      );
-    });
+    await wait(200);
+
+    expect(toast.success).toHaveBeenCalledWith(
+      'Successfully deleted the Post.',
+    );
+
+    expect(cardProps.fetchPosts).toHaveBeenCalled();
   });
 
   test('Should handle delete post failure correctly', async () => {
