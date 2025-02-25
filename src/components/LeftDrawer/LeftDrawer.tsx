@@ -39,7 +39,7 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin');
+  const superAdmin = getItem('SuperAdmin') !== null;
 
   useEffect(() => {
     if (hideDrawer === null) {
