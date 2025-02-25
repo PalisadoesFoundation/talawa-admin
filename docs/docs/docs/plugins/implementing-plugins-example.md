@@ -1,6 +1,7 @@
 ---
 id: implementing-plugins-example
 title: Plugin Examples
+sidebar_position: 3
 ---
 
 :::note
