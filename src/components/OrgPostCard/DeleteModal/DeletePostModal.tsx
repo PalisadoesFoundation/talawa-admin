@@ -1,7 +1,7 @@
 import React, { type FC } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 
 /**
  * A modal component that confirms a post delete operation.

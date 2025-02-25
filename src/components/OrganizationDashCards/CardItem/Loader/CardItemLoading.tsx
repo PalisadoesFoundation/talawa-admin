@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 
 /**
  * CardItemLoading component is a loading state for the card item. It is used when the data is being fetched.
