@@ -117,6 +117,11 @@ export default function OrgPostCard({
     setPlaying(true);
     videoRef.current?.play();
   };
+  const handleCloseModal = (e: React.MouseEvent): void => {
+    // Stop the click event from bubbling up to parent elements
+    e.stopPropagation();
+    setModalVisible(false);
+  };
 
   const { data: userData, loading: userLoading } = useQuery(GET_USER_BY_ID, {
     variables: {
@@ -211,6 +216,7 @@ export default function OrgPostCard({
       errorHandler(t, error);
     }
   };
+
   const updatePost = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
@@ -368,7 +374,8 @@ export default function OrgPostCard({
               </button>
               <button
                 className={styles.closeButtonOrgPostCard}
-                onClick={(): void => setModalVisible(false)}
+                onClick={handleCloseModal}
+                data-testid="close-modal-button"
               >
                 <Close />
               </button>
