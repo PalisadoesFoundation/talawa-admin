@@ -382,7 +382,10 @@ export default function OrgPostCard({
                 <li onClick={togglePostPin} data-testid="pin-post-button">
                   {isPinned ? 'Unpin post' : 'Pin post'}
                 </li>
-                <li onClick={(): void => setMenuVisible(false)}>
+                <li
+                  onClick={(): void => setMenuVisible(false)}
+                  data-testid="close-menu-option"
+                >
                   {tCommon('close')}
                 </li>
               </ul>

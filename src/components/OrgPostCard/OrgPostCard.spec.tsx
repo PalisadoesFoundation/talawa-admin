@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import type { DocumentNode } from 'graphql';
 import * as errorHandlerModule from 'utils/errorHandler';
 import type { MockedResponse } from '@apollo/client/testing';
+import { MemoryRouter } from 'react-router-dom';
 
 /**
  * Unit Tests for OrgPostCard Component
@@ -319,36 +320,33 @@ describe('OrgPostCard Component', () => {
     );
   };
   describe('Tests', () => {
-    test('clicking the "close" menu option closes the menu', async () => {
+    it('clicking the "close" menu option hides the menu', async () => {
       render(
         <MockedProvider>
-          <I18nextProvider i18n={i18n}>
+          <I18nextProvider i18n={i18nForTest}>
             <MemoryRouter>
               <OrgPostCard post={mockPost} />
             </MemoryRouter>
           </I18nextProvider>
-        </MockedProvider>
+        </MockedProvider>,
       );
-    
-      // Open the options menu by clicking the more-options button.
-      const moreOptionsButton = screen.getByTestId('more-options-button');
+
+      const moreOptionsButton = await screen.findByTestId(
+        'more-options-button',
+      );
       fireEvent.click(moreOptionsButton);
-    
-      // Verify that the menu is visible.
+
       const menu = await screen.findByTestId('post-menu');
       expect(menu).toBeInTheDocument();
-    
-      // Click the "close" option in the menu.
-      // Assuming the "close" text is rendered as provided by tCommon('close').
-      const closeOption = screen.getByText(/close/i);
+
+      const closeOption = await screen.findByTestId('close-menu-option');
       fireEvent.click(closeOption);
-    
-      // Wait for the menu to be removed from the DOM.
+
       await waitFor(() => {
         expect(screen.queryByTestId('post-menu')).toBeNull();
       });
     });
-    
+
     it('renders the post card with basic information', () => {
       renderComponent();
 
