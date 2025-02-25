@@ -52,7 +52,8 @@ function OrgPost(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
   const [displayPosts, setDisplayPosts] = useState<InterfacePost[]>([]);
-
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreview, setVideoPreview] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const { orgId: currentUrl } = useParams();
   const [showTitle, setShowTitle] = useState(true);
@@ -385,6 +386,28 @@ function OrgPost(): JSX.Element {
       }
     }
   };
+  const handleVideoAddMediaChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      if (!selectedFile.type.startsWith('video/')) {
+        toast.error('Please select a video file');
+        return;
+      }
+      setVideoFile(selectedFile);
+      try {
+        const base64 = await convertToBase64(selectedFile);
+        setVideoPreview(base64);
+      } catch {
+        toast.error('Could not generate video preview');
+      }
+    } else {
+      setVideoFile(null);
+      setVideoPreview('');
+    }
+  };
+
   return (
     <>
       <Row className={styles.head}>
@@ -515,6 +538,17 @@ function OrgPost(): JSX.Element {
               className={`mb-3 ${styles.inputField}`}
             />
 
+            <Form.Control
+              id="videoAddMedia"
+              name="videoAddMedia"
+              type="file"
+              accept="video/*"
+              placeholder={t('addVideo')}
+              onChange={handleVideoAddMediaChange}
+              data-testid="addVideoField"
+              className={`mb-3 ${styles.inputField}`}
+            />
+
             {postformState.addMedia && file && (
               <div className={styles.previewOrgPost} data-testid="mediaPreview">
                 {file.type.startsWith('image') ? (
@@ -544,6 +578,34 @@ function OrgPost(): JSX.Element {
                     }
                   }}
                   data-testid="mediaCloseButton"
+                >
+                  <i className="fa fa-times"></i>
+                </button>
+              </div>
+            )}
+
+            {videoPreview && videoFile && (
+              <div
+                className={styles.previewOrgPost}
+                data-testid="videoPreviewContainer"
+              >
+                <video controls data-testid="videoPreview">
+                  <source src={videoPreview} type={videoFile.type} />({t('tag')}
+                  )
+                </video>
+                <button
+                  className={styles.closeButtonOrgPost}
+                  onClick={(): void => {
+                    setVideoPreview('');
+                    setVideoFile(null);
+                    const fileInput = document.getElementById(
+                      'videoAddMedia',
+                    ) as HTMLInputElement;
+                    if (fileInput) {
+                      fileInput.value = '';
+                    }
+                  }}
+                  data-testid="videoMediaCloseButton"
                 >
                   <i className="fa fa-times"></i>
                 </button>
