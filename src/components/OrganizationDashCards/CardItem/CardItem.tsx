@@ -5,7 +5,7 @@ import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import UserIcon from 'assets/svgs/user.svg?react';
 import dayjs from 'dayjs';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { PersonAddAlt1Rounded } from '@mui/icons-material';
 
 /**

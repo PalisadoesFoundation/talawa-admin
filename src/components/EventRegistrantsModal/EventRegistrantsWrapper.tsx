@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
-import style from '../../style/app.module.css';
+import style from '../../style/app-fixed.module.css';
 
 // Props for the EventRegistrantsWrapper component
 type PropType = {
