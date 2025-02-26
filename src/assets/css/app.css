@@ -2478,9 +2478,9 @@ progress {
 .form-control:focus {
   color: var(--bs-body-color);
   background-color: #f2f2f2;
-  border-color: #98ddb5;
+  border-color: #dddddd;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(49, 187, 107, 0.25);
+  box-shadow: #dedede 0 4px 3px;
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -3498,16 +3498,16 @@ fieldset:disabled .btn {
 }
 
 .btn-primary {
-  --bs-btn-color: #000;
-  --bs-btn-bg: #31bb6b;
-  --bs-btn-border-color: #31bb6b;
-  --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: #50c581;
-  --bs-btn-hover-border-color: #46c27a;
+  --bs-btn-color: #555555;
+  --bs-btn-bg: #a8c7fa;
+  --bs-btn-border-color: #a8c7fa;
+  --bs-btn-hover-color: #555;
+  --bs-btn-hover-bg: #4a88eb;
+  --bs-btn-hover-border-color: #4a88eb;
   --bs-btn-focus-shadow-rgb: 42, 159, 91;
   --bs-btn-active-color: #000;
-  --bs-btn-active-bg: #5ac989;
-  --bs-btn-active-border-color: #46c27a;
+  --bs-btn-active-bg: #a8c7fa;
+  --bs-btn-active-border-color: #4a88eb;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #000;
   --bs-btn-disabled-bg: #31bb6b;

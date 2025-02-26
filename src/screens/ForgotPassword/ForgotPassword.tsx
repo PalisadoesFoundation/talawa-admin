@@ -191,7 +191,7 @@ const ForgotPassword = (): JSX.Element => {
                     </div>
                     <Button
                       type="submit"
-                      className="mt-4 w-100"
+                      className={styles.send_otp_btn}
                       data-testid="getOtpBtn"
                     >
                       {t('getOtp')}
@@ -255,13 +255,13 @@ const ForgotPassword = (): JSX.Element => {
                         })
                       }
                     />
-                    <Button type="submit" className="mt-2 w-100">
+                    <Button type="submit" className={styles.change_password}>
                       {t('changePassword')}
                     </Button>
                   </Form>
                 </div>
               )}
-              <div className="d-flex justify-content-between items-center mt-4">
+              <div className={styles.back_to_login}>
                 <Link
                   to={'/'}
                   className="mx-auto d-flex items-center text-secondary"
