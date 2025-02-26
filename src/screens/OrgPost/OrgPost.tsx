@@ -299,10 +299,6 @@ function OrgPost(): JSX.Element {
       });
       return;
     }
-    if (!['latest', 'oldest'].includes(option)) {
-      return;
-    }
-
     if (loading || error || !data?.postsByOrganization) {
       return;
     }
