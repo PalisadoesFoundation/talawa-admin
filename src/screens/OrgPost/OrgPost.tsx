@@ -527,7 +527,7 @@ function OrgPost(): JSX.Element {
               type="file"
               accept="image/*,video/*"
               placeholder={t('addMedia')}
-              multiple={true}
+              multiple={false}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
               className={`mb-3 ${styles.inputField}`}
