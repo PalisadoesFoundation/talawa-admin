@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import useLocalStorage from './useLocalstorage';
 
 type UseSessionReturnType = {
   startSession: () => void;
@@ -49,7 +50,11 @@ const useSession = (): UseSessionReturnType => {
     } else {
       const sessionTimeoutData = data?.community;
       if (sessionTimeoutData) {
-        setSessionTimeout(sessionTimeoutData.inactivityTimeoutDuration);
+        setSessionTimeout(
+          sessionTimeoutData.inactivityTimeoutDuration
+            ? sessionTimeoutData.inactivityTimeoutDuration
+            : sessionTimeout,
+        );
       }
     }
   }, [data, queryError]);
@@ -68,7 +73,17 @@ const useSession = (): UseSessionReturnType => {
 
   const handleLogout = async (): Promise<void> => {
     try {
-      await revokeRefreshToken();
+      const { getItem } = useLocalStorage();
+      const userId = getItem('id');
+      if (!userId) {
+        console.error('User ID is missing.');
+        return;
+      }
+      await revokeRefreshToken({
+        variables: {
+          input: { id: userId },
+        },
+      });
     } catch (error) {
       console.error('Error revoking refresh token:', error);
       // toast.error('Failed to revoke session. Please try again.');

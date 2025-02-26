@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryUserListItem
 
-Defined in: [src/utils/interfaces.ts:1072](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1072)
+Defined in: [src/utils/interfaces.ts:1062](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1062)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1072](https://github.com/PalisadoesFoundati
 
 > **appUserProfile**: `object`
 
-Defined in: [src/utils/interfaces.ts:1111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1111)
+Defined in: [src/utils/interfaces.ts:1101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1101)
 
 #### \_id
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:1111](https://github.com/PalisadoesFoundati
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:1073](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1073)
+Defined in: [src/utils/interfaces.ts:1063](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1063)
 
 #### \_id
 

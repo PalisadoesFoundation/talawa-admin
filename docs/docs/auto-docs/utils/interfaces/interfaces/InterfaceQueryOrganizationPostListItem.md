@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationPostListItem
 
-Defined in: [src/utils/interfaces.ts:875](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L875)
+Defined in: [src/utils/interfaces.ts:865](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L865)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:875](https://github.com/PalisadoesFoundatio
 
 > **posts**: `object`
 
-Defined in: [src/utils/interfaces.ts:876](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L876)
+Defined in: [src/utils/interfaces.ts:866](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L866)
 
 #### edges
 

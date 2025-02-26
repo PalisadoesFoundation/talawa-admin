@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryMembershipRequestsListItem
 
-Defined in: [src/utils/interfaces.ts:1192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1192)
+Defined in: [src/utils/interfaces.ts:1182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1182)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1192](https://github.com/PalisadoesFoundati
 
 > **organizations**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1193)
+Defined in: [src/utils/interfaces.ts:1183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1183)
 
 #### \_id
 

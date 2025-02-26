@@ -52,10 +52,23 @@ function userNavbar(): JSX.Element {
    * Redirects to the home page after logout.
    */
 
-  const handleLogout = (): void => {
-    revokeRefreshToken();
-    localStorage.clear();
-    navigate('/');
+  const handleLogout: () => Promise<void> = async () => {
+    try {
+      const userId = getItem('id');
+      if (!userId) {
+        console.error('User ID is missing.');
+        return;
+      }
+      await revokeRefreshToken({
+        variables: {
+          input: { id: userId },
+        },
+      });
+      localStorage.clear();
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

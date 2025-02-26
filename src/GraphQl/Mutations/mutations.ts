@@ -204,8 +204,8 @@ export const REFRESH_TOKEN_MUTATION = gql`
 // to revoke a refresh token
 
 export const REVOKE_REFRESH_TOKEN = gql`
-  mutation RevokeRefreshTokenForUser {
-    revokeRefreshTokenForUser
+  mutation RevokeRefreshTokenForUser($input: RevokeRefreshTokenInput!) {
+    revokeRefreshTokenForUser(input: $input)
   }
 `;
 
