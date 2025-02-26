@@ -33,7 +33,6 @@ function AgendaItemsContainer({
   agendaItemConnection,
   agendaItemData,
   agendaItemRefetch,
-  agendaItemCategories,
 }: {
   agendaItemConnection: 'Event';
   agendaItemData: InterfaceAgendaItemInfo[] | undefined;
@@ -447,7 +446,6 @@ function AgendaItemsContainer({
         setFormState={setFormState}
         updateAgendaItemHandler={updateAgendaItemHandler}
         t={t}
-        agendaItemCategories={agendaItemCategories}
       />
     </>
   );

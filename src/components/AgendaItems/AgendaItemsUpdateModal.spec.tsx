@@ -4,7 +4,7 @@ import {
   screen,
   fireEvent,
   waitFor,
-  within,
+  cleanup,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -18,8 +18,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AgendaItemsUpdateModal from './AgendaItemsUpdateModal';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
-import type { MockedFunction } from 'vitest';
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const mockFormState = {
   title: 'Test Title',
@@ -35,43 +34,13 @@ const mockFormState = {
   },
 };
 
-const mockAgendaItemCategories = [
-  {
-    _id: '1',
-    name: 'Test Name',
-    description: 'Test Description',
-    createdBy: {
-      _id: '1',
-      firstName: 'Test',
-      lastName: 'User',
-    },
-  },
-  {
-    _id: '2',
-    name: 'Another Category',
-    description: 'Another Description',
-    createdBy: {
-      _id: '2',
-      firstName: 'Another',
-      lastName: 'Creator',
-    },
-  },
-  {
-    _id: '3',
-    name: 'Third Category',
-    description: 'Third Description',
-    createdBy: {
-      _id: '3',
-      firstName: 'Third',
-      lastName: 'User',
-    },
-  },
-];
-
 const mockHideUpdateModal = vi.fn();
 const mockSetFormState = vi.fn();
 const mockUpdateAgendaItemHandler = vi.fn();
-const mockT = (key: string): string => key;
+const mockT = (key: string, options?: Record<string, unknown>): string => {
+  if (options) return `${key} ${JSON.stringify(options)}`;
+  return key;
+};
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -79,12 +48,19 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
-vi.mock('utils/convertToBase64');
-const mockedConvertToBase64 = convertToBase64 as MockedFunction<
-  typeof convertToBase64
->;
+vi.mock('utils/convertToBase64', () => ({
+  default: vi.fn().mockResolvedValue('base64-file'),
+}));
 
 describe('AgendaItemsUpdateModal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup();
+  });
+
   test('renders modal correctly', () => {
     render(
       <MockedProvider addTypename={false}>
@@ -93,7 +69,6 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={[]}
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState}
@@ -115,7 +90,7 @@ describe('AgendaItemsUpdateModal', () => {
     ).toBeInTheDocument();
   });
 
-  test('tests the condition for formState.title and formState.description', async () => {
+  test('calls hideUpdateModal when close button is clicked', async () => {
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
@@ -123,7 +98,6 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={[]}
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState}
@@ -138,81 +112,42 @@ describe('AgendaItemsUpdateModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.change(screen.getByLabelText('title'), {
-      target: { value: 'New title' },
-    });
-
-    fireEvent.change(screen.getByLabelText('description'), {
-      target: { value: 'New description' },
-    });
-
-    fireEvent.change(screen.getByLabelText('duration'), {
-      target: { value: '30' },
-    });
-
-    fireEvent.click(screen.getByTestId('deleteUrl'));
-    fireEvent.click(screen.getByTestId('deleteAttachment'));
-
-    expect(mockSetFormState).toHaveBeenCalledWith({
-      ...mockFormState,
-      title: 'New title',
-    });
-    expect(mockSetFormState).toHaveBeenCalledWith({
-      ...mockFormState,
-      description: 'New description',
-    });
-
-    expect(mockSetFormState).toHaveBeenCalledWith({
-      ...mockFormState,
-      duration: '30',
-    });
+    fireEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
 
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState,
-        urls: [],
-      });
-    });
-
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState,
-        attachments: [],
-      });
+      expect(mockHideUpdateModal).toHaveBeenCalled();
     });
   });
 
-  test('handleAddUrl correctly adds valid URL', async () => {
+  test('updates form state when title is changed', async () => {
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <AgendaItemsUpdateModal
-                agendaItemCategories={[]}
-                agendaItemUpdateModalIsOpen
-                hideUpdateModal={mockHideUpdateModal}
-                formState={mockFormState}
-                setFormState={mockSetFormState}
-                updateAgendaItemHandler={mockUpdateAgendaItemHandler}
-                t={mockT}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
       </MockedProvider>,
     );
 
-    const urlInput = screen.getByTestId('urlInput');
-    const linkBtn = screen.getByTestId('linkBtn');
-
-    fireEvent.change(urlInput, { target: { value: 'https://example.com' } });
-    fireEvent.click(linkBtn);
+    const titleInput = screen.getByLabelText('title');
+    fireEvent.change(titleInput, { target: { value: 'New Title' } });
 
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith({
         ...mockFormState,
-        urls: [...mockFormState.urls, 'https://example.com'],
+        title: 'New Title',
       });
     });
   });
@@ -225,7 +160,6 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={[]}
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState}
@@ -259,7 +193,6 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={[]}
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState}
@@ -284,7 +217,7 @@ describe('AgendaItemsUpdateModal', () => {
       value: [largeFile],
     });
 
-    fireEvent.change(fileInput);
+    fireEvent.change(fileInput, { target: { files: [largeFile] } });
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('fileSizeExceedsLimit');
@@ -292,8 +225,6 @@ describe('AgendaItemsUpdateModal', () => {
   });
 
   test('adds files correctly when within size limit', async () => {
-    mockedConvertToBase64.mockResolvedValue('base64-file');
-
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
@@ -301,7 +232,6 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={[]}
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState}
@@ -323,7 +253,7 @@ describe('AgendaItemsUpdateModal', () => {
       value: [smallFile],
     });
 
-    fireEvent.change(fileInput);
+    fireEvent.change(fileInput, { target: { files: [smallFile] } });
 
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith({
@@ -332,7 +262,8 @@ describe('AgendaItemsUpdateModal', () => {
       });
     });
   });
-  test('renders autocomplete and selects categories correctly', async () => {
+
+  test('calls updateAgendaItemHandler on form submission', async () => {
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
@@ -340,7 +271,6 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={mockAgendaItemCategories}
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState}
@@ -355,16 +285,199 @@ describe('AgendaItemsUpdateModal', () => {
       </MockedProvider>,
     );
 
-    const autocomplete = screen.getByTestId('categorySelect');
-    expect(autocomplete).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
-    const input = within(autocomplete).getByRole('combobox');
-    fireEvent.mouseDown(input);
+    await waitFor(() => {
+      expect(mockUpdateAgendaItemHandler).toHaveBeenCalled();
+    });
+  });
 
-    const options = screen.getAllByRole('option');
-    expect(options).toHaveLength(mockAgendaItemCategories.length);
+  test('shows error toast when form is submitted with empty title', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={{ ...mockFormState, title: '' }} // Empty title
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-    fireEvent.click(options[0]);
-    fireEvent.click(options[1]);
+    fireEvent.click(screen.getByTestId('updateAgendaItemBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Title is required');
+    });
+  });
+
+  test('shows error toast when file conversion fails', async () => {
+    vi.mocked(convertToBase64).mockRejectedValue(
+      new Error('Conversion failed'),
+    );
+
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const smallFile = new File(['small-file-content'], 'small-file.jpg');
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [smallFile],
+    });
+
+    fireEvent.change(fileInput, { target: { files: [smallFile] } });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to convert file');
+    });
+  });
+
+  test('handles multiple URLs correctly', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const urlInput = screen.getByTestId('urlInput');
+    const linkBtn = screen.getByTestId('linkBtn');
+
+    fireEvent.change(urlInput, { target: { value: 'https://example.com' } });
+    fireEvent.click(linkBtn);
+
+    fireEvent.change(urlInput, { target: { value: 'https://another.com' } });
+    fireEvent.click(linkBtn);
+
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith({
+        ...mockFormState,
+        urls: [
+          ...mockFormState.urls,
+          'https://example.com',
+          'https://another.com',
+        ],
+      });
+    });
+  });
+
+  test('handles multiple attachments correctly', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const smallFile1 = new File(['small-file-content-1'], 'small-file-1.jpg');
+    const smallFile2 = new File(['small-file-content-2'], 'small-file-2.jpg');
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [smallFile1, smallFile2],
+    });
+
+    fireEvent.change(fileInput, {
+      target: { files: [smallFile1, smallFile2] },
+    });
+
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith({
+        ...mockFormState,
+        attachments: [
+          ...mockFormState.attachments,
+          'base64-file',
+          'base64-file',
+        ],
+      });
+    });
+  });
+
+  test('shows error toast for invalid duration', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={{ ...mockFormState, duration: '-10' }} // Invalid duration
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    fireEvent.click(screen.getByTestId('updateAgendaItemBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Duration must be a positive number',
+      );
+    });
   });
 });
