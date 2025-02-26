@@ -156,7 +156,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
    */
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
-      // Add validation for required fields
       if (!formState.orgName || !formState.orgDescrip) {
         toast.error('Name and description are required');
         return;
