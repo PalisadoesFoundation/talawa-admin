@@ -1278,7 +1278,8 @@
     "yes": "yes",
     "edit": "edit",
     "saveChanges": "saveChanges",
-    "endOfResults": "endOfResults"
+    "endOfResults": "endOfResults",
+    "endAtGreaterOrEqual": "The start date must be before the end date"
   },
   "userChat": {
     "title": "Chats",

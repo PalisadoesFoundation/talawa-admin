@@ -53,11 +53,11 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
+                endAt={new Date()}
+                startAt={new Date()}
                 id="1"
                 key={1}
-                mediaUrl="data:videos"
+                attachmentUrl="data:videos"
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
@@ -134,34 +134,34 @@ describe('Testing Advertisement Entry Component', () => {
     const elements = screen.getAllByText(''); // This will return an array of matching elements
     elements.forEach((element) => expect(element).toBeInTheDocument());
 
-    // Check that the component renders with default `mediaUrl` (empty string)
+    // Check that the component renders with default `attachmentUrl` (empty string)
     const mediaElement = screen.getByTestId('media');
     expect(mediaElement).toHaveAttribute('src', '');
 
-    // Check that the component renders with default `endDate`
-    const defaultEndDate = new Date().toDateString();
-    expect(screen.getByText(`Ends on ${defaultEndDate}`)).toBeInTheDocument();
+    // Check that the component renders with default `endAt`
+    const defaultendAt = new Date().toDateString();
+    expect(screen.getByText(`Ends on ${defaultendAt}`)).toBeInTheDocument();
 
-    // Check that the component renders with default `startDate`
-    const defaultStartDate = new Date().toDateString();
-    expect(screen.getByText(`Ends on ${defaultStartDate}`)).toBeInTheDocument(); //fix text "Ends on"?
+    // Check that the component renders with default `startAt`
+    const defaultstartAt = new Date().toDateString();
+    expect(screen.getByText(`Starts on ${defaultstartAt}`)).toBeInTheDocument(); 
   });
 
   it('should correctly override default props when values are provided', () => {
     const mockName = 'Test Ad';
     const mockType = 'Banner';
     const mockMediaUrl = 'https://example.com/media.png';
-    const mockEndDate = new Date(2025, 11, 31);
-    const mockStartDate = new Date(2024, 0, 1);
+    const mockendAt = new Date(2025, 11, 31);
+    const mockstartAt = new Date(2024, 0, 1);
     const mockOrganizationId = 'org123';
 
     const { getByText } = render(
       <AdvertisementEntry
         name={mockName}
         type={mockType}
-        mediaUrl={mockMediaUrl}
-        endDate={mockEndDate}
-        startDate={mockStartDate}
+        attachmentUrl={mockMediaUrl}
+        endAt={mockendAt}
+        startAt={mockstartAt}
         organizationId={mockOrganizationId}
         id={''}
         setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
@@ -176,7 +176,7 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getByText(mockType)).toBeInTheDocument();
     expect(screen.getByTestId('media')).toHaveAttribute('src', mockMediaUrl);
     expect(
-      getByText(`Ends on ${mockEndDate.toDateString()}`),
+      getByText(`Ends on ${mockendAt.toDateString()}`),
     ).toBeInTheDocument();
   });
 
@@ -187,11 +187,11 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
+                endAt={new Date()}
+                startAt={new Date()}
                 id="1"
                 key={1}
-                mediaUrl=""
+                attachmentUrl=""
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
@@ -232,11 +232,11 @@ describe('Testing Advertisement Entry Component', () => {
       data: {
         updateAdvertisement: {
           advertisement: {
-            _id: '1',
+            id: '1',
             name: 'Updated Advertisement',
-            mediaUrl: '',
-            startDate: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
-            endDate: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
+            attachmentUrl: '',
+            startAt: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
+            endAt: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
             type: 'BANNER',
           },
         },
@@ -251,12 +251,12 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
+                endAt={new Date()}
+                startAt={new Date()}
                 type="POPUP"
                 name="Advert1"
                 organizationId="1"
-                mediaUrl=""
+                attachmentUrl=""
                 id="1"
                 setAfter={vi.fn()}
               />
@@ -283,11 +283,11 @@ describe('Testing Advertisement Entry Component', () => {
     });
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
       target: { value: dayjs().add(1, 'day').format('YYYY-MM-DD') },
     });
 
-    fireEvent.change(screen.getByLabelText(translations.RendDate), {
+    fireEvent.change(screen.getByLabelText(translations.RendAt), {
       target: { value: dayjs().add(2, 'days').format('YYYY-MM-DD') },
     });
 
@@ -298,8 +298,8 @@ describe('Testing Advertisement Entry Component', () => {
         id: '1',
         name: 'Updated Advertisement',
         type: 'BANNER',
-        startDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
-        endDate: dayjs().add(2, 'days').format('YYYY-MM-DD'),
+        startAt: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+        endAt: dayjs().add(2, 'days').format('YYYY-MM-DD'),
       },
     });
   });
@@ -307,7 +307,7 @@ describe('Testing Advertisement Entry Component', () => {
   it('Simulating if the mutation doesnt have data variable while updating', async () => {
     const updateAdByIdMock = vi.fn().mockResolvedValue({
       updateAdvertisement: {
-        _id: '1',
+        id: '1',
         name: 'Updated Advertisement',
         type: 'BANNER',
       },
@@ -321,12 +321,12 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
+                endAt={new Date()}
+                startAt={new Date()}
                 type="POPUP"
                 name="Advert1"
                 organizationId="1"
-                mediaUrl=""
+                attachmentUrl=""
                 id="1"
                 setAfter={vi.fn()}
               />
@@ -373,7 +373,7 @@ describe('Testing Advertisement Entry Component', () => {
     const createAdByIdMock = vi.fn().mockResolvedValue({
       data1: {
         createAdvertisement: {
-          _id: '1',
+          id: '1',
         },
       },
     });
@@ -412,17 +412,17 @@ describe('Testing Advertisement Entry Component', () => {
     });
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
       target: { value: '2023-01-01' },
     });
-    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+    expect(screen.getByLabelText(translations.RstartAt)).toHaveValue(
       '2023-01-01',
     );
 
-    fireEvent.change(screen.getByLabelText(translations.RendDate), {
+    fireEvent.change(screen.getByLabelText(translations.RendAt), {
       target: { value: '2023-02-01' },
     });
-    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+    expect(screen.getByLabelText(translations.RendAt)).toHaveValue(
       '2023-02-01',
     );
 
@@ -434,8 +434,8 @@ describe('Testing Advertisement Entry Component', () => {
         name: 'Updated Advertisement',
         file: '',
         type: 'BANNER',
-        startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
-        endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
+        startAt: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
+        endAt: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
       },
     });
   });
@@ -458,66 +458,66 @@ describe('Testing Advertisement Entry Component', () => {
           data: {
             organizations: [
               {
-                _id: '1',
+                id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        _id: '1',
+                        id: '1',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
+                        startAt: '2022-01-01',
+                        endAt: '2023-01-01',
+                        attachmentUrl: 'http://example1.com',
                       },
                       cursor: 'cursor1',
                     },
                     {
                       node: {
-                        _id: '2',
+                        id: '2',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
+                        startAt: '2024-02-01',
+                        endAt: '2025-02-01',
+                        attachmentUrl: 'http://example2.com',
                       },
                       cursor: 'cursor2',
                     },
                     {
                       node: {
-                        _id: '3',
+                        id: '3',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
+                        startAt: '2022-01-01',
+                        endAt: '2023-01-01',
+                        attachmentUrl: 'http://example1.com',
                       },
                       cursor: 'cursor3',
                     },
                     {
                       node: {
-                        _id: '4',
+                        id: '4',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
+                        startAt: '2024-02-01',
+                        endAt: '2025-02-01',
+                        attachmentUrl: 'http://example2.com',
                       },
                       cursor: 'cursor4',
                     },
                     {
                       node: {
-                        _id: '5',
+                        id: '5',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
+                        startAt: '2022-01-01',
+                        endAt: '2023-01-01',
+                        attachmentUrl: 'http://example1.com',
                       },
                       cursor: 'cursor5',
                     },
                     {
                       node: {
-                        _id: '6',
+                        id: '6',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
+                        startAt: '2024-02-01',
+                        endAt: '2025-02-01',
+                        attachmentUrl: 'http://example2.com',
                       },
                       cursor: 'cursor6',
                     },
@@ -545,7 +545,7 @@ describe('Testing Advertisement Entry Component', () => {
         result: {
           data: {
             advertisements: {
-              _id: null,
+              id: null,
             },
           },
         },
@@ -559,11 +559,11 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider mocks={mocks} addTypename={false}>
                 <AdvertisementEntry
-                  endDate={new Date()}
-                  startDate={new Date()}
+                  endAt={new Date()}
+                  startAt={new Date()}
                   id="1"
                   key={1}
-                  mediaUrl="data:videos"
+                  attachmentUrl="data:videos"
                   name="Advert1"
                   organizationId="1"
                   type="POPUP"
@@ -623,6 +623,80 @@ describe('Testing Advertisement Entry Component', () => {
         );
       });
       expect(deletionFailedText).toBeNull();
+    });
+  });
+  it('should display an error and prevent submission when start date is after end date', async () => {
+    // Render AdvertisementRegister component to test date range validation
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister setAfter={vi.fn()} formStatus="register" />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    // Simulate filling in the form with an invalid date range: start date is later than end date.
+    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+      target: { value: 'Invalid Date Range Ad' },
+    });
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+      target: { value: '2023-02-01' }, // Start date (later)
+    });
+    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+      target: { value: '2023-01-01' }, // End date (earlier)
+    });
+
+    // Attempt to submit the form.
+    fireEvent.click(screen.getByTestId('addonregister'));
+
+    // Wait for and assert that an error message is shown.
+    // Adjust the expected text to match your component's implementation.
+    expect(await screen.findByText(/invalid date range/i)).toBeInTheDocument();
+
+    // Optionally, verify that the mutation or submission is not triggered.
+  });
+
+  it('should allow submission when the date range is valid', async () => {
+    // Render AdvertisementRegister component for a valid date range scenario
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister setAfter={vi.fn()} formStatus="register" />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    // Simulate filling in the form with a valid date range: start date is before end date.
+    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+      target: { value: 'Valid Date Range Ad' },
+    });
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+      target: { value: '2023-01-01' }, // Start date (earlier)
+    });
+    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+      target: { value: '2023-02-01' }, // End date (later)
+    });
+
+    // Submit the form.
+    fireEvent.click(screen.getByTestId('addonregister'));
+
+    // Confirm that no error message is displayed.
+    await waitFor(() => {
+      expect(screen.queryByText(/invalid date range/i)).toBeNull();
     });
   });
 });
