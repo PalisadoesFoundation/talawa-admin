@@ -41,7 +41,7 @@ const fundProps: InterfaceFundModal[] = [
     isOpen: true,
     hide: vi.fn(),
     fund: {
-      _id: 'fundId',
+      id: 'fundId',
       name: 'Fund 1',
       refrenceNumber: '1111',
       taxDeductible: true,
@@ -50,9 +50,9 @@ const fundProps: InterfaceFundModal[] = [
       createdAt: '2024-06-22',
       organizationId: 'orgId',
       creator: {
-        _id: 'creatorId1',
-        firstName: 'John',
-        lastName: 'Doe',
+        id: 'creatorId1',
+        // firstName: 'John',
+        // lastName: 'Doe',
       },
     },
     refetchFunds: vi.fn(),
@@ -63,7 +63,7 @@ const fundProps: InterfaceFundModal[] = [
     isOpen: true,
     hide: vi.fn(),
     fund: {
-      _id: 'fundId',
+      id: 'fundId',
       name: 'Fund 1',
       refrenceNumber: '1111',
       taxDeductible: true,
@@ -72,9 +72,9 @@ const fundProps: InterfaceFundModal[] = [
       createdAt: '2024-06-22',
       organizationId: 'orgId',
       creator: {
-        _id: 'creatorId1',
-        firstName: 'John',
-        lastName: 'Doe',
+        id: 'creatorId1',
+        // firstName: 'John',
+        // lastName: 'Doe',
       },
     },
     refetchFunds: vi.fn(),

@@ -80,7 +80,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: fund?.name ?? '',
-    fundRef: fund?.refrenceNumber ?? '',
     isDefault: fund?.isDefault ?? false,
     taxDeductible: fund?.taxDeductible ?? false,
     isArchived: fund?.isArchived ?? false,
@@ -89,7 +88,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   useEffect(() => {
     setFormState({
       fundName: fund?.name ?? '',
-      fundRef: fund?.refrenceNumber ?? '',
       isDefault: fund?.isDefault ?? false,
       taxDeductible: fund?.taxDeductible ?? false,
       isArchived: fund?.isArchived ?? false,
@@ -103,15 +101,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, fundRef, isDefault, taxDeductible, isArchived } =
-      formState;
+    const { fundName, isDefault, taxDeductible, isArchived } = formState;
     try {
       await createFund({
         variables: {
           name: fundName,
-          refrenceNumber: fundRef,
           organizationId: orgId,
-          taxDeductible,
+          isTaxDeductible: taxDeductible,
           isArchived,
           isDefault,
         },
@@ -119,7 +115,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         taxDeductible: false,
         isArchived: false,
@@ -136,37 +131,28 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, fundRef, taxDeductible, isArchived, isDefault } =
-      formState;
+    const { fundName, taxDeductible } = formState;
     try {
       const updatedFields: { [key: string]: string | boolean } = {};
       if (fundName != fund?.name) {
         updatedFields.name = fundName;
       }
-      if (fundRef != fund?.refrenceNumber) {
-        updatedFields.refrenceNumber = fundRef;
-      }
       if (taxDeductible != fund?.taxDeductible) {
-        updatedFields.taxDeductible = taxDeductible;
-      }
-      if (isArchived != fund?.isArchived) {
-        updatedFields.isArchived = isArchived;
-      }
-      if (isDefault != fund?.isDefault) {
-        updatedFields.isDefault = isDefault;
+        updatedFields.isTaxDeductible = taxDeductible;
       }
       if (Object.keys(updatedFields).length === 0) {
         return;
       }
       await updateFund({
         variables: {
-          id: fund?._id,
-          ...updatedFields,
+          input: {
+            id: fund?.id,
+            ...updatedFields,
+          },
         },
       });
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         taxDeductible: false,
         isArchived: false,
@@ -224,13 +210,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   label={t('fundId')}
                   variant="outlined"
                   className={`${styles.noOutline} w-100`}
-                  value={formState.fundRef}
-                  onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      fundRef: e.target.value,
-                    })
-                  }
+                  // value={formState.fundRef}
+                  // onChange={(e) =>
+                  //   setFormState({
+                  //     ...formState,
+                  //     fundRef: e.target.value,
+                  //   })
+                  // }
                 />
               </FormControl>
             </Form.Group>
@@ -299,4 +285,5 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     </>
   );
 };
+
 export default FundModal;
