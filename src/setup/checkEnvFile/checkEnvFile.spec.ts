@@ -1,6 +1,7 @@
 import fs from 'fs';
+import dotenv from 'dotenv';
 import { checkEnvFile } from './checkEnvFile';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 /**
  * This file contains unit tests for the `checkEnvFile` function.
@@ -13,44 +14,85 @@ import { vi } from 'vitest';
  */
 
 vi.mock('fs');
+vi.mock('dotenv');
 
 describe('checkEnvFile', () => {
   beforeEach(() => {
     vi.resetAllMocks();
+
+    vi.mocked(dotenv.config).mockImplementation(() => ({ parsed: {} }));
   });
 
-  it('should append missing keys to the .env file', () => {
-    const envContent = 'EXISTING_KEY=existing_value\n';
-    const envExampleContent =
-      'EXISTING_KEY=existing_value\nNEW_KEY=default_value\n';
+  it('should create a new .env file from the .env.example file if the .env file is missing', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(false);
 
-    vi.spyOn(fs, 'readFileSync')
-      .mockReturnValueOnce(envContent)
-      .mockReturnValueOnce(envExampleContent)
-      .mockReturnValueOnce(envExampleContent);
+    const copyFileSyncMock = vi
+      .mocked(fs.copyFileSync)
+      .mockImplementation(() => undefined);
 
-    vi.spyOn(fs, 'appendFileSync');
+    vi.mocked(fs.readFileSync).mockImplementation(() => {
+      return Buffer.from('KEY=value');
+    });
+
+    vi.mocked(dotenv.parse).mockReturnValue({ KEY: 'value' });
 
     checkEnvFile();
 
-    expect(fs.appendFileSync).toHaveBeenCalledWith(
+    expect(copyFileSyncMock).toHaveBeenCalledWith('.env.example', '.env');
+  });
+
+  it('should append missing keys to the .env file', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true);
+
+    const envContent = { EXISTING_KEY: 'existing_value' };
+    const envExampleContent = {
+      EXISTING_KEY: 'existing_value',
+      NEW_KEY: 'default_value',
+    };
+
+    vi.mocked(fs.readFileSync).mockImplementation((path) => {
+      if (String(path) === '.env') {
+        return Buffer.from('EXISTING_KEY=existing_value\n');
+      } else if (String(path) === '.env.example') {
+        return Buffer.from(
+          'EXISTING_KEY=existing_value\nNEW_KEY=default_value\n',
+        );
+      }
+      return Buffer.from('');
+    });
+
+    const parseMock = vi.mocked(dotenv.parse);
+    parseMock.mockImplementationOnce(() => envContent); // First call for .env
+    parseMock.mockImplementationOnce(() => envExampleContent); // Second call for .env.example
+    parseMock.mockImplementationOnce(() => envExampleContent); // Third call for .env.example again
+
+    const appendFileSyncMock = vi
+      .mocked(fs.appendFileSync)
+      .mockImplementation(() => undefined);
+
+    checkEnvFile();
+
+    expect(appendFileSyncMock).toHaveBeenCalledWith(
       '.env',
       'NEW_KEY=default_value\n',
     );
   });
 
   it('should not append anything if all keys are present', () => {
-    const envContent = 'EXISTING_KEY=existing_value\n';
-    const envExampleContent = 'EXISTING_KEY=existing_value\n';
+    vi.mocked(fs.existsSync).mockReturnValue(true);
 
-    vi.spyOn(fs, 'readFileSync')
-      .mockReturnValueOnce(envContent)
-      .mockReturnValueOnce(envExampleContent);
+    vi.mocked(fs.readFileSync).mockImplementation(() => {
+      return Buffer.from('EXISTING_KEY=existing_value\n');
+    });
 
-    vi.spyOn(fs, 'appendFileSync');
+    vi.mocked(dotenv.parse).mockReturnValue({ EXISTING_KEY: 'existing_value' });
+
+    const appendFileSyncMock = vi
+      .mocked(fs.appendFileSync)
+      .mockImplementation(() => undefined);
 
     checkEnvFile();
 
-    expect(fs.appendFileSync).not.toHaveBeenCalled();
+    expect(appendFileSyncMock).not.toHaveBeenCalled();
   });
 });
