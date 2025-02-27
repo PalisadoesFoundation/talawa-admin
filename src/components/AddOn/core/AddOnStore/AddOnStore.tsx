@@ -41,14 +41,18 @@ function addOnStore(): JSX.Element {
    * Fetches store plugins and updates the Redux store with the plugin data.
    */
   const getStorePlugins = async (): Promise<void> => {
-    let plugins = await new PluginHelper().fetchStore();
-    const installIds = (await new PluginHelper().fetchInstalled()).map(
-      (plugin: InterfacePluginHelper) => plugin._id,
-    );
+    let plugins: InterfacePluginHelper[] =
+      (await new PluginHelper().fetchStore()) as InterfacePluginHelper[];
+
+    const installIds = (
+      (await new PluginHelper().fetchInstalled()) as InterfacePluginHelper[]
+    ).map((plugin: InterfacePluginHelper) => plugin.id);
+
     plugins = plugins.map((plugin: InterfacePluginHelper) => {
-      plugin.installed = installIds.includes(plugin._id);
+      plugin.installed = installIds.includes(plugin.id);
       return plugin;
     });
+
     store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
   };
 
@@ -86,6 +90,7 @@ function addOnStore(): JSX.Element {
     plugins: InterfacePluginHelper[],
     searchTerm: string,
   ): InterfacePluginHelper[] => {
+    console.log('Plugin is triggered: ', plugins);
     if (!searchTerm) {
       return plugins;
     }
@@ -172,7 +177,7 @@ function addOnStore(): JSX.Element {
                       {filteredPlugins.map((plug, i) => (
                         <div className={styles.cardGridItem} key={i}>
                           <AddOnEntry
-                            id={plug._id}
+                            id={plug.id}
                             title={plug.pluginName}
                             description={plug.pluginDesc}
                             createdBy={plug.pluginCreatedBy}
@@ -210,7 +215,7 @@ function addOnStore(): JSX.Element {
                   return filteredPlugins.map((plug, i) => (
                     <div className={styles.cardGridItem} key={i}>
                       <AddOnEntry
-                        id={plug._id}
+                        id={plug.id}
                         title={plug.pluginName}
                         description={plug.pluginDesc}
                         createdBy={plug.pluginCreatedBy}

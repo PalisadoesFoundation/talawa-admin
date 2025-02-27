@@ -31,7 +31,7 @@ export interface InterfaceAddOnRegisterProps {
 }
 
 export interface InterfacePluginHelper {
-  _id: string;
+  id: string;
   pluginName?: string;
   pluginDesc?: string;
   pluginCreatedBy: string;

@@ -9,7 +9,7 @@ import gql from 'graphql-tag';
 export const PLUGIN_GET = gql`
   query getPluginList {
     getPlugins {
-      _id
+      id
       pluginName
       pluginCreatedBy
       pluginDesc
