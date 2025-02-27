@@ -414,35 +414,24 @@ export const ADD_MEMBER_MUTATION = gql`
 `;
 
 export const CREATE_POST_MUTATION = gql`
-  mutation CreatePost(
-    $text: String!
-    $title: String!
-    $imageUrl: URL
-    $videoUrl: URL
-    $organizationId: ID!
-    $file: String
-    $pinned: Boolean
-  ) {
-    createPost(
-      data: {
-        text: $text
-        title: $title
-        imageUrl: $imageUrl
-        videoUrl: $videoUrl
-        organizationId: $organizationId
-        pinned: $pinned
+  mutation CreatePost($input: MutationCreatePostInput!) {
+    createPost(input: $input) {
+      id
+      caption
+      pinnedAt
+      attachments {
+        url
       }
-      file: $file
-    ) {
-      _id
+      createdAt
+      updatedAt
     }
   }
 `;
 
 export const DELETE_POST_MUTATION = gql`
-  mutation RemovePost($id: ID!) {
-    removePost(id: $id) {
-      _id
+  mutation RemovePost($input: MutationDeletePostInput!) {
+    deletePost(input: $input) {
+      id
     }
   }
 `;
@@ -588,23 +577,14 @@ export const DELETE_ADVERTISEMENT_BY_ID = gql`
   }
 `;
 export const UPDATE_POST_MUTATION = gql`
-  mutation UpdatePost(
-    $id: ID!
-    $title: String
-    $text: String
-    $imageUrl: String
-    $videoUrl: String
-  ) {
-    updatePost(
-      id: $id
-      data: {
-        title: $title
-        text: $text
-        imageUrl: $imageUrl
-        videoUrl: $videoUrl
+  mutation UpdatePost($input: MutationUpdatePostInput!) {
+    updatePost(input: $input) {
+      id
+      caption
+      pinnedAt
+      attachments {
+        url
       }
-    ) {
-      _id
     }
   }
 `;
