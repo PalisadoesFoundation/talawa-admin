@@ -108,8 +108,6 @@ export default function Events(): JSX.Element {
     },
   });
 
-  console.log('data is: ', data);
-
   // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION);
 
