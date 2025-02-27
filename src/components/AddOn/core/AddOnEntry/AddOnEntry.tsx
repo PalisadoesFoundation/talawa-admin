@@ -87,7 +87,7 @@ function addOnEntry({
     setButtonLoading(true);
     await addOrgAsUninstalled({
       variables: {
-        id: id.toString(),
+        pluginId: id.toString(),
         orgId: currentOrg.toString(),
       },
     });
