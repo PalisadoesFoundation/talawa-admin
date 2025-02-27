@@ -1,7 +1,7 @@
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
-import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ButtonGroup } from 'react-bootstrap';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../style/app.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -49,9 +49,9 @@ const profileDropdown = (): JSX.Element => {
       : name;
 
   return (
-    <Dropdown as={ButtonGroup} variant="none">
-      <div className={styles.profileContainer}>
-        <div className={styles.imageContainer}>
+    <div className={styles.Profilebox}>
+      <div className={styles.profileContainerarrowright}>
+        <div className={styles.imageContainerSidebar}>
           {userImage && userImage !== 'null' ? (
             <img
               src={userImage}
@@ -69,44 +69,39 @@ const profileDropdown = (): JSX.Element => {
             />
           )}
         </div>
-        <div className={styles.profileText}>
-          <span className={styles.primaryText} data-testid="display-name">
-            {displayedName}
-          </span>
-          <span className={styles.secondaryText} data-testid="display-type">
-            {`${userRole}`}
-          </span>
-        </div>
-      </div>
-      <Dropdown.Toggle
-        split
-        variant="none"
-        data-testid="togDrop"
-        id="dropdown-split-basic"
-        className={styles.dropdownToggle}
-        aria-label="User Profile Menu"
-      />
-      <Dropdown.Menu>
-        <Dropdown.Item
+        <div
+          className={styles.profileTextTitle}
+          role="button"
+          tabIndex={0}
+          aria-label="View Profile"
           data-testid="profileBtn"
           onClick={() =>
             userRole === 'regular'
               ? navigate(`/user/settings`)
               : navigate(`/member/${orgId || ''}`)
           }
-          aria-label="View Profile"
         >
-          {tCommon('viewProfile')}
-        </Dropdown.Item>
-        <Dropdown.Item
-          style={{ color: 'red' }}
+          <span className={styles.primaryText} data-testid="display-name">
+            {displayedName}
+            <span className={styles.arrowbtn}>
+              <i className="fa fa-angle-right" aria-hidden="true"></i>
+            </span>
+          </span>
+          <span className={styles.secondaryText} data-testid="display-type">
+            {userRole}
+          </span>
+        </div>
+      </div>
+      <div>
+        <ButtonGroup
+          className={styles.logoutBtn}
           onClick={logout}
           data-testid="logoutBtn"
         >
           {tCommon('logout')}
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+        </ButtonGroup>
+      </div>
+    </div>
   );
 };
 

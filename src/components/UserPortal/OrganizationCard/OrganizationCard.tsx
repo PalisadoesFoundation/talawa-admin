@@ -118,7 +118,6 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       },
     });
   }
-
   return (
     <>
       <div className={styles.orgCard}>
@@ -154,14 +153,15 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             )}
             <h6 className={styles.orgadmin}>
               <div>
-                {tCommon('admins')}: <span>{props.admins?.length}</span>
+                {tCommon('admins')}: <span>{props.admins?.length ?? 0}</span>
               </div>
               <div>
-                {tCommon('members')}: <span>{props.members?.length}</span>
+                {tCommon('members')}: <span>{props.members?.length ?? 0}</span>
               </div>
             </h6>
           </div>
         </div>
+
         {props.membershipRequestStatus === 'accepted' && (
           <Button
             data-testid="manageBtn"
@@ -174,7 +174,6 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             {t('visit')}
           </Button>
         )}
-
         {props.membershipRequestStatus === 'pending' && (
           <Button
             variant="danger"
