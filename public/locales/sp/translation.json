@@ -1287,22 +1287,6 @@
     "sendMessage": "Enviar mensaje",
     "reply": "responder"
   },
-  "orgProfileField": {
-    "loading": "Cargando..",
-    "noCustomField": "No hay campos personalizados disponibles",
-    "customFieldName": "Nombre del Campo",
-    "enterCustomFieldName": "Ingrese el Nombre del Campo",
-    "customFieldType": "Tipo de Campo",
-    "saveChanges": "Guardar Cambios",
-    "Remove Custom Field": "Eliminar Campo Personalizado",
-    "fieldSuccessMessage": "Campo añadido exitosamente",
-    "fieldRemovalSuccess": "Campo eliminado exitosamente",
-    "String": "Cadena",
-    "Boolean": "Booleano",
-    "Date": "Fecha",
-    "Number": "Número",
-    "pleaseFillAllRequiredFields": "Por favor llene todos los campos requeridos"
-  },
   "orgActionItemCategories": {
     "createButton": "Crear",
     "editButton": "Editar",

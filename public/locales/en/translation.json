@@ -1284,22 +1284,6 @@
     "sendMessage": "Send Message",
     "reply": "Reply"
   },
-  "orgProfileField": {
-    "loading": "Loading...",
-    "noCustomField": "No custom fields available",
-    "customFieldName": "Field Name",
-    "enterCustomFieldName": "Enter Field name",
-    "customFieldType": "Field Type",
-    "Remove Custom Field": "Remove Custom Field",
-    "fieldSuccessMessage": "Field added successfully",
-    "fieldRemovalSuccess": "Field removed successfully",
-    "String": "String",
-    "Boolean": "Boolean",
-    "Date": "Date",
-    "Number": "Number",
-    "saveChanges": "saveChanges",
-    "pleaseFillAllRequiredFields": "pleaseFillAllRequiredFields"
-  },
   "orgActionItemCategories": {
     "enableButton": "Enable",
     "disableButton": "Disable",

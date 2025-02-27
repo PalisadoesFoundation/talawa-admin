@@ -1284,22 +1284,6 @@
     "sendMessage": "Envoyer le message",
     "reply": "répondre"
   },
-  "orgProfileField": {
-    "loading": "Chargement...",
-    "noCustomField": "Aucun champ personnalisé disponible",
-    "customFieldName": "Nom de domaine",
-    "enterCustomFieldName": "Entrez le nom du champ",
-    "customFieldType": "Type de champ",
-    "Remove Custom Field": "Supprimer le champ personnalisé",
-    "fieldSuccessMessage": "Champ ajouté avec succès",
-    "fieldRemovalSuccess": "Champ supprimé avec succès",
-    "String": "Chaîne",
-    "Boolean": "Booléen",
-    "Date": "Date",
-    "Number": "Nombre",
-    "saveChanges": "Enregistrer les modifications",
-    "pleaseFillAllRequiredFields": "Veuillez remplir tous les champs obligatoires"
-  },
   "orgActionItemCategories": {
     "enableButton": "Activer",
     "disableButton": "Désactiver",

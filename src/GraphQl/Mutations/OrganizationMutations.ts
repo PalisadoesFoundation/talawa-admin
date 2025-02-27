@@ -226,47 +226,6 @@ export const TOGGLE_PINNED_POST = gql`
 `;
 
 /**
- * GraphQL mutation to add a custom field to an organization.
- *
- * @param organizationId - The ID of the organization where the custom field is being added.
- * @param type - The type of the custom field (e.g., String, Number).
- * @param name - The name of the custom field.
- * @returns The added organization custom field object.
- */
-
-export const ADD_CUSTOM_FIELD = gql`
-  mutation addOrganizationCustomField(
-    $organizationId: String!
-    $name: String!
-    $type: String!
-  ) {
-    addOrganizationCustomField(
-      organizationId: $organizationId
-      name: $name
-      type: $type
-    ) {
-      id
-      name
-      type
-      organizationId
-    }
-  }
-`;
-
-export const REMOVE_CUSTOM_FIELD = gql`
-  mutation removeOrganizationCustomField($id: String!) {
-    removeOrganizationCustomField(id: $id) {
-      id
-      name
-      type
-      organizationId
-    }
-  }
-`;
-
-// Handles custom organization fields
-
-/**
  * GraphQL mutation to remove a custom field from an organization.
  *
  * @param organizationId - The ID of the organization from which the custom field is being removed.

@@ -1284,22 +1284,6 @@
     "sendMessage": "发信息",
     "reply": "回复"
   },
-  "orgProfileField": {
-    "loading": "加载中...",
-    "noCustomField": "没有可用的自定义字段",
-    "customFieldName": "字段名称",
-    "enterCustomFieldName": "输入字段名称",
-    "customFieldType": "字段类型",
-    "Remove Custom Field": "删除自定义字段",
-    "fieldSuccessMessage": "字段添加成功",
-    "fieldRemovalSuccess": "字段删除成功",
-    "String": "字符串",
-    "Boolean": "布尔值",
-    "Date": "日期",
-    "Number": "数字",
-    "saveChanges": "保存更改",
-    "pleaseFillAllRequiredFields": "请填写所有必填字段"
-  },
   "orgActionItemCategories": {
     "enableButton": "使能够",
     "disableButton": "禁用",

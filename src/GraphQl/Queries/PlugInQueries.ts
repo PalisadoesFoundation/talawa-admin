@@ -374,24 +374,3 @@ export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
     }
   }
 `;
-
-/**
- * GraphQL query to retrieve custom fields for a specific organization.
- *
- * @param customFieldsByOrganizationId - The ID of the organization for which custom fields are being retrieved.
- * @returns The list of custom fields associated with the organization, including details such as ID, type, and name.
- */
-
-export const ORGANIZATION_CUSTOM_FIELDS = gql`
-  query GetOrganizationCustomFields($organizationId: String!) {
-    organization(input: { id: $organizationId }) {
-      id
-      customFields {
-        id
-        name
-        type
-        organizationId
-      }
-    }
-  }
-`;
