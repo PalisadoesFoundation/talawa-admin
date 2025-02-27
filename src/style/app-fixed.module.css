@@ -4833,7 +4833,7 @@ form {
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--cardHeader-border);
+  border-bottom: 3px solid var(--cardHeader-border);
   display: flex;
   justify-content: space-between;
   align-items: center;

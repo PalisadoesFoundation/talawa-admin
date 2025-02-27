@@ -1583,15 +1583,26 @@ hr {
   color: var(--rating-star-hover); /* Color for star on hover */
 }
 .cardHeader {
+  position: relative;
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--bs-gray-200);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: 'Lato', sans-serif;
+}
+
+.cardHeader::after {
+  content: '';
+  position: absolute;
+  left: 18px; /* gap on the left */
+  right: 18px; /* gap on the right */
+  bottom: 0;
+  border-bottom: 2px solid var(--bs-gray-200);
 }
 
 .cardHeader .cardTitle {
   font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .formLabel {
@@ -4649,14 +4660,7 @@ button[data-testid='createPostBtn'] {
     top: 45%;
   }
 }
-.cardItem {
-  position: relative;
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--bs-gray-200);
-  border-radius: 8px;
-  margin-top: 20px;
-}
+
 @-webkit-keyframes zoomIn {
   0% {
     opacity: 0;
@@ -4683,6 +4687,21 @@ button[data-testid='createPostBtn'] {
   }
 }
 
+.cardItem {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid var(--bs-gray-200);
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-bottom: 4rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
 .cardItem .iconWrapper {
   position: relative;
   height: 40px;
@@ -4693,7 +4712,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .cardItem .iconWrapper .themeOverlay {
-  background: var(--bs-primary);
+  /* background: var(--bs-primary); */
   position: absolute;
   top: 0;
   right: 0;
@@ -4703,13 +4722,9 @@ button[data-testid='createPostBtn'] {
   border-radius: 50%;
 }
 
-.cardItem .title {
-  font-size: 1rem;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; /* Fallback for browsers that don't support line-clamp */
-  margin-left: 3px;
+.cardItemtitle {
+  font-size: 20px;
+  background-color: #000;
 }
 /* Modern browsers - enable line clamping */
 @supports (-webkit-line-clamp: 1) {
@@ -4724,7 +4739,7 @@ button[data-testid='createPostBtn'] {
 }
 .cardItem .location {
   font-size: 0.9rem;
-  color: var(--bs-primary);
+  /* color: var(--bs-primary); */
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -4735,22 +4750,29 @@ button[data-testid='createPostBtn'] {
 .cardItem .time {
   font-size: 0.9rem;
   color: var(--bs-secondary);
+  background-color: #000000;
 }
 
 .cardItem .creator {
   font-size: 1rem;
-  color: var(--bs-success, var(--green-color));
+  /* color: var(--bs-success, var(--green-color)); */
 }
+
 .rightCard {
-  display: flex;
-  gap: 7px;
-  min-width: 170px;
-  justify-content: center;
-  flex-direction: column;
-  margin-left: 10px;
-  overflow-x: hidden;
-  width: 210px;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1;
+  margin-left: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
+.rightCard::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes zoomIn {
   0% {
     opacity: 0;
@@ -5524,7 +5546,7 @@ button[data-testid='createPostBtn'] {
   gap: 0.5rem;
   align-items: center;
   background-color: var(--bs-white);
-  border-bottom: 1px solid var(--input-shadow-color);
+  border-bottom: 4px solid var(--input-shadow-color);
 }
 
 .creator {
@@ -9189,4 +9211,9 @@ button[data-testid='createPostBtn'] {
 .agenda-category-options-button:focus-visible {
   outline: 2px solid var(--outlineBtn-color);
   outline-offset: 2px;
+}
+
+.containerBody {
+  width: 100%;
+  height: 100%;
 }

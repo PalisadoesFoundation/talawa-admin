@@ -4,7 +4,6 @@ import { Button, Card } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-
 import {
   GET_ORGANIZATION_MEMBERS_PG,
   GET_ORGANIZATION_POSTS_COUNT_PG,
@@ -334,8 +333,8 @@ function OrganizationDashboard(): JSX.Element {
             </Row>
           )}
           <Row>
-            <Col lg={6} className="mb-4">
-              <Card border="0" className="rounded-4">
+            <Col lg={6} className="mb-4 ">
+              <Card border="0" className="rounded-4 ">
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('upcomingEvents')}</div>
                   <Button size="sm" variant="light" data-testid="viewAllEvents">
@@ -369,14 +368,15 @@ function OrganizationDashboard(): JSX.Element {
               </Card>
             </Col>
 
-            <Col lg={6} className="mb-4">
-              <Card border="0" className="rounded-4">
+            <Col lg={6} className="mb-4 ">
+              <Card className="rounded-4 border-2 border-gray-300">
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('latestPosts')}</div>
                   <Button
                     size="sm"
                     variant="light"
                     data-testid="viewAllPosts"
+                    className=""
                     // onClick={(): void => navigate(postsLink)}
                   >
                     {t('viewAll')}
