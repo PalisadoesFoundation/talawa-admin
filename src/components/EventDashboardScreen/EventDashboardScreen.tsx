@@ -33,7 +33,7 @@ const EventDashboardScreen = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  if (isLoggedIn === false) return <Navigate to="/" replace />;
+  if (isLoggedIn === 'false') return <Navigate to="/" replace />;
   if (adminFor === null) {
     return (
       <>

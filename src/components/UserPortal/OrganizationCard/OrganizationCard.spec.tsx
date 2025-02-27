@@ -172,7 +172,7 @@ const MOCKS = [
               {
                 _id: '56gheqyr7deyfuiwfewifruy8',
                 user: {
-                  _id: getItem('userId'),
+                  _id: (getItem('userId') as string) || '',
                 },
               },
             ],
@@ -448,7 +448,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
         {
           _id: '56gheqyr7deyfuiwfewifruy8',
           user: {
-            _id: getItem('userId'),
+            _id: getItem('userId') as string,
           },
         },
       ],
