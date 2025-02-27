@@ -45,7 +45,7 @@ function userNavbar(): JSX.Element {
   );
 
   // Retrieve the username from local storage
-  const userName = getItem('name');
+  const userName = getItem('name') as string;
 
   /**
    * Handles user logout by revoking the refresh token and clearing local storage.
@@ -125,7 +125,7 @@ function userNavbar(): JSX.Element {
             <Dropdown.Menu>
               {/* Display the user's name */}
               <Dropdown.ItemText>
-                <b>{userName}</b>
+                <b>{userName || ''}</b>
               </Dropdown.ItemText>
               {/* Link to user settings */}
               <Dropdown.Item

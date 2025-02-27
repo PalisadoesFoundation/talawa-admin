@@ -146,7 +146,7 @@ function organizationEvents(): JSX.Element {
 
   const userId = getItem('id') as string;
   const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
+  const adminFor = getItem('AdminFor') as string[];
   const userRole = superAdmin
     ? 'SUPERADMIN'
     : adminFor?.length > 0

@@ -57,10 +57,6 @@ describe('GeneralSettings Component', () => {
     expect(screen.getByTestId('change-language')).toBeInTheDocument();
   });
 
-  test('renders organization profile field settings', () => {
-    expect(screen.getByTestId('org-profile-settings')).toBeInTheDocument();
-  });
-
   test('renders cards with correct styling classes', () => {
     const { container } = render(
       <I18nextProvider i18n={i18n}>
@@ -93,7 +89,6 @@ describe('GeneralSettings Component', () => {
     expect(elements[0]).toHaveAttribute('data-testid', 'org-update');
     expect(elements[1]).toHaveAttribute('data-testid', 'delete-org');
     expect(elements[2]).toHaveAttribute('data-testid', 'change-language');
-    expect(elements[3]).toHaveAttribute('data-testid', 'org-profile-settings');
   });
 });
 

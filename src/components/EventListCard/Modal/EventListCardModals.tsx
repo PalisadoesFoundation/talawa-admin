@@ -412,7 +412,7 @@ function EventListCardModals({
         popover={popover}
         weekDayOccurenceInMonth={weekDayOccurenceInMonth}
         isRegistered={isRegistered}
-        userId={userId}
+        userId={userId as string}
         eventStartDate={eventStartDate}
         eventEndDate={eventEndDate}
         setEventStartDate={setEventStartDate}

@@ -170,7 +170,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     setReplyToDirectMessage(null);
     setNewMessage('');
     setAttachment('');
-    await props.chatListRefetch({ id: userId });
+    await props.chatListRefetch({ id: userId as string });
   };
 
   useSubscription(MESSAGE_SENT_TO_CHAT, {

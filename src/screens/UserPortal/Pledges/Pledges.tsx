@@ -95,11 +95,12 @@ const Pledges = (): JSX.Element => {
   const { t: tErrors } = useTranslation('errors');
 
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userIdFromStorage = getItem('userId');
   const { orgId } = useParams();
-  if (!orgId || !userId) {
+  if (!orgId || !userIdFromStorage) {
     return <Navigate to={'/'} replace />;
   }
+  const userId: string = userIdFromStorage as string;
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo[]>([]);

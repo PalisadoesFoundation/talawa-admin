@@ -27,8 +27,8 @@ const profileDropdown = (): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
   const userRole = getItem('role');
-  const name = getItem('name') || '';
-  const userImage = getItem('UserImage');
+  const name: string = getItem('name') || '';
+  const userImage: string = getItem('UserImage') || '';
   const navigate = useNavigate();
   const { orgId } = useParams();
 

@@ -61,7 +61,7 @@ const Campaigns = (): JSX.Element => {
 
   // Retrieves stored user ID from local storage
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem('userId') as string;
 
   // Extracts organization ID from the URL parameters
   const { orgId } = useParams();

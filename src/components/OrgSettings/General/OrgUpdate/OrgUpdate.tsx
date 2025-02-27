@@ -13,14 +13,24 @@ import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../../../style/app-fixed.module.css';
-import type {
-  InterfaceQueryOrganizationsListObject,
-  InterfaceAddress,
-} from 'utils/interfaces';
+import type { InterfaceAddress } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
+}
+
+interface InterfaceMutationUpdateOrganizationInput {
+  id: string;
+  name?: string;
+  description?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  countryCode?: string;
+  avatar?: string | null;
 }
 
 /**
@@ -33,7 +43,7 @@ interface InterfaceOrgUpdateProps {
  * @param props - Component props containing the organization ID.
  * @returns The rendered component.
  */
-function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
+function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
 
   const [formState, setFormState] = useState<{
@@ -71,12 +81,28 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     React.useState(false);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
 
-  const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
+  const [updateOrganization, { loading: updateLoading }] = useMutation<
+    { updateOrganization: { organization: InterfaceOrganization } },
+    { input: InterfaceMutationUpdateOrganizationInput }
+  >(UPDATE_ORGANIZATION_MUTATION);
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
   const { t: tCommon } = useTranslation('common');
+
+  interface InterfaceOrganization {
+    id: string;
+    name: string;
+    description: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    countryCode: string;
+    avatarURL: string | null;
+  }
 
   const {
     data,
@@ -85,35 +111,44 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     error,
   }: {
     data?: {
-      organizations: InterfaceQueryOrganizationsListObject[];
+      organization: InterfaceOrganization;
     };
     loading: boolean;
-    refetch: (variables: { id: string }) => void;
+    refetch: (variables: { input: { id: string } }) => void;
     error?: ApolloError;
   } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: orgId },
+    variables: {
+      input: {
+        id: orgId,
+      },
+    },
     notifyOnNetworkStatusChange: true,
   });
 
   // Update form state when data changes
   useEffect(() => {
     let isMounted = true;
-    if (data && isMounted) {
+    if (data?.organization && isMounted) {
       setFormState({
-        ...formState,
-        orgName: data.organizations[0].name,
-        orgDescrip: data.organizations[0].description,
-        address: data.organizations[0].address,
+        orgName: data.organization.name,
+        orgDescrip: data.organization.description,
+        address: {
+          city: data.organization.city,
+          countryCode: data.organization.countryCode,
+          dependentLocality: '',
+          line1: data.organization.addressLine1,
+          line2: data.organization.addressLine2,
+          postalCode: data.organization.postalCode,
+          sortingCode: '',
+          state: data.organization.state,
+        },
+        orgImage: null,
       });
-      setuserRegistrationRequiredChecked(
-        data.organizations[0].userRegistrationRequired,
-      );
-      setVisibleChecked(data.organizations[0].visibleInSearch);
     }
     return () => {
       isMounted = false;
     };
-  }, [data, orgId]);
+  }, [data]);
 
   /**
    * Handles the save button click event.
@@ -121,30 +156,33 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
    */
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
-      const { data } = await login({
+      if (!formState.orgName || !formState.orgDescrip) {
+        toast.error('Name and description are required');
+        return;
+      }
+
+      const { data } = await updateOrganization({
         variables: {
-          id: orgId,
-          name: formState.orgName,
-          description: formState.orgDescrip,
-          address: {
+          input: {
+            id: orgId,
+            name: formState.orgName,
+            description: formState.orgDescrip,
+            addressLine1: formState.address.line1,
+            addressLine2: formState.address.line2,
             city: formState.address.city,
-            countryCode: formState.address.countryCode,
-            dependentLocality: formState.address.dependentLocality,
-            line1: formState.address.line1,
-            line2: formState.address.line2,
-            postalCode: formState.address.postalCode,
-            sortingCode: formState.address.sortingCode,
             state: formState.address.state,
+            postalCode: formState.address.postalCode,
+            countryCode: formState.address.countryCode,
+            avatar: formState.orgImage,
           },
-          userRegistrationRequired: userRegistrationRequiredChecked,
-          visibleInSearch: visiblechecked,
-          file: formState.orgImage,
         },
       });
 
       if (data) {
-        refetch({ id: orgId });
+        refetch({ input: { id: orgId } });
         toast.success(t('successfulUpdated') as string);
+      } else {
+        toast.error('Failed to update organization');
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -347,8 +385,10 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               variant="success"
               value="savechanges"
               onClick={onSaveChangesClicked}
+              disabled={updateLoading}
+              data-testid="save-org-changes-btn"
             >
-              {tCommon('saveChanges')}
+              {updateLoading ? tCommon('saving') : tCommon('saveChanges')}
             </Button>
           </div>
         </form>
@@ -356,4 +396,4 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     </>
   );
 }
-export default orgUpdate;
+export default OrgUpdate;

@@ -1,7 +1,6 @@
 import React, { type FC } from 'react';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import styles from '../../../../src/style/app.module.css';
-import OrgProfileFieldSettings from './OrgProfileFieldSettings/OrgProfileFieldSettings';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import DeleteOrg from './DeleteOrg/DeleteOrg';
 import OrgUpdate from './OrgUpdate/OrgUpdate';
@@ -52,17 +51,6 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
               {/* Render language change dropdown component */}
               <ChangeLanguageDropDown />
             </div>
-          </Card.Body>
-        </Card>
-      </Col>
-      <Col lg={7}>
-        <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>{t('manageCustomFields')}</div>
-          </div>
-          <Card.Body className={styles.cardBody}>
-            {/* Render organization profile field settings component */}
-            <OrgProfileFieldSettings />
           </Card.Body>
         </Card>
       </Col>
