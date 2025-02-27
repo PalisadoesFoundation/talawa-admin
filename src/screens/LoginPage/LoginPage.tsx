@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -89,7 +89,7 @@ const loginPage = (): JSX.Element => {
     specialChar: true,
   });
   const [organizations, setOrganizations] = useState([]);
-
+  const location = useLocation();
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
     uppercaseCharRegExp: new RegExp('[A-Z]'),
@@ -111,17 +111,17 @@ const loginPage = (): JSX.Element => {
   // };
 
   useEffect(() => {
-    const isRegister = window.location.pathname === '/register';
+    const isRegister = location.pathname === '/register';
     if (isRegister) {
       setShowTab('REGISTER');
     }
-    const isAdmin = window.location.pathname === '/admin';
+    const isAdmin = location.pathname === '/admin';
     if (isAdmin) {
       setRole('admin');
     } else {
       setRole('user');
     }
-  }, [window.location.pathname]);
+  }, [location.pathname]);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
@@ -436,7 +436,7 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {role === 'admin' ? 'Admin Login' : 'Login'}
+                    {role === 'admin' ? t('adminLogin') : t('login')}
                   </h1>
                   <Form.Label>{tCommon('email')}</Form.Label>
                   <div className="position-relative">
