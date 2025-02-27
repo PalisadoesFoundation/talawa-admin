@@ -10,7 +10,7 @@ import EventHeader from 'components/EventCalendar/EventHeader';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './../../../style/app.module.css';
+import Loader from 'components/Loader/Loader';
 
 /**
  * Converts a time string to a Dayjs object.
@@ -59,7 +60,7 @@ const timeToDayJs = (time: string): Dayjs => {
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-export default function events(): JSX.Element {
+export default function Events(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEvents',
   });
@@ -68,38 +69,65 @@ export default function events(): JSX.Element {
   const { getItem } = useLocalStorage();
 
   // State variables to manage event details and UI
-  const [events, setEvents] = React.useState([]);
-  const [eventTitle, setEventTitle] = React.useState('');
-  const [eventDescription, setEventDescription] = React.useState('');
-  const [eventLocation, setEventLocation] = React.useState('');
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
-  const [isPublic, setIsPublic] = React.useState(true);
-  const [isRegisterable, setIsRegisterable] = React.useState(true);
-  const [isRecurring, setIsRecurring] = React.useState(false);
-  const [isAllDay, setIsAllDay] = React.useState(true);
-  const [startTime, setStartTime] = React.useState('08:00:00');
-  const [endTime, setEndTime] = React.useState('10:00:00');
-  const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
-  const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
-  const [createChatCheck, setCreateChatCheck] = React.useState(false);
+  const [events, setEvents] = useState([]);
+  const [eventTitle, setEventTitle] = useState('');
+  const [eventDescription, setEventDescription] = useState('');
+  const [eventLocation, setEventLocation] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [isPublic, setIsPublic] = useState(true);
+  const [isRegisterable, setIsRegisterable] = useState(true);
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [isAllDay, setIsAllDay] = useState(true);
+  const [startTime, setStartTime] = useState('08:00:00');
+  const [endTime, setEndTime] = useState('10:00:00');
+  const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
+  const [createEventModal, setCreateEventmodalisOpen] = useState(false);
+  const [createChatCheck, setCreateChatCheck] = useState(false);
   const { orgId: organizationId } = useParams();
-
-  // Query to fetch events for the organization
-  const { data, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
-    variables: {
-      organization_id: organizationId,
-      title_contains: '',
-    },
-  });
 
   // Query to fetch organization details
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: organizationId },
+    fetchPolicy: 'cache-first', // Use cached data if available
   });
+
+  // Query to fetch events for the organization
+  const { data, loading, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
+    variables: {
+      organization_id: organizationId,
+      title_contains: '',
+      first: 400, // fetch first 400 events
+    },
+    skip: !organizationId, // skip if organization ID is not available
+    fetchPolicy: 'cache-and-network', // Fetch from cache if available, then fetch from network
+    errorPolicy: 'all', // show partial data if some data is available
+    onError: (error) => {
+      // log error if query fails
+      console.error('Query error:', error);
+    },
+  });
+
+  console.log('data is: ', data);
 
   // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION);
+
+  // Update the list of events when the data from the query changes
+  useEffect(() => {
+    if (data) {
+      setEvents(data.eventsByOrganizationConnection);
+    }
+  }, [data]);
+
+  // Show loading spinner while fetching data
+  if (loading) {
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  }
 
   // Get user details from local storage
   const userId = getItem('id') as string;
@@ -173,7 +201,7 @@ export default function events(): JSX.Element {
    * @returns Void.
    */
   const handleEventTitleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventTitle(event.target.value);
   };
@@ -185,7 +213,7 @@ export default function events(): JSX.Element {
    * @returns Void.
    */
   const handleEventLocationChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventLocation(event.target.value);
   };
@@ -197,17 +225,10 @@ export default function events(): JSX.Element {
    * @returns Void.
    */
   const handleEventDescriptionChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventDescription(event.target.value);
   };
-
-  // Update the list of events when the data from the query changes
-  React.useEffect(() => {
-    if (data) {
-      setEvents(data.eventsByOrganizationConnection);
-    }
-  }, [data]);
 
   /**
    * Shows the modal for creating a new event.
