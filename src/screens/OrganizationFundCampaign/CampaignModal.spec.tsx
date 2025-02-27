@@ -46,6 +46,7 @@ const translations = JSON.parse(
 );
 
 const campaignProps: InterfaceCampaignModal[] = [
+  // On Create Mode
   {
     isOpen: true,
     hide: vi.fn(),
@@ -63,6 +64,7 @@ const campaignProps: InterfaceCampaignModal[] = [
     refetchCampaign: vi.fn(),
     mode: 'create',
   },
+  // On Edit Mode
   {
     isOpen: true,
     hide: vi.fn(),
@@ -80,7 +82,42 @@ const campaignProps: InterfaceCampaignModal[] = [
     refetchCampaign: vi.fn(),
     mode: 'edit',
   },
+  {
+    isOpen: false,
+    hide: vi.fn(),
+    fundId: 'fundId',
+    orgId: 'orgId',
+    campaign: {
+      _id: 'campaignId1',
+      name: 'Campaign 1',
+      fundingGoal: 100,
+      startDate: new Date('2021-01-01'),
+      endDate: new Date('2024-01-01'),
+      currency: 'USD',
+      createdAt: '2021-01-01',
+    },
+    refetchCampaign: vi.fn(),
+    mode: 'create',
+  },
+  {
+    isOpen: false,
+    hide: vi.fn(),
+    fundId: 'fundId',
+    orgId: 'orgId',
+    campaign: {
+      _id: 'campaignId1',
+      name: 'Campaign 1',
+      fundingGoal: 100,
+      startDate: new Date('2021-01-01'),
+      endDate: new Date('2024-01-01'),
+      currency: 'USD',
+      createdAt: '2021-01-01',
+    },
+    refetchCampaign: vi.fn(),
+    mode: 'edit',
+  },
 ];
+
 const renderCampaignModal = (
   link: ApolloLink,
   props: InterfaceCampaignModal,
@@ -104,6 +141,36 @@ describe('CampaignModal', () => {
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();
+  });
+
+  it('renders "Create Campaign" in Create Mode', () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    expect(document.querySelector('p')?.textContent).toContain(
+      'Create Campaign',
+    );
+  });
+
+  it('renders "Update Campaign" in Edit Mode', () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    expect(document.querySelector('p')?.textContent).toContain(
+      'Update Campaign',
+    );
+  });
+
+  it('Did not render "Create Campaign" in Create Mode', () => {
+    renderCampaignModal(link1, campaignProps[2]);
+
+    const paragraph = document.querySelector('p');
+    expect(paragraph?.textContent || '').not.toContain('Create Campaign');
+  });
+
+  it('Did not render "Update Campaign" in Edit Mode', () => {
+    renderCampaignModal(link1, campaignProps[3]);
+
+    const paragraph = document.querySelector('p');
+    expect(paragraph?.textContent || '').not.toContain('Update Campaign');
   });
 
   it('should populate form fields with correct values in edit mode', async () => {
@@ -174,6 +241,11 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
+    const campaignCurrency = screen.getByLabelText(translations.currency);
+    fireEvent.mouseDown(campaignCurrency);
+    const Option = screen.getByDisplayValue('USD');
+    fireEvent.click(Option);
+
     const startDate = screen.getByLabelText('Start Date');
     fireEvent.change(startDate, { target: { value: '02/01/2024' } });
 
@@ -199,6 +271,11 @@ describe('CampaignModal', () => {
 
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
+
+    const campaignCurrency = screen.getByLabelText(translations.currency);
+    fireEvent.mouseDown(campaignCurrency);
+    const Option = screen.getByDisplayValue('USD');
+    fireEvent.click(Option);
 
     const startDate = screen.getByLabelText('Start Date');
     fireEvent.change(startDate, { target: { value: '02/01/2023' } });
@@ -226,6 +303,11 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
+    const campaignCurrency = screen.getByLabelText(translations.currency);
+    fireEvent.mouseDown(campaignCurrency);
+    const Option = screen.getByDisplayValue('USD');
+    fireEvent.click(Option);
+
     const startDate = screen.getByLabelText('Start Date');
     fireEvent.change(startDate, { target: { value: '02/01/2024' } });
 
@@ -250,14 +332,19 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
+    const campaignCurrency = screen.getByLabelText(translations.currency);
+    fireEvent.mouseDown(campaignCurrency);
+    const Option = screen.getByDisplayValue('USD');
+    fireEvent.click(Option);
+
+    const fundingGoal = screen.getByLabelText(translations.fundingGoal);
+    fireEvent.change(fundingGoal, { target: { value: '400' } });
+
     const startDate = screen.getByLabelText('Start Date');
     fireEvent.change(startDate, { target: { value: '02/01/2023' } });
 
     const endDate = screen.getByLabelText('End Date');
     fireEvent.change(endDate, { target: { value: '02/02/2023' } });
-
-    const fundingGoal = screen.getByLabelText(translations.fundingGoal);
-    fireEvent.change(fundingGoal, { target: { value: '400' } });
 
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     expect(submitBtn).toBeInTheDocument();
