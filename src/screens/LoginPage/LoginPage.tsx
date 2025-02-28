@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import '../../style/app.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -29,7 +29,6 @@ import {
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
@@ -69,7 +68,7 @@ const loginPage = (): JSX.Element => {
   const SignupRecaptchaRef = useRef<ReCAPTCHA>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
-  const [role, setRole] = useState<'admin' | 'user'>('admin');
+  const [role, setRole] = useState<'admin' | 'user'>('user');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signName: '',
@@ -92,7 +91,7 @@ const loginPage = (): JSX.Element => {
     specialChar: true,
   });
   const [organizations, setOrganizations] = useState([]);
-
+  const location = useLocation();
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
     uppercaseCharRegExp: new RegExp('[A-Z]'),
@@ -109,9 +108,18 @@ const loginPage = (): JSX.Element => {
     });
   };
 
-  const handleRoleToggle = (role: 'admin' | 'user'): void => {
-    setRole(role);
-  };
+  useEffect(() => {
+    const isRegister = location.pathname === '/register';
+    if (isRegister) {
+      setShowTab('REGISTER');
+    }
+    const isAdmin = location.pathname === '/admin';
+    if (isAdmin) {
+      setRole('admin');
+    } else {
+      setRole('user');
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
@@ -399,9 +407,6 @@ const loginPage = (): JSX.Element => {
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
-
-              <LoginPortalToggle onToggle={handleRoleToggle} />
-
               {/* LOGIN FORM */}
               <div
                 className={`${
@@ -410,7 +415,8 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {role === 'admin' ? tCommon('login') : t('userLogin')}
+                    {/* {role === 'admin' ? tCommon('login') : t('userLogin')} */}
+                    {role === 'admin' ? t('adminLogin') : t('userLogin')}
                   </h1>
                   <Form.Label>{tCommon('email')}</Form.Label>
                   <div className="position-relative">
@@ -511,7 +517,9 @@ const loginPage = (): JSX.Element => {
                       setShowPassword(false);
                     }}
                   >
-                    {tCommon('register')}
+                    <Link to={'/register'} className="text-decoration-none">
+                      {tCommon('register')}
+                    </Link>
                   </Button>
                 </form>
               </div>
@@ -853,7 +861,9 @@ const loginPage = (): JSX.Element => {
                       setShowPassword(false);
                     }}
                   >
-                    {tCommon('login')}
+                    <Link to={'/'} className="text-decoration-none">
+                      {tCommon('login')}
+                    </Link>
                   </Button>
                 </Form>
               </div>
