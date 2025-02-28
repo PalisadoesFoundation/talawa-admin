@@ -7399,7 +7399,9 @@ form {
   border-radius: 4px;
   margin-right: 0.4rem;
 }
-
+:global(.form-control:focus) {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+}
 /* -- Users.tsx -- */
 
 /* Add more Class Related to a particular Screen above this */
