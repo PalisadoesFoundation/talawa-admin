@@ -22,7 +22,7 @@ export interface InterfaceLeftDrawerProps {
 }
 
 /**
- * LeftDrawerOrg component for displaying organization details and navigation options.
+ * LeftDrawerOrg component for displaying organization details and  options.
  *
  * @param orgId - ID of the current organization.
  * @param targets - List of navigation targets.
