@@ -249,7 +249,7 @@ function OrganizationDashboard(): JSX.Element {
                 <DashBoardCard
                   count={memberCount}
                   title={tCommon('members')}
-                  icon={<UsersIcon fill="var(--bs-primary)" />}
+                  icon={<UsersIcon fill="#555555" />}
                 />
               </Col>
               <Col
@@ -265,7 +265,7 @@ function OrganizationDashboard(): JSX.Element {
                 <DashBoardCard
                   count={adminCount}
                   title={tCommon('admins')}
-                  icon={<AdminsIcon fill="var(--bs-primary)" />}
+                  icon={<AdminsIcon fill="#555555" />}
                 />
               </Col>
               <Col
@@ -281,7 +281,7 @@ function OrganizationDashboard(): JSX.Element {
                 <DashBoardCard
                   count={orgPostsData?.organization.postsCount}
                   title={t('posts')}
-                  icon={<PostsIcon fill="var(--bs-primary)" />}
+                  icon={<PostsIcon fill="#555555" />}
                 />
               </Col>
               <Col
@@ -297,7 +297,7 @@ function OrganizationDashboard(): JSX.Element {
                 <DashBoardCard
                   count={eventCount}
                   title={t('events')}
-                  icon={<EventsIcon fill="var(--bs-primary)" />}
+                  icon={<EventsIcon fill="#555555" />}
                 />
               </Col>
               <Col

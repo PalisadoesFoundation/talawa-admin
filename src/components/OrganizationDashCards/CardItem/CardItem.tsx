@@ -36,58 +36,18 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, time, enddate, location } = props;
   return (
     <>
-      <div
-        className={`${styles.cardItem}`}
-        data-testid="cardItem"
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'flex-start', // Ensures left alignment
-          justifyContent: 'flex-start',
-          height: '6rem',
-          padding: '1rem',
-          gap: '2rem',
-          backgroundColor: '#F7F8FA',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: '#EAEBEF',
-            height: '4rem',
-            width: '4rem',
-            border: '3.25rem',
-            borderRadius: '8px', // Add your desired radius
-          }}
-        >
+      <div className={`${styles.cardItem}`} data-testid="cardItem">
+        <div className={`${styles.CardItemImage}`}>
           <img src="" alt="" />
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <div className={`${styles.CardItemMainDiv}`}>
           {title && (
-            <div
-              className={styles.cardItemtitle}
-              style={{
-                fontSize: '18px',
-                fontWeight: 'bold',
-              }} // Increased font size
-            >
-              {title.slice(0, 25)}
-            </div>
+            <div className={styles.cardItemtitle}>{title.slice(0, 25)}..</div>
           )}
 
           {type == 'Post' && time && (
-            <span
-              className=""
-              style={{
-                color: 'gray',
-                fontSize: '12px',
-              }}
-            >
+            <span className={`${styles.CardItemDate}`}>
               Posted on:
               {dayjs(time).format('MMM D, YYYY')}
             </span>
