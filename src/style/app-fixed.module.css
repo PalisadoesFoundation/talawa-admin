@@ -4102,6 +4102,7 @@ form {
   border: none;
   padding: 2.1rem 0.5rem;
   height: 52px;
+  width: 300px;
   border-radius: 8px 0px 0px 8px;
   display: flex;
   align-items: center;
@@ -4132,6 +4133,21 @@ form {
   border-radius: 100%;
 }
 
+.ArrowIcon {
+  font-size: 24px;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+}
+
+.ProfileRightConatiner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
 .profileContainer .profileTextUserSidebarOrg {
   flex: 1;
   text-align: start;
@@ -4140,7 +4156,7 @@ form {
 }
 
 .profileContainer .profileTextUserSidebarOrg .primaryText {
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
@@ -4484,7 +4500,7 @@ form {
 }
 
 .leftDrawer .optionList {
-  height: 45%;
+  height: 75%;
   overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;

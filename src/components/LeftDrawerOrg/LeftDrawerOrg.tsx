@@ -10,7 +10,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './../../style/app.module.css'; // Import the global CSS file
+import styles from './../../style/app-fixed.module.css'; // Import the global CSS file
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -153,15 +153,19 @@ const leftDrawerOrg = ({
                   />
                 )}
               </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {data.organization?.name}
-                </span>
-                <span className={styles.secondaryText}>
-                  {data.organization?.city}
-                </span>
+              <div className={`${styles.ProfileRightConatiner}`}>
+                <div className={styles.profileText}>
+                  <span className={styles.primaryText}>
+                    {data.organization?.name}
+                  </span>
+                  <span className={styles.secondaryText}>
+                    {data.organization?.city}
+                  </span>
+                </div>
+                <div className={`${styles.ArrowIcon}`}>
+                  <AngleRightIcon fill={'var(--bs-secondary)'} />
+                </div>
               </div>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
             </button>
           )}
         </div>
