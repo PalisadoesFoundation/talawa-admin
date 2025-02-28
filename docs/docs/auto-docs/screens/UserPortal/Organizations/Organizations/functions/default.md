@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/UserPortal/Organizations/Organizations.tsx:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Organizations/Organizations.tsx#L101)
+Defined in: [src/screens/UserPortal/Organizations/Organizations.tsx:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Organizations/Organizations.tsx#L100)
 
 Component for displaying and managing user organizations.
 
