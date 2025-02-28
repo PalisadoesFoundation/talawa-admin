@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';

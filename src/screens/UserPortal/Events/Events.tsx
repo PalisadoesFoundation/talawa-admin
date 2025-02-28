@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './../../../style/app.module.css';
+import styles from './../../../style/app-fixed.module.css';
 
 /**
  * Converts a time string to a Dayjs object.
@@ -105,10 +105,10 @@ export default function events(): JSX.Element {
   const userId = getItem('id') as string;
 
   const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
+  const adminFor = getItem('AdminFor') as string[] | null;
   const userRole = superAdmin
     ? 'SUPERADMIN'
-    : adminFor?.length > 0
+    : Array.isArray(adminFor) && adminFor.length > 0
       ? 'ADMIN'
       : 'USER';
 

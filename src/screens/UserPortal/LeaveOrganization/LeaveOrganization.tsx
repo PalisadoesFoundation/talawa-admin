@@ -96,7 +96,7 @@ const LeaveOrganization = (): JSX.Element => {
    * Verifies the user's email before proceeding.
    */
   const handleVerifyAndLeave = (): void => {
-    if (email.trim().toLowerCase() === userEmail.toLowerCase()) {
+    if (email.trim().toLowerCase() === (userEmail as string).toLowerCase()) {
       handleLeaveOrganization();
     } else {
       setError('Verification failed: Email does not match.');

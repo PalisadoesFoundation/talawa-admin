@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { Navigate, useParams } from 'react-router-dom';
 import EventListCardModals from './Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
