@@ -9,6 +9,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
+import { DatePicker } from '@mui/x-date-pickers';
 import {
   educationGradeEnum,
   employmentStatusEnum,
@@ -16,6 +17,8 @@ import {
   maritalStatusEnum,
 } from 'utils/formEnumFields';
 import DeleteUser from 'components/UserProfileSettings/DeleteUser';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
@@ -122,7 +125,7 @@ export default function settings(): JSX.Element {
    * @param fieldName - The name of the field to be updated.
    * @param value - The new value for the field.
    */
-  const handleFieldChange = (fieldName: string, value: string): void => {
+  const handleFieldChange = (fieldName: string, value: string | Date): void => {
     // If the field is 'birthDate', validate the date
     if (fieldName === 'birthDate') {
       const today = new Date();
@@ -158,7 +161,6 @@ export default function settings(): JSX.Element {
    */
   const handleResetChanges = (): void => {
     setisUpdated(false);
-    /* istanbul ignore next */
     if (data) {
       const {
         firstName,
@@ -192,7 +194,6 @@ export default function settings(): JSX.Element {
   };
 
   useEffect(() => {
-    /* istanbul ignore next */
     if (data) {
       const {
         firstName,
@@ -314,9 +315,8 @@ export default function settings(): JSX.Element {
                             role="button"
                             aria-label="Edit profile picture"
                             tabIndex={0}
-                            onKeyDown={
-                              /*istanbul ignore next*/
-                              (e) => e.key === 'Enter' && handleImageUpload()
+                            onKeyDown={(e) =>
+                              e.key === 'Enter' && handleImageUpload()
                             }
                           />
                         </div>
@@ -330,18 +330,15 @@ export default function settings(): JSX.Element {
                         data-testid="fileInput"
                         multiple={false}
                         ref={fileInputRef}
-                        onChange={
-                          /* istanbul ignore next */
-                          async (
-                            e: React.ChangeEvent<HTMLInputElement>,
-                          ): Promise<void> => {
-                            const file = e.target?.files?.[0];
-                            if (file) {
-                              const image = await convertToBase64(file);
-                              setUserDetails({ ...userDetails, image });
-                            }
+                        onChange={async (
+                          e: React.ChangeEvent<HTMLInputElement>,
+                        ): Promise<void> => {
+                          const file = e.target?.files?.[0];
+                          if (file) {
+                            const image = await convertToBase64(file);
+                            setUserDetails({ ...userDetails, image });
                           }
-                        }
+                        }}
                         style={{ display: 'none' }}
                       />
                     </Col>
@@ -444,22 +441,29 @@ export default function settings(): JSX.Element {
                         data-testid="inputPhoneNumber"
                       />
                     </Col>
-                    <Col lg={4}>
+                    <Col lg={4} className={styles.responsiveCol}>
                       <Form.Label
                         htmlFor="birthDate"
                         className={`${styles.cardLabel}`}
                       >
                         {t('birthDate')}
                       </Form.Label>
-                      <Form.Control
-                        type="date"
-                        id="birthDate"
-                        value={userDetails.birthDate}
-                        onChange={(e) =>
-                          handleFieldChange('birthDate', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                        max={new Date().toISOString().split('T')[0]}
+                      <DatePicker
+                        className={`${styles.dateControl}`}
+                        value={dayjs(userDetails.birthDate)}
+                        onChange={(date: Dayjs | null): void => {
+                          if (date) {
+                            handleFieldChange('birthDate', date.toDate());
+                          }
+                        }}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            id: 'birthDate',
+                          },
+                        }}
+                        maxDate={dayjs(new Date().toISOString().split('T')[0])}
+                        format="YYYY-MM-DD"
                       />
                     </Col>
                   </Row>

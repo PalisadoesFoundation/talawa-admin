@@ -55,6 +55,11 @@
   margin-bottom: 20px;
 }
 
+.dateControl {
+  background-color: #f2f2f2;
+  border-radius: 0.4rem;
+}
+
 .cardButton {
   width: fit-content;
 }
@@ -175,6 +180,11 @@
   .profileContainer {
     align-items: center;
     justify-content: center;
+  }
+
+  .responsiveCol {
+    display: flex;
+    flex-direction: column;
   }
 }
 

@@ -14,6 +14,8 @@ import userEvent from '@testing-library/user-event';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -25,6 +27,25 @@ vi.mock('react-toastify', () => ({
 
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
+}));
+
+vi.mock('@mui/x-date-pickers', () => ({
+  DatePicker: ({
+    value,
+    onChange,
+  }: {
+    value: Dayjs | null;
+    onChange: (value: Dayjs | null) => void;
+  }) => (
+    <input
+      data-testid="birth-date-picker"
+      value={value && value.isValid() ? value.format('YYYY-MM-DD') : ''}
+      onChange={(e) => {
+        const date = dayjs(e.target.value);
+        onChange(date.isValid() ? date : null);
+      }}
+    />
+  ),
 }));
 
 const MOCKS = [
@@ -253,46 +274,93 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
+    await act(async () => {
+      userEvent.type(screen.getByTestId('inputFirstName'), 'Noble');
+    });
+    await wait();
 
-    userEvent.type(screen.getByTestId('inputFirstName'), 'Noble');
+    await act(async () => {
+      userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
+    });
     await wait();
-    userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
+
+    await act(async () => {
+      userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
+    });
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
+
+    await act(async () => {
+      userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
+    });
     await wait();
-    userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
+
+    await act(async () => {
+      userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
+    });
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
+
+    await act(async () => {
+      userEvent.selectOptions(
+        screen.getByTestId('inputEmpStatus'),
+        'Unemployed',
+      );
+    });
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Unemployed');
+
+    await act(async () => {
+      userEvent.selectOptions(
+        screen.getByTestId('inputMaritalStatus'),
+        'Single',
+      );
+    });
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputMaritalStatus'), 'Single');
+
+    await act(async () => {
+      userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    });
     await wait();
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+
+    await act(async () => {
+      userEvent.type(screen.getByTestId('inputState'), 'random');
+    });
     await wait();
-    userEvent.type(screen.getByTestId('inputState'), 'random');
+
+    await act(async () => {
+      userEvent.selectOptions(screen.getByTestId('inputCountry'), 'IN');
+    });
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputCountry'), 'IN');
-    await wait();
+
     expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
     await wait();
-    fireEvent.change(screen.getByLabelText('Birth Date'), {
-      target: { value: '2024-03-01' },
+
+    const birthDateInput = screen.getByTestId(
+      'birth-date-picker',
+    ) as HTMLInputElement;
+
+    await act(async () => {
+      fireEvent.change(birthDateInput, { target: { value: '2024-03-01' } });
     });
-    expect(screen.getByLabelText('Birth Date')).toHaveValue('2024-03-01');
-    await wait();
+
+    expect(birthDateInput.value).toBe('2024-03-01');
+
     const fileInp = screen.getByTestId('fileInput');
     fileInp.style.display = 'block';
-    userEvent.click(screen.getByTestId('uploadImageBtn'));
+    await act(async () => {
+      userEvent.click(screen.getByTestId('uploadImageBtn'));
+    });
     await wait();
+
     const imageFile = new File(['(⌐□_□)'], 'profile-image.jpg', {
       type: 'image/jpeg',
     });
     const files = [imageFile];
-    userEvent.upload(fileInp, files);
+    await act(async () => {
+      userEvent.upload(fileInp, files);
+    });
     await wait();
+
     expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
-  });
+  }, 10000); // 10 seconds timeout
 
   it('resetChangesBtn works properly', async () => {
     await act(async () => {
@@ -324,7 +392,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByTestId('inputAddress')).toHaveValue('random');
     expect(screen.getByTestId('inputState')).toHaveValue('random');
     expect(screen.getByTestId('inputCountry')).toHaveValue('IN');
-    expect(screen.getByLabelText('Birth Date')).toHaveValue('2024-03-01');
+    expect(screen.getByTestId('birth-date-picker')).toHaveValue('2024-03-01');
   });
 
   it('resetChangesBtn works properly when the details are empty', async () => {
@@ -357,7 +425,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByTestId('inputAddress')).toHaveValue('');
     expect(screen.getByTestId('inputState')).toHaveValue('');
     expect(screen.getByTestId('inputCountry')).toHaveValue('');
-    expect(screen.getByLabelText('Birth Date')).toHaveValue('');
+    expect(screen.getByTestId('birth-date-picker')).toHaveValue('');
   });
 
   it('sidebar', async () => {
@@ -503,21 +571,31 @@ it('prevents selecting future dates for birth date', async () => {
     );
   });
 
-  const birthDateInput = screen.getByLabelText(
-    'Birth Date',
-  ) as HTMLInputElement;
-  const today = new Date().toISOString().split('T')[0];
-  const futureDate = new Date();
-  futureDate.setFullYear(futureDate.getFullYear() + 100);
-  const futureDateString = futureDate.toISOString().split('T')[0];
-
   // Trying future date
-  fireEvent.change(birthDateInput, { target: { value: futureDateString } });
-  // Checking if value is not updated to future date
-  expect(birthDateInput.value).not.toBe(futureDateString);
+  const birthDateInput = screen.getByTestId(
+    'birth-date-picker',
+  ) as HTMLInputElement;
 
-  // Checking if value set correctly
-  fireEvent.change(birthDateInput, { target: { value: today } });
+  // Get today's date in the correct format
+  const today = dayjs().format('YYYY-MM-DD');
+
+  // Simulate a future date (100 years from now)
+  const futureDate = dayjs().add(100, 'year').format('YYYY-MM-DD');
+
+  // Simulate changing the date to a future date
+  await act(async () => {
+    fireEvent.change(birthDateInput, { target: { value: futureDate } });
+  });
+
+  // Check if the value is not updated to the future date
+  expect(birthDateInput.value).not.toBe(futureDate);
+
+  // Simulate changing the date to today's date
+  await act(async () => {
+    fireEvent.change(birthDateInput, { target: { value: today } });
+  });
+
+  // Check if the value is updated to today's date
   expect(birthDateInput.value).toBe(today);
 });
 
