@@ -175,15 +175,15 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
 `;
 
 export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
-  query Organizations(
-    $id: ID!
+  query GetAdvertisements(
+    $input: QueryOrganizationInput!
     $after: String
     $before: String
     $first: Int
     $last: Int
   ) {
-    organizations(id: $id) {
-      _id
+    organization(input: $input) {
+      id
       advertisements(
         after: $after
         before: $before
@@ -192,11 +192,13 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
       ) {
         edges {
           node {
-            _id
+            id
             name
-            startDate
-            endDate
-            mediaUrl
+            startAt
+            endAt
+            attachments {
+              url
+            }
           }
           cursor
         }
@@ -206,7 +208,6 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
           hasNextPage
           hasPreviousPage
         }
-        totalCount
       }
     }
   }
