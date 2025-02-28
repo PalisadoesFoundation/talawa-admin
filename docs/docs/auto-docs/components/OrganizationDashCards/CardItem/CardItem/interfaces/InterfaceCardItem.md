@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCardItem
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L14)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L15)
 
 Interface for the CardItem component's props.
 
@@ -14,7 +14,7 @@ Interface for the CardItem component's props.
 
 > `optional` **creator**: `object`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L20)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L21)
 
 #### id
 
@@ -30,7 +30,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:20](http
 
 > `optional` **enddate**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L19)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L20)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:19](http
 
 > `optional` **location**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L24)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L25)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:24](http
 
 > `optional` **startdate**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L18)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L19)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:18](http
 
 > `optional` **time**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L17)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L18)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:17](http
 
 > **title**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L16)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L17)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:16](http
 
 > **type**: `"Event"` \| `"Post"` \| `"MembershipRequest"`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L15)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L16)

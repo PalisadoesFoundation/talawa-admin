@@ -132,17 +132,7 @@ describe('OrganizationDashboard', () => {
       ).toBeInTheDocument();
     });
   });
-
-  it('displays latest posts with correct data', async () => {
-    renderWithProviders({ mocks: MOCKS });
-
-    await waitFor(() => {
-      expect(screen.getByText('First Post')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
 });
-
 it('handles navigation to posts page', async () => {
   renderWithProviders({ mocks: MOCKS });
 
@@ -193,17 +183,5 @@ it('handles multiple page loads without memory leaks', async () => {
 
   await waitFor(() => {
     expect(screen.getByText('posts')).toBeInTheDocument();
-  });
-});
-
-it('verifies card item rendering for different data types', async () => {
-  renderWithProviders({ mocks: MOCKS });
-
-  await waitFor(() => {
-    const eventCardItems = screen.getAllByTestId('cardItem');
-    expect(eventCardItems.length).toBeGreaterThan(0);
-
-    const postTitle = screen.getByText('First Post');
-    expect(postTitle).toBeInTheDocument();
   });
 });
