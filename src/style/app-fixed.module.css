@@ -5608,13 +5608,15 @@ form {
 }
 
 .cardbodyIcon {
+  font-size: 2rem;
+  height: 3rem;
+  color: #555555;
+  background-color: #eaebef;
+  width: 3rem;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #f5f5f5;
+  justify-content: center;
   border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
 }
 
 .iconCol {
