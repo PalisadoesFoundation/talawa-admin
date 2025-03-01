@@ -782,3 +782,13 @@ export {
   DELETE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
 } from './VenueMutations';
+
+export const PRESIGNED_URL = gql`
+  mutation createPresignedUrl($input: MutationCreatePresignedUrlInput!) {
+    createPresignedUrl(input: $input) {
+      fileUrl
+      presignedUrl
+      objectName
+    }
+  }
+`;
