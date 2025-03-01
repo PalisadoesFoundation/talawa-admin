@@ -123,7 +123,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/apollo-upload-client": "^18.0.0",
     "@types/inquirer": "^9.0.7",
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^29.5.14",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.9.0",
     "@types/node-fetch": "^2.6.10",
