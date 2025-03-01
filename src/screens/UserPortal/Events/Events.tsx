@@ -97,7 +97,8 @@ export default function Events(): JSX.Element {
     variables: {
       organization_id: organizationId,
       title_contains: '',
-      first: 400, // fetch first 400 events
+      upcomingOnly: true, // Fetch only upcoming events
+      first: 400, // Fetch up to 400 events
     },
     skip: !organizationId, // skip if organization ID is not available
     fetchPolicy: 'cache-and-network', // Fetch from cache if available, then fetch from network
