@@ -8,7 +8,7 @@
 
 Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L34)
 
-LeftDrawerOrg component for displaying organization details and navigation options.
+LeftDrawerOrg component for displaying organization details and  options.
 
 ## Parameters
 
