@@ -4,13 +4,17 @@ import '@testing-library/jest-dom';
 import AgendaCategoryPreviewModal from './AgendaCategoryPreviewModal';
 
 // Mock translation function
-const mockT = (key: string) => key;
+const mockT = (key: string): string => key;
 
 describe('AgendaCategoryPreviewModal Component', () => {
   const mockOnClose = jest.fn();
   const mockShowUpdateModal = jest.fn();
   const mockToggleDeleteModal = jest.fn();
-  const mockCategory = { name: 'Meeting', description: 'Team discussion', createdBy: 'John Doe' };
+  const mockCategory = {
+    name: 'Meeting',
+    description: 'Team discussion',
+    createdBy: 'John Doe',
+  };
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -60,7 +64,9 @@ describe('AgendaCategoryPreviewModal Component', () => {
       />,
     );
 
-    const closeButton = screen.getByTestId('previewAgendaCategoryModalCloseBtn');
+    const closeButton = screen.getByTestId(
+      'previewAgendaCategoryModalCloseBtn',
+    );
     fireEvent.click(closeButton);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
