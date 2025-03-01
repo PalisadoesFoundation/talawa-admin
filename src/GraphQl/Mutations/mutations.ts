@@ -652,15 +652,6 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
-export const PRESIGNED_URL = gql`
-  mutation createPresignedUrl($input: MutationCreatePresignedUrlInput!) {
-    createPresignedUrl(input: $input) {
-      fileUrl
-      presignedUrl
-      objectName
-    }
-  }
-`;
 export const UPDATE_COMMUNITY_PG = gql`
   mutation updateCommunity(
     $facebookURL: String
@@ -791,3 +782,13 @@ export {
   DELETE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
 } from './VenueMutations';
+
+export const PRESIGNED_URL = gql`
+  mutation createPresignedUrl($input: MutationCreatePresignedUrlInput!) {
+    createPresignedUrl(input: $input) {
+      fileUrl
+      presignedUrl
+      objectName
+    }
+  }
+`;
