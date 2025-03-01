@@ -3428,12 +3428,35 @@
 /* -- CardItem.tsx -- */
 
 .cardItem {
-  position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start; /* Ensures left alignment */
+  justify-content: flex-start;
+  height: 6rem;
+  padding: 1rem;
+  gap: 2rem;
+  background-color: #f7f8fa;
   border: 1px solid var(--cardItem-border);
   border-radius: 8px;
   margin-top: 20px;
+}
+
+.CardItemImage {
+  background-color: #eaebef;
+  height: 4rem;
+  width: 4rem;
+  border: 3.25rem; /* Make sure to update this if you need border style & color */
+  border-radius: 8px;
+}
+
+.cardItemtitle {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.CardItemDate {
+  color: gray;
+  font-size: 12px;
 }
 
 .cardItem .iconWrapper {
@@ -4079,6 +4102,7 @@ form {
   border: none;
   padding: 2.1rem 0.5rem;
   height: 52px;
+  width: 300px;
   border-radius: 8px 0px 0px 8px;
   display: flex;
   align-items: center;
@@ -4109,6 +4133,21 @@ form {
   border-radius: 100%;
 }
 
+.ArrowIcon {
+  font-size: 24px;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+}
+
+.ProfileRightConatiner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
 .profileContainer .profileTextUserSidebarOrg {
   flex: 1;
   text-align: start;
@@ -4117,7 +4156,7 @@ form {
 }
 
 .profileContainer .profileTextUserSidebarOrg .primaryText {
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
@@ -4461,7 +4500,7 @@ form {
 }
 
 .leftDrawer .optionList {
-  height: 45%;
+  height: 75%;
   overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
@@ -4833,7 +4872,7 @@ form {
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--cardHeader-border);
+  border-bottom: 3px solid var(--cardHeader-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -5555,9 +5594,59 @@ form {
 }
 
 .cardBody {
-  min-height: 180px;
+  padding: 1rem;
+  height: 8rem;
+  display: flex;
+  align-items: center;
 }
 
+.cardBodymain {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.cardbodyIcon {
+  font-size: 2rem;
+  height: 3rem;
+  color: #555555;
+  background-color: #eaebef;
+  width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.iconCol {
+  padding-right: 0.75rem;
+}
+
+.contentCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBodyNumber {
+  color: black;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.cardBodySecondaryText {
+  font-size: 0.75rem;
+  color: gray;
+}
+
+.cardBodyMainDiv {
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: none;
+  height: auto;
+  width: 100%;
+}
 .cardBody .textBox {
   margin: 0 0 3rem 0;
   color: var(--cardBody-color);
@@ -5588,40 +5677,17 @@ form {
   }
 }
 
-.cardBody {
-  padding: 1.25rem 1.5rem;
-}
-
-.cardBody .iconWrapper {
-  position: relative;
-  height: 48px;
-  width: 48px;
+.cardbodyIcon {
+  font-size: 2rem;
+  height: 50px;
+  color: #555555;
+  height: 3rem;
+  background-color: #eaebef;
+  width: 3rem;
   display: flex;
-  justify-content: center;
   align-items: center;
-}
-
-.cardBody .iconWrapper .themeOverlay {
-  background: var(--themeOverlay-bg);
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  opacity: 0.12;
+  justify-content: center;
   border-radius: 50%;
-}
-
-.cardBody .textWrapper .primaryText {
-  font-size: 24px;
-  font-weight: bold;
-  display: block;
-}
-
-.cardBody .textWrapper .secondaryText {
-  font-size: 14px;
-  display: block;
-  color: var(--cardBody-tw-st-color, var(--cardBody-st-color));
 }
 
 /* -- OrgContribution.tsx -- */

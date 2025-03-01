@@ -125,7 +125,7 @@ const OrganizationScreen = (): JSX.Element => {
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
       )}
-      <div className={styles.drawer}>
+      <div className={styles.opendrawerdrawer}>
         <LeftDrawerOrg
           orgId={orgId}
           targets={targets}
