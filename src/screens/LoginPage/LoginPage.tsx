@@ -106,9 +106,15 @@ const loginPage = (): JSX.Element => {
     });
   };
 
+<<<<<<< Updated upstream
   const handleRoleToggle = (role: 'admin' | 'user'): void => {
     setRole(role);
   };
+=======
+  // const handleRoleToggle = (role: 'admin' | 'user'): void => {
+  //   setRole(role);
+  // };
+>>>>>>> Stashed changes
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');

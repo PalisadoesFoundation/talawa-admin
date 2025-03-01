@@ -965,7 +965,9 @@ hr {
 .cardHeader .cardTitle {
   font-size: 1.5rem;
 }
-
+.form-control:focus{
+  box-shadow: (0 4px 4px rgba(0, 0, 0, 0.15));
+}
 .formLabel {
   font-weight: normal;
   padding-bottom: 0;

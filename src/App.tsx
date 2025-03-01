@@ -139,6 +139,11 @@ function app(): JSX.Element {
     <>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+<<<<<<< Updated upstream
+=======
+        <Route path="/register" element={<LoginPage />} /><Route path="/admin" element={<LoginPage />} />
+        
+>>>>>>> Stashed changes
         <Route element={<SecuredRoute />}>
           <Route element={<SuperAdminScreen />}>
             <Route path="/orglist" element={<OrgList />} />
