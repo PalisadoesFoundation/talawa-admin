@@ -102,7 +102,7 @@ const Users = (): JSX.Element => {
     : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
-  const loggedInUserId = getItem('id');
+  const loggedInUserId = getItem('id') as string;
   const [usersData, setUsersData] = useState<
     { users: InterfaceQueryUserListItem[] } | undefined
   >(undefined);

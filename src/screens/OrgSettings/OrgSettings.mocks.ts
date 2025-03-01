@@ -2,7 +2,6 @@ import {
   ACTION_ITEM_CATEGORY_LIST,
   AGENDA_ITEM_CATEGORY_LIST,
   IS_SAMPLE_ORGANIZATION_QUERY,
-  ORGANIZATION_CUSTOM_FIELDS,
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
 
@@ -64,23 +63,6 @@ export const MOCKS = [
             membershipRequests: [],
             blockedUsers: [],
             __typename: 'Organization',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_CUSTOM_FIELDS,
-      variables: { customFieldsByOrganizationId: 'orgId' },
-    },
-    result: {
-      data: {
-        customFieldsByOrganization: [
-          {
-            _id: 'adsdasdsa334343yiu423434',
-            type: 'fieldType',
-            name: 'fieldName',
           },
         ],
       },

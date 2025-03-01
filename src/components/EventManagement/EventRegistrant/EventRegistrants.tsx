@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Button, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES, EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';

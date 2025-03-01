@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Button, Table, FormControl } from 'react-bootstrap';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { useParams, Link } from 'react-router-dom';
