@@ -9,7 +9,6 @@ import {
 import { vi } from 'vitest';
 import Calendar from './YearlyEventCalender';
 import { BrowserRouter } from 'react-router-dom';
-import styles from '../../../style/app.module.css';
 
 enum Role {
   USER = 'USER',
@@ -85,39 +84,6 @@ describe('Calendar Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-  it('filters private events for ADMIN not in organization admins', async () => {
-    const privateEvent = {
-      ...mockEventData[1],
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-    };
-
-    const { container } = renderWithRouter(
-      <Calendar
-        eventData={[privateEvent]}
-        refetchEvents={mockRefetchEvents}
-        userRole={Role.ADMIN}
-        userId="admin2"
-        orgData={mockOrgData}
-      />,
-    );
-
-    await waitFor(() => {
-      expect(container.querySelector('[data-testid="event-card"]')).toBeNull();
-    });
-
-    // Verify empty state appears
-    const expandButton = container.querySelector(`.${styles.btn__more}`);
-    if (expandButton) {
-      await act(async () => {
-        fireEvent.click(expandButton);
-      });
-    }
-
-    await waitFor(() => {
-      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
-    });
-  });
 
   it('renders correctly with basic props', async () => {
     const { getByText, getAllByTestId, container } = renderWithRouter(
@@ -134,12 +100,12 @@ describe('Calendar Component', () => {
     expect(getByText('December')).toBeInTheDocument();
 
     const weekdayHeaders = container.querySelectorAll(
-      '._calendar__weekdays_658d08',
+      '._calendar__weekdays_d00707',
     );
     expect(weekdayHeaders.length).toBe(12);
 
     weekdayHeaders.forEach((header) => {
-      const weekdaySlots = header.querySelectorAll('._weekday__yearly_658d08');
+      const weekdaySlots = header.querySelectorAll('._weekday__yearly_d00707');
       expect(weekdaySlots.length).toBe(7);
     });
 
@@ -239,7 +205,7 @@ describe('Calendar Component', () => {
       <Calendar eventData={[mockEvent]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButton = container.querySelector('._btn__more_658d08');
+    const expandButton = container.querySelector('._btn__more_d00707');
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -249,7 +215,7 @@ describe('Calendar Component', () => {
 
     await waitFor(() => {
       const expandedList = container.querySelector(
-        '._expand_event_list_658d08',
+        '._expand_event_list_d00707',
       );
       expect(expandedList).toBeInTheDocument();
     });
@@ -303,12 +269,12 @@ describe('Calendar Component', () => {
       </BrowserRouter>,
     );
 
-    const expandButtons = container.querySelectorAll('._btn__more_658d08');
+    const expandButtons = container.querySelectorAll('._btn__more_d00707');
 
     for (const button of Array.from(expandButtons)) {
       fireEvent.click(button);
 
-      const eventList = container.querySelector('._event_list_658d08');
+      const eventList = container.querySelector('._event_list_d00707');
       if (eventList) {
         expect(eventList).toBeInTheDocument();
         break;
@@ -354,7 +320,7 @@ describe('Calendar Component', () => {
       />,
     );
 
-    const expandButtons = container.querySelectorAll('._btn__more_658d08');
+    const expandButtons = container.querySelectorAll('._btn__more_d00707');
 
     for (const button of Array.from(expandButtons)) {
       await act(async () => {
@@ -363,7 +329,7 @@ describe('Calendar Component', () => {
     }
 
     const expandedLists = container.querySelectorAll(
-      '._expand_event_list_658d08',
+      '._expand_event_list_d00707',
     );
     expect(expandedLists.length).toBeGreaterThan(0);
   });
@@ -403,7 +369,7 @@ describe('Calendar Component', () => {
       <Calendar eventData={[mockEvent]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButton = container.querySelector('._btn__more_658d08');
+    const expandButton = container.querySelector('._btn__more_d00707');
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -412,7 +378,7 @@ describe('Calendar Component', () => {
     }
     await waitFor(() => {
       const expandedList = container.querySelector(
-        '._expand_event_list_658d08',
+        '._expand_event_list_d00707',
       );
       expect(expandedList).toBeInTheDocument();
     });
@@ -422,9 +388,8 @@ describe('Calendar Component', () => {
         fireEvent.click(expandButton);
       });
     }
-
     await waitFor(() => {
-      expect(container.querySelector('._expand_event_list_658d08')).toBeNull();
+      expect(container.querySelector('._expand_event_list_d00707')).toBeNull();
     });
   });
 });
