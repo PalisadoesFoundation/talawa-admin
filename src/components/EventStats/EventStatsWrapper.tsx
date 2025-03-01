@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { EventStats } from './Statistics/EventStats';
 import { Button } from 'react-bootstrap';
 import IconComponent from 'components/IconComponent/IconComponent';
-import styles from './css/EventStatsWrapper.module.css';
+import styles from '../../style/app-fixed.module.css';
 /**
  * Wrapper component that displays a button to show event statistics.
  *

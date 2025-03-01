@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './OrganizationCardStart.module.css';
+import styles from '../../style/app-fixed.module.css';
 import type { InterfaceOrganizationCardStartProps } from 'types/Organization/interface';
 
 /**

@@ -41,27 +41,20 @@ export const ACCEPT_ORGANIZATION_REQUEST_MUTATION = gql`
 // to update the organization details
 
 export const UPDATE_ORGANIZATION_MUTATION = gql`
-  mutation UpdateOrganization(
-    $id: ID!
-    $name: String
-    $description: String
-    $address: AddressInput
-    $userRegistrationRequired: Boolean
-    $visibleInSearch: Boolean
-    $file: String
-  ) {
-    updateOrganization(
-      id: $id
-      data: {
-        name: $name
-        description: $description
-        userRegistrationRequired: $userRegistrationRequired
-        visibleInSearch: $visibleInSearch
-        address: $address
-      }
-      file: $file
-    ) {
-      _id
+  mutation UpdateOrganization($input: MutationUpdateOrganizationInput!) {
+    updateOrganization(input: $input) {
+      id
+      name
+      description
+      addressLine1
+      addressLine2
+      city
+      state
+      postalCode
+      countryCode
+      avatarMimeType
+      avatarURL
+      updatedAt
     }
   }
 `;
@@ -116,43 +109,36 @@ export const UPDATE_CURRENT_USER_MUTATION = gql`
 // to update the details of the user
 
 export const UPDATE_USER_MUTATION = gql`
-  mutation UpdateUserProfile(
-    $firstName: String
-    $lastName: String
-    $gender: Gender
-    $email: EmailAddress
-    $phoneNumber: PhoneNumber
-    $birthDate: Date
-    $grade: EducationGrade
-    $empStatus: EmploymentStatus
-    $maritalStatus: MaritalStatus
-    $address: String
-    $state: String
-    $country: String
-    $image: String
-    $appLanguageCode: String
-  ) {
-    updateUserProfile(
-      data: {
-        firstName: $firstName
-        lastName: $lastName
-        gender: $gender
-        email: $email
-        phone: { mobile: $phoneNumber }
-        birthDate: $birthDate
-        educationGrade: $grade
-        employmentStatus: $empStatus
-        maritalStatus: $maritalStatus
-        address: { line1: $address, state: $state, countryCode: $country }
-        appLanguageCode: $appLanguageCode
-      }
-      file: $image
-    ) {
-      _id
+  mutation UpdateCurrentUser($input: MutationUpdateCurrentUserInput!) {
+    updateCurrentUser(input: $input) {
+      addressLine1
+      addressLine2
+      avatarMimeType
+      avatarURL
+      birthDate
+      city
+      countryCode
+      createdAt
+      description
+      educationGrade
+      emailAddress
+      employmentStatus
+      homePhoneNumber
+      id
+      isEmailAddressVerified
+      maritalStatus
+      mobilePhoneNumber
+      name
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      updatedAt
+      workPhoneNumber
     }
   }
 `;
-
 // to update the password of user
 
 export const UPDATE_USER_PASSWORD_MUTATION = gql`
@@ -296,11 +282,10 @@ export const CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG = gql`
 // to delete the organization
 
 export const DELETE_ORGANIZATION_MUTATION = gql`
-  mutation RemoveOrganization($id: ID!) {
-    removeOrganization(id: $id) {
-      user {
-        _id
-      }
+  mutation DeleteOrganization($input: MutationDeleteOrganizationInput!) {
+    deleteOrganization(input: $input) {
+      id
+      name
     }
   }
 `;
@@ -414,35 +399,24 @@ export const ADD_MEMBER_MUTATION = gql`
 `;
 
 export const CREATE_POST_MUTATION = gql`
-  mutation CreatePost(
-    $text: String!
-    $title: String!
-    $imageUrl: URL
-    $videoUrl: URL
-    $organizationId: ID!
-    $file: String
-    $pinned: Boolean
-  ) {
-    createPost(
-      data: {
-        text: $text
-        title: $title
-        imageUrl: $imageUrl
-        videoUrl: $videoUrl
-        organizationId: $organizationId
-        pinned: $pinned
+  mutation CreatePost($input: MutationCreatePostInput!) {
+    createPost(input: $input) {
+      id
+      caption
+      pinnedAt
+      attachments {
+        url
       }
-      file: $file
-    ) {
-      _id
+      createdAt
+      updatedAt
     }
   }
 `;
 
 export const DELETE_POST_MUTATION = gql`
-  mutation RemovePost($id: ID!) {
-    removePost(id: $id) {
-      _id
+  mutation RemovePost($input: MutationDeletePostInput!) {
+    deletePost(input: $input) {
+      id
     }
   }
 `;
@@ -588,23 +562,14 @@ export const DELETE_ADVERTISEMENT_BY_ID = gql`
   }
 `;
 export const UPDATE_POST_MUTATION = gql`
-  mutation UpdatePost(
-    $id: ID!
-    $title: String
-    $text: String
-    $imageUrl: String
-    $videoUrl: String
-  ) {
-    updatePost(
-      id: $id
-      data: {
-        title: $title
-        text: $text
-        imageUrl: $imageUrl
-        videoUrl: $videoUrl
+  mutation UpdatePost($input: MutationUpdatePostInput!) {
+    updatePost(input: $input) {
+      id
+      caption
+      pinnedAt
+      attachments {
+        url
       }
-    ) {
-      _id
     }
   }
 `;
@@ -803,11 +768,9 @@ export {
 
 // Changes the role of a user in an organization
 export {
-  ADD_CUSTOM_FIELD,
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
   JOIN_PUBLIC_ORGANIZATION,
   PLUGIN_SUBSCRIPTION,
-  REMOVE_CUSTOM_FIELD,
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
   SEND_MEMBERSHIP_REQUEST,
   TOGGLE_PINNED_POST,
@@ -819,3 +782,13 @@ export {
   DELETE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
 } from './VenueMutations';
+
+export const PRESIGNED_URL = gql`
+  mutation createPresignedUrl($input: MutationCreatePresignedUrlInput!) {
+    createPresignedUrl(input: $input) {
+      fileUrl
+      presignedUrl
+      objectName
+    }
+  }
+`;

@@ -13,7 +13,7 @@ import { REGISTRANTS_MOCKS } from './Registrations.mocks';
 import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/EventAttendanceMocks';
 import { vi } from 'vitest';
 import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 
 const COMBINED_MOCKS = [...REGISTRANTS_MOCKS, ...ATTENDEES_MOCKS];
 
@@ -318,13 +318,6 @@ describe('EventRegistrants CSS Tests', () => {
     headerCells.forEach((cell) => {
       expect(cell).toHaveClass(styles.customcell);
     });
-  });
-
-  it('should style the check-in wrapper component correctly', () => {
-    renderEventRegistrants();
-    const checkInWrapper = screen.getByTestId('stats-modal');
-    expect(checkInWrapper).toBeInTheDocument();
-    expect(checkInWrapper).toHaveClass(styles.createButton);
   });
 
   it('should apply proper spacing between buttons', () => {

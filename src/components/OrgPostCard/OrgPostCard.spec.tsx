@@ -1,821 +1,978 @@
 import React from 'react';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import OrgPostCard from './OrgPostCard';
 import { I18nextProvider } from 'react-i18next';
-import userEvent from '@testing-library/user-event';
+import OrgPostCard from './OrgPostCard';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
   TOGGLE_PINNED_POST,
 } from 'GraphQl/Mutations/mutations';
+import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import convertToBase64 from 'utils/convertToBase64';
-import { BrowserRouter } from 'react-router-dom';
-import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { toast } from 'react-toastify';
+import type { DocumentNode } from 'graphql';
+import * as errorHandlerModule from 'utils/errorHandler';
+import type { MockedResponse } from '@apollo/client/testing';
 
 /**
- * Unit tests for the OrgPostCard component, which displays organization posts with various interactions.
+ * Unit Tests for OrgPostCard Component
  *
- * These tests verify:
- * - Basic rendering and display functionality:
- *   - Proper rendering of post content (title, text, images, videos)
- *   - "Read more" toggle button behavior
- *   - Image and video display handling
- *   - Fallback behavior when media is missing
+ * This test suite validates the functionality of the OrgPostCard component,
+ * which handles the display and interaction with organization posts.
  *
- * - Modal interactions:
- *   - Opening/closing primary modal on post click
- *   - Secondary modal functionality for edit/delete operations
- *   - Form validation in edit modal
- *   - Media upload handling in edit modal
+ * Key Test Areas:
+ * 1. Component Rendering
+ * 2. User Interactions
+ * 3. Mutation Operations
+ * 4. Media Handling
+ * 5. Error/State Management
  *
- * - Post management operations:
- *   - Creating and updating posts
- *   - Deleting posts
- *   - Pinning/unpinning posts
- *   - Error handling for failed operations
- *
- * - Media handling:
- *   - Image upload and preview
- *   - Video upload and preview
- *   - Auto-play behavior on hover
- *   - Clearing uploaded media
+ * Test Strategy:
+ * - Uses Apollo MockedProvider for GraphQL operation mocking
+ * - Leverages react-i18next for internationalization
+ * - Employs userEvent for realistic interaction simulation
+ * - Verifies both UI states and business logic outcomes
  */
 
-const { setItem } = useLocalStorage();
+interface InterfacePostAttachment {
+  id: string;
+  postId: string;
+  name: string;
+  mimeType: string;
+  createdAt: Date;
+  updatedAt?: Date | null;
+  creatorId?: string | null;
+  updaterId?: string | null;
+}
 
-const MOCKS = [
-  {
-    request: {
-      query: DELETE_POST_MUTATION,
-      variables: { id: '12' },
-    },
-    result: {
-      data: {
-        removePost: {
-          _id: '12',
-        },
-      },
+interface InterfacePost {
+  id: string;
+  caption: string;
+  createdAt: Date;
+  updatedAt: Date | null;
+  pinnedAt: Date | null;
+  creatorId: string | null;
+  attachments: InterfacePostAttachment[];
+}
+
+interface InterfaceMockedResponse {
+  request: {
+    query: DocumentNode;
+    variables: {
+      input: {
+        id: string;
+        isPinned: boolean;
+      };
+    };
+  };
+  result?: {
+    data: {
+      updatePost: {
+        id: string;
+        pinnedAt: Date | null;
+      };
+    };
+  };
+  error?: Error;
+}
+
+interface InterfaceUserMockedResponse {
+  request: {
+    query: DocumentNode;
+    variables: {
+      input: {
+        id: string;
+      };
+    };
+  };
+  result: {
+    data: {
+      user: {
+        id: string;
+        name: string;
+      };
+    };
+  };
+}
+
+interface InterfaceFailedMockedResponse {
+  request: {
+    query: DocumentNode;
+    variables: {
+      input: {
+        id: string;
+        isPinned: boolean;
+      };
+    };
+  };
+  result?: {
+    data: {
+      updatePost: { id: string; pinnedAt: Date | null } | null;
+    };
+  };
+  error?: Error;
+}
+
+const userMock: InterfaceUserMockedResponse = {
+  request: {
+    query: GET_USER_BY_ID,
+    variables: {
+      input: { id: '123' },
     },
   },
-  {
-    request: {
-      query: UPDATE_POST_MUTATION,
-      variables: {
-        id: '12',
-        title: 'updated title',
-        text: 'This is a updated text',
-      },
-    },
-    result: {
-      data: {
-        updatePost: {
-          _id: '12',
-        },
-      },
+  result: {
+    data: {
+      user: { id: '123', name: 'Test User' },
     },
   },
-  {
-    request: {
-      query: TOGGLE_PINNED_POST,
-      variables: {
-        id: '12',
-      },
-    },
-    result: {
-      data: {
-        togglePostPin: {
-          _id: '12',
-        },
-      },
-    },
+};
+
+const successMock = {
+  request: {
+    query: DELETE_POST_MUTATION,
+    variables: { input: { id: '12' } },
   },
-];
+  result: {
+    data: { deletePost: { id: '12' } },
+  },
+};
+
+const errorMock = {
+  request: {
+    query: DELETE_POST_MUTATION,
+    variables: { input: { id: '12' } },
+  },
+  error: new Error('Failed to delete post'),
+};
+
+const nullResponseMock = {
+  request: {
+    query: DELETE_POST_MUTATION,
+    variables: { input: { id: '12' } },
+  },
+  result: {
+    data: { deletePost: null },
+  },
+};
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
+// Mock the dependencies
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
-    warn: vi.fn(),
     error: vi.fn(),
   },
 }));
-vi.mock('i18next-browser-languagedetector', () => {
-  return {
-    default: {
-      init: vi.fn(),
-      type: 'languageDetector',
-      detect: vi.fn(() => 'en'),
-      cacheUserLanguage: vi.fn(),
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
+describe('OrgPostCard Component', () => {
+  const mockPost = {
+    id: '12',
+    caption: 'Test Caption',
+    createdAt: new Date('2024-02-22'),
+    updatedAt: new Date('2024-02-23'),
+    pinnedAt: null,
+    creatorId: '123',
+    attachments: [
+      {
+        id: '1',
+        postId: '12',
+        name: 'test-image.jpg',
+        mimeType: 'image/jpeg',
+        createdAt: new Date(),
+      },
+    ],
+  };
+
+  const videoPost = {
+    ...{
+      id: '12',
+      caption: 'Test Caption with Video',
+      createdAt: new Date('2024-02-22'),
+      updatedAt: new Date('2024-02-23'),
+      pinnedAt: null,
+      creatorId: '123',
+      attachments: [
+        {
+          id: 'v1',
+          postId: '12',
+          name: 'video.mp4',
+          mimeType: 'video/mp4',
+          createdAt: new Date(),
+        },
+      ],
     },
   };
-});
-const link = new StaticMockLink(MOCKS, true);
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-describe('Testing Organization Post Card', () => {
-  const originalLocation = window.location;
+
+  const renderComponentVideo = (): RenderResult => {
+    return render(
+      <MockedProvider mocks={[userMock as MockedResponse]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={videoPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  };
+
+  const mocks = [
+    {
+      request: {
+        query: GET_USER_BY_ID,
+        variables: {
+          input: { id: '123' },
+        },
+      },
+      result: {
+        data: {
+          user: {
+            id: '123',
+            name: 'Test User',
+          },
+        },
+      },
+    },
+    // Mock for delete mutation
+    {
+      request: {
+        query: DELETE_POST_MUTATION,
+        variables: {
+          input: { id: '12' },
+        },
+      },
+      result: {
+        data: {
+          deletePost: {
+            id: '12',
+          },
+        },
+      },
+    },
+    // Mock for pin toggle mutation
+    {
+      request: {
+        query: TOGGLE_PINNED_POST,
+        variables: {
+          input: {
+            id: '12',
+            isPinned: true,
+          },
+        },
+      },
+      result: {
+        data: {
+          updatePost: {
+            id: '12',
+            pinnedAt: new Date(),
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: UPDATE_POST_MUTATION,
+        variables: {
+          input: {
+            id: '12',
+            caption: 'Updated Caption',
+            attachments: [],
+          },
+        },
+      },
+      result: {
+        data: {
+          updatePost: {
+            id: '12',
+          },
+        },
+      },
+    },
+  ];
 
   beforeAll(() => {
     Object.defineProperty(window, 'location', {
       configurable: true,
-      value: {
-        reload: vi.fn(),
-      },
+      value: { reload: vi.fn() },
     });
   });
 
-  afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: originalLocation,
-    });
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  const props = {
+  const renderComponent = (): RenderResult => {
+    return render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  };
+  describe('Tests', () => {
+    it('renders the post card with basic information', () => {
+      renderComponent();
+
+      expect(screen.getByText('Test Caption')).toBeInTheDocument();
+      expect(screen.getByText(/Created: 2\/22\/2024/)).toBeInTheDocument();
+      expect(screen.getByTestId('post-item')).toBeInTheDocument();
+    });
+
+    it('displays the correct image when provided', () => {
+      renderComponent();
+
+      const image = screen.getByAltText('Post image');
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', 'test-image.jpg');
+    });
+
+    it('closes the modal and stops event propagation when the close button is clicked', async () => {
+      render(
+        <MockedProvider>
+          <OrgPostCard post={mockPost} />
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      fireEvent.click(postItem);
+
+      const modal = await screen.findByTestId('post-modal');
+      expect(modal).toBeInTheDocument();
+
+      const closeButton = screen.getByTestId('close-modal-button');
+
+      const clickEvent = new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      });
+      const stopPropagationSpy = vi.spyOn(clickEvent, 'stopPropagation');
+      closeButton.dispatchEvent(clickEvent);
+
+      expect(stopPropagationSpy).toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('post-modal')).toBeNull();
+      });
+    });
+
+    it('shows default image when no image attachment is provided', () => {
+      const postWithoutImage = {
+        ...mockPost,
+        attachments: [],
+      };
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={postWithoutImage} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const defaultImage = screen.getByAltText('Default image');
+      expect(defaultImage).toBeInTheDocument();
+    });
+
+    it('handleVideoPlay: sets playing to true and calls video.play()', async () => {
+      renderComponentVideo();
+
+      const videoElement = screen.getByTestId('video') as HTMLVideoElement;
+      videoElement.play = vi.fn();
+
+      fireEvent.mouseEnter(videoElement);
+
+      await waitFor(() => {
+        expect(videoElement.play).toHaveBeenCalled();
+      });
+    });
+
+    it('handleVideoPause: sets playing to false and calls video.pause()', async () => {
+      renderComponentVideo();
+
+      const videoElement = screen.getByTestId('video') as HTMLVideoElement;
+      videoElement.pause = vi.fn();
+
+      fireEvent.mouseLeave(videoElement);
+
+      await waitFor(() => {
+        expect(videoElement.pause).toHaveBeenCalled();
+      });
+    });
+
+    it('handleInputChange: updates the caption in the edit modal', async () => {
+      const simplePost = {
+        id: '12',
+        caption: 'Test Caption',
+        createdAt: new Date('2024-02-22'),
+        updatedAt: new Date('2024-02-23'),
+        pinnedAt: null,
+        creatorId: '123',
+        attachments: [],
+      };
+
+      render(
+        <MockedProvider
+          mocks={[userMock as MockedResponse]}
+          addTypename={false}
+        >
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={simplePost} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+      const editOption = screen.getByText(/edit/i);
+      await userEvent.click(editOption);
+
+      const captionInput = await screen.findByPlaceholderText(/enterCaption/i);
+      expect(captionInput).toBeInTheDocument();
+
+      fireEvent.change(captionInput, { target: { value: 'Updated Caption' } });
+      expect((captionInput as HTMLInputElement).value).toBe('Updated Caption');
+    });
+
+    it('removes the preview image when clearImage is triggered', async () => {
+      renderComponent();
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+      const editOption = screen.getByText(/edit/i);
+      await userEvent.click(editOption);
+
+      const fileInput = await screen.findByTestId('image-upload');
+      expect(fileInput).toBeInTheDocument();
+
+      const file = new File(['dummy content'], 'dummy-image.jpg', {
+        type: 'image/jpeg',
+      });
+      await userEvent.upload(fileInput, file);
+
+      const previewImage = await screen.findByAltText('Preview');
+      expect(previewImage).toBeInTheDocument();
+
+      const clearButton = screen.getByRole('button', { name: '×' });
+      expect(clearButton).toBeInTheDocument();
+
+      await userEvent.click(clearButton);
+
+      await waitFor(() => {
+        expect(screen.queryByAltText('Preview')).not.toBeInTheDocument();
+      });
+    });
+
+    it('removes the preview video when clearVideo is triggered', async () => {
+      renderComponent();
+
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+      const editOption = screen.getByText(/edit/i);
+      await userEvent.click(editOption);
+
+      const videoInput = await screen.findByTestId('video-upload');
+      expect(videoInput).toBeInTheDocument();
+
+      const file = new File(['dummy video content'], 'dummy-video.mp4', {
+        type: 'video/mp4',
+      });
+      await userEvent.upload(videoInput, file);
+
+      const previewVideo = await screen.findByTestId('video-preview');
+      expect(previewVideo).toBeInTheDocument();
+
+      const clearButton = screen.getByRole('button', { name: '×' });
+      expect(clearButton).toBeInTheDocument();
+
+      await userEvent.click(clearButton);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('video-preview')).not.toBeInTheDocument();
+      });
+    });
+
+    it('deletes a post successfully', async () => {
+      render(
+        <MockedProvider mocks={[successMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={mockPost} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+
+      const deleteOption = screen.getByTestId('delete-option');
+      await userEvent.click(deleteOption);
+
+      const modal = await screen.findByTestId('delete-post-modal');
+      expect(modal).toBeInTheDocument();
+
+      const deleteButton = screen.getByTestId('deletePostBtn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'Post deleted successfully.',
+        );
+      });
+
+      await waitFor(
+        () => {
+          expect(window.location.reload).toHaveBeenCalled();
+        },
+        { timeout: 2500 },
+      );
+    });
+
+    it('handles delete error gracefully', async () => {
+      render(
+        <MockedProvider mocks={[errorMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={mockPost} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+
+      const deleteOption = screen.getByTestId('delete-option');
+      await userEvent.click(deleteOption);
+
+      const deleteButton = screen.getByTestId('deletePostBtn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(() => {
+        expect(errorHandlerModule.errorHandler).toHaveBeenCalled();
+      });
+    });
+
+    it('handles null response gracefully', async () => {
+      render(
+        <MockedProvider mocks={[nullResponseMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={mockPost} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+
+      const deleteOption = screen.getByTestId('delete-option');
+      await userEvent.click(deleteOption);
+
+      const deleteButton = screen.getByTestId('deletePostBtn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(() => {
+        expect(toast.success).not.toHaveBeenCalled();
+        expect(window.location.reload).not.toHaveBeenCalled();
+      });
+    });
+
+    it('closes delete modal when cancel is clicked', async () => {
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={mockPost} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+
+      const deleteOption = screen.getByTestId('delete-option');
+      await userEvent.click(deleteOption);
+
+      const cancelButton = screen.getByTestId('deleteModalNoBtn');
+      await userEvent.click(cancelButton);
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('delete-post-modal'),
+        ).not.toBeInTheDocument();
+      });
+    });
+  });
+});
+
+describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
+  const mockPost: InterfacePost = {
     id: '12',
-    postID: '123',
-    postTitle: 'Event Info',
-    postInfo: 'Time change',
-    postAuthor: 'John Doe',
-    postPhoto: 'test.png',
-    postVideo: 'test.mp4',
-    pinned: false,
+    caption: 'Test Caption',
+    createdAt: new Date('2024-02-22'),
+    updatedAt: new Date('2024-02-23'),
+    pinnedAt: null,
+    creatorId: '123',
+    attachments: [],
   };
 
-  vi.mock('react-toastify', () => ({
-    toast: {
-      success: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
+  const updateMock = {
+    request: {
+      query: UPDATE_POST_MUTATION,
+      variables: {
+        input: {
+          id: '12',
+          caption: 'Updated Caption',
+          attachments: [],
+        },
+      },
     },
-  }));
-  global.alert = vi.fn();
-
-  it('Opens post on image click', async () => {
-    const { getByTestId, getByAltText } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    expect(getByTestId('card-text')).toBeInTheDocument();
-    expect(getByTestId('card-title')).toBeInTheDocument();
-    expect(getByAltText('image')).toBeInTheDocument();
-  });
-  it('renders with default props', () => {
-    const { getByAltText, getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    expect(getByTestId('card-text')).toBeInTheDocument();
-    expect(getByTestId('card-title')).toBeInTheDocument();
-    expect(getByAltText('image')).toBeInTheDocument();
-  });
-  it('toggles "Read more" button', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-    const toggleButton = getByTestId('toggleBtn');
-    fireEvent.click(toggleButton);
-    expect(toggleButton).toHaveTextContent('hide');
-    fireEvent.click(toggleButton);
-    expect(toggleButton).toHaveTextContent('Read more');
-  });
-  it('opens and closes edit modal', async () => {
-    setItem('id', '123');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await wait();
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    const createOrgBtn = screen.getByTestId('modalOrganizationHeader');
-    expect(createOrgBtn).toBeInTheDocument();
-    await userEvent.click(createOrgBtn);
-    await userEvent.click(screen.getByTestId('closeOrganizationModal'));
-  });
-  it('Should render text elements when props value is not passed', async () => {
-    global.confirm = (): boolean => false;
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await wait();
-    await userEvent.click(screen.getByAltText('image'));
-    expect(screen.getByAltText('Post Image')).toBeInTheDocument();
-  });
-  it('Testing post updating after post is updated', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-    fireEvent.change(getByTestId('updateTitle'), {
-      target: { value: 'updated title' },
-    });
-    fireEvent.change(getByTestId('updateText'), {
-      target: { value: 'This is a updated text' },
-    });
-    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
-    if (postVideoUrlInput) {
-      fireEvent.change(getByTestId('postVideoUrl'), {
-        target: { value: 'This is a updated video' },
-      });
-      await userEvent.click(screen.getByPlaceholderText(/video/i));
-      const input = getByTestId('postVideoUrl');
-      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-      await waitFor(() => {
-        convertToBase64(file);
-      });
-
-      await userEvent.click(screen.getByTestId('closePreview'));
-    }
-    const imageUrlInput = screen.queryByTestId('postImageUrl');
-    if (imageUrlInput) {
-      fireEvent.change(getByTestId('postImageUrl'), {
-        target: { value: 'This is a updated image' },
-      });
-      await userEvent.click(screen.getByPlaceholderText(/image/i));
-      const input = getByTestId('postImageUrl');
-      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-
-      // Simulate the asynchronous base64 conversion function
-      await waitFor(() => {
-        convertToBase64(file); // Replace with the expected base64-encoded image
-      });
-      document.getElementById = vi.fn(() => input);
-      const clearImageButton = getByTestId('closeimage');
-      fireEvent.click(clearImageButton);
-    }
-    await userEvent.click(screen.getByTestId('updatePostBtn'));
-
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
+    result: {
+      data: {
+        updatePost: { id: '12' },
       },
-      { timeout: 2500 },
-    );
-  });
-  it('Testing post updating functionality fail case', async () => {
-    const props2 = {
-      id: '',
-      postID: '123',
-      postTitle: 'Event Info',
-      postInfo: 'Time change',
-      postAuthor: 'John Doe',
-      postPhoto: 'test.png',
-      postVideo: 'test.mp4',
-      pinned: true,
-    };
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
+    },
+  };
 
-    await wait();
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-    fireEvent.change(getByTestId('updateTitle'), {
-      target: { value: 'updated title' },
-    });
-    fireEvent.change(getByTestId('updateText'), {
-      target: { value: 'This is a updated text' },
-    });
-    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
-    if (postVideoUrlInput) {
-      fireEvent.change(getByTestId('postVideoUrl'), {
-        target: { value: 'This is a updated video' },
-      });
-      await userEvent.click(screen.getByPlaceholderText(/video/i));
-      const input = getByTestId('postVideoUrl');
-      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-      await waitFor(() => {
-        convertToBase64(file);
-      });
-
-      await userEvent.click(screen.getByTestId('closePreview'));
-    }
-    const imageUrlInput = screen.queryByTestId('postImageUrl');
-    if (imageUrlInput) {
-      fireEvent.change(getByTestId('postImageUrl'), {
-        target: { value: 'This is a updated image' },
-      });
-      await userEvent.click(screen.getByPlaceholderText(/image/i));
-      const input = getByTestId('postImageUrl');
-      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-
-      // Simulate the asynchronous base64 conversion function
-      await waitFor(() => {
-        convertToBase64(file); // Replace with the expected base64-encoded image
-      });
-      document.getElementById = vi.fn(() => input);
-      const clearImageButton = getByTestId('closeimage');
-      fireEvent.click(clearImageButton);
-    }
-    await userEvent.click(screen.getByTestId('updatePostBtn'));
-
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
+  const deleteMock = {
+    request: {
+      query: DELETE_POST_MUTATION,
+      variables: {
+        input: { id: '12' },
       },
-      { timeout: 2500 },
-    );
-  });
-  it('Testing pin post functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('pinpostBtn'));
-
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
+    },
+    result: {
+      data: {
+        deletePost: { id: '12' },
       },
-      { timeout: 3000 },
-    );
-  });
-  it('Testing pin post functionality fail case', async () => {
-    const props2 = {
-      id: '',
-      postID: '123',
-      postTitle: 'Event Info',
-      postInfo: 'Time change',
-      postAuthor: 'John Doe',
-      postPhoto: 'test.png',
-      postVideo: 'test.mp4',
-      pinned: true,
-    };
+    },
+  };
+
+  const renderComponent = (
+    mocks: InterfaceMockedResponse[] = [],
+    post: InterfacePost = mockPost,
+  ): void => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
+          <OrgPostCard post={post} />
         </I18nextProvider>
       </MockedProvider>,
     );
+  };
 
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('pinpostBtn'));
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { reload: vi.fn() },
+    });
   });
-  it('Testing post delete functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPostCard {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
 
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('deletePostModalBtn'));
-    fireEvent.click(screen.getByTestId('deletePostBtn'));
-
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
+  it('successfully pins a post', async () => {
+    const pinMock: InterfaceMockedResponse = {
+      request: {
+        query: TOGGLE_PINNED_POST,
+        variables: {
+          input: {
+            id: '12',
+            isPinned: true,
+          },
+        },
       },
-      { timeout: 3000 },
-    );
-  });
-  it('Testing post delete functionality fail case', async () => {
-    const props2 = {
-      id: '',
-      postID: '123',
-      postTitle: 'Event Info',
-      postInfo: 'Time change',
-      postAuthor: 'John Doe',
-      postPhoto: 'test.png',
-      postVideo: 'test.mp4',
-      pinned: true,
+      result: {
+        data: {
+          updatePost: {
+            id: '12',
+            pinnedAt: new Date(),
+          },
+        },
+      },
     };
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPostCard {...props2} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
 
-    await wait();
+    renderComponent([pinMock]);
 
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
 
-    await userEvent.click(screen.getByTestId('deletePostModalBtn'));
-    fireEvent.click(screen.getByTestId('deletePostBtn'));
-  });
-  it('Testing close functionality of primary modal', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
+    const postModal = await screen.findByTestId('post-modal');
+    expect(postModal).toBeInTheDocument();
 
-    await wait();
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
 
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('closeiconbtn'));
+    const pinButton = await screen.findByTestId('pin-post-button');
+    await userEvent.click(pinButton);
 
-    //Primary Modal is closed
-    expect(screen.queryByTestId('moreiconbtn')).not.toBeInTheDocument();
-  });
-  it('Testing close functionality of secondary modal', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('closebtn'));
-
-    //Secondary Modal is closed
-    expect(screen.queryByTestId('deletePostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('editPostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
-  });
-  it('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    expect(screen.queryByTestId('toggleBtn')).not.toBeInTheDocument();
-  });
-  it('renders with "Read more" button when postInfo length is more than 43', async () => {
-    const props2 = {
-      id: '12',
-      postID: '123',
-      postTitle: 'Event Info',
-      postInfo:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.', // Length is greater than 43
-      postAuthor: 'John Doe',
-      postPhoto: 'photoLink',
-      postVideo: 'videoLink',
-      pinned: false,
-    };
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    expect(screen.getByTestId('toggleBtn')).toBeInTheDocument();
-  });
-  it('updates state variables correctly when handleEditModal is called', async () => {
-    const link2 = new StaticMockLink(MOCKS, true);
-    render(
-      <MockedProvider link={link2} addTypename={false}>
-        <OrgPostCard {...props} />
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    expect(screen.queryByTestId('editPostModalBtn')).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    //Primary Modal is closed
-    expect(screen.queryByTestId('closeiconbtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('moreiconbtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('toggleBtn')).not.toBeInTheDocument();
-
-    //Secondary Modal is closed
-    expect(screen.queryByTestId('deletePostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('editPostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
-  });
-  it('updates state variables correctly when handleDeleteModal is called', async () => {
-    const link2 = new StaticMockLink(MOCKS, true);
-    render(
-      <MockedProvider link={link2} addTypename={false}>
-        <OrgPostCard {...props} />
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    expect(screen.queryByTestId('deletePostModalBtn')).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('deletePostModalBtn'));
-
-    //Primary Modal is closed
-    expect(screen.queryByTestId('closeiconbtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('moreiconbtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('toggleBtn')).not.toBeInTheDocument();
-
-    //Secondary Modal is closed
-    expect(screen.queryByTestId('deletePostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('editPostModalBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
-  });
-  it('clears postvideo state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
-
-    if (postVideoUrlInput) {
-      fireEvent.change(getByTestId('postVideoUrl'), {
-        target: { value: '' },
-      });
-      await userEvent.click(screen.getByPlaceholderText(/video/i));
-      const input = getByTestId('postVideoUrl');
-      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-      await waitFor(() => {
-        convertToBase64(file);
-      });
-
-      await userEvent.click(screen.getByTestId('closePreview'));
-    }
-  });
-  it('clears postimage state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    const imageUrlInput = screen.queryByTestId('postImageUrl');
-
-    if (imageUrlInput) {
-      fireEvent.change(getByTestId('postImageUrl'), {
-        target: { value: '' },
-      });
-      await userEvent.click(screen.getByPlaceholderText(/image/i));
-      const input = getByTestId('postImageUrl');
-      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-
-      // Simulate the asynchronous base64 conversion function
-      await waitFor(() => {
-        convertToBase64(file); // Replace with the expected base64-encoded image
-      });
-      document.getElementById = vi.fn(() => input);
-      const clearImageButton = getByTestId('closeimage');
-      fireEvent.click(clearImageButton);
-    }
-  });
-  it('clears postitle state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    fireEvent.change(getByTestId('updateTitle'), {
-      target: { value: '' },
-    });
-
-    await userEvent.click(screen.getByTestId('updatePostBtn')); // Should not update post
-
-    expect(screen.getByTestId('updateTitle')).toHaveValue('');
-    expect(screen.getByTestId('closeOrganizationModal')).toBeInTheDocument();
-    expect(screen.getByTestId('updatePostBtn')).toBeInTheDocument();
-  });
-  it('clears postinfo state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByAltText('image'));
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    fireEvent.change(getByTestId('updateText'), {
-      target: { value: '' },
-    });
-
-    await userEvent.click(screen.getByTestId('updatePostBtn')); // Should not update post
-
-    expect(screen.getByTestId('updateText')).toHaveValue('');
-    expect(screen.getByTestId('closeOrganizationModal')).toBeInTheDocument();
-    expect(screen.getByTestId('updatePostBtn')).toBeInTheDocument();
-  });
-  it('Testing create organization modal', async () => {
-    setItem('id', '123');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-    await userEvent.click(screen.getByAltText('image'));
-
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    await userEvent.click(screen.getByTestId('editPostModalBtn'));
-    const createOrgBtn = screen.getByTestId('modalOrganizationHeader');
-    expect(createOrgBtn).toBeInTheDocument();
-    await userEvent.click(createOrgBtn);
-    await userEvent.click(screen.getByTestId('closeOrganizationModal'));
-  });
-  it('should toggle post pin when pin button is clicked', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await userEvent.click(screen.getByAltText('image'));
-
-    await userEvent.click(screen.getByTestId('moreiconbtn'));
-    const pinButton = getByTestId('pinpostBtn');
-    fireEvent.click(pinButton);
     await waitFor(() => {
-      expect(MOCKS[2].request.variables).toEqual({
-        id: '12',
-      });
+      expect(toast.success).toHaveBeenCalledWith('Post pinned');
+      expect(screen.queryByTestId('post-modal')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('post-menu')).not.toBeInTheDocument();
     });
-  });
-  test('testing video play and pause on mouse enter and leave events', async () => {
-    const playMock = vi.fn();
-    const pauseMock = vi.fn();
 
-    HTMLMediaElement.prototype.play = playMock;
-    HTMLMediaElement.prototype.pause = pauseMock;
-
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
+    await waitFor(
+      () => {
+        expect(window.location.reload).toHaveBeenCalled();
+      },
+      { timeout: 2500 },
     );
-
-    const card = getByTestId('cardVid');
-
-    fireEvent.mouseEnter(card);
-    expect(playMock).toHaveBeenCalledTimes(1);
-
-    fireEvent.mouseLeave(card);
-    expect(pauseMock).toHaveBeenCalledTimes(1);
   });
 
-  it('for rendering when no image and no video is available', async () => {
-    const props2 = {
-      id: '',
-      postID: '123',
-      postTitle: 'Event Info',
-      postInfo: 'Time change',
-      postAuthor: 'John Doe',
-      postPhoto: '',
-      postVideo: '',
-      pinned: true,
+  it('handles pin toggle failure', async () => {
+    const failedPinMock: InterfaceFailedMockedResponse = {
+      request: {
+        query: TOGGLE_PINNED_POST,
+        variables: {
+          input: {
+            id: '12',
+            isPinned: true,
+          },
+        },
+      },
+      result: {
+        data: {
+          updatePost: null,
+        },
+      },
     };
 
-    const { getByAltText } = render(
-      <MockedProvider addTypename={false} link={link}>
+    renderComponent([
+      failedPinMock as unknown as InterfaceMockedResponse,
+      userMock as unknown as InterfaceMockedResponse,
+    ]);
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const pinButton = screen.getByTestId('pin-post-button');
+    await userEvent.click(pinButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to toggle pin');
+    });
+  });
+
+  it('handles pin toggle error', async () => {
+    const errorPinMock: InterfaceMockedResponse = {
+      request: {
+        query: TOGGLE_PINNED_POST,
+        variables: {
+          input: {
+            id: '12',
+            isPinned: true,
+          },
+        },
+      },
+      error: new Error('Network error'),
+    };
+
+    renderComponent([
+      errorPinMock as unknown as InterfaceMockedResponse,
+      userMock as unknown as InterfaceMockedResponse,
+    ]);
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const pinButton = screen.getByTestId('pin-post-button');
+    await userEvent.click(pinButton);
+    await waitFor(() => {
+      expect(errorHandlerModule.errorHandler).toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalled();
+    });
+  });
+
+  it('unpins a pinned post', async () => {
+    const pinnedPost: InterfacePost = {
+      ...mockPost,
+      pinnedAt: new Date(),
+    };
+
+    const unpinMock: InterfaceMockedResponse = {
+      request: {
+        query: TOGGLE_PINNED_POST,
+        variables: {
+          input: {
+            id: '12',
+            isPinned: false,
+          },
+        },
+      },
+      result: {
+        data: {
+          updatePost: {
+            id: '12',
+            pinnedAt: null,
+          },
+        },
+      },
+    };
+
+    renderComponent([unpinMock], pinnedPost);
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const unpinButton = screen.getByTestId('pin-post-button');
+    await userEvent.click(unpinButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Post unpinned');
+      expect(screen.queryByTestId('post-modal')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('post-menu')).not.toBeInTheDocument();
+    });
+
+    await waitFor(
+      () => {
+        expect(window.location.reload).toHaveBeenCalled();
+      },
+      { timeout: 2500 },
+    );
+  });
+
+  it('updates post successfully', async () => {
+    render(
+      <MockedProvider mocks={[updateMock]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
+          <OrgPostCard post={mockPost} />
         </I18nextProvider>
       </MockedProvider>,
     );
 
-    expect(getByAltText('image not found')).toBeInTheDocument();
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const editButton = screen.getByText(/edit/i);
+    await userEvent.click(editButton);
+
+    const captionInput = screen.getByPlaceholderText(/enterCaption/i);
+    await userEvent.clear(captionInput);
+    await userEvent.type(captionInput, 'Updated Caption');
+
+    const submitButton = screen.getByTestId('update-post-submit');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Post Updated successfully.');
+    });
+
+    await waitFor(
+      () => {
+        expect(window.location.reload).toHaveBeenCalled();
+      },
+      { timeout: 2500 },
+    );
+  });
+
+  it('deletes post successfully', async () => {
+    render(
+      <MockedProvider mocks={[deleteMock]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const deleteOption = screen.getByTestId('delete-option');
+    await userEvent.click(deleteOption);
+
+    const deleteButton = screen.getByTestId('deletePostBtn');
+    await userEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Post deleted successfully.');
+    });
+
+    await waitFor(
+      () => {
+        expect(window.location.reload).toHaveBeenCalled();
+      },
+      { timeout: 2500 },
+    );
+  });
+
+  it('handles update error gracefully', async () => {
+    const errorMock = {
+      request: {
+        query: UPDATE_POST_MUTATION,
+        variables: {
+          input: {
+            id: '12',
+            caption: 'Updated Caption',
+            attachments: [],
+          },
+        },
+      },
+      error: new Error('Network error'),
+    };
+
+    render(
+      <MockedProvider mocks={[errorMock]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const editButton = screen.getByText(/edit/i);
+    await userEvent.click(editButton);
+
+    const captionInput = screen.getByPlaceholderText(/enterCaption/i);
+    await userEvent.clear(captionInput);
+    await userEvent.type(captionInput, 'Updated Caption');
+
+    const submitButton = screen.getByRole('button', { name: /save/i }); // Adjust the name accordingly
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(errorHandlerModule.errorHandler).toHaveBeenCalled();
+    });
   });
 });

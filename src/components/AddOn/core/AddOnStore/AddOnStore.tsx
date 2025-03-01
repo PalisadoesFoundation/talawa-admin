@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import { useQuery } from '@apollo/client';
 import { PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST

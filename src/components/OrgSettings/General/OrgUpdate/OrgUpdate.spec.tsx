@@ -1,254 +1,1044 @@
-import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import i18nForTest from 'utils/i18nForTest';
+import i18n from 'i18next';
+import { toast } from 'react-toastify';
+
 import OrgUpdate from './OrgUpdate';
-import {
-  MOCKS,
-  MOCKS_ERROR_ORGLIST,
-  MOCKS_ERROR_UPDATE_ORGLIST,
-} from './OrgUpdateMocks';
-import { vi } from 'vitest';
+import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
-/**
- * Unit Tests for `OrgUpdate` Component
- *
- * - Rendering Component with Props: Verifies if labels and input fields are correctly rendered based on mock data.
- * - Updating Organization: Ensures the form updates with new data and saves changes correctly.
- * - Error Handling: Verifies error messages when organization cannot be found or updated.
- * - Toast on Error: Verifies that an error toast is shown when the update fails.
- * - Form Field Values: Ensures form values are correctly displayed and updated.
- * - GraphQL Mock Responses: Mocks GraphQL responses for success and error scenarios.
- */
+// Mock modules
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
 
-const link = new StaticMockLink(MOCKS, true);
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
-describe('Testing Organization Update', () => {
-  const props = {
-    orgId: '123',
-  };
-
-  const formData = {
-    name: 'Palisadoes Organization',
-    description: 'This is a updated description',
-    address: {
-      city: 'Kingston',
-      countryCode: 'JM',
-      dependentLocality: 'Sample Dependent Locality',
-      line1: '123 Jamaica Street',
-      line2: 'Apartment 456',
-      postalCode: 'JM12345',
-      sortingCode: 'ABC-123',
-      state: 'Kingston Parish',
+// Initialize i18n for testing
+i18n.init({
+  lng: 'en',
+  resources: {
+    en: {
+      translation: {
+        orgUpdate: {
+          successfulUpdated: 'Organization updated successfully',
+          enterNameOrganization: 'Enter organization name',
+        },
+      },
+      common: {
+        name: 'Name',
+        description: 'Description',
+        address: 'Address',
+        saving: 'Saving...',
+        saveChanges: 'Save Changes',
+      },
     },
-    displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
-    userRegistrationRequired: false,
-    isVisible: true,
-  };
+  },
+});
 
-  global.alert = vi.fn();
+const mockOrgData = {
+  organization: {
+    id: '1',
+    name: 'Test Org',
+    description: 'Test Description',
+    addressLine1: '123 Test St',
+    addressLine2: 'Suite 100',
+    city: 'Test City',
+    state: 'Test State',
+    postalCode: '12345',
+    countryCode: 'US',
+    avatarURL: null,
+  },
+};
 
-  it('should render props and text elements test for the page component along with mock data', async () => {
-    act(() => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgUpdate {...props} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-    });
-    await wait();
-    // Check labels are present or not
-    expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Description')).toBeInTheDocument();
-    expect(screen.getByText('Address')).toBeInTheDocument();
-    expect(screen.getByText('Display Image:')).toBeInTheDocument();
-    expect(screen.getByText(/Registration/)).toBeInTheDocument();
-    expect(screen.getByText('Visible in Search:')).toBeInTheDocument();
+describe('OrgUpdate Component', () => {
+  const mocks = [
+    {
+      request: {
+        query: ORGANIZATIONS_LIST,
+        variables: { input: { id: '1' } },
+      },
+      result: {
+        data: mockOrgData,
+      },
+    },
+    {
+      request: {
+        query: UPDATE_ORGANIZATION_MUTATION,
+        variables: {
+          input: {
+            id: '1',
+            name: 'Updated Org',
+            description: 'Updated Description',
+            addressLine1: '123 Test St',
+            addressLine2: 'Suite 100',
+            city: 'Test City',
+            state: 'Test State',
+            postalCode: '12345',
+            countryCode: 'US',
+            avatar: null,
+          },
+        },
+      },
+      result: {
+        data: {
+          updateOrganization: {
+            organization: {
+              ...mockOrgData.organization,
+              name: 'Updated Org',
+              description: 'Updated Description',
+            },
+          },
+        },
+      },
+    },
+  ];
 
-    // Get the input fields, and btns
-    const name = screen.getByPlaceholderText(/Enter Organization Name/i);
-    const des = screen.getByPlaceholderText(/Description/i);
-    const city = screen.getByPlaceholderText(/City/i);
-    const countryCode = screen.getByTestId('countrycode');
-    const line1 = screen.getByPlaceholderText(/Line 1/i);
-    const line2 = screen.getByPlaceholderText(/Line 2/i);
-    const dependentLocality =
-      screen.getByPlaceholderText(/Dependent Locality/i);
-    const sortingCode = screen.getByPlaceholderText(/Sorting code/i);
-    const postalCode = screen.getByPlaceholderText(/Postal Code/i);
-    const userRegistrationRequired =
-      screen.getByPlaceholderText(/Registration/i);
-    const isVisible = screen.getByPlaceholderText(/Visible/i);
-
-    // Checking if form fields got updated according to the mock data
-    expect(name).toHaveValue('Palisadoes');
-    expect(des).toHaveValue('Equitable Access to STEM Education Jobs');
-    expect(city).toHaveValue('Kingston');
-    expect(countryCode).toHaveValue('JM');
-    expect(dependentLocality).toHaveValue('Sample Dependent Locality');
-    expect(line1).toHaveValue('123 Jamaica Street');
-    expect(line2).toHaveValue('Apartment 456');
-    expect(postalCode).toHaveValue('JM12345');
-    expect(sortingCode).toHaveValue('ABC-123');
-    expect(userRegistrationRequired).toBeChecked();
-    expect(isVisible).not.toBeChecked();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('Should Update organization properly', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgUpdate {...props} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
+  it('loads and displays organization data', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Test Description')).toBeInTheDocument();
     });
-
-    await wait();
-
-    // Get the input fields, and btns
-    const name = screen.getByPlaceholderText(/Enter Organization Name/i);
-    const des = screen.getByPlaceholderText(/Description/i);
-
-    const city = screen.getByPlaceholderText(/City/i);
-    const countryCode = screen.getByTestId('countrycode');
-    const line1 = screen.getByPlaceholderText(/Line 1/i);
-    const line2 = screen.getByPlaceholderText(/Line 2/i);
-    const dependentLocality =
-      screen.getByPlaceholderText(/Dependent Locality/i);
-    const sortingCode = screen.getByPlaceholderText(/Sorting code/i);
-    const postalCode = screen.getByPlaceholderText(/Postal Code/i);
-    const displayImage = screen.getByPlaceholderText(/Display Image/i);
-    const userRegistrationRequired =
-      screen.getByPlaceholderText(/Registration/i);
-    const isVisible = screen.getByPlaceholderText(/Visible/i);
-    const saveChangesBtn = screen.getByText(/Save Changes/i);
-
-    // Emptying the text fields to add updated data
-    fireEvent.change(name, { target: { value: '' } });
-    fireEvent.change(des, { target: { value: '' } });
-    fireEvent.change(city, { target: { value: '' } });
-    fireEvent.change(line1, { target: { value: '' } });
-    fireEvent.change(line2, { target: { value: '' } });
-    fireEvent.change(postalCode, { target: { value: '' } });
-    fireEvent.change(sortingCode, { target: { value: '' } });
-    fireEvent.change(dependentLocality, { target: { value: '' } });
-
-    // Mocking filling form behaviour
-    await userEvent.type(name, formData.name);
-    await userEvent.type(des, formData.description);
-    await userEvent.type(city, formData.address.city);
-    await userEvent.selectOptions(countryCode, formData.address.countryCode);
-    await userEvent.type(line1, formData.address.line1);
-    await userEvent.type(line2, formData.address.line2);
-    await userEvent.type(postalCode, formData.address.postalCode);
-    await userEvent.type(dependentLocality, formData.address.dependentLocality);
-    await userEvent.type(sortingCode, formData.address.sortingCode);
-    await userEvent.upload(displayImage, formData.displayImage);
-    await userEvent.click(userRegistrationRequired);
-    await userEvent.click(isVisible);
-
-    await wait();
-    await userEvent.click(saveChangesBtn);
-
-    // Checking if the form got update accordingly
-    expect(name).toHaveValue(formData.name);
-    expect(des).toHaveValue(formData.description);
-    expect(city).toHaveValue(formData.address.city);
-    expect(countryCode).toHaveValue(formData.address.countryCode);
-    expect(dependentLocality).toHaveValue(formData.address.dependentLocality);
-    expect(line1).toHaveValue(formData.address.line1);
-    expect(line2).toHaveValue(formData.address.line2);
-    expect(postalCode).toHaveValue(formData.address.postalCode);
-    expect(sortingCode).toHaveValue(formData.address.sortingCode);
-    expect(displayImage).toBeTruthy();
-    expect(userRegistrationRequired).not.toBeChecked();
-    expect(isVisible).toBeChecked();
   });
 
-  it('Should render error occured text when Organization Could not be found', async () => {
-    act(() => {
-      render(
-        <MockedProvider addTypename={false} mocks={MOCKS_ERROR_ORGLIST}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgUpdate {...props} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
+  it('handles form input changes', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
     });
-    await wait();
-    expect(screen.getByText(/Mock Graphql Error/i)).toBeInTheDocument();
+
+    const nameInput = screen.getByDisplayValue('Test Org');
+    fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
+    expect(nameInput).toHaveValue('Updated Org');
   });
 
-  it('Should show error occured toast when Organization could not be updated', async () => {
-    await act(async () => {
+  it('handles form submission successfully', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+    });
+
+    // Update form fields
+    fireEvent.change(screen.getByDisplayValue('Test Org'), {
+      target: { value: 'Updated Org' },
+    });
+    fireEvent.change(screen.getByDisplayValue('Test Description'), {
+      target: { value: 'Updated Description' },
+    });
+
+    // Submit form
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'Organization updated successfully',
+      );
+    });
+  });
+
+  it('displays error when form submission fails', async () => {
+    const errorMock = {
+      request: {
+        query: UPDATE_ORGANIZATION_MUTATION,
+        variables: {
+          input: {
+            id: '1',
+            name: '',
+            description: '',
+            addressLine1: '123 Test St',
+            addressLine2: 'Suite 100',
+            city: 'Test City',
+            state: 'Test State',
+            postalCode: '12345',
+            countryCode: 'US',
+            avatar: null,
+          },
+        },
+      },
+      error: new Error('Failed to update organization'),
+    };
+
+    render(
+      <MockedProvider mocks={[...mocks, errorMock]} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+    });
+
+    // Clear required fields
+    fireEvent.change(screen.getByDisplayValue('Test Org'), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByDisplayValue('Test Description'), {
+      target: { value: '' },
+    });
+
+    // Submit form
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Name and description are required',
+      );
+    });
+  });
+
+  it('handles file upload', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
+    });
+
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('organisationImage');
+
+    await userEvent.upload(fileInput, file);
+  });
+
+  describe('OrgUpdate Address Form Fields', () => {
+    const mockOrgData = {
+      organization: {
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+      },
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: { input: { id: '1' } },
+        },
+        result: {
+          data: mockOrgData,
+        },
+      },
+    ];
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('loads and displays address fields correctly', async () => {
       render(
-        <MockedProvider addTypename={false} mocks={MOCKS_ERROR_UPDATE_ORGLIST}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgUpdate {...props} />
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
           </I18nextProvider>
         </MockedProvider>,
       );
+
+      await waitFor(() => {
+        // Check if address fields are populated with initial data
+        expect(screen.getByDisplayValue('Test City')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Test State')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Suite 100')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('12345')).toBeInTheDocument();
+
+        // Check if country select is present
+        expect(screen.getByTestId('countrycode')).toBeInTheDocument();
+      });
     });
 
-    await wait();
+    it('handles country selection change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
 
-    // Get the input fields, and btns
-    const name = screen.getByPlaceholderText(/Enter Organization Name/i);
-    const des = screen.getByPlaceholderText(/Description/i);
-    const city = screen.getByPlaceholderText(/City/i);
-    const countryCode = screen.getByTestId('countrycode');
-    const line1 = screen.getByPlaceholderText(/Line 1/i);
-    const line2 = screen.getByPlaceholderText(/Line 2/i);
-    const dependentLocality =
-      screen.getByPlaceholderText(/Dependent Locality/i);
-    const sortingCode = screen.getByPlaceholderText(/Sorting code/i);
-    const postalCode = screen.getByPlaceholderText(/Postal Code/i);
-    const displayImage = screen.getByPlaceholderText(/Display Image/i);
-    const userRegistrationRequired =
-      screen.getByPlaceholderText(/Registration/i);
-    const isVisible = screen.getByPlaceholderText(/Visible/i);
-    const saveChangesBtn = screen.getByText(/Save Changes/i);
+      await waitFor(() => {
+        expect(screen.getByTestId('countrycode')).toBeInTheDocument();
+      });
 
-    // Emptying the text fields to add updated data
-    fireEvent.change(name, { target: { value: '' } });
-    fireEvent.change(des, { target: { value: '' } });
-    fireEvent.change(city, { target: { value: '' } });
-    fireEvent.change(line1, { target: { value: '' } });
-    fireEvent.change(line2, { target: { value: '' } });
-    fireEvent.change(postalCode, { target: { value: '' } });
-    fireEvent.change(sortingCode, { target: { value: '' } });
-    fireEvent.change(dependentLocality, { target: { value: '' } });
+      const countrySelect = screen.getByTestId('countrycode');
+      fireEvent.change(countrySelect, { target: { value: 'CA' } });
+      expect(countrySelect).toHaveValue('CA');
+    });
 
-    // Mocking filling form behaviour
-    await userEvent.type(name, formData.name);
-    await userEvent.type(des, formData.description);
-    await userEvent.type(city, formData.address.city);
-    await userEvent.selectOptions(countryCode, formData.address.countryCode);
-    await userEvent.type(line1, formData.address.line1);
-    await userEvent.type(line2, formData.address.line2);
-    await userEvent.type(postalCode, formData.address.postalCode);
-    await userEvent.type(dependentLocality, formData.address.dependentLocality);
-    await userEvent.type(sortingCode, formData.address.sortingCode);
-    await userEvent.upload(displayImage, formData.displayImage);
-    await userEvent.click(userRegistrationRequired);
-    await userEvent.click(isVisible);
+    it('handles city input change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
 
-    await wait();
-    await userEvent.click(saveChangesBtn);
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test City')).toBeInTheDocument();
+      });
+
+      const cityInput = screen.getByDisplayValue('Test City');
+      fireEvent.change(cityInput, { target: { value: 'New City' } });
+      expect(cityInput).toHaveValue('New City');
+    });
+
+    it('handles state input change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test State')).toBeInTheDocument();
+      });
+
+      const stateInput = screen.getByDisplayValue('Test State');
+      fireEvent.change(stateInput, { target: { value: 'New State' } });
+      expect(stateInput).toHaveValue('New State');
+    });
+
+    it('handles dependent locality input change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for the component to load initial data
+      await waitFor(() => {
+        expect(
+          screen.getByPlaceholderText(i18n.t('orgUpdate.dependentLocality')),
+        ).toBeInTheDocument();
+      });
+
+      // Get and change the dependent locality input
+      const dependentLocalityInput = screen.getByPlaceholderText(
+        i18n.t('orgUpdate.dependentLocality'),
+      );
+      fireEvent.change(dependentLocalityInput, {
+        target: { value: 'District 1' },
+      });
+
+      // Verify the value was updated in the input
+      expect(dependentLocalityInput).toHaveValue('District 1');
+
+      // Verify the form state was updated
+      await waitFor(() => {
+        expect(dependentLocalityInput).toHaveValue('District 1');
+      });
+    });
+
+    it('handles address line inputs change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Suite 100')).toBeInTheDocument();
+      });
+
+      const line1Input = screen.getByDisplayValue('123 Test St');
+      const line2Input = screen.getByDisplayValue('Suite 100');
+
+      fireEvent.change(line1Input, { target: { value: '456 New St' } });
+      fireEvent.change(line2Input, { target: { value: 'Floor 2' } });
+
+      expect(line1Input).toHaveValue('456 New St');
+      expect(line2Input).toHaveValue('Floor 2');
+    });
+
+    it('handles postal code and sorting code inputs change', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for component to load with initial data
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('12345')).toBeInTheDocument();
+        expect(
+          screen.getByPlaceholderText(i18n.t('orgUpdate.sortingCode')),
+        ).toBeInTheDocument();
+      });
+
+      // Get input elements using translation keys
+      const postalCodeInput = screen.getByDisplayValue('12345');
+      const sortingCodeInput = screen.getByPlaceholderText(
+        i18n.t('orgUpdate.sortingCode'),
+      );
+
+      // Change input values
+      fireEvent.change(postalCodeInput, { target: { value: '54321' } });
+      fireEvent.change(sortingCodeInput, { target: { value: 'SORT123' } });
+
+      // Verify immediate value changes
+      expect(postalCodeInput).toHaveValue('54321');
+      expect(sortingCodeInput).toHaveValue('SORT123');
+
+      // Verify the form state was updated
+      await waitFor(() => {
+        expect(postalCodeInput).toHaveValue('54321');
+        expect(sortingCodeInput).toHaveValue('SORT123');
+      });
+    });
+  });
+
+  describe('OrgUpdate Loading and Error States', () => {
+    const mockOrgData = {
+      organization: {
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+      },
+    };
+
+    it('shows loading state while fetching data', async () => {
+      // Create mock data with consistent structure
+      const mockOrgData = {
+        organization: {
+          id: '1',
+          name: 'Test Org',
+          description: 'Test Description',
+          addressLine1: '123 Test St',
+          addressLine2: 'Suite 100',
+          city: 'Test City',
+          state: 'Test State',
+          postalCode: '12345',
+          countryCode: 'US',
+          avatarURL: null,
+          createdAt: '2024-02-24T00:00:00Z',
+          updatedAt: '2024-02-24T00:00:00Z',
+          creator: {
+            id: '1',
+            name: 'Test Creator',
+            emailAddress: 'creator@test.com',
+          },
+          updater: {
+            id: '1',
+            name: 'Test Updater',
+            emailAddress: 'updater@test.com',
+          },
+        },
+      };
+
+      const loadingMock = {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: { input: { id: '1' } },
+        },
+        result: {
+          data: mockOrgData,
+        },
+        delay: 100, // Add delay to ensure loading state is visible
+      };
+
+      render(
+        <MockedProvider mocks={[loadingMock]} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Verify loading state is shown
+      expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+      expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+      // Wait for loading to complete and verify data is loaded
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Verify loading state is removed
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
+    it('shows error state when data fetch fails', async () => {
+      const errorMock = {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: { input: { id: '1' } },
+        },
+        error: new Error('Failed to load organization'),
+      };
+
+      render(
+        <MockedProvider mocks={[errorMock]} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(/Error occured while loading Organization Data/),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(/Failed to load organization/),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('handles successful organization update', async () => {
+      const successMocks = [
+        {
+          request: {
+            query: ORGANIZATIONS_LIST,
+            variables: { input: { id: '1' } },
+          },
+          result: {
+            data: {
+              organization: {
+                id: '1',
+                name: 'Test Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatarURL: null,
+                createdAt: '2024-02-24T00:00:00Z',
+                updatedAt: '2024-02-24T00:00:00Z',
+                creator: {
+                  id: '1',
+                  name: 'Test Creator',
+                  emailAddress: 'creator@test.com',
+                },
+                updater: {
+                  id: '1',
+                  name: 'Test Updater',
+                  emailAddress: 'updater@test.com',
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: UPDATE_ORGANIZATION_MUTATION,
+            variables: {
+              input: {
+                id: '1',
+                name: 'Updated Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatar: null,
+              },
+            },
+          },
+          result: {
+            data: {
+              updateOrganization: {
+                organization: {
+                  id: '1',
+                  name: 'Updated Org',
+                  description: 'Test Description',
+                  addressLine1: '123 Test St',
+                  addressLine2: 'Suite 100',
+                  city: 'Test City',
+                  state: 'Test State',
+                  postalCode: '12345',
+                  countryCode: 'US',
+                  avatarURL: null,
+                  createdAt: '2024-02-24T00:00:00Z',
+                  updatedAt: '2024-02-24T00:00:00Z',
+                  creator: {
+                    id: '1',
+                    name: 'Test Creator',
+                    emailAddress: 'creator@test.com',
+                  },
+                  updater: {
+                    id: '1',
+                    name: 'Test Updater',
+                    emailAddress: 'updater@test.com',
+                  },
+                },
+              },
+            },
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={successMocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for initial data to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Update organization name
+      const nameInput = screen.getByDisplayValue('Test Org');
+      fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
+
+      // Click save button
+      const saveButton = screen.getByTestId('save-org-changes-btn');
+      fireEvent.click(saveButton);
+
+      // Check for success message using the correct translation key
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          i18n.t('orgUpdate.successfulUpdated'),
+        );
+      });
+    });
+
+    it('handles failed organization update', async () => {
+      const errorMocks = [
+        {
+          request: {
+            query: ORGANIZATIONS_LIST,
+            variables: { input: { id: '1' } },
+          },
+          result: {
+            data: mockOrgData,
+          },
+        },
+        {
+          request: {
+            query: UPDATE_ORGANIZATION_MUTATION,
+            variables: {
+              input: {
+                id: '1',
+                name: 'Updated Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatar: null,
+              },
+            },
+          },
+          error: new Error('Failed to update organization'),
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={errorMocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Update organization name
+      const nameInput = screen.getByDisplayValue('Test Org');
+      fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
+
+      // Click save button
+      const saveButton = screen.getByTestId('save-org-changes-btn');
+      fireEvent.click(saveButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to update organization',
+        );
+      });
+    });
+
+    it('shows loading state during update', async () => {
+      // Create mock data with consistent structure
+      const mockOrgData = {
+        organization: {
+          id: '1',
+          name: 'Test Org',
+          description: 'Test Description',
+          addressLine1: '123 Test St',
+          addressLine2: 'Suite 100',
+          city: 'Test City',
+          state: 'Test State',
+          postalCode: '12345',
+          countryCode: 'US',
+          avatarURL: null,
+          createdAt: '2024-02-24T00:00:00Z',
+          updatedAt: '2024-02-24T00:00:00Z',
+          creator: {
+            id: '1',
+            name: 'Test Creator',
+            emailAddress: 'creator@test.com',
+          },
+          updater: {
+            id: '1',
+            name: 'Test Updater',
+            emailAddress: 'updater@test.com',
+          },
+        },
+      };
+
+      const mocks = [
+        // Initial data fetch mock
+        {
+          request: {
+            query: ORGANIZATIONS_LIST,
+            variables: { input: { id: '1' } },
+          },
+          result: {
+            data: mockOrgData,
+          },
+        },
+        // Update mutation mock with delay to show loading state
+        {
+          request: {
+            query: UPDATE_ORGANIZATION_MUTATION,
+            variables: {
+              input: {
+                id: '1',
+                name: 'Updated Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatar: null,
+              },
+            },
+          },
+          delay: 100, // Add delay to ensure loading state is visible
+          result: {
+            data: {
+              updateOrganization: {
+                organization: {
+                  ...mockOrgData.organization,
+                  name: 'Updated Org',
+                },
+              },
+            },
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for initial data to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Update organization name
+      const nameInput = screen.getByDisplayValue('Test Org');
+      fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
+
+      // Get save button and check initial state
+      const saveButton = screen.getByTestId('save-org-changes-btn');
+      expect(saveButton).not.toBeDisabled();
+      expect(saveButton).toHaveTextContent('Save Changes');
+
+      // Click save button
+      fireEvent.click(saveButton);
+
+      // Verify button is disabled during loading state
+      await waitFor(() => {
+        expect(saveButton).toBeDisabled();
+      });
+
+      // Verify button returns to enabled state after update completes
+      await waitFor(
+        () => {
+          expect(saveButton).not.toBeDisabled();
+          expect(saveButton).toHaveTextContent('Save Changes');
+        },
+        { timeout: 2000 },
+      );
+
+      // Verify success message
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          i18n.t('orgUpdate.successfulUpdated'),
+        );
+      });
+    });
+  });
+
+  describe('OrgUpdate Form Switch Controls', () => {
+    const mockOrgData = {
+      organization: {
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+      },
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: { input: { id: '1' } },
+        },
+        result: {
+          data: mockOrgData,
+        },
+      },
+    ];
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('toggles user registration switch correctly', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Find the user registration switch
+      const userRegSwitch = screen.getByPlaceholderText(
+        i18n.t('orgUpdate.userRegistrationRequired'),
+      );
+      expect(userRegSwitch).toBeInTheDocument();
+      expect(userRegSwitch).not.toBeChecked();
+
+      // Toggle the switch
+      fireEvent.click(userRegSwitch);
+      expect(userRegSwitch).toBeChecked();
+
+      // Toggle back
+      fireEvent.click(userRegSwitch);
+      expect(userRegSwitch).not.toBeChecked();
+    });
+
+    it('toggles visibility switch correctly', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Find the visibility switch
+      const visibilitySwitch = screen.getByPlaceholderText(
+        i18n.t('orgUpdate.isVisibleInSearch'),
+      );
+      expect(visibilitySwitch).toBeInTheDocument();
+      expect(visibilitySwitch).not.toBeChecked();
+
+      // Toggle the switch
+      fireEvent.click(visibilitySwitch);
+      expect(visibilitySwitch).toBeChecked();
+
+      // Toggle back
+      fireEvent.click(visibilitySwitch);
+      expect(visibilitySwitch).not.toBeChecked();
+    });
+  });
+
+  describe('OrgUpdate Loading and Error States', () => {
+    const mockOrgData = {
+      organization: {
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+        createdAt: '2024-02-24T00:00:00Z',
+        updatedAt: '2024-02-24T00:00:00Z',
+        creator: {
+          id: '1',
+          name: 'Test Creator',
+          emailAddress: 'creator@test.com',
+        },
+        updater: {
+          id: '1',
+          name: 'Test Updater',
+          emailAddress: 'updater@test.com',
+        },
+      },
+    };
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('handles empty response from update mutation', async () => {
+      const mocks = [
+        // Initial data fetch mock
+        {
+          request: {
+            query: ORGANIZATIONS_LIST,
+            variables: { input: { id: '1' } },
+          },
+          result: {
+            data: mockOrgData,
+          },
+        },
+        // Update mutation mock that returns empty data
+        {
+          request: {
+            query: UPDATE_ORGANIZATION_MUTATION,
+            variables: {
+              input: {
+                id: '1',
+                name: 'Updated Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatar: null,
+              },
+            },
+          },
+          result: {
+            data: null, // Simulate empty response
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for initial data to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      // Update organization name
+      const nameInput = screen.getByDisplayValue('Test Org');
+      fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
+
+      // Click save button
+      const saveButton = screen.getByTestId('save-org-changes-btn');
+      fireEvent.click(saveButton);
+
+      // Verify error toast is shown
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to update organization',
+        );
+      });
+
+      // Verify button is enabled after failed update
+      expect(saveButton).not.toBeDisabled();
+      expect(saveButton).toHaveTextContent('Save Changes');
+    });
   });
 });

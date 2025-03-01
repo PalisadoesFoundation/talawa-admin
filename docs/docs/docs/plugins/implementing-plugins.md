@@ -1,6 +1,7 @@
 ---
 id: implementing-plugins
 title: Plugin Implementation
+sidebar_position: 2
 ---
 
 Plugins are existing features that are wrapped with some special logic or widgets to make them controllable.
