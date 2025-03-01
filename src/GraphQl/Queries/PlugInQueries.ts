@@ -64,6 +64,7 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
     $location_contains: String
     $first: Int
     $skip: Int
+    $upcomingOnly: Boolean
   ) {
     eventsByOrganizationConnection(
       where: {
@@ -74,6 +75,7 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
       }
       first: $first
       skip: $skip
+      upcomingOnly: $upcomingOnly
     ) {
       _id
       title
