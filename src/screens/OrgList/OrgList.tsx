@@ -322,6 +322,7 @@ function orgList(): JSX.Element {
   };
 
   const handleSortChange = (value: string): void => {
+    // Update the sorting state and refetch organizations based on the selected sorting option
     setSortingState({
       option: value,
       selectedOption: t(value),

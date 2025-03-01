@@ -17,12 +17,23 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
+import { CREATE_ORGANIZATION_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 
 vi.setConfig({ testTimeout: 30000 });
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+  ToastContainer: vi
+    .fn()
+    .mockImplementation(() => <div data-testid="toast-container" />),
+}));
 
 const { setItem } = useLocalStorage();
 
@@ -583,5 +594,255 @@ describe('Organisations Page testing as Admin', () => {
     });
 
     expect(sortDropdown).toBeInTheDocument();
+  });
+});
+
+describe('Organization Modal Tests', () => {
+  const formData = {
+    name: 'Test Organization',
+    description: 'This is a test organization',
+    addressLine1: '123 Main Street',
+    addressLine2: 'Suite 456',
+    city: 'Kingston',
+    state: 'Kingston Parish',
+    postalCode: 'JM12345',
+    countryCode: 'jm',
+    avatar: new File(['avatar'], 'avatar.png', { type: 'image/png' }),
+  };
+
+  test('Testing create organization modal open and close', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(500);
+
+    // Verify create organization button exists for administrator
+    const createOrgButton = screen.getByTestId('createOrganizationBtn');
+    expect(createOrgButton).toBeInTheDocument();
+
+    // Open the modal
+    await userEvent.click(createOrgButton);
+
+    // Verify modal is open - checking for modal header which should be present
+    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+
+    // Close the modal using the header's close button
+    // Find the close button within the modal header
+    const modalHeader = screen.getByTestId('modalOrganizationHeader');
+    const closeButton = modalHeader.querySelector('.btn-close');
+
+    if (closeButton) {
+      await userEvent.click(closeButton);
+    } else {
+      const closeButtons = modalHeader.querySelectorAll('button');
+      if (closeButtons.length > 0) {
+        // Click the last button which is typically the close button
+        fireEvent.click(closeButtons[closeButtons.length - 1]);
+      } else {
+        // If no buttons found, try to click on any element that might be the close button
+        const closeElements =
+          modalHeader.querySelectorAll('.close, .btn-close');
+        if (closeElements.length > 0) {
+          fireEvent.click(closeElements[0]);
+        }
+      }
+    }
+
+    // Verify modal is closed
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('modalOrganizationHeader'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('Testing organization form input handling', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(500);
+
+    // Open the modal
+    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+
+    // Fill out form fields
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationName'),
+      formData.name,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationDescription'),
+      formData.description,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationAddressLine1'),
+      formData.addressLine1,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationAddressLine2'),
+      formData.addressLine2,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationCity'),
+      formData.city,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationState'),
+      formData.state,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationPostalCode'),
+      formData.postalCode,
+    );
+
+    await userEvent.selectOptions(
+      screen.getByTestId('modalOrganizationCountryCode'),
+      formData.countryCode,
+    );
+
+    // Verify form values are correctly set
+    expect(screen.getByTestId('modalOrganizationName')).toHaveValue(
+      formData.name,
+    );
+    expect(screen.getByTestId('modalOrganizationDescription')).toHaveValue(
+      formData.description,
+    );
+    expect(screen.getByTestId('modalOrganizationAddressLine1')).toHaveValue(
+      formData.addressLine1,
+    );
+    expect(screen.getByTestId('modalOrganizationAddressLine2')).toHaveValue(
+      formData.addressLine2,
+    );
+    expect(screen.getByTestId('modalOrganizationCity')).toHaveValue(
+      formData.city,
+    );
+    expect(screen.getByTestId('modalOrganizationState')).toHaveValue(
+      formData.state,
+    );
+    expect(screen.getByTestId('modalOrganizationPostalCode')).toHaveValue(
+      formData.postalCode,
+    );
+  });
+
+  test('Testing organization creation error handling', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    // Mock error response
+    const CREATE_ORG_ERROR_MOCK = {
+      request: {
+        query: CREATE_ORGANIZATION_MUTATION_PG,
+        variables: {
+          name: formData.name,
+          description: formData.description,
+          addressLine1: formData.addressLine1,
+          addressLine2: formData.addressLine2,
+          city: formData.city,
+          countryCode: formData.countryCode,
+          postalCode: formData.postalCode,
+          state: formData.state,
+          avatar: null,
+        },
+      },
+      error: new Error('Failed to create organization'),
+    };
+
+    const CUSTOM_MOCKS = [...MOCKS, CREATE_ORG_ERROR_MOCK];
+
+    render(
+      <MockedProvider
+        addTypename={false}
+        link={new StaticMockLink(CUSTOM_MOCKS, true)}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(500);
+
+    // Open the modal
+    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+
+    // Fill out form fields
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationName'),
+      formData.name,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationDescription'),
+      formData.description,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationAddressLine1'),
+      formData.addressLine1,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationAddressLine2'),
+      formData.addressLine2,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationCity'),
+      formData.city,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationState'),
+      formData.state,
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationPostalCode'),
+      formData.postalCode,
+    );
+
+    await userEvent.selectOptions(
+      screen.getByTestId('modalOrganizationCountryCode'),
+      formData.countryCode,
+    );
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitOrganizationForm');
+    await userEvent.click(submitButton);
+
+    // Verify error handling was triggered
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 });
