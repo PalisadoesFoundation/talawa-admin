@@ -402,35 +402,39 @@ describe('Testing AddOnStore Component', () => {
 
     expect(dropdownToggle.textContent).toBe('Enabled');
   });
+
   // Add this test to AddOnStore.spec.tsx
   test('properly marks plugins as installed or not installed based on their IDs', async () => {
-    // Mock the PluginHelper implementation
-    vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
-      __esModule: true,
-      default: vi.fn().mockImplementation(() => ({
-        fetchStore: vi.fn().mockResolvedValue([
-          {
-            id: '1', // This ID matches one in the installed plugins
-            pluginName: 'Plugin 1',
-            pluginDesc: 'Description 1',
-            pluginCreatedBy: 'User 1',
-          },
-          {
-            id: '2', // This ID doesn't match any installed plugin
-            pluginName: 'Plugin 2',
-            pluginDesc: 'Description 2',
-            pluginCreatedBy: 'User 2',
-          },
-        ]),
-        fetchInstalled: vi.fn().mockResolvedValue([
-          {
-            id: '1', // This ID matches one of the store plugins
-            pluginName: 'Installed Plugin 1',
-            pluginDesc: 'Installed Description 1',
-            pluginCreatedBy: 'User 3',
-          },
-        ]),
-      })),
+    // Reset and configure mocks for this specific test
+    vi.resetAllMocks();
+    const mockFetchStore = vi.fn().mockResolvedValue([
+      {
+        id: '1', // This ID matches one in the installed plugins
+        pluginName: 'Plugin 1',
+        pluginDesc: 'Description 1',
+        pluginCreatedBy: 'User 1',
+      },
+      {
+        id: '2', // This ID doesn't match any installed plugin
+        pluginName: 'Plugin 2',
+        pluginDesc: 'Description 2',
+        pluginCreatedBy: 'User 2',
+      },
+    ]);
+    const mockFetchInstalled = vi.fn().mockResolvedValue([
+      {
+        id: '1', // This ID matches one of the store plugins
+        pluginName: 'Installed Plugin 1',
+        pluginDesc: 'Installed Description 1',
+        pluginCreatedBy: 'User 3',
+      },
+    ]);
+
+    // Configure the mock implementation for this test
+    vi.mocked(PluginHelper).mockImplementation(() => ({
+      fetchStore: mockFetchStore,
+      fetchInstalled: mockFetchInstalled,
+      generateLinks: vi.fn(),
     }));
 
     // Create a spy on the store dispatch
