@@ -90,7 +90,6 @@ function addOnStore(): JSX.Element {
     plugins: InterfacePluginHelper[],
     searchTerm: string,
   ): InterfacePluginHelper[] => {
-    console.log('Plugin is triggered: ', plugins);
     if (!searchTerm) {
       return plugins;
     }

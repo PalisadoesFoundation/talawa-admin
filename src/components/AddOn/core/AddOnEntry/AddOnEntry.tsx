@@ -84,7 +84,6 @@ function addOnEntry({
    * Function to toggle the installation status of the plugin.
    */
 
-  console.log(currentOrg);
   const togglePluginInstall = async (): Promise<void> => {
     setButtonLoading(true);
 
@@ -105,8 +104,6 @@ function addOnEntry({
       : t('uninstallMsg');
     toast.success(dialog);
   };
-
-  console.log(uninstalledOrgs);
 
   return (
     <>
