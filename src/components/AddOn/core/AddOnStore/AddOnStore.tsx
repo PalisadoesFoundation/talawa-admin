@@ -49,7 +49,7 @@ function addOnStore(): JSX.Element {
     ).map((plugin: InterfacePluginHelper) => plugin.id);
 
     plugins = plugins.map((plugin: InterfacePluginHelper) => {
-      plugin.installed = installIds.includes(plugin.id);
+      plugin.installed = (installIds || []).includes(plugin.id);
       return plugin;
     });
 
@@ -200,7 +200,8 @@ function addOnStore(): JSX.Element {
               <div className={styles.justifyspAddOnStore}>
                 {(() => {
                   const installedPlugins = (data?.getPlugins || []).filter(
-                    (plugin) => !plugin.uninstalledOrgs.includes(orgId ?? ''),
+                    (plugin) =>
+                      !(plugin.uninstalledOrgs ?? []).includes(orgId ?? ''),
                   );
                   const filteredPlugins = filterPlugins(
                     installedPlugins,
