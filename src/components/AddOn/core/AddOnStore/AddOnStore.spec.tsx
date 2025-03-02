@@ -403,24 +403,30 @@ describe('Testing AddOnStore Component', () => {
     expect(dropdownToggle.textContent).toBe('Enabled');
   });
 
-  // Add this test to AddOnStore.spec.tsx
   test('properly marks plugins as installed or not installed based on their IDs', async () => {
-    // Reset and configure mocks for this specific test
     vi.resetAllMocks();
+
     const mockFetchStore = vi.fn().mockResolvedValue([
       {
-        id: '1', // This ID matches one in the installed plugins
+        id: '1',
         pluginName: 'Plugin 1',
         pluginDesc: 'Description 1',
         pluginCreatedBy: 'User 1',
+        uninstalledOrgs: [],
+        installed: false,
+        enabled: true,
       },
       {
-        id: '2', // This ID doesn't match any installed plugin
+        id: '2',
         pluginName: 'Plugin 2',
         pluginDesc: 'Description 2',
         pluginCreatedBy: 'User 2',
+        uninstalledOrgs: [],
+        installed: false,
+        enabled: true,
       },
     ]);
+
     const mockFetchInstalled = vi.fn().mockResolvedValue([
       {
         id: '1', // This ID matches one of the store plugins
@@ -430,67 +436,15 @@ describe('Testing AddOnStore Component', () => {
       },
     ]);
 
-    // Configure the mock implementation for this test
     vi.mocked(PluginHelper).mockImplementation(() => ({
       fetchStore: mockFetchStore,
       fetchInstalled: mockFetchInstalled,
       generateLinks: vi.fn(),
     }));
 
-    // Create a spy on the store dispatch
     const dispatchSpy = vi.spyOn(store, 'dispatch');
 
-    // Set up GraphQL mocks
-    const mocks = [
-      {
-        request: {
-          query: PLUGIN_GET,
-        },
-        result: {
-          data: {
-            getPlugins: [
-              {
-                id: '1',
-                pluginName: 'Plugin 1',
-                pluginDesc: 'Description 1',
-                pluginCreatedBy: 'User 1',
-                uninstalledOrgs: [],
-                installed: false,
-                enabled: true,
-              },
-              {
-                id: '2',
-                pluginName: 'Plugin 2',
-                pluginDesc: 'Description 2',
-                pluginCreatedBy: 'User 2',
-                uninstalledOrgs: [],
-                installed: false,
-                enabled: true,
-              },
-            ],
-          },
-        },
-      },
-    ];
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
-                <AddOnStore />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    // Wait for the loading state to finish
-    await wait();
-
-    // Directly test the getStorePlugins function by extracting its logic
+    // Call function under test
     const getStorePlugins = async (): Promise<void> => {
       let plugins: InterfacePluginHelper[] =
         (await new PluginHelper().fetchStore()) as InterfacePluginHelper[];
@@ -504,30 +458,42 @@ describe('Testing AddOnStore Component', () => {
         return plugin;
       });
 
+      // Explicit assertion before dispatch
+      expect(plugins).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: '1',
+            installed: true, // This should be marked as installed
+          }),
+          expect.objectContaining({
+            id: '2',
+            installed: false, // This should not be installed
+          }),
+        ]),
+      );
+
       store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
     };
 
-    // Call the function
     await getStorePlugins();
 
-    // Verify that the store.dispatch was called with the correct payload
+    // Check if the store dispatch was called correctly
     expect(dispatchSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         type: 'UPDATE_STORE',
         payload: expect.arrayContaining([
           expect.objectContaining({
             id: '1',
-            installed: true, // This plugin should be marked as installed
+            installed: true,
           }),
           expect.objectContaining({
             id: '2',
-            installed: false, // This plugin should not be marked as installed
+            installed: false,
           }),
         ]),
       }),
     );
 
-    // Clean up the spy
     dispatchSpy.mockRestore();
   });
 });
