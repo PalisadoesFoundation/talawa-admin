@@ -28,14 +28,14 @@ vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   default: vi.fn().mockImplementation(() => ({
     fetchStore: vi.fn().mockResolvedValue([
       {
-        _id: '1',
+        id: '1',
         pluginName: 'Plugin 1',
         pluginDesc: 'Description 1',
         pluginCreatedBy: 'User 1',
         pluginInstallStatus: true,
       },
       {
-        _id: '2',
+        id: '2',
         pluginName: 'Plugin 2',
         pluginDesc: 'Description 2',
         pluginCreatedBy: 'User 2',
@@ -45,14 +45,14 @@ vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
     ]),
     fetchInstalled: vi.fn().mockResolvedValue([
       {
-        _id: '1',
+        id: '1',
         pluginName: 'Installed Plugin 1',
         pluginDesc: 'Installed Description 1',
         pluginCreatedBy: 'User 3',
         pluginInstallStatus: true,
       },
       {
-        _id: '3',
+        id: '3',
         pluginName: 'Installed Plugin 3',
         pluginDesc: 'Installed Description 3',
         pluginCreatedBy: 'User 4',
@@ -194,7 +194,7 @@ describe('Testing AddOnStore Component', () => {
           data: {
             getPlugins: [
               {
-                _id: '1',
+                id: '1',
                 pluginName: 'Plugin 1',
                 pluginDesc: 'Desc 1',
                 pluginCreatedBy: 'User 1',
@@ -238,7 +238,7 @@ describe('Testing AddOnStore Component', () => {
           data: {
             getPlugins: [
               {
-                _id: '2',
+                id: '2',
                 pluginName: 'Plugin 2',
                 pluginDesc: 'Desc 2',
                 pluginCreatedBy: 'User 2',
@@ -286,7 +286,7 @@ describe('Testing AddOnStore Component', () => {
           data: {
             getPlugins: [
               {
-                _id: '1',
+                id: '1',
                 pluginName: 'Test Plugin',
                 pluginDesc: 'Description',
                 pluginCreatedBy: 'User',
@@ -353,7 +353,7 @@ describe('Testing AddOnStore Component', () => {
           data: {
             getPlugins: [
               {
-                _id: '1',
+                id: '1',
                 pluginName: 'Test Plugin 1',
                 pluginDesc: 'Description',
                 pluginCreatedBy: 'User1',
@@ -362,7 +362,7 @@ describe('Testing AddOnStore Component', () => {
                 enabled: true,
               },
               {
-                _id: '2',
+                id: '2',
                 pluginName: 'Test Plugin 2',
                 pluginDesc: 'Description',
                 pluginCreatedBy: 'User2',
