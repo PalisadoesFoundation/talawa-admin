@@ -4,7 +4,6 @@ import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useEffect, useMemo, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
@@ -179,11 +178,12 @@ const leftDrawerOrg = ({
             return url ? (
               <NavLink to={url} key={name} onClick={handleLinkClick}>
                 {({ isActive }) => (
-                  <Button
+                  <button
                     key={name}
-                    variant={isActive ? 'success' : ''}
                     className={
-                      isActive ? styles.activeButton : styles.inactiveButton
+                      isActive
+                        ? styles.leftDrawerActiveButton
+                        : styles.leftDrawerInactiveButton
                     }
                   >
                     <div className={styles.iconWrapper}>
@@ -195,7 +195,7 @@ const leftDrawerOrg = ({
                       />
                     </div>
                     {tCommon(name)}
-                  </Button>
+                  </button>
                 )}
               </NavLink>
             ) : (
