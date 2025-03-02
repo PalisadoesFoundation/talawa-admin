@@ -48,7 +48,8 @@ describe('Talawa Admin Setup', () => {
   it('should successfully complete setup with default options', async () => {
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
+      .mockResolvedValueOnce({ shouldLogErrors: false })
+      .mockResolvedValueOnce({ shouldBackupEnv: false });
 
     await main();
 
@@ -65,7 +66,8 @@ describe('Talawa Admin Setup', () => {
 
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
+      .mockResolvedValueOnce({ shouldLogErrors: false })
+      .mockResolvedValueOnce({ shouldBackupEnv: false });
 
     await main();
 
@@ -76,7 +78,8 @@ describe('Talawa Admin Setup', () => {
   it('should handle error logging setup when user opts in', async () => {
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: true });
+      .mockResolvedValueOnce({ shouldLogErrors: true })
+      .mockResolvedValueOnce({ shouldBackupEnv: false });
 
     await main();
 
@@ -114,7 +117,8 @@ describe('Talawa Admin Setup', () => {
   it('should handle file system operations correctly', async () => {
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
+      .mockResolvedValueOnce({ shouldLogErrors: false })
+      .mockResolvedValueOnce({ shouldBackupEnv: false });
 
     const mockEnvContent = 'MOCK_ENV_CONTENT';
 
@@ -125,6 +129,7 @@ describe('Talawa Admin Setup', () => {
     expect(fs.readFileSync).toHaveBeenCalledWith('.env', 'utf8');
     expect(dotenv.parse).toHaveBeenCalledWith(mockEnvContent);
   });
+
   it('should handle user opting out of reCAPTCHA setup', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({
       shouldUseRecaptcha: false,
@@ -150,9 +155,7 @@ describe('Talawa Admin Setup', () => {
         expect(validationResult).toBe(
           'Invalid reCAPTCHA site key. Please try again.',
         );
-        return Object.assign(
-          Promise.resolve({ recaptchaSiteKeyInput: mockInvalidKey }),
-        );
+        return Promise.resolve({ recaptchaSiteKeyInput: mockInvalidKey });
       });
 
     vi.mocked(validateRecaptcha).mockReturnValue(false);
