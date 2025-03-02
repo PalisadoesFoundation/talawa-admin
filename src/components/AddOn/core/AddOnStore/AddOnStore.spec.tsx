@@ -500,7 +500,7 @@ describe('Testing AddOnStore Component', () => {
       ).map((plugin: InterfacePluginHelper) => plugin.id);
 
       plugins = plugins.map((plugin: InterfacePluginHelper) => {
-        plugin.installed = (installIds || []).includes(plugin.id);
+        plugin.installed = installIds.includes(plugin.id);
         return plugin;
       });
 

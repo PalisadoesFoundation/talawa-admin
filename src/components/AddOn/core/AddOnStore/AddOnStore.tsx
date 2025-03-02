@@ -49,7 +49,7 @@ function addOnStore(): JSX.Element {
     ).map((plugin: InterfacePluginHelper) => plugin.id);
 
     plugins = plugins.map((plugin: InterfacePluginHelper) => {
-      plugin.installed = (installIds || []).includes(plugin.id);
+      plugin.installed = installIds.includes(plugin.id);
       return plugin;
     });
 
