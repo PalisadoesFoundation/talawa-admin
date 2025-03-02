@@ -2,7 +2,10 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
-import AddOnStore, { markInstalledPlugins } from './AddOnStore';
+import AddOnStore, {
+  getInstalledIds,
+  markInstalledPlugins,
+} from './AddOnStore';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -403,7 +406,23 @@ describe('Testing AddOnStore Component', () => {
   });
 
   // Test this separately
-  test('markInstalledPlugins correctly marks installed plugins', () => {
+  test('should return an array of installed plugin IDs', () => {
+    const plugins: InterfacePluginHelper[] = [
+      { id: 'p1' } as InterfacePluginHelper,
+      { id: 'p2' } as InterfacePluginHelper,
+    ];
+
+    const result = getInstalledIds(plugins);
+
+    expect(result).toEqual(['p1', 'p2']); // Ensures `map((p) => p.id)` is covered
+  });
+
+  test('should return an empty array when no plugins exist', () => {
+    const result = getInstalledIds([]);
+    expect(result).toEqual([]);
+  });
+
+  test('correctly marks installed plugins', () => {
     const plugins: InterfacePluginHelper[] = [
       { id: 'p1', installed: false } as InterfacePluginHelper,
       { id: 'p2', installed: false } as InterfacePluginHelper,
@@ -414,6 +433,21 @@ describe('Testing AddOnStore Component', () => {
 
     expect(result).toEqual([
       { id: 'p1', installed: true },
+      { id: 'p2', installed: false },
+    ]);
+  });
+
+  test('does not modify plugins if no installed IDs match', () => {
+    const plugins: InterfacePluginHelper[] = [
+      { id: 'p1', installed: false } as InterfacePluginHelper,
+      { id: 'p2', installed: false } as InterfacePluginHelper,
+    ];
+    const installedIds = ['p3']; // No match
+
+    const result = markInstalledPlugins(plugins, installedIds);
+
+    expect(result).toEqual([
+      { id: 'p1', installed: false },
       { id: 'p2', installed: false },
     ]);
   });

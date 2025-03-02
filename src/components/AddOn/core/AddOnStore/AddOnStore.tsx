@@ -38,21 +38,6 @@ function addOnStore(): JSX.Element {
   const { orgId } = useParams<{ orgId: string }>();
 
   /**
-   * Fetches store plugins and updates the Redux store with the plugin data.
-   */
-
-  const getStorePlugins = async (): Promise<void> => {
-    const plugins =
-      (await new PluginHelper().fetchStore()) as InterfacePluginHelper[];
-    const installIds = (
-      (await new PluginHelper().fetchInstalled()) as InterfacePluginHelper[]
-    ).map((p) => p.id);
-
-    const updatedPlugins = markInstalledPlugins(plugins, installIds);
-    store.dispatch({ type: 'UPDATE_STORE', payload: updatedPlugins });
-  };
-
-  /**
    * Sets the list of installed plugins in the component's state.
    */
   const getInstalledPlugins: () => void = () => {
@@ -234,6 +219,22 @@ function addOnStore(): JSX.Element {
 
 export default addOnStore;
 
+/**
+ * Fetches store plugins and updates the Redux store with the plugin data.
+ */
+
+export const getStorePlugins = async (): Promise<void> => {
+  const plugins =
+    (await new PluginHelper().fetchStore()) as InterfacePluginHelper[];
+  const installedPlugins =
+    (await new PluginHelper().fetchInstalled()) as InterfacePluginHelper[];
+
+  const installIds = getInstalledIds(installedPlugins); // <-- Now testable
+  const updatedPlugins = markInstalledPlugins(plugins, installIds);
+
+  store.dispatch({ type: 'UPDATE_STORE', payload: updatedPlugins });
+};
+
 export const markInstalledPlugins = (
   plugins: InterfacePluginHelper[],
   installedIds: string[],
@@ -242,4 +243,8 @@ export const markInstalledPlugins = (
     ...plugin,
     installed: installedIds.includes(plugin.id),
   }));
+};
+
+export const getInstalledIds = (plugins: InterfacePluginHelper[]): string[] => {
+  return plugins.map((p) => p.id);
 };
