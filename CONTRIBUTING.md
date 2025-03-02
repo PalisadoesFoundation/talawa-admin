@@ -199,10 +199,10 @@ The process of proposing a change to Talawa Admin can be summarized as:
         4. Click on Setup Repo option
            ![Debugging Test Demo](</public/images/codecov/homescrenn%20(1).jpg>)
         5. Use the value of this token to create a secret named CODE_COV for your forked repo.
-           [![Code-cov-token.jpg](/public/images/codecov/Code-cov-token.jpg)]()
-           [![addd-your-key.jpg](/public/images/codecov/addd-your-key.jpg)]()
+           ![Code-cov-token.jpg](/public/images/codecov/Code-cov-token.jpg)
+           ![addd-your-key.jpg](/public/images/codecov/addd-your-key.jpg)
         6. You will see your code coverage reports with every push to your repo after following these steps
-           [![results.jpg](/public/images/codecov/results.jpg)]()
+           ![results.jpg](/public/images/codecov/results.jpg)
 
 1. After making changes you can add them to git locally using `git add <file_name>`(to add changes only in a particular file) or `git add .` (to add all changes).
 1. After adding the changes you need to commit them using `git commit -m '<commit message>'`(look at the commit guidelines below for commit messages).
