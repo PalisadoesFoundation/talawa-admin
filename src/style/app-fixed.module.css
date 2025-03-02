@@ -210,6 +210,10 @@
   --LeftDrawer-org-profileContainer-bg: #e0e9ff;
   --leftDrawer-profileContainer-bg: #ffffff;
   --leftDrawer-secondaryText-color: #6c757d;
+  --leftDrawer-inactive-button-hover-bg: #eaebef;
+  --leftDrawer-collapse-active-button-bg: #e0e5ec;
+  --leftDrawer-inactive-button-bg: transparent;
+  --leftDrawer-active-button-bg: #d3e3fd;
 
   --activeItem-bg: #eaebef;
   --activeItem-color: #000000;
@@ -4615,18 +4619,38 @@ form {
   text-transform: capitalize;
 }
 
-.activeItem {
-  background-color: var(--activeItem-bg);
-  color: var(--activeItem-color);
-  font-weight: 500;
-  border-radius: 10px !important;
+.leftDrawerActiveButton,
+.leftDrawerInactiveButton {
+  position: relative;
+  transition: all 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
-.activeItem:hover {
-  background-color: var(--user-sidebar-org-item-bg);
-  border-radius: 10px !important;
-  color: var(--activeItem-color-hover);
-  font-weight: 500;
+.leftDrawerActiveButton {
+  background-color: var(--leftDrawer-active-button-bg);
+  color: black;
+}
+
+.leftDrawerActiveButton:hover .arrow-indicator {
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+.leftDrawerInactiveButton {
+  background-color: var(--leftDrawer-inactive-button-bg);
+  color: black;
+
+  &:hover {
+    background-color: var(--leftDrawer-inactive-button-hover-bg);
+  }
+}
+
+.leftDrawerCollapseActiveButton {
+  background-color: var(--leftDrawer-collapse-active-button-bg);
+  color: black;
 }
 
 .userSidebarOrgFooter {
