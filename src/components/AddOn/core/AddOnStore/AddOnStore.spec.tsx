@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
-import AddOnStore from './AddOnStore';
+import AddOnStore, { markInstalledPlugins } from './AddOnStore';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -21,7 +21,6 @@ import type {
   InterfacePlugin,
   InterfacePluginHelper,
 } from 'types/AddOn/interface';
-import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
@@ -403,97 +402,19 @@ describe('Testing AddOnStore Component', () => {
     expect(dropdownToggle.textContent).toBe('Enabled');
   });
 
-  test('properly marks plugins as installed or not installed based on their IDs', async () => {
-    vi.resetAllMocks();
+  // Test this separately
+  test('markInstalledPlugins correctly marks installed plugins', () => {
+    const plugins: InterfacePluginHelper[] = [
+      { id: 'p1', installed: false } as InterfacePluginHelper,
+      { id: 'p2', installed: false } as InterfacePluginHelper,
+    ];
+    const installedIds = ['p1'];
 
-    const mockFetchStore = vi.fn().mockResolvedValue([
-      {
-        id: '1',
-        pluginName: 'Plugin 1',
-        pluginDesc: 'Description 1',
-        pluginCreatedBy: 'User 1',
-        uninstalledOrgs: [],
-        installed: false,
-        enabled: true,
-      },
-      {
-        id: '2',
-        pluginName: 'Plugin 2',
-        pluginDesc: 'Description 2',
-        pluginCreatedBy: 'User 2',
-        uninstalledOrgs: [],
-        installed: false,
-        enabled: true,
-      },
+    const result = markInstalledPlugins(plugins, installedIds);
+
+    expect(result).toEqual([
+      { id: 'p1', installed: true },
+      { id: 'p2', installed: false },
     ]);
-
-    const mockFetchInstalled = vi.fn().mockResolvedValue([
-      {
-        id: '1', // This ID matches one of the store plugins
-        pluginName: 'Installed Plugin 1',
-        pluginDesc: 'Installed Description 1',
-        pluginCreatedBy: 'User 3',
-      },
-    ]);
-
-    vi.mocked(PluginHelper).mockImplementation(() => ({
-      fetchStore: mockFetchStore,
-      fetchInstalled: mockFetchInstalled,
-      generateLinks: vi.fn(),
-    }));
-
-    const dispatchSpy = vi.spyOn(store, 'dispatch');
-
-    // Call function under test
-    const getStorePlugins = async (): Promise<void> => {
-      let plugins: InterfacePluginHelper[] =
-        (await new PluginHelper().fetchStore()) as InterfacePluginHelper[];
-
-      const installIds = (
-        (await new PluginHelper().fetchInstalled()) as InterfacePluginHelper[]
-      ).map((plugin: InterfacePluginHelper) => plugin.id);
-
-      plugins = plugins.map((plugin: InterfacePluginHelper) => {
-        plugin.installed = installIds.includes(plugin.id);
-        return plugin;
-      });
-
-      // Explicit assertion before dispatch
-      expect(plugins).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            id: '1',
-            installed: true, // This should be marked as installed
-          }),
-          expect.objectContaining({
-            id: '2',
-            installed: false, // This should not be installed
-          }),
-        ]),
-      );
-
-      store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
-    };
-
-    await getStorePlugins();
-
-    // Check if the store dispatch was called correctly
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: 'UPDATE_STORE',
-        payload: expect.arrayContaining([
-          expect.objectContaining({
-            id: '1',
-            installed: true,
-          }),
-          expect.objectContaining({
-            id: '2',
-            installed: false,
-          }),
-        ]),
-      }),
-    );
-
-    dispatchSpy.mockRestore();
   });
 });

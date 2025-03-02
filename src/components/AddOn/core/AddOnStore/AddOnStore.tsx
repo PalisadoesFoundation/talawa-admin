@@ -40,20 +40,16 @@ function addOnStore(): JSX.Element {
   /**
    * Fetches store plugins and updates the Redux store with the plugin data.
    */
-  const getStorePlugins = async (): Promise<void> => {
-    let plugins: InterfacePluginHelper[] =
-      (await new PluginHelper().fetchStore()) as InterfacePluginHelper[];
 
+  const getStorePlugins = async (): Promise<void> => {
+    const plugins =
+      (await new PluginHelper().fetchStore()) as InterfacePluginHelper[];
     const installIds = (
       (await new PluginHelper().fetchInstalled()) as InterfacePluginHelper[]
-    ).map((plugin: InterfacePluginHelper) => plugin.id);
+    ).map((p) => p.id);
 
-    plugins = plugins.map((plugin: InterfacePluginHelper) => {
-      plugin.installed = installIds.includes(plugin.id);
-      return plugin;
-    });
-
-    store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
+    const updatedPlugins = markInstalledPlugins(plugins, installIds);
+    store.dispatch({ type: 'UPDATE_STORE', payload: updatedPlugins });
   };
 
   /**
@@ -237,3 +233,13 @@ function addOnStore(): JSX.Element {
 }
 
 export default addOnStore;
+
+export const markInstalledPlugins = (
+  plugins: InterfacePluginHelper[],
+  installedIds: string[],
+): InterfacePluginHelper[] => {
+  return plugins.map((plugin) => ({
+    ...plugin,
+    installed: installedIds.includes(plugin.id),
+  }));
+};
