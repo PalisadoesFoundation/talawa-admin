@@ -127,7 +127,7 @@
   --email-button-fill: #555555;
 
   --login-button-color: #555555;
-  --login-button-bg: #a8c7fa;
+  --login-button-bg: #1778F2;
   --login-button-border: #a8c7fa;
   --login-button-bg-hover: #a8c7fa;
   --login-button-border-hover: #a8c7fa;
@@ -547,8 +547,8 @@
   --btnsContainerOrgActionItemCategories-outline: #9ca3af;
 
   --delete-button-bg: #f8d6dc;
-  --delete-button-color: #ff4d4f;
-  --delete-button-color-hover: #ff4d4f;
+  --delete-button-color: #C8102E;
+  /* --delete-button-color-hover: #ff4d4f; */
 
   --customDataTable-bg: #f2f2f2;
 
@@ -4016,29 +4016,174 @@
 
 /* -- GeneralSettings.tsx -- */
 
-/* -- DeleteOrg.tsx -- */
+.cardSettings{
+  border-radius: 0.5rem; /* Equivalent to Bootstrap's rounded-4 */
+  margin-bottom: 1.5rem; /* Equivalent to mb-4 */
+  border: none; /* Equivalent to border-0 */
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
+  height: 800px;
+  width: 588px;
+}
 
+.cardHeaderStyle{
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 3px solid var(--cardHeader-border);
+  background-color: #EAEBEF;
+  padding: 16px;
+}
+
+.userupdatediv {
+  /* border: 1px solid var(--grey-border);
+  box-shadow: 2px 1px var(--grey-border); */
+  padding: 25px 16px;
+  /* border-radius: 5px; */
+  background: var(--white-color);
+}
+
+.maskGroupButton{
+  /* Mask group */
+
+/* position: absolute; */
+width: 20px;
+height: 20px;
+/* left: 398px; */
+/* top: 844px; */
+/* background: var(--maskGroupButton-bg); */
+color: #1778F2;
+
+}
+
+.customTextarea{
+  min-height: 100px;
+  background-color: #F1F3F6;
+  color: #737373;
+}
+
+.textFields{
+  background-color: #F1F3F6;
+  color: #737373;
+  margin-bottom: 1rem;
+  width: auto;
+}
+
+.descriptionTextField{
+  background-color: #F1F3F6;
+  color: #737373;
+  margin-bottom: 1rem;
+  width: auto;
+  resize: none; 
+  height: 100px;
+}
+
+/* -- DeleteOrg.tsx -- */
+.DeleteOrgCard{
+    border-radius: 0.5rem;
+    margin-left: 1rem; 
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
+    border: none; 
+    height: 280px !important;
+    width: 404px !important;
+}
 .settingsBody {
   margin: 2.5rem 0;
 }
 
-.deleteButton {
-  background-color: var(--delete-button-bg);
-  color: var(--delete-button-color);
-  border: none;
-  padding: 5px 20px;
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  margin-right: auto;
-  margin-left: auto;
-  gap: 8px;
+.deleteCardHeader{
+  background-color: #eaebef;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+  
+  /* Equivalent to py-3 (vertical padding, top and bottom) */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
-.deleteButton:is(:hover, :active) {
-  background-color: var(--delete-button-color) !important;
-  color: white;
+.btnDelete{
+  background-color: #EAEBEF;
+  border: #000;
 }
+
+.btnDelete:hover{
+  background-color: #EAEBEF;
+  color: #000 !important;
+}
+.btnDelete:active{
+  background-color: #EAEBEF !important;
+  color: #000 !important;
+}
+
+.deleteButton {
+  background-color: #F8D6DC; 
+  color: #C8102E;           
+  border: 1px solid #C8102E;  
+  padding: 8px 16px;        
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+  border-radius: 4px;  
+  width: 365px;
+  height: 42px;
+  text-align: center;
+}
+
+.deleteButton:hover, 
+.deleteButton:active,
+.deleteButton:focus {
+  background-color: #F8D6DC !important;
+  color: #C8102E; 
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  outline: none;
+}
+
+.btnConfirmDelete{
+  background-color: #F8D6DC;
+  color: #C8102E;
+  border: 0px;
+}
+
+.customFileInput,
+.customFileInput:hover{
+  background-color: #F1F3F6;
+}
+
+.customFileInput::file-selector-button {
+  background-color: #1778F2 !important;
+  color:white
+}
+
+.customFileInput::file-selector-button:hover {
+  background-color: blue !important;
+}
+.btnConfirmDelete:hover{
+  background-color: #F8D6DC;
+  color: #C8102E !important;
+}
+
+.btnConfirmDelete:active{
+  background-color: #F8D6DC !important;
+  color: #C8102E;
+  border: 0px;
+}
+
+.btnConfirmDelete:focus{
+  background-color: #F8D6DC;
+  color: #C8102E;
+  border: 0px;
+}
+
+/* Icon spacing so text isn’t jammed up against it */
+.icon {
+  margin-right: 8px;
+  /* If you want to control the icon color, you can do: */
+  /* fill: #c93434; */
+}
+
+.modelHeaderDelete{
+  background-color: #1778F2;
+}
+
 
 /* -- OrgProfileFieldSettings.tsx -- */
 
@@ -4070,14 +4215,56 @@ form {
 
 /* -- OrgUpdate.tsx -- */
 
-.userupdatediv {
-  border: 1px solid var(--userupdatediv-border);
-  box-shadow: 2px 1px var(--userupdatediv-box-shadow);
-  padding: 25px 16px;
-  border-radius: 5px;
-  background: var(--userupdatediv-bg);
+.orgCardSettings{
+  width: 558px;
 }
 
+.resetChangesBtn {
+  border-width: 2px;
+  border-color: #1778F2;
+  color: #1778F2;
+  padding: 0.5rem 1rem; 
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.resetChangesBtn:hover {
+  color: #1778F2;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  border: 2px solid #1778F2 !important;
+}
+
+.syncIconStyle ,.syncIconStyle:focus{
+  transform: rotate(135deg) scale(1.2);
+  width: 10px;
+  height: 10px;
+  stroke: #1778F2;
+  stroke-width: 1; 
+  fill: #1778F2; 
+}
+.saveChangesBtn{
+  color: white;
+  border: 0px ;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  background-color:#1778F2 ;
+}
+
+.saveChangesBtn:hover{
+  background-color: #1778F2 !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.orgUpdateFormLables{
+  font-weight: normal !important;
+  color: #000;
+}
 /* -- OrganizationCard.tsx -- */
 
 /* -- OrganizationCardStart.tsx -- */
@@ -5597,6 +5784,7 @@ form {
   padding: 1rem;
   height: 8rem;
   display: flex;
+  width: 600px;
   align-items: center;
 }
 
@@ -5618,6 +5806,7 @@ form {
   justify-content: center;
   border-radius: 50%;
 }
+
 
 .iconCol {
   padding-right: 0.75rem;
@@ -5649,7 +5838,13 @@ form {
 }
 .cardBody .textBox {
   margin: 0 0 3rem 0;
+  padding-bottom: 10px;
   color: var(--cardBody-color);
+}
+
+.textBox{
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 @media (max-width: 600px) {

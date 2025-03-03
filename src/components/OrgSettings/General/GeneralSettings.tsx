@@ -1,7 +1,6 @@
 import React, { type FC } from 'react';
-import { Card, Col, Form, Row } from 'react-bootstrap';
-import styles from '../../../../src/style/app.module.css';
-import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import { Card, Col, Row } from 'react-bootstrap';
+import styles from '../../../style/app-fixed.module.css';
 import DeleteOrg from './DeleteOrg/DeleteOrg';
 import OrgUpdate from './OrgUpdate/OrgUpdate';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +18,7 @@ interface InterfaceGeneralSettingsProps {
  * @param props - The properties passed to the component.
  * @returns The `GeneralSettings` component.
  */
+
 const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgSettings',
@@ -28,31 +28,19 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
     <Row className={`${styles.settingsBody} mt-3`}>
       <Col lg={7}>
         <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>{t('updateOrganization')}</div>
-          </div>
+          <Card.Header
+            className={`py-3 `}
+            style={{ backgroundColor: '#eaebef' }}
+          >
+            <h5 className="mb-0 fw-semibold">{t('Edit Organization')}</h5>
+          </Card.Header>
           <Card.Body className={styles.cardBody}>
-            {/* Render organization update component */}
             <OrgUpdate orgId={orgId} />
           </Card.Body>
         </Card>
       </Col>
       <Col lg={5}>
         <DeleteOrg />
-        <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>{t('otherSettings')}</div>
-          </div>
-          <Card.Body className={styles.cardBody}>
-            <div className={styles.textBox}>
-              <Form.Label className={'text-secondary fw-bold'}>
-                {t('changeLanguage')}
-              </Form.Label>
-              {/* Render language change dropdown component */}
-              <ChangeLanguageDropDown />
-            </div>
-          </Card.Body>
-        </Card>
       </Col>
     </Row>
   );
