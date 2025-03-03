@@ -5,7 +5,7 @@ import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
-import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
+import type { InterfaceActionItemCategory } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
@@ -67,16 +67,17 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const [category, setCategory] =
-    useState<InterfaceActionItemCategoryInfo | null>(null);
+  const [category, setCategory] = useState<InterfaceActionItemCategory | null>(
+    null,
+  );
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
   const [status, setStatus] = useState<CategoryStatus | null>(null);
-  const [categories, setCategories] = useState<
-    InterfaceActionItemCategoryInfo[]
-  >([]);
+  const [categories, setCategories] = useState<InterfaceActionItemCategory[]>(
+    [],
+  );
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
@@ -93,7 +94,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     refetch: refetchCategories,
   }: {
     data?: {
-      actionItemCategoriesByOrganization: InterfaceActionItemCategoryInfo[];
+      actionItemCategoriesByOrganization: InterfaceActionItemCategory[];
     };
     loading: boolean;
     error?: Error | undefined;
@@ -109,6 +110,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     },
   });
 
+  console.log(categories);
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
@@ -117,7 +119,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
 
   const handleOpenModal = useCallback(
     (
-      category: InterfaceActionItemCategoryInfo | null,
+      category: InterfaceActionItemCategory | null,
       mode: 'edit' | 'create',
     ): void => {
       setCategory(category);
@@ -257,10 +259,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
             className="me-2 rounded"
             data-testid={'editCategoryBtn' + params.row.id}
             onClick={() =>
-              handleOpenModal(
-                params.row as InterfaceActionItemCategoryInfo,
-                'edit',
-              )
+              handleOpenModal(params.row as InterfaceActionItemCategory, 'edit')
             }
           >
             <i className="fa fa-edit" />
@@ -356,10 +355,10 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={categories.map((category, index) => ({
-          id: index + 1,
-          ...category,
-        }))}
+        // rows={categories.map((category, index) => ({
+        //   id: index + 1,
+        //   ...category,
+        // }))}
         columns={columns}
         isRowSelectable={() => false}
       />

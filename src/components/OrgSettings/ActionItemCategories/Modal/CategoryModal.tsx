@@ -2,7 +2,7 @@ import React, { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from '../../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
+import type { InterfaceActionItemCategory } from 'utils/interfaces';
 import { useMutation } from '@apollo/client';
 import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
@@ -28,7 +28,7 @@ export interface InterfaceActionItemCategoryModal {
   hide: () => void;
   refetchCategories: () => void;
   orgId: string;
-  category: InterfaceActionItemCategoryInfo | null;
+  category: InterfaceActionItemCategory | null;
   mode: 'create' | 'edit';
 }
 
@@ -121,7 +121,7 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
 
         await updateActionItemCategory({
           variables: {
-            actionItemCategoryId: category?._id,
+            actionItemCategoryId: category?.id,
             ...updatedFields,
           },
         });

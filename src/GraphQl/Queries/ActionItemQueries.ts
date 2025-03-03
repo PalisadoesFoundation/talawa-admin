@@ -11,6 +11,43 @@ import gql from 'graphql-tag';
  * @returns The list of action item categories associated with the organization.
  */
 
+export const ACTION_ITEM_FOR_ORGANIZATION = gql`
+  query ActionItemsByOrganization($organizationId: String!) {
+    actionItemsByOrganization(input: { organizationId: $organizationId }) {
+      id
+      isCompleted
+      assignedAt
+      completionAt
+      createdAt
+      updatedAt
+      preCompletionNotes
+      postCompletionNotes
+      organizationId
+      categoryId
+      eventId
+      assigneeId
+      creatorId
+      updaterId
+    }
+  }
+`;
+
+export const ACTION_ITEM_CATEGORY = gql`
+  query FetchActionCategoriesByOrganization(
+    $input: QueryActionCategoriesByOrganizationInput!
+  ) {
+    actionCategoriesByOrganization(input: $input) {
+      id
+      name
+      organizationId
+      creatorId
+      isDisabled
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const ACTION_ITEM_LIST = gql`
   query ActionItemsByOrganization(
     $organizationId: ID!

@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 
 import type {
-  InterfaceActionItemCategoryInfo,
+  InterfaceActionItemCategory,
   InterfaceActionItemCategoryList,
   InterfaceActionItemInfo,
   InterfaceEventVolunteerInfo,
@@ -30,6 +30,7 @@ import {
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { HiUser, HiUserGroup } from 'react-icons/hi2';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemQueries';
 
 /**
  * Interface for the form state used in the `ItemModal` component.
@@ -103,7 +104,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   });
 
   const [actionItemCategory, setActionItemCategory] =
-    useState<InterfaceActionItemCategoryInfo | null>(null);
+    useState<InterfaceActionItemCategory | null>(null);
   const [assignee, setAssignee] = useState<InterfaceEventVolunteerInfo | null>(
     null,
   );
@@ -158,6 +159,37 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         eventId: eventId,
         hasAccepted: true,
       },
+    },
+  });
+
+  const {
+    data: categoryData,
+  }: {
+    data:
+      | {
+          actionCategoriesByOrganization: {
+            id: string;
+            name: string;
+            organizationId: string;
+            creatorId: string;
+            isDisabled: boolean;
+            createdAt: string;
+            updatedAt: string;
+          }[];
+        }
+      | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+    refetch: () => void;
+  } = useQuery(ACTION_ITEM_CATEGORY, {
+    variables: {
+      input: { organizationId: orgId }, // Pass the current organization ID here
+    },
+    onCompleted: (data) => {
+      console.log(' Successfully fetched action categories:', data);
+    },
+    onError: (error) => {
+      console.error(' Error fetching action categories:', error);
     },
   });
 
@@ -260,7 +292,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           dDate: dDate,
           assigneeId: assigneeId,
           assigneeType: assigneeType,
-          actionItemCategoryId: actionItemCategory?._id,
+          actionItemCategoryId: actionItemCategory?.id,
           preCompletionNotes: preCompletionNotes,
           allottedHours: allottedHours,
           ...(eventId && { eventId }),
@@ -367,7 +399,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     setFormState(initializeFormState(actionItem));
     setActionItemCategory(
       actionItemCategories.find(
-        (category) => category._id === actionItem?.actionItemCategory?._id,
+        (category) => category.id === actionItem?.actionItemCategory?._id,
       ) || null,
     );
     setAssignee(
@@ -411,18 +443,16 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
             <Autocomplete
               className={`${styles.noOutline} w-100`}
               data-testid="categorySelect"
-              options={actionItemCategories}
-              value={actionItemCategory}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
-              filterSelectedOptions={true}
-              getOptionLabel={(item: InterfaceActionItemCategoryInfo): string =>
-                item.name
+              options={
+                (categoryData?.actionCategoriesByOrganization as InterfaceActionItemCategory[]) ||
+                []
               }
-              onChange={(_, newCategory): void => {
-                handleFormChange(
-                  'actionItemCategoryId',
-                  newCategory?._id ?? '',
-                );
+              value={actionItemCategory as InterfaceActionItemCategory | null}
+              isOptionEqualToValue={(option, value) => option?.id === value?.id}
+              filterSelectedOptions={true}
+              getOptionLabel={(item) => item.name}
+              onChange={(_, newCategory) => {
+                handleFormChange('actionItemCategoryId', newCategory?.id ?? '');
                 setActionItemCategory(newCategory);
               }}
               renderInput={(params) => (
@@ -433,6 +463,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                 />
               )}
             />
+
             {isCompleted && (
               <>
                 {/* Input text Component to add allotted Hours for action item  */}

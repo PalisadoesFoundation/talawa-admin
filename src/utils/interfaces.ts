@@ -351,16 +351,17 @@ export interface InterfaceBaseEvent {
   recurring: boolean;
 }
 
-export interface InterfaceActionItemCategoryInfo {
-  _id: string;
+export interface InterfaceActionItemCategory {
+  id: string;
   name: string;
+  organizationId: string;
+  creatorId: string;
   isDisabled: boolean;
   createdAt: string;
-  creator: { _id: string; firstName: string; lastName: string };
+  updatedAt: string;
 }
-
 export interface InterfaceActionItemCategoryList {
-  actionItemCategoriesByOrganization: InterfaceActionItemCategoryInfo[];
+  actionItemCategoriesByOrganization: InterfaceActionItemCategory[];
 }
 
 export interface InterfaceActionItemInfo {

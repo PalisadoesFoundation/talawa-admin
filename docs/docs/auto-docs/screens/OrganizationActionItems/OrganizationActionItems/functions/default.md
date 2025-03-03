@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItems.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItems.tsx#L52)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItems.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItems.tsx#L48)
 
 Component for managing and displaying action items within an organization.
 

@@ -7,12 +7,8 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
-
-import type {
-  InterfaceActionItemInfo,
-  InterfaceActionItemList,
-} from 'utils/interfaces';
+import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
+import type { InterfaceActionItemInfo } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 import {
@@ -20,7 +16,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Chip, debounce, Stack } from '@mui/material';
+import { Chip, debounce } from '@mui/material';
 import ItemViewModal from './ItemViewModal';
 import ItemModal from './ItemModal';
 import ItemDeleteModal from './ItemDeleteModal';
@@ -99,44 +95,67 @@ function organizationActionItems(): JSX.Element {
     [openModal],
   );
 
-  /**
-   * Query to fetch action items for the organization based on filters and sorting.
-   */
   const {
     data: actionItemsData,
     loading: actionItemsLoading,
     error: actionItemsError,
     refetch: actionItemsRefetch,
   }: {
-    data: InterfaceActionItemList | undefined;
+    data:
+      | {
+          actionItemsByOrganization: {
+            id: string;
+            isCompleted: boolean;
+            assignedAt: string;
+            completionAt: string;
+            createdAt: string;
+            updatedAt: string;
+            preCompletionNotes: string | null;
+            postCompletionNotes: string | null;
+            organizationId: string;
+            categoryId: string | null;
+            eventId: string | null;
+            assigneeId: string | null;
+            creatorId: string | null;
+            updaterId: string | null;
+          }[];
+        }
+      | undefined;
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
-  } = useQuery(ACTION_ITEM_LIST, {
+  } = useQuery(ACTION_ITEM_FOR_ORGANIZATION, {
     variables: {
-      organizationId: orgId,
-      eventId: eventId,
-      orderBy: sortBy,
-      where: {
-        assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
-        categoryName: searchBy === 'category' ? searchTerm : undefined,
-        is_completed:
-          status === null ? undefined : status === ItemStatus.Completed,
-      },
+      organizationId: orgId, // Ensure orgId is passed correctly
+    },
+    onError: (error) => {
+      console.error(' Error fetching action items:', error);
     },
   });
 
-  const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByOrganization || [],
-    [actionItemsData],
-  );
+  // Logs when data updates
+  useEffect(() => {
+    if (actionItemsLoading) {
+      console.log('⏳ Loading action items...');
+    }
+
+    if (actionItemsData) {
+      console.log(
+        ' Action Items Data:',
+        JSON.stringify(actionItemsData, null, 2),
+      );
+    }
+
+    if (actionItemsError) {
+      console.error(' Action Items Error:', actionItemsError);
+    }
+  }, [actionItemsLoading, actionItemsData, actionItemsError]);
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
-
-  // Trigger refetch on sortBy or status change
+  console.log(searchTerm);
   useEffect(() => {
     actionItemsRefetch();
   }, [sortBy, status, actionItemsRefetch]);
@@ -447,34 +466,15 @@ function organizationActionItems(): JSX.Element {
         disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
-        sx={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          '& .MuiDataGrid-columnHeaders': {
-            border: 'none',
-          },
-          '& .MuiDataGrid-cell': {
-            border: 'none',
-          },
-          '& .MuiDataGrid-columnSeparator': {
-            display: 'none',
-          },
-        }}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItems')}
-            </Stack>
-          ),
-        }}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowId={(row) => row.id} // Ensure correct row ID is used
         autoHeight
         rowHeight={65}
-        rows={actionItems.map((actionItem, index) => ({
-          id: index + 1,
-          ...actionItem,
-        }))}
+        rows={
+          actionItemsData?.actionItemsByOrganization.map((actionItem) => ({
+            ...actionItem,
+            status: actionItem.isCompleted ? 'Completed' : 'Pending',
+          })) || []
+        }
         columns={columns}
         isRowSelectable={() => false}
       />

@@ -54,11 +54,13 @@ const categoryProps: InterfaceActionItemCategoryModal[] = [
     orgId: 'orgId',
     mode: 'create',
     category: {
-      _id: 'categoryId',
+      id: 'categoryId',
       name: 'Category 1',
       isDisabled: false,
       createdAt: '2044-01-01',
-      creator: { _id: 'userId', firstName: 'John', lastName: 'Doe' },
+      updatedAt: '2044-01-02',
+      creatorId: '65378abd-8500-8f17-1cf2-990d00000002',
+      organizationId: 'org-123456',
     },
   },
   {
@@ -68,11 +70,13 @@ const categoryProps: InterfaceActionItemCategoryModal[] = [
     orgId: 'orgId',
     mode: 'edit',
     category: {
-      _id: 'categoryId',
+      id: 'categoryId',
       name: 'Category 1',
       isDisabled: false,
       createdAt: '2044-01-01',
-      creator: { _id: 'userId', firstName: 'John', lastName: 'Doe' },
+      updatedAt: '2044-01-02',
+      creatorId: '65378abd-8500-8f17-1cf2-990d00000002',
+      organizationId: 'org-123456',
     },
   },
 ];

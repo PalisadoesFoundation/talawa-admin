@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L92)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L93)
 
 A modal component for creating action items.
 

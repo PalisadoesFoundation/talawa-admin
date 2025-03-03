@@ -19,7 +19,7 @@ mode - The mode of the modal.
 
 ### category
 
-> **category**: [`InterfaceActionItemCategoryInfo`](../../../../../../utils/interfaces/interfaces/InterfaceActionItemCategoryInfo.md)
+> **category**: [`InterfaceActionItemCategory`](../../../../../../utils/interfaces/interfaces/InterfaceActionItemCategory.md)
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L31)
 

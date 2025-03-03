@@ -29,6 +29,7 @@ import AgendaItemsUpdateModal from 'components/AgendaItems/Update/AgendaItemsUpd
  * @param props - The props for the component.
  * @returns JSX.Element
  */
+
 function AgendaItemsContainer({
   agendaItemConnection,
   agendaItemData,
