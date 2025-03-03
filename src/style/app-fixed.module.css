@@ -127,7 +127,7 @@
   --email-button-fill: #555555;
 
   --login-button-color: #555555;
-  --login-button-bg: #1778f2;
+  --login-button-bg: #a8c7fa;
   --login-button-border: #a8c7fa;
   --login-button-bg-hover: #a8c7fa;
   --login-button-border-hover: #a8c7fa;
@@ -552,7 +552,8 @@
 
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #c8102e;
-  /* --delete-button-color-hover: #ff4d4f; */
+  --delete-button-border: #000;
+  --delete-button-color-hover: #ff4d4f;
 
   --customDataTable-bg: #f2f2f2;
 
@@ -674,6 +675,8 @@
   --holidayCard-bg: #00000026;
 
   --spinner-border: #9ca3af;
+  --cardBackground-color: #1778f2;
+  --textFields-color: #737373;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -4026,15 +4029,15 @@
 }
 
 .textFields {
-  background-color: #f1f3f6;
-  color: #737373;
+  background-color: var(--inputColor-bg);
+  color: var(--textFields-color);
   margin-bottom: 1rem;
   width: auto;
 }
 
 .descriptionTextField {
-  background-color: #f1f3f6;
-  color: #737373;
+  background-color: var(--inputColor-bg);
+  color: var(--textFields-color);
   margin-bottom: 1rem;
   width: auto;
   resize: none;
@@ -4057,7 +4060,7 @@
 }
 
 .deleteCardHeader {
-  background-color: #eaebef;
+  background-color: var(--activeTab-bg);
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
   padding-top: 1rem;
@@ -4065,24 +4068,24 @@
 }
 
 .btnDelete {
-  background-color: #eaebef;
-  border: #000;
+  background-color: var(--activeTab-bg);
+  border: var(--activeItem-color);
 }
 
 .btnDelete:hover {
-  background-color: #eaebef;
-  color: #000 !important;
+  background-color: var(--activeTab-bg);
+  color: var(--activeItem-color) !important;
 }
 
 .btnDelete:active {
-  background-color: #eaebef !important;
-  color: #000 !important;
+  background-color: var(--activeTab-bg) !important;
+  color: var(--activeItem-color) !important;
 }
 
 .deleteButton {
-  background-color: #f8d6dc;
-  color: #c8102e;
-  border: 1px solid #c8102e;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: 1px solid var(--removeButton-color);
   padding: 8px 16px;
   cursor: pointer;
   display: block;
@@ -4096,25 +4099,25 @@
 .deleteButton:hover,
 .deleteButton:active,
 .deleteButton:focus {
-  background-color: #f8d6dc !important;
-  color: #c8102e;
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
   outline: none;
 }
 
 .btnConfirmDelete {
-  background-color: #f8d6dc;
-  color: #c8102e;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
   border: 0px;
 }
 
 .customFileInput,
 .customFileInput:hover {
-  background-color: #f1f3f6;
+  background-color: var(--inputColor-bg);
 }
 
 .customFileInput::file-selector-button {
-  background-color: #1778f2 !important;
+  background-color: var(--cardBackground-color) !important;
   color: white;
 }
 
@@ -4123,19 +4126,19 @@
 }
 
 .btnConfirmDelete:hover {
-  background-color: #f8d6dc;
-  color: #c8102e !important;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color) !important;
 }
 
 .btnConfirmDelete:active {
-  background-color: #f8d6dc !important;
-  color: #c8102e;
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
   border: 0px;
 }
 
 .btnConfirmDelete:focus {
-  background-color: #f8d6dc;
-  color: #c8102e;
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
   border: 0px;
 }
 
@@ -4144,7 +4147,7 @@
 }
 
 .modelHeaderDelete {
-  background-color: #1778f2;
+  background-color: var(--cardBackground-color);
 }
 
 /* -- OrgProfileFieldSettings.tsx -- */
@@ -4183,8 +4186,8 @@ form {
 
 .resetChangesBtn {
   border-width: 2px;
-  border-color: #1778f2;
-  color: #1778f2;
+  border-color: var(--cardBackground-color);
+  color: var(--cardBackground-color);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   display: flex;
@@ -4196,9 +4199,9 @@ form {
 }
 
 .resetChangesBtn:hover {
-  color: #1778f2;
+  color: var(--cardBackground-color);
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
-  border: 2px solid #1778f2 !important;
+  border: 2px solid var(--cardBackground-color) !important;
 }
 
 .syncIconStyle,
@@ -4206,9 +4209,9 @@ form {
   transform: rotate(135deg) scale(1.2);
   width: 10px;
   height: 10px;
-  stroke: #1778f2;
+  stroke: var(--cardBackground-color);
   stroke-width: 1;
-  fill: #1778f2;
+  fill: var(--cardBackground-color);
 }
 
 .saveChangesBtn {
@@ -4217,17 +4220,17 @@ form {
   height: 49px;
   width: 160px;
   font-size: 0.8rem;
-  background-color: #1778f2;
+  background-color: var(--cardBackground-color);
 }
 
 .saveChangesBtn:hover {
-  background-color: #1778f2 !important;
+  background-color: var(--cardBackground-color) !important;
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
 }
 
 .orgUpdateFormLables {
   font-weight: normal !important;
-  color: #000;
+  color: var(--delete-button-border);
 }
 
 /* -- OrganizationCard.tsx -- */
