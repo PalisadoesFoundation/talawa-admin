@@ -4020,39 +4020,9 @@
 
 /* -- GeneralSettings.tsx -- */
 
-.cardSettings {
-  border-radius: 0.5rem;
-  margin-bottom: 1.5rem;
-  border: none;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  height: 800px;
-  width: 588px;
-}
-
-.cardHeaderStyle {
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
-  padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 3px solid var(--cardHeader-border);
-  background-color: #eaebef;
-  padding: 16px;
-}
-
 .userupdatediv {
   padding: 25px 16px;
   background: var(--white-color);
-}
-
-.maskGroupButton {
-  width: 20px;
-  height: 20px;
-  color: #1778f2;
-}
-
-.customTextarea {
-  min-height: 100px;
-  background-color: #f1f3f6;
-  color: #737373;
 }
 
 .textFields {
@@ -4081,6 +4051,7 @@
   height: 280px !important;
   width: 404px !important;
 }
+
 .settingsBody {
   margin: 2.5rem 0;
 }
@@ -4102,6 +4073,7 @@
   background-color: #eaebef;
   color: #000 !important;
 }
+
 .btnDelete:active {
   background-color: #eaebef !important;
   color: #000 !important;
@@ -4149,6 +4121,7 @@
 .customFileInput::file-selector-button:hover {
   background-color: blue !important;
 }
+
 .btnConfirmDelete:hover {
   background-color: #f8d6dc;
   color: #c8102e !important;
@@ -4237,6 +4210,7 @@ form {
   stroke-width: 1;
   fill: #1778f2;
 }
+
 .saveChangesBtn {
   color: white;
   border: 0px;
@@ -4255,6 +4229,7 @@ form {
   font-weight: normal !important;
   color: #000;
 }
+
 /* -- OrganizationCard.tsx -- */
 
 /* -- OrganizationCardStart.tsx -- */
@@ -6249,8 +6224,6 @@ form {
   font-size: 16px;
 }
 
-/* -- OrgSettings.tsx -- */
-
 /* -- ItemDeleteModal.tsx -- */
 
 .itemModal {
@@ -6975,7 +6948,6 @@ form {
 }
 
 /* -- LeaveOrganization.tsx -- */
-
 /* -- Organizations.tsx -- */
 
 .mainContainerOrganization {
