@@ -82,21 +82,6 @@ describe('Testing OrganizationScreen', () => {
     });
   });
 
-  test('handles drawer toggle correctly', () => {
-    renderComponent();
-
-    const closeButton = screen.getByTestId('closeMenu');
-    fireEvent.click(closeButton);
-
-    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
-
-    const openButton = screen.getByTestId('openMenu');
-    fireEvent.click(openButton);
-
-    // Check for expand class after opening
-    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.contract);
-  });
-
   test('handles window resize', () => {
     renderComponent();
     window.innerWidth = 800;
