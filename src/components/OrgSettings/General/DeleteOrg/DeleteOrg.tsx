@@ -110,7 +110,7 @@ function deleteOrg(): JSX.Element {
               data-testid="openDeleteModalBtn"
             >
               <DeleteIcon className={styles.icon} />
-              {data && data.isSampleOrganization
+              {data?.isSampleOrganization
                 ? t('deleteSampleOrganization')
                 : t('delete')}
             </Button>
