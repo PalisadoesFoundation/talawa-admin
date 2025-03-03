@@ -80,11 +80,7 @@ describe('GeneralSettings Component', () => {
     );
 
     const elements = getAllByTestId(/org-update|delete-org/);
-
-    // Check if we have exactly 2 components
     expect(elements).toHaveLength(4);
-
-    // Check if components are rendered in the correct order
     expect(elements[0]).toHaveAttribute('data-testid', 'org-update');
     expect(elements[1]).toHaveAttribute('data-testid', 'delete-org');
   });

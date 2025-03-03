@@ -4017,9 +4017,9 @@
 /* -- GeneralSettings.tsx -- */
 
 .cardSettings {
-  border-radius: 0.5rem; /* Equivalent to Bootstrap's rounded-4 */
-  margin-bottom: 1.5rem; /* Equivalent to mb-4 */
-  border: none; /* Equivalent to border-0 */
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  border: none;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   height: 800px;
   width: 588px;
@@ -4035,22 +4035,13 @@
 }
 
 .userupdatediv {
-  /* border: 1px solid var(--grey-border);
-  box-shadow: 2px 1px var(--grey-border); */
   padding: 25px 16px;
-  /* border-radius: 5px; */
   background: var(--white-color);
 }
 
 .maskGroupButton {
-  /* Mask group */
-
-  /* position: absolute; */
   width: 20px;
   height: 20px;
-  /* left: 398px; */
-  /* top: 844px; */
-  /* background: var(--maskGroupButton-bg); */
   color: #1778f2;
 }
 
@@ -4077,6 +4068,7 @@
 }
 
 /* -- DeleteOrg.tsx -- */
+
 .DeleteOrgCard {
   border-radius: 0.5rem;
   margin-left: 1rem;
@@ -4093,8 +4085,6 @@
   background-color: #eaebef;
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
-
-  /* Equivalent to py-3 (vertical padding, top and bottom) */
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -4172,11 +4162,8 @@
   border: 0px;
 }
 
-/* Icon spacing so text isn’t jammed up against it */
 .icon {
   margin-right: 8px;
-  /* If you want to control the icon color, you can do: */
-  /* fill: #c93434; */
 }
 
 .modelHeaderDelete {
@@ -4381,14 +4368,12 @@ form {
   font-weight: bold;
   color: var(--bs-emphasis-color, var(--primaryText-color));
   @extend .reusable-text-ellipsis;
-  /* Referencing the reusable class from the general section */
 }
 
 .secondaryText {
   font-size: 0.9rem;
   color: var(--secondText-color);
   @extend .reusable-text-ellipsis;
-  /* Referencing the reusable class from the general section */
 }
 
 /* -- ProfileDropdown.tsx -- */

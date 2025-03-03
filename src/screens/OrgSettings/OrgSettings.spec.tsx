@@ -102,65 +102,15 @@ describe('Organisation Settings Page', () => {
   it('should render the organisation settings page', async () => {
     renderOrganisationSettings();
 
-    // Wait for and verify the general tab is rendered
     const generalTab = await waitFor(() => screen.getByTestId('generalTab'));
     expect(generalTab).toBeInTheDocument();
     expect(generalTab).toBeVisible();
 
-    // Verify the parent container has the correct class
     await waitFor(() => {
       const container = generalTab.parentElement;
       expect(container).toHaveClass('d-flex', 'justify-content-between');
     });
 
-    // Verify GeneralSettings component is rendered with the correct orgId prop
     expect(screen.getByTestId('generalTab')).toBeInTheDocument();
   });
-
-  // it('should handle dropdown item selection correctly', async () => {
-  //   renderOrganisationSettings();
-
-  //   await waitFor(() => {
-  //     expect(
-  //       screen.getByTestId('settingsDropdownContainer'),
-  //     ).toBeInTheDocument();
-  //   });
-
-  //   const dropdownToggle = screen.getByTestId('settingsDropdownToggle');
-  //   await userEvent.click(dropdownToggle);
-
-  //   // Find all dropdown items
-  //   const dropdownItems = screen.getAllByRole('menuitem');
-  //   expect(dropdownItems).toHaveLength(3);
-
-  //   for (const item of dropdownItems) {
-  //     await userEvent.click(item);
-
-  //     if (item.textContent?.includes('general')) {
-  //       await waitFor(() => {
-  //         expect(screen.getByTestId('generalTab')).toBeInTheDocument();
-  //       });
-  //     } else if (item.textContent?.includes('actionItemCategories')) {
-  //       await waitFor(() => {
-  //         expect(
-  //           screen.getByTestId('actionItemCategoriesTab'),
-  //         ).toBeInTheDocument();
-  //       });
-  //     } else if (item.textContent?.includes('agendaItemCategories')) {
-  //       await waitFor(() => {
-  //         expect(
-  //           screen.getByTestId('agendaItemCategoriesTab'),
-  //         ).toBeInTheDocument();
-  //       });
-  //     }
-
-  //     if (item !== dropdownItems[dropdownItems.length - 1]) {
-  //       await userEvent.click(dropdownToggle);
-  //     }
-  //   }
-
-  //   expect(dropdownToggle).toHaveTextContent(
-  //     screen.getByTestId('agendaItemCategoriesSettings').textContent || '',
-  //   );
-  // });
 });

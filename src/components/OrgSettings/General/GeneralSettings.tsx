@@ -28,10 +28,7 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
     <Row className={`${styles.settingsBody} mt-3`}>
       <Col lg={7}>
         <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
-          <Card.Header
-            className={`py-3 `}
-            style={{ backgroundColor: '#eaebef' }}
-          >
+          <Card.Header className={styles.deleteCardHeader}>
             <h5 className="mb-0 fw-semibold">{t('Edit Organization')}</h5>
           </Card.Header>
           <Card.Body className={styles.cardBody}>

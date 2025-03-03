@@ -164,7 +164,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         return;
       }
 
-      setIsSaving(true); // Set loading state before mutation
+      setIsSaving(true);
 
       const { data } = await updateOrganization({
         variables: {
@@ -192,7 +192,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     } catch (error: unknown) {
       errorHandler(t, error);
     } finally {
-      setIsSaving(false); // Reset loading state after mutation
+      setIsSaving(false);
     }
   };
 
@@ -233,23 +233,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          {/* <Form.Label className={styles.orgUpdateFormLables}>
-            {tCommon('description')}
-          </Form.Label>
-          <Form.Control
-            as="textarea"
-            className={`mb-3 ${styles.customTextarea}`}
-            placeholder={tCommon('Enter organization description')}
-            autoComplete="off"
-            required
-            value={formState.orgDescrip}
-            onChange={(e): void => {
-              setFormState({
-                ...formState,
-                orgDescrip: e.target.value,
-              });
-            }}
-          /> */}
           <Form.Label className={styles.orgUpdateFormLables}>
             {tCommon('description')}
           </Form.Label>
@@ -350,7 +333,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                   value="savechanges"
                   data-testid="save-org-changes-btn"
                   onClick={onSaveChangesClicked}
-                  disabled={isSaving} // Add disabled state
+                  disabled={isSaving}
                 >
                   <SaveIcon className="me-1" />
                   {isSaving ? tCommon('saving') : tCommon('saveChanges')}
