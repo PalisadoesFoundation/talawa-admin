@@ -29,6 +29,7 @@
     "@reduxjs/toolkit": "^2.3.0",
     "apollo-upload-client": "^18.0.1",
     "babel-plugin-transform-import-meta": "^2.2.1",
+    "better-auth": "^1.2.1",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
     "customize-cra": "^1.0.0",

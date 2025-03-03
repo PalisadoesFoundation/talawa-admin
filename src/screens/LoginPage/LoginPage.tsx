@@ -89,6 +89,7 @@ import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
+import { authClient } from 'lib/auth-client';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -172,6 +173,8 @@ const loginPage = (): JSX.Element => {
   }, [data]);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
+  console.log(signup);
+
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
   const { startSession, extendSession } = useSession();
@@ -261,13 +264,38 @@ const loginPage = (): JSX.Element => {
     ) {
       if (cPassword == signPassword) {
         try {
-          const { data: signUpData } = await signup({
-            variables: {
-              name: signName,
+          // const { data: signUpData } = await signup({
+          //   variables: {
+          //     name: signName,
+          //     email: signEmail,
+          //     password: signPassword,
+          //   },
+          // });
+          const { data: signUpData, error } = await authClient.signUp.email(
+            {
               email: signEmail,
-              password: signPassword,
+              password: signPassword, // user password -> min 8 characters by default
+              name: signName, // user display name
+              // callbackURL: "/dashboard" // a url to redirect to after the user verifies their email (optional)
             },
-          });
+            {
+              onRequest: (ctx) => {
+                //show loading
+                console.log(ctx);
+              },
+              onSuccess: (ctx) => {
+                //redirect to the dashboard or sign in page
+                console.log(ctx);
+
+                alert('success');
+              },
+              onError: (ctx) => {
+                // display the error message
+                alert(ctx.error.message);
+              },
+            },
+          );
+          console.log(error);
 
           if (signUpData) {
             toast.success(
@@ -318,6 +346,18 @@ const loginPage = (): JSX.Element => {
       const { data: signInData } = await signin({
         variables: { email: formState.email, password: formState.password },
       });
+      const { data, error } = await authClient.signIn.email(
+        {
+          email: formState.email,
+          password: formState.password,
+          /**
+           * remember the user session after the browser is closed.
+           */
+          rememberMe: false,
+        },
+        {},
+      );
+      console.log(data, error);
 
       if (signInData) {
         if (signInData.signIn.user.countryCode !== null) {
