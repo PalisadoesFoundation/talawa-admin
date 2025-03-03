@@ -75,8 +75,8 @@
   --searchButton-bg-hover: #a8c7fa;
   --searchButton-bg-active: #a8c7fa;
 
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --modalHeader-color: #000000;
   --modalHeader-bg: #ffffff;
@@ -127,7 +127,7 @@
   --email-button-fill: #555555;
 
   --login-button-color: #555555;
-  --login-button-bg: #1778F2;
+  --login-button-bg: #1778f2;
   --login-button-border: #a8c7fa;
   --login-button-bg-hover: #a8c7fa;
   --login-button-border-hover: #a8c7fa;
@@ -276,8 +276,8 @@
   --colorPrimary-bg-active: #a8c7fa;
   --colorPrimary-bg-active: #a8c7fa;
 
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --colorPrimary-color-active: #555555;
   --colorWhite: #555555;
@@ -547,7 +547,7 @@
   --btnsContainerOrgActionItemCategories-outline: #9ca3af;
 
   --delete-button-bg: #f8d6dc;
-  --delete-button-color: #C8102E;
+  --delete-button-color: #c8102e;
   /* --delete-button-color-hover: #ff4d4f; */
 
   --customDataTable-bg: #f2f2f2;
@@ -4016,21 +4016,21 @@
 
 /* -- GeneralSettings.tsx -- */
 
-.cardSettings{
+.cardSettings {
   border-radius: 0.5rem; /* Equivalent to Bootstrap's rounded-4 */
   margin-bottom: 1.5rem; /* Equivalent to mb-4 */
   border: none; /* Equivalent to border-0 */
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   height: 800px;
   width: 588px;
 }
 
-.cardHeaderStyle{
+.cardHeaderStyle {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 3px solid var(--cardHeader-border);
-  background-color: #EAEBEF;
+  background-color: #eaebef;
   padding: 16px;
 }
 
@@ -4042,134 +4042,133 @@
   background: var(--white-color);
 }
 
-.maskGroupButton{
+.maskGroupButton {
   /* Mask group */
 
-/* position: absolute; */
-width: 20px;
-height: 20px;
-/* left: 398px; */
-/* top: 844px; */
-/* background: var(--maskGroupButton-bg); */
-color: #1778F2;
-
+  /* position: absolute; */
+  width: 20px;
+  height: 20px;
+  /* left: 398px; */
+  /* top: 844px; */
+  /* background: var(--maskGroupButton-bg); */
+  color: #1778f2;
 }
 
-.customTextarea{
+.customTextarea {
   min-height: 100px;
-  background-color: #F1F3F6;
+  background-color: #f1f3f6;
   color: #737373;
 }
 
-.textFields{
-  background-color: #F1F3F6;
+.textFields {
+  background-color: #f1f3f6;
   color: #737373;
   margin-bottom: 1rem;
   width: auto;
 }
 
-.descriptionTextField{
-  background-color: #F1F3F6;
+.descriptionTextField {
+  background-color: #f1f3f6;
   color: #737373;
   margin-bottom: 1rem;
   width: auto;
-  resize: none; 
+  resize: none;
   height: 100px;
 }
 
 /* -- DeleteOrg.tsx -- */
-.DeleteOrgCard{
-    border-radius: 0.5rem;
-    margin-left: 1rem; 
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
-    border: none; 
-    height: 280px !important;
-    width: 404px !important;
+.DeleteOrgCard {
+  border-radius: 0.5rem;
+  margin-left: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: none;
+  height: 280px !important;
+  width: 404px !important;
 }
 .settingsBody {
   margin: 2.5rem 0;
 }
 
-.deleteCardHeader{
+.deleteCardHeader {
   background-color: #eaebef;
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
-  
+
   /* Equivalent to py-3 (vertical padding, top and bottom) */
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
-.btnDelete{
-  background-color: #EAEBEF;
+.btnDelete {
+  background-color: #eaebef;
   border: #000;
 }
 
-.btnDelete:hover{
-  background-color: #EAEBEF;
+.btnDelete:hover {
+  background-color: #eaebef;
   color: #000 !important;
 }
-.btnDelete:active{
-  background-color: #EAEBEF !important;
+.btnDelete:active {
+  background-color: #eaebef !important;
   color: #000 !important;
 }
 
 .deleteButton {
-  background-color: #F8D6DC; 
-  color: #C8102E;           
-  border: 1px solid #C8102E;  
-  padding: 8px 16px;        
+  background-color: #f8d6dc;
+  color: #c8102e;
+  border: 1px solid #c8102e;
+  padding: 8px 16px;
   cursor: pointer;
   display: block;
   margin: 10px auto;
-  border-radius: 4px;  
+  border-radius: 4px;
   width: 365px;
   height: 42px;
   text-align: center;
 }
 
-.deleteButton:hover, 
+.deleteButton:hover,
 .deleteButton:active,
 .deleteButton:focus {
-  background-color: #F8D6DC !important;
-  color: #C8102E; 
+  background-color: #f8d6dc !important;
+  color: #c8102e;
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
   outline: none;
 }
 
-.btnConfirmDelete{
-  background-color: #F8D6DC;
-  color: #C8102E;
+.btnConfirmDelete {
+  background-color: #f8d6dc;
+  color: #c8102e;
   border: 0px;
 }
 
 .customFileInput,
-.customFileInput:hover{
-  background-color: #F1F3F6;
+.customFileInput:hover {
+  background-color: #f1f3f6;
 }
 
 .customFileInput::file-selector-button {
-  background-color: #1778F2 !important;
-  color:white
+  background-color: #1778f2 !important;
+  color: white;
 }
 
 .customFileInput::file-selector-button:hover {
   background-color: blue !important;
 }
-.btnConfirmDelete:hover{
-  background-color: #F8D6DC;
-  color: #C8102E !important;
+.btnConfirmDelete:hover {
+  background-color: #f8d6dc;
+  color: #c8102e !important;
 }
 
-.btnConfirmDelete:active{
-  background-color: #F8D6DC !important;
-  color: #C8102E;
+.btnConfirmDelete:active {
+  background-color: #f8d6dc !important;
+  color: #c8102e;
   border: 0px;
 }
 
-.btnConfirmDelete:focus{
-  background-color: #F8D6DC;
-  color: #C8102E;
+.btnConfirmDelete:focus {
+  background-color: #f8d6dc;
+  color: #c8102e;
   border: 0px;
 }
 
@@ -4180,10 +4179,9 @@ color: #1778F2;
   /* fill: #c93434; */
 }
 
-.modelHeaderDelete{
-  background-color: #1778F2;
+.modelHeaderDelete {
+  background-color: #1778f2;
 }
-
 
 /* -- OrgProfileFieldSettings.tsx -- */
 
@@ -4215,15 +4213,15 @@ form {
 
 /* -- OrgUpdate.tsx -- */
 
-.orgCardSettings{
+.orgCardSettings {
   width: 558px;
 }
 
 .resetChangesBtn {
   border-width: 2px;
-  border-color: #1778F2;
-  color: #1778F2;
-  padding: 0.5rem 1rem; 
+  border-color: #1778f2;
+  color: #1778f2;
+  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
@@ -4234,34 +4232,35 @@ form {
 }
 
 .resetChangesBtn:hover {
-  color: #1778F2;
+  color: #1778f2;
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
-  border: 2px solid #1778F2 !important;
+  border: 2px solid #1778f2 !important;
 }
 
-.syncIconStyle ,.syncIconStyle:focus{
+.syncIconStyle,
+.syncIconStyle:focus {
   transform: rotate(135deg) scale(1.2);
   width: 10px;
   height: 10px;
-  stroke: #1778F2;
-  stroke-width: 1; 
-  fill: #1778F2; 
+  stroke: #1778f2;
+  stroke-width: 1;
+  fill: #1778f2;
 }
-.saveChangesBtn{
+.saveChangesBtn {
   color: white;
-  border: 0px ;
+  border: 0px;
   height: 49px;
   width: 160px;
   font-size: 0.8rem;
-  background-color:#1778F2 ;
+  background-color: #1778f2;
 }
 
-.saveChangesBtn:hover{
-  background-color: #1778F2 !important;
+.saveChangesBtn:hover {
+  background-color: #1778f2 !important;
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
 }
 
-.orgUpdateFormLables{
+.orgUpdateFormLables {
   font-weight: normal !important;
   color: #000;
 }
@@ -5807,7 +5806,6 @@ form {
   border-radius: 50%;
 }
 
-
 .iconCol {
   padding-right: 0.75rem;
 }
@@ -5842,7 +5840,7 @@ form {
   color: var(--cardBody-color);
 }
 
-.textBox{
+.textBox {
   padding-top: 20px;
   padding-bottom: 20px;
 }

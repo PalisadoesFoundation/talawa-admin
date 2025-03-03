@@ -824,7 +824,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
-    "delete":"supprimer",
+    "delete": "supprimer",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "confirmDelete": "Confirmation de la suppression",
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
