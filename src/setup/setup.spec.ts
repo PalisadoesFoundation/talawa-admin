@@ -155,7 +155,9 @@ describe('Talawa Admin Setup', () => {
         expect(validationResult).toBe(
           'Invalid reCAPTCHA site key. Please try again.',
         );
-        return Promise.resolve({ recaptchaSiteKeyInput: mockInvalidKey });
+        return Object.assign(
+          Promise.resolve({ recaptchaSiteKeyInput: mockInvalidKey, ui: {} }),
+        );
       });
 
     vi.mocked(validateRecaptcha).mockReturnValue(false);
