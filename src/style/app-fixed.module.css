@@ -674,8 +674,8 @@
   --holidayCard-bg: #00000026;
 
   --spinner-border: #9ca3af;
-  --cardBackground-color: #1778f2;
-  --textFields-color: #737373;
+  --card-background-color: #1778f2;
+  --text-fields-color: #737373;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
