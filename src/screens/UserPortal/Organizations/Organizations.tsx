@@ -271,10 +271,10 @@ export default function organizations(): JSX.Element {
             )
               membershipRequestStatus = 'accepted';
             else if (
-              (organization.membershipRequests?.some(
+              organization.membershipRequests?.some(
                 (request: { _id: string; user: { _id: string } }) =>
                   request.user._id === userId,
-              ) as boolean)
+              ) as boolean
             )
               membershipRequestStatus = 'pending';
             return {
