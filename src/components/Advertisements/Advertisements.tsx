@@ -33,8 +33,15 @@ export default function advertisements(): JSX.Element {
     startAt: string;
   };
 
+  //Local state for all ads and pagination
+  const [advertisements, setAdvertisements] = useState<Ad[]>([]);
+  const [pageInfo, setPageInfo] = useState<{
+    hasNextPage: boolean;
+    endCursor: string | null;
+  } | null>(null);
+
   // GraphQL query to fetch the list of advertisements
-  const { data: orgAdvertisementListData, refetch } = useQuery<{
+  const { data: orgAdvertisementListData, fetchMore } = useQuery<{
     organization: InterfaceQueryOrganizationAdvertisementListItem;
   }>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
@@ -43,40 +50,15 @@ export default function advertisements(): JSX.Element {
       },
       after: null,
       before: null,
-      first: 12,
+      first: 6,
     },
+    notifyOnNetworkStatusChange: true,
   });
-
-  // State to manage the list of advertisements
-  const [advertisements, setAdvertisements] = useState<Ad[]>(
-    orgAdvertisementListData?.organization?.advertisements?.edges?.map(
-      (edge) => ({
-        id: edge.node.id,
-        name: edge.node.name,
-        type: edge.node.type,
-        startAt: edge.node.startAt,
-        endAt: edge.node.endAt,
-        attachmentUrl: edge.node.attachments?.at(-1)?.url || '',
-      }),
-    ) || [],
-  );
-  console.log('1', orgAdvertisementListData);
-  // Reset advertisements when `after` is reset
-  useEffect(() => {
-    if (!after) {
-      setAdvertisements([]); // Reset the list when `after` is reset
-    }
-  }, [after]);
 
   // Effect hook to update advertisements list when data changes or pagination cursor changes
   useEffect(() => {
     if (orgAdvertisementListData?.organization?.advertisements?.edges) {
-      console.log(
-        'API Response:',
-        orgAdvertisementListData.organization.advertisements.edges,
-      );
-
-      const ads: Ad[] =
+      const newAds: Ad[] =
         orgAdvertisementListData.organization.advertisements.edges.map(
           (edge) => ({
             id: edge.node.id,
@@ -88,52 +70,79 @@ export default function advertisements(): JSX.Element {
           }),
         );
 
-      setAdvertisements((prevAds) => (after ? [...prevAds, ...ads] : ads));
+      setAdvertisements(newAds);
+      setPageInfo(
+        orgAdvertisementListData.organization.advertisements.pageInfo,
+      );
     }
   }, [orgAdvertisementListData, after]);
 
-  /**
-   * Fetches more advertisements for infinite scrolling.
-   */
+  //  Fetches more advertisements for infinite scrolling.
+
   async function loadMoreAdvertisements(): Promise<void> {
-    const { data } = await refetch({
-      variables: {
-        input: {
-          id: currentOrgId,
+    if (
+      !orgAdvertisementListData?.organization?.advertisements?.pageInfo
+        ?.hasNextPage
+    ) {
+      console.log('No More Ads to fetch');
+      return;
+    }
+    try {
+      await fetchMore({
+        variables: {
+          after: pageInfo?.endCursor,
+          first: 6,
         },
-        after: after, // Use the current `after` cursor
-        first: 12, // Ensure this matches the initial query
-      },
-    });
-
-    console.log('Fetched Data:', data); // Debugging
-
-    if (data?.organization?.advertisements?.pageInfo?.endCursor) {
-      const newAfter = data.organization.advertisements.pageInfo.endCursor;
-      if (newAfter !== after) {
-        setAfter(newAfter);
-        // Append new ads to the existing list
-        const newAds: Ad[] = data.organization.advertisements.edges.map(
-          (edge) => ({
-            id: edge.node.id,
-            name: edge.node.name,
-            type: edge.node.type, // or default to "banner" if needed
-            startAt: edge.node.startAt,
-            endAt: edge.node.endAt,
-            attachmentUrl: edge.node.attachments?.at(-1)?.url || '',
-          }),
-        );
-        // Filter out duplicates based on `id`
-        const uniqueAds = newAds.filter(
-          (newAd) => !advertisements.some((ad) => ad.id === newAd.id),
-        );
-
-        setAdvertisements((prevAds) => [...prevAds, ...uniqueAds]);
-      }
-    } else {
-      console.log('No more data to fetch.');
+        updateQuery: (prevResult, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prevResult;
+          const newEdges = fetchMoreResult.organization.advertisements.edges;
+          const newPageInfo =
+            fetchMoreResult.organization.advertisements.pageInfo;
+          const mergedEdges = [
+            ...prevResult.organization.advertisements.edges,
+            ...newEdges,
+          ].reduce(
+            (acc, edge) => {
+              if (!acc.some((e) => e.node.id === edge.node.id)) {
+                acc.push(edge);
+              }
+              return acc;
+            },
+            [] as typeof prevResult.organization.advertisements.edges,
+          );
+          setAdvertisements(
+            mergedEdges.map((edge) => ({
+              id: edge.node.id,
+              name: edge.node.name,
+              type: edge.node.type || 'banner',
+              startAt: edge.node.startAt,
+              endAt: edge.node.endAt,
+              attachmentUrl: edge.node.attachments?.at(-1)?.url || '',
+            })),
+          );
+          setPageInfo(newPageInfo);
+          return {
+            organization: {
+              ...prevResult.organization,
+              advertisements: {
+                edges: mergedEdges,
+                pageInfo: newPageInfo,
+              },
+            },
+          };
+        },
+      });
+    } catch (error) {
+      console.error('Error While Loading Advertisements', error);
     }
   }
+  //Filtering to seperate active and completed Ads
+  const activeAds = advertisements.filter(
+    (ad) => new Date(ad.endAt) > new Date(),
+  );
+  const completedAds = advertisements.filter(
+    (ad) => new Date(ad.endAt) < new Date(),
+  );
 
   return (
     <>
@@ -143,7 +152,7 @@ export default function advertisements(): JSX.Element {
             <Col className={styles.colAdvertisements}>
               <SearchBar
                 placeholder={'Search..'}
-                onSearch={(value) => console.log(value)} // Replace with actual search handler
+                onSearch={(value) => console.log(value)} // To Replace with actual search handler
                 inputTestId="searchname"
                 buttonTestId="searchButton"
               />
@@ -162,7 +171,7 @@ export default function advertisements(): JSX.Element {
                 className="pt-4 m-2"
               >
                 <InfiniteScroll
-                  dataLength={advertisements?.length ?? 0}
+                  dataLength={activeAds?.length ?? 0}
                   next={loadMoreAdvertisements}
                   loader={
                     <>
@@ -184,55 +193,34 @@ export default function advertisements(): JSX.Element {
                       ))}
                     </>
                   }
-                  hasMore={
-                    orgAdvertisementListData?.organization?.advertisements
-                      ?.pageInfo?.hasNextPage ?? false
-                  }
+                  hasMore={pageInfo?.hasNextPage ?? false}
                   className={styles.listBoxAdvertisements}
                   data-testid="organizations-list"
                   endMessage={
-                    advertisements.filter(
-                      (ad: Ad) => new Date(ad.endAt) > new Date(),
-                    ).length !== 0 && (
-                      <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+                    activeAds.length !== 0 && (
+                      <div className="w-100 text-center my-4">
+                        <h5 className="m-0">{tCommon('endOfResults')}</h5>
                       </div>
                     )
                   }
                 >
-                  {advertisements.filter(
-                    (ad: Ad) => new Date(ad.endAt) > new Date(),
-                  ).length === 0 ? (
+                  {activeAds.length === 0 ? (
                     <h4>{t('pMessage')}</h4>
                   ) : (
-                    advertisements
-                      .filter((ad: Ad) => new Date(ad.endAt) > new Date())
-                      .map(
-                        (
-                          ad: {
-                            id: string;
-                            name: string | undefined;
-                            type: string | undefined;
-                            attachmentUrl: string;
-                            endAt: string;
-                            startAt: string;
-                          },
-                          i: React.Key | null | undefined,
-                        ): JSX.Element => (
-                          <AdvertisementEntry
-                            id={ad.id}
-                            key={i}
-                            name={ad.name}
-                            type={ad.type}
-                            organizationId={currentOrgId}
-                            startAt={new Date(ad.startAt)}
-                            endAt={new Date(ad.endAt)}
-                            attachmentUrl={ad.attachmentUrl}
-                            data-testid="Ad"
-                            setAfter={setAfter}
-                          />
-                        ),
-                      )
+                    activeAds.map((ad, i) => (
+                      <AdvertisementEntry
+                        key={ad.id || i}
+                        id={ad.id}
+                        name={ad.name}
+                        type={ad.type}
+                        organizationId={currentOrgId}
+                        startAt={new Date(ad.startAt)}
+                        endAt={new Date(ad.endAt)}
+                        attachmentUrl={ad.attachmentUrl}
+                        data-testid="Ad"
+                        setAfter={() => {}}
+                      />
+                    ))
                   )}
                 </InfiniteScroll>
               </Tab>
@@ -243,7 +231,7 @@ export default function advertisements(): JSX.Element {
                 className="pt-4 m-2"
               >
                 <InfiniteScroll
-                  dataLength={advertisements?.length ?? 0}
+                  dataLength={completedAds?.length ?? 0}
                   next={loadMoreAdvertisements}
                   loader={
                     <>
@@ -265,57 +253,34 @@ export default function advertisements(): JSX.Element {
                       ))}
                     </>
                   }
-                  hasMore={
-                    orgAdvertisementListData?.organization?.advertisements
-                      ?.pageInfo?.hasNextPage ?? false
-                  }
+                  hasMore={pageInfo?.hasNextPage ?? false}
                   className={styles.listBoxAdvertisements}
                   data-testid="organizations-list"
                   endMessage={
-                    advertisements.filter(
-                      (ad: Ad) => new Date(ad.endAt) < new Date(),
-                    ).length !== 0 && (
-                      <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+                    activeAds.length !== 0 && (
+                      <div className="w-100 text-center my-4">
+                        <h5 className="m-0">{tCommon('endOfResults')}</h5>
                       </div>
                     )
                   }
                 >
-                  {advertisements.filter(
-                    (ad: Ad) => new Date(ad.endAt) < new Date(),
-                  ).length === 0 ? (
+                  {completedAds.length === 0 ? (
                     <h4>{t('pMessage')}</h4>
                   ) : (
-                    advertisements
-                      .filter((ad: Ad) => new Date(ad.endAt) < new Date())
-                      .map(
-                        (
-                          ad: {
-                            id: string;
-                            name: string | undefined;
-                            type: string | undefined;
-                            attachmentUrl: string | undefined;
-                            // attachments: {
-                            //   url: string;
-                            // }[];
-                            endAt: string;
-                            startAt: string;
-                          },
-                          i: React.Key | null | undefined,
-                        ): JSX.Element => (
-                          <AdvertisementEntry
-                            id={ad.id}
-                            key={i}
-                            name={ad.name}
-                            type={ad.type}
-                            organizationId={currentOrgId}
-                            startAt={new Date(ad.startAt)}
-                            endAt={new Date(ad.endAt)}
-                            attachmentUrl={ad.attachmentUrl}
-                            setAfter={setAfter}
-                          />
-                        ),
-                      )
+                    completedAds.map((ad, i) => (
+                      <AdvertisementEntry
+                        key={ad.id || i}
+                        id={ad.id}
+                        name={ad.name}
+                        type={ad.type}
+                        organizationId={currentOrgId}
+                        startAt={new Date(ad.startAt)}
+                        endAt={new Date(ad.endAt)}
+                        attachmentUrl={ad.attachmentUrl}
+                        data-testid="Ad"
+                        setAfter={() => {}}
+                      />
+                    ))
                   )}
                 </InfiniteScroll>
               </Tab>

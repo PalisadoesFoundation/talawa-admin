@@ -186,9 +186,6 @@ function advertisementRegister({
           attachments: formState.attachments,
         },
       });
-      console.log('data:', data);
-      console.log('1', formState.attachments);
-
       if (data) {
         toast.success(t('advertisementCreated') as string);
         handleClose();
@@ -228,9 +225,7 @@ function advertisementRegister({
         updatedFields.name = formState.name;
       }
       if (formState.attachments !== updatedFields.attachments) {
-        console.log(formState.attachments !== updatedFields.attachments);
         updatedFields.attachments = formState.attachments; //updated field me new file aa to rha hai
-        console.log(updatedFields.attachments);
       }
       if (formState.type !== typeEdit) {
         updatedFields.type = formState.type;
@@ -251,7 +246,6 @@ function advertisementRegister({
       if (!dayjs(startAtDate).isSame(startAtEdit, 'day')) {
         updatedFields.startAt = startAtDate;
       }
-      console.log('At handle update', updatedFields);
       const mutationVariables = {
         id: idEdit,
         ...(updatedFields.name && { name: updatedFields.name }),
@@ -266,8 +260,6 @@ function advertisementRegister({
       const { data } = await updateAdvertisement({
         variables: mutationVariables,
       });
-      console.log('2', formState.attachments);
-      console.log('3', formState.name);
 
       if (data) {
         toast.success(

@@ -49,7 +49,6 @@ function AdvertisementEntry({
   setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { orgId: currentOrg } = useParams();
-  console.log(id, type);
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
 
