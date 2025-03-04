@@ -33,6 +33,8 @@ export default function advertisements(): JSX.Element {
     startAt: string;
   };
 
+  const minRequiredAds = 6;
+
   //Local state for all ads and pagination
   const [advertisements, setAdvertisements] = useState<Ad[]>([]);
   const [pageInfo, setPageInfo] = useState<{
@@ -50,7 +52,7 @@ export default function advertisements(): JSX.Element {
       },
       after: null,
       before: null,
-      first: 6,
+      first: minRequiredAds,
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -91,7 +93,7 @@ export default function advertisements(): JSX.Element {
       await fetchMore({
         variables: {
           after: pageInfo?.endCursor,
-          first: 6,
+          first: minRequiredAds,
         },
         updateQuery: (prevResult, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prevResult;
@@ -143,6 +145,19 @@ export default function advertisements(): JSX.Element {
   const completedAds = advertisements.filter(
     (ad) => new Date(ad.endAt) < new Date(),
   );
+
+  //If no active/completed ads are present and more pages exist then it fetches the next page.
+  useEffect(() => {
+    if (activeAds.length < minRequiredAds && pageInfo?.hasNextPage) {
+      loadMoreAdvertisements();
+    }
+  }, [activeAds, pageInfo]);
+
+  useEffect(() => {
+    if (completedAds.length < minRequiredAds && pageInfo?.hasNextPage) {
+      loadMoreAdvertisements();
+    }
+  }, [completedAds, pageInfo]);
 
   return (
     <>

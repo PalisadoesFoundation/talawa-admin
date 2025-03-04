@@ -144,7 +144,7 @@ describe('Testing Advertisement Entry Component', () => {
 
     // Check that the component renders with default `startAt`
     const defaultstartAt = new Date().toDateString();
-    expect(screen.getByText(`Starts on ${defaultstartAt}`)).toBeInTheDocument(); 
+    expect(screen.getByText(`Starts on ${defaultstartAt}`)).toBeInTheDocument();
   });
 
   it('should correctly override default props when values are provided', () => {
