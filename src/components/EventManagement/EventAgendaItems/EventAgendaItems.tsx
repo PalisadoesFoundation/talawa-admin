@@ -20,7 +20,7 @@ import type {
 import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
 
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 
 /**

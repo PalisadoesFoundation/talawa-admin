@@ -4,20 +4,22 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `Element`
+> **default**(`props`): `Element`
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L25)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L34)
 
-LeftDrawer component for displaying navigation options.
+LeftDrawer component that displays the sidebar with navigation options.
 
 ## Parameters
 
-### \_\_namedParameters
+### props
 
 [`InterfaceLeftDrawerProps`](../interfaces/InterfaceLeftDrawerProps.md)
+
+The props for the component.
 
 ## Returns
 
 `Element`
 
-JSX element for the left navigation drawer.
+The rendered LeftDrawer component.

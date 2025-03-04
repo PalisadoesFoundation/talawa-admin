@@ -4750,44 +4750,43 @@ button[data-testid='createPostBtn'] {
   margin-left: 10px;
   overflow-x: hidden;
   width: 210px;
-
-  @keyframes zoomIn {
-    0% {
-      opacity: 0;
-      -webkit-transform: scale(0.5);
-      transform: scale(0.5);
-    }
-
-    100% {
-      opacity: 1;
-      -webkit-transform: scale(1);
-      transform: scale(1);
-    }
+}
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
   }
 
-  .buttonList {
-    background-color: var(--buttonList-bg) !important;
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
   }
-  /* AddOnEntry.tsx */
+}
 
-  .entrytoggle {
-    margin: 24px 24px 0 auto;
-    width: fit-content;
-  }
+.buttonList {
+  background-color: var(--buttonList-bg) !important;
+}
+/* AddOnEntry.tsx */
 
-  .entryaction {
-    margin-left: auto;
-    display: flex !important;
-    align-items: center;
-    background-color: transparent;
-    color: var(--light-blue);
-  }
+.entrytoggle {
+  margin: 24px 24px 0 auto;
+  width: fit-content;
+}
 
-  .entryaction .spinner-grow {
-    height: 1rem;
-    width: 1rem;
-    margin-right: 8px;
-  }
+.entryaction {
+  margin-left: auto;
+  display: flex !important;
+  align-items: center;
+  background-color: transparent;
+  color: var(--light-blue);
+}
+
+.entryaction .spinner-grow {
+  height: 1rem;
+  width: 1rem;
+  margin-right: 8px;
 }
 
 .entrytoggle {
@@ -7127,15 +7126,6 @@ button[data-testid='createPostBtn'] {
     width: 100%;
     margin-bottom: 10px;
   }
-
-  /* .input {
-    width: 100%;
-  }
-
-  .createButton {
-    margin: 0 auto;
-    width: 100%;
-  } */
 }
 
 /* EventListCardModals.tsx */

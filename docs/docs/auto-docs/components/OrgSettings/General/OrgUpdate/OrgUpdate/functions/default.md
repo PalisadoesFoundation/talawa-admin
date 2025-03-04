@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L36)
+Defined in: [src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L46)
 
 Component for updating organization details.
 

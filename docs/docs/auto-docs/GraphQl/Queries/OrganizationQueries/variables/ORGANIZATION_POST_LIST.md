@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_POST\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L15)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L16)
 
 GraphQL query to retrieve the list of organizations.
 

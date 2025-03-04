@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useParams, Navigate } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { Close } from '@mui/icons-material';
 import type { InterfaceOrgPeopleListCardProps } from 'types/Organization/interface';
 

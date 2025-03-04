@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -90,7 +90,7 @@ function OrganizationCard({
     try {
       // Use the custom hook to retrieve the userId
       const id = getItem('userId'); // Adjust this line based on your actual localStorage key
-      setUserId(id);
+      setUserId(id as string);
     } catch (error) {
       console.error('Failed to access localStorage:', error);
       setUserId(null); // Handle gracefully if localStorage is not available
