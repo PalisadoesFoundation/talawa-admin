@@ -58,9 +58,9 @@ interface InterfaceOrganizationCardProps {
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
   membershipRequests: {
-    id: string;
+    _id: string;
     user: {
-      id: string;
+      _id: string;
     };
   }[];
   isJoined: boolean;
@@ -271,10 +271,10 @@ export default function organizations(): JSX.Element {
             )
               membershipRequestStatus = 'accepted';
             else if (
-              organization.membershipRequests?.some(
+              (organization.membershipRequests?.some(
                 (request: { _id: string; user: { _id: string } }) =>
                   request.user._id === userId,
-              )
+              ) as boolean)
             )
               membershipRequestStatus = 'pending';
             return {
@@ -430,7 +430,7 @@ export default function organizations(): JSX.Element {
                         const cardProps: InterfaceOrganizationCardProps = {
                           name: organization.name,
                           image: organization.image,
-                          id: organization.id,
+                          id: organization._id,
                           description: organization.description,
                           admins: organization.admins,
                           members: organization.members,
