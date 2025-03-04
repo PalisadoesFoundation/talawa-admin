@@ -4121,7 +4121,8 @@
 }
 
 .customFileInput::file-selector-button:hover {
-  background-color: blue !important;
+  color: var(--cardBackground-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
 }
 
 .btnConfirmDelete:hover {
