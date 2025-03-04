@@ -40,36 +40,28 @@ export const CURRENT_USER = gql`
 export const ORGANIZATION_LIST = gql`
   query {
     organizations {
-      _id
-      image
-      creator {
-        firstName
-        lastName
-      }
-      name
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
+      id
+       name
+       addressLine1
+       description
+       avatarURL
+       members(first: 32) {
+       edges {
+        node {
+           id   
+        }
+       }
+        pageInfo {
+          hasNextPage
+        }
+      
       }
     }
   }
 `;
 
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
-  query UserJoinedOrganizations($id: String!, $first: Int) {
+  query UserJoinedOrganizations($id: String!, $first: Int!) {
     user(input: { id: $id }) {
       organizationsWhereMember(first: $first) {
         pageInfo {

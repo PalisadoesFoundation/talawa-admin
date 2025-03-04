@@ -3,8 +3,8 @@ import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS_PG,
+  ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
@@ -58,9 +58,9 @@ interface InterfaceOrganizationCardProps {
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
   membershipRequests: {
-    _id: string;
+    id: string;
     user: {
-      _id: string;
+      id: string;
     };
   }[];
   isJoined: boolean;
@@ -140,14 +140,15 @@ export default function organizations(): JSX.Element {
     data,
     refetch,
     loading: loadingOrganizations,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
+  } = useQuery(ORGANIZATION_LIST, {
     variables: { id: userId, first: rowsPerPage, filter: '' },
   });
+  console.log(data);
 
   const { data: joinedOrganizationsData } = useQuery(
-    USER_JOINED_ORGANIZATIONS,
+    USER_JOINED_ORGANIZATIONS_PG,
     {
-      variables: { id: userId },
+      variables: { id: userId, first: 5 },
     },
   );
 
@@ -254,13 +255,12 @@ export default function organizations(): JSX.Element {
    * Updates the list of organizations based on the selected mode and query results.
    */
   useEffect(() => {
+   
     if (mode === 0) {
-      if (data?.user?.organizationsWhereMember?.edges) {
-        const organizations = data.user.organizationsWhereMember.edges.map(
-          (edge: { node: InterfaceOrganization }) => {
-            const organization = edge.node;
+      if (data?.organizations) {
+        const organizations = data.organizations.map(
+          (organization: { members: { _id: string; }[]; membershipRequests: { _id: string; user: { _id: string; }; }[]; }) => {
             let membershipRequestStatus = '';
-
             if (
               Array.isArray(organization.members) &&
               organization.members.some(
@@ -428,7 +428,7 @@ export default function organizations(): JSX.Element {
                         const cardProps: InterfaceOrganizationCardProps = {
                           name: organization.name,
                           image: organization.image,
-                          id: organization._id,
+                          id: organization.id,
                           description: organization.description,
                           admins: organization.admins,
                           members: organization.members,

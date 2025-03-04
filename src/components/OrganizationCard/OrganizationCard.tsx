@@ -10,10 +10,8 @@ import {
   SEND_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { useMutation, useQuery } from '@apollo/client';
-import {
-  USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
-} from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { ApolloError } from '@apollo/client';
@@ -69,20 +67,20 @@ function OrganizationCard({
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id } },
+      { query: ORGANIZATION_LIST, variables: { id } },
     ],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id } },
+      { query: ORGANIZATION_LIST, variables: { id } },
     ],
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id } },
+      { query: ORGANIZATION_LIST, variables: { id } },
     ],
   });
-  const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS, {
+  const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
     variables: { id: userId },
   });
 
