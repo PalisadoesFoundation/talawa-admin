@@ -4116,7 +4116,7 @@
 }
 
 .customFileInput::file-selector-button {
- background-color: var(--card-background-color) !important;
+  background-color: var(--card-background-color) !important;
   color: white;
 }
 

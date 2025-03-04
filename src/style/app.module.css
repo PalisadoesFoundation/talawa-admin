@@ -381,19 +381,19 @@
   color: var(--grey-bg-color-dark);
 }
 
-.fonts>span {
+.fonts > span {
   font-weight: 600;
 }
 
-.cards>h2 {
+.cards > h2 {
   font-size: 19px;
 }
 
-.cards>h3 {
+.cards > h3 {
   font-size: 17px;
 }
 
-.cards>p {
+.cards > p {
   font-size: 14px;
   margin-top: -5px;
   margin-bottom: 7px;
@@ -417,7 +417,7 @@
 }
 
 .cards:first-child:nth-last-child(even),
-.cards:first-child:nth-last-child(even)~.box {
+.cards:first-child:nth-last-child(even) ~ .box {
   grid-column: auto / span 1;
 }
 
@@ -481,7 +481,7 @@
   margin-top: 7px;
 }
 
-.sidebarsticky>p {
+.sidebarsticky > p {
   margin-top: -10px;
 }
 
@@ -510,12 +510,12 @@
   justify-content: space-between;
 }
 
-.admindetails>p {
+.admindetails > p {
   margin-top: -12px;
   margin-right: 30px;
 }
 
-.mainpageright>hr {
+.mainpageright > hr {
   margin-top: 20px;
   width: 100%;
   margin-left: -15px;
@@ -537,7 +537,7 @@
   }
 }
 
-.sidebarsticky>input {
+.sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
   border-color: var(--grey-border-box-color);
@@ -594,13 +594,15 @@
   display: inline-block;
 }
 
-.dropdown:is( :hover,
-  :focus,
-  :active,
-  :focus-visible,
-  .show,
-  :disabled,
-  :checked) {
+.dropdown:is(
+    :hover,
+    :focus,
+    :active,
+    :focus-visible,
+    .show,
+    :disabled,
+    :checked
+  ) {
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
   border: 1px solid var(--dropdown-border) !important;
   color: var(--dropdown-font) !important;
@@ -626,8 +628,10 @@
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(--dropdown-hover-color,
-      var(--grey-border-box-color)) !important;
+  background-color: var(
+    --dropdown-hover-color,
+    var(--grey-border-box-color)
+  ) !important;
   color: var(--dropdown-font) !important;
   outline: none !important;
 }
@@ -818,7 +822,7 @@
   box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
-.inputField>button {
+.inputField > button {
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -1143,11 +1147,11 @@
   position: sticky;
 }
 
-input[type='checkbox']:checked+label {
+input[type='checkbox']:checked + label {
   background-color: var(--subtle-blue-grey) !important;
 }
 
-input[type='radio']:checked+label:hover {
+input[type='radio']:checked + label:hover {
   color: var(--table-header-color) !important;
 }
 
@@ -1560,16 +1564,16 @@ hr {
   border-color: var(--grey-border-box-color);
 }
 
-.toggleBtnPledge:is(:focus, :active, :checked)+label {
+.toggleBtnPledge:is(:focus, :active, :checked) + label {
   color: black !important;
   border-color: black !important;
 }
 
-.toggleBtnPledge:not(:checked)+label {
+.toggleBtnPledge:not(:checked) + label {
   color: var(--subtle-blue-grey-hover) !important;
 }
 
-.toggleBtnPledge:is(:hover)+label {
+.toggleBtnPledge:is(:hover) + label {
   color: var(--light-blue) !important;
 }
 
@@ -1709,7 +1713,7 @@ hr {
   justify-content: space-between;
 }
 
-.dispflexOrganizationEvents>input {
+.dispflexOrganizationEvents > input {
   border: none;
   box-shadow: none;
   margin-top: 5px;
@@ -1720,7 +1724,7 @@ hr {
   margin-bottom: 5px;
 }
 
-.checkboxdiv>div {
+.checkboxdiv > div {
   width: 50%;
 }
 
@@ -1852,11 +1856,11 @@ hr {
   color: var(--light-more-green) !important;
 }
 
-.table-body>.table-row {
+.table-body > .table-row {
   background-color: var(--primary-bg-color) !important;
 }
 
-.table-body>.table-row:nth-child(2n) {
+.table-body > .table-row:nth-child(2n) {
   background: var(--light-blue) !important;
 }
 
@@ -1966,7 +1970,10 @@ hr {
   gap: 0.8rem;
 }
 
-.btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+.btnsContainerOrganizationFundCampaign
+  .btnsBlockOrganizationFundCampaign
+  div
+  button {
   display: flex;
   margin-left: 1rem;
   justify-content: center;
@@ -1997,7 +2004,10 @@ hr {
     justify-content: space-between;
   }
 
-  .btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+  .btnsContainerOrganizationFundCampaign
+    .btnsBlockOrganizationFundCampaign
+    div
+    button {
     margin: 0;
   }
 
@@ -2025,7 +2035,10 @@ hr {
     margin-right: 0;
   }
 
-  .btnsContainerOrganizationFundCampaign .btnsBlockOrganizationFundCampaign div button {
+  .btnsContainerOrganizationFundCampaign
+    .btnsBlockOrganizationFundCampaign
+    div
+    button {
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
@@ -2161,7 +2174,7 @@ hr {
     justify-content: center;
   }
 
-  .btnsContainer>div {
+  .btnsContainer > div {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box;
@@ -2347,12 +2360,12 @@ hr {
   border: 1px solid var(--create-button-border) !important;
 }
 
-input[type='radio']:checked+label {
+input[type='radio']:checked + label {
   color: var(--table-header-color) !important;
   background-color: var(--table-bg-color) !important;
 }
 
-input[type='radio']:checked+label:hover {
+input[type='radio']:checked + label:hover {
   color: var(--table-header-color) !important;
 }
 
@@ -3336,7 +3349,7 @@ input[type='radio']:checked+label:hover {
   /* overflow-x: hidden; */
 }
 
-.sidebarstickyMemberDetail>p {
+.sidebarstickyMemberDetail > p {
   margin-top: -10px;
 }
 
@@ -3362,7 +3375,7 @@ input[type='radio']:checked+label:hover {
   width: 100%;
 }
 
-.sidebarstickyMemberDetail>input {
+.sidebarstickyMemberDetail > input {
   text-decoration: none;
   margin-bottom: 50px;
   border-color: var(--grey-border-box-color);
@@ -3496,11 +3509,11 @@ input[type='radio']:checked+label:hover {
   width: 65%;
 }
 
-.checkboxdiv>label {
+.checkboxdiv > label {
   margin-right: 50px;
 }
 
-.checkboxdiv>label>input {
+.checkboxdiv > label > input {
   margin-left: 10px;
 }
 
@@ -3508,13 +3521,13 @@ input[type='radio']:checked+label:hover {
   margin-top: 5px;
 }
 
-.orgphoto>input {
+.orgphoto > input {
   margin-top: 10px;
   cursor: pointer;
   margin-bottom: 5px;
 }
 
-.cancel>i {
+.cancel > i {
   margin-top: 5px;
   transform: scale(1.2);
   cursor: pointer;
@@ -3592,7 +3605,7 @@ input[type='radio']:checked+label:hover {
   display: flex;
 }
 
-.dispflex>input {
+.dispflex > input {
   width: 20%;
   border: none;
   box-shadow: none;
@@ -3603,7 +3616,7 @@ input[type='radio']:checked+label:hover {
   display: flex;
 }
 
-.checkboxdivMemberDetail>div {
+.checkboxdivMemberDetail > div {
   width: 50%;
 }
 
@@ -3687,7 +3700,7 @@ input[type='radio']:checked+label:hover {
   transition: 0.5s;
 }
 
-.sidebarstickyMemberDetail>button {
+.sidebarstickyMemberDetail > button {
   display: flex;
   align-items: center;
   text-align: start;
@@ -3803,7 +3816,7 @@ input[type='radio']:checked+label:hover {
   margin-left: 5px;
 }
 
-.dateboxMemberDetail>div>input {
+.dateboxMemberDetail > div > input {
   padding: 0.5rem 0 0.5rem 0.5rem !important;
   /* top, right, bottom, left */
   background-color: var(--input-area-color);
@@ -3811,17 +3824,17 @@ input[type='radio']:checked+label:hover {
   border: none !important;
 }
 
-.dateboxMemberDetail>div>div {
+.dateboxMemberDetail > div > div {
   margin-left: 0px !important;
 }
 
-.dateboxMemberDetail>div>fieldset {
+.dateboxMemberDetail > div > fieldset {
   border: none !important;
   /* background-color: var(--input-area-color); */
   border-radius: var(--bs-border-radius, 4px) !important;
 }
 
-.dateboxMemberDetail>div {
+.dateboxMemberDetail > div {
   margin: 0.5rem !important;
   background-color: var(--input-area-color);
 }
@@ -4009,7 +4022,7 @@ form label {
   color: var(--grey-bg-color-dark);
 }
 
-form>input {
+form > input {
   display: block;
   margin-bottom: 20px;
   border: 1px solid var(--grey-border-box-color);
@@ -4371,7 +4384,7 @@ form>input {
   height: auto;
 }
 
-.mainpagerightOrgPost>hr {
+.mainpagerightOrgPost > hr {
   margin-top: 20px;
   width: 100%;
   margin-left: -15px;
@@ -4787,7 +4800,6 @@ button[data-testid='createPostBtn'] {
 
 /* Modern browsers - enable line clamping */
 @supports (-webkit-line-clamp: 1) {
-
   .cardItem .title,
   .cardItem .location,
   .cardItem .time {
@@ -5020,7 +5032,6 @@ button[data-testid='createPostBtn'] {
 
 .leftDrawer .optionList button:active,
 .leftDrawer .optionList button:focus {
-
   .leftDrawer .optionList button:active,
   .leftDrawer .optionList button:focus {
     font-weight: 500;
@@ -5946,11 +5957,11 @@ button[data-testid='createPostBtn'] {
   margin-left: 5px;
 }
 
-.checkboxdivEvents>label {
+.checkboxdivEvents > label {
   margin-right: 50px;
 }
 
-.checkboxdivEvents>label>input {
+.checkboxdivEvents > label > input {
   margin-left: 10px;
 }
 
@@ -5958,7 +5969,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
 }
 
-.checkboxdivEvents>div {
+.checkboxdivEvents > div {
   width: 50%;
 }
 
@@ -5967,7 +5978,7 @@ button[data-testid='createPostBtn'] {
   align-items: center;
 }
 
-.dispflexEvents>input {
+.dispflexEvents > input {
   border: none;
   box-shadow: none;
   margin-top: 5px;
@@ -6240,7 +6251,7 @@ button[data-testid='createPostBtn'] {
   margin-top: 3px;
 }
 
-.memberfont>span {
+.memberfont > span {
   width: 80%;
 }
 
@@ -6302,7 +6313,7 @@ button[data-testid='createPostBtn'] {
   margin: 20px 30% 0 30%;
 }
 
-.dispflexUserPasswordUpdate>div {
+.dispflexUserPasswordUpdate > div {
   width: 50%;
   margin-right: 50px;
 }
@@ -6416,7 +6427,7 @@ button[data-testid='createPostBtn'] {
   flex-direction: row;
 }
 
-.yearlyCalendarHeader>div {
+.yearlyCalendarHeader > div {
   font-weight: 600;
   font-size: 2rem;
   padding: 0 10px;
@@ -7193,7 +7204,6 @@ button[data-testid='createPostBtn'] {
 }
 
 @media only screen and (max-width: var(--breakpoint-tablet)) {
-
   .holidayIndicator,
   .organizationIndicator {
     width: 16px;
@@ -7260,7 +7270,7 @@ button[data-testid='createPostBtn'] {
     text-align: center;
   }
 
-  .space>* {
+  .space > * {
     width: 100%;
     margin-bottom: 10px;
   }
@@ -7282,15 +7292,15 @@ button[data-testid='createPostBtn'] {
   white-space: nowrap;
 }
 
-.checkboxdivEventListCardModals>div label {
+.checkboxdivEventListCardModals > div label {
   margin-right: 50px;
 }
 
-.checkboxdivEventListCardModals>label>input {
+.checkboxdivEventListCardModals > label > input {
   margin-left: 10px;
 }
 
-.dispflexEventListCardModals>input {
+.dispflexEventListCardModals > input {
   width: 20%;
   border: none;
   box-shadow: none;
@@ -7325,13 +7335,13 @@ button[data-testid='createPostBtn'] {
     flex-direction: column;
   }
 
-  .datediv>div {
+  .datediv > div {
     width: 100%;
     margin-left: 0;
     margin-bottom: 10px;
   }
 
-  .datediv>div p {
+  .datediv > div p {
     margin-bottom: 5px;
   }
 }
@@ -7364,11 +7374,11 @@ button[data-testid='createPostBtn'] {
   font-weight: 500;
 }
 
-.cardsEventListCard>h3 {
+.cardsEventListCard > h3 {
   font-size: 17px;
 }
 
-.cardsEventListCard>p {
+.cardsEventListCard > p {
   font-size: 14px;
   margin-top: 0px;
   margin-bottom: 7px;
@@ -7388,7 +7398,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .cardsEventListCard:first-child:nth-last-child(even),
-.cardsEventListCard:first-child:nth-last-child(even)~.box {
+.cardsEventListCard:first-child:nth-last-child(even) ~ .box {
   grid-column: auto / span 1;
 }
 
@@ -7399,7 +7409,7 @@ button[data-testid='createPostBtn'] {
   margin: 10px 5px 5px 0px;
 }
 
-.dispflexEventListCard>input {
+.dispflexEventListCard > input {
   width: 20%;
   border: none;
   box-shadow: none;
@@ -7418,7 +7428,7 @@ button[data-testid='createPostBtn'] {
   font-size: 20px;
 }
 
-.cardsOrgPostCard>h3 {
+.cardsOrgPostCard > h3 {
   font-size: 17px;
 }
 
@@ -7581,7 +7591,7 @@ button[data-testid='createPostBtn'] {
   mix-blend-mode: normal;
 }
 
-.cardsOrgPostCard>p {
+.cardsOrgPostCard > p {
   font-size: 14px;
   margin-top: 0px;
   margin-bottom: 7px;
@@ -7603,7 +7613,7 @@ button[data-testid='createPostBtn'] {
   word-wrap: break-word;
 }
 
-.infodiv>p {
+.infodiv > p {
   margin: 0;
 }
 
@@ -7612,7 +7622,7 @@ button[data-testid='createPostBtn'] {
 }
 
 .cardsOrgPostCard:first-child:nth-last-child(even),
-.cardsOrgPostCard:first-child:nth-last-child(even)~.box {
+.cardsOrgPostCard:first-child:nth-last-child(even) ~ .box {
   grid-column: auto / span 1;
 }
 
@@ -9180,14 +9190,14 @@ button[data-testid='createPostBtn'] {
   padding-top: 10px;
 }
 
-.second_box>h4 {
+.second_box > h4 {
   font-size: 0.625rem;
   font-weight: bold;
   text-decoration: none;
   color: var(--primary-text-color);
 }
 
-.second_box>h5 {
+.second_box > h5 {
   text-decoration: none;
   font-size: 0.625rem;
   font-weight: 100;
