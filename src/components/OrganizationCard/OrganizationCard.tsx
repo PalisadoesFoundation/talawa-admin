@@ -66,22 +66,16 @@ function OrganizationCard({
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
-    refetchQueries: [
-      { query: ORGANIZATION_LIST, variables: { id } },
-    ],
+    refetchQueries: [{ query: ORGANIZATION_LIST, variables: { id } }],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
-    refetchQueries: [
-      { query: ORGANIZATION_LIST, variables: { id } },
-    ],
+    refetchQueries: [{ query: ORGANIZATION_LIST, variables: { id } }],
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
-    refetchQueries: [
-      { query: ORGANIZATION_LIST, variables: { id } },
-    ],
+    refetchQueries: [{ query: ORGANIZATION_LIST, variables: { id } }],
   });
   const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
-    variables: { id: userId },
+    variables: { id: userId, first: 5 },
   });
 
   useEffect(() => {

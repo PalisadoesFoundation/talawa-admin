@@ -255,11 +255,13 @@ export default function organizations(): JSX.Element {
    * Updates the list of organizations based on the selected mode and query results.
    */
   useEffect(() => {
-   
     if (mode === 0) {
       if (data?.organizations) {
         const organizations = data.organizations.map(
-          (organization: { members: { _id: string; }[]; membershipRequests: { _id: string; user: { _id: string; }; }[]; }) => {
+          (organization: {
+            members: { _id: string }[];
+            membershipRequests: { _id: string; user: { _id: string } }[];
+          }) => {
             let membershipRequestStatus = '';
             if (
               Array.isArray(organization.members) &&

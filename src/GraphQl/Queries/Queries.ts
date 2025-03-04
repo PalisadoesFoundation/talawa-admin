@@ -41,20 +41,19 @@ export const ORGANIZATION_LIST = gql`
   query {
     organizations {
       id
-       name
-       addressLine1
-       description
-       avatarURL
-       members(first: 32) {
-       edges {
-        node {
-           id   
+      name
+      addressLine1
+      description
+      avatarURL
+      members(first: 32) {
+        edges {
+          node {
+            id
+          }
         }
-       }
         pageInfo {
           hasNextPage
         }
-      
       }
     }
   }
