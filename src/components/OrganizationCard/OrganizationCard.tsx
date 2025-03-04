@@ -10,8 +10,10 @@ import {
   SEND_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { useMutation, useQuery } from '@apollo/client';
-import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_LIST,
+  USER_JOINED_ORGANIZATIONS_PG,
+} from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { ApolloError } from '@apollo/client';
