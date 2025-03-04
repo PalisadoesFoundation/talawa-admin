@@ -11,6 +11,16 @@ import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/inte
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchBar from 'subComponents/SearchBar';
 
+/**
+ * Advertisements Component
+ *
+ * This component displays advertisements for an organization.
+ * It fetches data from a GraphQL API, supports infinite scrolling,
+ * and separates ads into active and completed based on their end dates.
+ *
+ * @returns The rendered advertisements component.
+ */
+
 export default function advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams();
   // Translation hook for internationalization
