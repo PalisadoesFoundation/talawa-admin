@@ -4199,9 +4199,10 @@ form {
 }
 
 .resetChangesBtn:hover {
+  border-width: 2px;
+  border-color: var(--cardBackground-color);
   color: var(--cardBackground-color);
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
-  border: 2px solid var(--cardBackground-color) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow) !important;
 }
 
 .syncIconStyle,
@@ -4220,11 +4221,11 @@ form {
   height: 49px;
   width: 160px;
   font-size: 0.8rem;
-  background-color: var(--cardBackground-color);
+  background-color: var(--card-background-color) !important;
 }
 
 .saveChangesBtn:hover {
- background-color: var(--card-background-color) !important;
+  background-color: var(--card-background-color) !important;
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
 }
 
