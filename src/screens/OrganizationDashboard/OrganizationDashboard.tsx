@@ -434,7 +434,7 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllMembershipRequests"
                   onClick={(): void => {
-                    toast.success('Coming soon!');
+                    toast.success(t('comingSoon'));
                   }}
                 >
                   {t('viewAll')}
@@ -481,7 +481,7 @@ function OrganizationDashboard(): JSX.Element {
                   data-testid="viewAllLeadeboard"
                   // onClick={(): void => navigate(leaderboardLink)}
                   onClick={(): void => {
-                    toast.success('Coming soon!');
+                    toast.success(t('comingSoon'));
                   }}
                 >
                   {t('viewAll')}

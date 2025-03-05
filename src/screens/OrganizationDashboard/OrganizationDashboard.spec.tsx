@@ -113,11 +113,11 @@ describe('OrganizationDashboard', () => {
 
     const viewRequestsBtn = screen.getByTestId('viewAllMembershipRequests');
     fireEvent.click(viewRequestsBtn);
-    expect(toast.success).toHaveBeenCalledWith('Coming soon!');
+    expect(toast.success).toHaveBeenCalledWith('comingSoon');
 
     const viewLeaderBtn = screen.getByTestId('viewAllLeadeboard');
     fireEvent.click(viewLeaderBtn);
-    expect(toast.success).toHaveBeenCalledWith('Coming soon!');
+    expect(toast.success).toHaveBeenCalledWith('comingSoon');
 
     const viewEventsBtn = screen.getByTestId('viewAllEvents');
     fireEvent.click(viewEventsBtn);

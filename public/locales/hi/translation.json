@@ -282,7 +282,8 @@
     "requests": "अनुरोध",
     "talawaApiUnavailable": "तालावा एपीआई अनुपलब्ध",
     "volunteerRankings": "स्वयंसेवक रैंकिंग",
-    "noVolunteers": "कोई स्वयंसेवक नहीं मिला!"
+    "noVolunteers": "कोई स्वयंसेवक नहीं मिला!",
+    "comingSoon": "जल्द आ रहा है!"
   },
   "organizationPeople": {
     "title": "तालावा सदस्य",
