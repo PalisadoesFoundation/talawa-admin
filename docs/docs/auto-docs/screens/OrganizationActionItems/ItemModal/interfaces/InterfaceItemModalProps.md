@@ -4,7 +4,7 @@
 
 # Interface: InterfaceItemModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L53)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L61)
 
 Props for the `ItemModal` component.
 
@@ -14,7 +14,7 @@ Props for the `ItemModal` component.
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L59)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L67)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:59](https://githu
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L58)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L66)
 
 #### Returns
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:58](https://githu
 
 > **editMode**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L60)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L68)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:60](https://githu
 
 > **eventId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L57)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L65)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:57](https://githu
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L55)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L63)
 
 #### Returns
 
@@ -62,7 +62,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:55](https://githu
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L54)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L62)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:54](https://githu
 
 > **orgId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L56)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L64)

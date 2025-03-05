@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMembersList
 
-Defined in: [src/utils/interfaces.ts:396](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L396)
+Defined in: [src/utils/interfaces.ts:417](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L417)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:396](https://github.com/PalisadoesFoundatio
 
 > **organizations**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:397](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L397)
+Defined in: [src/utils/interfaces.ts:418](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L418)
 
 #### \_id
 

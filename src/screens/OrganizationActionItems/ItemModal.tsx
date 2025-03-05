@@ -11,7 +11,6 @@ import type {
   InterfaceActionItemCategoryList,
   InterfaceActionItemInfo,
   InterfaceEventVolunteerInfo,
-  InterfaceMemberInfo,
   InterfaceMembersList,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
@@ -19,15 +18,17 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
 import {
-  CREATE_ACTION_ITEM_MUTATION,
+  POSTGRES_CREATE_ACTION_ITEM_MUTATION,
+  // POSTGRES_EVENTS_BY_ORGANIZATION_ID,
   UPDATE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
 import {
-  EVENT_VOLUNTEER_GROUP_LIST,
+  USERS_BY_ORGANIZATION_ID,
   EVENT_VOLUNTEER_LIST,
 } from 'GraphQl/Queries/EventVolunteerQueries';
+
 import { HiUser, HiUserGroup } from 'react-icons/hi2';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemQueries';
@@ -43,9 +44,16 @@ interface InterfaceFormStateType {
   eventId?: string;
   preCompletionNotes: string;
   postCompletionNotes: string | null;
-  allottedHours: number | null;
   isCompleted: boolean;
 }
+
+type UserType = {
+  id: string;
+  name: string;
+  emailAddress: string;
+  createdAt: string;
+  __typename?: string;
+};
 
 /**
  * Props for the `ItemModal` component.
@@ -80,7 +88,6 @@ const initializeFormState = (
   assigneeType: actionItem?.assigneeType || 'User',
   preCompletionNotes: actionItem?.preCompletionNotes || '',
   postCompletionNotes: actionItem?.postCompletionNotes || null,
-  allottedHours: actionItem?.allottedHours || null,
   isCompleted: actionItem?.isCompleted || false,
 });
 
@@ -111,9 +118,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   const [assigneeGroup, setAssigneeGroup] =
     useState<InterfaceVolunteerGroupInfo | null>(null);
 
-  const [assigneeUser, setAssigneeUser] = useState<InterfaceMemberInfo | null>(
-    null,
-  );
+  const [assigneeUser, setAssigneeUser] = useState<UserType | null>(null);
 
   const [formState, setFormState] = useState<InterfaceFormStateType>(
     initializeFormState(actionItem),
@@ -126,7 +131,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     assigneeId,
     preCompletionNotes,
     postCompletionNotes,
-    allottedHours,
     isCompleted,
   } = formState;
 
@@ -161,6 +165,22 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
       },
     },
   });
+
+  // const { data: eventsData } = useQuery(POSTGRES_EVENTS_BY_ORGANIZATION_ID, {
+  //   variables: {
+  //     input: { organizationId: orgId },
+  //   },
+  //   onCompleted: (data) => console.log(' Events Data:', data),
+  //   onError: (error) => console.error(' Error fetching events:', error),
+  // });
+
+  // const events1 = useMemo(() => {
+  //   if (eventsData?.eventsByOrganizationId) {
+  //     console.log(' Processed Events:', eventsData.eventsByOrganizationId);
+  //     return eventsData.eventsByOrganizationId;
+  //   }
+  //   return [];
+  // }, [eventsData]);
 
   const {
     data: categoryData,
@@ -197,18 +217,22 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
    * Query to fetch the list of volunteer groups for the event.
    */
   const {
-    data: groupsData,
+    data: usersData,
   }: {
     data?: {
-      getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
+      usersByOrganizationId: UserType[];
     };
-  } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
+  } = useQuery(USERS_BY_ORGANIZATION_ID, {
     variables: {
-      where: {
-        eventId: eventId,
-      },
+      organizationId: orgId,
     },
   });
+
+  useEffect(() => {
+    if (usersData) {
+      console.log('🚀 Backend Response - usersByOrganizationId:', usersData);
+    }
+  }, [usersData]);
 
   /**
    * Query to fetch members of the organization.
@@ -226,14 +250,22 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     [membersData],
   );
 
+  // const events = useMemo(() => {
+  //   if (eventsData?.eventsByOrganizationId) {
+  //     console.log('🚀 Processed Events:', eventsData.eventsByOrganizationId);
+  //     return eventsData.eventsByOrganizationId;
+  //   }
+  //   return [];
+  // }, [eventsData]);
+
   const volunteers = useMemo(
     () => volunteersData?.getEventVolunteers || [],
     [volunteersData],
   );
 
-  const groups = useMemo(
-    () => groupsData?.getEventVolunteerGroups || [],
-    [groupsData],
+  const users = useMemo(
+    () => usersData?.usersByOrganizationId || [],
+    [usersData],
   );
 
   const actionItemCategories = useMemo(
@@ -244,7 +276,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   /**
    * Mutation to create & update a new action item.
    */
-  const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION);
+  const [createActionItem] = useMutation(POSTGRES_CREATE_ACTION_ITEM_MUTATION);
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
 
   /**
@@ -259,18 +291,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     value: string | number | boolean | Date | undefined | null,
   ): void => {
     // Special handling for allottedHours
-    if (field === 'allottedHours') {
-      // If the value is not a valid number or is negative, set to null
-      const numValue = typeof value === 'string' ? Number(value) : value;
-      if (
-        typeof numValue !== 'number' ||
-        Number.isNaN(numValue) ||
-        numValue < 0
-      ) {
-        setFormState((prevState) => ({ ...prevState, [field]: null }));
-        return;
-      }
-    }
 
     setFormState((prevState) => ({ ...prevState, [field]: value }));
   };
@@ -281,25 +301,36 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
    * @param e - The form submit event.
    * @returns A promise that resolves when the action item is created.
    */
+
   const createActionItemHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     try {
-      const dDate = dayjs(dueDate).format('YYYY-MM-DD');
-      await createActionItem({
-        variables: {
-          dDate: dDate,
+      const inputVariables = {
+        input: {
+          categoryId: actionItemCategoryId,
           assigneeId: assigneeId,
-          assigneeType: assigneeType,
-          actionItemCategoryId: actionItemCategory?.id,
           preCompletionNotes: preCompletionNotes,
-          allottedHours: allottedHours,
-          ...(eventId && { eventId }),
+          organizationId: orgId,
+          eventId,
         },
+      };
+
+      //  Only include `eventId` if it exists (omit null values)
+      if (eventId) {
+        inputVariables.input.eventId = eventId;
+      }
+
+      console.log(
+        ' Sending Data to Backend - POSTGRES_CREATE_ACTION_ITEM_MUTATION:',
+        inputVariables,
+      );
+
+      await createActionItem({
+        variables: inputVariables,
       });
 
-      // Reset form and date after successful creation
       setFormState(initializeFormState(null));
       setActionItemCategory(null);
       setAssignee(null);
@@ -308,6 +339,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
       hide();
       toast.success(t('successfulCreation'));
     } catch (error: unknown) {
+      console.error('❌ Error Creating Action Item:', error);
       toast.error((error as Error).message);
     }
   };
@@ -363,10 +395,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         updatedFields.postCompletionNotes = postCompletionNotes;
       }
 
-      if (allottedHours !== actionItem?.allottedHours) {
-        updatedFields.allottedHours = allottedHours;
-      }
-
       if (dueDate !== actionItem?.dueDate) {
         updatedFields.dueDate = dayjs(dueDate).format('YYYY-MM-DD');
       }
@@ -397,25 +425,51 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
 
   useEffect(() => {
     setFormState(initializeFormState(actionItem));
+
     setActionItemCategory(
       actionItemCategories.find(
         (category) => category.id === actionItem?.actionItemCategory?._id,
       ) || null,
     );
+
     setAssignee(
       volunteers.find(
         (volunteer) => volunteer._id === actionItem?.assignee?._id,
       ) || null,
     );
-    setAssigneeGroup(
-      groups.find((group) => group._id === actionItem?.assigneeGroup?._id) ||
-        null,
-    );
+
     setAssigneeUser(
-      members.find((member) => member._id === actionItem?.assigneeUser?._id) ||
-        null,
+      users.find((user) => user.id === actionItem?.assignee?._id) || null,
     );
-  }, [actionItem, actionItemCategories, volunteers, groups, members]);
+
+    setAssigneeUser(
+      members.find((member) => member._id === actionItem?.assigneeUser?._id)
+        ? {
+            id:
+              members.find(
+                (member) => member._id === actionItem?.assigneeUser?._id,
+              )?._id || '',
+            name:
+              members.find(
+                (member) => member._id === actionItem?.assigneeUser?._id,
+              )?.firstName +
+                ' ' +
+                members.find(
+                  (member) => member._id === actionItem?.assigneeUser?._id,
+                )?.lastName || '',
+            emailAddress:
+              members.find(
+                (member) => member._id === actionItem?.assigneeUser?._id,
+              )?.email || '',
+            createdAt:
+              members.find(
+                (member) => member._id === actionItem?.assigneeUser?._id,
+              )?.createdAt || '',
+            __typename: 'User', // Optional, only if needed
+          }
+        : null,
+    );
+  }, [actionItem, actionItemCategories, volunteers, members]); // ✅ Removed `groups`
 
   return (
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
@@ -464,27 +518,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
               )}
             />
 
-            {isCompleted && (
-              <>
-                {/* Input text Component to add allotted Hours for action item  */}
-                <FormControl>
-                  <TextField
-                    label={t('allottedHours')}
-                    variant="outlined"
-                    className={styles.noOutline}
-                    value={allottedHours ?? ''}
-                    onChange={(e) =>
-                      handleFormChange(
-                        'allottedHours',
-                        e.target.value === '' || parseInt(e.target.value) < 0
-                          ? null
-                          : parseInt(e.target.value),
-                      )
-                    }
-                  />
-                </FormControl>
-              </>
-            )}
+            {isCompleted && <></>}
           </Form.Group>
           {!isCompleted && (
             <>
@@ -592,17 +626,15 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   <Autocomplete
                     className={`${styles.noOutline} w-100`}
                     data-testid="memberSelect"
-                    options={members}
+                    options={users.filter((user) => user.__typename === 'User')} // ✅ Only include users with __typename === "User"
                     value={assigneeUser}
                     isOptionEqualToValue={(option, value) =>
-                      option._id === value._id
-                    }
+                      option.id === value?.id
+                    } // ✅ Use `id` instead of `_id`
                     filterSelectedOptions={true}
-                    getOptionLabel={(member: InterfaceMemberInfo): string =>
-                      `${member.firstName} ${member.lastName}`
-                    }
+                    getOptionLabel={(user: UserType): string => user.name} // ✅ Get name directly from user object
                     onChange={(_, newAssignee): void => {
-                      handleFormChange('assigneeId', newAssignee?._id ?? '');
+                      handleFormChange('assigneeId', newAssignee?.id ?? '');
                       setAssigneeUser(newAssignee);
                     }}
                     renderInput={(params) => (
@@ -612,7 +644,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                 </Form.Group>
               )}
 
-              <Form.Group className="d-flex gap-3 mx-auto  mb-3">
+              <Form.Group className="d-flex gap-3 mx-auto mb-3">
                 {/* Date Calendar Component to select due date of an action item */}
                 <DatePicker
                   format="DD/MM/YYYY"
@@ -623,25 +655,24 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                     if (date) handleFormChange('dueDate', date.toDate());
                   }}
                 />
-
-                {/* Input text Component to add allotted Hours for action item  */}
-                <FormControl>
-                  <TextField
-                    label={t('allottedHours')}
-                    variant="outlined"
-                    className={styles.noOutline}
-                    value={allottedHours ?? ''}
-                    onChange={(e) =>
-                      handleFormChange(
-                        'allottedHours',
-                        e.target.value === '' || parseInt(e.target.value) < 0
-                          ? null
-                          : parseInt(e.target.value),
-                      )
-                    }
-                  />
-                </FormControl>
               </Form.Group>
+
+              {/* <Form.Group className="mb-3 w-100">
+              <Autocomplete
+                className={`${styles.noOutline} w-100`}
+                data-testid="eventSelect"
+                options={events}
+                value={events.find(event => event.id === eventId) || null}
+                isOptionEqualToValue={(option, value) => option.id === value?.id}
+                getOptionLabel={(event) => event.name}
+                onChange={(_, selectedEvent) => {
+                  handleFormChange("eventId", selectedEvent?.id || undefined);
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Event" required />
+                )}
+              />
+            </Form.Group> */}
 
               {/* Input text Component to add notes for action item */}
               <FormControl fullWidth className="mb-2">

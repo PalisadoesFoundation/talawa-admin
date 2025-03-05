@@ -2,13 +2,11 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
-
+import { GET_USERS_BY_IDS, GET_EVENTS_BY_IDS } from 'GraphQl/Queries/Queries';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
-
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
 import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 import {
@@ -24,6 +22,12 @@ import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from './ItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
+import type { InterfaceActionItem } from 'utils/interfaces';
+
+type EventType = {
+  id: string;
+  name: string;
+};
 
 enum ItemStatus {
   Pending = 'pending',
@@ -38,6 +42,11 @@ enum ModalState {
   STATUS = 'status',
 }
 
+type User = {
+  id: string;
+  name: string;
+  emailAddress: string;
+};
 /**
  * Component for managing and displaying action items within an organization.
  *
@@ -59,11 +68,12 @@ function organizationActionItems(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
+  const [actionItem, setActionItem] = useState<InterfaceActionItem | null>(
     null,
   );
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  // const [filteredActionItems, setFilteredActionItems] = useState([]);
   const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
     null,
   );
@@ -85,7 +95,7 @@ function organizationActionItems(): JSX.Element {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleModalClick = useCallback(
-    (actionItem: InterfaceActionItemInfo | null, modal: ModalState): void => {
+    (actionItem: InterfaceActionItem | null, modal: ModalState): void => {
       if (modal === ModalState.SAME) {
         setModalMode(actionItem ? 'edit' : 'create');
       }
@@ -100,43 +110,122 @@ function organizationActionItems(): JSX.Element {
     loading: actionItemsLoading,
     error: actionItemsError,
     refetch: actionItemsRefetch,
-  }: {
-    data:
-      | {
-          actionItemsByOrganization: {
-            id: string;
-            isCompleted: boolean;
-            assignedAt: string;
-            completionAt: string;
-            createdAt: string;
-            updatedAt: string;
-            preCompletionNotes: string | null;
-            postCompletionNotes: string | null;
-            organizationId: string;
-            categoryId: string | null;
-            eventId: string | null;
-            assigneeId: string | null;
-            creatorId: string | null;
-            updaterId: string | null;
-          }[];
-        }
-      | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_FOR_ORGANIZATION, {
-    variables: {
-      organizationId: orgId, // Ensure orgId is passed correctly
+  } = useQuery<{ actionItemsByOrganization: InterfaceActionItem[] }>(
+    ACTION_ITEM_FOR_ORGANIZATION,
+    {
+      variables: { organizationId: orgId },
     },
-    onError: (error) => {
-      console.error(' Error fetching action items:', error);
-    },
+  );
+
+  const assigneeIds =
+    actionItemsData?.actionItemsByOrganization
+      .map((item) => item.assigneeId)
+      .filter((id): id is string => id !== null) || [];
+
+  const {
+    data: usersData,
+    loading: userLoading,
+    error: userError,
+  } = useQuery(GET_USERS_BY_IDS, {
+    skip: assigneeIds.length === 0,
+    variables: { input: { ids: assigneeIds } },
   });
 
-  // Logs when data updates
+  useEffect(() => {
+    if (userLoading) {
+      // console.log("Loading users...");
+    }
+
+    if (userError) {
+      // console.error("Error fetching users:", userError.message);
+    }
+  }, [userLoading, userError]);
+
+  const getAssigneeName = (assigneeId: string | null): string => {
+    if (!assigneeId) return 'Unassigned';
+
+    if (!usersData?.usersByIds) {
+      return 'Unknown User';
+    }
+
+    const user = usersData.usersByIds.find(
+      (user: User) => user.id === assigneeId,
+    );
+
+    if (user) {
+      // console.log("Found user:", user);
+      return user.name;
+    } else {
+      // console.warn("User with id", assigneeId, "not found");
+      return 'Unknown User';
+    }
+  };
+
+  const eventIds =
+    actionItemsData?.actionItemsByOrganization
+      .map((item) => item.eventId)
+      .filter((id): id is string => id !== null) || [];
+
+  const { data: eventsData } = useQuery(GET_EVENTS_BY_IDS, {
+    skip: eventIds.length === 0,
+    variables: { ids: eventIds },
+  });
+
+  const filteredAndSortedActionItems = useMemo(() => {
+    if (!actionItemsData?.actionItemsByOrganization) return [];
+
+    let items = [...actionItemsData.actionItemsByOrganization];
+
+    // Apply search filtering
+    if (searchTerm) {
+      items = items.filter((item) =>
+        searchBy === 'assignee'
+          ? getAssigneeName(item.assigneeId)
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          : item.actionItemCategory?.name
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase()),
+      );
+    }
+
+    if (status !== null) {
+      items = items.filter((item) =>
+        status === ItemStatus.Pending ? !item.isCompleted : item.isCompleted,
+      );
+    }
+
+    // Apply sorting
+    if (sortBy) {
+      items.sort((a, b) => {
+        const dateA = a.completionAt ? new Date(a.completionAt).getTime() : 0;
+        const dateB = b.completionAt ? new Date(b.completionAt).getTime() : 0;
+        return sortBy === 'dueDate_DESC' ? dateB - dateA : dateA - dateB;
+      });
+    }
+
+    return items;
+  }, [actionItemsData, searchTerm, searchBy, status, sortBy]);
+
+  const getEventDetails = (eventId: string | null): string => {
+    if (!eventId) return 'No Event Assigned';
+
+    const event = eventsData?.eventsByIds?.find(
+      (evt: EventType) => evt.id === eventId,
+    );
+    return event ? `${event.name}` : 'Unknown Event';
+  };
+
+  // Logging data to ensure correctness
+  useEffect(() => {
+    if (eventsData) {
+      // console.log("Fetched Events Data:", eventsData);
+    }
+  }, [eventsData]);
+
   useEffect(() => {
     if (actionItemsLoading) {
-      console.log('⏳ Loading action items...');
+      // console.log('⏳ Loading action items...');
     }
 
     if (actionItemsData) {
@@ -147,7 +236,7 @@ function organizationActionItems(): JSX.Element {
     }
 
     if (actionItemsError) {
-      console.error(' Action Items Error:', actionItemsError);
+      // console.error(' Action Items Error:', actionItemsError);
     }
   }, [actionItemsLoading, actionItemsData, actionItemsError]);
 
@@ -186,58 +275,25 @@ function organizationActionItems(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } =
-          params.row.assigneeUser || params.row.assignee?.user || {};
+        const name = params.row.assigneeName || 'Unassigned'; // ✅ Fetch from row data
 
         return (
-          <>
-            {params.row.assigneeType !== 'EventVolunteerGroup' ? (
-              <>
-                <div
-                  className="d-flex fw-bold align-items-center ms-2"
-                  data-testid="assigneeName"
-                >
-                  {image ? (
-                    <img
-                      src={image}
-                      alt="Assignee"
-                      data-testid={`image${_id + 1}`}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <div className={styles.TableImage}>
-                      <Avatar
-                        key={_id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
-                        name={firstName + ' ' + lastName}
-                        alt={firstName + ' ' + lastName}
-                      />
-                    </div>
-                  )}
-                  {firstName + ' ' + lastName}
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  className="d-flex fw-bold align-items-center ms-2"
-                  data-testid="assigneeName"
-                >
-                  <div className={styles.avatarContainer}>
-                    <Avatar
-                      key={_id + '1'}
-                      containerStyle={styles.imageContainer}
-                      avatarStyle={styles.TableImage}
-                      name={params.row.assigneeGroup?.name as string}
-                      alt={'assigneeGroup_avatar'}
-                    />
-                  </div>
-                  {params.row.assigneeGroup?.name as string}
-                </div>
-              </>
-            )}
-          </>
+          <div
+            className="d-flex fw-bold align-items-center ms-2"
+            data-testid="assigneeName"
+          >
+            <div className={styles.TableImage}>
+              <Avatar
+                key={params.row.id}
+                containerStyle={styles.imageContainer}
+                avatarStyle={styles.TableImage}
+                name={name}
+                alt={name}
+              />
+            </div>
+
+            {name}
+          </div>
         );
       },
     },
@@ -282,37 +338,64 @@ function organizationActionItems(): JSX.Element {
       },
     },
     {
-      field: 'allottedHours',
-      headerName: 'Allotted Hours',
+      field: 'eventDetails',
+      headerName: 'Event',
+      flex: 1,
       align: 'center',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
-          <div data-testid="allottedHours">
-            {params.row.allottedHours ?? '-'}
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="eventDetails"
+          >
+            {getEventDetails(params.row.eventId)}
           </div>
         );
       },
     },
     {
-      field: 'dueDate',
-      headerName: 'Due Date',
+      field: 'createdAt',
+      headerName: 'Date of Creation',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       flex: 1,
       renderCell: (params: GridCellParams) => {
+        const createdDate = params.row.createdAt;
         return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.dueDate).format('DD/MM/YYYY')}
+          <div data-testid="createdDate">
+            {createdDate
+              ? dayjs(createdDate).format('DD/MM/YYYY')
+              : 'No Created Date'}
           </div>
         );
       },
     },
+    {
+      field: 'completionAt',
+      headerName: 'Completion Date',
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      flex: 1,
+      renderCell: (params: GridCellParams) => {
+        const completionDate = params.row.completionAt;
+        return (
+          <div data-testid="completionDate">
+            {completionDate
+              ? dayjs(completionDate).format('DD/MM/YYYY')
+              : 'No Completion Date'}
+          </div>
+        );
+      },
+    },
+
     {
       field: 'options',
       headerName: 'Options',
@@ -326,7 +409,6 @@ function organizationActionItems(): JSX.Element {
         return (
           <>
             <Button
-              // variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
               className={styles.infoButton}
@@ -401,11 +483,14 @@ function organizationActionItems(): JSX.Element {
             title={tCommon('searchBy')}
             sortingOptions={[
               { label: t('assignee'), value: 'assignee' },
-              { label: t('category'), value: 'category' },
+              // { label: t('category'), value: 'category' },
             ]}
             selectedOption={t(searchBy)}
             onSortChange={(value) =>
-              setSearchBy(value as 'assignee' | 'category')
+              setSearchBy(
+                value as 'assignee',
+                // 'category'
+              )
             }
             dataTestIdPrefix="searchByToggle"
             buttonLabel={tCommon('searchBy', { item: '' })}
@@ -460,18 +545,18 @@ function organizationActionItems(): JSX.Element {
         </div>
       </div>
 
-      {/* Table with Action Items */}
       <DataGrid
         disableColumnMenu
         disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row.id} // Ensure correct row ID is used
+        getRowId={(row) => row.id}
         autoHeight
         rowHeight={65}
         rows={
-          actionItemsData?.actionItemsByOrganization.map((actionItem) => ({
+          filteredAndSortedActionItems.map((actionItem) => ({
             ...actionItem,
+            assigneeName: getAssigneeName(actionItem.assigneeId),
             status: actionItem.isCompleted ? 'Completed' : 'Pending',
           })) || []
         }
@@ -479,7 +564,6 @@ function organizationActionItems(): JSX.Element {
         isRowSelectable={() => false}
       />
 
-      {/* Item Modal (Create/Edit) */}
       <ItemModal
         isOpen={modalState[ModalState.SAME]}
         hide={() => closeModal(ModalState.SAME)}
@@ -490,7 +574,6 @@ function organizationActionItems(): JSX.Element {
         editMode={modalMode === 'edit'}
       />
 
-      {/* View Modal */}
       {actionItem && (
         <>
           <ItemViewModal

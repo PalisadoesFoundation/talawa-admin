@@ -12,7 +12,7 @@ Props for the `ItemDeleteModal` component.
 
 ### actionItem
 
-> **actionItem**: [`InterfaceActionItemInfo`](../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
+> **actionItem**: [`InterfaceActionItem`](../../../../utils/interfaces/interfaces/InterfaceActionItem.md)
 
 Defined in: [src/screens/OrganizationActionItems/ItemDeleteModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemDeleteModal.tsx#L16)
 

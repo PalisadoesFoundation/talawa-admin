@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationEventsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:651](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L651)
+Defined in: [src/utils/interfaces.ts:672](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L672)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:651](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:652](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L652)
+Defined in: [src/utils/interfaces.ts:673](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L673)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/utils/interfaces.ts:652](https://github.com/PalisadoesFoundatio
 
 > **node**: [`InterfaceEventPg`](InterfaceEventPg.md)
 
-Defined in: [src/utils/interfaces.ts:653](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L653)
+Defined in: [src/utils/interfaces.ts:674](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L674)

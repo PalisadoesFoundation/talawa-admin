@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAdvertisementAttachmentPg
 
-Defined in: [src/utils/interfaces.ts:563](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L563)
+Defined in: [src/utils/interfaces.ts:584](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L584)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:563](https://github.com/PalisadoesFoundatio
 
 > **mimeType**: `string`
 
-Defined in: [src/utils/interfaces.ts:564](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L564)
+Defined in: [src/utils/interfaces.ts:585](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L585)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/utils/interfaces.ts:564](https://github.com/PalisadoesFoundatio
 
 > **url**: `string`
 
-Defined in: [src/utils/interfaces.ts:565](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L565)
+Defined in: [src/utils/interfaces.ts:586](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L586)

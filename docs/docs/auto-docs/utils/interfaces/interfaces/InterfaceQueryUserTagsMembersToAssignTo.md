@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryUserTagsMembersToAssignTo
 
-Defined in: [src/utils/interfaces.ts:968](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L968)
+Defined in: [src/utils/interfaces.ts:989](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L989)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:968](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:969](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L969)
+Defined in: [src/utils/interfaces.ts:990](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L990)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/utils/interfaces.ts:969](https://github.com/PalisadoesFoundatio
 
 > **usersToAssignTo**: `InterfaceTagMembersData`
 
-Defined in: [src/utils/interfaces.ts:970](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L970)
+Defined in: [src/utils/interfaces.ts:991](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L991)

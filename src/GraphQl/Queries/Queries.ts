@@ -443,6 +443,48 @@ export const GET_USER_BY_ID = gql`
   }
 `;
 
+export const GET_EVENTS_BY_IDS = gql`
+  query FetchEventsByIds($ids: [ID!]!) {
+    eventsByIds(input: { ids: $ids }) {
+      id
+      name
+      description
+      organization {
+        id
+        name
+        countryCode
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_USERS_BY_IDS = gql`
+  query GetUsersByIds($input: UsersByIdsInput!) {
+    usersByIds(input: $input) {
+      id
+      name
+      emailAddress
+    }
+  }
+`;
+
+export const GET_CATEGORIES_BY_IDS = gql`
+  query FetchCategoriesByIds($ids: [ID!]!) {
+    categoriesByIds(input: { ids: $ids }) {
+      id
+      name
+      organizationId
+      creatorId
+      isDisabled
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
   query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {

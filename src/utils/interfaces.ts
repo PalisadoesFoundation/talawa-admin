@@ -389,6 +389,27 @@ export interface InterfaceActionItemInfo {
   allottedHours: number | null;
 }
 
+export interface InterfaceActionItem {
+  id: string;
+  isCompleted: boolean;
+  assignedAt: string;
+  completionAt: string;
+  createdAt: string;
+  updatedAt: string;
+  preCompletionNotes: string | null;
+  postCompletionNotes: string | null;
+  organizationId: string;
+  categoryId: string | null;
+  eventId: string | null;
+  assigneeId: string | null;
+  creatorId: string | null;
+  updaterId: string | null;
+  actionItemCategory?: {
+    id: string;
+    name: string;
+  };
+}
+
 export interface InterfaceActionItemList {
   actionItemsByOrganization: InterfaceActionItemInfo[];
 }
