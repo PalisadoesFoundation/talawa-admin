@@ -341,9 +341,7 @@ function OrganizationDashboard(): JSX.Element {
                     size="sm"
                     variant="light"
                     data-testid="viewAllEvents"
-                    onClick={(): void => {
-                      toast.success('Coming soon!');
-                    }}
+                    onClick={(): void => navigate(eventsLink)}
                   >
                     {t('viewAll')}
                   </Button>
@@ -384,10 +382,7 @@ function OrganizationDashboard(): JSX.Element {
                     variant="light"
                     data-testid="viewAllPosts"
                     className=""
-                    // onClick={(): void => navigate(postsLink)}
-                    onClick={(): void => {
-                      toast.success('Coming soon!');
-                    }}
+                    onClick={(): void => navigate(postsLink)}
                   >
                     {t('viewAll')}
                   </Button>
