@@ -2245,9 +2245,8 @@ hr {
 
 .modalHeader {
   border: none;
-  padding-bottom: 0;
   background-color: var(--primary-bg-color) !important;
-  padding: 1rem 1rem;
+  padding: 1rem;
   color: #000000;
 }
 
@@ -3151,7 +3150,7 @@ input[type='radio']:checked + label:hover {
 
 .img {
   height: 100%;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   background-color: rgba(49, 187, 107, 12%);
 }
 
@@ -4096,15 +4095,15 @@ form > input {
 }
 
 .selectOrgText {
-  :global(.MuiOutlinedInput-root.Mui-focused) fieldset {
+  .MuiOutlinedInput-root.Mui-focused fieldset {
     border-color: var(--primary-color);
   }
 
-  :global(.MuiInputLabel-root.Mui-focused) {
+  .MuiInputLabel-root.Mui-focused {
     color: var(--primary-color);
   }
 
-  :global(.MuiAutocomplete-option:hover) {
+  .MuiAutocomplete-option:hover {
     background-color: var(--primary-color);
     color: var(--text-color-light);
   }
@@ -5815,7 +5814,7 @@ button[data-testid='createPostBtn'] {
 
 .postImage {
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
 }
 
@@ -6068,7 +6067,6 @@ button[data-testid='createPostBtn'] {
   gap: 1rem;
   margin: 0 auto;
   margin-bottom: 0.5rem;
-  role: 'status';
 }
 
 .statusIcon {
@@ -6916,7 +6914,7 @@ button[data-testid='createPostBtn'] {
 .calendar__header_month div {
   font-weight: 400;
   color: var(--black-color);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
 }
 
 .buttonEventCalendar {
@@ -6932,7 +6930,7 @@ button[data-testid='createPostBtn'] {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   background-color: var(--black-color);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
   height: 25px;
 }
 

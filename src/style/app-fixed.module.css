@@ -675,6 +675,7 @@
 
   --spinner-border: #9ca3af;
   --card-background-color: #1778f2;
+  --card-header-background-color: #1778f2;
   --text-fields-color: #737373;
 }
 
@@ -802,9 +803,8 @@
 
 .modalHeader {
   border: none;
-  padding-bottom: 0;
   background-color: var(--modalHeader-bg) !important;
-  padding: 1rem 1rem;
+  padding: 1rem;
   color: var(--modalHeader-color);
 }
 
@@ -2457,7 +2457,7 @@
 .calendar__header_month div {
   font-weight: 400;
   color: var(--calendarHeaderMonthDiv-color);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
 }
 
 .buttonEventCalendar {
@@ -2473,7 +2473,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   background-color: var(--calendarWeekdays-bg);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
   height: 25px;
 }
 
@@ -4147,7 +4147,7 @@
 }
 
 .modelHeaderDelete {
-  background-color: var(--cardBackground-color);
+  background-color: var(--card-header-background-color);
 }
 
 /* -- OrgProfileFieldSettings.tsx -- */
