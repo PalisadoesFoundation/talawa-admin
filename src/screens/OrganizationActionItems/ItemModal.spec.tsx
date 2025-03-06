@@ -21,6 +21,7 @@ import {
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
+import userEvent from '@testing-library/user-event';
 
 // --- Initialize global mocks immediately after imports ---
 vi.mock('react-i18next', () => ({
@@ -37,6 +38,38 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual('@mui/x-date-pickers');
+  return {
+    ...actual,
+    DatePicker: ({
+      label,
+      value,
+      onChange,
+    }: {
+      label: string;
+      value: dayjs.Dayjs | null;
+      onChange: (value: dayjs.Dayjs | null) => void;
+    }) => {
+      return (
+        <input
+          aria-label={label}
+          value={value ? value.format('DD/MM/YYYY') : ''}
+          onChange={(e) => {
+            const parts = e.target.value.split('/');
+            if (parts.length === 3) {
+              const [day, month, year] = parts.map((part) =>
+                parseInt(part, 10),
+              );
+              onChange(dayjs(new Date(year, month - 1, day)));
+            }
+          }}
+        />
+      );
+    },
+  };
+});
+
 // --- Sample data ---
 const sampleActionItem = {
   id: '1',
@@ -47,6 +80,27 @@ const sampleActionItem = {
   updatedAt: '2022-12-31T00:00:00.000Z',
   preCompletionNotes: 'Initial notes',
   postCompletionNotes: null,
+  organizationId: 'org1',
+  categoryId: 'cat1',
+  eventId: 'event1',
+  assigneeId: 'user1',
+  creatorId: 'user2',
+  updaterId: 'user2',
+  actionItemCategory: {
+    id: 'cat1',
+    name: 'Category 1',
+  },
+};
+
+const sampleCompletedActionItem = {
+  id: '1',
+  isCompleted: true, // Ensure it's completed so postCompletionNotes appears
+  assignedAt: '2023-01-01T00:00:00.000Z',
+  completionAt: '',
+  createdAt: '2022-12-31T00:00:00.000Z',
+  updatedAt: '2022-12-31T00:00:00.000Z',
+  preCompletionNotes: 'Initial pre notes',
+  postCompletionNotes: 'Initial post notes',
   organizationId: 'org1',
   categoryId: 'cat1',
   eventId: 'event1',
@@ -72,6 +126,55 @@ const sampleCategoryData = {
     },
   ],
 };
+
+const updateMock = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+        preCompletionNotes: 'Updated notes',
+        isCompleted: false,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateActionItem: {
+        id: '1',
+        isCompleted: false,
+        preCompletionNotes: 'Updated notes',
+        updaterId: 'user2',
+      },
+    },
+  },
+};
+
+const updateMockPostNotesChange = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+        postCompletionNotes: 'Updated post notes',
+        isCompleted: true,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateActionItem: {
+        id: '1',
+        isCompleted: true,
+        postCompletionNotes: 'Updated post notes',
+        updaterId: 'user2',
+      },
+    },
+  },
+};
+
+const mocks1 = [updateMock];
+const mocks2 = [updateMockPostNotesChange];
 
 const sampleActionCategoryData = {
   actionCategoriesByOrganization: [
@@ -361,5 +464,277 @@ describe('ItemModal Component', () => {
     fireEvent.click(closeButton);
 
     expect(hideMock).toHaveBeenCalled();
+  });
+
+  it('calls toast.error if createActionItemHandler fails', async () => {
+    const errorMessage = 'Create failed';
+    // Override create mutation to reject.
+    const errorMock: MockedResponse = {
+      request: {
+        query: POSTGRES_CREATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            categoryId: '',
+            assigneeId: '',
+            preCompletionNotes: 'Initial notes',
+            organizationId: 'org1',
+            eventId: 'event1',
+            assignedAt: today,
+          },
+        },
+      },
+      error: new Error(errorMessage),
+    };
+
+    render(
+      <MockedProvider mocks={[errorMock, ...mocks]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Fill the preCompletionNotes field.
+    const preCompletionField = screen.getByLabelText('preCompletionNotes');
+    fireEvent.change(preCompletionField, {
+      target: { value: 'Initial notes' },
+    });
+    // Submit the form.
+    const submitBtn = screen.getByTestId('submitBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(errorMessage);
+    });
+  });
+
+  it('calls toast.error if updateActionItemHandler fails', async () => {
+    const errorMessage = 'Update failed';
+    const errorUpdateMock: MockedResponse = {
+      request: {
+        query: UPDATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            id: '1',
+            preCompletionNotes: 'Updated notes',
+            isCompleted: false,
+          },
+        },
+      },
+      error: new Error(errorMessage),
+    };
+
+    render(
+      <MockedProvider mocks={[errorUpdateMock, ...mocks]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={sampleActionItem}
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Change the preCompletionNotes to trigger update.
+    const preCompletionField = screen.getByLabelText('preCompletionNotes');
+    fireEvent.change(preCompletionField, {
+      target: { value: 'Updated notes' },
+    });
+    const submitBtn = screen.getByTestId('submitBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(errorMessage);
+    });
+  });
+
+  it('updates assigneeType when radio buttons are clicked', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* Render in create mode with an eventId so that radios are visible */}
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Get the radio buttons by their id or label.
+    const individualRadio = screen.getByRole('radio', { name: /individuals/i });
+    const groupsRadio = screen.getByRole('radio', { name: /groups/i });
+
+    // Click the individual radio and expect it to be checked.
+    fireEvent.click(individualRadio);
+    expect(individualRadio).toBeChecked();
+
+    // Click the groups radio.
+    fireEvent.click(groupsRadio);
+    expect(groupsRadio).toBeChecked();
+  });
+
+  it('updates dueDate when a new date is selected', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    const dateInput = screen.getByLabelText('dueDate');
+    // Simulate entering a new date in DD/MM/YYYY format.
+    fireEvent.change(dateInput, { target: { value: '01/04/2025' } });
+    // Expect the input to reflect the new date.
+    expect(dateInput).toHaveValue('01/04/2025');
+  });
+
+  it('updates postCompletionNotes when text is entered', async () => {
+    // Create an action item with isCompleted true.
+    const completedActionItem = {
+      ...sampleActionItem,
+      isCompleted: true,
+      postCompletionNotes: '',
+    };
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={completedActionItem}
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // The postCompletionNotes field should be rendered.
+    const postNotesField = screen.getByLabelText('postCompletionNotes');
+    fireEvent.change(postNotesField, { target: { value: 'New post note' } });
+    expect(postNotesField).toHaveValue('New post note');
+  });
+});
+
+describe('ItemModal Component - Field Updates', () => {
+  beforeEach(() => {
+    hideMock = vi.fn();
+    refetchMock = vi.fn();
+    toast.success = vi.fn();
+    toast.warning = vi.fn();
+    toast.error = vi.fn();
+  });
+
+  it('updates updatedFields when preCompletionNotes is changed', async () => {
+    render(
+      <MockedProvider mocks={mocks1} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={sampleActionItem}
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Ensure the input for preCompletionNotes is present
+    const preCompletionInput =
+      await screen.findByLabelText('preCompletionNotes');
+
+    // Type new preCompletionNotes
+    userEvent.clear(preCompletionInput);
+    await userEvent.type(preCompletionInput, 'Updated notes');
+
+    // Submit the form
+    const submitBtn = screen.getByTestId('submitBtn');
+    userEvent.click(submitBtn);
+
+    // Wait for the mutation to be triggered
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+    });
+
+    expect(hideMock).toHaveBeenCalled();
+    expect(refetchMock).toHaveBeenCalled();
+  });
+
+  it('updates updatedFields when postCompletionNotes is changed', async () => {
+    render(
+      <MockedProvider mocks={mocks2} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={sampleCompletedActionItem} // completed item
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for the postCompletionNotes TextField to appear.
+    // Note: The label comes from t('postCompletionNotes'), so we use a case-insensitive query.
+    const postCompletionInput = await waitFor(() =>
+      screen.getByLabelText(/postCompletionNotes/i),
+    );
+
+    // Change its value: clear it first then type a new value.
+    // Note: If the TextField is controlled and not read-only, userEvent.clear() should work.
+    userEvent.clear(postCompletionInput);
+    await userEvent.type(postCompletionInput, 'Updated post notes');
+
+    // Instead of clicking just the submit button, find the closest form element and submit it.
+    const submitBtn = screen.getByTestId('submitBtn');
+    const form = submitBtn.closest('form');
+    if (!form) {
+      throw new Error('Form element not found');
+    }
+    fireEvent.submit(form);
+
+    // Wait for the mutation to be triggered and for toast.success to be called.
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+    });
+    expect(hideMock).toHaveBeenCalled();
+    expect(refetchMock).toHaveBeenCalled();
   });
 });

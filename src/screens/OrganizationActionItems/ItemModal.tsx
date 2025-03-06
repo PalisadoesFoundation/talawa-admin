@@ -413,6 +413,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
 
               <Form.Group className="mb-3 w-100">
                 <Autocomplete
+                  disablePortal
                   className={`${styles.noOutline} w-100`}
                   data-testid="memberSelect"
                   options={users.filter(

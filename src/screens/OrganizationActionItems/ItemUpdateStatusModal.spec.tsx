@@ -153,14 +153,11 @@ describe('ItemUpdateStatusModal Component', () => {
       </MockedProvider>,
     );
 
-    // Expect the text field for postCompletionNotes to be in the document.
     const notesField = screen.getByLabelText('postCompletionNotes');
     expect(notesField).toBeInTheDocument();
 
-    // Simulate user updating the text field.
     fireEvent.change(notesField, { target: { value: 'Updated notes' } });
 
-    // Submit the form by clicking the submit button.
     const submitBtn = screen.getByTestId('createBtn');
     fireEvent.click(submitBtn);
 
@@ -186,11 +183,9 @@ describe('ItemUpdateStatusModal Component', () => {
       </MockedProvider>,
     );
 
-    // In completed mode, the postCompletionNotes field is not rendered.
     expect(screen.queryByLabelText('postCompletionNotes')).toBeNull();
     expect(screen.getByText('updateStatusMsg')).toBeInTheDocument();
 
-    // Click the "yes" button (for completed items)
     const yesBtn = screen.getByTestId('yesBtn');
     fireEvent.click(yesBtn);
 
@@ -235,11 +230,9 @@ describe('ItemUpdateStatusModal Component', () => {
       </MockedProvider>,
     );
 
-    // Simulate updating the notes.
     const notesField = screen.getByLabelText('postCompletionNotes');
     fireEvent.change(notesField, { target: { value: 'Updated notes' } });
 
-    // Submit the form.
     const submitBtn = screen.getByTestId('createBtn');
     fireEvent.click(submitBtn);
 
