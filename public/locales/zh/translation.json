@@ -282,7 +282,8 @@
     "requests": "请求",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "volunteerRankings": "志愿者排名",
-    "noVolunteers": "未找到志愿者!"
+    "noVolunteers": "未找到志愿者!",
+    "comingSoon": "即将推出！"
   },
   "organizationPeople": {
     "title": "塔拉瓦会员",

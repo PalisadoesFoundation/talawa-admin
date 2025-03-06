@@ -282,7 +282,8 @@
     "requests": "requests",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "volunteerRankings": "Volunteer Rankings",
-    "noVolunteers": "No Volunteers Found!"
+    "noVolunteers": "No Volunteers Found!",
+    "comingSoon": "Coming soon!"
   },
   "organizationPeople": {
     "title": "Talawa Members",
