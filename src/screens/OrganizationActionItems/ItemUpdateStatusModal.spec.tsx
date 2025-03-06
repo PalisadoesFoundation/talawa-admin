@@ -10,7 +10,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ItemUpdateStatusModal from './ItemUpdateStatusModal';
 import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
-
+import {
+  GET_USERS_BY_IDS,
+  GET_CATEGORIES_BY_IDS,
+} from 'GraphQl/Queries/Queries';
 // Global mocks
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -46,6 +49,37 @@ const sampleActionItemNotCompleted = {
   actionItemCategory: {
     id: 'cat1',
     name: 'Category 1',
+  },
+};
+
+const usersMock: MockedResponse<{
+  usersByIds: { id: string; name: string }[];
+}> = {
+  request: {
+    query: GET_USERS_BY_IDS,
+    variables: { input: { ids: ['user1', 'user2'] } },
+  },
+  result: {
+    data: {
+      usersByIds: [
+        { id: 'user1', name: 'User One' },
+        { id: 'user2', name: 'User Two' },
+      ],
+    },
+  },
+};
+
+const categoriesMock: MockedResponse<{
+  categoriesByIds: { id: string; name: string }[];
+}> = {
+  request: {
+    query: GET_CATEGORIES_BY_IDS,
+    variables: { ids: ['cat1'] },
+  },
+  result: {
+    data: {
+      categoriesByIds: [{ id: 'cat1', name: 'Category 1' }],
+    },
   },
 };
 
@@ -239,5 +273,28 @@ describe('ItemUpdateStatusModal Component', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mutation failed');
     });
+  });
+
+  it('displays correct category and assignee values using helper functions', async () => {
+    render(
+      <MockedProvider mocks={[usersMock, categoriesMock]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemUpdateStatusModal
+            isOpen={true}
+            hide={hideMock}
+            actionItemsRefetch={refetchMock}
+            actionItem={sampleActionItemNotCompleted}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for the category TextField to display its value.
+    const categoryField = await screen.findByLabelText('category');
+    expect(categoryField).toHaveValue('Category 1');
+
+    // Wait for the assignee TextField to display its value.
+    const assigneeField = await screen.findByLabelText('assignee');
+    expect(assigneeField).toHaveValue('User One');
   });
 });
