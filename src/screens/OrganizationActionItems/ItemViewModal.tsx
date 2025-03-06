@@ -15,6 +15,13 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 
+/**
+ * The ItemViewModal component displays a read-only modal view of an action item.
+ * It shows details such as category, assignee, assigner, status, dates, and any pre-
+ * or post-completion notes. It uses GraphQL queries to fetch user and category data,
+ * and leverages React-Bootstrap and MUI components for the UI.
+ */
+
 export interface InterfaceViewModalProps {
   isOpen: boolean;
   hide: () => void;

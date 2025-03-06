@@ -4,7 +4,14 @@
 
 # Interface: InterfaceItemUpdateStatusModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L18)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L28)
+
+The ItemUpdateStatusModal component displays a modal window that allows users to update
+the status of an action item. It supports updating the post-completion notes and toggling
+the completion status using a GraphQL mutation.
+
+It uses Apollo Client for data fetching and mutations, react-i18next for localization,
+and React-Bootstrap along with MUI components for the UI.
 
 ## Properties
 
@@ -12,7 +19,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:18](h
 
 > **actionItem**: [`InterfaceActionItem`](../../../../utils/interfaces/interfaces/InterfaceActionItem.md)
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L22)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L32)
 
 ***
 
@@ -20,7 +27,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:22](h
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L21)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L31)
 
 #### Returns
 
@@ -32,7 +39,7 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:21](h
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L20)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L30)
 
 #### Returns
 
@@ -44,4 +51,4 @@ Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:20](h
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L19)
+Defined in: [src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemUpdateStatusModal.tsx#L29)

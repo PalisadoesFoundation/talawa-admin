@@ -15,6 +15,16 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
 
+/**
+ *
+ * The ItemUpdateStatusModal component displays a modal window that allows users to update
+ * the status of an action item. It supports updating the post-completion notes and toggling
+ * the completion status using a GraphQL mutation.
+ *
+ * It uses Apollo Client for data fetching and mutations, react-i18next for localization,
+ * and React-Bootstrap along with MUI components for the UI.
+ */
+
 export interface InterfaceItemUpdateStatusModalProps {
   isOpen: boolean;
   hide: () => void;
