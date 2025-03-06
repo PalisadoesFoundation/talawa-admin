@@ -1,11 +1,11 @@
 ---
-id: miniO-fileupload-guidelines
-title: Minio uploads Guidelines
+id: MiniO-fileupload-guidelines
+title: MiniO uploads Guidelines
 sidebar_label: MiniO 
 ---
 
 ### File Upload and Management System for talawa  : 
->This is the given architecture diagram for minio-file upload system: 
+>This is the given architecture diagram for MiniO-file upload system: 
 
 ![minio-architecture](../../../static/img/markdown/minio/architecture.png)
 
@@ -33,7 +33,7 @@ sidebar_label: MiniO
 
 **ObjectName Retrieval:** The backend retrieves the MinIO `objectName` associated with the file from the database.
 
-**Presigned URL Generation:** As there is no specific way to *update* files in miniO we will be overwriting the file on the existing `objectName`. The backend generates a presigned URL for  the file in MinIO using the retrieved objectName.
+**Presigned URL Generation:** As there is no specific way to *update* files in MiniO we will be overwriting the file on the existing `objectName`. The backend generates a presigned URL for  the file in MinIO using the retrieved objectName.
 
 **File Update to MinIO:** The client uses the presigned URL to upload the updated file to MinIO, overwriting the existing object.
 
