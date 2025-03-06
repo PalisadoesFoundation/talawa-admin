@@ -1,260 +1,250 @@
-// import React from 'react';
-// import type { ApolloLink } from '@apollo/client';
-// import { MockedProvider } from '@apollo/react-testing';
-// import { LocalizationProvider } from '@mui/x-date-pickers';
-// import type { RenderResult } from '@testing-library/react';
-// import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-// import { I18nextProvider } from 'react-i18next';
-// import { Provider } from 'react-redux';
-// import { BrowserRouter } from 'react-router-dom';
-// import { store } from 'state/store';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import i18nForTest from '../../utils/i18nForTest';
-// import { MOCKS, MOCKS_ERROR } from './OrganizationActionItem.mocks';
-// import { StaticMockLink } from 'utils/StaticMockLink';
-// import { toast } from 'react-toastify';
-// import ItemUpdateStatusModal, {
-//   type InterfaceItemUpdateStatusModalProps,
-// } from './ItemUpdateStatusModal';
-// import { vi } from 'vitest';
+// src/screens/OrganizationActionItems/ItemUpdateStatusModal.spec.tsx
 
-// vi.mock('react-toastify', () => ({
-//   toast: {
-//     success: vi.fn(),
-//     error: vi.fn(),
-//   },
-// }));
+import React from 'react';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import type { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import ItemUpdateStatusModal from './ItemUpdateStatusModal';
+import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
+import { toast } from 'react-toastify';
 
-// const link1 = new StaticMockLink(MOCKS);
-// const link2 = new StaticMockLink(MOCKS_ERROR);
-// const t = JSON.parse(
-//   JSON.stringify(
-//     i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems,
-//   ),
-// );
+// Global mocks
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    tCommon: (key: string) => key,
+  }),
+}));
 
-// const itemProps: InterfaceItemUpdateStatusModalProps[] = [
-//   {
-//     isOpen: true,
-//     hide: vi.fn(),
-//     actionItemsRefetch: vi.fn(),
-//     actionItem: {
-//       id: 'actionItemId1',
-//       assignee: null,
-//       assigneeGroup: null,
-//       assigneeType: 'User',
-//       assigneeUser: {
-//         _id: 'userId1',
-//         firstName: 'John',
-//         lastName: 'Doe',
-//         image: undefined,
-//       },
-//       actionItemCategory: {
-//         id: 'actionItemCategoryId1',
-//         name: 'Category 1',
-//       },
-//       preCompletionNotes: 'Notes 1',
-//       postCompletionNotes: 'Cmp Notes 1',
-//       assignmentDate: new Date('2024-08-27'),
-//       dueDate: new Date('2044-08-30'),
-//       completionDate: new Date('2044-09-03'),
-//       isCompleted: true,
-//       event: null,
-//       allottedHours: 24,
-//       assigner: {
-//         _id: 'userId2',
-//         firstName: 'Wilt',
-//         lastName: 'Shepherd',
-//         image: undefined,
-//       },
-//       creator: {
-//         _id: 'userId2',
-//         firstName: 'Wilt',
-//         lastName: 'Shepherd',
-//       },
-//     },
-//   },
-//   {
-//     isOpen: true,
-//     hide: vi.fn(),
-//     actionItemsRefetch: vi.fn(),
-//     actionItem: {
-//       _id: 'actionItemId1',
-//       assignee: null,
-//       assigneeGroup: {
-//         _id: 'volunteerGroupId1',
-//         name: 'Group 1',
-//         description: 'Description 1',
-//         event: {
-//           _id: 'eventId1',
-//         },
-//         createdAt: '2024-08-27',
-//         creator: {
-//           _id: 'userId2',
-//           firstName: 'Wilt',
-//           lastName: 'Shepherd',
-//           image: undefined,
-//         },
-//         leader: {
-//           _id: 'userId1',
-//           firstName: 'John',
-//           lastName: 'Doe',
-//           image: undefined,
-//         },
-//         volunteersRequired: 10,
-//         assignments: [],
-//         volunteers: [
-//           {
-//             _id: 'volunteerId1',
-//             user: {
-//               _id: 'userId1',
-//               firstName: 'John',
-//               lastName: 'Doe',
-//               image: undefined,
-//             },
-//           },
-//         ],
-//       },
-//       assigneeType: 'EventVolunteerGroup',
-//       assigneeUser: {
-//         _id: 'userId1',
-//         firstName: 'John',
-//         lastName: 'Doe',
-//         image: undefined,
-//       },
-//       actionItemCategory: {
-//         _id: 'actionItemCategoryId1',
-//         name: 'Category 1',
-//       },
-//       preCompletionNotes: 'Notes 1',
-//       postCompletionNotes: null,
-//       assignmentDate: new Date('2024-08-27'),
-//       dueDate: new Date('2044-08-30'),
-//       completionDate: new Date('2044-09-03'),
-//       isCompleted: false,
-//       event: null,
-//       allottedHours: 24,
-//       assigner: {
-//         _id: 'userId2',
-//         firstName: 'Wilt',
-//         lastName: 'Shepherd',
-//         image: undefined,
-//       },
-//       creator: {
-//         _id: 'userId2',
-//         firstName: 'Wilt',
-//         lastName: 'Shepherd',
-//       },
-//     },
-//   },
-//   {
-//     isOpen: true,
-//     hide: vi.fn(),
-//     actionItemsRefetch: vi.fn(),
-//     actionItem: {
-//       _id: 'actionItemId1',
-//       assignee: {
-//         _id: 'volunteerId1',
-//         hasAccepted: true,
-//         user: {
-//           _id: 'userId1',
-//           firstName: 'John',
-//           lastName: 'Doe',
-//           image: undefined,
-//         },
-//         assignments: [],
-//         groups: [],
-//         hoursVolunteered: 0,
-//       },
-//       assigneeGroup: null,
-//       assigneeType: 'EventVolunteer',
-//       assigneeUser: null,
-//       actionItemCategory: {
-//         _id: 'actionItemCategoryId1',
-//         name: 'Category 1',
-//       },
-//       preCompletionNotes: 'Notes 1',
-//       postCompletionNotes: null,
-//       assignmentDate: new Date('2024-08-27'),
-//       dueDate: new Date('2044-08-30'),
-//       completionDate: new Date('2044-09-03'),
-//       isCompleted: true,
-//       event: null,
-//       allottedHours: 24,
-//       assigner: {
-//         _id: 'userId2',
-//         firstName: 'Wilt',
-//         lastName: 'Shepherd',
-//         image: undefined,
-//       },
-//       creator: {
-//         _id: 'userId2',
-//         firstName: 'Wilt',
-//         lastName: 'Shepherd',
-//       },
-//     },
-//   },
-// ];
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    warning: vi.fn(),
+    error: vi.fn(),
+  },
+}));
 
-// const renderItemUpdateStatusModal = (
-//   link: ApolloLink,
-//   props: InterfaceItemUpdateStatusModalProps,
-// ): RenderResult => {
-//   return render(
-//     <MockedProvider link={link} addTypename={false}>
-//       <Provider store={store}>
-//         <BrowserRouter>
-//           <LocalizationProvider dateAdapter={AdapterDayjs}>
-//             <I18nextProvider i18n={i18nForTest}>
-//               <ItemUpdateStatusModal {...props} />
-//             </I18nextProvider>
-//           </LocalizationProvider>
-//         </BrowserRouter>
-//       </Provider>
-//     </MockedProvider>,
-//   );
-// };
+// Sample action item (not completed)
+const sampleActionItemNotCompleted = {
+  id: '1',
+  isCompleted: false,
+  assignedAt: '2023-01-01T00:00:00.000Z',
+  completionAt: '',
+  createdAt: '2022-12-31T00:00:00.000Z',
+  updatedAt: '2022-12-31T00:00:00.000Z',
+  preCompletionNotes: 'Pre notes',
+  postCompletionNotes: null,
+  organizationId: 'org1',
+  categoryId: 'cat1',
+  eventId: 'event1',
+  assigneeId: 'user1',
+  creatorId: 'user2',
+  updaterId: 'user2',
+  actionItemCategory: {
+    id: 'cat1',
+    name: 'Category 1',
+  },
+};
 
-// describe('Testing ItemUpdateStatusModal', () => {
-//   it('Update Status of Completed ActionItem', async () => {
-//     renderItemUpdateStatusModal(link1, itemProps[0]);
-//     expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
-//     const yesBtn = await screen.findByTestId('yesBtn');
-//     fireEvent.click(yesBtn);
+// Sample action item (completed)
+const sampleActionItemCompleted = {
+  ...sampleActionItemNotCompleted,
+  isCompleted: true,
+  postCompletionNotes: 'Some post notes',
+};
 
-//     await waitFor(() => {
-//       expect(itemProps[0].actionItemsRefetch).toHaveBeenCalled();
-//       expect(itemProps[0].hide).toHaveBeenCalled();
-//       expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
-//     });
-//   });
+// Global GraphQL mocks
+const updateMockNotCompleted: MockedResponse = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+        assigneeId: 'user1',
+        postCompletionNotes: 'Updated notes',
+        isCompleted: true, // toggled from false to true
+      },
+    },
+  },
+  result: {
+    data: {
+      updateActionItem: {
+        id: '1',
+        isCompleted: true,
+        preCompletionNotes: 'Pre notes',
+        postCompletionNotes: 'Updated notes',
+        categoryId: 'cat1',
+        assigneeId: 'user1',
+        updaterId: 'user2',
+      },
+    },
+  },
+};
 
-//   it('Update Status of Pending ActionItem', async () => {
-//     renderItemUpdateStatusModal(link1, itemProps[1]);
-//     expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
+const updateMockCompleted: MockedResponse = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+        assigneeId: 'user1',
+        postCompletionNotes: '',
+        isCompleted: false, // toggled from true to false
+      },
+    },
+  },
+  result: {
+    data: {
+      updateActionItem: {
+        id: '1',
+        isCompleted: false,
+        preCompletionNotes: 'Pre notes',
+        postCompletionNotes: '',
+        categoryId: 'cat1',
+        assigneeId: 'user1',
+        updaterId: 'user2',
+      },
+    },
+  },
+};
 
-//     const notes = await screen.findByLabelText(t.postCompletionNotes);
-//     fireEvent.change(notes, { target: { value: 'Cmp Notes 1' } });
+const updateMockError: MockedResponse = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+        assigneeId: 'user1',
+        postCompletionNotes: 'Updated notes',
+        isCompleted: true,
+      },
+    },
+  },
+  error: new Error('Mutation failed'),
+};
 
-//     const createBtn = await screen.findByTestId('createBtn');
-//     fireEvent.click(createBtn);
+// Global callback mocks
+let hideMock = vi.fn();
+let refetchMock = vi.fn();
 
-//     await waitFor(() => {
-//       expect(itemProps[1].actionItemsRefetch).toHaveBeenCalled();
-//       expect(itemProps[1].hide).toHaveBeenCalled();
-//       expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
-//     });
-//   });
+beforeEach(() => {
+  hideMock = vi.fn();
+  refetchMock = vi.fn();
+  toast.success = vi.fn();
+  toast.warning = vi.fn();
+  toast.error = vi.fn();
+});
 
-//   it('should fail to Update status of Action Item', async () => {
-//     renderItemUpdateStatusModal(link2, itemProps[2]);
+describe('ItemUpdateStatusModal Component', () => {
+  it('renders in update mode (not completed) and submits updated action item', async () => {
+    render(
+      <MockedProvider mocks={[updateMockNotCompleted]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemUpdateStatusModal
+            isOpen={true}
+            hide={hideMock}
+            actionItemsRefetch={refetchMock}
+            actionItem={sampleActionItemNotCompleted}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
 
-//     expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
-//     const yesBtn = await screen.findByTestId('yesBtn');
-//     fireEvent.click(yesBtn);
+    // Expect the text field for postCompletionNotes to be in the document.
+    const notesField = screen.getByLabelText('postCompletionNotes');
+    expect(notesField).toBeInTheDocument();
 
-//     await waitFor(() => {
-//       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
-//     });
-//   });
-// });
+    // Simulate user updating the text field.
+    fireEvent.change(notesField, { target: { value: 'Updated notes' } });
+
+    // Submit the form by clicking the submit button.
+    const submitBtn = screen.getByTestId('createBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+    });
+
+    expect(hideMock).toHaveBeenCalled();
+    expect(refetchMock).toHaveBeenCalled();
+  });
+
+  it('renders in update mode (completed) and submits updated action item', async () => {
+    render(
+      <MockedProvider mocks={[updateMockCompleted]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemUpdateStatusModal
+            isOpen={true}
+            hide={hideMock}
+            actionItemsRefetch={refetchMock}
+            actionItem={sampleActionItemCompleted}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // In completed mode, the postCompletionNotes field is not rendered.
+    expect(screen.queryByLabelText('postCompletionNotes')).toBeNull();
+    expect(screen.getByText('updateStatusMsg')).toBeInTheDocument();
+
+    // Click the "yes" button (for completed items)
+    const yesBtn = screen.getByTestId('yesBtn');
+    fireEvent.click(yesBtn);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+    });
+
+    expect(hideMock).toHaveBeenCalled();
+    expect(refetchMock).toHaveBeenCalled();
+  });
+
+  it('calls hide when the close button is clicked', async () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemUpdateStatusModal
+            isOpen={true}
+            hide={hideMock}
+            actionItemsRefetch={refetchMock}
+            actionItem={sampleActionItemNotCompleted}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    const closeButton = screen.getByTestId('modalCloseBtn');
+    fireEvent.click(closeButton);
+    expect(hideMock).toHaveBeenCalled();
+  });
+
+  it('calls toast.error on mutation failure', async () => {
+    render(
+      <MockedProvider mocks={[updateMockError]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemUpdateStatusModal
+            isOpen={true}
+            hide={hideMock}
+            actionItemsRefetch={refetchMock}
+            actionItem={sampleActionItemNotCompleted}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Simulate updating the notes.
+    const notesField = screen.getByLabelText('postCompletionNotes');
+    fireEvent.change(notesField, { target: { value: 'Updated notes' } });
+
+    // Submit the form.
+    const submitBtn = screen.getByTestId('createBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Mutation failed');
+    });
+  });
+});

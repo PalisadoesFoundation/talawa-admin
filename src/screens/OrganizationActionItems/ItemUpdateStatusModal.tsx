@@ -16,7 +16,6 @@ import {
 import Avatar from 'components/Avatar/Avatar';
 
 /**
- *
  * The ItemUpdateStatusModal component displays a modal window that allows users to update
  * the status of an action item. It supports updating the post-completion notes and toggling
  * the completion status using a GraphQL mutation.
@@ -180,7 +179,11 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
             </FormControl>
           </Form.Group>
 
-          <Form onSubmitCapture={updateActionItemHandler} className="p-2">
+          <Form
+            onSubmitCapture={updateActionItemHandler}
+            className="p-2"
+            data-testid="update-form"
+          >
             {!isCompleted ? (
               <FormControl fullWidth className="mb-2">
                 <TextField
