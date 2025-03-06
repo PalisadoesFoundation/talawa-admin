@@ -393,7 +393,7 @@ function orgList(): JSX.Element {
       ) : (
         <>
           <InfiniteScroll
-            dataLength={orgsData?.organizationsConnection?.length ?? 0}
+            dataLength={orgsData?.organizations?.length ?? 0}
             next={loadMoreOrganizations}
             loader={
               <>

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import {
   MEMBERSHIP_REQUEST,
-  ORGANIZATION_CONNECTION_LIST,
+  ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import RequestsTableItem from 'components/RequestsTableItem/RequestsTableItem';
@@ -75,7 +75,7 @@ const Requests = (): JSX.Element => {
   });
 
   // Query to fetch the list of organizations
-  const { data: orgsData } = useQuery(ORGANIZATION_CONNECTION_LIST);
+  const { data: orgsData } = useQuery(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState(
     data?.organizations[0]?.membershipRequests || [],
   );
@@ -108,7 +108,7 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    if (orgsData.organizationsConnection.length === 0) {
+    if (orgsData.organizations.length === 0) {
       toast.warning(t('noOrgError') as string);
     }
   }, [orgsData]);
@@ -236,7 +236,7 @@ const Requests = (): JSX.Element => {
         </div>
       </div>
 
-      {!isLoading && orgsData?.organizationsConnection.length === 0 ? (
+      {!isLoading && orgsData?.organizations.length === 0 ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

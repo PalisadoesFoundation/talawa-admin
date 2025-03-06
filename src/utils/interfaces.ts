@@ -460,11 +460,11 @@ export interface InterfaceOrgInfoTypePG {
   addressLine1: string;
 }
 export interface InterfaceOrgConnectionType {
-  organizationsConnection: InterfaceOrgConnectionInfoType[];
+  organizations: InterfaceOrgConnectionInfoType[];
 }
 
 export interface InterfaceOrgConnectionTypePG {
-  organizationsConnection: InterfaceOrgInfoTypePG[];
+  organizations: InterfaceOrgInfoTypePG[];
 }
 
 export interface InterfaceQueryOrganizationsListObject {

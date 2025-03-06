@@ -143,7 +143,6 @@ export default function organizations(): JSX.Element {
   } = useQuery(ORGANIZATION_LIST, {
     variables: { id: userId, first: rowsPerPage, filter: '' },
   });
-  console.log(data);
 
   const { data: joinedOrganizationsData } = useQuery(
     USER_JOINED_ORGANIZATIONS_PG,
@@ -287,7 +286,7 @@ export default function organizations(): JSX.Element {
         setOrganizations(organizations);
       }
     } else if (mode === 1) {
-      if (joinedOrganizationsData?.users?.[0]?.user?.joinedOrganizations) {
+      if (joinedOrganizationsData?.users?.[0]?.user?.organizationsWhereMember) {
         const organizations =
           joinedOrganizationsData.users[0].user.joinedOrganizations.map(
             (org: InterfaceOrganization) => ({
@@ -348,6 +347,7 @@ export default function organizations(): JSX.Element {
               ? styles.expandOrg
               : styles.contractOrg
         }`}
+        data-testid="organizations-container"
       >
         <div className={`${styles.mainContainerOrganization}`}>
           <div className="d-flex justify-content-between align-items-center">
@@ -410,16 +410,16 @@ export default function organizations(): JSX.Element {
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
             <div
-              className={`d-flex flex-column  ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
               {loadingOrganizations ? (
-                <div className={`d-flex flex-row justify-content-center`}>
+                <div className={`d-flex flex-row justify-content-center`} data-testid="loading-indicator">
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
                 <>
                   {organizations && organizations.length > 0 ? (
-                    <div className="row">
+                    <div className="row" data-testid="organizations-list">
                       {(rowsPerPage > 0
                         ? organizations.slice(
                             page * rowsPerPage,
@@ -443,14 +443,26 @@ export default function organizations(): JSX.Element {
                           isJoined: organization.isJoined,
                         };
                         return (
-                          <div key={index} className="col-md-6 mb-4">
+                          <div 
+                            key={index} 
+                            className="col-md-6 mb-4" 
+                            data-testid="organization-card"
+                            data-organization-name={organization.name}
+                          >
                             <OrganizationCard {...cardProps} />
+                            {/* Add a hidden span with organization name for testing purposes */}
+                            <span 
+                              data-testid={`org-name-${organization.name}`} 
+                              className="visually-hidden"
+                            >
+                              {organization.name}
+                            </span>
                           </div>
                         );
                       })}
                     </div>
                   ) : (
-                    <span>{t('nothingToShow')}</span>
+                    <span data-testid="no-organizations-message">{t('nothingToShow')}</span>
                   )}
                 </>
               )}

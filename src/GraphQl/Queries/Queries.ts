@@ -87,48 +87,6 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
   }
 `;
 
-// Query to take the Organization list with filter  and sort option
-export const ORGANIZATION_CONNECTION_LIST = gql`
-  query OrganizationsConnection(
-    $filter: String
-    $first: Int
-    $skip: Int
-    $orderBy: OrganizationOrderByInput
-  ) {
-    organizationsConnection(
-      where: { name_contains: $filter }
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-    ) {
-      _id
-      image
-      creator {
-        firstName
-        lastName
-      }
-      name
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
-      }
-    }
-  }
-`;
-
 // Query to take the User list
 export const USER_LIST = gql`
   query Users(
@@ -1045,6 +1003,4 @@ export {
 export {
   ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
 } from './OrganizationQueries';

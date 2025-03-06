@@ -14,11 +14,9 @@ import {
   ORGANIZATION_LIST,
   USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
-import useLocalStorage from 'utils/useLocalstorage';
+import useLocalStorage, { getItem } from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
-
-const { getItem } = useLocalStorage();
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 
 /**
@@ -41,14 +39,14 @@ import type { InterfaceOrganizationCardProps } from 'types/Organization/interfac
  *
  * @returns The organization card component.
  */
-const userId: string | null = getItem('userId');
+const userId: string | null = getItem('Talawa-admin', 'userId');
 
 function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'users',
   });
   const { t: tCommon } = useTranslation('common');
-
+  const { getItem } = useLocalStorage();
   const navigate = useNavigate();
 
   // Mutations for handling organization memberships

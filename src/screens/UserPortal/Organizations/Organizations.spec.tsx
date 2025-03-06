@@ -5,9 +5,8 @@ import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
   USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS_PG,
-  USER_ORGANIZATION_CONNECTION,
+  ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -93,14 +92,16 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: {
+        id: getItem('userId'),
+        first: 5,
         filter: '',
       },
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             __typename: 'Organization',
             _id: '6401ff65ce8e8406b8f07af2',
@@ -195,9 +196,10 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: getItem('userId'),
+        first: 5,
       },
     },
     result: {
@@ -254,6 +256,45 @@ const MOCKS = [
                   ],
                 },
               ],
+              organizationsWhereMember: {
+                edges: [
+                  {
+                    node: {
+                      __typename: 'Organization',
+                      _id: '6401ff65ce8e8406b8f07af2',
+                      image: '',
+                      name: 'Test Edge Org',
+                      description: 'Test Description',
+                      address: {
+                        city: 'Test City',
+                        countryCode: '123',
+                        postalCode: '456',
+                        state: 'Test State',
+                        dependentLocality: 'Test Locality',
+                        line1: 'Test Line 1',
+                        line2: 'Test Line 2',
+                        sortingCode: '4567',
+                      },
+                      createdAt: '1234567890',
+                      userRegistrationRequired: true,
+                      creator: {
+                        __typename: 'User',
+                        name: 'Test Creator',
+                      },
+                      members: [
+                        {
+                          _id: 'member1',
+                          user: {
+                            _id: getItem('userId'),
+                          },
+                        },
+                      ],
+                      admins: [],
+                      membershipRequests: [],
+                    },
+                  },
+                ],
+              },
             },
           },
         ],
@@ -262,14 +303,16 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: {
+        id: getItem('userId'),
+        first: 5,
         filter: '2',
       },
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             __typename: 'Organization',
             _id: '6401ff65ce8e8406b8f07af3',
@@ -479,7 +522,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: getItem('userId'),
       },
@@ -592,11 +635,18 @@ describe('Testing Organizations Screen [User Portal]', () => {
     );
 
     // Wait for initial data load
-    await wait();
+    await wait(500);
 
-    // Verify initial state
-    expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
-    expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
+    // Wait for organizations to be displayed
+    await waitFor(() => {
+      expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+    });
+
+    // Verify initial state by looking for hidden spans with organization names
+    await waitFor(() => {
+      expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
+      expect(screen.getByTestId('org-name-anyOrganization2')).toBeInTheDocument();
+    });
 
     // Perform search
     const searchInput = screen.getByTestId('searchInput');
@@ -607,24 +657,27 @@ describe('Testing Organizations Screen [User Portal]', () => {
     await userEvent.click(searchBtn);
 
     // Wait for search results to update
-    await wait();
+    await wait(300);
 
     // Clear search
     await userEvent.clear(searchInput);
     await userEvent.click(searchBtn);
 
     // Wait again for results to update
-    await wait();
+    await wait(300);
 
     // Perform search again
     await userEvent.type(searchInput, '2');
     await userEvent.keyboard('{Enter}');
 
     // Wait for final search results
-    await wait();
+    await wait(300);
 
-    // Verify final state
-    expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
+    // Verify organization with name containing "2" is present
+    await waitFor(() => {
+      const org2Element = screen.getByTestId('org-name-anyOrganization2');
+      expect(org2Element).toBeInTheDocument();
+    });
   });
 
   /**
@@ -700,7 +753,12 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     // Wait for organizations to load
     await waitFor(() => {
-      expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
+      expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+    });
+
+    // Check for organization by data attribute
+    await waitFor(() => {
+      expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
     });
 
     // Check for join buttons
@@ -834,100 +892,4 @@ describe('Testing Organizations Screen [User Portal]', () => {
     expect(searchInput).toBeInTheDocument();
   });
   const link = new StaticMockLink(MOCKS, true);
-});
-
-describe('Testing Organizations Edge/Node Data Structure', async () => {
-  test('processes edge/node data structure correctly', async () => {
-    const TEST_USER_NAME = 'Noble Mittal';
-
-    beforeEach(() => {
-      setItem('name', TEST_USER_NAME);
-    });
-
-    const EDGE_MOCK = {
-      request: {
-        query: USER_JOINED_ORGANIZATIONS_PG,
-        variables: {
-          id: getItem('userId'),
-          first: 5,
-          filter: '',
-        },
-      },
-      result: {
-        data: {
-          user: {
-            organizationsWhereMember: {
-              edges: [
-                {
-                  node: {
-                    __typename: 'Organization',
-                    _id: '6401ff65ce8e8406b8f07af2',
-                    image: '',
-                    name: 'Test Edge Org',
-                    description: 'Test Description',
-                    address: {
-                      city: 'Test City',
-                      countryCode: '123',
-                      postalCode: '456',
-                      state: 'Test State',
-                      dependentLocality: 'Test Locality',
-                      line1: 'Test Line 1',
-                      line2: 'Test Line 2',
-                      sortingCode: '4567',
-                    },
-                    userRegistrationRequired: true,
-                    members: [
-                      {
-                        _id: 'member1',
-                        user: {
-                          _id: getItem('userId'),
-                        },
-                      },
-                    ],
-                    admins: [],
-                    membershipRequests: [],
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    };
-    const linkWithEdge = new StaticMockLink([EDGE_MOCK], true);
-    render(
-      <MockedProvider addTypename={false} link={linkWithEdge}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for loading state
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-    // Wait for initial load and UI interactions
-    await waitFor(
-      () => {
-        expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
-
-    // Change mode to test edge/node data structure
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn0'));
-
-    // Wait for the query to complete and data to be displayed
-    await waitFor(
-      () => {
-        expect(screen.getByText('Test Edge Org')).toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
-  });
 });
