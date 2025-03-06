@@ -309,7 +309,7 @@ export interface InterfaceUserType {
     lastName: string;
     image: string | null;
     email: string;
-    };
+  };
 }
 
 export interface InterfaceUserTypePG {
