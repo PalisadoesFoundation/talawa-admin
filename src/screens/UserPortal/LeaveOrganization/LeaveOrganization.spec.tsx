@@ -10,10 +10,7 @@ import {
   useParams,
 } from 'react-router-dom';
 import LeaveOrganization from './LeaveOrganization';
-import {
-  ORGANIZATIONS_LIST,
-  ORGANIZATION_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATIONS_LIST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
