@@ -151,12 +151,12 @@ const organizationFunds = (): JSX.Element => {
     variables: {
       input: {
         id: orgId,
-      }
-    }
+      },
+    },
   });
 
   const funds = useMemo(() => {
-    return fundData?.organization?.funds?.edges.map(edge => edge.node) ?? [];
+    return fundData?.organization?.funds?.edges.map((edge) => edge.node) ?? [];
   }, [fundData]);
 
   const handleClick = (fundId: string): void => {

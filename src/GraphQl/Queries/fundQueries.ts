@@ -12,28 +12,28 @@ import gql from 'graphql-tag';
  * @returns The list of members associated with the organization.
  */
 export const FUND_LIST = gql`
-query FundsByOrganization($input: QueryOrganizationInput!) {
-  organization(input: $input) {
-    funds(first: 32) {
-      edges {
-        node {
-          creator {
+  query FundsByOrganization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      funds(first: 32) {
+        edges {
+          node {
+            creator {
+              id
+            }
             id
-          }
-          id
-          isTaxDeductible
-          name
-          organization {
-            id
-          }
-          updater {
-            id
+            isTaxDeductible
+            name
+            organization {
+              id
+            }
+            updater {
+              id
+            }
           }
         }
       }
     }
   }
-}
 `;
 
 /**
@@ -58,7 +58,7 @@ export const FUND_CAMPAIGN = gql`
             id
             name
             startAt
-            endAt 
+            endAt
             currencyCode
             goalAmount
           }
