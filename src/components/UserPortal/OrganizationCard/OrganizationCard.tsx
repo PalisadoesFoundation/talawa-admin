@@ -14,7 +14,7 @@ import {
   ORGANIZATION_LIST,
   USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
-import useLocalStorage, { getItem } from 'utils/useLocalstorage';
+import { getItem } from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
