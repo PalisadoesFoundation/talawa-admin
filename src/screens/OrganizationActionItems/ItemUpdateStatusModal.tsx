@@ -45,16 +45,11 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     postCompletionNotes,
   } = actionItem;
 
-  // Local state for postCompletionNotes
   const [localPostCompletionNotes, setLocalPostCompletionNotes] =
     useState<string>(postCompletionNotes ?? '');
 
-  // Local state for additional updatable fields
-  const [newDueDate, setNewDueDate] = useState<string>(assignedAt);
   const [newAssigneeId, setNewAssigneeId] = useState<string | null>(assigneeId);
-  const [newEventId, setNewEventId] = useState<string | null>(eventId);
 
-  // Query for user data (for both assignee and creator)
   const userIds = Array.from(
     new Set([assigneeId, creatorId].filter(Boolean)),
   ) as string[];
@@ -64,13 +59,11 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     skip: userIds.length === 0,
   });
 
-  // Query for category data (to get the category name)
   const { data: categoriesData } = useQuery(GET_CATEGORIES_BY_IDS, {
     variables: { ids: categoryId ? [categoryId] : [] },
     skip: !categoryId,
   });
 
-  // Helper: get a user's name by ID
   const getUserName = (userId: string | null, defaultName: string): string => {
     if (!userId) return defaultName;
     const user = usersData?.usersByIds?.find(
@@ -79,11 +72,9 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     return user ? user.name : defaultName;
   };
 
-  // For display, show the assignee's name using the current assigneeId
   const getAssigneeDisplay = (): string =>
     getUserName(assigneeId, 'Unassigned');
 
-  // Helper: get the category name by categoryId
   const getCategoryDisplay = (): string => {
     if (!categoryId) return 'No Category';
     const category = categoriesData?.categoriesByIds?.find(
@@ -97,9 +88,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
 
   useEffect(() => {
     setLocalPostCompletionNotes(postCompletionNotes ?? '');
-    setNewDueDate(assignedAt);
     setNewAssigneeId(assigneeId);
-    setNewEventId(eventId);
   }, [actionItem, postCompletionNotes, assignedAt, assigneeId, eventId]);
 
   const updateActionItemHandler = async (
@@ -114,8 +103,8 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
             assigneeId: newAssigneeId,
             postCompletionNotes: isCompleted ? '' : localPostCompletionNotes,
             isCompleted: !isCompleted,
-            assignedAt: newDueDate,
-            eventId: newEventId,
+            // Remove assignedAt and eventId because they're not in the input type
+            // If you need them, update your GraphQL schema accordingly.
           },
         },
       });
@@ -130,9 +119,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   // Update local state when actionItem changes
   useEffect(() => {
     setLocalPostCompletionNotes(postCompletionNotes ?? '');
-    setNewDueDate(assignedAt);
     setNewAssigneeId(assigneeId);
-    setNewEventId(eventId);
   }, [actionItem, postCompletionNotes, assignedAt, assigneeId, eventId]);
 
   return (

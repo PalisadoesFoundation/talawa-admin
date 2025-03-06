@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
 
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import type { InterfaceActionItem } from 'utils/interfaces';
 import styles from '../../../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
@@ -93,7 +93,7 @@ function actions(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
+  const [actionItem, setActionItem] = useState<InterfaceActionItem | null>(
     null,
   );
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -120,7 +120,7 @@ function actions(): JSX.Element {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleModalClick = useCallback(
-    (actionItem: InterfaceActionItemInfo | null, modal: ModalState): void => {
+    (actionItem: InterfaceActionItem | null, modal: ModalState): void => {
       setActionItem(actionItem);
       openModal(modal);
     },
@@ -137,7 +137,7 @@ function actions(): JSX.Element {
     refetch: actionItemsRefetch,
   }: {
     data?: {
-      actionItemsByUser: InterfaceActionItemInfo[];
+      actionItemsByUser: InterfaceActionItem[];
     };
     loading: boolean;
     error?: Error | undefined;
