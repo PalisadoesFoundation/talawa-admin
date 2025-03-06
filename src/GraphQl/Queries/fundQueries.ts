@@ -1,87 +1,89 @@
-/*eslint-disable*/
+/* eslint-disable */
 import gql from 'graphql-tag';
 
 /**
  * GraphQL query to retrieve the list of members for a specific organization.
  *
  * @param id - The ID of the organization for which members are being retrieved.
- * @param filter - The filter to search for a specific member.
+ * @params name - The name of the organization for which members are being retrieved.
+ * @params creatorId - The ID of the creator of the organization.
+ * @params updaterId - The ID of the user who last updated the organization.
+ * @params isTaxDeductible - A boolean value indicating whether the organization is tax deductible.
  * @returns The list of members associated with the organization.
  */
 export const FUND_LIST = gql`
-  query FundsByOrganization(
-    $organizationId: ID!
-    $filter: String
-    $orderBy: FundOrderByInput
-  ) {
-    fundsByOrganization(
-      organizationId: $organizationId
-      where: { name_contains: $filter }
-      orderBy: $orderBy
-    ) {
-      _id
-      name
-      refrenceNumber
-      taxDeductible
-      isDefault
-      isArchived
-      createdAt
-      organizationId
-      creator {
-        _id
-        firstName
-        lastName
+query FundsByOrganization($input: QueryOrganizationInput!) {
+  organization(input: $input) {
+    funds(first: 32) {
+      edges {
+        node {
+          creator {
+            id
+          }
+          id
+          isTaxDeductible
+          name
+          organization {
+            id
+          }
+          updater {
+            id
+          }
+        }
       }
     }
   }
+}
 `;
 
+/**
+ * Query to fetch a specific fund by its ID, along with its associated campaigns.
+ * @params id - The ID of the fund campaign to be fetched.
+ * @params name - The name of the fund campaign to be fetched.
+ * @params sratAt - The start date of the fund campaign to be fetched.
+ * @params endAt - The end date of the fund campaign to be fetched.
+ * @params currencyCode - The currency code of the fund campaign to be fetched.
+ * @params goalAmount - The goal amount of the fund campaign to be fetched.
+ * @returns The fund campaign with the specified ID.
+ */
+
 export const FUND_CAMPAIGN = gql`
-  query GetFundById(
-    $id: ID!
-    $where: CampaignWhereInput
-    $orderBy: CampaignOrderByInput
-  ) {
-    getFundById(id: $id, where: $where, orderBy: $orderBy) {
+  query GetFundById($input: QueryFundInput!) {
+    fund(input: $input) {
+      id
       name
-      isArchived
-      campaigns {
-        _id
-        endDate
-        fundingGoal
-        name
-        startDate
-        currency
+      campaigns(first: 10) {
+        edges {
+          node {
+            id
+            name
+            startAt
+            endAt 
+            currencyCode
+            goalAmount
+          }
+        }
       }
     }
   }
 `;
 
 export const FUND_CAMPAIGN_PLEDGE = gql`
-  query GetFundraisingCampaigns(
-    $where: CampaignWhereInput
-    $pledgeOrderBy: PledgeOrderByInput
-  ) {
-    getFundraisingCampaigns(where: $where, pledgeOrderBy: $pledgeOrderBy) {
-      fundId {
-        name
-      }
+  query GetFundCampaignPledges($input: QueryFundCampaignInput!) {
+    fundCampaign(input: $input) {
+      id
       name
-      fundingGoal
-      currency
-      startDate
-      endDate
-      pledges {
-        _id
-        amount
-        currency
-        endDate
-        startDate
-        users {
-          _id
-          firstName
-          lastName
-          image
+      pledges(first: 10) {
+        edges {
+          node {
+            id
+            amount
+            note
+            pledger {
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -93,13 +95,13 @@ export const USER_FUND_CAMPAIGNS = gql`
     $where: CampaignWhereInput
     $campaignOrderBy: CampaignOrderByInput
   ) {
-    getFundraisingCampaigns(where: $where, campaignOrderby: $campaignOrderBy) {
-      _id
+    getFundraisingCampaigns(where: $where, campaignOrderBy: $campaignOrderBy) {
+      id
+      name
+      currency
+      fundingGoal
       startDate
       endDate
-      name
-      fundingGoal
-      currency
     }
   }
 `;
