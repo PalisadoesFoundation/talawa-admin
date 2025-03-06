@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import {
-  MEMBERSHIP_REQUEST,
-  ORGANIZATION_LIST,
-} from 'GraphQl/Queries/Queries';
+import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import RequestsTableItem from 'components/RequestsTableItem/RequestsTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';

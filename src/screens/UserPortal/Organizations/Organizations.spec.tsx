@@ -644,8 +644,12 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     // Verify initial state by looking for hidden spans with organization names
     await waitFor(() => {
-      expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
-      expect(screen.getByTestId('org-name-anyOrganization2')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('org-name-anyOrganization1'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('org-name-anyOrganization2'),
+      ).toBeInTheDocument();
     });
 
     // Perform search
@@ -758,7 +762,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     // Check for organization by data attribute
     await waitFor(() => {
-      expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('org-name-anyOrganization1'),
+      ).toBeInTheDocument();
     });
 
     // Check for join buttons

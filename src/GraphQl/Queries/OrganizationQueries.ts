@@ -222,7 +222,6 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
  * @returns The list of organizations based on the applied filters.
  */
 
-
 /**
  * GraphQL query to retrieve organizations created by a user.
  *

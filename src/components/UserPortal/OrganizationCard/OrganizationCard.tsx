@@ -46,7 +46,6 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
     keyPrefix: 'users',
   });
   const { t: tCommon } = useTranslation('common');
-  const { getItem } = useLocalStorage();
   const navigate = useNavigate();
 
   // Mutations for handling organization memberships

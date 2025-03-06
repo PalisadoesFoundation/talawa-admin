@@ -413,7 +413,10 @@ export default function organizations(): JSX.Element {
               className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
               {loadingOrganizations ? (
-                <div className={`d-flex flex-row justify-content-center`} data-testid="loading-indicator">
+                <div
+                  className={`d-flex flex-row justify-content-center`}
+                  data-testid="loading-indicator"
+                >
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
@@ -443,16 +446,16 @@ export default function organizations(): JSX.Element {
                           isJoined: organization.isJoined,
                         };
                         return (
-                          <div 
-                            key={index} 
-                            className="col-md-6 mb-4" 
+                          <div
+                            key={index}
+                            className="col-md-6 mb-4"
                             data-testid="organization-card"
                             data-organization-name={organization.name}
                           >
                             <OrganizationCard {...cardProps} />
                             {/* Add a hidden span with organization name for testing purposes */}
-                            <span 
-                              data-testid={`org-name-${organization.name}`} 
+                            <span
+                              data-testid={`org-name-${organization.name}`}
                               className="visually-hidden"
                             >
                               {organization.name}
@@ -462,7 +465,9 @@ export default function organizations(): JSX.Element {
                       })}
                     </div>
                   ) : (
-                    <span data-testid="no-organizations-message">{t('nothingToShow')}</span>
+                    <span data-testid="no-organizations-message">
+                      {t('nothingToShow')}
+                    </span>
                   )}
                 </>
               )}

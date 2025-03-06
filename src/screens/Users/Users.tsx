@@ -4,10 +4,7 @@ import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import {
-  ORGANIZATION_LIST,
-  USER_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
