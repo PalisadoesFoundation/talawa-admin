@@ -6,7 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import styles from '../../../style/app.module.css';
 import {
   USER_DETAILS,
-  USER_JOINED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -101,7 +101,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: 'properId',
       },
@@ -218,7 +218,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: 'imagePresent',
       },
@@ -334,7 +334,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: 'orgEmpty',
       },

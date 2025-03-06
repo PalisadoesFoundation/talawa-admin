@@ -12,7 +12,7 @@ import {
 import LeaveOrganization from './LeaveOrganization';
 import {
   ORGANIZATIONS_LIST,
-  USER_ORGANIZATION_CONNECTION,
+  ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
@@ -159,7 +159,7 @@ const mocks = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: { id: 'test-org-id' },
     },
     result: {
@@ -231,7 +231,7 @@ const errorMocks = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: { id: 'test-org-id' },
     },
     error: new Error('Operation Failed'),

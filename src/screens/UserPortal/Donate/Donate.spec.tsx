@@ -11,7 +11,7 @@ import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
-  USER_ORGANIZATION_CONNECTION,
+  ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -55,7 +55,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: {
         id: '',
       },

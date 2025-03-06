@@ -12,7 +12,7 @@ import {
   JOIN_PUBLIC_ORGANIZATION,
   CANCEL_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
+import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/Queries';
 
 // Mock hooks
 const mockGetItem = vi.fn();
@@ -102,7 +102,7 @@ const successMocks: MockedResponse[] = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: { userId: 'mockUserId' },
     },
     result: {

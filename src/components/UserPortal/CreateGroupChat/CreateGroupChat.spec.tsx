@@ -11,7 +11,7 @@ import { I18nextProvider } from 'react-i18next';
 
 import {
   USERS_CONNECTION_LIST,
-  USER_JOINED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -55,7 +55,7 @@ const { setItem } = useLocalStorage();
 const USER_JOINED_ORG_MOCK = [
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
       },
@@ -267,7 +267,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
       },
@@ -383,7 +383,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
       },
@@ -499,7 +499,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
       },
@@ -615,7 +615,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
       },
@@ -731,7 +731,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
       },

@@ -11,7 +11,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
-import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 
 import { createMemoryHistory } from 'history';
@@ -48,7 +48,7 @@ const organizationId = 'org1234';
 
 const MOCK_ORGANIZATION_CONNECTION = {
   request: {
-    query: USER_ORGANIZATION_CONNECTION,
+    query: ORGANIZATION_LIST,
     variables: {
       id: organizationId,
     },

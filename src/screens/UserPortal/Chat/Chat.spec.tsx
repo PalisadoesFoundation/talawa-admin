@@ -16,7 +16,7 @@ import { I18nextProvider } from 'react-i18next';
 import Chat from './Chat';
 import {
   USERS_CONNECTION_LIST,
-  USER_JOINED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import {
   MARK_CHAT_MESSAGES_AS_READ,
@@ -143,7 +143,7 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
 const USER_JOINED_ORG_MOCK = [
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
       },
@@ -211,7 +211,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
       },
@@ -279,7 +279,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
       },
@@ -347,7 +347,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
       },
@@ -415,7 +415,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
       },
@@ -483,7 +483,7 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
       },

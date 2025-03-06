@@ -17,9 +17,9 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationCard from './OrganizationCard';
 import {
-  USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
-} from 'GraphQl/Queries/OrganizationQueries';
+  USER_JOINED_ORGANIZATIONS_PG,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   SEND_MEMBERSHIP_REQUEST,
@@ -117,7 +117,7 @@ const MOCKS = [
   // User joined organizations
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
       },
@@ -141,7 +141,7 @@ const MOCKS = [
   // Organization connection data
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: {
         id: '1',
       },
