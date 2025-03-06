@@ -948,7 +948,7 @@ input OTPInput {
 }
 
 type Organization {
-  _id: ID!
+  id: ID!
   actionItemCategories: [ActionItemCategory]
   address: Address
   admins(adminId: ID): [User!]

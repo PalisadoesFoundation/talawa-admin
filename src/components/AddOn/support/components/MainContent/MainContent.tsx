@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './MainContent.module.css';
+import styles from '../../../../../style/app-fixed.module.css';
 import type { InterfaceMainContentProps } from 'types/AddOn/interface';
 
 /**

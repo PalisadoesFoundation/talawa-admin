@@ -7,7 +7,7 @@ import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from './Chat.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import {
   CHATS_LIST,
   GROUP_CHAT_LIST,
@@ -253,9 +253,13 @@ export default function chat(): JSX.Element {
                           setSelectedContact,
                           selectedContact,
                           isGroup: chat.isGroup,
-                          unseenMessages: JSON.parse(
-                            chat.unseenMessagesByUsers,
-                          )[userId],
+                          unseenMessages: Number(
+                            (
+                              JSON.parse(
+                                chat.unseenMessagesByUsers as string,
+                              ) as Record<string, number>
+                            )[userId as string],
+                          ),
                           lastMessage:
                             chat.messages[chat.messages.length - 1]
                               ?.messageContent,

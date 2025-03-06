@@ -26,9 +26,9 @@ The unique name identifying the value.
 
 ### value
 
-`any`
+`unknown`
 
-The value for the key.
+The value to be stored (any type that can be serialized).
 
 ## Returns
 

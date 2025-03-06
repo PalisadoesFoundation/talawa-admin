@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 
 /**
  * A component that displays an indicator for the current hour.

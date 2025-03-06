@@ -3,7 +3,7 @@ import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -27,8 +27,8 @@ const profileDropdown = (): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
   const userRole = getItem('role');
-  const name = getItem('name') || '';
-  const userImage = getItem('UserImage');
+  const name: string = getItem('name') || '';
+  const userImage: string = getItem('UserImage') || '';
   const navigate = useNavigate();
   const { orgId } = useParams();
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 
 /**
  * Dashboard card loading component is a loading state for the dashboard card. It is used when the data is being fetched.

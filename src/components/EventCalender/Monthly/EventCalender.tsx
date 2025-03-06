@@ -2,7 +2,7 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';

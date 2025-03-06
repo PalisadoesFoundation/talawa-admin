@@ -1274,8 +1274,10 @@ export interface InterfaceMapType {
 }
 
 export interface InterfaceCustomFieldData {
-  type: string;
+  id?: string;
   name: string;
+  type: string;
+  organizationId?: string;
 }
 
 export interface InterfaceEventVolunteerInfo {

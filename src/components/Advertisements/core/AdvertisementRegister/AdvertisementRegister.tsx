@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styles from '../../../../style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
   ADD_ADVERTISEMENT_MUTATION,
