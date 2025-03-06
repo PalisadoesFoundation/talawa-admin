@@ -135,25 +135,12 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     variables: {
       input: { organizationId: orgId },
     },
-    onCompleted: (data) => {
-      console.log('Successfully fetched action categories:', data);
-    },
-    onError: (error) => {
-      console.error('Error fetching action categories:', error);
-    },
   });
 
   // Query to fetch users
   const { data: usersData } = useQuery(USERS_BY_ORGANIZATION_ID, {
     variables: { organizationId: orgId },
   });
-
-  useEffect(() => {
-    if (usersData) {
-      console.log('🚀 Backend Response - usersByOrganizationId:', usersData);
-    }
-  }, [usersData]);
-
   // Query to fetch members
   const { data: membersData } = useQuery(MEMBERS_LIST, {
     variables: { id: orgId },
@@ -209,11 +196,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         },
       };
 
-      console.log(
-        'Sending Data to Backend - POSTGRES_CREATE_ACTION_ITEM_MUTATION:',
-        inputVariables,
-      );
-
       await createActionItem({ variables: inputVariables });
 
       setFormState(initializeFormState(null));
@@ -223,7 +205,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
       hide();
       toast.success(t('successfulCreation'));
     } catch (error: unknown) {
-      console.error('❌ Error Creating Action Item:', error);
       toast.error((error as Error).message);
     }
   };

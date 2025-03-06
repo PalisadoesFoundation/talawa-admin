@@ -343,7 +343,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
         disableColumnMenu
         columnBufferPx={6}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
