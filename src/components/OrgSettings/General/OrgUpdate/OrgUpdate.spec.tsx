@@ -11,7 +11,6 @@ import OrgUpdate from './OrgUpdate';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
-// Mock modules
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -19,7 +18,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-// Initialize i18n for testing
 i18n.init({
   lng: 'en',
   resources: {
@@ -28,6 +26,10 @@ i18n.init({
         orgUpdate: {
           successfulUpdated: 'Organization updated successfully',
           enterNameOrganization: 'Enter organization name',
+          enterOrganizationDescription: 'Enter organization description',
+          userRegistrationRequired: 'User registration required',
+          isVisibleInSearch: 'Is visible in search',
+          'Is Public': 'Is Public',
         },
       },
       common: {
@@ -36,6 +38,10 @@ i18n.init({
         address: 'Address',
         saving: 'Saving...',
         saveChanges: 'Save Changes',
+        resetChanges: 'Reset Changes',
+        displayImage: 'Display Image',
+        Location: 'Location',
+        'Enter Organization location': 'Enter Organization location',
       },
     },
   },
@@ -149,7 +155,6 @@ describe('OrgUpdate Component', () => {
       expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
     });
 
-    // Update form fields
     fireEvent.change(screen.getByDisplayValue('Test Org'), {
       target: { value: 'Updated Org' },
     });
@@ -157,7 +162,6 @@ describe('OrgUpdate Component', () => {
       target: { value: 'Updated Description' },
     });
 
-    // Submit form
     const saveButton = screen.getByTestId('save-org-changes-btn');
     fireEvent.click(saveButton);
 
@@ -221,12 +225,10 @@ describe('OrgUpdate Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial data to load
     await waitFor(() => {
       expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
     });
 
-    // Update form with valid data
     fireEvent.change(screen.getByDisplayValue('Test Org'), {
       target: { value: 'Updated Org' },
     });
@@ -234,22 +236,18 @@ describe('OrgUpdate Component', () => {
       target: { value: 'Updated Description' },
     });
 
-    // Submit form
     const saveButton = screen.getByTestId('save-org-changes-btn');
     fireEvent.click(saveButton);
 
-    // Verify loading state
     await waitFor(() => {
       expect(saveButton).toBeDisabled();
       expect(saveButton).toHaveTextContent('Saving...');
     });
 
-    // Verify error message from failed mutation
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Failed to update organization');
     });
 
-    // Verify button state after error
     await waitFor(() => {
       expect(saveButton).not.toBeDisabled();
       expect(saveButton).toHaveTextContent('Save Changes');
@@ -292,7 +290,6 @@ describe('OrgUpdate Component', () => {
     };
 
     it('shows loading state while fetching data', async () => {
-      // Create mock data with consistent structure
       const mockOrgData = {
         organization: {
           id: '1',
@@ -328,7 +325,7 @@ describe('OrgUpdate Component', () => {
         result: {
           data: mockOrgData,
         },
-        delay: 100, // Add delay to ensure loading state is visible
+        delay: 100,
       };
 
       render(
@@ -339,16 +336,13 @@ describe('OrgUpdate Component', () => {
         </MockedProvider>,
       );
 
-      // Verify loading state is shown
       expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
       expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
-      // Wait for loading to complete and verify data is loaded
       await waitFor(() => {
         expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
 
-      // Verify loading state is removed
       expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
@@ -475,20 +469,16 @@ describe('OrgUpdate Component', () => {
         </MockedProvider>,
       );
 
-      // Wait for initial data to load
       await waitFor(() => {
         expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
 
-      // Update organization name
       const nameInput = screen.getByDisplayValue('Test Org');
       fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
 
-      // Click save button
       const saveButton = screen.getByTestId('save-org-changes-btn');
       fireEvent.click(saveButton);
 
-      // Check for success message using the correct translation key
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
           i18n.t('orgUpdate.successfulUpdated'),
@@ -541,11 +531,9 @@ describe('OrgUpdate Component', () => {
         expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
 
-      // Update organization name
       const nameInput = screen.getByDisplayValue('Test Org');
       fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
 
-      // Click save button
       const saveButton = screen.getByTestId('save-org-changes-btn');
       fireEvent.click(saveButton);
 
@@ -598,24 +586,29 @@ describe('OrgUpdate Component', () => {
         </MockedProvider>,
       );
 
-      // Wait for component to load
       await waitFor(() => {
         expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
 
-      // Find the user registration switch
-      const userRegSwitch = screen.getByPlaceholderText(
-        i18n.t('orgUpdate.userRegistrationRequired'),
+      const userRegLabel = screen.getByText(
+        i18n.t('orgUpdate.Is Public') + ':',
       );
+      expect(userRegLabel).toBeInTheDocument();
+
+      const userRegSwitch = userRegLabel
+        .closest('.d-flex')
+        ?.querySelector('input[type="checkbox"]');
       expect(userRegSwitch).toBeInTheDocument();
       expect(userRegSwitch).not.toBeChecked();
 
-      // Toggle the switch
-      fireEvent.click(userRegSwitch);
-      expect(userRegSwitch).toBeChecked();
+      if (userRegSwitch) {
+        fireEvent.click(userRegSwitch);
+        expect(userRegSwitch).toBeChecked();
+      }
 
-      // Toggle back
-      fireEvent.click(userRegSwitch);
+      if (userRegSwitch) {
+        fireEvent.click(userRegSwitch);
+      }
       expect(userRegSwitch).not.toBeChecked();
     });
 
@@ -628,25 +621,28 @@ describe('OrgUpdate Component', () => {
         </MockedProvider>,
       );
 
-      // Wait for component to load
       await waitFor(() => {
         expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
 
-      // Find the visibility switch
-      const visibilitySwitch = screen.getByPlaceholderText(
-        i18n.t('orgUpdate.isVisibleInSearch'),
+      const visibilityLabel = screen.getByText(
+        i18n.t('orgUpdate.isVisibleInSearch') + ':',
       );
+      expect(visibilityLabel).toBeInTheDocument();
+
+      const visibilitySwitch = visibilityLabel
+        .closest('.d-flex')
+        ?.querySelector('input[type="checkbox"]');
       expect(visibilitySwitch).toBeInTheDocument();
       expect(visibilitySwitch).not.toBeChecked();
 
-      // Toggle the switch
-      fireEvent.click(visibilitySwitch);
-      expect(visibilitySwitch).toBeChecked();
+      if (visibilitySwitch) {
+        fireEvent.click(visibilitySwitch);
+        expect(visibilitySwitch).toBeChecked();
 
-      // Toggle back
-      fireEvent.click(visibilitySwitch);
-      expect(visibilitySwitch).not.toBeChecked();
+        fireEvent.click(visibilitySwitch);
+        expect(visibilitySwitch).not.toBeChecked();
+      }
     });
   });
 
@@ -725,23 +721,18 @@ describe('OrgUpdate Component', () => {
         </MockedProvider>,
       );
 
-      // Wait for initial data to load and component to be ready
       await waitFor(() => {
         expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
 
-      // Find and verify the save button is present
       const saveButton = await screen.findByTestId('save-org-changes-btn');
       expect(saveButton).toBeInTheDocument();
 
-      // Update organization name
       const nameInput = screen.getByDisplayValue('Test Org');
       fireEvent.change(nameInput, { target: { value: 'Updated Org' } });
 
-      // Click save button and wait for the mutation to complete
       fireEvent.click(saveButton);
 
-      // Wait for the error toast with a more specific timeout
       await waitFor(
         () => {
           expect(toast.error).toHaveBeenCalledWith(
@@ -751,9 +742,33 @@ describe('OrgUpdate Component', () => {
         { timeout: 2000 },
       );
 
-      // Verify button state after mutation
       expect(saveButton).not.toBeDisabled();
       expect(saveButton).toHaveTextContent('Save Changes');
     });
+  });
+
+  it('updates address line1 when input changes', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
+    });
+
+    const addressInput = screen.getByPlaceholderText(
+      'Enter Organization location',
+    );
+    expect(addressInput).toBeInTheDocument();
+
+    expect(addressInput).toHaveValue('123 Test St');
+
+    fireEvent.change(addressInput, { target: { value: 'New Address Line' } });
+
+    expect(addressInput).toHaveValue('New Address Line');
   });
 });
