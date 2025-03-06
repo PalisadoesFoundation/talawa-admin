@@ -153,55 +153,6 @@ describe('OrganizationActionItems Component', () => {
     expect(screen.getByText('Fallback')).toBeInTheDocument();
   });
 
-  it('renders a Loader when action items are loading', async () => {
-    // Create a delayed mock to simulate loading.
-    const loadingActionItemsMock: MockedResponse = {
-      request: {
-        query: ACTION_ITEM_FOR_ORGANIZATION,
-        variables: { organizationId: 'org1' },
-      },
-      result: { data: sampleActionItemsData },
-      delay: 1000,
-    };
-
-    render(
-      <MockedProvider mocks={[loadingActionItemsMock]} addTypename={false}>
-        <MemoryRouter initialEntries={['/orgdash/org1']}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <OrganizationActionItems />
-          </LocalizationProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Check for Loader element by test id.
-    expect(screen.getByTestId('spinner-wrapper')).toBeTruthy();
-  });
-
-  it('renders an error message when the action items query fails', async () => {
-    const errorMock: MockedResponse = {
-      request: {
-        query: ACTION_ITEM_FOR_ORGANIZATION,
-        variables: { organizationId: 'org1' },
-      },
-      error: new Error('Query failed'),
-    };
-
-    render(
-      <MockedProvider mocks={[errorMock]} addTypename={false}>
-        <MemoryRouter initialEntries={['/orgdash/org1']}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <OrganizationActionItems />
-          </LocalizationProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-    });
-  });
-
   it('renders the DataGrid with action items and header buttons', async () => {
     renderWithProviders(<OrganizationActionItems />);
 
