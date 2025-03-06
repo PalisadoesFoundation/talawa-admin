@@ -116,7 +116,8 @@ const organizationFunds = (): JSX.Element => {
   }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  // Remove the searchTerm state
+  // const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
