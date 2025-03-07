@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostForm
 
-Defined in: [src/utils/interfaces.ts:890](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L890)
+Defined in: [src/utils/interfaces.ts:876](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L876)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:890](https://github.com/PalisadoesFoundatio
 
 > **pinned**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:895](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L895)
+Defined in: [src/utils/interfaces.ts:881](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L881)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:895](https://github.com/PalisadoesFoundatio
 
 > **postinfo**: `string`
 
-Defined in: [src/utils/interfaces.ts:892](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L892)
+Defined in: [src/utils/interfaces.ts:878](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L878)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:892](https://github.com/PalisadoesFoundatio
 
 > **postphoto**: `string`
 
-Defined in: [src/utils/interfaces.ts:893](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L893)
+Defined in: [src/utils/interfaces.ts:879](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L879)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:893](https://github.com/PalisadoesFoundatio
 
 > **posttitle**: `string`
 
-Defined in: [src/utils/interfaces.ts:891](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L891)
+Defined in: [src/utils/interfaces.ts:877](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L877)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/utils/interfaces.ts:891](https://github.com/PalisadoesFoundatio
 
 > **postvideo**: `string`
 
-Defined in: [src/utils/interfaces.ts:894](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L894)
+Defined in: [src/utils/interfaces.ts:880](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L880)

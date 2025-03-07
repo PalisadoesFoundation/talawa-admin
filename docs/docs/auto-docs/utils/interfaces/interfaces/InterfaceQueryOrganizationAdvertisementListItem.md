@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationAdvertisementListItem
 
-Defined in: [src/utils/interfaces.ts:994](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L994)
+Defined in: [src/utils/interfaces.ts:980](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L980)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:994](https://github.com/PalisadoesFoundatio
 
 > **advertisements**: `object`
 
-Defined in: [src/utils/interfaces.ts:995](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L995)
+Defined in: [src/utils/interfaces.ts:981](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L981)
 
 #### edges
 
