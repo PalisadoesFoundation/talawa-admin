@@ -116,7 +116,6 @@ const organizationFunds = (): JSX.Element => {
   }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  // Remove the searchTerm state
   // const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
@@ -143,7 +142,11 @@ const organizationFunds = (): JSX.Element => {
     refetch: refetchFunds,
   }: {
     data?: {
-      fundsByOrganization: InterfaceFundInfo[];
+      organization: {
+        funds: {
+          edges: { node: InterfaceFundInfo }[];
+        };
+      };
     };
     loading: boolean;
     error?: Error | undefined;
@@ -157,7 +160,11 @@ const organizationFunds = (): JSX.Element => {
   });
 
   const funds = useMemo(() => {
-    return fundData?.organization?.funds?.edges.map((edge) => edge.node) ?? [];
+    return (
+      fundData?.organization?.funds?.edges.map(
+        (edge: { node: InterfaceFundInfo }) => edge.node,
+      ) ?? []
+    );
   }, [fundData]);
 
   const handleClick = (fundId: string): void => {
@@ -319,7 +326,6 @@ const organizationFunds = (): JSX.Element => {
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
           <SearchBar
             placeholder={tCommon('searchByName')}
-            onSearch={setSearchTerm}
             inputTestId="searchByName"
             buttonTestId="searchBtn"
           />

@@ -160,7 +160,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       }
       await updateFund({
         variables: {
-          id: fund?._id,
+          id: fund?.id,
           ...updatedFields,
         },
       });
