@@ -269,7 +269,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
             id: actionItem?.id,
             ...updatedFields,
             // Toggle the status:
-            isCompleted: !actionItem?.isCompleted,
+            isCompleted: actionItem?.isCompleted,
           },
         },
       });
@@ -441,7 +441,12 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                     setAssigneeUser(newAssignee);
                   }}
                   renderInput={(params) => (
-                    <TextField {...params} label={t('assignee')} required />
+                    <TextField
+                      {...params}
+                      label={t('assignee')}
+                      data-testid="assigneeSelect"
+                      required
+                    />
                   )}
                 />
               </Form.Group>

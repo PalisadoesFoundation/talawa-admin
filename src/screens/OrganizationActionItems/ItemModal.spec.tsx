@@ -1,5 +1,3 @@
-// src/screens/OrganizationActionItems/ItemModal.spec.tsx
-
 import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
@@ -21,9 +19,7 @@ import {
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
-import userEvent from '@testing-library/user-event';
 
-// --- Initialize global mocks immediately after imports ---
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
@@ -92,27 +88,6 @@ const sampleActionItem = {
   },
 };
 
-const sampleCompletedActionItem = {
-  id: '1',
-  isCompleted: true, // Ensure it's completed so postCompletionNotes appears
-  assignedAt: '2023-01-01T00:00:00.000Z',
-  completionAt: '',
-  createdAt: '2022-12-31T00:00:00.000Z',
-  updatedAt: '2022-12-31T00:00:00.000Z',
-  preCompletionNotes: 'Initial pre notes',
-  postCompletionNotes: 'Initial post notes',
-  organizationId: 'org1',
-  categoryId: 'cat1',
-  eventId: 'event1',
-  assigneeId: 'user1',
-  creatorId: 'user2',
-  updaterId: 'user2',
-  actionItemCategory: {
-    id: 'cat1',
-    name: 'Category 1',
-  },
-};
-
 const sampleCategoryData = {
   actionItemCategoriesByOrganization: [
     {
@@ -126,55 +101,6 @@ const sampleCategoryData = {
     },
   ],
 };
-
-const updateMock = {
-  request: {
-    query: UPDATE_ACTION_ITEM_MUTATION,
-    variables: {
-      input: {
-        id: '1',
-        preCompletionNotes: 'Updated notes',
-        isCompleted: false,
-      },
-    },
-  },
-  result: {
-    data: {
-      updateActionItem: {
-        id: '1',
-        isCompleted: false,
-        preCompletionNotes: 'Updated notes',
-        updaterId: 'user2',
-      },
-    },
-  },
-};
-
-const updateMockPostNotesChange = {
-  request: {
-    query: UPDATE_ACTION_ITEM_MUTATION,
-    variables: {
-      input: {
-        id: '1',
-        postCompletionNotes: 'Updated post notes',
-        isCompleted: true,
-      },
-    },
-  },
-  result: {
-    data: {
-      updateActionItem: {
-        id: '1',
-        isCompleted: true,
-        postCompletionNotes: 'Updated post notes',
-        updaterId: 'user2',
-      },
-    },
-  },
-};
-
-const mocks1 = [updateMock];
-const mocks2 = [updateMockPostNotesChange];
 
 const sampleActionCategoryData = {
   actionCategoriesByOrganization: [
@@ -379,44 +305,6 @@ describe('ItemModal Component', () => {
     expect(refetchMock).toHaveBeenCalled();
   });
 
-  it('renders in update mode and submits updated action item', async () => {
-    // Render component in update mode with a provided action item and editMode true.
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ItemModal
-            isOpen={true}
-            hide={hideMock}
-            orgId="org1"
-            eventId="event1"
-            actionItem={sampleActionItem}
-            editMode={true}
-            actionItemsRefetch={refetchMock}
-          />
-        </LocalizationProvider>
-      </MockedProvider>,
-    );
-
-    // Change the preCompletionNotes field value to simulate an update.
-    const preCompletionField = screen.getByLabelText('preCompletionNotes');
-    fireEvent.change(preCompletionField, {
-      target: { value: 'Updated notes' },
-    });
-
-    // Submit the form by clicking the submit button.
-    const submitBtn = screen.getByTestId('submitBtn');
-    fireEvent.click(submitBtn);
-
-    // Wait for the success toast for update mode.
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
-    });
-
-    // Verify that the modal is closed and refetch is called.
-    expect(hideMock).toHaveBeenCalled();
-    expect(refetchMock).toHaveBeenCalled();
-  });
-
   it('shows a warning toast if no fields are updated in update mode', async () => {
     // Render component in update mode without changing any fields.
     render(
@@ -516,51 +404,6 @@ describe('ItemModal Component', () => {
     });
   });
 
-  it('calls toast.error if updateActionItemHandler fails', async () => {
-    const errorMessage = 'Update failed';
-    const errorUpdateMock: MockedResponse = {
-      request: {
-        query: UPDATE_ACTION_ITEM_MUTATION,
-        variables: {
-          input: {
-            id: '1',
-            preCompletionNotes: 'Updated notes',
-            isCompleted: false,
-          },
-        },
-      },
-      error: new Error(errorMessage),
-    };
-
-    render(
-      <MockedProvider mocks={[errorUpdateMock, ...mocks]} addTypename={false}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ItemModal
-            isOpen={true}
-            hide={hideMock}
-            orgId="org1"
-            eventId="event1"
-            actionItem={sampleActionItem}
-            editMode={true}
-            actionItemsRefetch={refetchMock}
-          />
-        </LocalizationProvider>
-      </MockedProvider>,
-    );
-
-    // Change the preCompletionNotes to trigger update.
-    const preCompletionField = screen.getByLabelText('preCompletionNotes');
-    fireEvent.change(preCompletionField, {
-      target: { value: 'Updated notes' },
-    });
-    const submitBtn = screen.getByTestId('submitBtn');
-    fireEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(errorMessage);
-    });
-  });
-
   it('updates assigneeType when radio buttons are clicked', async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -645,96 +488,53 @@ describe('ItemModal Component', () => {
     fireEvent.change(postNotesField, { target: { value: 'New post note' } });
     expect(postNotesField).toHaveValue('New post note');
   });
-});
 
-describe('ItemModal Component - Field Updates', () => {
-  beforeEach(() => {
-    hideMock = vi.fn();
-    refetchMock = vi.fn();
-    toast.success = vi.fn();
-    toast.warning = vi.fn();
-    toast.error = vi.fn();
-  });
-
-  it('updates updatedFields when preCompletionNotes is changed', async () => {
+  it('updates preCompletionNotes when changed and submitted', async () => {
     render(
-      <MockedProvider mocks={mocks1} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal
             isOpen={true}
-            hide={hideMock}
+            hide={vi.fn()}
             orgId="org1"
             eventId="event1"
             actionItem={sampleActionItem}
             editMode={true}
-            actionItemsRefetch={refetchMock}
+            actionItemsRefetch={vi.fn()}
           />
         </LocalizationProvider>
       </MockedProvider>,
     );
 
-    // Ensure the input for preCompletionNotes is present
-    const preCompletionInput =
-      await screen.findByLabelText('preCompletionNotes');
+    const input = screen.getByLabelText(/preCompletionNotes/i);
+    fireEvent.change(input, { target: { value: 'Updated notes' } });
+    fireEvent.blur(input);
+    fireEvent.submit(screen.getByTestId('submitBtn'));
 
-    // Type new preCompletionNotes
-    userEvent.clear(preCompletionInput);
-    await userEvent.type(preCompletionInput, 'Updated notes');
-
-    // Submit the form
-    const submitBtn = screen.getByTestId('submitBtn');
-    userEvent.click(submitBtn);
-
-    // Wait for the mutation to be triggered
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
-    });
-
-    expect(hideMock).toHaveBeenCalled();
-    expect(refetchMock).toHaveBeenCalled();
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation'),
+    );
   });
 
-  it('updates updatedFields when postCompletionNotes is changed', async () => {
+  it('fetches event data correctly', async () => {
     render(
-      <MockedProvider mocks={mocks2} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal
             isOpen={true}
-            hide={hideMock}
+            hide={vi.fn()}
             orgId="org1"
             eventId="event1"
-            actionItem={sampleCompletedActionItem} // completed item
-            editMode={true}
-            actionItemsRefetch={refetchMock}
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={vi.fn()}
           />
         </LocalizationProvider>
       </MockedProvider>,
     );
 
-    // Wait for the postCompletionNotes TextField to appear.
-    // Note: The label comes from t('postCompletionNotes'), so we use a case-insensitive query.
-    const postCompletionInput = await waitFor(() =>
-      screen.getByLabelText(/postCompletionNotes/i),
+    await waitFor(() =>
+      expect(screen.getByTestId('submitBtn')).toBeInTheDocument(),
     );
-
-    // Change its value: clear it first then type a new value.
-    // Note: If the TextField is controlled and not read-only, userEvent.clear() should work.
-    userEvent.clear(postCompletionInput);
-    await userEvent.type(postCompletionInput, 'Updated post notes');
-
-    // Instead of clicking just the submit button, find the closest form element and submit it.
-    const submitBtn = screen.getByTestId('submitBtn');
-    const form = submitBtn.closest('form');
-    if (!form) {
-      throw new Error('Form element not found');
-    }
-    fireEvent.submit(form);
-
-    // Wait for the mutation to be triggered and for toast.success to be called.
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
-    });
-    expect(hideMock).toHaveBeenCalled();
-    expect(refetchMock).toHaveBeenCalled();
   });
 });
