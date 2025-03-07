@@ -55,7 +55,7 @@ const MOCK_ORGANIZATION_CONNECTION = {
   },
   result: {
     data: {
-      organizationsConnection: [
+      organizations: [
         {
           __typename: 'Organization',
           _id: '6401ff65ce8e8406b8f07af2',

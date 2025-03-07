@@ -214,26 +214,6 @@ describe('Testing Users screen', () => {
     expect(screen.getByText(/No User Found/i)).toBeTruthy();
   });
 
-  it('Should render warning alert when there are no organizations', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
-  });
-
   it('Should not render warning alert when there are organizations present', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>

@@ -62,7 +62,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             _id: '6401ff65ce8e8406b8f07af3',
             image: '',

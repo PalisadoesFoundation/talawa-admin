@@ -164,16 +164,17 @@ const Users = (): JSX.Element => {
     };
   }, []);
 
-  // Warn if there is no organization
-  useEffect(() => {
-    if (!dataOrgs) {
-      return;
-    }
-
-    if (dataOrgs.organizations.length === 0) {
-      toast.warning(t('noOrgError') as string);
-    }
-  }, [dataOrgs]);
+  // Show a warning if there are no organizations
+    useEffect(() => {
+      if (!dataOrgs) {
+        return;
+      }
+  
+      // Add null check before accessing organizations.length
+      if (dataOrgs.organizations?.length === 0) {
+        toast.warning(t('noOrgError') as string);
+      }
+    }, [dataOrgs, t]);
 
   // Send to orgList page if user is not superadmin
   useEffect(() => {
