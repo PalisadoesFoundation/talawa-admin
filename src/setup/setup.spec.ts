@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import { main, askAndSetRecaptcha } from './setup';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
+import { backupEnv } from './backupEnv/backupEnv';
 import { validateRecaptcha } from './validateRecaptcha/validateRecaptcha';
 import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
 import updateEnvFile from './updateEnvFile/updateEnvFile';
@@ -20,6 +21,7 @@ vi.mock('./askAndSetDockerOption/askAndSetDockerOption');
 vi.mock('./updateEnvFile/updateEnvFile');
 vi.mock('./askAndUpdatePort/askAndUpdatePort');
 vi.mock('./askForDocker/askForDocker');
+vi.mock('./backupEnv/backupEnv');
 
 describe('Talawa Admin Setup', () => {
   let processExitSpy: MockInstance;
@@ -181,5 +183,16 @@ describe('Talawa Admin Setup', () => {
       mockError,
     );
     expect(updateEnvFile).not.toHaveBeenCalled();
+  });
+
+  it('should call backupEnv when user opts to backup the .env file', async () => {
+    vi.mocked(inquirer.prompt)
+      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
+      .mockResolvedValueOnce({ shouldLogErrors: false })
+      .mockResolvedValueOnce({ shouldBackupEnv: true });
+
+    await main();
+
+    expect(backupEnv).toHaveBeenCalled();
   });
 });
