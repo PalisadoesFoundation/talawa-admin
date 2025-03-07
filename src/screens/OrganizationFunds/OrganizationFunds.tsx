@@ -328,6 +328,7 @@ const organizationFunds = (): JSX.Element => {
             placeholder={tCommon('searchByName')}
             inputTestId="searchByName"
             buttonTestId="searchBtn"
+            onSearch={() => {}}
           />
           <div className="d-flex gap-4 mb-1">
             <SortingButton

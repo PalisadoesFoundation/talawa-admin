@@ -54,6 +54,21 @@ const fundProps: InterfaceFundModal[] = [
         firstName: 'John',
         lastName: 'Doe',
       },
+      organization: {
+        id: 'orgId',
+        name: 'Organization 1',
+      },
+      edges: {
+        node: {
+          id: 'nodeId',
+          name: 'Node Name',
+          fundingGoal: 1000,
+          startDate: '2024-01-01',
+          endDate: '2024-12-31',
+          currency: 'USD',
+          createdAt: '2024-06-22',
+        },
+      },
     },
     refetchFunds: vi.fn(),
     orgId: 'orgId',
@@ -75,6 +90,21 @@ const fundProps: InterfaceFundModal[] = [
         id: 'creatorId1',
         firstName: 'John',
         lastName: 'Doe',
+      },
+      organization: {
+        id: 'orgId',
+        name: 'Organization 1',
+      },
+      edges: {
+        node: {
+          id: 'nodeId',
+          name: 'Node Name',
+          fundingGoal: 1000,
+          startDate: '2024-01-01',
+          endDate: '2024-12-31',
+          currency: 'USD',
+          createdAt: '2024-06-22',
+        },
       },
     },
     refetchFunds: vi.fn(),
