@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L80)
+Defined in: [src/screens/OrganizationActionItems/ItemModal.tsx:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ItemModal.tsx#L81)
 
 ## Parameters
 

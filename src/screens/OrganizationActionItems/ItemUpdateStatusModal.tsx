@@ -6,7 +6,10 @@ import { FormControl, TextField } from '@mui/material';
 // import dayjs from 'dayjs';
 import styles from '../../style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
-import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
+import {
+  UPDATE_ACTION_ITEM_MUTATION,
+  MARK_ACTION_ITEM_AS_PENDING,
+} from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import type { InterfaceActionItem } from 'utils/interfaces';
 import {
@@ -59,6 +62,8 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
 
   const [newAssigneeId, setNewAssigneeId] = useState<string | null>(assigneeId);
 
+  const [markActionItemAsPending] = useMutation(MARK_ACTION_ITEM_AS_PENDING);
+
   const userIds = Array.from(
     new Set([assigneeId, creatorId].filter(Boolean)),
   ) as string[];
@@ -99,6 +104,26 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     setLocalPostCompletionNotes(postCompletionNotes ?? '');
     setNewAssigneeId(assigneeId);
   }, [actionItem, postCompletionNotes, assignedAt, assigneeId, eventId]);
+
+  const handleMarkAsPending = async (e: React.MouseEvent): Promise<void> => {
+    e.preventDefault();
+    if (!actionItem?.id) {
+      toast.error('Action item ID is missing.');
+      return;
+    }
+
+    try {
+      await markActionItemAsPending({
+        variables: { id: actionItem.id }, // ✅ Pass `id` correctly
+      });
+
+      actionItemsRefetch();
+      hide();
+      toast.success(t('successfulUpdation'));
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
 
   const updateActionItemHandler = async (
     e: FormEvent<HTMLFormElement>,
@@ -198,11 +223,12 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
               <p>{t('updateStatusMsg')}</p>
             )}
             {isCompleted ? (
-              <div className="d-flex gap-3 justify-content-end">
+              <>
                 <Button
-                  type="submit"
+                  type="button"
                   className={styles.addButton}
                   data-testid="yesBtn"
+                  onClick={handleMarkAsPending} // ✅ Attach correct function
                 >
                   {tCommon('yes')}
                 </Button>
@@ -212,7 +238,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
                 >
                   {tCommon('no')}
                 </Button>
-              </div>
+              </>
             ) : (
               <Button
                 type="submit"

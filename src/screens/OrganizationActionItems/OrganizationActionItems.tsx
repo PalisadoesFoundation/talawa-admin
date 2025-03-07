@@ -2,7 +2,11 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
-import { GET_USERS_BY_IDS, GET_EVENTS_BY_IDS } from 'GraphQl/Queries/Queries';
+import {
+  GET_USERS_BY_IDS,
+  GET_EVENTS_BY_IDS,
+  GET_CATEGORIES_BY_IDS,
+} from 'GraphQl/Queries/Queries';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
@@ -49,11 +53,10 @@ type User = {
 };
 /**
  * Component for managing and displaying action items within an organization.
- *
  * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
- *
  * @returns The rendered component.
  */
+
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
@@ -156,10 +159,41 @@ function organizationActionItems(): JSX.Element {
       // console.log("Found user:", user);
       return user.name;
     } else {
-      // console.warn("User with id", assigneeId, "not found");
       return 'Unknown User';
     }
   };
+
+  const categoryIds = Array.from(
+    new Set(
+      actionItemsData?.actionItemsByOrganization
+        .map((item) => item.categoryId)
+        .filter((id): id is string => id != null),
+    ),
+  );
+
+  const { data: categoriesData } = useQuery(GET_CATEGORIES_BY_IDS, {
+    variables: { ids: categoryIds },
+    skip: !categoryIds.length,
+  });
+
+  const enrichedActionItems = useMemo(() => {
+    if (!actionItemsData?.actionItemsByOrganization) return [];
+    if (!categoriesData) {
+      return actionItemsData.actionItemsByOrganization.map((item) => ({
+        ...item,
+        categoryName: 'No Category',
+      }));
+    }
+    return actionItemsData.actionItemsByOrganization.map((item) => {
+      const category = categoriesData.categoriesByIds.find(
+        (cat: { id: string; name: string }) => cat.id === item.categoryId,
+      );
+      return {
+        ...item,
+        categoryName: category ? category.name : 'No Category',
+      };
+    });
+  }, [actionItemsData, categoriesData]);
 
   const eventIds =
     actionItemsData?.actionItemsByOrganization
@@ -172,9 +206,9 @@ function organizationActionItems(): JSX.Element {
   });
 
   const filteredAndSortedActionItems = useMemo(() => {
-    if (!actionItemsData?.actionItemsByOrganization) return [];
+    if (!enrichedActionItems.length) return [];
 
-    let items = [...actionItemsData.actionItemsByOrganization];
+    let items = [...enrichedActionItems];
 
     // Apply search filtering
     if (searchTerm) {
@@ -183,8 +217,8 @@ function organizationActionItems(): JSX.Element {
           ? getAssigneeName(item.assigneeId)
               .toLowerCase()
               .includes(searchTerm.toLowerCase())
-          : item.actionItemCategory?.name
-              ?.toLowerCase()
+          : (item.categoryName || 'No Category')
+              .toLowerCase()
               .includes(searchTerm.toLowerCase()),
       );
     }
@@ -205,8 +239,14 @@ function organizationActionItems(): JSX.Element {
     }
 
     return items;
-  }, [actionItemsData, searchTerm, searchBy, status, sortBy]);
-
+  }, [
+    enrichedActionItems,
+    searchTerm,
+    searchBy,
+    status,
+    sortBy,
+    getAssigneeName,
+  ]);
   const getEventDetails = (eventId: string | null): string => {
     if (!eventId) return 'No Event Assigned';
 
@@ -306,16 +346,14 @@ function organizationActionItems(): JSX.Element {
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.actionItemCategory?.name}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="categoryName"
+        >
+          {params.row.categoryName}
+        </div>
+      ),
     },
     {
       field: 'status',
@@ -549,14 +587,14 @@ function organizationActionItems(): JSX.Element {
         disableColumnMenu
         disableColumnResize
         columnBufferPx={7}
-        hideFooter={true}
+        hideFooter
         getRowId={(row) => row.id}
         autoHeight
         rowHeight={65}
         rows={
           filteredAndSortedActionItems.map((actionItem) => ({
             ...actionItem,
-            assigneeName: getAssigneeName(actionItem.assigneeId),
+            assigneeName: getAssigneeName(actionItem.assigneeId), // Still need this for assignee name
             status: actionItem.isCompleted ? 'Completed' : 'Pending',
           })) || []
         }

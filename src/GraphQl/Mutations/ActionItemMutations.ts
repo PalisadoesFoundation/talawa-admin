@@ -93,6 +93,16 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
   }
 `;
 
+export const MARK_ACTION_ITEM_AS_PENDING = gql`
+  mutation MarkActionItemAsPending($id: ID!) {
+    markActionItemAsPending(input: { id: $id }) {
+      id
+      isCompleted
+      postCompletionNotes
+    }
+  }
+`;
+
 /**
  * GraphQL mutation to delete an action item.
  *

@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   POSTGRES_CREATE_ACTION_ITEM_MUTATION,
+  POSTGRES_EVENTS_BY_ORGANIZATION_ID,
   UPDATE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
@@ -130,6 +131,12 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     },
   });
 
+  const { data: eventsData } = useQuery(POSTGRES_EVENTS_BY_ORGANIZATION_ID, {
+    variables: {
+      input: { organizationId: orgId },
+    },
+  });
+
   // Query to fetch action item categories (for the Autocomplete)
   const { data: categoryData } = useQuery(ACTION_ITEM_CATEGORY, {
     variables: {
@@ -150,6 +157,13 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     () => membersData?.organizations[0].members || [],
     [membersData],
   );
+
+  const events = useMemo(() => {
+    if (eventsData?.eventsByOrganizationId) {
+      return eventsData.eventsByOrganizationId;
+    }
+    return [];
+  }, [eventsData]);
 
   const volunteers = useMemo(
     () => volunteersData?.getEventVolunteers || [],
@@ -191,7 +205,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           assigneeId: assigneeId,
           preCompletionNotes: preCompletionNotes,
           organizationId: orgId,
-          eventId: eventId || null,
+          eventId: eventId,
           assignedAt: dayjs(dueDate).format('YYYY-MM-DD'),
         },
       };
@@ -244,9 +258,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         updatedFields.postCompletionNotes = postCompletionNotes;
       }
 
-      // NOTE: Removing the update of 'assigneeType' and 'assignedAt'
-      // because they are not defined in your MutationUpdateActionItemInput
-
       if (Object.keys(updatedFields).length === 0) {
         toast.warning(t('noneUpdated'));
         return;
@@ -257,7 +268,8 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           input: {
             id: actionItem?.id,
             ...updatedFields,
-            isCompleted: actionItem?.isCompleted,
+            // Toggle the status:
+            isCompleted: !actionItem?.isCompleted,
           },
         },
       });
@@ -290,7 +302,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         null,
     );
 
-    // If you don't have an existing interface for members, define one inline:
     interface InterfaceMember {
       _id: string;
       firstName: string;
@@ -444,6 +455,36 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   onChange={(date: Dayjs | null): void => {
                     if (date) handleFormChange('dueDate', date.toDate());
                   }}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3 w-100">
+                <Autocomplete
+                  className={`${styles.noOutline} w-100`}
+                  data-testid="eventSelect"
+                  options={events}
+                  value={
+                    events.find(
+                      (event: { id: string; name: string }) =>
+                        event.id === eventId,
+                    ) || null
+                  }
+                  isOptionEqualToValue={(
+                    option: { id: string; name: string },
+                    value: { id: string; name: string } | null,
+                  ) => option.id === value?.id}
+                  getOptionLabel={(event: { id: string; name: string }) =>
+                    event.name
+                  }
+                  onChange={(
+                    _,
+                    selectedEvent: { id: string; name: string } | null,
+                  ) => {
+                    handleFormChange('eventId', selectedEvent?.id || undefined);
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select Event" required />
+                  )}
                 />
               </Form.Group>
 
