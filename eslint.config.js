@@ -42,7 +42,6 @@ export default [
       react: {
         version: 'detect',
       },
-
       tsdoc: {
         tagDefinitions: [
           {
@@ -145,12 +144,22 @@ export default [
       '**/*.less',
       '**/*.json',
       '**/*.svg',
-      'docs/docusaurus.config.ts',
-      'docs/sidebars.ts',
-      'docs/src/**',
-      'docs/blog/**',
-      'pyproject.toml',
-      'schema.graphql',
+      'docs/**', // Ignore the Docusaurus website subdirectory
+      '**/*.md', // Ignore markdown files
+      'docker/docker-compose.prod.yaml',
+      'docker/docker-compose.dev.yaml',
+      'docker/docker-compose.deploy.yaml',
+      'docker/Dockerfile.prod',
+      'docker/Dockerfile.dev',
+      'docker/Dockerfile.deploy',
+      'config/docker/setup/nginx.conf',
+      'config/docker/setup/nginx.prod.conf',
+      'src/components/CheckIn/tagTemplate.ts',
+      'package.json',
+      'package-lock.json',
+      'tsconfig.json',
+      'fix-readme-links.js',
+      'fix-repo-url.js',
     ],
   },
   {
@@ -160,9 +169,6 @@ export default [
       prettier: prettierPlugin,
     },
     rules: {
-      '@typescript-eslint/consistent-type-imports': 'off',
-      '@typescript-eslint/naming-convention': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],

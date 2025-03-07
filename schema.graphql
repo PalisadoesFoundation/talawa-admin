@@ -1,13 +1,6 @@
 directive @auth on FIELD_DEFINITION
 directive @role(requires: UserType) on FIELD_DEFINITION
 
-# Then define the UserType enum
-enum UserType {
-  ADMIN
-  SUPERADMIN
-  USER
-}
-
 type ActionItem {
   _id: ID!
   actionItemCategory: ActionItemCategory
