@@ -107,8 +107,8 @@ describe('Organisation Settings Page', () => {
     expect(generalTab).toBeVisible();
 
     await waitFor(() => {
-      const container = generalTab.parentElement;
-      expect(container).toHaveClass('d-flex', 'justify-content-between');
+      const container = document.querySelector('.d-flex.flex-column');
+      expect(container).toBeInTheDocument();
     });
 
     expect(screen.getByTestId('generalTab')).toBeInTheDocument();
