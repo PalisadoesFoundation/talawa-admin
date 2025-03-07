@@ -10,7 +10,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import OrganizationActionItems from './OrganizationActionItems';
 import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
-import { GET_USERS_BY_IDS, GET_EVENTS_BY_IDS } from 'GraphQl/Queries/Queries';
+import {
+  GET_USERS_BY_IDS,
+  GET_EVENTS_BY_IDS,
+  GET_CATEGORIES_BY_IDS,
+} from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import type { Mock } from 'vitest';
 
@@ -194,6 +198,67 @@ const sampleActionItemsData = {
   ],
 };
 
+const customActionItemsData = {
+  actionItemsByOrganization: [
+    {
+      id: '9',
+      isCompleted: false,
+      assignedAt: '2025-03-08T00:00:00.000Z',
+      completionAt: '',
+      preCompletionNotes: 'Note',
+      postCompletionNotes: null,
+      createdAt: '2025-03-08T00:00:00.000Z',
+      updatedAt: '2025-03-08T00:00:00.000Z',
+      organizationId: 'org1',
+      categoryId: 'catZ',
+      eventId: null,
+      assigneeId: 'user1',
+      creatorId: 'user2',
+      updaterId: 'user2',
+    },
+    {
+      id: '10',
+      isCompleted: false,
+      assignedAt: '2025-03-08T00:00:00.000Z',
+      completionAt: '',
+      preCompletionNotes: 'Note',
+      postCompletionNotes: null,
+      createdAt: '2025-03-08T00:00:00.000Z',
+      updatedAt: '2025-03-08T00:00:00.000Z',
+      organizationId: 'org1',
+      categoryId: 'catA',
+      eventId: null,
+      assigneeId: 'user3',
+      creatorId: 'user2',
+      updaterId: 'user2',
+    },
+  ],
+};
+
+const customActionItemsMock: MockedResponse = {
+  request: {
+    query: ACTION_ITEM_FOR_ORGANIZATION,
+    variables: { organizationId: 'org1' },
+  },
+  result: { data: customActionItemsData },
+};
+
+// Provide a categories mock that returns proper names for both categories
+const categoriesMockForFiltering: MockedResponse = {
+  request: {
+    query: GET_CATEGORIES_BY_IDS,
+    variables: { ids: ['catZ', 'catA'] },
+  },
+  result: {
+    data: {
+      categoriesByIds: [
+        { id: 'catZ', name: 'Category Z' },
+        { id: 'catA', name: 'Category A' },
+      ],
+    },
+  },
+};
+
 const sampleUsersData = {
   usersByIds: [
     { id: 'user1', name: 'User One' },
@@ -249,6 +314,85 @@ const sampleActionItemsDataEdge = {
       actionItemCategory: { id: 'cat1', name: 'General' },
     },
   ],
+};
+
+const customActionItemsData2 = {
+  actionItemsByOrganization: [
+    {
+      id: '7',
+      isCompleted: false,
+      assignedAt: '2025-03-08T00:00:00.000Z',
+      completionAt: '',
+      preCompletionNotes: 'Note',
+      postCompletionNotes: null,
+      createdAt: '2025-03-08T00:00:00.000Z',
+      updatedAt: '2025-03-08T00:00:00.000Z',
+      organizationId: 'org1',
+      categoryId: 'catX',
+      eventId: null,
+      assigneeId: 'user1',
+      creatorId: 'user2',
+      updaterId: 'user2',
+      // actionItemCategory is optional; enrichment sets categoryName
+    },
+  ],
+};
+
+const customActionItemsMock2: MockedResponse = {
+  request: {
+    query: ACTION_ITEM_FOR_ORGANIZATION,
+    variables: { organizationId: 'org1' },
+  },
+  result: { data: customActionItemsData2 },
+};
+
+// Provide a categories mock that returns an empty array
+const emptyCategoriesMock2: MockedResponse = {
+  request: {
+    query: GET_CATEGORIES_BY_IDS,
+    variables: { ids: ['catX'] },
+  },
+  result: { data: { categoriesByIds: [] } },
+};
+
+const customActionItemsData1 = {
+  actionItemsByOrganization: [
+    {
+      id: '8',
+      isCompleted: false,
+      assignedAt: '2025-03-08T00:00:00.000Z',
+      completionAt: '',
+      preCompletionNotes: 'Note',
+      postCompletionNotes: null,
+      createdAt: '2025-03-08T00:00:00.000Z',
+      updatedAt: '2025-03-08T00:00:00.000Z',
+      organizationId: 'org1',
+      categoryId: 'catY',
+      eventId: null,
+      assigneeId: 'user1',
+      creatorId: 'user2',
+      updaterId: 'user2',
+    },
+  ],
+};
+
+const customActionItemsMock1: MockedResponse = {
+  request: {
+    query: ACTION_ITEM_FOR_ORGANIZATION,
+    variables: { organizationId: 'org1' },
+  },
+  result: { data: customActionItemsData1 },
+};
+
+// Provide a categories mock that returns a matching category for "catY"
+const categoriesMockForCatY1: MockedResponse = {
+  request: {
+    query: GET_CATEGORIES_BY_IDS,
+    variables: { ids: ['catY'] },
+  },
+  result: {
+    data: { categoriesByIds: [{ id: 'catY', name: 'Special Category' }] },
+  },
 };
 
 const sampleUsersDataEdge = {
@@ -513,7 +657,7 @@ describe('OrganizationActionItems Component', () => {
 
   it('displays "Unassigned" when action item has no assigneeId', async () => {
     // Create a custom action item with a null assigneeId.
-    const customActionItemsData = {
+    const customActionItemsData3 = {
       actionItemsByOrganization: [
         {
           id: '5',
@@ -534,16 +678,16 @@ describe('OrganizationActionItems Component', () => {
         },
       ],
     };
-    const customActionItemsMock: MockedResponse = {
+    const customActionItemsMock3: MockedResponse = {
       request: {
         query: ACTION_ITEM_FOR_ORGANIZATION,
         variables: { organizationId: 'org1' },
       },
-      result: { data: customActionItemsData },
+      result: { data: customActionItemsData3 },
     };
 
     renderWithProviders(<OrganizationActionItems />, {
-      mocks: [customActionItemsMock, usersMock, eventsMock],
+      mocks: [customActionItemsMock3, usersMock, eventsMock],
     });
     // The rendered grid cell should show "Unassigned"
     const unassignedCell = await screen.findByText('Unassigned');
@@ -649,10 +793,6 @@ describe('OrganizationActionItems Component', () => {
       >
         <MemoryRouter initialEntries={['/orgdash/']}>
           <Routes>
-            {/* 
-            Use a wildcard so that the path matches '/orgdash/' even if there is no orgId.
-            This forces useParams() to return {}.
-          */}
             <Route path="/orgdash/*" element={<OrganizationActionItems />} />
             <Route path="/" element={<div>Home</div>} />
           </Routes>
@@ -662,6 +802,96 @@ describe('OrganizationActionItems Component', () => {
     // The component should redirect to "/" and display the Home component.
     await waitFor(() => {
       expect(screen.getByText('Home')).toBeInTheDocument();
+    });
+  });
+
+  // Test: Enriches action items with "No Category" when categoriesData returns empty
+  it('enriches action items with "No Category" when categoriesData is empty', async () => {
+    renderWithProviders(<OrganizationActionItems />, {
+      mocks: [
+        customActionItemsMock2,
+        emptyCategoriesMock2,
+        usersMock,
+        eventsMock,
+      ],
+    });
+
+    // Verify that the category cell shows "No Category"
+    const categoryCell = await screen.findByTestId('categoryName');
+    expect(categoryCell.textContent).toContain('No Category');
+  });
+
+  it('enriches action items with matching category names', async () => {
+    renderWithProviders(<OrganizationActionItems />, {
+      mocks: [
+        customActionItemsMock1,
+        categoriesMockForCatY1,
+        usersMock,
+        eventsMock,
+      ],
+    });
+
+    // Wait until the query has resolved and the component updates
+    await waitFor(
+      () => {
+        const categoryCell = screen.getByTestId('categoryName');
+        expect(categoryCell.textContent).toContain('Special Category');
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  // Test: Filters action items by assignee name when search term is entered (default searchBy: 'assignee')
+  it('filters action items by assignee when search term matches', async () => {
+    renderWithProviders(<OrganizationActionItems />, {
+      mocks: [actionItemsMock, usersMock, eventsMock],
+    });
+
+    // Wait for the grid rows to be rendered
+    await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+    });
+
+    // Type a search term that should match "User One" (assume one of the items has that name)
+    const searchInput = screen.getByTestId('searchBy');
+    fireEvent.change(searchInput, { target: { value: 'One' } });
+
+    // After filtering, every visible row should include "User One" (case-insensitive)
+    await waitFor(() => {
+      const rows = screen.getAllByTestId('assigneeName');
+      rows.forEach((row) => {
+        expect(row.textContent?.toLowerCase()).toContain('one');
+      });
+    });
+  });
+
+  // Test: Filters action items by category when searchBy is set to 'category'
+  it('filters action items by category when search term matches', async () => {
+    // Create custom action items with different categories
+
+    renderWithProviders(<OrganizationActionItems />, {
+      mocks: [
+        customActionItemsMock,
+        categoriesMockForFiltering,
+        usersMock,
+        eventsMock,
+      ],
+    });
+
+    // Change the search criterion to "category" via the SortingButton (which uses test id "searchByToggle")
+    const searchByToggle = await screen.findByTestId('searchByToggle');
+    fireEvent.change(searchByToggle, { target: { value: 'category' } });
+
+    // Type a search term that matches only one category (e.g., "Z" for "Category Z")
+    const searchInput = screen.getByTestId('searchBy');
+    fireEvent.change(searchInput, { target: { value: 'Z' } });
+
+    // Verify that all rendered category cells include "Category Z"
+    await waitFor(() => {
+      const categoryCells = screen.getAllByTestId('categoryName');
+      categoryCells.forEach((cell) => {
+        expect(cell.textContent).toContain('Category Z');
+      });
     });
   });
 });
