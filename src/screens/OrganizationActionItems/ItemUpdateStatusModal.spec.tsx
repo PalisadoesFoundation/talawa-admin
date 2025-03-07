@@ -8,7 +8,10 @@ import { MockedProvider } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ItemUpdateStatusModal from './ItemUpdateStatusModal';
-import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
+import {
+  UPDATE_ACTION_ITEM_MUTATION,
+  MARK_ACTION_ITEM_AS_PENDING,
+} from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import {
   GET_USERS_BY_IDS,
@@ -52,6 +55,30 @@ const sampleActionItemNotCompleted = {
   },
 };
 
+const sampleActionItemCompleted = {
+  ...{
+    id: '1',
+    isCompleted: true,
+    assignedAt: '2023-01-01T00:00:00.000Z',
+    completionAt: '2023-01-02T00:00:00.000Z',
+    createdAt: '2022-12-31T00:00:00.000Z',
+    updatedAt: '2022-12-31T00:00:00.000Z',
+    preCompletionNotes: 'Pre notes',
+    postCompletionNotes: 'Some notes',
+    organizationId: 'org1',
+    categoryId: 'cat1',
+    eventId: 'event1',
+    assigneeId: 'user1',
+    creatorId: 'user2',
+    updaterId: 'user2',
+  },
+};
+
+const sampleActionItemMissingId = {
+  ...sampleActionItemCompleted,
+  id: '',
+};
+
 const usersMock: MockedResponse<{
   usersByIds: { id: string; name: string }[];
 }> = {
@@ -83,14 +110,6 @@ const categoriesMock: MockedResponse<{
   },
 };
 
-// // Sample action item (completed)
-// const sampleActionItemCompleted = {
-//   ...sampleActionItemNotCompleted,
-//   isCompleted: true,
-//   postCompletionNotes: 'Some post notes',
-// };
-
-// Global GraphQL mocks
 const updateMockNotCompleted: MockedResponse = {
   request: {
     query: UPDATE_ACTION_ITEM_MUTATION,
@@ -118,33 +137,6 @@ const updateMockNotCompleted: MockedResponse = {
   },
 };
 
-// const updateMockCompleted: MockedResponse = {
-//   request: {
-//     query: UPDATE_ACTION_ITEM_MUTATION,
-//     variables: {
-//       input: {
-//         id: '1',
-//         assigneeId: 'user1',
-//         postCompletionNotes: '',
-//         isCompleted: false, // toggled from true to false
-//       },
-//     },
-//   },
-//   result: {
-//     data: {
-//       updateActionItem: {
-//         id: '1',
-//         isCompleted: false,
-//         preCompletionNotes: 'Pre notes',
-//         postCompletionNotes: '',
-//         categoryId: 'cat1',
-//         assigneeId: 'user1',
-//         updaterId: 'user2',
-//       },
-//     },
-//   },
-// };
-//////////////////////////////////
 const updateMockError: MockedResponse = {
   request: {
     query: UPDATE_ACTION_ITEM_MUTATION,
@@ -158,6 +150,27 @@ const updateMockError: MockedResponse = {
     },
   },
   error: new Error('Mutation failed'),
+};
+
+const pendingMockSuccess: MockedResponse = {
+  request: {
+    query: MARK_ACTION_ITEM_AS_PENDING,
+    variables: { id: '1' },
+  },
+  result: {
+    data: {
+      markActionItemAsPending: { id: '1', isCompleted: false },
+    },
+  },
+};
+
+// Error case for the pending mutation
+const pendingMockError: MockedResponse = {
+  request: {
+    query: MARK_ACTION_ITEM_AS_PENDING,
+    variables: { id: '1' },
+  },
+  error: new Error('Pending mutation failed'),
 };
 
 // Global callback mocks
@@ -202,34 +215,6 @@ describe('ItemUpdateStatusModal Component', () => {
     expect(hideMock).toHaveBeenCalled();
     expect(refetchMock).toHaveBeenCalled();
   });
-
-  // it('renders in update mode (completed) and submits updated action item', async () => {
-  //   render(
-  //     <MockedProvider mocks={[updateMockCompleted]} addTypename={false}>
-  //       <LocalizationProvider dateAdapter={AdapterDayjs}>
-  //         <ItemUpdateStatusModal
-  //           isOpen={true}
-  //           hide={hideMock}
-  //           actionItemsRefetch={refetchMock}
-  //           actionItem={sampleActionItemCompleted}
-  //         />
-  //       </LocalizationProvider>
-  //     </MockedProvider>,
-  //   );
-
-  //   expect(screen.queryByLabelText('postCompletionNotes')).toBeNull();
-  //   expect(screen.getByText('updateStatusMsg')).toBeInTheDocument();
-
-  //   const yesBtn = screen.getByTestId('yesBtn');
-  //   fireEvent.click(yesBtn);
-
-  //   await waitFor(() => {
-  //     expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
-  //   });
-
-  //   expect(hideMock).toHaveBeenCalled();
-  //   expect(refetchMock).toHaveBeenCalled();
-  // });
 
   it('calls hide when the close button is clicked', async () => {
     render(
@@ -296,5 +281,79 @@ describe('ItemUpdateStatusModal Component', () => {
     // Wait for the assignee TextField to display its value.
     const assigneeField = await screen.findByLabelText('assignee');
     expect(assigneeField).toHaveValue('User One');
+  });
+  it('handles successful pending mutation', async () => {
+    render(
+      <MockedProvider
+        mocks={[pendingMockSuccess, usersMock, categoriesMock]}
+        addTypename={false}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemUpdateStatusModal
+            isOpen={true}
+            hide={hideMock}
+            actionItemsRefetch={refetchMock}
+            actionItem={sampleActionItemCompleted}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // The "yes" button is rendered only when isCompleted is true.
+    const yesButton = screen.getByTestId('yesBtn');
+    fireEvent.click(yesButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+    });
+    expect(hideMock).toHaveBeenCalled();
+    expect(refetchMock).toHaveBeenCalled();
+  });
+
+  it('handles error during pending mutation', async () => {
+    render(
+      <MockedProvider
+        mocks={[pendingMockError, usersMock, categoriesMock]}
+        addTypename={false}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemUpdateStatusModal
+            isOpen={true}
+            hide={hideMock}
+            actionItemsRefetch={refetchMock}
+            actionItem={sampleActionItemCompleted}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    const yesButton = screen.getByTestId('yesBtn');
+    fireEvent.click(yesButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Pending mutation failed');
+    });
+  });
+
+  it('displays error when action item ID is missing for pending update', async () => {
+    render(
+      <MockedProvider mocks={[usersMock, categoriesMock]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemUpdateStatusModal
+            isOpen={true}
+            hide={hideMock}
+            actionItemsRefetch={refetchMock}
+            actionItem={sampleActionItemMissingId}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    const yesButton = screen.getByTestId('yesBtn');
+    fireEvent.click(yesButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing.');
+    });
   });
 });

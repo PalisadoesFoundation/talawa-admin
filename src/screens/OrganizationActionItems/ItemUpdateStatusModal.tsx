@@ -228,7 +228,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
                   type="button"
                   className={styles.addButton}
                   data-testid="yesBtn"
-                  onClick={handleMarkAsPending} // ✅ Attach correct function
+                  onClick={handleMarkAsPending}
                 >
                   {tCommon('yes')}
                 </Button>
