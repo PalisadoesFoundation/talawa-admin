@@ -1,10 +1,7 @@
-import React from 'react';
 import styles from '../../style/app-fixed.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 /**
  * Renders a sign out button.
@@ -17,45 +14,13 @@ import { useNavigate } from 'react-router-dom';
  */
 
 const SignOut = (): JSX.Element => {
-  const { endSession } = useSession();
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-  const navigate = useNavigate();
-
-  const logout = async (): Promise<void> => {
-    const handleSignOut = (): void => {
-      localStorage.clear();
-      endSession();
-      navigate('/');
-    };
-
-    try {
-      await revokeRefreshToken();
-      handleSignOut();
-    } catch (error) {
-      console.error('Error revoking refresh token:', error);
-      const retryRevocation = window.confirm(
-        'Failed to revoke session. Retry?',
-      );
-      if (retryRevocation) {
-        try {
-          await revokeRefreshToken();
-          handleSignOut();
-        } catch {
-          // Proceed with local logout if retry fails
-          console.error('Token revocation retry failed');
-          handleSignOut();
-        }
-      } else {
-        handleSignOut();
-      }
-    }
-  };
+  const { handleLogout } = useSession();
   return (
     <div className={styles.signOutContainer}>
       <LogoutIcon />
       <button
         className={styles.signOutButton}
-        onClick={logout}
+        onClick={handleLogout}
         aria-label="Sign out"
       >
         Sign Out

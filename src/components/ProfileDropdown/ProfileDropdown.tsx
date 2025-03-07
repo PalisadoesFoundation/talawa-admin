@@ -1,14 +1,11 @@
-import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
+import Avatar from 'components/Avatar/Avatar';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../style/app.module.css';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
-
 /**
  * Renders a profile dropdown menu for the user.
  *
@@ -22,9 +19,8 @@ import useSession from 'utils/useSession';
  * @returns JSX.Element - The profile dropdown menu.
  */
 const profileDropdown = (): JSX.Element => {
-  const { endSession } = useSession();
+  const { handleLogout } = useSession();
   const { t: tCommon } = useTranslation('common');
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
   const userRole = getItem('role');
   const name: string = getItem('name') || '';
@@ -32,16 +28,6 @@ const profileDropdown = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId } = useParams();
 
-  const logout = async (): Promise<void> => {
-    try {
-      await revokeRefreshToken();
-    } catch (error) {
-      console.error('Error revoking refresh token:', error);
-    }
-    localStorage.clear();
-    endSession();
-    navigate('/');
-  };
   const MAX_NAME_LENGTH = 20;
   const displayedName =
     name.length > MAX_NAME_LENGTH
@@ -100,7 +86,7 @@ const profileDropdown = (): JSX.Element => {
         </Dropdown.Item>
         <Dropdown.Item
           style={{ color: 'red' }}
-          onClick={logout}
+          onClick={handleLogout}
           data-testid="logoutBtn"
         >
           {tCommon('logout')}

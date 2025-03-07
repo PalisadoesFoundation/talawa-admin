@@ -14,6 +14,7 @@ import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import useSession from 'utils/useSession';
 interface InterfaceNavbarProps {
   currentPage: string | null;
 }
@@ -45,6 +46,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
+  const { handleLogout } = useSession();
   const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
@@ -66,14 +68,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   );
 
   const { getItem, setItem } = useLocalStorage();
-
-  /**
-   * Handles user logout by clearing local storage and redirecting to the home page.
-   */
-  const handleLogout = (): void => {
-    localStorage.clear();
-    window.location.replace('/');
-  };
 
   const userName = getItem('name');
 

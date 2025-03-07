@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/SignOut/SignOut.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SignOut/SignOut.tsx#L19)
+Defined in: [src/components/SignOut/SignOut.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SignOut/SignOut.tsx#L16)
 
 Renders a sign out button.
 

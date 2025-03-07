@@ -8,10 +8,9 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
+import useSession from 'utils/useSession';
 
 /**
  * Navbar component for user-specific actions and settings.
@@ -24,6 +23,7 @@ import useLocalStorage from 'utils/useLocalstorage';
  * @returns JSX.Element - The rendered Navbar component.
  */
 function userNavbar(): JSX.Element {
+  const { handleLogout } = useSession();
   // Hook for local storage operations
   const { getItem } = useLocalStorage();
 
@@ -35,9 +35,6 @@ function userNavbar(): JSX.Element {
     keyPrefix: 'userNavbar',
   });
   const { t: tCommon } = useTranslation('common');
-
-  // Mutation hook for revoking the refresh token
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
   // State for managing the current language code
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
@@ -51,12 +48,6 @@ function userNavbar(): JSX.Element {
    * Handles user logout by revoking the refresh token and clearing local storage.
    * Redirects to the home page after logout.
    */
-
-  const handleLogout = (): void => {
-    revokeRefreshToken();
-    localStorage.clear();
-    navigate('/');
-  };
 
   return (
     <Navbar variant="dark" className={`${styles.colorPrimary}`}>
