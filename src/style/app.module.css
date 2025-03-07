@@ -2243,13 +2243,6 @@ hr {
   cursor: pointer;
 }
 
-.modalHeader {
-  border: none;
-  background-color: var(--primary-bg-color) !important;
-  padding: 1rem;
-  color: #000000;
-}
-
 .modalHeader div {
   color: #000000 !important;
 }
@@ -2460,18 +2453,6 @@ input[type='radio']:checked + label:hover {
 .noOutline textarea:disabled {
   color: var(--noOutline-textarea-disables) !important;
   opacity: 1;
-}
-
-.inputFields {
-  background-color: var(--eventManagement-button-bg);
-  border: 1px solid var(--create-button-border);
-  color: var(--eventManagement-button-bg);
-  box-shadow: 0 1px 1px var(--brand-primary);
-  width: 375px;
-  padding-right: 40px;
-  /* Make room for the button */
-  border-radius: 8px;
-  /* Match the image's rounded corners */
 }
 
 .inputFields:focus {

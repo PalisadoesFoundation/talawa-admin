@@ -26,8 +26,10 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
 
   return (
     <Row className={`${styles.settingsBody} mt-3`}>
-      <Col lg={7}>
-        <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
+      <Col xxl={7} xl={12} className="mb-4">
+        <Card
+          className={`rounded-4 mb-4 shadow-sm border border-light-subtle `}
+        >
           <Card.Header className={styles.deleteCardHeader}>
             <h5 className="mb-0 fw-semibold">{t('Edit Organization')}</h5>
           </Card.Header>
@@ -36,7 +38,7 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
           </Card.Body>
         </Card>
       </Col>
-      <Col lg={5}>
+      <Col xxl={5} xl={12}>
         <DeleteOrg />
       </Col>
     </Row>

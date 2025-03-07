@@ -550,8 +550,7 @@
   --btnsContainerOrgActionItemCategories-outline: #9ca3af;
 
   --delete-button-bg: #f8d6dc;
-  --delete-button-color: #ff4d4f;
-  --delete-button-color-hover: #ff4d4f;
+  --delete-button-color: #c8102e;
   --delete-button-border: #000;
   --delete-button-color-hover: #ff4d4f;
 
@@ -678,6 +677,14 @@
   --card-background-color: #1778f2;
   --card-header-background-color: #1778f2;
   --text-fields-color: #737373;
+
+  --settings-header-button-bg: #ffffff;
+  --settings-header-button-border: #808080;
+  --settings-header-button-color: #808080;
+
+  --settings-active-button-bg: #eaebef;
+  --settings-active-button-border: #555555;
+  --settings-active-button-color: #555555;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -4183,6 +4190,7 @@ form {
 
 .orgCardSettings {
   width: 558px;
+  margin: 0 !important;
 }
 
 .resetChangesBtn {
@@ -6093,6 +6101,80 @@ form {
   grid-template-columns: repeat(1, 1fr);
   row-gap: 1em;
   width: 100%;
+}
+
+/* orgsettings */
+
+.modalHeader {
+  border: none;
+  background-color: var(--primary-bg-color) !important;
+  padding: 1rem;
+  color: #000000;
+}
+
+.inputFields {
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--create-button-border);
+  color: var(--eventManagement-button-bg);
+  box-shadow: 0 1px 1px var(--brand-primary);
+  width: 375px;
+  padding-right: 40px;
+  border-radius: 8px;
+}
+
+.headerBtn {
+  background: var(--settings-header-button-bg);
+  border: 1px solid var(--settings-header-button-border);
+  border-radius: 8px;
+  height: auto;
+  width: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: var(--settings-header-button-color) !important;
+}
+
+.headerBtn:active {
+  background: var(--settings-header-button-bg) !important;
+  border: 1px solid var(--settings-header-button-border) !important;
+  border-radius: 8px;
+  height: auto;
+  width: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: var(--settings-header-button-color) !important;
+}
+
+.activeTabBtn {
+  background: var(--settings-active-button-bg);
+  border: 1px solid var(--settings-active-button-border);
+  border-radius: 8px;
+  color: var(--settings-active-button-color) !important;
+}
+
+.activeTabBtn:active {
+  background: var(--settings-active-button-bg) !important;
+  border: 1px solid var(--settings-active-button-border) !important;
+  color: var(--settings-active-button-color) !important;
+}
+
+.settingsTabs {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.headerBtn:hover {
+  border: 1px solid var(--settings-header-button-border);
+  background: var(--settings-header-button-bg);
+  border-radius: 8px;
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
+  color: var(--settings-header-button-color) !important;
+}
+
+.activeTabBtn:hover {
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
+  background: var(--settings-active-button-bg);
+  border: 1px solid var(--settings-active-button-border);
+  color: var(--settings-active-button-color) !important;
 }
 
 /* -- OrgPost.tsx -- */
