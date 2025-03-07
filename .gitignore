@@ -41,5 +41,3 @@ debug.log
 .idea
 .vscode
 *.swp
-
-.early.coverage
