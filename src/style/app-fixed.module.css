@@ -3678,7 +3678,7 @@
   color: var(--manageBtn1-color) #555555 !important;
   position: absolute;
   right: 10px;
-  bottom: 10px
+  bottom: 10px;
 }
 
 .manageBtn:hover {

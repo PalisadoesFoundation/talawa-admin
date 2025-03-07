@@ -4,10 +4,7 @@ import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import {
-  ALL_ORGANIZATIONS_PG,
-  CURRENT_USER,
-} from 'GraphQl/Queries/Queries';
+import { ALL_ORGANIZATIONS_PG, CURRENT_USER } from 'GraphQl/Queries/Queries';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import { useTranslation } from 'react-i18next';
@@ -96,7 +93,7 @@ function orgList(): JSX.Element {
   });
 
   // const [hasMore, sethasMore] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  // const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -141,8 +138,6 @@ function orgList(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
-  console.log(UsersOrgsData);
-
   const orgsData = UsersOrgsData?.organizations;
 
   // To clear the search field and form fields on unmount
@@ -170,7 +165,7 @@ function orgList(): JSX.Element {
   // }, []);
 
   useEffect(() => {
-    setIsLoading(loading && isLoadingMore);
+    setIsLoading(loading);
   }, [loading]);
 
   // const isAdminForCurrentOrg = (
@@ -279,7 +274,7 @@ function orgList(): JSX.Element {
   // };
 
   const handleSearch = (value: string): void => {
-      setSearchByName(value);
+    setSearchByName(value);
     // if (value == '') {
     //    resetAllParams();
     //   return;
@@ -459,13 +454,19 @@ function orgList(): JSX.Element {
             </>
           )}
           <div className={`${styles.listBoxOrgList}`}>
-          {orgsData?.filter((org: InterfaceOrgInfoTypePG)=>searchByName ? org.name.toLowerCase().includes(searchByName.toLowerCase()) : org).map((item: InterfaceOrgInfoTypePG) => {
-            return (
-              <div key={item.id} className={styles.itemCardOrgList}>
-                <OrgListCard data={item} />
-              </div>
-            );
-          })}
+            {orgsData
+              ?.filter((org: InterfaceOrgInfoTypePG) =>
+                searchByName
+                  ? org.name.toLowerCase().includes(searchByName.toLowerCase())
+                  : org,
+              )
+              .map((item: InterfaceOrgInfoTypePG) => {
+                return (
+                  <div key={item.id} className={styles.itemCardOrgList}>
+                    <OrgListCard data={item} />
+                  </div>
+                );
+              })}
           </div>
         </>
       )}

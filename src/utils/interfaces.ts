@@ -443,7 +443,7 @@ export interface InterfaceOrgInfoTypePG {
   name: string;
   addressLine1: string;
   description: string;
-  avatarURL: string;
+  avatarURL: string | null;
   members: {
     edges: {
       node: {
