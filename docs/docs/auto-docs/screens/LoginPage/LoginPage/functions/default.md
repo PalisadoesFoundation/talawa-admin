@@ -6,11 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/LoginPage/LoginPage.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/LoginPage/LoginPage.tsx#L51)
-
-LoginPage component is used to render the login page of the application where user can login or register
-to the application using email and password. The component also provides the functionality to switch between login and
-register form.
+Defined in: [src/screens/LoginPage/LoginPage.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/LoginPage/LoginPage.tsx#L61)
 
 ## Returns
 

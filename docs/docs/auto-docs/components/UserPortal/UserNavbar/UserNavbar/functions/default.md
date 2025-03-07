@@ -6,7 +6,14 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/components/UserPortal/UserNavbar/UserNavbar.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L61)
+Defined in: [src/components/UserPortal/UserNavbar/UserNavbar.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L25)
+
+Navbar component for user-specific actions and settings.
+
+This component provides:
+- A branding image and name.
+- A dropdown for language selection.
+- A dropdown for user actions including profile settings and logout.
 
 ## Returns
 
