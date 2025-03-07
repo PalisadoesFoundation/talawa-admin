@@ -131,7 +131,7 @@ describe('Testing Requests screen', () => {
     setItem('id', '');
     removeItem('AdminFor');
     removeItem('SuperAdmin');
-    
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -201,7 +201,7 @@ describe('Testing Requests screen', () => {
     await wait(200);
     const searchBtn = await screen.findByTestId('searchButton');
     const searchInput = await screen.findByTestId('searchByName');
-    
+
     const search1 = 'John';
     await userEvent.type(searchInput, search1);
     await userEvent.click(searchBtn);
@@ -266,7 +266,9 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
     // Wait for the loading to finish and check if "No Membership Requests Found" text is present
-    const noRequestsText = await screen.findByText(/No Membership Requests Found/i);
+    const noRequestsText = await screen.findByText(
+      /No Membership Requests Found/i,
+    );
     expect(noRequestsText).toBeInTheDocument();
   });
 
@@ -283,37 +285,36 @@ describe('Testing Requests screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-  
+
     // Wait for component to finish rendering
     await wait(500);
-    
+
     // Ensure the component rendered without errors
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
-    
+
     // We just want to make sure the test passes without errors
     // since we can't reliably check for specific content without knowing the translations
     expect(container).toBeInTheDocument();
   }),
+    test('Should not render warning alert when there are organizations present', async () => {
+      const { container } = render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-  test('Should not render warning alert when there are organizations present', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    expect(container.textContent).not.toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
-  });
+      await wait(200);
+      expect(container.textContent).not.toMatch(
+        'Organizations not found, please create an organization through dashboard',
+      );
+    });
 
   test('Should render properly when there are no organizations present in requestsData', async () => {
     render(

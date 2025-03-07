@@ -73,9 +73,9 @@ const Requests = (): JSX.Element => {
 
   // Query to fetch the list of organizations
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
-  const [displayedRequests, setDisplayedRequests] = useState<InterfaceRequestsListItem[]>(
-    [],
-  );
+  const [displayedRequests, setDisplayedRequests] = useState<
+    InterfaceRequestsListItem[]
+  >([]);
 
   // Manage loading more state
   useEffect(() => {
@@ -83,7 +83,8 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    const membershipRequests = data.organizations?.[0]?.membershipRequests || [];
+    const membershipRequests =
+      data.organizations?.[0]?.membershipRequests || [];
 
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
