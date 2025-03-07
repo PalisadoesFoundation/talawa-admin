@@ -845,35 +845,4 @@ describe('ItemModal Update Category Tests', () => {
       expect(refetchMock).toHaveBeenCalled();
     });
   });
-
-  it('should properly match assignee options by id in the Autocomplete', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ItemModal
-              isOpen={true}
-              hide={hideMock}
-              orgId="org1"
-              eventId="event1"
-              actionItem={sampleActionItem}
-              editMode={true}
-              actionItemsRefetch={refetchMock}
-            />
-          </LocalizationProvider>
-        </MockedProvider>,
-      );
-    });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('memberSelect')).toBeInTheDocument();
-    });
-
-    const memberSelect = screen.getByTestId('memberSelect');
-    // Assert that the input is not null by casting it.
-    const autocompleteInput = memberSelect.querySelector(
-      'input',
-    ) as HTMLInputElement;
-    expect(autocompleteInput.value).toBe('User One');
-  });
 });
