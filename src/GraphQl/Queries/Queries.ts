@@ -87,6 +87,27 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
   }
 `;
 
+<<<<<<< userportal
+=======
+export const ALL_ORGANIZATIONS_PG = gql`
+  query UserJoinedOrganizations {
+    organizations {
+      id
+      name
+      addressLine1
+      description
+      avatarURL
+      members(first: 32) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 // Query to take the User list
 export const USER_LIST = gql`
   query Users(
