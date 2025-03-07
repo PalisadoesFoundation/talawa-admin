@@ -3,7 +3,7 @@
 import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import prettier from 'eslint-plugin-prettier';
+import prettierPlugin from 'eslint-plugin-prettier';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
@@ -15,7 +15,7 @@ export default [
   eslintConfigPrettier, // Integrating Prettier config
   {
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2022,
       sourceType: 'module',
       parser: tsParser,
       parserOptions: {
@@ -32,17 +32,27 @@ export default [
 
     plugins: {
       '@typescript-eslint': tseslint,
-      prettier,
+      prettier: prettierPlugin,
       import: importPlugin,
-      react,
-      tsdoc,
+      react: react,
+      tsdoc: tsdoc,
       '@graphql-eslint': graphql,
     },
     settings: {
       react: {
         version: 'detect',
       },
+
+      tsdoc: {
+        tagDefinitions: [
+          {
+            tagName: '@pdfme',
+            syntaxKind: 'block',
+          },
+        ],
+      },
     },
+
     rules: {
       'react/destructuring-assignment': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'error',
@@ -140,12 +150,14 @@ export default [
       'docs/src/**',
       'docs/blog/**',
       'pyproject.toml',
+      'schema.graphql',
     ],
   },
   {
     files: ['*.graphql'],
     plugins: {
       '@graphql-eslint': graphql,
+      prettier: prettierPlugin,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -156,10 +168,12 @@ export default [
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
+
   {
     files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
     rules: {
-      '@typescript-eslint/explicit-function-return-type': 'off', // Ignore return types in JS
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off', // Add this line
     },
   },
 ];
