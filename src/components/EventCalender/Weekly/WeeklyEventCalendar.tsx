@@ -15,7 +15,7 @@ import type {
 import { Role } from 'types/Event/interface';
 import { type User } from 'types/User/type';
 
-const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
+const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
   orgData,
@@ -24,7 +24,7 @@ const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
 }) => {
   const today = new Date();
   const [currentWeekStart, setCurrentWeekStart] = useState(
-    new Date(today.setDate(today.getDate() - today.getDay()) // Start from Sunday
+    new Date(today.setDate(today.getDate() - today.getDay()) 
   );
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
@@ -258,4 +258,4 @@ const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
   );
 };
 
-export default WeeklyEventCalendar;
+export default Calendar;

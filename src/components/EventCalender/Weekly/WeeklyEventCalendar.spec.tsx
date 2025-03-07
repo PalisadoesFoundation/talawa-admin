@@ -7,7 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { vi } from 'vitest';
-import Calendar from './WeeklyEventCalendar';
+import Calendar from './WeeklyEventCalendar'; 
 import { BrowserRouter } from 'react-router-dom';
 
 enum Role {
@@ -26,7 +26,7 @@ const renderWithRouter = (
   );
 };
 
-describe('WeeklyEventCalendar Component', () => {
+describe('Calendar Component (Weekly View)', () => { 
   const mockRefetchEvents = vi.fn();
   const today = new Date();
 
