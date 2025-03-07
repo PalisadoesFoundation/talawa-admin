@@ -87,8 +87,6 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
   }
 `;
 
-<<<<<<< userportal
-=======
 export const ALL_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations {
     organizations {
