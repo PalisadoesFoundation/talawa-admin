@@ -181,7 +181,6 @@ const map: InterfaceMapType = {
   orgfundcampaign: 'fundCampaign',
   fundCampaignPledge: 'pledges',
   orgsetting: 'orgSettings',
-  orgstore: 'addOnStore',
   blockuser: 'blockUnblockUser',
   orgvenues: 'organizationVenues',
   event: 'eventManagement',

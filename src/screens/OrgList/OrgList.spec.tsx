@@ -407,9 +407,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-    // await act(async () => {
-    //   await new Promise((resolve) => setTimeout(resolve, 1000));
-    // });
     await waitFor(() =>
       expect(
         screen.queryByText(/Congratulation the Organization is created/i),

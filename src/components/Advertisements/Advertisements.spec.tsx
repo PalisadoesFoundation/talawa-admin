@@ -20,7 +20,6 @@ import { ADD_ADVERTISEMENT_MUTATION } from '../../GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_ADVERTISEMENT_LIST,
-  PLUGIN_GET,
 } from '../../GraphQl/Queries/Queries';
 
 import { I18nextProvider } from 'react-i18next';
@@ -252,32 +251,6 @@ for (let i = 0; i < 4; i++) {
   });
 }
 
-const PLUGIN_GET_MOCK = {
-  request: {
-    query: PLUGIN_GET,
-  },
-  result: {
-    data: {
-      getPlugins: [
-        {
-          _id: '6581be50e88e74003aab436c',
-          pluginName: 'Chats',
-          pluginCreatedBy: 'Talawa Team',
-          pluginDesc:
-            'User can share messages with other users in a chat user interface.',
-          uninstalledOrgs: [
-            '62ccfccd3eb7fd2a30f41601',
-            '62ccfccd3eb7fd2a30f41601',
-          ],
-          pluginInstallStatus: true,
-          __typename: 'Plugin',
-        },
-      ],
-    },
-    loading: false,
-  },
-};
-
 const ADD_ADVERTISEMENT_MUTATION_MOCK = {
   request: {
     query: ADD_ADVERTISEMENT_MUTATION,
@@ -370,7 +343,6 @@ describe('Testing Advertisement Component', () => {
   test('for creating new Advertisements', async () => {
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,
-      PLUGIN_GET_MOCK,
       ADD_ADVERTISEMENT_MUTATION_MOCK,
       ...ADVERTISEMENTS_LIST_MOCK,
     ];
@@ -423,7 +395,6 @@ describe('Testing Advertisement Component', () => {
   test('for the working of the tabs', async () => {
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,
-      PLUGIN_GET_MOCK,
       ADD_ADVERTISEMENT_MUTATION_MOCK,
       ...ADVERTISEMENTS_LIST_MOCK,
     ];

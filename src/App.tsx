@@ -5,13 +5,9 @@ import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import * as installedPlugins from 'components/plugins/index';
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
 import LoginPage from 'screens/LoginPage/LoginPage';
 
-const AddOnStore = lazy(
-  () => import('components/AddOn/core/AddOnStore/AddOnStore'),
-);
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
 );
@@ -101,7 +97,6 @@ const { setItem } = useLocalStorage();
  *
  * ## Important Details
  * - **UseEffect Hook**: This hook checks user authentication status using the `CHECK_AUTH` GraphQL query.
- * - **Plugins**: It dynamically loads additional routes for any installed plugins.
  * - **Routes**:
  *   - The root route ("/") takes the user to the `LoginPage`.
  *   - Protected routes are wrapped with the `SecuredRoute` component to ensure they are only accessible to authenticated users.
@@ -112,31 +107,6 @@ const { setItem } = useLocalStorage();
  */
 
 function app(): JSX.Element {
-  /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
-    actionCreators,
-    dispatch
-  );
-
-  const getInstalledPlugins = async () => {
-    const plugins = await fetchInstalled();
-    updateInstalled(plugins);
-    updatePluginLinks(new PluginHelper().generateLinks(plugins));
-  };
-
-  const fetchInstalled = async () => {
-    const result = await fetch(`http://localhost:3005/installed`);
-    return await result.json();
-  };
-
-  useEffect(() => {
-    getInstalledPlugins();
-  }, []);*/
-
-  // const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  // const { components } = appRoutes;
-
-  // TODO: Fetch Installed plugin extras and store for use within the MainContent and Side Panel Components.
-
   const { data, loading } = useQuery(CHECK_AUTH);
 
   useEffect(() => {
@@ -150,28 +120,6 @@ function app(): JSX.Element {
       setItem('UserImage', auth.image);
     }
   }, [data, loading, setItem]);
-
-  const extraRoutes = Object.entries(installedPlugins).map(
-    (
-      plugin: [
-        string,
-        (
-          | typeof installedPlugins.DummyPlugin
-          | typeof installedPlugins.DummyPlugin2
-        ),
-      ],
-      index: number,
-    ) => {
-      const ExtraComponent = plugin[1];
-      return (
-        <Route
-          key={index}
-          path={`/plugin/${plugin[0].toLowerCase()}`}
-          element={<ExtraComponent />}
-        />
-      );
-    },
-  );
 
   return (
     <>
@@ -229,7 +177,6 @@ function app(): JSX.Element {
               <Route path="/orgcontribution" element={<OrgContribution />} />
               <Route path="/orgpost/:orgId" element={<OrgPost />} />
               <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
-              <Route path="/orgstore/:orgId" element={<AddOnStore />} />
               <Route path="/orgads/:orgId" element={<Advertisements />} />
               <Route path="/blockuser/:orgId" element={<BlockUser />} />
               <Route
@@ -237,7 +184,6 @@ function app(): JSX.Element {
                 element={<OrganizationVenues />}
               />
               <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
-              {extraRoutes}
             </Route>
           </Route>
           <Route path="/forgotPassword" element={<ForgotPassword />} />

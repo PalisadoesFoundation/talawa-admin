@@ -82,7 +82,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     state: '',
     city: '',
     country: '',
-    pluginCreationAllowed: false,
   });
   const handleDateChange = (date: Dayjs | null): void => {
     if (date) {
@@ -127,7 +126,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         state: userData?.user?.address?.state,
         city: userData?.user?.address?.city,
         country: userData?.user?.address?.countryCode,
-        pluginCreationAllowed: userData?.appUserProfile?.pluginCreationAllowed,
         image: userData?.user?.image || '',
       });
     }
@@ -286,8 +284,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       state: userData?.user?.address?.state || '',
       birthDate: userData?.user?.birthDate || '',
       grade: userData?.user?.educationGrade || '',
-      pluginCreationAllowed:
-        userData?.appUserProfile?.pluginCreationAllowed || false,
     });
     setisUpdated(false);
   };
