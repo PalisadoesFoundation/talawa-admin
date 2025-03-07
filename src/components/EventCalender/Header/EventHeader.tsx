@@ -36,7 +36,7 @@ import type { InterfaceEventHeaderProps } from 'types/Event/interface';
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-function EventHeader({
+function eventHeader({
   viewType,
   handleChangeView,
   showInviteModal,
@@ -51,7 +51,7 @@ function EventHeader({
       data-testid="calendarEventHeader"
     >
       <div className={styles.calendar__header}>
-        {/* Search Bar */}
+        
         <SearchBar
           placeholder={t('searchEventName')}
           onSearch={(term) => console.log(`Search term: ${term}`)}
@@ -59,7 +59,7 @@ function EventHeader({
           buttonTestId="searchButton"
         />
 
-        {/* View Type Dropdown */}
+        
         <div className={styles.space}>
           <SortingButton
             title={t('viewType')}
@@ -76,7 +76,7 @@ function EventHeader({
           />
         </div>
 
-        {/* Event Type Dropdown */}
+        
         <div className={styles.btnsBlock}>
           <SortingButton
             title={t('eventType')}
@@ -92,7 +92,7 @@ function EventHeader({
           />
         </div>
 
-        {/* Create Event Button */}
+        
         <div className={styles.btnsBlock}>
           <div className={styles.selectTypeEventHeader}>
             <Button
@@ -118,4 +118,4 @@ function EventHeader({
   );
 }
 
-export default EventHeader;
+export default eventHeader;
