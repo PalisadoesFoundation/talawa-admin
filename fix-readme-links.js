@@ -13,8 +13,8 @@ function replaceLinks(dir) {
       let content = fs.readFileSync(filePath, 'utf8');
 
       // Replace any README.md links with root directory ("/")
-      content = content.replace(/\[.*?\]\((.*?)README\.md\)/g, (match) => {
-        return '[Admin Docs](/)'; // Redirect broken links to the root
+      content = content.replace(/\[.*?\]\((.*?)README\.md\)/g, () => {
+        return '[Admin Docs](/)';
       });
 
       fs.writeFileSync(filePath, content, 'utf8');

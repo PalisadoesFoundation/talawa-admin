@@ -6,11 +6,11 @@ import { TextEncoder, TextDecoder } from 'util';
  * Providing a polyfill to the environment for the same
  */
 export default class CustomTestEnvironment extends Environment {
-  async setup() {
+  async setup(): Promise<void> {
     await super.setup();
     if (typeof this.global.TextEncoder === 'undefined') {
       this.global.TextEncoder = TextEncoder;
-      this.global.TextDecoder = TextDecoder;
+      this.global.TextDecoder = TextDecoder as any;
     }
   }
 }
