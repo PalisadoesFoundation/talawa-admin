@@ -10,6 +10,7 @@ import ItemModal from './ItemModal';
 import {
   POSTGRES_CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
+  POSTGRES_EVENTS_BY_ORGANIZATION_ID,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemQueries';
@@ -19,6 +20,7 @@ import {
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
+import { act } from 'react-dom/test-utils';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -99,6 +101,15 @@ const sampleCategoryData = {
       createdAt: '2022-12-31T00:00:00.000Z',
       updatedAt: '2022-12-31T00:00:00.000Z',
     },
+    {
+      id: 'cat2',
+      name: 'Category 2',
+      organizationId: 'org1',
+      creatorId: 'user2',
+      isDisabled: false,
+      createdAt: '2022-12-31T00:00:00.000Z',
+      updatedAt: '2022-12-31T00:00:00.000Z',
+    },
   ],
 };
 
@@ -107,6 +118,15 @@ const sampleActionCategoryData = {
     {
       id: 'cat1',
       name: 'Category 1',
+      organizationId: 'org1',
+      creatorId: 'user2',
+      isDisabled: false,
+      createdAt: '2022-12-31T00:00:00.000Z',
+      updatedAt: '2022-12-31T00:00:00.000Z',
+    },
+    {
+      id: 'cat2',
+      name: 'Category 2',
       organizationId: 'org1',
       creatorId: 'user2',
       isDisabled: false,
@@ -155,10 +175,146 @@ const sampleMembersData = {
   ],
 };
 
-// Compute today's date as formatted by the component.
-// In create mode, since actionItem is null, initializeFormState uses new Date().
-// We capture that value here so our mock matches.
+// Create completed action item with initial postCompletionNotes
+const completedActionItem = {
+  ...sampleActionItem,
+  isCompleted: true,
+  postCompletionNotes: 'Initial completion notes',
+};
+
+// Mock for post completion notes update
+const updateNotesMock = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+        postCompletionNotes: 'Updated completion notes',
+        isCompleted: true,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateActionItem: {
+        id: '1',
+        isCompleted: true,
+        preCompletionNotes: 'Initial notes',
+        postCompletionNotes: 'Updated completion notes',
+        categoryId: 'cat1',
+        assigneeId: 'user1',
+        updaterId: 'user2',
+      },
+    },
+  },
+};
+
+const mocks2 = [
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY_LIST,
+      variables: { organizationId: 'org1', where: { is_disabled: false } },
+    },
+    result: { data: sampleCategoryData },
+  },
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY,
+      variables: { input: { organizationId: 'org1' } },
+    },
+    result: { data: sampleActionCategoryData },
+  },
+  {
+    request: {
+      query: USERS_BY_ORGANIZATION_ID,
+      variables: { organizationId: 'org1' },
+    },
+    result: { data: sampleUsersData },
+  },
+  {
+    request: {
+      query: EVENT_VOLUNTEER_LIST,
+      variables: { where: { eventId: 'event1', hasAccepted: true } },
+    },
+    result: { data: sampleVolunteersData },
+  },
+  {
+    request: {
+      query: MEMBERS_LIST,
+      variables: { id: 'org1' },
+    },
+    result: { data: sampleMembersData },
+  },
+  updateNotesMock,
+];
+
 const today = dayjs(new Date()).format('YYYY-MM-DD');
+
+// Mock for category selection update
+const updateCategoryMock = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+        categoryId: 'cat2',
+        isCompleted: false,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateActionItem: {
+        id: '1',
+        isCompleted: false,
+        preCompletionNotes: 'Initial notes',
+        postCompletionNotes: null,
+        categoryId: 'cat2',
+        assigneeId: 'user1',
+        updaterId: 'user2',
+      },
+    },
+  },
+};
+
+const mocks4 = [
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY_LIST,
+      variables: { organizationId: 'org1', where: { is_disabled: false } },
+    },
+    result: { data: sampleCategoryData },
+  },
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY,
+      variables: { input: { organizationId: 'org1' } },
+    },
+    result: { data: sampleActionCategoryData },
+  },
+  {
+    request: {
+      query: USERS_BY_ORGANIZATION_ID,
+      variables: { organizationId: 'org1' },
+    },
+    result: { data: sampleUsersData },
+  },
+  {
+    request: {
+      query: EVENT_VOLUNTEER_LIST,
+      variables: { where: { eventId: 'event1', hasAccepted: true } },
+    },
+    result: { data: sampleVolunteersData },
+  },
+  {
+    request: {
+      query: MEMBERS_LIST,
+      variables: { id: 'org1' },
+    },
+    result: { data: sampleMembersData },
+  },
+  updateCategoryMock,
+];
 
 // --- GraphQL mocks ---
 const mocks: MockedResponse[] = [
@@ -536,5 +692,188 @@ describe('ItemModal Component', () => {
     await waitFor(() =>
       expect(screen.getByTestId('submitBtn')).toBeInTheDocument(),
     );
+  });
+
+  it('returns events correctly when eventsData is provided', async () => {
+    const sampleEventsData = {
+      eventsByOrganizationId: [
+        { id: 'evt1', name: 'Event One' },
+        { id: 'evt2', name: 'Event Two' },
+      ],
+    };
+
+    const eventsMock: MockedResponse = {
+      request: {
+        query: POSTGRES_EVENTS_BY_ORGANIZATION_ID,
+        variables: { input: { organizationId: 'org1' } },
+      },
+      result: { data: sampleEventsData },
+    };
+
+    render(
+      <MockedProvider mocks={[...mocks, eventsMock]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="evt1"
+            actionItem={sampleActionItem}
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const eventSelect = screen.getByTestId('eventSelect');
+      const eventInput = eventSelect.querySelector('input');
+      expect(eventInput?.value).toBe('Event One');
+    });
+  });
+});
+
+describe('ItemModal Update Category Tests', () => {
+  beforeEach(() => {
+    hideMock = vi.fn();
+    refetchMock = vi.fn();
+    toast.success = vi.fn();
+    toast.warning = vi.fn();
+    toast.error = vi.fn();
+  });
+
+  it('should update categoryId when a different category is selected', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider mocks={mocks4} addTypename={false}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={hideMock}
+              orgId="org1"
+              eventId="event1"
+              actionItem={sampleActionItem}
+              editMode={true}
+              actionItemsRefetch={refetchMock}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+    });
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
+    });
+
+    // Open the category dropdown
+    const categorySelect = screen.getByTestId('categorySelect');
+    const autocomplete = categorySelect.querySelector('input');
+    if (!autocomplete) {
+      throw new Error('Autocomplete input not found in categorySelect');
+    }
+
+    // Click to open dropdown
+    await act(async () => {
+      fireEvent.mouseDown(autocomplete);
+    });
+
+    // Wait for the dropdown options to appear
+    await waitFor(() => {
+      const options = screen.getAllByRole('option');
+      expect(options.length).toBeGreaterThan(0);
+
+      // Find and click on "Category 2"
+      const category2Option = options.find(
+        (option) => option.textContent?.trim() === 'Category 2',
+      );
+      if (!category2Option) {
+        throw new Error('Category 2 option not found');
+      }
+      fireEvent.click(category2Option);
+    });
+
+    // Submit the form
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('submitBtn'));
+    });
+  });
+
+  it('should update postCompletionNotes when changed for a completed action item', async () => {
+    // Render with edit mode true and completed action item
+    await act(async () => {
+      render(
+        <MockedProvider mocks={mocks2} addTypename={false}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={hideMock}
+              orgId="org1"
+              eventId="event1"
+              actionItem={completedActionItem}
+              editMode={true}
+              actionItemsRefetch={refetchMock}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+    });
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByLabelText('postCompletionNotes')).toBeInTheDocument();
+    });
+
+    // Update the post completion notes
+    const postCompletionField = screen.getByLabelText('postCompletionNotes');
+    await act(async () => {
+      fireEvent.change(postCompletionField, {
+        target: { value: 'Updated completion notes' },
+      });
+    });
+
+    // Submit the form
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('submitBtn'));
+    });
+
+    // Verify update was called and succeeded
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+      expect(hideMock).toHaveBeenCalled();
+      expect(refetchMock).toHaveBeenCalled();
+    });
+  });
+
+  it('should properly match assignee options by id in the Autocomplete', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={hideMock}
+              orgId="org1"
+              eventId="event1"
+              actionItem={sampleActionItem}
+              editMode={true}
+              actionItemsRefetch={refetchMock}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('memberSelect')).toBeInTheDocument();
+    });
+
+    const memberSelect = screen.getByTestId('memberSelect');
+    // Assert that the input is not null by casting it.
+    const autocompleteInput = memberSelect.querySelector(
+      'input',
+    ) as HTMLInputElement;
+    expect(autocompleteInput.value).toBe('User One');
   });
 });

@@ -268,7 +268,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           input: {
             id: actionItem?.id,
             ...updatedFields,
-            // Toggle the status:
             isCompleted: actionItem?.isCompleted,
           },
         },
