@@ -1,15 +1,15 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import AgendaCategoryPreviewModal from './AgendaCategoryPreviewModal';
+import { vi } from 'vitest';
 
 // Mock translation function
 const mockT = (key: string): string => key;
 
 describe('AgendaCategoryPreviewModal Component', () => {
-  const mockOnClose = jest.fn();
-  const mockShowUpdateModal = jest.fn();
-  const mockToggleDeleteModal = jest.fn();
+  const mockOnClose = vi.fn();
+  const mockShowUpdateModal = vi.fn();
+  const mockToggleDeleteModal = vi.fn();
   const mockCategory = {
     name: 'Meeting',
     description: 'Team discussion',
@@ -17,7 +17,7 @@ describe('AgendaCategoryPreviewModal Component', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders modal when isOpen is true', () => {
