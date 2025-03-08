@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
 :root {
   /* Root variables remain the same */
@@ -35,10 +35,10 @@
   --ifm-breadcrumb-color-active: var(--primary-neutral-600);
   --ifm-table-stripe-background: #efeff2;
   --ifm-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
-    Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --ifm-font-family-monospace: "IBM Plex Mono", SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+    Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-monospace: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
   --ifm-heading-color: #353232;
   --ifm-color-gray-100: #e3e3e6;
   --ifm-color-gray-200: #c9c9cc;
@@ -76,7 +76,7 @@
   --icon-youtube-height: 30px;
 }
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --ifm-background-color: #111927;
   --ifm-background-surface-color: var(--ifm-background-color);
   --ifm-menu-color: var(--neutral-mid-400);
@@ -286,33 +286,33 @@ html[data-theme="dark"] {
 }
 
 .header-github-link:before {
-  content: "";
+  content: '';
   width: var(--icon-github-width);
   height: var(--icon-github-height);
   display: flex;
-  background: url("/img/icons/github-dark.svg") no-repeat;
+  background: url('/img/icons/github-dark.svg') no-repeat;
   position: relative;
   right: 8px;
   top: 1.5px;
 }
 
 .header-twitter-link:before {
-  content: "";
+  content: '';
   width: var(--icon-twitter-width);
   height: var(--icon-twitter-height);
   display: flex;
-  background: url("/img/icons/twitter.svg") no-repeat 90% 100%;
+  background: url('/img/icons/twitter.svg') no-repeat 90% 100%;
   position: relative;
   right: 6px;
   top: 2px;
 }
 
 .header-youtube-link:before {
-  content: "";
+  content: '';
   width: var(--icon-youtube-width);
   height: var(--icon-youtube-height);
   display: flex;
-  background: url("/img/icons/youtube.svg") no-repeat;
+  background: url('/img/icons/youtube.svg') no-repeat;
   position: relative;
   right: 8px;
   top: 4.5px;
@@ -338,7 +338,7 @@ a:hover {
   color: #86a7ef;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --ifm-color-primary: #1e56e3;
   --ifm-color-primary-light: #29d5b0;
   --ifm-color-primary-lighter: #32d8b4;
@@ -346,11 +346,11 @@ a:hover {
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-[data-theme="dark"] .themedComponent--light_NVdE {
+[data-theme='dark'] .themedComponent--light_NVdE {
   display: initial;
 }
 
-[data-theme="dark"] .navbar {
+[data-theme='dark'] .navbar {
   border-bottom: 1px solid #2d3956;
 }
 
@@ -533,7 +533,7 @@ h1 {
 }
 
 .footer__icon:before {
-  content: "";
+  content: '';
   display: inline-flex;
   height: 16px;
   width: 16px;
@@ -594,11 +594,11 @@ h1 {
   mask-size: cover;
 }
 
-html[data-theme="dark"] .header-github-link:before {
+html[data-theme='dark'] .header-github-link:before {
   background: url(/img/github.svg) no-repeat;
 }
 
-html[data-theme="dark"] .header-youtube-link:before {
+html[data-theme='dark'] .header-youtube-link:before {
   background: url(/img/youtube-white.svg) no-repeat;
 }
 
