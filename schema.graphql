@@ -64,15 +64,16 @@ type Advertisement {
   updatedAt: DateTime!
 }
 
-enum AdvertisementType {
-  BANNER
-  MENU
-  POPUP
-}
-
 type AdvertisementEdge {
   cursor: String
   node: Advertisement
+}
+
+type DefaultConnectionPageInfo implements ConnectionPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
 }
 
 type AdvertisementsConnection {
@@ -171,7 +172,7 @@ type Community {
 
 union ConnectionError = InvalidCursor | MaximumValueError
 
-type ConnectionPageInfo {
+interface ConnectionPageInfo {
   endCursor: String
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -240,32 +241,7 @@ input DonationWhereInput {
   name_of_user_starts_with: String
 }
 
-enum EducationGrade {
-  GRADE_1
-  GRADE_2
-  GRADE_3
-  GRADE_4
-  GRADE_5
-  GRADE_6
-  GRADE_7
-  GRADE_8
-  GRADE_9
-  GRADE_10
-  GRADE_11
-  GRADE_12
-  GRADUATE
-  KG
-  NO_GRADE
-  PRE_KG
-}
-
 scalar EmailAddress
-
-enum EmploymentStatus {
-  FULL_TIME
-  PART_TIME
-  UNEMPLOYED
-}
 
 interface Error {
   message: String!
@@ -434,12 +410,6 @@ enum Frequency {
   YEARLY
 }
 
-enum Gender {
-  FEMALE
-  MALE
-  OTHER
-}
-
 type Group {
   _id: ID!
   admins: [User!]!
@@ -447,6 +417,31 @@ type Group {
   description: String
   organization: Organization!
   title: String!
+  updatedAt: DateTime!
+}
+
+type SocialMediaUrls {
+  X: String
+  facebook: String
+  gitHub: String
+  instagram: String
+  linkedIn: String
+  reddit: String
+  slack: String
+  youTube: String
+}
+
+type FundraisingCampaign {
+  _id: ID!
+  createdAt: DateTime!
+  currency: Currency!
+  endDate: Date!
+  fundId: Fund!
+  fundingGoal: Float!
+  name: String!
+  organizationId: Organization!
+  pledges: [FundraisingCampaignPledge]
+  startDate: Date!
   updatedAt: DateTime!
 }
 
@@ -486,15 +481,6 @@ input LoginInput {
 }
 
 scalar Longitude
-
-enum MaritalStatus {
-  DIVORCED
-  ENGAGED
-  MARRIED
-  SEPERATED
-  SINGLE
-  WIDOWED
-}
 
 type Chat {
   _id: ID!
@@ -554,6 +540,172 @@ enum AdvertisementType {
   BANNER
   MENU
   POPUP
+}
+
+enum Currency {
+  AED
+  AFN
+  ALL
+  AMD
+  ANG
+  AOA
+  ARS
+  AUD
+  AWG
+  AZN
+  BAM
+  BBD
+  BDT
+  BGN
+  BHD
+  BIF
+  BMD
+  BND
+  BOB
+  BRL
+  BSD
+  BTN
+  BWP
+  BYN
+  BZD
+  CAD
+  CDF
+  CHF
+  CLP
+  CNY
+  COP
+  CRC
+  CUP
+  CVE
+  CZK
+  DJF
+  DKK
+  DOP
+  DZD
+  EGP
+  ERN
+  ETB
+  EUR
+  FJD
+  FKP
+  FOK
+  FRO
+  GBP
+  GEL
+  GGP
+  GHS
+  GIP
+  GMD
+  GNF
+  GTQ
+  GYD
+  HKD
+  HNL
+  HRK
+  HTG
+  HUF
+  IDR
+  ILS
+  IMP
+  INR
+  IQD
+  IRR
+  ISK
+  JEP
+  JMD
+  JOD
+  JPY
+  KES
+  KGS
+  KHR
+  KID
+  KMF
+  KRW
+  KWD
+  KYD
+  KZT
+  LAK
+  LBP
+  LKR
+  LRD
+  LSL
+  LYD
+  MAD
+  MDL
+  MGA
+  MKD
+  MMK
+  MNT
+  MOP
+  MRU
+  MUR
+  MVR
+  MWK
+  MXN
+  MYR
+  MZN
+  NAD
+  NGN
+  NIO
+  NOK
+  NPR
+  NZD
+  OMR
+  PAB
+  PEN
+  PGK
+  PHP
+  PKR
+  PLN
+  PYG
+  QAR
+  RON
+  RSD
+  RUB
+  RWF
+  SAR
+  SBD
+  SCR
+  SDG
+  SEK
+  SGD
+  SHP
+  SLL
+  SOS
+  SPL
+  SRD
+  STN
+  SVC
+  SYP
+  SZL
+  THB
+  TJS
+  TMT
+  TND
+  TOP
+  TRY
+  TTD
+  TVD
+  TWD
+  TZS
+  UAH
+  UGX
+  USD
+  UYU
+  UZS
+  VEF
+  VND
+  VUV
+  WST
+  XAF
+  XCD
+  XDR
+  XOF
+  XPF
+  YER
+  ZAR
+  ZMW
+  ZWD
 }
 
 input CreateAdvertisementInput {
@@ -759,13 +911,6 @@ type Organization {
   ): UserTagsConnection
   visibleInSearch: Boolean!
   venues: [Venue]
-}
-
-type OrganizationCustomField {
-  _id: ID!
-  name: String!
-  organizationId: String!
-  type: String!
 }
 
 type OrganizationCustomField {
@@ -1165,17 +1310,6 @@ input UpdateOrganizationInput {
   visibleInSearch: Boolean
 }
 
-input AddressInput {
-  city: String
-  countryCode: String
-  dependentLocality: String
-  line1: String
-  line2: String
-  postalCode: String
-  sortingCode: String
-  state: String
-}
-
 enum EducationGrade {
   GRADE_1
   GRADE_2
@@ -1277,6 +1411,16 @@ type User {
   updatedAt: DateTime!
 }
 
+type FundraisingCampaignPledge {
+  _id: ID!
+  amount: Float!
+  campaign: FundraisingCampaign!
+  currency: Currency!
+  endDate: Date
+  startDate: Date
+  users: [User]!
+}
+
 type Fund {
   _id: ID!
   campaigns: [FundraisingCampaign!]
@@ -1298,12 +1442,6 @@ input FundWhereInput {
 input UserAndOrganizationInput {
   organizationId: ID!
   userId: ID!
-}
-
-type UserPhone {
-  home: PhoneNumber
-  mobile: PhoneNumber
-  work: PhoneNumber
 }
 
 type UserConnection {
