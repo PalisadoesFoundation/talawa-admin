@@ -2,8 +2,11 @@ import js from "@eslint/js";
 import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import react from "eslint-plugin-react";
-import prettier from "eslint-config-prettier";
+import prettier from "eslint-plugin-prettier";  // Import naming changed for clarity
 import vitest from "eslint-plugin-vitest";
+import tsdoc from "eslint-plugin-tsdoc";
+import graphql from "@graphql-eslint/eslint-plugin";
+import imports from "eslint-plugin-import";
 
 export default [
   {
@@ -19,14 +22,13 @@ export default [
       "src/components/CheckIn/tagTemplate.ts",
       "docs/**",
       "*.md",
-      "docker/docker-compose.prod.yaml",
-      "docker/docker-compose.dev.yaml",
-      "docker/docker-compose.deploy.yaml",
-      "docker/Dockerfile.prod",
-      "docker/Dockerfile.dev",
-      "docker/Dockerfile.deploy",
-      "config/docker/setup/nginx.conf",
-      "config/docker/setup/nginx.prod.conf"
+      "docker/**",
+      "config/docker/setup/nginx*.conf",
+      "**/*.css",
+      "**/*.scss",
+      "**/*.less",
+      "**/*.json",
+      "**/*.svg"
     ],
   },
   {
@@ -50,6 +52,10 @@ export default [
       react,
       "@typescript-eslint": ts,
       vitest,
+      tsdoc,
+      "@graphql-eslint": graphql,
+      import: imports,
+      prettier,
     },
     settings: {
       react: {
@@ -59,7 +65,31 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
-      ...prettier.rules,
+      "react/destructuring-assignment": "error",
+      "react/no-multi-comp": ["error", { ignoreStateless: false }],
+      "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
+      "import/no-duplicates": "error",
+      "tsdoc/syntax": "error",
+      "@typescript-eslint/ban-ts-comment": "error",
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-non-null-assertion": "error",
+      "@typescript-eslint/consistent-type-assertions": "error",
+      "@typescript-eslint/naming-convention": [
+        "error",
+        { selector: "interface", format: ["PascalCase"], prefix: ["I"] },
+        { selector: ["typeAlias", "typeLike", "enum"], format: ["PascalCase"] },
+        { selector: "typeParameter", format: ["PascalCase"], prefix: ["T"] },
+        { selector: "variable", format: ["camelCase", "UPPER_CASE", "PascalCase"], leadingUnderscore: "allow" },
+        { selector: "parameter", format: ["camelCase"], leadingUnderscore: "allow" },
+        { selector: "function", format: ["camelCase", "PascalCase"] },
+        { selector: "memberLike", modifiers: ["private"], format: ["camelCase"], leadingUnderscore: "require" },
+        { selector: "variable", modifiers: ["exported"], format: null },
+      ],
+      "react/jsx-pascal-case": ["error", { allowAllCaps: false, allowNamespace: false }],
+      "react/no-this-in-sfc": "error",
+      "react/no-unstable-nested-components": ["error", { allowAsProps: true }],
+      "prettier/prettier": "error",  // This rule should now work correctly
       "vitest/no-disabled-tests": "warn",
       "vitest/no-focused-tests": "error",
       "vitest/no-identical-title": "error",
@@ -76,6 +106,24 @@ export default [
         beforeEach: "readonly",
         afterEach: "readonly",
       },
+    },
+  },
+  {
+    files: ["*.graphql"],
+    languageOptions: {
+      parser: graphql.parser,
+    },
+    plugins: {
+      "@graphql-eslint": graphql,
+      prettier,
+    },
+    rules: {
+      "@typescript-eslint/consistent-type-imports": "off",
+      "@typescript-eslint/naming-convention": "off",
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@graphql-eslint/known-type-names": "error",
+      "@graphql-eslint/no-unreachable-types": "off",
+      "prettier/prettier": ["error", { endOfLine: "auto" }],
     },
   },
 ];
