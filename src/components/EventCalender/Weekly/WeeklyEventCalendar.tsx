@@ -34,7 +34,6 @@ import { type User } from 'types/User/type';
  * For more details on the reusable classes, refer to the global CSS file.
  */
 
-
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
