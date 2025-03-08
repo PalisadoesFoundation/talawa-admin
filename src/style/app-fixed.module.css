@@ -7528,7 +7528,7 @@ form {
   background-color: var(--blue-dark);
 }
 
-.editButton {
+.weeklyEditButton {
   background-color: var(--light-green);
   color: white;
   border: none;
@@ -7537,7 +7537,7 @@ form {
   cursor: pointer;
 }
 
-.editButton:hover {
+.weeklyEditButton:hover {
   background-color: var(--green-dark);
 }
 
