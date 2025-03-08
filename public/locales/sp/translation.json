@@ -882,18 +882,6 @@
     "successfulUpdated": "Exitoso actualizado",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
-  "addOnStore": {
-    "title": "Tienda de complementos",
-    "searchName": "Ej: Donaciones",
-    "search": "Buscar",
-    "enable": "Activada",
-    "disable": "Desactivada",
-    "pHeading": "Complementos",
-    "install": "Instalada",
-    "available": "Disponible",
-    "pMessage": "El complemento no existe",
-    "filter": "filtros"
-  },
   "memberDetail": {
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",

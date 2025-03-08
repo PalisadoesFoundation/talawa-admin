@@ -881,18 +881,6 @@
     "cancel": "取消",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
-  "addOnStore": {
-    "title": "添加商店",
-    "searchName": "例如：捐款",
-    "search": "搜索",
-    "enable": "启用",
-    "disable": "残疾人",
-    "pHeading": "插件",
-    "install": "已安装",
-    "available": "可用的",
-    "pMessage": "插件不存在",
-    "filter": "筛选"
-  },
   "memberDetail": {
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
