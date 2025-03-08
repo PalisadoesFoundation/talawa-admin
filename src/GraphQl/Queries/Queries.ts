@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import '../../style/app.module.css';
 //Query List
-// Check Auth
+// Check Auth 
 
 // Query to get info about current user
 export const CURRENT_USER = gql`
