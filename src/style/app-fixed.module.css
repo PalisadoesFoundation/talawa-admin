@@ -7491,7 +7491,6 @@ form {
 }
 /* WeeklyEventCalendar.css */
 
-
 .weeklyEventCalendar {
   background-color: var(--primary-bg-color);
   box-sizing: border-box;
@@ -7499,7 +7498,6 @@ form {
   border-radius: 8px;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
-
 
 .weeklyEventCalendarHeader {
   display: flex;
@@ -7513,7 +7511,6 @@ form {
   font-size: 1.5rem;
   color: var(--grey-dark);
 }
-
 
 .buttonEventCalendar {
   background-color: var(--blue-primary);
@@ -7541,7 +7538,6 @@ form {
   background-color: var(--green-dark);
 }
 
-
 .calendar__weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -7556,7 +7552,6 @@ form {
   text-align: center;
   font-weight: bold;
 }
-
 
 .calendar__days {
   display: grid;
@@ -7582,7 +7577,6 @@ form {
   font-weight: bold;
   margin-bottom: 10px;
 }
-
 
 .event_list {
   display: flex;
@@ -7619,7 +7613,6 @@ form {
   text-decoration: underline;
 }
 
-
 .day__selected {
   background-color: var(--blue-primary);
   color: var(--grey-dark);
@@ -7631,7 +7624,6 @@ form {
   text-decoration: underline;
   color: var(--light-green);
 }
-
 
 @media only screen and (max-width: var(--breakpoint-tablet)) {
   .event_list {
