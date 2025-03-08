@@ -215,8 +215,8 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
   return (
     <>
-      <div id="orgupdate" className={styles.orgCardSettings}>
-        <form>
+      <div id="orgupdate"  >
+        <form className={styles.ss}>
           <Form.Label className={styles.orgUpdateFormLables}>
             {tCommon('name')}
           </Form.Label>

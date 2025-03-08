@@ -686,6 +686,8 @@
   --settings-active-button-bg: #eaebef;
   --settings-active-button-border: #555555;
   --settings-active-button-color: #555555;
+
+  --bg-header: #FFFFFF;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -4193,7 +4195,8 @@ form {
 /* -- OrgUpdate.tsx -- */
 
 .orgCardSettings {
-  width: 558px;
+  margin-top: 580px;
+  width: 95% !important;
   margin: 0 !important;
 }
 
@@ -5805,9 +5808,9 @@ form {
 
 .cardBody {
   padding: 1rem;
-  height: 8rem;
   display: flex;
-  width: 600px;
+  width: 100% !important;
+  justify-content: center;
   align-items: center;
 }
 
@@ -6154,9 +6157,9 @@ form {
   border: 1px solid var(--settings-header-button-border);
   border-radius: 8px;
   height: auto;
-  width: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   color: var(--settings-header-button-color) !important;
 }
 
@@ -6166,8 +6169,8 @@ form {
   border-radius: 8px;
   height: auto;
   width: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   color: var(--settings-header-button-color) !important;
 }
 
@@ -6187,6 +6190,9 @@ form {
 .settingsTabs {
   display: flex;
   gap: 0.75rem;
+  background-color: var(--bg-header) !important;
+  padding: 20px 30px;
+  border-radius: 1rem;
 }
 
 .headerBtn:hover {

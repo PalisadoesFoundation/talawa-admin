@@ -34,7 +34,9 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
             <h5 className="mb-0 fw-semibold">{t('Edit Organization')}</h5>
           </Card.Header>
           <Card.Body className={styles.cardBody}>
-            <OrgUpdate orgId={orgId} />
+            <div className={styles.orgCardSettings}>
+              <OrgUpdate orgId={orgId} />
+            </div>
           </Card.Body>
         </Card>
       </Col>

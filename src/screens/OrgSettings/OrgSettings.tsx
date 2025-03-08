@@ -42,7 +42,7 @@ function OrgSettings(): JSX.Element {
 
   return (
     <div className="d-flex flex-column">
-      <Row className="mx-3 mt-3">
+      <Row className="mx-1 mt-3">
         <Col>
           <div className={styles.settingsTabs}>
             {settingtabs.map((setting, index) => (
@@ -57,10 +57,6 @@ function OrgSettings(): JSX.Element {
             ))}
           </div>
         </Col>
-
-        <Row className="mt-3">
-          <hr />
-        </Row>
       </Row>
 
       {(() => {
