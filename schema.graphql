@@ -40,17 +40,6 @@ type Address {
   state: String
 }
 
-input AddressInput {
-  city: String
-  countryCode: String
-  dependentLocality: String
-  line1: String
-  line2: String
-  postalCode: String
-  sortingCode: String
-  state: String
-}
-
 type Advertisement {
   _id: ID!
   createdAt: DateTime!
@@ -101,8 +90,6 @@ type AggregateUser {
 }
 
 scalar Any
-
-scalar Iso639Set1LanguageCode
 
 type AppUserProfile {
   _id: ID!
@@ -265,32 +252,7 @@ input DonationWhereInput {
   name_of_user_starts_with: String
 }
 
-enum UserEducationGrade {
-  grade_1
-  grade_2
-  grade_3
-  grade_4
-  grade_5
-  grade_6
-  grade_7
-  grade_8
-  grade_9
-  grade_10
-  grade_11
-  grade_12
-  graduate
-  kg
-  no_grade
-  pre_kg
-}
-
 scalar EmailAddress
-
-enum UserEmploymentStatus {
-  full_time
-  part_time
-  unemployed
-}
 
 interface Error {
   message: String!
@@ -457,12 +419,6 @@ enum Frequency {
   MONTHLY
   WEEKLY
   YEARLY
-}
-
-enum Gender {
-  FEMALE
-  MALE
-  OTHER
 }
 
 enum Iso4217CurrencyCode {
@@ -692,15 +648,6 @@ input LoginInput {
 }
 
 scalar Longitude
-
-enum UserMaritalStatus {
-  divorced
-  engaged
-  married
-  seperated
-  single
-  widowed
-}
 
 type Chat {
   _id: ID!
@@ -1321,16 +1268,6 @@ type VenuePg {
   ): VenueEventsConnectionPg
 }
 
-type VenueEventsConnectionPg {
-  edges: [VenueEventsConnectionEdgePg!]!
-  pageInfo: PageInfoPg!
-}
-
-type VenueEventsConnectionEdgePg {
-  node: EventPg!
-  cursor: String!
-}
-
 type OrganizationFundsConnectionPg {
   edges: [OrganizationFundsConnectionEdgePg]
   pageInfo: PageInfoPg!
@@ -1508,11 +1445,6 @@ type CommentDownVotersConnectionEdgePg {
   node: UserPg
 }
 
-type CommentUpVotersConnectionPg {
-  cursor: String!
-  node: UserPg
-}
-
 type PostUpVotersConnectionPg {
   edges: [PostUpVotersConnectionEdgePg]
   pageInfo: PageInfoPg!
@@ -1533,27 +1465,12 @@ type PostDownVotersConnectionEdgePg {
   node: UserPg
 }
 
-type PostDownVotersConnectionPg {
-  cursor: String!
-  node: UserPg
-}
-
 type CommentUpVotersConnectionPg {
   edges: [CommentUpVotersConnectionEdgePg]
   pageInfo: PageInfoPg!
 }
 
 type CommentUpVotersConnectionEdgePg {
-  cursor: String!
-  node: UserPg
-}
-
-type CommentDownVotersConnectionPg {
-  edges: [CommentDownVotersConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type CommentDownVotersConnectionEdgePg {
   cursor: String!
   node: UserPg
 }
@@ -1686,24 +1603,6 @@ type VenueEventsConnectionPg {
 type VenueEventsConnectionEdgePg {
   cursor: String!
   node: EventPg
-}
-
-type VenuePg {
-  id: ID!
-  name: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  creator: UserPg
-  updater: UserPg
-  description: String
-  organization: OrganizationPg
-  attachments: [VenueAttachmentPg!]
-  events(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): VenueEventsConnectionPg
 }
 
 type OrganizationCustomField {
@@ -2185,15 +2084,6 @@ enum Gender {
   FEMALE
   MALE
   OTHER
-}
-
-enum UserMaritalStatus {
-  divorced
-  engaged
-  married
-  seperated
-  single
-  widowed
 }
 
 input MutationUpdateUserInput {
@@ -2842,12 +2732,6 @@ input FundWhereInput {
 input UserAndOrganizationInput {
   organizationId: ID!
   userId: ID!
-}
-
-type UserPhone {
-  home: PhoneNumber
-  mobile: PhoneNumber
-  work: PhoneNumber
 }
 
 type UserConnection {
