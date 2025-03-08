@@ -121,8 +121,6 @@
     "Contributions": "Contribuciones",
     "Posts": "Publicaciones",
     "Block/Unblock": "Bloquear/Desbloquear",
-    "Plugins": "Complementos",
-    "Plugin Store": "Tienda de complementos",
     "allOrganizations": "Todas las organizaciones",
     "yourOrganization": "Tu organización",
     "notification": "Notificación",
@@ -884,37 +882,6 @@
     "successfulUpdated": "Exitoso actualizado",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
-  "addOnRegister": {
-    "addNew": "Agregar nueva",
-    "addPlugin": "Agregar complemento",
-    "pluginName": "Nombre del complemento",
-    "creatorName": "Nombre del creadora",
-    "pluginDesc": "Descripción del complemento",
-    "close": "Cerca",
-    "register": "Registro",
-    "pName": "Ej: Donaciones",
-    "cName": "Ej: John Doe",
-    "pDesc": "Este complemento habilita la interfaz de usuario para"
-  },
-  "addOnStore": {
-    "title": "Tienda de complementos",
-    "searchName": "Ej: Donaciones",
-    "search": "Buscar",
-    "enable": "Activada",
-    "disable": "Desactivada",
-    "pHeading": "Complementos",
-    "install": "Instalada",
-    "available": "Disponible",
-    "pMessage": "El complemento no existe",
-    "filter": "filtros"
-  },
-  "addOnEntry": {
-    "enable": "Activada",
-    "install": "Instalar",
-    "uninstall": "Desinstalar",
-    "uninstallMsg": "Mensaje de desinstalación",
-    "installMsg": "Mensaje de instalación"
-  },
   "memberDetail": {
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
@@ -949,7 +916,6 @@
     "appLanguageCode": "Elegir Idioma",
     "delete": "Eliminar Usuario",
     "saveChanges": "Guardar Cambios",
-    "pluginCreationAllowed": "Permitir creación de complementos",
     "joined": "Unido",
     "created": "Creado",
     "adminForOrganizations": "Administrador de organizaciones",

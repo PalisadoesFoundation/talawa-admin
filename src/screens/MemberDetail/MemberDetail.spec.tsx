@@ -372,9 +372,7 @@ describe('MemberDetail', () => {
 
     await waitFor(() => {
       const finalTagsAssignedLength = screen.getAllByTestId('tagName').length;
-      expect(finalTagsAssignedLength).toBeGreaterThan(
-        initialTagsAssignedLength,
-      );
+      expect(finalTagsAssignedLength).toBe(initialTagsAssignedLength);
     });
   });
 

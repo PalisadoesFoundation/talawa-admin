@@ -6,7 +6,7 @@
 
 > `const` **MOCKS3**: `object`[]
 
-Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:437](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L437)
+Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:434](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L434)
 
 ## Type declaration
 
@@ -81,10 +81,6 @@ Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:437](https://github.c
 #### result.data.user.appUserProfile.isSuperAdmin
 
 > **isSuperAdmin**: `boolean` = `true`
-
-#### result.data.user.appUserProfile.pluginCreationAllowed
-
-> **pluginCreationAllowed**: `boolean` = `true`
 
 #### result.data.user.user
 

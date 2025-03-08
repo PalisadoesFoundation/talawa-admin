@@ -64,15 +64,16 @@ type Advertisement {
   updatedAt: DateTime!
 }
 
-enum AdvertisementType {
-  BANNER
-  MENU
-  POPUP
-}
-
 type AdvertisementEdge {
   cursor: String
   node: Advertisement
+}
+
+type DefaultConnectionPageInfo implements ConnectionPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
 }
 
 type AdvertisementsConnection {
@@ -110,7 +111,6 @@ type AppUserProfile {
   createdOrganizations: [Organization]
   eventAdmin: [Event]
   isSuperAdmin: Boolean!
-  pluginCreationAllowed: Boolean!
   userId: User!
 }
 
@@ -172,7 +172,7 @@ type Community {
 
 union ConnectionError = InvalidCursor | MaximumValueError
 
-type ConnectionPageInfo {
+interface ConnectionPageInfo {
   endCursor: String
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -241,32 +241,7 @@ input DonationWhereInput {
   name_of_user_starts_with: String
 }
 
-enum EducationGrade {
-  GRADE_1
-  GRADE_2
-  GRADE_3
-  GRADE_4
-  GRADE_5
-  GRADE_6
-  GRADE_7
-  GRADE_8
-  GRADE_9
-  GRADE_10
-  GRADE_11
-  GRADE_12
-  GRADUATE
-  KG
-  NO_GRADE
-  PRE_KG
-}
-
 scalar EmailAddress
-
-enum EmploymentStatus {
-  FULL_TIME
-  PART_TIME
-  UNEMPLOYED
-}
 
 interface Error {
   message: String!
@@ -435,12 +410,6 @@ enum Frequency {
   YEARLY
 }
 
-enum Gender {
-  FEMALE
-  MALE
-  OTHER
-}
-
 type Group {
   _id: ID!
   admins: [User!]!
@@ -448,6 +417,31 @@ type Group {
   description: String
   organization: Organization!
   title: String!
+  updatedAt: DateTime!
+}
+
+type SocialMediaUrls {
+  X: String
+  facebook: String
+  gitHub: String
+  instagram: String
+  linkedIn: String
+  reddit: String
+  slack: String
+  youTube: String
+}
+
+type FundraisingCampaign {
+  _id: ID!
+  createdAt: DateTime!
+  currency: Currency!
+  endDate: Date!
+  fundId: Fund!
+  fundingGoal: Float!
+  name: String!
+  organizationId: Organization!
+  pledges: [FundraisingCampaignPledge]
+  startDate: Date!
   updatedAt: DateTime!
 }
 
@@ -487,15 +481,6 @@ input LoginInput {
 }
 
 scalar Longitude
-
-enum MaritalStatus {
-  DIVORCED
-  ENGAGED
-  MARRIED
-  SEPERATED
-  SINGLE
-  WIDOWED
-}
 
 type Chat {
   _id: ID!
@@ -557,6 +542,172 @@ enum AdvertisementType {
   POPUP
 }
 
+enum Currency {
+  AED
+  AFN
+  ALL
+  AMD
+  ANG
+  AOA
+  ARS
+  AUD
+  AWG
+  AZN
+  BAM
+  BBD
+  BDT
+  BGN
+  BHD
+  BIF
+  BMD
+  BND
+  BOB
+  BRL
+  BSD
+  BTN
+  BWP
+  BYN
+  BZD
+  CAD
+  CDF
+  CHF
+  CLP
+  CNY
+  COP
+  CRC
+  CUP
+  CVE
+  CZK
+  DJF
+  DKK
+  DOP
+  DZD
+  EGP
+  ERN
+  ETB
+  EUR
+  FJD
+  FKP
+  FOK
+  FRO
+  GBP
+  GEL
+  GGP
+  GHS
+  GIP
+  GMD
+  GNF
+  GTQ
+  GYD
+  HKD
+  HNL
+  HRK
+  HTG
+  HUF
+  IDR
+  ILS
+  IMP
+  INR
+  IQD
+  IRR
+  ISK
+  JEP
+  JMD
+  JOD
+  JPY
+  KES
+  KGS
+  KHR
+  KID
+  KMF
+  KRW
+  KWD
+  KYD
+  KZT
+  LAK
+  LBP
+  LKR
+  LRD
+  LSL
+  LYD
+  MAD
+  MDL
+  MGA
+  MKD
+  MMK
+  MNT
+  MOP
+  MRU
+  MUR
+  MVR
+  MWK
+  MXN
+  MYR
+  MZN
+  NAD
+  NGN
+  NIO
+  NOK
+  NPR
+  NZD
+  OMR
+  PAB
+  PEN
+  PGK
+  PHP
+  PKR
+  PLN
+  PYG
+  QAR
+  RON
+  RSD
+  RUB
+  RWF
+  SAR
+  SBD
+  SCR
+  SDG
+  SEK
+  SGD
+  SHP
+  SLL
+  SOS
+  SPL
+  SRD
+  STN
+  SVC
+  SYP
+  SZL
+  THB
+  TJS
+  TMT
+  TND
+  TOP
+  TRY
+  TTD
+  TVD
+  TWD
+  TZS
+  UAH
+  UGX
+  USD
+  UYU
+  UZS
+  VEF
+  VND
+  VUV
+  WST
+  XAF
+  XCD
+  XDR
+  XOF
+  XPF
+  YER
+  ZAR
+  ZMW
+  ZWD
+}
+
 input CreateAdvertisementInput {
   endDate: Date!
   name: String!
@@ -598,10 +749,6 @@ type Mutation {
   addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
   adminRemoveEvent(eventId: ID!): Event!
   assignUserTag(input: ToggleUserTagAssignInput!): User
-  blockPluginCreationBySuperadmin(
-    blockUser: Boolean!
-    userId: ID!
-  ): AppUserProfile!
   blockUser(organizationId: ID!, userId: ID!): User!
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
@@ -641,12 +788,6 @@ type Mutation {
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
   createOrganization(data: OrganizationInput, file: String): Organization!
-  createPlugin(
-    pluginCreatedBy: String!
-    pluginDesc: String!
-    pluginName: String!
-    uninstalledOrgs: [ID!]
-  ): Plugin!
   createPost(data: PostInput!, file: String): Post
   createSampleOrganization: Boolean!
   createUserFamily(data: createUserFamilyInput!): UserFamily!
@@ -694,7 +835,12 @@ type Mutation {
   revokeRefreshTokenForUser: Boolean!
   saveFcmToken(token: String): Boolean!
   sendMembershipRequest(organizationId: ID!): MembershipRequest!
-  sendMessageToChat(chatId: ID!, messageContent: String!, type: String!, replyTo: ID): ChatMessage!
+  sendMessageToChat(
+    chatId: ID!
+    messageContent: String!
+    type: String!
+    replyTo: ID
+  ): ChatMessage!
   signUp(data: UserInput!, file: String): AuthData!
   togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
@@ -725,7 +871,6 @@ type Mutation {
     file: String
     id: ID!
   ): Organization!
-  updatePluginStatus(id: ID!, orgId: ID!): Plugin!
   updatePost(data: PostUpdateInput, id: ID!): Post!
   updateSessionTimeout(timeout: Int!): Boolean!
   updateUserPassword(data: UpdateUserPasswordInput!): UserData!
@@ -771,13 +916,6 @@ type Organization {
   ): UserTagsConnection
   visibleInSearch: Boolean!
   venues: [Venue]
-}
-
-type OrganizationCustomField {
-  _id: ID!
-  name: String!
-  organizationId: String!
-  type: String!
 }
 
 type OrganizationCustomField {
@@ -882,34 +1020,6 @@ enum PaginationDirection {
 
 scalar PhoneNumber
 
-type Plugin {
-  _id: ID!
-  pluginCreatedBy: String!
-  pluginDesc: String!
-  pluginName: String!
-  uninstalledOrgs: [ID!]
-}
-
-type PluginField {
-  createdAt: DateTime!
-  key: String!
-  status: Status!
-  value: String!
-}
-
-input PluginFieldInput {
-  key: String!
-  value: String!
-}
-
-input PluginInput {
-  fields: [PluginFieldInput]
-  orgId: ID!
-  pluginKey: String
-  pluginName: String!
-  pluginType: Type
-}
-
 scalar PositiveInt
 
 type Post {
@@ -1009,7 +1119,6 @@ type Query {
   actionItemCategory(id: ID!): ActionItemCategory
   actionItemsByEvent(eventId: ID!): [ActionItem]
   actionItemsByOrganization(organizationId: ID!): [ActionItem]
-  adminPlugin(orgId: ID!): [Plugin]
   agendaCategory(id: ID!): AgendaCategory!
   checkAuth: User!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
@@ -1026,7 +1135,12 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  advertisementsConnection(after: String, before: String, first: PositiveInt, last: PositiveInt): AdvertisementsConnection
+  advertisementsConnection(
+    after: String
+    before: String
+    first: PositiveInt
+    last: PositiveInt
+  ): AdvertisementsConnection
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(
@@ -1035,7 +1149,6 @@ type Query {
     skip: Int
     where: DonationWhereInput
   ): [Donation!]!
-  getPlugins: [Plugin]
   getlanguage(lang_code: String!): [Translation]
   hasSubmittedFeedback(eventId: ID!, userId: ID!): Boolean
   isSampleOrganization(id: ID!): Boolean!
@@ -1057,7 +1170,6 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): UserConnection!
-  plugin(orgId: ID!): [Plugin]
   getRecurringEvents(baseRecurringEventId: ID!): [Event]
   post(id: ID!): Post
   postsByOrganization(id: ID!, orderBy: PostOrderByInput): [Post]
@@ -1084,7 +1196,7 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): [UserData]!
-  venue(id:ID!):[Venue]
+  venue(id: ID!): [Venue]
 }
 
 input RecaptchaVerification {
@@ -1113,7 +1225,6 @@ enum Status {
 
 type Subscription {
   messageSentToChat(userId: ID!): ChatMessage
-  onPluginUpdate: Plugin
 }
 
 scalar Time
@@ -1209,17 +1320,6 @@ input UpdateOrganizationInput {
   visibleInSearch: Boolean
 }
 
-input AddressInput {
-  city: String
-  countryCode: String
-  dependentLocality: String
-  line1: String
-  line2: String
-  postalCode: String
-  sortingCode: String
-  state: String
-}
-
 enum EducationGrade {
   GRADE_1
   GRADE_2
@@ -1309,7 +1409,6 @@ type User {
   membershipRequests: [MembershipRequest]
   organizationsBlockedBy: [Organization]
   phone: UserPhone
-  pluginCreationAllowed: Boolean!
   registeredEvents: [Event]
   eventsAttended: [Event]
   tagsAssignedWith(
@@ -1320,6 +1419,16 @@ type User {
     organizationId: ID
   ): UserTagsConnection
   updatedAt: DateTime!
+}
+
+type FundraisingCampaignPledge {
+  _id: ID!
+  amount: Float!
+  campaign: FundraisingCampaign!
+  currency: Currency!
+  endDate: Date
+  startDate: Date
+  users: [User]!
 }
 
 type Fund {
@@ -1343,12 +1452,6 @@ input FundWhereInput {
 input UserAndOrganizationInput {
   organizationId: ID!
   userId: ID!
-}
-
-type UserPhone {
-  home: PhoneNumber
-  mobile: PhoneNumber
-  work: PhoneNumber
 }
 
 type UserConnection {
@@ -1388,7 +1491,7 @@ input UserInput {
   firstName: String!
   lastName: String!
   password: String!
-  selectedOrganization : ID!
+  selectedOrganization: ID!
 }
 
 enum UserOrderByInput {

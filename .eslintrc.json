@@ -4,7 +4,6 @@
     "node": true,
     "es6": true
   },
-
   "extends": [
     "plugin:react/recommended",
     "eslint:recommended",
@@ -26,14 +25,13 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-
   "plugins": [
     "react",
     "@typescript-eslint",
-    "jest",
     "import",
     "eslint-plugin-tsdoc",
-    "prettier"
+    "prettier",
+    "@graphql-eslint"
   ],
   "rules": {
     "react/destructuring-assignment": "error",
@@ -76,13 +74,11 @@
     "camelcase": "off",
     "@typescript-eslint/naming-convention": [
       "error",
-
       {
         "selector": "interface",
         "format": ["PascalCase"],
         "prefix": ["Interface", "TestInterface"]
       },
-
       {
         "selector": ["typeAlias", "typeLike", "enum"],
         "format": ["PascalCase"]
@@ -112,32 +108,36 @@
         "format": ["camelCase"],
         "leadingUnderscore": "require"
       },
-
       {
         "selector": "variable",
         "modifiers": ["exported"],
         "format": null
       }
     ],
-
     "react/jsx-pascal-case": [
       "error",
-      { "allowAllCaps": false, "allowNamespace": false }
+      {
+        "allowAllCaps": false,
+        "allowNamespace": false
+      }
     ],
-
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
-
     "jest/expect-expect": 0,
-
-    "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
+    "react/no-unstable-nested-components": [
+      "error",
+      {
+        "allowAsProps": true
+      }
+    ],
     "react/function-component-definition": [
       0,
-      { "namedComponents": "function-declaration" }
+      {
+        "namedComponents": "function-declaration"
+      }
     ],
     "prettier/prettier": "error"
   },
-
   "settings": {
     "react": {
       "version": "detect"
@@ -154,5 +154,25 @@
     "docs/src/**",
     "docs/blog/**",
     "pyproject.toml"
+  ],
+  "overrides": [
+    {
+      "files": ["*.graphql"],
+      "parser": "@graphql-eslint/eslint-plugin",
+      "plugins": ["@graphql-eslint"],
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@graphql-eslint/known-type-names": "error",
+        "@graphql-eslint/no-unreachable-types": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ]
+      }
+    }
   ]
 }

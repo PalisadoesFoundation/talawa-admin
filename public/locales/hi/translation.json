@@ -118,8 +118,6 @@
     "Contributions": "योगदान",
     "Posts": "पोस्ट",
     "Block/Unblock": "ब्लॉक/अनब्लॉक",
-    "Plugins": "प्लगइन्स",
-    "Plugin Store": "प्लगइन स्टोर",
     "Advertisement": "विज्ञापन",
     "allOrganizations": "सभी संगठन",
     "yourOrganization": "आपका संगठन",
@@ -883,37 +881,6 @@
     "cancel": "रद्द करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
-  "addOnRegister": {
-    "addNew": "नया जोड़ो",
-    "addPlugin": "प्लगइन जोड़ें",
-    "pluginName": "प्लगइन नाम",
-    "creatorName": "निर्माता का नाम",
-    "pluginDesc": "प्लगइन विवरण",
-    "pName": "उदाहरणार्थ: दान",
-    "cName": "उदाहरण: जॉन डो",
-    "pDesc": "यह प्लगइन यूआई को सक्षम बनाता है",
-    "close": "बंद करें",
-    "register": "पंजीकरण करें"
-  },
-  "addOnStore": {
-    "title": "स्टोर पर जोड़ें",
-    "searchName": "उदाहरणार्थ: दान",
-    "search": "खोजें",
-    "enable": "सक्रिय",
-    "disable": "अक्षम",
-    "pHeading": "प्लग-इन",
-    "install": "स्थापित",
-    "available": "उपलब्ध",
-    "pMessage": "प्लगइन मौजूद नहीं है",
-    "filter": "फ़िल्टर"
-  },
-  "addOnEntry": {
-    "enable": "सक्रिय",
-    "install": "स्थापित करना",
-    "uninstall": "स्थापना रद्द करें",
-    "uninstallMsg": "यह सुविधा अब आपके संगठन से हटा दी गई है",
-    "installMsg": "यह सुविधा अब आपके संगठन में सक्षम है"
-  },
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -944,7 +911,6 @@
     "personalDetailsHeading": "प्रोफ़ाइल विवरण",
     "appLanguageCode": "भाषा चुनें",
     "deleteUser": "उपभोक्ता मिटायें",
-    "pluginCreationAllowed": "प्लगइन निर्माण की अनुमति दी गई",
     "created": "बनाया था",
     "adminForOrganizations": "संगठनों के लिए व्यवस्थापक",
     "membershipRequests": "सदस्यता अनुरोध",

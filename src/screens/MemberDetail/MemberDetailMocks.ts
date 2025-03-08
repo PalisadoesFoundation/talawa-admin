@@ -52,7 +52,6 @@ export const MOCKS1 = [
                 _id: '65e32a5b2a1f4288ca1f086a',
               },
             ],
-            pluginCreationAllowed: true,
           },
           user: {
             _id: '1',
@@ -241,7 +240,6 @@ export const MOCKS1 = [
                 _id: '65e32a5b2a1f4288ca1f086a',
               },
             ],
-            pluginCreationAllowed: true,
           },
           user: {
             _id: '1',
@@ -375,7 +373,6 @@ export const MOCKS2 = [
                 _id: '65e32a5b2a1f4288ca1f086a',
               },
             ],
-            pluginCreationAllowed: true,
           },
           user: {
             _id: '1',
@@ -475,7 +472,6 @@ export const MOCKS3 = [
                 _id: '65e32a5b2a1f4288ca1f086a',
               },
             ],
-            pluginCreationAllowed: true,
           },
           user: {
             _id: '1',
