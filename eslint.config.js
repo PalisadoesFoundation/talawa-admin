@@ -30,7 +30,6 @@ export default [
       '**/*.json',
       '**/*.svg',
       'schema.graphql',
-      'vitest.setup.ts',
     ],
   },
   {
@@ -48,6 +47,10 @@ export default [
         window: 'readonly',
         localStorage: 'readonly',
         setTimeout: 'readonly',
+        console: 'readonly', // Add console as a global variable
+        beforeAll: 'readonly',
+        afterEach: 'readonly',
+        afterAll: 'readonly',
       },
     },
     plugins: {
