@@ -24,8 +24,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 }) => {
   const today = new Date();
   const [currentWeekStart, setCurrentWeekStart] = useState(
-    new Date(today.setDate(today.getDate() - today.getDay()) 
-  ));
+    new Date(today.setDate(today.getDate() - today.getDay())),
+  );
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
@@ -96,7 +96,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
   const handleTodayButton = (): void => {
     const today = new Date();
-    setCurrentWeekStart(new Date(today.setDate(today.getDate() - today.getDay())));
+    setCurrentWeekStart(
+      new Date(today.setDate(today.getDate() - today.getDay())),
+    );
   };
 
   const renderWeekDays = (): JSX.Element[] => {
@@ -165,7 +167,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       return (
         <div
           key={index}
-          className={styles.day + ' ' + (allEventsList?.length > 0 && styles.day__events)}
+          className={
+            styles.day + ' ' + (allEventsList?.length > 0 && styles.day__events)
+          }
           data-testid="day"
         >
           <div className={styles.day_header}>
@@ -223,7 +227,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             data-testid="current-week"
           >
             {dayjs(currentWeekStart).format('MMM D')} -{' '}
-            {dayjs(new Date(currentWeekStart).setDate(currentWeekStart.getDate() + 6)).format('MMM D')}
+            {dayjs(
+              new Date(currentWeekStart).setDate(
+                currentWeekStart.getDate() + 6,
+              ),
+            ).format('MMM D')}
           </div>
           <Button
             variant="outlined"

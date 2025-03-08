@@ -7,7 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { vi } from 'vitest';
-import Calendar from './WeeklyEventCalendar'; 
+import Calendar from './WeeklyEventCalendar';
 import { BrowserRouter } from 'react-router-dom';
 
 enum Role {
@@ -26,7 +26,7 @@ const renderWithRouter = (
   );
 };
 
-describe('Calendar Component (Weekly View)', () => { 
+describe('Calendar Component (Weekly View)', () => {
   const mockRefetchEvents = vi.fn();
   const today = new Date();
 
@@ -299,8 +299,16 @@ describe('Calendar Component (Weekly View)', () => {
     const multiWeekEvents = [
       {
         ...mockEventData[0],
-        startDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7).toISOString(),
-        endDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7).toISOString(),
+        startDate: new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate() - 7,
+        ).toISOString(),
+        endDate: new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate() + 7,
+        ).toISOString(),
       },
     ];
 

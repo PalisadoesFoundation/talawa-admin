@@ -51,7 +51,6 @@ function eventHeader({
       data-testid="calendarEventHeader"
     >
       <div className={styles.calendar__header}>
-        
         <SearchBar
           placeholder={t('searchEventName')}
           onSearch={(term) => console.log(`Search term: ${term}`)}
@@ -59,7 +58,6 @@ function eventHeader({
           buttonTestId="searchButton"
         />
 
-        
         <div className={styles.space}>
           <SortingButton
             title={t('viewType')}
@@ -76,7 +74,6 @@ function eventHeader({
           />
         </div>
 
-        
         <div className={styles.btnsBlock}>
           <SortingButton
             title={t('eventType')}
@@ -92,7 +89,6 @@ function eventHeader({
           />
         </div>
 
-        
         <div className={styles.btnsBlock}>
           <div className={styles.selectTypeEventHeader}>
             <Button
