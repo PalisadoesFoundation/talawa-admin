@@ -75,8 +75,8 @@
   --searchButton-bg-hover: #a8c7fa;
   --searchButton-bg-active: #a8c7fa;
 
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --modalHeader-color: #000000;
   --modalHeader-bg: #ffffff;
@@ -280,8 +280,8 @@
   --colorPrimary-bg-active: #a8c7fa;
   --colorPrimary-bg-active: #a8c7fa;
 
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --colorPrimary-color-active: #555555;
   --colorWhite: #555555;
@@ -3676,6 +3676,9 @@
   border-color: var(--manageBtn1-border) !important;
   background-color: var(--manageBtn1-bg) !important;
   color: var(--manageBtn1-color) #555555 !important;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .manageBtn:hover {
