@@ -237,13 +237,10 @@ const loginPage = (): JSX.Element => {
             },
 
             {
-              onError: (ctx) => {
-                console.log(ctx.error.message);
-              },
               onRequest: () => {
                 setSigninLoading(true);
               },
-              onSuccess: () => {
+              onResponse() {
                 setSigninLoading(false);
               },
             },
@@ -306,7 +303,7 @@ const loginPage = (): JSX.Element => {
           onRequest: () => {
             setLoginLoading(true);
           },
-          onSuccess: () => {
+          onResponse() {
             setLoginLoading(false);
           },
         },
