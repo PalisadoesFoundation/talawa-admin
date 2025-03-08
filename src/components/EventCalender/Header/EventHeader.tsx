@@ -66,7 +66,7 @@ function eventHeader({
             sortingOptions={[
               { label: 'Select Month', value: ViewType.MONTH },
               { label: 'Select Day', value: ViewType.DAY },
-              { label: 'Select Week', value: ViewType.WEEK }, // Added Weekly View
+              { label: 'Select Week', value: ViewType.WEEK },
               { label: 'Select Year', value: ViewType.YEAR },
             ]}
             selectedOption={viewType}
