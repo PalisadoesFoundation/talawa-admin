@@ -118,8 +118,6 @@
     "Contributions": "Contributions",
     "Posts": "Posts",
     "Block/Unblock": "Block/Unblock",
-    "Plugins": "Plugins",
-    "Plugin Store": "Plugin Store",
     "Advertisement": "Advertisements",
     "allOrganizations": "All Organizations",
     "yourOrganization": "Your Organization",
@@ -163,8 +161,6 @@
     "sampleOrgDuplicate": "Only one sample organization allowed",
     "noOrgErrorDescription": "Please create an organization through dashboard",
     "manageFeatures": "Manage Features",
-    "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
-    "goToStore": "Go to Plugin Store",
     "enableEverything": "Enable Everything",
     "sampleOrgSuccess": "Sample Organization Successfully Created",
     "name": "name",
@@ -926,37 +922,6 @@
     "cancel": "cancel",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
-  "addOnRegister": {
-    "addNew": "Add New",
-    "addPlugin": "Add Plugin",
-    "pluginName": "Plugin Name",
-    "creatorName": "Creator Name",
-    "pluginDesc": "Plugin Description",
-    "pName": "Ex: Donations",
-    "cName": "Ex: john Doe",
-    "pDesc": "This Plugin enables UI for",
-    "close": "close",
-    "register": "register"
-  },
-  "addOnStore": {
-    "title": "Plugin Store",
-    "searchName": "Ex: Donations",
-    "search": "Search",
-    "enable": "Enabled",
-    "disable": "Disabled",
-    "pHeading": "Plugins",
-    "install": "Installed",
-    "available": "Available",
-    "pMessage": "Plugin does not exists",
-    "filter": "Filters"
-  },
-  "addOnEntry": {
-    "enable": "Enabled",
-    "install": "Install",
-    "uninstall": "Uninstall",
-    "uninstallMsg": "This feature is now removed from your organization",
-    "installMsg": "This feature is now enabled in your organization"
-  },
   "memberDetail": {
     "title": "User Details",
     "addAdmin": "Add Admin",
@@ -987,7 +952,6 @@
     "personalDetailsHeading": "Profile Details",
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
-    "pluginCreationAllowed": "Plugin creation allowed",
     "created": "Created",
     "adminForOrganizations": "Admin for organizations",
     "membershipRequests": "Membership requests",

@@ -118,8 +118,6 @@
     "Contributions": "Contributions",
     "Posts": "Des postes",
     "Block/Unblock": "Bloquer/Débloquer",
-    "Plugins": "Plugins",
-    "Plugin Store": "Magasin de plugins",
     "Advertisement": "Annonces",
     "allOrganizations": "Toutes les organisations",
     "yourOrganization": "Ton organisation",
@@ -163,8 +161,6 @@
     "sampleOrgDuplicate": "Un seul échantillon d’organisation autorisé",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
     "manageFeatures": "Gérer les fonctionnalités",
-    "manageFeaturesInfo": "Création réussie ! ",
-    "goToStore": "Accédez à la boutique de plugins",
     "enableEverything": "Activer tout",
     "sampleOrgSuccess": "Exemple d'organisation créée avec succès",
     "name": "Nom",
@@ -886,37 +882,6 @@
     "cancel": "Annuler",
     "talawaApiUnavailable": "API Talawa non disponible"
   },
-  "addOnRegister": {
-    "addNew": "Ajouter un nouveau",
-    "addPlugin": "Ajouter un plugin",
-    "pluginName": "Nom du plugin",
-    "creatorName": "Nom du créateur",
-    "pluginDesc": "Description du plugin",
-    "pName": "Ex : Dons",
-    "cName": "Ex : John Doe",
-    "pDesc": "Ce plugin active l'interface utilisateur pour",
-    "close": "Fermer",
-    "register": "Inscription"
-  },
-  "addOnStore": {
-    "title": "Ajouter sur la boutique",
-    "searchName": "Ex : Dons",
-    "search": "Rechercher",
-    "enable": "Activé",
-    "disable": "Désactivé",
-    "pHeading": "Plugins",
-    "install": "installée",
-    "available": "Disponible",
-    "pMessage": "Le plugin n'existe pas",
-    "filter": "filtrer"
-  },
-  "addOnEntry": {
-    "enable": "Activé",
-    "install": "Installer",
-    "uninstall": "Désinstaller",
-    "uninstallMsg": "Cette fonctionnalité est désormais supprimée de votre organisation",
-    "installMsg": "Cette fonctionnalité est désormais activée dans votre organisation"
-  },
   "memberDetail": {
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
@@ -947,7 +912,6 @@
     "personalDetailsHeading": "Détails du profil",
     "appLanguageCode": "Choisissez la langue",
     "deleteUser": "Supprimer l'utilisateur",
-    "pluginCreationAllowed": "Création de plugin autorisée",
     "created": "Créé",
     "adminForOrganizations": "Administrateur pour les organisations",
     "membershipRequests": "Demandes d'adhésion",

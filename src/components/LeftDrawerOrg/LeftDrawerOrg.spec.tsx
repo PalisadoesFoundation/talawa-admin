@@ -47,16 +47,6 @@ const props: InterfaceLeftDrawerProps = {
       url: '/blockuser/123',
     },
     {
-      name: 'Plugins',
-      subTargets: [
-        {
-          name: 'Plugin Store',
-          url: '/orgstore/123',
-          icon: 'fa-store',
-        },
-      ],
-    },
-    {
       name: 'Settings',
       url: '/orgsetting/123',
     },
@@ -240,7 +230,6 @@ const defaultScreens = [
   'Events',
   'Posts',
   'Block/Unblock',
-  'Plugins',
   'Settings',
   'All Organizations',
 ];

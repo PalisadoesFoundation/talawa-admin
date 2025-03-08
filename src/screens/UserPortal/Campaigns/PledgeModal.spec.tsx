@@ -137,7 +137,6 @@ const PLEDGE_MODAL_MOCKS = [
             adminFor: [],
             isSuperAdmin: false,
             appLanguageCode: 'en',
-            pluginCreationAllowed: true,
             createdOrganizations: [],
             createdEvents: [],
             eventAdmin: [],
