@@ -1,7 +1,1 @@
 schema: 'schema.graphql'
-documents: './src/**/*.graphql'
-extensions:
-  eslint:
-    rules:
-      '@graphql-eslint/known-type-names': 'error'
-      '@graphql-eslint/no-unreachable-types': 'off'
