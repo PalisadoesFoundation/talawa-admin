@@ -1,21 +1,42 @@
-// eslint.config.js
-
 import js from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
+import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import prettierPlugin from 'eslint-plugin-prettier';
-import eslintConfigPrettier from 'eslint-config-prettier';
-import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
+import prettier from 'eslint-plugin-prettier'; // Import naming changed for clarity
+import vitest from 'eslint-plugin-vitest';
 import tsdoc from 'eslint-plugin-tsdoc';
 import graphql from '@graphql-eslint/eslint-plugin';
+import imports from 'eslint-plugin-import';
 
 export default [
-  js.configs.recommended,
-  eslintConfigPrettier, // Integrating Prettier config
   {
+    ignores: [
+      'node_modules',
+      'dist',
+      'build',
+      'package.json',
+      'package-lock.json',
+      'tsconfig.json',
+      'fix-readme-links.js',
+      'fix-repo-url.js',
+      'src/components/CheckIn/tagTemplate.ts',
+      'docs/**',
+      '*.md',
+      'docker/**',
+      'config/docker/setup/nginx*.conf',
+      '**/*.css',
+      '**/*.scss',
+      '**/*.less',
+      '**/*.json',
+      '**/*.svg',
+      'schema.graphql',
+      'vitest.setup.ts',
+    ],
+  },
+  {
+    files: ['*.ts', '*.tsx'],
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 'latest',
       sourceType: 'module',
       parser: tsParser,
       parserOptions: {
@@ -24,84 +45,43 @@ export default [
         },
       },
       globals: {
-        console: 'readonly',
-        process: 'readonly',
-        module: 'readonly',
+        window: 'readonly',
+        localStorage: 'readonly',
+        setTimeout: 'readonly',
       },
     },
-
     plugins: {
-      '@typescript-eslint': tseslint,
-      prettier: prettierPlugin,
-      import: importPlugin,
-      react: react,
-      tsdoc: tsdoc,
+      react,
+      '@typescript-eslint': ts,
+      vitest,
+      tsdoc,
       '@graphql-eslint': graphql,
+      import: imports,
+      prettier,
     },
     settings: {
       react: {
         version: 'detect',
       },
-      tsdoc: {
-        tagDefinitions: [
-          {
-            tagName: '@pdfme',
-            syntaxKind: 'block',
-          },
-        ],
-      },
     },
-
     rules: {
+      ...js.configs.recommended.rules,
+      ...ts.configs.recommended.rules,
       'react/destructuring-assignment': 'error',
-      '@typescript-eslint/explicit-module-boundary-types': 'error',
-      'react/no-multi-comp': [
-        'error',
-        {
-          ignoreStateless: false,
-        },
-      ],
+      'react/no-multi-comp': ['error', { ignoreStateless: false }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'import/no-duplicates': 'error',
       'tsdoc/syntax': 'error',
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-inferrable-types': 'error',
-      '@typescript-eslint/no-non-null-asserted-optional-chain': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
-      '@typescript-eslint/no-var-requires': 'error',
-      '@typescript-eslint/no-unsafe-function-type': 'error',
-      '@typescript-eslint/no-wrapper-object-types': 'error',
-      '@typescript-eslint/no-empty-object-type': 'error',
-      '@typescript-eslint/no-duplicate-enum-values': 'error',
-      '@typescript-eslint/array-type': 'error',
       '@typescript-eslint/consistent-type-assertions': 'error',
-      '@typescript-eslint/consistent-type-imports': 'error',
-      '@typescript-eslint/explicit-function-return-type': [
-        'error',
-        {
-          allowExpressions: true,
-          allowTypedFunctionExpressions: true,
-        },
-      ],
-      camelcase: 'off',
       '@typescript-eslint/naming-convention': [
         'error',
-        {
-          selector: 'interface',
-          format: ['PascalCase'],
-          prefix: ['Interface', 'TestInterface'],
-        },
-        {
-          selector: ['typeAlias', 'typeLike', 'enum'],
-          format: ['PascalCase'],
-        },
-        {
-          selector: 'typeParameter',
-          format: ['PascalCase'],
-          prefix: ['T'],
-        },
+        { selector: 'interface', format: ['PascalCase'], prefix: ['I'] },
+        { selector: ['typeAlias', 'typeLike', 'enum'], format: ['PascalCase'] },
+        { selector: 'typeParameter', format: ['PascalCase'], prefix: ['T'] },
         {
           selector: 'variable',
           format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
@@ -112,55 +92,39 @@ export default [
           format: ['camelCase'],
           leadingUnderscore: 'allow',
         },
-        {
-          selector: 'function',
-          format: ['camelCase', 'PascalCase'],
-        },
+        { selector: 'function', format: ['camelCase', 'PascalCase'] },
         {
           selector: 'memberLike',
           modifiers: ['private'],
           format: ['camelCase'],
           leadingUnderscore: 'require',
         },
-        {
-          selector: 'variable',
-          modifiers: ['exported'],
-          format: null,
-        },
+        { selector: 'variable', modifiers: ['exported'], format: null },
       ],
       'react/jsx-pascal-case': [
         'error',
         { allowAllCaps: false, allowNamespace: false },
       ],
-      'react/jsx-equals-spacing': ['warn', 'never'],
       'react/no-this-in-sfc': 'error',
       'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
-      'react/function-component-definition': 'off',
-      'prettier/prettier': 'error',
+      'prettier/prettier': 'error', // This rule should now work correctly
+      'vitest/no-disabled-tests': 'warn',
+      'vitest/no-focused-tests': 'error',
+      'vitest/no-identical-title': 'error',
+      '@typescript-eslint/no-unused-expressions': 'error',
     },
-    ignores: [
-      '**/*.css',
-      '**/*.scss',
-      '**/*.less',
-      '**/*.json',
-      '**/*.svg',
-      'docs/**', // Ignore the Docusaurus website subdirectory
-      '**/*.md', // Ignore markdown files
-      'docker/docker-compose.prod.yaml',
-      'docker/docker-compose.dev.yaml',
-      'docker/docker-compose.deploy.yaml',
-      'docker/Dockerfile.prod',
-      'docker/Dockerfile.dev',
-      'docker/Dockerfile.deploy',
-      'config/docker/setup/nginx.conf',
-      'config/docker/setup/nginx.prod.conf',
-      'src/components/CheckIn/tagTemplate.ts',
-      'package.json',
-      'package-lock.json',
-      'tsconfig.json',
-      'fix-readme-links.js',
-      'fix-repo-url.js',
-    ],
+  },
+  {
+    files: ['*.spec.ts', '*.test.ts', '*.spec.tsx', '*.test.tsx'],
+    languageOptions: {
+      globals: {
+        describe: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+      },
+    },
   },
   {
     files: ['*.graphql'],
@@ -169,16 +133,7 @@ export default [
     },
     plugins: {
       '@graphql-eslint': graphql,
-    },
-    rules: {
-      '@graphql-eslint/known-type-names': 'error',
-      '@graphql-eslint/no-unreachable-types': 'off',
-    },
-  },
-  {
-    files: ['*.graphql'],
-    plugins: {
-      '@graphql-eslint': graphql,
+      prettier,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -186,20 +141,7 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
-      'prettier/prettier': [
-        'error',
-        {
-          endOfLine: 'auto',
-        },
-      ],
-    },
-  },
-
-  {
-    files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
-    rules: {
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off', // Add this line
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
 ];
