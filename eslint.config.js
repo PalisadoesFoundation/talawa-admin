@@ -164,14 +164,34 @@ export default [
   },
   {
     files: ['*.graphql'],
+    languageOptions: {
+      parser: graphql.parser,
+    },
     plugins: {
       '@graphql-eslint': graphql,
-      prettier: prettierPlugin,
     },
     rules: {
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
-      'prettier/prettier': ['error', { endOfLine: 'auto' }],
+    },
+  },
+  {
+    files: ['*.graphql'],
+    plugins: {
+      '@graphql-eslint': graphql,
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'off',
+      '@typescript-eslint/naming-convention': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@graphql-eslint/known-type-names': 'error',
+      '@graphql-eslint/no-unreachable-types': 'off',
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
     },
   },
 
