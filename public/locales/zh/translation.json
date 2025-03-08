@@ -161,8 +161,6 @@
     "sampleOrgDuplicate": "只允许一个样本组织",
     "noOrgErrorDescription": "请通过仪表板创建组织",
     "manageFeatures": "管理功能",
-    "manageFeaturesInfo": "创建成功！",
-    "goToStore": "前往插件商店",
     "enableEverything": "启用一切",
     "sampleOrgSuccess": "样本组织已成功创建",
     "name": "名称",
