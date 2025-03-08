@@ -74,6 +74,24 @@
   --ifm-font-size-base: 17px;
 }
 
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+
+[data-theme='dark'] {
+  --ifm-color-primary: #1e56e3;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .themedComponent--light_NVdE {
+  display: initial;
+}
+
+[data-theme='dark'] .navbar {
+  border-bottom: 1px solid #2d3956;
+}
+
 html[data-theme='dark'] {
   --ifm-background-color: #111927;
   --ifm-background-surface-color: var(--ifm-background-color);
