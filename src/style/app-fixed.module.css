@@ -550,7 +550,8 @@
   --btnsContainerOrgActionItemCategories-outline: #9ca3af;
 
   --delete-button-bg: #f8d6dc;
-  --delete-button-color: #c8102e;
+  --delete-button-color: #ff4d4f;
+  --delete-button-color-hover: #ff4d4f;
   --delete-button-border: #000;
   --delete-button-color-hover: #ff4d4f;
 

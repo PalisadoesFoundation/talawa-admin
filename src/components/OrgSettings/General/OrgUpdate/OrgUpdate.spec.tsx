@@ -254,7 +254,14 @@ describe('OrgUpdate Component', () => {
     });
   });
 
+  vi.mock('utils/convertToBase64', () => ({
+    default: vi.fn().mockResolvedValue('base64String'),
+  }));
+
   it('handles file upload', async () => {
+    const convertToBase64 = (await import('utils/convertToBase64')).default;
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
@@ -267,10 +274,21 @@ describe('OrgUpdate Component', () => {
       expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
     });
 
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-    const fileInput = screen.getByTestId('organisationImage');
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
 
     await userEvent.upload(fileInput, file);
+
+    expect(fileInput.files).toHaveLength(1);
+    expect(fileInput.files?.[0]).toBe(file);
+
+    expect(convertToBase64).toHaveBeenCalledWith(file);
+
+    await waitFor(() => {
+      const saveButton = screen.getByTestId('save-org-changes-btn');
+      expect(saveButton).toBeEnabled();
+    });
   });
 
   describe('OrgUpdate Loading and Error States', () => {
