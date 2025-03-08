@@ -160,6 +160,11 @@
       "files": ["*.graphql"],
       "parser": "@graphql-eslint/eslint-plugin",
       "plugins": ["@graphql-eslint"],
+      "parserOptions": {
+        "skipGraphQLConfig": true,
+        "schema": "./schema.graphql",
+        "operations": "./schema.graphql"
+      },
       "rules": {
         "@typescript-eslint/consistent-type-imports": "off",
         "@typescript-eslint/naming-convention": "off",
