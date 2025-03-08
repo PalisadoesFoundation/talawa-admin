@@ -430,41 +430,27 @@ export interface InterfaceOrgConnectionInfoType {
   address: InterfaceAddress;
 }
 
+// export interface InterfaceOrgConnectionType {
+//   organizationsConnection: InterfaceOrgConnectionInfoType[];
+// }
+
 export interface InterfaceOrgConnectionInfoTypePG {
-  node: InterfaceOrgInfoTypePG;
+  organizations: InterfaceOrgInfoTypePG[];
 }
 
 export interface InterfaceOrgInfoTypePG {
   id: string;
-  avatarURL: string | null;
   name: string;
+  addressLine1: string;
+  description: string;
+  avatarURL: string | null;
   members: {
     edges: {
       node: {
         id: string;
-        name: string;
-        addressLine1: string;
-        description: string;
-        avatarURL: string;
-        members: {
-          edges: {
-            node: {
-              id: string;
-            };
-          }[];
-        };
       };
     }[];
   };
-  description: string;
-  addressLine1: string;
-}
-export interface InterfaceOrgConnectionType {
-  organizationsConnection: InterfaceOrgConnectionInfoType[];
-}
-
-export interface InterfaceOrgConnectionTypePG {
-  organizationsConnection: InterfaceOrgInfoTypePG[];
 }
 
 export interface InterfaceQueryOrganizationsListObject {

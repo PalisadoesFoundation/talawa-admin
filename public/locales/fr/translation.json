@@ -282,7 +282,8 @@
     "requests": "Demandes",
     "talawaApiUnavailable": "API Talawa indisponible",
     "volunteerRankings": "Classement des Bénévoles",
-    "noVolunteers": "Aucun Bénévole Trouvé!"
+    "noVolunteers": "Aucun Bénévole Trouvé!",
+    "comingSoon": "Bientôt disponible !"
   },
   "organizationPeople": {
     "title": "Membres Talawa",

@@ -337,7 +337,12 @@ function OrganizationDashboard(): JSX.Element {
               <Card border="0" className="rounded-4 ">
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('upcomingEvents')}</div>
-                  <Button size="sm" variant="light" data-testid="viewAllEvents">
+                  <Button
+                    size="sm"
+                    variant="light"
+                    data-testid="viewAllEvents"
+                    onClick={(): void => navigate(eventsLink)}
+                  >
                     {t('viewAll')}
                   </Button>
                 </div>
@@ -377,7 +382,7 @@ function OrganizationDashboard(): JSX.Element {
                     variant="light"
                     data-testid="viewAllPosts"
                     className=""
-                    // onClick={(): void => navigate(postsLink)}
+                    onClick={(): void => navigate(postsLink)}
                   >
                     {t('viewAll')}
                   </Button>
@@ -429,7 +434,7 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllMembershipRequests"
                   onClick={(): void => {
-                    toast.success('Coming soon!');
+                    toast.success(t('comingSoon'));
                   }}
                 >
                   {t('viewAll')}
@@ -475,6 +480,9 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllLeadeboard"
                   // onClick={(): void => navigate(leaderboardLink)}
+                  onClick={(): void => {
+                    toast.success(t('comingSoon'));
+                  }}
                 >
                   {t('viewAll')}
                 </Button>
