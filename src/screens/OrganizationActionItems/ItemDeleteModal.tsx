@@ -20,7 +20,7 @@ export interface InterfaceItemDeleteModalProps {
 /**
  * A modal component for confirming the deletion of an action item.
  *
- * @param props - The properties passed to the component.
+ * @param props: The properties passed to the component.
  * @returns The `ItemDeleteModal` component.
  */
 const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
