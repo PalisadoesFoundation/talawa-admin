@@ -215,8 +215,8 @@
   --leftDrawer-active-button-bg: #d3e3fd;
 
   --activeItem-bg: #eaebef;
-  --activeItem-color: #000000;
-  --activeItem-color-hover: #000000;
+  --active-item-color: #000000;
+  --active-item-color-hover: #000000;
 
   --user-sidebar-org-item-bg: #eaebef;
 
@@ -4090,18 +4090,18 @@
 
 .btnDelete {
   background-color: var(--activeTab-bg);
-  border: var(--activeItem-color) !important;
-  color: var(--activeItem-color);
+  border: var(--active-item-color) !important;
+  color: var(--active-item-color);
 }
 
 .btnDelete:hover {
   background-color: var(--activeTab-bg);
-  color: var(--activeItem-color) !important;
+  color: var(--active-item-color) !important;
 }
 
 .btnDelete:active {
   background-color: var(--activeTab-bg) !important;
-  color: var(--activeItem-color) !important;
+  color: var(--active-item-color) !important;
 }
 
 .deleteButton {
