@@ -4090,7 +4090,8 @@
 
 .btnDelete {
   background-color: var(--activeTab-bg);
-  border: var(--activeItem-color);
+  border: var(--activeItem-color) !important;
+  color: var(--activeItem-color);
 }
 
 .btnDelete:hover {
