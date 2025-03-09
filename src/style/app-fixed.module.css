@@ -4236,9 +4236,9 @@ form {
   transform: rotate(135deg) scale(1.2);
   width: 10px;
   height: 10px;
-  stroke: var(--cardBackground-color);
+  stroke: var(--card-background-color);
   stroke-width: 1;
-  fill: var(--cardBackground-color);
+  fill: var(--card-background-color);
 }
 
 .saveChangesBtn {
