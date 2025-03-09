@@ -884,7 +884,8 @@
     "displayImage": "प्रदर्शन छवि",
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध",
+    "enterOrganizationDescription": "संगठन का विवरण दर्ज करें"
   },
   "addOnRegister": {
     "addNew": "नया जोड़ो",

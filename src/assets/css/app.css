@@ -161,6 +161,7 @@
   --font-size-header: 16px;
   --visiable-btn-bg: #1778f2;
   --form-check-input-bg: #efefef;
+  --form-check-input-border: #0000;
 }
 
 [data-bs-theme='dark'] {
@@ -2751,7 +2752,7 @@ textarea.form-control-lg {
 
 .form-check-input:checked {
   background-color: var(--visiable-btn-bg);
-  border-color: #000;
+  border-color: var(--form-check-input-border);
 }
 
 .form-check-input:checked[type='checkbox'] {

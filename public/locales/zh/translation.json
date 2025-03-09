@@ -884,7 +884,8 @@
     "displayImage": "显示图像",
     "saveChanges": "保存更改",
     "cancel": "取消",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "enterOrganizationDescription": "输入组织描述"
   },
   "addOnRegister": {
     "addNew": "添新",

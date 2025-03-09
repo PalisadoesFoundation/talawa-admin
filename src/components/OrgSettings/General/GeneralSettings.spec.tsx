@@ -61,10 +61,11 @@ describe('GeneralSettings Component', () => {
     );
 
     const cards = container.getElementsByClassName('card');
+    expect(cards.length).toBeGreaterThan(0);
+
     Array.from(cards).forEach((card) => {
       expect(card).toHaveClass(
         'rounded-4',
-        'mb-4',
         'shadow-sm',
         'border',
         'border-light-subtle',

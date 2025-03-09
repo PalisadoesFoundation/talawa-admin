@@ -924,7 +924,8 @@
     "displayImage": "displayImage",
     "saveChanges": "saveChanges",
     "cancel": "cancel",
-    "talawaApiUnavailable": "talawaApiUnavailable"
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "enterOrganizationDescription": "Enter Organization Description"
   },
   "addOnRegister": {
     "addNew": "Add New",

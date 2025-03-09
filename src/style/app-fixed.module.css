@@ -4112,9 +4112,10 @@
   display: block;
   margin: 10px auto;
   border-radius: 4px;
-  width: 365px;
   height: 42px;
   text-align: center;
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 
 .deleteButton:hover,

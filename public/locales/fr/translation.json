@@ -884,7 +884,8 @@
     "displayImage": "Image d'affichage",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler",
-    "talawaApiUnavailable": "API Talawa non disponible"
+    "talawaApiUnavailable": "API Talawa non disponible",
+    "enterOrganizationDescription": "Entrez la description de l'organisation"
   },
   "addOnRegister": {
     "addNew": "Ajouter un nouveau",
