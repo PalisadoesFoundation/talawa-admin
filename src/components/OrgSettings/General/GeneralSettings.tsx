@@ -33,7 +33,7 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
         >
           <Card.Header className={styles.deleteCardHeader}>
             <h5 className={`mb-0 fw-semibold ${styles.cardHeading} `}>
-              {t('Edit Organization')}
+              {t('editOrganization')}
             </h5>
           </Card.Header>
           <Card.Body className={styles.cardBody}>

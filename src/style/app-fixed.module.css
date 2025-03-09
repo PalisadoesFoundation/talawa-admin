@@ -4051,14 +4051,14 @@
 
 .textFields {
   background-color: var(--inputColor-bg);
-  color: var(--textFields-color);
+  color: var(--text-fields-color);
   margin-bottom: 1rem;
   width: auto;
 }
 
 .descriptionTextField {
   background-color: var(--inputColor-bg);
-  color: var(--textFields-color);
+  color: var(--text-fields-color);
   margin-bottom: 1rem;
   width: auto;
   resize: none;
@@ -4144,7 +4144,7 @@
 }
 
 .customFileInput::file-selector-button:hover {
-  color: var(--cardBackground-color);
+  color: var(--card-background-color);
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
 }
 
@@ -4204,9 +4204,8 @@ form {
 /* -- OrgUpdate.tsx -- */
 
 .orgCardSettings {
-  margin-top: 580px;
+  margin: 580px 0 0 0 !important;
   width: 95% !important;
-  margin: 0 !important;
 }
 
 .resetChangesBtn {

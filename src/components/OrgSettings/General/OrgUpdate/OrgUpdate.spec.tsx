@@ -608,9 +608,7 @@ describe('OrgUpdate Component', () => {
         expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
 
-      const userRegLabel = screen.getByText(
-        i18n.t('orgUpdate.Is Public') + ':',
-      );
+      const userRegLabel = screen.getByText(i18n.t('orgUpdate.isPublic') + ':');
       expect(userRegLabel).toBeInTheDocument();
 
       const userRegSwitch = userRegLabel

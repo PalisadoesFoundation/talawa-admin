@@ -288,7 +288,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           <Row>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
               <Form.Label className="me-3 mb-0 fw-normal text-black">
-                {t('Is Public')}:
+                {t('isPublic')}:
               </Form.Label>
               <Form.Switch
                 className="custom-switch"
