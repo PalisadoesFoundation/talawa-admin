@@ -592,7 +592,6 @@ export const USER_DETAILS = gql`
         }
         isSuperAdmin
         appLanguageCode
-        pluginCreationAllowed
         createdOrganizations {
           _id
         }
