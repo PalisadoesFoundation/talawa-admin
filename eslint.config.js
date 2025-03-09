@@ -17,7 +17,6 @@ export default [
       'package.json',
       'package-lock.json',
       'tsconfig.json',
-      'fix-readme-links.js',
       'fix-repo-url.js',
       'src/components/CheckIn/tagTemplate.ts',
       'docs/**',
