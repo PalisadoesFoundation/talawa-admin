@@ -191,7 +191,6 @@ describe('MemberDetail', () => {
     userEvent.clear(screen.getByPlaceholderText(/Phone/i));
     userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phoneNumber);
 
-    // userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
     // userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
     // userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
     await wait();
