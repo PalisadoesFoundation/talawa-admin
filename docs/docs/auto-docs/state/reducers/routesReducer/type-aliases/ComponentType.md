@@ -6,7 +6,7 @@
 
 > **ComponentType**: `object`
 
-Defined in: [src/state/reducers/routesReducer.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L55)
+Defined in: [src/state/reducers/routesReducer.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L32)
 
 ## Type declaration
 

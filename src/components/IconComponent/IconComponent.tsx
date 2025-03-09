@@ -14,7 +14,6 @@ import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import PeopleIcon from 'assets/svgs/people.svg?react';
 import TagsIcon from 'assets/svgs/tags.svg?react';
 import TagIcon from 'assets/svgs/tag.svg?react';
-import PluginsIcon from 'assets/svgs/plugins.svg?react';
 import PostsIcon from 'assets/svgs/posts.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import VenueIcon from 'assets/svgs/venues.svg?react';
@@ -75,13 +74,6 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
         <BlockUserIcon
           {...props}
           data-testid="Block/Icon-Component-UnblockIcon"
-        />
-      );
-    case 'Plugins':
-      return (
-        <PluginsIcon
-          stroke={props.fill}
-          data-testid="Icon-Component-PluginsIcon"
         />
       );
     case 'Settings':

@@ -38,10 +38,6 @@ Defined in: [src/types/User/type.ts:43](https://github.com/PalisadoesFoundation/
 
 > **isSuperAdmin**: `boolean`
 
-### pluginCreationAllowed
-
-> **pluginCreationAllowed**: `boolean`
-
 ### userId
 
 > **userId**: [`User`](User.md)
