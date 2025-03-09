@@ -1,0 +1,22 @@
+{
+  email {$CADDY_TALAWA_ADMIN_EMAIL}
+}
+
+{$CADDY_TALAWA_ADMIN_DOMAIN_NAME} {
+  tls {
+    issuer acme
+  }
+
+  encode zstd gzip
+
+  log {
+    format json
+    output stdout
+  }
+
+  # Redirect HTTP to HTTPS
+  @http {
+    protocol http
+  }
+  redir @http https://{host}{uri} 308
+}

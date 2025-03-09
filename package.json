@@ -12,6 +12,7 @@
     "@dicebear/core": "^9.2.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@fastify/reply-from": "^12.0.2",
     "@mui/base": "^5.0.0-beta.61",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
@@ -88,7 +89,8 @@
     "setup": "tsx src/setup/setup.ts",
     "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts",
     "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node fix-repo-url.js",
-    "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js"
+    "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js",
+    "proxy": "tsx proxy/proxy.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -154,7 +156,7 @@
     "jest": "^27.4.5",
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^2.0.0",
-    "jest-preview": "^0.3.1",
+    "jest-preview": "^0.2.3",
     "lint-staged": "^15.3.0",
     "postcss-modules": "^6.0.1",
     "sass": "^1.80.7",
