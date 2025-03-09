@@ -4262,7 +4262,6 @@ form {
 .btnStyle {
   border-width: 2px !important;
   border-color: #1778f2;
-  /* color: var(--cardBackground-color); */
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   display: flex;
@@ -4270,7 +4269,7 @@ form {
   gap: 0.5rem;
   height: 49px;
   width: 160px;
-  background-color: red !important;
+  background-color: var(--card-background-color) !important;
   font-size: 0.8rem;
 }
 
