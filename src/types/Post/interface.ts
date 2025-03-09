@@ -1,8 +1,13 @@
 import type { User } from 'types/User/type';
 import type { Comment } from 'types/Comment/type';
 export interface InterfacePostCard {
-  _id: string;
-  creator: Partial<User>;
+  id: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    id: string;
+  };
   postedAt: string;
   image: string | null;
   video: string | null;
@@ -10,8 +15,25 @@ export interface InterfacePostCard {
   title: string;
   likeCount: number;
   commentCount: number;
-  comments: Comment[];
-  likedBy: Partial<User>[];
+  comments: {
+    id: string;
+    creator: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    likeCount: number;
+    likedBy: {
+      id: string;
+    }[];
+    text: string;
+  }[];
+  likedBy: {
+    firstName: string;
+    lastName: string;
+    id: string;
+  }[];
   fetchPosts: () => void;
 }
 
@@ -77,14 +99,34 @@ export interface InterfaceCreator {
   id: string;
 }
 
+export interface InterfacePostAttachment {
+  createdAt: string; // Changed from Date to string since GraphQL returns string
+  fileName: string;
+  url: string;  // MinIO URL
+  mimeType: string;
+  postId: string;
+  name: string;
+}
+
 export interface InterfacePost {
-  id: string;
-  caption: string;
-  createdAt: string;
-  pinnedAt?: string | null;
-  pinned?: boolean; // Add this if you're using it
-  creator?: InterfaceCreator;
-  attachments?: InterfaceAttachment[];
-  imageUrl?: string | null; // Add these if you're using them directly
-  videoUrl?: string | null; // in your component
+  _id: string;
+  text: string;
+  title: string;
+  createdAt: string;  // Keep as string to match API data
+  imageUrl: string | null;
+  videoUrl: string | null;
+  attachments?: InterfacePostAttachment[];
+  creatorId: string | null;
+  organization: {
+    _id: string;
+  };
+  creator: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  likeCount: number;
+  commentCount: number;
+  pinned?: boolean;
 }

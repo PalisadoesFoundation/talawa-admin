@@ -5,7 +5,6 @@ import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
@@ -15,29 +14,15 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
+import { useMinioUpload } from 'utils/MinioUpload';
+import DOMPurify from 'dompurify';
+import type { 
+  InterfacePost,
+  InterfacePostAttachment,
+  InterfacePostCard 
+} from '../../types/Post/interface';
 
-interface InterfacePostAttachment {
-  id: string;
-  postId: string;
-  name: string;
-  mimeType: string;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  creatorId?: string | null;
-  updaterId?: string | null;
-}
-
-interface InterfacePost {
-  id: string;
-  caption: string;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  pinnedAt?: Date | null;
-  creatorId: string | null;
-  attachments: InterfacePostAttachment[];
-}
-
-interface InterfaceOrgPostCardProps {
+interface OrgPostCardProps {
   post: InterfacePost;
 }
 
@@ -51,7 +36,9 @@ interface InterfacePostFormState {
 
 export default function OrgPostCard({
   post,
-}: InterfaceOrgPostCardProps): JSX.Element {
+}: OrgPostCardProps): JSX.Element {
+  const { uploadFileToMinio } = useMinioUpload();
+  
   const [postFormState, setPostFormState] = useState<InterfacePostFormState>({
     caption: post.caption,
     attachments: [],
@@ -68,10 +55,10 @@ export default function OrgPostCard({
   const { t: tCommon } = useTranslation('common');
 
   // Get media attachments
-  const imageAttachment = post.attachments.find((a) =>
+  const imageAttachment = post.attachments?.find((a) =>
     a.mimeType.startsWith('image/'),
   );
-  const videoAttachment = post.attachments.find((a) =>
+  const videoAttachment = post.attachments?.find((a) =>
     a.mimeType.startsWith('video/'),
   );
 
@@ -149,17 +136,27 @@ export default function OrgPostCard({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          {
-            url: base64 as string,
-            mimeType: file.type,
-          },
-        ],
-      }));
+      try {
+        const { fileUrl } = await uploadFileToMinio(
+          file, 
+          post.organization._id,
+          imageAttachment?.url
+        );
+
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            {
+              url: DOMPurify.sanitize(fileUrl),
+              mimeType: file.type,
+            },
+          ],
+        }));
+      } catch (error) {
+        console.error('Image upload error:', error);
+        toast.error('Failed to upload image');
+      }
     }
   };
 
@@ -168,17 +165,31 @@ export default function OrgPostCard({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          {
-            url: base64 as string,
-            mimeType: file.type,
-          },
-        ],
-      }));
+      if (!file.type.startsWith('video/')) {
+        toast.error('Please select a video file');
+        return;
+      }
+      try {
+        const { fileUrl } = await uploadFileToMinio(
+          file, 
+          post.organization._id,
+          videoAttachment?.url
+        );
+
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            {
+              url: DOMPurify.sanitize(fileUrl),
+              mimeType: file.type,
+            },
+          ],
+        }));
+      } catch (error) {
+        console.error('Video upload error:', error);
+        toast.error('Failed to upload video');
+      }
     }
   };
 
@@ -242,6 +253,15 @@ export default function OrgPostCard({
     }
   };
 
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
+  };
+
   return (
     <>
       <div
@@ -264,15 +284,14 @@ export default function OrgPostCard({
                 onMouseLeave={handleVideoPause}
               >
                 <source
-                  src={videoAttachment.name}
-                  type={videoAttachment.mimeType}
+                  src={DOMPurify.sanitize(videoAttachment.url)}
+                  type={DOMPurify.sanitize(videoAttachment.mimeType)}
                 />
               </video>
             ) : imageAttachment ? (
-              <Card.Img
+              <img
                 className={styles.postimageOrgPostCard}
-                variant="top"
-                src={imageAttachment.name}
+                src={DOMPurify.sanitize(imageAttachment.url)}
                 alt="Post image"
               />
             ) : (
@@ -292,7 +311,7 @@ export default function OrgPostCard({
                 {post.caption}
               </Card.Title>
               <Card.Text className={styles.textOrgPostCard}>
-                Created: {new Date(post.createdAt).toLocaleDateString()}
+                Created: {formatDate(post.createdAt)}
               </Card.Text>
             </Card.Body>
           </Card>
@@ -305,13 +324,13 @@ export default function OrgPostCard({
                 {videoAttachment ? (
                   <video controls autoPlay loop muted>
                     <source
-                      src={videoAttachment.name}
-                      type={videoAttachment.mimeType}
+                      src={DOMPurify.sanitize(videoAttachment.url)}
+                      type={DOMPurify.sanitize(videoAttachment.mimeType)}
                     />
                   </video>
                 ) : (
                   <img
-                    src={imageAttachment?.name || AboutImg}
+                    src={DOMPurify.sanitize(imageAttachment?.url || AboutImg)}
                     alt="Post content"
                   />
                 )}
@@ -435,7 +454,7 @@ export default function OrgPostCard({
                   .filter((a) => a.mimeType.startsWith('image/'))
                   .map((attachment, index) => (
                     <div key={index} className={styles.previewOrgPostCard}>
-                      <img src={attachment.url} alt="Preview" />
+                      <img src={DOMPurify.sanitize(attachment.url)} alt="Preview" />
                       <button
                         type="button"
                         className={styles.closeButtonP}
@@ -463,8 +482,8 @@ export default function OrgPostCard({
                     <div key={index} className={styles.previewOrgPostCard}>
                       <video controls data-testid="video-preview">
                         <source
-                          src={attachment.url}
-                          type={attachment.mimeType}
+                          src={DOMPurify.sanitize(attachment.url)}
+                          type={DOMPurify.sanitize(attachment.mimeType)}
                         />
                         {t('videoNotSupported')}
                       </video>
