@@ -688,6 +688,14 @@
   --settings-active-button-color: #555555;
 
   --bg-header: #ffffff;
+
+  --changelangauge-btn-bg: #ffffff;
+  --changelangauge-btn-color: #1778f2;
+  --changelangauge-btn-border: #1778f2;
+
+  --resetbtn-border: #1778f2;
+  --resetbtn-bg: #ffffff;
+  --resetbtn-color: #1778f2;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -4061,7 +4069,6 @@
 
 .DeleteOrgCard {
   border-radius: 0.5rem;
-  margin-left: 1rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   border: none;
   height: 280px !important;
@@ -4070,12 +4077,13 @@
 
 .settingsBody {
   margin: 2.5rem 0;
+  padding: 0;
 }
 
 .deleteCardHeader {
   background-color: var(--activeTab-bg);
-  border-top-left-radius: 1.5rem;
-  border-top-right-radius: 1.5rem;
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -4202,8 +4210,8 @@ form {
 
 .resetChangesBtn {
   border-width: 2px;
-  border-color: var(--cardBackground-color);
-  color: var(--cardBackground-color);
+  border-color: var(--resetbtn-border);
+  color: var(--resetbtn-color);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   display: flex;
@@ -4214,10 +4222,12 @@ form {
   font-size: 0.8rem;
 }
 
-.resetChangesBtn:hover {
+.resetChangesBtn:hover,
+.resetChangesBtn:focus,
+.resetChangesBtn:active {
   border-width: 2px;
-  border-color: var(--cardBackground-color);
-  color: var(--cardBackground-color);
+  border-color: var(--resetbtn-border) !important;
+  color: var(--resetbtn-color) !important;
   box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow) !important;
 }
 
@@ -4248,6 +4258,21 @@ form {
 .orgUpdateFormLables {
   font-weight: normal !important;
   color: var(--delete-button-border);
+}
+
+.btnStyle {
+  border-width: 2px !important;
+  border-color: #1778f2;
+  /* color: var(--cardBackground-color); */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  background-color: red !important;
+  font-size: 0.8rem;
 }
 
 /* -- OrganizationCard.tsx -- */
@@ -5807,13 +5832,16 @@ form {
 }
 
 .cardBody {
-  padding: 1rem;
+  padding: 1rem 0rem;
   display: flex;
   width: 100% !important;
   justify-content: center;
   align-items: center;
 }
 
+.cardHeading {
+  padding-left: 0.3rem !important;
+}
 .cardBodymain {
   display: flex;
   flex-direction: row;
@@ -5870,6 +5898,39 @@ form {
 .textBox {
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.changeLanguageBtn {
+  border-width: 2px;
+  background-color: var(--changelangauge-btn-bg);
+  color: var(--changelangauge-btn-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-color: var(--changelangauge-btn-border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.changeLanguageBtn:hover,
+.changeLanguageBtn:active,
+.changeLanguageBtn:focus {
+  border-width: 2px;
+  background-color: #ffff !important;
+  color: var(--changelangauge-btn-color) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-color: var(--changelangauge-btn-border) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
 }
 
 @media (max-width: 600px) {
@@ -6191,7 +6252,7 @@ form {
   display: flex;
   gap: 0.75rem;
   background-color: var(--bg-header) !important;
-  padding: 20px 30px;
+  padding: 20px 14.9px;
   border-radius: 1rem;
 }
 
