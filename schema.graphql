@@ -1,4 +1,5 @@
 directive @auth on FIELD_DEFINITION
+
 directive @role(requires: UserType) on FIELD_DEFINITION
 
 type ActionItem {

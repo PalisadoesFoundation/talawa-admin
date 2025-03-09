@@ -2,9 +2,8 @@ import Environment from 'jest-environment-jsdom';
 import { TextEncoder, TextDecoder } from 'util';
 
 /**
- * A custom environment to set the TextEncoder and TextDecoder variables,
- * required for pdfme during testing.
- * Providing a polyfill to the environment.
+ * A custom environment to set the TextEncoder and TextDecoder variables, that is required by @pdfme during testing.
+ * Providing a polyfill to the environment for the same
  */
 
 export default class CustomTestEnvironment extends Environment {
