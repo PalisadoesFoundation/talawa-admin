@@ -6,50 +6,48 @@ vi.mock('fs');
 
 const filePath = path.join('docs', 'docs', 'auto-docs', 'test.md');
 
-// Mock file content with README.md links
-const mockFileContent = `
-This is a test file.
-[Some Link](./README.md)
-More content here.
-`;
-
-const expectedFileContent = `
-This is a test file.
-[Admin Docs](/)
-More content here.
-`;
+// Move the function outside the test
+const replaceLinks = (filePath: string) => {
+  let content = fs.readFileSync(filePath, 'utf8') as string;
+  content = content.replace(/\[.*?\]\((.*?)README\.md\)/g, () => {
+    return '[Admin Docs](/)';
+  });
+  fs.writeFileSync(filePath, content, 'utf8');
+  return content;
+};
 
 describe('fix-readme-links.js', () => {
   beforeEach(() => {
-    vi.restoreAllMocks(); // Reset mocks before each test
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(mockFileContent);
-    vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {}); // Mock writeFileSync
+    vi.restoreAllMocks();
   });
 
-  it('should read the file, replace README.md links, and write the modified content', () => {
-    const replaceLinks = (filePath: string) => {
-      // Read file
-      let content = fs.readFileSync(filePath, 'utf8') as string;
-      expect(content).toBe(mockFileContent); // Ensures readFileSync returns expected content
+  it('should replace README.md links with Admin Docs link', () => {
+    // Test case 1: Basic replacement
+    const mockContent1 = '[Some Link](./README.md)';
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(mockContent1);
+    vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
 
-      // Perform replacement
-      content = content.replace(/\[.*?\]\((.*?)README\.md\)/g, () => {
-        return '[Admin Docs](/)';
-      });
-      expect(content).toBe(expectedFileContent); // Ensures replacement occurred
+    const result = replaceLinks(filePath);
+    expect(result).toBe('[Admin Docs](/)');
+  });
 
-      // Write file
-      fs.writeFileSync(filePath, content, 'utf8');
-    };
+  it('should handle multiple README.md links', () => {
+    // Test case 2: Multiple replacements
+    const mockContent2 = '[Link1](README.md)[Link2](./docs/README.md)';
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(mockContent2);
+    vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
 
-    replaceLinks(filePath);
+    const result = replaceLinks(filePath);
+    expect(result).toBe('[Admin Docs](/)[Admin Docs](/)');
+  });
 
-    // Assertions to confirm function execution
-    expect(fs.readFileSync).toHaveBeenCalledWith(filePath, 'utf8');
-    expect(fs.writeFileSync).toHaveBeenCalledWith(
-      filePath,
-      expectedFileContent,
-      'utf8',
-    );
+  it('should handle content with no README.md links', () => {
+    // Test case 3: No replacements needed
+    const mockContent3 = 'No links here';
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(mockContent3);
+    vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
+
+    const result = replaceLinks(filePath);
+    expect(result).toBe('No links here');
   });
 });
