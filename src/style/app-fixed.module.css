@@ -194,8 +194,8 @@
   --signOut-container-bg: #d3e3fd;
   --signOutBtn-bg: #d3e3fd;
 
-  --profileContainer-bg: #ffffff;
-  --profileContainer-bg-focus: #f8f9fa;
+  --profile-container-bg: #ffffff;
+  --profile-container-bg-focus: #f8f9fa;
   --profileText-color: #6c757d;
 
   --chevronRightbtn-bg: #ffffff;
@@ -4315,7 +4315,7 @@ form {
 
 .btnStyle {
   border-width: 2px !important;
-  border-color: #1778f2;
+  border-color: var(--card-background-color);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   display: flex;
@@ -4355,12 +4355,12 @@ form {
   border-radius: 16px 0px 0px 16px;
   display: flex;
   align-items: center;
-  background-color: var(--profileContainer-bg) !important;
+  background-color: var(--profile-container-bg) !important;
 }
 
 .profileContainer:focus {
   outline: none;
-  background-color: var(--profileContainer-bg-focus);
+  background-color: var(--profile-container-bg-focus);
 }
 
 .imageContainer {
