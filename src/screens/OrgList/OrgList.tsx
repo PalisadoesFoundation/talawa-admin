@@ -18,7 +18,7 @@ import type {
   InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 import { Button } from '@mui/material';

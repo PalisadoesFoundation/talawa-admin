@@ -1019,6 +1019,9 @@
   position: relative;
   display: inline-block;
 }
+.customDropdown {
+  width: 100%;
+}
 
 .dropdown:is(
     :hover,
@@ -1041,7 +1044,7 @@
 
 .createorgdropdown {
   background-color: var(--createorgdropdown-button-bg);
-  border-color: var(--createorgdropdown-button-border);
+  border: 1px solid var(--dropdown-border) !important;
   height: 3rem;
   margin-top: 0.7rem;
   color: var(--dropdown-button-fill);
@@ -1519,7 +1522,7 @@
 .orgCard {
   background-color: var(--orgCard-bg);
   margin: 0.5rem;
-  height: calc(120px + 2rem);
+  height: calc(170px + 2rem);
   padding: 1rem;
   border-radius: 8px;
   outline: 1px solid var(--orgCard-outline);
@@ -3652,8 +3655,8 @@
 /* -- OrgListCard.tsx -- */
 
 .manageBtn {
-  margin: 1rem 0 0;
-  margin-top: 15px;
+  margin: 0 0 0;
+  margin-top: 0px;
   border: 1px solid var(--manageBtn-border);
   box-shadow: 0 2px 2px var(--manageBtn-box-shadow);
   padding: 10px 10px;
@@ -4472,6 +4475,9 @@ form {
   left: calc(-300px - 2rem);
   bottom: 0;
   animation: goToLeftBigScreen 0.5s ease-in-out;
+}
+.leftDrawer .sidebarcompheight {
+  flex-grow: 1;
 }
 
 .leftDrawer .brandingContainer {
@@ -5821,6 +5827,14 @@ form {
 
 .btnsContainerSearchBar .btnsBlockSearchBar {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btnsContainerSearchBar .btnsBlock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar button {
