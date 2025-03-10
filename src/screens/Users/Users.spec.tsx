@@ -257,13 +257,16 @@ describe('Testing Users screen', () => {
     };
 
     // The update query function from the component
-    const updateQuery = (prev, { fetchMoreResult }) => {
+    const updateQuery = (
+      prev: { users: any[] } | undefined,
+      { fetchMoreResult }: { fetchMoreResult?: { users: any[] } },
+    ) => {
       if (!fetchMoreResult) return prev || { users: [] };
 
       const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
 
       const uniqueUsers = Array.from(
-        new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
+        new Map(mergedUsers.map((user: any) => [user.user._id, user])).values(),
       );
 
       return { users: uniqueUsers };
