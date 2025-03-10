@@ -47,20 +47,29 @@ function organizationVenues(): JSX.Element {
   }
 
   // GraphQL query for fetching venue data
+  const whereFilter: Record<string, unknown> = {};
+  if (searchBy === 'name' && searchTerm.trim() !== '') {
+    whereFilter.name_contains = searchTerm;
+  }
+  if (searchBy === 'desc' && searchTerm.trim() !== '') {
+    whereFilter.description_contains = searchTerm;
+  }
+  const variables: Record<string, unknown> = {
+    isInversed: sortOrder == 'highest' ? true : false,
+    id: orgId,
+    first: 30,
+  };
+  if (Object.keys(whereFilter).length > 0) {
+    variables.where = whereFilter;
+  }
+
   const {
     data: venueData,
     loading: venueLoading,
     error: venueError,
     refetch: venueRefetch,
   } = useQuery(VENUE_LIST, {
-    variables: {
-      orgId: orgId,
-      orderBy: sortOrder === 'highest' ? 'capacity_DESC' : 'capacity_ASC',
-      where: {
-        name_starts_with: searchBy === 'name' ? searchTerm : undefined,
-        description_starts_with: searchBy === 'desc' ? searchTerm : undefined,
-      },
-    },
+    variables,
   });
 
   // GraphQL mutation for deleting a venue
@@ -87,6 +96,7 @@ function organizationVenues(): JSX.Element {
    */
   const handleSearch = (term: string): void => {
     setSearchTerm(term);
+    venueRefetch();
   };
 
   /**
@@ -94,6 +104,7 @@ function organizationVenues(): JSX.Element {
    * @param value - The field to search by (name or description).
    */
   const handleSearchByChange = (value: string): void => {
+    setSearchTerm('');
     setSearchBy(value as 'name' | 'desc');
   };
 
@@ -133,13 +144,21 @@ function organizationVenues(): JSX.Element {
 
   // Error handling for venue data fetch
   if (venueError) {
+    console.error(
+      'GraphQL Error Response:',
+      JSON.stringify(venueError, null, 2),
+    );
     errorHandler(t, venueError);
   }
 
   // Updating venues state when venue data changes
   useEffect(() => {
-    if (venueData && venueData.getVenueByOrgId) {
-      setVenues(venueData.getVenueByOrgId);
+    if (venueData && venueData.organization) {
+      setVenues(
+        venueData.organization.venues.edges.map(
+          (edge: Record<string, unknown>) => edge.node,
+        ),
+      );
     }
   }, [venueData]);
 

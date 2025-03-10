@@ -6,7 +6,7 @@ import styles from '../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 
-interface InterfaceVenueCardProps {
+export interface InterfaceVenueCardProps {
   venueItem: InterfaceQueryVenueListItem;
   index: number;
   showEditVenueModal: (venueItem: InterfaceQueryVenueListItem) => void;
@@ -62,33 +62,40 @@ const VenueCard = ({
 }: InterfaceVenueCardProps): JSX.Element => {
   // Translation hook for internationalization
   const { t: tCommon } = useTranslation('common');
-
   return (
     <div
       className="col-xl-4 col-lg-4 col-md-6"
       data-testid={`venue-item${index + 1}`}
-      key={venueItem._id}
+      key={venueItem.id}
     >
       <div className={styles.cards} data-testid="cardStructure">
         <Card className={styles.card}>
           {/* Venue image or default image if none provided */}
           <Card.Img
             variant="top"
-            src={venueItem.image || defaultImg}
+            src={venueItem.attachments?.[0]?.url || defaultImg}
             alt="image not found"
+            // temporary solution to bypass CORS error
+            crossOrigin="anonymous"
             className={styles.novenueimage}
           />
           <Card.Body className="pb-0">
             <Card.Title className="d-flex justify-content-between">
               {/* Venue name with truncation if too long */}
-              <div className={styles.title}>
+              <div
+                className={styles.title}
+                data-testid={`venue-name${index + 1}`}
+              >
                 {venueItem.name.length > 25
                   ? venueItem.name.slice(0, 25) + '...'
                   : venueItem.name}
               </div>
 
               {/* Venue capacity with icon */}
-              <div className={styles.capacityLabel}>
+              <div
+                className={styles.capacityLabel}
+                data-testid={`capacity-${venueItem.capacity}`}
+              >
                 Capacity: {venueItem.capacity}
                 <PeopleIcon className="ms-1" width={16} height={16} />
               </div>
@@ -117,7 +124,7 @@ const VenueCard = ({
             <Button
               size="sm"
               data-testid={`deleteVenueBtn${index + 1}`}
-              onClick={() => handleDelete(venueItem._id)}
+              onClick={() => handleDelete(venueItem.id)}
               className={`btn btn-danger ${styles.removeButton}`}
             >
               <i className="fa fa-trash me-2"></i>

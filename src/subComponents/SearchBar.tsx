@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Search } from '@mui/icons-material';
 import styles from '../style/app.module.css';
-
 interface InterfaceSearchBarProps {
   /** Placeholder text for the search input */
   placeholder?: string;
@@ -32,9 +31,20 @@ const SearchBar: React.FC<InterfaceSearchBarProps> = ({
   buttonTestId,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null); // Store the timeout reference
+
+  useEffect(() => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current); // Cancel previous timeout immediately
+    }
+    debounceTimeout.current = setTimeout(() => {
+      onSearch(searchTerm);
+    }, 300);
+  }, [searchTerm]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchTerm(event.target.value);
+    onSearch(event.target.value);
   };
 
   const handleSearchClick = (): void => {

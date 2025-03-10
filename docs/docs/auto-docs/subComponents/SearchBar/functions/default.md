@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/subComponents/SearchBar.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchBar.tsx#L27)
+Defined in: [src/subComponents/SearchBar.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchBar.tsx#L26)
 
 SearchBar component renders a search input with a button.
 It allows users to enter a search term and triggers a callback on search.

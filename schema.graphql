@@ -973,9 +973,32 @@ type Organization {
     last: PositiveInt
   ): UserTagsConnection
   visibleInSearch: Boolean!
-  venues: [Venue]
+  venues(
+    first: Int
+    where: QueryVenuesInput
+    isInversed: Boolean
+  ): OrganizationVenuesConnection
+}
+type QueryVenuesInput {
+  description_contains: String
+  name_contains: String
+}
+type Venue {
+  id: ID!
+  capacity: Int!
+  description: String
+  attachments: [VenueAttachment!]
+  name: String!
 }
 
+type OrganizationVenuesConnection {
+  edges: [OrganizationVenuesConnectionEdge]
+  pageInfo: PageInfo!
+}
+type OrganizationVenuesConnectionEdge {
+  cursor: String!
+  node: Venue
+}
 type OrganizationPg {
   id: ID!
   name: String
@@ -2021,6 +2044,7 @@ type Query {
     where: UserWhereInput
   ): [UserData]!
   venue(id: ID!): [Venue]
+  organization(id: ID!): Organization
 }
 
 input RecaptchaVerification {
@@ -3005,14 +3029,9 @@ enum WeekDays {
   TU
   WE
 }
-
-type Venue {
-  _id: ID!
-  capacity: Int!
-  description: String
-  imageUrl: URL
-  name: String!
-  organization: Organization!
+type VenueAttachment {
+  mimeType: String
+  url: String
 }
 
 input VenueInput {

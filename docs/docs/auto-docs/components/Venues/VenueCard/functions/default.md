@@ -17,7 +17,7 @@ It also provides buttons to edit or delete the venue.
 
 ### \_\_namedParameters
 
-`InterfaceVenueCardProps`
+[`InterfaceVenueCardProps`](../interfaces/InterfaceVenueCardProps.md)
 
 ## Returns
 

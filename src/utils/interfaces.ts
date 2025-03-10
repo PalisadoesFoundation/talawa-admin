@@ -1117,13 +1117,16 @@ export interface InterfaceQueryUserListItem {
     eventAdmin: { _id: string }[];
   };
 }
-
+export interface InterfaceAttachment {
+  url: string;
+  mimeType: string;
+}
 export interface InterfaceQueryVenueListItem {
-  _id: string;
+  id: string;
   name: string;
-  description: string | null;
-  image: string | null;
-  capacity: string;
+  description?: string;
+  attachments?: InterfaceAttachment[];
+  capacity: number;
 }
 
 export interface InterfaceAddress {
