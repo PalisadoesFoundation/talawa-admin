@@ -1,13 +1,17 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
 language: "en-US"
 early_access: false
+chat:
+  auto_reply: true
 reviews:
-  profile: "chill"
+  profile: "assertive"
+  poem: false
   request_changes_workflow: true
   high_level_summary: true
-  poem: true
   review_status: true
   collapse_walkthrough: false
+  request_changes_workflow: true
   auto_review:
     enabled: true
     drafts: false
@@ -15,5 +19,9 @@ reviews:
       - develop
       - develop-postgres
       - main
-chat:
-  auto_reply: true
+  path_filters:
+    - '!**/docs/docs/**'
+    - "!*.html"
+    - "!*.md"
+    - "!*.svg" 
+
