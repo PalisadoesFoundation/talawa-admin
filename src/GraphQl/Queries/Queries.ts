@@ -96,6 +96,25 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
   }
 `;
 
+export const ALL_ORGANIZATIONS_PG = gql`
+  query UserJoinedOrganizations {
+    organizations {
+      id
+      name
+      addressLine1
+      description
+      avatarURL
+      members(first: 32) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 // Query to take the Organization list with filter  and sort option
 export const ORGANIZATION_CONNECTION_LIST = gql`
   query OrganizationsConnection(
@@ -714,7 +733,6 @@ export const USER_DETAILS = gql`
         }
         isSuperAdmin
         appLanguageCode
-        pluginCreationAllowed
         createdOrganizations {
           _id
         }
@@ -1045,7 +1063,6 @@ export {
   ADVERTISEMENTS_GET,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_EVENTS_CONNECTION,
-  PLUGIN_GET,
 } from './PlugInQueries';
 
 // display posts

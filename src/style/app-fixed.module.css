@@ -75,8 +75,8 @@
   --searchButton-bg-hover: #a8c7fa;
   --searchButton-bg-active: #a8c7fa;
 
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --modalHeader-color: #000000;
   --modalHeader-bg: #ffffff;
@@ -282,8 +282,8 @@
   --colorPrimary-bg-active: #a8c7fa;
   --colorPrimary-bg-active: #a8c7fa;
 
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --colorPrimary-color-active: #555555;
   --colorWhite: #555555;
@@ -3487,11 +3487,11 @@ form label,
 .cardItem {
   display: flex;
   flex-direction: row;
-  align-items: flex-start; /* Ensures left alignment */
+  align-items: center; /* Ensures left alignment */
   justify-content: flex-start;
   height: 6rem;
-  padding: 1rem;
-  gap: 2rem;
+  padding: 0.75rem;
+  gap: 1.5rem;
   background-color: #f7f8fa;
   border: 1px solid var(--cardItem-border);
   border-radius: 8px;
@@ -3500,14 +3500,14 @@ form label,
 
 .CardItemImage {
   background-color: #eaebef;
-  height: 4rem;
-  width: 4rem;
+  height: 3.5rem;
+  min-width: 3.5rem;
   border: 3.25rem; /* Make sure to update this if you need border style & color */
   border-radius: 8px;
 }
 
 .cardItemtitle {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
 }
 
@@ -3729,6 +3729,9 @@ form label,
   border-color: var(--manageBtn1-border) !important;
   background-color: var(--manageBtn1-bg) !important;
   color: var(--manageBtn1-color) #555555 !important;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .manageBtn:hover {
@@ -4159,8 +4162,8 @@ form {
   border: none;
   padding: 2.1rem 0.5rem;
   height: 52px;
-  width: 300px;
-  border-radius: 8px 0px 0px 8px;
+  width: 100%;
+  border-radius: 16px 0px 0px 16px;
   display: flex;
   align-items: center;
   background-color: var(--profileContainer-bg) !important;
@@ -4192,6 +4195,29 @@ form {
 
 .ArrowIcon {
   font-size: 24px;
+}
+
+.dropdownToggle {
+  margin-bottom: 0;
+  display: flex;
+  background-image: url(/public/images/svg/angleDown.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--tablerow-bg-color) !important;
+  border-left: none;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  color: var(--eventManagement-button-text);
+}
+
+.dropdownToggle:hover {
+  border: 1px solid var(--create-button-border);
+  border-left: none;
+}
+
+.dropdownToggle::after {
+  border-top: none !important;
+  border-bottom: none !important;
 }
 
 .profileText {
