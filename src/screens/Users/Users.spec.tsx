@@ -257,9 +257,22 @@ describe('Testing Users screen', () => {
     };
 
     // The update query function from the component
+    interface UserData {
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        createdAt: string;
+      };
+      appUserProfile: {
+        adminFor: string[];
+        isSuperAdmin: boolean;
+      };
+    }
+
     const updateQuery = (
-      prev: { users: any[] } | undefined,
-      { fetchMoreResult }: { fetchMoreResult?: { users: any[] } },
+      prev: { users: UserData[] } | undefined,
+      { fetchMoreResult }: { fetchMoreResult?: { users: UserData[] } },
     ) => {
       if (!fetchMoreResult) return prev || { users: [] };
 
