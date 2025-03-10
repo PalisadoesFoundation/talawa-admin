@@ -19,8 +19,9 @@ import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
+
 interface InterfaceChatRoomProps {
   selectedContact: string;
   chatListRefetch: (
@@ -58,6 +59,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
+
+  // Add the MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
+
   const [chatTitle, setChatTitle] = useState('');
   const [chatSubtitle, setChatSubtitle] = useState('');
   const [chatImage, setChatImage] = useState('');
@@ -70,6 +75,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     useState(false);
 
   const [attachment, setAttachment] = useState('');
+  const [attachmentObjectName, setAttachmentObjectName] = useState('');
 
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
@@ -170,6 +176,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     setReplyToDirectMessage(null);
     setNewMessage('');
     setAttachment('');
+    setAttachmentObjectName(''); // Reset the object name
     await props.chatListRefetch({ id: userId as string });
   };
 
@@ -203,13 +210,25 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     fileInputRef?.current?.click();
   };
 
+  // Update the handleImageChange function to use MinIO
   const handleImageChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setAttachment(base64);
+    if (file && chat) {
+      try {
+        const organizationId = chat.organization?._id || '';
+
+        const { fileUrl, objectName } = await uploadFileToMinio(
+          file,
+          organizationId,
+        );
+
+        setAttachment(fileUrl);
+        setAttachmentObjectName(objectName);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
     }
   };
 
@@ -421,10 +440,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
             )}
             {attachment && (
               <div className={styles.attachment}>
-                <img src={attachment as string} alt="attachment" />
+                <img src={attachment} alt="attachment" />
 
                 <Button
-                  onClick={() => setAttachment('')}
+                  onClick={() => {
+                    setAttachment('');
+                    setAttachmentObjectName('');
+                  }}
                   className={styles.closeBtn}
                 >
                   <Close />
