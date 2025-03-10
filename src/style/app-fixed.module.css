@@ -36,7 +36,7 @@
  */
 
 :root {
-  --addButton-font: var(#555555);
+  --addButton-font: #555555;
   --addButton-border: #eaebef;
   --addButton-bg: #a8c7fa;
   --addButton-bg-hover: #1778f2;
@@ -80,6 +80,8 @@
 
   --modalHeader-color: #000000;
   --modalHeader-bg: #ffffff;
+
+  --modalTitle-color: #4b5563;
 
   --switch-bg-checked: #1778f2;
   --switch-border-checked: #1778f2;
@@ -674,6 +676,12 @@
   --holidayCard-bg: #00000026;
 
   --spinner-border: #9ca3af;
+
+  --modalClose-button-color: #c8102e;
+  --formLabel-color: #000000;
+  --inputField-text-color: #555555;
+  --inputField-placeholder-color: #707070;
+  --inputField-bg-focus: #f1f3f6;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -801,13 +809,58 @@
 .modalHeader {
   border: none;
   padding-bottom: 0;
-  background-color: var(--modalHeader-bg) !important;
-  padding: 1rem 1rem;
+  background-color: var(--colorlight-bg) !important;
+  padding: 1rem 1rem 0 1rem;
   color: var(--modalHeader-color);
 }
 
-.modalHeader div {
-  color: var(--modalHeader-color) !important;
+/* Make sure the modal title is dark grey */
+.modalHeader div,
+.modalHeader .modal-title {
+  color: var(--modalTitle-color) !important;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* Close button styling */
+.modalHeader button.close,
+.modalHeader .btn-close {
+  color: var(--modalClose-button-color) !important;
+  opacity: 1;
+}
+
+/* Form Labels */
+.inputField label,
+form label,
+.form-label {
+  color: var(--formLabel-color) !important;
+  font-weight: normal;
+  padding-bottom: 0;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+/* Input Fields - Update the existing inputField class */
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--inputField-bg) !important;
+  border: 1px solid var(--inputField-border);
+  color: var(--inputField-text-color) !important;
+}
+
+/* Placeholder styling */
+.inputField::placeholder {
+  color: var(--inputField-placeholder-color) !important;
+  opacity: 1;
+}
+
+.inputField:focus {
+  border: 0.1px solid var(--inputField-border-focus) !important;
+  background-color: var(--inputField-bg-focus) !important;
+  box-shadow: var(--drop-shadow);
+  outline: none;
+  transition: box-shadow 0.2s ease;
 }
 
 /* Switch */
