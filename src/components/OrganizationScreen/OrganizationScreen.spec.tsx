@@ -13,13 +13,27 @@ import styles from '../../style/app-fixed.module.css';
 import { vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
 import '../../style/app.module.css';
+
 const { setItem } = useLocalStorage();
-const mockID: string | undefined = '123';
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
-  useParams: () => ({ orgId: mockID }),
-  useMatch: () => ({ params: { eventId: 'event123', orgId: '123' } }),
-}));
+
+// Create mocks for the router hooks
+const mockUseParams = vi.fn();
+const mockUseMatch = vi.fn();
+const mockNavigate = vi.fn();
+
+// Mock the router hooks
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => mockUseParams(),
+    useMatch: () => mockUseMatch(),
+    Navigate: (props: any) => {
+      mockNavigate(props);
+      return null;
+    },
+  };
+});
 
 const MOCKS = [
   {
@@ -56,9 +70,18 @@ describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
     setItem('name', 'John Doe');
   });
+
   afterAll(() => {
     localStorage.clear();
   });
+
+  beforeEach(() => {
+    // Reset all mocks before each test
+    mockUseParams.mockReset();
+    mockUseMatch.mockReset();
+    mockNavigate.mockReset();
+  });
+
   const renderComponent = (): void => {
     render(
       <MockedProvider addTypename={false} link={link} mocks={MOCKS}>
@@ -74,6 +97,12 @@ describe('Testing OrganizationScreen', () => {
   };
 
   test('renders correctly with event title', async () => {
+    // Set up mocks for valid orgId case
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    mockUseMatch.mockReturnValue({
+      params: { eventId: 'event123', orgId: '123' },
+    });
+
     renderComponent();
 
     await waitFor(() => {
@@ -82,10 +111,62 @@ describe('Testing OrganizationScreen', () => {
     });
   });
 
-  test('handles window resize', () => {
+  test('navigates to home page when orgId is not provided', () => {
+    // Set up mocks for undefined orgId case
+    mockUseParams.mockReturnValue({ orgId: undefined });
+    mockUseMatch.mockReturnValue(null);
+
     renderComponent();
+
+    // Verify Navigate was called with correct props
+    expect(mockNavigate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: '/',
+        replace: true,
+      }),
+    );
+  });
+
+  test('handles window resize', () => {
+    // Set up mocks for valid orgId case
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    mockUseMatch.mockReturnValue({
+      params: { eventId: 'event123', orgId: '123' },
+    });
+
+    renderComponent();
+
     window.innerWidth = 800;
     fireEvent(window, new Event('resize'));
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
+  });
+
+  test('handles event not found scenario', async () => {
+    // Set up mocks for valid orgId but with an eventId that doesn't match any events in data
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    // Return a match with an eventId that doesn't exist in our mock data
+    mockUseMatch.mockReturnValue({
+      params: { eventId: 'nonexistent-event', orgId: '123' },
+    });
+
+    // Spy on console.warn to verify it's called
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    renderComponent();
+
+    // Wait for data to be processed
+    await waitFor(() => {
+      // Verify console.warn was called with the expected message
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Event with id nonexistent-event not found',
+      );
+    });
+
+    // Verify that no event name is displayed
+    const eventNameElement = screen.queryByText(/Test Event Title/i);
+    expect(eventNameElement).not.toBeInTheDocument();
+
+    // Clean up the spy
+    warnSpy.mockRestore();
   });
 });
