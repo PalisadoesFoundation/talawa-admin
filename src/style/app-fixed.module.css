@@ -205,6 +205,7 @@
   --secondText-color: #9fa6b2;
 
   --leftDrawer-bg: #ffffff;
+  --leftDrawer-fixedModule-bg: #f6f8fc;
   --leftDrawer-scrollbar-color: #eaebef;
   --leftDrawer-optionList-bg: #ffffff;
   --LeftDrawer-org-profileContainer-bg: #e0e9ff;
@@ -213,7 +214,7 @@
   --leftDrawer-inactive-button-hover-bg: #eaebef;
   --leftDrawer-collapse-active-button-bg: #e0e5ec;
   --leftDrawer-inactive-button-bg: transparent;
-  --leftDrawer-active-button-bg: #d3e3fd;
+  --leftDrawer-active-button-bg: #eaebef;
 
   --activeItem-bg: #eaebef;
   --activeItem-color: #000000;
@@ -4478,7 +4479,7 @@ form {
   display: flex;
   flex-direction: column;
   padding: 0.8rem 1rem 0 1rem;
-  background-color: var(--leftDrawer-bg) !important;
+  background-color: var(--leftDrawer-fixedModule-bg) !important;
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
 }
@@ -4564,7 +4565,7 @@ form {
   width: 100%;
   text-align: start;
   margin-bottom: 0.8rem;
-  border-radius: 16px;
+  border-radius: 12px;
   font-size: 16px;
   padding: 0.6rem;
   padding-left: 0.8rem;
@@ -4658,6 +4659,7 @@ form {
 .leftDrawerActiveButton {
   background-color: var(--leftDrawer-active-button-bg);
   color: black;
+  font-weight: bold;
 }
 
 .leftDrawerActiveButton:hover .arrow-indicator {
