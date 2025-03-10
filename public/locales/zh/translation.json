@@ -118,8 +118,6 @@
     "Contributions": "贡献",
     "Posts": "帖子",
     "Block/Unblock": "阻止/解除阻止",
-    "Plugins": "插件",
-    "Plugin Store": "插件商店",
     "Advertisement": "广告",
     "allOrganizations": "所有组织",
     "yourOrganization": "您的组织",
@@ -163,8 +161,6 @@
     "sampleOrgDuplicate": "只允许一个样本组织",
     "noOrgErrorDescription": "请通过仪表板创建组织",
     "manageFeatures": "管理功能",
-    "manageFeaturesInfo": "创建成功！",
-    "goToStore": "前往插件商店",
     "enableEverything": "启用一切",
     "sampleOrgSuccess": "样本组织已成功创建",
     "name": "名称",
@@ -886,37 +882,6 @@
     "cancel": "取消",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
-  "addOnRegister": {
-    "addNew": "添新",
-    "addPlugin": "添加插件",
-    "pluginName": "插件名称",
-    "creatorName": "创建者姓名",
-    "pluginDesc": "插件说明",
-    "pName": "例如：捐款",
-    "cName": "例如：约翰·多伊",
-    "pDesc": "该插件启用 UI",
-    "close": "关闭",
-    "register": "注册"
-  },
-  "addOnStore": {
-    "title": "添加商店",
-    "searchName": "例如：捐款",
-    "search": "搜索",
-    "enable": "启用",
-    "disable": "残疾人",
-    "pHeading": "插件",
-    "install": "已安装",
-    "available": "可用的",
-    "pMessage": "插件不存在",
-    "filter": "筛选"
-  },
-  "addOnEntry": {
-    "enable": "启用",
-    "install": "安装",
-    "uninstall": "卸载",
-    "uninstallMsg": "此功能现已从您的组织中删除",
-    "installMsg": "您的组织现已启用此功能"
-  },
   "memberDetail": {
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
@@ -947,7 +912,6 @@
     "personalDetailsHeading": "个人资料详情",
     "appLanguageCode": "选择语言",
     "deleteUser": "删除用户",
-    "pluginCreationAllowed": "允许创建插件",
     "created": "已创建",
     "adminForOrganizations": "组织管理员",
     "membershipRequests": "会员请求",

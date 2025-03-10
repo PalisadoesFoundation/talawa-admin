@@ -682,7 +682,6 @@ export const USER_DETAILS = gql`
         }
         isSuperAdmin
         appLanguageCode
-        pluginCreationAllowed
         createdOrganizations {
           _id
         }
@@ -1013,7 +1012,6 @@ export {
   ADVERTISEMENTS_GET,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_EVENTS_CONNECTION,
-  PLUGIN_GET,
 } from './PlugInQueries';
 
 // display posts
