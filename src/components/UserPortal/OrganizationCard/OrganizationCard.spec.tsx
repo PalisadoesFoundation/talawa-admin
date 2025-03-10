@@ -148,7 +148,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             __typename: 'Organization',
             _id: '2',

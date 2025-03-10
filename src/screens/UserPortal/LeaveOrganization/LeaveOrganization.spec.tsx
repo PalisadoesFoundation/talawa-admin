@@ -161,7 +161,7 @@ const mocks = [
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             _id: 'org123',
             name: 'Tech Enthusiasts Club',

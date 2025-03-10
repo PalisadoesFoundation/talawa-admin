@@ -196,7 +196,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             _id: 123,
             image: null,
@@ -431,7 +431,7 @@ export const MOCKS2 = [
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             _id: 123,
             image: null,

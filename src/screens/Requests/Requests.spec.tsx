@@ -365,4 +365,28 @@ describe('Testing Requests screen', () => {
     await wait(200);
     // This test should not throw any errors
   });
+
+  test('Shows warning toast when there are no organizations', async () => {
+    const { toast } = await import('react-toastify');
+
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to finish loading and the effect to run
+    await wait(200);
+
+    // Verify that the toast.warning function was called with the expected message
+    expect(toast.warning).toHaveBeenCalledWith(expect.any(String));
+    expect(toast.warning).toHaveBeenCalledTimes(1);
+  });
 });
