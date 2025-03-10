@@ -18,9 +18,9 @@ import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import convertToBase64 from 'utils/convertToBase64';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -88,6 +88,10 @@ export default function CreateGroupChat({
   const [userIds, setUserIds] = useState<string[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { orgId: currentOrg } = useParams();
+  const { uploadFileToMinio } = useMinioUpload();
 
   function openAddUserModal(): void {
     setAddUserModalisOpen(true);
@@ -95,8 +99,6 @@ export default function CreateGroupChat({
 
   const toggleAddUserModal = (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
-
-  const { orgId: currentOrg } = useParams();
 
   function reset(): void {
     setTitle('');
@@ -139,20 +141,12 @@ export default function CreateGroupChat({
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
     const [firstName, lastName] = userName.split(' ');
-
     const newFilterData = {
       firstName_contains: firstName || '',
       lastName_contains: lastName || '',
     };
-
-    allUsersRefetch({
-      ...newFilterData,
-    });
+    allUsersRefetch({ ...newFilterData });
   };
-
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = (): void => {
     fileInputRef?.current?.click();
@@ -162,9 +156,13 @@ export default function CreateGroupChat({
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setSelectedImage(base64);
+    if (file && currentOrg) {
+      try {
+        const { fileUrl } = await uploadFileToMinio(file, currentOrg);
+        setSelectedImage(fileUrl);
+      } catch (error) {
+        console.error('Error uploading image to MinIO:', error);
+      }
     }
   };
 
@@ -184,7 +182,7 @@ export default function CreateGroupChat({
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            style={{ display: 'none' }} // Hide the input
+            style={{ display: 'none' }}
             onChange={handleImageChange}
             data-testid="fileInput"
           />
