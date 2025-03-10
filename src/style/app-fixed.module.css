@@ -809,7 +809,7 @@
 .modalHeader {
   border: none;
   padding-bottom: 0;
-  background-color: #f5f5f5 !important;
+  background-color: var(--colorlight-bg) !important;
   padding: 1rem 1rem 0 1rem;
   color: var(--modalHeader-color);
 }
