@@ -103,16 +103,31 @@ const successMocks: MockedResponse[] = [
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: { userId: 'mockUserId' },
+      variables: { id: 'mockUserId', first: 10 },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: '123',
-            name: 'Test Org',
+        user: {
+          organizationsWhereMember: {
+            pageInfo: {
+              hasNextPage: false,
+            },
+            edges: [
+              {
+                node: {
+                  id: '123',
+                  name: 'Test Org',
+                  addressLine1: '',
+                  description: '',
+                  avatarURL: '',
+                  members: {
+                    edges: [],
+                  },
+                },
+              },
+            ],
           },
-        ],
+        },
       },
     },
   },

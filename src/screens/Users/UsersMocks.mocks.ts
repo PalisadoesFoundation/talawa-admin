@@ -25,7 +25,7 @@ export const EMPTY_MOCKS = [
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
@@ -72,7 +72,7 @@ export const MOCKS_NEW_2 = [
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
@@ -102,7 +102,7 @@ export const MOCKS_NEW = [
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
@@ -132,7 +132,7 @@ export const MOCKS_NEW2 = [
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
@@ -180,7 +180,7 @@ export const MOCKS_NEW3 = [
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
