@@ -131,7 +131,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         variables: {
           name: formState.campaignName,
           currencyCode: formState.campaignCurrency,
-          goalAmount: parseInt(formState.campaignGoal, 10),
+          goalAmount: parseInt(formState.campaignGoal.toString()),
           startAt: dayjs(formState.campaignStartDate).toISOString(),
           endAt: dayjs(formState.campaignEndDate).toISOString(),
           fundId,
