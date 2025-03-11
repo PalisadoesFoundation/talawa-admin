@@ -5,7 +5,7 @@ import type { ChangeEvent } from 'react';
 import styles from '../../style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
-
+import { useMinioUpload } from 'utils/MinioUpload';
 // import useLocalStorage from 'utils/useLocalstorage';
 
 /**
@@ -71,6 +71,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   t,
   tCommon,
 }) => {
+  const { uploadFileToMinio } = useMinioUpload();
+
   return (
     <Modal
       show={showModal}
@@ -271,15 +273,23 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             name="photo"
             type="file"
             multiple={false}
-            onChange={async (e: React.ChangeEvent): Promise<void> => {
+            onChange={async (e: React.ChangeEvent) => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
 
-              if (file)
-                setFormState({
-                  ...formState,
-                  avatar: (await convertToBase64(file)) || null,
-                });
+              if (file) {
+                try {
+                  const { fileUrl } = await uploadFileToMinio(file, '');
+                  console.log('File uploaded successfully:', fileUrl);
+
+                  setFormState({
+                    ...formState,
+                    avatar: fileUrl,
+                  });
+                } catch (error) {
+                  console.error('Error uploading image to MinIO:', error);
+                }
+              }
             }}
             data-testid="organisationImage"
           />

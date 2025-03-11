@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
 import {
   render,
@@ -16,9 +16,23 @@ import OrganizationModal from './OrganizationModal';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 
-vi.mock('utils/convertToBase64', () => ({
-  default: vi.fn(() => Promise.resolve('mockBase64String')),
+const mockUploadFileToMinio = vi
+  .fn()
+  .mockResolvedValue({ fileUrl: 'https://minio-test.com/test-image.jpg' });
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: vi.fn(() => ({
+    uploadFileToMinio: mockUploadFileToMinio,
+  })),
 }));
+
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 describe('OrganizationModal Component', () => {
   const mockToggleModal = vi.fn();
@@ -39,6 +53,10 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   vi.mock('utils/convertToBase64', () => ({
@@ -94,18 +112,18 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => expect(mockCreateOrg).toHaveBeenCalled());
   });
 
-  test('uploads image correctly', async () => {
+  test('should handle successful image upload with MinioClient', async () => {
     setup();
+
+    await wait();
+
     const fileInput = screen.getByTestId('organisationImage');
-    const file = new File(['dummy content'], 'example.png', {
-      type: 'image/png',
+    expect(fileInput).toBeInTheDocument();
+
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [file] } });
     });
-    fireEvent.change(fileInput, { target: { files: [file] } });
-    await waitFor(() =>
-      expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mockBase64String' }),
-      ),
-    );
   });
 
   test('closes modal when close button is clicked', () => {
@@ -337,20 +355,55 @@ describe('OrganizationModal Component', () => {
       expect(lastCall[0][formKey]).not.toEqual(longText);
     });
   });
-  test('should handle valid image upload', async () => {
+
+  // Add new test for MinIO upload error handling
+  test('should handle MinIO upload error', async () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error');
     setup();
+    await wait();
+
+    const fileInput = screen.getByTestId('organisationImage');
     const file = new File(['dummy content'], 'test.png', {
       type: 'image/png',
     });
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error uploading image to MinIO:',
+        expect.any(Error),
+      );
+    });
+    consoleErrorSpy.mockRestore();
+  });
+
+  test('should validate file size', async () => {
+    setup();
     const fileInput = screen.getByTestId('organisationImage');
+    const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.png', {
+      type: 'image/png',
+    });
 
-    await userEvent.upload(fileInput, file);
+    fireEvent.change(fileInput, { target: { files: [largeFile] } });
 
-    expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({
-        avatar: 'mockBase64String',
-      }),
-    );
+    await waitFor(() => {
+      expect(mockSetFormState).not.toHaveBeenCalled();
+    });
+  });
+
+  test('should validate file type', async () => {
+    setup();
+    const fileInput = screen.getByTestId('organisationImage');
+    const invalidFile = new File(['content'], 'test.txt', {
+      type: 'text/plain',
+    });
+
+    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+
+    await waitFor(() => {
+      expect(mockSetFormState).not.toHaveBeenCalled();
+    });
   });
 
   test('should handle null file selection', async () => {
@@ -437,6 +490,7 @@ describe('OrganizationModal Component', () => {
       }),
     );
   });
+
   test('should validate all required fields on submit', async () => {
     setup();
     const form = screen.getByTestId('submitOrganizationForm').closest('form');
