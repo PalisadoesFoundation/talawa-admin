@@ -109,9 +109,8 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       await createFund({
         variables: {
           name: fundName,
-          refrenceNumber: fundRef,
           organizationId: orgId,
-          taxDeductible,
+          isTaxDeductible: taxDeductible,
           isArchived,
           isDefault,
         },
@@ -136,32 +135,25 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, fundRef, taxDeductible, isArchived, isDefault } =
+    const { fundName, taxDeductible } =
       formState;
     try {
       const updatedFields: { [key: string]: string | boolean } = {};
       if (fundName != fund?.name) {
         updatedFields.name = fundName;
       }
-      if (fundRef != fund?.refrenceNumber) {
-        updatedFields.refrenceNumber = fundRef;
-      }
       if (taxDeductible != fund?.taxDeductible) {
-        updatedFields.taxDeductible = taxDeductible;
-      }
-      if (isArchived != fund?.isArchived) {
-        updatedFields.isArchived = isArchived;
-      }
-      if (isDefault != fund?.isDefault) {
-        updatedFields.isDefault = isDefault;
+        updatedFields.isTaxDeductible = taxDeductible;
       }
       if (Object.keys(updatedFields).length === 0) {
         return;
       }
       await updateFund({
         variables: {
-          id: fund?.id,
-          ...updatedFields,
+          input: {
+            id: fund?.id,
+            ...updatedFields,
+          },
         },
       });
       setFormState({
@@ -299,4 +291,5 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     </>
   );
 };
+
 export default FundModal;
