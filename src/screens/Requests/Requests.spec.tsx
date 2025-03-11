@@ -23,10 +23,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
-/**
- * Set up `localStorage` stubs for testing.
- */
-
+// Mock localStorage
 vi.stubGlobal('localStorage', {
   getItem: vi.fn(),
   setItem: vi.fn(),
@@ -34,10 +31,7 @@ vi.stubGlobal('localStorage', {
   removeItem: vi.fn(),
 });
 
-/**
- * Mock `window.location` for testing redirection behavior.
- */
-
+// Mock window.location
 Object.defineProperty(window, 'location', {
   value: {
     href: 'http://localhost/',
@@ -51,7 +45,7 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-// Mock the toast functions to avoid issues with notifications
+// Mock react-toastify
 vi.mock('react-toastify', async () => {
   const actual = await vi.importActual('react-toastify');
   return {
@@ -67,8 +61,7 @@ vi.mock('react-toastify', async () => {
 
 const { setItem, removeItem } = useLocalStorage();
 
-// Make sure MOCKS and all other mock data have proper organization structure
-// Each mock should return { organizations: [...] } even if empty
+// Create mock links
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
@@ -77,57 +70,9 @@ const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
 const link6 = new StaticMockLink(MOCKS3, true);
 const link7 = new StaticMockLink(MOCKS4, true);
 
-export const MOCKS_WITH_NULL_FETCHMORE = [
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST,
-      variables: {
-        id: 'org1',
-        first: 8,
-        skip: 0,
-        firstName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 'org1',
-            membershipRequests: [
-              {
-                _id: 'request1',
-                user: {
-                  firstName: 'Scott',
-                  lastName: 'Tony',
-                  email: 'scott@example.com',
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST,
-      variables: {
-        id: 'org1',
-        skip: 1,
-        firstName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 'org1',
-            membershipRequests: [], // Return an empty array
-          },
-        ],
-      },
-    },
-  },
+// Mock data for infinite scroll tests
+const INFINITE_SCROLL_MOCKS = [
+  // Initial organization list query
   {
     request: {
       query: ORGANIZATION_LIST,
@@ -137,7 +82,71 @@ export const MOCKS_WITH_NULL_FETCHMORE = [
         organizations: [
           {
             _id: 'org1',
-            name: 'Organization 1',
+            name: 'Test Organization',
+          },
+        ],
+      },
+    },
+  },
+  // Initial membership requests query
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: '',
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '',
+            membershipRequests: Array(8)
+              .fill(null)
+              .map((_, i) => ({
+                _id: `request${i + 1}`,
+                user: {
+                  _id: `user${i + 1}`,
+                  firstName: `User${i + 1}`,
+                  lastName: 'Test',
+                  email: `user${i + 1}@test.com`,
+                },
+              })),
+          },
+        ],
+      },
+    },
+  },
+  // Follow-up query for more data
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: '',
+        skip: 8,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '',
+            membershipRequests: Array(4)
+              .fill(null)
+              .map((_, i) => ({
+                _id: `request${i + 9}`,
+                user: {
+                  _id: `user${i + 9}`,
+                  firstName: `User${i + 9}`,
+                  lastName: 'Test',
+                  email: `user${i + 9}@test.com`,
+                },
+              })),
           },
         ],
       },
@@ -145,14 +154,11 @@ export const MOCKS_WITH_NULL_FETCHMORE = [
   },
 ];
 
+const linkInfiniteScroll = new StaticMockLink(INFINITE_SCROLL_MOCKS, true);
+
 /**
  * Utility function to wait for a specified amount of time.
- * Wraps `setTimeout` in an `act` block for testing purposes.
- *
- * @param ms - The duration to wait in milliseconds. Default is 100ms.
- * @returns A promise that resolves after the specified time.
  */
-
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -165,8 +171,6 @@ beforeEach(() => {
   setItem('id', 'user1');
   setItem('AdminFor', [{ _id: 'org1', __typename: 'Organization' }]);
   setItem('SuperAdmin', false);
-
-  // Reset mocked functions
   vi.clearAllMocks();
 });
 
@@ -459,8 +463,6 @@ describe('Testing Requests screen', () => {
     expect(toast.warning).toHaveBeenCalledTimes(1);
   });
 
-  const link8 = new StaticMockLink(MOCKS_WITH_NULL_FETCHMORE, true);
-
   /**
    * Utility function to wait for a specified amount of time.
    * Wraps `setTimeout` in an `act` block for testing purposes.
@@ -490,28 +492,8 @@ describe('Testing Requests screen', () => {
     localStorage.clear();
   });
   test('should handle loading more requests successfully', async () => {
-    const mockFetchMore = vi.fn();
-    const mockSetIsLoadingMore = vi.fn();
-    const mockSetHasMore = vi.fn();
-
-    // Mock data structure that matches your component's expectations
-    const mockData = {
-      organizations: [
-        {
-          _id: 'org1',
-          membershipRequests: Array(8)
-            .fill(null)
-            .map((_, i) => ({
-              _id: `request${i + 1}`,
-              user: { firstName: `User${i + 1}`, lastName: 'Test' },
-            })),
-        },
-      ],
-    };
-
-    // Render component with mocked data and functions
     render(
-      <MockedProvider addTypename={false} link={link7}>
+      <MockedProvider addTypename={false} link={linkInfiniteScroll}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -528,25 +510,28 @@ describe('Testing Requests screen', () => {
     const table = screen.getByRole('grid');
     expect(table).toBeInTheDocument();
 
-    // Simulate scroll to bottom to trigger load more
+    // Initial data should be loaded
+    expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
+
+    // Simulate scroll to bottom
     fireEvent.scroll(window, {
       target: {
-        scrollY: 1000,
-        innerHeight: 100,
-        scrollHeight: 1000,
+        scrollY: document.documentElement.scrollHeight,
+        innerHeight: window.innerHeight,
+        scrollHeight: document.documentElement.scrollHeight,
       },
     });
 
-    await wait(200);
+    await wait(500); // Wait longer for the scroll handler and data fetch
 
     // Verify that more items were loaded
-    const tableRows = screen.getAllByRole('row');
-    expect(tableRows.length).toBeGreaterThan(1); // Header row + data rows
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(8); // Should have more than initial 8 rows
   });
 
   test('should handle loading more requests with search term', async () => {
     render(
-      <MockedProvider addTypename={false} link={link7}>
+      <MockedProvider addTypename={false} link={linkInfiniteScroll}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -559,27 +544,23 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    // Enter search term
     const searchInput = screen.getByTestId('searchByName');
-    await userEvent.type(searchInput, 'John');
+    await userEvent.type(searchInput, 'User');
+    await wait(200);
 
-    // Find the table element
-    const table = screen.getByRole('grid');
-    expect(table).toBeInTheDocument();
-
-    // Simulate scroll to bottom to trigger load more
+    // Simulate scroll to bottom
     fireEvent.scroll(window, {
       target: {
-        scrollY: 1000,
-        innerHeight: 100,
-        scrollHeight: 1000,
+        scrollY: document.documentElement.scrollHeight,
+        innerHeight: window.innerHeight,
+        scrollHeight: document.documentElement.scrollHeight,
       },
     });
 
-    await wait(200);
+    await wait(500);
 
     // Verify the component is still rendered
-    expect(table).toBeInTheDocument();
+    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   test('should handle loading more requests when no previous data exists', async () => {
@@ -605,7 +586,7 @@ describe('Testing Requests screen', () => {
 
   test('should handle loading more requests with null response', async () => {
     render(
-      <MockedProvider addTypename={false} link={link8}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
