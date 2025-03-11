@@ -18,10 +18,10 @@ import {
   EMPTY_REQUEST_MOCKS,
   MOCKS3,
   MOCKS4,
-  MOCKS_WITH_NULL_FETCHMORE,
 } from './RequestsMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
+import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 /**
  * Set up `localStorage` stubs for testing.
@@ -76,6 +76,74 @@ const link4 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
 const link6 = new StaticMockLink(MOCKS3, true);
 const link7 = new StaticMockLink(MOCKS4, true);
+
+export const MOCKS_WITH_NULL_FETCHMORE = [
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: 'org1',
+        first: 8,
+        skip: 0,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org1',
+            membershipRequests: [
+              {
+                _id: 'request1',
+                user: {
+                  firstName: 'Scott',
+                  lastName: 'Tony',
+                  email: 'scott@example.com',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: 'org1',
+        skip: 1,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org1',
+            membershipRequests: [], // Return an empty array
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org1',
+            name: 'Organization 1',
+          },
+        ],
+      },
+    },
+  },
+];
 
 /**
  * Utility function to wait for a specified amount of time.
@@ -435,15 +503,6 @@ describe('Testing Requests screen', () => {
 
   const { setItem, removeItem } = useLocalStorage();
 
-  // Make sure MOCKS and all other mock data have proper organization structure
-  // Each mock should return { organizations: [...] } even if empty
-  const link = new StaticMockLink(MOCKS, true);
-  const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-  const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
-  const link4 = new StaticMockLink(MOCKS2, true);
-  const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
-  const link6 = new StaticMockLink(MOCKS3, true);
-  const link7 = new StaticMockLink(MOCKS4, true);
   const link8 = new StaticMockLink(MOCKS_WITH_NULL_FETCHMORE, true);
 
   /**
