@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L45)
+Defined in: [src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L35)
 
 Displays the organization navbar with navigation options, user settings, and language selection.
 

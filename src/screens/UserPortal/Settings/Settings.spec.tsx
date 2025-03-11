@@ -201,6 +201,80 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByLabelText('Birth Date')).toHaveValue('2000-01-01');
   });
 
+  it('handles update user mutation error', async () => {
+    const mockedErrorHandler = vi.mocked(errorHandler);
+    const errorLink = new StaticMockLink(errorMock, true);
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={errorLink}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await wait();
+
+    // Make changes that will trigger error
+    fireEvent.change(screen.getByTestId('inputName'), {
+      target: { value: 'Bandhan' },
+    });
+    fireEvent.change(screen.getByTestId('inputPhoneNumber'), {
+      target: { value: '1200' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('updateUserBtn'));
+    });
+    await wait();
+    expect(mockedErrorHandler).toHaveBeenCalled();
+  });
+
+  it('handles file upload correctly', async () => {
+    vi.clearAllMocks();
+    const toastSpy = vi.spyOn(toast, 'error');
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await wait();
+
+    const fileInput = screen.getByTestId('fileInput');
+    fileInput.style.display = 'block';
+
+    // Valid file upload
+    const validFile = new File(['valid'], 'test.jpg', { type: 'image/jpeg' });
+    await act(async () => {
+      userEvent.upload(fileInput, validFile);
+    });
+    await wait();
+
+    fireEvent.change(screen.getByTestId('inputName'), {
+      target: { value: 'Bandhan' },
+    });
+
+    // Check if states are updated
+    const updateBtn = screen.getByTestId('updateUserBtn');
+    expect(updateBtn).toBeEnabled();
+    expect(toastSpy).not.toHaveBeenCalled();
+  });
+
   it('rejects invalid file types', async () => {
     const toastSpy = vi.spyOn(toast, 'error');
 
