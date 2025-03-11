@@ -4143,7 +4143,7 @@ form label,
 
 .btnDelete {
   background-color: var(--activeTab-bg);
-  border: var(--active-item-color) !important;
+  border: 1px solid var(--active-item-color) !important;
   color: var(--active-item-color);
 }
 
