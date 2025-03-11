@@ -55,6 +55,12 @@ interface QueryVariable {
   before?: string | null;
   where?: { role: { equal: 'administrator' | 'regular' } };
 }
+/**
+ * OrganizationPeople component is used to display the list of members, admins and users of the organization.
+ * It also provides the functionality to search the members, admins and users by their name.
+ * It also provides the functionality to remove the members and admins from the organization.
+ * @returns JSX.Element which contains the list of members, admins and users of the organization.
+ */
 
 function OrganizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
