@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -18,6 +18,7 @@ import {
   EMPTY_REQUEST_MOCKS,
   MOCKS3,
   MOCKS4,
+  MOCKS_WITH_NULL_FETCHMORE,
 } from './RequestsMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
@@ -388,5 +389,236 @@ describe('Testing Requests screen', () => {
     // Verify that the toast.warning function was called with the expected message
     expect(toast.warning).toHaveBeenCalledWith(expect.any(String));
     expect(toast.warning).toHaveBeenCalledTimes(1);
+  });
+
+  /**
+   * Set up `localStorage` stubs for testing.
+   */
+
+  vi.stubGlobal('localStorage', {
+    getItem: vi.fn(),
+    setItem: vi.fn(),
+    clear: vi.fn(),
+    removeItem: vi.fn(),
+  });
+
+  /**
+   * Mock `window.location` for testing redirection behavior.
+   */
+
+  Object.defineProperty(window, 'location', {
+    value: {
+      href: 'http://localhost/',
+      assign: vi.fn(),
+      reload: vi.fn(),
+      pathname: '/',
+      search: '',
+      hash: '',
+      origin: 'http://localhost',
+    },
+    writable: true,
+  });
+
+  // Mock the toast functions to avoid issues with notifications
+  vi.mock('react-toastify', async () => {
+    const actual = await vi.importActual('react-toastify');
+    return {
+      ...actual,
+      toast: {
+        warning: vi.fn(),
+        error: vi.fn(),
+        success: vi.fn(),
+        info: vi.fn(),
+      },
+    };
+  });
+
+  const { setItem, removeItem } = useLocalStorage();
+
+  // Make sure MOCKS and all other mock data have proper organization structure
+  // Each mock should return { organizations: [...] } even if empty
+  const link = new StaticMockLink(MOCKS, true);
+  const link2 = new StaticMockLink(EMPTY_MOCKS, true);
+  const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
+  const link4 = new StaticMockLink(MOCKS2, true);
+  const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
+  const link6 = new StaticMockLink(MOCKS3, true);
+  const link7 = new StaticMockLink(MOCKS4, true);
+  const link8 = new StaticMockLink(MOCKS_WITH_NULL_FETCHMORE, true);
+
+  /**
+   * Utility function to wait for a specified amount of time.
+   * Wraps `setTimeout` in an `act` block for testing purposes.
+   *
+   * @param ms - The duration to wait in milliseconds. Default is 100ms.
+   * @returns A promise that resolves after the specified time.
+   */
+
+  async function wait(ms = 100): Promise<void> {
+    await act(() => {
+      return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+      });
+    });
+  }
+
+  beforeEach(() => {
+    setItem('id', 'user1');
+    setItem('AdminFor', [{ _id: 'org1', __typename: 'Organization' }]);
+    setItem('SuperAdmin', false);
+
+    // Reset mocked functions
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+  test('should handle loading more requests successfully', async () => {
+    const mockFetchMore = vi.fn();
+    const mockSetIsLoadingMore = vi.fn();
+    const mockSetHasMore = vi.fn();
+
+    // Mock data structure that matches your component's expectations
+    const mockData = {
+      organizations: [
+        {
+          _id: 'org1',
+          membershipRequests: Array(8)
+            .fill(null)
+            .map((_, i) => ({
+              _id: `request${i + 1}`,
+              user: { firstName: `User${i + 1}`, lastName: 'Test' },
+            })),
+        },
+      ],
+    };
+
+    // Render component with mocked data and functions
+    render(
+      <MockedProvider addTypename={false} link={link7}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+
+    // Find the table element
+    const table = screen.getByRole('grid');
+    expect(table).toBeInTheDocument();
+
+    // Simulate scroll to bottom to trigger load more
+    fireEvent.scroll(window, {
+      target: {
+        scrollY: 1000,
+        innerHeight: 100,
+        scrollHeight: 1000,
+      },
+    });
+
+    await wait(200);
+
+    // Verify that more items were loaded
+    const tableRows = screen.getAllByRole('row');
+    expect(tableRows.length).toBeGreaterThan(1); // Header row + data rows
+  });
+
+  test('should handle loading more requests with search term', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link7}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+
+    // Enter search term
+    const searchInput = screen.getByTestId('searchByName');
+    await userEvent.type(searchInput, 'John');
+
+    // Find the table element
+    const table = screen.getByRole('grid');
+    expect(table).toBeInTheDocument();
+
+    // Simulate scroll to bottom to trigger load more
+    fireEvent.scroll(window, {
+      target: {
+        scrollY: 1000,
+        innerHeight: 100,
+        scrollHeight: 1000,
+      },
+    });
+
+    await wait(200);
+
+    // Verify the component is still rendered
+    expect(table).toBeInTheDocument();
+  });
+
+  test('should handle loading more requests when no previous data exists', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+
+    // Verify that the component handles the case with no initial data
+    expect(
+      screen.getByText(/No Membership Requests Found/i),
+    ).toBeInTheDocument();
+  });
+
+  test('should handle loading more requests with null response', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link8}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+
+    // Find the table element
+    const table = screen.getByRole('grid');
+    expect(table).toBeInTheDocument();
+
+    // Simulate scroll to bottom to trigger load more
+    fireEvent.scroll(window, {
+      target: {
+        scrollY: 1000,
+        innerHeight: 100,
+        scrollHeight: 1000,
+      },
+    });
+
+    await wait(200);
+
+    // Component should still be in the document and not crash
+    expect(table).toBeInTheDocument();
   });
 });

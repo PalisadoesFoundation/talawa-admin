@@ -568,3 +568,71 @@ export const MOCKS_WITH_ERROR = [
     },
   },
 ];
+// Add this to your RequestsMocks.js file
+export const MOCKS_WITH_NULL_FETCHMORE = [
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: 'org1',
+        first: 8,
+        skip: 0,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org1',
+            membershipRequests: [
+              {
+                _id: 'request1',
+                user: {
+                  firstName: 'Scott',
+                  lastName: 'Tony',
+                  email: 'scott@example.com',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: 'org1',
+        skip: 1,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org1',
+            membershipRequests: [], // Return an empty array
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org1',
+            name: 'Organization 1',
+          },
+        ],
+      },
+    },
+  },
+];
