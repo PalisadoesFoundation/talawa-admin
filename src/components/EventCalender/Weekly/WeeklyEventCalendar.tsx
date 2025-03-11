@@ -25,7 +25,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const today = new Date();
   const [currentWeekStart, setCurrentWeekStart] = useState(
     new Date(today.setDate(today.getDate() - today.getDay()) 
-  );
+  ));
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
