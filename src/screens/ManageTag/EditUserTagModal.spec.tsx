@@ -157,15 +157,4 @@ describe('EditUserTagModal Component', () => {
     const inputField = screen.getByTestId('tagNameInput');
     expect(inputField).toHaveAttribute('autoComplete', 'off');
   });
-
-  // it('prevents default form submission behavior', () => {
-  //   const preventDefault = vi.fn();
-
-  //   render(<EditUserTagModal {...defaultProps} />);
-
-  //   const form = screen.getByRole('form');
-  //   fireEvent.submit(form, { preventDefault });
-
-  //   expect(preventDefault).toHaveBeenCalled();
-  // });
 });
