@@ -157,7 +157,7 @@
     "dependentLocality": "Localidad Dependiente",
     "sortingCode": "Código de Ordenamiento",
     "state": "Estado / Provincia",
-    "userRegistrationRequired": "Registro de usuario requerido",
+    "isPublic": "Es público",
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
@@ -812,7 +812,7 @@
     "title": "Configuración",
     "general": "General",
     "actionItemCategories": "Categorías de elementos de acción",
-    "updateOrganization": "Actualizar organización",
+    "editOrganization": "Editar organización",
     "seeRequest": "Ver solicitud",
     "noData": "Sin datos",
     "otherSettings": "Otras configuraciones",
@@ -822,7 +822,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
-    "deleteSampleOrganization": "Eliminar organización de muestra",
+    "delete": "eliminar",
     "deleteMsg": "¿Desea eliminar esta organización?",
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
@@ -875,13 +875,14 @@
     "sortingCode": "Código de Ordenamiento",
     "state": "Estado / Provincia",
     "displayImage": "Mostrar imagen",
-    "userRegistrationRequired": "Registro de usuario requerido",
+    "isPublic": "Es público",
     "isVisibleInSearch": "Visible en la búsqueda",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
     "enterNameOrganization": "Ingrese el nombre de la organización",
     "successfulUpdated": "Exitoso actualizado",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
+    "enterOrganizationDescription": "Ingrese la descripción de la organización"
   },
   "memberDetail": {
     "title": "Detalles del usuario",

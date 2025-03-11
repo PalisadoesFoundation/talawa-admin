@@ -151,7 +151,7 @@
     "postalCode": "Postal Code",
     "sortingCode": "Sorting code",
     "state": "State / Province",
-    "userRegistrationRequired": "User Registration Required",
+    "isPublic": "Is Public",
     "visibleInSearch": "Visible In Search",
     "enterName": "Enter Name",
     "sort": "Sort",
@@ -851,7 +851,7 @@
     "title": "Settings",
     "general": "General",
     "actionItemCategories": "Action Item Categories",
-    "updateOrganization": "Update Organization",
+    "editOrganization": "Edit Organization",
     "seeRequest": "See Request",
     "noData": "No data",
     "otherSettings": "Other Settings",
@@ -860,8 +860,8 @@
     "agendaItemCategories": "Agenda Item Categories"
   },
   "deleteOrg": {
+    "delete": "Delete",
     "deleteOrganization": "Delete Organization",
-    "deleteSampleOrganization": "Delete Sample Organization",
     "deleteMsg": "Do you want to delete this organization?",
     "confirmDelete": "Confirm Delete",
     "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
@@ -909,7 +909,7 @@
     "dependentLocality": "Dependent Locality",
     "sortingCode": "Sorting code",
     "state": "State / Province",
-    "userRegistrationRequired": "User Registration Required",
+    "isPublic": "Is Public",
     "isVisibleInSearch": "Visible in Search",
     "enterNameOrganization": "Enter Organization Name",
     "successfulUpdated": "Organization updated successfully",
@@ -920,7 +920,8 @@
     "displayImage": "displayImage",
     "saveChanges": "saveChanges",
     "cancel": "cancel",
-    "talawaApiUnavailable": "talawaApiUnavailable"
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "enterOrganizationDescription": "Enter Organization Description"
   },
   "memberDetail": {
     "title": "User Details",

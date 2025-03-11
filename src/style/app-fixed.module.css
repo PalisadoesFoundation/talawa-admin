@@ -74,7 +74,6 @@
   --searchButton-border-focus: #a8c7fa;
   --searchButton-bg-hover: #a8c7fa;
   --searchButton-bg-active: #a8c7fa;
-
   --hover-shadow:
     0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
@@ -195,8 +194,8 @@
   --signOut-container-bg: #d3e3fd;
   --signOutBtn-bg: #d3e3fd;
 
-  --profileContainer-bg: #ffffff;
-  --profileContainer-bg-focus: #f8f9fa;
+  --profile-container-bg: #ffffff;
+  --profile-container-bg-focus: #f8f9fa;
   --profileText-color: #6c757d;
 
   --chevronRightbtn-bg: #ffffff;
@@ -219,8 +218,8 @@
   --leftDrawer-active-button-bg: #eaebef;
 
   --activeItem-bg: #eaebef;
-  --activeItem-color: #000000;
-  --activeItem-color-hover: #000000;
+  --active-item-color: #000000;
+  --active-item-color-hover: #000000;
 
   --user-sidebar-org-item-bg: #eaebef;
 
@@ -556,6 +555,8 @@
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
   --delete-button-color-hover: #ff4d4f;
+  --delete-button-border: #000;
+  --delete-button-color-hover: #ff4d4f;
 
   --customDataTable-bg: #f2f2f2;
 
@@ -677,6 +678,27 @@
   --holidayCard-bg: #00000026;
 
   --spinner-border: #9ca3af;
+  --card-background-color: #1778f2;
+  --card-header-background-color: #1778f2;
+  --text-fields-color: #737373;
+
+  --settings-header-button-bg: #ffffff;
+  --settings-header-button-border: #808080;
+  --settings-header-button-color: #808080;
+
+  --settings-active-button-bg: #eaebef;
+  --settings-active-button-border: #555555;
+  --settings-active-button-color: #555555;
+
+  --bg-header: #ffffff;
+
+  --changelangauge-btn-bg: #ffffff;
+  --changelangauge-btn-color: #1778f2;
+  --changelangauge-btn-border: #1778f2;
+
+  --resetbtn-border: #1778f2;
+  --resetbtn-bg: #ffffff;
+  --resetbtn-color: #1778f2;
 
   --modalClose-button-color: #c8102e;
   --formLabel-color: #000000;
@@ -809,9 +831,8 @@
 
 .modalHeader {
   border: none;
-  padding-bottom: 0;
-  background-color: var(--colorlight-bg) !important;
-  padding: 1rem 1rem 0 1rem;
+  background-color: var(--modalHeader-bg) !important;
+  padding: 1rem;
   color: var(--modalHeader-color);
 }
 
@@ -2512,7 +2533,7 @@ form label,
 .calendar__header_month div {
   font-weight: 400;
   color: var(--calendarHeaderMonthDiv-color);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
 }
 
 .buttonEventCalendar {
@@ -2528,7 +2549,7 @@ form label,
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   background-color: var(--calendarWeekdays-bg);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
   height: 25px;
 }
 
@@ -4080,28 +4101,134 @@ form label,
 
 /* -- GeneralSettings.tsx -- */
 
+.userupdatediv {
+  padding: 25px 16px;
+  background: var(--white-color);
+}
+
+.textFields {
+  background-color: var(--inputColor-bg);
+  color: var(--text-fields-color);
+  margin-bottom: 1rem;
+  width: auto;
+}
+
+.descriptionTextField {
+  background-color: var(--inputColor-bg);
+  color: var(--text-fields-color);
+  margin-bottom: 1rem;
+  width: auto;
+  resize: none;
+  height: 100px;
+}
+
 /* -- DeleteOrg.tsx -- */
+
+.DeleteOrgCard {
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: none;
+  height: 280px !important;
+  width: 98% !important;
+}
 
 .settingsBody {
   margin: 2.5rem 0;
+  padding: 0;
+}
+
+.deleteCardHeader {
+  background-color: var(--activeTab-bg);
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.btnDelete {
+  background-color: var(--activeTab-bg);
+  border: 1px solid var(--active-item-color) !important;
+  color: var(--active-item-color);
+}
+
+.btnDelete:hover {
+  background-color: var(--activeTab-bg);
+  color: var(--active-item-color) !important;
+}
+
+.btnDelete:active {
+  background-color: var(--activeTab-bg) !important;
+  color: var(--active-item-color) !important;
 }
 
 .deleteButton {
-  background-color: var(--delete-button-bg);
-  color: var(--delete-button-color);
-  border: none;
-  padding: 5px 20px;
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  margin-right: auto;
-  margin-left: auto;
-  gap: 8px;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: 1px solid var(--removeButton-color);
+  padding: 8px 16px;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+  border-radius: 4px;
+  height: 42px;
+  text-align: center;
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 
-.deleteButton:is(:hover, :active) {
-  background-color: var(--delete-button-color) !important;
+.deleteButton:hover,
+.deleteButton:active,
+.deleteButton:focus {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  outline: none;
+}
+
+.btnConfirmDelete {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: 0px;
+}
+
+.customFileInput,
+.customFileInput:hover {
+  background-color: var(--inputColor-bg);
+}
+
+.customFileInput::file-selector-button {
+  background-color: var(--card-background-color) !important;
   color: white;
+}
+
+.customFileInput::file-selector-button:hover {
+  color: var(--card-background-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.btnConfirmDelete:hover {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color) !important;
+}
+
+.btnConfirmDelete:active {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  border: 0px;
+}
+
+.btnConfirmDelete:focus {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  border: 0px;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.modelHeaderDelete {
+  background-color: var(--card-header-background-color);
 }
 
 /* -- OrgProfileFieldSettings.tsx -- */
@@ -4134,12 +4261,74 @@ form {
 
 /* -- OrgUpdate.tsx -- */
 
-.userupdatediv {
-  border: 1px solid var(--userupdatediv-border);
-  box-shadow: 2px 1px var(--userupdatediv-box-shadow);
-  padding: 25px 16px;
-  border-radius: 5px;
-  background: var(--userupdatediv-bg);
+.orgCardSettings {
+  width: 95% !important;
+}
+
+.resetChangesBtn {
+  border-width: 2px;
+  border-color: var(--resetbtn-border);
+  color: var(--resetbtn-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.resetChangesBtn:hover,
+.resetChangesBtn:focus,
+.resetChangesBtn:active {
+  border-width: 2px;
+  border-color: var(--resetbtn-border) !important;
+  color: var(--resetbtn-color) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow) !important;
+}
+
+.syncIconStyle,
+.syncIconStyle:focus {
+  transform: rotate(135deg) scale(1.2);
+  width: 10px;
+  height: 10px;
+  stroke: var(--card-background-color);
+  stroke-width: 1;
+  fill: var(--card-background-color);
+}
+
+.saveChangesBtn {
+  color: white;
+  border: 0px;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  background-color: var(--card-background-color) !important;
+}
+
+.saveChangesBtn:hover {
+  background-color: var(--card-background-color) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.orgUpdateFormLables {
+  font-weight: normal !important;
+  color: var(--delete-button-border);
+}
+
+.btnStyle {
+  border-width: 2px !important;
+  border-color: var(--card-background-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  background-color: var(--card-background-color) !important;
+  font-size: 0.8rem;
 }
 
 /* -- OrganizationCard.tsx -- */
@@ -4170,12 +4359,12 @@ form {
   border-radius: 16px 0px 0px 16px;
   display: flex;
   align-items: center;
-  background-color: var(--profileContainer-bg) !important;
+  background-color: var(--profile-container-bg) !important;
 }
 
 .profileContainer:focus {
   outline: none;
-  background-color: var(--profileContainer-bg-focus);
+  background-color: var(--profile-container-bg-focus);
 }
 
 .imageContainer {
@@ -4282,14 +4471,12 @@ form {
   font-weight: bold;
   color: var(--bs-emphasis-color, var(--primaryText-color));
   @extend .reusable-text-ellipsis;
-  /* Referencing the reusable class from the general section */
 }
 
 .secondaryText {
   font-size: 0.9rem;
   color: var(--secondText-color);
   @extend .reusable-text-ellipsis;
-  /* Referencing the reusable class from the general section */
 }
 
 /* -- ProfileDropdown.tsx -- */
@@ -5705,12 +5892,16 @@ form {
 }
 
 .cardBody {
-  padding: 1rem;
-  height: 8rem;
+  padding: 1rem 0rem;
   display: flex;
+  width: 100% !important;
+  justify-content: center;
   align-items: center;
 }
 
+.cardHeading {
+  padding-left: 0.3rem !important;
+}
 .cardBodymain {
   display: flex;
   flex-direction: row;
@@ -5760,7 +5951,46 @@ form {
 }
 .cardBody .textBox {
   margin: 0 0 3rem 0;
+  padding-bottom: 10px;
   color: var(--cardBody-color);
+}
+
+.textBox {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.changeLanguageBtn {
+  border-width: 2px;
+  background-color: var(--changelangauge-btn-bg);
+  color: var(--changelangauge-btn-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-color: var(--changelangauge-btn-border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.changeLanguageBtn:hover,
+.changeLanguageBtn:active,
+.changeLanguageBtn:focus {
+  border-width: 2px;
+  background-color: #ffff !important;
+  color: var(--changelangauge-btn-color) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-color: var(--changelangauge-btn-border) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
 }
 
 @media (max-width: 600px) {
@@ -6032,6 +6262,83 @@ form {
   width: 100%;
 }
 
+/* orgsettings */
+
+.modalHeader {
+  border: none;
+  background-color: var(--primary-bg-color) !important;
+  padding: 1rem;
+  color: #000000;
+}
+
+.inputFields {
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--create-button-border);
+  color: var(--eventManagement-button-bg);
+  box-shadow: 0 1px 1px var(--brand-primary);
+  width: 375px;
+  padding-right: 40px;
+  border-radius: 8px;
+}
+
+.headerBtn {
+  background: var(--settings-header-button-bg);
+  border: 1px solid var(--settings-header-button-border);
+  border-radius: 8px;
+  height: auto;
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  color: var(--settings-header-button-color) !important;
+}
+
+.headerBtn:active {
+  background: var(--settings-header-button-bg) !important;
+  border: 1px solid var(--settings-header-button-border) !important;
+  border-radius: 8px;
+  height: auto;
+  width: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  color: var(--settings-header-button-color) !important;
+}
+
+.activeTabBtn {
+  background: var(--settings-active-button-bg);
+  border: 1px solid var(--settings-active-button-border);
+  border-radius: 8px;
+  color: var(--settings-active-button-color) !important;
+}
+
+.activeTabBtn:active {
+  background: var(--settings-active-button-bg) !important;
+  border: 1px solid var(--settings-active-button-border) !important;
+  color: var(--settings-active-button-color) !important;
+}
+
+.settingsTabs {
+  display: flex;
+  gap: 0.75rem;
+  background-color: var(--bg-header) !important;
+  padding: 20px 14.9px;
+  border-radius: 1rem;
+}
+
+.headerBtn:hover {
+  border: 1px solid var(--settings-header-button-border);
+  background: var(--settings-header-button-bg);
+  border-radius: 8px;
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
+  color: var(--settings-header-button-color) !important;
+}
+
+.activeTabBtn:hover {
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
+  background: var(--settings-active-button-bg);
+  border: 1px solid var(--settings-active-button-border);
+  color: var(--settings-active-button-color) !important;
+}
+
 /* -- OrgPost.tsx -- */
 
 .mainpagerightOrgPost > hr {
@@ -6166,8 +6473,6 @@ form {
   font-size: 16px;
 }
 
-/* -- OrgSettings.tsx -- */
-
 /* -- ItemDeleteModal.tsx -- */
 
 .itemModal {
@@ -6227,7 +6532,6 @@ form {
 
 .TableImage {
   object-fit: cover;
-  /* margin-top: px !important; */
   margin-right: 5px;
   width: var(--table-image-size) !important;
   height: var(--table-image-size) !important;
@@ -6892,7 +7196,6 @@ form {
 }
 
 /* -- LeaveOrganization.tsx -- */
-
 /* -- Organizations.tsx -- */
 
 .mainContainerOrganization {
