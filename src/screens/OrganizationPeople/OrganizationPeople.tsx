@@ -26,7 +26,7 @@ import Avatar from 'components/Avatar/Avatar';
 import AddMember from './AddMember';
 
 const PAGE_SIZE = 10;
-interface ProcesssedRow {
+interface ProcessedRow {
   _id: string;
   name: string;
   email: string;
@@ -87,7 +87,7 @@ function OrganizationPeople(): JSX.Element {
   const pageCursors = useRef<{
     [page: number]: { startCursor: string; endCursor: string };
   }>({});
-  const [currentRows, setCurrentRows] = useState<ProcesssedRow[]>([]);
+  const [currentRows, setCurrentRows] = useState<ProcessedRow[]>([]);
   const [data, setData] = useState<any>();
 
   // Pagination metadata
@@ -120,14 +120,16 @@ function OrganizationPeople(): JSX.Element {
   useEffect(() => {
     if (data) {
       const { edges, pageInfo } = data;
-      const processedRows = edges.map((edge: Edges) => ({
-        _id: edge.node.id,
-        name: edge.node.name,
-        email: edge.node.emailAddress,
-        image: edge.node.avatarURL,
-        createdAt: edge.node.createdAt || new Date().toISOString(),
-        cursor: edge.cursor,
-      }));
+      const processedRows = edges.map(
+        (edge: Edges): ProcessedRow => ({
+          _id: edge.node.id,
+          name: edge.node.name,
+          email: edge.node.emailAddress,
+          image: edge.node.avatarURL,
+          createdAt: edge.node.createdAt || new Date().toISOString(),
+          cursor: edge.cursor,
+        }),
+      );
 
       // Store both start and end cursors for the current page
       if (pageInfo.startCursor && pageInfo.endCursor) {
@@ -156,7 +158,7 @@ function OrganizationPeople(): JSX.Element {
     });
     pageCursors.current = {};
 
-    const variables = {
+    const variables: QueryVariable = {
       first: PAGE_SIZE,
       after: null,
       last: null,
@@ -450,7 +452,7 @@ function OrganizationPeople(): JSX.Element {
           slots={{
             noRowsOverlay: () => (
               <Stack height="100%" alignItems="center" justifyContent="center">
-                Nothing Found !!
+                {t('notFound')}
               </Stack>
             ),
           }}
