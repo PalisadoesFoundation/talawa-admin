@@ -136,7 +136,7 @@
   --dropdown-color: #555555;
   --user-sidebar-org-option-bg: #eaebef;
   --user-sidebar-org-item-bg: #eaebef;
-  --user-sidebar-org-bg: #ffffff;
+  --user-sidebar-org-bg: #f6f8fc;
   --sign-out-bg: #d3e3fd;
   --dropdown-toggle-bg: azure;
   --loader-border: #ffffff33;
@@ -169,8 +169,8 @@
   --modal-width: 670px;
   --modal-max-width: 680px;
   /* Hover style */
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   /* Additional Variables */
   --primary-theme-color: #1778f2;
@@ -8547,54 +8547,75 @@ button[data-testid='createPostBtn'] {
 }
 
 .leftDrawer .profileContainer {
-  border: none;
-  width: 100%;
-  height: 52px;
-  border-radius: 16px;
   display: flex;
   align-items: center;
+  justify-content: flex-start; /* More standard than "start" */
+  gap: 12px;
   background-color: var(--tablerow-bg-color);
-}
-
-.leftDrawer .profileContainer:focus {
-  outline: none;
+  border-radius: 16px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
 }
 
 .leftDrawer .imageContainer {
-  width: 68px;
-  margin-right: 8px;
-  margin-bottom: 10px;
-}
-
-.leftDrawer .profileContainer img {
-  height: 52px;
   width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   border-radius: 50%;
+  overflow: hidden;
 }
 
-.leftDrawer .profileContainer .profileTextUserSidebarOrg {
+.leftDrawer .imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.leftDrawer .profileTextUserSidebarOrg {
   flex: 1;
-  text-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   overflow: hidden;
+  min-width: 0;
 }
 
-.leftDrawer .profileContainer .profileTextUserSidebarOrg .primaryText {
-  font-size: 1.1rem;
+.leftDrawer .profileTextUserSidebarOrg .primaryText {
+  font-size: 1rem;
   font-weight: 600;
+  white-space: nowrap;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
-  -webkit-box-orient: vertical;
-  word-wrap: break-word;
-  white-space: normal;
+  text-overflow: ellipsis;
+  margin: 0;
+  line-height: 1.2;
 }
 
-.leftDrawer .profileContainer .profileTextUserSidebarOrg .secondaryText {
-  font-size: 0.8rem;
+.leftDrawer .profileTextUserSidebarOrg .secondaryText {
+  font-size: 0.85rem;
   font-weight: 400;
   color: var(--bs-secondary);
-  display: block;
-  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 4px 0 0 0;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .leftDrawer .profileContainer {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .leftDrawer .imageContainer {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .activeItem {
