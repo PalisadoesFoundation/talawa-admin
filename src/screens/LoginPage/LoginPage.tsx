@@ -245,8 +245,6 @@ const loginPage = (): JSX.Element => {
               },
             },
           );
-          console.log(error);
-
           if (signUpData) {
             toast.success(
               t(
@@ -310,16 +308,17 @@ const loginPage = (): JSX.Element => {
       )) as {
         data: IAuthResponse | null;
       };
-      if (signInData && signInData.data) {
-        if (signInData.data.countryCode !== null) {
+
+      if (signInData?.data) {
+        if (signInData?.data?.countryCode !== null) {
           i18n.changeLanguage(signInData.data.countryCode);
         }
 
         const { data } = signInData;
         const { role, token, id, name, email, avatarName } = data;
-        const isAdmin: boolean = role === 'administrator';
+        const isAdministrator: boolean = role === 'administrator';
 
-        if (!isAdmin) {
+        if (!isAdministrator) {
           toast.warn(tErrors('notAuthorised') as string);
           return;
         }

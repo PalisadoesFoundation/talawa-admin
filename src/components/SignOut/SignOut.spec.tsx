@@ -23,6 +23,9 @@ const mockStorage = {
   key: vi.fn(),
 };
 
+// Save the original localStorage
+const originalLocalStorage = global.localStorage;
+
 // Mock localStorage globally
 beforeEach(() => {
   Object.defineProperty(global, 'localStorage', {
@@ -35,6 +38,14 @@ beforeEach(() => {
   mockStorage.getItem.mockClear();
   mockStorage.setItem.mockClear();
   mockStorage.removeItem.mockClear();
+});
+
+// Restore the original localStorage after each test
+afterEach(() => {
+  Object.defineProperty(global, 'localStorage', {
+    value: originalLocalStorage,
+    configurable: true,
+  });
 });
 
 const mockHandleLogout = vi.fn(async () => {
