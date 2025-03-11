@@ -6,4 +6,4 @@
 
 > `const` **CREATE\_POST\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L401)
+Defined in: [src/GraphQl/Mutations/mutations.ts:437](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L437)

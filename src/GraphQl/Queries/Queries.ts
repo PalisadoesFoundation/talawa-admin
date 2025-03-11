@@ -255,20 +255,35 @@ export const USER_LIST = gql`
   }
 `;
 export const USER_LIST_FOR_TABLE = gql`
-  query Users($firstName_contains: String, $lastName_contains: String) {
-    users(
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
+  query allUsers(
+    $first: Int
+    $after: String
+    $last: Int
+    $before: String
+    $where: QueryAllUsersWhereInput
+  ) {
+    allUsers(
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      where: $where
     ) {
-      user {
-        _id
-        firstName
-        lastName
-        email
-        image
-        createdAt
+      pageInfo {
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+          role
+          avatarURL
+          emailAddress
+        }
       }
     }
   }
@@ -541,8 +556,8 @@ export const GET_ORGANIZATION_DATA_PG = gql`
 `;
 
 export const ORGANIZATIONS_LIST = gql`
-  query getOrganization($input: QueryOrganizationInput!) {
-    organization(input: $input) {
+  query getOrganization($id: String!) {
+    organization(input: { id: $id }) {
       id
       name
       description
@@ -618,28 +633,38 @@ export const BLOCK_PAGE_MEMBER_LIST = gql`
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
-    $orgId: ID!
-    $firstName_contains: String
-    $lastName_contains: String
+    $orgId: String!
     $first: Int
-    $skip: Int
+    $after: String
+    $last: Int
+    $before: String
+    $where: MembersWhereInput
   ) {
-    organizationsMemberConnection(
-      orgId: $orgId
-      first: $first
-      skip: $skip
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
-    ) {
-      edges {
-        _id
-        firstName
-        lastName
-        image
-        email
-        createdAt
+    organization(input: { id: $orgId }) {
+      members(
+        first: $first
+        after: $after
+        last: $last
+        before: $before
+        where: $where
+      ) {
+        pageInfo {
+          endCursor
+          hasPreviousPage
+          hasNextPage
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            name
+            role
+            avatarURL
+            emailAddress
+            createdAt
+          }
+        }
       }
     }
   }
