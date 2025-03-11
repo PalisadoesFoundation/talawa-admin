@@ -58,6 +58,7 @@ const USER_JOINED_ORG_MOCK = [
       query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
+        first: 10,
       },
     },
     result: {
@@ -270,6 +271,7 @@ const USER_JOINED_ORG_MOCK = [
       query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
+        first: 10,
       },
     },
     result: {
@@ -386,6 +388,7 @@ const USER_JOINED_ORG_MOCK = [
       query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
+        first: 10,
       },
     },
     result: {
@@ -502,6 +505,7 @@ const USER_JOINED_ORG_MOCK = [
       query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
+        first: 10,
       },
     },
     result: {
@@ -618,6 +622,7 @@ const USER_JOINED_ORG_MOCK = [
       query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
+        first: 10,
       },
     },
     result: {
@@ -734,6 +739,7 @@ const USER_JOINED_ORG_MOCK = [
       query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
+        first: 10,
       },
     },
     result: {
