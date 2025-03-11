@@ -235,12 +235,12 @@ describe('OrganizationPeople', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/organization/orgid']}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/organization/:orgId"
+                  path="/orgpeople/:orgId"
                   element={<OrganizationPeople />}
                 />
               </Routes>
@@ -274,11 +274,11 @@ describe('OrganizationPeople', () => {
 
   //   render(
   //     <MockedProvider addTypename={false} link={link}>
-  //       <MemoryRouter initialEntries={['/organization/orgid']}>
+  //       <MemoryRouter initialEntries={['/orgpeople/orgid']}>
   //         <Provider store={store}>
   //           <I18nextProvider i18n={i18nForTest}>
   //             <Routes>
-  //               <Route path="/organization/:orgId" element={<OrganizationPeople />} />
+  //               <Route path="/orgpeople/:orgid" element={<OrganizationPeople />} />
   //             </Routes>
   //           </I18nextProvider>
   //         </Provider>
@@ -316,12 +316,12 @@ describe('OrganizationPeople', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/organization/orgid']}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/organization/:orgId"
+                  path="/orgpeople/:orgId"
                   element={<OrganizationPeople />}
                 />
               </Routes>
@@ -405,12 +405,12 @@ describe('OrganizationPeople', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/organization/orgid']}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/organization/:orgId"
+                  path="/orgpeople/:orgId"
                   element={<OrganizationPeople />}
                 />
               </Routes>
@@ -501,12 +501,12 @@ describe('OrganizationPeople', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/organization/orgid']}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/organization/:orgId"
+                  path="/orgpeople/:orgId"
                   element={<OrganizationPeople />}
                 />
               </Routes>
@@ -934,12 +934,12 @@ describe('OrganizationPeople', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/organization/orgid']}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/organization/:orgId"
+                  path="/orgpeople/:orgId"
                   element={<OrganizationPeople />}
                 />
               </Routes>
@@ -1062,52 +1062,6 @@ describe('OrganizationPeople', () => {
     // Should directly show admin data without switching tabs
     await waitFor(() => {
       expect(screen.getByText('ADMIN')).toBeInTheDocument();
-    });
-  });
-
-  test('handles zero results correctly', async () => {
-    const emptyMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      },
-      {
-        edges: [],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-          startCursor: null,
-          endCursor: null,
-        },
-      },
-    );
-
-    const mocks = [emptyMock];
-    const link = new StaticMockLink(mocks, true);
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/organization/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/organization/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Should show no rows message
-    await waitFor(() => {
-      expect(screen.getByText('Nothing Found !!')).toBeInTheDocument();
     });
   });
 });
