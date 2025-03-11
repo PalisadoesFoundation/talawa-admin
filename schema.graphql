@@ -2196,7 +2196,7 @@ enum UserRole {
 
 input deleteOrganizationMembershipInput {
   organizationId: String!
-  memberID: STring!
+  memberID: String!
 }
 
 enum Iso3166Alpha2CountryCode {

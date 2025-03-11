@@ -76,14 +76,14 @@ const StyledTableRow = styled(TableRow)(() => ({
  */
 
 interface Edge {
-  cursor: String;
+  cursor: string;
   node: {
-    id: String;
-    name: String;
-    role: String;
-    avatarURL: String;
-    emailAddress: String;
-    createdAt: String;
+    id: string;
+    name: string;
+    role: string;
+    avatarURL: string;
+    emailAddress: string;
+    createdAt: string;
   };
 }
 
@@ -325,7 +325,7 @@ function AddMember(): JSX.Element {
 
   // Process data when it arrives
   useEffect(() => {
-    if (userData && userData.allUsers) {
+    if (userData?.allUsers) {
       const { edges, pageInfo } = userData.allUsers;
 
       // Store cursors for navigation

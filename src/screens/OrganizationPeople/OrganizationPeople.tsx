@@ -27,23 +27,23 @@ import AddMember from './AddMember';
 
 const PAGE_SIZE = 10;
 interface ProcesssedRow {
-  _id: String;
-  name: String;
-  email: String;
-  image: String;
-  createdAt: String;
-  cursor: String;
+  _id: string;
+  name: string;
+  email: string;
+  image: string;
+  createdAt: string;
+  cursor: string;
 }
 
 interface Edges {
-  cursor: String;
+  cursor: string;
   node: {
-    id: String;
-    name: String;
-    role: String;
-    avatarURL: String;
-    emailAddress: String;
-    createdAt: String;
+    id: string;
+    name: string;
+    role: string;
+    avatarURL: string;
+    emailAddress: string;
+    createdAt: string;
   };
 }
 
