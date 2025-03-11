@@ -459,50 +459,6 @@ describe('Testing Requests screen', () => {
     expect(toast.warning).toHaveBeenCalledTimes(1);
   });
 
-  /**
-   * Set up `localStorage` stubs for testing.
-   */
-
-  vi.stubGlobal('localStorage', {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    clear: vi.fn(),
-    removeItem: vi.fn(),
-  });
-
-  /**
-   * Mock `window.location` for testing redirection behavior.
-   */
-
-  Object.defineProperty(window, 'location', {
-    value: {
-      href: 'http://localhost/',
-      assign: vi.fn(),
-      reload: vi.fn(),
-      pathname: '/',
-      search: '',
-      hash: '',
-      origin: 'http://localhost',
-    },
-    writable: true,
-  });
-
-  // Mock the toast functions to avoid issues with notifications
-  vi.mock('react-toastify', async () => {
-    const actual = await vi.importActual('react-toastify');
-    return {
-      ...actual,
-      toast: {
-        warning: vi.fn(),
-        error: vi.fn(),
-        success: vi.fn(),
-        info: vi.fn(),
-      },
-    };
-  });
-
-  const { setItem, removeItem } = useLocalStorage();
-
   const link8 = new StaticMockLink(MOCKS_WITH_NULL_FETCHMORE, true);
 
   /**
