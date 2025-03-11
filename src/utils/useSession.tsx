@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 type UseSessionReturnType = {
-  listSession: () => void;
-  revokeOtherSessionExceptCurrentSession: () => void;
-  revokeAllSession: () => void;
+  listSession: () => Promise<Awaited<ReturnType<typeof authClient.listSessions>>>;
+  revokeOtherSessionExceptCurrentSession: () => Promise<void>;
+  revokeAllSession: () => Promise<void>;
   handleLogout: () => void; //for when logged in already, simply extend session
 };
 
