@@ -275,11 +275,27 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             multiple={false}
             onChange={async (e: React.ChangeEvent) => {
               const target = e.target as HTMLInputElement;
-              const file = target.files && target.files[0];
+              const file = target.files?.[0];
 
               if (file) {
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                  console.error('File size exceeds the 5MB limit');
+                  return;
+                }
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                  console.error('Only image files are allowed');
+                  return;
+                }
+
                 try {
-                  const { fileUrl } = await uploadFileToMinio(file, '');
+                  // Using 'organizations' as the folder path for better organization
+                  const { fileUrl } = await uploadFileToMinio(
+                    file,
+                    'organizations',
+                  );
                   console.log('File uploaded successfully:', fileUrl);
 
                   setFormState({
@@ -288,6 +304,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   });
                 } catch (error) {
                   console.error('Error uploading image to MinIO:', error);
+                  // Consider showing user feedback for upload errors
                 }
               }
             }}

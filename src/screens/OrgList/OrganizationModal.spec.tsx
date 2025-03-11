@@ -55,10 +55,6 @@ describe('OrganizationModal Component', () => {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   vi.mock('utils/convertToBase64', () => ({
     default: vi.fn((file) => {
       if (file.size > 5000000) {
@@ -123,6 +119,17 @@ describe('OrganizationModal Component', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     await act(async () => {
       fireEvent.change(fileInput, { target: { files: [file] } });
+    });
+
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organizations');
+    });
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({
+          avatar: 'https://minio-test.com/test-image.jpg',
+        }),
+      );
     });
   });
 
@@ -360,6 +367,10 @@ describe('OrganizationModal Component', () => {
   test('should handle MinIO upload error', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error');
     setup();
+
+    // Mock the function to reject with an error
+    mockUploadFileToMinio.mockRejectedValue(new Error('MinIO upload failed'));
+
     await wait();
 
     const fileInput = screen.getByTestId('organisationImage');
@@ -370,11 +381,16 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organizations');
+    });
+
+    await waitFor(() => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error uploading image to MinIO:',
         expect.any(Error),
       );
     });
+
     consoleErrorSpy.mockRestore();
   });
 
