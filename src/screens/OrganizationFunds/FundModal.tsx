@@ -135,8 +135,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, taxDeductible } =
-      formState;
+    const { fundName, taxDeductible } = formState;
     try {
       const updatedFields: { [key: string]: string | boolean } = {};
       if (fundName != fund?.name) {
