@@ -338,7 +338,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     );
     await wait();
     await userEvent.click(screen.getByTestId('personIcon'));
+    console.log('Before click:', mockNavigate.mock.calls);
     await userEvent.click(screen.getByTestId('logoutBtn'));
+    console.log('After click:', mockNavigate.mock.calls);
     expect(mockStorage.clear).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
