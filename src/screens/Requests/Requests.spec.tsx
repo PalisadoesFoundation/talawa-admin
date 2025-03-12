@@ -70,6 +70,32 @@ const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
 const link6 = new StaticMockLink(MOCKS3, true);
 const link7 = new StaticMockLink(MOCKS4, true);
 
+const NULL_RESPONSE_MOCKS = [
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: '',
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '',
+            membershipRequests: null,
+          },
+        ],
+      },
+    },
+  },
+];
+
+const linkNullResponse = new StaticMockLink(NULL_RESPONSE_MOCKS, true);
+
 // Mock data for infinite scroll tests
 const INFINITE_SCROLL_MOCKS = [
   // Initial organization list query
@@ -616,5 +642,22 @@ describe('Testing Requests screen', () => {
 
     // Component should still be in the document and not crash
     expect(table).toBeInTheDocument();
+  });
+
+  test('should handle null membership requests in response', async () => {
+    render(
+      <MockedProvider addTypename={false} link={linkNullResponse}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+    expect(screen.getByTestId('testComp')).toBeInTheDocument();
   });
 });
