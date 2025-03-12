@@ -165,6 +165,7 @@ describe('WeeklyViewCalendar Component', () => {
     const { getByText } = renderWithRouter(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
+    
 
     const currentWeekStart = dayjs().startOf('week');
 
