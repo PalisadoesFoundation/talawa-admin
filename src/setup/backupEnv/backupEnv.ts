@@ -11,12 +11,16 @@ export function backupEnv(): void {
   }
 
   const backupDir = path.join(process.cwd(), '.backup');
-  if (!fs.existsSync(backupDir)) {
-    fs.mkdirSync(backupDir);
-  }
+  try {
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdirSync(backupDir);
+    }
 
-  const timestamp = Math.floor(Date.now() / 1000);
-  const backupFilePath = path.join(backupDir, `.env.${timestamp}`);
-  fs.copyFileSync('.env', backupFilePath);
-  console.log(`Backup created: ${backupFilePath}`);
+    const timestamp = Math.floor(Date.now() / 1000);
+    const backupFilePath = path.join(backupDir, `.env.${timestamp}`);
+    fs.copyFileSync('.env', backupFilePath);
+    console.log(`Backup created: ${backupFilePath}`);
+  } catch (error) {
+    console.error(`Failed to backup .env file: ${(error as Error).message}`);
+  }
 }

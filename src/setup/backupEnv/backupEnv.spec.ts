@@ -103,4 +103,50 @@ describe('backupEnv', () => {
       expect.stringContaining('Backup created:'),
     );
   });
+
+  it('should log an error if mkdirSync fails', () => {
+    vi.spyOn(fs, 'existsSync').mockImplementation((filePath: fs.PathLike) => {
+      const pathString = filePath.toString();
+      return pathString.includes('.env');
+    });
+
+    vi.spyOn(fs, 'mkdirSync').mockImplementation(() => {
+      throw new Error('mkdirSync failed');
+    });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    backupEnv();
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to backup .env file: mkdirSync failed'),
+    );
+  });
+
+  it('should log an error if copyFileSync fails', () => {
+    vi.spyOn(fs, 'existsSync').mockImplementation((filePath: fs.PathLike) => {
+      return (
+        filePath.toString().includes('.env') ||
+        filePath.toString().includes('.backup')
+      );
+    });
+
+    vi.spyOn(fs, 'copyFileSync').mockImplementation(() => {
+      throw new Error('copyFileSync failed');
+    });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    backupEnv();
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Failed to backup .env file: copyFileSync failed',
+      ),
+    );
+  });
 });
