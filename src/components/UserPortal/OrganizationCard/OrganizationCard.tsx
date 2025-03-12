@@ -60,6 +60,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   });
   const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
     variables: { id: userId, first: 5 },
+    skip: !userId,
   });
 
   /**
