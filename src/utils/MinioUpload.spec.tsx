@@ -150,6 +150,7 @@ describe('Minio Upload Integration', (): void => {
 
     expect(handleComplete).toHaveBeenCalledWith({
       objectName: 'test-object-name',
+      fileHash: 'mocked-file-hash',
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
