@@ -6,7 +6,7 @@ interface InterfaceMinioUpload {
   uploadFileToMinio: (
     file: File,
     organizationId: string,
-  ) => Promise<{ objectName: string, fileHash: string }>;
+  ) => Promise<{ objectName: string; fileHash: string }>;
 }
 
 export const useMinioUpload = (): InterfaceMinioUpload => {
@@ -14,7 +14,7 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
   const uploadFileToMinio = async (
     file: File,
     organizationId: string,
-  ): Promise<{ objectName: string, fileHash: string }> => {
+  ): Promise<{ objectName: string; fileHash: string }> => {
     try {
       const fileHash = await calculateFileHash(file);
       const { data } = await generatePresignedUrl({
