@@ -41,7 +41,8 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
         throw new Error('Failed to get presigned URL');
       }
 
-      const { presignedUrl, objectName, requiresUpload } = data.createPresignedUrl;
+      const { presignedUrl, objectName, requiresUpload } =
+        data.createPresignedUrl;
 
       // Upload the file only if required
       if (requiresUpload && presignedUrl) {
