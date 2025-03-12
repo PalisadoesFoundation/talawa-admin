@@ -6380,7 +6380,7 @@ describe('CreateGroupChat - handleImageChange', () => {
     const mockUploadFileToMinio = vi.fn().mockResolvedValue({
       objectName: 'https://minio.example.com/test-image.jpg',
       fileHash: 'dummyFileHash',
-  });
+    });
     vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
       uploadFileToMinio: mockUploadFileToMinio,
     });
