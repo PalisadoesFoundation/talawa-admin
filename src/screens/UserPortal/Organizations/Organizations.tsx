@@ -259,10 +259,7 @@ export default function organizations(): JSX.Element {
   // Update organizations list when createdOrganizationsData changes (mode 2)
   useEffect(() => {
     if (mode === 2) {
-      if (
-        createdOrganizationsData &&
-        createdOrganizationsData.user?.createdOrganizations
-      ) {
+      if (createdOrganizationsData?.user?.createdOrganizations) {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: InterfaceOrganization) => ({
             ...org,
@@ -280,7 +277,7 @@ export default function organizations(): JSX.Element {
   // When mode is 0 (all organizations), you might have a separate query.
   useEffect(() => {
     if (mode === 0) {
-      if (allOrganizationsData && allOrganizationsData.organizations) {
+      if (allOrganizationsData?.organizations) {
         const orgs = allOrganizationsData.organizations.map(
           (org: InterfaceOrganization) => ({
             ...org,
