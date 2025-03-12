@@ -6,7 +6,7 @@ interface InterfaceMinioUpload {
   uploadFileToMinio: (
     file: File,
     organizationId: string,
-  ) => Promise<{ objectName: string; fileHash: string }>;
+  ) => Promise<{ objectName: string, fileHash: string }>;
 }
 
 export const useMinioUpload = (): InterfaceMinioUpload => {
