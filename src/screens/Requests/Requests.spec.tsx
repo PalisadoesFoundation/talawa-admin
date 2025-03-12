@@ -489,34 +489,6 @@ describe('Testing Requests screen', () => {
     expect(toast.warning).toHaveBeenCalledTimes(1);
   });
 
-  /**
-   * Utility function to wait for a specified amount of time.
-   * Wraps `setTimeout` in an `act` block for testing purposes.
-   *
-   * @param ms - The duration to wait in milliseconds. Default is 100ms.
-   * @returns A promise that resolves after the specified time.
-   */
-
-  async function wait(ms = 100): Promise<void> {
-    await act(() => {
-      return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-      });
-    });
-  }
-
-  beforeEach(() => {
-    setItem('id', 'user1');
-    setItem('AdminFor', [{ _id: 'org1', __typename: 'Organization' }]);
-    setItem('SuperAdmin', false);
-
-    // Reset mocked functions
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    localStorage.clear();
-  });
   test('should handle loading more requests successfully', async () => {
     render(
       <MockedProvider addTypename={false} link={linkInfiniteScroll}>

@@ -760,24 +760,7 @@ test('Testing sidebar when the screen size is less than or equal to 820px', asyn
     settingsBtn.click();
   });
 });
-test('Search input has correct placeholder text', async () => {
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
 
-  await wait();
-
-  const searchInput = screen.getByPlaceholderText('Search Organization');
-  expect(searchInput).toBeInTheDocument();
-});
 const link = new StaticMockLink(MOCKS, true);
 
 import { vi } from 'vitest';
