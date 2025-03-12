@@ -57,12 +57,14 @@ function eventHeader({
           inputTestId="searchEvent"
           buttonTestId="searchButton"
         />
+
         <div className={styles.space}>
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
               { label: 'Select Month', value: ViewType.MONTH },
               { label: 'Select Day', value: ViewType.DAY },
+              { label: 'Select Week', value: ViewType.WEEK },
               { label: 'Select Year', value: ViewType.YEAR },
             ]}
             selectedOption={viewType}
@@ -71,6 +73,7 @@ function eventHeader({
             className={styles.dropdown}
           />
         </div>
+
         <div className={styles.btnsBlock}>
           <SortingButton
             title={t('eventType')}
@@ -85,6 +88,7 @@ function eventHeader({
             buttonLabel={t('eventType')}
           />
         </div>
+
         <div className={styles.btnsBlock}>
           <div className={styles.selectTypeEventHeader}>
             <Button
