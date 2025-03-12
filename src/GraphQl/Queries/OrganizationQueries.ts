@@ -222,6 +222,18 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
  * @returns The list of organizations based on the applied filters.
  */
 
+export const ALL_ORGANIZATIONS = gql`
+  query AllOrganizations {
+    organizations {
+      id
+      name
+      addressLine1
+      description
+      avatarURL
+    }
+  }
+`;
+
 export const USER_ORGANIZATION_CONNECTION = gql`
   query organizationsConnection(
     $first: Int
@@ -279,29 +291,26 @@ export const USER_ORGANIZATION_CONNECTION = gql`
  */
 
 export const USER_JOINED_ORGANIZATIONS = gql`
-  query UserJoinedOrganizations($id: ID!) {
-    users(where: { id: $id }) {
-      user {
-        joinedOrganizations {
-          _id
-          name
-          description
-          image
-          members {
-            _id
-          }
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          admins {
-            _id
+  query UserJoinedOrganizations($id: String!, $first: Int) {
+    user(input: { id: $id }) {
+      organizationsWhereMember(first: $first) {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            name
+            addressLine1
+            description
+            avatarURL
+            members(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
           }
         }
       }
@@ -317,31 +326,15 @@ export const USER_JOINED_ORGANIZATIONS = gql`
  */
 
 export const USER_CREATED_ORGANIZATIONS = gql`
-  query UserCreatedOrganizations($id: ID!) {
-    users(where: { id: $id }) {
-      appUserProfile {
-        createdOrganizations {
-          _id
-          name
-          description
-          image
-          members {
-            _id
-          }
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          admins {
-            _id
-          }
-        }
+  query UserCreatedOrganizations($id: String!) {
+    user(input: { id: $id }) {
+      id
+      createdOrganizations {
+        id
+        name
+        description
+        createdAt
+        avatarMimeType
       }
     }
   }
