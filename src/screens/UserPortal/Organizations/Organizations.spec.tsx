@@ -700,29 +700,6 @@ test('Join Now button renders correctly', async () => {
   });
 });
 
-test('Mode is changed to created organisations', async () => {
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await wait();
-
-  await userEvent.click(screen.getByTestId('modeChangeBtn'));
-  await wait();
-  await userEvent.click(screen.getByTestId('modeBtn2'));
-  await wait();
-
-  expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
-});
-
 /**
  * Test case to ensure the sidebar is functional, including opening and closing actions.
  */

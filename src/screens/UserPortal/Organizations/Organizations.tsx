@@ -223,34 +223,6 @@ export default function organizations(): JSX.Element {
   };
 
   /**
-   * Updates the list of organizations based on query results and selected mode.
-   */
-  useEffect(() => {
-    if (data) {
-      const organizations = data?.UserJoinedOrganizations?.map(
-        (organization: InterfaceOrganization) => {
-          let membershipRequestStatus = '';
-          if (
-            organization.members.find(
-              (member: { _id: string }) => member._id === userId,
-            )
-          )
-            membershipRequestStatus = 'accepted';
-          else if (
-            organization.membershipRequests.find(
-              (request: { user: { _id: string } }) =>
-                request.user._id === userId,
-            )
-          )
-            membershipRequestStatus = 'pending';
-          return { ...organization, membershipRequestStatus };
-        },
-      );
-      setOrganizations(organizations);
-    }
-  }, [data]);
-
-  /**
    * Updates the list of organizations based on the selected mode and query results.
    */
   useEffect(() => {
