@@ -1104,7 +1104,7 @@ describe('Requests Component - Additional Tests', () => {
     const searchInput = screen.getByTestId('searchByName');
     fireEvent.change(searchInput, { target: { value: 'John' } });
     const searchButton = screen.getByTestId('searchBtn');
-		fireEvent.click(searchButton);
+    fireEvent.click(searchButton);
 
     const sortingButton = screen.getByTestId('userFilter');
     fireEvent.click(sortingButton);
