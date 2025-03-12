@@ -6,7 +6,7 @@ interface InterfaceMinioUpload {
   uploadFileToMinio: (
     file: File,
     organizationId: string,
-  ) => Promise<{ objectName: string , fileHash: string }>;
+  ) => Promise<{ objectName: string, fileHash: string }>;
 }
 
 export const useMinioUpload = (): InterfaceMinioUpload => {
@@ -47,7 +47,7 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
           throw new Error('File upload failed');
         }
       }
-      return { objectName , fileHash };
+      return { objectName, fileHash };
     } catch (error) {
       console.error('Error in file upload process:', error);
       throw error;
