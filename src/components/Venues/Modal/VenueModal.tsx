@@ -114,7 +114,7 @@ const VenueModal = ({
         // Don't include name if it hasn't changed
       };
 
-      console.log('Sending update mutation without name:', variables);
+      //console.log('Sending update mutation without name:', variables);
 
       try {
         const result = await mutate({ variables });
@@ -149,7 +149,7 @@ const VenueModal = ({
           file: formState.imageURL || '',
         };
 
-        console.log('Sending update mutation with name:', variables);
+        //console.log('Sending update mutation with name:', variables);
 
         const result = await mutate({ variables });
 
@@ -293,14 +293,17 @@ const VenueModal = ({
                   toast.error('Only image files are allowed');
                   return;
                 }
-                const { fileUrl } = await uploadFileToMinio(
-                  file,
-                  'organizations',
-                );
-                console.log('File uploaded successfully:', fileUrl);
-
-                setFormState({ ...formState, imageURL: fileUrl });
-                setVenueImage(true); // To show image preview
+                try {
+                  const { fileUrl } = await uploadFileToMinio(
+                    file,
+                    'organizations',
+                  );
+                  setFormState({ ...formState, imageURL: fileUrl });
+                  setVenueImage(true); // To show image preview
+                } catch (error) {
+                  toast.error('Failed to upload image');
+                  //console.error('Upload error:', error);
+                }
               }
             }}
             className={styles.inputField}

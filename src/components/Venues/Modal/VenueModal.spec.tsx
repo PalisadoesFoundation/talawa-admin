@@ -9,7 +9,6 @@ import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 import type * as RouterTypes from 'react-router-dom';
-//import { act } from 'react-dom/test-utils';
 
 import type { InterfaceVenueModalProps } from './VenueModal';
 import VenueModal from './VenueModal';
@@ -379,14 +378,6 @@ describe('VenueModal', () => {
 
   // Image Handling Tests
   describe('Image Handling', () => {
-    const defaultProps = {
-      show: true,
-      onHide: vi.fn(),
-      refetchVenues: vi.fn(),
-      orgId: 'org123',
-      edit: false,
-    };
-
     beforeEach(() => {
       vi.clearAllMocks();
       console.error = vi.fn();
