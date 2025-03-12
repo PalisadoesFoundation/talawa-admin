@@ -99,15 +99,16 @@ const Requests = (): JSX.Element => {
 
   useEffect(() => {
     if (blockedUsersData && !hasFetchedBlockedUsers.current) {
+      const edges = blockedUsersData.organization?.blockedUsers?.edges || [];
       setBlockedUsers((prevBlockedUsers) => [
         ...prevBlockedUsers,
-        ...blockedUsersData.organization.blockedUsers.edges.map(
+        ...edges.map(
           (blockedUser: InterfaceOrganizationBlockedUsersConnectionEdgePg) =>
             blockedUser.node,
         ),
       ]);
 
-      if (blockedUsersData.organization.blockedUsers.pageInfo.hasNextPage) {
+      if (blockedUsersData.organization?.blockedUsers?.pageInfo?.hasNextPage) {
         blockedUserRefetch({
           variables: {
             id: currentUrl,
@@ -136,7 +137,8 @@ const Requests = (): JSX.Element => {
 
   useEffect(() => {
     if (memberData && !hasFetchedAllMembers.current && blockedUsersLoaded) {
-      const newMembers = memberData.organization.members.edges.map(
+      const edges = memberData.organization?.members?.edges || [];
+      const newMembers = edges.map(
         (member: InterfaceOrganizationMembersConnectionEdgePg) => member.node,
       );
 
@@ -147,7 +149,7 @@ const Requests = (): JSX.Element => {
 
       setAllMembers((prevMembers) => [...prevMembers, ...filteredMembers]);
 
-      if (memberData.organization.members.pageInfo.hasNextPage) {
+      if (memberData.organization?.members?.pageInfo?.hasNextPage) {
         memberRefetch({
           variables: {
             id: currentUrl,

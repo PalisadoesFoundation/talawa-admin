@@ -311,7 +311,7 @@ describe('Requests Component - Additional Tests', () => {
     const sortingButton = screen.getByTestId('userFilter');
     fireEvent.click(sortingButton);
 
-    const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+    const blockedUsersOption = screen.getByTestId('blockedUsers');
     fireEvent.click(blockedUsersOption);
 
     await waitFor(() =>
@@ -321,7 +321,7 @@ describe('Requests Component - Additional Tests', () => {
     expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
 
     fireEvent.click(sortingButton);
-    const allMembersOption = screen.getByTestId('userFilterallMembers');
+    const allMembersOption = screen.getByTestId('allMembers');
     fireEvent.click(allMembersOption);
 
     await waitFor(() =>
@@ -344,7 +344,7 @@ describe('Requests Component - Additional Tests', () => {
 
     const sortingButton = await waitFor(() => screen.getByTestId('userFilter'));
     fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+    const blockedUsersOption = screen.getByTestId('blockedUsers');
     fireEvent.click(blockedUsersOption);
 
     await waitFor(() =>
@@ -402,7 +402,7 @@ describe('Requests Component - Additional Tests', () => {
     const sortingButton = await waitFor(() => screen.getByTestId('userFilter'));
     fireEvent.click(sortingButton);
 
-    const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+    const blockedUsersOption = screen.getByTestId('blockedUsers');
     fireEvent.click(blockedUsersOption);
 
     await waitFor(() =>
@@ -646,7 +646,7 @@ describe('Requests Component - Additional Tests', () => {
       fireEvent.click(sortingButton);
     });
 
-    const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+    const blockedUsersOption = screen.getByTestId('blockedUsers');
     fireEvent.click(blockedUsersOption);
 
     await waitFor(() => {
@@ -740,7 +740,7 @@ describe('Requests Component - Additional Tests', () => {
 
     const sortingButton = screen.getByTestId('userFilter');
     fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+    const blockedUsersOption = screen.getByTestId('blockedUsers');
     fireEvent.click(blockedUsersOption);
 
     await waitFor(() => {
@@ -816,7 +816,7 @@ describe('Requests Component - Additional Tests', () => {
 
     const sortingButton = screen.getByTestId('userFilter');
     fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+    const blockedUsersOption = screen.getByTestId('blockedUsers');
     fireEvent.click(blockedUsersOption);
 
     await waitFor(() => {
@@ -824,7 +824,7 @@ describe('Requests Component - Additional Tests', () => {
     });
 
     fireEvent.click(sortingButton);
-    const allMembersOption = screen.getByTestId('userFilterallMembers');
+    const allMembersOption = screen.getByTestId('allMembers');
     fireEvent.click(allMembersOption);
 
     await waitFor(() => {
@@ -1005,7 +1005,7 @@ describe('Requests Component - Additional Tests', () => {
 
     const sortingButton = await waitFor(() => screen.getByTestId('userFilter'));
     fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+    const blockedUsersOption = screen.getByTestId('blockedUsers');
     fireEvent.click(blockedUsersOption);
 
     await waitFor(() => {
@@ -1108,13 +1108,13 @@ describe('Requests Component - Additional Tests', () => {
 
     const sortingButton = screen.getByTestId('userFilter');
     fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+    const blockedUsersOption = screen.getByTestId('blockedUsers');
     fireEvent.click(blockedUsersOption);
 
     expect(searchInput).toHaveValue('John');
 
     fireEvent.click(sortingButton);
-    const allMembersOption = screen.getByTestId('userFilterallMembers');
+    const allMembersOption = screen.getByTestId('allMembers');
     fireEvent.click(allMembersOption);
 
     expect(searchInput).toHaveValue('John');
@@ -1137,11 +1137,11 @@ describe('Requests Component - Additional Tests', () => {
 
     for (let i = 0; i < 3; i++) {
       fireEvent.click(sortingButton);
-      const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
+      const blockedUsersOption = screen.getByTestId('blockedUsers');
       fireEvent.click(blockedUsersOption);
 
       fireEvent.click(sortingButton);
-      const allMembersOption = screen.getByTestId('userFilterallMembers');
+      const allMembersOption = screen.getByTestId('allMembers');
       fireEvent.click(allMembersOption);
     }
 
