@@ -1,7 +1,7 @@
 {
   "firstName": "First Name",
   "lastName": "Last Name",
-  "searchByName": "Search By Name",
+  "searchByName": "Search by name...",
   "loading": "Loading...",
   "endOfResults": "End of results",
   "noResultsFoundFor": "No results found for ",

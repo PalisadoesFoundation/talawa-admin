@@ -43,12 +43,19 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
+  --blockButton-font: var(#555555);
+  --blockButton-border: #eaebef;
+  --blockButton-bg: #a8c7fa;
+  --blockButton-bg-hover: #1778f2;
+  --blockButton-border-hover: #1778f2;
+  --disabled-btn: #e7f0fe;
+
   --removeButton-bg: #f8d6dc;
   --removeButton-color: #c8102e;
   --removeButton-bg-hover: #ff4d4f;
   --removeButton-border-hover: #ff4d4f;
   --removeButton-color-hover: #ffffff;
-  --removeButton-border: #dc3545;
+  --removeButton-border: #f8d6dc;
 
   --activeTab-bg: #eaebef;
   --activeTab-color: #808080;
@@ -449,6 +456,11 @@
   --rowBackgroundPledge-bg: #fff;
 
   --table-image-small-size: 25px;
+
+  --banIcon-color: #555555;
+  --banIcon-color-hover: #ffffff;
+  --unbanIcon-color: #c8102e;
+  --unbanIcon-color-hover: #ffffff;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -457,13 +469,13 @@
 
 .addButton {
   margin-bottom: 10px;
-  color: var(--addButton-font);
-  background-color: var(--addButton-bg);
+  color: var(--addButton-font) !important;
+  background-color: var(--addButton-bg) !important;
   border-color: var(--addButton-border);
   --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:is(:hover, :active, :focus-visible) {
+.addButton:is(:hover, :active, :focus) {
   background-color: var(--addButton-bg-hover) !important;
   border-color: var(--addButton-border-hover);
 }
@@ -472,6 +484,49 @@
   margin-bottom: 10px;
   background-color: var(--disabled-btn);
   border-color: var(--addButton-bg);
+}
+
+/* Block Button */
+
+.blockButton {
+  margin-bottom: 10px;
+  color: var(--blockButton-font) !important;
+  background-color: var(--blockButton-bg) !important;
+  border-color: var(--blockButton-border);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.blockButton:is(:hover, :active, :focus) {
+  background-color: var(--blockButton-bg-hover) !important;
+  border-color: var(--blockButton-border-hover);
+}
+
+/* Ban Icon */
+
+.banIcon {
+  color: var(--banIcon-color);
+  font-size: 12px;
+  font-weight: 'bold';
+  margin-bottom: 0.5px;
+  margin-right: 4px;
+}
+
+.blockButton:hover .banIcon {
+  color: var(--banIcon-color-hover) !important;
+}
+
+/* Unban Icon*/
+
+.unbanIcon {
+  color: var(--unbanIcon-color);
+  font-size: 12px;
+  font-weight: 'bold';
+  margin-bottom: 0.5px;
+  margin-right: 4px;
+}
+
+.removeButton:hover .unbanIcon {
+  color: var(--unbanIcon-color-hover) !important;
 }
 
 /* Remove Button */

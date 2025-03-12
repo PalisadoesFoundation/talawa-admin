@@ -6,4 +6,4 @@
 
 > `const` **REJECT\_ORGANIZATION\_REQUEST\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L23)
+Defined in: [src/GraphQl/Mutations/mutations.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L35)

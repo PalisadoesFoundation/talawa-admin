@@ -17,7 +17,6 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
-
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';

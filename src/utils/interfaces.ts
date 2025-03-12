@@ -574,6 +574,16 @@ export interface InterfaceOrganizationAdvertisementsConnectionEdgePg {
   node: InterfaceAdvertisementPg;
 }
 
+export interface InterfaceOrganizationBlockedUsersConnectionEdgePg {
+  cursor: string;
+  node: InterfaceUserPg;
+}
+
+export interface InterfaceOrganizationBlockedUsersConnectionPg {
+  edges: InterfaceOrganizationBlockedUsersConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
 export interface InterfaceChatPg {
   id: ID;
   name: string;
@@ -826,6 +836,8 @@ export interface InterfaceOrganizationPg {
     pinnedPostsCount: number;
 
     advertisements: InterfaceOrganizationAdvertisementsConnectionPg;
+
+    blockedUsers: InterfaceOrganizationBlockedUsersConnectionPg;
 
     chats: InterfaceOrganizationChatsConnectionPg;
 
