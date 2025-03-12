@@ -43,7 +43,7 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
-  --blockButton-font: var(#555555);
+  --blockButton-font: #555555;
   --blockButton-border: #eaebef;
   --blockButton-bg: #a8c7fa;
   --blockButton-bg-hover: #1778f2;
@@ -3583,8 +3583,7 @@ form label,
   background-color: #eaebef;
   height: 3.5rem;
   min-width: 3.5rem;
-  border: 3.25rem;
-  /* Make sure to update this if you need border style & color */
+  border: 3.25rem solid transparent;;
   border-radius: 8px;
 }
 
