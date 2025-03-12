@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 import type * as RouterTypes from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
+//import { act } from 'react-dom/test-utils';
 
 import type { InterfaceVenueModalProps } from './VenueModal';
 import VenueModal from './VenueModal';
@@ -21,6 +21,7 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import type { ApolloLink } from '@apollo/client';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 // Mock Setup
 const MOCKS = [
@@ -199,6 +200,18 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi
+      .fn()
+      .mockImplementation(() =>
+        Promise.resolve({
+          fileUrl: 'https://minio-server.example/test-image.png',
+        }),
+      ),
+  }),
+}));
+
 // Helper Functions
 async function wait(ms = 100): Promise<void> {
   await act(async () => {
@@ -252,6 +265,91 @@ const renderVenueModal = (
 describe('VenueModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.resetModules();
+  });
+
+  test('creates a new venue successfully', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...defaultProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: 'Test Venue' },
+    });
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+      target: { value: 'Test Description' },
+    });
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '100' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'organizationVenues.venueCreated',
+      );
+    });
+  });
+
+  test('handles duplicate venue name error', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...defaultProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: 'Existing Venue' },
+    });
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+      target: { value: 'Test Description' },
+    });
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '100' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'organizationVenues.venueNameExists',
+      );
+    });
+  });
+
+  test('clears image input correctly', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...editProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('venueImgUrl');
+    await userEvent.upload(fileInput, file);
+
+    fireEvent.click(screen.getByTestId('closeimage'));
+
+    expect(
+      screen.queryByAltText('Venue Image Preview'),
+    ).not.toBeInTheDocument();
   });
 
   // Basic Rendering Tests
@@ -326,6 +424,19 @@ describe('VenueModal', () => {
 
   // Image Handling Tests
   describe('Image Handling', () => {
+    const defaultProps = {
+      show: true,
+      onHide: vi.fn(),
+      refetchVenues: vi.fn(),
+      orgId: 'org123',
+      edit: false,
+    };
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+      console.error = vi.fn();
+    });
+
     test('displays image preview and clear button when an image is selected', async () => {
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
       const file = new File(['test'], 'test.png', { type: 'image/png' });
@@ -347,6 +458,50 @@ describe('VenueModal', () => {
         screen.queryByAltText('Venue Image Preview'),
       ).not.toBeInTheDocument();
       expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
+    });
+
+    test('shows error when uploading file larger than 5MB', async () => {
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+      // Create a file that exceeds the size limit (5MB)
+      const largeFile = new File(
+        ['x'.repeat(6 * 1024 * 1024)],
+        'large-image.png',
+        { type: 'image/png' },
+      );
+
+      await act(async () => {
+        fireEvent.change(screen.getByTestId('venueImgUrl'), {
+          target: { files: [largeFile] },
+        });
+      });
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'File size exceeds the 5MB limit',
+        );
+      });
+    });
+
+    test('shows error when uploading non-image file', async () => {
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+      // Create a non-image file
+      const pdfFile = new File(['test content'], 'document.pdf', {
+        type: 'application/pdf',
+      });
+
+      await act(async () => {
+        fireEvent.change(screen.getByTestId('venueImgUrl'), {
+          target: { files: [pdfFile] },
+        });
+      });
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Only image files are allowed',
+        );
+      });
     });
   });
 
