@@ -11,10 +11,10 @@ import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../../../style/app-fixed.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
@@ -45,6 +45,7 @@ interface InterfaceMutationUpdateOrganizationInput {
  */
 function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
+  const { uploadFileToMinio } = useMinioUpload();
 
   const [formState, setFormState] = useState<{
     orgName: string;
@@ -90,6 +91,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     keyPrefix: 'orgUpdate',
   });
   const { t: tCommon } = useTranslation('common');
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   interface InterfaceOrganization {
     id: string;
@@ -142,7 +144,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           sortingCode: '',
           state: data.organization.state,
         },
-        orgImage: null,
+        orgImage: data.organization.avatarURL,
       });
     }
     return () => {
@@ -277,14 +279,48 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
-              if (file)
-                setFormState({
-                  ...formState,
-                  orgImage: await convertToBase64(file),
-                });
+              if (file && orgId) {
+                try {
+                  const { fileUrl } = await uploadFileToMinio(file, orgId);
+                  setFormState({
+                    ...formState,
+                    orgImage: fileUrl,
+                  });
+                } catch (error) {
+                  console.error('Error uploading file image to Minio', error);
+                  toast.error('Failed to upload image');
+                }
+              }
             }}
             data-testid="organisationImage"
+            style={{ display: 'none' }}
           />
+
+          <div className="mb-4">
+            {formState.orgImage ? (
+              <div className="d-flex flex-column align-items-start">
+                <img
+                  src={formState.orgImage}
+                  alt="orgImage"
+                  className={styles.orgImage}
+                />
+                <Button
+                  variant="outline-primary"
+                  className="mt-2"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  Change Image
+                </Button>
+              </div>
+            ) : (
+              <Button
+                variant="primary"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Upload Image
+              </Button>
+            )}
+          </div>
           <Row>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
               <Form.Label className="me-3 mb-0 fw-normal text-black">

@@ -18,6 +18,16 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+const mockUploadFileToMinio = vi.fn().mockResolvedValue({
+  fileUrl: 'https://minio-test.com/test-image.jpg',
+});
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: vi.fn(() => ({
+    uploadFileToMinio: mockUploadFileToMinio,
+  })),
+}));
+
 i18n.init({
   lng: 'en',
   resources: {
@@ -254,14 +264,7 @@ describe('OrgUpdate Component', () => {
     });
   });
 
-  vi.mock('utils/convertToBase64', () => ({
-    default: vi.fn().mockResolvedValue('base64String'),
-  }));
-
   it('handles file upload', async () => {
-    const convertToBase64 = (await import('utils/convertToBase64')).default;
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
@@ -274,20 +277,80 @@ describe('OrgUpdate Component', () => {
       expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
     });
 
-    const fileInput = screen.getByTestId(
-      'organisationImage',
-    ) as HTMLInputElement;
+    // Simulate file selection and upload
+    const testFile = new File(['test image content'], 'test-image.jpg', {
+      type: 'image/jpeg',
+    });
 
-    await userEvent.upload(fileInput, file);
+    const fileInput = screen.getByTestId('organisationImage');
+    await userEvent.upload(fileInput, testFile);
 
-    expect(fileInput.files).toHaveLength(1);
-    expect(fileInput.files?.[0]).toBe(file);
+    // Verify uploadFileToMinio was called with the correct file and orgId
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalledTimes(1);
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(testFile, '1');
+    });
 
-    expect(convertToBase64).toHaveBeenCalledWith(file);
+    // Ensure the uploaded image is updated in the UI
+    await waitFor(() => {
+      const updatedImage = screen.getByAltText('orgImage');
+      expect(updatedImage).toHaveAttribute(
+        'src',
+        'https://minio-test.com/test-image.jpg',
+      );
+    });
+  });
+  it('handles case when no file is selected', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
     await waitFor(() => {
-      const saveButton = screen.getByTestId('save-org-changes-btn');
-      expect(saveButton).toBeEnabled();
+      expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
+    });
+
+    // Create an empty file input event (with no files)
+    const fileInput = screen.getByTestId('organisationImage');
+    fireEvent.change(fileInput, { target: { files: [] } });
+
+    // Verify nothing happens (no error is shown, no uploadFileToMinio call)
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+  });
+
+  it('displays error toast when name or description is missing', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to load
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+    });
+
+    // Clear the name and description fields
+    const nameInput = screen.getByDisplayValue('Test Org');
+    const descriptionInput = screen.getByDisplayValue('Test Description');
+
+    fireEvent.change(nameInput, { target: { value: '' } });
+    fireEvent.change(descriptionInput, { target: { value: '' } });
+
+    // Click the save button
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    fireEvent.click(saveButton);
+
+    // Verify that the error toast is displayed
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Name and description are required',
+      );
     });
   });
 
@@ -786,5 +849,172 @@ describe('OrgUpdate Component', () => {
     fireEvent.change(addressInput, { target: { value: 'New Address Line' } });
 
     expect(addressInput).toHaveValue('New Address Line');
+  });
+
+  it('handles file upload error', async () => {
+    // Mock the upload function to throw an error
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+
+    // Spy on console.error
+    const consoleErrorSpy = vi.spyOn(console, 'error');
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
+    });
+
+    // Simulate file selection and upload
+    const testFile = new File(['test image content'], 'test-image.jpg', {
+      type: 'image/jpeg',
+    });
+
+    const fileInput = screen.getByTestId('organisationImage');
+    await userEvent.upload(fileInput, testFile);
+
+    // Verify error handling
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error uploading file image to Minio',
+        expect.any(Error),
+      );
+      expect(toast.error).toHaveBeenCalledWith('Failed to upload image');
+    });
+
+    // Clean up
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('triggers file input click when "Change Image" button is clicked', async () => {
+    // Create a modified mock with an image URL
+    const mocksWithImage = [
+      {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: { input: { id: '1' } },
+        },
+        result: {
+          data: {
+            organization: {
+              ...mockOrgData.organization,
+              avatarURL: 'https://example.com/test-image.jpg',
+            },
+          },
+        },
+      },
+    ];
+
+    // Mock the ref and click function
+    const mockRef = { current: { click: vi.fn() } };
+    const originalUseRef = React.useRef;
+
+    // Override useRef to return our mock for file inputs
+    vi.spyOn(React, 'useRef').mockImplementation((initialValue) => {
+      // Return mock ref only for file input ref
+      if (initialValue === null) {
+        return mockRef;
+      }
+      // For other useRef calls, return the original implementation
+      return originalUseRef(initialValue);
+    });
+
+    render(
+      <MockedProvider mocks={mocksWithImage} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByAltText('orgImage')).toBeInTheDocument();
+    });
+
+    // Find and click the "Change Image" button
+    const changeButton = screen.getByText('Change Image');
+    fireEvent.click(changeButton);
+
+    // Verify the file input's click method was called
+    expect(mockRef.current.click).toHaveBeenCalled();
+
+    // Restore the original useRef implementation
+    vi.restoreAllMocks();
+  });
+
+  it('triggers file input click when "Upload Image" button is clicked', async () => {
+    // Mock the ref and click function
+    const mockRef = { current: { click: vi.fn() } };
+    const originalUseRef = React.useRef;
+
+    // Override useRef to return our mock for file inputs
+    vi.spyOn(React, 'useRef').mockImplementation((initialValue) => {
+      // Return mock ref only for file input ref
+      if (initialValue === null) {
+        return mockRef;
+      }
+      // For other useRef calls, return the original implementation
+      return originalUseRef(initialValue);
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load (with no image)
+    await waitFor(() => {
+      expect(screen.getByText('Upload Image')).toBeInTheDocument();
+    });
+
+    // Find and click the "Upload Image" button
+    const uploadButton = screen.getByText('Upload Image');
+    fireEvent.click(uploadButton);
+
+    // Verify the file input's click method was called
+    expect(mockRef.current.click).toHaveBeenCalled();
+
+    // Restore the original useRef implementation
+    vi.restoreAllMocks();
+  });
+  it('displays error toast when name or description is missing', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to load
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+    });
+
+    // Clear the name and description fields
+    const nameInput = screen.getByDisplayValue('Test Org');
+    const descriptionInput = screen.getByDisplayValue('Test Description');
+
+    fireEvent.change(nameInput, { target: { value: '' } });
+    fireEvent.change(descriptionInput, { target: { value: '' } });
+
+    // Click the save button
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    fireEvent.click(saveButton);
+
+    // Verify that the error toast is displayed
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Name and description are required',
+      );
+    });
   });
 });
