@@ -484,7 +484,6 @@ export const GET_ORGANIZATION_MEMBERS_PG = gql`
   }
 `;
 
-
 export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
   query GetOrganizationBlockedUsers($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
@@ -1078,29 +1077,29 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
 export {
-	AgendaItemByEvent,
-	AgendaItemByOrganization,
+  AgendaItemByEvent,
+  AgendaItemByOrganization,
 } from './AgendaItemQueries';
 
 export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
-	ADVERTISEMENTS_GET,
-	IS_SAMPLE_ORGANIZATION_QUERY,
-	ORGANIZATION_EVENTS_CONNECTION,
+  ADVERTISEMENTS_GET,
+  IS_SAMPLE_ORGANIZATION_QUERY,
+  ORGANIZATION_EVENTS_CONNECTION,
 } from './PlugInQueries';
 
 // display posts
 export {
-	ORGANIZATION_POST_LIST,
-	ORGANIZATION_ADVERTISEMENT_LIST,
+  ORGANIZATION_POST_LIST,
+  ORGANIZATION_ADVERTISEMENT_LIST,
 } from './OrganizationQueries';
 
 export {
-	ORGANIZATION_ADMINS_LIST,
-	USER_CREATED_ORGANIZATIONS,
-	USER_JOINED_ORGANIZATIONS,
-	USER_ORGANIZATION_CONNECTION,
+  ORGANIZATION_ADMINS_LIST,
+  USER_CREATED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS,
+  USER_ORGANIZATION_CONNECTION,
 } from './OrganizationQueries';
 
 export const GET_ORGANIZATION_EVENTS = gql`
