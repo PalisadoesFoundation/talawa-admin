@@ -48,7 +48,6 @@
   --blockButton-bg: #a8c7fa;
   --blockButton-bg-hover: #1778f2;
   --blockButton-border-hover: #1778f2;
-  --disabled-btn: #e7f0fe;
 
   --removeButton-bg: #f8d6dc;
   --removeButton-color: #c8102e;
@@ -761,7 +760,7 @@
 .banIcon {
   color: var(--banIcon-color);
   font-size: 12px;
-  font-weight: 'bold';
+  font-weight: bold;
   margin-bottom: 0.5px;
   margin-right: 4px;
 }
