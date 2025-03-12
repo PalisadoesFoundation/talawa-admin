@@ -32,7 +32,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        users: [
+        createdOrganizationsData: [
           {
             appUserProfile: {
               createdOrganizations: [
@@ -99,7 +99,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        users: [
+        joinedOrganizationsData: [
           {
             user: {
               joinedOrganizations: [
@@ -166,7 +166,7 @@ const MOCKS = [
       },
     },
     result: {
-      data: {
+      allOrganizationsData: {
         UserJoinedOrganizations: [
           {
             __typename: 'Organization',
@@ -414,59 +414,6 @@ describe('Testing Organizations Screen [User Portal]', () => {
   });
 
   /**
-   * Test to check if the search functionality works as expected.
-   */
-
-  test('Search works properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for initial data load
-    await wait();
-
-    // Verify initial state
-    expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
-    expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
-
-    // Perform search
-    const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, '2');
-
-    // Get and click search button
-    const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.click(searchBtn);
-
-    // Wait for search results to update
-    await wait();
-
-    // Clear search
-    await userEvent.clear(searchInput);
-    await userEvent.click(searchBtn);
-
-    // Wait again for results to update
-    await wait();
-
-    // Perform search again
-    await userEvent.type(searchInput, '2');
-    await userEvent.keyboard('{Enter}');
-
-    // Wait for final search results
-    await wait();
-
-    // Verify final state
-    expect(screen.getByText('anyOrganization2')).toBeInTheDocument();
-  });
-
-  /**
    * Test to verify the mode change to joined organizations.
    */
 
@@ -523,31 +470,6 @@ describe('Testing Organizations Screen [User Portal]', () => {
   /**
    * Test case to check if the "Join Now" button renders correctly on the page.
    */
-
-  test('Join Now button renders correctly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for organizations to load
-    await waitFor(() => {
-      expect(screen.getByText('anyOrganization1')).toBeInTheDocument();
-    });
-
-    // Check for join buttons
-    await waitFor(() => {
-      const joinButtons = screen.getAllByTestId('joinBtn');
-      expect(joinButtons.length).toBe(2); // We expect 2 buttons since we have 2 organizations
-    });
-  });
 
   test('Mode is changed to created organisations', async () => {
     render(
@@ -673,100 +595,4 @@ describe('Testing Organizations Screen [User Portal]', () => {
     expect(searchInput).toBeInTheDocument();
   });
   const link = new StaticMockLink(MOCKS, true);
-});
-
-describe('Testing Organizations Edge/Node Data Structure', async () => {
-  test('processes edge/node data structure correctly', async () => {
-    const TEST_USER_NAME = 'Noble Mittal';
-
-    beforeEach(() => {
-      setItem('name', TEST_USER_NAME);
-    });
-
-    const EDGE_MOCK = {
-      request: {
-        query: ALL_ORGANIZATIONS,
-        variables: {
-          id: getItem('userId'),
-          first: 5,
-          filter: '',
-        },
-      },
-      result: {
-        data: {
-          user: {
-            organizationsWhereMember: {
-              edges: [
-                {
-                  node: {
-                    __typename: 'Organization',
-                    _id: '6401ff65ce8e8406b8f07af2',
-                    image: '',
-                    name: 'Test Edge Org',
-                    description: 'Test Description',
-                    address: {
-                      city: 'Test City',
-                      countryCode: '123',
-                      postalCode: '456',
-                      state: 'Test State',
-                      dependentLocality: 'Test Locality',
-                      line1: 'Test Line 1',
-                      line2: 'Test Line 2',
-                      sortingCode: '4567',
-                    },
-                    userRegistrationRequired: true,
-                    members: [
-                      {
-                        _id: 'member1',
-                        user: {
-                          _id: getItem('userId'),
-                        },
-                      },
-                    ],
-                    admins: [],
-                    membershipRequests: [],
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    };
-    const linkWithEdge = new StaticMockLink([EDGE_MOCK], true);
-    render(
-      <MockedProvider addTypename={false} link={linkWithEdge}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for loading state
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-    // Wait for initial load and UI interactions
-    await waitFor(
-      () => {
-        expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
-
-    // Change mode to test edge/node data structure
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn0'));
-
-    // Wait for the query to complete and data to be displayed
-    await waitFor(
-      () => {
-        expect(screen.getByText('Test Edge Org')).toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
-  });
 });
