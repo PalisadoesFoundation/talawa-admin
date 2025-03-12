@@ -40,27 +40,16 @@ const organizationId = 'org1234';
 const MOCK_ORGANIZATION_CONNECTION = {
   request: {
     query: ORGANIZATION_LIST,
-    variables: {
-      id: organizationId,
-    },
+    variables: {},
   },
   result: {
     data: {
       organizations: [
         {
           __typename: 'Organization',
-          _id: '6401ff65ce8e8406b8f07af2',
-          image: '',
-          address: {
-            city: 'abc',
-            countryCode: '123',
-            postalCode: '456',
-            state: 'def',
-            dependentLocality: 'ghi',
-            line1: 'asdfg',
-            line2: 'dfghj',
-            sortingCode: '4567',
-          },
+          id: '6401ff65ce8e8406b8f07af2',
+          avatarURL: '',
+          addressLine1: 'abc',
           name: 'anyOrganization1',
           description: 'desc',
           userRegistrationRequired: true,

@@ -142,9 +142,6 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATION_LIST,
-      variables: {
-        id: '1',
-      },
     },
     result: {
       data: {

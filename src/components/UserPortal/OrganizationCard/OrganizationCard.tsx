@@ -50,13 +50,13 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
-    refetchQueries: [{ query: ORGANIZATION_LIST, variables: { id: props.id } }],
+    refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
-    refetchQueries: [{ query: ORGANIZATION_LIST, variables: { id: props.id } }],
+    refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
-    refetchQueries: [{ query: ORGANIZATION_LIST, variables: { id: props.id } }],
+    refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
   const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
     variables: { id: userId, first: 5 },

@@ -288,7 +288,7 @@ export default function organizations(): JSX.Element {
     } else if (mode === 1) {
       if (joinedOrganizationsData?.users?.[0]?.user?.organizationsWhereMember) {
         const organizations =
-          joinedOrganizationsData.users[0].user.joinedOrganizations.map(
+          joinedOrganizationsData.users[0].user.organizationsWhereMember.map(
             (org: InterfaceOrganization) => ({
               ...org,
               membershipRequestStatus: 'accepted',

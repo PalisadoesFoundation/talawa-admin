@@ -1121,11 +1121,7 @@ test('should correctly map joined organizations data when mode is 1', async () =
         users: [
           {
             user: {
-              organizationsWhereMember: {
-                pageInfo: { hasNextPage: false },
-                edges: [],
-              },
-              joinedOrganizations: [
+              organizationsWhereMember: [
                 {
                   _id: 'joined-org-1',
                   name: 'Joined Organization 1',
