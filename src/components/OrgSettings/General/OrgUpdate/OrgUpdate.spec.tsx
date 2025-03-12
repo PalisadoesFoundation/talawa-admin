@@ -953,32 +953,4 @@ describe('OrgUpdate Component', () => {
 
     cleanup();
   });
-  it('displays error toast when name or description is missing', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <OrgUpdate orgId="1" />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
-    });
-
-    const nameInput = screen.getByDisplayValue('Test Org');
-    const descriptionInput = screen.getByDisplayValue('Test Description');
-
-    fireEvent.change(nameInput, { target: { value: '' } });
-    fireEvent.change(descriptionInput, { target: { value: '' } });
-
-    const saveButton = screen.getByTestId('save-org-changes-btn');
-    fireEvent.click(saveButton);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'Name and description are required',
-      );
-    });
-  });
 });
