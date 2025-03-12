@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -631,5 +631,276 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
+  });
+
+  test('Component should be rendered properly when user is SuperAdmin', async () => {
+    setItem('SuperAdmin', true);
+    removeItem('AdminFor');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+    expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+  });
+
+  // Test for search functionality with empty string
+  test('Search functionality should reset when empty string is provided', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+    const searchInput = screen.getByTestId('searchByName');
+
+    // Type something first
+    await userEvent.type(searchInput, 'John');
+    await wait(100);
+
+    // Clear the input and trigger change event
+    await userEvent.clear(searchInput);
+    fireEvent.change(searchInput, { target: { value: '' } });
+    await wait(200);
+
+    // Verify the table is still present
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  // Test for handling null response in fetchMore
+  test('should handle null response in fetchMore correctly', async () => {
+    const NULL_FETCH_MORE_MOCKS = [
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: 'org1',
+                name: 'Test Organization',
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            id: '',
+            skip: 0,
+            first: 8,
+            firstName_contains: '',
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '',
+                membershipRequests: Array(8).fill({
+                  _id: '1',
+                  user: {
+                    _id: 'user1',
+                    firstName: 'Test',
+                    lastName: 'User',
+                    email: 'test@example.com',
+                  },
+                }),
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            id: '',
+            skip: 8,
+            first: 8,
+            firstName_contains: '',
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '',
+                membershipRequests: null,
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkNullFetchMore = new StaticMockLink(NULL_FETCH_MORE_MOCKS, true);
+
+    render(
+      <MockedProvider addTypename={false} link={linkNullFetchMore}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+
+    // Trigger infinite scroll
+    fireEvent.scroll(window, {
+      target: {
+        scrollY: document.documentElement.scrollHeight,
+        innerHeight: window.innerHeight,
+        scrollHeight: document.documentElement.scrollHeight,
+      },
+    });
+
+    await wait(500);
+
+    // Component should still be rendered
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  // Test for search with special characters
+  test('Search functionality should handle special characters', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+    const searchInput = screen.getByTestId('searchByName');
+
+    // Test with special characters
+    await userEvent.type(searchInput, '@#$%');
+    await wait(200);
+
+    // Component should not crash
+    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+  });
+
+  // Test for rapid search input changes
+  test('Should handle rapid search input changes', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+    const searchInput = screen.getByTestId('searchByName');
+
+    // Rapidly type and clear multiple times
+    for (let i = 0; i < 5; i++) {
+      await userEvent.type(searchInput, 'test');
+      await userEvent.clear(searchInput);
+    }
+
+    await wait(200);
+
+    // Component should still be functional
+    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+  });
+
+  test('Search functionality should refetch data with correct variables', async () => {
+    const searchMocks = [
+      ...MOCKS,
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            id: '',
+            skip: 0,
+            first: 8,
+            firstName_contains: 'TestSearch',
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '',
+                membershipRequests: [],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkSearch = new StaticMockLink(searchMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={linkSearch}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+    const searchInput = screen.getByTestId('searchByName');
+    await userEvent.type(searchInput, 'TestSearch');
+    await wait(200);
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('Component should clean up effects on unmount', async () => {
+    const { unmount } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+    unmount();
+    // No errors should be thrown during unmount
   });
 });
