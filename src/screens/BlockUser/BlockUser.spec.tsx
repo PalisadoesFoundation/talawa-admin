@@ -810,28 +810,23 @@ describe('Requests Component - Additional Tests', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial members to load
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Switch to blocked users
     const sortingButton = screen.getByTestId('userFilter');
     fireEvent.click(sortingButton);
     const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
     fireEvent.click(blockedUsersOption);
 
-    // Verify blocked user is shown
     await waitFor(() => {
       expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
     });
 
-    // Switch back to all members
     fireEvent.click(sortingButton);
     const allMembersOption = screen.getByTestId('userFilterallMembers');
     fireEvent.click(allMembersOption);
 
-    // Verify original member is shown again
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
@@ -900,18 +895,15 @@ describe('Requests Component - Additional Tests', () => {
       </MockedProvider>,
     );
 
-    // Wait for member to load
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Click block button
     const blockButton = screen.getByTestId('blockUser1');
     await act(async () => {
       fireEvent.click(blockButton);
     });
 
-    // Verify success message
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
     });
@@ -978,29 +970,24 @@ describe('Requests Component - Additional Tests', () => {
       </MockedProvider>,
     );
 
-    // Wait for members to load
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
 
-    // Search for John
     const searchInput = screen.getByTestId('searchByName');
     fireEvent.change(searchInput, { target: { value: 'John' } });
     const searchButton = screen.getByTestId('searchBtn');
     fireEvent.click(searchButton);
 
-    // Verify filtered results
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
     });
 
-    // Clear search
     fireEvent.change(searchInput, { target: { value: '' } });
     fireEvent.click(searchButton);
 
-    // Verify all results are shown again
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
@@ -1059,7 +1046,6 @@ describe('Requests Component - Additional Tests', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Search with uppercase
     fireEvent.change(searchInput, { target: { value: 'JOHN' } });
     fireEvent.click(searchButton);
 
@@ -1083,7 +1069,6 @@ describe('Requests Component - Additional Tests', () => {
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
 
-    // Block first user
     const blockButton1 = screen.getByTestId('blockUser1');
     await act(async () => {
       fireEvent.click(blockButton1);
@@ -1093,7 +1078,6 @@ describe('Requests Component - Additional Tests', () => {
       expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
     });
 
-    // Block second user
     const blockButton2 = screen.getByTestId('blockUser2');
     await act(async () => {
       fireEvent.click(blockButton2);
@@ -1117,27 +1101,22 @@ describe('Requests Component - Additional Tests', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Enter search term
     const searchInput = screen.getByTestId('searchByName');
     fireEvent.change(searchInput, { target: { value: 'John' } });
     const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
+		fireEvent.click(searchButton);
 
-    // Switch to blocked users
     const sortingButton = screen.getByTestId('userFilter');
     fireEvent.click(sortingButton);
     const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
     fireEvent.click(blockedUsersOption);
 
-    // Verify search input still has the value
     expect(searchInput).toHaveValue('John');
 
-    // Switch back to all members
     fireEvent.click(sortingButton);
     const allMembersOption = screen.getByTestId('userFilterallMembers');
     fireEvent.click(allMembersOption);
 
-    // Verify search input still has the value
     expect(searchInput).toHaveValue('John');
   });
 
@@ -1156,7 +1135,6 @@ describe('Requests Component - Additional Tests', () => {
 
     const sortingButton = screen.getByTestId('userFilter');
 
-    // Rapidly switch between views multiple times
     for (let i = 0; i < 3; i++) {
       fireEvent.click(sortingButton);
       const blockedUsersOption = screen.getByTestId('userFilterblockedUsers');
@@ -1167,7 +1145,6 @@ describe('Requests Component - Additional Tests', () => {
       fireEvent.click(allMembersOption);
     }
 
-    // Verify final state is correct
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
@@ -1190,7 +1167,6 @@ describe('Requests Component - Additional Tests', () => {
     const searchInput = screen.getByTestId('searchByName');
     const searchButton = screen.getByTestId('searchBtn');
 
-    // Rapidly change search input and click search
     fireEvent.change(searchInput, { target: { value: 'J' } });
     fireEvent.click(searchButton);
     fireEvent.change(searchInput, { target: { value: 'Jo' } });

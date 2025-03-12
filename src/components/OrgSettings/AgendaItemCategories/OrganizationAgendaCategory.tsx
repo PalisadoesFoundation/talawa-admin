@@ -13,7 +13,7 @@ import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutation
 import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
 import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import SearchBar from 'subComponents/SearchBar';
 

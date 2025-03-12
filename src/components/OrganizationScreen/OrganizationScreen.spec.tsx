@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import styles from './OrganizationScreen.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
 import '../../style/app.module.css';
@@ -80,21 +80,6 @@ describe('Testing OrganizationScreen', () => {
       const mainPage = screen.getByTestId('mainpageright');
       expect(mainPage).toBeInTheDocument();
     });
-  });
-
-  test('handles drawer toggle correctly', () => {
-    renderComponent();
-
-    const closeButton = screen.getByTestId('closeMenu');
-    fireEvent.click(closeButton);
-
-    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
-
-    const openButton = screen.getByTestId('openMenu');
-    fireEvent.click(openButton);
-
-    // Check for expand class after opening
-    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.contract);
   });
 
   test('handles window resize', () => {

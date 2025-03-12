@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 /**
  * InterfaceFormStateType is an object containing the form state
  */

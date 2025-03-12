@@ -2,7 +2,7 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   type InterfaceEvent,

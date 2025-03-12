@@ -61,7 +61,8 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
         data-testid={`${dataTestIdPrefix}`}
         className={className}
       >
-        <IconComponent className={'me-1'} /> {/* Use the appropriate icon */}
+        <IconComponent className={'me-1'} data-testid="sorting-icon" />{' '}
+        {/* Use the appropriate icon */}
         {buttonLabel || selectedOption}
         {/* Use buttonLabel if provided, otherwise use selectedOption */}
       </Dropdown.Toggle>

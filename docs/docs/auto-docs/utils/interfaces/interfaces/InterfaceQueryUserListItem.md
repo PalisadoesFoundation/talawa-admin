@@ -4,7 +4,11 @@
 
 # Interface: InterfaceQueryUserListItem
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1084](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1084)
+=======
+Defined in: [src/utils/interfaces.ts:1058](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1058)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 ## Properties
 
@@ -12,7 +16,11 @@ Defined in: [src/utils/interfaces.ts:1084](https://github.com/PalisadoesFoundati
 
 > **appUserProfile**: `object`
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1123)
+=======
+Defined in: [src/utils/interfaces.ts:1097](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1097)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 #### \_id
 
@@ -44,7 +52,11 @@ Defined in: [src/utils/interfaces.ts:1123](https://github.com/PalisadoesFoundati
 
 > **user**: `object`
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1085](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1085)
+=======
+Defined in: [src/utils/interfaces.ts:1059](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1059)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 #### \_id
 

@@ -4,7 +4,11 @@
 
 # Interface: InterfaceQueryOrganizationEventListItem
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1068](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1068)
+=======
+Defined in: [src/utils/interfaces.ts:1042](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1042)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 ## Extends
 
@@ -76,7 +80,11 @@ Defined in: [src/utils/interfaces.ts:349](https://github.com/PalisadoesFoundatio
 
 > **isPublic**: `boolean`
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1070](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1070)
+=======
+Defined in: [src/utils/interfaces.ts:1044](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1044)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 ***
 
@@ -84,7 +92,11 @@ Defined in: [src/utils/interfaces.ts:1070](https://github.com/PalisadoesFoundati
 
 > **isRegisterable**: `boolean`
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1071](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1071)
+=======
+Defined in: [src/utils/interfaces.ts:1045](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1045)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 ***
 

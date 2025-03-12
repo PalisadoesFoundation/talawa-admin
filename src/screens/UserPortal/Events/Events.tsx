@@ -105,10 +105,10 @@ export default function events(): JSX.Element {
   const userId = getItem('id') as string;
 
   const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
+  const adminFor = getItem('AdminFor') as string[] | null;
   const userRole = superAdmin
     ? 'SUPERADMIN'
-    : adminFor?.length > 0
+    : Array.isArray(adminFor) && adminFor.length > 0
       ? 'ADMIN'
       : 'USER';
 

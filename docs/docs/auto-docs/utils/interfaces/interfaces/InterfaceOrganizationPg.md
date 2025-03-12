@@ -4,7 +4,11 @@
 
 # Interface: InterfaceOrganizationPg
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:818](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L818)
+=======
+Defined in: [src/utils/interfaces.ts:794](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L794)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 ## Properties
 
@@ -12,7 +16,11 @@ Defined in: [src/utils/interfaces.ts:818](https://github.com/PalisadoesFoundatio
 
 > **organization**: `object`
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:819](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L819)
+=======
+Defined in: [src/utils/interfaces.ts:795](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L795)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 #### addressLine1
 

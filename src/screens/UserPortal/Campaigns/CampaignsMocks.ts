@@ -46,7 +46,6 @@ const userDetailsQuery = {
           adminFor: [],
           isSuperAdmin: false,
           appLanguageCode: 'en',
-          pluginCreationAllowed: true,
           createdOrganizations: [],
           createdEvents: [],
           eventAdmin: [],

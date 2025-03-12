@@ -4,7 +4,11 @@
 
 # Interface: InterfaceUserEvents
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1344)
+=======
+Defined in: [src/utils/interfaces.ts:1320](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1320)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 ## Extends
 
@@ -136,7 +140,11 @@ Defined in: [src/utils/interfaces.ts:343](https://github.com/PalisadoesFoundatio
 
 > **volunteerGroups**: `object`[]
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1345)
+=======
+Defined in: [src/utils/interfaces.ts:1321](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1321)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 #### \_id
 
@@ -164,7 +172,11 @@ Defined in: [src/utils/interfaces.ts:1345](https://github.com/PalisadoesFoundati
 
 > **volunteers**: `object`[]
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1352](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1352)
+=======
+Defined in: [src/utils/interfaces.ts:1328](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1328)
+>>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
 
 #### \_id
 

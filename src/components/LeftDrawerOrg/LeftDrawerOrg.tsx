@@ -4,13 +4,12 @@ import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useEffect, useMemo, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './../../style/app.module.css'; // Import the global CSS file
+import styles from './../../style/app-fixed.module.css'; // Import the global CSS file
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -22,7 +21,7 @@ export interface InterfaceLeftDrawerProps {
 }
 
 /**
- * LeftDrawerOrg component for displaying organization details and navigation options.
+ * LeftDrawerOrg component for displaying organization details and  options.
  *
  * @param orgId - ID of the current organization.
  * @param targets - List of navigation targets.
@@ -153,15 +152,19 @@ const leftDrawerOrg = ({
                   />
                 )}
               </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {data.organization?.name}
-                </span>
-                <span className={styles.secondaryText}>
-                  {data.organization?.city}
-                </span>
+              <div className={`${styles.ProfileRightConatiner}`}>
+                <div className={styles.profileText}>
+                  <span className={styles.primaryText}>
+                    {data.organization?.name}
+                  </span>
+                  <span className={styles.secondaryText}>
+                    {data.organization?.city}
+                  </span>
+                </div>
+                <div className={`${styles.ArrowIcon}`}>
+                  <AngleRightIcon fill={'var(--bs-secondary)'} />
+                </div>
               </div>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
             </button>
           )}
         </div>
@@ -175,11 +178,12 @@ const leftDrawerOrg = ({
             return url ? (
               <NavLink to={url} key={name} onClick={handleLinkClick}>
                 {({ isActive }) => (
-                  <Button
+                  <button
                     key={name}
-                    variant={isActive ? 'success' : ''}
                     className={
-                      isActive ? styles.activeButton : styles.inactiveButton
+                      isActive
+                        ? styles.leftDrawerActiveButton
+                        : styles.leftDrawerInactiveButton
                     }
                   >
                     <div className={styles.iconWrapper}>
@@ -191,7 +195,7 @@ const leftDrawerOrg = ({
                       />
                     </div>
                     {tCommon(name)}
-                  </Button>
+                  </button>
                 )}
               </NavLink>
             ) : (

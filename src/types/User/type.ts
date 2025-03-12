@@ -48,7 +48,6 @@ export type AppUserProfile = {
   createdOrganizations: Organization[];
   eventAdmin: Event[];
   isSuperAdmin: boolean;
-  pluginCreationAllowed: boolean;
   userId: User;
 };
 
