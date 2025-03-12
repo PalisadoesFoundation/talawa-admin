@@ -113,8 +113,7 @@ const Requests = (): JSX.Element => {
           variables: {
             id: currentUrl,
             first: 32,
-            after:
-              blockedUsersData.organization.blockedUsers.pageInfo.endCursor,
+            after: blockedUsersData.organization?.blockedUsers?.pageInfo?.endCursor,
           },
         });
       } else {
