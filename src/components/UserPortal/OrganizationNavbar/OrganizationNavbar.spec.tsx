@@ -40,7 +40,9 @@ const organizationId = 'org1234';
 const MOCK_ORGANIZATION_CONNECTION = {
   request: {
     query: ORGANIZATION_LIST,
-    variables: {},
+    variables: {
+      id: organizationId,
+    },
   },
   result: {
     data: {
