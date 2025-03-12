@@ -195,7 +195,7 @@ const Requests = (): JSX.Element => {
             organizationId: currentUrl,
           },
         });
-        if (data) {
+        if (data && data.blockUser && data.blockUser.success) {
           toast.success(t('blockedSuccessfully') as string);
           memberRefetch();
 
