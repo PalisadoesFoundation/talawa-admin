@@ -37,13 +37,7 @@ const MOCKS = [
         file: '',
       },
     },
-    result: {
-      data: {
-        createVenue: {
-          _id: 'orgId',
-        },
-      },
-    },
+    result: { data: { createVenue: { _id: 'orgId' } } },
   },
 
   // Basic update venue mock
@@ -58,13 +52,7 @@ const MOCKS = [
         file: 'image1',
       },
     },
-    result: {
-      data: {
-        editVenue: {
-          _id: 'venue1',
-        },
-      },
-    },
+    result: { data: { editVenue: { _id: 'venue1' } } },
   },
 
   // First sequential update mock
@@ -79,13 +67,7 @@ const MOCKS = [
         file: 'image1',
       },
     },
-    result: {
-      data: {
-        editVenue: {
-          _id: 'venue1',
-        },
-      },
-    },
+    result: { data: { editVenue: { _id: 'venue1' } } },
   },
 
   // Second sequential update mock
@@ -100,13 +82,7 @@ const MOCKS = [
         file: 'image1',
       },
     },
-    result: {
-      data: {
-        editVenue: {
-          _id: 'venue1',
-        },
-      },
-    },
+    result: { data: { editVenue: { _id: 'venue1' } } },
   },
 
   // Duplicate name error mock
@@ -150,13 +126,7 @@ const MOCKS = [
         file: 'image1',
       },
     },
-    result: {
-      data: {
-        editVenue: {
-          _id: 'venue1',
-        },
-      },
-    },
+    result: { data: { editVenue: { _id: 'venue1' } } },
   },
 
   // Mock for whitespace trimming test
@@ -171,13 +141,7 @@ const MOCKS = [
         file: '',
       },
     },
-    result: {
-      data: {
-        createVenue: {
-          _id: 'newVenue',
-        },
-      },
-    },
+    result: { data: { createVenue: { _id: 'newVenue' } } },
   },
 ];
 const mockId = 'orgId';
@@ -186,29 +150,20 @@ vi.mock('react-router-dom', async () => {
   const actual = (await vi.importActual(
     'react-router-dom',
   )) as typeof RouterTypes;
-  return {
-    ...actual,
-    useParams: () => ({ orgId: mockId }),
-  };
+  return { ...actual, useParams: () => ({ orgId: mockId }) };
 });
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warning: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), warning: vi.fn(), error: vi.fn() },
 }));
 
 vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: () => ({
-    uploadFileToMinio: vi
-      .fn()
-      .mockImplementation(() =>
-        Promise.resolve({
-          fileUrl: 'https://minio-server.example/test-image.png',
-        }),
-      ),
+    uploadFileToMinio: vi.fn().mockImplementation(() =>
+      Promise.resolve({
+        fileUrl: 'https://minio-server.example/test-image.png',
+      }),
+    ),
   }),
 }));
 
@@ -668,9 +623,7 @@ describe('VenueModal', () => {
       });
       fireEvent.change(
         screen.getByDisplayValue('Updated description for venue 1'),
-        {
-          target: { value: 'Updated description' },
-        },
+        { target: { value: 'Updated description' } },
       );
       fireEvent.change(screen.getByDisplayValue('100'), {
         target: { value: '200' },
@@ -692,11 +645,7 @@ describe('VenueModal', () => {
       const onHide = vi.fn();
       const refetchVenues = vi.fn();
 
-      const props = {
-        ...editProps,
-        onHide,
-        refetchVenues,
-      };
+      const props = { ...editProps, onHide, refetchVenues };
 
       renderVenueModal(props, mockLink);
 
@@ -780,9 +729,7 @@ describe('VenueModal', () => {
         });
         fireEvent.change(
           screen.getByDisplayValue('Updated description for venue 1'),
-          {
-            target: { value: 'Test Description' },
-          },
+          { target: { value: 'Test Description' } },
         );
 
         await act(async () => {
@@ -1020,9 +967,7 @@ describe('VenueModal', () => {
 
             fireEvent.change(
               screen.getByPlaceholderText('Enter Venue Capacity'),
-              {
-                target: { value: '100' },
-              },
+              { target: { value: '100' } },
             );
 
             await act(async () => {
@@ -1048,13 +993,7 @@ describe('VenueModal', () => {
                   file: '',
                 },
               },
-              result: {
-                data: {
-                  createVenue: {
-                    _id: 'newVenue',
-                  },
-                },
-              },
+              result: { data: { createVenue: { _id: 'newVenue' } } },
             };
 
             const mockLink = new StaticMockLink([createVenueMock], true);
@@ -1092,13 +1031,7 @@ describe('VenueModal', () => {
                   file: '', // Explicitly passing empty string
                 },
               },
-              result: {
-                data: {
-                  createVenue: {
-                    _id: 'newVenue',
-                  },
-                },
-              },
+              result: { data: { createVenue: { _id: 'newVenue' } } },
             };
 
             renderVenueModal(
@@ -1138,13 +1071,7 @@ describe('VenueModal', () => {
                   file: '',
                 },
               },
-              result: {
-                data: {
-                  createVenue: {
-                    _id: 'newVenue',
-                  },
-                },
-              },
+              result: { data: { createVenue: { _id: 'newVenue' } } },
             };
 
             const mockLink = new StaticMockLink([createVenueMock], true);
@@ -1284,13 +1211,7 @@ describe('VenueModal', () => {
                 file: '',
               },
             },
-            result: {
-              data: {
-                createVenue: {
-                  _id: 'newVenue',
-                },
-              },
-            },
+            result: { data: { createVenue: { _id: 'newVenue' } } },
           };
 
           renderVenueModal(
@@ -1331,13 +1252,7 @@ describe('VenueModal', () => {
                 file: '',
               },
             },
-            result: {
-              data: {
-                editVenue: {
-                  _id: 'venue1',
-                },
-              },
-            },
+            result: { data: { editVenue: { _id: 'venue1' } } },
           };
 
           renderVenueModal(
