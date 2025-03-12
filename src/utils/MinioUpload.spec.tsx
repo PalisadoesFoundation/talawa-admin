@@ -12,7 +12,7 @@ vi.mock('./filehash', () => ({
 const TestComponent = ({
   onUploadComplete,
 }: {
-  onUploadComplete: (result: { objectName: string }) => void;
+  onUploadComplete: (result: { objectName: string; fileHash: string }) => void;
 }): JSX.Element => {
   const { uploadFileToMinio } = useMinioUpload();
   const [status, setStatus] = React.useState('idle');
