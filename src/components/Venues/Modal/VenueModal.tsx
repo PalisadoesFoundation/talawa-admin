@@ -254,7 +254,7 @@ const VenueModal = ({
           />
           <label htmlFor="venuecapacity">{t('capacity')}</label>
           <Form.Control
-            type="number"
+            type="text"
             id="venuecapacity"
             placeholder={t('enterVenueCapacity')}
             autoComplete="off"
