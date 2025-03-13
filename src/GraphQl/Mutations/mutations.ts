@@ -5,7 +5,9 @@ import '../../style/app.module.css';
 
 export const BLOCK_USER_MUTATION_PG = gql`
   mutation BlockUser($organizationId: String!, $userId: String!) {
-    blockUser(organizationId: $organizationId, userId: $userId)
+    blockUser(organizationId: $organizationId, userId: $userId) {
+      success
+    }
   }
 `;
 
