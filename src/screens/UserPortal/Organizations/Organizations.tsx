@@ -166,41 +166,11 @@ export default function organizations(): JSX.Element {
   });
 
   /**
-   * Handles page change in pagination.
-   *
-   * @param _event - The event triggering the page change.
-   * @param  newPage - The new page number.
-   */
-  const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ): void => {
-    setPage(newPage);
-  };
-
-  /**
-   * Handles change in the number of rows per page.
-   *
-   * @param  event - The event triggering the change.
-   */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    const newRowsPerPage = event.target.value;
-
-    setRowsPerPage(parseInt(newRowsPerPage, 10));
-    setPage(0);
-  };
-
-  /**
-   * Searches organizations based on the provided filter value.
-   *
-   * @param  value - The search filter value.
+   * Re-fetch logic depending on mode
    */
   const handleSearch = (value: string): void => {
-    setFilterName(value); // store in state for immediate use in variables
+    setFilterName(value);
 
-    // Re-run the correct query
     if (mode === 0) {
       refetchAll({ filter: value });
     } else if (mode === 1) {
@@ -210,6 +180,17 @@ export default function organizations(): JSX.Element {
     }
   };
 
+  /**
+   * Trigger search in real-time as user types
+   */
+  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = e.target.value;
+    handleSearch(newValue);
+  };
+
+  /**
+   * Pressing Enter also triggers search (optional)
+   */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -220,7 +201,7 @@ export default function organizations(): JSX.Element {
   };
 
   /**
-   * Handles search button click to search organizations.
+   * Clicking the search button also triggers the same logic
    */
   const handleSearchByBtnClick = (): void => {
     const value =
@@ -230,11 +211,11 @@ export default function organizations(): JSX.Element {
   };
 
   /**
-   * Updates the list of organizations based on query results and selected mode.
+   * React to changes in mode or relevant query data
    */
   useEffect(() => {
-    // "All organizations"
     if (mode === 0) {
+      // All organizations
       if (allOrganizationsData?.organizations) {
         const orgs = allOrganizationsData.organizations.map(
           (org: InterfaceOrganization) => ({
@@ -247,10 +228,8 @@ export default function organizations(): JSX.Element {
       } else {
         setOrganizations([]);
       }
-    }
-
-    // "Joined organizations"
-    if (mode === 1) {
+    } else if (mode === 1) {
+      // Joined organizations
       if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
         const orgs =
           joinedOrganizationsData.user.organizationsWhereMember.edges.map(
@@ -285,10 +264,8 @@ export default function organizations(): JSX.Element {
       } else {
         setOrganizations([]);
       }
-    }
-
-    // "Created organizations"
-    if (mode === 2) {
+    } else if (mode === 2) {
+      // Created organizations
       if (createdOrganizationsData?.user?.createdOrganizations) {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: InterfaceOrganization) => ({
@@ -310,9 +287,21 @@ export default function organizations(): JSX.Element {
     userId,
   ]);
 
-  /**
-   * We can unify loading states
-   */
+  const handleChangePage = (
+    _event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ): void => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ): void => {
+    const newRowsPerPage = event.target.value;
+    setRowsPerPage(parseInt(newRowsPerPage, 10));
+    setPage(0);
+  };
+
   const isLoading = loadingAll || loadingJoined || loadingCreated;
 
   return (
@@ -320,9 +309,7 @@ export default function organizations(): JSX.Element {
       {hideDrawer ? (
         <Button
           className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
+          onClick={() => setHideDrawer(!hideDrawer)}
           data-testid="openMenu"
         >
           <i className="fa fa-angle-double-right" aria-hidden="true"></i>
@@ -330,9 +317,7 @@ export default function organizations(): JSX.Element {
       ) : (
         <Button
           className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
+          onClick={() => setHideDrawer(!hideDrawer)}
           data-testid="closeMenu"
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
@@ -364,6 +349,8 @@ export default function organizations(): JSX.Element {
                     id="searchUserOrgs"
                     type="text"
                     className={styles.inputField}
+                    value={filterName}
+                    onChange={handleChangeFilter}
                     onKeyUp={handleSearchByEnter}
                     data-testid="searchInput"
                   />
@@ -383,22 +370,20 @@ export default function organizations(): JSX.Element {
                     className={styles.dropdown}
                     variant="success"
                     id="dropdown-basic"
-                    data-testid={`modeChangeBtn`}
+                    data-testid="modeChangeBtn"
                   >
                     {modes[mode]}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {modes.map((value, index) => {
-                      return (
-                        <Dropdown.Item
-                          key={index}
-                          data-testid={`modeBtn${index}`}
-                          onClick={(): void => setMode(index)}
-                        >
-                          {value}
-                        </Dropdown.Item>
-                      );
-                    })}
+                    {modes.map((value, index) => (
+                      <Dropdown.Item
+                        key={index}
+                        data-testid={`modeBtn${index}`}
+                        onClick={() => setMode(index)}
+                      >
+                        {value}
+                      </Dropdown.Item>
+                    ))}
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
