@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { act } from 'react-dom/test-utils';
-
+import { describe, it, expect, vi } from 'vitest';
 import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -174,6 +174,24 @@ const mocks = [
       },
     },
   },
+  {
+    request: {
+      query: ALL_ORGANIZATIONS,
+      variables: { filter: 'Debounced Search' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'debserorgid1',
+            name: 'Debounced Search Ord',
+            description: 'desc 123',
+            image: null,
+          },
+        ],
+      },
+    },
+  },
 ];
 
 async function waitMs(ms = 100) {
@@ -260,35 +278,7 @@ describe('Organizations Screen Tests', () => {
     expect(screen.getByText('Created Org 1')).toBeInTheDocument();
   });
 
-  it('searches joined organizations by filter text', async () => {
-    setItem('userId', TEST_USER_ID);
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await waitMs();
-
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await waitMs();
-    await userEvent.click(screen.getByTestId('modeBtn1'));
-
-    await waitMs();
-
-    const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, '2');
-    await userEvent.keyboard('{Enter}');
-    await waitMs(500);
-    expect(screen.getByText(/Joined Org 2/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Joined Org 1/i)).not.toBeInTheDocument();
-  });
-  it('searches All organizations by filter text', async () => {
+  it('searches All organizations by filter text using keystroke', async () => {
     setItem('userId', TEST_USER_ID);
     render(
       <MockedProvider mocks={mocks}>
@@ -316,7 +306,37 @@ describe('Organizations Screen Tests', () => {
     expect(screen.getByText(/All Org 2/i)).toBeInTheDocument();
     expect(screen.queryByText(/All Org 1/i)).not.toBeInTheDocument();
   });
-  it('searches Created organizations by filter text', async () => {
+
+  it('searches joined organizations by filter text using keystroke', async () => {
+    setItem('userId', TEST_USER_ID);
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitMs();
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await waitMs();
+    await userEvent.click(screen.getByTestId('modeBtn1'));
+
+    await waitMs();
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2');
+    await userEvent.keyboard('{Enter}');
+    await waitMs(50);
+    expect(screen.getByText(/Joined Org 2/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Joined Org 1/i)).not.toBeInTheDocument();
+  });
+
+  it('searches Created organizations by filter text by search button', async () => {
     setItem('userId', TEST_USER_ID);
     render(
       <MockedProvider mocks={mocks}>
@@ -338,9 +358,10 @@ describe('Organizations Screen Tests', () => {
     await waitMs();
 
     const searchInput = screen.getByTestId('searchInput');
+    const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.type(searchInput, '2');
-    await userEvent.keyboard('{Enter}');
-    await waitMs(500);
+    await userEvent.click(searchBtn);
+    await waitMs(50);
     expect(screen.getByText(/Created Org 2/i)).toBeInTheDocument();
     expect(screen.queryByText(/Created Org 1/i)).not.toBeInTheDocument();
   });
@@ -404,5 +425,85 @@ describe('Organizations Screen Tests', () => {
     await waitMs();
 
     expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+  });
+
+  it('debounces search input to prevent multiple rapid API calls', async () => {
+    setItem('userId', TEST_USER_ID);
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitMs();
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'Deb');
+    await userEvent.type(searchInput, 'Debounce');
+    await userEvent.type(searchInput, 'Debounced Search');
+    await waitMs(500);
+
+    expect(screen.queryByText(/All Org 1/i)).not.toBeInTheDocument();
+  });
+
+  it('toggles the sidebar multiple times correctly', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const closeBtn = screen.getByTestId('closeMenu');
+
+    expect(closeBtn).toBeInTheDocument();
+
+    await userEvent.click(closeBtn);
+    await waitMs();
+    const openBtn = screen.getByTestId('openMenu');
+
+    expect(openBtn).toBeInTheDocument();
+
+    await userEvent.click(openBtn);
+    await waitMs();
+
+    expect(closeBtn).toBeInTheDocument();
+  });
+
+  it('changing rows per page resets pagination', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitMs();
+
+    expect(screen.getByText(/All Org 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/All Org 5/i)).toBeInTheDocument();
+    expect(screen.queryByText(/All Org 6/i)).toBeNull();
+
+    const rowsPerPageDropdown = screen.getByLabelText(/rows per page/i);
+    await userEvent.selectOptions(rowsPerPageDropdown, '10');
+    await waitMs();
+
+    expect(screen.getByText(/All Org 6/i)).toBeInTheDocument();
   });
 });
