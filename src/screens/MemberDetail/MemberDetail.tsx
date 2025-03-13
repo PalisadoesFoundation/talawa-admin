@@ -257,7 +257,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`bg-success text-white py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+              className={`bg-secondary text-white py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
             >
               <h3 className="m-0">{t('personalDetailsHeading')}</h3>
               <Button
@@ -277,6 +277,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <div className="position-relative d-inline-block">
                     {formState?.avatarURL ? (
                       <img
+                        onClick={() => fileInputRef.current?.click()}
                         className="rounded-circle"
                         style={{
                           width: '60px',
@@ -292,15 +293,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         crossOrigin="anonymous" // to avoid Cors
                       />
                     ) : (
-                      <Avatar
-                        name={formState.name}
-                        alt="User Image"
-                        size={60}
-                        dataTestId="profile-picture"
-                        radius={150}
-                      />
+                      <div onClick={() => fileInputRef.current?.click()}>
+                        <Avatar
+                          name={formState.name}
+                          alt="User Image"
+                          size={60}
+                          dataTestId="profile-picture"
+                          radius={150}
+                        />
+                      </div>
                     )}
-                    <i
+                    {/* <i
                       className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
@@ -312,7 +315,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       onKeyDown={(e) =>
                         e.key === 'Enter' && fileInputRef.current?.click()
                       }
-                    />
+                    /> */}
                   </div>
                 </div>
                 <Form.Control
@@ -467,7 +470,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`bg-success text-white py-3 px-4 ${styles.topRadius}`}
+              className={`bg-secondary text-white py-3 px-4 ${styles.topRadius}`}
             >
               <h3 className="m-0">{t('contactInfoHeading')}</h3>
             </Card.Header>
@@ -679,7 +682,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Col xs={12} lg={6}>
           <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
             <Card.Header
-              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              className={`bg-secondary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
             >
               <h3 className="text-white m-0" data-testid="eventsAttended-title">
                 {t('tagsAssigned')}

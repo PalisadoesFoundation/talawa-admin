@@ -3034,6 +3034,7 @@ input[type='radio']:checked + label:hover {
 .topRadius {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  background-color: #EAEBEF;
 }
 
 .bottomRadius {
