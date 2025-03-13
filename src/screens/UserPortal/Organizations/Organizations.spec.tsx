@@ -509,7 +509,6 @@ describe('Organizations Screen Tests', () => {
     vi.advanceTimersByTime(300);
 
     waitFor(() => {
-      console.log(screen.debug());
       expect(screen.getByText(/Debounced Search Org/i)).toBeInTheDocument();
     });
 
