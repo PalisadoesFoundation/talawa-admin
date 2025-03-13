@@ -197,7 +197,7 @@ const Requests = (): JSX.Element => {
             organizationId: currentUrl,
           },
         });
-        if (data && data.blockUser && data.blockUser.success) {
+        if (data?.blockUser?.success) {
           toast.success(t('blockedSuccessfully') as string);
           memberRefetch();
 
@@ -288,7 +288,7 @@ const Requests = (): JSX.Element => {
             />
             <div
               className={styles.btnsBlock}
-              data-testId="userFilterDropdownToggle"
+              data-testid="userFilterDropdownToggle"
             >
               <SortingButton
                 title={t('sortOrganizations')}

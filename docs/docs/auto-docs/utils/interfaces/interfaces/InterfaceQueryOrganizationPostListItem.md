@@ -4,11 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationPostListItem
 
-<<<<<<< HEAD
-Defined in: [src/utils/interfaces.ts:887](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L887)
-=======
-Defined in: [src/utils/interfaces.ts:861](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L861)
->>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
+Defined in: [src/utils/interfaces.ts:873](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L873)
 
 ## Properties
 
@@ -16,11 +12,7 @@ Defined in: [src/utils/interfaces.ts:861](https://github.com/PalisadoesFoundatio
 
 > **posts**: `object`
 
-<<<<<<< HEAD
-Defined in: [src/utils/interfaces.ts:888](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L888)
-=======
-Defined in: [src/utils/interfaces.ts:862](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L862)
->>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
+Defined in: [src/utils/interfaces.ts:874](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L874)
 
 #### edges
 

@@ -4,11 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
-<<<<<<< HEAD
-Defined in: [src/utils/interfaces.ts:1007](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1007)
-=======
-Defined in: [src/utils/interfaces.ts:981](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L981)
->>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
+Defined in: [src/utils/interfaces.ts:993](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L993)
 
 ## Properties
 
@@ -16,11 +12,7 @@ Defined in: [src/utils/interfaces.ts:981](https://github.com/PalisadoesFoundatio
 
 > **campaigns**: `object`[]
 
-<<<<<<< HEAD
-Defined in: [src/utils/interfaces.ts:1010](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1010)
-=======
-Defined in: [src/utils/interfaces.ts:984](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L984)
->>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
+Defined in: [src/utils/interfaces.ts:996](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L996)
 
 #### \_id
 
@@ -56,11 +48,7 @@ Defined in: [src/utils/interfaces.ts:984](https://github.com/PalisadoesFoundatio
 
 > **isArchived**: `boolean`
 
-<<<<<<< HEAD
-Defined in: [src/utils/interfaces.ts:1009](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1009)
-=======
-Defined in: [src/utils/interfaces.ts:983](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L983)
->>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
+Defined in: [src/utils/interfaces.ts:995](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L995)
 
 ***
 
@@ -68,8 +56,4 @@ Defined in: [src/utils/interfaces.ts:983](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-<<<<<<< HEAD
-Defined in: [src/utils/interfaces.ts:1008](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1008)
-=======
-Defined in: [src/utils/interfaces.ts:982](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L982)
->>>>>>> b54b74ec1cc19648e4cc5316db1d2ecdcb7bb136
+Defined in: [src/utils/interfaces.ts:994](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L994)
