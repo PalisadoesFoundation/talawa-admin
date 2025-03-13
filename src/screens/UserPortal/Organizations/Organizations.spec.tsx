@@ -94,6 +94,7 @@ const mocks = [
       },
     },
   },
+
   {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
@@ -115,14 +116,14 @@ const mocks = [
     },
   },
   {
-    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'search' } },
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: '2' } },
     result: {
       data: {
         organizations: [
           {
-            _id: 'allOrgId3',
-            name: 'Search Org',
-            description: 'Found by search',
+            _id: 'allOrgId2',
+            name: 'All Org 2',
+            description: 'desc 2',
             image: null,
           },
         ],
@@ -143,12 +144,32 @@ const mocks = [
                 node: {
                   _id: 'joinedOrgId2',
                   name: 'Joined Org 2',
-                  description: 'Joined Desc',
+                  description: 'Joined Desc 2',
                   isJoined: true,
                 },
               },
             ],
           },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: '2' },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [
+            {
+              _id: 'createdOrgId2',
+              name: 'Created Org 2',
+              description: 'Created Desc 2',
+              isJoined: true,
+            },
+          ],
         },
       },
     },
@@ -265,6 +286,63 @@ describe('Organizations Screen Tests', () => {
     await userEvent.keyboard('{Enter}');
     await waitMs(500);
     expect(screen.getByText(/Joined Org 2/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Joined Org 1/i)).not.toBeInTheDocument();
+  });
+  it('searches All organizations by filter text', async () => {
+    setItem('userId', TEST_USER_ID);
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitMs();
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await waitMs();
+    await userEvent.click(screen.getByTestId('modeBtn0'));
+
+    await waitMs();
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2');
+    await userEvent.keyboard('{Enter}');
+    await waitMs(500);
+    expect(screen.getByText(/All Org 2/i)).toBeInTheDocument();
+    expect(screen.queryByText(/All Org 1/i)).not.toBeInTheDocument();
+  });
+  it('searches Created organizations by filter text', async () => {
+    setItem('userId', TEST_USER_ID);
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitMs();
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await waitMs();
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+
+    await waitMs();
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2');
+    await userEvent.keyboard('{Enter}');
+    await waitMs(500);
+    expect(screen.getByText(/Created Org 2/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Created Org 1/i)).not.toBeInTheDocument();
   });
 
   it('paginates through the list of organizations', async () => {
@@ -299,5 +377,32 @@ describe('Organizations Screen Tests', () => {
     // Now, All Org 6 should be visible, and All Org 1 should be gone
     expect(screen.getByText(/All Org 6/i)).toBeInTheDocument();
     expect(screen.queryByText(/All Org 1/i)).toBeNull();
+  });
+  it('toggles the sidebar visibility', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitMs();
+
+    expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('closeMenu'));
+    await waitMs();
+
+    expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('openMenu'));
+    await waitMs();
+
+    expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
   });
 });
