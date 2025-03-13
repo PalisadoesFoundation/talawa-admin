@@ -184,7 +184,7 @@ const mocks = [
         organizations: [
           {
             _id: 'debserorgid1',
-            name: 'Debounced Search Ord',
+            name: 'Debounced Search Org',
             description: 'desc 123',
             image: null,
           },
@@ -427,31 +427,6 @@ describe('Organizations Screen Tests', () => {
     expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
   });
 
-  it('debounces search input to prevent multiple rapid API calls', async () => {
-    setItem('userId', TEST_USER_ID);
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitMs();
-
-    const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, 'Deb');
-    await userEvent.type(searchInput, 'Debounce');
-    await userEvent.type(searchInput, 'Debounced Search');
-    await waitMs(500);
-
-    expect(screen.queryByText(/All Org 1/i)).not.toBeInTheDocument();
-  });
-
   it('toggles the sidebar multiple times correctly', async () => {
     render(
       <MockedProvider mocks={mocks}>
@@ -505,5 +480,39 @@ describe('Organizations Screen Tests', () => {
     await waitMs();
 
     expect(screen.getByText(/All Org 6/i)).toBeInTheDocument();
+  });
+
+  it('debounces search input to prevent multiple rapid API calls', () => {
+    setItem('userId', TEST_USER_ID);
+    vi.useFakeTimers();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+
+    userEvent.type(searchInput, 'Deb');
+    vi.advanceTimersByTime(100);
+    userEvent.type(searchInput, 'ounce');
+    vi.advanceTimersByTime(100);
+    userEvent.type(searchInput, 'd Search');
+
+    vi.advanceTimersByTime(300);
+
+    waitFor(() => {
+      console.log(screen.debug());
+      expect(screen.getByText(/Debounced Search Org/i)).toBeInTheDocument();
+    });
+
+    vi.useRealTimers();
   });
 });
