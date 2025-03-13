@@ -9,7 +9,7 @@ import {
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -40,6 +40,21 @@ import styles from '../../../style/app-fixed.module.css';
  * For more details on the reusable classes, refer to the global CSS file.
  */
 const { getItem } = useLocalStorage();
+
+function useDebounce<T>(fn: (val: T) => void, delay: number) {
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  function debouncedFn(val: T) {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      fn(val);
+    }, delay);
+  }
+
+  return debouncedFn;
+}
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -96,7 +111,6 @@ interface InterfaceOrganization {
 
 /**
  * Component for displaying and managing user organizations.
- *
  */
 export default function organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -127,6 +141,7 @@ export default function organizations(): JSX.Element {
   const [organizations, setOrganizations] = React.useState<
     InterfaceOrganization[]
   >([]);
+  const [typedValue, setTypedValue] = React.useState('');
   const [filterName, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
 
@@ -166,48 +181,38 @@ export default function organizations(): JSX.Element {
   });
 
   /**
-   * Re-fetch logic depending on mode
+   * 2) doSearch sets the filterName (triggering refetch)
    */
-  const handleSearch = (value: string): void => {
+  function doSearch(value: string) {
     setFilterName(value);
-
     if (mode === 0) {
       refetchAll({ filter: value });
     } else if (mode === 1) {
       refetchJoined({ filter: value });
-    } else if (mode === 2) {
+    } else {
       refetchCreated({ filter: value });
     }
+  }
+
+  const debouncedSearch = useDebounce(doSearch, 300);
+
+  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVal = e.target.value;
+    setTypedValue(newVal);
+    debouncedSearch(newVal);
   };
 
-  /**
-   * Trigger search in real-time as user types
-   */
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const newValue = e.target.value;
-    handleSearch(newValue);
-  };
-
-  /**
-   * Pressing Enter also triggers search (optional)
-   */
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
+  const handleSearchByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const { value } = e.target as HTMLInputElement;
-      handleSearch(value);
+      doSearch(typedValue);
     }
   };
 
   /**
    * Clicking the search button also triggers the same logic
    */
-  const handleSearchByBtnClick = (): void => {
-    const value =
-      (document.getElementById('searchUserOrgs') as HTMLInputElement)?.value ||
-      '';
-    handleSearch(value);
+  const handleSearchByBtnClick = () => {
+    doSearch(typedValue);
   };
 
   /**
@@ -215,7 +220,7 @@ export default function organizations(): JSX.Element {
    */
   useEffect(() => {
     if (mode === 0) {
-      // All organizations
+      // All
       if (allOrganizationsData?.organizations) {
         const orgs = allOrganizationsData.organizations.map(
           (org: InterfaceOrganization) => ({
@@ -229,7 +234,7 @@ export default function organizations(): JSX.Element {
         setOrganizations([]);
       }
     } else if (mode === 1) {
-      // Joined organizations
+      // Joined
       if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
         const orgs =
           joinedOrganizationsData.user.organizationsWhereMember.edges.map(
@@ -252,7 +257,6 @@ export default function organizations(): JSX.Element {
               ) {
                 membershipRequestStatus = 'pending';
               }
-
               return {
                 ...organization,
                 membershipRequestStatus,
@@ -265,7 +269,7 @@ export default function organizations(): JSX.Element {
         setOrganizations([]);
       }
     } else if (mode === 2) {
-      // Created organizations
+      // Created
       if (createdOrganizationsData?.user?.createdOrganizations) {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: InterfaceOrganization) => ({
@@ -287,18 +291,21 @@ export default function organizations(): JSX.Element {
     userId,
   ]);
 
+  /**
+   * pagination
+   */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
-  ): void => {
+  ) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    const newRowsPerPage = event.target.value;
-    setRowsPerPage(parseInt(newRowsPerPage, 10));
+  ) => {
+    const newVal = event.target.value;
+    setRowsPerPage(parseInt(newVal, 10));
     setPage(0);
   };
 
@@ -312,7 +319,7 @@ export default function organizations(): JSX.Element {
           onClick={() => setHideDrawer(!hideDrawer)}
           data-testid="openMenu"
         >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+          <i className="fa fa-angle-double-right" aria-hidden="true" />
         </Button>
       ) : (
         <Button
@@ -320,7 +327,7 @@ export default function organizations(): JSX.Element {
           onClick={() => setHideDrawer(!hideDrawer)}
           data-testid="closeMenu"
         >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+          <i className="fa fa-angle-double-left" aria-hidden="true" />
         </Button>
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
@@ -349,9 +356,9 @@ export default function organizations(): JSX.Element {
                     id="searchUserOrgs"
                     type="text"
                     className={styles.inputField}
-                    value={filterName}
-                    onChange={handleChangeFilter}
-                    onKeyUp={handleSearchByEnter}
+                    value={typedValue}
+                    onChange={handleChangeFilter} // debounced
+                    onKeyUp={handleSearchByEnter} // immediate search if user presses Enter
                     data-testid="searchInput"
                   />
                   <InputGroup.Text
