@@ -319,7 +319,7 @@ export default function organizations(): JSX.Element {
           onClick={() => setHideDrawer(!hideDrawer)}
           data-testid="openMenu"
         >
-          <i className="fa fa-angle-double-right" aria-hidden="true" />
+          <i className="fa fa-angle-double-right" />
         </Button>
       ) : (
         <Button
@@ -327,7 +327,7 @@ export default function organizations(): JSX.Element {
           onClick={() => setHideDrawer(!hideDrawer)}
           data-testid="closeMenu"
         >
-          <i className="fa fa-angle-double-left" aria-hidden="true" />
+          <i className="fa fa-angle-double-left" />
         </Button>
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
@@ -407,8 +407,10 @@ export default function organizations(): JSX.Element {
                 <div
                   className="d-flex flex-row justify-content-center"
                   data-testid="loading-spinner"
+                  role="status"
                 >
-                  <HourglassBottomIcon /> <span>Loading...</span>
+                  <HourglassBottomIcon />{' '}
+                  <span aria-live="polite">Loading...</span>
                 </div>
               ) : (
                 <>
