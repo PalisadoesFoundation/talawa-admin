@@ -281,12 +281,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         crossOrigin="anonymous" // to avoid Cors
                       />
                     ) : (
-                      <div
+                      <button
                         onClick={() => fileInputRef.current?.click()}
                         data-testid="uploadImageBtn"
-                        style={{ cursor: 'pointer', fontSize: '1.2rem' }}
+                        style={{
+                          cursor: 'pointer',
+                          fontSize: '1.2rem',
+                          background: 'none',
+                          border: 'none',
+                          padding: '0px',
+                        }}
                         title="Edit profile picture"
-                        role="button"
+                        type="button"
                         aria-label="Edit profile picture"
                         tabIndex={0}
                         onKeyDown={(e) =>
@@ -300,7 +306,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           dataTestId="profile-picture"
                           radius={150}
                         />
-                      </div>
+                      </button>
                     )}
 
                     {/** Removed Logo for file upload **/}
