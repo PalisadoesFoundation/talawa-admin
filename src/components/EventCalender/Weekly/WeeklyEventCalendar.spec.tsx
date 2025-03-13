@@ -194,10 +194,58 @@ describe('WeeklyViewCalendar Component', () => {
     });
   });
 
-  it('toggles event list expansion', async () => {
-    const { getByTestId, getAllByText } = renderWithRouter(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+  it('returns all events for SUPERADMIN role', async () => {
+    const { queryByText } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        userRole={Role.SUPERADMIN}
+      />,
     );
+
+    await waitFor(() => {
+      expect(queryByText('Test Event')).toBeInTheDocument();
+      expect(queryByText('Private Event')).toBeInTheDocument();
+    });
+  });
+
+  it('toggles event list expansion', async () => {
+    const mockEventsWithMany = [
+      ...mockEventData,
+      {
+        _id: '3',
+        location: 'Location 3',
+        title: 'Event 3',
+        description: 'Description 3',
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+        startTime: '14:00',
+        endTime: '15:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+        attendees: [{ _id: 'user3' }],
+        creator: {
+          firstName: 'Alice',
+          lastName: 'Smith',
+          _id: 'creator3',
+        },
+      },
+    ];
+
+    const { getByTestId, getAllByText } = renderWithRouter(
+      <Calendar
+        eventData={mockEventsWithMany}
+        refetchEvents={mockRefetchEvents}
+      />,
+    );
+
+    // Mock window width to ensure the "View all" button is rendered
+    global.innerWidth = 500;
+    fireEvent(window, new Event('resize'));
 
     await act(async () => {
       fireEvent.click(getByTestId('more'));

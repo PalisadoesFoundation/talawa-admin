@@ -1,6 +1,6 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from '../../../style/app-fixed.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
@@ -14,25 +14,6 @@ import type {
 } from 'types/Event/interface';
 import { Role } from 'types/Event/interface';
 import { type User } from 'types/User/type';
-
-/**
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.weeklyEditButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
@@ -63,44 +44,33 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     userRole?: string,
     userId?: string,
   ): InterfaceEvent[] => {
-    const data: InterfaceEvent[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
 
-    if (userRole === Role.ADMIN) {
-      eventData?.forEach((event) => {
-        if (event.isPublic) data.push(event);
-        if (!event.isPublic) {
-          const filteredOrg: boolean | undefined = orgData?.admins?.some(
-            (data) => data._id === userId,
+    return (
+      eventData?.filter((event) => {
+        if (event.isPublic) return true;
+
+        if (userRole === Role.ADMIN) {
+          const isAdmin = orgData?.admins?.some(
+            (admin) => admin._id === userId,
           );
-          if (filteredOrg) {
-            data.push(event);
-          }
+          return isAdmin;
         }
-      });
-    } else {
-      eventData?.forEach((event) => {
-        if (event.isPublic) data.push(event);
-        const userAttending = event.attendees?.some(
-          (data) => data._id === userId,
+
+        const isAttending = event.attendees?.some(
+          (attendee) => attendee._id === userId,
         );
-        if (userAttending) {
-          data.push(event);
-        }
-      });
-    }
-    return data;
+        return isAttending;
+      }) || []
+    );
   };
 
   useEffect(() => {
     const filteredData = filterData(eventData, orgData, userRole, userId);
-
     const uniqueData = Array.from(
-      new Set(filteredData.map((event) => event._id)),
-    )
-      .map((id) => filteredData.find((event) => event._id === id))
-      .filter((event): event is InterfaceEvent => event !== undefined);
-    setEvents(uniqueData);
+      new Map(filteredData.map((event) => [event._id, event])).values(),
+    );
+    setEvents(Array.from(uniqueData));
   }, [eventData, orgData, userRole, userId]);
 
   const goToPreviousWeek = (): void => {
@@ -126,6 +96,28 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     );
   };
 
+  const eventsByDate = useMemo(() => {
+    const map = new Map<string, InterfaceEvent[]>();
+    events?.forEach((event) => {
+      const startDate = dayjs(event.startDate);
+      const endDate = dayjs(event.endDate);
+      let currentDate = startDate;
+
+      while (
+        currentDate.isBefore(endDate) ||
+        currentDate.isSame(endDate, 'day')
+      ) {
+        const dateKey = currentDate.format('YYYY-MM-DD');
+        if (!map.has(dateKey)) {
+          map.set(dateKey, []);
+        }
+        map.get(dateKey)?.push(event);
+        currentDate = currentDate.add(1, 'day');
+      }
+    });
+    return map;
+  }, [events]);
+
   const renderWeekDays = (): JSX.Element[] => {
     const days = [];
     for (let i = 0; i < 7; i++) {
@@ -144,52 +136,31 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       };
 
       const allEventsList: JSX.Element[] =
-        events
-          ?.filter((datas) => {
-            const eventStartDate = dayjs(datas.startDate);
-            const eventEndDate = dayjs(datas.endDate);
-            const currentDate = dayjs(date).format('YYYY-MM-DD');
-
-            if (
-              currentDate >= eventStartDate.format('YYYY-MM-DD') &&
-              currentDate <= eventEndDate.format('YYYY-MM-DD')
-            ) {
-              return datas;
-            }
-          })
-          .map((datas: InterfaceEvent) => {
-            const attendees: Partial<User>[] = [];
-            datas.attendees?.forEach((attendee) => {
-              const r = {
-                _id: attendee._id,
-              };
-              attendees.push(r);
-            });
-
-            return (
-              <EventListCard
-                refetchEvents={refetchEvents}
-                userRole={userRole}
-                key={datas._id}
-                _id={datas._id}
-                location={datas.location}
-                title={datas.title}
-                description={datas.description}
-                startDate={datas.startDate}
-                endDate={datas.endDate}
-                startTime={datas.startTime}
-                endTime={datas.endTime}
-                allDay={datas.allDay}
-                recurring={datas.recurring}
-                recurrenceRule={datas.recurrenceRule}
-                isRecurringEventException={datas.isRecurringEventException}
-                isPublic={datas.isPublic}
-                isRegisterable={datas.isRegisterable}
-                attendees={attendees}
-                creator={datas.creator}
-              />
-            );
-          }) || [];
+        eventsByDate
+          .get(dayjs(date).format('YYYY-MM-DD'))
+          ?.map((datas) => (
+            <EventListCard
+              refetchEvents={refetchEvents}
+              userRole={userRole}
+              key={datas._id}
+              _id={datas._id}
+              location={datas.location}
+              title={datas.title}
+              description={datas.description}
+              startDate={datas.startDate}
+              endDate={datas.endDate}
+              startTime={datas.startTime}
+              endTime={datas.endTime}
+              allDay={datas.allDay}
+              recurring={datas.recurring}
+              recurrenceRule={datas.recurrenceRule}
+              isRecurringEventException={datas.isRecurringEventException}
+              isPublic={datas.isPublic}
+              isRegisterable={datas.isRegisterable}
+              attendees={datas.attendees}
+              creator={datas.creator}
+            />
+          )) || [];
 
       const holidayList: JSX.Element[] = holidays
         .filter((holiday) => holiday.date === dayjs(date).format('MM-DD'))
