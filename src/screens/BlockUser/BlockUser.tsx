@@ -175,10 +175,8 @@ const Requests = (): JSX.Element => {
       );
       setFilteredAllMembers(matchedMembers);
 
-      const matchedBlockedUsers = blockedUsers.filter(
-        (blockedUser) =>
-          blockedUser.name?.toLowerCase().includes(lowercaseSearch) ||
-          blockedUser.emailAddress?.toLowerCase().includes(lowercaseSearch),
+      const matchedBlockedUsers = blockedUsers.filter((blockedUser) =>
+        blockedUser.name?.toLowerCase().includes(lowercaseSearch),
       );
       setFilteredBlockedUsers(matchedBlockedUsers);
     }
