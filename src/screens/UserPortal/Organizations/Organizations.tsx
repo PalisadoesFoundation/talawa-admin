@@ -404,7 +404,10 @@ export default function organizations(): JSX.Element {
               className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
               {isLoading ? (
-                <div className="d-flex flex-row justify-content-center">
+                <div
+                  className="d-flex flex-row justify-content-center"
+                  data-testid="loading-spinner"
+                >
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
