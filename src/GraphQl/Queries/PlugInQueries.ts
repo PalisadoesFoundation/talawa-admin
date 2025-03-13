@@ -1,24 +1,6 @@
 import gql from 'graphql-tag';
 
 /**
- * GraphQL query to retrieve a list of plugins.
- *
- * @returns The list of plugins with details such as ID, name, creator, description, and uninstalled organizations.
- */
-
-export const PLUGIN_GET = gql`
-  query getPluginList {
-    getPlugins {
-      _id
-      pluginName
-      pluginCreatedBy
-      pluginDesc
-      uninstalledOrgs
-    }
-  }
-`;
-
-/**
  * GraphQL query to retrieve a list of advertisements.
  *
  * @returns The list of advertisements with details such as ID, name, type, organization ID, link, start date, and end date.
@@ -363,25 +345,14 @@ export const CHATS_LIST = gql`
  * @returns A boolean indicating whether the organization is a sample organization.
  */
 
+// Ensure query matches backend schema
 export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
-  query ($isSampleOrganizationId: ID!) {
-    isSampleOrganization(id: $isSampleOrganizationId)
-  }
-`;
-
-/**
- * GraphQL query to retrieve custom fields for a specific organization.
- *
- * @param customFieldsByOrganizationId - The ID of the organization for which custom fields are being retrieved.
- * @returns The list of custom fields associated with the organization, including details such as ID, type, and name.
- */
-
-export const ORGANIZATION_CUSTOM_FIELDS = gql`
-  query ($customFieldsByOrganizationId: ID!) {
-    customFieldsByOrganization(id: $customFieldsByOrganizationId) {
-      _id
-      type
+  query Organization($id: String!) {
+    organization(input: { id: $id }) {
+      id
       name
+      description
+      isSampleOrganization
     }
   }
 `;

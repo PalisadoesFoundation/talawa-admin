@@ -260,7 +260,9 @@ export default function groupChatDetails({
               {chat.users.length} {t('members')}
             </h5>
             <ListGroup className={styles.memberList} variant="flush">
-              {chat.admins.map((admin) => admin._id).includes(userId) && (
+              {chat.admins
+                .map((admin) => admin._id)
+                .includes(userId as string) && (
                 <ListGroup.Item
                   data-testid="addMembers"
                   className={styles.listItem}

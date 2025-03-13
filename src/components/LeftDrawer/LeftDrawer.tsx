@@ -10,17 +10,26 @@ import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
+/**
+ * Interface for LeftDrawer component props.
+ */
 export interface InterfaceLeftDrawerProps {
-  hideDrawer: boolean | null; // Controls the visibility of the drawer
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>; // Function to set the visibility state
+  /**
+   * Determines if the drawer should be hidden.
+   */
+  hideDrawer: boolean | null;
+
+  /**
+   * Function to set the hideDrawer state.
+   */
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 /**
- * LeftDrawer component for displaying navigation options.
+ * LeftDrawer component that displays the sidebar with navigation options.
  *
- * @param hideDrawer - Determines if the drawer should be hidden or shown.
- * @param setHideDrawer - Function to update the visibility state of the drawer.
- * @returns JSX element for the left navigation drawer.
+ * @param props - The props for the component.
+ * @returns The rendered LeftDrawer component.
  */
 const leftDrawer = ({
   hideDrawer,
@@ -30,7 +39,7 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin');
+  const superAdmin = getItem('SuperAdmin') !== null;
 
   useEffect(() => {
     if (hideDrawer === null) {
@@ -38,9 +47,6 @@ const leftDrawer = ({
     }
   }, []);
 
-  /**
-   * Handles link click to hide the drawer on smaller screens.
-   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -48,119 +54,118 @@ const leftDrawer = ({
   };
 
   return (
-    <>
-      <div
-        className={`${styles.leftDrawer} ${
-          hideDrawer === null
-            ? styles.hideElemByDefault
-            : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-        }`}
-        data-testid="leftDrawerContainer"
-      >
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
-        <h5 className={`${styles.titleHeader} text-secondary`}>
-          {tCommon('menu')}
-        </h5>
-        <div className={`d-flex flex-column ${styles.sidebarcompheight} `}>
-          <div className={styles.optionList}>
-            <NavLink to={'/orglist'} onClick={handleLinkClick}>
+    <div
+      className={`${styles.leftDrawer} ${
+        hideDrawer === null
+          ? styles.hideElemByDefault
+          : hideDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
+      }`}
+      data-testid="leftDrawerContainer"
+    >
+      <TalawaLogo className={styles.talawaLogo} />
+      <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
+      <h5 className={`${styles.titleHeader} text-secondary`}>
+        {tCommon('menu')}
+      </h5>
+      <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
+        <div className={styles.optionList}>
+          <NavLink to={'/orglist'} onClick={handleLinkClick}>
+            {({ isActive }) => (
+              <Button
+                variant={isActive ? 'success' : undefined}
+                style={{
+                  backgroundColor: isActive
+                    ? 'var(--sidebar-option-bg)'
+                    : 'transparent',
+                  fontWeight: isActive ? 'bold' : 'normal',
+                  color: isActive
+                    ? 'var(--sidebar-option-text-active)'
+                    : 'var(--sidebar-option-text-inactive)',
+                }}
+                data-testid="organizationsBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <OrganizationsIcon
+                    fill="none"
+                    stroke={
+                      isActive
+                        ? 'var(--sidebar-icon-stroke-active)'
+                        : 'var(--sidebar-icon-stroke-inactive)'
+                    }
+                  />
+                </div>
+                {t('my organizations')}
+              </Button>
+            )}
+          </NavLink>
+          {superAdmin && (
+            <NavLink to={'/users'} onClick={handleLinkClick}>
               {({ isActive }) => (
                 <Button
-                  variant={isActive === true ? 'success' : ''}
+                  variant={isActive ? 'success' : undefined}
                   style={{
-                    backgroundColor:
-                      isActive === true ? 'var(--sidebar-option-bg)' : '',
+                    backgroundColor: isActive
+                      ? 'var(--sidebar-option-bg)'
+                      : undefined,
                     fontWeight: isActive ? 'bold' : 'normal',
                     color: isActive
                       ? 'var(--sidebar-option-text-active)'
                       : 'var(--sidebar-option-text-inactive)',
                   }}
-                  data-testid="orgsBtn"
+                  data-testid="rolesBtn"
                 >
                   <div className={styles.iconWrapper}>
-                    <OrganizationsIcon
+                    <RolesIcon
                       fill="none"
-                      stroke={`${
-                        isActive === true
+                      stroke={
+                        isActive
                           ? 'var(--sidebar-icon-stroke-active)'
                           : 'var(--sidebar-icon-stroke-inactive)'
-                      }`}
+                      }
                     />
                   </div>
-                  {t('my organizations')}
+                  {t('users')}
                 </Button>
               )}
             </NavLink>
-            {superAdmin && (
-              <>
-                <NavLink to={'/users'} onClick={handleLinkClick}>
-                  {({ isActive }) => (
-                    <Button
-                      variant={isActive === true ? 'success' : ''}
-                      style={{
-                        backgroundColor:
-                          isActive === true ? 'var(--sidebar-option-bg)' : '',
-                        fontWeight: isActive ? 'bold' : 'normal',
-                        color: isActive
-                          ? 'var(--sidebar-option-text-active)'
-                          : 'var(--sidebar-option-text-inactive)',
-                      }}
-                      data-testid="rolesBtn"
-                    >
-                      <div className={styles.iconWrapper}>
-                        <RolesIcon
-                          fill="none"
-                          stroke={`${
-                            isActive === true
-                              ? 'var(--sidebar-icon-stroke-active)'
-                              : 'var(--sidebar-icon-stroke-inactive)'
-                          }`}
-                        />
-                      </div>
-                      {tCommon('users')}
-                    </Button>
-                  )}
-                </NavLink>
-                <NavLink to={'/communityProfile'} onClick={handleLinkClick}>
-                  {({ isActive }) => (
-                    <Button
-                      variant={isActive === true ? 'success' : ''}
-                      style={{
-                        backgroundColor:
-                          isActive === true ? 'var(--sidebar-option-bg)' : '',
-                        fontWeight: isActive ? 'bold' : 'normal',
-                        color: isActive
-                          ? 'var(--sidebar-option-text-active)'
-                          : 'var(--sidebar-option-text-inactive)',
-                      }}
-                      data-testid="communityProfileBtn"
-                    >
-                      <div className={styles.iconWrapper}>
-                        <SettingsIcon
-                          fill="none"
-                          stroke={`${
-                            isActive === true
-                              ? 'var(--sidebar-icon-stroke-active)'
-                              : 'var(--sidebar-icon-stroke-inactive)'
-                          }`}
-                        />
-                      </div>
-                      {t('communityProfile')}
-                    </Button>
-                  )}
-                </NavLink>
-              </>
+          )}
+          <NavLink to={'/CommunityProfile'} onClick={handleLinkClick}>
+            {({ isActive }) => (
+              <Button
+                variant={isActive ? 'success' : undefined}
+                style={{
+                  backgroundColor: isActive
+                    ? 'var(--sidebar-option-bg)'
+                    : 'transparent',
+                  fontWeight: isActive ? 'bold' : 'normal',
+                  color: isActive
+                    ? 'var(--sidebar-option-text-active)'
+                    : 'var(--sidebar-option-text-inactive)',
+                }}
+                data-testid="communityProfileBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <SettingsIcon
+                    fill="none"
+                    stroke={
+                      isActive
+                        ? 'var(--sidebar-icon-stroke-active)'
+                        : 'var(--sidebar-icon-stroke-inactive)'
+                    }
+                  />
+                </div>
+                {t('communityProfile')}
+              </Button>
             )}
-          </div>
-          <div className="mt-auto">
-            <ProfileDropdown />
-          </div>
+          </NavLink>
+        </div>
+        <div className="mt-auto mb-4">
+          <ProfileDropdown />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

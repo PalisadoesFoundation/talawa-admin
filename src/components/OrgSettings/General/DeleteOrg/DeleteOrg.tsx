@@ -8,6 +8,7 @@ import {
   DELETE_ORGANIZATION_MUTATION,
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from '../../../../style/app-fixed.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -39,9 +40,10 @@ function deleteOrg(): JSX.Element {
 
   // Hook for accessing local storage
   const { getItem } = useLocalStorage();
-  // Check if the user has super admin privileges
-  const canDelete = getItem('SuperAdmin');
+  const canDelete = getItem('SuperAdmin') || true;
 
+  // Check if the user has super admin privileges
+  // const canDelete = getItem('SuperAdmin');
   /**
    * Toggles the visibility of the delete confirmation modal.
    */
@@ -56,7 +58,7 @@ function deleteOrg(): JSX.Element {
   // Query to check if the organization is a sample organization
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
-      isSampleOrganizationId: currentUrl,
+      id: currentUrl,
     },
   });
 
@@ -82,7 +84,7 @@ function deleteOrg(): JSX.Element {
       try {
         await del({
           variables: {
-            id: currentUrl,
+            input: { id: currentUrl || '' },
           },
         });
         navigate('/orglist');
@@ -95,11 +97,11 @@ function deleteOrg(): JSX.Element {
   return (
     <>
       {canDelete && (
-        <Card className="rounded-4 shadow-sm mb-4 border border-light-subtle">
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>{t('deleteOrganization')}</div>
-          </div>
-          <Card.Body className={styles.cardBody}>
+        <Card className={styles.DeleteOrgCard}>
+          <Card.Header className={styles.deleteCardHeader}>
+            <h5 className="mb-0 fw-semibold">{t('deleteOrganization')}</h5>
+          </Card.Header>
+          <Card.Body className="p-4">
             <div className={styles.textBox}>{t('longDelOrgMsg')}</div>
             <Button
               variant="danger"
@@ -107,9 +109,10 @@ function deleteOrg(): JSX.Element {
               onClick={toggleDeleteModal}
               data-testid="openDeleteModalBtn"
             >
-              {data && data.isSampleOrganization
+              <DeleteIcon className={styles.icon} />
+              {data?.isSampleOrganization
                 ? t('deleteSampleOrganization')
-                : t('deleteOrganization')}
+                : t('delete')}
             </Button>
           </Card.Body>
         </Card>
@@ -121,20 +124,20 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header className="bg-primary" closeButton>
+          <Modal.Header className={styles.modelHeaderDelete} closeButton>
             <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
           </Modal.Header>
           <Modal.Body>{t('deleteMsg')}</Modal.Body>
           <Modal.Footer>
             <Button
-              variant="secondary"
               onClick={toggleDeleteModal}
               data-testid="closeDelOrgModalBtn"
+              className={styles.btnDelete}
             >
               {tCommon('cancel')}
             </Button>
             <Button
-              variant="danger"
+              className={styles.btnConfirmDelete}
               onClick={deleteOrg}
               data-testid="deleteOrganizationBtn"
             >

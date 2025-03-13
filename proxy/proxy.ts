@@ -18,7 +18,7 @@ fastify.register(cors, {
 
 fastify.register(replyFrom);
 
-fastify.all('/*', async (req, reply) => {
+fastify.all('/', async (req, reply) => {
   return reply.from(TARGET_URL, {
     rewriteRequestHeaders: (req, headers) => {
       return { ...headers };

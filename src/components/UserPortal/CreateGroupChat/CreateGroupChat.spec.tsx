@@ -1,4 +1,6 @@
 import React from 'react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import * as MinioUploadHook from 'utils/MinioUpload';
 import {
   act,
   fireEvent,
@@ -51,6 +53,16 @@ import { vi } from 'vitest';
  */
 
 const { setItem } = useLocalStorage();
+
+const mockUploadFileToMinio = vi
+  .fn()
+  .mockResolvedValue({ fileUrl: 'https://minio-test.com/test-image.jpg' });
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: vi.fn(() => ({
+    uploadFileToMinio: mockUploadFileToMinio,
+  })),
+}));
 
 const USER_JOINED_ORG_MOCK = [
   {
@@ -6323,5 +6335,272 @@ describe('CreateGroupChat Additional Tests', () => {
     // Clicking edit button should trigger file input
     fireEvent.click(editBtn);
     expect(fileInput).toBeInTheDocument();
+  });
+});
+
+describe('CreateGroupChat - handleImageChange', () => {
+  const mockToggleCreateGroupChatModal = vi.fn();
+  const mockChatsListRefetch = vi.fn().mockResolvedValue({});
+
+  const mockUserData = {
+    users: [
+      {
+        user: {
+          _id: 'user1',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+        },
+      },
+    ],
+  };
+
+  const mocks = [
+    {
+      request: {
+        query: USERS_CONNECTION_LIST,
+        variables: { firstName_contains: '', lastName_contains: '' },
+      },
+      result: {
+        data: mockUserData,
+      },
+    },
+  ];
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test('should upload file to MinIO and set the image URL on successful upload', async () => {
+    // Mock the return value of useMinioUpload
+    const mockUploadFileToMinio = vi.fn().mockResolvedValue({
+      fileUrl: 'https://minio.example.com/test-image.jpg',
+    });
+    vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/organizations/test-org-id']}>
+          <Routes>
+            <Route
+              path="/organizations/:orgId"
+              element={
+                <CreateGroupChat
+                  toggleCreateGroupChatModal={mockToggleCreateGroupChatModal}
+                  createGroupChatModalisOpen={true}
+                  chatsListRefetch={mockChatsListRefetch}
+                />
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('createGroupChatModal')).toBeInTheDocument();
+    });
+
+    // Create a test file
+    const testFile = new File(['test image content'], 'test-image.jpg', {
+      type: 'image/jpeg',
+    });
+
+    // Get the file input
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Simulate file selection
+    fireEvent.change(fileInput, { target: { files: [testFile] } });
+
+    // Check if uploadFileToMinio was called with the correct arguments
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(
+        testFile,
+        'test-org-id',
+      );
+    });
+
+    // Verify that the image URL was set correctly
+    await waitFor(() => {
+      // If the image is visible, we should see the image element with the correct src
+      const img = screen.getByAltText('');
+      expect(img).toHaveAttribute(
+        'src',
+        'https://minio.example.com/test-image.jpg',
+      );
+    });
+  });
+
+  test('should handle errors when uploading file to MinIO', async () => {
+    // Spy on console.error
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    // Mock the return value of useMinioUpload to throw an error
+    const mockUploadFileToMinio = vi
+      .fn()
+      .mockRejectedValue(new Error('Upload failed'));
+    vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/organizations/test-org-id']}>
+          <Routes>
+            <Route
+              path="/organizations/:orgId"
+              element={
+                <CreateGroupChat
+                  toggleCreateGroupChatModal={mockToggleCreateGroupChatModal}
+                  createGroupChatModalisOpen={true}
+                  chatsListRefetch={mockChatsListRefetch}
+                />
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('createGroupChatModal')).toBeInTheDocument();
+    });
+
+    // Create a test file
+    const testFile = new File(['test image content'], 'test-image.jpg', {
+      type: 'image/jpeg',
+    });
+
+    // Get the file input
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Simulate file selection
+    fireEvent.change(fileInput, { target: { files: [testFile] } });
+
+    // Check if uploadFileToMinio was called with the correct arguments
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(
+        testFile,
+        'test-org-id',
+      );
+    });
+
+    // Verify that console.error was called with the correct error message
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error uploading image to MinIO:',
+        expect.any(Error),
+      );
+    });
+
+    // Verify that the image was not set (should still show the Avatar component)
+    await waitFor(() => {
+      const avatar = screen.getByTestId('editImageBtn');
+      expect(avatar).toBeInTheDocument();
+    });
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  test('should not call uploadFileToMinio when no file is selected', async () => {
+    // Mock the return value of useMinioUpload
+    const mockUploadFileToMinio = vi.fn();
+    vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/organizations/test-org-id']}>
+          <Routes>
+            <Route
+              path="/organizations/:orgId"
+              element={
+                <CreateGroupChat
+                  toggleCreateGroupChatModal={mockToggleCreateGroupChatModal}
+                  createGroupChatModalisOpen={true}
+                  chatsListRefetch={mockChatsListRefetch}
+                />
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('createGroupChatModal')).toBeInTheDocument();
+    });
+
+    // Get the file input
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Simulate an empty file selection
+    fireEvent.change(fileInput, { target: { files: [] } });
+
+    // Verify that uploadFileToMinio was not called
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+  });
+
+  test('should trigger handleImageChange when edit button is clicked', async () => {
+    // Mock the return value of useMinioUpload
+    const mockUploadFileToMinio = vi.fn();
+    vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/organizations/test-org-id']}>
+          <Routes>
+            <Route
+              path="/organizations/:orgId"
+              element={
+                <CreateGroupChat
+                  toggleCreateGroupChatModal={mockToggleCreateGroupChatModal}
+                  createGroupChatModalisOpen={true}
+                  chatsListRefetch={mockChatsListRefetch}
+                />
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('createGroupChatModal')).toBeInTheDocument();
+    });
+
+    // Find the edit button
+    const editButton = screen.getByTestId('editImageBtn');
+
+    // Create a mock click function for the file input
+    const mockClick = vi.fn();
+
+    // Get the file input and mock its click method
+    const fileInput = screen.getByTestId('fileInput');
+    Object.defineProperty(fileInput, 'click', {
+      value: mockClick,
+      configurable: true,
+    });
+
+    // Click the edit button
+    fireEvent.click(editButton);
+
+    // Verify that the file input's click method was called
+    expect(mockClick).toHaveBeenCalled();
   });
 });

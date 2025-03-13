@@ -3,7 +3,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-
+import SyncIcon from '@mui/icons-material/Sync';
+import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -13,14 +14,23 @@ import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../../../style/app-fixed.module.css';
-import type {
-  InterfaceQueryOrganizationsListObject,
-  InterfaceAddress,
-} from 'utils/interfaces';
-import { countryOptions } from 'utils/formEnumFields';
+import type { InterfaceAddress } from 'utils/interfaces';
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
+}
+
+interface InterfaceMutationUpdateOrganizationInput {
+  id: string;
+  name?: string;
+  description?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  countryCode?: string;
+  avatar?: string | null;
 }
 
 /**
@@ -33,7 +43,7 @@ interface InterfaceOrgUpdateProps {
  * @param props - Component props containing the organization ID.
  * @returns The rendered component.
  */
-function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
+function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
 
   const [formState, setFormState] = useState<{
@@ -71,12 +81,28 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     React.useState(false);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
 
-  const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
+  const [updateOrganization] = useMutation<
+    { updateOrganization: { organization: InterfaceOrganization } },
+    { input: InterfaceMutationUpdateOrganizationInput }
+  >(UPDATE_ORGANIZATION_MUTATION);
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
   const { t: tCommon } = useTranslation('common');
+
+  interface InterfaceOrganization {
+    id: string;
+    name: string;
+    description: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    countryCode: string;
+    avatarURL: string | null;
+  }
 
   const {
     data,
@@ -85,69 +111,88 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     error,
   }: {
     data?: {
-      organizations: InterfaceQueryOrganizationsListObject[];
+      organization: InterfaceOrganization;
     };
     loading: boolean;
-    refetch: (variables: { id: string }) => void;
+    refetch: (variables: { input: { id: string } }) => void;
     error?: ApolloError;
   } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: orgId },
+    variables: {
+      input: {
+        id: orgId,
+      },
+    },
     notifyOnNetworkStatusChange: true,
   });
 
   // Update form state when data changes
   useEffect(() => {
     let isMounted = true;
-    if (data && isMounted) {
+    if (data?.organization && isMounted) {
       setFormState({
-        ...formState,
-        orgName: data.organizations[0].name,
-        orgDescrip: data.organizations[0].description,
-        address: data.organizations[0].address,
+        orgName: data.organization.name,
+        orgDescrip: data.organization.description,
+        address: {
+          city: data.organization.city,
+          countryCode: data.organization.countryCode,
+          dependentLocality: '',
+          line1: data.organization.addressLine1,
+          line2: data.organization.addressLine2,
+          postalCode: data.organization.postalCode,
+          sortingCode: '',
+          state: data.organization.state,
+        },
+        orgImage: null,
       });
-      setuserRegistrationRequiredChecked(
-        data.organizations[0].userRegistrationRequired,
-      );
-      setVisibleChecked(data.organizations[0].visibleInSearch);
     }
     return () => {
       isMounted = false;
     };
-  }, [data, orgId]);
+  }, [data]);
 
   /**
    * Handles the save button click event.
    * Updates the organization with the form data.
    */
+
+  const [isSaving, setIsSaving] = useState(false);
+
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
-      const { data } = await login({
+      if (!formState.orgName || !formState.orgDescrip) {
+        toast.error('Name and description are required');
+        return;
+      }
+
+      setIsSaving(true);
+
+      const { data } = await updateOrganization({
         variables: {
-          id: orgId,
-          name: formState.orgName,
-          description: formState.orgDescrip,
-          address: {
+          input: {
+            id: orgId,
+            name: formState.orgName,
+            description: formState.orgDescrip,
+            addressLine1: formState.address.line1,
+            addressLine2: formState.address.line2,
             city: formState.address.city,
-            countryCode: formState.address.countryCode,
-            dependentLocality: formState.address.dependentLocality,
-            line1: formState.address.line1,
-            line2: formState.address.line2,
-            postalCode: formState.address.postalCode,
-            sortingCode: formState.address.sortingCode,
             state: formState.address.state,
+            postalCode: formState.address.postalCode,
+            countryCode: formState.address.countryCode,
+            avatar: formState.orgImage,
           },
-          userRegistrationRequired: userRegistrationRequiredChecked,
-          visibleInSearch: visiblechecked,
-          file: formState.orgImage,
         },
       });
 
       if (data) {
-        refetch({ id: orgId });
+        refetch({ input: { id: orgId } });
         toast.success(t('successfulUpdated') as string);
+      } else {
+        toast.error('Failed to update organization');
       }
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -170,11 +215,13 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
   return (
     <>
-      <div id="orgupdate" className={styles.userupdatediv}>
-        <form>
-          <Form.Label>{tCommon('name')}</Form.Label>
+      <div id="orgupdate">
+        <form className={styles.ss}>
+          <Form.Label className={styles.orgUpdateFormLables}>
+            {tCommon('name')}
+          </Form.Label>
           <Form.Control
-            className="mb-3"
+            className={styles.textFields}
             placeholder={t('enterNameOrganization')}
             autoComplete="off"
             required
@@ -186,10 +233,13 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label>{tCommon('description')}</Form.Label>
+          <Form.Label className={styles.orgUpdateFormLables}>
+            {tCommon('description')}
+          </Form.Label>
           <Form.Control
-            className="mb-3"
-            placeholder={tCommon('description')}
+            as="textarea"
+            className={styles.descriptionTextField}
+            placeholder={t('enterOrganizationDescription')}
             autoComplete="off"
             required
             value={formState.orgDescrip}
@@ -200,108 +250,48 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label>{tCommon('address')}</Form.Label>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-3">
-              <Form.Control
-                required
-                as="select"
-                value={formState.address.countryCode}
-                data-testid="countrycode"
-                onChange={(e) => {
-                  const countryCode = e.target.value;
-                  handleInputChange('countryCode', countryCode);
-                }}
-              >
-                <option value="" disabled>
-                  Select a country
-                </option>
-                {countryOptions.map((country) => (
-                  <option
-                    key={country.value.toUpperCase()}
-                    value={country.value.toUpperCase()}
-                  >
-                    {country.label}
-                  </option>
-                ))}
-              </Form.Control>
-            </Col>
-            <Col sm={6} className="mb-3">
-              <Form.Control
-                placeholder={t('city')}
-                autoComplete="off"
-                required
-                value={formState.address.city}
-                onChange={(e) => handleInputChange('city', e.target.value)}
-              />
-            </Col>
-          </Row>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-3">
-              <Form.Control
-                placeholder={t('state')}
-                autoComplete="off"
-                value={formState.address.state}
-                onChange={(e) => handleInputChange('state', e.target.value)}
-              />
-            </Col>
-            <Col sm={6} className="mb-3">
-              <Form.Control
-                placeholder={t('dependentLocality')}
-                autoComplete="off"
-                value={formState.address.dependentLocality}
-                onChange={(e) =>
-                  handleInputChange('dependentLocality', e.target.value)
-                }
-              />
-            </Col>
-          </Row>
-          <Row className="mb-3">
-            <Col sm={6} className="mb-1">
-              <Form.Control
-                placeholder={t('line1')}
-                autoComplete="off"
-                value={formState.address.line1}
-                onChange={(e) => handleInputChange('line1', e.target.value)}
-              />
-            </Col>
-            <Col sm={6} className="mb-1">
-              <Form.Control
-                placeholder={t('line2')}
-                autoComplete="off"
-                value={formState.address.line2}
-                onChange={(e) => handleInputChange('line2', e.target.value)}
-              />
-            </Col>
-          </Row>
-          <Row className="mb-1">
-            <Col sm={6} className="mb-1">
-              <Form.Control
-                placeholder={t('postalCode')}
-                autoComplete="off"
-                value={formState.address.postalCode}
-                onChange={(e) =>
-                  handleInputChange('postalCode', e.target.value)
-                }
-              />
-            </Col>
-            <Col sm={6} className="mb-1">
-              <Form.Control
-                placeholder={t('sortingCode')}
-                autoComplete="off"
-                value={formState.address.sortingCode}
-                onChange={(e) =>
-                  handleInputChange('sortingCode', e.target.value)
-                }
-              />
-            </Col>
-          </Row>
+
+          <Form.Label className={styles.orgUpdateFormLables}>
+            {tCommon('Location')}
+          </Form.Label>
+          <Form.Control
+            className={styles.textFields}
+            placeholder={tCommon('Enter Organization location')}
+            autoComplete="off"
+            required
+            value={formState.address.line1}
+            onChange={(e): void => {
+              handleInputChange('line1', e.target.value);
+            }}
+          />
+          <Form.Label htmlFor="orgphoto" className={styles.orgUpdateFormLables}>
+            {tCommon('displayImage')}:
+          </Form.Label>
+          <Form.Control
+            className={styles.customFileInput}
+            accept="image/*"
+            placeholder={tCommon('displayImage')}
+            name="photo"
+            type="file"
+            multiple={false}
+            onChange={async (e: React.ChangeEvent): Promise<void> => {
+              const target = e.target as HTMLInputElement;
+              const file = target.files && target.files[0];
+              if (file)
+                setFormState({
+                  ...formState,
+                  orgImage: await convertToBase64(file),
+                });
+            }}
+            data-testid="organisationImage"
+          />
           <Row>
-            <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">
-                {t('userRegistrationRequired')}:
+            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
+              <Form.Label className="me-3 mb-0 fw-normal text-black">
+                {t('isPublic')}:
               </Form.Label>
               <Form.Switch
+                className="custom-switch"
                 placeholder={t('userRegistrationRequired')}
                 checked={userRegistrationRequiredChecked}
                 onChange={(): void =>
@@ -311,49 +301,49 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 }
               />
             </Col>
-            <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">
+            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
+              <Form.Label className="me-3 mb-0 fw-normal text-black">
                 {t('isVisibleInSearch')}:
               </Form.Label>
               <Form.Switch
+                className="custom-switch"
                 placeholder={t('isVisibleInSearch')}
                 checked={visiblechecked}
                 onChange={(): void => setVisibleChecked(!visiblechecked)}
               />
             </Col>
           </Row>
-          <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}:</Form.Label>
-          <Form.Control
-            className="mb-4"
-            accept="image/*"
-            placeholder={tCommon('displayImage')}
-            name="photo"
-            type="file"
-            multiple={false}
-            onChange={async (e: React.ChangeEvent): Promise<void> => {
-              const target = e.target as HTMLInputElement;
-              const file = target.files && target.files[0];
 
-              if (file)
-                setFormState({
-                  ...formState,
-                  orgImage: await convertToBase64(file),
-                });
-            }}
-            data-testid="organisationImage"
-          />
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="success"
-              value="savechanges"
-              onClick={onSaveChangesClicked}
-            >
-              {tCommon('saveChanges')}
-            </Button>
+          <div className="w-fulld-flex justify-content-between mt-4 ">
+            <Row>
+              <Col sm={6}>
+                <Button
+                  variant="outline"
+                  className={styles.resetChangesBtn}
+                  value="resetchanges"
+                  // onClick={onResetChangesClicked}
+                >
+                  <SyncIcon className={styles.syncIconStyle} />
+                  {tCommon('resetChanges')}
+                </Button>
+              </Col>
+              <Col sm={6} className="d-flex justify-content-end">
+                <Button
+                  className={styles.saveChangesBtn}
+                  value="savechanges"
+                  data-testid="save-org-changes-btn"
+                  onClick={onSaveChangesClicked}
+                  disabled={isSaving}
+                >
+                  <SaveIcon className="me-1" />
+                  {isSaving ? tCommon('saving') : tCommon('saveChanges')}
+                </Button>
+              </Col>
+            </Row>
           </div>
         </form>
       </div>
     </>
   );
 }
-export default orgUpdate;
+export default OrgUpdate;

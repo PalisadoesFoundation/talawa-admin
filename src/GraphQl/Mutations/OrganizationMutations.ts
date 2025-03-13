@@ -191,25 +191,6 @@ export const MESSAGE_SENT_TO_CHAT = gql`
   }
 `;
 
-//Plugin WebSocket listner
-
-/**
- * GraphQL subscription to listen for updates on plugins.
- *
- * @returns An object containing information about the updated plugin.
- */
-
-export const PLUGIN_SUBSCRIPTION = gql`
-  subscription onPluginUpdate {
-    onPluginUpdate {
-      pluginName
-      _id
-      pluginDesc
-      uninstalledOrgs
-    }
-  }
-`;
-
 /**
  * GraphQL mutation to toggle the pinned status of a post.
  *
@@ -231,48 +212,12 @@ export const TOGGLE_PINNED_POST = gql`
 `;
 
 /**
- * GraphQL mutation to add a custom field to an organization.
- *
- * @param organizationId - The ID of the organization where the custom field is being added.
- * @param type - The type of the custom field (e.g., String, Number).
- * @param name - The name of the custom field.
- * @returns The added organization custom field object.
- */
-
-export const ADD_CUSTOM_FIELD = gql`
-  mutation ($organizationId: ID!, $type: String!, $name: String!) {
-    addOrganizationCustomField(
-      organizationId: $organizationId
-      type: $type
-      name: $name
-    ) {
-      name
-      type
-    }
-  }
-`;
-
-// Handles custom organization fields
-
-/**
  * GraphQL mutation to remove a custom field from an organization.
  *
  * @param organizationId - The ID of the organization from which the custom field is being removed.
  * @param customFieldId - The ID of the custom field to be removed.
  * @returns The removed organization custom field object.
  */
-
-export const REMOVE_CUSTOM_FIELD = gql`
-  mutation ($organizationId: ID!, $customFieldId: ID!) {
-    removeOrganizationCustomField(
-      organizationId: $organizationId
-      customFieldId: $customFieldId
-    ) {
-      type
-      name
-    }
-  }
-`;
 
 export const SEND_MEMBERSHIP_REQUEST = gql`
   mutation ($organizationId: ID!) {

@@ -14,7 +14,6 @@
 // import { Venue } from "./venue";
 // import { Post } from "./post";
 // import { Organization } from "types/Organization/type";
-// import { Plugin } from "./plugin";
 // import { AuthData } from "./auth";
 // import { ExtendSession } from "./others";
 // import { ChatMessage } from "./chat";
@@ -40,7 +39,6 @@
 //   addUserToUserFamily: (familyId: string, userId: string) => Promise<UserFamily>;
 //   adminRemoveEvent: (eventId: string) => Promise<Event>;
 //   assignUserTag: (input: ToggleUserTagAssignInput) => Promise<User | null>;
-//   blockPluginCreationBySuperadmin: (blockUser: boolean, userId: string) => Promise<AppUserProfile>;
 //   blockUser: (organizationId: string, userId: string) => Promise<User>;
 //   cancelMembershipRequest: (membershipRequestId: string) => Promise<MembershipRequest>;
 //   checkIn: (data: CheckInInput) => Promise<CheckIn>;

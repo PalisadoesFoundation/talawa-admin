@@ -6,4 +6,4 @@
 
 > `const` **DONATE\_TO\_ORGANIZATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:720](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L720)
+Defined in: [src/GraphQl/Mutations/mutations.ts:648](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L648)

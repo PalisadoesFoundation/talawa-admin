@@ -4,21 +4,17 @@ import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import {
-  USER_JOINED_ORGANIZATIONS_PG,
-  CURRENT_USER,
-} from 'GraphQl/Queries/Queries';
+import { ALL_ORGANIZATIONS_PG, CURRENT_USER } from 'GraphQl/Queries/Queries';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import { useTranslation } from 'react-i18next';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { errorHandler } from 'utils/errorHandler';
 import type {
-  InterfaceOrgConnectionInfoTypePG,
   InterfaceCurrentUserTypePG,
+  InterfaceOrgInfoTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 import { Button } from '@mui/material';
@@ -78,8 +74,8 @@ function orgList(): JSX.Element {
 
   const { getItem } = useLocalStorage();
   const role = getItem('role');
-  const adminFor = getItem('AdminFor');
-
+  const adminFor: { _id: string; name: string; image: string | null }[] =
+    getItem('AdminFor') || [];
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
@@ -96,8 +92,8 @@ function orgList(): JSX.Element {
     selectedOption: t('sort'),
   });
 
-  const [hasMore, sethasMore] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  // const [hasMore, sethasMore] = useState(true);
+  // const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -138,16 +134,11 @@ function orgList(): JSX.Element {
     loading,
     error: errorList,
     refetch: refetchOrgs,
-    fetchMore,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
-    variables: {
-      id: getItem('id'),
-      first: perPageResult,
-    },
+  } = useQuery(ALL_ORGANIZATIONS_PG, {
     notifyOnNetworkStatusChange: true,
   });
 
-  const orgsData = UsersOrgsData?.user.organizationsWhereMember;
+  const orgsData = UsersOrgsData?.organizations;
 
   // To clear the search field and form fields on unmount
   // useEffect(() => {
@@ -174,7 +165,7 @@ function orgList(): JSX.Element {
   // }, []);
 
   useEffect(() => {
-    setIsLoading(loading && isLoadingMore);
+    setIsLoading(loading);
   }, [loading]);
 
   // const isAdminForCurrentOrg = (
@@ -271,68 +262,69 @@ function orgList(): JSX.Element {
     window.location.assign('/');
   }
 
-  const resetAllParams = (): void => {
-    refetchOrgs({
-      filter: '',
-      first: perPageResult,
-      skip: 0,
-      orderBy:
-        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
-    });
-    sethasMore(true);
-  };
+  // const resetAllParams = (): void => {
+  //   refetchOrgs({
+  //     filter: '',
+  //     first: perPageResult,
+  //     skip: 0,
+  //     orderBy:
+  //       sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
+  //   });
+  //   sethasMore(true);
+  // };
 
   const handleSearch = (value: string): void => {
     setSearchByName(value);
-    if (value === '') {
-      resetAllParams();
-      return;
-    }
-    refetchOrgs({
-      filter: value,
-    });
+    // if (value == '') {
+    //    resetAllParams();
+    //   return;
+    // }
+    // refetchOrgs({
+    //   filter: value,
+    // });
   };
 
-  const loadMoreOrganizations = (): void => {
-    if (!isLoadingMore || hasMore) setIsLoadingMore(true);
-    fetchMore({
-      variables: {
-        skip: orgsData?.edges?.length || 0,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        setIsLoadingMore(false);
+  // const loadMoreOrganizations = (): void => {
+  //   if (!isLoadingMore || hasMore) setIsLoadingMore(true);
+  //   fetchMore({
+  //     variables: {
+  //       skip: orgsData?.length || 0,
+  //     },
+  //     updateQuery: (prev, { fetchMoreResult }) => {
+  //       setIsLoadingMore(false);
 
-        if (!fetchMoreResult || !fetchMoreResult.user) {
-          return prev; // Prevents breaking the UI
-        }
+  //       if (!fetchMoreResult || !fetchMoreResult.user) {
+  //         return prev; // Prevents breaking the UI
+  //       }
 
-        return {
-          user: {
-            organizationsWhereMember: {
-              pageInfo: fetchMoreResult.user.organizationsWhereMember.pageInfo,
-              edges: [
-                ...(prev?.user.organizationsWhereMember.edges || []),
-                ...fetchMoreResult.user.organizationsWhereMember.edges,
-              ],
-            },
-          },
-        };
-      },
-    });
-  };
+  //       return {
+  //         user: {
+  //           organizationsWhereMember: {
+  //             pageInfo: fetchMoreResult.user.organizationsWhereMember.pageInfo,
+  //             edges: [
+  //               ...(prev?.user.organizationsWhereMember.edges || []),
+  //               ...fetchMoreResult.user.organizationsWhereMember.edges,
+  //             ],
+  //           },
+  //         },
+  //       };
+  //     },
+  //   });
+  // };
 
   const handleSortChange = (value: string): void => {
+    // Update the sorting state and refetch organizations based on the selected sorting option
     setSortingState({
       option: value,
       selectedOption: t(value),
     });
-    const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
-    refetchOrgs({
-      first: perPageResult,
-      skip: 0,
-      filter: searchByName,
-      orderBy,
-    });
+    // const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
+    // refetchOrgs({
+    //   first: perPageResult,
+    //   skip: 0,
+    //   filter: searchByName,
+    //   orderBy,
+    // });
   };
 
   return (
@@ -375,16 +367,14 @@ function orgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-      (!orgsData?.edges || orgsData.edges.length === 0) &&
+      (!orgsData || orgsData.length === 0) &&
       searchByName.length === 0 &&
-      (!userData || adminFor?.length === 0) ? (
+      (!userData || adminFor.length === 0) ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
         </div>
-      ) : !isLoading &&
-        orgsData?.edges.length == 0 &&
-        searchByName.length > 0 ? (
+      ) : !isLoading && orgsData.length == 0 && searchByName.length > 0 ? (
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
@@ -392,8 +382,9 @@ function orgList(): JSX.Element {
         </div>
       ) : (
         <>
-          <InfiniteScroll
-            dataLength={orgsData?.organizationsConnection?.length ?? 0}
+          {/* Infinite scroll can be added when query supports infinitescroll*/}
+          {/* <InfiniteScroll
+            dataLength={orgsData?.length ?? 0}
             next={loadMoreOrganizations}
             loader={
               <>
@@ -426,36 +417,19 @@ function orgList(): JSX.Element {
               </div>
             }
           >
-            {userData && role === 'administrator'
-              ? orgsData?.edges.map(
-                  (item: InterfaceOrgConnectionInfoTypePG) => {
+            {orgsData?.map(
+                  (item: any) => {
                     return (
                       <div
-                        key={item.node.id}
+                        key={item.id}
                         className={styles.itemCardOrgList}
                       >
-                        <OrgListCard data={item.node} />
+                        <OrgListCard data={item} />
                       </div>
                     );
-                  },
-                )
-              : // userData &&
-                // adminFor.length > 0 &&
-                orgsData?.edges.map(
-                  (item: InterfaceOrgConnectionInfoTypePG) => {
-                    // if (isAdminForCurrentOrg(item)) {
-                    return (
-                      <div
-                        key={item.node.id}
-                        className={styles.itemCardOrgList}
-                      >
-                        <OrgListCard data={item.node} />
-                      </div>
-                    );
-                    // }
                   },
                 )}
-          </InfiniteScroll>
+          </InfiniteScroll> */}
           {isLoading && (
             <>
               {[...Array(perPageResult)].map((_, index) => (
@@ -479,6 +453,21 @@ function orgList(): JSX.Element {
               ))}
             </>
           )}
+          <div className={`${styles.listBoxOrgList}`}>
+            {orgsData
+              ?.filter((org: InterfaceOrgInfoTypePG) =>
+                searchByName
+                  ? org.name.toLowerCase().includes(searchByName.toLowerCase())
+                  : org,
+              )
+              .map((item: InterfaceOrgInfoTypePG) => {
+                return (
+                  <div key={item.id} className={styles.itemCardOrgList}>
+                    <OrgListCard data={item} />
+                  </div>
+                );
+              })}
+          </div>
         </>
       )}
       {/* Create Organization Modal */}

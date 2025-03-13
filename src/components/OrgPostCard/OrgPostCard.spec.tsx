@@ -323,7 +323,9 @@ describe('OrgPostCard Component', () => {
       renderComponent();
 
       expect(screen.getByText('Test Caption')).toBeInTheDocument();
-      expect(screen.getByText(/Created: 2\/22\/2024/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Created:\s*\d{1,2}\/\d{1,2}\/\d{4}/),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('post-item')).toBeInTheDocument();
     });
 

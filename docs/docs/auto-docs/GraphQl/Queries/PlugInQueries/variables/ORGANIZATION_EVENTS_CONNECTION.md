@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_EVENTS\_CONNECTION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L59)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L41)
 
 GraphQL query to retrieve a list of events based on organization connection.
 
