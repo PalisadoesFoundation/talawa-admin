@@ -1147,7 +1147,15 @@
     "partTime": "Medio Tiempo",
     "enterState": "Ingresar ciudad o estado",
     "selectCountry": "Seleccionar un país",
-    "joined": "Unido"
+    "joined": "Unido",
+    "enterPhoneNo": "Ingrese número de teléfono",
+    "workPhoneNumber": "Número de teléfono del trabajo",
+    "addressLine1": "Dirección Línea 1",
+    "addressLine2": "Dirección Línea 2",
+    "postalCode": "Código Postal",
+    "city": "Ciudad",
+    "description": "Descripción",
+    "enterDescription": "Ingrese descripción"
   },
   "donate": {
     "title": "Donaciones",

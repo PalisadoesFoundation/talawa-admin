@@ -1144,7 +1144,15 @@
     "displayImage": "显示图像",
     "address": "地址",
     "saveChanges": "保存更改",
-    "joined": "已加入"
+    "joined": "已加入",
+    "enterPhoneNo": "输入电话号码",
+    "workPhoneNumber": "工作电话号码",
+    "addressLine1": "地址行1",
+    "addressLine2": "地址行2",
+    "postalCode": "邮政编码",
+    "city": "城市",
+    "description": "描述",
+    "enterDescription": "输入描述"
   },
   "donate": {
     "title": "捐款",
