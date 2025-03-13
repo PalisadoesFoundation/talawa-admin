@@ -482,6 +482,35 @@ describe('Organizations Screen Tests', () => {
     expect(screen.getByText(/All Org 6/i)).toBeInTheDocument();
   });
 
+  it('Debounce providing time to write', async () => {
+    setItem('userId', TEST_USER_ID);
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitMs();
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'Deb');
+    await waitMs(50);
+    await userEvent.type(searchInput, 'ounce');
+    await waitMs(50);
+    await userEvent.type(searchInput, 'd Search');
+    await waitMs(50);
+    await userEvent.keyboard('{Enter}');
+    await waitMs(50);
+    expect(screen.getByText(/Debounced Search Org/i)).toBeInTheDocument();
+    expect(screen.queryByText(/All Org 1/i)).not.toBeInTheDocument();
+  });
+
   it('debounces search input to prevent multiple rapid API calls', () => {
     setItem('userId', TEST_USER_ID);
     vi.useFakeTimers();
