@@ -13,7 +13,11 @@ export const BLOCK_USER_MUTATION_PG = gql`
 
 export const UNBLOCK_USER_MUTATION_PG = gql`
   mutation UnblockUser($organizationId: String!, $userId: String!) {
-    unblockUser(organizationId: $organizationId, userId: $userId)
+    unblockUser(organizationId: $organizationId, userId: $userId) {
+      success
+    }
+  }
+`;
   }
 `;
 
