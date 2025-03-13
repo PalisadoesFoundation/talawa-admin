@@ -42,7 +42,7 @@ import styles from '../../../style/app-fixed.module.css';
 const { getItem } = useLocalStorage();
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function debouncedFn(val: T) {
     if (timerRef.current) {
