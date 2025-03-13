@@ -18,8 +18,6 @@ export const UNBLOCK_USER_MUTATION_PG = gql`
     }
   }
 `;
-  }
-`;
 
 // to reject the organization request
 

@@ -167,7 +167,7 @@ const createMocks = (
       },
       ...(unblockUserError
         ? { error: new Error('Failed to unblock user') }
-        : { result: { data: { unBlockUser: { success: true } } } }),
+        : { result: { data: { unblockUser: { success: true } } } }),
     },
     {
       request: {
