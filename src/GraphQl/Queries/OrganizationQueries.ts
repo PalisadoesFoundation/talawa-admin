@@ -223,8 +223,8 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
  */
 
 export const ALL_ORGANIZATIONS = gql`
-  query AllOrganizations {
-    organizations {
+  query AllOrganizations($filter: String) {
+    organizations(filter: $filter) {
       id
       name
       addressLine1
@@ -291,9 +291,9 @@ export const USER_ORGANIZATION_CONNECTION = gql`
  */
 
 export const USER_JOINED_ORGANIZATIONS = gql`
-  query UserJoinedOrganizations($id: String!, $first: Int) {
+  query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
     user(input: { id: $id }) {
-      organizationsWhereMember(first: $first) {
+      organizationsWhereMember(first: $first, filter: $filter) {
         pageInfo {
           hasNextPage
         }
@@ -326,10 +326,10 @@ export const USER_JOINED_ORGANIZATIONS = gql`
  */
 
 export const USER_CREATED_ORGANIZATIONS = gql`
-  query UserCreatedOrganizations($id: String!) {
+  query UserCreatedOrganizations($id: String!, $filter: String) {
     user(input: { id: $id }) {
       id
-      createdOrganizations {
+      createdOrganizations(filter: $filter) {
         id
         name
         description

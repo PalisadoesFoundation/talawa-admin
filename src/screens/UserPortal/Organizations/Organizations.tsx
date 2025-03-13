@@ -124,8 +124,10 @@ export default function organizations(): JSX.Element {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [organizations, setOrganizations] = React.useState([]);
-  const [, setFilterName] = React.useState('');
+  const [organizations, setOrganizations] = React.useState<
+    InterfaceOrganization[]
+  >([]);
+  const [filterName, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
 
   const modes = [
@@ -136,22 +138,32 @@ export default function organizations(): JSX.Element {
 
   const userId: string | null = getItem('userId');
 
+  /**
+   * Queries for all 3 modes
+   */
   const {
-    data: joinedOrganizationsData,
-    refetch,
-    loading: loadingOrganizations,
-  } = useQuery(USER_JOINED_ORGANIZATIONS, {
-    variables: { id: userId, first: rowsPerPage, filter: '' },
+    data: allOrganizationsData,
+    loading: loadingAll,
+    refetch: refetchAll,
+  } = useQuery(ALL_ORGANIZATIONS, {
+    variables: { filter: filterName },
   });
 
-  const { data: createdOrganizationsData } = useQuery(
-    USER_CREATED_ORGANIZATIONS,
-    {
-      variables: { id: userId },
-    },
-  );
-  const { data: allOrganizationsData, loading: loadingAll } =
-    useQuery(ALL_ORGANIZATIONS);
+  const {
+    data: joinedOrganizationsData,
+    loading: loadingJoined,
+    refetch: refetchJoined,
+  } = useQuery(USER_JOINED_ORGANIZATIONS, {
+    variables: { id: userId, first: rowsPerPage, filter: filterName },
+  });
+
+  const {
+    data: createdOrganizationsData,
+    loading: loadingCreated,
+    refetch: refetchCreated,
+  } = useQuery(USER_CREATED_ORGANIZATIONS, {
+    variables: { id: userId, filter: filterName },
+  });
 
   /**
    * Handles page change in pagination.
@@ -186,18 +198,18 @@ export default function organizations(): JSX.Element {
    * @param  value - The search filter value.
    */
   const handleSearch = (value: string): void => {
-    setFilterName(value);
+    setFilterName(value); // store in state for immediate use in variables
 
-    refetch({
-      filter: value,
-    });
+    // Re-run the correct query
+    if (mode === 0) {
+      refetchAll({ filter: value });
+    } else if (mode === 1) {
+      refetchJoined({ filter: value });
+    } else if (mode === 2) {
+      refetchCreated({ filter: value });
+    }
   };
 
-  /**
-   * Handles search input submission by pressing the Enter key.
-   *
-   * @param  e - The keyboard event.
-   */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -220,62 +232,8 @@ export default function organizations(): JSX.Element {
   /**
    * Updates the list of organizations based on query results and selected mode.
    */
-  // Update organizations list when joinedOrganizationsData changes (mode 1)
   useEffect(() => {
-    if (joinedOrganizationsData && mode === 1) {
-      // Assuming joinedOrganizationsData.user.organizationsWhereMember.edges is defined
-      if (joinedOrganizationsData.user?.organizationsWhereMember?.edges) {
-        const orgs =
-          joinedOrganizationsData.user.organizationsWhereMember.edges.map(
-            (edge: { node: InterfaceOrganization }) => {
-              const organization = edge.node;
-              let membershipRequestStatus = '';
-              if (
-                Array.isArray(organization.members) &&
-                organization.members.some(
-                  (member: { _id: string }) => member._id === userId,
-                )
-              )
-                membershipRequestStatus = 'accepted';
-              else if (
-                organization.membershipRequests?.some(
-                  (request: { _id: string; user: { _id: string } }) =>
-                    request.user._id === userId,
-                )
-              )
-                membershipRequestStatus = 'pending';
-              return {
-                ...organization,
-                membershipRequestStatus,
-                isJoined: true,
-              };
-            },
-          );
-        setOrganizations(orgs);
-      }
-    }
-  }, [joinedOrganizationsData, mode, userId]);
-
-  // Update organizations list when createdOrganizationsData changes (mode 2)
-  useEffect(() => {
-    if (mode === 2) {
-      if (createdOrganizationsData?.user?.createdOrganizations) {
-        const orgs = createdOrganizationsData.user.createdOrganizations.map(
-          (org: InterfaceOrganization) => ({
-            ...org,
-            membershipRequestStatus: 'created',
-            isJoined: true,
-          }),
-        );
-        setOrganizations(orgs);
-      } else {
-        setOrganizations([]);
-      }
-    }
-  }, [mode, createdOrganizationsData]);
-
-  // When mode is 0 (all organizations), you might have a separate query.
-  useEffect(() => {
+    // "All organizations"
     if (mode === 0) {
       if (allOrganizationsData?.organizations) {
         const orgs = allOrganizationsData.organizations.map(
@@ -290,7 +248,72 @@ export default function organizations(): JSX.Element {
         setOrganizations([]);
       }
     }
-  }, [mode, allOrganizationsData]);
+
+    // "Joined organizations"
+    if (mode === 1) {
+      if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
+        const orgs =
+          joinedOrganizationsData.user.organizationsWhereMember.edges.map(
+            (edge: { node: InterfaceOrganization }) => {
+              const organization = edge.node;
+              let membershipRequestStatus = '';
+
+              if (
+                Array.isArray(organization.members) &&
+                organization.members.some(
+                  (member: { _id: string }) => member._id === userId,
+                )
+              ) {
+                membershipRequestStatus = 'accepted';
+              } else if (
+                organization.membershipRequests?.some(
+                  (request: { _id: string; user: { _id: string } }) =>
+                    request.user._id === userId,
+                )
+              ) {
+                membershipRequestStatus = 'pending';
+              }
+
+              return {
+                ...organization,
+                membershipRequestStatus,
+                isJoined: true,
+              };
+            },
+          );
+        setOrganizations(orgs);
+      } else {
+        setOrganizations([]);
+      }
+    }
+
+    // "Created organizations"
+    if (mode === 2) {
+      if (createdOrganizationsData?.user?.createdOrganizations) {
+        const orgs = createdOrganizationsData.user.createdOrganizations.map(
+          (org: InterfaceOrganization) => ({
+            ...org,
+            membershipRequestStatus: 'created',
+            isJoined: true,
+          }),
+        );
+        setOrganizations(orgs);
+      } else {
+        setOrganizations([]);
+      }
+    }
+  }, [
+    mode,
+    allOrganizationsData,
+    joinedOrganizationsData,
+    createdOrganizationsData,
+    userId,
+  ]);
+
+  /**
+   * We can unify loading states
+   */
+  const isLoading = loadingAll || loadingJoined || loadingCreated;
 
   return (
     <>
@@ -325,7 +348,7 @@ export default function organizations(): JSX.Element {
               : styles.contractOrg
         }`}
       >
-        <div className={`${styles.mainContainerOrganization}`}>
+        <div className={styles.mainContainerOrganization}>
           <div className="d-flex justify-content-between align-items-center">
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
@@ -340,24 +363,24 @@ export default function organizations(): JSX.Element {
                     placeholder={t('searchOrganizations')}
                     id="searchUserOrgs"
                     type="text"
-                    className={`${styles.inputField}`}
+                    className={styles.inputField}
                     onKeyUp={handleSearchByEnter}
                     data-testid="searchInput"
                   />
                   <InputGroup.Text
-                    className={`${styles.searchButton}`}
+                    className={styles.searchButton}
                     style={{ cursor: 'pointer' }}
                     onClick={handleSearchByBtnClick}
                     data-testid="searchBtn"
                   >
-                    <SearchOutlined className={`${styles.colorWhite}`} />
+                    <SearchOutlined className={styles.colorWhite} />
                   </InputGroup.Text>
                 </InputGroup>
               </div>
               <div className={styles.btnsBlock}>
                 <Dropdown drop="down-centered">
                   <Dropdown.Toggle
-                    className={`${styles.dropdown}`}
+                    className={styles.dropdown}
                     variant="success"
                     id="dropdown-basic"
                     data-testid={`modeChangeBtn`}
@@ -386,10 +409,10 @@ export default function organizations(): JSX.Element {
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
             <div
-              className={`d-flex flex-column  ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
-              {loadingOrganizations || loadingAll ? (
-                <div className={`d-flex flex-row justify-content-center`}>
+              {isLoading ? (
+                <div className="d-flex flex-row justify-content-center">
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
