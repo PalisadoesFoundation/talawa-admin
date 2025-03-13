@@ -1013,7 +1013,7 @@ describe('Requests Component - Additional Tests', () => {
     });
 
     const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'bob@example.com' } });
+    fireEvent.change(searchInput, { target: { value: 'Bob' } });
 
     const searchButton = screen.getByTestId('searchBtn');
     fireEvent.click(searchButton);
