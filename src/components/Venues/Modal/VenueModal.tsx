@@ -254,7 +254,7 @@ const VenueModal = ({
           />
           <label htmlFor="venuecapacity">{t('capacity')}</label>
           <Form.Control
-            type="text"
+            type="number"
             id="venuecapacity"
             placeholder={t('enterVenueCapacity')}
             autoComplete="off"
@@ -280,6 +280,10 @@ const VenueModal = ({
               const file = target.files?.[0];
 
               if (file) {
+                if (!file.size) {
+                  toast.error('Empty file selected');
+                  return;
+                }
                 if (file.size > 5 * 1024 * 1024) {
                   toast.error('File size exceeds the 5MB limit');
                   return;
