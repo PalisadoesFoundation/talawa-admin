@@ -113,9 +113,6 @@ const VenueModal = ({
         file: formState.imageURL || '',
         // Don't include name if it hasn't changed
       };
-
-      //console.log('Sending update mutation without name:', variables);
-
       try {
         const result = await mutate({ variables });
 
@@ -148,8 +145,6 @@ const VenueModal = ({
           description: formState.description?.trim() || '',
           file: formState.imageURL || '',
         };
-
-        //console.log('Sending update mutation with name:', variables);
 
         const result = await mutate({ variables });
 
@@ -302,7 +297,6 @@ const VenueModal = ({
                   setVenueImage(true); // To show image preview
                 } catch (error) {
                   toast.error('Failed to upload image');
-                  //console.error('Upload error:', error);
                 }
               }
             }}
