@@ -176,4 +176,92 @@ describe('WeeklyViewCalendar Component', () => {
       });
     });
   });
+
+  it('filters events based on user role', async () => {
+    const { queryByText } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        userRole={Role.ADMIN}
+        orgData={mockOrgData}
+        userId="admin1"
+      />,
+    );
+
+    await waitFor(() => {
+      expect(queryByText('Test Event')).toBeInTheDocument();
+      expect(queryByText('Private Event')).toBeInTheDocument();
+    });
+  });
+
+  it('toggles event list expansion', async () => {
+    const { getByTestId, getAllByText } = renderWithRouter(
+      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+    );
+
+    await act(async () => {
+      fireEvent.click(getByTestId('more'));
+    });
+
+    await waitFor(() => {
+      expect(getAllByText('View less').length).toBeGreaterThan(0);
+    });
+
+    await act(async () => {
+      fireEvent.click(getByTestId('more'));
+    });
+
+    await waitFor(() => {
+      expect(getAllByText('View all').length).toBeGreaterThan(0);
+    });
+  });
+
+  it('handles window resizing', async () => {
+    const { getByTestId } = renderWithRouter(
+      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+    );
+
+    global.innerWidth = 500;
+    fireEvent(window, new Event('resize'));
+
+    await waitFor(() => {
+      expect(getByTestId('more')).toBeInTheDocument();
+    });
+  });
+
+  it('renders multi-day events correctly', async () => {
+    const multiDayEvent = {
+      _id: '3',
+      location: 'Multi-Day Location',
+      title: 'Multi-Day Event',
+      description: 'Multi-Day Description',
+      startDate: dayjs().startOf('week').toISOString(),
+      endDate: dayjs().startOf('week').add(2, 'day').toISOString(),
+      startTime: '10:00',
+      endTime: '11:00',
+      allDay: false,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [{ _id: 'user3' }],
+      creator: {
+        firstName: 'Alice',
+        lastName: 'Smith',
+        _id: 'creator3',
+      },
+    };
+
+    const { getByText } = renderWithRouter(
+      <Calendar
+        eventData={[...mockEventData, multiDayEvent]}
+        refetchEvents={mockRefetchEvents}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(getByText('Multi-Day Event')).toBeInTheDocument();
+    });
+  });
 });

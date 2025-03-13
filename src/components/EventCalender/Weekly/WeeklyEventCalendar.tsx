@@ -1,6 +1,6 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from '../../../style/app-fixed.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
@@ -47,11 +47,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   );
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
-  const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
     function handleResize(): void {
-      setWindowWidth(window.screen.width);
+      setWindowWidth(window.innerWidth);
     }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -93,8 +93,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   useEffect(() => {
-    const data = filterData(eventData, orgData, userRole, userId);
-    setEvents(data);
+    const filteredData = filterData(eventData, orgData, userRole, userId);
+
+    const uniqueData = Array.from(
+      new Set(filteredData.map((event) => event._id)),
+    )
+      .map((id) => filteredData.find((event) => event._id === id))
+      .filter((event): event is InterfaceEvent => event !== undefined);
+    setEvents(uniqueData);
   }, [eventData, orgData, userRole, userId]);
 
   const goToPreviousWeek = (): void => {
@@ -140,8 +146,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       const allEventsList: JSX.Element[] =
         events
           ?.filter((datas) => {
-            if (datas.startDate === dayjs(date).format('YYYY-MM-DD'))
+            const eventStartDate = dayjs(datas.startDate);
+            const eventEndDate = dayjs(datas.endDate);
+            const currentDate = dayjs(date).format('YYYY-MM-DD');
+
+            if (
+              currentDate >= eventStartDate.format('YYYY-MM-DD') &&
+              currentDate <= eventEndDate.format('YYYY-MM-DD')
+            ) {
               return datas;
+            }
           })
           .map((datas: InterfaceEvent) => {
             const attendees: Partial<User>[] = [];
@@ -186,9 +200,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       return (
         <div
           key={index}
-          className={
-            styles.day + ' ' + (allEventsList?.length > 0 && styles.day__events)
-          }
+          className={`${styles.day} ${allEventsList?.length > 0 ? styles.day__events : ''}`}
           data-testid="day"
         >
           <div className={styles.day_header}>
@@ -214,6 +226,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             {(allEventsList?.length > 2 ||
               (windowWidth <= 700 && allEventsList?.length > 0)) && (
               <button
+                type="button"
                 className={styles.btn__more}
                 data-testid="more"
                 onClick={() => {
