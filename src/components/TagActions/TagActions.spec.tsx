@@ -29,6 +29,12 @@ import {
   MOCKS_ERROR_SUBTAGS_QUERY,
 } from './TagActionsMocks';
 import type { TFunction } from 'i18next';
+import {
+  ASSIGN_TO_TAGS,
+  REMOVE_FROM_TAGS,
+} from 'GraphQl/Mutations/TagMutations';
+import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
@@ -411,5 +417,101 @@ describe('Organisation Tags Page', () => {
         translations.successfullyRemovedFromTags,
       );
     });
+  });
+
+  test('Properly handles ancestor tags when selecting and deselecting multiple tags', async () => {
+    renderTagActionsModal(props[0], link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTag1'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTag2'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('clearSelectedTag1')).toBeInTheDocument();
+      expect(screen.getByTestId('clearSelectedTag2')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('checkTag2'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('clearSelectedTag2')).not.toBeInTheDocument();
+      expect(screen.getByTestId('clearSelectedTag1')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('checkTag1'));
+
+    await waitFor(() => {
+      expect(screen.getByText(translations.noTagSelected)).toBeInTheDocument();
+    });
+  });
+
+  test('Handles empty user tag list correctly', async () => {
+    const emptyTagsLink = new StaticMockLink([
+      {
+        request: {
+          query: ORGANIZATION_USER_TAGS_LIST,
+          variables: {
+            id: '123',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+            where: { name: { starts_with: '' } },
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                userTags: {
+                  edges: [],
+                  pageInfo: {
+                    hasNextPage: false,
+                    endCursor: null,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderTagActionsModal(props[0], emptyTagsLink);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('scrollableDiv')).toBeInTheDocument();
+      expect(screen.queryByTestId('orgUserTag')).not.toBeInTheDocument();
+    });
+  });
+
+  test('Component does not fetch data when modal is closed', async () => {
+    const props2: InterfaceTagActionsProps = {
+      tagActionsModalIsOpen: false,
+      hideTagActionsModal: () => {},
+      tagActionType: 'assignToTags',
+      t: ((key: string) => translations[key]) as TFunction<
+        'translation',
+        'manageTag'
+      >,
+      tCommon: ((key: string) => translations[key]) as TFunction<
+        'common',
+        undefined
+      >,
+    };
+
+    renderTagActionsModal(props2, link);
+
+    await wait();
+
+    expect(screen.queryByTestId('scrollableDiv')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('tagActionSubmitBtn')).not.toBeInTheDocument();
   });
 });
