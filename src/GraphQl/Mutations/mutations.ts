@@ -1,22 +1,7 @@
 import gql from 'graphql-tag';
 import '../../style/app.module.css';
-export const UNBLOCK_USER_MUTATION = gql`
-  mutation UnblockUser($userId: ID!, $orgId: ID!) {
-    unblockUser(organizationId: $orgId, userId: $userId) {
-      _id
-    }
-  }
-`;
 
 // to block the user
-
-// export const BLOCK_USER_MUTATION = gql`
-//   mutation BlockUser($userId: ID!, $orgId: ID!) {
-//     blockUser(organizationId: $orgId, userId: $userId) {
-//       _id
-//     }
-//   }
-// `;
 
 export const BLOCK_USER_MUTATION_PG = gql`
   mutation BlockUser($organizationId: String!, $userId: String!) {

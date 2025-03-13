@@ -64,7 +64,7 @@ import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-const Requests = (): JSX.Element => {
+const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'blockUnblockUser',
@@ -449,4 +449,4 @@ const Requests = (): JSX.Element => {
   );
 };
 
-export default Requests;
+export default BlockUser;

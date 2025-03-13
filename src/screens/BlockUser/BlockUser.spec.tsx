@@ -8,7 +8,7 @@ import {
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi } from 'vitest';
-import Requests from './BlockUser';
+import BlockUser from './BlockUser';
 import {
   GET_ORGANIZATION_MEMBERS_PG,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
@@ -287,7 +287,7 @@ const createMocks = (
     },
   ];
 };
-describe('Requests Component - Additional Tests', () => {
+describe('BlockUser Component - Additional Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -296,7 +296,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -336,7 +336,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
           <ToastContainer data-testid="toast-container" />
         </BrowserRouter>
       </MockedProvider>,
@@ -368,7 +368,7 @@ describe('Requests Component - Additional Tests', () => {
         addTypename={false}
       >
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -394,7 +394,7 @@ describe('Requests Component - Additional Tests', () => {
         addTypename={false}
       >
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -426,7 +426,7 @@ describe('Requests Component - Additional Tests', () => {
         addTypename={false}
       >
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -440,7 +440,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -474,7 +474,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -549,7 +549,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -636,7 +636,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -669,7 +669,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -729,7 +729,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={emptyMocks} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -805,7 +805,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -889,7 +889,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
           <ToastContainer />
         </BrowserRouter>
       </MockedProvider>,
@@ -965,7 +965,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -998,7 +998,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -1027,7 +1027,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -1058,7 +1058,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
           <ToastContainer />
         </BrowserRouter>
       </MockedProvider>,
@@ -1092,7 +1092,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -1124,7 +1124,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -1155,7 +1155,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -1184,7 +1184,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={createMocks()} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -1253,7 +1253,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={mocksWithNullName} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -1311,7 +1311,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={mocksWithUndefinedEdges} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -1355,7 +1355,7 @@ describe('Requests Component - Additional Tests', () => {
     render(
       <MockedProvider mocks={mocksWithUndefinedOrg} addTypename={false}>
         <BrowserRouter>
-          <Requests />
+          <BlockUser />
         </BrowserRouter>
       </MockedProvider>,
     );
