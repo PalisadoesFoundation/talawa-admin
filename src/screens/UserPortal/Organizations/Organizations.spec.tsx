@@ -42,6 +42,30 @@ const mocks = [
             description: 'desc 2',
             image: null,
           },
+          {
+            _id: 'allOrgId3',
+            name: 'All Org 3',
+            description: 'desc 3',
+            image: null,
+          },
+          {
+            _id: 'allOrgId4',
+            name: 'All Org 4',
+            description: 'desc 4',
+            image: null,
+          },
+          {
+            _id: 'allOrgId5',
+            name: 'All Org 5',
+            description: 'desc 5',
+            image: null,
+          },
+          {
+            _id: 'allOrgId6',
+            name: 'All Org 6',
+            description: 'desc 6',
+            image: null,
+          },
         ],
       },
     },
@@ -241,5 +265,39 @@ describe('Organizations Screen Tests', () => {
     await userEvent.keyboard('{Enter}');
     await waitMs(500);
     expect(screen.getByText(/Joined Org 2/i)).toBeInTheDocument();
+  });
+
+  it('paginates through the list of organizations', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitMs();
+
+    // Ensure the first 5 organizations are shown
+    expect(screen.getByText(/All Org 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/All Org 2/i)).toBeInTheDocument();
+    expect(screen.getByText(/All Org 3/i)).toBeInTheDocument();
+    expect(screen.getByText(/All Org 4/i)).toBeInTheDocument();
+    expect(screen.getByText(/All Org 5/i)).toBeInTheDocument();
+
+    // Ensure the 6th organization is NOT visible initially
+    expect(screen.queryByText(/All Org 6/i)).toBeNull();
+
+    // Click "Next Page" button using aria-label
+    await userEvent.click(screen.getByRole('button', { name: /next page/i }));
+    await waitMs();
+
+    // Now, All Org 6 should be visible, and All Org 1 should be gone
+    expect(screen.getByText(/All Org 6/i)).toBeInTheDocument();
+    expect(screen.queryByText(/All Org 1/i)).toBeNull();
   });
 });
