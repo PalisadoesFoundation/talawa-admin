@@ -169,8 +169,8 @@
   --modal-width: 670px;
   --modal-max-width: 680px;
   /* Hover style */
-  --hover-shadow:
-    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
+    0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   /* Additional Variables */
   --primary-theme-color: #1778f2;
@@ -3034,7 +3034,6 @@ input[type='radio']:checked + label:hover {
 .topRadius {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
-  background-color: #eaebef;
 }
 
 .bottomRadius {

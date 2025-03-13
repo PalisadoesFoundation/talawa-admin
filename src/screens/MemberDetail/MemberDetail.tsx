@@ -281,7 +281,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         crossOrigin="anonymous" // to avoid Cors
                       />
                     ) : (
-                      <div onClick={() => fileInputRef.current?.click()}>
+                      <div
+                        onClick={() => fileInputRef.current?.click()}
+                        data-testid="uploadImageBtn"
+                        style={{ cursor: 'pointer', fontSize: '1.2rem' }}
+                        title="Edit profile picture"
+                        role="button"
+                        aria-label="Edit profile picture"
+                        tabIndex={0}
+                        onKeyDown={(e) =>
+                          e.key === 'Enter' && fileInputRef.current?.click()
+                        }
+                      >
                         <Avatar
                           name={formState.name}
                           alt="User Image"
@@ -291,6 +302,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         />
                       </div>
                     )}
+
+                    {/** Removed Logo for file upload **/}
                     {/* <i
                       className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
                       onClick={() => fileInputRef.current?.click()}
