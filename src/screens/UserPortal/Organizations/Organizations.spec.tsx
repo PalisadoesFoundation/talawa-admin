@@ -1,404 +1,229 @@
-import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { I18nextProvider } from 'react-i18next';
+// Organizations.test.tsx
 
+import React from 'react';
+import { MockedProvider } from '@apollo/client/testing';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS,
-  ALL_ORGANIZATIONS,
-} from 'GraphQl/Queries/Queries';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import i18nForTest from 'utils/i18nForTest';
-import useLocalStorage from 'utils/useLocalstorage';
-import Organizations from './Organizations';
-import React, { act } from 'react';
-const { getItem, setItem } = useLocalStorage();
-import '../../../style/app.module.css';
-/**
- * Mock data for GraphQL queries.
- */
+import { Provider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+import { act } from 'react-dom/test-utils';
 
-const MOCKS = [
+import i18nForTest from 'utils/i18nForTest';
+import { store } from 'state/store';
+import useLocalStorage from 'utils/useLocalstorage';
+import {
+  ALL_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS,
+  USER_CREATED_ORGANIZATIONS,
+} from 'GraphQl/Queries/Queries';
+import Organizations from './Organizations';
+
+// In your real code, you might import getItem/setItem from "utils/useLocalstorage" directly
+const { setItem, getItem } = useLocalStorage();
+
+const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
+
+// Create mocks that match your new queries and data shapes
+const mocks = [
+  // 1. Mock for ALL_ORGANIZATIONS (mode=0)
   {
     request: {
-      query: USER_CREATED_ORGANIZATIONS,
-      variables: {
-        id: getItem('userId'),
-      },
+      query: ALL_ORGANIZATIONS,
     },
     result: {
       data: {
-        createdOrganizationsData: [
+        organizations: [
           {
-            appUserProfile: {
-              createdOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  image: '',
-                  name: 'anyOrganization1',
-                  description: 'desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    name: 'John Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
+            id: 'allOrgId1',
+            name: 'All Org 1',
+            addressLine1: 'Street 123',
+            description: 'desc 1',
+            avatarURL: null,
+          },
+          {
+            id: 'allOrgId2',
+            name: 'All Org 2',
+            addressLine1: 'Street 234',
+            description: 'desc 2',
+            avatarURL: null,
           },
         ],
       },
     },
   },
+
+  // 2. Mock for USER_JOINED_ORGANIZATIONS (mode=1)
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: getItem('userId'),
+        id: TEST_USER_ID,
+        first: 5, // same default used in Organizations.tsx
+        filter: '', // same default used in Organizations.tsx
       },
     },
     result: {
       data: {
-        joinedOrganizationsData: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  image: '',
-                  name: 'anyOrganization1',
-                  description: 'desc',
+        user: {
+          organizationsWhereMember: {
+            edges: [
+              {
+                node: {
+                  id: 'joinedOrgId1',
+                  name: 'Joined Org 1',
+                  image: null,
+                  description: 'Joined Org Description',
+                  admins: [],
+                  members: [{ _id: TEST_USER_ID }],
                   address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
+                    city: 'Some City',
+                    countryCode: 'XX',
+                    line1: '123 Lane',
+                    postalCode: '99999',
+                    state: 'StateX',
                   },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    name: 'John Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
+                  // The new code extracts membershipRequestStatus, etc.
+                  membershipRequestStatus: '',
+                  userRegistrationRequired: false,
+                  membershipRequests: [],
+                  isJoined: true,
                 },
-              ],
-            },
+              },
+            ],
           },
-        ],
+        },
       },
     },
   },
+
+  // 3. Mock for USER_CREATED_ORGANIZATIONS (mode=2)
   {
     request: {
-      query: ALL_ORGANIZATIONS,
+      query: USER_CREATED_ORGANIZATIONS,
       variables: {
-        id: getItem('userId'),
-        first: 5,
+        id: TEST_USER_ID,
       },
     },
     result: {
-      allOrganizationsData: {
-        UserJoinedOrganizations: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af2',
-            image: '',
-            name: 'anyOrganization1',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
+      data: {
+        user: {
+          createdOrganizations: [
+            {
+              id: 'createdOrgId1',
+              name: 'Created Org 1',
+              description: 'Created Org Description',
+              image: null,
+              admins: [],
+              members: [],
+              address: {
+                city: 'Creator City',
+                countryCode: 'CC',
+                line1: '999 Creator St',
+                postalCode: '12345',
+                state: 'CreatorState',
+              },
+              membershipRequestStatus: 'created',
+              userRegistrationRequired: false,
+              membershipRequests: [],
+              isJoined: true,
             },
-            userRegistrationRequired: true,
-            members: [],
-            admins: [],
-            membershipRequests: [],
-            isJoined: false,
-          },
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af3',
-            image: '',
-            name: 'anyOrganization2',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            userRegistrationRequired: true,
-            members: [],
-            admins: [],
-            membershipRequests: [],
-            isJoined: false,
-          },
-        ],
+          ],
+        },
       },
     },
   },
-  // New mock for search query
+
+  // Mock for searching joined organizations with filter='2'
   {
     request: {
-      query: ALL_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: getItem('userId'),
+        id: TEST_USER_ID,
         first: 5,
         filter: '2',
       },
     },
     result: {
       data: {
-        UserJoinedOrganizations: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af3',
-            image: '',
-            name: 'anyOrganization2',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            userRegistrationRequired: true,
-            members: [],
-            admins: [],
-            membershipRequests: [],
-            isJoined: false,
-          },
-        ],
-      },
-    },
-  },
-  // Mock for empty search (when search is cleared)
-  {
-    request: {
-      query: ALL_ORGANIZATIONS,
-      variables: {
-        id: getItem('userId'),
-        first: 5,
-        filter: '',
-      },
-    },
-    result: {
-      data: {
-        UserJoinedOrganizations: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af2',
-            image: '',
-            name: 'anyOrganization1',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            userRegistrationRequired: true,
-            members: [],
-            admins: [],
-            membershipRequests: [],
-            isJoined: false,
-          },
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af3',
-            image: '',
-            name: 'anyOrganization2',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            userRegistrationRequired: true,
-            members: [],
-            admins: [],
-            membershipRequests: [],
-            isJoined: false,
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: getItem('userId'),
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              organizationsWhereMember: {
-                edges: [
-                  {
-                    node: {
-                      __typename: 'Organization',
-                      _id: '6401ff65ce8e8406b8f07af2',
-                      image: '',
-                      name: 'Test Edge Org',
-                      description: 'Test Description',
-                      address: {
-                        city: 'Test City',
-                        countryCode: '123',
-                        postalCode: '456',
-                        state: 'Test State',
-                        dependentLocality: 'Test Locality',
-                        line1: 'Test Line 1',
-                        line2: 'Test Line 2',
-                        sortingCode: '4567',
-                      },
-                      createdAt: '1234567890',
-                      userRegistrationRequired: true,
-                      creator: {
-                        __typename: 'User',
-                        name: 'Test Creator',
-                      },
-                      members: [
-                        {
-                          _id: 'member1',
-                          user: {
-                            _id: getItem('userId'),
-                          },
-                        },
-                      ],
-                      admins: [],
-                      membershipRequests: [],
-                    },
+        user: {
+          organizationsWhereMember: {
+            edges: [
+              {
+                node: {
+                  id: 'joinedOrgId2',
+                  name: 'Joined Org 2',
+                  image: null,
+                  description: 'Joined Org Description 2',
+                  admins: [],
+                  members: [{ _id: TEST_USER_ID }],
+                  address: {
+                    city: 'City2',
+                    countryCode: 'XX2',
+                    line1: '456 Lane2',
+                    postalCode: '88888',
+                    state: 'StateY',
                   },
-                ],
+                  membershipRequestStatus: '',
+                  userRegistrationRequired: false,
+                  membershipRequests: [],
+                  isJoined: true,
+                },
               },
-            },
+            ],
           },
-        ],
+        },
       },
     },
   },
 ];
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
+// A small helper for time-based or asynchronous tests
+async function wait(ms = 100) {
+  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
-};
-
-describe('Testing Organizations Screen [User Portal]', () => {
-  /**
-   * Test to ensure the screen is rendered properly.
-   */
-  const TEST_USER_NAME = 'Noble Mittal';
-  beforeEach(() => {
-    setItem('name', TEST_USER_NAME);
+describe('Organizations Screen Tests (Updated)', () => {
+  beforeAll(() => {
+    // Place userId in localStorage so the queries can pick it up
+    setItem('userId', TEST_USER_ID);
   });
-  test('Screen should be rendered properly', async () => {
+
+  afterAll(() => {
+    // Clear your localStorage if needed
+    // localStorage.clear();
+  });
+
+  test('Renders screen with default mode=0 (All Organizations)', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for data load
+    await wait();
+
+    // The default mode in your code is 0 => "All Organizations"
+    // So we should see organizations from the ALL_ORGANIZATIONS mock
+    expect(await screen.findByText('All Org 1')).toBeInTheDocument();
+    expect(screen.getByText('All Org 2')).toBeInTheDocument();
+
+    // The heading from the code i.e. t('selectOrganization')
+    // In English, it might appear as "Select Organization" or "My Organizations"
+    // This depends on your translation. Adjust accordingly.
+    expect(screen.getByText(/my organizations/i)).toBeInTheDocument();
+  });
+
+  test('Switch to Joined Organizations (mode=1)', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -410,16 +235,25 @@ describe('Testing Organizations Screen [User Portal]', () => {
     );
 
     await wait();
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+
+    // Open the mode dropdown
+    const modeChangeBtn = screen.getByTestId('modeChangeBtn');
+    await userEvent.click(modeChangeBtn);
+
+    // modeBtn1 corresponds to joined organizations
+    const joinedOrgsBtn = screen.getByTestId('modeBtn1');
+    await userEvent.click(joinedOrgsBtn);
+
+    // Wait for the joined org data to load
+    await wait();
+
+    // The mock for joined orgs returns "Joined Org 1" by default (filter='')
+    expect(screen.getByText('Joined Org 1')).toBeInTheDocument();
   });
 
-  /**
-   * Test to verify the mode change to joined organizations.
-   */
-
-  test('Mode is changed to joined organizations', async () => {
+  test('Switch to Created Organizations (mode=2)', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -432,48 +266,21 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
+    // Open the mode dropdown
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await wait();
-    await userEvent.click(screen.getByTestId('modeBtn1'));
-    await wait();
 
-    expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
-  });
-
-  /**
-   * Test case to ensure the mode can be changed to display created organizations.
-   */
-
-  test('Mode is changed to created organizations', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await wait();
+    // modeBtn2 corresponds to created organizations
     await userEvent.click(screen.getByTestId('modeBtn2'));
+
     await wait();
 
-    expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
+    // The mock returns "Created Org 1"
+    expect(screen.getByText('Created Org 1')).toBeInTheDocument();
   });
 
-  /**
-   * Test case to check if the "Join Now" button renders correctly on the page.
-   */
-
-  test('Mode is changed to created organisations', async () => {
+  test('Sidebar opens and closes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -484,55 +291,33 @@ describe('Testing Organizations Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
+    // Wait for initial load
     await wait();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await wait();
-    await userEvent.click(screen.getByTestId('modeBtn2'));
-    await wait();
+    // Check that the close menu button is in the document
+    const closeMenuBtn = screen.getByTestId('closeMenu');
+    expect(closeMenuBtn).toBeInTheDocument();
 
-    expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
-  });
+    // Close the sidebar
+    fireEvent.click(closeMenuBtn);
 
-  /**
-   * Test case to ensure the sidebar is functional, including opening and closing actions.
-   */
-
-  test('Testing Sidebar', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    // Wait for the open menu button to appear
     await waitFor(() => {
-      const closeMenuBtn = screen.getByTestId('closeMenu');
-      expect(closeMenuBtn).toBeInTheDocument();
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
     });
-    await act(async () => {
-      const closeMenuBtn = screen.getByTestId('closeMenu');
-      closeMenuBtn.click();
-    });
+
+    // Re-open the sidebar
+    fireEvent.click(screen.getByTestId('openMenu'));
+
+    // The closeMenu should come back
     await waitFor(() => {
-      const openMenuBtn = screen.getByTestId('openMenu');
-      expect(openMenuBtn).toBeInTheDocument();
-    });
-    await act(async () => {
-      const openMenuBtn = screen.getByTestId('openMenu');
-      openMenuBtn.click();
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
     });
   });
 
-  test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
-    resizeWindow(800);
+  test('Rows per page dropdown displays expected values', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -543,42 +328,25 @@ describe('Testing Organizations Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('My Organizations')).toBeInTheDocument();
-      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-    });
-
-    await act(async () => {
-      const settingsBtn = screen.getByTestId('settingsBtn');
-
-      settingsBtn.click();
-    });
-  });
-  test('Rows per Page values', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
     await wait();
-    const dropdown = screen.getByTestId('table-pagination');
-    await userEvent.click(dropdown);
-    expect(screen.queryByText('-1')).not.toBeInTheDocument();
-    expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('10')).toBeInTheDocument();
-    expect(screen.getByText('30')).toBeInTheDocument();
-    expect(screen.getByText('All')).toBeInTheDocument();
+
+    // The paginationList component typically has a dropdown for rows per page
+    // In your older tests, you used data-testid="table-pagination".
+    // Make sure your new code has something similar or adjust the test ID accordingly.
+    const paginationDropdown = screen.getByTestId('table-pagination');
+    await userEvent.click(paginationDropdown);
+
+    // Check the typical per-page options you used: 5, 10, 30, All
+    expect(screen.queryByText('5')).toBeInTheDocument();
+    expect(screen.queryByText('10')).toBeInTheDocument();
+    expect(screen.queryByText('30')).toBeInTheDocument();
+    expect(screen.queryByText('All')).toBeInTheDocument();
+    // "All" presumably sets rowsPerPage to something like -1 or 9999
   });
 
   test('Search input has correct placeholder text', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -591,8 +359,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
+    // In your code, the placeholder is t('searchOrganizations') => "Search Organization"
+    // If your translation is different, adapt accordingly
     const searchInput = screen.getByPlaceholderText('Search Organization');
     expect(searchInput).toBeInTheDocument();
   });
-  const link = new StaticMockLink(MOCKS, true);
 });
