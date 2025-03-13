@@ -63,8 +63,8 @@
   --next-prev-border-color: #e5e7eb;
   --ifm-color-emphasis-100: #f4f8fb;
   --ifm-color-emphasis-0: #fff;
-  --ifm-font-family-base: 'Optimistic Display', system-ui, -apple-system,
-    sans-serif;
+  --ifm-font-family-base:
+    'Optimistic Display', system-ui, -apple-system, sans-serif;
   --ifm-font-size-base: 17px;
 }
 
