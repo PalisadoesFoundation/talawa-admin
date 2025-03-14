@@ -104,7 +104,7 @@ describe('Testing Advertisement Component', () => {
   test('for the working of the tabs', async () => {
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,
-      PLUGIN_GET_MOCK,
+      // PLUGIN_GET_MOCK,
       ADD_ADVERTISEMENT_MUTATION_MOCK,
       ...ADVERTISEMENTS_LIST_MOCK,
     ];
