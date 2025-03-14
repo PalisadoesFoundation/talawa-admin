@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
-import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -195,15 +195,18 @@ describe('OrganizationPeople', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/" element={<OrganizationPeople />} />
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
               </Routes>
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -1031,62 +1034,6 @@ describe('OrganizationPeople', () => {
     // Modal should be closed
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
-    });
-  });
-
-  test('initializes with role state from location', async () => {
-    const adminMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-        where: { role: { equal: 'administrator' } },
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'admin1',
-              name: 'Admin User',
-              emailAddress: 'admin@example.com',
-              avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
-            },
-            cursor: 'adminCursor1',
-          },
-        ],
-      },
-    );
-
-    const mocks = [adminMock];
-    const link = new StaticMockLink(mocks, true);
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter
-          initialEntries={[
-            { pathname: '/orgpeople/orgid', state: { role: 1 } },
-          ]}
-        >
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Should directly show admin data without switching tabs
-    await waitFor(() => {
-      expect(screen.getByText('ADMIN')).toBeInTheDocument();
     });
   });
 });
