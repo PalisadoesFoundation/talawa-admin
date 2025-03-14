@@ -391,6 +391,15 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('User One')).toBeInTheDocument();
       expect(screen.getByText('User Two')).toBeInTheDocument();
     });
+
+    // Switch to users tab
+    fireEvent.click(sortingButton);
+    const memberOption = screen.getByText(/members/i);
+    fireEvent.click(memberOption);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
   });
 
   test('handles pagination correctly for MEMBERS', async () => {
@@ -659,98 +668,6 @@ describe('OrganizationPeople', () => {
       before: null,
     });
 
-    // const initialUserMock = createMemberConnectionMock(
-    //   {
-    //     orgId: 'orgid',
-    //     first: 10,
-    //     after: null,
-    //     last: null,
-    //     before: null,
-    //   },
-    //   {
-    //     edges: [
-    //       {
-    //         node: {
-    //           id: 'user1',
-    //           name: 'User',
-    //           emailAddress: 'admin@example.com',
-    //           avatarURL: null,
-    //           createdAt: '2023-01-03T00:00:00Z',
-    //         },
-    //         cursor: 'adminCursor1',
-    //       },
-    //     ],
-    //     pageInfo: {
-    //       hasNextPage: true,
-    //       hasPreviousPage: false,
-    //       startCursor: 'adminCursor1',
-    //       endCursor: 'adminCursor1',
-    //     },
-    //   },
-    // );
-
-    // const nextAdminPageMock = createMemberConnectionMock(
-    //   {
-    //     orgId: 'orgid',
-    //     last: null,
-    //     after: 'adminCursor1',
-    //     first: 10,
-    //     before: null,
-    //     where: { role: { equal: 'administrator' } },
-    //   },
-    //   {
-    //     edges: [
-    //       {
-    //         node: {
-    //           id: 'admin2',
-    //           name: 'Admin User 2',
-    //           emailAddress: 'admin2@example.com',
-    //           avatarURL: null,
-    //           createdAt: '2023-01-03T00:00:00Z',
-    //         },
-    //         cursor: 'adminCursor2',
-    //       },
-    //     ],
-    //     pageInfo: {
-    //       hasNextPage: false,
-    //       hasPreviousPage: true,
-    //       startCursor: 'adminCursor2',
-    //       endCursor: 'adminCursor2',
-    //     },
-    //   },
-    // );
-
-    // const prevAdminPageMock = createMemberConnectionMock(
-    //   {
-    //     orgId: 'orgid',
-    //     last: 10,
-    //     after: null,
-    //     first: null,
-    //     before: 'adminCursor2',
-    //     where: { role: { equal: 'administrator' } },
-    //   },
-    //   {
-    //     edges: [
-    //       {
-    //         node: {
-    //           id: 'admin1',
-    //           name: 'Admin User',
-    //           emailAddress: 'admin1@example.com',
-    //           avatarURL: null,
-    //           createdAt: '2023-01-03T00:00:00Z',
-    //         },
-    //         cursor: 'adminCursor1',
-    //       },
-    //     ],
-    //     pageInfo: {
-    //       hasNextPage: true,
-    //       hasPreviousPage: false,
-    //       startCursor: 'adminCursor1',
-    //       endCursor: 'adminCursor1',
-    //     },
-    //   },
-    // );
-
     const initialUsersMock = createUserListMock({
       orgId: 'orgid',
       first: 10,
@@ -859,6 +776,93 @@ describe('OrganizationPeople', () => {
     });
   });
 
+  test('handles pagination correctly for ADMIN no next', async () => {
+    const initialMemberMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const initialAdminMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+        where: { role: { equal: 'administrator' } },
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'admin1',
+              name: 'Admin User',
+              emailAddress: 'admin@example.com',
+              avatarURL: null,
+              createdAt: '2023-01-03T00:00:00Z',
+            },
+            cursor: 'adminCursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'adminCursor1',
+          endCursor: 'adminCursor1',
+        },
+      },
+    );
+
+    const mocks = [initialMemberMock, initialAdminMock];
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for initial data to load
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    // Switch to admin tab
+    const sortingButton = screen.getByText(/members/i);
+    fireEvent.click(sortingButton);
+
+    const adminOption = screen.getByText(/ADMIN/i);
+    fireEvent.click(adminOption);
+
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+    });
+
+    // Navigate to next page
+    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    fireEvent.click(nextPageButton);
+
+    // Navigate back to previous page
+    const prevPageButton = screen.getByRole('button', {
+      name: /previous page/i,
+    });
+    fireEvent.click(prevPageButton);
+  });
+
   test('handles errors from GraphQL queries', async () => {
     const errorMock = {
       request: {
@@ -892,6 +896,66 @@ describe('OrganizationPeople', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
+
+    // Wait for error handling
+    await waitFor(() => {
+      expect(vi.mocked(toast.error)).toHaveBeenCalledWith('An error occurred');
+    });
+  });
+
+  test('handles errors from GraphQL queries for users', async () => {
+    const initialMemberMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const errorMock = {
+      request: {
+        query: USER_LIST_FOR_TABLE,
+        variables: {
+          orgId: 'orgid',
+          first: 10,
+          after: null,
+          last: null,
+          before: null,
+        },
+      },
+      error: new Error('An error occurred'),
+    };
+
+    const link = new StaticMockLink([initialMemberMock, errorMock], true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for initial data to load
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    // Switch to admin tab
+    const sortingButton = screen.getByText(/members/i);
+    fireEvent.click(sortingButton);
+
+    const adminOption = screen.getByText(/user/i);
+    fireEvent.click(adminOption);
 
     // Wait for error handling
     await waitFor(() => {
