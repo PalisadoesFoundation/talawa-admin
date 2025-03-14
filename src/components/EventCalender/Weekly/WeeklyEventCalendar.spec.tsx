@@ -176,4 +176,50 @@ describe('WeeklyViewCalendar Component', () => {
       });
     });
   });
+
+  it('renders correctly when user has ADMIN role', async () => {
+    const { getByText, getAllByTestId } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        userRole={Role.ADMIN}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(getByText('Sunday')).toBeInTheDocument();
+      expect(getByText('Monday')).toBeInTheDocument();
+      expect(getByText('Tuesday')).toBeInTheDocument();
+      expect(getByText('Wednesday')).toBeInTheDocument();
+      expect(getByText('Thursday')).toBeInTheDocument();
+      expect(getByText('Friday')).toBeInTheDocument();
+      expect(getByText('Saturday')).toBeInTheDocument();
+    });
+
+    const days = getAllByTestId('day');
+    expect(days.length).toBe(7);
+  });
+
+  it('renders correctly when user has ADMIN role', async () => {
+    const { getByText, getAllByTestId } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        userRole={Role.SUPERADMIN}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(getByText('Sunday')).toBeInTheDocument();
+      expect(getByText('Monday')).toBeInTheDocument();
+      expect(getByText('Tuesday')).toBeInTheDocument();
+      expect(getByText('Wednesday')).toBeInTheDocument();
+      expect(getByText('Thursday')).toBeInTheDocument();
+      expect(getByText('Friday')).toBeInTheDocument();
+      expect(getByText('Saturday')).toBeInTheDocument();
+    });
+
+    const days = getAllByTestId('day');
+    expect(days.length).toBe(7);
+  });
 });
