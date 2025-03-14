@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
-import styles from './UserProfileSettings.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import type { InterfaceUser } from 'types/User/interface';
 
@@ -43,7 +43,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
 
   return (
     <>
-      <Card border="0" className="rounded-4 mb-4">
+      <Card border="0" className="rounded-4 mb-4 ">
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('profileDetails')}</div>
         </div>

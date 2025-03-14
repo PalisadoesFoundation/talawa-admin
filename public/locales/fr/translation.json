@@ -1144,7 +1144,16 @@
     "displayImage": "Image d'affichage",
     "address": "Adresse",
     "saveChanges": "Enregistrer les modifications",
-    "joined": "Rejoint"
+    "joined": "Rejoint",
+    "enterPhoneNo": "Entrez le numéro de téléphone",
+    "workPhoneNumber": "Numéro de téléphone professionnel",
+    "homePhoneNumber": "Numéro de téléphone fixe",
+    "addressLine1": "Adresse ligne 1",
+    "addressLine2": "Adresse ligne 2",
+    "postalCode": "Code postal",
+    "city": "Ville",
+    "description": "Description",
+    "enterDescription": "Entrez la description"
   },
   "donate": {
     "title": "Des dons",
