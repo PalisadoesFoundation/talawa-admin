@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@apollo/client';
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
@@ -21,9 +21,7 @@ import SearchBar from 'subComponents/SearchBar';
 
 import type {
   InterfaceUserPg,
-  InterfaceOrganizationMembersConnectionEdgePg,
   InterfaceOrganizationPg,
-  InterfaceOrganizationBlockedUsersConnectionEdgePg,
 } from 'utils/interfaces';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -78,7 +76,6 @@ const BlockUser = (): JSX.Element => {
   const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(false);
   const [allMembers, setAllMembers] = useState<InterfaceUserPg[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<InterfaceUserPg[]>([]);
-  const [blockedUsersLoaded, setBlockedUsersLoaded] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredAllMembers, setFilteredAllMembers] = useState<
     InterfaceUserPg[]
@@ -86,22 +83,6 @@ const BlockUser = (): JSX.Element => {
   const [filteredBlockedUsers, setFilteredBlockedUsers] = useState<
     InterfaceUserPg[]
   >([]);
-  const hasFetchedAllMembers = useRef(false);
-  const hasFetchedBlockedUsers = useRef(false);
-
-  // Helper function to filter out blocked users from members list
-  const filterBlockedUsersFromMembers = useCallback(
-    (
-      members: InterfaceUserPg[],
-      blockedUsersList: InterfaceUserPg[],
-    ): InterfaceUserPg[] => {
-      return members.filter(
-        (member) =>
-          !blockedUsersList.some((blockedUser) => blockedUser.id === member.id),
-      );
-    },
-    [],
-  );
 
   // Query to fetch blocked users list
   const {
@@ -121,31 +102,13 @@ const BlockUser = (): JSX.Element => {
   }, [errorBlockedUsers]);
 
   useEffect(() => {
-    if (blockedUsersData && !hasFetchedBlockedUsers.current) {
+    if (blockedUsersData) {
       const edges = blockedUsersData.organization?.blockedUsers?.edges || [];
-      setBlockedUsers((prevBlockedUsers) => [
-        ...prevBlockedUsers,
-        ...edges.map(
-          (blockedUser: InterfaceOrganizationBlockedUsersConnectionEdgePg) =>
-            blockedUser.node,
-        ),
-      ]);
-
-      if (blockedUsersData.organization?.blockedUsers?.pageInfo?.hasNextPage) {
-        blockedUserRefetch({
-          variables: {
-            id: currentUrl,
-            first: 32,
-            after:
-              blockedUsersData.organization?.blockedUsers?.pageInfo?.endCursor,
-          },
-        });
-      } else {
-        hasFetchedBlockedUsers.current = true;
-        setBlockedUsersLoaded(true);
-      }
+      const newBlockedUsers = edges.map((edge) => edge.node);
+      setBlockedUsers(newBlockedUsers);
+      setFilteredBlockedUsers(newBlockedUsers);
     }
-  }, [blockedUsersData, blockedUserRefetch, currentUrl]);
+  }, [blockedUsersData]);
 
   // Query to fetch members list
   const {
@@ -159,56 +122,26 @@ const BlockUser = (): JSX.Element => {
   });
 
   useEffect(() => {
-    if (memberData && !hasFetchedAllMembers.current && blockedUsersLoaded) {
-      const edges = memberData.organization?.members?.edges || [];
-      const newMembers = edges.map(
-        (member: InterfaceOrganizationMembersConnectionEdgePg) => member.node,
-      );
-
-      const filteredMembers = filterBlockedUsersFromMembers(
-        newMembers,
-        blockedUsers,
-      );
-      setAllMembers((prevMembers) => [...prevMembers, ...filteredMembers]);
-
-      if (memberData.organization?.members?.pageInfo?.hasNextPage) {
-        memberRefetch({
-          variables: {
-            id: currentUrl,
-            first: 32,
-            after: memberData.organization.members.pageInfo.endCursor,
-          },
-        });
-      } else {
-        hasFetchedAllMembers.current = true;
-      }
+    if (errorMembers) {
+      toast.error(errorMembers.message);
     }
-  }, [
-    memberData,
-    memberRefetch,
-    currentUrl,
-    blockedUsers,
-    blockedUsersLoaded,
-    filterBlockedUsersFromMembers,
-  ]);
+  }, [errorMembers]);
 
-  // Update the effect that handles filtering after blocked users change
   useEffect(() => {
-    if (blockedUsersLoaded && hasFetchedAllMembers.current) {
-      const filteredMembers = filterBlockedUsersFromMembers(
-        allMembers,
-        blockedUsers,
+    if (memberData) {
+      const edges = memberData.organization?.members?.edges || [];
+      const newMembers = edges.map((edge) => edge.node);
+
+      // Filter out blocked users
+      const filteredMembers = newMembers.filter(
+        (member) =>
+          !blockedUsers.some((blockedUser) => blockedUser.id === member.id),
       );
-      if (filteredMembers.length !== allMembers.length) {
-        setAllMembers(filteredMembers);
-      }
+
+      setAllMembers(filteredMembers);
+      setFilteredAllMembers(filteredMembers);
     }
-  }, [
-    blockedUsers,
-    blockedUsersLoaded,
-    allMembers,
-    filterBlockedUsersFromMembers,
-  ]);
+  }, [memberData, blockedUsers]);
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
@@ -217,13 +150,17 @@ const BlockUser = (): JSX.Element => {
     } else {
       const lowercaseSearch = searchTerm.toLowerCase();
 
-      const matchedMembers = allMembers.filter((member) =>
-        member.name?.toLowerCase().includes(lowercaseSearch),
+      const matchedMembers = allMembers.filter(
+        (member) =>
+          member.name?.toLowerCase().includes(lowercaseSearch) ||
+          member.emailAddress?.toLowerCase().includes(lowercaseSearch),
       );
       setFilteredAllMembers(matchedMembers);
 
-      const matchedBlockedUsers = blockedUsers.filter((blockedUser) =>
-        blockedUser.name?.toLowerCase().includes(lowercaseSearch),
+      const matchedBlockedUsers = blockedUsers.filter(
+        (blockedUser) =>
+          blockedUser.name?.toLowerCase().includes(lowercaseSearch) ||
+          blockedUser.emailAddress?.toLowerCase().includes(lowercaseSearch),
       );
       setFilteredBlockedUsers(matchedBlockedUsers);
     }
@@ -235,47 +172,40 @@ const BlockUser = (): JSX.Element => {
   const handleBlockUser = useCallback(
     async (user: InterfaceUserPg): Promise<void> => {
       try {
-        const userId = user.id;
         const { data } = await blockUser({
           variables: {
-            userId,
+            userId: user.id,
             organizationId: currentUrl,
           },
         });
         if (data?.blockUser) {
           toast.success(t('blockedSuccessfully') as string);
-          memberRefetch();
-
           setAllMembers((prevMembers) =>
             prevMembers.filter((member) => member.id !== user.id),
           );
-          blockedUserRefetch();
           setBlockedUsers((prevBlockedUsers) => [...prevBlockedUsers, user]);
         }
       } catch (error: unknown) {
         errorHandler(t, error);
       }
     },
-    [blockUser, currentUrl, memberRefetch, blockedUserRefetch, t],
+    [blockUser, currentUrl, t],
   );
 
   const handleUnBlockUser = useCallback(
     async (user: InterfaceUserPg): Promise<void> => {
-      const userId = user.id;
       try {
         const { data } = await unBlockUser({
           variables: {
-            userId,
+            userId: user.id,
             organizationId: currentUrl,
           },
         });
         if (data) {
           toast.success(t('Un-BlockedSuccessfully') as string);
-          memberRefetch();
-          blockedUserRefetch();
           setBlockedUsers((prevBlockedUsers) =>
             prevBlockedUsers.filter(
-              (prevBlockedUsers) => prevBlockedUsers.id !== user.id,
+              (blockedUser) => blockedUser.id !== user.id,
             ),
           );
           setAllMembers((prevMembers) => [...prevMembers, user]);
@@ -284,14 +214,8 @@ const BlockUser = (): JSX.Element => {
         errorHandler(t, error);
       }
     },
-    [unBlockUser, currentUrl, memberRefetch, t],
+    [unBlockUser, currentUrl, t],
   );
-
-  useEffect(() => {
-    if (errorMembers) {
-      toast.error(errorMembers.message);
-    }
-  }, [errorMembers]);
 
   const handleSearch = useCallback((value: string): void => {
     setSearchTerm(value);
@@ -306,13 +230,18 @@ const BlockUser = (): JSX.Element => {
   ];
 
   if (loadingMembers || loadingBlockedUsers) {
-    return <TableLoader headerTitles={headerTitles} noOfRows={10} />;
+    return (
+      <TableLoader
+        data-testid="TableLoader"
+        headerTitles={headerTitles}
+        noOfRows={10}
+      />
+    );
   }
 
   return (
     <>
       <div>
-        {/* Buttons Container */}
         <div className={styles.head}>
           <div className={styles.btnsContainer}>
             <SearchBar
@@ -344,146 +273,108 @@ const BlockUser = (): JSX.Element => {
             </div>
           </div>
         </div>
-        {/* Table */}
-        {loadingMembers || loadingBlockedUsers ? (
-          <TableLoader headerTitles={headerTitles} noOfRows={10} />
-        ) : (allMembers.length === 0 && !showBlockedMembers) ||
-          (blockedUsers.length === 0 && showBlockedMembers) ? (
-          <div className={styles.notFound}>
-            <h4>
-              {showBlockedMembers
-                ? t('noSpammerFound')
-                : tCommon('noResultsFoundFor')}{' '}
-              &quot;{}&quot;
-            </h4>
-          </div>
-        ) : (
-          <div className={styles.listBox}>
-            {loadingMembers ? (
-              <TableLoader headerTitles={headerTitles} noOfRows={10} />
-            ) : (
-              <Table
-                responsive
-                data-testid="userList"
-                className={styles.custom_table}
-              >
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {!showBlockedMembers === true ? (
-                    filteredAllMembers.length > 0 ? (
-                      filteredAllMembers.map((user, index: number) => {
-                        return (
-                          <tr key={user.id}>
-                            <th scope="row">{index + 1}</th>
-                            <td>{`${user.name}`}</td>
-                            <td>{user.emailAddress}</td>
-
-                            <td>
-                              <Button
-                                variant="success"
-                                size="sm"
-                                className={styles.removeButton}
-                                onClick={async (): Promise<void> => {
-                                  await handleBlockUser(user);
-                                }}
-                                data-testid={`blockUser${user.id}`}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faBan}
-                                  className={styles.banIcon}
-                                />
-                                {t('block')}
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan={headerTitles.length}
-                          className={styles.noDataMessage}
+        <div className={styles.listBox}>
+          <Table
+            responsive
+            data-testid="userList"
+            className={styles.custom_table}
+          >
+            <thead>
+              <tr>
+                {headerTitles.map((title: string, index: number) => (
+                  <th key={index} scope="col">
+                    {title}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {!showBlockedMembers ? (
+                filteredAllMembers.length > 0 ? (
+                  filteredAllMembers.map((user, index: number) => (
+                    <tr key={user.id}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{user.name}</td>
+                      <td>{user.emailAddress}</td>
+                      <td>
+                        <Button
+                          variant="success"
+                          size="sm"
+                          className={styles.removeButton}
+                          onClick={async (): Promise<void> => {
+                            await handleBlockUser(user);
+                          }}
+                          data-testid={`blockUser${user.id}`}
                         >
-                          {searchTerm.length === 0 ? (
-                            <div className={styles.notFound}>
-                              <h4>{t('noUsersFound')}</h4>
-                            </div>
-                          ) : (
-                            <div className={styles.notFound}>
-                              <h4>
-                                {tCommon('noResultsFoundFor')} &quot;
-                                {searchTerm}
-                                &quot;
-                              </h4>
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    )
-                  ) : filteredBlockedUsers.length > 0 ? (
-                    filteredBlockedUsers.map((user, index: number) => {
-                      return (
-                        <tr key={user.id}>
-                          <th scope="row">{index + 1}</th>
-                          <td>{`${user.name}`}</td>
-                          <td>{user.emailAddress}</td>
-
-                          <td>
-                            <Button
-                              variant="success"
-                              size="sm"
-                              className={styles.unblockButton}
-                              onClick={async (): Promise<void> => {
-                                await handleUnBlockUser(user);
-                              }}
-                              data-testid={`blockUser${user.id}`}
-                            >
-                              <FontAwesomeIcon
-                                icon={faUserPlus}
-                                className={styles.unbanIcon}
-                              />
-                              {t('unblock')}
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan={headerTitles.length}
-                        className={styles.noDataMessage}
-                      >
-                        {searchTerm.length === 0 ? (
-                          <div className={styles.notFound}>
-                            <h4>{t('noSpammerFound')}</h4>
-                          </div>
-                        ) : (
-                          <div className={styles.notFound}>
-                            <h4>
-                              {tCommon('noResultsFoundFor')} &quot;{searchTerm}
-                              &quot;
-                            </h4>
-                          </div>
-                        )}
+                          <FontAwesomeIcon
+                            icon={faBan}
+                            className={styles.banIcon}
+                          />
+                          {t('block')}
+                        </Button>
                       </td>
                     </tr>
-                  )}
-                </tbody>
-              </Table>
-            )}
-          </div>
-        )}
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={headerTitles.length}
+                      className={styles.noDataMessage}
+                    >
+                      <div className={styles.notFound}>
+                        <h4>
+                          {searchTerm.length === 0
+                            ? t('noUsersFound')
+                            : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
+                        </h4>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              ) : filteredBlockedUsers.length > 0 ? (
+                filteredBlockedUsers.map((user, index: number) => (
+                  <tr key={user.id}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{user.name}</td>
+                    <td>{user.emailAddress}</td>
+                    <td>
+                      <Button
+                        variant="success"
+                        size="sm"
+                        className={styles.unblockButton}
+                        onClick={async (): Promise<void> => {
+                          await handleUnBlockUser(user);
+                        }}
+                        data-testid={`blockUser${user.id}`}
+                      >
+                        <FontAwesomeIcon
+                          icon={faUserPlus}
+                          className={styles.unbanIcon}
+                        />
+                        {t('unblock')}
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={headerTitles.length}
+                    className={styles.noDataMessage}
+                  >
+                    <div className={styles.notFound}>
+                      <h4>
+                        {searchTerm.length === 0
+                          ? t('noSpammerFound')
+                          : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
+                      </h4>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </div>
       </div>
     </>
   );

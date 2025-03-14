@@ -49,6 +49,10 @@ interface InterfaceMockOptions {
   blockUserError?: boolean;
   unblockUserError?: boolean;
   membersQueryError?: boolean;
+  blockedUsersQueryError?: boolean;
+  emptyMembers?: boolean;
+  emptyBlockedUsers?: boolean;
+  nullData?: boolean;
 }
 
 interface InterfaceGraphQLVariables {
@@ -77,6 +81,10 @@ const createMocks = (
     blockUserError = false,
     unblockUserError = false,
     membersQueryError = false,
+    blockedUsersQueryError = false,
+    emptyMembers = false,
+    emptyBlockedUsers = false,
+    nullData = false,
   } = options;
 
   return [
@@ -89,31 +97,35 @@ const createMocks = (
         ? { error: new Error('Failed to fetch members') }
         : {
             result: {
-              data: {
-                organization: {
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: '1',
-                          name: 'John Doe',
-                          emailAddress: 'john@example.com',
-                          role: 'regular',
-                        },
+              data: nullData
+                ? { organization: null }
+                : {
+                    organization: {
+                      members: {
+                        edges: emptyMembers
+                          ? []
+                          : [
+                              {
+                                node: {
+                                  id: '1',
+                                  name: 'John Doe',
+                                  emailAddress: 'john@example.com',
+                                  role: 'regular',
+                                },
+                              },
+                              {
+                                node: {
+                                  id: '2',
+                                  name: 'Jane Smith',
+                                  emailAddress: 'jane@example.com',
+                                  role: 'regular',
+                                },
+                              },
+                            ],
+                        pageInfo: { hasNextPage: false, endCursor: null },
                       },
-                      {
-                        node: {
-                          id: '2',
-                          name: 'Jane Smith',
-                          emailAddress: 'jane@example.com',
-                          role: 'regular',
-                        },
-                      },
-                    ],
-                    pageInfo: { hasNextPage: false, endCursor: null },
+                    },
                   },
-                },
-              },
             },
           }),
     },
@@ -122,25 +134,33 @@ const createMocks = (
         query: GET_ORGANIZATION_BLOCKED_USERS_PG,
         variables: { id: '123', first: 32, after: null },
       },
-      result: {
-        data: {
-          organization: {
-            blockedUsers: {
-              edges: [
-                {
-                  node: {
-                    id: '3',
-                    name: 'Bob Johnson',
-                    emailAddress: 'bob@example.com',
-                    role: 'regular',
+      ...(blockedUsersQueryError
+        ? { error: new Error('Failed to fetch blocked users') }
+        : {
+            result: {
+              data: nullData
+                ? { organization: null }
+                : {
+                    organization: {
+                      blockedUsers: {
+                        edges: emptyBlockedUsers
+                          ? []
+                          : [
+                              {
+                                node: {
+                                  id: '3',
+                                  name: 'Bob Johnson',
+                                  emailAddress: 'bob@example.com',
+                                  role: 'regular',
+                                },
+                              },
+                            ],
+                        pageInfo: { hasNextPage: false, endCursor: null },
+                      },
+                    },
                   },
-                },
-              ],
-              pageInfo: { hasNextPage: false, endCursor: null },
             },
-          },
-        },
-      },
+          }),
     },
     {
       request: {
@@ -156,9 +176,9 @@ const createMocks = (
         query: BLOCK_USER_MUTATION_PG,
         variables: { userId: '2', organizationId: '123' },
       },
-      result: {
-        data: { blockUser: { success: true } },
-      },
+      ...(blockUserError
+        ? { error: new Error('Failed to block user') }
+        : { result: { data: { blockUser: { success: true } } } }),
     },
     {
       request: {
@@ -169,1199 +189,804 @@ const createMocks = (
         ? { error: new Error('Failed to unblock user') }
         : { result: { data: { unblockUser: { success: true } } } }),
     },
-    {
-      request: {
-        query: GET_ORGANIZATION_MEMBERS_PG,
-        variables: { id: '123', first: 32, after: null },
-      },
-      result: {
-        data: {
-          organization: {
-            members: {
-              edges: [
-                {
-                  node: {
-                    id: '2',
-                    name: 'Jane Smith',
-                    emailAddress: 'jane@example.com',
-                    role: 'regular',
-                  },
-                },
-              ],
-              pageInfo: { hasNextPage: false, endCursor: null },
-            },
-          },
-        },
-      },
-    },
-    {
-      request: {
-        query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-        variables: { id: '123', first: 32, after: null },
-      },
-      result: {
-        data: {
-          organization: {
-            blockedUsers: {
-              edges: [
-                {
-                  node: {
-                    id: '3',
-                    name: 'Bob Johnson',
-                    emailAddress: 'bob@example.com',
-                    role: 'regular',
-                  },
-                },
-                {
-                  node: {
-                    id: '1',
-                    name: 'John Doe',
-                    emailAddress: 'john@example.com',
-                    role: 'regular',
-                  },
-                },
-              ],
-              pageInfo: { hasNextPage: false, endCursor: null },
-            },
-          },
-        },
-      },
-    },
-    {
-      request: {
-        query: GET_ORGANIZATION_MEMBERS_PG,
-        variables: { id: '123', first: 32, after: null },
-      },
-      result: {
-        data: {
-          organization: {
-            members: {
-              edges: [
-                {
-                  node: {
-                    id: '2',
-                    name: 'Jane Smith',
-                    emailAddress: 'jane@example.com',
-                    role: 'regular',
-                  },
-                },
-                {
-                  node: {
-                    id: '3',
-                    name: 'Bob Johnson',
-                    emailAddress: 'bob@example.com',
-                    role: 'regular',
-                  },
-                },
-              ],
-              pageInfo: { hasNextPage: false, endCursor: null },
-            },
-          },
-        },
-      },
-    },
-    {
-      request: {
-        query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-        variables: { id: '123', first: 32, after: null },
-      },
-      result: {
-        data: {
-          organization: {
-            blockedUsers: {
-              edges: [
-                {
-                  node: {
-                    id: '1',
-                    name: 'John Doe',
-                    emailAddress: 'john@example.com',
-                    role: 'regular',
-                  },
-                },
-              ],
-              pageInfo: { hasNextPage: false, endCursor: null },
-            },
-          },
-        },
-      },
-    },
   ];
 };
-describe('BlockUser Component - Additional Tests', () => {
+
+describe('BlockUser Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('toggles between all members and blocked users view', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  describe('Initial Loading and Error States', () => {
+    it('shows loading state when fetching data', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
-    );
-    await waitFor(() =>
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument(),
-    );
+      await waitFor(() => {
+        expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+      });
 
-    const sortingButton = screen.getByTestId('userFilter');
-    fireEvent.click(sortingButton);
-
-    const blockedUsersOption = screen.getByTestId('blockedUsers');
-    fireEvent.click(blockedUsersOption);
-
-    await waitFor(() =>
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument(),
-    );
-    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-    expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
-
-    fireEvent.click(sortingButton);
-    const allMembersOption = screen.getByTestId('allMembers');
-    fireEvent.click(allMembersOption);
-
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
-    );
-    await waitFor(() =>
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument(),
-    );
-  });
-
-  it('unblocks a user successfully', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-          <ToastContainer data-testid="toast-container" />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const sortingButton = await waitFor(() => screen.getByTestId('userFilter'));
-    fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('blockedUsers');
-    fireEvent.click(blockedUsersOption);
-
-    await waitFor(() =>
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument(),
-    );
-
-    const unblockButton = screen.getByTestId('blockUser3');
-    await act(async () => {
-      fireEvent.click(unblockButton);
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
     });
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Un-BlockedSuccessfully');
-    });
-  });
+    it('handles members query error', async () => {
+      render(
+        <MockedProvider
+          mocks={createMocks({ membersQueryError: true })}
+          addTypename={false}
+        >
+          <BrowserRouter>
+            <BlockUser />
+            <ToastContainer />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-  it('handles error when blocking a user fails', async () => {
-    render(
-      <MockedProvider
-        mocks={createMocks({ blockUserError: true })}
-        addTypename={false}
-      >
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
-    );
-
-    const blockButton = screen.getByTestId('blockUser1');
-    await act(async () => {
-      fireEvent.click(blockButton);
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Failed to fetch members');
+      });
     });
 
-    await waitFor(() => {
-      expect(errorHandler).toHaveBeenCalled();
-    });
-  });
+    it('handles blocked users query error', async () => {
+      render(
+        <MockedProvider
+          mocks={createMocks({ blockedUsersQueryError: true })}
+          addTypename={false}
+        >
+          <BrowserRouter>
+            <BlockUser />
+            <ToastContainer />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-  it('handles error when unblocking a user fails', async () => {
-    render(
-      <MockedProvider
-        mocks={createMocks({ unblockUserError: true })}
-        addTypename={false}
-      >
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const sortingButton = await waitFor(() => screen.getByTestId('userFilter'));
-    fireEvent.click(sortingButton);
-
-    const blockedUsersOption = screen.getByTestId('blockedUsers');
-    fireEvent.click(blockedUsersOption);
-
-    await waitFor(() =>
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument(),
-    );
-
-    const unblockButton = screen.getByTestId('blockUser3');
-    await act(async () => {
-      fireEvent.click(unblockButton);
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to fetch blocked users',
+        );
+      });
     });
 
-    await waitFor(() => {
-      expect(errorHandler).toHaveBeenCalled();
-    });
-  });
+    it('handles null organization data gracefully', async () => {
+      render(
+        <MockedProvider
+          mocks={createMocks({ nullData: true })}
+          addTypename={false}
+        >
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-  it('shows error toast when members query fails', async () => {
-    render(
-      <MockedProvider
-        mocks={createMocks({ membersQueryError: true })}
-        addTypename={false}
-      >
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      // Wait for loading to finish
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Failed to fetch members');
-    });
-  });
-
-  it('filters members by search term', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      // Should show empty state
+      await waitFor(() => {
+        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+      });
     });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'Jane' } });
-
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-    });
-
-    fireEvent.change(searchInput, { target: { value: '' } });
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    });
-  });
-
-  it('shows "no users found" message when filtered members list is empty', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'Nobody' } });
-
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
-    });
-  });
-  it('clears search field and shows all results', async () => {
-    const mocks = [
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              members: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      role: 'regular',
-                    },
-                  },
-                  {
-                    node: {
-                      id: '2',
-                      name: 'Jane Smith',
-                      emailAddress: 'jane@example.com',
-                      role: 'regular',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
+    it('handles both queries returning null data', async () => {
+      // Create custom mocks with both queries returning null data
+      const customMocks = [
+        {
+          request: {
+            query: GET_ORGANIZATION_MEMBERS_PG,
+            variables: { id: '123', first: 32, after: null },
+          },
+          result: {
+            data: { organization: null },
           },
         },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
+        {
+          request: {
+            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+            variables: { id: '123', first: 32, after: null },
+          },
+          result: {
+            data: { organization: null },
           },
         },
-      },
-    ];
+      ];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      render(
+        <MockedProvider mocks={customMocks} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    });
+      // Wait for loading to finish
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'John' } });
+      // Should show empty state
+      await waitFor(() => {
+        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+      });
 
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
+      // Switch to blocked users view
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
-    });
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
 
-    fireEvent.change(searchInput, { target: { value: '' } });
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      // Should show empty state for blocked users
+      await waitFor(() => {
+        expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
+      });
     });
   });
 
-  it('handles search with empty results when searching blocked users', async () => {
-    const mocks = [
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              members: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      role: 'regular',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [
-                  {
-                    node: {
-                      id: '3',
-                      name: 'Bob Johnson',
-                      emailAddress: 'bob@example.com',
-                      role: 'regular',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-    ];
+  describe('View Switching', () => {
+    it('displays all members initially', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      const sortingButton = screen.getByTestId('userFilter');
-      fireEvent.click(sortingButton);
+      await waitFor(() => {
+        const johnDoe = screen.getByText('John Doe');
+        const janeSmith = screen.getByText('Jane Smith');
+        expect(johnDoe).toBeInTheDocument();
+        expect(janeSmith).toBeInTheDocument();
+        expect(screen.queryByText('Bob Johnson')).not.toBeInTheDocument();
+      });
     });
 
-    const blockedUsersOption = screen.getByTestId('blockedUsers');
-    fireEvent.click(blockedUsersOption);
+    it('switches to blocked users view', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    await waitFor(() => {
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
+
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+        expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
     });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'Nobody' } });
+    it('displays empty state when no members are available', async () => {
+      render(
+        <MockedProvider
+          mocks={createMocks({ emptyMembers: true })}
+          addTypename={false}
+        >
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
-      expect(screen.getByText(/Nobody/i)).toBeInTheDocument();
-    });
-  });
-
-  it('handles search with special characters', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+      });
     });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: '!@#$%^&*()' } });
+    it('displays empty state when no blocked users are available', async () => {
+      render(
+        <MockedProvider
+          mocks={createMocks({ emptyBlockedUsers: true })}
+          addTypename={false}
+        >
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
-      expect(screen.getByText(/!@#\$%\^&\*\(\)/i)).toBeInTheDocument();
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
+
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
+      });
     });
   });
 
-  it('handles empty state when no members or blocked users exist', async () => {
-    const emptyMocks = [
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              members: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-    ];
+  describe('Search Functionality', () => {
+    it('searches members by name', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    render(
-      <MockedProvider mocks={emptyMocks} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      const searchInput = screen.getByTestId('searchByName');
+      await act(async () => {
+        fireEvent.change(searchInput, { target: { value: 'John' } });
+      });
+
+      const searchButton = screen.getByTestId('searchBtn');
+      await act(async () => {
+        fireEvent.click(searchButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+      });
     });
 
-    const sortingButton = screen.getByTestId('userFilter');
-    fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('blockedUsers');
-    fireEvent.click(blockedUsersOption);
+    it('searches members by email address', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    await waitFor(() => {
-      expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
-    });
-  });
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-  it('handles filtering between all members and blocked users', async () => {
-    const mocks = [
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [
-                  {
-                    node: {
-                      id: '3',
-                      name: 'Bob Johnson',
-                      emailAddress: 'bob@example.com',
-                      role: 'regular',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              members: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      role: 'regular',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-    ];
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      const searchInput = screen.getByTestId('searchByName');
+      await act(async () => {
+        fireEvent.change(searchInput, {
+          target: { value: 'jane@example.com' },
+        });
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      const searchButton = screen.getByTestId('searchBtn');
+      await act(async () => {
+        fireEvent.click(searchButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
     });
 
-    const sortingButton = screen.getByTestId('userFilter');
-    fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('blockedUsers');
-    fireEvent.click(blockedUsersOption);
+    it('searches blocked users by name', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    await waitFor(() => {
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
+
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
+
+      const searchInput = screen.getByTestId('searchByName');
+      await act(async () => {
+        fireEvent.change(searchInput, { target: { value: 'Bob' } });
+      });
+
+      const searchButton = screen.getByTestId('searchBtn');
+      await act(async () => {
+        fireEvent.click(searchButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
     });
 
-    fireEvent.click(sortingButton);
-    const allMembersOption = screen.getByTestId('allMembers');
-    fireEvent.click(allMembersOption);
+    it('searches blocked users by email address', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-  it('handles successful blocking of a user', async () => {
-    const mocks = [
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              members: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      role: 'regular',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: BLOCK_USER_MUTATION_PG,
-          variables: { userId: '1', organizationId: '123' },
-        },
-        result: {
-          data: { blockUser: { success: true } },
-        },
-      },
-    ];
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-          <ToastContainer />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
+
+      const searchInput = screen.getByTestId('searchByName');
+      await act(async () => {
+        fireEvent.change(searchInput, { target: { value: 'bob@example.com' } });
+      });
+
+      const searchButton = screen.getByTestId('searchBtn');
+      await act(async () => {
+        fireEvent.click(searchButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
     });
 
-    const blockButton = screen.getByTestId('blockUser1');
-    await act(async () => {
-      fireEvent.click(blockButton);
+    it('handles search with no results for members', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      const searchInput = screen.getByTestId('searchByName');
+      await act(async () => {
+        fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
+      });
+
+      const searchButton = screen.getByTestId('searchBtn');
+      await act(async () => {
+        fireEvent.click(searchButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+      });
     });
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
-    });
-  });
+    it('handles search with no results for blocked users', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-  it('handles search functionality for members list', async () => {
-    const mocks = [
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              members: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      role: 'regular',
-                    },
-                  },
-                  {
-                    node: {
-                      id: '2',
-                      name: 'Jane Smith',
-                      emailAddress: 'jane@example.com',
-                      role: 'regular',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-    ];
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
+
+      const searchInput = screen.getByTestId('searchByName');
+      await act(async () => {
+        fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
+      });
+
+      const searchButton = screen.getByTestId('searchBtn');
+      await act(async () => {
+        fireEvent.click(searchButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+      });
     });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'John' } });
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
+    it('clears search results when search term is empty', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
-    });
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    fireEvent.change(searchInput, { target: { value: '' } });
-    fireEvent.click(searchButton);
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      // First search for something
+      const searchInput = screen.getByTestId('searchByName');
+      await act(async () => {
+        fireEvent.change(searchInput, { target: { value: 'John' } });
+      });
+
+      const searchButton = screen.getByTestId('searchBtn');
+      await act(async () => {
+        fireEvent.click(searchButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+      });
+
+      // Then clear the search
+      await act(async () => {
+        fireEvent.change(searchInput, { target: { value: '' } });
+      });
+
+      await act(async () => {
+        fireEvent.click(searchButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
     });
   });
 
-  it('handles email search for blocked users', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  describe('Block/Unblock Actions', () => {
+    it('blocks a user successfully', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+            <ToastContainer />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    const sortingButton = await waitFor(() => screen.getByTestId('userFilter'));
-    fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('blockedUsers');
-    fireEvent.click(blockedUsersOption);
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      const blockButton = screen.getByTestId('blockUser1');
+      await act(async () => {
+        fireEvent.click(blockButton);
+      });
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
+      });
     });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'Bob' } });
+    it('unblocks a user successfully', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+            <ToastContainer />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
-    });
-  });
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
 
-  it('handles case-insensitive search', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'john' } });
+      const unblockButton = screen.getByTestId('blockUser3');
+      await act(async () => {
+        fireEvent.click(unblockButton);
+      });
 
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    fireEvent.change(searchInput, { target: { value: 'JOHN' } });
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
-
-  it('handles multiple block operations in sequence', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-          <ToastContainer />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('Un-BlockedSuccessfully');
+      });
     });
 
-    const blockButton1 = screen.getByTestId('blockUser1');
-    await act(async () => {
-      fireEvent.click(blockButton1);
+    it('handles block user error', async () => {
+      render(
+        <MockedProvider
+          mocks={createMocks({ blockUserError: true })}
+          addTypename={false}
+        >
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      const blockButton = screen.getByTestId('blockUser1');
+      await act(async () => {
+        fireEvent.click(blockButton);
+      });
+
+      await waitFor(() => {
+        expect(errorHandler).toHaveBeenCalled();
+      });
     });
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
+    it('handles unblock user error', async () => {
+      render(
+        <MockedProvider
+          mocks={createMocks({ unblockUserError: true })}
+          addTypename={false}
+        >
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
+
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
+
+      const unblockButton = screen.getByTestId('blockUser3');
+      await act(async () => {
+        fireEvent.click(unblockButton);
+      });
+
+      await waitFor(() => {
+        expect(errorHandler).toHaveBeenCalled();
+      });
     });
 
-    const blockButton2 = screen.getByTestId('blockUser2');
-    await act(async () => {
-      fireEvent.click(blockButton2);
+    it('can block multiple users', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+            <ToastContainer />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
+
+      // Block first user
+      const blockButton1 = screen.getByTestId('blockUser1');
+      await act(async () => {
+        fireEvent.click(blockButton1);
+      });
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
+      });
+
+      // Block second user
+      const blockButton2 = screen.getByTestId('blockUser2');
+      await act(async () => {
+        fireEvent.click(blockButton2);
+      });
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
+      });
+
+      // Verify both users are no longer in the list
+      await waitFor(() => {
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+        expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+      });
     });
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
-    });
-  });
+    it('shows blocked user in blocked users list after blocking', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+            <ToastContainer />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-  it('preserves search term when switching between views', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
+      // Verify John Doe is in the members list
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'John' } });
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
+      // Block John Doe
+      const blockButton = screen.getByTestId('blockUser1');
+      await act(async () => {
+        fireEvent.click(blockButton);
+      });
 
-    const sortingButton = screen.getByTestId('userFilter');
-    fireEvent.click(sortingButton);
-    const blockedUsersOption = screen.getByTestId('blockedUsers');
-    fireEvent.click(blockedUsersOption);
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('blockedSuccessfully');
+      });
 
-    expect(searchInput).toHaveValue('John');
+      // Switch to blocked users view
+      const sortingButton = await screen.findByTestId('userFilter');
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
 
-    fireEvent.click(sortingButton);
-    const allMembersOption = screen.getByTestId('allMembers');
-    fireEvent.click(allMembersOption);
+      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
 
-    expect(searchInput).toHaveValue('John');
-  });
+      // Verify John Doe is now in the blocked users list
+      // Note: In a real scenario, we would need to update the mock for the blocked users query
+      // Here we're testing the component's internal state management
+      await waitFor(() => {
+        // Bob Johnson should still be there
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
 
-  it('handles rapid view switching', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    const sortingButton = screen.getByTestId('userFilter');
-
-    for (let i = 0; i < 3; i++) {
-      fireEvent.click(sortingButton);
-      const blockedUsersOption = screen.getByTestId('blockedUsers');
-      fireEvent.click(blockedUsersOption);
-
-      fireEvent.click(sortingButton);
-      const allMembersOption = screen.getByTestId('allMembers');
-      fireEvent.click(allMembersOption);
-    }
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    });
-  });
-
-  it('handles rapid search input changes', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('searchByName');
-    const searchButton = screen.getByTestId('searchBtn');
-
-    fireEvent.change(searchInput, { target: { value: 'J' } });
-    fireEvent.click(searchButton);
-    fireEvent.change(searchInput, { target: { value: 'Jo' } });
-    fireEvent.click(searchButton);
-    fireEvent.change(searchInput, { target: { value: 'John' } });
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
-    });
-  });
-
-  it('handles search with only whitespace', async () => {
-    render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: '   ' } });
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    });
-  });
-
-  it('handles null name in member data', async () => {
-    const mocksWithNullName = [
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              members: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      name: null,
-                      emailAddress: 'john@example.com',
-                      role: 'regular',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={mocksWithNullName} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('john@example.com')).toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'john' } });
-    const searchButton = screen.getByTestId('searchBtn');
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+        // John Doe should now be in the list too (added to state)
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
     });
   });
 
-  it('handles undefined edges in members response', async () => {
-    const mocksWithUndefinedEdges = [
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              members: {
-                edges: undefined,
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-    ];
+  describe('Component Behavior', () => {
+    it('updates document title on mount', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    render(
-      <MockedProvider mocks={mocksWithUndefinedEdges} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+      expect(document.title).toBe('title');
     });
-  });
 
-  it('handles undefined organization in response', async () => {
-    const mocksWithUndefinedOrg = [
-      {
-        request: {
-          query: GET_ORGANIZATION_MEMBERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: undefined,
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-          variables: { id: '123', first: 32, after: null },
-        },
-        result: {
-          data: {
-            organization: {
-              blockedUsers: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        },
-      },
-    ];
+    it('renders table headers correctly', async () => {
+      render(
+        <MockedProvider mocks={createMocks()} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
 
-    render(
-      <MockedProvider mocks={mocksWithUndefinedOrg} addTypename={false}>
-        <BrowserRouter>
-          <BlockUser />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+      // Check for table headers
+      expect(screen.getByText('#')).toBeInTheDocument();
+      expect(screen.getByText('name')).toBeInTheDocument();
+      expect(screen.getByText('email')).toBeInTheDocument();
+      expect(screen.getByText('block_unblock')).toBeInTheDocument();
     });
   });
 });

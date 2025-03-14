@@ -43,11 +43,11 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
-  --blockButton-font: #555555;
-  --blockButton-border: #eaebef;
-  --blockButton-bg: #a8c7fa;
-  --blockButton-bg-hover: #1778f2;
-  --blockButton-border-hover: #1778f2;
+  --unblockButton-font: #555555;
+  --unblockButton-border: #eaebef;
+  --unblockButton-bg: #a8c7fa;
+  --unblockButton-bg-hover: #1778f2;
+  --unblockButton-border-hover: #1778f2;
 
   --removeButton-bg: #f8d6dc;
   --removeButton-color: #c8102e;
@@ -462,9 +462,9 @@
 
   --table-image-small-size: 25px;
 
-  --banIcon-color: #555555;
+  --banIcon-color:#c8102e ;
   --banIcon-color-hover: #ffffff;
-  --unbanIcon-color: #c8102e;
+  --unbanIcon-color: #555555;
   --unbanIcon-color-hover: #ffffff;
   --containerAdvertisemens-bg: #ffffff;
   --orgCard-bg: #fff;
@@ -729,8 +729,8 @@
 
 .addButton {
   margin-bottom: 10px;
-  color: var(--addButton-font) !important;
-  background-color: var(--addButton-bg) !important;
+  color: var(--addButton-font);
+  background-color: var(--addButton-bg);
   border-color: var(--addButton-border);
   --bs-btn-focus-box-shadow: none;
 }
@@ -750,34 +750,20 @@
 
 .unblockButton {
   margin-bottom: 10px;
-  color: var(--blockButton-font) !important;
-  background-color: var(--blockButton-bg) !important;
-  border-color: var(--blockButton-border);
+  color: var(--unblockButton-font) !important;
+  background-color: var(--unblockButton-bg) !important;
+  border-color: var(--unblockButton-border);
   --bs-btn-focus-box-shadow: none;
 }
 
 .unblockButton:is(:hover, :active, :focus) {
-  background-color: var(--blockButton-bg-hover) !important;
-  border-color: var(--blockButton-border-hover);
+  background-color: var(--unblockButton-bg-hover) !important;
+  border-color: var(--unblockButton-border-hover);
 }
 
 /* Unban Icon */
 
 .unbanIcon {
-  color: var(--banIcon-color);
-  font-size: 12px;
-  font-weight: bold;
-  margin-bottom: 0.5px;
-  margin-right: 4px;
-}
-
-.unblockButton:hover .unbanIcon {
-  color: var(--banIcon-color-hover) !important;
-}
-
-/* Ban Icon*/
-
-.banIcon {
   color: var(--unbanIcon-color);
   font-size: 12px;
   font-weight: bold;
@@ -785,8 +771,22 @@
   margin-right: 4px;
 }
 
-.removeButton:hover .banIcon {
+.unblockButton:hover .unbanIcon {
   color: var(--unbanIcon-color-hover) !important;
+}
+
+/* Ban Icon*/
+
+.banIcon {
+  color: var(--banIcon-color);
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 0.5px;
+  margin-right: 4px;
+}
+
+.removeButton:hover .banIcon {
+  color: var(--banIcon-color-hover) !important;
 }
 
 /* Remove Button */
