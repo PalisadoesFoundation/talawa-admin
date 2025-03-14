@@ -77,7 +77,7 @@ describe(' VenueCard', () => {
     renderVenueCardModel({
       ...defaultPropsMock,
       venueItem: mockVenueItemWithoutImg,
-    }).debug();
+    });
 
     // default image is used source is used
     const venueImage = screen.getByAltText('image not found');
@@ -93,7 +93,7 @@ describe(' VenueCard', () => {
     renderVenueCardModel({
       ...defaultPropsMock,
       venueItem: longNameVenueItem,
-    }).debug();
+    });
     expect(screen.getByTestId('venue-name2')).toHaveTextContent(
       'This is very long name th...',
     );
@@ -108,7 +108,7 @@ describe(' VenueCard', () => {
     renderVenueCardModel({
       ...defaultPropsMock,
       venueItem: longDescVenueItem,
-    }).debug();
+    });
     expect(
       screen.getByText(
         'This is very long description thats need to be truncated and "..." should b...',
@@ -127,7 +127,7 @@ describe(' VenueCard', () => {
     expect(showEditVenueModal).toHaveBeenCalledWith(mockVenueItem);
   });
   it('calls handleDelete when the btn clicked ', async () => {
-    renderVenueCardModel(defaultPropsMock).debug();
+    renderVenueCardModel(defaultPropsMock);
     const deleteBtn = screen.getByTestId('deleteVenueBtn2');
     expect(deleteBtn).toBeInTheDocument();
     await waitFor(() => {

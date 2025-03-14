@@ -10,27 +10,6 @@ import gql from 'graphql-tag';
  * @param organizationId - Organization to which the ActionItemCategory belongs.
  */
 
-// export const CREATE_VENUE_MUTATION = gql`
-//   mutation createVenue(
-//     $capacity: Int!
-//     $description: String
-//     $file: String
-//     $name: String!
-//     $organizationId: ID!
-//   ) {
-//     createVenue(
-//       data: {
-//         capacity: $capacity
-//         description: $description
-//         file: $file
-//         name: $name
-//         organizationId: $organizationId
-//       }
-//     ) {
-//       id
-//     }
-//   }
-// `;
 export const CREATE_VENUE_MUTATION = gql`
   mutation CREATE_VENUE(
     $organizationId: ID!
@@ -63,27 +42,6 @@ export const CREATE_VENUE_MUTATION = gql`
  * @param name - Name of the venue.
  */
 
-// export const UPDATE_VENUE_MUTATION = gql`
-//   mutation editVenue(
-//     $capacity: Int
-//     $description: String
-//     $file: String
-//     $id: ID!
-//     $name: String
-//   ) {
-//     editVenue(
-//       data: {
-//         capacity: $capacity
-//         description: $description
-//         file: $file
-//         id: $id
-//         name: $name
-//       }
-//     ) {
-//       _id
-//     }
-//   }
-// `;
 export const UPDATE_VENUE_MUTATION = gql`
   mutation UPDATE_VENUE_MUTATION(
     $attachments: [Upload!]

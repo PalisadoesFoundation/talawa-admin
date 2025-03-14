@@ -55,7 +55,7 @@ function organizationVenues(): JSX.Element {
     whereFilter.description_contains = searchTerm;
   }
   const variables: Record<string, unknown> = {
-    isInversed: sortOrder == 'highest' ? true : false,
+    isInversed: sortOrder == 'highest',
     id: orgId,
     first: 30,
   };
@@ -153,10 +153,10 @@ function organizationVenues(): JSX.Element {
 
   // Updating venues state when venue data changes
   useEffect(() => {
-    if (venueData && venueData.organization) {
+    if (venueData?.organization) {
       setVenues(
         venueData.organization.venues.edges.map(
-          (edge: Record<string, unknown>) => edge.node,
+          (edge: { node: InterfaceQueryVenueListItem }) => edge.node,
         ),
       );
     }
