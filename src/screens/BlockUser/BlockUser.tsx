@@ -89,13 +89,32 @@ const BlockUser = (): JSX.Element => {
   const hasFetchedAllMembers = useRef(false);
   const hasFetchedBlockedUsers = useRef(false);
 
-  // Query to fetch blocked users list
+  // Helper function to filter out blocked users from members list
+  const filterBlockedUsersFromMembers = useCallback(
+    (members: InterfaceUserPg[], blockedUsersList: InterfaceUserPg[]): InterfaceUserPg[] => {
+      return members.filter(
+        (member) => !blockedUsersList.some((blockedUser) => blockedUser.id === member.id)
+      );
+    },
+    []
+  );
 
-  const { data: blockedUsersData, refetch: blockedUserRefetch } =
-    useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_BLOCKED_USERS_PG, {
-      variables: { id: currentUrl, first: 32, after: null },
-      notifyOnNetworkStatusChange: true,
-    });
+  // Query to fetch blocked users list
+  const {
+    data: blockedUsersData,
+    loading: loadingBlockedUsers,
+    error: errorBlockedUsers,
+    refetch: blockedUserRefetch,
+  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_BLOCKED_USERS_PG, {
+    variables: { id: currentUrl, first: 32, after: null },
+    notifyOnNetworkStatusChange: true,
+  });
+
+  useEffect(() => {
+    if (errorBlockedUsers) {
+      toast.error(errorBlockedUsers.message);
+    }
+  }, [errorBlockedUsers]);
 
   useEffect(() => {
     if (blockedUsersData && !hasFetchedBlockedUsers.current) {
@@ -142,11 +161,7 @@ const BlockUser = (): JSX.Element => {
         (member: InterfaceOrganizationMembersConnectionEdgePg) => member.node,
       );
 
-      const filteredMembers = newMembers.filter(
-        (member) =>
-          !blockedUsers.some((blockedUser) => blockedUser.id === member.id),
-      );
-
+      const filteredMembers = filterBlockedUsersFromMembers(newMembers, blockedUsers);
       setAllMembers((prevMembers) => [...prevMembers, ...filteredMembers]);
 
       if (memberData.organization?.members?.pageInfo?.hasNextPage) {
@@ -161,7 +176,17 @@ const BlockUser = (): JSX.Element => {
         hasFetchedAllMembers.current = true;
       }
     }
-  }, [memberData, memberRefetch, currentUrl, blockedUsers, blockedUsersLoaded]);
+  }, [memberData, memberRefetch, currentUrl, blockedUsers, blockedUsersLoaded, filterBlockedUsersFromMembers]);
+
+  // Update the effect that handles filtering after blocked users change
+  useEffect(() => {
+    if (blockedUsersLoaded && hasFetchedAllMembers.current) {
+      const filteredMembers = filterBlockedUsersFromMembers(allMembers, blockedUsers);
+      if (filteredMembers.length !== allMembers.length) {
+        setAllMembers(filteredMembers);
+      }
+    }
+  }, [blockedUsers, blockedUsersLoaded, allMembers, filterBlockedUsersFromMembers]);
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
@@ -195,7 +220,7 @@ const BlockUser = (): JSX.Element => {
             organizationId: currentUrl,
           },
         });
-        if (data?.blockUser?.success) {
+        if (data?.blockUser) {
           toast.success(t('blockedSuccessfully') as string);
           memberRefetch();
 
@@ -211,19 +236,6 @@ const BlockUser = (): JSX.Element => {
     },
     [blockUser, currentUrl, memberRefetch, blockedUserRefetch, t],
   );
-
-  useEffect(() => {
-    if (blockedUsersLoaded && hasFetchedAllMembers.current) {
-      const filteredMembers = allMembers.filter(
-        (member) =>
-          !blockedUsers.some((blockedUser) => blockedUser.id === member.id),
-      );
-
-      if (filteredMembers.length !== allMembers.length) {
-        setAllMembers(filteredMembers);
-      }
-    }
-  }, [blockedUsers, blockedUsersLoaded]);
 
   const handleUnBlockUser = useCallback(
     async (user: InterfaceUserPg): Promise<void> => {
@@ -271,6 +283,10 @@ const BlockUser = (): JSX.Element => {
     t('block_unblock'),
   ];
 
+  if (loadingMembers || loadingBlockedUsers) {
+    return <TableLoader headerTitles={headerTitles} noOfRows={10} />;
+  }
+
   return (
     <>
       <div>
@@ -307,15 +323,13 @@ const BlockUser = (): JSX.Element => {
           </div>
         </div>
         {/* Table */}
-        {loadingMembers === false && allMembers.length === 0 ? (
+        {(loadingMembers || loadingBlockedUsers) ? (
+          <TableLoader headerTitles={headerTitles} noOfRows={10} />
+        ) : (allMembers.length === 0 && !showBlockedMembers) || (blockedUsers.length === 0 && showBlockedMembers) ? (
           <div className={styles.notFound}>
             <h4>
-              {tCommon('noResultsFoundFor')} &quot;{}&quot;
+              {showBlockedMembers ? t('noSpammerFound') : tCommon('noResultsFoundFor')} &quot;{}&quot;
             </h4>
-          </div>
-        ) : loadingMembers === false && allMembers.length === 0 ? (
-          <div className={styles.notFound}>
-            <h4>{t('noSpammerFound')}</h4>
           </div>
         ) : (
           <div className={styles.listBox}>
@@ -352,7 +366,7 @@ const BlockUser = (): JSX.Element => {
                               <Button
                                 variant="success"
                                 size="sm"
-                                className={styles.blockButton}
+                                className={styles.removeButton}
                                 onClick={async (): Promise<void> => {
                                   await handleBlockUser(user);
                                 }}
@@ -402,7 +416,7 @@ const BlockUser = (): JSX.Element => {
                             <Button
                               variant="success"
                               size="sm"
-                              className={styles.removeButton}
+                              className={styles.unblockButton}
                               onClick={async (): Promise<void> => {
                                 await handleUnBlockUser(user);
                               }}

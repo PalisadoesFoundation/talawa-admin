@@ -5,17 +5,13 @@ import '../../style/app.module.css';
 
 export const BLOCK_USER_MUTATION_PG = gql`
   mutation BlockUser($organizationId: String!, $userId: String!) {
-    blockUser(organizationId: $organizationId, userId: $userId) {
-      success
-    }
+    blockUser(organizationId: $organizationId, userId: $userId)
   }
 `;
 
 export const UNBLOCK_USER_MUTATION_PG = gql`
   mutation UnblockUser($organizationId: String!, $userId: String!) {
-    unblockUser(organizationId: $organizationId, userId: $userId) {
-      success
-    }
+    unblockUser(organizationId: $organizationId, userId: $userId)
   }
 `;
 
