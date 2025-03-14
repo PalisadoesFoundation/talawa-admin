@@ -13,6 +13,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
+import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { toast } from 'react-toastify';
 
@@ -968,15 +969,27 @@ describe('OrganizationPeople', () => {
   });
 
   test('handles member removal modal correctly', async () => {
-    const mocks = [
-      createMemberConnectionMock({
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      }),
-    ];
+    const initialMember = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const removeMemberMock = {
+      request: {
+        query: REMOVE_MEMBER_MUTATION_PG,
+        variables: { organizationId: 'orgid', memberId: 'member1' },
+      },
+      result: {
+        data: {
+          removeMember: { id: 1 },
+        },
+      },
+    };
+
+    const mocks = [initialMember, removeMemberMock];
 
     const link = new StaticMockLink(mocks, true);
 
@@ -1012,12 +1025,12 @@ describe('OrganizationPeople', () => {
     });
 
     // Close the modal
-    const closeButton = screen.getByTestId('closeRemoveId');
+    const closeButton = screen.getByTestId('removeMemberBtn');
     fireEvent.click(closeButton);
 
     // Modal should be closed
     await waitFor(() => {
-      expect(screen.queryByTestId('removeMemberModal')).not.toBeInTheDocument();
+      expect(toast.success).toHaveBeenCalled();
     });
   });
 
