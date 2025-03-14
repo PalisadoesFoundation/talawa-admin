@@ -52,18 +52,14 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
         }
       } catch (error) {
         console.log('Error processing avatar:', error);
-        // Continue with language change even if avatar processing fails
       }
     }
-
-    // Prepare mutation input
     const input = {
       naturalLanguageCode: languageCode,
-      ...(avatarFile && { avatar: avatarFile }), // Only include avatar if it exists
+      ...(avatarFile && { avatar: avatarFile }),
     };
 
     try {
-      // Update user's language preference. If fails, catch error and log it
       await updateUser({
         variables: { input },
       });

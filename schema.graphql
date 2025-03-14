@@ -812,6 +812,9 @@ type Mutation {
   removeEventAttendee(data: EventAttendeeInput!): User!
   removeEventVolunteer(id: ID!): EventVolunteer!
   removeMember(data: UserAndOrganizationInput!): Organization!
+  deleteOrganizationMembership(
+    input: deleteOrganizationMembershipInput
+  ): Organization!
   removeOrganization(id: ID!): UserData!
   removeOrganizationCustomField(
     customFieldId: ID!
@@ -835,6 +838,7 @@ type Mutation {
     replyTo: ID
   ): ChatMessage!
   signUp(input: UserInput!, file: String): AuthData!
+  createUser(input: createUserInput!): AuthData!
   togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
   unblockUser(organizationId: ID!, userId: ID!): User!
@@ -1792,6 +1796,10 @@ input PostWhereInput {
   title_starts_with: String
 }
 
+input OueryAllUsersWhereInput {
+  name: String
+}
+
 type Query {
   signIn(input: LoginInput!): AuthenticationPayload
   actionItem(id: ID!): ActionItem
@@ -2171,6 +2179,24 @@ type UserPg {
 
 input QueryUserInput {
   id: String!
+}
+
+input createUserInput {
+  name: String!
+  emailAddress: EmailAddress!
+  password: String!
+  role: UserRole!
+  isEmailAddressVerified: Boolean!
+}
+
+enum UserRole {
+  administrator
+  regular
+}
+
+input deleteOrganizationMembershipInput {
+  organizationId: String!
+  memberID: String!
 }
 
 enum Iso3166Alpha2CountryCode {

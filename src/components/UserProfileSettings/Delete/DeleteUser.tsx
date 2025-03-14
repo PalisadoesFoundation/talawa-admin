@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../UserProfileSettings.module.css';
+import styles from '../../../style/app-fixed.module.css';
 
 /**
  * DeleteUser component displays a card with a button to delete a user.
