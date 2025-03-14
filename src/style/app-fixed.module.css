@@ -3609,7 +3609,7 @@ form label,
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* Ensures left alignment */
+  /* Vertically centers the items */
   justify-content: flex-start;
   height: 6rem;
   padding: 0.75rem;
