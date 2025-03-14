@@ -19,7 +19,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 const mockUploadFileToMinio = vi.fn().mockResolvedValue({
-  fileUrl: 'https://minio-test.com/test-image.jpg',
+  objectName: 'https://minio-test.com/test-image.jpg',
 });
 
 vi.mock('utils/MinioUpload', () => ({

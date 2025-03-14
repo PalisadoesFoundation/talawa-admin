@@ -281,10 +281,10 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               const file = target.files && target.files[0];
               if (file && orgId) {
                 try {
-                  const { fileUrl } = await uploadFileToMinio(file, orgId);
+                  const { objectName } = await uploadFileToMinio(file, orgId);
                   setFormState({
                     ...formState,
-                    orgImage: fileUrl,
+                    orgImage: objectName,
                   });
                 } catch (error) {
                   console.error('Error uploading file image to Minio', error);
