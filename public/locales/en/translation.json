@@ -1144,7 +1144,16 @@
     "displayImage": "displayImage",
     "address": "address",
     "saveChanges": "saveChanges",
-    "joined": "joined"
+    "joined": "joined",
+    "homePhoneNumber": "Home Phone Number",
+    "enterPhoneNo": "Enter Phone Number",
+    "workPhoneNumber": "Work Phone Number",
+    "addressLine1": "Address Line 1",
+    "addressLine2": "Address Line 2",
+    "postalCode": "Postal Code",
+    "city": "City",
+    "description": "Description",
+    "enterDescription": "Enter Description"
   },
   "donate": {
     "title": "Donations",

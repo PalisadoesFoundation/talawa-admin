@@ -257,22 +257,27 @@ export default function Settings(): JSX.Element {
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('profileSettings')}</div>
                 </div>
-                <Card.Body className={styles.cardBody}>
-                  <ProfileImageSection
-                    userDetails={userDetails}
-                    selectedAvatar={selectedAvatar}
-                    fileInputRef={fileInputRef}
-                    handleFileUpload={handleFileUpload}
-                  />
-                  <UserDetailsForm
-                    userDetails={userDetails}
-                    handleFieldChange={handleFieldChange}
-                    isUpdated={isUpdated}
-                    handleResetChanges={handleResetChanges}
-                    handleUpdateUserDetails={handleUpdateUserDetails}
-                    t={t}
-                    tCommon={tCommon}
-                  />
+
+                <Card.Body className={styles.userCardBody}>
+                  <div>
+                    <ProfileImageSection
+                      userDetails={userDetails}
+                      selectedAvatar={selectedAvatar}
+                      fileInputRef={fileInputRef}
+                      handleFileUpload={handleFileUpload}
+                    />
+                  </div>
+                  <div>
+                    <UserDetailsForm
+                      userDetails={userDetails}
+                      handleFieldChange={handleFieldChange}
+                      isUpdated={isUpdated}
+                      handleResetChanges={handleResetChanges}
+                      handleUpdateUserDetails={handleUpdateUserDetails}
+                      t={t}
+                      tCommon={tCommon}
+                    />
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
