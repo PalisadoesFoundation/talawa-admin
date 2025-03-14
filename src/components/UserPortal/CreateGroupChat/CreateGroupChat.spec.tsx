@@ -6378,7 +6378,8 @@ describe('CreateGroupChat - handleImageChange', () => {
   test('should upload file to MinIO and set the image URL on successful upload', async () => {
     // Mock the return value of useMinioUpload
     const mockUploadFileToMinio = vi.fn().mockResolvedValue({
-      fileUrl: 'https://minio.example.com/test-image.jpg',
+      objectName: 'https://minio.example.com/test-image.jpg',
+      fileHash: 'dummyFileHash',
     });
     vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
       uploadFileToMinio: mockUploadFileToMinio,

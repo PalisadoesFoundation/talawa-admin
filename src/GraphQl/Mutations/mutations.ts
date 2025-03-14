@@ -769,6 +769,7 @@ export const PRESIGNED_URL = gql`
       fileUrl
       presignedUrl
       objectName
+      requiresUpload
     }
   }
 `;
