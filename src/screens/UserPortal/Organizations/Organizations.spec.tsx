@@ -24,7 +24,6 @@ import {
   USER_CREATED_ORGANIZATIONS,
 } from 'GraphQl/Queries/Queries';
 import Organizations from './Organizations';
-import organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { useQuery } from '@apollo/client';
 
@@ -971,7 +970,6 @@ test('should update page when pagination is clicked', async () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  // Verify the page was updated to 1
   expect(currentPageElement.textContent).toBe('0');
 
   // Find the prev page button
@@ -1177,8 +1175,6 @@ test('Should change page when pagination control is clicked', async () => {
 });
 
 await wait(500);
-console.log(screen.debug()); // Log the entire rendered DOM
-console.log('Organizations state:', organizations); // Log the state
 
 test('should correctly map joined organizations data when mode is 1', async () => {
   // Mock user ID

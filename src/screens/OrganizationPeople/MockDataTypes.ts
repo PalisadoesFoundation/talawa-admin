@@ -1,3 +1,4 @@
+import { FetchResult } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 type User = {
@@ -5,15 +6,15 @@ type User = {
   firstName: string;
   lastName: string;
   image: string | null;
-  _id: string;
+  id: string;
   email: string;
   createdAt: string;
   joinedOrganizations: {
     __typename: string;
-    _id: string;
+    id: string;
     name?: string;
     creator?: {
-      _id: string;
+      id: string;
       firstName: string;
       lastName: string;
       email: string;
@@ -23,7 +24,7 @@ type User = {
   }[];
 };
 type Edge = {
-  _id?: string;
+  id?: string;
   firstName?: string;
   lastName?: string;
   image?: string | null;
@@ -31,12 +32,18 @@ type Edge = {
   createdAt?: string;
   user?: Edge;
 };
+
 export type TestMock = {
   request: {
     query: DocumentNode;
     variables: {
       id?: string;
       orgId?: string;
+      first?: number | null;
+      after?: string | null;
+      last?: number | null;
+      before?: string | null;
+      where?: { role: { equal: 'administrator' } };
       orgid?: string;
       firstNameContains?: string;
       lastNameContains?: string;
@@ -50,17 +57,55 @@ export type TestMock = {
       password?: string;
     };
   };
-  result: {
-    __typename?: string;
+  result?: {
     data: {
-      __typename?: string;
+      organization?: {
+        members?: {
+          edges: Array<{
+            node: {
+              id: string;
+              name: string;
+              emailAddress: string;
+              avatarURL: string | null;
+              createdAt: string;
+            };
+            cursor: string;
+          }>;
+          pageInfo: {
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor: string;
+            endCursor: string;
+          };
+        };
+      };
+      allUsers?: {
+        edges: Array<{
+          node: {
+            id: string;
+            name: string;
+            emailAddress: string;
+            avatarURL: string | null;
+            createdAt: string;
+          };
+          cursor: string;
+        }>;
+        pageInfo: {
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+          startCursor: string;
+          endCursor: string;
+        };
+      };
+      removeMember?: {
+        id: string;
+      };
       createMember?: {
-        __typename: string;
-        _id: string;
+        id: string;
       };
       signUp?: {
         user?: {
-          _id: string;
+          id: string;
         };
         accessToken?: string;
         refreshToken?: string;
@@ -73,5 +118,6 @@ export type TestMock = {
       };
     };
   };
-  newData?: () => TestMock['result'];
+  error?: Error;
+  newData?: () => FetchResult<Record<string, any>>;
 };
