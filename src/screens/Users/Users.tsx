@@ -12,7 +12,7 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import SortingButton from 'subComponents/SortingButton';
@@ -102,7 +102,7 @@ const Users = (): JSX.Element => {
     : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
-  const loggedInUserId = getItem('id');
+  const loggedInUserId = getItem('id') as string;
   const [usersData, setUsersData] = useState<
     { users: InterfaceQueryUserListItem[] } | undefined
   >(undefined);

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Button, Collapse } from 'react-bootstrap';
-import styles from '../../style/app.module.css';
+import { Collapse } from 'react-bootstrap';
+import styles from '../../style/app-fixed.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -35,9 +35,12 @@ const collapsibleDropdown = ({
 
   return (
     <>
-      <Button
-        variant={showDropdown ? 'success' : ''}
-        className={showDropdown ? 'text-white' : 'text-secondary'}
+      <button
+        className={
+          showDropdown
+            ? styles.leftDrawerActiveButton
+            : styles.leftDrawerInactiveButton
+        }
         onClick={(): void => setShowDropdown(!showDropdown)}
         aria-expanded={showDropdown}
         data-testid="collapsible-dropdown"
@@ -45,17 +48,17 @@ const collapsibleDropdown = ({
         <div className={styles.collapsibleDropdownIconWrapper}>
           <IconComponent
             name={name}
-            fill={showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
+            fill={showDropdown ? 'var(--bs-black)' : 'var(--bs-secondary)'}
           />
         </div>
         {tCommon(name)}
         <i
-          className={`ms-auto fa  
-          ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'} 
+          className={`ms-auto fa
+          ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
           ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
           `}
         />
-      </Button>
+      </button>
       <Collapse in={showDropdown}>
         <div className="ps-4">
           {subTargets &&
@@ -63,13 +66,13 @@ const collapsibleDropdown = ({
               return (
                 <NavLink to={url} key={name}>
                   {({ isActive }) => (
-                    <Button
+                    <button
                       key={name}
-                      variant={isActive === true ? 'success' : 'light'}
-                      size="sm"
-                      className={`${styles.collapsibleDropdownCollapseBtn} ${
-                        isActive === true ? 'text-white' : 'text-secondary'
-                      }`}
+                      className={
+                        isActive
+                          ? styles.leftDrawerCollapseActiveButton
+                          : styles.leftDrawerInactiveButton
+                      }
                       onClick={(): void => {
                         navigate(url);
                       }}
@@ -86,7 +89,7 @@ const collapsibleDropdown = ({
                           }`}
                         />
                       </div>
-                    </Button>
+                    </button>
                   )}
                 </NavLink>
               );

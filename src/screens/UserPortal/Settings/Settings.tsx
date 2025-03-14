@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './Settings.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { Card, Col, Row } from 'react-bootstrap';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
@@ -257,22 +257,27 @@ export default function Settings(): JSX.Element {
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('profileSettings')}</div>
                 </div>
-                <Card.Body className={styles.cardBody}>
-                  <ProfileImageSection
-                    userDetails={userDetails}
-                    selectedAvatar={selectedAvatar}
-                    fileInputRef={fileInputRef}
-                    handleFileUpload={handleFileUpload}
-                  />
-                  <UserDetailsForm
-                    userDetails={userDetails}
-                    handleFieldChange={handleFieldChange}
-                    isUpdated={isUpdated}
-                    handleResetChanges={handleResetChanges}
-                    handleUpdateUserDetails={handleUpdateUserDetails}
-                    t={t}
-                    tCommon={tCommon}
-                  />
+
+                <Card.Body className={styles.userCardBody}>
+                  <div>
+                    <ProfileImageSection
+                      userDetails={userDetails}
+                      selectedAvatar={selectedAvatar}
+                      fileInputRef={fileInputRef}
+                      handleFileUpload={handleFileUpload}
+                    />
+                  </div>
+                  <div>
+                    <UserDetailsForm
+                      userDetails={userDetails}
+                      handleFieldChange={handleFieldChange}
+                      isUpdated={isUpdated}
+                      handleResetChanges={handleResetChanges}
+                      handleUpdateUserDetails={handleUpdateUserDetails}
+                      t={t}
+                      tCommon={tCommon}
+                    />
+                  </div>
                 </Card.Body>
               </Card>
             </Col>

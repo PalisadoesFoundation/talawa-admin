@@ -6,17 +6,21 @@
 
 > **TestMock**: `object`
 
-Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L34)
+Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L36)
 
 ## Type declaration
 
+### error?
+
+> `optional` **error**: `Error`
+
 ### newData()?
 
-> `optional` **newData**: () => [`TestMock`](TestMock.md)\[`"result"`\]
+> `optional` **newData**: () => `FetchResult`\<`Record`\<`string`, `any`\>\>
 
 #### Returns
 
-[`TestMock`](TestMock.md)\[`"result"`\]
+`FetchResult`\<`Record`\<`string`, `any`\>\>
 
 ### request
 
@@ -30,9 +34,21 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:34](https://github.
 
 > **variables**: `object`
 
+#### request.variables.after?
+
+> `optional` **after**: `string` \| `null`
+
+#### request.variables.before?
+
+> `optional` **before**: `string` \| `null`
+
 #### request.variables.email?
 
 > `optional` **email**: `string`
+
+#### request.variables.first?
+
+> `optional` **first**: `number` \| `null`
 
 #### request.variables.firstName?
 
@@ -53,6 +69,10 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:34](https://github.
 #### request.variables.id\_not\_in?
 
 > `optional` **id\_not\_in**: `string`[]
+
+#### request.variables.last?
+
+> `optional` **last**: `number` \| `null`
 
 #### request.variables.lastName?
 
@@ -82,33 +102,93 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:34](https://github.
 
 > `optional` **userid**: `string`
 
-### result
+#### request.variables.where?
 
-> **result**: `object`
+> `optional` **where**: `object`
 
-#### result.\_\_typename?
+#### request.variables.where.role
 
-> `optional` **\_\_typename**: `string`
+> **role**: `object`
+
+#### request.variables.where.role.equal
+
+> **equal**: `"administrator"`
+
+### result?
+
+> `optional` **result**: `object`
 
 #### result.data
 
 > **data**: `object`
 
-#### result.data.\_\_typename?
+#### result.data.allUsers?
 
-> `optional` **\_\_typename**: `string`
+> `optional` **allUsers**: `object`
+
+#### result.data.allUsers.edges
+
+> **edges**: `object`[]
+
+#### result.data.allUsers.pageInfo
+
+> **pageInfo**: `object`
+
+#### result.data.allUsers.pageInfo.endCursor
+
+> **endCursor**: `string`
+
+#### result.data.allUsers.pageInfo.hasNextPage
+
+> **hasNextPage**: `boolean`
+
+#### result.data.allUsers.pageInfo.hasPreviousPage
+
+> **hasPreviousPage**: `boolean`
+
+#### result.data.allUsers.pageInfo.startCursor
+
+> **startCursor**: `string`
 
 #### result.data.createMember?
 
 > `optional` **createMember**: `object`
 
-#### result.data.createMember.\_\_typename
+#### result.data.createMember.id
 
-> **\_\_typename**: `string`
+> **id**: `string`
 
-#### result.data.createMember.\_id
+#### result.data.organization?
 
-> **\_id**: `string`
+> `optional` **organization**: `object`
+
+#### result.data.organization.members?
+
+> `optional` **members**: `object`
+
+#### result.data.organization.members.edges
+
+> **edges**: `object`[]
+
+#### result.data.organization.members.pageInfo
+
+> **pageInfo**: `object`
+
+#### result.data.organization.members.pageInfo.endCursor
+
+> **endCursor**: `string`
+
+#### result.data.organization.members.pageInfo.hasNextPage
+
+> **hasNextPage**: `boolean`
+
+#### result.data.organization.members.pageInfo.hasPreviousPage
+
+> **hasPreviousPage**: `boolean`
+
+#### result.data.organization.members.pageInfo.startCursor
+
+> **startCursor**: `string`
 
 #### result.data.organizations?
 
@@ -126,6 +206,14 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:34](https://github.
 
 > `optional` **user**: `Edge`[]
 
+#### result.data.removeMember?
+
+> `optional` **removeMember**: `object`
+
+#### result.data.removeMember.id
+
+> **id**: `string`
+
 #### result.data.signUp?
 
 > `optional` **signUp**: `object`
@@ -142,9 +230,9 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:34](https://github.
 
 > `optional` **user**: `object`
 
-#### result.data.signUp.user.\_id
+#### result.data.signUp.user.id
 
-> **\_id**: `string`
+> **id**: `string`
 
 #### result.data.users?
 

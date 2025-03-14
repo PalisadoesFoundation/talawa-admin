@@ -3,7 +3,7 @@ import TruncatedText from './TruncatedText';
 // import {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
@@ -67,37 +67,37 @@ function OrgListCard({
             )}
           </div>
           <div className={styles.content}>
-            {/* Tooltip for the organization name */}
-            <Tooltip title={name} placement="top-end">
-              <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
-            </Tooltip>
-            {/* Description of the organization */}
-            <div className={`${styles.orgdesc} fw-semibold`}>
-              <TruncatedText text={description} />
-            </div>
+            <div>
+              {/* Tooltip for the organization name */}
+              <Tooltip title={name} placement="top-end">
+                <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
+              </Tooltip>
+              {/* Description of the organization */}
+              <div className={`${styles.orgdesc} fw-semibold`}>
+                <TruncatedText text={description} />
+              </div>
 
-            {/* Display the organization address if available */}
-            {addressLine1 && (
-              <div className={styles.address}>
-                <TruncatedText text={`${addressLine1}`} />
-              </div>
-            )}
-            {/* Display the number of admins and members */}
-            <h6 className={styles.orgadmin}>
-              <div>
-                {tCommon('members')}: <span>{members.edges.length}</span>
-              </div>
-            </h6>
-          </div>
-        </div>
-        {/* Button to manage the organization */}
-        <Button
-          onClick={handleClick}
-          data-testid="manageBtn"
-          className={styles.manageBtn}
-        >
-          {/* Show flask icon if the organization is a sample organization */}
-          {/* {data && data?.isSampleOrganization && (
+              {/* Display the organization address if available */}
+              {addressLine1 && (
+                <div className={styles.address}>
+                  <TruncatedText text={`${addressLine1}`} />
+                </div>
+              )}
+              {/* Display the number of admins and members */}
+              <h6 className={styles.orgadmin}>
+                <div>
+                  {tCommon('members')}: <span>{members.edges.length}</span>
+                </div>
+              </h6>
+            </div>
+            {/* Button to manage the organization */}
+            <Button
+              onClick={handleClick}
+              data-testid="manageBtn"
+              className={styles.manageBtn}
+            >
+              {/* Show flask icon if the organization is a sample organization */}
+              {/* {data && data?.isSampleOrganization && (
             <FlaskIcon
               fill="var(--bs-white)"
               width={12}
@@ -107,8 +107,10 @@ function OrgListCard({
             />
           )}
           {'  '} */}
-          {t('manage')}
-        </Button>
+              {t('manage')}
+            </Button>
+          </div>
+        </div>
       </div>
     </>
   );

@@ -13,9 +13,8 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from './OrganizationScreen.module.css';
+import styles from '../../style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
-import { Button } from 'react-bootstrap';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
@@ -104,28 +103,7 @@ const OrganizationScreen = (): JSX.Element => {
 
   return (
     <>
-      {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )}
-      <div className={styles.drawer}>
+      <div className={styles.opendrawerdrawer}>
         <LeftDrawerOrg
           orgId={orgId}
           targets={targets}

@@ -3,7 +3,7 @@ import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './../../style/app.module.css';
+import styles from './../../style/app-fixed.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 /**
@@ -21,7 +21,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 const ProfileCard = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
+  const adminFor: string[] = getItem('AdminFor') || [];
   const userRole = superAdmin
     ? 'SuperAdmin'
     : adminFor?.length > 0
@@ -29,7 +29,7 @@ const ProfileCard = (): JSX.Element => {
       : 'User';
   const firstName = getItem('FirstName');
   const lastName = getItem('LastName');
-  const userImage = getItem('UserImage');
+  const userImage = getItem('UserImage') as string;
   const navigate = useNavigate();
   const { orgId } = useParams();
 

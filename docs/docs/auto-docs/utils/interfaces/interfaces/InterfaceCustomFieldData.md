@@ -4,15 +4,31 @@
 
 # Interface: InterfaceCustomFieldData
 
-Defined in: [src/utils/interfaces.ts:1279](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1279)
+Defined in: [src/utils/interfaces.ts:1265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1265)
 
 ## Properties
+
+### id?
+
+> `optional` **id**: `string`
+
+Defined in: [src/utils/interfaces.ts:1266](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1266)
+
+***
 
 ### name
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1281](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1281)
+Defined in: [src/utils/interfaces.ts:1267](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1267)
+
+***
+
+### organizationId?
+
+> `optional` **organizationId**: `string`
+
+Defined in: [src/utils/interfaces.ts:1269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1269)
 
 ***
 
@@ -20,4 +36,4 @@ Defined in: [src/utils/interfaces.ts:1281](https://github.com/PalisadoesFoundati
 
 > **type**: `string`
 
-Defined in: [src/utils/interfaces.ts:1280](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1280)
+Defined in: [src/utils/interfaces.ts:1268](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1268)

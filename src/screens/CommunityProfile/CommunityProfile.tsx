@@ -21,7 +21,7 @@ import {
   SlackLogo,
 } from 'assets/svgs/social-icons';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../components/UpdateSession/UpdateSession';
 
@@ -156,14 +156,14 @@ const CommunityProfile = (): JSX.Element => {
           name: profileVariable.name,
           websiteURL: profileVariable.websiteURL,
           inactivityTimeoutDuration: data?.community?.inactivityTimeoutDuration,
-          facebookURL: profileVariable.facebookURL,
-          instagramURL: profileVariable.instagramURL,
-          xURL: profileVariable.xURL,
-          linkedinURL: profileVariable.linkedInURL,
-          githubURL: profileVariable.githubURL,
-          youtubeURL: profileVariable.youtubeURL,
-          redditURL: profileVariable.redditURL,
-          slackURL: profileVariable.slackURL,
+          facebookURL: profileVariable.facebookURL || undefined,
+          instagramURL: profileVariable.instagramURL || undefined,
+          xURL: profileVariable.xURL || undefined,
+          linkedinURL: profileVariable.linkedInURL || undefined,
+          githubURL: profileVariable.githubURL || undefined,
+          youtubeURL: profileVariable.youtubeURL || undefined,
+          redditURL: profileVariable.redditURL || undefined,
+          slackURL: profileVariable.slackURL || undefined,
         },
       });
       toast.success(t('profileChangedMsg') as string);

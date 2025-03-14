@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
-Defined in: [src/utils/interfaces.ts:1210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1210)
+Defined in: [src/utils/interfaces.ts:1196](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1196)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1210](https://github.com/PalisadoesFoundati
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1211)
+Defined in: [src/utils/interfaces.ts:1197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1197)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1211](https://github.com/PalisadoesFoundati
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:1214](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1214)
+Defined in: [src/utils/interfaces.ts:1200](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1200)
 
 #### \_id
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1214](https://github.com/PalisadoesFoundati
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1213)
+Defined in: [src/utils/interfaces.ts:1199](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1199)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [src/utils/interfaces.ts:1213](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1212)
+Defined in: [src/utils/interfaces.ts:1198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1198)

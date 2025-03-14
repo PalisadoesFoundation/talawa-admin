@@ -2,6 +2,7 @@ import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import i18next from 'i18next';
 import { languages } from 'utils/languages';
+import styles from '../../style/app-fixed.module.css';
 import cookies from 'js-cookie';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -24,7 +25,9 @@ import { toast } from 'react-toastify';
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+
+  // Remove the extra prefix here. The hook already adds "Talawa-admin".
+  const userId = getItem('id');
   const userImage = getItem('UserImage');
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
 
@@ -44,21 +47,19 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     // Only process avatar if userImage exists in localStorage
     if (userImage) {
       try {
-        avatarFile = await urlToFile(userImage);
+        if (typeof userImage === 'string') {
+          avatarFile = await urlToFile(userImage);
+        }
       } catch (error) {
         console.log('Error processing avatar:', error);
-        // Continue with language change even if avatar processing fails
       }
     }
-
-    // Prepare mutation input
     const input = {
       naturalLanguageCode: languageCode,
-      ...(avatarFile && { avatar: avatarFile }), // Only include avatar if it exists
+      ...(avatarFile && { avatar: avatarFile }),
     };
 
     try {
-      // Update user's language preference. If fails, catch error and log it
       await updateUser({
         variables: { input },
       });
@@ -71,14 +72,9 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   };
 
   return (
-    <Dropdown
-      title="Change Langauge"
-      className={`${props?.parentContainerStyle ?? ''}`}
-      data-testid="language-dropdown-container"
-    >
+    <Dropdown title="Change Language" data-testid="language-dropdown-container">
       <Dropdown.Toggle
-        variant="outline-success"
-        className={`${props?.btnStyle ?? ''}`}
+        className={styles.changeLanguageBtn}
         data-testid="language-dropdown-btn"
       >
         {languages.map((language, index: number) => (

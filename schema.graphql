@@ -40,17 +40,6 @@ type Address {
   state: String
 }
 
-input AddressInput {
-  city: String
-  countryCode: String
-  dependentLocality: String
-  line1: String
-  line2: String
-  postalCode: String
-  sortingCode: String
-  state: String
-}
-
 type Advertisement {
   _id: ID!
   createdAt: DateTime!
@@ -102,8 +91,6 @@ type AggregateUser {
 
 scalar Any
 
-scalar Iso639Set1LanguageCode
-
 type AppUserProfile {
   _id: ID!
   adminFor: [Organization]
@@ -112,7 +99,6 @@ type AppUserProfile {
   createdOrganizations: [Organization]
   eventAdmin: [Event]
   isSuperAdmin: Boolean!
-  pluginCreationAllowed: Boolean!
   userId: User!
 }
 
@@ -265,32 +251,7 @@ input DonationWhereInput {
   name_of_user_starts_with: String
 }
 
-enum UserEducationGrade {
-  grade_1
-  grade_2
-  grade_3
-  grade_4
-  grade_5
-  grade_6
-  grade_7
-  grade_8
-  grade_9
-  grade_10
-  grade_11
-  grade_12
-  graduate
-  kg
-  no_grade
-  pre_kg
-}
-
 scalar EmailAddress
-
-enum UserEmploymentStatus {
-  full_time
-  part_time
-  unemployed
-}
 
 interface Error {
   message: String!
@@ -457,12 +418,6 @@ enum Frequency {
   MONTHLY
   WEEKLY
   YEARLY
-}
-
-enum Gender {
-  FEMALE
-  MALE
-  OTHER
 }
 
 enum Iso4217CurrencyCode {
@@ -693,15 +648,6 @@ input LoginInput {
 
 scalar Longitude
 
-enum UserMaritalStatus {
-  divorced
-  engaged
-  married
-  seperated
-  single
-  widowed
-}
-
 type Chat {
   _id: ID!
   isGroup: Boolean!
@@ -797,10 +743,6 @@ type Mutation {
   addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
   adminRemoveEvent(eventId: ID!): Event!
   assignUserTag(input: ToggleUserTagAssignInput!): User
-  blockPluginCreationBySuperadmin(
-    blockUser: Boolean!
-    userId: ID!
-  ): AppUserProfile!
   blockUser(organizationId: ID!, userId: ID!): User!
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
@@ -840,12 +782,6 @@ type Mutation {
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
   createOrganization(data: OrganizationInput, file: String): Organization!
-  createPlugin(
-    pluginCreatedBy: String!
-    pluginDesc: String!
-    pluginName: String!
-    uninstalledOrgs: [ID!]
-  ): Plugin!
   createPost(data: PostInput!, file: String): Post
   createSampleOrganization: Boolean!
   createUserFamily(data: createUserFamilyInput!): UserFamily!
@@ -876,6 +812,9 @@ type Mutation {
   removeEventAttendee(data: EventAttendeeInput!): User!
   removeEventVolunteer(id: ID!): EventVolunteer!
   removeMember(data: UserAndOrganizationInput!): Organization!
+  deleteOrganizationMembership(
+    input: deleteOrganizationMembershipInput
+  ): Organization!
   removeOrganization(id: ID!): UserData!
   removeOrganizationCustomField(
     customFieldId: ID!
@@ -899,6 +838,7 @@ type Mutation {
     replyTo: ID
   ): ChatMessage!
   signUp(input: UserInput!, file: String): AuthData!
+  createUser(input: createUserInput!): AuthData!
   togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
   unblockUser(organizationId: ID!, userId: ID!): User!
@@ -929,7 +869,6 @@ type Mutation {
     file: String
     id: ID!
   ): Organization!
-  updatePluginStatus(id: ID!, orgId: ID!): Plugin!
   updatePost(data: PostUpdateInput, id: ID!): Post!
   updateSessionTimeout(timeout: Int!): Boolean!
   updateUser(input: MutationUpdateUserInput!): UserPg
@@ -948,7 +887,7 @@ input OTPInput {
 }
 
 type Organization {
-  _id: ID!
+  id: ID!
   actionItemCategories: [ActionItemCategory]
   address: Address
   admins(adminId: ID): [User!]
@@ -979,7 +918,7 @@ type Organization {
     isInversed: Boolean
   ): OrganizationVenuesConnection
 }
-type QueryVenuesInput {
+input QueryVenuesInput {
   description_contains: String
   name_contains: String
 }
@@ -1344,16 +1283,6 @@ type VenuePg {
   ): VenueEventsConnectionPg
 }
 
-type VenueEventsConnectionPg {
-  edges: [VenueEventsConnectionEdgePg!]!
-  pageInfo: PageInfoPg!
-}
-
-type VenueEventsConnectionEdgePg {
-  node: EventPg!
-  cursor: String!
-}
-
 type OrganizationFundsConnectionPg {
   edges: [OrganizationFundsConnectionEdgePg]
   pageInfo: PageInfoPg!
@@ -1531,11 +1460,6 @@ type CommentDownVotersConnectionEdgePg {
   node: UserPg
 }
 
-type CommentUpVotersConnectionPg {
-  cursor: String!
-  node: UserPg
-}
-
 type PostUpVotersConnectionPg {
   edges: [PostUpVotersConnectionEdgePg]
   pageInfo: PageInfoPg!
@@ -1556,27 +1480,12 @@ type PostDownVotersConnectionEdgePg {
   node: UserPg
 }
 
-type PostDownVotersConnectionPg {
-  cursor: String!
-  node: UserPg
-}
-
 type CommentUpVotersConnectionPg {
   edges: [CommentUpVotersConnectionEdgePg]
   pageInfo: PageInfoPg!
 }
 
 type CommentUpVotersConnectionEdgePg {
-  cursor: String!
-  node: UserPg
-}
-
-type CommentDownVotersConnectionPg {
-  edges: [CommentDownVotersConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type CommentDownVotersConnectionEdgePg {
   cursor: String!
   node: UserPg
 }
@@ -1711,24 +1620,6 @@ type VenueEventsConnectionEdgePg {
   node: EventPg
 }
 
-type VenuePg {
-  id: ID!
-  name: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  creator: UserPg
-  updater: UserPg
-  description: String
-  organization: OrganizationPg
-  attachments: [VenueAttachmentPg!]
-  events(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): VenueEventsConnectionPg
-}
-
 type OrganizationCustomField {
   _id: ID!
   name: String!
@@ -1835,34 +1726,6 @@ enum PaginationDirection {
 
 scalar PhoneNumber
 
-type Plugin {
-  _id: ID!
-  pluginCreatedBy: String!
-  pluginDesc: String!
-  pluginName: String!
-  uninstalledOrgs: [ID!]
-}
-
-type PluginField {
-  createdAt: DateTime!
-  key: String!
-  status: Status!
-  value: String!
-}
-
-input PluginFieldInput {
-  key: String!
-  value: String!
-}
-
-input PluginInput {
-  fields: [PluginFieldInput]
-  orgId: ID!
-  pluginKey: String
-  pluginName: String!
-  pluginType: Type
-}
-
 scalar PositiveInt
 
 type Post {
@@ -1956,6 +1819,10 @@ input PostWhereInput {
   title_starts_with: String
 }
 
+input OueryAllUsersWhereInput {
+  name: String
+}
+
 type Query {
   signIn(input: LoginInput!): AuthenticationPayload
   actionItem(id: ID!): ActionItem
@@ -1963,7 +1830,6 @@ type Query {
   actionItemCategory(id: ID!): ActionItemCategory
   actionItemsByEvent(eventId: ID!): [ActionItem]
   actionItemsByOrganization(organizationId: ID!): [ActionItem]
-  adminPlugin(orgId: ID!): [Plugin]
   agendaCategory(id: ID!): AgendaCategory!
   currentUser: UserPg!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
@@ -1994,7 +1860,6 @@ type Query {
     skip: Int
     where: DonationWhereInput
   ): [Donation!]!
-  getPlugins: [Plugin]
   getlanguage(lang_code: String!): [Translation]
   hasSubmittedFeedback(eventId: ID!, userId: ID!): Boolean
   isSampleOrganization(id: ID!): Boolean!
@@ -2016,7 +1881,6 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): UserConnection!
-  plugin(orgId: ID!): [Plugin]
   getRecurringEvents(baseRecurringEventId: ID!): [Event]
   post(id: ID!): Post
   postsByOrganization(id: ID!, orderBy: PostOrderByInput): [Post]
@@ -2073,7 +1937,6 @@ enum Status {
 
 type Subscription {
   messageSentToChat(userId: ID!): ChatMessage
-  onPluginUpdate: Plugin
 }
 
 scalar Time
@@ -2211,15 +2074,6 @@ enum Gender {
   OTHER
 }
 
-enum UserMaritalStatus {
-  divorced
-  engaged
-  married
-  seperated
-  single
-  widowed
-}
-
 input MutationUpdateUserInput {
   addressLine1: String
   addressLine2: String
@@ -2299,7 +2153,6 @@ type User {
   membershipRequests: [MembershipRequest]
   organizationsBlockedBy: [Organization]
   phone: UserPhone
-  pluginCreationAllowed: Boolean!
   registeredEvents: [Event]
   eventsAttended: [Event]
   tagsAssignedWith(
@@ -2350,6 +2203,24 @@ type UserPg {
 
 input QueryUserInput {
   id: String!
+}
+
+input createUserInput {
+  name: String!
+  emailAddress: EmailAddress!
+  password: String!
+  role: UserRole!
+  isEmailAddressVerified: Boolean!
+}
+
+enum UserRole {
+  administrator
+  regular
+}
+
+input deleteOrganizationMembershipInput {
+  organizationId: String!
+  memberID: String!
 }
 
 enum Iso3166Alpha2CountryCode {
@@ -2866,12 +2737,6 @@ input FundWhereInput {
 input UserAndOrganizationInput {
   organizationId: ID!
   userId: ID!
-}
-
-type UserPhone {
-  home: PhoneNumber
-  mobile: PhoneNumber
-  work: PhoneNumber
 }
 
 type UserConnection {

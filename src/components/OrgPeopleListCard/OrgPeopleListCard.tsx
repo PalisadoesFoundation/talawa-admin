@@ -4,10 +4,10 @@ import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { useParams, Navigate } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { Close } from '@mui/icons-material';
 import type { InterfaceOrgPeopleListCardProps } from 'types/Organization/interface';
 
@@ -32,7 +32,7 @@ function orgPeopleListCard(
   }
 
   // Mutation to remove a member from the organization
-  const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
+  const [remove] = useMutation(REMOVE_MEMBER_MUTATION_PG);
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPeopleListCard',
@@ -44,8 +44,8 @@ function orgPeopleListCard(
     try {
       const { data } = await remove({
         variables: {
-          userid: props.id,
-          orgid: currentUrl,
+          memberId: props.id,
+          organizationId: currentUrl,
         },
       });
       if (data) {
@@ -62,7 +62,7 @@ function orgPeopleListCard(
       {/* Modal to confirm member removal */}
       <Modal show={true} onHide={props.toggleRemoveModal}>
         <Modal.Header>
-          <h5>{t('removeMember')}</h5>
+          <h5 data-testid="removeMemberModal">{t('removeMember')}</h5>
           {/* Button to close the modal */}
           <Button
             variant="danger"
@@ -79,6 +79,7 @@ function orgPeopleListCard(
             variant="danger"
             onClick={props.toggleRemoveModal}
             className={styles.closeButton}
+            data-testid="closeRemoveId"
           >
             {tCommon('no')}
           </Button>

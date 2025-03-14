@@ -173,20 +173,20 @@ describe('Testing Actions Screen', () => {
 
   it('Search by Assignee name', async () => {
     renderActions(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expectVitestToBeInTheDocument(searchInput);
 
-      const searchToggle = await screen.findByTestId('searchByToggle');
-      expectVitestToBeInTheDocument(searchToggle);
-      await userEvent.click(searchToggle);
+    const searchInput = await screen.findByTestId('searchBy');
+    expectVitestToBeInTheDocument(searchInput);
 
-      const searchByAssignee = await screen.findByTestId('assignee');
-      expectVitestToBeInTheDocument(searchByAssignee);
-      await userEvent.click(searchByAssignee);
+    const searchToggle = await screen.findByTestId('searchByToggle');
+    expectVitestToBeInTheDocument(searchToggle);
+    await userEvent.click(searchToggle);
 
-      await userEvent.type(searchInput, '1');
-    });
+    const searchByAssignee = await screen.findByTestId('assignee');
+    expectVitestToBeInTheDocument(searchByAssignee);
+    await userEvent.click(searchByAssignee);
+
+    await userEvent.type(searchInput, '1');
+
     await debounceWait();
     fireEvent.click(screen.getByTestId('searchBtn'));
 
@@ -198,20 +198,20 @@ describe('Testing Actions Screen', () => {
 
   it('Search by Category name', async () => {
     renderActions(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expectVitestToBeInTheDocument(searchInput);
 
-      const searchToggle = await screen.findByTestId('searchByToggle');
-      expectVitestToBeInTheDocument(searchToggle);
-      await userEvent.click(searchToggle);
+    const searchInput = await screen.findByTestId('searchBy');
+    expectVitestToBeInTheDocument(searchInput);
 
-      const searchByCategory = await screen.findByTestId('category');
-      expectVitestToBeInTheDocument(searchByCategory);
-      await userEvent.click(searchByCategory);
+    const searchToggle = await screen.findByTestId('searchByToggle');
+    expectVitestToBeInTheDocument(searchToggle);
+    await userEvent.click(searchToggle);
 
-      await userEvent.type(searchInput, '1');
-    });
+    const searchByCategory = await screen.findByTestId('category');
+    expectVitestToBeInTheDocument(searchByCategory);
+    await userEvent.click(searchByCategory);
+
+    await userEvent.type(searchInput, '1');
+
     await debounceWait();
 
     await waitFor(

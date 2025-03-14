@@ -5,7 +5,7 @@ import type {
   InterfaceVolunteerGroupInfo,
   InterfaceVolunteerMembership,
 } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -304,7 +304,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             {/* Button to submit the pledge form */}
             <Button
               type="submit"
-              className={styles.greenregbtn}
+              className={styles.regBtn}
               data-testid="submitBtn"
             >
               {t('updateGroup')}

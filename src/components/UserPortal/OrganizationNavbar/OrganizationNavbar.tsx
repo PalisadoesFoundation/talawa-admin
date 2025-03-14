@@ -8,24 +8,14 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useSubscription } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 interface InterfaceNavbarProps {
   currentPage: string | null;
 }
-
-type Plugin = {
-  pluginName: string;
-
-  alias: string;
-  link: string;
-  translated: string;
-  view: boolean;
-};
 
 /**
  * Displays the organization navbar with navigation options, user settings, and language selection.
@@ -85,68 +75,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const homeLink = `/user/organization/${organizationId}`;
 
-  let plugins: Plugin[] = [
-    {
-      pluginName: 'People',
-      alias: 'people',
-      link: `/user/people/${organizationId}`,
-      translated: t('people'),
-      view: true,
-    },
-    {
-      pluginName: 'Events',
-      alias: 'events',
-      link: `/user/events/${organizationId}`,
-      translated: t('events'),
-      view: true,
-    },
-    {
-      pluginName: 'Donation',
-      alias: 'donate',
-      link: `/user/donate/${organizationId}`,
-      translated: t('donate'),
-      view: true,
-    },
-    // {
-    //   pluginName: 'Chats',
-    //   alias: 'chat',
-    //   link: `/user/chat/id=${organizationId}`,
-    //   translated: t('chat'),
-    //   view: true,
-    // },
-  ];
-
-  if (getItem('talawaPlugins')) {
-    const talawaPlugins: string = getItem('talawaPlugins') || '{}';
-    plugins = JSON.parse(talawaPlugins);
-  }
-
-  const { data: updatedPluginData } = useSubscription(PLUGIN_SUBSCRIPTION);
-
-  function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
-    return pluginsArray.findIndex((plugin) => plugin.pluginName === pluginName);
-  }
-
-  if (updatedPluginData != undefined) {
-    const pluginName = updatedPluginData.onPluginUpdate.pluginName;
-    const uninstalledOrgs = updatedPluginData.onPluginUpdate.uninstalledOrgs;
-    const pluginIndexToRemove = getPluginIndex(pluginName, plugins);
-    if (uninstalledOrgs.includes(organizationId)) {
-      if (pluginIndexToRemove != -1) {
-        plugins[pluginIndexToRemove].view = false;
-        setItem('talawaPlugins', JSON.stringify(plugins));
-        console.log(`Plugin ${pluginName} has been removed.`);
-      } else {
-        console.log(`Plugin ${pluginName} is not present.`);
-      }
-    } else {
-      if (pluginIndexToRemove != -1) {
-        plugins[pluginIndexToRemove].view = true;
-        setItem('talawaPlugins', JSON.stringify(plugins));
-      }
-    }
-  }
-
   return (
     <Navbar expand={'md'} variant="dark" className={`${styles.colorPrimary}`}>
       <Container fluid>
@@ -176,18 +104,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
               >
                 {t('home')}
               </Nav.Link>
-              {plugins.map(
-                (plugin, idx) =>
-                  plugin.view && (
-                    <Nav.Link
-                      active={props.currentPage == plugin.alias}
-                      onClick={(): void => navigate(plugin.link)}
-                      key={idx}
-                    >
-                      {plugin.translated}
-                    </Nav.Link>
-                  ),
-              )}
             </Nav>
             <Navbar.Collapse className="justify-content-end">
               <Dropdown data-testid="languageDropdown" drop={dropDirection}>
@@ -236,7 +152,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.ItemText>
-                    <b>{userName}</b>
+                    <b>{userName as string}</b>
                   </Dropdown.ItemText>
                   <Dropdown.Item>
                     <Link to="/user/settings" className={styles.link}>

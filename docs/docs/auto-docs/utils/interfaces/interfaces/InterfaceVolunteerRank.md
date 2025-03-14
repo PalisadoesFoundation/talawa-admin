@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerRank
 
-Defined in: [src/utils/interfaces.ts:1370](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1370)
+Defined in: [src/utils/interfaces.ts:1358](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1358)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1370](https://github.com/PalisadoesFoundati
 
 > **hoursVolunteered**: `number`
 
-Defined in: [src/utils/interfaces.ts:1372](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1372)
+Defined in: [src/utils/interfaces.ts:1360](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1360)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1372](https://github.com/PalisadoesFoundati
 
 > **rank**: `number`
 
-Defined in: [src/utils/interfaces.ts:1371](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1371)
+Defined in: [src/utils/interfaces.ts:1359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1359)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1371](https://github.com/PalisadoesFoundati
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:1373](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1373)
+Defined in: [src/utils/interfaces.ts:1361](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1361)
 
 #### \_id
 

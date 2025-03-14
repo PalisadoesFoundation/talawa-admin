@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryVenueListItem
 
-Defined in: [src/utils/interfaces.ts:1124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1124)
+Defined in: [src/utils/interfaces.ts:1110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1110)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1124](https://github.com/PalisadoesFoundati
 
 > `optional` **attachments**: [`InterfaceAttachment`](InterfaceAttachment.md)[]
 
-Defined in: [src/utils/interfaces.ts:1128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1128)
+Defined in: [src/utils/interfaces.ts:1114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1114)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1128](https://github.com/PalisadoesFoundati
 
 > **capacity**: `number`
 
-Defined in: [src/utils/interfaces.ts:1129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1129)
+Defined in: [src/utils/interfaces.ts:1115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1115)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1129](https://github.com/PalisadoesFoundati
 
 > `optional` **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1127)
+Defined in: [src/utils/interfaces.ts:1113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1113)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1127](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1125)
+Defined in: [src/utils/interfaces.ts:1111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1111)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/utils/interfaces.ts:1125](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1126)
+Defined in: [src/utils/interfaces.ts:1112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1112)

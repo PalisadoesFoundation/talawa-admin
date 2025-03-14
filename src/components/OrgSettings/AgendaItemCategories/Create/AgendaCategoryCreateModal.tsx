@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
-import styles from 'style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 /**
  * InterfaceFormStateType is an object containing the form state
  */
@@ -91,7 +91,7 @@ const AgendaCategoryCreateModal: React.FC<
           </Form.Group>
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.regBtn}
             value="createAgendaCategory"
             data-testid="createAgendaCategoryFormSubmitBtn"
           >

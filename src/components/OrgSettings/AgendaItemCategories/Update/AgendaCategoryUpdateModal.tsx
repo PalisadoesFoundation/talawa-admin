@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 
-import styles from 'style/app.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 
 /**
  * InterfaceFormStateType is an object containing the form state
@@ -90,7 +90,7 @@ const AgendaCategoryUpdateModal: React.FC<
           </Form.Group>
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.regBtn}
             data-testid="editAgendaCategoryBtn"
           >
             {t('update')}
