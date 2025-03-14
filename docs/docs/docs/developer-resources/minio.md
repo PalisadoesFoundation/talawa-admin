@@ -43,6 +43,8 @@ File viewing is handled in this way:
 1. **File Retrieval and Display:** The client uses the presigned URL to fetch the file directly from MinIO.
 1. **File Display:** The client embeds the file (e.g., an image) within the application's user interface for display.
 
+NOTE: Contributors need to set `NODE_ENV=DEVELOPMENT` in the `.env` file of Talawa API to configure `localhost` as the endpoint for MiniO.
+
 ## Helper-Functions
 These are related helper functions.
 
