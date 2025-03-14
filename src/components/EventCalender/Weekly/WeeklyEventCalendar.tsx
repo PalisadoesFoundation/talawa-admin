@@ -15,6 +15,20 @@ import type {
 import { Role } from 'types/Event/interface';
 import { type User } from 'types/User/type';
 
+/**
+ * WeeklyEventCalendar Component
+ *
+ * Displays a weekly calendar view with events and holidays.
+ * Users can navigate between weeks, view event details, and toggle event lists.
+ *
+ * @param {InterfaceCalendarProps} props - The props for the component.
+ * @param {InterfaceEvent[]} props.eventData - The list of events to display.
+ * @param {() => void} props.refetchEvents - Function to refetch events.
+ * @param {InterfaceIOrgList} [props.orgData] - Organization data for filtering events.
+ * @param {string} [props.userRole] - The role of the current user.
+ * @param {string} [props.userId] - The ID of the current user.
+ * @returns {JSX.Element} - The rendered weekly calendar view.
+ */
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
@@ -38,6 +52,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  /**
+   * Filters events based on user role and organization data.
+   *
+   * @param {InterfaceEvent[]} eventData - The list of events to filter.
+   * @param {InterfaceIOrgList} [orgData] - Organization data for filtering.
+   * @param {string} [userRole] - The role of the current user.
+   * @param {string} [userId] - The ID of the current user.
+   * @returns {InterfaceEvent[]} - The filtered list of events.
+   */
   const filterData = (
     eventData: InterfaceEvent[],
     orgData?: InterfaceIOrgList,
