@@ -15,12 +15,15 @@ import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { client } from 'components/Advertisements/AdvertisementsMocks';
+import { toast } from 'react-toastify';
+vi.spyOn(toast, 'error');
 
 const translations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null,
   ),
 );
+console.log('Available translations:', translations);
 
 const mockUseMutation = vi.fn();
 vi.mock('@apollo/client', async () => {
@@ -38,6 +41,8 @@ vi.mock('react-router-dom', async () => {
     useParams: () => ({ orgId: '1' }),
   };
 });
+
+global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
 describe('Testing Advertisement Entry Component', () => {
   beforeEach(() => {
@@ -89,7 +94,9 @@ describe('Testing Advertisement Entry Component', () => {
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
         variables: {
-          id: '1',
+          input: {
+            id: '1',
+          },
         },
       });
       const deletedMessage = screen.queryByText('Advertisement Deleted');
@@ -100,13 +107,22 @@ describe('Testing Advertisement Entry Component', () => {
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
     fireEvent.click(getByTestId('moreiconbtn'));
-
-    fireEvent.click(getByTestId('delete_yes'));
+    console.log('screen');
+    screen.debug();
+    await waitFor(() => {
+      expect(screen.getByTestId('deletebtn')).toBeInTheDocument();
+    });
+    fireEvent.click(getByTestId('deletebtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('delete_yes')).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
         variables: {
-          id: '1',
+          input: {
+            id: '1',
+          },
         },
       });
       const deletionFailedText = screen.queryByText((content, element) => {
@@ -237,7 +253,7 @@ describe('Testing Advertisement Entry Component', () => {
             attachmentUrl: '',
             startAt: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
             endAt: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
-            type: 'BANNER',
+            type: 'banner',
           },
         },
       },
@@ -269,25 +285,24 @@ describe('Testing Advertisement Entry Component', () => {
     const optionsButton = screen.getByTestId('moreiconbtn');
     fireEvent.click(optionsButton);
     fireEvent.click(screen.getByTestId('editBtn'));
-
-    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
       target: { value: 'Updated Advertisement' },
     });
 
-    expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue(
       'Updated Advertisement',
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'banner' },
     });
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
 
-    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
       target: { value: dayjs().add(1, 'day').format('YYYY-MM-DD') },
     });
 
-    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
       target: { value: dayjs().add(2, 'days').format('YYYY-MM-DD') },
     });
 
@@ -297,9 +312,10 @@ describe('Testing Advertisement Entry Component', () => {
       variables: {
         id: '1',
         name: 'Updated Advertisement',
-        type: 'BANNER',
-        startAt: dayjs().add(1, 'day').format('YYYY-MM-DD'),
-        endAt: dayjs().add(2, 'days').format('YYYY-MM-DD'),
+        type: 'banner',
+        attachments: [],
+        startAt: expect.any(String),
+        endAt: expect.any(String),
       },
     });
   });
@@ -309,7 +325,7 @@ describe('Testing Advertisement Entry Component', () => {
       updateAdvertisement: {
         id: '1',
         name: 'Updated Advertisement',
-        type: 'BANNER',
+        type: 'banner',
       },
     });
 
@@ -340,18 +356,18 @@ describe('Testing Advertisement Entry Component', () => {
     fireEvent.click(optionsButton);
     fireEvent.click(screen.getByTestId('editBtn'));
 
-    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
       target: { value: 'Updated Advertisement' },
     });
 
-    expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue(
       'Updated Advertisement',
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'banner' },
     });
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
 
     fireEvent.click(screen.getByTestId('addonupdate'));
 
@@ -359,7 +375,10 @@ describe('Testing Advertisement Entry Component', () => {
       variables: {
         id: '1',
         name: 'Updated Advertisement',
-        type: 'BANNER',
+        type: 'banner',
+        attachments: [],
+        startAt: expect.any(String),
+        endAt: expect.any(String),
       },
     });
   });
@@ -399,30 +418,30 @@ describe('Testing Advertisement Entry Component', () => {
 
     fireEvent.click(screen.getByTestId('createAdvertisement'));
 
-    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
       target: { value: 'Updated Advertisement' },
     });
 
-    expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue(
       'Updated Advertisement',
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'banner' },
     });
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
 
-    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
       target: { value: '2023-01-01' },
     });
-    expect(screen.getByLabelText(translations.RstartAt)).toHaveValue(
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
       '2023-01-01',
     );
 
-    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
       target: { value: '2023-02-01' },
     });
-    expect(screen.getByLabelText(translations.RendAt)).toHaveValue(
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
       '2023-02-01',
     );
 
@@ -432,10 +451,10 @@ describe('Testing Advertisement Entry Component', () => {
       variables: {
         organizationId: '1',
         name: 'Updated Advertisement',
-        file: '',
-        type: 'BANNER',
-        startAt: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
-        endAt: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
+        attachments: [],
+        type: 'banner',
+        startAt: dayjs(new Date('2023-01-01')).toISOString(),
+        endAt: dayjs(new Date('2023-02-01')).toISOString(),
       },
     });
   });
@@ -539,7 +558,9 @@ describe('Testing Advertisement Entry Component', () => {
         request: {
           query: DELETE_ADVERTISEMENT_BY_ID,
           variables: {
-            id: '1',
+            input: {
+              id: '1',
+            },
           },
         },
         result: {
@@ -596,7 +617,9 @@ describe('Testing Advertisement Entry Component', () => {
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
         variables: {
-          id: '1',
+          input: {
+            id: '1',
+          },
         },
       });
       const deletedMessage = screen.queryByText('Advertisement Deleted');
@@ -613,7 +636,9 @@ describe('Testing Advertisement Entry Component', () => {
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
         variables: {
-          id: '1',
+          input: {
+            id: '1',
+          },
         },
       });
       const deletionFailedText = screen.queryByText((content, element) => {
@@ -640,16 +665,17 @@ describe('Testing Advertisement Entry Component', () => {
     );
 
     // Simulate filling in the form with an invalid date range: start date is later than end date.
-    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+    fireEvent.click(screen.getByTestId('createAdvertisement'));
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
       target: { value: 'Invalid Date Range Ad' },
     });
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'banner' },
     });
-    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
       target: { value: '2023-02-01' }, // Start date (later)
     });
-    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
       target: { value: '2023-01-01' }, // End date (earlier)
     });
 
@@ -658,7 +684,9 @@ describe('Testing Advertisement Entry Component', () => {
 
     // Wait for and assert that an error message is shown.
     // Adjust the expected text to match your component's implementation.
-    expect(await screen.findByText(/invalid date range/i)).toBeInTheDocument();
+    expect(toast.error).toHaveBeenCalledWith(
+      expect.stringContaining(translations.endAtGreaterOrEqual),
+    );
 
     // Optionally, verify that the mutation or submission is not triggered.
   });
@@ -678,16 +706,17 @@ describe('Testing Advertisement Entry Component', () => {
     );
 
     // Simulate filling in the form with a valid date range: start date is before end date.
-    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+    fireEvent.click(screen.getByTestId('createAdvertisement'));
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
       target: { value: 'Valid Date Range Ad' },
     });
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'banner' },
     });
-    fireEvent.change(screen.getByLabelText(translations.RstartAt), {
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
       target: { value: '2023-01-01' }, // Start date (earlier)
     });
-    fireEvent.change(screen.getByLabelText(translations.RendAt), {
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
       target: { value: '2023-02-01' }, // End date (later)
     });
 

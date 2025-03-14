@@ -37,6 +37,8 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+
 const today = new Date();
 const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);

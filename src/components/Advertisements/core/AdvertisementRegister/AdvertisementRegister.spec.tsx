@@ -26,6 +26,8 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -581,7 +583,7 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       // Verify success toast was shown
       expect(toast.success).toHaveBeenCalledWith(
-        'Advertisement created successfully.',
+        'Advertisement updated successfully.',
       );
     });
   });

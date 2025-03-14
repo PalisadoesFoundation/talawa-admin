@@ -358,10 +358,18 @@ function advertisementRegister({
               )}
               {formState.attachments.map((file, index) => (
                 <div key={index}>
-                  {file.type.startsWith('video/') ? (
-                    <video controls src={URL.createObjectURL(file)} />
+                  {file?.type?.startsWith?.('video/') ? (
+                    <video
+                      data-testid="mediaPreview"
+                      controls
+                      src={URL.createObjectURL(file)}
+                    />
                   ) : (
-                    <img src={URL.createObjectURL(file)} alt="Preview" />
+                    <img
+                      data-testid="mediaPreview"
+                      src={URL.createObjectURL(file)}
+                      alt="Preview"
+                    />
                   )}
                   <button
                     className={styles.closeButtonAdvertisementRegister}
