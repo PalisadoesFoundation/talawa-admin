@@ -19,6 +19,39 @@ export interface InterfaceVenueModalProps {
   edit: boolean;
 }
 
+/**
+ * A modal component for creating or updating venue information.
+ *
+ * This component displays a modal window where users can enter details for a venue, such as name, description, capacity, and an image.
+ * It also handles submitting the form data to create or update a venue based on whether the edit prop is true or false.
+ *
+ * @param show - A flag indicating if the modal should be visible.
+ * @param onHide - A function to call when the modal should be closed.
+ * @param refetchVenues - A function to refetch the list of venues after a successful operation.
+ * @param orgId - The ID of the organization to which the venue belongs.
+ * @param venueData - Optional venue data to prefill the form for editing. If null, the form will be empty.
+ * @param edit - A flag indicating if the modal is in edit mode. If true, the component will update an existing venue; if false, it will create a new one.
+ *
+ * @returns The rendered modal component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
 const VenueModal = ({
   show,
   onHide,
@@ -47,6 +80,16 @@ const VenueModal = ({
   const [mutate, { loading }] = useMutation(
     edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION,
   );
+
+  /**
+   * Handles form submission to create or update a venue.
+   *
+   * Validates form inputs and sends a request to the server to create or update the venue.
+   * If the operation is successful, it shows a success message, refetches venues, and resets the form.
+   *
+   * @returns A promise that resolves when the submission is complete.
+   */
+  // Update the handleSubmit function in VenueModal.tsx
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -117,6 +160,11 @@ const VenueModal = ({
     setVenueFile(file);
     setVenueImagePreview(URL.createObjectURL(file));
   };
+  /**
+   * Clears the selected image and resets the image preview.
+   *
+   * This function also clears the file input field.
+   */
 
   const clearImageInput = (): void => {
     setVenueFile(null);
