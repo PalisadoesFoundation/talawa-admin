@@ -18,10 +18,10 @@ File uploads are handled in this way:
 
 1. **Client Upload:** The client selects a file for upload and initiates the process.
 1. **Deduplication Check:** The backend calculates a unique hash (e.g., SHA-256) of the file. This hash is then used to query the database.
-1. **Existing File Check:** If the hash exists in the database, it indicates that the file has already been uploaded. The system retrieves the existing file metadata (including the MinIO object name and URL) and returns it to the client, effectively preventing redundant uploads.
+1. **Existing File Check:** If the hash exists in the database, it indicates that the file has already been uploaded. The system retrieves the existing file metadata (including the MinIO object name) and returns it to the client, effectively preventing redundant uploads.
 1. **Presigned URL Generation (Upload):** If the hash is not found, the backend generates a presigned URL for uploading the file to MinIO. This URL provides temporary, limited access to MinIO for uploading the specific file.
 1. **File Upload to MinIO:** The client uses the presigned URL to upload the file directly to MinIO.
-1. **Metadata Storage:** Upon successful upload, the backend stores the file metadata in the database. This includes the file hash, unique file name, MinIO object URL, and other relevant information.
+1. **Metadata Storage:** Upon successful upload, the backend stores the file metadata in the database. This includes the file hash, unique file name, MinIO objectName, and other relevant information.
 
 ## File Updates
 
@@ -42,6 +42,8 @@ File viewing is handled in this way:
 1. **Presigned URL Generation:** The backend generates a presigned URL for retrieving the file directly from MinIO using the `GET` method . This URL allows the client to access the file for rendering within the application .
 1. **File Retrieval and Display:** The client uses the presigned URL to fetch the file directly from MinIO.
 1. **File Display:** The client embeds the file (e.g., an image) within the application's user interface for display.
+
+NOTE: Contributors need to set `NODE_ENV=DEVELOPMENT` in the `.env` file of Talawa API to configure `localhost` as the endpoint for MiniO.
 
 ## Helper-Functions
 These are related helper functions.
