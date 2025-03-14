@@ -279,7 +279,9 @@ describe('Testing Users screen', () => {
       const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
 
       const uniqueUsers = Array.from(
-        new Map(mergedUsers.map((user: any) => [user.user._id, user])).values(),
+        new Map(
+          mergedUsers.map((user: UserData) => [user.user._id, user]),
+        ).values(),
       );
 
       return { users: uniqueUsers };
