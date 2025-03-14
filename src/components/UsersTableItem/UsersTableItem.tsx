@@ -45,7 +45,7 @@ type Props = {
   resetAndRefetch: () => void;
 };
 export function handleModalHide(
-  removeUserProps: { setShowOnCancel: string },
+  removeUserProps: { setShowOnCancel: 'JOINED' | 'BLOCKED' | '' },
   setShowRemoveUserModal: (value: boolean) => void,
   setShowJoinedOrganizations: (value: boolean) => void,
   setShowBlockedOrganizations: (value: boolean) => void,

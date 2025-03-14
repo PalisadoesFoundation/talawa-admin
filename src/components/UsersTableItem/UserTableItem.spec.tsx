@@ -1099,7 +1099,7 @@ describe('Testing User Table Item', () => {
     const setShowJoinedOrganizations = vi.fn();
     const setShowBlockedOrganizations = vi.fn();
 
-    const props = { setShowOnCancel: 'BLOCKED' };
+    const props = { setShowOnCancel: 'BLOCKED' as const };
 
     handleModalHide(
       props,
@@ -1111,6 +1111,24 @@ describe('Testing User Table Item', () => {
     expect(setShowRemoveUserModal).toHaveBeenCalledWith(false);
     expect(setShowJoinedOrganizations).not.toHaveBeenCalled();
     expect(setShowBlockedOrganizations).toHaveBeenCalledWith(true);
+  });
+  test('handleModalHide should handle JOINED state correctly', () => {
+    const setShowRemoveUserModal = vi.fn();
+    const setShowJoinedOrganizations = vi.fn();
+    const setShowBlockedOrganizations = vi.fn();
+
+    const props = { setShowOnCancel: 'JOINED' as const };
+
+    handleModalHide(
+      props,
+      setShowRemoveUserModal,
+      setShowJoinedOrganizations,
+      setShowBlockedOrganizations,
+    );
+
+    expect(setShowRemoveUserModal).toHaveBeenCalledWith(false);
+    expect(setShowJoinedOrganizations).toHaveBeenCalledWith(true);
+    expect(setShowBlockedOrganizations).not.toHaveBeenCalled();
   });
   test('handles errors in removeUser mutation', async () => {
     const props: {

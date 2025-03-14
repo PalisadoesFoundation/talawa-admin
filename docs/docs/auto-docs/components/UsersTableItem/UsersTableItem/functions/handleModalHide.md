@@ -14,7 +14,7 @@ Defined in: [src/components/UsersTableItem/UsersTableItem.tsx:47](https://github
 
 #### setShowOnCancel
 
-`string`
+`""` \| `"JOINED"` \| `"BLOCKED"`
 
 ### setShowRemoveUserModal
 
