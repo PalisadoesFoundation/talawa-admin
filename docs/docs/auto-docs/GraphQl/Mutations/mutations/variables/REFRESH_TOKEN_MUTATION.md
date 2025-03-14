@@ -6,4 +6,4 @@
 
 > `const` **REFRESH\_TOKEN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L193)
+Defined in: [src/GraphQl/Mutations/mutations.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L205)

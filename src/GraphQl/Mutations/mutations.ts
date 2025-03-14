@@ -171,6 +171,33 @@ export const SIGNUP_MUTATION = gql`
   }
 `;
 
+//to create user by admin
+export const CREATE_MEMBER_PG = gql`
+  mutation CreateUser(
+    $name: String!
+    $email: EmailAddress!
+    $password: String!
+    $role: UserRole!
+    $isEmailAddressVerified: Boolean!
+  ) {
+    createUser(
+      input: {
+        name: $name
+        emailAddress: $email
+        password: $password
+        role: $role
+        isEmailAddressVerified: $isEmailAddressVerified
+      }
+    ) {
+      authenticationToken
+      user {
+        id
+        name
+      }
+    }
+  }
+`;
+
 // to login in the talawa admin
 
 // to get the refresh token
@@ -370,6 +397,17 @@ export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
     removeMember(data: { organizationId: $orgid, userId: $userid }) {
       _id
+    }
+  }
+`;
+
+// to Remove member from an organization postgres
+export const REMOVE_MEMBER_MUTATION_PG = gql`
+  mutation RemoveMember($organizationId: ID!, $memberId: ID!) {
+    deleteOrganizationMembership(
+      input: { organizationId: $organizationId, memberId: $memberId }
+    ) {
+      id
     }
   }
 `;

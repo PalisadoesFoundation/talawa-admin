@@ -6,4 +6,4 @@
 
 > `const` **SIGNUP\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L178)
+Defined in: [src/GraphQl/Mutations/mutations.ts:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L163)

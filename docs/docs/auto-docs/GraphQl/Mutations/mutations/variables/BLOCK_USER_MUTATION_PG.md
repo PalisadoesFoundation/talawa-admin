@@ -6,4 +6,4 @@
 
 > `const` **BLOCK\_USER\_MUTATION\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L21)
+Defined in: [src/GraphQl/Mutations/mutations.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L6)

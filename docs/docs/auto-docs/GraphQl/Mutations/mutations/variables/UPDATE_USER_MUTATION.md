@@ -6,4 +6,4 @@
 
 > `const` **UPDATE\_USER\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L123)
+Defined in: [src/GraphQl/Mutations/mutations.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L108)

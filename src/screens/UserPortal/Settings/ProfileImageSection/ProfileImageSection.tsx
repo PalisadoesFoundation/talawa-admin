@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Col } from 'react-bootstrap';
 import Avatar from 'components/Avatar/Avatar';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
-import styles from '../Settings.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 
 /**
  * Interface for ProfileImageSection component props

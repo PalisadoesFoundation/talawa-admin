@@ -715,6 +715,12 @@
   --inputField-text-color: #555555;
   --inputField-placeholder-color: #707070;
   --inputField-bg-focus: #f1f3f6;
+
+  --card-background-color: #1778f2;
+  --card-header-background-color: #1778f2;
+  --reset-border-color: #1778f2;
+  --reset-backgroundcolor-color: #ffffff;
+  --reset-btn-colour: #1778f2;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1149,7 +1155,7 @@ form label,
 }
 
 .customDropdown {
-  width: 100%;
+  width: auto;
 }
 
 .dropdown:is(
@@ -1474,6 +1480,9 @@ form label,
 
 /* -- AdvertisementEntry.tsx -- */
 
+.cardOtherSettings {
+  height: 350px;
+}
 .addCard {
   width: 28rem;
 }
@@ -2133,7 +2142,40 @@ form label,
 /* -- Avatar.tsx -- */
 
 /* -- ChangeLanguageDropDown.tsx -- */
+.langBtn {
+  border-width: 2px;
+  border-color: var(--reset-border-color);
+  color: var(--reset-btn-colour) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: var(--reset-backgroundcolor-color);
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
 
+.langBtn:hover,
+.langBtn:focus {
+  border-width: 2px;
+  border-color: var(--reset-border-color);
+  color: var(--reset-btn-colour) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: var(--reset-backgroundcolor-color);
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+.langBtn:active {
+  background-color: var(--reset-backgroundcolor-color) !important;
+  border-color: var(--reset-border-color) !important;
+}
 /* -- TableRow.tsx -- */
 
 /* -- CheckInWrapper.tsx -- */
@@ -4175,6 +4217,337 @@ form label,
   width: auto;
   resize: none;
   height: 100px;
+}
+
+/* Userprofile.tsx */
+
+.cardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader .cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.cardBody {
+  padding: 1.25rem 1rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardLabel {
+  font-weight: bold;
+  padding-bottom: 1px;
+  font-size: 14px;
+  color: #707070;
+  margin-bottom: 10px;
+}
+
+.cardControl {
+  margin-bottom: 20px;
+}
+
+.imgContianer {
+  margin: 0 2rem 0 0;
+}
+
+.imgContianer img {
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-left: 10%;
+}
+
+@media screen and (max-width: 1280px) and (min-width: 992px) {
+  .imgContianer {
+    margin: 1rem auto;
+  }
+  .profileContainer {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .profileContainer {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .imgContianer {
+    margin: 1rem auto;
+  }
+  .profileContainer {
+    flex-direction: column;
+  }
+}
+
+/* Settings.tsx */
+
+.resetChangesBtn {
+  border-width: 2px;
+  border-color: var(--reset-border-color);
+  color: var(--reset-btn-colour) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: var(--reset-backgroundcolor-color);
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.resetChangesBtn:hover,
+.resetChangesBtn:focus,
+.resetChangesBtn:active {
+  border-width: 2px;
+  border-color: var(--reset-border-color);
+  color: var(--reset-btn-colour) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: var(--reset-backgroundcolor-color);
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.syncIconStyle,
+.syncIconStyle:focus {
+  transform: rotate(135deg) scale(1.2);
+  width: 10px;
+  height: 10px;
+  stroke: var(--cardBackground-color);
+  stroke-width: 1;
+  fill: var(--cardBackground-color);
+}
+
+.saveChangesBtn {
+  color: white;
+  border: 0px;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  background-color: var(--card-background-color) !important;
+}
+
+.saveChangesBtn:hover {
+  background-color: var(--card-background-color) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.mainContainer {
+  flex-grow: 3;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.containerHeight {
+  padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
+  height: 100vh;
+}
+
+.expand {
+  padding-left: 4rem;
+  animation: moveLeft 0.9s ease-in-out;
+}
+
+.contract {
+  padding-left: calc(300px + 2rem + 1.5rem);
+  animation: moveRight 0.5s ease-in-out;
+}
+
+.cardHeader .cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.scrollableCardBody {
+  max-height: min(220px, 50vh);
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.cardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.otherSettingsCardBody {
+  padding: 1.25rem 1rem 1.5rem 1rem;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.userCardBody {
+  display: flex;
+  flex-direction: column !important;
+  overflow-y: scroll;
+}
+
+.cardLabel {
+  font-weight: bold;
+  padding-bottom: 1px;
+  font-size: 14px;
+  color: #707070;
+  margin-bottom: 10px;
+}
+
+.cardControl {
+  margin-bottom: 20px;
+}
+
+.cardButton {
+  width: fit-content;
+}
+
+.imgContianer {
+  margin: 0 2rem 0 0;
+}
+
+.imgContianer img {
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+}
+
+.SettingsprofileDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.collapseSidebarButton {
+  position: fixed;
+  height: 40px;
+  bottom: 0;
+  z-index: 9999;
+  width: calc(300px + 2rem);
+  background-color: rgba(245, 245, 245, 0.7);
+  color: black;
+  border: none;
+  border-radius: 0px;
+}
+
+.collapseSidebarButton:hover,
+.opendrawer:hover {
+  opacity: 1;
+  color: black !important;
+}
+.opendrawer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 100vh;
+  z-index: 9999;
+  background-color: rgba(245, 245, 245);
+  border: none;
+  border-radius: 0px;
+  margin-right: 20px;
+  color: black;
+}
+
+.opendrawer:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--bs-primary);
+}
+.collapseSidebarButton:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--bs-primary);
+}
+
+@media (max-width: 1120px) {
+  .collapseSidebarButton {
+    width: calc(250px);
+  }
+}
+
+@media (max-height: 650px) {
+  .collapseSidebarButton {
+    width: 250px;
+    height: 20px;
+  }
+  .opendrawer {
+    width: 30px;
+  }
+}
+
+/* For tablets */
+@media (max-width: 820px) {
+  .containerHeight {
+    height: 100vh;
+    padding: 2rem;
+  }
+
+  .scrollableCardBody {
+    max-height: 40vh;
+  }
+
+  .contract,
+  .expand {
+    animation: none;
+  }
+
+  .opendrawer {
+    width: 25px;
+  }
+
+  .collapseSidebarButton {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+
+@media screen and (max-width: 1280px) and (min-width: 992px) {
+  .imgContianer {
+    margin: 1rem auto;
+  }
+  .profileContainer {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .profileContainer {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .imgContianer {
+    margin: 1rem auto;
+  }
+  .profileContainer {
+    flex-direction: column;
+  }
 }
 
 /* -- DeleteOrg.tsx -- */

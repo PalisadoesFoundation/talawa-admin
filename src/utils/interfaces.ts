@@ -454,7 +454,7 @@ export interface InterfaceOrgInfoTypePG {
 }
 
 export interface InterfaceQueryOrganizationsListObject {
-  _id: string;
+  id: string;
   image: string | null;
   creator: {
     firstName: string;
