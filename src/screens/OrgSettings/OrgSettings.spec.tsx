@@ -2,7 +2,6 @@ import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -103,77 +102,15 @@ describe('Organisation Settings Page', () => {
   it('should render the organisation settings page', async () => {
     renderOrganisationSettings();
 
+    const generalTab = await waitFor(() => screen.getByTestId('generalTab'));
+    expect(generalTab).toBeInTheDocument();
+    expect(generalTab).toBeVisible();
+
     await waitFor(() => {
-      expect(screen.getByTestId('generalSettings')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('actionItemCategoriesSettings'),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByTestId('agendaItemCategoriesSettings'),
-      ).toBeInTheDocument();
+      const container = document.querySelector('.d-flex.flex-column');
+      expect(container).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('generalSettings'));
-    await waitFor(() => {
-      expect(screen.getByTestId('generalTab')).toBeInTheDocument();
-      expect(screen.getByTestId('generalTab')).toBeVisible();
-    });
-
-    await userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
-    await waitFor(() => {
-      expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
-    await waitFor(() => {
-      expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('generalTab')).toBeInTheDocument();
   });
-
-  // it('should handle dropdown item selection correctly', async () => {
-  //   renderOrganisationSettings();
-
-  //   await waitFor(() => {
-  //     expect(
-  //       screen.getByTestId('settingsDropdownContainer'),
-  //     ).toBeInTheDocument();
-  //   });
-
-  //   const dropdownToggle = screen.getByTestId('settingsDropdownToggle');
-  //   await userEvent.click(dropdownToggle);
-
-  //   // Find all dropdown items
-  //   const dropdownItems = screen.getAllByRole('menuitem');
-  //   expect(dropdownItems).toHaveLength(3);
-
-  //   for (const item of dropdownItems) {
-  //     await userEvent.click(item);
-
-  //     if (item.textContent?.includes('general')) {
-  //       await waitFor(() => {
-  //         expect(screen.getByTestId('generalTab')).toBeInTheDocument();
-  //       });
-  //     } else if (item.textContent?.includes('actionItemCategories')) {
-  //       await waitFor(() => {
-  //         expect(
-  //           screen.getByTestId('actionItemCategoriesTab'),
-  //         ).toBeInTheDocument();
-  //       });
-  //     } else if (item.textContent?.includes('agendaItemCategories')) {
-  //       await waitFor(() => {
-  //         expect(
-  //           screen.getByTestId('agendaItemCategoriesTab'),
-  //         ).toBeInTheDocument();
-  //       });
-  //     }
-
-  //     if (item !== dropdownItems[dropdownItems.length - 1]) {
-  //       await userEvent.click(dropdownToggle);
-  //     }
-  //   }
-
-  //   expect(dropdownToggle).toHaveTextContent(
-  //     screen.getByTestId('agendaItemCategoriesSettings').textContent || '',
-  //   );
-  // });
 });

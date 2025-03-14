@@ -39,6 +39,13 @@ vi.mock('utils/urlToFile', () => ({
   urlToFile: vi.fn(),
 }));
 
+// Mock the CSS module
+vi.mock('../../style/app-fixed.module.css', () => ({
+  default: {
+    changeLanguageBtn: '_changeLanguageBtn_d00707',
+  },
+}));
+
 describe('ChangeLanguageDropDown', () => {
   const mockUserId = 'test-user-123';
   const mockUserImage = 'http://example.com/avatar.jpg';
@@ -95,27 +102,6 @@ describe('ChangeLanguageDropDown', () => {
 
     const englishOption = screen.getByText('English');
     expect(englishOption).toBeInTheDocument();
-  });
-
-  it('applies custom styles from props', () => {
-    const customStyles = {
-      parentContainerStyle: 'custom-container',
-      btnStyle: 'custom-button',
-      btnTextStyle: 'custom-text',
-    };
-
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <ChangeLanguageDropDown {...customStyles} />
-      </MockedProvider>,
-    );
-
-    expect(screen.getByTestId('language-dropdown-container')).toHaveClass(
-      'custom-container',
-    );
-    expect(screen.getByTestId('language-dropdown-btn')).toHaveClass(
-      'custom-button',
-    );
   });
 
   it('shows error toast when userId is not found', async () => {

@@ -49,7 +49,7 @@ const profileDropdown = (): JSX.Element => {
       : name;
 
   return (
-    <Dropdown as={ButtonGroup} variant="none">
+    <Dropdown as={ButtonGroup} variant="none" className={styles.customDropdown}>
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (

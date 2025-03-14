@@ -151,7 +151,7 @@
     "postalCode": "Code Postal",
     "sortingCode": "Code de tri",
     "state": "État/Province",
-    "userRegistrationRequired": "Inscription de l'utilisateur requise",
+    "isPublic": "est public",
     "visibleInSearch": "Visible dans la recherche",
     "enterName": "Entrez le nom",
     "sort": "Trier",
@@ -811,7 +811,7 @@
     "title": "Paramètres",
     "general": "Général",
     "actionItemCategories": "Catégories d'éléments d'action",
-    "updateOrganization": "Mettre à jour l'organisation",
+    "editOrganization": "Éditer l'organisation",
     "seeRequest": "Voir la demande",
     "noData": "Aucune donnée",
     "otherSettings": "Autres paramètres",
@@ -821,7 +821,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
-    "deleteSampleOrganization": "Supprimer un exemple d'organisation",
+    "delete": "supprimer",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "confirmDelete": "Confirmation de la suppression",
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
@@ -869,7 +869,7 @@
     "dependentLocality": "Localité dépendante",
     "sortingCode": "Code de tri",
     "state": "État/Province",
-    "userRegistrationRequired": "Inscription de l'utilisateur requise",
+    "isPublic": "est public",
     "isVisibleInSearch": "Visible dans la recherche",
     "enterNameOrganization": "Entrez le nom de l'organisation",
     "successfulUpdated": "Organisation mise à jour avec succès",
@@ -880,7 +880,8 @@
     "displayImage": "Image d'affichage",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler",
-    "talawaApiUnavailable": "API Talawa non disponible"
+    "talawaApiUnavailable": "API Talawa non disponible",
+    "enterOrganizationDescription": "Entrez la description de l'organisation"
   },
   "memberDetail": {
     "title": "Détails de l'utilisateur",
@@ -1143,7 +1144,16 @@
     "displayImage": "Image d'affichage",
     "address": "Adresse",
     "saveChanges": "Enregistrer les modifications",
-    "joined": "Rejoint"
+    "joined": "Rejoint",
+    "enterPhoneNo": "Entrez le numéro de téléphone",
+    "workPhoneNumber": "Numéro de téléphone professionnel",
+    "homePhoneNumber": "Numéro de téléphone fixe",
+    "addressLine1": "Adresse ligne 1",
+    "addressLine2": "Adresse ligne 2",
+    "postalCode": "Code postal",
+    "city": "Ville",
+    "description": "Description",
+    "enterDescription": "Entrez la description"
   },
   "donate": {
     "title": "Des dons",

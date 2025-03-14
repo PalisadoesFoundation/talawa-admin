@@ -230,31 +230,15 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
  */
 
 export const USER_CREATED_ORGANIZATIONS = gql`
-  query UserCreatedOrganizations($id: ID!) {
-    users(where: { id: $id }) {
-      appUserProfile {
-        createdOrganizations {
-          _id
-          name
-          description
-          image
-          members {
-            _id
-          }
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          admins {
-            _id
-          }
-        }
+  query UserCreatedOrganizations($id: String!, $filter: String) {
+    user(input: { id: $id }) {
+      id
+      createdOrganizations(filter: $filter) {
+        id
+        name
+        description
+        createdAt
+        avatarMimeType
       }
     }
   }

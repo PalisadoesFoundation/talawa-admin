@@ -78,7 +78,7 @@ const leftDrawer = ({
                 style={{
                   backgroundColor: isActive
                     ? 'var(--sidebar-option-bg)'
-                    : undefined,
+                    : 'transparent',
                   fontWeight: isActive ? 'bold' : 'normal',
                   color: isActive
                     ? 'var(--sidebar-option-text-active)'
@@ -138,7 +138,7 @@ const leftDrawer = ({
                 style={{
                   backgroundColor: isActive
                     ? 'var(--sidebar-option-bg)'
-                    : undefined,
+                    : 'transparent',
                   fontWeight: isActive ? 'bold' : 'normal',
                   color: isActive
                     ? 'var(--sidebar-option-text-active)'
@@ -161,7 +161,7 @@ const leftDrawer = ({
             )}
           </NavLink>
         </div>
-        <div className="mt-auto">
+        <div className="mt-auto mb-4">
           <ProfileDropdown />
         </div>
       </div>

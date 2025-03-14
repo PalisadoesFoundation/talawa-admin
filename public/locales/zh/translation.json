@@ -151,7 +151,7 @@
     "postalCode": "邮政编码",
     "sortingCode": "排序代码",
     "state": "州/省",
-    "userRegistrationRequired": "需要用户注册",
+    "isPublic": "是公开的",
     "visibleInSearch": "在搜索中可见",
     "enterName": "输入名字",
     "sort": "种类",
@@ -811,7 +811,7 @@
     "title": "设置",
     "general": "一般的",
     "actionItemCategories": "行动项目类别",
-    "updateOrganization": "更新组织",
+    "editOrganization": "編輯組織",
     "seeRequest": "查看请求",
     "noData": "没有数据",
     "otherSettings": "其他设置",
@@ -821,7 +821,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
-    "deleteSampleOrganization": "删除样本组织",
+    "delete": "删除",
     "deleteMsg": "您想删除该组织吗？",
     "confirmDelete": "确认删除",
     "longDelOrgMsg": "通过单击“删除组织”按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
@@ -869,7 +869,7 @@
     "dependentLocality": "附属地点",
     "sortingCode": "排序代码",
     "state": "州/省",
-    "userRegistrationRequired": "需要用户注册",
+    "isPublic": "是公开的",
     "isVisibleInSearch": "在搜索中可见",
     "enterNameOrganization": "输入组织名称",
     "successfulUpdated": "组织更新成功",
@@ -880,7 +880,8 @@
     "displayImage": "显示图像",
     "saveChanges": "保存更改",
     "cancel": "取消",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "enterOrganizationDescription": "输入组织描述"
   },
   "memberDetail": {
     "title": "用户详细信息",
@@ -1087,6 +1088,7 @@
     "profileSettings": "配置文件设置",
     "gender": "性别",
     "phoneNumber": "电话号码",
+    "homePhoneNumber": "家庭电话号码",
     "chooseFile": "选择文件",
     "birthDate": "出生日期",
     "grade": "教育等级",
@@ -1143,7 +1145,15 @@
     "displayImage": "显示图像",
     "address": "地址",
     "saveChanges": "保存更改",
-    "joined": "已加入"
+    "joined": "已加入",
+    "enterPhoneNo": "输入电话号码",
+    "workPhoneNumber": "工作电话号码",
+    "addressLine1": "地址行1",
+    "addressLine2": "地址行2",
+    "postalCode": "邮政编码",
+    "city": "城市",
+    "description": "描述",
+    "enterDescription": "输入描述"
   },
   "donate": {
     "title": "捐款",
