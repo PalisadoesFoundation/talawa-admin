@@ -6,7 +6,7 @@
 
 > **TestMock**: `object`
 
-Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L41)
+Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L36)
 
 ## Type declaration
 
@@ -112,7 +112,7 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:41](https://github.
 
 #### request.variables.where.role.equal
 
-> **equal**: `UserRole`
+> **equal**: `"administrator"`
 
 ### result?
 

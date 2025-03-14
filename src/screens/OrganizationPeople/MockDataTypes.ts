@@ -33,11 +33,6 @@ type Edge = {
   user?: Edge;
 };
 
-enum UserRole {
-  'administrator',
-  'regular',
-}
-
 export type TestMock = {
   request: {
     query: DocumentNode;
@@ -48,7 +43,7 @@ export type TestMock = {
       after?: string | null;
       last?: number | null;
       before?: string | null;
-      where?: { role: { equal: UserRole } };
+      where?: { role: { equal: 'administrator' } };
       orgid?: string;
       firstNameContains?: string;
       lastNameContains?: string;

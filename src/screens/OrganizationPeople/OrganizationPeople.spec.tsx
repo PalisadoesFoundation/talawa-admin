@@ -25,20 +25,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-// Mock components
-// vi.mock('components/OrgPeopleListCard/OrgPeopleListCard', () => ({
-//   default: ({ id, toggleRemoveModal: vi.fn() }) => (
-//     <div data-testid="org-people-list-card">
-//       <span>Mock People List Card for ID: {id}</span>
-//       <button data-testid="close-modal" onClick={toggleRemoveModal}>Close</button>
-//     </div>
-//   )
-// }));
-
-// vi.mock('components/Avatar/Avatar', () => ({
-//   default: ({ name:  }) => <div data-testid="avatar">Avatar for {name}</div>
-// }));
-
 vi.mock('./AddMember', () => ({
   default: () => <button data-testid="add-member-button">Add Member</button>,
 }));
@@ -258,48 +244,6 @@ describe('OrganizationPeople', () => {
     expect(screen.getByText('jane@example.com')).toBeInTheDocument();
     expect(screen.getByText('01/01/2023')).toBeInTheDocument(); // Formatted date
   });
-
-  // test('displays avatar correctly for members with and without images', async () => {
-  //   const mocks = [
-  //     createMemberConnectionMock({
-  //       orgId: 'orgid',
-  //       first: 10,
-  //       after: null,
-  //       last: null,
-  //       before: null,
-  //     }),
-  //   ];
-
-  //   const link = new StaticMockLink(mocks, true);
-
-  //   render(
-  //     <MockedProvider addTypename={false} link={link}>
-  //       <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <Routes>
-  //               <Route path="/orgpeople/:orgid" element={<OrganizationPeople />} />
-  //             </Routes>
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </MemoryRouter>
-  //     </MockedProvider>
-  //   );
-
-  //   // Wait for data to load
-  //   await waitFor(() => {
-  //     expect(screen.getByText('John Doe')).toBeInTheDocument();
-  //   });
-
-  //   // The first member has an image
-  //   const images = screen.getAllByRole('img');
-  //   expect(images.length).toBeGreaterThan(0);
-  //   expect(images[0]).toHaveAttribute('src', 'https://example.com/avatar1.jpg');
-
-  //   // The second member uses Avatar component
-  //   expect(screen.getByTestId('avatar')).toBeInTheDocument();
-  //   expect(screen.getByText('JS')).toBeInTheDocument();
-  // });
 
   test('handles search functionality correctly', async () => {
     const mocks = [

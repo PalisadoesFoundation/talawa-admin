@@ -83,7 +83,7 @@ interface Edge {
     role: string;
     avatarURL: string;
     emailAddress: string;
-    createdAt: string;
+    createdAt?: string;
   };
 }
 
@@ -155,8 +155,6 @@ function AddMember(): JSX.Element {
   function closeCreateNewUserModal(): void {
     setCreateNewUserModalIsOpen(false);
   }
-  const toggleCreateNewUserModal = (): void =>
-    setCreateNewUserModalIsOpen(!addUserModalisOpen);
 
   const [addMember] = useMutation(CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG);
 
@@ -471,10 +469,7 @@ function AddMember(): JSX.Element {
                       </StyledTableRow>
                     ) : (
                       allUsersData.map((userDetails: any, index: number) => (
-                        <StyledTableRow
-                          data-testid="user"
-                          key={userDetails._id}
-                        >
+                        <StyledTableRow data-testid="user" key={userDetails.id}>
                           <StyledTableCell component="th" scope="row">
                             {page * PAGE_SIZE + index + 1}
                           </StyledTableCell>
@@ -549,11 +544,7 @@ function AddMember(): JSX.Element {
       </Modal>
 
       {/* New User Modal */}
-      <Modal
-        data-testid="addNewUserModal"
-        show={createNewUserModalisOpen}
-        onHide={toggleCreateNewUserModal}
-      >
+      <Modal data-testid="addNewUserModal" show={createNewUserModalisOpen}>
         <Modal.Header className={styles.createButton} data-testid="createUser">
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
