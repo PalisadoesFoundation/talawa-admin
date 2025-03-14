@@ -44,6 +44,19 @@ type Props = {
   loggedInUserId: string;
   resetAndRefetch: () => void;
 };
+export function handleModalHide(
+  removeUserProps: { setShowOnCancel: string },
+  setShowRemoveUserModal: (value: boolean) => void,
+  setShowJoinedOrganizations: (value: boolean) => void,
+  setShowBlockedOrganizations: (value: boolean) => void,
+): void {
+  setShowRemoveUserModal(false);
+  if (removeUserProps.setShowOnCancel === 'JOINED') {
+    setShowJoinedOrganizations(true);
+  } else if (removeUserProps.setShowOnCancel === 'BLOCKED') {
+    setShowBlockedOrganizations(true);
+  }
+}
 const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
@@ -169,13 +182,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
     searchOrgsBlockedBy(inputValue);
   };
   function onHideRemoveUserModal(): void {
-    setShowRemoveUserModal(false);
-    if (removeUserProps.setShowOnCancel == 'JOINED') {
-      setShowJoinedOrganizations(true);
-    } else if (removeUserProps.setShowOnCancel == 'BLOCKED') {
-      setShowBlockedOrganizations(true);
-    }
+    handleModalHide(
+      removeUserProps,
+      setShowRemoveUserModal,
+      setShowJoinedOrganizations,
+      setShowBlockedOrganizations,
+    );
   }
+
   const isSuperAdmin = user.appUserProfile.isSuperAdmin;
   return (
     <>

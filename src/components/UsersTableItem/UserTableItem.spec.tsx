@@ -7,7 +7,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS, MOCKS2, MOCKS_UPDATE } from './UserTableItemMocks';
-import UsersTableItem from './UsersTableItem';
+import UsersTableItem, { handleModalHide } from './UsersTableItem';
 import { BrowserRouter } from 'react-router-dom';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
@@ -1094,7 +1094,24 @@ describe('Testing User Table Item', () => {
 
     fireEvent.click(confirmRemoveBtn);
   });
+  test('handleModalHide should handle BLOCKED state correctly', () => {
+    const setShowRemoveUserModal = vi.fn();
+    const setShowJoinedOrganizations = vi.fn();
+    const setShowBlockedOrganizations = vi.fn();
 
+    const props = { setShowOnCancel: 'BLOCKED' };
+
+    handleModalHide(
+      props,
+      setShowRemoveUserModal,
+      setShowJoinedOrganizations,
+      setShowBlockedOrganizations,
+    );
+
+    expect(setShowRemoveUserModal).toHaveBeenCalledWith(false);
+    expect(setShowJoinedOrganizations).not.toHaveBeenCalled();
+    expect(setShowBlockedOrganizations).toHaveBeenCalledWith(true);
+  });
   test('handles errors in removeUser mutation', async () => {
     const props: {
       user: InterfaceQueryUserListItem;
