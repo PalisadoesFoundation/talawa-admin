@@ -26,7 +26,11 @@ vi.mock('react-toastify', () => ({
 }));
 
 vi.mock('./AddMember', () => ({
-  default: () => <button data-testid="add-member-button">Add Member</button>,
+  default: () => (
+    <button type="button" data-testid="add-member-button">
+      Add Member
+    </button>
+  ),
 }));
 
 // Setup mock window.location
