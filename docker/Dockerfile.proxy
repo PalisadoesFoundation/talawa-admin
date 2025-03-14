@@ -1,0 +1,11 @@
+FROM node:22 AS builder
+WORKDIR /talawa-admin
+
+COPY package*.json ./
+RUN npm install fastify @fastify/reply-from @fastify/cors
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["npm", "run", "proxy"]

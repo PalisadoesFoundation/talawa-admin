@@ -5,8 +5,7 @@ services:
       dockerfile: docker/Dockerfile.dev
     ports:
       - '4321:4321'
-    env_file:
-      - ../.env
+    env_file: ../.env
     #environment:
     #  - REACT_APP_TALAWA_URL=${REACT_APP_TALAWA_URL}
     #  - REACT_APP_BACKEND_WEBSOCKET_URL=${REACT_APP_BACKEND_WEBSOCKET_URL}
@@ -22,3 +21,50 @@ services:
       timeout: 10s
       retries: 3
     restart: unless-stopped
+  proxy:
+      build:
+        context: ..
+        dockerfile: docker/Dockerfile.proxy
+      ports:
+        - '5000:5000'
+      env_file: ../.env
+      environment:
+        - PROXY_PORT=${PROXY_PORT:?error}
+        - TARGET_URL=${TARGET_URL:?error}
+        - ADMIN_PORT=${PORT:?error}
+      depends_on:
+        - app
+  caddy:
+    image: caddy:2.8.4-alpine
+    env_file: ../.env
+    environment:
+    - CADDY_TALAWA_ADMIN_DOMAIN_NAME=${CADDY_TALAWA_ADMIN_DOMAIN_NAME:?error}
+    - CADDY_TALAWA_ADMIN_EMAIL=${CADDY_TALAWA_ADMIN_EMAIL:?error}
+    - CADDY_TALAWA_ADMIN_HOST=${CADDY_TALAWA_ADMIN_HOST:?error}
+    - REACT_APP_TALAWA_URL=${REACT_APP_TALAWA_URL:?error}
+    ports:
+      - name: caddy_http
+        published: ${CADDY_HTTP_MAPPED_PORT:?error}
+        target: 80
+      - name: caddy_https
+        published: ${CADDY_HTTPS_MAPPED_PORT:?error}
+        target: 443
+      - name: caddy_http3
+        protocol: udp
+        published: ${CADDY_HTTP3_MAPPED_PORT:?error}
+        target: 443
+    # https://docs.docker.com/reference/compose-file/services/#restart
+    restart: unless-stopped
+    volumes:
+      - source: caddy_config
+        target: /config
+        type: volume
+      - source: caddy_data
+        target: /data
+        type: volume
+      - source: ../docker/Caddyfile
+        target: /etc/caddy/Caddyfile
+        type: bind
+volumes:
+  caddy_data:
+  caddy_config:
