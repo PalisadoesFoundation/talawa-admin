@@ -16,19 +16,24 @@ import { Role } from 'types/Event/interface';
 import { type User } from 'types/User/type';
 
 /**
- * WeeklyEventCalendar Component
+ * ## CSS Strategy Explanation:
  *
- * Displays a weekly calendar view with events and holidays.
- * Users can navigate between weeks, view event details, and toggle event lists.
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
  *
- * @param {InterfaceCalendarProps} props - The props for the component.
- * @param {InterfaceEvent[]} props.eventData - The list of events to display.
- * @param {() => void} props.refetchEvents - Function to refetch events.
- * @param {InterfaceIOrgList} [props.orgData] - Organization data for filtering events.
- * @param {string} [props.userRole] - The role of the current user.
- * @param {string} [props.userId] - The ID of the current user.
- * @returns {JSX.Element} - The rendered weekly calendar view.
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.weeklyEditButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
  */
+
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
@@ -42,58 +47,54 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   );
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
 
   useEffect(() => {
     function handleResize(): void {
-      setWindowWidth(window.innerWidth);
+      setWindowWidth(window.screen.width);
     }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  /**
-   * Filters events based on user role and organization data.
-   *
-   * @param {InterfaceEvent[]} eventData - The list of events to filter.
-   * @param {InterfaceIOrgList} [orgData] - Organization data for filtering.
-   * @param {string} [userRole] - The role of the current user.
-   * @param {string} [userId] - The ID of the current user.
-   * @returns {InterfaceEvent[]} - The filtered list of events.
-   */
   const filterData = (
     eventData: InterfaceEvent[],
     orgData?: InterfaceIOrgList,
     userRole?: string,
     userId?: string,
   ): InterfaceEvent[] => {
+    const data: InterfaceEvent[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
 
-    return (
-      eventData?.filter((event) => {
-        if (event.isPublic) return true;
-
-        if (userRole === Role.ADMIN) {
-          const isAdmin = orgData?.admins?.some(
-            (admin) => admin._id === userId,
+    if (userRole === Role.ADMIN) {
+      eventData?.forEach((event) => {
+        if (event.isPublic) data.push(event);
+        if (!event.isPublic) {
+          const filteredOrg: boolean | undefined = orgData?.admins?.some(
+            (data) => data._id === userId,
           );
-          return isAdmin;
+          if (filteredOrg) {
+            data.push(event);
+          }
         }
-
-        const isAttending = event.attendees?.some(
-          (attendee) => attendee._id === userId,
+      });
+    } else {
+      eventData?.forEach((event) => {
+        if (event.isPublic) data.push(event);
+        const userAttending = event.attendees?.some(
+          (data) => data._id === userId,
         );
-        return isAttending;
-      }) || []
-    );
+        if (userAttending) {
+          data.push(event);
+        }
+      });
+    }
+    return data;
   };
 
   useEffect(() => {
-    const filteredData = filterData(eventData, orgData, userRole, userId);
-    const uniqueData = Array.from(
-      new Map(filteredData.map((event) => [event._id, event])).values(),
-    );
-    setEvents(Array.from(uniqueData));
+    const data = filterData(eventData, orgData, userRole, userId);
+    setEvents(data);
   }, [eventData, orgData, userRole, userId]);
 
   const goToPreviousWeek = (): void => {
@@ -119,28 +120,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     );
   };
 
-  const eventsByDate = useMemo(() => {
-    const map = new Map<string, InterfaceEvent[]>();
-    events?.forEach((event) => {
-      const startDate = dayjs(event.startDate);
-      const endDate = dayjs(event.endDate);
-      let currentDate = startDate;
-
-      while (
-        currentDate.isBefore(endDate) ||
-        currentDate.isSame(endDate, 'day')
-      ) {
-        const dateKey = currentDate.format('YYYY-MM-DD');
-        if (!map.has(dateKey)) {
-          map.set(dateKey, []);
-        }
-        map.get(dateKey)?.push(event);
-        currentDate = currentDate.add(1, 'day');
-      }
-    });
-    return map;
-  }, [events]);
-
   const renderWeekDays = (): JSX.Element[] => {
     const days = [];
     for (let i = 0; i < 7; i++) {
@@ -159,31 +138,44 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       };
 
       const allEventsList: JSX.Element[] =
-        eventsByDate
-          .get(dayjs(date).format('YYYY-MM-DD'))
-          ?.map((datas) => (
-            <EventListCard
-              refetchEvents={refetchEvents}
-              userRole={userRole}
-              key={datas._id}
-              _id={datas._id}
-              location={datas.location}
-              title={datas.title}
-              description={datas.description}
-              startDate={datas.startDate}
-              endDate={datas.endDate}
-              startTime={datas.startTime}
-              endTime={datas.endTime}
-              allDay={datas.allDay}
-              recurring={datas.recurring}
-              recurrenceRule={datas.recurrenceRule}
-              isRecurringEventException={datas.isRecurringEventException}
-              isPublic={datas.isPublic}
-              isRegisterable={datas.isRegisterable}
-              attendees={datas.attendees}
-              creator={datas.creator}
-            />
-          )) || [];
+        events
+          ?.filter((datas) => {
+            if (datas.startDate === dayjs(date).format('YYYY-MM-DD'))
+              return datas;
+          })
+          .map((datas: InterfaceEvent) => {
+            const attendees: Partial<User>[] = [];
+            datas.attendees?.forEach((attendee) => {
+              const r = {
+                _id: attendee._id,
+              };
+              attendees.push(r);
+            });
+
+            return (
+              <EventListCard
+                refetchEvents={refetchEvents}
+                userRole={userRole}
+                key={datas._id}
+                _id={datas._id}
+                location={datas.location}
+                title={datas.title}
+                description={datas.description}
+                startDate={datas.startDate}
+                endDate={datas.endDate}
+                startTime={datas.startTime}
+                endTime={datas.endTime}
+                allDay={datas.allDay}
+                recurring={datas.recurring}
+                recurrenceRule={datas.recurrenceRule}
+                isRecurringEventException={datas.isRecurringEventException}
+                isPublic={datas.isPublic}
+                isRegisterable={datas.isRegisterable}
+                attendees={attendees}
+                creator={datas.creator}
+              />
+            );
+          }) || [];
 
       const holidayList: JSX.Element[] = holidays
         .filter((holiday) => holiday.date === dayjs(date).format('MM-DD'))
@@ -194,7 +186,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       return (
         <div
           key={index}
-          className={`${styles.day} ${allEventsList?.length > 0 ? styles.day__events : ''}`}
+          className={
+            styles.day + ' ' + (allEventsList?.length > 0 && styles.day__events)
+          }
           data-testid="day"
         >
           <div className={styles.day_header}>
@@ -220,7 +214,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             {(allEventsList?.length > 2 ||
               (windowWidth <= 700 && allEventsList?.length > 0)) && (
               <button
-                type="button"
                 className={styles.btn__more}
                 data-testid="more"
                 onClick={() => {
