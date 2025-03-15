@@ -4,7 +4,7 @@ import type { Template } from '@pdfme/common';
 describe('Testing mock generate util', () => {
   test('should return a Promise', async () => {
     const result = generate({
-      template: { schemas: [] } as Template,
+      template: { schemas: [{ fields: [] }] } as unknown as Template, // Fixed structure & casted as unknown first
       inputs: [],
     });
     expect(result).toBeInstanceOf(Promise);
@@ -12,14 +12,16 @@ describe('Testing mock generate util', () => {
 
   test('should resolve to a Uint8Array', async () => {
     const result = generate({
-      template: { schemas: [] } as Template,
+      template: { schemas: [{ fields: [] }] } as unknown as Template,
       inputs: [],
     });
-    expect(result).toBeInstanceOf(Uint8Array);
+
+    const resolvedResult = await result;
+    expect(resolvedResult).toBeInstanceOf(Uint8Array);
   });
 
   it('should throw an error when template is empty', async () => {
-    const emptyTemplate = { schemas: [] } as Template;
+    const emptyTemplate = { schemas: [{ fields: [] }] } as unknown as Template; // Fixed structure
     const validInputs = [{ field1: 'value1' }];
 
     await expect(
@@ -28,7 +30,9 @@ describe('Testing mock generate util', () => {
   });
 
   it('should throw an error when inputs are empty', async () => {
-    const validTemplate = { schemas: [{ name: 'field1' }] } as Template;
+    const validTemplate = {
+      schemas: [{ fields: [{ name: 'field1', type: 'text' }] }],
+    } as unknown as Template; // Ensuring proper structure
     const emptyInputs: Record<string, string>[] = [];
 
     await expect(
@@ -37,7 +41,7 @@ describe('Testing mock generate util', () => {
   });
 
   it('should throw an error when both template and inputs are empty', async () => {
-    const emptyTemplate = { schemas: [] } as Template;
+    const emptyTemplate = { schemas: [{ fields: [] }] } as unknown as Template;
     const emptyInputs: Record<string, string>[] = [];
 
     await expect(
