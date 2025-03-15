@@ -116,7 +116,7 @@ describe(' VenueCard', () => {
     );
   });
 
-  it('calls showCreateVenueModal when the btn clicked ', async () => {
+  it('calls showEditVenueModal when the btn clicked ', async () => {
     renderVenueCardModel(defaultPropsMock);
     const editBtn = screen.getByTestId('updateVenueBtn2');
     expect(editBtn).toBeInTheDocument();

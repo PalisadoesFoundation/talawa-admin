@@ -2894,7 +2894,7 @@ enum WeekDays {
   TU
   WE
 }
-input VenueAttachment {
+type VenueAttachment {
   mimeType: String
   url: String
 }

@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_VENUE\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/VenueMutations.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/VenueMutations.ts#L77)
+Defined in: [src/GraphQl/Mutations/VenueMutations.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/VenueMutations.ts#L75)
 
 GraphQL mutation to delete a venue.
 
