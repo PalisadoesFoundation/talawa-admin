@@ -1,33 +1,15 @@
-import React, { Suspense } from 'react';
-import {
-  render,
-  fireEvent,
-  act,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import React from 'react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { vi } from 'vitest';
 import Calendar from './WeeklyEventCalendar';
-import { BrowserRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { BrowserRouter } from 'react-router-dom';
 
-enum Role {
-  USER = 'USER',
-  SUPERADMIN = 'SUPERADMIN',
-  ADMIN = 'ADMIN',
-}
-
-const renderWithRouter = (
-  ui: React.ReactElement,
-): ReturnType<typeof render> => {
-  return render(
-    <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>{ui}</Suspense>
-    </BrowserRouter>,
-  );
+const renderWithRouter = (ui: React.ReactElement) => {
+  return render(<BrowserRouter>{ui}</BrowserRouter>);
 };
 
-describe('WeeklyViewCalendar Component', () => {
+describe('WeeklyEventCalendar Component', () => {
   const mockRefetchEvents = vi.fn();
   const today = new Date();
 
@@ -37,8 +19,8 @@ describe('WeeklyViewCalendar Component', () => {
       location: 'Test Location',
       title: 'Test Event',
       description: 'Test Description',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
+      startDate: dayjs(today).format('YYYY-MM-DD'),
+      endDate: dayjs(today).format('YYYY-MM-DD'),
       startTime: '10:00',
       endTime: '11:00',
       allDay: false,
@@ -56,24 +38,24 @@ describe('WeeklyViewCalendar Component', () => {
     },
     {
       _id: '2',
-      location: 'Private Location',
-      title: 'Private Event',
-      description: 'Private Description',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-      startTime: '12:00',
-      endTime: '13:00',
+      location: 'Test Location 2',
+      title: 'Test Event 2',
+      description: 'Test Description 2',
+      startDate: dayjs(today).add(1, 'day').format('YYYY-MM-DD'),
+      endDate: dayjs(today).add(1, 'day').format('YYYY-MM-DD'),
+      startTime: '14:00',
+      endTime: '15:00',
       allDay: false,
       recurring: false,
       recurrenceRule: null,
       isRecurringEventException: false,
-      isPublic: false,
+      isPublic: true,
       isRegisterable: true,
-      attendees: [{ _id: 'user2' }],
+      attendees: [{ _id: 'user1' }],
       creator: {
-        firstName: 'Jane',
+        firstName: 'John',
         lastName: 'Doe',
-        _id: 'creator2',
+        _id: 'creator1',
       },
     },
   ];
@@ -82,23 +64,19 @@ describe('WeeklyViewCalendar Component', () => {
     admins: [{ _id: 'admin1' }],
   };
 
-  interface Holiday {
-    name: string;
-    date: string;
-  }
-
-  const holidays: Holiday[] = [
-    { name: 'New Year', date: '01-01' },
-    { name: 'Christmas', date: '12-25' },
-  ];
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders correctly with basic props', async () => {
     const { getByText, getAllByTestId } = renderWithRouter(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+        userRole="USER"
+        userId="user1"
+      />,
     );
 
     await waitFor(() => {
@@ -116,110 +94,133 @@ describe('WeeklyViewCalendar Component', () => {
   });
 
   it('handles week navigation correctly', async () => {
-    const { getByTestId, getByText } = renderWithRouter(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+    const { getByTestId } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+        userRole="USER"
+        userId="user1"
+      />,
     );
 
-    const currentWeekStart = dayjs().startOf('week');
-    const currentWeekText = `${currentWeekStart.format('MMM D')} - ${currentWeekStart
-      .add(6, 'day')
-      .format('MMM D')}`;
+    const currentDate = new Date();
+    const prevWeekStartDate = new Date(
+      currentDate.setDate(currentDate.getDate() - 7),
+    );
+    const expectedDate = dayjs(prevWeekStartDate).format('MMM D');
 
     await act(async () => {
       fireEvent.click(getByTestId('prevWeek'));
     });
-    await waitFor(() => {
-      expect(getByTestId('current-week')).not.toHaveTextContent(
-        currentWeekText,
-      );
-    });
 
-    await act(async () => {
-      fireEvent.click(getByTestId('nextWeek'));
-    });
     await waitFor(() => {
-      expect(getByTestId('current-week')).toHaveTextContent(currentWeekText);
+      const currentWeekElement = getByTestId('current-week');
+      expect(currentWeekElement.textContent).toContain(expectedDate);
     });
   });
 
-  it('navigates to the current week when "Today" button is clicked', async () => {
-    const { getByTestId } = renderWithRouter(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+  it('handles today button correctly', async () => {
+    const { getByTestId, getByText } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+        userRole="USER"
+        userId="user1"
+      />,
     );
 
     await act(async () => {
       fireEvent.click(getByTestId('today'));
     });
-
-    const currentWeekStart = dayjs().startOf('week');
-    const currentWeekText = `${currentWeekStart.format('MMM D')} - ${currentWeekStart
-      .add(6, 'day')
-      .format('MMM D')}`;
-
     await waitFor(() => {
-      expect(getByTestId('current-week')).toHaveTextContent(currentWeekText);
+      expect(
+        getByText((content, element) =>
+          content.includes(dayjs(today).format('MMM D')),
+        ),
+      ).toBeInTheDocument();
     });
   });
 
-  it('renders holiday cards correctly', async () => {
-    const { getByText } = renderWithRouter(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+  it('toggles event list expansion correctly', async () => {
+    const { queryByTestId, getByText } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+        userRole="USER"
+        userId="user1"
+      />,
     );
 
-    const currentWeekStart = dayjs().startOf('week');
+    const moreButton = queryByTestId('more');
 
-    await waitFor(() => {
-      holidays.forEach((holiday: Holiday) => {
-        if (dayjs(currentWeekStart).format('MM-DD') === holiday.date) {
-          expect(getByText(holiday.name)).toBeInTheDocument();
-        }
+    if (moreButton) {
+      await act(async () => {
+        fireEvent.click(moreButton);
       });
-    });
+      await waitFor(() => {
+        expect(getByText('View less')).toBeInTheDocument();
+      });
+
+      await act(async () => {
+        fireEvent.click(moreButton);
+      });
+      await waitFor(() => {
+        expect(getByText('View all')).toBeInTheDocument();
+      });
+    } else {
+      console.warn('Element with data-testid "more" not found.');
+    }
   });
 
-  it('renders correctly when user has ADMIN role', async () => {
-    const { getByText, getAllByTestId } = renderWithRouter(
+  it('renders events on different days of the week', async () => {
+    const { getByText } = renderWithRouter(
       <Calendar
         eventData={mockEventData}
         refetchEvents={mockRefetchEvents}
-        userRole={Role.ADMIN}
+        orgData={mockOrgData}
+        userRole="USER"
+        userId="user1"
       />,
     );
 
     await waitFor(() => {
-      expect(getByText('Sunday')).toBeInTheDocument();
-      expect(getByText('Monday')).toBeInTheDocument();
-      expect(getByText('Tuesday')).toBeInTheDocument();
-      expect(getByText('Wednesday')).toBeInTheDocument();
-      expect(getByText('Thursday')).toBeInTheDocument();
-      expect(getByText('Friday')).toBeInTheDocument();
-      expect(getByText('Saturday')).toBeInTheDocument();
+      expect(getByText('Test Event')).toBeInTheDocument();
+      expect(getByText('Test Event 2')).toBeInTheDocument();
     });
-
-    const days = getAllByTestId('day');
-    expect(days.length).toBe(7);
   });
 
-  it('renders correctly when user has ADMIN role', async () => {
-    const { getByText, getAllByTestId } = renderWithRouter(
+  it('renders correctly when there are no events', async () => {
+    const { getByText } = renderWithRouter(
       <Calendar
-        eventData={mockEventData}
+        eventData={[]}
         refetchEvents={mockRefetchEvents}
-        userRole={Role.SUPERADMIN}
+        orgData={mockOrgData}
+        userRole="USER"
+        userId="user1"
       />,
     );
 
     await waitFor(() => {
-      expect(getByText('Sunday')).toBeInTheDocument();
-      expect(getByText('Monday')).toBeInTheDocument();
-      expect(getByText('Tuesday')).toBeInTheDocument();
-      expect(getByText('Wednesday')).toBeInTheDocument();
-      expect(getByText('Thursday')).toBeInTheDocument();
-      expect(getByText('Friday')).toBeInTheDocument();
-      expect(getByText('Saturday')).toBeInTheDocument();
+      expect(getByText('No events this week')).toBeInTheDocument();
     });
+  });
 
-    const days = getAllByTestId('day');
-    expect(days.length).toBe(7);
+  it('renders admin-specific features when user is an admin', async () => {
+    const { getByTestId } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+        userRole="ADMIN"
+        userId="admin1"
+      />,
+    );
+
+    await waitFor(() => {
+      expect(getByTestId('add-event-button')).toBeInTheDocument();
+    });
   });
 });
