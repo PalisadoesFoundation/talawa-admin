@@ -26,12 +26,11 @@ vi.mock('@apollo/client', async () => {
 describe('refreshToken', () => {
   const { location } = window;
 
-  interface TestInterfacePartialWindow {
-    location?: Partial<Location>;
-  }
-
-  delete (window as TestInterfacePartialWindow).location;
-  global.window.location = { ...location, reload: vi.fn() };
+  // Create a mock for window.location
+  const mockLocation = {
+    ...location,
+    reload: vi.fn(),
+  };
 
   // Create storage mock
   const localStorageMock = {
@@ -45,6 +44,14 @@ describe('refreshToken', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Mock window.location
+    Object.defineProperty(window, 'location', {
+      value: mockLocation,
+      writable: true,
+    });
+
+    // Mock localStorage
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
       writable: true,

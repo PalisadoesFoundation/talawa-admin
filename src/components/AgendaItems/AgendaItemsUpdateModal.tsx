@@ -4,7 +4,6 @@ import type { ChangeEvent } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
 
 import styles from '../../style/app.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
@@ -15,7 +14,7 @@ interface InterfaceFormStateType {
   title: string;
   description: string;
   duration: string;
-  attachments: string[];
+  attachments: string[]; // Will store MinIO URLs
   urls: string[];
   createdBy: {
     firstName: string;
@@ -29,23 +28,10 @@ interface InterfaceAgendaItemsUpdateModalProps {
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   updateAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
+  t: (key: string) => string; // Translation function
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
 }
 
-/**
- * Modal component for updating details of an agenda item.
- * Provides a form to update the agenda item's title, description, duration, categories, URLs, and attachments.
- * Also includes functionality to add, remove URLs and attachments.
- *
- * @param agendaItemUpdateModalIsOpen - Boolean flag indicating if the update modal is open.
- * @param hideUpdateModal - Function to hide the update modal.
- * @param formState - The current state of the form containing agenda item details.
- * @param setFormState - Function to update the form state.
- * @param updateAgendaItemHandler - Handler function for submitting the form.
- * @param t - Function for translating text based on keys.
- * @param agendaItemCategories - List of agenda item categories for selection.
- */
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
@@ -58,6 +44,7 @@ const AgendaItemsUpdateModal: React.FC<
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false); // Loading state for file uploads
 
   useEffect(() => {
     setFormState((prevState) => ({
@@ -68,21 +55,53 @@ const AgendaItemsUpdateModal: React.FC<
   }, []);
 
   /**
-   * Validates if a given URL is in a correct format.
+   * Uploads a file to MinIO using a pre-signed URL.
    *
-   * @param url - The URL to validate.
-   * @returns True if the URL is valid, false otherwise.
+   * @param file - The file to upload.
+   * @returns The MinIO file URL.
    */
+  const uploadFileToMinIO = async (file: File): Promise<string> => {
+    try {
+      // Fetch pre-signed URL from the backend
+      const response = await fetch('/api/get-presigned-url', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fileName: file.name, fileType: file.type }),
+      });
+
+      if (!response.ok) {
+        throw new Error(t('failedToGetPresignedUrl')); // Use `t` for translation
+      }
+
+      const { presignedUrl, fileUrl } = await response.json();
+
+      // Upload the file to MinIO using the pre-signed URL
+      const uploadResponse = await fetch(presignedUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(t('failedToUploadFile')); // Use `t` for translation
+      }
+
+      return fileUrl;
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw new Error(t('fileUploadFailed')); // Use `t` for translation
+    }
+  };
+
   const isValidUrl = (url: string): boolean => {
-    // Regular expression for basic URL validation
     const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
     return urlRegex.test(url);
   };
 
-  /**
-   * Handles adding a new URL to the form state.
-   * Displays an error toast if the URL is invalid.
-   */
   const handleAddUrl = (): void => {
     if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
       setFormState({
@@ -95,11 +114,6 @@ const AgendaItemsUpdateModal: React.FC<
     }
   };
 
-  /**
-   * Handles removing a URL from the form state.
-   *
-   * @param url - The URL to remove.
-   */
   const handleRemoveUrl = (url: string): void => {
     setFormState({
       ...formState,
@@ -109,40 +123,67 @@ const AgendaItemsUpdateModal: React.FC<
 
   /**
    * Handles file input change event.
-   * Converts selected files to base64 format and updates the form state.
-   * Displays an error toast if the total file size exceeds the limit.
-   *
-   * @param e - The change event for file input.
+   * Uploads files to MinIO and stores the returned URLs.
    */
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const target = e.target as HTMLInputElement;
     if (target.files) {
+      setIsUploading(true); // Start loading
       const files = Array.from(target.files);
       let totalSize = 0;
-      files.forEach((file) => {
+
+      // Validate file types and sizes
+      const validFileTypes = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'video/mp4',
+      ];
+      const maxFileSize = 10 * 1024 * 1024; // 10 MB
+
+      for (const file of files) {
+        if (!validFileTypes.includes(file.type)) {
+          toast.error(t('invalidFileType'));
+          setIsUploading(false); // Stop loading
+          return;
+        }
+        if (file.size > maxFileSize) {
+          toast.error(t('fileSizeExceedsLimit'));
+          setIsUploading(false); // Stop loading
+          return;
+        }
         totalSize += file.size;
-      });
-      if (totalSize > 10 * 1024 * 1024) {
-        toast.error(t('fileSizeExceedsLimit'));
+      }
+
+      if (totalSize > maxFileSize) {
+        toast.error(t('totalFileSizeExceedsLimit'));
+        setIsUploading(false); // Stop loading
         return;
       }
-      const base64Files = await Promise.all(
-        files.map(async (file) => await convertToBase64(file)),
-      );
-      setFormState({
-        ...formState,
-        attachments: [...formState.attachments, ...base64Files],
-      });
+
+      try {
+        const fileUrls = await Promise.all(
+          files.map(async (file) => await uploadFileToMinIO(file)),
+        );
+        setFormState({
+          ...formState,
+          attachments: [...formState.attachments, ...fileUrls],
+        });
+      } catch (error) {
+        console.error('File upload error:', error);
+        if (error instanceof Error) {
+          toast.error(`${t('fileUploadFailed')}: ${error.message}`);
+        } else {
+          toast.error(t('fileUploadFailed'));
+        }
+      } finally {
+        setIsUploading(false); // Stop loading
+      }
     }
   };
 
-  /**
-   * Handles removing an attachment from the form state.
-   *
-   * @param attachment - The attachment to remove.
-   */
   const handleRemoveAttachment = (attachment: string): void => {
     setFormState({
       ...formState,
@@ -284,8 +325,11 @@ const AgendaItemsUpdateModal: React.FC<
               id="attachment"
               multiple={true}
               onChange={handleFileChange}
+              disabled={isUploading} // Disable input while uploading
             />
             <Form.Text>{t('attachmentLimit')}</Form.Text>
+            {isUploading && <p>{t('uploadingFiles')}...</p>}{' '}
+            {/* Loading indicator */}
           </Form.Group>
           {formState.attachments && (
             <div className={styles.previewFile} data-testid="mediaPreview">
@@ -298,11 +342,20 @@ const AgendaItemsUpdateModal: React.FC<
                       loop={true}
                       playsInline
                       crossOrigin="anonymous"
+                      controls // Add controls for video playback
                     >
                       <source src={attachment} type="video/mp4" />
+                      Your browser does not support the video tag.
                     </video>
                   ) : (
-                    <img src={attachment} alt="Attachment preview" />
+                    <img
+                      src={attachment}
+                      alt="Attachment preview"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          'fallback-image-url'; // Fallback for broken images
+                      }}
+                    />
                   )}
                   <button
                     className={styles.closeButtonFile}

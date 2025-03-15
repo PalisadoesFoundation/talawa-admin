@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from './tagTemplate';
 import { useTranslation } from 'react-i18next';
+
 /**
  * Component that represents a single row in the check-in table.
  * Allows users to mark themselves as checked in and download a tag if they are already checked in.
@@ -31,7 +32,6 @@ export const TableRow = ({
    * Displays success or error messages based on the result of the mutation.
    */
   const markCheckIn = (): void => {
-    // as we do not want to clutter the UI currently with the same (only provide the most basic of operations)
     checkInMutation({
       variables: {
         userId: data.userId,
@@ -47,6 +47,7 @@ export const TableRow = ({
         toast.error(err.message);
       });
   };
+
   /**
    * Triggers a notification while generating and downloading a PDF tag.
    *
@@ -71,14 +72,21 @@ export const TableRow = ({
         throw new Error('Invalid or empty name provided');
       }
       inputs.push({ name: data.name.trim() });
+
+      // Generate the PDF
       const pdf = await generate({ template: tagTemplate, inputs });
-      // istanbul ignore next
-      const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
-      // istanbul ignore next
+
+      // Create a Blob from the ArrayBuffer
+      const buffer = new Uint8Array(pdf.buffer); // Convert ArrayBuffer to Uint8Array
+      const blob = new Blob([buffer], { type: 'application/pdf' });
+
+      // Create a URL for the Blob
       const url = URL.createObjectURL(blob);
-      // istanbul ignore next
+
+      // Open the PDF in a new tab
       window.open(url);
-      // istanbul ignore next
+
+      // Notify the user
       toast.success('PDF generated successfully!');
     } catch (error: unknown) {
       const errorMessage =
