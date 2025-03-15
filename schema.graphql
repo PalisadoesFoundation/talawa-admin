@@ -941,6 +941,13 @@ type OrganizationPg {
     last: Int
   ): OrganizationAdvertisementsConnectionPg
 
+  blockedUsers(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationBlockedUsersConnectionPg
+
   chats(
     after: String
     before: String
@@ -1046,6 +1053,23 @@ type AdvertisementPg {
   updater: UserPg
   organization: OrganizationPg
   attachments: [AdvertisementAttachmentPg!]
+}
+
+type BlockedUserPg {
+  createdAt: Date
+  id: ID!
+  organization: OrganizationPg
+  user: UserPg
+}
+
+type OrganizationBlockedUsersConnectionPg {
+  edges: [OrganizationBlockedUsersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationBlockedUsersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
 }
 
 type OrganizationChatsConnectionPg {
