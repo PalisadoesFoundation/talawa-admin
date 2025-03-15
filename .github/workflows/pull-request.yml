@@ -215,12 +215,11 @@ jobs:
       - name: Get changed files
         id: changed-files
         run: |
-          # Get all changed files count
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-          ALL_CHANGED_FILES_COUNT=$(echo "$ALL_CHANGED_FILES" | wc -l)
-          
-          echo "all_changed_files_count=${ALL_CHANGED_FILES_COUNT}" >> $GITHUB_OUTPUT
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+          # Get all changed files and quote/escape paths properly
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' '\n' | xargs -I{} echo "{}")  
+          echo "all_changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Echo number of changed files
         env: 
@@ -251,10 +250,11 @@ jobs:
       - name: Get changed files
         id: changed-files
         run: |
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+          # Get all changed files and quote/escape paths properly
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' '\n' | xargs -I{} echo "{}")  
+          echo "all_changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -278,10 +278,11 @@ jobs:
       - name: Get changed files
         id: changed-files
         run: |
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+          # Get all changed files and quote/escape paths properly
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' '\n' | xargs -I{} echo "{}")  
+          echo "all_changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
