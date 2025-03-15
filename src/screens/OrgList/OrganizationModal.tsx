@@ -6,6 +6,7 @@ import styles from '../../style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 import { useMinioUpload } from 'utils/MinioUpload';
+import { toast } from 'react-toastify';
 // import useLocalStorage from 'utils/useLocalstorage';
 
 /**
@@ -280,31 +281,47 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               if (file) {
                 // Validate file size (max 5MB)
                 if (file.size > 5 * 1024 * 1024) {
-                  console.error('File size exceeds the 5MB limit');
+                  toast.error(
+                    'File size exceeds the 5MB limit. Please choose a smaller file.',
+                  );
+                  // Reset the file input
+                  target.value = '';
                   return;
                 }
 
                 // Validate file type
                 if (!file.type.startsWith('image/')) {
-                  console.error('Only image files are allowed');
+                  toast.error(
+                    'Only image files are allowed. Please select a valid image file.',
+                  );
+                  // Reset the file input
+                  target.value = '';
                   return;
                 }
 
                 try {
+                  // Show loading toast
+                  toast.info('Uploading image...');
+
                   // Upload to MinIO and get objectName
                   const { objectName } = await uploadFileToMinio(
                     file,
                     'organizations',
                   );
-                  console.log('File uploaded successfully:', objectName);
+
+                  // Show success toast
+                  toast.success('Image uploaded successfully!');
 
                   setFormState({
                     ...formState,
                     avatar: objectName,
                   });
                 } catch (error) {
+                  // Show error toast
+                  toast.error('Failed to upload image. Please try again.');
                   console.error('Error uploading image to MinIO:', error);
-                  // Consider showing user feedback for upload errors
+                  // Reset the file input
+                  target.value = '';
                 }
               }
             }}

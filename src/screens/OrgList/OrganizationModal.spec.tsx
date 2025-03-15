@@ -26,14 +26,6 @@ vi.mock('utils/MinioUpload', () => ({
   })),
 }));
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 describe('OrganizationModal Component', () => {
   const mockToggleModal = vi.fn();
   const mockCreateOrg = vi.fn((e) => e.preventDefault());
@@ -110,8 +102,6 @@ describe('OrganizationModal Component', () => {
 
   test('should handle successful image upload with MinioClient', async () => {
     setup();
-
-    await wait();
 
     const fileInput = screen.getByTestId('organisationImage');
     expect(fileInput).toBeInTheDocument();
@@ -387,8 +377,6 @@ describe('OrganizationModal Component', () => {
 
     // Mock the function to reject with an error
     mockUploadFileToMinio.mockRejectedValue(new Error('MinIO upload failed'));
-
-    await wait();
 
     const fileInput = screen.getByTestId('organisationImage');
     const file = new File(['dummy content'], 'test.png', {
