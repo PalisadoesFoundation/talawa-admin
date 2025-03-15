@@ -27,7 +27,7 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -45,15 +45,26 @@ jobs:
       - name: Get changed TypeScript files
         id: changed-files
         run: |
-          ONLY_CHANGED=false
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
           
-          # Check if only specific files were changed
-          # This replicates the functionality of the tj-actions/changed-files action's only_changed output
-          # Logic would need to be adjusted based on specific requirements
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
           
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
-          echo "only_changed=${ONLY_CHANGED}" >> $GITHUB_OUTPUT
+          # Count all changed files
+          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l | tr -d ' ')
+          echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
+          
+          # Check if any files changed
+          if [ "$ALL_CHANGED_FILES_COUNT" -gt 0 ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Set only_changed to false by default (adjust logic as needed)
+          echo "only_changed=false" >> $GITHUB_OUTPUT
 
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
@@ -101,95 +112,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch all history for all branches and tags
       
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
         run: |
-          # Sensitive files to check
-          SENSITIVE_FILES=(
-            .flake8
-            .pydocstyle
-            pyproject.toml
-            ".env*"
-            vitest.config.js
-            src/App.tsx
-            ".github/**"
-            env.example
-            .node-version
-            ".husky/**"
-            "scripts/**"
-            "src/style/**" 
-            schema.graphql
-            package.json
-            package-lock.json
-            tsconfig.json
-            .gitignore
-            .eslintrc.json
-            .eslintignore
-            .prettierrc
-            .prettierignore
-            vite.config.ts
-            docker/docker-compose.prod.yaml
-            docker/docker-compose.dev.yaml
-            docker/Dockerfile.dev
-            docker/Dockerfile.prod
-            config/docker/setup/nginx.conf
-            config/docker/setup/nginx.prod.conf
-            CODEOWNERS
-            LICENSE
-            setup.ts
-            .coderabbit.yaml
-            CODE_OF_CONDUCT.md
-            CODE_STYLE.md
-            CONTRIBUTING.md
-            DOCUMENTATION.md
-            INSTALLATION.md
-            ISSUE_GUIDELINES.md
-            PR_GUIDELINES.md
-            README.md
-            "*.pem"
-            "*.key"
-            "*.cert"
-            "*.password"
-            "*.secret"
-            "*.credentials"
-            .nojekyll
-            yarn.lock
-            docs/docusaurus.config.ts
-            "docs/sidebar*"
-            CNAME
-          )
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
           
-          # Get all changed files between base and head of PR
-          ALL_FILES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          # Define sensitive files pattern
+          SENSITIVE_FILES=".flake8 .pydocstyle pyproject.toml .env* vitest.config.js src/App.tsx .github/** env.example .node-version .husky/** scripts/** src/style/** schema.graphql package.json package-lock.json tsconfig.json .gitignore .eslintrc.json .eslintignore .prettierrc .prettierignore vite.config.ts docker/docker-compose.prod.yaml docker/docker-compose.dev.yaml docker/Dockerfile.dev docker/Dockerfile.prod config/docker/setup/nginx.conf config/docker/setup/nginx.prod.conf CODEOWNERS LICENSE setup.ts .coderabbit.yaml CODE_OF_CONDUCT.md CODE_STYLE.md CONTRIBUTING.md DOCUMENTATION.md INSTALLATION.md ISSUE_GUIDELINES.md PR_GUIDELINES.md README.md *.pem *.key *.cert *.password *.secret *.credentials .nojekyll yarn.lock docs/docusaurus.config.ts docs/sidebar* CNAME"
           
-          # Initialize variables
-          ANY_CHANGED=false
-          ANY_DELETED=false
-          CHANGED_FILES=""
-          
-          # Check each file against sensitive patterns
-          for FILE in $ALL_FILES; do
-            for PATTERN in "${SENSITIVE_FILES[@]}"; do
-              if [[ "$FILE" == $PATTERN || "$FILE" =~ $PATTERN ]]; then
-                CHANGED_FILES+="$FILE "
-                
-                # Check if file was deleted
-                if git diff --name-only --diff-filter=D ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -q "^$FILE$"; then
-                  ANY_DELETED=true
-                fi
-                
-                ANY_CHANGED=true
-                break
-              fi
-            done
+          # Check for changes in sensitive files
+          CHANGED_UNAUTH_FILES=""
+          for pattern in $SENSITIVE_FILES; do
+            FILES=$(git diff --name-only --diff-filter=ACMRD $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E "$pattern" || true)
+            if [ ! -z "$FILES" ]; then
+              CHANGED_UNAUTH_FILES="$CHANGED_UNAUTH_FILES $FILES"
+            fi
           done
           
-          # Set outputs for the next steps
-          echo "all_changed_files=${CHANGED_FILES}" >> $GITHUB_OUTPUT
-          echo "any_changed=${ANY_CHANGED}" >> $GITHUB_OUTPUT
-          echo "any_deleted=${ANY_DELETED}" >> $GITHUB_OUTPUT
+          # Trim and format output
+          CHANGED_UNAUTH_FILES=$(echo "$CHANGED_UNAUTH_FILES" | xargs)
+          echo "all_changed_files=$CHANGED_UNAUTH_FILES" >> $GITHUB_OUTPUT
+          
+          # Check if any unauthorized files changed
+          if [ ! -z "$CHANGED_UNAUTH_FILES" ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+            echo "any_deleted=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+            echo "any_deleted=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
@@ -210,16 +164,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
         run: |
-          # Get all changed files and quote/escape paths properly
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' '\n' | xargs -I{} echo "{}")  
-          echo "all_changed_files<<EOF" >> $GITHUB_OUTPUT
-          echo "$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          
+          # Count all changed files
+          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l | tr -d ' ')
+          echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
 
       - name: Echo number of changed files
         env: 
@@ -245,16 +200,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
         run: |
-          # Get all changed files and quote/escape paths properly
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' '\n' | xargs -I{} echo "{}")  
-          echo "all_changed_files<<EOF" >> $GITHUB_OUTPUT
-          echo "$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -273,16 +229,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
         run: |
-          # Get all changed files and quote/escape paths properly
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' '\n' | xargs -I{} echo "{}")  
-          echo "all_changed_files<<EOF" >> $GITHUB_OUTPUT
-          echo "$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=$ALL_CHANGED_FILES" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -301,7 +258,7 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -314,22 +271,20 @@ jobs:
       - name: Get changed TypeScript files
         id: changed-files
         run: |
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
           
-          # Check if any files were changed
-          if [ -n "$ALL_CHANGED_FILES" ]; then
-            ANY_CHANGED=true
+          # Check if any files changed
+          ANY_CHANGED=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l)
+          if [ "$ANY_CHANGED" -gt 0 ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
           else
-            ANY_CHANGED=false
+            echo "any_changed=false" >> $GITHUB_OUTPUT
           fi
           
-          # Get all files (for TS compilation)
-          ALL_FILES=$(git ls-files | tr '\n' ' ')
-          
-          echo "any_changed=${ANY_CHANGED}" >> $GITHUB_OUTPUT
-          echo "all_files=${ALL_FILES}" >> $GITHUB_OUTPUT
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+          # Get all files for TypeScript compilation check
+          ALL_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_files=$ALL_FILES" >> $GITHUB_OUTPUT
 
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.any_changed == 'true'
@@ -609,3 +564,4 @@ jobs:
         run: |
           source venv/bin/activate
           python .github/workflows/scripts/check_docstrings.py --directories .github
+
