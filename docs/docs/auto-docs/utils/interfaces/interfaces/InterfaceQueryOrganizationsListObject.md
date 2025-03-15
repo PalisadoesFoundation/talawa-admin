@@ -8,14 +8,6 @@ Defined in: [src/utils/interfaces.ts:456](https://github.com/PalisadoesFoundatio
 
 ## Properties
 
-### \_id
-
-> **\_id**: `string`
-
-Defined in: [src/utils/interfaces.ts:457](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L457)
-
-***
-
 ### address
 
 > **address**: [`InterfaceAddress`](InterfaceAddress.md)
@@ -101,6 +93,14 @@ Defined in: [src/utils/interfaces.ts:459](https://github.com/PalisadoesFoundatio
 > **description**: `string`
 
 Defined in: [src/utils/interfaces.ts:465](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L465)
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/utils/interfaces.ts:457](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L457)
 
 ***
 

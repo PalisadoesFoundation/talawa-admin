@@ -385,6 +385,7 @@ function orgList(): JSX.Element {
           {/* Infinite scroll can be added when query supports infinitescroll*/}
           {/* <InfiniteScroll
             dataLength={orgsData?.length ?? 0}
+
             next={loadMoreOrganizations}
             loader={
               <>

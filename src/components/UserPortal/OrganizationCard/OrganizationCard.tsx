@@ -11,14 +11,12 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { useMutation, useQuery } from '@apollo/client';
 import {
-  USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
-} from 'GraphQl/Queries/OrganizationQueries';
-import useLocalStorage from 'utils/useLocalstorage';
+  ORGANIZATION_LIST,
+  USER_JOINED_ORGANIZATIONS_PG,
+} from 'GraphQl/Queries/Queries';
+import { getItem } from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
-
-const { getItem } = useLocalStorage();
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 
 /**
@@ -41,34 +39,28 @@ import type { InterfaceOrganizationCardProps } from 'types/Organization/interfac
  *
  * @returns The organization card component.
  */
-const userId: string | null = getItem('userId');
+const userId: string | null = getItem('Talawa-admin', 'userId');
 
 function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'users',
   });
   const { t: tCommon } = useTranslation('common');
-
   const navigate = useNavigate();
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
-    refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
-    ],
+    refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
-    refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
-    ],
+    refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
-    refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
-    ],
+    refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
-  const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS, {
-    variables: { id: userId },
+  const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
+    variables: { id: userId, first: 5 },
+    skip: !userId,
   });
 
   /**

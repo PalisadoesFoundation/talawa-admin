@@ -11,7 +11,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
-import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 import { createMemoryHistory } from 'history';
 import { vi } from 'vitest';
@@ -39,28 +39,19 @@ const organizationId = 'org1234';
 
 const MOCK_ORGANIZATION_CONNECTION = {
   request: {
-    query: USER_ORGANIZATION_CONNECTION,
+    query: ORGANIZATION_LIST,
     variables: {
       id: organizationId,
     },
   },
   result: {
     data: {
-      organizationsConnection: [
+      organizations: [
         {
           __typename: 'Organization',
-          _id: '6401ff65ce8e8406b8f07af2',
-          image: '',
-          address: {
-            city: 'abc',
-            countryCode: '123',
-            postalCode: '456',
-            state: 'def',
-            dependentLocality: 'ghi',
-            line1: 'asdfg',
-            line2: 'dfghj',
-            sortingCode: '4567',
-          },
+          id: '6401ff65ce8e8406b8f07af2',
+          avatarURL: '',
+          addressLine1: 'abc',
           name: 'anyOrganization1',
           description: 'desc',
           userRegistrationRequired: true,
