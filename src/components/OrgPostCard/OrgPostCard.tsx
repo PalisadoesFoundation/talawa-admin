@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom'; // Import useParams
 import AboutImg from 'assets/images/defaultImg.png';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
@@ -13,13 +13,29 @@ import {
   DELETE_POST_MUTATION,
   TOGGLE_PINNED_POST,
   UPDATE_POST_MUTATION,
+  PRESIGNED_URL, // Changed from GET_PRESIGNED_URL
 } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
+import { useMinioUpload } from 'utils/MinioUpload';
+
+interface OrgPostCardProps {
+  post: InterfacePost;
+}
+
+interface InterfacePostFormState {
+  caption: string;
+  attachments: {
+    objectName: string;
+    mimeType: string;
+    fileHash?: string; // Add this field
+  }[];
+}
 
 interface InterfacePostAttachment {
   id: string;
   postId: string;
-  name: string;
+  name: string; // Original file name (unchanged)
+  objectName: string; // Add this for MinIO object name
   mimeType: string;
   createdAt: Date;
   updatedAt?: Date | null;
@@ -37,21 +53,10 @@ interface InterfacePost {
   attachments: InterfacePostAttachment[];
 }
 
-interface InterfaceOrgPostCardProps {
-  post: InterfacePost;
-}
+export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
+  const { orgId: currentOrg } = useParams<{ orgId: string }>(); // Get organization ID from URL
+  const { uploadFileToMinio } = useMinioUpload();
 
-interface InterfacePostFormState {
-  caption: string;
-  attachments: {
-    url: string;
-    mimeType: string;
-  }[];
-}
-
-export default function OrgPostCard({
-  post,
-}: InterfaceOrgPostCardProps): JSX.Element {
   const [postFormState, setPostFormState] = useState<InterfacePostFormState>({
     caption: post.caption,
     attachments: [],
@@ -68,10 +73,10 @@ export default function OrgPostCard({
   const { t: tCommon } = useTranslation('common');
 
   // Get media attachments
-  const imageAttachment = post.attachments.find((a) =>
+  const imageAttachment = post.attachments?.find((a) =>
     a.mimeType.startsWith('image/'),
   );
-  const videoAttachment = post.attachments.find((a) =>
+  const videoAttachment = post.attachments?.find((a) =>
     a.mimeType.startsWith('video/'),
   );
 
@@ -80,6 +85,94 @@ export default function OrgPostCard({
   const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
   const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
   const [togglePinMutation] = useMutation(TOGGLE_PINNED_POST);
+  const [getPresignedUrl] = useMutation(PRESIGNED_URL);
+
+  const [imagePresignedUrl, setImagePresignedUrl] = useState<string | null>(
+    null,
+  );
+  const [videoPresignedUrl, setVideoPresignedUrl] = useState<string | null>(
+    null,
+  );
+
+  const fetchPresignedUrl = async (
+    objectName: string,
+  ): Promise<string | null> => {
+    if (!objectName) return null;
+
+    try {
+      const { data } = await getPresignedUrl({
+        variables: {
+          input: {
+            objectName,
+            operation: 'GET',
+          },
+        },
+      });
+
+      // Fix the property name to match the GraphQL schema:
+      // Using createPresignedUrl instead of getPresignedUrl
+      return data?.createPresignedUrl?.presignedUrl || null;
+    } catch (error) {
+      console.error('Error getting presigned URL:', error);
+      toast.error('Failed to load media. Please try again.');
+      return null; // Prevents breaking UI
+    }
+  };
+
+  useEffect(() => {
+    const loadPresignedUrls = async (): Promise<void> => {
+      try {
+        // Get presigned URL for image if it exists
+        if (imageAttachment?.objectName) {
+          const url = await fetchPresignedUrl(imageAttachment.objectName);
+          setImagePresignedUrl(url);
+        }
+
+        // Get presigned URL for video if it exists
+        if (videoAttachment?.objectName) {
+          const url = await fetchPresignedUrl(videoAttachment.objectName);
+          setVideoPresignedUrl(url);
+        }
+      } catch (error) {
+        console.error('Failed to load presigned URLs:', error);
+      }
+    };
+
+    if (modalVisible || playing) {
+      loadPresignedUrls();
+    }
+  }, [imageAttachment, videoAttachment, modalVisible, playing]);
+
+  // Add this state for preview URLs
+  const [previewUrls, setPreviewUrls] = useState<Record<string, string>>({});
+
+  // Add this useEffect to load preview URLs when edit modal opens
+  useEffect(() => {
+    if (showEditModal && postFormState.attachments.length > 0) {
+      const loadPreviewUrls = async (): Promise<void> => {
+        try {
+          const urlPromises = postFormState.attachments.map(
+            (a) => fetchPresignedUrl(a.objectName), // Changed from a.url
+          );
+
+          const urls = await Promise.all(urlPromises);
+          const urlMap: Record<string, string> = {};
+
+          postFormState.attachments.forEach((a, i) => {
+            if (urls[i]) {
+              urlMap[a.objectName] = urls[i] as string;
+            }
+          });
+
+          setPreviewUrls(urlMap);
+        } catch (error) {
+          console.error('Error loading preview URLs:', error);
+        }
+      };
+
+      loadPreviewUrls();
+    }
+  }, [showEditModal, JSON.stringify(postFormState.attachments)]); // Better dependency tracking
 
   const togglePostPin = async (): Promise<void> => {
     try {
@@ -149,17 +242,27 @@ export default function OrgPostCard({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          {
-            url: base64 as string,
-            mimeType: file.type,
-          },
-        ],
-      }));
+      try {
+        const { objectName, fileHash } = await uploadFileToMinio(
+          file,
+          currentOrg || 'organizations', // Use currentOrg if available, fallback to 'organizations'
+        );
+
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            {
+              objectName,
+              mimeType: file.type,
+              fileHash, // Store fileHash for deduplication
+            },
+          ],
+        }));
+      } catch (error) {
+        console.error('Image upload error:', error);
+        toast.error('Failed to upload image');
+      }
     }
   };
 
@@ -168,31 +271,45 @@ export default function OrgPostCard({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          {
-            url: base64 as string,
-            mimeType: file.type,
-          },
-        ],
-      }));
+      if (!file.type.startsWith('video/')) {
+        toast.error('Please select a video file');
+        return;
+      }
+      try {
+        const { objectName, fileHash } = await uploadFileToMinio(
+          file,
+          currentOrg || 'organizations', // Use currentOrg if available, fallback to 'organizations'
+        );
+
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            {
+              objectName,
+              mimeType: file.type,
+              fileHash, // Store fileHash for deduplication
+            },
+          ],
+        }));
+      } catch (error) {
+        console.error('Video upload error:', error);
+        toast.error('Failed to upload video');
+      }
     }
   };
 
-  const clearImage = (url: string): void => {
+  const clearImage = (objectName: string): void => {
     setPostFormState((prev) => ({
       ...prev,
-      attachments: prev.attachments.filter((a) => a.url !== url),
+      attachments: prev.attachments.filter((a) => a.objectName !== objectName),
     }));
   };
 
-  const clearVideo = (url: string): void => {
+  const clearVideo = (objectName: string): void => {
     setPostFormState((prev) => ({
       ...prev,
-      attachments: prev.attachments.filter((a) => a.url !== url),
+      attachments: prev.attachments.filter((a) => a.objectName !== objectName),
     }));
   };
 
@@ -264,15 +381,14 @@ export default function OrgPostCard({
                 onMouseLeave={handleVideoPause}
               >
                 <source
-                  src={videoAttachment.name}
-                  type={videoAttachment.mimeType}
+                  src={videoPresignedUrl || ''}
+                  type={videoAttachment?.mimeType || ''}
                 />
               </video>
             ) : imageAttachment ? (
-              <Card.Img
+              <img
                 className={styles.postimageOrgPostCard}
-                variant="top"
-                src={imageAttachment.name}
+                src={imagePresignedUrl || AboutImg}
                 alt="Post image"
               />
             ) : (
@@ -305,13 +421,17 @@ export default function OrgPostCard({
                 {videoAttachment ? (
                   <video controls autoPlay loop muted>
                     <source
-                      src={videoAttachment.name}
+                      src={videoPresignedUrl || videoAttachment.objectName}
                       type={videoAttachment.mimeType}
                     />
                   </video>
                 ) : (
                   <img
-                    src={imageAttachment?.name || AboutImg}
+                    src={
+                      imagePresignedUrl ||
+                      imageAttachment?.objectName ||
+                      AboutImg
+                    }
                     alt="Post content"
                   />
                 )}
@@ -435,11 +555,14 @@ export default function OrgPostCard({
                   .filter((a) => a.mimeType.startsWith('image/'))
                   .map((attachment, index) => (
                     <div key={index} className={styles.previewOrgPostCard}>
-                      <img src={attachment.url} alt="Preview" />
+                      <img
+                        src={previewUrls[attachment.objectName] || ''} // Changed from attachment.url
+                        alt="Preview"
+                      />
                       <button
                         type="button"
                         className={styles.closeButtonP}
-                        onClick={() => clearImage(attachment.url)}
+                        onClick={() => clearImage(attachment.objectName)} // Changed from attachment.url
                       >
                         ×
                       </button>
@@ -463,7 +586,7 @@ export default function OrgPostCard({
                     <div key={index} className={styles.previewOrgPostCard}>
                       <video controls data-testid="video-preview">
                         <source
-                          src={attachment.url}
+                          src={previewUrls[attachment.objectName] || ''} // Changed from attachment.url
                           type={attachment.mimeType}
                         />
                         {t('videoNotSupported')}
@@ -471,7 +594,7 @@ export default function OrgPostCard({
                       <button
                         type="button"
                         className={styles.closeButtonP}
-                        onClick={() => clearVideo(attachment.url)}
+                        onClick={() => clearVideo(attachment.objectName)} // Changed from attachment.url
                       >
                         ×
                       </button>
