@@ -9,7 +9,7 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
-import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -47,7 +47,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
-  const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
+  const { data } = useQuery(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 
@@ -69,7 +69,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   React.useEffect(() => {
     if (data) {
-      setOrganizationDetails({ name: data.organizationsConnection[0].name });
+      setOrganizationDetails({ name: data.organizations[0].name });
     }
   }, [data]);
 

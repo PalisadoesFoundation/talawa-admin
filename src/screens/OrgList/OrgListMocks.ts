@@ -4,7 +4,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import {
   CURRENT_USER,
-  ORGANIZATION_CONNECTION_LIST,
+  ORGANIZATION_LIST,
   USER_ORGANIZATION_LIST,
   ALL_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
@@ -212,7 +212,7 @@ const MOCKS_WITH_ERROR = [
     },
     result: {
       data: {
-        organizationsConnection: organizations,
+        organizations: organizations,
       },
     },
   },
@@ -237,7 +237,7 @@ const MOCKS_WITH_ERROR = [
 const MOCKS_ADMIN = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
       variables: {
         first: 8,
         skip: 0,
@@ -248,7 +248,7 @@ const MOCKS_ADMIN = [
     },
     result: {
       data: {
-        organizationsConnection: organizations,
+        organizations: organizations,
       },
     },
   },

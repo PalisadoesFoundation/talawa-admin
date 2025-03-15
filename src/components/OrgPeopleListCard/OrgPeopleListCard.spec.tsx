@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import OrgPeopleListCard from './OrgPeopleListCard';
-import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
@@ -35,10 +35,10 @@ vi.mock('react-router-dom', async () => {
 const MOCKS = [
   {
     request: {
-      query: REMOVE_MEMBER_MUTATION,
+      query: REMOVE_MEMBER_MUTATION_PG,
       variables: {
-        userid: '1',
-        orgid: '456',
+        memberId: '1',
+        organizationId: '456',
       },
     },
     result: {
@@ -55,10 +55,10 @@ const MOCKS = [
 const ERROR_MOCKS = [
   {
     request: {
-      query: REMOVE_MEMBER_MUTATION,
+      query: REMOVE_MEMBER_MUTATION_PG,
       variables: {
-        userid: '1',
-        orgid: '456',
+        memberId: '1',
+        organizationId: '456',
       },
     },
     error: new Error('Failed to remove member'),
@@ -86,10 +86,10 @@ describe('Testing Organization People List Card', () => {
   const NULL_DATA_MOCKS = [
     {
       request: {
-        query: REMOVE_MEMBER_MUTATION,
+        query: REMOVE_MEMBER_MUTATION_PG,
         variables: {
-          userid: '1',
-          orgid: '456',
+          memberId: '1',
+          organizationId: '456',
         },
       },
       result: {
