@@ -964,6 +964,13 @@ type OrganizationPg {
     last: Int
   ): OrganizationAdvertisementsConnectionPg
 
+  blockedUsers(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationBlockedUsersConnectionPg
+
   chats(
     after: String
     before: String
@@ -1069,6 +1076,23 @@ type AdvertisementPg {
   updater: UserPg
   organization: OrganizationPg
   attachments: [AdvertisementAttachmentPg!]
+}
+
+type BlockedUserPg {
+  createdAt: Date
+  id: ID!
+  organization: OrganizationPg
+  user: UserPg
+}
+
+type OrganizationBlockedUsersConnectionPg {
+  edges: [OrganizationBlockedUsersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationBlockedUsersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
 }
 
 type OrganizationChatsConnectionPg {
@@ -1868,12 +1892,6 @@ type Query {
   myLanguage: String
   fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
   organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
-  organizationsConnection(
-    first: Int
-    orderBy: OrganizationOrderByInput
-    skip: Int
-    where: OrganizationWhereInput
-  ): [Organization]!
   organizationsMemberConnection(
     first: Int
     orderBy: UserOrderByInput

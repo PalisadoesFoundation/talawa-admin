@@ -6,6 +6,7 @@ export interface InterfaceTableLoader {
   noOfRows: number;
   headerTitles?: string[];
   noOfCols?: number;
+  'data-testid'?: string;
 }
 
 /**
@@ -17,11 +18,12 @@ export interface InterfaceTableLoader {
  * @param noOfRows - The number of rows to display.
  * @param headerTitles - Optional. The titles for the table headers.
  * @param noOfCols - Optional. The number of columns if headerTitles is not provided.
+ * @param data-testid - Optional. Test ID for testing purposes.
  *
  * @returns The JSX element representing the table loader.
  */
 const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
-  const { noOfRows, headerTitles, noOfCols } = props;
+  const { noOfRows, headerTitles, noOfCols, 'data-testid': dataTestId } = props;
 
   useEffect(() => {
     if (headerTitles == undefined && noOfCols == undefined) {
@@ -32,7 +34,7 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
   }, []);
 
   return (
-    <>
+    <div data-testid={dataTestId || 'TableLoader'}>
       <Table className="mb-4" responsive>
         <thead>
           <tr>
@@ -72,7 +74,7 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
           })}
         </tbody>
       </Table>
-    </>
+    </div>
   );
 };
 

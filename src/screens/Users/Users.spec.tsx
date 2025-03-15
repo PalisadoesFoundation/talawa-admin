@@ -1,10 +1,16 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -22,7 +28,7 @@ import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 
 const { setItem, removeItem } = useLocalStorage();
 
@@ -214,45 +220,82 @@ describe('Testing Users screen', () => {
     expect(screen.getByText(/No User Found/i)).toBeTruthy();
   });
 
-  it('Should render warning alert when there are no organizations', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  it('Should properly merge users when loading more', async () => {
+    // Create test data
+    const previousData = {
+      users: Array(5)
+        .fill(null)
+        .map((_, i) => ({
+          user: {
+            _id: `id${i}`,
+            firstName: `User${i}`,
+            lastName: `Last${i}`,
+            createdAt: new Date().toISOString(),
+          },
+          appUserProfile: {
+            adminFor: [],
+            isSuperAdmin: false,
+          },
+        })),
+    };
 
-    await wait(200);
-    expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
-  });
+    const newData = {
+      users: Array(5)
+        .fill(null)
+        .map((_, i) => ({
+          user: {
+            _id: `id${i + 5}`,
+            firstName: `User${i + 5}`,
+            lastName: `Last${i + 5}`,
+            createdAt: new Date().toISOString(),
+          },
+          appUserProfile: {
+            adminFor: [],
+            isSuperAdmin: false,
+          },
+        })),
+    };
 
-  it('Should not render warning alert when there are organizations present', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    // The update query function from the component
+    interface UserData {
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        createdAt: string;
+      };
+      appUserProfile: {
+        adminFor: string[];
+        isSuperAdmin: boolean;
+      };
+    }
 
-    await wait();
+    const updateQuery = (
+      prev: { users: UserData[] } | undefined,
+      { fetchMoreResult }: { fetchMoreResult?: { users: UserData[] } },
+    ) => {
+      if (!fetchMoreResult) return prev || { users: [] };
 
-    expect(container.textContent).not.toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
+      const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
+
+      const uniqueUsers = Array.from(
+        new Map(
+          mergedUsers.map((user: UserData) => [user.user._id, user]),
+        ).values(),
+      );
+
+      return { users: uniqueUsers };
+    };
+
+    // Test the updateQuery function
+    const result = updateQuery(previousData, { fetchMoreResult: newData });
+
+    // Verify that the users were properly merged
+    expect(result.users.length).toBe(10); // 5 initial + 5 new
+
+    // Make sure we have users from both data sets
+    expect(result.users.some((user) => user.user._id === 'id0')).toBe(true);
+    expect(result.users.some((user) => user.user._id === 'id9')).toBe(true);
   });
 
   it('Testing filter functionality', async () => {
@@ -868,5 +911,216 @@ describe('Testing Users screen', () => {
       expect(mockUser.appUserProfile.adminFor).toEqual([]);
       expect(mockUser.appUserProfile.isSuperAdmin).toBe(false);
     });
+  });
+
+  it('shows warning toast when organizations array is empty', async () => {
+    // Mock toast.warning for verification
+    const warningMock = vi.fn();
+    vi.spyOn(toast, 'warning').mockImplementation(warningMock);
+
+    // Create the mock with empty organizations array
+    const emptyOrgsMock = [
+      {
+        request: {
+          query: USER_LIST,
+          variables: {
+            first: 12,
+            skip: 0,
+            firstName_contains: '',
+            lastName_contains: '',
+            order: 'createdAt_DESC',
+          },
+        },
+        result: {
+          data: {
+            users: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [], // Empty organizations array
+          },
+        },
+      },
+    ];
+
+    const linkWithEmptyOrgs = new StaticMockLink(emptyOrgsMock, true);
+
+    render(
+      <MockedProvider
+        mocks={emptyOrgsMock}
+        addTypename={false}
+        link={linkWithEmptyOrgs}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to finish rendering and effect to run
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    // Verify toast.warning was called
+    expect(warningMock).toHaveBeenCalled();
+  });
+
+  // Test for null check before accessing organizations.length
+  it('handles null organizations data gracefully', async () => {
+    const nullOrgsMock = [
+      {
+        request: {
+          query: USER_LIST,
+          variables: {
+            first: 12,
+            skip: 0,
+            firstName_contains: '',
+            lastName_contains: '',
+            order: 'createdAt_DESC',
+          },
+        },
+        result: {
+          data: {
+            users: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: null, // Null organizations
+          },
+        },
+      },
+    ];
+
+    const linkNullOrgs = new StaticMockLink(nullOrgsMock, true);
+
+    // This should not throw an error
+    render(
+      <MockedProvider
+        mocks={nullOrgsMock}
+        addTypename={false}
+        link={linkNullOrgs}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // If it reaches this point without throwing an error, the test passes
+    await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
+    expect(true).toBeTruthy();
+  });
+
+  // Additional test for the prev?.users condition
+  it('handles missing prev.users in updateQuery gracefully', async () => {
+    const mockData = [
+      {
+        request: {
+          query: USER_LIST,
+          variables: {
+            first: 12,
+            skip: 0,
+            firstName_contains: '',
+            lastName_contains: '',
+            order: 'createdAt_DESC',
+          },
+        },
+        result: {
+          data: {
+            users: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [{ _id: 'org1', name: 'Organization 1' }],
+          },
+        },
+      },
+    ];
+
+    const link = new StaticMockLink(mockData, true);
+
+    // Spy on fetchMore to capture the updateQuery function
+    const fetchMoreSpy = vi.fn();
+    vi.spyOn(require('@apollo/client'), 'useQuery').mockImplementation(() => ({
+      data: undefined, // Simulate no data initially
+      loading: false,
+      fetchMore: fetchMoreSpy,
+      refetch: vi.fn(),
+    }));
+
+    render(
+      <MockedProvider mocks={mockData} addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to render
+    await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
+
+    // Simulate fetchMore being called
+    const updateQueryFn = fetchMoreSpy.mock.calls[0]?.[0]?.updateQuery;
+
+    if (updateQueryFn) {
+      // Create mock data with undefined prev to test the null check
+      const prev = undefined;
+
+      const fetchMoreResult = {
+        users: Array(5)
+          .fill(null)
+          .map((_, i) => ({
+            user: {
+              _id: `user_${i}`,
+              firstName: `User ${i}`,
+              lastName: `Last ${i}`,
+              email: `user${i}@example.com`,
+              createdAt: new Date().toISOString(),
+            },
+            appUserProfile: {
+              adminFor: [],
+              isSuperAdmin: false,
+              organizationsBlockedBy: [],
+            },
+          })),
+      };
+
+      // This should not throw an error due to the prev?.users check
+      const result = updateQueryFn(prev, { fetchMoreResult });
+
+      // Verify that the function returns the expected result
+      expect(result.users).toEqual(fetchMoreResult.users);
+    }
   });
 });

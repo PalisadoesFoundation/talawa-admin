@@ -4,7 +4,9 @@
 
 # Interface: InterfaceUserEvents
 
+
 Defined in: [src/utils/interfaces.ts:1323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1323)
+
 
 ## Extends
 
@@ -136,7 +138,9 @@ Defined in: [src/utils/interfaces.ts:343](https://github.com/PalisadoesFoundatio
 
 > **volunteerGroups**: `object`[]
 
+
 Defined in: [src/utils/interfaces.ts:1324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1324)
+
 
 #### \_id
 
@@ -164,7 +168,9 @@ Defined in: [src/utils/interfaces.ts:1324](https://github.com/PalisadoesFoundati
 
 > **volunteers**: `object`[]
 
+
 Defined in: [src/utils/interfaces.ts:1331](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1331)
+
 
 #### \_id
 
