@@ -70,12 +70,12 @@ const VenueModal = ({
   const { uploadFileToMinio } = useMinioUpload();
 
   // State to manage image preview and form data
-  const [venueImage, setVenueImage] = useState<boolean>(false);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [formState, setFormState] = useState({
     name: venueData?.name || '',
     description: venueData?.description || '',
     capacity: venueData?.capacity || '',
-    imageURL: venueData?.image || '',
+    objectName: venueData?.image || '',
   });
 
   // Reference for the file input element
@@ -110,7 +110,7 @@ const VenueModal = ({
         id: venueData._id,
         capacity: parseInt(formState.capacity, 10),
         description: formState.description?.trim() || '',
-        file: formState.imageURL || '',
+        file: formState.objectName || '',
         // Don't include name if it hasn't changed
       };
       try {
@@ -143,7 +143,7 @@ const VenueModal = ({
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
-          file: formState.imageURL || '',
+          file: formState.objectName || '',
         };
 
         const result = await mutate({ variables });
@@ -159,7 +159,7 @@ const VenueModal = ({
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
-          file: formState.imageURL || '',
+          file: formState.objectName || '',
           organizationId: orgId,
         };
 
@@ -189,8 +189,8 @@ const VenueModal = ({
    * This function also clears the file input field.
    */
   const clearImageInput = useCallback(() => {
-    setFormState((prevState) => ({ ...prevState, imageURL: '' }));
-    setVenueImage(false);
+    setFormState((prevState) => ({ ...prevState, objectName: '' }));
+    setImagePreviewUrl(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -202,12 +202,26 @@ const VenueModal = ({
       name: venueData?.name || '', // Prefill name or set as empty
       description: venueData?.description || '', // Prefill description
       capacity: venueData?.capacity?.toString() || '', // Prefill capacity as a string
-      imageURL: venueData?.image || '', // Prefill image
+      objectName: venueData?.image || '', // Prefill image
     });
-    setVenueImage(!!venueData?.image); // Set preview if image exists
+
+    if (venueData?.image) {
+      try {
+        const previewUrl = new URL(
+          `/api/images/${venueData.image}`,
+          window.location.origin,
+        ).toString();
+        setImagePreviewUrl(previewUrl);
+      } catch (error) {
+        toast.error('Error creating preview URL');
+        setImagePreviewUrl(null);
+      }
+    } else {
+      setImagePreviewUrl(null);
+    }
   }, [venueData]);
 
-  const { name, description, capacity, imageURL } = formState;
+  const { name, description, capacity } = formState;
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -293,12 +307,13 @@ const VenueModal = ({
                   return;
                 }
                 try {
-                  const { fileUrl } = await uploadFileToMinio(
+                  const { objectName } = await uploadFileToMinio(
                     file,
                     'organizations',
                   );
-                  setFormState({ ...formState, imageURL: fileUrl });
-                  setVenueImage(true); // To show image preview
+                  setFormState({ ...formState, objectName });
+                  const previewUrl = URL.createObjectURL(file);
+                  setImagePreviewUrl(previewUrl);
                 } catch (error) {
                   toast.error('Failed to upload image');
                 }
@@ -306,9 +321,9 @@ const VenueModal = ({
             }}
             className={styles.inputField}
           />
-          {venueImage && (
+          {imagePreviewUrl && (
             <div className={styles.previewVenueModal}>
-              <img src={imageURL} alt="Venue Image Preview" />
+              <img src={imagePreviewUrl} alt="Venue Image Preview" />
               <button
                 className={styles.closeButtonP}
                 onClick={clearImageInput}

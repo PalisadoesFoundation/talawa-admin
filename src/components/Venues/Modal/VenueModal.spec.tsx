@@ -156,15 +156,14 @@ vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), warning: vi.fn(), error: vi.fn() },
 }));
 
+const mockUploadFileToMinio = vi
+  .fn()
+  .mockResolvedValue({ objectName: 'test-image.png' });
 vi.mock('utils/MinioUpload', () => ({
-  useMinioUpload: () => ({
-    uploadFileToMinio: vi.fn().mockImplementation(() =>
-      Promise.resolve({
-        fileUrl: 'https://minio-server.example/test-image.png',
-      }),
-    ),
-  }),
+  useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
 }));
+
+global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
 // Helper Functions
 async function wait(ms = 100): Promise<void> {
@@ -388,8 +387,11 @@ describe('VenueModal', () => {
       const file = new File(['test'], 'test.png', { type: 'image/png' });
       const fileInput = screen.getByTestId('venueImgUrl');
       await userEvent.upload(fileInput, file);
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
 
-      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+      // Wait for the image to appear
+      const image = await screen.findByAltText('Venue Image Preview');
+      expect(image).toBeInTheDocument();
       expect(screen.getByTestId('closeimage')).toBeInTheDocument();
     });
 
@@ -448,6 +450,68 @@ describe('VenueModal', () => {
           'Only image files are allowed',
         );
       });
+    });
+
+    test('shows error toast when creating preview URL fails', async () => {
+      const originalURL = global.URL;
+      const urlConstructorSpy = vi
+        .spyOn(global, 'URL')
+        .mockImplementation(() => {
+          throw new Error('Invalid URL');
+        });
+
+      render(
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <VenueModal
+              {...defaultProps}
+              venueData={{
+                _id: '123',
+                name: 'Test Venue',
+                description: 'Test Description',
+                capacity: '100', // Make sure capacity is a string, not undefined
+                image: 'some-image.jpg',
+              }}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Error creating preview URL');
+      });
+
+      urlConstructorSpy.mockRestore();
+    });
+
+    test('shows error toast when an empty file is selected', async () => {
+      render(
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <VenueModal {...defaultProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Create an empty file (with size 0)
+      const emptyFile = new File([], 'empty.png', { type: 'image/png' });
+
+      // Get file input and upload the empty file
+      const fileInput = screen.getByTestId('venueImgUrl');
+
+      await act(async () => {
+        fireEvent.change(fileInput, { target: { files: [emptyFile] } });
+      });
+
+      // Check that toast.error was called with the expected message
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Empty file selected');
+      });
+
+      // Verify that no image preview is shown
+      expect(
+        screen.queryByAltText('Venue Image Preview'),
+      ).not.toBeInTheDocument();
     });
   });
 
