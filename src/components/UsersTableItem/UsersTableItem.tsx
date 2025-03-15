@@ -379,7 +379,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                               setremoveUserProps({
                                 orgId: org._id,
                                 orgName: org.name,
-                                setShowOnCancel: 'JOINED',
+                                setShowOnCancel: 'BLOCKED',
                               });
                               setShowJoinedOrganizations(false);
                               setShowRemoveUserModal(true);
@@ -562,7 +562,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                               setremoveUserProps({
                                 orgId: org._id,
                                 orgName: org.name,
-                                setShowOnCancel: 'JOINED',
+                                setShowOnCancel: 'BLOCKED',
                               });
                               setShowBlockedOrganizations(false);
                               setShowRemoveUserModal(true);

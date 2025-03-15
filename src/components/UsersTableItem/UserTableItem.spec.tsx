@@ -1357,4 +1357,50 @@ describe('Testing User Table Item', () => {
     expect(changeRoleBtn.value).toBe(`USER?abc`);
     await wait();
   });
+  test('handleModalHide function should be fully tested for all cases', () => {
+    const setShowRemoveUserModal1 = vi.fn();
+    const setShowJoinedOrganizations1 = vi.fn();
+    const setShowBlockedOrganizations1 = vi.fn();
+
+    handleModalHide(
+      { setShowOnCancel: '' },
+      setShowRemoveUserModal1,
+      setShowJoinedOrganizations1,
+      setShowBlockedOrganizations1,
+    );
+
+    expect(setShowRemoveUserModal1).toHaveBeenCalledWith(false);
+    expect(setShowJoinedOrganizations1).not.toHaveBeenCalled();
+    expect(setShowBlockedOrganizations1).not.toHaveBeenCalled();
+
+    const setShowRemoveUserModal2 = vi.fn();
+    const setShowJoinedOrganizations2 = vi.fn();
+    const setShowBlockedOrganizations2 = vi.fn();
+
+    handleModalHide(
+      { setShowOnCancel: 'JOINED' },
+      setShowRemoveUserModal2,
+      setShowJoinedOrganizations2,
+      setShowBlockedOrganizations2,
+    );
+
+    expect(setShowRemoveUserModal2).toHaveBeenCalledWith(false);
+    expect(setShowJoinedOrganizations2).toHaveBeenCalledWith(true);
+    expect(setShowBlockedOrganizations2).not.toHaveBeenCalled();
+
+    const setShowRemoveUserModal3 = vi.fn();
+    const setShowJoinedOrganizations3 = vi.fn();
+    const setShowBlockedOrganizations3 = vi.fn();
+
+    handleModalHide(
+      { setShowOnCancel: 'BLOCKED' },
+      setShowRemoveUserModal3,
+      setShowJoinedOrganizations3,
+      setShowBlockedOrganizations3,
+    );
+
+    expect(setShowRemoveUserModal3).toHaveBeenCalledWith(false);
+    expect(setShowJoinedOrganizations3).not.toHaveBeenCalled();
+    expect(setShowBlockedOrganizations3).toHaveBeenCalledWith(true);
+  });
 });
