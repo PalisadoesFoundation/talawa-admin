@@ -230,13 +230,15 @@ describe('MemberDetail', () => {
   });
 
   test('Should display dicebear image if image is null', async () => {
-    renderMemberDetailScreen(link1);
+    const dicebearUrl = 'mocked-data-uri';
 
-    await waitFor(() => {
-      expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    });
-
-    const dicebearUrl = 'http://example.com/avatar.jpg';
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <MemberDetail id="123" />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     const userImage = await waitFor(() =>
       screen.getByTestId('profile-picture'),

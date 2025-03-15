@@ -43,12 +43,18 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
+  --unblockButton-font: #555555;
+  --unblockButton-border: #eaebef;
+  --unblockButton-bg: #a8c7fa;
+  --unblockButton-bg-hover: #1778f2;
+  --unblockButton-border-hover: #1778f2;
+
   --removeButton-bg: #f8d6dc;
   --removeButton-color: #c8102e;
   --removeButton-bg-hover: #ff4d4f;
   --removeButton-border-hover: #ff4d4f;
   --removeButton-color-hover: #ffffff;
-  --removeButton-border: #dc3545;
+  --removeButton-border: #f8d6dc;
 
   --activeTab-bg: #eaebef;
   --activeTab-color: #808080;
@@ -456,6 +462,10 @@
 
   --table-image-small-size: 25px;
 
+  --banIcon-color: #c8102e;
+  --banIcon-color-hover: #ffffff;
+  --unbanIcon-color: #555555;
+  --unbanIcon-color-hover: #ffffff;
   --containerAdvertisemens-bg: #ffffff;
   --orgCard-bg: #fff;
   --orgCard-bg: #fff;
@@ -725,7 +735,7 @@
   --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:is(:hover, :active, :focus-visible) {
+.addButton:is(:hover, :active, :focus) {
   background-color: var(--addButton-bg-hover) !important;
   border-color: var(--addButton-border-hover);
 }
@@ -734,6 +744,49 @@
   margin-bottom: 10px;
   background-color: var(--disabled-btn);
   border-color: var(--addButton-bg);
+}
+
+/* Unblock Button */
+
+.unblockButton {
+  margin-bottom: 10px;
+  color: var(--unblockButton-font) !important;
+  background-color: var(--unblockButton-bg) !important;
+  border-color: var(--unblockButton-border);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.unblockButton:is(:hover, :active, :focus) {
+  background-color: var(--unblockButton-bg-hover) !important;
+  border-color: var(--unblockButton-border-hover);
+}
+
+/* Unban Icon */
+
+.unbanIcon {
+  color: var(--unbanIcon-color);
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 0.5px;
+  margin-right: 4px;
+}
+
+.unblockButton:hover .unbanIcon {
+  color: var(--unbanIcon-color-hover) !important;
+}
+
+/* Ban Icon*/
+
+.banIcon {
+  color: var(--banIcon-color);
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 0.5px;
+  margin-right: 4px;
+}
+
+.removeButton:hover .banIcon {
+  color: var(--banIcon-color-hover) !important;
 }
 
 /* Remove Button */
@@ -1100,6 +1153,7 @@ form label,
   position: relative;
   display: inline-block;
 }
+
 .customDropdown {
   width: auto;
 }
@@ -3554,7 +3608,8 @@ form label,
 .cardItem {
   display: flex;
   flex-direction: row;
-  align-items: center; /* Ensures left alignment */
+  align-items: center;
+  /* Vertically centers the items */
   justify-content: flex-start;
   height: 6rem;
   padding: 0.75rem;
@@ -3569,7 +3624,7 @@ form label,
   background-color: #eaebef;
   height: 3.5rem;
   min-width: 3.5rem;
-  border: 3.25rem; /* Make sure to update this if you need border style & color */
+  border: 3.25rem solid transparent;
   border-radius: 8px;
 }
 
@@ -4797,6 +4852,7 @@ form {
   justify-content: center;
   gap: 15px;
 }
+
 .profileContainer .profileTextUserSidebarOrg {
   flex: 1;
   text-align: start;
@@ -5116,6 +5172,7 @@ form {
   bottom: 0;
   animation: goToLeftBigScreen 0.5s ease-in-out;
 }
+
 .leftDrawer .sidebarcompheight {
   flex-grow: 1;
 }
@@ -6275,6 +6332,7 @@ form {
 .cardHeading {
   padding-left: 0.3rem !important;
 }
+
 .cardBodymain {
   display: flex;
   flex-direction: row;
@@ -6322,6 +6380,7 @@ form {
   height: auto;
   width: 100%;
 }
+
 .cardBody .textBox {
   margin: 0 0 3rem 0;
   padding-bottom: 10px;
@@ -6514,6 +6573,7 @@ form {
   justify-content: center;
   align-items: center;
 }
+
 .btnsContainerSearchBar .btnsBlock {
   display: flex;
   justify-content: center;

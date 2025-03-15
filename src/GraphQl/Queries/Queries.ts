@@ -484,6 +484,30 @@ export const GET_ORGANIZATION_MEMBERS_PG = gql`
         edges {
           node {
             id
+            name
+            emailAddress
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
+  query GetOrganizationBlockedUsers($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      blockedUsers(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            emailAddress
             role
           }
           cursor
