@@ -117,17 +117,34 @@ describe('OrganizationModal Component', () => {
     expect(fileInput).toBeInTheDocument();
 
     const file = new File(['test'], 'test.png', { type: 'image/png' });
+
+    // Mock the MinIO upload response with objectName
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'organizations/test-image-123.png',
+    });
+
     await act(async () => {
       fireEvent.change(fileInput, { target: { files: [file] } });
     });
 
+    // Verify MinIO upload was called correctly
     await waitFor(() => {
       expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organizations');
     });
+
+    // Verify form state was updated with objectName while preserving existing state
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith(
         expect.objectContaining({
-          avatar: 'https://minio-test.com/test-image.jpg',
+          addressLine1: '',
+          addressLine2: '',
+          city: '',
+          countryCode: '',
+          description: '',
+          name: '',
+          postalCode: '',
+          state: '',
+          avatar: 'organizations/test-image-123.png',
         }),
       );
     });
@@ -378,18 +395,29 @@ describe('OrganizationModal Component', () => {
       type: 'image/png',
     });
 
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [file] } });
+    });
 
+    // Verify MinIO upload was attempted
     await waitFor(() => {
       expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organizations');
     });
 
+    // Verify error was logged
     await waitFor(() => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error uploading image to MinIO:',
         expect.any(Error),
       );
     });
+
+    // Verify form state wasn't updated with objectName due to error
+    expect(mockSetFormState).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        avatar: expect.any(String),
+      }),
+    );
 
     consoleErrorSpy.mockRestore();
   });
@@ -401,11 +429,21 @@ describe('OrganizationModal Component', () => {
       type: 'image/png',
     });
 
-    fireEvent.change(fileInput, { target: { files: [largeFile] } });
-
-    await waitFor(() => {
-      expect(mockSetFormState).not.toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [largeFile] } });
     });
+
+    // Verify MinIO upload was not called for large file
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    });
+
+    // Verify form state wasn't updated with objectName
+    expect(mockSetFormState).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        avatar: expect.any(String),
+      }),
+    );
   });
 
   test('should validate file type', async () => {
@@ -415,31 +453,59 @@ describe('OrganizationModal Component', () => {
       type: 'text/plain',
     });
 
-    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
-
-    await waitFor(() => {
-      expect(mockSetFormState).not.toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [invalidFile] } });
     });
+
+    // Verify MinIO upload was not called for invalid file type
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    });
+
+    // Verify form state wasn't updated with objectName
+    expect(mockSetFormState).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        avatar: expect.any(String),
+      }),
+    );
   });
 
   test('should handle null file selection', async () => {
     setup();
     const fileInput = screen.getByTestId('organisationImage');
 
-    // Simulate a file input change event with no files
-    fireEvent.change(fileInput, { target: { files: null } });
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: null } });
+    });
 
-    expect(mockSetFormState).not.toHaveBeenCalled();
+    // Verify MinIO upload was not called
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+
+    // Verify form state wasn't updated with objectName
+    expect(mockSetFormState).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        avatar: expect.any(String),
+      }),
+    );
   });
 
   test('should handle empty file selection', async () => {
     setup();
     const fileInput = screen.getByTestId('organisationImage');
 
-    // Simulate a file input change event with empty files array
-    fireEvent.change(fileInput, { target: { files: [] } });
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [] } });
+    });
 
-    expect(mockSetFormState).not.toHaveBeenCalled();
+    // Verify MinIO upload was not called
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+
+    // Verify form state wasn't updated with objectName
+    expect(mockSetFormState).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        avatar: expect.any(String),
+      }),
+    );
   });
 
   test('should show modal when showModal is true', () => {

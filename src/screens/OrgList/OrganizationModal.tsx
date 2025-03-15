@@ -291,16 +291,16 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 }
 
                 try {
-                  // Using 'organizations' as the folder path for better organization
-                  const { fileUrl } = await uploadFileToMinio(
+                  // Upload to MinIO and get objectName
+                  const { objectName } = await uploadFileToMinio(
                     file,
                     'organizations',
                   );
-                  console.log('File uploaded successfully:', fileUrl);
+                  console.log('File uploaded successfully:', objectName);
 
                   setFormState({
                     ...formState,
-                    avatar: fileUrl,
+                    avatar: objectName,
                   });
                 } catch (error) {
                   console.error('Error uploading image to MinIO:', error);
