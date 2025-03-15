@@ -341,7 +341,15 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
+<<<<<<< HEAD
   --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
+=======
+  --featuresBox-border: #808080;
+  --featuresBox-border-hover: #555555;
+  --featuresBox-bg-hover: #eaebef;
+
+  --loader-size: 10em;
+>>>>>>> ec7e589be (added new UI Components)
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
 
@@ -6374,6 +6382,27 @@ form {
 
 .allRound {
   border-radius: 16px;
+}
+
+.featuresBox {
+  display: flex;
+  border: solid;
+  color: var(--featuresBox-border);
+  border-width: 1px;
+  background-color: #ffffff;
+  border-color: var(--featuresBox-border);
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: fit-content;
+  padding: 1rem;
+  gap: 0.5rem;
+}
+
+.featuresBox:hover {
+  background-color: var(--featuresBox-bg-hover);
+  border-color: var(--featuresBox-border-hover);
+  color: var(--featuresBox-border-hover);
 }
 
 .topRadius {

@@ -28,6 +28,10 @@ import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
+import TagIcon from 'assets/svgs/tag.svg?react';
+import MemberOrganizationIcon from 'assets/svgs/memberOrganization.svg?react';
+import MemberEvents from 'assets/svgs/memberEvents.svg?react';
+import OverviewIcon from 'assets/svgs/overview.svg?react';
 
 type MemberDetailProps = { id?: string };
 
@@ -241,6 +245,71 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           setShow={setShow}
         />
       )}
+      <div
+        style={{
+          display: 'flex',
+          marginTop: '2rem',
+          width: 'max',
+          padding: '2rem',
+        }}
+        className={`bg-white gap-4 ${styles.allRound}`}
+      >
+        <a href="/member">
+          <button
+            className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
+          >
+            <OverviewIcon />
+            <h3
+              style={{ margin: 'auto', fontSize: '1rem' }}
+              className={`text-gray-100`}
+            >
+              {t('navigationOverview')}
+            </h3>
+          </button>
+        </a>
+
+        <a href="/orgList">
+          <button
+            className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
+          >
+            <MemberOrganizationIcon />
+            <h3
+              style={{ margin: 'auto', fontSize: '1rem' }}
+              className={`text-gray-100`}
+            >
+              {t('navigationOrganisations')}
+            </h3>
+          </button>
+        </a>
+
+        <a href="/orgevents">
+          <button
+            className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
+          >
+            <MemberEvents />
+            <h3
+              style={{ margin: 'auto', fontSize: '1rem' }}
+              className={`text-gray-100`}
+            >
+              {t('navigationEvents')}
+            </h3>
+          </button>
+        </a>
+
+        <a href="/orgtags">
+          <button
+            className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
+          >
+            <TagIcon />
+            <h3
+              style={{ margin: 'auto', fontSize: '1rem' }}
+              className={`text-gray-100`}
+            >
+              {t('navigationTags')}
+            </h3>
+          </button>
+        </a>
+      </div>
       <Row className="g-4 mt-1">
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
