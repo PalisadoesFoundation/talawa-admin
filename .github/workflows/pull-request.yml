@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -42,7 +44,16 @@ jobs:
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          ONLY_CHANGED=false
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          
+          # Check if only specific files were changed
+          # This replicates the functionality of the tj-actions/changed-files action's only_changed output
+          # Logic would need to be adjusted based on specific requirements
+          
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+          echo "only_changed=${ONLY_CHANGED}" >> $GITHUB_OUTPUT
 
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
@@ -89,24 +100,26 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
-        uses: tj-actions/changed-files@v45
-        with:
-          files: |
+        run: |
+          # Sensitive files to check
+          SENSITIVE_FILES=(
             .flake8
             .pydocstyle
             pyproject.toml
-            .env*
+            ".env*"
             vitest.config.js
             src/App.tsx
-            .github/**
+            ".github/**"
             env.example
             .node-version
-            .husky/**
-            scripts/**
-            src/style/** 
+            ".husky/**"
+            "scripts/**"
+            "src/style/**" 
             schema.graphql
             package.json
             package-lock.json
@@ -135,18 +148,49 @@ jobs:
             ISSUE_GUIDELINES.md
             PR_GUIDELINES.md
             README.md
-            *.pem
-            *.key
-            *.cert
-            *.password
-            *.secret
-            *.credentials
+            "*.pem"
+            "*.key"
+            "*.cert"
+            "*.password"
+            "*.secret"
+            "*.credentials"
             .nojekyll
             yarn.lock
             docs/docusaurus.config.ts
-            docs/sidebar*
+            "docs/sidebar*"
             CNAME
-            
+          )
+          
+          # Get all changed files between base and head of PR
+          ALL_FILES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          
+          # Initialize variables
+          ANY_CHANGED=false
+          ANY_DELETED=false
+          CHANGED_FILES=""
+          
+          # Check each file against sensitive patterns
+          for FILE in $ALL_FILES; do
+            for PATTERN in "${SENSITIVE_FILES[@]}"; do
+              if [[ "$FILE" == $PATTERN || "$FILE" =~ $PATTERN ]]; then
+                CHANGED_FILES+="$FILE "
+                
+                # Check if file was deleted
+                if git diff --name-only --diff-filter=D ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -q "^$FILE$"; then
+                  ANY_DELETED=true
+                fi
+                
+                ANY_CHANGED=true
+                break
+              fi
+            done
+          done
+          
+          # Set outputs for the next steps
+          echo "all_changed_files=${CHANGED_FILES}" >> $GITHUB_OUTPUT
+          echo "any_changed=${ANY_CHANGED}" >> $GITHUB_OUTPUT
+          echo "any_deleted=${ANY_DELETED}" >> $GITHUB_OUTPUT
+
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
         env: 
@@ -165,10 +209,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get all changed files count
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          ALL_CHANGED_FILES_COUNT=$(echo "$ALL_CHANGED_FILES" | wc -l)
+          
+          echo "all_changed_files_count=${ALL_CHANGED_FILES_COUNT}" >> $GITHUB_OUTPUT
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Echo number of changed files
         env: 
@@ -193,10 +245,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -214,10 +272,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -235,6 +299,8 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -246,7 +312,23 @@ jobs:
       
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          
+          # Check if any files were changed
+          if [ -n "$ALL_CHANGED_FILES" ]; then
+            ANY_CHANGED=true
+          else
+            ANY_CHANGED=false
+          fi
+          
+          # Get all files (for TS compilation)
+          ALL_FILES=$(git ls-files | tr '\n' ' ')
+          
+          echo "any_changed=${ANY_CHANGED}" >> $GITHUB_OUTPUT
+          echo "all_files=${ALL_FILES}" >> $GITHUB_OUTPUT
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.any_changed == 'true'
