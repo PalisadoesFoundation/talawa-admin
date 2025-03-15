@@ -40,36 +40,27 @@ export const CURRENT_USER = gql`
 export const ORGANIZATION_LIST = gql`
   query {
     organizations {
-      _id
-      image
-      creator {
-        firstName
-        lastName
-      }
+      id
       name
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
+      addressLine1
+      description
+      avatarURL
+      members(first: 32) {
+        edges {
+          node {
+            id
+          }
+        }
+        pageInfo {
+          hasNextPage
+        }
       }
     }
   }
 `;
 
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
-  query UserJoinedOrganizations($id: String!, $first: Int) {
+  query UserJoinedOrganizations($id: String!, $first: Int!) {
     user(input: { id: $id }) {
       organizationsWhereMember(first: $first) {
         pageInfo {
@@ -110,48 +101,6 @@ export const ALL_ORGANIZATIONS_PG = gql`
             id
           }
         }
-      }
-    }
-  }
-`;
-
-// Query to take the Organization list with filter  and sort option
-export const ORGANIZATION_CONNECTION_LIST = gql`
-  query OrganizationsConnection(
-    $filter: String
-    $first: Int
-    $skip: Int
-    $orderBy: OrganizationOrderByInput
-  ) {
-    organizationsConnection(
-      where: { name_contains: $filter }
-      first: $first
-      skip: $skip
-      orderBy: $order
-    ) {
-      _id
-      image
-      creator {
-        firstName
-        lastName
-      }
-      name
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
       }
     }
   }
@@ -1122,10 +1071,7 @@ export {
 
 export {
   ORGANIZATION_ADMINS_LIST,
-  USER_JOINED_ORGANIZATIONS,
   USER_CREATED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
-  ALL_ORGANIZATIONS,
 } from './OrganizationQueries';
 
 export const GET_ORGANIZATION_EVENTS = gql`

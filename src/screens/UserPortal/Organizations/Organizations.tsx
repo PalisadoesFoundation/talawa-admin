@@ -3,8 +3,8 @@ import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS,
-  ALL_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
+  ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
@@ -160,7 +160,7 @@ export default function organizations(): JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-  } = useQuery(ALL_ORGANIZATIONS, {
+  } = useQuery(ORGANIZATION_LIST, {
     variables: { filter: filterName },
   });
 
@@ -168,7 +168,7 @@ export default function organizations(): JSX.Element {
     data: joinedOrganizationsData,
     loading: loadingJoined,
     refetch: refetchJoined,
-  } = useQuery(USER_JOINED_ORGANIZATIONS, {
+  } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
     variables: { id: userId, first: rowsPerPage, filter: filterName },
   });
 
@@ -339,6 +339,7 @@ export default function organizations(): JSX.Element {
               ? styles.expandOrg
               : styles.contractOrg
         }`}
+        data-testid="organizations-container"
       >
         <div className={styles.mainContainerOrganization}>
           <div className="d-flex justify-content-between align-items-center">
@@ -415,7 +416,7 @@ export default function organizations(): JSX.Element {
               ) : (
                 <>
                   {organizations && organizations.length > 0 ? (
-                    <div className="row">
+                    <div className="row" data-testid="organizations-list">
                       {(rowsPerPage > 0
                         ? organizations.slice(
                             page * rowsPerPage,
@@ -439,14 +440,37 @@ export default function organizations(): JSX.Element {
                           isJoined: organization.isJoined,
                         };
                         return (
-                          <div key={index} className="col-md-6 mb-4">
+                          <div
+                            key={index}
+                            className="col-md-6 mb-4"
+                            data-testid="organization-card"
+                            data-organization-name={organization.name}
+                            data-membership-status={
+                              organization.membershipRequestStatus
+                            }
+                          >
+                            <div
+                              data-testid={`membership-status-${organization.name}`}
+                              data-status={organization.membershipRequestStatus}
+                              className="visually-hidden"
+                            ></div>
+
                             <OrganizationCard {...cardProps} />
+                            {/* Add a hidden span with organization name for testing purposes */}
+                            <span
+                              data-testid={`org-name-${organization.name}`}
+                              className="visually-hidden"
+                            >
+                              {organization.name}
+                            </span>
                           </div>
                         );
                       })}
                     </div>
                   ) : (
-                    <span>{t('nothingToShow')}</span>
+                    <span data-testid="no-organizations-message">
+                      {t('nothingToShow')}
+                    </span>
                   )}
                 </>
               )}

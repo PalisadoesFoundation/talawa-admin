@@ -1869,12 +1869,6 @@ type Query {
   myLanguage: String
   fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
   organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
-  organizationsConnection(
-    first: Int
-    orderBy: OrganizationOrderByInput
-    skip: Int
-    where: OrganizationWhereInput
-  ): [Organization]!
   organizationsMemberConnection(
     first: Int
     orderBy: UserOrderByInput
