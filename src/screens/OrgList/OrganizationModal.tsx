@@ -1,10 +1,11 @@
 import React from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
 import type { ChangeEvent } from 'react';
 import styles from '../../style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
+import { toast } from 'react-toastify';
 
 // import useLocalStorage from 'utils/useLocalstorage';
 
@@ -71,6 +72,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   t,
   tCommon,
 }) => {
+  const { uploadFileToMinio } = useMinioUpload();
+
   return (
     <Modal
       show={showModal}
@@ -275,11 +278,35 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
 
-              if (file)
-                setFormState({
-                  ...formState,
-                  avatar: (await convertToBase64(file)) || null,
-                });
+              if (file) {
+                // Check file size (5MB limit)
+                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                if (file.size > maxSize) {
+                  toast.error(t('fileSizeLimitExceeded'));
+                  return;
+                }
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                  toast.error(t('invalidFileType'));
+                  return;
+                }
+
+                try {
+                  const { objectName } = await uploadFileToMinio(
+                    file,
+                    'organization',
+                  );
+                  setFormState({
+                    ...formState,
+                    avatar: objectName,
+                  });
+                  toast.success(t('imageUploadSuccess'));
+                } catch (error) {
+                  console.error('Error uploading image:', error);
+                  toast.error(t('imageUploadError'));
+                }
+              }
             }}
             data-testid="organisationImage"
           />
