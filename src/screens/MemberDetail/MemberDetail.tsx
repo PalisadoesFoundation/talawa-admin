@@ -32,6 +32,10 @@ import TagIcon from 'assets/svgs/tag.svg?react';
 import MemberOrganizationIcon from 'assets/svgs/memberOrganization.svg?react';
 import MemberEvents from 'assets/svgs/memberEvents.svg?react';
 import OverviewIcon from 'assets/svgs/overview.svg?react';
+import DeleteIcon from 'assets/svgs/delete.svg?react';
+import GlobalIcon from 'assets/svgs/global.svg?react';
+import ReloadIcon from 'assets/svgs/reload.svg?react';
+import SaveIcon from 'assets/svgs/save.svg?react';
 
 type MemberDetailProps = { id?: string };
 
@@ -311,10 +315,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         </a>
       </div>
       <Row className="g-4 mt-1">
-        <Col md={6}>
+        <Col md={8}>
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`bg-secondary text-white py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+              style={{backgroundColor: "#EAEBEF", color: "#000000"}}
             >
               <h3 className="m-0">{t('personalDetailsHeading')}</h3>
               <Button
@@ -408,7 +413,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 />
               </Col>
               <Row className="g-3">
-                <Col md={6}>
+                <Col md={9}>
                   <label htmlFor="name" className="form-label">
                     {tCommon('name')}
                   </label>
@@ -424,7 +429,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder={tCommon('name')}
                   />
                 </Col>
-                <Col md={6} data-testid="gender">
+                <Col md={3} data-testid="gender">
                   <label htmlFor="gender" className="form-label">
                     {t('gender')}
                   </label>
@@ -438,7 +443,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     }
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={5}>
                   <label htmlFor="birthDate" className="form-label">
                     {t('birthDate')}
                   </label>
@@ -462,7 +467,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     }}
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={4}>
                   <label htmlFor="grade" className="form-label">
                     {t('educationGrade')}
                   </label>
@@ -476,7 +481,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     }
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={5}>
                   <label htmlFor="empStatus" className="form-label">
                     {t('employmentStatus')}
                   </label>
@@ -490,7 +495,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     }
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={4}>
                   <label htmlFor="maritalStatus" className="form-label">
                     {t('maritalStatus')}
                   </label>
@@ -543,16 +548,131 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6}>
+
+        <Col lg={4}>
+          <Card className={`${styles.contact} ${styles.allRound}`}>
+            <Card.Header
+              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              style={{backgroundColor: "#EAEBEF", color: "#000000"}}
+            >
+              <h3 className="m-0" data-testid="eventsAttended-title">
+                {t('profileDetailHeading')}
+              </h3>
+            </Card.Header>
+            <Card.Body
+              id="tagsAssignedScrollableDiv"
+              data-testid="tagsAssignedScrollableDiv"
+              className={`${styles.cardBody} pe-0`}
+            ></Card.Body>
+          </Card>
+
+          <Card className={`${styles.contact} ${styles.allRound} mt-5`}>
+
+            <Card.Header
+              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              style={{backgroundColor: "#EAEBEF", color: "#000000"}}
+            >
+              <h3 className="m-0" data-testid="eventsAttended-title">
+                {t('actionsHeading')}
+              </h3>
+            </Card.Header>
+            <Card.Body
+              id="tagsAssignedScrollableDiv"
+              data-testid="tagsAssignedScrollableDiv"
+              className={`${styles.cardBody} pe-0`}
+            >
+              <Row className="mb-3 gap-2">
+                <Col md={12} className="mb-3">
+                  <Form.Check
+                    className="gap-3 d-flex align-items-center"
+                    type="checkbox"
+                    id="pluginCreationAllowed"
+                    label={t('pluginCreationAllowed')}
+                    style={{color: '#495057'}}
+                  />
+                </Col>
+                <Col md={12}>
+                  <Form.Check
+                    className="gap-3 d-flex align-items-center"
+                    style={{color: '#495057'}}
+                    type="checkbox"
+                    id="adminApproved"
+                    label={t('adminApproved')}
+                  />
+                </Col>
+            </Row>
+            <Row className="mt-4">
+              <Col md={5}>
+                <label htmlFor="language" className="form-label" style={{color : '#495057'}} >
+                  {t('chooseLanguage')}
+                </label>
+                <button 
+                  className={`${styles.inputColor} small form-control d-flex align-items-center`}
+                  style={{ width: 'fit-content' , gap: "0.5rem", border:'solid', borderWidth:'2px', borderColor:'#ced4da' }}
+                >
+                  <GlobalIcon />
+                  <span>English</span>
+                </button>
+              </Col>
+
+              <Col md={7}>
+                <label className="form-label" style={{color : '#495057'}} >
+                  {t('deleteUser')}
+                </label>
+                <Button 
+                  variant='outline-danger'
+                  style={{ backgroundColor: "#F8D6DC",width: 'fit-content' , gap: "0.5rem"}} 
+                  className="d-flex align-items-center justify-content-center"
+                >
+                  <DeleteIcon />
+                  {t('deleteUser')}
+                </Button>
+              </Col>
+            </Row>
+            </Card.Body>
+          </Card>
+
+          {isUpdated && (
+            <Row className="mt-4">
+              <Col md={12}>
+                <Card.Footer className="bg-inherit border-top-0 d-flex justify-content-center gap-2 py-3 px-2">
+                  <Button
+                    style={{color: "#495057"}}
+                    className='gap-3'
+                    variant="outline-secondary"
+                    onClick={resetChanges}
+                    data-testid="resetChangesBtn"
+                  >
+                    <ReloadIcon style={{marginRight:"0.5rem"}}/>
+                    {tCommon('resetChanges')}
+                  </Button>
+                  <Button
+                    style={{color: "#495057" , backgroundColor: "#A8C7FA"}}
+                    variant="success"
+                    onClick={handleUserUpdate}
+                    data-testid="saveChangesBtn"
+                  >
+                    <SaveIcon style={{marginRight:"0.5rem"}}/>
+                    {tCommon('saveChanges')}
+                  </Button>
+                </Card.Footer>
+              </Col>
+              </Row>
+            )}
+
+        </Col>
+
+        <Col md={8}>
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`bg-secondary text-white py-3 px-4 ${styles.topRadius}`}
+              className={`py-3 px-4 ${styles.topRadius}`}
+              style={{backgroundColor: "#EAEBEF" , color: "#000000"}}
             >
               <h3 className="m-0">{t('contactInfoHeading')}</h3>
             </Card.Header>
             <Card.Body className="py-3 px-3">
               <Row className="g-3">
-                <Col md={12}>
+                <Col md={6}>
                   <label htmlFor="email" className="form-label">
                     {tCommon('email')}
                   </label>
@@ -567,7 +687,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder={tCommon('email')}
                   />
                 </Col>
-                <Col md={12}>
+                <Col md={6}>
                   <label htmlFor="phoneNumber" className="form-label">
                     {t('mobilePhoneNumber')}
                   </label>
@@ -584,7 +704,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder="Ex. +1234567890"
                   />
                 </Col>
-                <Col md={12}>
+                <Col md={6}>
                   <label htmlFor="phoneNumber" className="form-label">
                     {t('workPhoneNumber')}
                   </label>
@@ -601,7 +721,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder="Ex. +1234567890"
                   />
                 </Col>
-                <Col md={12}>
+                <Col md={6}>
                   <label htmlFor="phoneNumber" className="form-label">
                     {t('homePhoneNumber')}
                   </label>
@@ -635,7 +755,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder="Ex. Lane 2"
                   />
                 </Col>
-                <Col md={12}>
+                <Col md={6}>
                   <label htmlFor="address" className="form-label">
                     {t('addressLine2')}
                   </label>
@@ -652,7 +772,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder="Ex. Lane 2"
                   />
                 </Col>
-                <Col md={12}>
+                <Col md={6}>
                   <label htmlFor="address" className="form-label">
                     {t('postalCode')}
                   </label>
@@ -669,7 +789,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder="Ex. 12345"
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={4}>
                   <label htmlFor="city" className="form-label">
                     {t('city')}
                   </label>
@@ -684,7 +804,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder="Enter city name"
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={4}>
                   <label htmlFor="state" className="form-label">
                     {t('state')}
                   </label>
@@ -699,7 +819,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     placeholder="Enter state name"
                   />
                 </Col>
-                <Col md={12}>
+                <Col md={4}>
                   <Form.Label htmlFor="country" className="form-label">
                     {tCommon('country')}
                   </Form.Label>
@@ -732,35 +852,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             </Card.Body>
           </Card>
         </Col>
-        {isUpdated && (
-          <Col md={12}>
-            <Card.Footer className="bg-white border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
-              <Button
-                variant="outline-secondary"
-                onClick={resetChanges}
-                data-testid="resetChangesBtn"
-              >
-                {tCommon('resetChanges')}
-              </Button>
-              <Button
-                variant="success"
-                onClick={handleUserUpdate}
-                data-testid="saveChangesBtn"
-              >
-                {tCommon('saveChanges')}
-              </Button>
-            </Card.Footer>
-          </Col>
-        )}
+        
       </Row>
 
       <Row className="mb-4">
         <Col xs={12} lg={6}>
           <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
             <Card.Header
-              className={`bg-secondary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              style={{backgroundColor: "#EAEBEF" , color: "#000000"}}
             >
-              <h3 className="text-white m-0" data-testid="eventsAttended-title">
+              <h3 className="m-0" data-testid="eventsAttended-title">
                 {t('tagsAssigned')}
               </h3>
             </Card.Header>

@@ -22,6 +22,10 @@ import VenueIcon from 'assets/svgs/venues.svg?react';
 import RequestsIcon from 'assets/svgs/requests.svg?react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import OverviewIcon from 'assets/svgs/overview.svg?react';
+import DeleteIcon from 'assets/svgs/delete.svg?react';
+import GlobalIcon from 'assets/svgs/global.svg?react';
+import ReloadIcon from 'assets/svgs/reload.svg?react';
+import SaveIcon from 'assets/svgs/save.svg?react';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';
 
 import React from 'react';
@@ -53,18 +57,22 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       );
     case 'People':
       return <PeopleIcon {...props} data-testid="Icon-Component-PeopleIcon" />;
+    case 'Reload':
+      return <ReloadIcon {...props} data-testid="Icon-Component-ReloadIcon" />;
+    case 'Save':
+      return <SaveIcon {...props} data-testid="Icon-Component-SaveIcon" />;
     case 'Tags':
       return <TagsIcon {...props} data-testid="Icon-Component-TagsIcon" />;
     case 'Overview':
-      return (
-        <OverviewIcon {...props} data-testid="Icon-Component-OverviewIcon" />
-      );
+      return <OverviewIcon {...props} data-testid="Icon-Component-OverviewIcon" />
+    case 'Delete':
+      return <DeleteIcon {...props} data-testid="Icon-Component-DeleteIcon" />
     case 'Tag':
       return <TagIcon {...props} data-testid="Icon-Component-TagIcon" />;
     case 'Requests':
-      return (
-        <RequestsIcon {...props} data-testid="Icon-Component-RequestsIcon" />
-      );
+      return <RequestsIcon {...props} data-testid="Icon-Component-RequestsIcon" />
+    case 'Global':
+      return <GlobalIcon {...props} data-testid="Icon-Component-GlobalIcon" />
     case 'Events':
       return <EventsIcon {...props} data-testid="Icon-Component-EventsIcon" />;
     case 'Member Organization':
