@@ -66,6 +66,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     id: string;
     postId: string;
     name: string;
+    objectName: string; // Add objectName property
     mimeType: string;
     createdAt: Date;
   }[] => {
@@ -76,6 +77,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
               id: `${post.id}-image`,
               postId: post.id,
               name: post.imageUrl,
+              objectName: post.imageUrl, // Use the image URL as objectName
               mimeType: 'image/jpeg',
               createdAt,
             },
@@ -87,6 +89,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
               id: `${post.id}-video`,
               postId: post.id,
               name: post.videoUrl,
+              objectName: post.videoUrl, // Use the video URL as objectName
               mimeType: 'video/mp4',
               createdAt,
             },

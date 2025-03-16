@@ -175,7 +175,9 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
   }, [showEditModal, JSON.stringify(postFormState.attachments)]); // Better dependency tracking
 
   // Add this state for file previews (different from MinIO URLs)
-  const [filePreviewUrls, setFilePreviewUrls] = useState<Record<string, string>>({});
+  const [filePreviewUrls, setFilePreviewUrls] = useState<
+    Record<string, string>
+  >({});
 
   // Add cleanup for object URLs on unmount
   useEffect(() => {
@@ -256,27 +258,27 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
       try {
         // Create temporary ID for this upload
         const tempId = `temp-${Date.now()}`;
-        
+
         // Create browser URL for immediate preview
         const previewUrl = URL.createObjectURL(file);
-        
+
         // Store preview immediately with temp ID
-        setFilePreviewUrls(prev => ({
+        setFilePreviewUrls((prev) => ({
           ...prev,
-          [tempId]: previewUrl
+          [tempId]: previewUrl,
         }));
 
         // Show loading state in UI
-        setPostFormState(prev => ({
+        setPostFormState((prev) => ({
           ...prev,
           attachments: [
             ...prev.attachments,
             {
               objectName: tempId, // Temporary ID for UI
               mimeType: file.type,
-              isUploading: true // Flag to show upload progress
-            }
-          ]
+              isUploading: true, // Flag to show upload progress
+            },
+          ],
         }));
 
         // Upload in background
@@ -286,8 +288,8 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         );
 
         // Update preview URLs map with final objectName
-        setFilePreviewUrls(prev => {
-          const newUrls = {...prev};
+        setFilePreviewUrls((prev) => {
+          const newUrls = { ...prev };
           // Store preview with real objectName
           newUrls[objectName] = prev[tempId];
           // Delete the temp entry
@@ -296,17 +298,18 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         });
 
         // Update attachments with real objectName
-        setPostFormState(prev => ({
+        setPostFormState((prev) => ({
           ...prev,
-          attachments: prev.attachments.map(a => 
-            a.objectName === tempId ? 
-            {
-              objectName,
-              mimeType: file.type,
-              fileHash,
-              isUploading: false
-            } : a
-          )
+          attachments: prev.attachments.map((a) =>
+            a.objectName === tempId
+              ? {
+                  objectName,
+                  mimeType: file.type,
+                  fileHash,
+                  isUploading: false,
+                }
+              : a,
+          ),
         }));
       } catch (error) {
         console.error('Image upload error:', error);
@@ -327,17 +330,17 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
       try {
         // Create browser URL for preview BEFORE uploading to MinIO
         const previewUrl = URL.createObjectURL(file);
-        
+
         // Upload to MinIO and get objectName
         const { objectName, fileHash } = await uploadFileToMinio(
           file,
           currentOrg || 'organizations',
         );
-        
+
         // Store preview URL with objectName as key
-        setFilePreviewUrls(prev => ({
+        setFilePreviewUrls((prev) => ({
           ...prev,
-          [objectName]: previewUrl // Use objectName as key
+          [objectName]: previewUrl, // Use objectName as key
         }));
 
         setPostFormState((prev) => ({
@@ -615,7 +618,11 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                   .map((attachment, index) => (
                     <div key={index} className={styles.previewOrgPostCard}>
                       <img
-                        src={filePreviewUrls[attachment.objectName] || previewUrls[attachment.objectName] || ''}
+                        src={
+                          filePreviewUrls[attachment.objectName] ||
+                          previewUrls[attachment.objectName] ||
+                          ''
+                        }
                         alt="Preview"
                       />
                       <button
@@ -623,9 +630,11 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                         className={styles.closeButtonP}
                         onClick={() => {
                           if (filePreviewUrls[attachment.objectName]) {
-                            URL.revokeObjectURL(filePreviewUrls[attachment.objectName]);
-                            setFilePreviewUrls(prev => {
-                              const newUrls = {...prev};
+                            URL.revokeObjectURL(
+                              filePreviewUrls[attachment.objectName],
+                            );
+                            setFilePreviewUrls((prev) => {
+                              const newUrls = { ...prev };
                               delete newUrls[attachment.objectName];
                               return newUrls;
                             });
@@ -655,7 +664,11 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                     <div key={index} className={styles.previewOrgPostCard}>
                       <video controls data-testid="video-preview">
                         <source
-                          src={filePreviewUrls[attachment.objectName] || previewUrls[attachment.objectName] || ''}
+                          src={
+                            filePreviewUrls[attachment.objectName] ||
+                            previewUrls[attachment.objectName] ||
+                            ''
+                          }
                           type={attachment.mimeType}
                         />
                         {t('videoNotSupported')}
@@ -665,9 +678,11 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                         className={styles.closeButtonP}
                         onClick={() => {
                           if (filePreviewUrls[attachment.objectName]) {
-                            URL.revokeObjectURL(filePreviewUrls[attachment.objectName]);
-                            setFilePreviewUrls(prev => {
-                              const newUrls = {...prev};
+                            URL.revokeObjectURL(
+                              filePreviewUrls[attachment.objectName],
+                            );
+                            setFilePreviewUrls((prev) => {
+                              const newUrls = { ...prev };
                               delete newUrls[attachment.objectName];
                               return newUrls;
                             });

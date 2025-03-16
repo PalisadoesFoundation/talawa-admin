@@ -1,6 +1,12 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, fireEvent, waitForElementToBeRemoved } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import OrgPostCard from './OrgPostCard';
@@ -847,17 +853,23 @@ describe('OrgPostCard Component', () => {
 
     it('shows preview immediately and updates when upload completes', async () => {
       // Set up a function we can resolve later to control when upload completes
-      let resolveUpload: (value: {objectName: string; fileHash: string}) => void = () => {};
-      const uploadPromise = new Promise<{objectName: string; fileHash: string}>(resolve => {
+      let resolveUpload: (value: {
+        objectName: string;
+        fileHash: string;
+      }) => void = () => {};
+      const uploadPromise = new Promise<{
+        objectName: string;
+        fileHash: string;
+      }>((resolve) => {
         resolveUpload = resolve;
       });
-      
+
       vi.mock('utils/MinioUpload', () => ({
         useMinioUpload: () => ({
           uploadFileToMinio: () => uploadPromise,
         }),
       }));
-    
+
       renderComponent();
       const postItem = screen.getByTestId('post-item');
       await userEvent.click(postItem);
@@ -865,22 +877,27 @@ describe('OrgPostCard Component', () => {
       await userEvent.click(moreOptionsButton);
       const editOption = screen.getByText(/edit/i);
       await userEvent.click(editOption);
-    
+
       const fileInput = await screen.findByTestId('image-upload');
-      const file = new File(['dummy content'], 'test-image.jpg', { type: 'image/jpeg' });
-      
+      const file = new File(['dummy content'], 'test-image.jpg', {
+        type: 'image/jpeg',
+      });
+
       // Upload the file
       await userEvent.upload(fileInput, file);
-      
+
       // Verify preview is shown immediately with loading indicator
       expect(URL.createObjectURL).toHaveBeenCalledWith(file);
       const preview = await screen.findByAltText('Preview');
       expect(preview).toBeInTheDocument();
       expect(screen.getByText(/uploading/i)).toBeInTheDocument();
-      
+
       // Complete the upload
-      resolveUpload({objectName: 'server-object-name', fileHash: 'test-hash'});
-      
+      resolveUpload({
+        objectName: 'server-object-name',
+        fileHash: 'test-hash',
+      });
+
       // Verify loading indicator disappears but preview remains
       await waitForElementToBeRemoved(() => screen.queryByText(/uploading/i));
       expect(screen.getByAltText('Preview')).toBeInTheDocument();
