@@ -280,7 +280,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
               if (file) {
                 // Check file size (5MB limit)
-                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+
+                const maxSize = MAX_FILE_SIZE;
+
                 if (file.size > maxSize) {
                   toast.error(t('fileSizeLimitExceeded'));
                   return;
