@@ -471,50 +471,68 @@ describe('OrganizationModal Component', () => {
     });
   });
 
-  test('should handle MinIO upload error', async () => {
+  test('should handle MinIO upload failures with comprehensive error handling', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error');
-
     setup();
 
-    // Mock the function to reject with an error
-    mockUploadFileToMinio.mockRejectedValue(new Error('MinIO upload failed'));
-
-    const fileInput = screen.getByTestId('organisationImage');
-    const file = new File(['dummy content'], 'test.png', {
+    const testFile = new File(['test content'], 'test-image.png', {
       type: 'image/png',
     });
 
-    await userEvent.upload(fileInput, file);
+    // Test different types of errors
+    const testCases = [
+      {
+        error: new Error('Network error'),
+        expectedErrorMessage: 'Network error',
+      },
+      {
+        error: new Error('MinIO upload failed'),
+        expectedErrorMessage: 'MinIO upload failed',
+      },
+    ];
 
-    // Verify MinIO upload was attempted
-    await waitFor(() => {
-      expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organizations');
-    });
+    for (const { error, expectedErrorMessage } of testCases) {
+      mockUploadFileToMinio.mockRejectedValue(error);
 
-    // Verify loading toast was shown with file name
-    expect(mockToast.info).toHaveBeenCalledWith('Uploading test.png...');
+      await act(async () => {
+        fireEvent.change(screen.getByTestId('organisationImage'), {
+          target: { files: [testFile] },
+        });
+      });
 
-    // Verify error toast was shown with file name
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Failed to upload test.png. MinIO upload failed',
-    );
+      // Verify the complete error handling flow
+      await waitFor(() => {
+        // 1. Loading toast shown
+        expect(mockToast.info).toHaveBeenCalledWith(
+          'Uploading test-image.png...',
+        );
 
-    // Verify error was logged to console
-    await waitFor(() => {
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error uploading image to MinIO:',
-        expect.any(Error),
-      );
-    });
+        // 2. Error toast shown with correct message
+        expect(mockToast.error).toHaveBeenCalledWith(
+          `Failed to upload test-image.png. ${expectedErrorMessage}`,
+        );
 
-    // Verify form state wasn't updated with objectName due to error
-    expect(mockSetFormState).not.toHaveBeenCalledWith(
-      expect.objectContaining({
-        avatar: expect.any(String),
-      }),
-    );
+        // 3. Error logged to console
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Error uploading image to MinIO:',
+          error,
+        );
 
-    // Cleanup spy
+        // 4. Form state not updated
+        expect(mockSetFormState).not.toHaveBeenCalledWith(
+          expect.objectContaining({
+            avatar: expect.any(String),
+          }),
+        );
+      });
+
+      // Clear mocks for next iteration
+      mockToast.info.mockClear();
+      mockToast.error.mockClear();
+      consoleErrorSpy.mockClear();
+      mockSetFormState.mockClear();
+    }
+
     consoleErrorSpy.mockRestore();
   });
 
