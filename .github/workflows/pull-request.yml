@@ -293,7 +293,7 @@ jobs:
         run: |
           if [[ -n "${{ steps.changed-files.outputs.ts_files }}" ]]; then
             echo "${{ steps.changed-files.outputs.ts_files }}" | tr ' ' '\n' | while read file; do
-              npx tsc --noEmit "./$file"
+              npx tsc --noEmit --target es2017 --lib dom,dom.iterable,esnext --allowJs --skipLibCheck --esModuleInterop --allowSyntheticDefaultImports --strict --forceConsistentCasingInFileNames --noFallthroughCasesInSwitch --module esnext --moduleResolution node --resolveJsonModule --isolatedModules --jsx react-jsx --baseUrl src --types vite/client,vite-plugin-svgr/client,node  "./$file"
             done
           fi
 
