@@ -24,7 +24,7 @@ It includes:
 
 ### GraphQL Queries
 - `ORGANIZATION_DONATION_CONNECTION_LIST`: Fetches the list of donations for the organization.
-- `USER_ORGANIZATION_CONNECTION`: Fetches organization details.
+- `ORGANIZATION_LIST`: Fetches organization details.
 
 ### GraphQL Mutations
 - `DONATE_TO_ORGANIZATION`: Performs the donation action.

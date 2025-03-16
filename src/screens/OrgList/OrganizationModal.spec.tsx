@@ -528,7 +528,7 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should show modal when showModal is true', () => {
-    return render(
+    render(
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
@@ -546,11 +546,12 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
+
     expect(screen.getByTestId('modalOrganizationHeader')).toBeVisible();
   });
 
   test('should not show modal when showModal is false', () => {
-    return render(
+    render(
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
@@ -568,6 +569,7 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
+
     expect(
       screen.queryByTestId('modalOrganizationHeader'),
     ).not.toBeInTheDocument();
