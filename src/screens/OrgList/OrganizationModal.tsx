@@ -278,48 +278,61 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               const target = e.target as HTMLInputElement;
               const file = target.files?.[0];
 
-              if (file) {
-                // Validate file size (max 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                  toast.error(
-                    'File size exceeds the 5MB limit. Please choose a smaller file.',
-                  );
-                  // Reset the file input
-                  target.value = '';
-                  return;
-                }
+              // Reset form if no file selected
+              if (!file) {
+                toast.error('Please select a file to upload.');
+                return;
+              }
 
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                  toast.error(
-                    'Only image files are allowed. Please select a valid image file.',
-                  );
-                  // Reset the file input
-                  target.value = '';
-                  return;
-                }
+              // Validate file size (max 5MB)
+              const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+              if (file.size > MAX_FILE_SIZE) {
+                toast.error(
+                  `File size (${(file.size / 1024 / 1024).toFixed(2)}MB) exceeds the 5MB limit. Please choose a smaller file.`,
+                );
+                target.value = '';
+                return;
+              }
 
-                try {
-                  // Show loading toast
-                  toast.info('Uploading image...');
+              // Validate file type
+              const allowedTypes = [
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/webp',
+              ];
+              if (!allowedTypes.includes(file.type)) {
+                toast.error(
+                  `Invalid file type: ${file.type}. Please select a valid image file (JPEG, PNG, GIF, or WebP).`,
+                );
+                target.value = '';
+                return;
+              }
 
-                  // Upload to MinIO and get objectName
-                  const { objectName } = await uploadFileToMinio(
-                    file,
-                    'organizations',
-                  );
+              try {
+                // Show loading toast with file name
+                toast.info(`Uploading ${file.name}...`);
 
-                  setFormState({
-                    ...formState,
-                    avatar: objectName,
-                  });
-                } catch (error) {
-                  // Show error toast
-                  toast.error('Failed to upload image. Please try again.');
-                  console.error('Error uploading image to MinIO:', error);
-                  // Reset the file input
-                  target.value = '';
-                }
+                // Upload to MinIO and get objectName
+                const { objectName } = await uploadFileToMinio(
+                  file,
+                  'organizations',
+                );
+
+                setFormState({
+                  ...formState,
+                  avatar: objectName,
+                });
+
+                // Show success toast with file name
+                toast.success(`${file.name} uploaded successfully!`);
+              } catch (error) {
+                // Show detailed error toast
+                const errorMessage =
+                  error instanceof Error ? error.message : 'Unknown error';
+                toast.error(`Failed to upload ${file.name}. ${errorMessage}`);
+                console.error('Error uploading image to MinIO:', error);
+                target.value = '';
               }
             }}
             data-testid="organisationImage"
