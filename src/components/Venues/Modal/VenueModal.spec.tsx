@@ -411,7 +411,6 @@ describe('VenueModal', () => {
     test('shows error when uploading file larger than 5MB', async () => {
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-      // Create a file that exceeds the size limit (5MB)
       const largeFile = new File(
         ['x'.repeat(6 * 1024 * 1024)],
         'large-image.png',
@@ -434,7 +433,6 @@ describe('VenueModal', () => {
     test('shows error when uploading non-image file', async () => {
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-      // Create a non-image file
       const pdfFile = new File(['test content'], 'document.pdf', {
         type: 'application/pdf',
       });
@@ -469,7 +467,7 @@ describe('VenueModal', () => {
                 _id: '123',
                 name: 'Test Venue',
                 description: 'Test Description',
-                capacity: '100', // Make sure capacity is a string, not undefined
+                capacity: '100',
                 image: 'some-image.jpg',
               }}
             />
