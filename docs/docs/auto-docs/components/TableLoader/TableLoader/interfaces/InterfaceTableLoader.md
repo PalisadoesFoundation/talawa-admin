@@ -8,6 +8,14 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/Pa
 
 ## Properties
 
+### data-testid?
+
+> `optional` **data-testid**: `string`
+
+Defined in: [src/components/TableLoader/TableLoader.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L9)
+
+***
+
 ### headerTitles?
 
 > `optional` **headerTitles**: `string`[]
