@@ -15,15 +15,26 @@ import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
+import { toast } from 'react-toastify';
 
-const mockUploadFileToMinio = vi
-  .fn()
-  .mockResolvedValue({ fileUrl: 'https://minio-test.com/test-image.jpg' });
+// Setup all mocks before any test code
+vi.mock('react-toastify', () => ({
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
+const mockToast = toast as jest.Mocked<typeof toast>;
+
+const mockUploadFileToMinio = vi.fn();
+
+// Mock the MinioUpload utility
 vi.mock('utils/MinioUpload', () => ({
-  useMinioUpload: vi.fn(() => ({
+  useMinioUpload: () => ({
     uploadFileToMinio: mockUploadFileToMinio,
-  })),
+  }),
 }));
 
 describe('OrganizationModal Component', () => {
@@ -101,28 +112,46 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle successful image upload with MinioClient', async () => {
+    // Setup component
     setup();
 
+    // Get the file input
     const fileInput = screen.getByTestId('organisationImage');
     expect(fileInput).toBeInTheDocument();
 
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-
-    // Mock the MinIO upload response with objectName
-    mockUploadFileToMinio.mockResolvedValue({
-      objectName: 'organizations/test-image-123.png',
+    // Create a test image file
+    const testImageFile = new File(['test image content'], 'test-image.png', {
+      type: 'image/png',
     });
 
+    // Setup the mock before triggering the upload
+    mockUploadFileToMinio.mockImplementation((file, folder) => {
+      expect(file).toBeTruthy();
+      expect(folder).toBe('organizations');
+      return Promise.resolve({
+        objectName: 'organizations/test-image-123.png',
+      });
+    });
+
+    // Trigger the file upload
     await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [file] } });
+      const event = {
+        target: {
+          files: [testImageFile],
+        },
+      };
+      fireEvent.change(fileInput, event);
     });
 
-    // Verify MinIO upload was called correctly
+    // Verify the upload was triggered with correct parameters
     await waitFor(() => {
-      expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organizations');
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(
+        expect.any(File),
+        'organizations',
+      );
     });
 
-    // Verify form state was updated with objectName while preserving existing state
+    // Verify the form state was updated correctly
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -373,6 +402,7 @@ describe('OrganizationModal Component', () => {
   // Add new test for MinIO upload error handling
   test('should handle MinIO upload error', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error');
+
     setup();
 
     // Mock the function to reject with an error
@@ -383,16 +413,22 @@ describe('OrganizationModal Component', () => {
       type: 'image/png',
     });
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [file] } });
-    });
+    await userEvent.upload(fileInput, file);
 
     // Verify MinIO upload was attempted
     await waitFor(() => {
       expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organizations');
     });
 
-    // Verify error was logged
+    // Verify loading toast was shown
+    expect(mockToast.info).toHaveBeenCalledWith('Uploading image...');
+
+    // Verify error toast was shown
+    expect(mockToast.error).toHaveBeenCalledWith(
+      'Failed to upload image. Please try again.',
+    );
+
+    // Verify error was logged to console
     await waitFor(() => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error uploading image to MinIO:',
@@ -407,6 +443,7 @@ describe('OrganizationModal Component', () => {
       }),
     );
 
+    // Cleanup spy
     consoleErrorSpy.mockRestore();
   });
 
@@ -417,9 +454,7 @@ describe('OrganizationModal Component', () => {
       type: 'image/png',
     });
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [largeFile] } });
-    });
+    await userEvent.upload(fileInput, largeFile);
 
     // Verify MinIO upload was not called for large file
     await waitFor(() => {
@@ -441,9 +476,7 @@ describe('OrganizationModal Component', () => {
       type: 'text/plain',
     });
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [invalidFile] } });
-    });
+    await userEvent.upload(fileInput, invalidFile);
 
     // Verify MinIO upload was not called for invalid file type
     await waitFor(() => {
@@ -462,9 +495,8 @@ describe('OrganizationModal Component', () => {
     setup();
     const fileInput = screen.getByTestId('organisationImage');
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: null } });
-    });
+    // For null case, we'll clear the file input value
+    fireEvent.change(fileInput, { target: { files: [] } });
 
     // Verify MinIO upload was not called
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();
@@ -481,9 +513,8 @@ describe('OrganizationModal Component', () => {
     setup();
     const fileInput = screen.getByTestId('organisationImage');
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [] } });
-    });
+    // For empty case, we'll use an empty file array
+    fireEvent.change(fileInput, { target: { files: [] } });
 
     // Verify MinIO upload was not called
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();

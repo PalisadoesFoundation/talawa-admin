@@ -309,9 +309,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                     'organizations',
                   );
 
-                  // Show success toast
-                  toast.success('Image uploaded successfully!');
-
                   setFormState({
                     ...formState,
                     avatar: objectName,
