@@ -1,20 +1,17 @@
 import gql from 'graphql-tag';
 import '../../style/app.module.css';
-export const UNBLOCK_USER_MUTATION = gql`
-  mutation UnblockUser($userId: ID!, $orgId: ID!) {
-    unblockUser(organizationId: $orgId, userId: $userId) {
-      _id
-    }
-  }
-`;
 
 // to block the user
 
-export const BLOCK_USER_MUTATION = gql`
-  mutation BlockUser($userId: ID!, $orgId: ID!) {
-    blockUser(organizationId: $orgId, userId: $userId) {
-      _id
-    }
+export const BLOCK_USER_MUTATION_PG = gql`
+  mutation BlockUser($organizationId: String!, $userId: String!) {
+    blockUser(organizationId: $organizationId, userId: $userId)
+  }
+`;
+
+export const UNBLOCK_USER_MUTATION_PG = gql`
+  mutation UnblockUser($organizationId: String!, $userId: String!) {
+    unblockUser(organizationId: $organizationId, userId: $userId)
   }
 `;
 
@@ -170,6 +167,33 @@ export const SIGNUP_MUTATION = gql`
         id
       }
       authenticationToken
+    }
+  }
+`;
+
+//to create user by admin
+export const CREATE_MEMBER_PG = gql`
+  mutation CreateUser(
+    $name: String!
+    $email: EmailAddress!
+    $password: String!
+    $role: UserRole!
+    $isEmailAddressVerified: Boolean!
+  ) {
+    createUser(
+      input: {
+        name: $name
+        emailAddress: $email
+        password: $password
+        role: $role
+        isEmailAddressVerified: $isEmailAddressVerified
+      }
+    ) {
+      authenticationToken
+      user {
+        id
+        name
+      }
     }
   }
 `;
@@ -373,6 +397,17 @@ export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
     removeMember(data: { organizationId: $orgid, userId: $userid }) {
       _id
+    }
+  }
+`;
+
+// to Remove member from an organization postgres
+export const REMOVE_MEMBER_MUTATION_PG = gql`
+  mutation RemoveMember($organizationId: ID!, $memberId: ID!) {
+    deleteOrganizationMembership(
+      input: { organizationId: $organizationId, memberId: $memberId }
+    ) {
+      id
     }
   }
 `;
@@ -731,6 +766,7 @@ export const PRESIGNED_URL = gql`
       fileUrl
       presignedUrl
       objectName
+      requiresUpload
     }
   }
 `;

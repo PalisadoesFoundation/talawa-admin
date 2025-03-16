@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
-  USER_ORGANIZATION_CONNECTION,
+  ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 import styles from '../../../style/app-fixed.module.css';
@@ -55,7 +55,7 @@ interface InterfaceDonation {
  *
  * ### GraphQL Queries
  * - `ORGANIZATION_DONATION_CONNECTION_LIST`: Fetches the list of donations for the organization.
- * - `USER_ORGANIZATION_CONNECTION`: Fetches organization details.
+ * - `ORGANIZATION_LIST`: Fetches organization details.
  *
  * ### GraphQL Mutations
  * - `DONATE_TO_ORGANIZATION`: Performs the donation action.
@@ -110,7 +110,7 @@ export default function donate(): JSX.Element {
     variables: { orgId: organizationId },
   });
 
-  const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
+  const { data } = useQuery(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 
@@ -134,7 +134,7 @@ export default function donate(): JSX.Element {
 
   useEffect(() => {
     if (data) {
-      setOrganizationDetails(data.organizationsConnection[0]);
+      setOrganizationDetails(data.organizations[0]);
     }
   }, [data]);
 

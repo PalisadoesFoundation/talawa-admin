@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import styles from '../Settings.module.css';
+import styles from '../../../../style/app-fixed.module.css';
 import {
   educationGradeEnum,
   employmentStatusEnum,
@@ -9,6 +9,8 @@ import {
 } from 'utils/formEnumFields';
 import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 import sanitizeHtml from 'sanitize-html';
+import SyncIcon from '@mui/icons-material/Sync';
+import SaveIcon from '@mui/icons-material/Save';
 
 interface InterfaceUserDetailsFormProps {
   userDetails: {
@@ -62,7 +64,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
 }) => (
   <Form>
     <Row className="mb-1">
-      <Col lg={4}>
+      <Col lg={12}>
         <Form.Label htmlFor="inputName" className={styles.cardLabel}>
           {tCommon('name')}
         </Form.Label>
@@ -277,20 +279,24 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
         />
       </Col>
     </Row>
-    {isUpdated && (
+    {!isUpdated && (
       <div className="d-flex justify-content-between mt-4">
         <Button
           onClick={handleResetChanges}
-          variant="outline-success"
+          className={styles.resetChangesBtn}
           data-testid="resetChangesBtn"
         >
-          {t('resetChanges')}
+          <SyncIcon className={styles.syncIconStyle} />
+          {tCommon('resetChanges')}
         </Button>
+
         <Button
-          onClick={handleUpdateUserDetails}
+          className={styles.saveChangesBtn}
+          value="savechanges"
           data-testid="updateUserBtn"
-          className={styles.cardButton}
+          onClick={handleUpdateUserDetails}
         >
+          <SaveIcon className="me-1" />
           {tCommon('saveChanges')}
         </Button>
       </div>
