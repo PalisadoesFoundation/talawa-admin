@@ -4,10 +4,7 @@ import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import {
-  ORGANIZATION_CONNECTION_LIST,
-  USER_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -31,7 +28,7 @@ import SearchBar from 'subComponents/SearchBar';
  *
  * ## GraphQL Queries:
  * - `USER_LIST`: Fetches a list of users with specified search, sorting, and pagination parameters.
- * - `ORGANIZATION_CONNECTION_LIST`: Fetches a list of organizations to verify organization existence.
+ * - `ORGANIZATION_LIST`: Fetches a list of organizations to verify organization existence.
  *
  *
  * ## Component State:
@@ -143,7 +140,7 @@ const Users = (): JSX.Element => {
     }
   }, [data, isLoading]);
 
-  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+  const { data: dataOrgs } = useQuery(ORGANIZATION_LIST);
   const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
 
   // Manage loading more state
@@ -167,16 +164,17 @@ const Users = (): JSX.Element => {
     };
   }, []);
 
-  // Warn if there is no organization
+  // Show a warning if there are no organizations
   useEffect(() => {
     if (!dataOrgs) {
       return;
     }
 
-    if (dataOrgs.organizationsConnection.length === 0) {
+    // Add null check before accessing organizations.length
+    if (dataOrgs.organizations?.length === 0) {
       toast.warning(t('noOrgError') as string);
     }
-  }, [dataOrgs]);
+  }, [dataOrgs, t]);
 
   // Send to orgList page if user is not superadmin
   useEffect(() => {

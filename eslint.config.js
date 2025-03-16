@@ -2,7 +2,7 @@ import js from "@eslint/js";
 import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import react from "eslint-plugin-react";
-import prettier from "eslint-plugin-prettier";  // Import naming changed for clarity
+import prettier from "eslint-plugin-prettier";
 import vitest from "eslint-plugin-vitest";
 import tsdoc from "eslint-plugin-tsdoc";
 import graphql from "@graphql-eslint/eslint-plugin";
@@ -43,9 +43,20 @@ export default [
         },
       },
       globals: {
+        // ✅ Node.js globals
         window: "readonly",
         localStorage: "readonly",
         setTimeout: "readonly",
+        console: "readonly",
+
+        // ✅ Vitest globals
+        describe: "readonly",
+        test: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
       },
     },
     plugins: {
@@ -89,23 +100,11 @@ export default [
       "react/jsx-pascal-case": ["error", { allowAllCaps: false, allowNamespace: false }],
       "react/no-this-in-sfc": "error",
       "react/no-unstable-nested-components": ["error", { allowAsProps: true }],
-      "prettier/prettier": "error",  // This rule should now work correctly
+      "prettier/prettier": "error",
       "vitest/no-disabled-tests": "warn",
       "vitest/no-focused-tests": "error",
       "vitest/no-identical-title": "error",
       "@typescript-eslint/no-unused-expressions": "error",
-    },
-  },
-  {
-    files: ["*.spec.ts", "*.test.ts", "*.spec.tsx", "*.test.tsx"],
-    languageOptions: {
-      globals: {
-        describe: "readonly",
-        test: "readonly",
-        expect: "readonly",
-        beforeEach: "readonly",
-        afterEach: "readonly",
-      },
     },
   },
   {

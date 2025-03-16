@@ -158,8 +158,8 @@ export default function CreateGroupChat({
     const file = e.target.files?.[0];
     if (file && currentOrg) {
       try {
-        const { fileUrl } = await uploadFileToMinio(file, currentOrg);
-        setSelectedImage(fileUrl);
+        const { objectName } = await uploadFileToMinio(file, currentOrg);
+        setSelectedImage(objectName);
       } catch (error) {
         console.error('Error uploading image to MinIO:', error);
       }

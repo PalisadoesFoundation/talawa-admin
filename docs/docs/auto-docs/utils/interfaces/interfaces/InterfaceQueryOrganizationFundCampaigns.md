@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
-Defined in: [src/utils/interfaces.ts:981](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L981)
+Defined in: [src/utils/interfaces.ts:993](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L993)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:981](https://github.com/PalisadoesFoundatio
 
 > **campaigns**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:984](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L984)
+Defined in: [src/utils/interfaces.ts:996](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L996)
 
 #### \_id
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:984](https://github.com/PalisadoesFoundatio
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:983](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L983)
+Defined in: [src/utils/interfaces.ts:995](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L995)
 
 ***
 
@@ -56,4 +56,4 @@ Defined in: [src/utils/interfaces.ts:983](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:982](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L982)
+Defined in: [src/utils/interfaces.ts:994](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L994)
