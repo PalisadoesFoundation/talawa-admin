@@ -13,7 +13,7 @@ import { Button, Stack } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
@@ -33,6 +33,7 @@ interface ProcessedRow {
   image: string;
   createdAt: string;
   cursor: string;
+  rowNumber: number;
 }
 
 interface Edges {
@@ -120,14 +121,16 @@ function OrganizationPeople(): JSX.Element {
   useEffect(() => {
     if (data) {
       const { edges, pageInfo } = data;
+      const baseIndex = paginationModel.page * PAGE_SIZE;
       const processedRows = edges.map(
-        (edge: Edges): ProcessedRow => ({
+        (edge: Edges, index: number): ProcessedRow => ({
           _id: edge.node.id,
           name: edge.node.name,
           email: edge.node.emailAddress,
           image: edge.node.avatarURL,
           createdAt: edge.node.createdAt || new Date().toISOString(),
           cursor: edge.cursor,
+          rowNumber: baseIndex + index + 1,
         }),
       );
 
@@ -282,6 +285,31 @@ function OrganizationPeople(): JSX.Element {
   // Column definitions
   const columns: GridColDef[] = [
     {
+      field: 'rowNumber',
+      headerName: tCommon('#'),
+      flex: 1,
+      minWidth: 50,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+          >
+            {params.row.rowNumber}
+          </div>
+        );
+      },
+    },
+    {
       field: 'profile',
       headerName: tCommon('profile'),
       flex: 1,
@@ -292,11 +320,12 @@ function OrganizationPeople(): JSX.Element {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.6, 60);
+        const imageSize = Math.min(columnWidth * 0.4, 40);
         return (
           <div
             style={{
               display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
               height: '100%',
@@ -349,6 +378,9 @@ function OrganizationPeople(): JSX.Element {
           <Link
             to={`/member/${currentUrl}`}
             state={{ id: params.row._id }}
+            style={{
+              fontSize: '15px',
+            }}
             className={`${styles.membername} ${styles.subtleBlueGrey}`}
           >
             {params.row.name}
@@ -368,7 +400,7 @@ function OrganizationPeople(): JSX.Element {
     },
     {
       field: 'joined',
-      headerName: tCommon('joined'),
+      headerName: tCommon('joined on'),
       flex: 2,
       minWidth: 100,
       align: 'center',
@@ -480,7 +512,6 @@ function OrganizationPeople(): JSX.Element {
             },
           }}
           getRowClassName={() => `${styles.rowBackground}`}
-          autoHeight
           rowHeight={70}
           isRowSelectable={() => false}
         />

@@ -74,23 +74,21 @@ function orgPeopleListCard(
         </Modal.Header>
         <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
         <Modal.Footer>
-          {/* Button to cancel the removal action */}
-          <Button
-            variant="danger"
-            onClick={props.toggleRemoveModal}
-            className={styles.closeButton}
-            data-testid="closeRemoveId"
-          >
-            {tCommon('no')}
-          </Button>
-          {/* Button to confirm the removal action */}
           <Button
             type="button"
-            className={styles.regularBtn}
+            className={styles.addButton}
             onClick={removeMember}
             data-testid="removeMemberBtn"
           >
             {tCommon('yes')}
+          </Button>
+          <Button
+            type="button"
+            onClick={props.toggleRemoveModal}
+            className={styles.removeButton}
+            data-testid="closeRemoveId"
+          >
+            {tCommon('no')}
           </Button>
         </Modal.Footer>
       </Modal>
