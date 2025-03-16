@@ -273,7 +273,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             name="photo"
             type="file"
             multiple={false}
-            onChange={async (e: React.ChangeEvent) => {
+            onChange={async (
+              e: React.ChangeEvent<HTMLInputElement>,
+            ): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files?.[0];
 
