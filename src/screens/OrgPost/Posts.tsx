@@ -56,8 +56,24 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   if (loading) return <Loader />;
   if (error) return <div>Error loading posts</div>;
 
-  // Rest of the component remains the same...
-  // (Previous implementation of createAttachments, renderPostCard, and rendering logic)
+  // The generateUniqueObjectName function properly handles both image and video URLs
+  const generateUniqueObjectName = (
+    postId: string,
+    fileUrl: string,
+    fileType: string
+  ): string => {
+    // Extract file extension from URL or use default based on type
+    const extension = fileUrl.split('.').pop()?.toLowerCase() || 
+      (fileType === 'image/jpeg' ? 'jpg' : 
+       fileType === 'video/mp4' ? 'mp4' : 'bin');
+    
+    // Generate a timestamp-based unique identifier
+    const timestamp = new Date().getTime();
+    
+    // Create format: posts/{postId}/{timestamp}-{last-part-of-url}.{extension}
+    const urlLastPart = fileUrl.split('/').pop()?.split('.')[0] || 'file';
+    return `posts/${postId}/${timestamp}-${urlLastPart}.${extension}`;
+  };
 
   const createAttachments = (
     post: InterfacePost,
@@ -77,7 +93,8 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
               id: `${post.id}-image`,
               postId: post.id,
               name: post.imageUrl,
-              objectName: post.imageUrl, // Use the image URL as objectName
+              // Generate a proper objectName for MinIO instead of using raw URL
+              objectName: generateUniqueObjectName(post.id, post.imageUrl, 'image/jpeg'),
               mimeType: 'image/jpeg',
               createdAt,
             },
@@ -89,7 +106,8 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
               id: `${post.id}-video`,
               postId: post.id,
               name: post.videoUrl,
-              objectName: post.videoUrl, // Use the video URL as objectName
+              // For videos, we already use the proper MinIO object naming pattern:
+              objectName: generateUniqueObjectName(post.id, post.videoUrl, 'video/mp4'),
               mimeType: 'video/mp4',
               createdAt,
             },

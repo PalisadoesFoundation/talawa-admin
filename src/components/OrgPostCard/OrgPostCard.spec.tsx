@@ -250,10 +250,6 @@ const presignedUrlVideoMock = {
   },
 };
 
-// Mock class for URL.createObjectURL
-global.URL.createObjectURL = vi.fn(() => 'mock-object-url');
-global.URL.revokeObjectURL = vi.fn();
-
 describe('OrgPostCard Component', () => {
   const mockPost = {
     id: '12',
@@ -395,6 +391,14 @@ describe('OrgPostCard Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Set up URL mocks within the scope of these tests
+    vi.spyOn(global.URL, 'createObjectURL').mockImplementation(() => 'mock-object-url');
+    vi.spyOn(global.URL, 'revokeObjectURL').mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    // Restore URL mocks after each test
+    vi.restoreAllMocks();
   });
 
   const renderComponent = (): RenderResult => {
@@ -426,19 +430,19 @@ describe('OrgPostCard Component', () => {
       const image = screen.getByAltText('Post image');
       expect(image).toBeInTheDocument();
 
-      // We're now expecting the default image initially
-      // since presigned URL is loaded asynchronously
+      // Initially should show the default image while presigned URL loads
       expect(image).toHaveAttribute(
         'src',
-        expect.stringContaining('defaultImg'),
+        expect.stringContaining('defaultImg')
       );
 
-      // After the presigned URL is loaded:
+      // After the presigned URL is loaded, verify it changes to the presigned URL
       await waitFor(() => {
         const updatedImage = screen.getByAltText('Post image');
-        // Expect the image to eventually get the presigned URL
-        // or still have the default image if the fetch failed
-        expect(updatedImage).toBeInTheDocument();
+        expect(updatedImage).toHaveAttribute(
+          'src',
+          'https://minio-server.example/test-image.jpg?presigned=true'
+        );
       });
     });
 
@@ -790,13 +794,16 @@ describe('OrgPostCard Component', () => {
     });
 
     it('properly handles image uploads in edit modal', async () => {
-      // Mock the useMinioUpload hook results
+      // Create a mock function we can inspect
+      const mockUploadFileToMinio = vi.fn().mockResolvedValue({
+        objectName: 'new-image-object-name',
+        fileHash: 'test-file-hash',
+      });
+      
+      // Mock with our trackable function
       vi.mock('utils/MinioUpload', () => ({
         useMinioUpload: () => ({
-          uploadFileToMinio: vi.fn().mockResolvedValue({
-            objectName: 'new-image-object-name',
-            fileHash: 'test-file-hash',
-          }),
+          uploadFileToMinio: mockUploadFileToMinio,
         }),
       }));
 
@@ -818,6 +825,17 @@ describe('OrgPostCard Component', () => {
       });
 
       await userEvent.upload(fileInput, file);
+
+      // Verify uploadFileToMinio was called with correct arguments
+      await waitFor(() => {
+        expect(mockUploadFileToMinio).toHaveBeenCalledWith(
+          expect.objectContaining({
+            name: 'new-image.jpg',
+            type: 'image/jpeg'
+          }),
+          'test-org-id'
+        );
+      });
 
       // The component should add the attachment with objectName, mimeType and fileHash
       // This is handled by the mock of useMinioUpload
@@ -966,10 +984,19 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    // Set up URL mocks for this test suite as well
+    vi.spyOn(global.URL, 'createObjectURL').mockImplementation(() => 'mock-object-url');
+    vi.spyOn(global.URL, 'revokeObjectURL').mockImplementation(() => undefined);
+    
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { reload: vi.fn() },
     });
+  });
+
+  afterEach(() => {
+    // Restore all mocks after each test
+    vi.restoreAllMocks();
   });
 
   it('successfully pins a post', async () => {

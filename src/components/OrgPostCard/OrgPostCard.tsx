@@ -28,6 +28,7 @@ interface InterfacePostFormState {
     objectName: string;
     mimeType: string;
     fileHash?: string;
+    isUploading?: boolean;
   }[];
 }
 
@@ -94,11 +95,22 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     null,
   );
 
+  // Add a URL cache with expiration timestamps
+  const [urlCache, setUrlCache] = useState<Record<string, {url: string, expiry: number}>>({});
+
+  // Modified fetchPresignedUrl that checks cache first
   const fetchPresignedUrl = async (
     objectName: string,
   ): Promise<string | null> => {
     if (!objectName) return null;
-
+    
+    // Check cache first
+    const cached = urlCache[objectName];
+    const now = Date.now();
+    if (cached && cached.expiry > now) {
+      return cached.url; // Return cached URL if not expired
+    }
+  
     try {
       const { data } = await getPresignedUrl({
         variables: {
@@ -108,40 +120,65 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
           },
         },
       });
-
-      // Fix the property name to match the GraphQL schema:
-      // Using createPresignedUrl instead of getPresignedUrl
-      return data?.createPresignedUrl?.presignedUrl || null;
+  
+      const url = data?.createPresignedUrl?.presignedUrl || null;
+      
+      // Store in cache with 5-minute expiry (or match your server's expiry time)
+      if (url) {
+        setUrlCache(prev => ({
+          ...prev,
+          [objectName]: {
+            url,
+            expiry: now + 5 * 60 * 1000 // 5 minutes
+          }
+        }));
+      }
+      
+      return url;
     } catch (error) {
       console.error('Error getting presigned URL:', error);
       toast.error('Failed to load media. Please try again.');
-      return null; // Prevents breaking UI
+      return null;
     }
   };
 
-  useEffect(() => {
-    const loadPresignedUrls = async (): Promise<void> => {
-      try {
-        // Get presigned URL for image if it exists
-        if (imageAttachment?.objectName) {
-          const url = await fetchPresignedUrl(imageAttachment.objectName);
-          setImagePresignedUrl(url);
-        }
-
-        // Get presigned URL for video if it exists
-        if (videoAttachment?.objectName) {
-          const url = await fetchPresignedUrl(videoAttachment.objectName);
-          setVideoPresignedUrl(url);
-        }
-      } catch (error) {
-        console.error('Failed to load presigned URLs:', error);
+  const loadPresignedUrls = async (): Promise<void> => {
+    try {
+      // Get presigned URL for image if it exists
+      if (imageAttachment?.objectName) {
+        const url = await fetchPresignedUrl(imageAttachment.objectName);
+        setImagePresignedUrl(url);
       }
-    };
 
+      // Get presigned URL for video if it exists
+      if (videoAttachment?.objectName) {
+        const url = await fetchPresignedUrl(videoAttachment.objectName);
+        setVideoPresignedUrl(url);
+      }
+    } catch (error) {
+      console.error('Failed to load presigned URLs:', error);
+    }
+  };
+
+  // Two useEffect hooks - one for early loading and one for immediate visibility
+  // Early loading (lower priority)
+  useEffect(() => {
+    // Load URLs on component mount with a small delay to prioritize UI rendering
+    const timer = setTimeout(() => {
+      if (!modalVisible && !playing && (imageAttachment?.objectName || videoAttachment?.objectName)) {
+        loadPresignedUrls();
+      }
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, [imageAttachment, videoAttachment]);
+
+  // Immediate loading for visible media (high priority)
+  useEffect(() => {
     if (modalVisible || playing) {
       loadPresignedUrls();
     }
-  }, [imageAttachment, videoAttachment, modalVisible, playing]);
+  }, [modalVisible, playing]);
 
   // Add this state for preview URLs
   const [previewUrls, setPreviewUrls] = useState<Record<string, string>>({});
@@ -175,9 +212,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
   }, [showEditModal, JSON.stringify(postFormState.attachments)]); // Better dependency tracking
 
   // Add this state for file previews (different from MinIO URLs)
-  const [filePreviewUrls, setFilePreviewUrls] = useState<
-    Record<string, string>
-  >({});
+  const [filePreviewUrls, setFilePreviewUrls] = useState<Record<string, string>>({});
 
   // Add cleanup for object URLs on unmount
   useEffect(() => {
@@ -256,64 +291,73 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        // Create temporary ID for this upload
-        const tempId = `temp-${Date.now()}`;
-
-        // Create browser URL for immediate preview
+        // Step 1: Create preview immediately using file.name as key
         const previewUrl = URL.createObjectURL(file);
-
-        // Store preview immediately with temp ID
-        setFilePreviewUrls((prev) => ({
+        setFilePreviewUrls(prev => ({
           ...prev,
-          [tempId]: previewUrl,
+          [file.name]: previewUrl
         }));
 
-        // Show loading state in UI
-        setPostFormState((prev) => ({
+        // Step 2: Show preview to user with temporary entry in attachments
+        setPostFormState(prev => ({
           ...prev,
           attachments: [
             ...prev.attachments,
             {
-              objectName: tempId, // Temporary ID for UI
+              objectName: file.name, // Use file.name temporarily 
               mimeType: file.type,
-              isUploading: true, // Flag to show upload progress
-            },
-          ],
+              isUploading: true // Show loading indicator
+            }
+          ]
         }));
 
-        // Upload in background
+        // Step 3: Upload to MinIO in background
         const { objectName, fileHash } = await uploadFileToMinio(
           file,
           currentOrg || 'organizations',
         );
 
+        // Step 4: Update attachments with real objectName while keeping preview visible
+        setPostFormState(prev => ({
+          ...prev,
+          attachments: prev.attachments.map(a => 
+            a.objectName === file.name ? 
+            {
+              objectName, // Replace with real objectName
+              mimeType: file.type,
+              fileHash,
+              isUploading: false
+            } : a
+          )
+        }));
+
         // Update preview URLs map with final objectName
-        setFilePreviewUrls((prev) => {
-          const newUrls = { ...prev };
-          // Store preview with real objectName
-          newUrls[objectName] = prev[tempId];
-          // Delete the temp entry
-          delete newUrls[tempId];
+        setFilePreviewUrls(prev => {
+          const newUrls = {...prev};
+          // Copy the preview URL to the new objectName key
+          newUrls[objectName] = prev[file.name];
+          // Delete the temporary entry
+          delete newUrls[file.name];
           return newUrls;
         });
-
-        // Update attachments with real objectName
-        setPostFormState((prev) => ({
-          ...prev,
-          attachments: prev.attachments.map((a) =>
-            a.objectName === tempId
-              ? {
-                  objectName,
-                  mimeType: file.type,
-                  fileHash,
-                  isUploading: false,
-                }
-              : a,
-          ),
-        }));
       } catch (error) {
         console.error('Image upload error:', error);
         toast.error('Failed to upload image');
+        
+        // Clean up on error - remove the attachment and preview
+        setPostFormState(prev => ({
+          ...prev,
+          attachments: prev.attachments.filter(a => a.objectName !== file.name)
+        }));
+        
+        if (filePreviewUrls[file.name]) {
+          URL.revokeObjectURL(filePreviewUrls[file.name]);
+          setFilePreviewUrls(prev => {
+            const newUrls = {...prev};
+            delete newUrls[file.name];
+            return newUrls;
+          });
+        }
       }
     }
   };
@@ -328,35 +372,73 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         return;
       }
       try {
-        // Create browser URL for preview BEFORE uploading to MinIO
+        // Step 1: Create preview immediately using file.name as key
         const previewUrl = URL.createObjectURL(file);
+        setFilePreviewUrls(prev => ({
+          ...prev,
+          [file.name]: previewUrl
+        }));
 
-        // Upload to MinIO and get objectName
+        // Step 2: Show preview with temporary entry in attachments
+        setPostFormState(prev => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            {
+              objectName: file.name, // Use file.name temporarily
+              mimeType: file.type,
+              isUploading: true // Show loading indicator
+            }
+          ]
+        }));
+
+        // Step 3: Upload to MinIO in background
         const { objectName, fileHash } = await uploadFileToMinio(
           file,
           currentOrg || 'organizations',
         );
 
-        // Store preview URL with objectName as key
-        setFilePreviewUrls((prev) => ({
+        // Step 4: Update attachments with real objectName while keeping preview visible
+        setPostFormState(prev => ({
           ...prev,
-          [objectName]: previewUrl, // Use objectName as key
-        }));
-
-        setPostFormState((prev) => ({
-          ...prev,
-          attachments: [
-            ...prev.attachments,
+          attachments: prev.attachments.map(a => 
+            a.objectName === file.name ? 
             {
-              objectName,
+              objectName, // Replace with real objectName
               mimeType: file.type,
               fileHash,
-            },
-          ],
+              isUploading: false
+            } : a
+          )
         }));
+
+        // Update preview URLs map with final objectName
+        setFilePreviewUrls(prev => {
+          const newUrls = {...prev};
+          // Copy the preview URL to the new objectName key
+          newUrls[objectName] = prev[file.name];
+          // Delete the temporary entry
+          delete newUrls[file.name];
+          return newUrls;
+        });
       } catch (error) {
         console.error('Video upload error:', error);
         toast.error('Failed to upload video');
+        
+        // Clean up on error
+        setPostFormState(prev => ({
+          ...prev,
+          attachments: prev.attachments.filter(a => a.objectName !== file.name)
+        }));
+        
+        if (filePreviewUrls[file.name]) {
+          URL.revokeObjectURL(filePreviewUrls[file.name]);
+          setFilePreviewUrls(prev => {
+            const newUrls = {...prev};
+            delete newUrls[file.name];
+            return newUrls;
+          });
+        }
       }
     }
   };
@@ -618,29 +700,25 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                   .map((attachment, index) => (
                     <div key={index} className={styles.previewOrgPostCard}>
                       <img
-                        src={
-                          filePreviewUrls[attachment.objectName] ||
-                          previewUrls[attachment.objectName] ||
-                          ''
-                        }
+                        src={filePreviewUrls[attachment.objectName] || previewUrls[attachment.objectName] || ''}
                         alt="Preview"
                       />
+                      {attachment.isUploading && <div className="upload-indicator">Uploading...</div>}
                       <button
                         type="button"
                         className={styles.closeButtonP}
                         onClick={() => {
                           if (filePreviewUrls[attachment.objectName]) {
-                            URL.revokeObjectURL(
-                              filePreviewUrls[attachment.objectName],
-                            );
-                            setFilePreviewUrls((prev) => {
-                              const newUrls = { ...prev };
+                            URL.revokeObjectURL(filePreviewUrls[attachment.objectName]);
+                            setFilePreviewUrls(prev => {
+                              const newUrls = {...prev};
                               delete newUrls[attachment.objectName];
                               return newUrls;
                             });
                           }
                           clearImage(attachment.objectName);
                         }}
+                        disabled={attachment.isUploading}
                       >
                         ×
                       </button>
@@ -664,31 +742,27 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                     <div key={index} className={styles.previewOrgPostCard}>
                       <video controls data-testid="video-preview">
                         <source
-                          src={
-                            filePreviewUrls[attachment.objectName] ||
-                            previewUrls[attachment.objectName] ||
-                            ''
-                          }
+                          src={filePreviewUrls[attachment.objectName] || previewUrls[attachment.objectName] || ''}
                           type={attachment.mimeType}
                         />
                         {t('videoNotSupported')}
                       </video>
+                      {attachment.isUploading && <div className="upload-indicator">Uploading...</div>}
                       <button
                         type="button"
                         className={styles.closeButtonP}
                         onClick={() => {
                           if (filePreviewUrls[attachment.objectName]) {
-                            URL.revokeObjectURL(
-                              filePreviewUrls[attachment.objectName],
-                            );
-                            setFilePreviewUrls((prev) => {
-                              const newUrls = { ...prev };
+                            URL.revokeObjectURL(filePreviewUrls[attachment.objectName]);
+                            setFilePreviewUrls(prev => {
+                              const newUrls = {...prev};
                               delete newUrls[attachment.objectName];
                               return newUrls;
                             });
                           }
                           clearVideo(attachment.objectName);
                         }}
+                        disabled={attachment.isUploading}
                       >
                         ×
                       </button>
