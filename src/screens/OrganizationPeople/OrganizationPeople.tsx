@@ -426,7 +426,11 @@ function OrganizationPeople(): JSX.Element {
           aria-label="Remove member"
           className={styles.deleteButton}
         >
-          <Delete />
+          <Delete
+            style={{
+              color: 'red',
+            }}
+          />
         </Button>
       ),
     },
