@@ -471,7 +471,6 @@ describe('OrganizationModal Component', () => {
     });
   });
 
-  // Add new test for MinIO upload error handling
   test('should handle MinIO upload error', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error');
 
@@ -519,40 +518,49 @@ describe('OrganizationModal Component', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  test('should handle null file selection', async () => {
+  test('should handle missing file selection scenarios', async () => {
     setup();
     const fileInput = screen.getByTestId('organisationImage');
 
-    // For null case, we'll clear the file input value
-    fireEvent.change(fileInput, { target: { files: [] } });
-
-    // Verify MinIO upload was not called
-    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
-
-    // Verify form state wasn't updated with objectName
-    expect(mockSetFormState).not.toHaveBeenCalledWith(
-      expect.objectContaining({
-        avatar: expect.any(String),
-      }),
+    // Test case 1: Empty files array
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [] } });
+    });
+    expect(mockToast.error).toHaveBeenCalledWith(
+      'Please select a file to upload.',
     );
-  });
-
-  test('should handle empty file selection', async () => {
-    setup();
-    const fileInput = screen.getByTestId('organisationImage');
-
-    // For empty case, we'll use an empty file array
-    fireEvent.change(fileInput, { target: { files: [] } });
-
-    // Verify MinIO upload was not called
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    expect(mockSetFormState).not.toHaveBeenCalled();
 
-    // Verify form state wasn't updated with objectName
-    expect(mockSetFormState).not.toHaveBeenCalledWith(
-      expect.objectContaining({
-        avatar: expect.any(String),
-      }),
+    // Clear mock calls
+    mockToast.error.mockClear();
+    mockUploadFileToMinio.mockClear();
+    mockSetFormState.mockClear();
+
+    // Test case 2: Null files
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: null } });
+    });
+    expect(mockToast.error).toHaveBeenCalledWith(
+      'Please select a file to upload.',
     );
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    expect(mockSetFormState).not.toHaveBeenCalled();
+
+    // Clear mock calls
+    mockToast.error.mockClear();
+    mockUploadFileToMinio.mockClear();
+    mockSetFormState.mockClear();
+
+    // Test case 3: Undefined files
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: undefined } });
+    });
+    expect(mockToast.error).toHaveBeenCalledWith(
+      'Please select a file to upload.',
+    );
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
   test('should show modal when showModal is true', () => {
