@@ -1034,7 +1034,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                 disabled={postFormState.attachments.some((a) => a.isUploading)}
               >
                 {postFormState.attachments.some((a) => a.isUploading)
-                  ? tCommon('uploading') + '...'
+                  ? `${tCommon('uploading')}...`
                   : tCommon('save')}
               </Button>
             </Modal.Footer>
