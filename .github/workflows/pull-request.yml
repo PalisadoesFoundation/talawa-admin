@@ -289,13 +289,9 @@ jobs:
           TS_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.tsx?$' | tr '\n' ' ')
           echo "ts_files=$TS_FILES" >> $GITHUB_OUTPUT
 
-      - name: TypeScript compilation for changed files
+      - name: TypeScript compilation
         run: |
-          if [[ -n "${{ steps.changed-files.outputs.ts_files }}" ]]; then
-            echo "${{ steps.changed-files.outputs.ts_files }}" | tr ' ' '\n' | while read file; do
-              npx tsc --noEmit "./$file"
-            done
-          fi
+          npx tsc --noEmit
 
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.any_changed == 'true'
