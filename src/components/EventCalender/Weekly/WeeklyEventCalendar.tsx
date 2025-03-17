@@ -12,7 +12,6 @@ import type {
   InterfaceIOrgList,
 } from 'types/Event/interface';
 import { Role } from 'types/Event/interface';
-import { type User } from 'types/User/type';
 
 /**
  * ## CSS Strategy Explanation:
@@ -157,25 +156,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.day_header}>
             {weekdays[date.getDay()]} {date.getDate()}
           </div>
-          <div
-            className={expanded === index ? styles.expand_list_container : ''}
-          >
-            <div
-              className={
-                expanded === index
-                  ? styles.expand_event_list
-                  : styles.event_list
-              }
-            >
+          <div className={expanded === index ? styles.expand_list_container : ''}>
+            <div className={expanded === index ? styles.expand_event_list : styles.event_list}>
               <div>{holidayList}</div>
               {expanded === index
                 ? allEventsList
                 : holidayList.length > 0
-                  ? allEventsList.slice(0, 1)
-                  : allEventsList.slice(0, 2)}
+                ? allEventsList.slice(0, 1)
+                : allEventsList.slice(0, 2)}
             </div>
-            {(allEventsList.length > 2 ||
-              (windowWidth <= 700 && allEventsList.length > 0)) && (
+            {(allEventsList.length > 2 || (windowWidth <= 700 && allEventsList.length > 0)) && (
               <button
                 className={styles.btn__more}
                 data-testid="more"
