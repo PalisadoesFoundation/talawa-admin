@@ -37,8 +37,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   refetchEvents,
   orgData,
   userRole,
-  userId,
-  className,
+  userId
 }) => {
   const today = new Date();
   const [currentWeekStart, setCurrentWeekStart] = useState(
