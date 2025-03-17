@@ -65,14 +65,17 @@ const VenueModal = ({
   });
   const { t: tCommon } = useTranslation('common');
 
+
   const [venueImagePreview, setVenueImagePreview] = useState<string | null>(
     null,
   );
   const [venueFile, setVenueFile] = useState<File | null>(null);
+
   const [formState, setFormState] = useState({
     name: venueData?.name || '',
     description: venueData?.description || '',
     capacity: venueData?.capacity || '',
+
   });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -91,6 +94,7 @@ const VenueModal = ({
    */
   // Update the handleSubmit function in VenueModal.tsx
 
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -98,7 +102,9 @@ const VenueModal = ({
       if (formState.name.trim().length === 0) {
         toast.error(t('venueTitleError') as string);
         return;
+
       }
+
 
       const capacityNum = Number(formState.capacity);
       if (Number.isNaN(capacityNum) || capacityNum <= 0) {
@@ -106,11 +112,13 @@ const VenueModal = ({
         return;
       }
 
+
       try {
         const variables: Record<string, unknown> = {
           id: venueData?.id,
           name: formState.name.trim(),
           capacity: capacityNum,
+
           organizationId: orgId,
         };
         const description = formState.description?.trim();
@@ -126,6 +134,7 @@ const VenueModal = ({
         // );
 
         const result = await mutate({ variables });
+
         if (result?.data?.createVenue || result?.data?.updateVenue) {
           toast.success(edit ? t('venueUpdated') : t('venueAdded'));
           setFormState({
@@ -135,6 +144,7 @@ const VenueModal = ({
           });
           setVenueFile(null);
           setVenueImagePreview(null);
+
           refetchVenues();
           onHide();
         }
@@ -166,6 +176,7 @@ const VenueModal = ({
    * This function also clears the file input field.
    */
 
+
   const clearImageInput = (): void => {
     setVenueFile(null);
     setVenueImagePreview(null);
@@ -194,6 +205,7 @@ const VenueModal = ({
       <Modal show={show} onHide={onHide}>
         <Modal.Header className="d-flex align-items-start">
           <p>{t('venueDetails')}</p>
+
           <Button
             variant="danger"
             onClick={onHide}
