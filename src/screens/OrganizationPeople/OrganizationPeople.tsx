@@ -9,7 +9,7 @@ import {
   GridCellParams,
   GridPaginationModel,
 } from '@mui/x-data-grid';
-import { Button, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
@@ -18,7 +18,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import { Row } from 'react-bootstrap';
+import { Row, Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import SearchBar from 'subComponents/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
@@ -421,16 +421,13 @@ function OrganizationPeople(): JSX.Element {
       sortable: false,
       renderCell: (params: GridCellParams) => (
         <Button
+          className={`${styles.removeButton}`}
+          variant="danger"
           onClick={() => toggleRemoveMemberModal(params.row._id)}
-          data-testid="removeMemberModalBtn"
           aria-label="Remove member"
-          className={styles.deleteButton}
+          data-testid="removeMemberModalBtn"
         >
-          <Delete
-            style={{
-              color: 'red',
-            }}
-          />
+          <Delete />
         </Button>
       ),
     },
