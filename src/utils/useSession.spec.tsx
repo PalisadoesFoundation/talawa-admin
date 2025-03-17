@@ -59,6 +59,9 @@ vi.mock('react-toastify', () => ({
 }));
 
 describe('useSession Hook', () => {
+  // beforeEach(() => {
+  //   vi.clearAllMocks();
+  // });
   it('should list sessions', async () => {
     const { result } = renderHook(() => useSession());
     const sessions = await result.current.listSession();
@@ -101,5 +104,46 @@ describe('useSession Hook', () => {
       expect(authClient.signOut).toHaveBeenCalled();
       expect(mockNavigate).toHaveBeenCalledWith('/');
     });
+  });
+
+  it('should handle errors when listing sessions fails', async () => {
+    // Mock `authClient.listSessions` to throw an error
+    vi.spyOn(authClient, 'listSessions').mockRejectedValue(
+      new Error('Network Error'),
+    );
+    const { result } = renderHook(() => useSession());
+    await expect(result.current.listSession()).rejects.toThrow('Network Error');
+    // Check if the toast error message was displayed
+    expect(toast.error).toHaveBeenCalledWith('sessionListingFailed');
+  });
+
+  it('should handle errors when revoke other sessions except current fails', async () => {
+    // Mock `authClient.revokeOtherSessions` to throw an error
+    vi.spyOn(authClient, 'revokeOtherSessions').mockRejectedValue(
+      new Error('Network Error'),
+    );
+    const { result } = renderHook(() => useSession(), {
+      wrapper: MemoryRouter,
+    });
+    await expect(
+      result.current.revokeOtherSessionExceptCurrentSession(),
+    ).rejects.toThrow('Network Error');
+    // Check if the toast error message was displayed
+    expect(toast.error).toHaveBeenCalledWith('revokeOtherSessionsFailed');
+  });
+
+  it('should handle errors when revoking all sessions fails', async () => {
+    // Mock `authClient.revokeSessions` to throw an error
+    vi.spyOn(authClient, 'revokeSessions').mockRejectedValue(
+      new Error('Network Error'),
+    );
+    const { result } = renderHook(() => useSession(), {
+      wrapper: MemoryRouter,
+    });
+    await expect(result.current.revokeAllSession()).rejects.toThrow(
+      'Network Error',
+    );
+    // Ensure the correct toast error is triggered
+    expect(toast.error).toHaveBeenCalledWith('revokeAllSessionsFailed');
   });
 });

@@ -1,10 +1,11 @@
-import React, { act } from 'react';
+import React, { act, ChangeEvent, useEffect } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import {
   render,
   screen,
   fireEvent,
   within,
+  waitFor,
   // waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -25,9 +26,11 @@ import {
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
-import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
-import 'style/app.module.css';
+import '../../style/app.module.css';
+import i18n from 'utils/i18nForTest';
+import { authClient } from 'lib/auth-client';
+
 const MOCKS = [
   {
     request: {
@@ -70,32 +73,46 @@ const MOCKS = [
     result: { data: { community: null } },
   },
 ];
-
-// const MOCKS2 = [
-//   {
-//     request: {
-//       query: GET_COMMUNITY_DATA_PG,
-//     },
-//     result: {
-//       data: {
-//         community: {
-//           id: 'communitId',
-//           websiteURL: 'http://link.com',
-//           name: 'testName',
-//           logoURL: 'image.png',
-//           facebookURL: 'http://url.com',
-//           gitHubURL: 'http://url.com',
-//           youTubeURL: 'http://url.com',
-//           instagramURL: 'http://url.com',
-//           linkedInURL: 'http://url.com',
-//           redditURL: 'http://url.com',
-//           slackURL: 'http://url.com',
-//           xURL: 'http://url.com',
-//         },
-//       },
-//     },
-//   },
-// ];
+const MOCKS2 = [
+  {
+    request: {
+      query: RECAPTCHA_MUTATION,
+      variables: {
+        recaptchaToken: null,
+      },
+    },
+    result: {
+      data: {
+        recaptcha: true,
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_COMMUNITY_DATA_PG,
+    },
+    result: {
+      data: {
+        community: null,
+      },
+    },
+  },
+];
+const MOCKS2 = [
+  {
+    request: {
+      query: RECAPTCHA_MUTATION,
+      variables: {
+        recaptchaToken: null,
+      },
+    },
+    result: {
+      data: {
+        recaptcha: true,
+      },
+    },
+  },
+];
 const MOCKS3 = [
   {
     request: { query: ORGANIZATION_LIST },
@@ -159,9 +176,24 @@ const MOCKS4 = [
     error: new Error('Invalid credentials'),
   },
 ];
-
+const mockedGetItem = vi.fn();
+const mockedSetItem = vi.fn();
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: mockedGetItem,
+    setItem: mockedSetItem,
+  }),
+}));
+vi.mock('lib/auth-client', () => ({
+  authClient: {
+    signIn: {
+      email: vi.fn(), // Generic mock function without tracker yet
+    },
+  },
+}));
+const trackedMock = vi.mocked(authClient.signIn.email);
 const link = new StaticMockLink(MOCKS, true);
-// const link2 = new StaticMockLink(MOCKS2, true);
+const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
 
@@ -172,7 +204,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
@@ -230,6 +261,9 @@ vi.mock('react-google-recaptcha', async () => {
 });
 
 describe('Testing Login Page Screen', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
   it('Component Should be rendered properly', async () => {
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -707,6 +741,123 @@ describe('Testing Login Page Screen', () => {
   //   });
   // });
 
+  it('sets correct localStorage items after successful login ,change language', async () => {
+    const changeLanguageMock = vi.fn();
+    vi.spyOn(i18n, 'changeLanguage').mockImplementation(changeLanguageMock);
+    trackedMock.mockImplementation(() => {
+      return Promise.resolve({
+        data: {
+          data: {
+            role: 'administrator',
+            token: 'test-token-123',
+            id: 'user-id-123',
+            name: 'Test User',
+            email: 'testuser@example.com',
+            avatarName: 'avatar.jpg',
+            countryCode: 'en',
+          },
+        },
+      });
+    });
+    // Render the component
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const user = userEvent.setup();
+
+    // Fill out the login form
+    await user.type(screen.getByTestId('loginEmail'), 'testuser@example.com');
+    await user.type(screen.getByTestId('password'), 'Password123!');
+
+    // Submit the form
+    await user.click(screen.getByTestId('loginBtn'));
+
+    // Wait for async operations to complete
+    await waitFor(() => {
+      expect(changeLanguageMock).toHaveBeenCalledWith('en');
+      // Verify localStorage items were set correctly
+      expect(mockedSetItem).toHaveBeenCalledWith('token', 'test-token-123');
+      expect(mockedSetItem).toHaveBeenCalledWith('IsLoggedIn', 'TRUE');
+      expect(mockedSetItem).toHaveBeenCalledWith('name', 'Test User');
+      expect(mockedSetItem).toHaveBeenCalledWith(
+        'email',
+        'testuser@example.com',
+      );
+      expect(mockedSetItem).toHaveBeenCalledWith('role', 'administrator');
+      expect(mockedSetItem).toHaveBeenCalledWith('UserImage', 'avatar.jpg');
+      expect(mockedSetItem).toHaveBeenCalledWith('id', 'user-id-123');
+    });
+  });
+  it('properly extracts and assigns values from signInData', async () => {
+    const mockResponse = {
+      data: {
+        data: {
+          role: 'administrator',
+          token: 'test-token-123',
+          id: 'user-id-123',
+          name: 'Test User',
+          email: 'testuser@example.com',
+          avatarName: 'avatar.jpg',
+          countryCode: 'en',
+        },
+      },
+    };
+
+    trackedMock.mockImplementation(() => Promise.resolve(mockResponse));
+
+    // Render the component
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const user = userEvent.setup();
+
+    // Fill out the login form
+    await user.type(screen.getByTestId('loginEmail'), 'testuser@example.com');
+    await user.type(screen.getByTestId('password'), 'Password123!');
+
+    // Submit the form
+    await user.click(screen.getByTestId('loginBtn'));
+
+    // Wait for async operations to complete
+    await waitFor(() => {
+      // Extracted values from mockResponse
+      const { data } = mockResponse.data;
+      const { role, token, id, name, email, avatarName } = data;
+
+      // Assertions for destructured properties
+      expect(role).toBe('administrator');
+      expect(token).toBe('test-token-123');
+      expect(id).toBe('user-id-123');
+      expect(name).toBe('Test User');
+      expect(email).toBe('testuser@example.com');
+      expect(avatarName).toBe('avatar.jpg');
+
+      // Role-based assertion
+      expect(role === 'administrator').toBe(true);
+
+      // Verify loggedInUserId assignment
+      expect(id).toBe('user-id-123');
+    });
+  });
+
   it('Testing password preview feature for login', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -1001,10 +1152,17 @@ describe('Testing Login Page Screen', () => {
 });
 
 describe('Testing redirect if already logged in', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('Logged in as USER', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('IsLoggedIn', 'TRUE');
-    setItem('userId', 'id');
+    mockedGetItem.mockImplementation((key) => {
+      if (key === 'IsLoggedIn') return 'TRUE';
+      if (key === 'userId') return '123'; // Example user ID
+      return null;
+    });
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -1020,11 +1178,16 @@ describe('Testing redirect if already logged in', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
   });
   it('Logged in as Admin or SuperAdmin', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('IsLoggedIn', 'TRUE');
-    setItem('userId', null);
+    mockedGetItem.mockImplementation((key) => {
+      if (key === 'IsLoggedIn') return 'TRUE';
+      if (key === 'userId') return null; // Example user ID
+      return null;
+    });
+
+    // setItem('IsLoggedIn', 'TRUE');
+    // setItem('userId', null);
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -45,7 +45,6 @@ const useSession = (): UseSessionReturnType => {
   };
   //it will revoke all active session except the current session
   const revokeOtherSessionExceptCurrentSession = async (): Promise<void> => {
-    await authClient.revokeOtherSessions();
     try {
       await authClient.revokeOtherSessions();
     } catch (error) {
@@ -56,7 +55,6 @@ const useSession = (): UseSessionReturnType => {
 
   //it will revoke all session with current session
   const revokeAllSession = async (): Promise<void> => {
-    await authClient.revokeSessions();
     try {
       await authClient.revokeSessions();
     } catch (error) {
