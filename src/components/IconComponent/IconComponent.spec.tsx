@@ -20,6 +20,10 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Tags',
     testId: 'Icon-Component-TagsIcon',
   },
+  Overview: {
+    name: 'Overview',
+    testId: 'Icon-Component-OverviewIcon',
+  },
   Tag: {
     name: 'Tag',
     testId: 'Icon-Component-TagIcon',

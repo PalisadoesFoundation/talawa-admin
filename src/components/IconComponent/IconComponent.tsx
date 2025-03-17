@@ -64,15 +64,19 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
     case 'Tags':
       return <TagsIcon {...props} data-testid="Icon-Component-TagsIcon" />;
     case 'Overview':
-      return <OverviewIcon {...props} data-testid="Icon-Component-OverviewIcon" />
+      return (
+        <OverviewIcon {...props} data-testid="Icon-Component-OverviewIcon" />
+      );
     case 'Delete':
-      return <DeleteIcon {...props} data-testid="Icon-Component-DeleteIcon" />
+      return <DeleteIcon {...props} data-testid="Icon-Component-DeleteIcon" />;
     case 'Tag':
       return <TagIcon {...props} data-testid="Icon-Component-TagIcon" />;
     case 'Requests':
-      return <RequestsIcon {...props} data-testid="Icon-Component-RequestsIcon" />
+      return (
+        <RequestsIcon {...props} data-testid="Icon-Component-RequestsIcon" />
+      );
     case 'Global':
-      return <GlobalIcon {...props} data-testid="Icon-Component-GlobalIcon" />
+      return <GlobalIcon {...props} data-testid="Icon-Component-GlobalIcon" />;
     case 'Events':
       return <EventsIcon {...props} data-testid="Icon-Component-EventsIcon" />;
     case 'Member Organization':

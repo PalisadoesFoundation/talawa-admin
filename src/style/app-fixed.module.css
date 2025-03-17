@@ -6384,6 +6384,11 @@ form {
   border-radius: 16px;
 }
 
+.headerStyle {
+  background-color: #eaebef;
+  color: #000000;
+}
+
 .featuresBox {
   display: flex;
   border: solid;

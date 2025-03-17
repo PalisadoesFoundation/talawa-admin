@@ -318,8 +318,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Col md={8}>
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
-              style={{backgroundColor: "#EAEBEF", color: "#000000"}}
+              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${styles.headerStyle}`}
             >
               <h3 className="m-0">{t('personalDetailsHeading')}</h3>
               <Button
@@ -552,8 +551,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Col lg={4}>
           <Card className={`${styles.contact} ${styles.allRound}`}>
             <Card.Header
-              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-              style={{backgroundColor: "#EAEBEF", color: "#000000"}}
+              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${styles.headerStyle}`}
             >
               <h3 className="m-0" data-testid="eventsAttended-title">
                 {t('profileDetailHeading')}
@@ -563,14 +561,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               id="tagsAssignedScrollableDiv"
               data-testid="tagsAssignedScrollableDiv"
               className={`${styles.cardBody} pe-0`}
-            ></Card.Body>
+            />
           </Card>
 
           <Card className={`${styles.contact} ${styles.allRound} mt-5`}>
-
             <Card.Header
-              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-              style={{backgroundColor: "#EAEBEF", color: "#000000"}}
+              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${styles.headerStyle}`}
             >
               <h3 className="m-0" data-testid="eventsAttended-title">
                 {t('actionsHeading')}
@@ -588,47 +584,67 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="checkbox"
                     id="pluginCreationAllowed"
                     label={t('pluginCreationAllowed')}
-                    style={{color: '#495057'}}
+                    style={{ color: '#495057' }}
                   />
                 </Col>
                 <Col md={12}>
                   <Form.Check
                     className="gap-3 d-flex align-items-center"
-                    style={{color: '#495057'}}
+                    style={{ color: '#495057' }}
                     type="checkbox"
                     id="adminApproved"
                     label={t('adminApproved')}
                   />
                 </Col>
-            </Row>
-            <Row className="mt-4">
-              <Col md={5}>
-                <label htmlFor="language" className="form-label" style={{color : '#495057'}} >
-                  {t('chooseLanguage')}
-                </label>
-                <button 
-                  className={`${styles.inputColor} small form-control d-flex align-items-center`}
-                  style={{ width: 'fit-content' , gap: "0.5rem", border:'solid', borderWidth:'2px', borderColor:'#ced4da' }}
-                >
-                  <GlobalIcon />
-                  <span>English</span>
-                </button>
-              </Col>
+              </Row>
+              <Row className="mt-4">
+                <Col md={5}>
+                  <label
+                    htmlFor="language"
+                    className="form-label"
+                    style={{ color: '#495057' }}
+                  >
+                    {t('chooseLanguage')}
+                  </label>
+                  <button
+                    type="button"
+                    className={`${styles.inputColor} small form-control d-flex align-items-center`}
+                    style={{
+                      width: 'fit-content',
+                      gap: '0.5rem',
+                      border: 'solid',
+                      borderWidth: '2px',
+                      borderColor: '#ced4da',
+                    }}
+                  >
+                    <GlobalIcon />
+                    <span>English</span>
+                  </button>
+                </Col>
 
-              <Col md={7}>
-                <label className="form-label" style={{color : '#495057'}} >
-                  {t('deleteUser')}
-                </label>
-                <Button 
-                  variant='outline-danger'
-                  style={{ backgroundColor: "#F8D6DC",width: 'fit-content' , gap: "0.5rem"}} 
-                  className="d-flex align-items-center justify-content-center"
-                >
-                  <DeleteIcon />
-                  {t('deleteUser')}
-                </Button>
-              </Col>
-            </Row>
+                <Col md={7}>
+                  <label
+                    htmlFor="deleteUserButton"
+                    className="form-label"
+                    style={{ color: '#495057' }}
+                  >
+                    {t('deleteUser')}
+                  </label>
+                  <Button
+                    id="deleteUserButton"
+                    variant="outline-danger"
+                    style={{
+                      backgroundColor: '#F8D6DC',
+                      width: 'fit-content',
+                      gap: '0.5rem',
+                    }}
+                    className="d-flex align-items-center justify-content-center"
+                  >
+                    <DeleteIcon />
+                    {t('deleteUser')}
+                  </Button>
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
 
@@ -637,36 +653,34 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               <Col md={12}>
                 <Card.Footer className="bg-inherit border-top-0 d-flex justify-content-center gap-2 py-3 px-2">
                   <Button
-                    style={{color: "#495057"}}
-                    className='gap-3'
+                    style={{ color: '#495057' }}
+                    className="gap-3"
                     variant="outline-secondary"
                     onClick={resetChanges}
                     data-testid="resetChangesBtn"
                   >
-                    <ReloadIcon style={{marginRight:"0.5rem"}}/>
+                    <ReloadIcon style={{ marginRight: '0.5rem' }} />
                     {tCommon('resetChanges')}
                   </Button>
                   <Button
-                    style={{color: "#495057" , backgroundColor: "#A8C7FA"}}
+                    style={{ color: '#495057', backgroundColor: '#A8C7FA' }}
                     variant="success"
                     onClick={handleUserUpdate}
                     data-testid="saveChangesBtn"
                   >
-                    <SaveIcon style={{marginRight:"0.5rem"}}/>
+                    <SaveIcon style={{ marginRight: '0.5rem' }} />
                     {tCommon('saveChanges')}
                   </Button>
                 </Card.Footer>
               </Col>
-              </Row>
-            )}
-
+            </Row>
+          )}
         </Col>
 
         <Col md={8}>
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`py-3 px-4 ${styles.topRadius}`}
-              style={{backgroundColor: "#EAEBEF" , color: "#000000"}}
+              className={`py-3 px-4 ${styles.topRadius} ${styles.headerStyle}`}
             >
               <h3 className="m-0">{t('contactInfoHeading')}</h3>
             </Card.Header>
@@ -852,15 +866,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             </Card.Body>
           </Card>
         </Col>
-        
       </Row>
 
       <Row className="mb-4">
         <Col xs={12} lg={6}>
           <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
             <Card.Header
-              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-              style={{backgroundColor: "#EAEBEF" , color: "#000000"}}
+              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${styles.headerStyle}`}
             >
               <h3 className="m-0" data-testid="eventsAttended-title">
                 {t('tagsAssigned')}
@@ -870,7 +882,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               id="tagsAssignedScrollableDiv"
               data-testid="tagsAssignedScrollableDiv"
               className={`${styles.cardBody} pe-0`}
-            ></Card.Body>
+            />
           </Card>
         </Col>
       </Row>
