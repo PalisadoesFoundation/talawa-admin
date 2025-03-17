@@ -123,18 +123,30 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     }
   };
 
-  // Add a text sanitization function
+  // Add a better URL sanitization and encoding function
+  const encodeUrlForSrc = (url: string | null): string => {
+    // First sanitize the URL to ensure it's a valid URL with safe protocol
+    const sanitized = sanitizeUrl(url);
+    if (!sanitized) return '';
+
+    // Then encode the URL to ensure no HTML characters are interpreted
+    return encodeURI(sanitized);
+  };
+
+  // Replace the existing sanitizeText function with a more complete version
   const sanitizeText = (text: string): string => {
     if (!text) return '';
 
-    // Simple sanitization: remove HTML tags with regex
+    // More complete sanitization: escape all HTML special characters first
     return text
-      .replace(/<[^>]*>?/g, '') // Remove HTML tags
-      .replace(/&/g, '&amp;') // Escape special chars
+      .replace(/&/g, '&amp;') // Must be first to prevent double-escaping
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+      .replace(/'/g, '&#039;')
+      .replace(/\//g, '&#x2F;') // Escape forward slashes to prevent </script> injection
+      .replace(/\\/g, '&#x5C;') // Escape backslashes
+      .replace(/`/g, '&#x60;'); // Escape backticks to prevent template literals
   };
 
   // Add this ref to track component mounted state
@@ -171,11 +183,22 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     };
   }, [cleanupExpiredUrls]);
 
-  // Modified fetchPresignedUrl that checks cache first and handles errors better
+  // Modified fetchPresignedUrl that validates objectName before requesting
   const fetchPresignedUrl = async (
     objectName: string,
   ): Promise<string | null> => {
     if (!objectName) return null;
+
+    // Validate objectName format - reject URLs or paths with special characters
+    // that are likely not valid MinIO object names
+    if (
+      objectName.includes('://') || // Contains protocol separator
+      objectName.includes('?') || // Contains URL query params
+      objectName.includes('#') // Contains URL fragment
+    ) {
+      console.error('Invalid object name format:', objectName);
+      return null;
+    }
 
     // Check cache first
     const cached = urlCache[objectName];
@@ -199,7 +222,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         console.error('Received invalid presigned URL data', data);
         return null;
       }
-
       const url = data.createPresignedUrl.presignedUrl;
 
       // Store in cache with 5-minute expiry (or match your server's expiry time)
@@ -212,7 +234,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
           },
         }));
       }
-
       return url;
     } catch (error) {
       console.error('Error getting presigned URL:', error);
@@ -266,6 +287,13 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         const url = await fetchPresignedUrl(imageAttachment.objectName);
         if (url && isMounted.current) {
           await loadMediaWithCorsHandling(url, 'image');
+        } else if (isMounted.current) {
+          // Handle case where fetchPresignedUrl returned null
+          console.warn(
+            'Could not fetch presigned URL for image:',
+            imageAttachment.objectName,
+          );
+          setImagePresignedUrl(null);
         }
       }
 
@@ -319,7 +347,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
 
           const urls = await Promise.all(urlPromises);
           const urlMap: Record<string, string> = {};
-
           postFormState.attachments.forEach((a, i) => {
             if (urls[i]) {
               urlMap[a.objectName] = urls[i] as string;
@@ -331,7 +358,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
           console.error('Error loading preview URLs:', error);
         }
       };
-
       loadPreviewUrls();
     }
   }, [showEditModal, JSON.stringify(postFormState.attachments)]); // Better dependency tracking
@@ -424,11 +450,18 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     }));
   };
 
+  // Enhanced handleImageUpload with better file type validation
   const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
+      // Add image file type validation
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select an image file');
+        return;
+      }
+
       try {
         // Generate a unique temporary ID for this upload to avoid race conditions
         const tempId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -492,7 +525,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         console.error('Image upload error:', error);
         if (isMounted.current) {
           toast.error('Failed to upload image');
-
           // Clean up on error - remove the attachment and preview
           setPostFormState((prev) => ({
             ...prev,
@@ -590,7 +622,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         console.error('Video upload error:', error);
         if (isMounted.current) {
           toast.error('Failed to upload video');
-
           // Use the specific tempId that was created for this upload
           if (tempId) {
             // Clean up post form state - remove the specific attachment with this tempId
@@ -605,7 +636,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                 ),
               };
             });
-
             // Revoke object URL to prevent memory leaks
             if (filePreviewUrls[tempId]) {
               URL.revokeObjectURL(filePreviewUrls[tempId]);
@@ -655,6 +685,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     }
   };
 
+  // Enhanced updatePost to validate objectNames before submission
   const updatePost = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
@@ -665,13 +696,23 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     }
 
     try {
+      // Filter out any attachments with invalid objectNames
+      const validAttachments = postFormState.attachments.filter(
+        (attachment) =>
+          attachment.objectName &&
+          typeof attachment.objectName === 'string' &&
+          attachment.objectName.trim() !== '' &&
+          !attachment.objectName.includes('://') &&
+          !attachment.isUploading,
+      );
+
       const { data } = await updatePostMutation({
         variables: {
           input: {
             id: post.id,
             caption: postFormState.caption.trim(),
-            // Filter out client-side properties that shouldn't be sent to server
-            attachments: postFormState.attachments.map(
+            // Only send validated attachments to backend
+            attachments: validAttachments.map(
               ({ objectName, mimeType, fileHash }) => ({
                 objectName,
                 mimeType,
@@ -723,15 +764,14 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                 onMouseLeave={handleVideoPause}
               >
                 <source
-                  src={sanitizeUrl(videoPresignedUrl) || ''}
+                  src={encodeUrlForSrc(videoPresignedUrl) || ''}
                   type={videoAttachment?.mimeType || ''}
                 />
               </video>
             ) : imageAttachment ? (
               <img
                 className={styles.postimageOrgPostCard}
-                // Remove variant="top" - this is a bootstrap Card.Img prop not for regular img
-                src={sanitizeUrl(imagePresignedUrl) || AboutImg}
+                src={encodeUrlForSrc(imagePresignedUrl) || AboutImg}
                 alt="Post image"
               />
             ) : (
@@ -756,7 +796,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
             </Card.Body>
           </Card>
         </div>
-
         {modalVisible && (
           <div className={styles.modalOrgPostCard} data-testid="post-modal">
             <div className={styles.modalContentOrgPostCard}>
@@ -764,19 +803,17 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                 {videoAttachment ? (
                   <video controls autoPlay loop muted>
                     <source
-                      src={sanitizeUrl(videoPresignedUrl) || ''}
+                      src={encodeUrlForSrc(videoPresignedUrl) || ''}
                       type={videoAttachment.mimeType}
                     />
                   </video>
                 ) : (
                   <img
-                    // Remove direct use of imageAttachment?.objectName which could be exploited for XSS
-                    src={sanitizeUrl(imagePresignedUrl) || AboutImg}
+                    src={encodeUrlForSrc(imagePresignedUrl) || AboutImg}
                     alt="Post content"
                   />
                 )}
               </div>
-
               <div className={styles.modalInfo}>
                 <div className={styles.infodiv}>
                   <p>{sanitizeText(post.caption)}</p>
@@ -897,7 +934,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                     <div key={index} className={styles.previewOrgPostCard}>
                       <img
                         src={
-                          sanitizeUrl(
+                          encodeUrlForSrc(
                             filePreviewUrls[attachment.objectName] ||
                               previewUrls[attachment.objectName],
                           ) || ''
@@ -940,7 +977,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                   className={styles.inputField}
                   data-testid="video-upload"
                 />
-
                 {postFormState.attachments
                   .filter((a) => a.mimeType.startsWith('video/'))
                   .map((attachment, index) => (
@@ -948,7 +984,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                       <video controls data-testid="video-preview">
                         <source
                           src={
-                            sanitizeUrl(
+                            encodeUrlForSrc(
                               filePreviewUrls[attachment.objectName] ||
                                 previewUrls[attachment.objectName] ||
                                 '',

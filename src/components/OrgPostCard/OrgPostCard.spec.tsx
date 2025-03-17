@@ -217,7 +217,7 @@ const presignedUrlImageMock = {
   result: {
     data: {
       createPresignedUrl: {
-        // Note: backend no longer returns fileUrl
+        // Note: backend no longer returns fileUrl but this comment isn't reflected in the actual code
         presignedUrl:
           'https://minio-server.example/test-image.jpg?presigned=true',
         objectName: 'test-image-object-name',
@@ -1310,9 +1310,6 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
 
 describe('Security Functions', () => {
   it('sanitizeUrl prevents XSS attacks in URLs', () => {
-    // Access the sanitizeUrl function from the component
-    // This requires exposing it for testing or using a test-specific utility
-
     // Mock implementation for testing
     const sanitizeUrl = (url: string | null): string => {
       if (!url) return '';
@@ -1343,24 +1340,68 @@ describe('Security Functions', () => {
     expect(sanitizeUrl(null)).toBe('');
   });
 
+  // Fix the sanitizeText test implementation to match our component implementation
   it('sanitizeText prevents XSS in text content', () => {
-    // Mock implementation for testing
+    // Mock implementation for testing - matches the implementation in the component
     const sanitizeText = (text: string): string => {
       if (!text) return '';
       return text
-        .replace(/<[^>]*>?/g, '')
-        .replace(/&/g, '&amp;')
+        .replace(/&/g, '&amp;') // Must be first to prevent double-escaping
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+        .replace(/'/g, '&#039;')
+        .replace(/\//g, '&#x2F;') // Escape forward slashes
+        .replace(/\\/g, '&#x5C;') // Escape backslashes
+        .replace(/`/g, '&#x60;'); // Escape backticks
     };
 
-    expect(sanitizeText('<script>alert(1)</script>')).toBe('');
+    expect(sanitizeText('<script>alert(1)</script>')).toBe(
+      '&lt;script&gt;alert(1)&lt;&#x2F;script&gt;',
+    );
     expect(sanitizeText('Test & < > " \'')).toBe(
       'Test &amp; &lt; &gt; &quot; &#039;',
     );
+    expect(sanitizeText('/')).toBe('&#x2F;');
     expect(sanitizeText('')).toBe('');
+  });
+
+  // Add test for encodeUrlForSrc function
+  it('encodeUrlForSrc properly encodes URLs for src attributes', () => {
+    // Mock implementation for testing
+    const sanitizeUrl = (url: string | null): string => {
+      if (!url) return '';
+
+      if (url.startsWith('blob:') || url.startsWith('data:')) {
+        return url;
+      }
+
+      try {
+        const parsed = new URL(url);
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+          return '';
+        }
+        return url;
+      } catch (e) {
+        return '';
+      }
+    };
+
+    const encodeUrlForSrc = (url: string | null): string => {
+      const sanitized = sanitizeUrl(url);
+      if (!sanitized) return '';
+      return encodeURI(sanitized);
+    };
+
+    // Test cases
+    expect(encodeUrlForSrc('javascript:alert(1)')).toBe('');
+    expect(encodeUrlForSrc('https://example.com/path with spaces')).toBe(
+      'https://example.com/path%20with%20spaces',
+    );
+    expect(encodeUrlForSrc('https://example.com/<script>')).toBe(
+      'https://example.com/%3Cscript%3E',
+    );
+    expect(encodeUrlForSrc(null)).toBe('');
   });
 });
 
