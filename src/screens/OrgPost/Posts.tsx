@@ -56,8 +56,45 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   if (loading) return <Loader />;
   if (error) return <div>Error loading posts</div>;
 
-  // Rest of the component remains the same...
-  // (Previous implementation of createAttachments, renderPostCard, and rendering logic)
+  /**
+   * Extract MinIO object name from a URL or path string
+   * This function handles different formats that might come from the backend:
+   * - Full URLs: https://minio-server.example.com/bucket/object-name.jpg
+   * - Path-only format: bucket/object-name.jpg
+   * - Direct object names: object-name.jpg
+   *
+   * @param urlOrPath - The URL or path string to extract object name from
+   * @returns The extracted object name or the original string if no clear extraction is possible
+   */
+  const extractObjectName = (urlOrPath: string | null): string | null => {
+    if (!urlOrPath) return null;
+
+    try {
+      // Check if it's a URL
+      if (urlOrPath.startsWith('http')) {
+        const url = new URL(urlOrPath);
+        // Get the path part and remove leading slash
+        const pathParts = url.pathname.split('/').filter(Boolean);
+        // Last part should be the object name (after the bucket)
+        return pathParts.length > 0
+          ? pathParts[pathParts.length - 1]
+          : urlOrPath;
+      }
+
+      // Check if it has path-like format with slashes
+      if (urlOrPath.includes('/')) {
+        const parts = urlOrPath.split('/');
+        return parts[parts.length - 1]; // Get the last part after the slash
+      }
+
+      // If no clear structure, return as is - might be direct object name
+      return urlOrPath;
+    } catch (e) {
+      console.warn('Failed to extract object name from:', urlOrPath);
+      // Return original as fallback
+      return urlOrPath;
+    }
+  };
 
   const createAttachments = (
     post: InterfacePost,
@@ -66,6 +103,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     id: string;
     postId: string;
     name: string;
+    objectName: string;
     mimeType: string;
     createdAt: Date;
   }[] => {
@@ -76,6 +114,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
               id: `${post.id}-image`,
               postId: post.id,
               name: post.imageUrl,
+              objectName: extractObjectName(post.imageUrl) || post.imageUrl,
               mimeType: 'image/jpeg',
               createdAt,
             },
@@ -87,6 +126,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
               id: `${post.id}-video`,
               postId: post.id,
               name: post.videoUrl,
+              objectName: extractObjectName(post.videoUrl) || post.videoUrl,
               mimeType: 'video/mp4',
               createdAt,
             },
