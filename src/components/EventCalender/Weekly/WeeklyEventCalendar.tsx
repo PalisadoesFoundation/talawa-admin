@@ -14,12 +14,32 @@ import type {
 import { Role } from 'types/Event/interface';
 import { type User } from 'types/User/type';
 
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.weeklyEditButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
   orgData,
   userRole,
   userId,
+  className,
 }) => {
   const today = new Date();
   const [currentWeekStart, setCurrentWeekStart] = useState(
@@ -172,7 +192,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   return (
-    <div className={styles.calendar}>
+    <div className={`${styles.calendar} ${className || ''}`}>
       <div className={styles.calendar__header}>
         <div className={styles.calender_week}>
           <Button

@@ -2587,7 +2587,7 @@ form label,
   position: relative;
 }
 
-.day__events {
+.weekly__day__events {
   background-color: var(--dayEvents-bg);
 }
 
@@ -2793,27 +2793,11 @@ form label,
   font-weight: bold;
 }
 
-.calendar__days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
-}
-
-.day {
-  background-color: white;
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  padding: 10px;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-}
-
 .day__events {
   background-color: var(--light-grey);
 }
 
-.day_header {
+.weekly__day_header {
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -2834,8 +2818,8 @@ form label,
   max-height: 200px;
   overflow-y: auto;
   padding: 10px;
-  background-color: var(--grey-bg-color);
-  border: 1px solid var(--border-color);
+  background-color: var(--expandListContainer-bg);
+  border: 1px solid var(--expandListContainer-border);
   border-radius: 5px;
   margin-top: 10px;
 }
@@ -2887,7 +2871,7 @@ form label,
     font-size: 12px;
   }
 
-  .weekly_calendar__days {
+  .weekly__calendar__days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 10px;

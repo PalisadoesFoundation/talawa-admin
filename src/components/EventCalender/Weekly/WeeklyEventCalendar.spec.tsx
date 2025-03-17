@@ -166,7 +166,11 @@ describe('WeeklyViewCalendar Component', () => {
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
-    const currentWeekStart = dayjs().startOf('week');
+    // Mock the current date to a known date that contains holidays
+    const mockDate = new Date('2025-12-24T00:00:00Z'); // Christmas week
+    vi.setSystemTime(mockDate);
+
+    const currentWeekStart = dayjs(mockDate).startOf('week');
 
     await waitFor(() => {
       holidays.forEach((holiday: Holiday) => {
@@ -175,6 +179,9 @@ describe('WeeklyViewCalendar Component', () => {
         }
       });
     });
+
+    // Restore the original date
+    vi.useRealTimers();
   });
 
   it('renders correctly when user has ADMIN role', async () => {
@@ -235,5 +242,29 @@ describe('WeeklyViewCalendar Component', () => {
     await waitFor(() => {
       expect(getByTestId('current-week')).toBeInTheDocument();
     });
+  });
+
+  it('renders correctly when user has USER role', async () => {
+    const { getByText, getAllByTestId } = renderWithRouter(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        userRole={Role.USER}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() => {
+      expect(getByText('Sunday')).toBeInTheDocument();
+      expect(getByText('Monday')).toBeInTheDocument();
+      expect(getByText('Tuesday')).toBeInTheDocument();
+      expect(getByText('Wednesday')).toBeInTheDocument();
+      expect(getByText('Thursday')).toBeInTheDocument();
+      expect(getByText('Friday')).toBeInTheDocument();
+      expect(getByText('Saturday')).toBeInTheDocument();
+    });
+
+    const days = getAllByTestId('day');
+    expect(days.length).toBe(7);
   });
 });
