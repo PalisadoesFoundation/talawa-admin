@@ -888,7 +888,8 @@ describe('OrgPostCard Component', () => {
       expect(URL.createObjectURL).toHaveBeenCalledWith(file);
       const preview = await screen.findByAltText('Preview');
       expect(preview).toBeInTheDocument();
-      expect(screen.getByText(/uploading/i)).toBeInTheDocument();
+      const uploadingIndicator = screen.getByTestId('uploading-indicator'); // Use a unique data-testid
+      expect(uploadingIndicator).toBeInTheDocument();
 
       // Complete the upload
       resolveUpload({
@@ -897,7 +898,9 @@ describe('OrgPostCard Component', () => {
       });
 
       // Verify loading indicator disappears but preview remains
-      await waitForElementToBeRemoved(() => screen.queryByText(/uploading/i));
+      await waitForElementToBeRemoved(() =>
+        screen.queryByTestId('uploading-indicator'),
+      );
       expect(screen.getByAltText('Preview')).toBeInTheDocument();
     });
 

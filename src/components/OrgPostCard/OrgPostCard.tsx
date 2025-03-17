@@ -787,7 +787,10 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
               {isPinned && (
                 <PushPin color="success" fontSize="large" className="fs-5" />
               )}
-              <Card.Title className={styles.titleOrgPostCard}>
+              <Card.Title
+                className={styles.titleOrgPostCard}
+                data-testid="post-caption"
+              >
                 {sanitizeText(post.caption)}
               </Card.Title>
               <Card.Text className={styles.textOrgPostCard}>
