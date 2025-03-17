@@ -55,7 +55,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           data.push(event);
         }
       } else {
-        const isAttending = event.attendees?.some((attendee) => attendee._id === userId);
+        const isAttending = event.attendees?.some(
+          (attendee) => attendee._id === userId,
+        );
         if (isAttending) {
           data.push(event);
         }
@@ -108,7 +110,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
       const allEventsList: JSX.Element[] =
         events
-          ?.filter((event) => event.startDate === dayjs(date).format('YYYY-MM-DD'))
+          ?.filter(
+            (event) => event.startDate === dayjs(date).format('YYYY-MM-DD'),
+          )
           .map((event: InterfaceEvent) => (
             <EventListCard
               refetchEvents={refetchEvents}
@@ -133,19 +137,29 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.day_header}>
             {weekdays[date.getDay()]} {date.getDate()}
           </div>
-          <div className={expanded === index ? styles.expand_list_container : ''}>
-            <div className={expanded === index ? styles.expand_event_list : styles.event_list}>
+          <div
+            className={expanded === index ? styles.expand_list_container : ''}
+          >
+            <div
+              className={
+                expanded === index
+                  ? styles.expand_event_list
+                  : styles.event_list
+              }
+            >
               <div>{holidayList}</div>
               {expanded === index
                 ? allEventsList
                 : holidayList.length > 0
-                ? allEventsList.slice(0, 1)
-                : allEventsList.slice(0, 2)}
+                  ? allEventsList.slice(0, 1)
+                  : allEventsList.slice(0, 2)}
             </div>
-            {(allEventsList.length > 2 || (windowWidth <= 700 && allEventsList.length > 0)) && (
+            {(allEventsList.length > 2 ||
+              (windowWidth <= 700 && allEventsList.length > 0)) && (
               <button
                 className={styles.btn__more}
                 data-testid="more"
+                type="button" // Added type attribute
                 onClick={() => toggleExpand(index)}
               >
                 {expanded === index ? 'View less' : 'View all'}
@@ -169,9 +183,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           >
             <ChevronLeft />
           </Button>
-          <div className={styles.calendar__header_week} data-testid="current-week">
+          <div
+            className={styles.calendar__header_week}
+            data-testid="current-week"
+          >
             {dayjs(currentWeekStart).format('MMM D')} -{' '}
-            {dayjs(new Date(currentWeekStart).setDate(currentWeekStart.getDate() + 6)).format('MMM D')}
+            {dayjs(
+              new Date(currentWeekStart).setDate(
+                currentWeekStart.getDate() + 6,
+              ),
+            ).format('MMM D')}
           </div>
           <Button
             variant="outlined"

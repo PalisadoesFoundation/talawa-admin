@@ -1,4 +1,3 @@
-// filepath: /Users/anushkagupta/Documents/talawa-admin/src/components/EventCalender/Weekly/WeeklyEventCalendar.spec.tsx
 import React, { Suspense } from 'react';
 import {
   render,

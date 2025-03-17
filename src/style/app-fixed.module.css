@@ -2641,14 +2641,6 @@ form label,
   font-size: 40px;
 }
 
-.calendar__weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  background-color: var(--calendarWeekdays-bg);
-  font-family: Outfit, sans-serif;
-  height: 25px;
-}
-
 .weekday {
   display: flex;
   justify-content: center;
@@ -2753,7 +2745,7 @@ form label,
 /* WeeklyEventCalendar.css */
 
 .weeklyEventCalendar {
-  background-color: var(--primary-bg-color);
+  background-color: var(--calendar-bg);
   box-sizing: border-box;
   padding: 20px;
   border-radius: 8px;
@@ -2784,19 +2776,6 @@ form label,
 
 .buttonEventCalendar:hover {
   background-color: var(--blue-dark);
-}
-
-.weeklyEditButton {
-  background-color: var(--light-green);
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.weeklyEditButton:hover {
-  background-color: var(--green-dark);
 }
 
 .calendar__weekdays {
@@ -2877,6 +2856,7 @@ form label,
 .day__selected {
   background-color: var(--blue-primary);
   color: var(--grey-dark);
+  outline: 2px solid var(--blue-dark);
 }
 
 .day__today {
@@ -2884,9 +2864,14 @@ form label,
   font-weight: 700;
   text-decoration: underline;
   color: var(--light-green);
+  position: relative;
 }
 
-@media only screen and (max-width: var(--breakpoint-tablet)) {
+.day:focus {
+  outline: 2px dashed var(--blue-primary);
+  outline-offset: 2px;
+}
+@media only screen and (max-width: 768px) {
   .event_list {
     display: none;
   }
@@ -2897,13 +2882,15 @@ form label,
   }
 }
 
-@media only screen and (max-width: var(--breakpoint-mobile)) {
+@media only screen and (max-width: 576px) {
   .btn__more {
     font-size: 12px;
   }
 
-  .calendar__days {
-    grid-template-columns: 1fr;
+  .weekly_calendar__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
   }
 
   .day {
