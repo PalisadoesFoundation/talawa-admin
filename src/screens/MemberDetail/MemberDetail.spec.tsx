@@ -222,6 +222,26 @@ describe('MemberDetail', () => {
     );
   });
 
+  test('should render language button with correct text', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <MemberDetail {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const languageButton = screen.getByRole('button', { name: /English/i });
+      expect(languageButton).toBeInTheDocument();
+    });
+
+    // Mock different language code
+    const newLanguage = 'fr';
+    const getLangName = vi.fn(getLanguageName);
+    expect(getLangName(newLanguage)).toBe('Français');
+  });
+
   test('display admin', async () => {
     renderMemberDetailScreen(link1);
     await wait();
