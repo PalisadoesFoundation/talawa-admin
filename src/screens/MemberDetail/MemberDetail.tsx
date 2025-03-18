@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from 'style/app-fixed.module.css';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
@@ -258,7 +258,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         }}
         className={`bg-white gap-4 ${styles.allRound}`}
       >
-        <a href="/member">
+        <Link to="/member">
           <button
             type="button"
             className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
@@ -271,9 +271,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               {t('navigationOverview')}
             </h3>
           </button>
-        </a>
+        </Link>
 
-        <a href="/orgList">
+        <Link to="/orgList">
           <button
             type="button"
             className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
@@ -286,9 +286,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               {t('navigationOrganisations')}
             </h3>
           </button>
-        </a>
+        </Link>
 
-        <a href="/orgevents">
+        <Link to="/orgevents">
           <button
             type="button"
             className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
@@ -301,9 +301,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               {t('navigationEvents')}
             </h3>
           </button>
-        </a>
+        </Link>
 
-        <a href="/orgtags">
+        <Link to="/orgtags">
           <button
             type="button"
             className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
@@ -316,7 +316,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               {t('navigationTags')}
             </h3>
           </button>
-        </a>
+        </Link>
       </div>
       <Row className="g-4 mt-1">
         <Col md={8}>
@@ -324,7 +324,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             <Card.Header
               className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${styles.headerStyle}`}
             >
-              <h3 className="m-0">{t('profileInformationHeading')}</h3>
+              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
               <Button
                 type="button"
                 variant="light"
@@ -587,11 +587,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <Form.Check
                     className="gap-3 d-flex align-items-center"
                     type="checkbox"
-                    onChange={() => {
+                    onChange={(e) => {
                       console.log('Plugin creation allowed');
                       setFormState((prevState) => ({
                         ...prevState,
-                        pluginCreationAllowed: true,
+                        pluginCreationAllowed: e.target.checked,
                       }));
                       setisUpdated(true);
                     }}
@@ -604,11 +604,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 <Col md={12}>
                   <Form.Check
                     className="gap-3 d-flex align-items-center"
-                    onChange={() => {
+                    onChange={(e) => {
                       console.log('Admin Approved');
                       setFormState((prevState) => ({
                         ...prevState,
-                        adminApproved: true,
+                        pluginCreationAllowed: e.target.checked,
                       }));
                       setisUpdated(true);
                     }}
