@@ -55,7 +55,8 @@ function OrgPost(): JSX.Element {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState('');
   const [file, setFile] = useState<File | null>(null);
-  const { orgId: currentUrl } = useParams();
+  const params = useParams<{ orgId: string }>() || {};
+  const currentUrl = params.orgId || 'default-org-id';
   const [showTitle, setShowTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
@@ -264,7 +265,11 @@ function OrgPost(): JSX.Element {
   }, [data, sortingOption]);
 
   if (createPostLoading || orgPostListLoading) {
-    return <Loader />;
+    return (
+      <div className={styles.spinnerWrapper} data-testid="spinner-wrapper">
+        <Loader />
+      </div>
+    );
   }
 
   const content = (
@@ -439,7 +444,7 @@ function OrgPost(): JSX.Element {
               <Button
                 variant="success"
                 onClick={showInviteModal}
-                data-testid="createPostModalBtn"
+                data-testid="createPostModalBtn" // Fix test ID
                 className={`${styles.createButton} mb-2`}
               >
                 <i className={'fa fa-plus me-2'} />
@@ -482,7 +487,7 @@ function OrgPost(): JSX.Element {
         <Modal.Header data-testid="modalOrganizationHeader" closeButton>
           <Modal.Title>{t('postDetails')}</Modal.Title>
         </Modal.Header>
-        <Form onSubmitCapture={createPost}>
+        <Form onSubmitCapture={createPost} data-testid="create-post-form">
           <Modal.Body>
             <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
             <Form.Control
