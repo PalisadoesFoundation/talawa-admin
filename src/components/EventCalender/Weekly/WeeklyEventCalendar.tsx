@@ -34,7 +34,10 @@ import { Role } from 'types/Event/interface';
  * For more details on the reusable classes, refer to the global CSS file.
  */
 
-const Calendar: React.FC<InterfaceCalendarProps> = ({
+const MAX_EVENTS_DISPLAYED = 2;
+const MOBILE_WIDTH_THRESHOLD = 700;
+
+const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
   orgData,
@@ -64,7 +67,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     userId?: string,
   ): InterfaceEvent[] => {
     const data: InterfaceEvent[] = [];
-    if (userRole === Role.SUPERADMIN) return eventData;
+    if (userRole === Role.SUPERADMIN) return eventData ?? [];
 
     eventData?.forEach((event) => {
       if (event.isPublic) {
@@ -170,14 +173,18 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               <div>{holidayList}</div>
               {expanded === index
                 ? allEventsList
-                : allEventsList.slice(0, holidayList.length > 0 ? 1 : 2)}
+                : allEventsList.slice(
+                    0,
+                    holidayList.length > 0 ? 1 : MAX_EVENTS_DISPLAYED,
+                  )}
             </div>
-            {(allEventsList.length > 2 ||
-              (windowWidth <= 700 && allEventsList.length > 0)) && (
+            {(allEventsList.length > MAX_EVENTS_DISPLAYED ||
+              (windowWidth <= MOBILE_WIDTH_THRESHOLD &&
+                allEventsList.length > 0)) && (
               <button
                 className={styles.btn__more}
                 data-testid="more"
-                type="button" // Added type attribute
+                type="button"
                 onClick={() => toggleExpand(index)}
               >
                 {expanded === index ? 'View less' : 'View all'}
@@ -245,4 +252,4 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   );
 };
 
-export default Calendar;
+export default WeeklyEventCalendar;
