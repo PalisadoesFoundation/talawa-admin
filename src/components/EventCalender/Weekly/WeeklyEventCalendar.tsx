@@ -14,6 +14,8 @@ import type {
 import { Role } from 'types/Event/interface';
 
 /**
+ * @file WeeklyEventCalendar.tsx
+ *
  * ## CSS Strategy Explanation:
  *
  * To ensure consistency across the application and reduce duplication, common styles
@@ -165,7 +167,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   : styles.event_list
               }
             >
-              + <div>{holidayList}</div>
+              <div>{holidayList}</div>
               {expanded === index
                 ? allEventsList
                 : allEventsList.slice(0, holidayList.length > 0 ? 1 : 2)}
@@ -188,11 +190,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   return (
-    <div className={`${styles.calendar} ${className || ''}`}>
+    <div className={styles.calendar}>
       <div className={styles.calendar__header}>
         <div className={styles.calender_week}>
           <Button
-            variant="outlined"
+            variant="outline-primary"
             className={styles.buttonEventCalendar}
             onClick={goToPreviousWeek}
             data-testid="prevWeek"
@@ -211,7 +213,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             ).format('MMM D')}
           </div>
           <Button
-            variant="outlined"
+            variant="outline-primary"
             className={styles.buttonEventCalendar}
             onClick={goToNextWeek}
             data-testid="nextWeek"
