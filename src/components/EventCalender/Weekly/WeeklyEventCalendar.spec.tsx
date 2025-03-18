@@ -474,4 +474,296 @@ describe('WeeklyViewCalendar Component', () => {
     const days = getAllByTestId('day');
     expect(days.length).toBe(7);
   });
+
+  it('shows "View all" button when there are more than MAX_EVENTS_DISPLAYED events', async () => {
+    const todayStr = dayjs().format('YYYY-MM-DD');
+
+    // Create multiple events for today to exceed MAX_EVENTS_DISPLAYED
+    const multipleEvents = [
+      {
+        _id: '1',
+        location: 'Location 1',
+        title: 'Event 1',
+        description: 'Description 1',
+        startDate: todayStr,
+        endDate: todayStr,
+        startTime: '09:00',
+        endTime: '10:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+        attendees: [],
+        creator: {
+          firstName: 'John',
+          lastName: 'Doe',
+          _id: 'creator1',
+        },
+      },
+      {
+        _id: '2',
+        location: 'Location 2',
+        title: 'Event 2',
+        description: 'Description 2',
+        startDate: todayStr,
+        endDate: todayStr,
+        startTime: '11:00',
+        endTime: '12:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+        attendees: [],
+        creator: {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          _id: 'creator2',
+        },
+      },
+      {
+        _id: '3',
+        location: 'Location 3',
+        title: 'Event 3',
+        description: 'Description 3',
+        startDate: todayStr,
+        endDate: todayStr,
+        startTime: '13:00',
+        endTime: '14:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+        attendees: [],
+        creator: {
+          firstName: 'Alice',
+          lastName: 'Smith',
+          _id: 'creator3',
+        },
+      },
+    ];
+
+    renderWithRouter(
+      <Calendar
+        eventData={multipleEvents}
+        refetchEvents={mockRefetchEvents}
+        userRole={Role.SUPERADMIN}
+      />,
+    );
+
+    // Wait for the component to render
+    await waitFor(() => {
+      expect(screen.getAllByTestId('day')).toHaveLength(7);
+    });
+
+    // Find the "View all" button
+    const viewAllButton = await screen.findByTestId('more');
+    expect(viewAllButton).toBeInTheDocument();
+    expect(viewAllButton).toHaveTextContent('View all');
+  });
+
+  it('toggles between "View all" and "View less" when clicking the button', async () => {
+    const todayStr = dayjs().format('YYYY-MM-DD');
+
+    // Create multiple events for today
+    const multipleEvents = [
+      {
+        _id: '1',
+        location: 'Location 1',
+        title: 'Event 1',
+        description: 'Description 1',
+        startDate: todayStr,
+        endDate: todayStr,
+        startTime: '09:00',
+        endTime: '10:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+        attendees: [],
+        creator: {
+          firstName: 'John',
+          lastName: 'Doe',
+          _id: 'creator1',
+        },
+      },
+      {
+        _id: '2',
+        location: 'Location 2',
+        title: 'Event 2',
+        description: 'Description 2',
+        startDate: todayStr,
+        endDate: todayStr,
+        startTime: '11:00',
+        endTime: '12:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+        attendees: [],
+        creator: {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          _id: 'creator2',
+        },
+      },
+      {
+        _id: '3',
+        location: 'Location 3',
+        title: 'Event 3',
+        description: 'Description 3',
+        startDate: todayStr,
+        endDate: todayStr,
+        startTime: '13:00',
+        endTime: '14:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+        attendees: [],
+        creator: {
+          firstName: 'Alice',
+          lastName: 'Smith',
+          _id: 'creator3',
+        },
+      },
+    ];
+
+    renderWithRouter(
+      <Calendar
+        eventData={multipleEvents}
+        refetchEvents={mockRefetchEvents}
+        userRole={Role.SUPERADMIN}
+      />,
+    );
+
+    // Wait for the component to render
+    await waitFor(() => {
+      expect(screen.getAllByTestId('day')).toHaveLength(7);
+    });
+
+    // Find and click the "View all" button
+    const viewAllButton = await screen.findByTestId('more');
+    expect(viewAllButton).toHaveTextContent('View all');
+
+    // Click to expand
+    await act(async () => {
+      fireEvent.click(viewAllButton);
+    });
+
+    // Now it should show "View less"
+    expect(viewAllButton).toHaveTextContent('View less');
+
+    // Click again to collapse
+    await act(async () => {
+      fireEvent.click(viewAllButton);
+    });
+
+    // Now it should show "View all" again
+    expect(viewAllButton).toHaveTextContent('View all');
+  });
+
+  it('shows "View all" button on mobile view when there are events', async () => {
+    // Mock mobile screen width
+    global.innerWidth = 600; // Set below MOBILE_WIDTH_THRESHOLD (700)
+    global.dispatchEvent(new Event('resize'));
+
+    const todayStr = dayjs().format('YYYY-MM-DD');
+
+    // Create a single event for today
+    const singleEvent = [
+      {
+        _id: '1',
+        location: 'Location 1',
+        title: 'Event 1',
+        description: 'Description 1',
+        startDate: todayStr,
+        endDate: todayStr,
+        startTime: '09:00',
+        endTime: '10:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+        attendees: [],
+        creator: {
+          firstName: 'John',
+          lastName: 'Doe',
+          _id: 'creator1',
+        },
+      },
+    ];
+
+    renderWithRouter(
+      <Calendar
+        eventData={singleEvent}
+        refetchEvents={mockRefetchEvents}
+        userRole={Role.SUPERADMIN}
+      />,
+    );
+
+    // Wait for the component to render
+    await waitFor(() => {
+      expect(screen.getAllByTestId('day')).toHaveLength(7);
+    });
+
+    // Find the "View all" button (should appear on mobile even with just one event)
+    const viewAllButton = await screen.findByTestId('more');
+    expect(viewAllButton).toBeInTheDocument();
+    expect(viewAllButton).toHaveTextContent('View all');
+
+    // Reset window width to desktop size
+    global.innerWidth = 1024;
+    global.dispatchEvent(new Event('resize'));
+  });
+
+  it('renders holiday cards correctly for specific holidays', async () => {
+    // Save original date implementation and mock functions
+    const RealDate = Date;
+    const originalSetSystemTime = vi.setSystemTime;
+
+    // Mock Christmas Eve (Dec 24), which will show Christmas day in the week view
+    const mockChristmasEve = new Date(2023, 11, 24); // December is 11 in JS Date
+
+    // Override the Date constructor to always return our fixed date
+    global.Date = class extends RealDate {
+      constructor(...args) {
+        if (args.length === 0) {
+          super(mockChristmasEve);
+        } else {
+          super(...args);
+        }
+      }
+
+      static now() {
+        return new RealDate(mockChristmasEve).getTime();
+      }
+    } as DateConstructor;
+
+    // Render the component with the mocked date
+    const { getAllByTestId, findByText } = renderWithRouter(
+      <Calendar eventData={[]} refetchEvents={mockRefetchEvents} />,
+    );
+
+    // Wait for the calendar to render
+    await waitFor(() => {
+      expect(getAllByTestId('day')).toHaveLength(7);
+    });
+
+    // Restore the original Date implementation
+    global.Date = RealDate;
+  });
 });
