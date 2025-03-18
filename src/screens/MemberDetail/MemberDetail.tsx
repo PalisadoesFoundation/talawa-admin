@@ -59,8 +59,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const currentId = location.state?.id || getItem('id') || id;
   const originalImageState = React.useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
-  const [adminApproved, setAdminApproved] = useState(false);
-  const [pluginCreationAllowed, setPluginCreationAllowed] = useState(false);
 
   document.title = t('title');
 
@@ -290,6 +288,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
         <a href="/orgevents">
           <button
+            type="button"
             className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
           >
             <MemberEvents />
@@ -586,7 +585,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="checkbox"
                     onChange={() => {
                       console.log('Plugin creation allowed');
-                      setPluginCreationAllowed(true);
+                      setFormState((prevState) => ({
+                        ...prevState,
+                        pluginCreationAllowed: true,
+                      }));
+                      setisUpdated(true);
                     }}
                     id="pluginCreationAllowed"
                     label={t('pluginCreationAllowed')}
@@ -599,7 +602,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     className="gap-3 d-flex align-items-center"
                     onChange={() => {
                       console.log('Admin Approved');
-                      setAdminApproved(true);
+                      setFormState((prevState) => ({
+                        ...prevState,
+                        adminApproved: true,
+                      }));
+                      setisUpdated(true);
                     }}
                     style={{ color: '#495057' }}
                     type="checkbox"
