@@ -88,7 +88,10 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       );
     case 'Member Events':
       return (
-        <MemberEvents {...props} data-testid="Icon-Component-MemberEvents" />
+        <MemberEvents
+          {...props}
+          data-testid="Icon-Component-MemberEventsIcon"
+        />
       );
     case 'Action Items':
       return (

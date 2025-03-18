@@ -114,7 +114,7 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
   },
   MemberEvents: {
     name: 'Member Events',
-    testId: 'Icon-Component-MemberEvents',
+    testId: 'Icon-Component-MemberEventsIcon',
   },
   default: {
     name: 'default',
