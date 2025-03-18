@@ -588,6 +588,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     id="pluginCreationAllowed"
                     label={t('pluginCreationAllowed')}
                     style={{ color: '#495057' }}
+                    data-testid="pluginCreationFrom"
                   />
                 </Col>
                 <Col md={12}>
@@ -600,6 +601,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="checkbox"
                     id="adminApproved"
                     label={t('adminApproved')}
+                    data-testid="AdminApprovedForm"
                   />
                 </Col>
               </Row>
@@ -659,6 +661,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               <Col md={12}>
                 <Card.Footer className="bg-inherit border-top-0 d-flex justify-content-center gap-2 py-3 px-2">
                   <Button
+                    type="button"
                     style={{ color: '#495057' }}
                     className="gap-3"
                     variant="outline-secondary"
@@ -669,6 +672,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     {tCommon('resetChanges')}
                   </Button>
                   <Button
+                    type="button"
                     style={{ color: '#495057', backgroundColor: '#A8C7FA' }}
                     variant="success"
                     onClick={handleUserUpdate}
