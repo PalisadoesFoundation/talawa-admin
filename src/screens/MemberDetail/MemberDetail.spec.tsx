@@ -228,6 +228,7 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getByText('Admin')).toBeInTheDocument();
   });
+
   test('logs correct messages when checkboxes are clicked', async () => {
     renderMemberDetailScreen(link1);
 
@@ -246,6 +247,8 @@ describe('MemberDetail', () => {
 
     fireEvent.click(adminCheckbox);
     expect(consoleSpy).toHaveBeenCalledWith('Admin Approved');
+
+    consoleSpy.mockRestore();
   });
 
   test('Should display dicebear image if image is null', async () => {
