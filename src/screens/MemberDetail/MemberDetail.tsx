@@ -324,7 +324,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             <Card.Header
               className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${styles.headerStyle}`}
             >
-              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
+              <h3 className="m-0">{t('profileInformationHeading')}</h3>
               <Button
                 type="button"
                 variant="light"
