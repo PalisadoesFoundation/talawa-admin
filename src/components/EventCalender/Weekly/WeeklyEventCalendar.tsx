@@ -37,7 +37,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   refetchEvents,
   orgData,
   userRole,
-  userId
+  userId,
 }) => {
   const today = new Date();
   const [currentWeekStart, setCurrentWeekStart] = useState(
@@ -165,12 +165,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   : styles.event_list
               }
             >
-              <div>{holidayList}</div>
+              + <div>{holidayList}</div>
               {expanded === index
                 ? allEventsList
-                : holidayList.length > 0
-                  ? allEventsList.slice(0, 1)
-                  : allEventsList.slice(0, 2)}
+                : allEventsList.slice(0, holidayList.length > 0 ? 1 : 2)}
             </div>
             {(allEventsList.length > 2 ||
               (windowWidth <= 700 && allEventsList.length > 0)) && (
@@ -221,7 +219,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <ChevronRight />
           </Button>
         </div>
-        <div>
+        <div data-testid="today-button-container">
           <Button
             className={styles.weeklyEditButton}
             onClick={handleTodayButton}
