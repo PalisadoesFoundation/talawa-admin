@@ -18,6 +18,14 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi
+      .fn()
+      .mockResolvedValue({ objectName: 'test-image-url' }),
+  }),
+}));
+
 i18n.init({
   lng: 'en',
   resources: {
@@ -254,13 +262,43 @@ describe('OrgUpdate Component', () => {
     });
   });
 
-  vi.mock('utils/convertToBase64', () => ({
-    default: vi.fn().mockResolvedValue('base64String'),
-  }));
+  it('handles file upload to MinIO', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-  it('handles file upload', async () => {
-    const convertToBase64 = (await import('utils/convertToBase64')).default;
+    await waitFor(() => {
+      expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
+    });
+
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
+
     const file = new File(['test'], 'test.png', { type: 'image/png' });
+    await userEvent.upload(fileInput, file);
+
+    expect(fileInput.files).toHaveLength(1);
+    expect(fileInput.files?.[0]).toBe(file);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('save-org-changes-btn')).toBeEnabled();
+    });
+  });
+
+  it('handles file upload error to MinIO', async () => {
+    // Mock the MinIO upload function to throw an error
+    vi.mock('utils/MinioUpload', () => ({
+      useMinioUpload: () => ({
+        uploadFileToMinio: vi
+          .fn()
+          .mockRejectedValue(new Error('Upload failed')),
+      }),
+    }));
 
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -278,16 +316,45 @@ describe('OrgUpdate Component', () => {
       'organisationImage',
     ) as HTMLInputElement;
 
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
     await userEvent.upload(fileInput, file);
 
     expect(fileInput.files).toHaveLength(1);
     expect(fileInput.files?.[0]).toBe(file);
 
-    expect(convertToBase64).toHaveBeenCalledWith(file);
+    // Wait for the error toast to be displayed
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to upload image');
+    });
+  });
+
+  it('displays error when name or description is missing', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
     await waitFor(() => {
-      const saveButton = screen.getByTestId('save-org-changes-btn');
-      expect(saveButton).toBeEnabled();
+      expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+    });
+
+    // Clear the name and description fields
+    const nameInput = screen.getByDisplayValue('Test Org');
+    const descriptionInput = screen.getByDisplayValue('Test Description');
+    fireEvent.change(nameInput, { target: { value: '' } });
+    fireEvent.change(descriptionInput, { target: { value: '' } });
+
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    fireEvent.click(saveButton);
+
+    // Verify that the error toast is displayed
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Name and description are required',
+      );
     });
   });
 

@@ -11,10 +11,10 @@ import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../../../style/app-fixed.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
@@ -45,7 +45,7 @@ interface InterfaceMutationUpdateOrganizationInput {
  */
 function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
-
+  const { uploadFileToMinio } = useMinioUpload();
   const [formState, setFormState] = useState<{
     orgName: string;
     orgDescrip: string;
@@ -142,7 +142,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           sortingCode: '',
           state: data.organization.state,
         },
-        orgImage: null,
+        orgImage: data.organization.avatarURL,
       });
     }
     return () => {
@@ -156,6 +156,39 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
    */
 
   const [isSaving, setIsSaving] = useState(false);
+
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const target = e.target as HTMLInputElement;
+    const file = target.files && target.files[0];
+    if (file && orgId) {
+      const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+      const maxSize = MAX_FILE_SIZE;
+
+      if (file.size > maxSize) {
+        toast.error(t('fileSizeLimitExceeded'));
+        return;
+      }
+
+      if (!file.type.startsWith('image/')) {
+        toast.error(t('invalidFileType'));
+        return;
+      }
+      try {
+        const { objectName } = await uploadFileToMinio(file, orgId);
+        setFormState({
+          ...formState,
+          orgImage: objectName,
+        });
+        toast.success('Image uploaded successfully');
+      } catch (error) {
+        console.error('Error uploading file image to Minio', error);
+        toast.error('Failed to upload image');
+      }
+    }
+  };
 
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
@@ -274,15 +307,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             name="photo"
             type="file"
             multiple={false}
-            onChange={async (e: React.ChangeEvent): Promise<void> => {
-              const target = e.target as HTMLInputElement;
-              const file = target.files && target.files[0];
-              if (file)
-                setFormState({
-                  ...formState,
-                  orgImage: await convertToBase64(file),
-                });
-            }}
+            onChange={handleImageChange}
             data-testid="organisationImage"
           />
           <Row>
