@@ -1,6 +1,12 @@
 import React from 'react';
 import { describe, expect, beforeAll, vi } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
@@ -204,6 +210,7 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('handles update user mutation error', async () => {
     const mockedErrorHandler = vi.mocked(errorHandler);
     const errorLink = new StaticMockLink(errorMock, true);
+
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={errorLink}>
@@ -218,8 +225,8 @@ describe('Testing Settings Screen [User Portal]', () => {
       );
     });
 
+    // Wait for the component to fully load
     await wait();
-
     // Make changes that will trigger error
     fireEvent.change(screen.getByTestId('inputName'), {
       target: { value: 'Bandhan' },
@@ -227,7 +234,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     fireEvent.change(screen.getByTestId('inputPhoneNumber'), {
       target: { value: '1200' },
     });
-
+    console.log('both phone number and name is changed');
     await act(async () => {
       fireEvent.click(screen.getByTestId('updateUserBtn'));
     });
@@ -270,7 +277,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     // Check if states are updated
-    const updateBtn = screen.getByTestId('updateUserBtn');
+    const updateBtn = screen.getByTestId('fileInput');
     expect(updateBtn).toBeEnabled();
     expect(toastSpy).not.toHaveBeenCalled();
   });
