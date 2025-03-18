@@ -92,13 +92,37 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Volunteer',
     testId: 'Icon-Component-Volunteer',
   },
+  Reload: {
+    name: 'Reload',
+    testId: 'Icon-Component-ReloadIcon',
+  },
+  Save: {
+    name: 'Save',
+    testId: 'Icon-Component-SaveIcon',
+  },
+  Delete: {
+    name: 'Delete',
+    testId: 'Icon-Component-DeleteIcon',
+  },
+  Global: {
+    name: 'Global',
+    testId: 'Icon-Component-GlobalIcon',
+  },
+  MemberOrganization: {
+    name: 'Member Organization',
+    testId: 'Icon-Component-MemberOrganizationIcon',
+  },
+  MemberEvents: {
+    name: 'Member Events',
+    testId: 'Icon-Component-MemberEvents',
+  },
   default: {
     name: 'default',
     testId: 'Icon-Component-DefaultIcon',
   },
 };
 
-describe('Testing Collapsible Dropdown component', () => {
+describe('Testing IconComponent rendering', () => {
   it('Renders the correct icon according to the component', () => {
     for (const component in screenTestIdMap) {
       render(<IconComponent name={screenTestIdMap[component].name} />);
