@@ -591,25 +591,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               <Row className="mb-3 gap-2">
                 <Col md={12} className="mb-3">
                   <Form.Check
-                    checked={formState.pluginCreationAllowed == 'true'}
+                    checked={formState.pluginCreationAllowed === 'true'}
                     className="gap-3 d-flex align-items-center"
                     type="checkbox"
                     onChange={(e) => {
                       console.log('Plugin creation allowed');
-
-                      if (formState.pluginCreationAllowed == 'false') {
-                        setFormState((prevState) => ({
-                          ...prevState,
-                          pluginCreationAllowed: 'true',
-                        }));
-                      } else {
-                        setFormState((prevState) => ({
-                          ...prevState,
-                          pluginCreationAllowed: 'false',
-                        }));
-                      }
-
-                      setisUpdated(true);
+                      setFormState((prevState) => ({
+                        ...prevState,
+                        pluginCreationAllowed: e.target.checked
+                          ? 'true'
+                          : 'false',
+                      }));
                       setisUpdated(true);
                     }}
                     id="pluginCreationAllowed"
@@ -620,23 +612,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={12}>
                   <Form.Check
-                    checked={formState.adminApproved == 'true'}
+                    checked={formState.adminApproved === 'true'}
                     className="gap-3 d-flex align-items-center"
                     onChange={(e) => {
                       console.log('Admin Approved');
-
-                      if (formState.adminApproved == 'false') {
-                        setFormState((prevState) => ({
-                          ...prevState,
-                          adminApproved: 'true',
-                        }));
-                      } else {
-                        setFormState((prevState) => ({
-                          ...prevState,
-                          adminApproved: 'false',
-                        }));
-                      }
-
+                      setFormState((prevState) => ({
+                        ...prevState,
+                        adminApproved: e.target.checked ? 'true' : 'false',
+                      }));
                       setisUpdated(true);
                     }}
                     style={{ color: '#495057' }}
