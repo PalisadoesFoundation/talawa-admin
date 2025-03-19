@@ -189,9 +189,14 @@ vi.mock('lib/auth-client', () => ({
     signIn: {
       email: vi.fn(), // Generic mock function without tracker yet
     },
+    signUp: {
+      email: vi.fn(),
+    },
   },
 }));
+
 const trackedMock = vi.mocked(authClient.signIn.email);
+const trackedMock2 = vi.mocked(authClient.signUp.email);
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS3, true);
@@ -378,6 +383,133 @@ describe('Testing Login Page Screen', () => {
     );
 
     await userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  it('sets Signin loading state correctly upon request and response', async () => {
+    const formData = {
+      name: 'John Doe',
+      email: 'johndoe@gmail.com',
+      password: 'John@123',
+      confirmPassword: 'John@123',
+    };
+
+    // Setup the trackedMock2 to handle the signup flow
+    trackedMock2.mockImplementation((data, options) => {
+      // Create a properly structured RequestContext object
+      if (options && typeof options.onRequest === 'function') {
+        options.onRequest({
+          url: 'test-url',
+          headers: new Headers(),
+          body: {},
+          method: 'POST',
+          signal: new AbortController().signal,
+        });
+      }
+
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          if (options && typeof options.onResponse === 'function') {
+            // Simulated Request object
+            const mockRequest = new Request('https://api.example.com/signup', {
+              method: 'POST',
+              headers: new Headers({ 'Content-Type': 'application/json' }),
+              body: JSON.stringify(formData),
+            });
+
+            // Simulated Response object
+            const mockResponse = new Response(
+              JSON.stringify({
+                token: 'test-token-123',
+                id: 'user-id-123',
+              }),
+              {
+                status: 200,
+                headers: new Headers({ 'Content-Type': 'application/json' }),
+              },
+            );
+
+            // Simulated ResponseContext
+            const mockResponseContext = {
+              url: mockRequest.url,
+              status: mockResponse.status,
+              headers: mockResponse.headers,
+              response: mockResponse,
+              request: mockRequest, // ✅ Added the missing 'request' property
+            };
+
+            options.onResponse(mockResponseContext);
+          }
+
+          resolve({
+            data: {
+              token: 'test-token-123',
+              id: 'user-id-123',
+            },
+          });
+        }, 50);
+      });
+    });
+
+    // Render the component
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+    await wait();
+
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
+    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      formData.password,
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword,
+    );
+
+    // Elements should be enabled initially
+    expect(screen.getByPlaceholderText(/Name/i)).not.toBeDisabled();
+    expect(screen.getByTestId(/signInEmail/i)).not.toBeDisabled();
+    expect(screen.getByPlaceholderText('Password')).not.toBeDisabled();
+    expect(screen.getByPlaceholderText('Confirm Password')).not.toBeDisabled();
+    expect(screen.getByTestId('registrationBtn')).not.toBeDisabled();
+
+    // Submit the form
+    await userEvent.click(screen.getByTestId('registrationBtn'));
+
+    // Verify that the form elements are disabled when loading
+    expect(screen.getByPlaceholderText(/Name/i)).toBeDisabled();
+    expect(screen.getByTestId(/signInEmail/i)).toBeDisabled();
+    expect(screen.getByPlaceholderText('Password')).toBeDisabled();
+    expect(screen.getByPlaceholderText('Confirm Password')).toBeDisabled();
+    expect(screen.getByTestId('registrationBtn')).toBeDisabled();
+
+    // Wait for the UI to update after the response
+    await waitFor(
+      () => {
+        expect(screen.getByPlaceholderText(/Name/i)).not.toBeDisabled();
+        expect(screen.getByTestId(/signInEmail/i)).not.toBeDisabled();
+        expect(screen.getByPlaceholderText('Password')).not.toBeDisabled();
+        expect(
+          screen.getByPlaceholderText('Confirm Password'),
+        ).not.toBeDisabled();
+        expect(screen.getByTestId('registrationBtn')).not.toBeDisabled();
+      },
+      { timeout: 1000 },
+    );
   });
 
   it('Testing registration functionality when all inputs are invalid', async () => {
@@ -740,6 +872,127 @@ describe('Testing Login Page Screen', () => {
   //     expect(resetReCAPTCHA).toBeCalled();
   //   });
   // });
+  it('sets login loading state correctly upon request and response', async () => {
+    const changeLanguageMock = vi.fn();
+    vi.spyOn(i18n, 'changeLanguage').mockImplementation(changeLanguageMock);
+
+    // Setup the trackedMock to handle the authentication flow
+    trackedMock.mockImplementation((data, options) => {
+      // Create a properly structured RequestContext object
+      if (options && typeof options.onRequest === 'function') {
+        options.onRequest({
+          url: 'test-url',
+          headers: new Headers(),
+          body: {},
+          method: 'POST',
+          signal: new AbortController().signal,
+        });
+      }
+
+      // Return a promise that will resolve after a short delay
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          // Create a proper ResponseContext object (without status property at this level)
+          if (options && typeof options.onResponse === 'function') {
+            // Simulated Request object
+            const mockRequest = new Request('https://api.example.com/login', {
+              method: 'POST',
+              headers: new Headers({ 'Content-Type': 'application/json' }),
+              body: JSON.stringify({
+                email: 'testuser@example.com',
+                password: 'Password123!',
+              }),
+            });
+
+            // Simulated Response object
+            const mockResponse = new Response(
+              JSON.stringify({
+                role: 'administrator',
+                token: 'test-token-123',
+                id: 'user-id-123',
+                name: 'Test User',
+                email: 'testuser@example.com',
+                avatarName: 'avatar.jpg',
+                countryCode: 'en',
+              }),
+              {
+                status: 200,
+                headers: new Headers({ 'Content-Type': 'application/json' }),
+              },
+            );
+
+            // Simulated ResponseContext
+            const mockResponseContext = {
+              url: mockRequest.url,
+              status: mockResponse.status,
+              headers: mockResponse.headers,
+              response: mockResponse,
+              request: mockRequest, // ✅ Added the missing 'request' property
+            };
+
+            // Call onResponse with the correctly structured ResponseContext
+            options.onResponse(mockResponseContext);
+          }
+          resolve({
+            data: {
+              data: {
+                role: 'administrator',
+                token: 'test-token-123',
+                id: 'user-id-123',
+                name: 'Test User',
+                email: 'testuser@example.com',
+                avatarName: 'avatar.jpg',
+                countryCode: 'en',
+              },
+            },
+          });
+        }, 50);
+      });
+    });
+
+    // Render the component
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const user = userEvent.setup();
+
+    // Fill out the login form
+    await user.type(screen.getByTestId('loginEmail'), 'testuser@example.com');
+    await user.type(screen.getByTestId('password'), 'Password123!');
+
+    // Elements should be enabled initially
+    expect(screen.getByTestId('loginEmail')).not.toBeDisabled();
+    expect(screen.getByTestId('password')).not.toBeDisabled();
+    expect(screen.getByTestId('loginBtn')).not.toBeDisabled();
+
+    // Submit the form
+    await user.click(screen.getByTestId('loginBtn'));
+
+    // Verify that the form elements are disabled when loading
+    expect(screen.getByTestId('loginEmail')).toBeDisabled();
+    expect(screen.getByTestId('password')).toBeDisabled();
+    expect(screen.getByTestId('loginBtn')).toBeDisabled();
+
+    // Wait for the UI to update after the response
+    await waitFor(
+      () => {
+        // Form elements should be enabled again
+        expect(screen.getByTestId('loginEmail')).not.toBeDisabled();
+        expect(screen.getByTestId('password')).not.toBeDisabled();
+        expect(screen.getByTestId('loginBtn')).not.toBeDisabled();
+      },
+      { timeout: 1000 },
+    );
+  });
 
   it('sets correct localStorage items after successful login ,change language', async () => {
     const changeLanguageMock = vi.fn();
