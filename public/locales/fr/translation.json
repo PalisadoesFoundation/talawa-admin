@@ -315,7 +315,8 @@
     "enterPassword": "Entrer le mot de passe",
     "confirmPassword": "Confirmer le mot de passe",
     "create": "Créer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "createUser": "Créer un utilisateur"
   },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
