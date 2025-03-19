@@ -64,9 +64,12 @@ const leftDrawer = ({
       }`}
       data-testid="leftDrawerContainer"
     >
-      <TalawaLogo className={styles.talawaLogo} />
-      <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
-      <h5 className={`${styles.titleHeader} text-secondary`}>
+      <div className={styles.talawaLogoContainer}>
+        <TalawaLogo className={styles.talawaLogo} />
+        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
+      </div>
+
+      <h5 className={`${styles.titleHeader}`}>
         {tCommon('menu')}
       </h5>
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
@@ -96,7 +99,8 @@ const leftDrawer = ({
                     }
                   />
                 </div>
-                {t('my organizations')}
+                {/* {t('my organizations')} */}
+                Organizations
               </Button>
             )}
           </NavLink>
@@ -161,9 +165,9 @@ const leftDrawer = ({
             )}
           </NavLink>
         </div>
-        <div className="mt-auto mb-4">
+        {/* <div className="mt-auto mb-4">
           <ProfileDropdown />
-        </div>
+        </div> */}
       </div>
     </div>
   );

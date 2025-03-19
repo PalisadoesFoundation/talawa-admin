@@ -153,6 +153,7 @@ function organizationEvents(): JSX.Element {
       ? 'ADMIN'
       : 'USER';
 
+  // console.log("UserRole: ", userRole);
   const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
 
   const {

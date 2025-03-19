@@ -3789,6 +3789,17 @@ form label,
 
 /* -- OrganizationScreen.tsx -- */
 
+/* -- SuperAdminScreen.tsx -- */
+
+.navContainer {
+  display: flex;
+  border: 5px solid red;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+}
+
 /* -- OrgContriCards.tsx -- */
 
 .cards > h2 {
@@ -5196,12 +5207,21 @@ form {
   margin-right: 0.3rem;
 }
 
+.leftDrawer .talawaLogoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 5px solid red;
+}
+
 .leftDrawer .talawaText {
   font-size: 18px;
   font-weight: 500;
 }
 
 .leftDrawer .titleHeader {
+  font-size: 25px;
+  line-height: normal;
   font-weight: 600;
   margin: 0.6rem 0rem;
 }
