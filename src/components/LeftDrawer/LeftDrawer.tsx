@@ -8,7 +8,6 @@ import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 /**
  * Interface for LeftDrawer component props.
@@ -40,6 +39,7 @@ const leftDrawer = ({
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin') !== null;
+  const [hover, setHover] = React.useState(false);
 
   useEffect(() => {
     if (hideDrawer === null) {
@@ -69,29 +69,21 @@ const leftDrawer = ({
         <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
       </div>
 
-      <h5 className={`${styles.titleHeader}`}>
-        {tCommon('menu')}
-      </h5>
+      <h5 className={`${styles.titleHeader}`}>{tCommon('menu')}</h5>
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         <div className={styles.optionList}>
           <NavLink to={'/orglist'} onClick={handleLinkClick}>
             {({ isActive }) => (
-              <Button
-                variant={isActive ? 'success' : undefined}
-                style={{
-                  backgroundColor: isActive
-                    ? 'var(--sidebar-option-bg)'
-                    : 'transparent',
-                  fontWeight: isActive ? 'bold' : 'normal',
-                  color: isActive
-                    ? 'var(--sidebar-option-text-active)'
-                    : 'var(--sidebar-option-text-inactive)',
-                }}
+              <button
+                className={`${
+                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                }`}
                 data-testid="organizationsBtn"
               >
                 <div className={styles.iconWrapper}>
                   <OrganizationsIcon
                     fill="none"
+                    fontSize={25}
                     stroke={
                       isActive
                         ? 'var(--sidebar-icon-stroke-active)'
@@ -101,10 +93,12 @@ const leftDrawer = ({
                 </div>
                 {/* {t('my organizations')} */}
                 Organizations
-              </Button>
+              </button>
             )}
           </NavLink>
-          {superAdmin && (
+
+          {/*
+           {superAdmin && (
             <NavLink to={'/users'} onClick={handleLinkClick}>
               {({ isActive }) => (
                 <Button
@@ -134,25 +128,21 @@ const leftDrawer = ({
                 </Button>
               )}
             </NavLink>
-          )}
+          )} 
+           */}
+
           <NavLink to={'/CommunityProfile'} onClick={handleLinkClick}>
             {({ isActive }) => (
-              <Button
-                variant={isActive ? 'success' : undefined}
-                style={{
-                  backgroundColor: isActive
-                    ? 'var(--sidebar-option-bg)'
-                    : 'transparent',
-                  fontWeight: isActive ? 'bold' : 'normal',
-                  color: isActive
-                    ? 'var(--sidebar-option-text-active)'
-                    : 'var(--sidebar-option-text-inactive)',
-                }}
+              <button
+                className={`${
+                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                }`}
                 data-testid="communityProfileBtn"
               >
                 <div className={styles.iconWrapper}>
                   <SettingsIcon
                     fill="none"
+                    fontSize={25}
                     stroke={
                       isActive
                         ? 'var(--sidebar-icon-stroke-active)'
@@ -161,13 +151,10 @@ const leftDrawer = ({
                   />
                 </div>
                 {t('communityProfile')}
-              </Button>
+              </button>
             )}
           </NavLink>
         </div>
-        {/* <div className="mt-auto mb-4">
-          <ProfileDropdown />
-        </div> */}
       </div>
     </div>
   );

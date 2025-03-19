@@ -37,7 +37,7 @@ const superAdminScreen = (): JSX.Element => {
 
   return (
     <>
-      {hideDrawer ? (
+      {/* {hideDrawer ? (
         <Button
           className={styles.opendrawer}
           onClick={(): void => {
@@ -57,7 +57,7 @@ const superAdminScreen = (): JSX.Element => {
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
-      )}
+      )} */}
       <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${styles.pageContainer} ${
@@ -70,7 +70,6 @@ const superAdminScreen = (): JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-        {/* <div style={{ flex: 1 }}> */}
           <div className={`${styles.navContainer}`}>
             <h2>{t('title')}</h2>
             <ProfileDropdown />

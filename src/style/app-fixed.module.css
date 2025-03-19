@@ -43,6 +43,12 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
+  --sidebar-option-bg: #eaebef;
+  --sidebar-option-text-active: #000000;
+  --sidebar-option-text-inactive: #000000;
+  /* --sidebar-icon-stroke-active: #000000;
+  --sidebar-icon-stroke-inactive: #808080; */
+
   --unblockButton-font: #555555;
   --unblockButton-border: #eaebef;
   --unblockButton-bg: #a8c7fa;
@@ -209,7 +215,7 @@
   --chevronIcon-bg: #ffffff;
 
   --primaryText-color: #000000;
-  --secondText-color: #9fa6b2;
+  --secondText-color: #555555;
 
   --leftDrawer-bg: #ffffff;
   --leftDrawer-fixedModule-bg: #f6f8fc;
@@ -3365,6 +3371,25 @@ form label,
   background-color: var(--LoginToggle-button-bg-active-hover);
 }
 
+/* -- Sidebar options -- */
+
+.sidebarBtn {
+  background-color: transparent;
+  color: var(--sidebar-option-text-inactive);
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.sidebarBtn:hover {
+  color: var(--sidebar-option-text-hover);
+}
+
+.sidebarBtnActive {
+  background-color: var(--sidebar-option-bg);
+  color: var(--sidebar-option-text-active);
+  font-weight: bold;
+}
+
 /* -- customTableCell.tsx -- */
 
 /* -- EventsAttendedByMember.tsx -- */
@@ -4836,16 +4861,17 @@ form {
   background-repeat: no-repeat;
   background-position: center;
   background-color: var(--tablerow-bg-color) !important;
-  border-left: none;
-  border-top-right-radius: 16px;
-  border-bottom-right-radius: 16px;
+  border: none;
+  /* border-left: none; */
+  /* border-top-right-radius: 16px; */
+  /* border-bottom-right-radius: 16px; */
   color: var(--eventManagement-button-text);
 }
 
-.dropdownToggle:hover {
+/* .dropdownToggle:hover {
   border: 1px solid var(--create-button-border);
   border-left: none;
-}
+} */
 
 .dropdownToggle::after {
   border-top: none !important;
