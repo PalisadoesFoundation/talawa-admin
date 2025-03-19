@@ -84,8 +84,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     postalCode: '',
     state: '',
     workPhoneNumber: '',
-    pluginallowed: '',
-    adminapproved: '',
+    pluginCreationAllowed: 'false',
+    adminApproved: 'false',
   });
 
   // Mutation to update the user details
@@ -199,8 +199,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       state: formState.state,
       workPhoneNumber: formState.workPhoneNumber,
       avatar: selectedAvatar ? selectedAvatar : avatarFile,
-      pluginallowed: formState.pluginallowed,
-      adminapproved: formState.adminapproved,
+      pluginCreationAllowed: formState.pluginCreationAllowed,
+      adminApproved: formState.adminApproved,
     };
 
     const input = removeEmptyFields(data);
@@ -570,8 +570,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               id="tagsAssignedScrollableDiv"
               data-testid="tagsAssignedScrollableDiv"
               className={`${styles.cardBody} pe-0`}
-            />
-            <h3 className="m-3">This section is for personal details.</h3>
+            >
+              <h3 className="m-3">This section is for personal details.</h3>
+            </Card.Body>
           </Card>
 
           <Card className={`${styles.contact} ${styles.allRound} mt-5`}>
@@ -590,14 +591,25 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               <Row className="mb-3 gap-2">
                 <Col md={12} className="mb-3">
                   <Form.Check
+                    checked={formState.pluginCreationAllowed == 'true'}
                     className="gap-3 d-flex align-items-center"
                     type="checkbox"
                     onChange={(e) => {
                       console.log('Plugin creation allowed');
-                      setFormState((prevState) => ({
-                        ...prevState,
-                        pluginCreationAllowed: e.target.checked,
-                      }));
+
+                      if (formState.pluginCreationAllowed == 'false') {
+                        setFormState((prevState) => ({
+                          ...prevState,
+                          pluginCreationAllowed: 'true',
+                        }));
+                      } else {
+                        setFormState((prevState) => ({
+                          ...prevState,
+                          pluginCreationAllowed: 'false',
+                        }));
+                      }
+
+                      setisUpdated(true);
                       setisUpdated(true);
                     }}
                     id="pluginCreationAllowed"
@@ -608,13 +620,23 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={12}>
                   <Form.Check
+                    checked={formState.adminApproved == 'true'}
                     className="gap-3 d-flex align-items-center"
                     onChange={(e) => {
                       console.log('Admin Approved');
-                      setFormState((prevState) => ({
-                        ...prevState,
-                        adminApproved: e.target.checked,
-                      }));
+
+                      if (formState.adminApproved == 'false') {
+                        setFormState((prevState) => ({
+                          ...prevState,
+                          adminApproved: 'true',
+                        }));
+                      } else {
+                        setFormState((prevState) => ({
+                          ...prevState,
+                          adminApproved: 'false',
+                        }));
+                      }
+
                       setisUpdated(true);
                     }}
                     style={{ color: '#495057' }}
