@@ -315,7 +315,8 @@
     "addMembers": "Agregar miembros",
     "searchFullName": "Ingrese el nombre completo",
     "user": "Usuario",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "createUser": "Crear usuario"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",

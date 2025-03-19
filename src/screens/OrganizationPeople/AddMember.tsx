@@ -545,8 +545,8 @@ function AddMember(): JSX.Element {
 
       {/* New User Modal */}
       <Modal data-testid="addNewUserModal" show={createNewUserModalisOpen}>
-        <Modal.Header className={styles.createButton} data-testid="createUser">
-          <Modal.Title>Create User</Modal.Title>
+        <Modal.Header className={styles.headers} data-testid="createUser">
+          <Modal.Title>{translateOrgPeople('createUser')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="my-3">
@@ -564,10 +564,10 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
             </div>
-            <h6>{translateOrgPeople('emailAddress')}</h6>
+            <h6>{translateOrgPeople('enterEmail')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={translateOrgPeople('enterEmail')}
+                placeholder={translateOrgPeople('emailAddress')}
                 type="email"
                 className={styles.borderNone}
                 value={createUserVariables.email}
@@ -580,10 +580,10 @@ function AddMember(): JSX.Element {
                 <EmailOutlinedIcon className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
-            <h6>{translateOrgPeople('password')}</h6>
+            <h6>{translateOrgPeople('enterPassword')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={translateOrgPeople('enterPassword')}
+                placeholder={translateOrgPeople('password')}
                 type={showPassword ? 'text' : 'password'}
                 className={styles.borderNone}
                 value={createUserVariables.password}
@@ -602,10 +602,10 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{translateOrgPeople('confirmPassword')}</h6>
+            <h6>{translateOrgPeople('enterConfirmPassword')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={translateOrgPeople('enterConfirmPassword')}
+                placeholder={translateOrgPeople('confirmPassword')}
                 type={showConfirmPassword ? 'text' : 'password'}
                 className={styles.borderNone}
                 value={createUserVariables.confirmPassword}
@@ -636,14 +636,14 @@ function AddMember(): JSX.Element {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div className={styles.createButton}>
+          <div>
             <Button
               className={`${styles.removeButton}`}
               variant="danger"
               onClick={closeCreateNewUserModal}
               data-testid="closeBtn"
             >
-              <Close className={styles.closeButton} />
+              <Close />
               {translateOrgPeople('cancel')}
             </Button>
             <Button
@@ -652,7 +652,7 @@ function AddMember(): JSX.Element {
               onClick={handleCreateUser}
               data-testid="createBtn"
             >
-              <Check className={styles.searchIcon} />
+              <Check />
               {translateOrgPeople('create')}
             </Button>
           </div>
