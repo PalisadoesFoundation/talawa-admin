@@ -3818,11 +3818,12 @@ form label,
 
 .navContainer {
   display: flex;
-  border: 5px solid red;
   width: 100%;
   justify-content: space-between;
   align-items: center;
   padding: 25px;
+  padding-left: 35px;
+  padding-right: 35px;
 }
 
 /* -- OrgContriCards.tsx -- */
@@ -4862,9 +4863,8 @@ form {
   background-position: center;
   background-color: var(--tablerow-bg-color) !important;
   border: none;
-  /* border-left: none; */
-  /* border-top-right-radius: 16px; */
-  /* border-bottom-right-radius: 16px; */
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
   color: var(--eventManagement-button-text);
 }
 
@@ -5228,28 +5228,29 @@ form {
 }
 
 .leftDrawer .talawaLogo {
-  width: 50px;
-  height: 50px;
-  margin-right: 0.3rem;
+  width: 65px;
+  height: 60px;
 }
 
 .leftDrawer .talawaLogoContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 5px solid red;
 }
 
 .leftDrawer .talawaText {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
 }
 
 .leftDrawer .titleHeader {
-  font-size: 25px;
+  font-size: 23px;
   line-height: normal;
-  font-weight: 600;
-  margin: 0.6rem 0rem;
+  font-weight: bolder;
+  padding: 10px;
+  /* padding-top: 20px;
+  padding-bottom: 10px;
+  padding-left: 5px; */
 }
 
 .leftDrawer .optionList {

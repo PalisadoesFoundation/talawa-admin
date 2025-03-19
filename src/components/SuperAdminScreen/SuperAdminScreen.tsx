@@ -69,9 +69,9 @@ const superAdminScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-between align-items-center">
+        <div>
           <div className={`${styles.navContainer}`}>
-            <h2>{t('title')}</h2>
+            <h1>{t('title')}</h1>
             <ProfileDropdown />
           </div>
         </div>

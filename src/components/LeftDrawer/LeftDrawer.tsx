@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
@@ -70,6 +69,7 @@ const leftDrawer = ({
       </div>
 
       <h5 className={`${styles.titleHeader}`}>{tCommon('menu')}</h5>
+
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         <div className={styles.optionList}>
           <NavLink to={'/orglist'} onClick={handleLinkClick}>
