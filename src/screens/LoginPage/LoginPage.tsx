@@ -229,7 +229,7 @@ const loginPage = (): JSX.Element => {
     ) {
       if (cPassword == signPassword) {
         try {
-          const { data: signUpData, error } = await authClient.signUp.email(
+          const { data: signUpData } = await authClient.signUp.email(
             {
               email: signEmail,
               password: signPassword,
@@ -310,7 +310,7 @@ const loginPage = (): JSX.Element => {
       };
 
       if (signInData?.data) {
-        if (signInData?.data?.countryCode !== null) {
+        if (signInData?.data?.countryCode) {
           i18n.changeLanguage(signInData.data.countryCode);
         }
 

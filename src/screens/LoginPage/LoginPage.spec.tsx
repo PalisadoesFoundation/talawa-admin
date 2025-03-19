@@ -385,7 +385,7 @@ describe('Testing Login Page Screen', () => {
     await userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
-  it('sets Signin loading state correctly upon request and response', async () => {
+  it('sets registration loading state', async () => {
     const formData = {
       name: 'John Doe',
       email: 'johndoe@gmail.com',
@@ -872,7 +872,7 @@ describe('Testing Login Page Screen', () => {
   //     expect(resetReCAPTCHA).toBeCalled();
   //   });
   // });
-  it('sets login loading state correctly upon request and response', async () => {
+  it('sets Login loading state', async () => {
     const changeLanguageMock = vi.fn();
     vi.spyOn(i18n, 'changeLanguage').mockImplementation(changeLanguageMock);
 
@@ -1436,11 +1436,8 @@ describe('Testing redirect if already logged in', () => {
       if (key === 'userId') return null; // Example user ID
       return null;
     });
-
-    // setItem('IsLoggedIn', 'TRUE');
-    // setItem('userId', null);
     render(
-      <MockedProvider>
+      <MockedProvider addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

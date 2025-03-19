@@ -9,7 +9,7 @@ type UseSessionReturnType = {
   >;
   revokeOtherSessionExceptCurrentSession: () => Promise<void>;
   revokeAllSession: () => Promise<void>;
-  handleLogout: () => void; //for when logged in already, simply extend session
+  handleLogout: () => Promise<void>; //for when logged in already, simply extend session
 };
 
 /**

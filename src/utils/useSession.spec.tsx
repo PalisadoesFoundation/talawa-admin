@@ -59,9 +59,6 @@ vi.mock('react-toastify', () => ({
 }));
 
 describe('useSession Hook', () => {
-  // beforeEach(() => {
-  //   vi.clearAllMocks();
-  // });
   it('should list sessions', async () => {
     const { result } = renderHook(() => useSession());
     const sessions = await result.current.listSession();
