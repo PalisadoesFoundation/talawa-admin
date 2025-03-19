@@ -84,6 +84,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     postalCode: '',
     state: '',
     workPhoneNumber: '',
+    pluginallowed: '',
+    adminapproved: '',
   });
 
   // Mutation to update the user details
@@ -197,6 +199,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       state: formState.state,
       workPhoneNumber: formState.workPhoneNumber,
       avatar: selectedAvatar ? selectedAvatar : avatarFile,
+      pluginallowed: formState.pluginallowed,
+      adminapproved: formState.adminapproved,
     };
 
     const input = removeEmptyFields(data);
@@ -567,6 +571,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               data-testid="tagsAssignedScrollableDiv"
               className={`${styles.cardBody} pe-0`}
             />
+            <h3 className="m-3">This section is for personal details.</h3>
           </Card>
 
           <Card className={`${styles.contact} ${styles.allRound} mt-5`}>

@@ -347,6 +347,7 @@
   --featuresBox-border: #808080;
   --featuresBox-border-hover: #555555;
   --featuresBox-bg-hover: #eaebef;
+  --featuresBox-bg: #ffffff;
 
   --loader-size: 10em;
 >>>>>>> ec7e589be (added new UI Components)
@@ -6394,7 +6395,7 @@ form {
   border: solid;
   color: var(--featuresBox-border);
   border-width: 1px;
-  background-color: #ffffff;
+  background-color: var(--featuresBox-bg);
   border-color: var(--featuresBox-border);
   align-items: center;
   justify-content: center;
