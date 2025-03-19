@@ -38,7 +38,6 @@ const leftDrawer = ({
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin') !== null;
-  const [hover, setHover] = React.useState(false);
 
   useEffect(() => {
     if (hideDrawer === null) {
@@ -91,27 +90,18 @@ const leftDrawer = ({
                     }
                   />
                 </div>
-                {/* {t('my organizations')} */}
-                Organizations
+                {t('my organizations')}
               </button>
             )}
           </NavLink>
 
-          {/*
-           {superAdmin && (
+          {superAdmin && (
             <NavLink to={'/users'} onClick={handleLinkClick}>
               {({ isActive }) => (
-                <Button
-                  variant={isActive ? 'success' : undefined}
-                  style={{
-                    backgroundColor: isActive
-                      ? 'var(--sidebar-option-bg)'
-                      : undefined,
-                    fontWeight: isActive ? 'bold' : 'normal',
-                    color: isActive
-                      ? 'var(--sidebar-option-text-active)'
-                      : 'var(--sidebar-option-text-inactive)',
-                  }}
+                <button
+                  className={`${
+                    isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                  }`}
                   data-testid="rolesBtn"
                 >
                   <div className={styles.iconWrapper}>
@@ -125,11 +115,10 @@ const leftDrawer = ({
                     />
                   </div>
                   {t('users')}
-                </Button>
+                </button>
               )}
             </NavLink>
-          )} 
-           */}
+          )}
 
           <NavLink to={'/CommunityProfile'} onClick={handleLinkClick}>
             {({ isActive }) => (

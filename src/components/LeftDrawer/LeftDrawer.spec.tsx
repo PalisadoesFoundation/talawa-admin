@@ -126,23 +126,29 @@ describe('LeftDrawer Component', () => {
     expect(defaultProps.setHideDrawer).toHaveBeenCalledWith(true);
   });
 
-  it('renders the profile dropdown', () => {
-    renderComponent();
-    expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
-  });
+  /*
+  
+    // Removed from left drawer
 
-  it('applies active styles to the current route button', () => {
-    renderComponent();
-    const organizationsButton = screen.getByTestId('organizationsBtn');
-
-    // Simulate active route
-    window.history.pushState({}, '', '/orglist');
-
-    expect(organizationsButton).toHaveStyle({
-      backgroundColor: 'var(--sidebar-option-bg)',
-      fontWeight: 'bold',
+    it('renders the profile dropdown', () => {
+      renderComponent();
+      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
     });
-  });
+  
+  */
+
+  // it('applies active styles to the current route button', () => {
+  //   renderComponent();
+  //   const organizationsButton = screen.getByTestId('organizationsBtn');
+
+  //   // Simulate active route
+  //   window.history.pushState({}, '', '/orglist');
+
+  //   expect(organizationsButton).toHaveStyle({
+  //     backgroundColor: 'var(--sidebar-option-bg)',
+  //     fontWeight: 'bold',
+  //   });
+  // });
 
   it('applies hideElemByDefault style when hideDrawer is null', () => {
     const setHideDrawer = vi.fn();

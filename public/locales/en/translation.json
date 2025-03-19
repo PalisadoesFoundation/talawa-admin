@@ -103,7 +103,7 @@
     "logout": "logout"
   },
   "leftDrawer": {
-    "my organizations": "My Organizations",
+    "my organizations": "Organizations",
     "requests": "Membership Requests",
     "communityProfile": "Community Profile",
     "talawaAdminPortal": "talawaAdminPortal",

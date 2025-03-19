@@ -41,20 +41,23 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
       </MockedProvider>,
     );
 
-    const toggleButton = screen.getByTestId('closeMenu') as HTMLElement;
-    const icon = toggleButton.querySelector('i');
+    // Removed toggle button from SuperAdminScreen.tsx.
+    /*
+      const toggleButton = screen.getByTestId('closeMenu') as HTMLElement;
+      const icon = toggleButton.querySelector('i');
 
-    // Resize window to a smaller width
-    resizeWindow(800);
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
+      // Resize window to a smaller width
+      resizeWindow(800);
+      clickToggleMenuBtn(toggleButton);
+      expect(icon).toHaveClass('fa fa-angle-double-left');
 
-    // Resize window back to a larger width
-    resizeWindow(1000);
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
+      // Resize window back to a larger width
+      resizeWindow(1000);
+      clickToggleMenuBtn(toggleButton);
+      expect(icon).toHaveClass('fa fa-angle-double-right');
 
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
+      clickToggleMenuBtn(toggleButton);
+      expect(icon).toHaveClass('fa fa-angle-double-left');
+    */
   });
 });
