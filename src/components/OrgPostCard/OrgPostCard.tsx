@@ -127,14 +127,13 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
   const sanitizeText = (text: string): string => {
     if (!text) return '';
 
-    // Simple sanitization: remove HTML tags with regex
     return text
-      .replace(/<[^>]*>?/g, '') // Remove HTML tags
-      .replace(/&/g, '&amp;') // Escape special chars
+      .replace(/&/g, '&amp;') // Must be first!
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+      .replace(/'/g, '&#039;')
+      .replace(/\//g, '&#x2F;'); // Also escape slashes for additional safety
   };
 
   // Add this ref to track component mounted state
