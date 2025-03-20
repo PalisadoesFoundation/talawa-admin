@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import SearchBar from './SearchBar';
-import styles from '../style/app.module.css';
+import styles from '../style/app-fixed.module.css';
 
 describe('SearchBar', () => {
   const defaultProps = {

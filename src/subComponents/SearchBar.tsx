@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Search } from '@mui/icons-material';
-import styles from '../style/app.module.css';
+import styles from '../style/app-fixed.module.css';
 
 interface InterfaceSearchBarProps {
   /** Placeholder text for the search input */
