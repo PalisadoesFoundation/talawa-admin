@@ -15,7 +15,7 @@ const memberList = {
   },
   result: {
     data: {
-      organizations: [
+      organization: [
         {
           _id: 'orgId',
           members: [
@@ -451,6 +451,66 @@ export const PLEDGE_MODAL_MOCKS = [
         createFundraisingCampaignPledge: {
           _id: '3',
         },
+      },
+    },
+  },
+];
+
+// Add this to your PledgesMocks.js file
+export const PLEDGE_MODAL_ERROR_MOCKS = [
+  {
+    request: {
+      query: CREATE_PlEDGE,
+      variables: {
+        campaignId: 'campaignId',
+        amount: 100,
+        currency: 'USD',
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+        userIds: ['1'],
+      },
+    },
+    error: new Error('Failed to create pledge'),
+  },
+  {
+    request: {
+      query: UPDATE_PLEDGE,
+      variables: {
+        id: '1',
+        amount: 200,
+        currency: 'USD',
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+        users: ['1'],
+      },
+    },
+    error: new Error('Failed to update pledge'),
+  },
+  {
+    request: {
+      query: MEMBERS_LIST,
+      variables: { id: 'orgId' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            members: [
+              {
+                _id: '1',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+              },
+              {
+                _id: '2',
+                firstName: 'Jane',
+                lastName: 'Smith',
+                image: null,
+              },
+            ],
+          },
+        ],
       },
     },
   },

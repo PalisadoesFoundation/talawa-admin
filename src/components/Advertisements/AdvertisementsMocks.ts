@@ -48,7 +48,7 @@ type MockRequest = {
   };
   result: {
     data: {
-      organizations: {
+      organization: {
         _id: string;
         advertisements: {
           edges: {
@@ -81,7 +81,7 @@ const createMock = (variables: VariablesType): MockRequest => ({
   },
   result: {
     data: {
-      organizations: [
+      organization: [
         {
           _id: '1',
           advertisements: {
@@ -186,7 +186,7 @@ export const ORGANIZATIONS_LIST_MOCK = {
   },
   result: {
     data: {
-      organizations: [
+      organization: [
         {
           _id: '1',
           image: '',
@@ -276,7 +276,7 @@ export const REGISTER_MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '1',
             advertisements: {

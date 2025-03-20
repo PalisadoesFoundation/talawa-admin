@@ -67,7 +67,7 @@ const mocks = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: 'test-org-id',
             image: 'https://example.com/organization-image.png',

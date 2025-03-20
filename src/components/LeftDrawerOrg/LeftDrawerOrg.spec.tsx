@@ -87,7 +87,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '123',
             image: null,
@@ -150,7 +150,7 @@ const MOCKS_WITH_IMAGE = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '123',
             image:
@@ -214,7 +214,7 @@ const MOCKS_WITH_IMAGE = [
 //     },
 //     result: {
 //       data: {
-//         organizations: [],
+//        organization: [],
 //       },
 //     },
 //   },
@@ -228,7 +228,7 @@ const MOCKS_EMPTY_ORGID = [
     },
     result: {
       data: {
-        organizations: [],
+        organization: [],
       },
     },
   },

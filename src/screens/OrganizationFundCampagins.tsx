@@ -159,10 +159,29 @@ const orgFundCampaign = (): JSX.Element => {
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {
-    return compaignsData.filter((campaign) =>
+    let sorted = compaignsData.filter((campaign) =>
       campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
-  }, [compaignsData, searchTerm]);
+
+    if (sortBy) {
+      sorted = [...sorted].sort((a, b) => {
+        switch (sortBy) {
+          case 'fundingGoal_ASC':
+            return a.goalAmount - b.goalAmount;
+          case 'fundingGoal_DESC':
+            return b.goalAmount - a.goalAmount;
+          case 'endDate_ASC':
+            return new Date(a.endAt).getTime() - new Date(b.endAt).getTime();
+          case 'endDate_DESC':
+            return new Date(b.endAt).getTime() - new Date(a.endAt).getTime();
+          default:
+            return 0;
+        }
+      });
+    }
+
+    return sorted;
+  }, [compaignsData, searchTerm, sortBy]);
 
   const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
@@ -266,12 +285,7 @@ const orgFundCampaign = (): JSX.Element => {
             className="d-flex justify-content-center fw-bold"
             data-testid="goalCell"
           >
-            {
-              currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
-              ]
-            }
-            {params.row.goalAmount || 0}
+            {`${currencySymbols[params.row.currencyCode as keyof typeof currencySymbols]}${params.row.goalAmount || 0}`}
           </div>
         );
       },

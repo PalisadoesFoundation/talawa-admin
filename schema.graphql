@@ -839,7 +839,7 @@ type Mutation {
   ): Event!
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
-  createOrganization(data: OrganizationInput, file: String): Organization!
+  createOrganization(data: QueryOrganizationInput, file: String): Organization!
   createPlugin(
     pluginCreatedBy: String!
     pluginDesc: String!
@@ -1728,7 +1728,7 @@ type AuthenticationPayload {
   authenticationToken: String
   user: User
 }
-input OrganizationInput {
+input QueryOrganizationInput {
   address: AddressInput!
   apiUrl: URL
   attendees: String
@@ -1979,7 +1979,11 @@ type Query {
   me: UserData!
   myLanguage: String
   fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
-  organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
+  organization(
+    id: ID
+    orderBy: OrganizationOrderByInput
+    input: input
+  ): [Organization]
   organizationsConnection(
     first: Int
     orderBy: OrganizationOrderByInput

@@ -138,7 +138,7 @@ function orgList(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
-  const orgsData = UsersOrgsData?.organizations;
+  const orgsData = UsersOrgsData?.organization;
 
   // To clear the search field and form fields on unmount
   // useEffect(() => {

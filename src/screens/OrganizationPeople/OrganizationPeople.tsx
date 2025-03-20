@@ -118,7 +118,7 @@ function organizationPeople(): JSX.Element {
       adminRefetch({
         id: currentUrl,
       });
-      setAdminFilteredData(adminData?.organizations[0].admins);
+      setAdminFilteredData(adminData?.organization[0].admins);
     } else {
       usersRefetch({
         ...filterData,
@@ -153,7 +153,7 @@ function organizationPeople(): JSX.Element {
         orgId: currentUrl,
       });
     } else if (state === 1) {
-      const filterData = adminData.organizations[0].admins.filter(
+      const filterData = adminData.organization[0].admins.filter(
         (value: {
           _id: string;
           firstName: string;

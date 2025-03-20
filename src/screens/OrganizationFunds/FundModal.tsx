@@ -82,7 +82,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     fundName: fund?.name ?? '',
     fundRef: fund?.refrenceNumber ?? '',
     isDefault: fund?.isDefault ?? false,
-    taxDeductible: fund?.taxDeductible ?? false,
+    isTaxDeductible: fund?.isTaxDeductible ?? false,
     isArchived: fund?.isArchived ?? false,
   });
 
@@ -91,7 +91,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       fundName: fund?.name ?? '',
       fundRef: fund?.refrenceNumber ?? '',
       isDefault: fund?.isDefault ?? false,
-      taxDeductible: fund?.taxDeductible ?? false,
+      isTaxDeductible: fund?.isTaxDeductible ?? false,
       isArchived: fund?.isArchived ?? false,
     });
   }, [fund]);
@@ -103,14 +103,14 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, fundRef, isDefault, taxDeductible, isArchived } =
+    const { fundName, fundRef, isDefault, isTaxDeductible, isArchived } =
       formState;
     try {
       await createFund({
         variables: {
           name: fundName,
           organizationId: orgId,
-          isTaxDeductible: taxDeductible,
+          isTaxDeductible: isTaxDeductible,
           isArchived,
           isDefault,
         },
@@ -120,7 +120,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         fundName: '',
         fundRef: '',
         isDefault: false,
-        taxDeductible: false,
+        isTaxDeductible: false,
         isArchived: false,
       });
       toast.success(t('fundCreated') as string);
@@ -135,14 +135,14 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, taxDeductible } = formState;
+    const { fundName, isTaxDeductible } = formState;
     try {
       const updatedFields: { [key: string]: string | boolean } = {};
       if (fundName != fund?.name) {
         updatedFields.name = fundName;
       }
-      if (taxDeductible != fund?.taxDeductible) {
-        updatedFields.isTaxDeductible = taxDeductible;
+      if (isTaxDeductible != fund?.isTaxDeductible) {
+        updatedFields.isTaxDeductible = isTaxDeductible;
       }
       if (Object.keys(updatedFields).length === 0) {
         return;
@@ -159,7 +159,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         fundName: '',
         fundRef: '',
         isDefault: false,
-        taxDeductible: false,
+        isTaxDeductible: false,
         isArchived: false,
       });
       refetchFunds();
@@ -174,7 +174,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     <>
       <Modal className={styles.fundModal} show={isOpen} onHide={hide}>
         <Modal.Header>
-          <p className={styles.titlemodal}>
+          <p className={styles.titlemodal} data-testid="modalTitle">
             {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
           </p>
           <Button
@@ -230,16 +230,16 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit' ? 'justify-content-between' : 'justify-content-start gap-3'} `}
             >
               <Form.Group className="d-flex">
-                <label>{t('taxDeductible')} </label>
+                <label>{t('isTaxDeductible')} </label>
                 <Form.Switch
                   type="checkbox"
-                  checked={formState.taxDeductible}
-                  data-testid="setTaxDeductibleSwitch"
+                  checked={formState.isTaxDeductible}
+                  data-testid="setisTaxDeductibleSwitch"
                   className={`ms-2 ${styles.switch}`}
                   onChange={() =>
                     setFormState({
                       ...formState,
-                      taxDeductible: !formState.taxDeductible,
+                      isTaxDeductible: !formState.isTaxDeductible,
                     })
                   }
                 />

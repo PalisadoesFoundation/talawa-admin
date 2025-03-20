@@ -184,7 +184,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 _id: '1',
                 advertisements: {
@@ -276,7 +276,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 _id: '1',
                 advertisements: {
@@ -326,7 +326,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 _id: '1',
                 advertisements: {

@@ -132,7 +132,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: 'orgid',
             image: '',

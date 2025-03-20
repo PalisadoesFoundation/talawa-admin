@@ -153,7 +153,7 @@ export default function home(): JSX.Element {
     data: promotedPostsData,
   }: {
     data?: {
-      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+      organization: InterfaceQueryOrganizationAdvertisementListItem[];
     };
     refetch: () => void;
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
@@ -186,15 +186,15 @@ export default function home(): JSX.Element {
   // Effect hook to update posts state when data changes
   useEffect(() => {
     if (data) {
-      setPosts(data.organizations[0].posts.edges);
+      setPosts(data.organization[0].posts.edges);
     }
   }, [data]);
 
   // Effect hook to update advertisements state when data changes
   useEffect(() => {
-    if (promotedPostsData && promotedPostsData.organizations) {
+    if (promotedPostsData && promotedPostsData.organization) {
       const ads: Ad[] =
-        promotedPostsData.organizations[0].advertisements?.edges.map(
+        promotedPostsData.organization[0].advertisements?.edges.map(
           (edge) => edge.node,
         ) || [];
 

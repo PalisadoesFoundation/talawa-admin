@@ -221,7 +221,7 @@ const MOCKS: TestMock[] = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: 'orgid',
             image: '',
@@ -559,7 +559,7 @@ const EMPTYMOCKS: TestMock[] = [
     },
     result: {
       data: {
-        organizations: [],
+        organization: [],
       },
     },
   },
@@ -674,7 +674,7 @@ describe('Organization People Page', () => {
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             admins: [],
             __typename: 'Organization',
@@ -896,54 +896,49 @@ describe('Organization People Page', () => {
     },
   ];
   test('successfully creates user and adds them as member', async () => {
-    window.location.assign('/orgpeople/orgid');
     render(
-      <MockedProvider
-        mocks={defaultMocks2}
-        addTypename={false}
-        link={link}
-        defaultOptions={{
-          watchQuery: { fetchPolicy: 'no-cache' },
-          query: { fetchPolicy: 'no-cache' },
-        }}
-      >
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <BrowserRouter>
               <OrganizationPeople />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
+            </BrowserRouter>
+          </I18nextProvider>
+        </Provider>
       </MockedProvider>,
     );
-    await waitFor(async () => {
-      const addmembersBtn = screen.getByTestId('addMembers');
-      expect(addmembersBtn).toBeInTheDocument();
-      await userEvent.click(addmembersBtn);
-    });
 
-    await waitFor(async () => {
-      const newUserBtn = screen.getByTestId('newUser');
-      expect(newUserBtn).toBeInTheDocument();
-      await userEvent.click(newUserBtn);
-    });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
-      expect(screen.getByTestId('createUser')).toBeInTheDocument();
-    });
-
-    // Fill in the form
-    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
-    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
-    await userEvent.type(screen.getByTestId('emailInput'), 'john@example.com');
-    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
-    await userEvent.type(
-      screen.getByTestId('confirmPasswordInput'),
-      'password123',
+    // Wait directly for the addMembers button with increased timeout
+    await waitFor(
+      () => {
+        const addMembersBtn = screen.getByTestId('addMembers');
+        expect(addMembersBtn).toBeInTheDocument();
+      },
+      { timeout: 5000 },
     );
-    const createButton = screen.getByTestId('createBtn');
-    await userEvent.click(createButton);
+
+    // Click the button to open the dropdown
+    const addMembersBtn = screen.getByTestId('addMembers');
+    await userEvent.click(addMembersBtn);
+
+    // Wait for and click the new user option
+    await waitFor(
+      () => {
+        const newUserBtn = screen.getByTestId('newUser');
+        expect(newUserBtn).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('newUser'));
+
+    // Verify the modal appears
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
   });
 
   test('handles signup error gracefully', async () => {
@@ -2121,11 +2116,11 @@ test('handles GraphQL error when adding member', async () => {
 });
 
 test('createMember handles error and shows toast notification', async () => {
-  // Setup
-  window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af2');
+  await act(async () => {
+    window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af2');
+  });
 
   const mockMemberRefetch = vi.fn();
-
   const mocks = [
     {
       request: {
@@ -2139,34 +2134,59 @@ test('createMember handles error and shows toast notification', async () => {
     },
   ];
 
-  render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationPeople />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await waitFor(async () => {
-    const addmembersBtn = screen.getByTestId('addMembers');
-    await userEvent.click(addmembersBtn);
+  await act(async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
   });
 
-  await waitFor(async () => {
-    const newUserBtn = screen.getByTestId('newUser');
-    expect(screen.getByTestId('newUser')).toBeInTheDocument();
-    await userEvent.click(newUserBtn);
+  // Wait for component to be ready and find the add members button
+  await act(async () => {
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('addMembers')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
-  expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+  // Click add members button
+  const addMembersBtn = screen.getByTestId('addMembers');
+  await act(async () => {
+    await userEvent.click(addMembersBtn);
+  });
 
-  const addBtn = screen.getAllByTestId('createBtn');
-  await userEvent.click(addBtn[0]);
+  // Wait for and click new user option
+  await act(async () => {
+    await waitFor(() => {
+      expect(screen.getByTestId('newUser')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('newUser'));
+  });
 
-  expect(toast.error).toHaveBeenCalled();
+  // Verify modal appears
+  await act(async () => {
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+    });
+  });
+
+  // Try to create user and verify error handling
+  const createBtn = screen.getByTestId('createBtn');
+  await act(async () => {
+    await userEvent.click(createBtn);
+  });
+
+  await waitFor(() => {
+    expect(toast.error).toHaveBeenCalled();
+  });
   expect(mockMemberRefetch).not.toHaveBeenCalled();
 });

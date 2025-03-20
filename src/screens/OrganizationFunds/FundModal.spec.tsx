@@ -44,18 +44,15 @@ const fundProps: InterfaceFundModal[] = [
       id: 'fundId',
       name: 'Fund 1',
       refrenceNumber: '1111',
-      taxDeductible: true,
+      isTaxDeductible: true,
       isArchived: false,
       isDefault: false,
       createdAt: '2024-06-22',
       organizationId: 'orgId',
       creator: {
-        id: 'creatorId1',
-        firstName: 'John',
-        lastName: 'Doe',
+        name: 'John Doe',
       },
       organization: {
-        id: 'orgId',
         name: 'Organization 1',
       },
       edges: {
@@ -81,7 +78,7 @@ const fundProps: InterfaceFundModal[] = [
       id: 'fundId',
       name: 'Fund 1',
       refrenceNumber: '1111',
-      taxDeductible: true,
+      isTaxDeductible: true,
       isArchived: false,
       isDefault: false,
       createdAt: '2024-06-22',
@@ -147,7 +144,7 @@ describe('PledgeModal', () => {
     );
     expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
     expect(screen.getByLabelText(translations.fundId)).toHaveValue('1111');
-    expect(screen.getByTestId('setTaxDeductibleSwitch')).toBeChecked();
+    expect(screen.getByTestId('setisTaxDeductibleSwitch')).toBeChecked();
     expect(screen.getByTestId('setDefaultSwitch')).not.toBeChecked();
     expect(screen.getByTestId('archivedSwitch')).not.toBeChecked();
   });
@@ -170,7 +167,7 @@ describe('PledgeModal', () => {
 
   it('should update Tax Deductible Switch when input value changes', async () => {
     renderFundModal(link1, fundProps[1]);
-    const taxDeductibleSwitch = screen.getByTestId('setTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     expect(taxDeductibleSwitch).toBeChecked();
     fireEvent.click(taxDeductibleSwitch);
     expect(taxDeductibleSwitch).not.toBeChecked();
@@ -201,7 +198,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
@@ -226,7 +223,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '1111' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
     fireEvent.click(taxDeductibleSwitch);
 
@@ -253,17 +250,8 @@ describe('PledgeModal', () => {
     const fundNameInput = screen.getByLabelText(translations.fundName);
     fireEvent.change(fundNameInput, { target: { value: 'Fund 2' } });
 
-    const fundIdInput = screen.getByLabelText(translations.fundId);
-    fireEvent.change(fundIdInput, { target: { value: '2222' } });
-
-    const taxDeductibleSwitch = screen.getByTestId('setTaxDeductibleSwitch');
-    fireEvent.click(taxDeductibleSwitch);
-
-    const defaultSwitch = screen.getByTestId('setDefaultSwitch');
-    fireEvent.click(defaultSwitch);
-
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    fireEvent.click(archivedSwitch);
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    fireEvent.click(taxDeductibleSwitch); // This will make isTaxDeductible false
 
     fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
@@ -283,7 +271,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
@@ -305,7 +293,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');

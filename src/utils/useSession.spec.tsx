@@ -509,8 +509,14 @@ test('should extend session when called directly', async () => {
 });
 
 test('should properly clean up on unmount', () => {
-  // Mock document.removeEventListener
-  const documentRemoveEventListener = vi.spyOn(document, 'removeEventListener');
+  // Mock window event listeners
+  const windowRemoveEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+
+  // Mock document event listeners
+  const documentRemoveEventListenerSpy = vi.spyOn(
+    document,
+    'removeEventListener',
+  );
 
   const { result, unmount } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
@@ -523,21 +529,27 @@ test('should properly clean up on unmount', () => {
   result.current.startSession();
   unmount();
 
-  expect(window.removeEventListener).toHaveBeenCalledWith(
+  // Verify window event listeners were removed
+  expect(windowRemoveEventListenerSpy).toHaveBeenCalledWith(
     'mousemove',
     expect.any(Function),
   );
-  expect(window.removeEventListener).toHaveBeenCalledWith(
+  expect(windowRemoveEventListenerSpy).toHaveBeenCalledWith(
     'keydown',
     expect.any(Function),
   );
-  expect(documentRemoveEventListener).toHaveBeenCalledWith(
+
+  // Verify document event listeners were removed
+  expect(documentRemoveEventListenerSpy).toHaveBeenCalledWith(
     'visibilitychange',
     expect.any(Function),
   );
 
-  documentRemoveEventListener.mockRestore();
+  // Clean up
+  windowRemoveEventListenerSpy.mockRestore();
+  documentRemoveEventListenerSpy.mockRestore();
 });
+
 test('should handle missing community data', async () => {
   vi.useFakeTimers();
   const setTimeoutSpy = vi.spyOn(global, 'setTimeout');

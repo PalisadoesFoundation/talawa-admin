@@ -144,7 +144,7 @@ const fundCampaignPledge = (): JSX.Element => {
     >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
     variables: {
-      input: {
+      where: {
         id: fundCampaignId,
       },
       pledgeOrderBy: sortBy,

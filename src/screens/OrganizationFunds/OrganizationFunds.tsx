@@ -126,6 +126,8 @@ const organizationFunds = (): JSX.Element => {
     'create',
   );
 
+  const [searchText, setSearchText] = useState('');
+
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
       setFund(fund);
@@ -166,6 +168,26 @@ const organizationFunds = (): JSX.Element => {
       ) ?? []
     );
   }, [fundData]);
+
+  const filteredAndSortedFunds = useMemo(() => {
+    let result = [...funds];
+
+    // Apply search filter
+    if (searchText) {
+      result = result.filter((fund) =>
+        fund.name.toLowerCase().includes(searchText.toLowerCase()),
+      );
+    }
+
+    // Apply sorting with strict timestamp comparison
+    return result.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+
+      const sortMultiplier = sortBy === 'createdAt_DESC' ? -1 : 1;
+      return (dateA - dateB) * sortMultiplier;
+    });
+  }, [funds, searchText, sortBy]);
 
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);
@@ -234,7 +256,7 @@ const organizationFunds = (): JSX.Element => {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.creator.id;
+        return params.row.creator.name;
       },
     },
     {
@@ -328,7 +350,7 @@ const organizationFunds = (): JSX.Element => {
             placeholder={tCommon('searchByName')}
             inputTestId="searchByName"
             buttonTestId="searchBtn"
-            onSearch={() => {}}
+            onSearch={(text) => setSearchText(text)}
           />
           <div className="d-flex gap-4 mb-1">
             <SortingButton
@@ -379,7 +401,7 @@ const organizationFunds = (): JSX.Element => {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={funds}
+        rows={filteredAndSortedFunds}
         columns={columns}
         isRowSelectable={() => false}
       />

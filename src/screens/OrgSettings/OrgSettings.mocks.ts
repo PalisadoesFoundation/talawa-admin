@@ -15,7 +15,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: 'orgId',
             image: null,

@@ -17,16 +17,16 @@ export const FUND_LIST = gql`
         edges {
           node {
             creator {
-              id
+              name
             }
             id
             isTaxDeductible
             name
             organization {
-              id
+              name
             }
             updater {
-              id
+              name
             }
           }
         }

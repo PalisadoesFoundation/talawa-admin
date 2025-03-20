@@ -190,7 +190,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   });
 
   const members = useMemo(
-    () => membersData?.organizations[0].members || [],
+    () => membersData?.organization[0]?.members || [],
     [membersData],
   );
 

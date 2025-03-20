@@ -21,6 +21,7 @@ import type { ApolloLink } from '@apollo/client';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -39,9 +40,9 @@ const translations = JSON.parse(
 
 const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/orgfunds/orgId']}>
-        <Provider store={store}>
+    <MockedProvider link={link} addTypename={false}>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/orgfunds/orgId']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
@@ -50,18 +51,20 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
                   element={<OrganizationFunds />}
                 />
                 <Route
-                  path="/orgfundcampaign/orgId/fundId"
-                  element={<div data-testid="campaignScreen"></div>}
+                  path="/orgfundcampaign/:orgId/:fundId"
+                  element={
+                    <div data-testid="campaignScreen">Campaign Screen</div>
+                  }
                 />
                 <Route
                   path="/"
-                  element={<div data-testid="paramsError"></div>}
+                  element={<div data-testid="paramsError">Error Page</div>}
                 />
               </Routes>
             </I18nextProvider>
           </LocalizationProvider>
-        </Provider>
-      </MemoryRouter>
+        </MemoryRouter>
+      </Provider>
     </MockedProvider>,
   );
 };
@@ -82,13 +85,13 @@ describe('OrganizationFunds Screen =>', () => {
     cleanup();
   });
 
-  // it('should render the Campaign Pledge screen', async () => {
-  //   vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
-  //   renderOrganizationFunds(link1);
-  //   await waitFor(() => {
-  //     expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-  //   });
-  // });
+  it('should render the Campaign Pledge screen', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+    });
+  });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     vi.mocked(useParams).mockReturnValue({});
@@ -109,35 +112,35 @@ describe('OrganizationFunds Screen =>', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    await waitFor(
-      () => {
-        expect(window.location.pathname).toBe('/');
-      },
-      { timeout: 1000 },
-    );
-    await waitFor(
-      () => {
-        expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-      },
-      { timeout: 1000 },
-    );
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/');
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
   });
 
   it('open and close Create Fund modal', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+
     const createFundBtn = await screen.findByTestId('createFundBtn');
     expect(createFundBtn).toBeInTheDocument();
     await userEvent.click(createFundBtn);
 
-    await waitFor(() =>
-      expect(screen.getAllByText(translations.fundCreate)).toHaveLength(3),
-    );
+    await waitFor(() => {
+      const modalTitle = screen.getByTestId('modalTitle');
+      expect(modalTitle).toHaveTextContent(translations.fundCreate);
+    });
+
     await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull(),
-    );
+    await waitFor(() => {
+      expect(screen.queryByTestId('fundModalCloseBtn')).not.toBeInTheDocument();
+    });
   });
 
   it('open and close update fund modal', async () => {
@@ -163,20 +166,31 @@ describe('OrganizationFunds Screen =>', () => {
     );
   });
 
-  // it('Search the Funds list by name', async () => {
-  //   vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
-  //   renderOrganizationFunds(link1);
-  //   const searchField = await screen.findByTestId('searchByName');
-  //   fireEvent.change(searchField, {
-  //     target: { value: '2' },
-  //   });
+  it('Search the Funds list by name', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link1);
 
-  //   fireEvent.click(screen.getByTestId('searchBtn'));
-  //   await waitFor(() => {
-  //     expect(screen.getByText('Fund 2')).toBeInTheDocument();
-  //     expect(screen.queryByText('Fund 1')).toBeNull();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+
+    // Get the search field and type into it
+    const searchField = await screen.findByTestId('searchByName');
+    await userEvent.clear(searchField);
+    await userEvent.type(searchField, '2');
+    await userEvent.click(screen.getByTestId('searchBtn'));
+
+    // Wait and verify search results
+    await waitFor(
+      () => {
+        const fund1Elements = screen.queryAllByText('Fund 1');
+        const fund2Elements = screen.queryAllByText('Fund 2');
+        expect(fund1Elements.length).toBe(0);
+        expect(fund2Elements.length).toBe(1);
+      },
+      { timeout: 3000 },
+    );
+  });
 
   it('should render the Fund screen with error', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
@@ -194,49 +208,23 @@ describe('OrganizationFunds Screen =>', () => {
     );
   });
 
-  // it('Sort the Pledges list by Latest created Date', async () => {
-  //   vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
-  //   renderOrganizationFunds(link1);
+  it('Sort the Pledges list by Latest created Date', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link1);
 
-  //   const sortBtn = await screen.findByTestId('filter');
-  //   expect(sortBtn).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
 
-  //   fireEvent.click(sortBtn);
-  //   fireEvent.click(screen.getByTestId('createdAt_DESC'));
+    await userEvent.click(await screen.findByTestId('filter'));
+    await userEvent.click(screen.getByTestId('createdAt_DESC'));
 
-  //   await waitFor(() => {
-  //     expect(screen.getByText('Fund 1')).toBeInTheDocument();
-  //     expect(screen.queryByText('Fund 2')).toBeInTheDocument();
-  //   });
-
-  //   await waitFor(() => {
-  //     expect(screen.getAllByTestId('createdOn')[0]).toHaveTextContent(
-  //       '22/06/2024',
-  //     );
-  //   });
-  // });
-
-  // it('Sort the Pledges list by Earliest created Date', async () => {
-  //   vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
-  //   renderOrganizationFunds(link1);
-
-  //   const sortBtn = await screen.findByTestId('filter');
-  //   expect(sortBtn).toBeInTheDocument();
-
-  //   fireEvent.click(sortBtn);
-  //   fireEvent.click(screen.getByTestId('createdAt_ASC'));
-
-  //   await waitFor(() => {
-  //     expect(screen.getByText('Fund 1')).toBeInTheDocument();
-  //     expect(screen.queryByText('Fund 2')).toBeInTheDocument();
-  //   });
-
-  //   await waitFor(() => {
-  //     expect(screen.getAllByTestId('createdOn')[0]).toHaveTextContent(
-  //       '21/06/2024',
-  //     );
-  //   });
-  // });
+    await waitFor(() => {
+      const rows = screen.getAllByTestId('fundName');
+      expect(rows[0]).toHaveTextContent('Fund 1');
+      expect(rows[1]).toHaveTextContent('Fund 2');
+    });
+  });
 
   it('Click on Fund Name', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });

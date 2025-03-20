@@ -63,7 +63,7 @@ const UserSidebarOrg = ({
   //   loading,
   // }: {
   //   data:
-  //     | { organizations: InterfaceQueryOrganizationsListObject[] }
+  //     | {organization: InterfaceQueryOrganizationsListObject[] }
   //     | undefined;
   //   loading: boolean;
   // } = useQuery(ORGANIZATIONS_LIST, {
@@ -74,7 +74,7 @@ const UserSidebarOrg = ({
   // useEffect(() => {
   //   let isMounted = true;
   //   if (data && isMounted) {
-  //     setOrganization(data?.organizations[0]);
+  //     setOrganization(data?.organization[0]);
   //   }
   //   return () => {
   //     isMounted = false;

@@ -34,7 +34,7 @@ const queryMock = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: 'org123',
             members: [

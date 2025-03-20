@@ -107,7 +107,7 @@ const successMocks: MockedResponse[] = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '123',
             name: 'Test Org',

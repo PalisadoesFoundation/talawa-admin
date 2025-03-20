@@ -77,7 +77,7 @@ const Requests = (): JSX.Element => {
   // Query to fetch the list of organizations
   const { data: orgsData } = useQuery(ORGANIZATION_CONNECTION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState(
-    data?.organizations[0]?.membershipRequests || [],
+    data?.organization[0]?.membershipRequests || [],
   );
 
   // Manage loading more state
@@ -86,7 +86,7 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    const membershipRequests = data.organizations[0].membershipRequests;
+    const membershipRequests = data.organization[0].membershipRequests;
 
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
@@ -182,16 +182,16 @@ const Requests = (): JSX.Element => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         const newMembershipRequests =
-          fetchMoreResult.organizations[0].membershipRequests || [];
+          fetchMoreResult.organization[0].membershipRequests || [];
         if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          organizations: [
+          organization: [
             {
               _id: organizationId,
               membershipRequests: [
-                ...(prev?.organizations[0].membershipRequests || []),
+                ...(prev?.organization[0].membershipRequests || []),
                 ...newMembershipRequests,
               ],
             },

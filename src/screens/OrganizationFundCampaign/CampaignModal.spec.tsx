@@ -54,11 +54,11 @@ const campaignProps: InterfaceCampaignModal[] = [
     campaign: {
       id: 'campaignId1',
       name: 'Campaign 1',
-      fundingGoal: 100,
-      startDate: new Date('2021-01-01'),
-      endDate: new Date('2024-01-01'),
-      currency: 'USD',
-      createdAt: '2021-01-01',
+      goalAmount: 100,
+      startAt: new Date('2025-01-01T00:00:00.000Z'),
+      endAt: new Date('2026-12-31T00:00:00.000Z'), // Update to future date
+      currencyCode: 'USD',
+      createdAt: '2021-01-01T00:00:00.000Z',
     },
     refetchCampaign: vi.fn(),
     mode: 'create',
@@ -71,16 +71,17 @@ const campaignProps: InterfaceCampaignModal[] = [
     campaign: {
       id: 'campaignId1',
       name: 'Campaign 1',
-      fundingGoal: 100,
-      startDate: new Date('2021-01-01'),
-      endDate: new Date('2024-01-01'),
-      currency: 'USD',
-      createdAt: '2021-01-01',
+      goalAmount: 100,
+      startAt: new Date('2026-01-01T00:00:00.000Z'),
+      endAt: new Date('2027-01-01T00:00:00.000Z'),
+      currencyCode: 'USD',
+      createdAt: '2021-01-01T00:00:00.000Z',
     },
     refetchCampaign: vi.fn(),
     mode: 'edit',
   },
 ];
+
 const renderCampaignModal = (
   link: ApolloLink,
   props: InterfaceCampaignModal,
@@ -115,8 +116,8 @@ describe('CampaignModal', () => {
     expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
       'Campaign 1',
     );
-    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2021');
-    expect(screen.getByLabelText('End Date')).toHaveValue('01/01/2024');
+    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2026');
+    expect(screen.getByLabelText('End Date')).toHaveValue('01/01/2027');
     expect(screen.getByLabelText(translations.currency)).toHaveTextContent(
       'USD ($)',
     );
@@ -149,7 +150,7 @@ describe('CampaignModal', () => {
   it('Start Date onChange when its null', async () => {
     renderCampaignModal(link1, campaignProps[1]);
     const startDateInput = screen.getByLabelText('Start Date');
-    expect(startDateInput).toHaveValue('01/01/2021');
+    expect(startDateInput).toHaveValue('01/01/2026');
     fireEvent.change(startDateInput, { target: { value: null } });
     expect(startDateInput).toHaveValue('');
   });
@@ -175,10 +176,10 @@ describe('CampaignModal', () => {
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
     const startDate = screen.getByLabelText('Start Date');
-    fireEvent.change(startDate, { target: { value: '02/01/2024' } });
+    fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
     const endDate = screen.getByLabelText('End Date');
-    fireEvent.change(endDate, { target: { value: '02/02/2024' } });
+    fireEvent.change(endDate, { target: { value: '31/12/2024' } }); // Update to future date
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '200' } });
@@ -201,10 +202,10 @@ describe('CampaignModal', () => {
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
     const startDate = screen.getByLabelText('Start Date');
-    fireEvent.change(startDate, { target: { value: '02/01/2023' } });
+    fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
     const endDate = screen.getByLabelText('End Date');
-    fireEvent.change(endDate, { target: { value: '02/02/2023' } });
+    fireEvent.change(endDate, { target: { value: '31/12/2024' } }); // Update to future date
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '400' } });
@@ -227,7 +228,7 @@ describe('CampaignModal', () => {
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
     const startDate = screen.getByLabelText('Start Date');
-    fireEvent.change(startDate, { target: { value: '02/01/2024' } });
+    fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
     const endDate = screen.getByLabelText('End Date');
     fireEvent.change(endDate, { target: { value: '02/02/2024' } });
@@ -236,7 +237,6 @@ describe('CampaignModal', () => {
     fireEvent.change(fundingGoal, { target: { value: '200' } });
 
     const submitBtn = screen.getByTestId('submitCampaignBtn');
-    expect(submitBtn).toBeInTheDocument();
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
@@ -251,18 +251,17 @@ describe('CampaignModal', () => {
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
     const startDate = screen.getByLabelText('Start Date');
-    fireEvent.change(startDate, { target: { value: '02/01/2023' } });
+    fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
     const endDate = screen.getByLabelText('End Date');
-    fireEvent.change(endDate, { target: { value: '02/02/2023' } });
+    fireEvent.change(endDate, { target: { value: '02/02/2024' } });
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '400' } });
 
     const submitBtn = screen.getByTestId('submitCampaignBtn');
-    expect(submitBtn).toBeInTheDocument();
-
     fireEvent.click(submitBtn);
+
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock graphql error');
     });

@@ -135,8 +135,8 @@ export default function people(): JSX.Element {
   };
 
   useEffect(() => {
-    if (data2?.organizations?.[0]?.admins) {
-      const adminsList = data2.organizations[0].admins.map(
+    if (data2?.organization[0]?.admins) {
+      const adminsList = data2.organization[0].admins.map(
         (admin: InterfaceMember) => ({
           ...admin,
           userType: 'Admin',

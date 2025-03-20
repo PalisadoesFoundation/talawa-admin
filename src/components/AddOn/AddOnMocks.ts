@@ -119,7 +119,7 @@ export const ORGANIZATIONS_LIST_MOCK = {
   },
   result: {
     data: {
-      organizations: [
+      organization: [
         {
           _id: 'undefined',
           image: '',
