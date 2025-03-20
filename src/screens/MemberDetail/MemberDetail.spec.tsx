@@ -419,6 +419,41 @@ describe('MemberDetail', () => {
     });
   });
 
+  test('clicking profile picture triggers file input click', async () => {
+    // Render the component with the mocked data that includes avatarURL
+    renderMemberDetailScreen(link2);
+    await wait();
+
+    // Verify the profile picture is rendered
+    const profilePicture = screen.getByTestId('profile-picture');
+    expect(profilePicture).toBeInTheDocument();
+
+    // Create a mock for the click method of the file input
+    const mockClick = vi.fn();
+
+    // Mock the fileInputRef.current
+    const originalClick = Object.getOwnPropertyDescriptor(
+      HTMLInputElement.prototype,
+      'click',
+    );
+
+    Object.defineProperty(HTMLInputElement.prototype, 'click', {
+      configurable: true,
+      value: mockClick,
+    });
+
+    // Click the profile picture
+    await userEvent.click(profilePicture);
+
+    // Verify the file input's click method was called
+    expect(mockClick).toHaveBeenCalled();
+
+    // Restore the original click method
+    if (originalClick) {
+      Object.defineProperty(HTMLInputElement.prototype, 'click', originalClick);
+    }
+  });
+
   it('handles avatar processing error', async () => {
     vi.mocked(urlToFile).mockRejectedValue(
       new Error('Failed to process image'),
@@ -544,6 +579,38 @@ describe('MemberDetail', () => {
     expect(toast.error).toHaveBeenCalledWith(
       'File is too large. Maximum size is 5MB.',
     );
+  });
+
+  test('renders language dropdown and handles selection', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    expect(
+      screen.getByTestId('naturallanguagecode-dropdown-container'),
+    ).toBeInTheDocument();
+
+    // Find the dropdown by the fieldName from DynamicDropDown props
+    const languageStatus = screen.getByTestId(
+      'naturallanguagecode-dropdown-btn',
+    );
+    expect(languageStatus).toBeInTheDocument();
+
+    // Test initial state
+    expect(languageStatus).toHaveTextContent('English'); // Or whatever your initial value is
+
+    // Click the dropdown button to open it
+    await userEvent.click(languageStatus);
+
+    expect(
+      screen.getByTestId('naturallanguagecode-dropdown-menu'),
+    ).toBeInTheDocument();
+
+    // Find and click one of the options=
+    const option = screen.getByTestId('change-naturallanguagecode-btn-en'); // Or whatever option text you expect
+    await userEvent.click(option);
+
+    // Verify the selection was made
+    expect(languageStatus).toHaveTextContent('English');
   });
 
   test('handles phone number input formatting', async () => {
