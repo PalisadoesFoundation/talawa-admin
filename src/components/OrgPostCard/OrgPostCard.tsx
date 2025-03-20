@@ -55,6 +55,14 @@ interface InterfacePost {
   attachments: InterfacePostAttachment[];
 }
 
+const safeReload = () => {
+  // Don't reload in test environment
+  if (process.env.NODE_ENV === 'test') {
+    console.log('Reload prevented in test environment');
+    return;
+  }
+  window.location.reload();
+};
 export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
   const { orgId: currentOrg } = useParams<{ orgId: string }>();
   const { uploadFileToMinio } = useMinioUpload();
@@ -96,11 +104,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     null,
   );
 
-  // Add a URL cache with expiration timestamps
-  const [urlCache, setUrlCache] = useState<
-    Record<string, { url: string; expiry: number }>
-  >({});
-
   // Add a URL sanitization function to prevent XSS attacks
   const sanitizeUrl = (url: string | null): string => {
     if (!url) return '';
@@ -137,42 +140,10 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
 
   const isMounted = useRef<boolean>(true);
 
-  const cleanupExpiredUrls = useCallback(() => {
-    const now = Date.now();
-    setUrlCache((prev) => {
-      const newCache = { ...prev };
-      let hasChanges = false;
-
-      Object.keys(newCache).forEach((key) => {
-        if (newCache[key].expiry < now) {
-          delete newCache[key];
-          hasChanges = true;
-        }
-      });
-
-      return hasChanges ? newCache : prev;
-    });
-  }, []);
-
-  useEffect(() => {
-    const cleanupInterval = setInterval(cleanupExpiredUrls, 60000);
-
-    return () => {
-      clearInterval(cleanupInterval);
-      isMounted.current = false;
-    };
-  }, [cleanupExpiredUrls]);
-
   const fetchPresignedUrl = async (
     objectName: string,
   ): Promise<string | null> => {
     if (!objectName) return null;
-
-    const cached = urlCache[objectName];
-    const now = Date.now();
-    if (cached && cached.expiry > now) {
-      return cached.url;
-    }
 
     try {
       const { data } = await getPresignedUrl({
@@ -189,19 +160,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         return null;
       }
 
-      const url = data.createPresignedUrl.presignedUrl;
-
-      if (url && isMounted.current) {
-        setUrlCache((prev) => ({
-          ...prev,
-          [objectName]: {
-            url,
-            expiry: now + 5 * 60 * 1000,
-          },
-        }));
-      }
-
-      return url;
+      return data.createPresignedUrl.presignedUrl;
     } catch (error) {
       console.error('Error getting presigned URL:', error);
       if (isMounted.current) {
@@ -369,7 +328,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
           toast.success(isPinned ? 'Post unpinned' : 'Post pinned');
           setTimeout(() => {
             if (isMounted.current) {
-              window.location.reload();
+              safeReload(); // replaced window.location.reload()
             }
           }, 2000);
         };
@@ -691,7 +650,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         toast.success(t('postDeleted'));
         toggleShowDeleteModal();
         setTimeout(() => {
-          window.location.reload();
+          safeReload(); // replaced window.location.reload()
         }, 2000);
       }
     } catch (error: unknown) {
@@ -730,7 +689,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         toast.success(t('postUpdated'));
         setShowEditModal(false);
         setTimeout(() => {
-          window.location.reload();
+          safeReload(); // replaced window.location.reload()
         }, 2000);
       }
     } catch (error: unknown) {
