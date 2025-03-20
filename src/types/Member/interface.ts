@@ -8,7 +8,7 @@ export interface InterfaceMemberRequestCardProps {
 }
 
 export interface InterfaceRequestsListItem {
-  _id: string;
+  id: string;
   user: {
     firstName: string;
     lastName: string;

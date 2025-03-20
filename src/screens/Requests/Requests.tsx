@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 
 interface InterfaceRequestsListItem {
-  _id: string;
+  id: string;
   user: {
     firstName: string;
     lastName: string;
@@ -188,7 +188,7 @@ const Requests = (): JSX.Element => {
         return {
           organizations: [
             {
-              _id: organizationId,
+              id: organizationId,
               membershipRequests: [
                 ...(prev?.organizations?.[0]?.membershipRequests || []),
                 ...newMembershipRequests,
@@ -306,7 +306,7 @@ const Requests = (): JSX.Element => {
                         (request: InterfaceRequestsListItem, index: number) => {
                           return (
                             <RequestsTableItem
-                              key={request?._id}
+                              key={request?.id}
                               index={index}
                               resetAndRefetch={resetAndRefetch}
                               request={request}
