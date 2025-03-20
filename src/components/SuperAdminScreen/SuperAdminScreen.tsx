@@ -73,7 +73,7 @@ const superAdminScreen = (): JSX.Element => {
         <div>
           <div className={`${styles.navContainer}`}>
             <h1>{t('title')}</h1>
-              <ProfileDropdown />
+            <ProfileDropdown />
           </div>
         </div>
         <Outlet />
