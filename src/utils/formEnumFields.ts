@@ -293,6 +293,29 @@ const maritalStatusEnum = [
   },
 ];
 
+const languageEnum = [
+  {
+    value: 'en',
+    label: 'English',
+  },
+  {
+    value: 'hi',
+    label: 'hindi',
+  },
+  {
+    value: 'sp',
+    label: 'spanish',
+  },
+  {
+    value: 'zh',
+    label: 'chinese',
+  },
+  {
+    value: 'fr',
+    label: 'french',
+  },
+];
+
 const genderEnum = [
   {
     value: 'male',
@@ -349,4 +372,5 @@ export {
   genderEnum,
   employmentStatusEnum,
   userRoleEnum,
+  languageEnum,
 };

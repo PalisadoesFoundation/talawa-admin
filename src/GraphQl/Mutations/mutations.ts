@@ -51,6 +51,8 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
       countryCode
       avatarMimeType
       avatarURL
+      pluginCreationAllowed
+      adminApproved
       updatedAt
     }
   }
@@ -99,6 +101,8 @@ export const UPDATE_CURRENT_USER_MUTATION = gql`
       state
       updatedAt
       workPhoneNumber
+      pluginCreationAllowed
+      adminApproved
     }
   }
 `;
@@ -133,6 +137,8 @@ export const UPDATE_USER_MUTATION = gql`
       state
       updatedAt
       workPhoneNumber
+      pluginCreationAllowed
+      adminApproved
     }
   }
 `;
