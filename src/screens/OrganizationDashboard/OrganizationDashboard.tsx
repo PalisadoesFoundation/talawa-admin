@@ -68,12 +68,17 @@ function OrganizationDashboard(): JSX.Element {
   const postsLink = `/orgpost/${orgId}`;
   const eventsLink = `/orgevents/${orgId}`;
   // const blockUserLink = `/blockuser/${orgId}`;
-  // const requestLink = '/requests';
+  const requestLink = `/requests/${orgId}`;
 
   /**
    * Query to fetch organization data.
    */
-  // const {
+  const {
+    data,
+    loading: loadingOrgData,
+  } = useQuery(GET_ORGANIZATION_MEMBERS_PG, {
+    variables: { id: orgId },
+  });
 
   const hasFetchedAllMembers = useRef(false);
   const hasFetchedAllEvents = useRef(false);
@@ -320,15 +325,15 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
-                // onClick={(): void => {
-                //   navigate(requestLink);
-                // }}
+                onClick={(): void => {
+                  navigate(requestLink);
+                }}
               >
-                {/* <DashBoardCard
+                <DashBoardCard
                   count={data?.organizations[0].membershipRequests?.length}
                   title={tCommon('requests')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
-                /> */}
+                />
               </Col>
             </Row>
           )}
@@ -434,41 +439,39 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllMembershipRequests"
                   onClick={(): void => {
-                    toast.success(t('comingSoon'));
+                    navigate(requestLink)
                   }}
                 >
                   {t('viewAll')}
                 </Button>
               </div>
-              {/* <Card.Body */}
-              {/* className={styles.containerBody} */}
-              {/* style={{ height: '150px' }} */}
-              {/* > */}
-              {/* {loadingOrgData ? ( */}
-              {/* [...Array(4)].map((_, index) => { */}
-              {/* return <CardItemLoading key={`requestsLoading_${index}`} />; */}
-              {/* }) */}
-              {/* ) : data?.organizations[0].membershipRequests.length == 0 ? ( */}
-              <div
-                className={styles.emptyContainer}
+              <Card.Body
+                className={styles.containerBody}
                 style={{ height: '150px' }}
               >
-                <h6>{t('noMembershipRequests')}</h6>
-              </div>
-              {/* ) : ( */}
-              {/* data?.organizations[0]?.membershipRequests */}
-              {/* .slice(0, 8) */}
-              {/* .map((request) => { */}
-              {/* return ( */}
-              {/* <CardItem */}
-              {/* type="MembershipRequest" */}
-              {/* key={request._id} */}
-              {/* title={`${request.user.firstName} ${request.user.lastName}`} */}
-              {/* /> */}
-              {/* ); */}
-              {/* }) */}
-              {/* )} */}
-              {/* </Card.Body> */}
+                {loadingOrgData ? (
+                  [...Array(4)].map((_, index) => (
+                    <CardItemLoading key={`requestsLoading_${index}`} />
+                  ))
+                ) : data?.organizations[0].membershipRequests.length === 0 ? (
+                  <div
+                    className={styles.emptyContainer}
+                    style={{ height: '150px' }}
+                  >
+                    <h6>{t('noMembershipRequests')}</h6>
+                  </div>
+                ) : (
+                  data?.organizations[0]?.membershipRequests
+                    .slice(0, 8)
+                    .map((request: any) => (
+                      <CardItem
+                        type="MembershipRequest"
+                        key={request._id}
+                        title={`${request.user.firstName} ${request.user.lastName}`}
+                      />
+                    ))
+                )}
+              </Card.Body>
             </Card>
           </Row>
           <Row>
