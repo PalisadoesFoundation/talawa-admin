@@ -315,7 +315,8 @@
     "cancel": "取消",
     "create": "创建",
     "user": "用户",
-    "profile": "个人资料"
+    "profile": "个人资料",
+    "createUser": "创建用户"
   },
   "organizationTags": {
     "title": "组织标签",
