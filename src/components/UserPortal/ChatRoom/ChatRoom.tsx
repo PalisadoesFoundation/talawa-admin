@@ -21,6 +21,7 @@ import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
+import { toast } from 'react-toastify';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -228,6 +229,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         setAttachmentObjectName(objectName);
       } catch (error) {
         console.error('Error uploading file:', error);
+        toast.error('File upload failed. Please try again.');
       }
     }
   };

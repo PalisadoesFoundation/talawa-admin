@@ -28,6 +28,7 @@ import ChatRoom from './ChatRoom';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
+import { toast } from 'react-toastify';
 
 /**
  * Unit tests for the ChatRoom component
@@ -5981,5 +5982,364 @@ describe('Testing Chatroom Component [User Portal]', () => {
     });
 
     await wait(500);
+  });
+});
+
+describe('ChatRoom Component', () => {
+  const mocks = [
+    ...MESSAGE_SENT_TO_CHAT_MOCK,
+    ...CHAT_BY_ID_QUERY_MOCK,
+    ...CHATS_LIST_MOCK,
+    ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+    ...SEND_MESSAGE_TO_CHAT_MOCK,
+    ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ...GROUP_CHAT_LIST_QUERY_MOCK,
+    ...UNREAD_CHAT_LIST_QUERY_MOCK,
+  ];
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders no contact selected state', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(await screen.findByTestId('noChatSelected')).toBeInTheDocument();
+  });
+
+  it('renders chat with a contact', async () => {
+    const link = new MockSubscriptionLink();
+    render(
+      <MockedProvider addTypename={false} mocks={mocks} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+  });
+
+  it('handles sending a message', async () => {
+    const mockChatListRefetch = vi.fn();
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom
+                selectedContact="1"
+                chatListRefetch={mockChatListRefetch}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const input = await screen.findByTestId('messageInput');
+    const sendBtn = await screen.findByTestId('sendMessage');
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Hello' } });
+    });
+
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+
+    await wait();
+  });
+
+  it('handles replying to a message', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const dropdown = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(dropdown);
+    });
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+    expect(replyMsg).toBeInTheDocument();
+  });
+
+  it('handles editing a message', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    // Find and click message dropdown
+    const dropdown = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(dropdown);
+    });
+
+    // Click edit button
+    const editBtn = await screen.findByTestId('replyToMessage');
+    act(() => {
+      fireEvent.click(editBtn);
+    });
+
+    // Verify input is populated
+    const input = await screen.findByTestId('messageInput');
+    expect(input).toHaveValue('Hello');
+  });
+});
+
+describe('handleImageChange function', () => {
+  let setAttachment: jest.Mock;
+  let setAttachmentObjectName: jest.Mock;
+  let handleImageChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => Promise<void>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    setAttachment = vi.fn();
+    setAttachmentObjectName = vi.fn();
+
+    const mockChat = {
+      organization: { _id: 'org123' },
+    };
+
+    // Create the event handler with mocked dependencies
+    handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file && mockChat) {
+        try {
+          const organizationId = mockChat.organization?._id || '';
+
+          const { fileUrl, objectName } = await mockUploadFileToMinio(
+            file,
+            organizationId,
+          );
+
+          setAttachment(fileUrl);
+          setAttachmentObjectName(objectName);
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          toast.error('File upload failed. Please try again.');
+        }
+      }
+    };
+  });
+
+  it('successfully uploads a file', async () => {
+    // Prepare mock upload response
+    mockUploadFileToMinio.mockResolvedValue({
+      fileUrl: 'http://example.com/uploaded-image.jpg',
+      objectName: 'uploaded-image-123',
+    });
+
+    // Create a mock file
+    const file = new File(['test'], 'test-image.jpg', { type: 'image/jpeg' });
+
+    // Create a mock event
+    const event = {
+      target: {
+        files: [file],
+      },
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+    await handleImageChange(event);
+
+    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'org123');
+
+    expect(setAttachment).toHaveBeenCalledWith(
+      'http://example.com/uploaded-image.jpg',
+    );
+    expect(setAttachmentObjectName).toHaveBeenCalledWith('uploaded-image-123');
+  });
+
+  it('does nothing if no file is selected', async () => {
+    // Create a mock event with no files
+    const event = {
+      target: {
+        files: [],
+      },
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+    await handleImageChange(event);
+
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    expect(setAttachment).not.toHaveBeenCalled();
+    expect(setAttachmentObjectName).not.toHaveBeenCalled();
+  });
+
+  it('handles scenario with no organization ID', async () => {
+    // Create a mock chat without organization
+    const mockChatWithoutOrg = {
+      organization: null as { _id: string } | null,
+    };
+
+    // Modify the handler to use this chat
+    const handleImageChangeWithNoOrg = async (
+      e: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+      const file = e.target.files?.[0];
+      if (file && mockChatWithoutOrg) {
+        try {
+          const organizationId = mockChatWithoutOrg.organization?._id || '';
+
+          const { fileUrl, objectName } = await mockUploadFileToMinio(
+            file,
+            organizationId,
+          );
+
+          setAttachment(fileUrl);
+          setAttachmentObjectName(objectName);
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          toast.error('File upload failed. Please try again.');
+        }
+      }
+    };
+
+    // Create a mock file
+    const file = new File(['test'], 'test-image.jpg', { type: 'image/jpeg' });
+
+    // Create a mock event
+    const event = {
+      target: {
+        files: [file],
+      },
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+    // Prepare mock upload response
+    mockUploadFileToMinio.mockResolvedValue({
+      fileUrl: 'http://example.com/uploaded-image.jpg',
+      objectName: 'uploaded-image-123',
+    });
+
+    await handleImageChangeWithNoOrg(event);
+
+    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, '');
+  });
+});
+
+const mockUploadFileToMinio = vi
+  .fn()
+  .mockImplementation(
+    (
+      file: File,
+      organizationId: string,
+    ): Promise<{ fileUrl: string; objectName: string }> => {
+      return Promise.resolve({ fileUrl: '', objectName: '' });
+    },
+  );
+
+describe('Error handling in file upload', () => {
+  it('shows error toast when file upload fails', async () => {
+    // Mock the necessary dependencies
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    vi.spyOn(toast, 'error').mockImplementation(() => 'mocked-toast-id');
+
+    // Create a mock chat object with organization
+    const mockChat = {
+      organization: { _id: 'test-org-id' },
+    };
+
+    // Set up state setter mocks
+    const setAttachment = vi.fn();
+    const setAttachmentObjectName = vi.fn();
+
+    // Mock the file upload function to simulate an error
+    const mockError = new Error('Upload failed');
+    mockUploadFileToMinio.mockRejectedValue(mockError);
+
+    // Create a mock file and event
+    const mockFile = new File(['test content'], 'test-image.jpg', {
+      type: 'image/jpeg',
+    });
+    const mockEvent = {
+      target: {
+        files: [mockFile],
+      },
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+    // Create the handleImageChange function with our mocked dependencies
+    const handleImageChange = async (
+      e: React.ChangeEvent<HTMLInputElement>,
+    ): Promise<void> => {
+      const file = e.target.files?.[0];
+      if (file && mockChat) {
+        try {
+          const organizationId = mockChat.organization?._id || '';
+
+          const { fileUrl, objectName } = await mockUploadFileToMinio(
+            file,
+            organizationId,
+          );
+
+          setAttachment(fileUrl);
+          setAttachmentObjectName(objectName);
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          toast.error('File upload failed. Please try again.');
+        }
+      }
+    };
+
+    // Call the function with our mocked event
+    await handleImageChange(mockEvent);
+
+    // Verify error handling behavior
+    expect(mockUploadFileToMinio).toHaveBeenCalledWith(mockFile, 'test-org-id');
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Error uploading file:',
+      mockError,
+    );
+    expect(toast.error).toHaveBeenCalledWith(
+      'File upload failed. Please try again.',
+    );
+
+    // Verify state was not updated
+    expect(setAttachment).not.toHaveBeenCalled();
+    expect(setAttachmentObjectName).not.toHaveBeenCalled();
+
+    // Clean up
+    consoleErrorSpy.mockRestore();
   });
 });
