@@ -763,6 +763,26 @@ describe('MemberDetail', () => {
     expect(maritialStatus).toHaveTextContent('Male');
   });
 
+  test('clicking and submission of profile picture', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const uploadImageBtn = screen.getByTestId('profile-picture');
+    expect(uploadImageBtn).toBeInTheDocument();
+
+    // Mock the file input click
+    const fileInput = screen.getByTestId('fileInput');
+    const fileInputClickSpy = vi.spyOn(fileInput, 'click');
+
+    // Simulate click on the edit button
+    await userEvent.click(uploadImageBtn);
+    expect(fileInputClickSpy).toHaveBeenCalled();
+
+    // Simulate Enter key press on the edit button
+    await userEvent.type(uploadImageBtn, '{enter}');
+    expect(fileInputClickSpy).toHaveBeenCalled();
+  });
+
   test('handles profile picture edit button click', async () => {
     renderMemberDetailScreen(link1);
     await wait();

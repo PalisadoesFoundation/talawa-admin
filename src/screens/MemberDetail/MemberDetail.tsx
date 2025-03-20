@@ -649,18 +649,15 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     {t('chooseLanguage')}
                   </label>
 
-                  <span data-testid="languageSelectButton">
-                    <GlobalIcon />
-                    <DynamicDropDown
-                      formState={formState}
-                      setFormState={setFormState}
-                      fieldOptions={languageEnum}
-                      fieldName="naturalLanguageCode"
-                      handleChange={(e) =>
-                        handleFieldChange('naturalLanguageCode', e.target.value)
-                      }
-                    />
-                  </span>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={languageEnum}
+                    fieldName="naturalLanguageCode"
+                    handleChange={(e) =>
+                      handleFieldChange('naturalLanguageCode', e.target.value)
+                    }
+                  />
                 </Col>
 
                 <Col md={7}>
