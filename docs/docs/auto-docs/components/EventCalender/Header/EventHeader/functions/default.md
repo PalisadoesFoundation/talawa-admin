@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`__namedParameters`): `Element`
 
 Defined in: [src/components/EventCalender/Header/EventHeader.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Header/EventHeader.tsx#L39)
 
@@ -19,7 +19,7 @@ It includes a search field, view type dropdown, event type dropdown, and a butto
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element - The rendered EventHeader component.
 

@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/components/EventManagement/EventAttendance/Attendance/EventAttendance.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/Attendance/EventAttendance.tsx#L28)
 
@@ -13,6 +13,6 @@ Includes filtering and sorting functionality for attendees
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX element containing the event attendance interface

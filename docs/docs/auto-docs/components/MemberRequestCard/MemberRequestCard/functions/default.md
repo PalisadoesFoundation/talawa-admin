@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberRequestCard/MemberRequestCard.tsx#L24)
 
@@ -20,6 +20,6 @@ Properties for the member request card.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX element for member request card.

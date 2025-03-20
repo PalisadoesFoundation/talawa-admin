@@ -19,9 +19,9 @@ export interface InterfaceOrganizationCardProps {
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
   membershipRequests: {
-    _id: string;
+    id: string;
     user: {
-      _id: string;
+      id: string;
     };
   }[];
   isJoined?: boolean;

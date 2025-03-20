@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/OrgContribution/OrgContribution.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgContribution/OrgContribution.tsx#L16)
 
@@ -14,4 +14,4 @@ Additionally, it shows recent contribution statistics and a list of contribution
 
 ## Returns
 
-`JSX.Element`
+`Element`

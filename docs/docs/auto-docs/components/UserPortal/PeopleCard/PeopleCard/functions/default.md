@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L47)
 
@@ -27,7 +27,7 @@ The properties passed to the component.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element representing a card with the person's details.
 

@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/UserPortal/Events/Events.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Events/Events.tsx#L62)
 
@@ -15,7 +15,7 @@ It includes a calendar view, a form to create new events, and various filters an
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The JSX element for the events management interface.
 

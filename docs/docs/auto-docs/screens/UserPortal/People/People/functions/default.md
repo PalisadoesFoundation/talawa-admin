@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/UserPortal/People/People.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/People.tsx#L62)
 
@@ -36,4 +36,4 @@ For more details on the reusable classes, refer to the global CSS file.
 
 ## Returns
 
-`JSX.Element`
+`Element`

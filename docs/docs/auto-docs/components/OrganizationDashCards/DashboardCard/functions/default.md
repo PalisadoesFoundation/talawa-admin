@@ -14,7 +14,7 @@ Dashboard card component is used to display the card with icon, title and count.
 
 ### props
 
-#### count
+#### count?
 
 `number`
 

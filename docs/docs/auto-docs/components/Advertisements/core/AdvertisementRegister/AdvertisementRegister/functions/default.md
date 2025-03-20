@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L57)
 
@@ -20,7 +20,7 @@ Contains form status, advertisement details, and a function to update parent sta
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 A JSX element that renders a form inside a modal for creating or editing an advertisement.
 

@@ -7,7 +7,7 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
+import OrganizationCard from 'components/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -73,9 +73,9 @@ interface InterfaceOrganizationCardProps {
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
   membershipRequests: {
-    _id: string;
+    id: string;
     user: {
-      _id: string;
+      id: string;
     };
   }[];
   isJoined: boolean;
@@ -86,7 +86,7 @@ interface InterfaceOrganizationCardProps {
  */
 interface InterfaceOrganization {
   isJoined: boolean;
-  _id: string;
+  id: string;
   name: string;
   image: string;
   description: string;
@@ -102,9 +102,9 @@ interface InterfaceOrganization {
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
   membershipRequests: {
-    _id: string;
+    id: string;
     user: {
-      _id: string;
+      id: string;
     };
   }[];
 }
@@ -222,13 +222,35 @@ export default function organizations(): JSX.Element {
     if (mode === 0) {
       // All
       if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map(
-          (org: InterfaceOrganization) => ({
-            ...org,
-            membershipRequestStatus: '',
-            isJoined: false,
-          }),
-        );
+        const orgs = allOrganizationsData.organizations.map((org: any) => {
+          // Check if user is a member using the connection pattern
+          const isMember =
+            org.members?.edges?.some(
+              (edge: { node: { id: string } }) => edge.node.id === userId,
+            ) || false;
+
+          // Transform the data to match your interface
+          return {
+            id: org.id,
+            name: org.name,
+            image: org.avatarURL, // Map avatarURL to image
+            description: org.description,
+            address: {
+              line1: org.addressLine1,
+              city: '', // These fields might not be available in your query
+              countryCode: '',
+              postalCode: '',
+              state: '',
+            },
+            admins: [], // You need to get this data from somewhere
+            // Transform members from edges/nodes to a simple array
+            members: org.members?.edges?.map((edge: any) => edge.node) || [],
+            membershipRequestStatus: isMember ? 'accepted' : '',
+            userRegistrationRequired: false, // Get this from your data
+            membershipRequests: [], // Get this from your data
+            isJoined: isMember,
+          };
+        });
         setOrganizations(orgs);
       } else {
         setOrganizations([]);
@@ -245,14 +267,14 @@ export default function organizations(): JSX.Element {
               if (
                 Array.isArray(organization.members) &&
                 organization.members.some(
-                  (member: { _id: string }) => member._id === userId,
+                  (member: { id: string }) => member.id === userId,
                 )
               ) {
                 membershipRequestStatus = 'accepted';
               } else if (
                 organization.membershipRequests?.some(
-                  (request: { _id: string; user: { _id: string } }) =>
-                    request.user._id === userId,
+                  (request: { id: string; user: { id: string } }) =>
+                    request.user.id === userId,
                 )
               ) {
                 membershipRequestStatus = 'pending';
@@ -427,7 +449,7 @@ export default function organizations(): JSX.Element {
                         const cardProps: InterfaceOrganizationCardProps = {
                           name: organization.name,
                           image: organization.image,
-                          id: organization._id,
+                          id: organization.id,
                           description: organization.description,
                           admins: organization.admins,
                           members: organization.members,

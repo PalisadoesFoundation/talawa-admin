@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/OrganizationPeople/OrganizationPeople.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/OrganizationPeople.tsx#L65)
 
@@ -14,6 +14,6 @@ It also provides the functionality to remove the members and admins from the org
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element which contains the list of members, admins and users of the organization.

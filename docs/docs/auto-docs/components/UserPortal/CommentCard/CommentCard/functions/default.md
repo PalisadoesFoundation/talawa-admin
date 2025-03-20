@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CommentCard/CommentCard.tsx#L51)
 
@@ -23,6 +23,6 @@ The properties passed to the component.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered comment card component.

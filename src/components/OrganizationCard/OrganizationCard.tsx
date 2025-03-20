@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../../style/app-fixed.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
@@ -17,8 +17,9 @@ import {
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { ApolloError } from '@apollo/client';
-import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
+import { getItem } from 'utils/useLocalstorage';
+
 /**
  * Component to display an organization's card with its image and owner details.
  * Displays an organization card with options to join or manage membership.
@@ -58,13 +59,21 @@ function OrganizationCard({
 }: InterfaceOrganizationCardProps): JSX.Element {
   const [userId, setUserId] = useState<string | null>(null);
 
+  useEffect(() => {
+    try {
+      const storedUserId = getItem('Talawa-admin', 'id');
+      setUserId(storedUserId as string | null);
+    } catch (error) {
+      // Handle localStorage error silently
+      console.error('Failed to get userId from localStorage:', error);
+    }
+  }, []);
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'users',
+  });
   const { t: tCommon } = useTranslation('common');
-  const { t } = useTranslation();
-
   const navigate = useNavigate();
-
-  // Custom hook for localStorage
-  const { getItem } = useLocalStorage();
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
@@ -78,20 +87,13 @@ function OrganizationCard({
   });
   const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
     variables: { id: userId, first: 5 },
+    skip: !userId,
   });
 
-  useEffect(() => {
-    try {
-      // Use the custom hook to retrieve the userId
-      const id = getItem('userId'); // Adjust this line based on your actual localStorage key
-      setUserId(id as string);
-    } catch (error) {
-      console.error('Failed to access localStorage:', error);
-      setUserId(null); // Handle gracefully if localStorage is not available
-      toast.error('Failed to access user data');
-    }
-  }, [getItem]);
-
+  /**
+   * Handles joining the organization. Sends a membership request if registration is required,
+   * otherwise joins the public organization directly. Displays success or error messages.
+   */
   async function joinOrganization(): Promise<void> {
     try {
       if (userRegistrationRequired) {
@@ -104,7 +106,9 @@ function OrganizationCard({
       } else {
         await joinPublicOrganization({
           variables: {
-            organizationId: id,
+            input: {
+              organizationId: id,
+            },
           },
         });
         toast.success(t('orgJoined') as string);
@@ -123,13 +127,17 @@ function OrganizationCard({
     }
   }
 
+  /**
+   * Handles withdrawing a membership request. Finds the request for the current user and cancels it.
+   */
   async function withdrawMembershipRequest(): Promise<void> {
     if (!userId) {
       toast.error(t('UserIdNotFound') as string);
       return;
     }
+
     const membershipRequest = membershipRequests.find(
-      (request) => request.user._id === userId,
+      (request) => request.user.id === userId,
     );
 
     try {
@@ -140,11 +148,11 @@ function OrganizationCard({
 
       await cancelMembershipRequest({
         variables: {
-          membershipRequestId: membershipRequest._id,
+          membershipRequestId: membershipRequest.id,
         },
       });
 
-      toast.success(t('MembershipRequestWithdrawn') as string); // Ensure this gets called
+      toast.success(t('MembershipRequestWithdrawn') as string);
     } catch (error: unknown) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Failed to withdraw membership request:', error);
@@ -184,25 +192,30 @@ function OrganizationCard({
             </div>
           )}
           <h6 className={styles.orgadmin}>
-            {tCommon('admins')}: <span>{admins?.length}</span> &nbsp; &nbsp;
-            &nbsp; {tCommon('members')}: <span>{members?.length}</span>
+            <div>
+              {tCommon('admins')}: <span>{admins?.length}</span>
+            </div>
+            <div>
+              {tCommon('members')}: <span>{members?.length}</span>
+            </div>
           </h6>
         </div>
       </div>
+
       {isJoined && (
         <Button
-          variant="success"
           data-testid="manageBtn"
-          className={styles.joinedBtn}
+          className={styles.addButton}
           onClick={() => {
             navigate(`/user/organization/${id}`);
           }}
+          style={{ width: '8rem' }}
         >
           {t('visit')}
         </Button>
       )}
 
-      {membershipRequestStatus === 'pending' && (
+      {membershipRequestStatus === 'pending' && !isJoined && (
         <Button
           variant="danger"
           onClick={withdrawMembershipRequest}
@@ -213,12 +226,12 @@ function OrganizationCard({
         </Button>
       )}
 
-      {membershipRequestStatus === '' && (
+      {membershipRequestStatus === '' && !isJoined && (
         <Button
           onClick={joinOrganization}
           data-testid="joinBtn"
-          className={styles.joinBtn}
-          variant="outline-success"
+          className={styles.outlineBtn}
+          style={{ width: '8rem' }}
         >
           {t('joinNow')}
         </Button>

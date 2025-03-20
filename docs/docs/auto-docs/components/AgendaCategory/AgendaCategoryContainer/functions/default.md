@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/AgendaCategory/AgendaCategoryContainer.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaCategory/AgendaCategoryContainer.tsx#L34)
 
@@ -30,7 +30,7 @@ Contains agenda category data and functions for data management.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 A JSX element that renders agenda item categories with options to preview, edit, and delete.
 

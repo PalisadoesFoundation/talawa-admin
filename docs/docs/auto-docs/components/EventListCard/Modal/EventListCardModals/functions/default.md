@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/EventListCard/Modal/EventListCardModals.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardModals.tsx#L86)
 
@@ -21,6 +21,6 @@ The properties for the component.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 A JSX element containing the event modals.

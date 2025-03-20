@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/UserPortal/Posts/Posts.tsx:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Posts/Posts.tsx#L130)
 
@@ -14,7 +14,7 @@ It utilizes Apollo Client for fetching and managing data through GraphQL queries
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element - The rendered `home` component.
 

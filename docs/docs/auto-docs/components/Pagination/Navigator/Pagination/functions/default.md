@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/Pagination/Navigator/Pagination.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Pagination/Navigator/Pagination.tsx#L30)
 
@@ -24,6 +24,6 @@ Component properties.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component.

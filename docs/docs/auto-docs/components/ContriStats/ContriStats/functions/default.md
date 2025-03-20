@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`__namedParameters`): `Element`
 
 Defined in: [src/components/ContriStats/ContriStats.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ContriStats/ContriStats.tsx#L16)
 
@@ -18,6 +18,6 @@ A component that displays contribution statistics.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element - The rendered component displaying the contribution stats.

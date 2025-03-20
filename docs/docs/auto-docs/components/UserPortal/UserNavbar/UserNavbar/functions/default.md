@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/components/UserPortal/UserNavbar/UserNavbar.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L26)
 
@@ -17,6 +17,6 @@ This component provides:
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element - The rendered Navbar component.

@@ -4,236 +4,250 @@
 
 # Type Alias: TestMock
 
-> **TestMock**: `object`
+> **TestMock** = `object`
 
 Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L36)
 
-## Type declaration
+## Properties
 
 ### error?
 
 > `optional` **error**: `Error`
 
+Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L121)
+
+***
+
 ### newData()?
 
 > `optional` **newData**: () => `FetchResult`\<`Record`\<`string`, `any`\>\>
+
+Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L122)
 
 #### Returns
 
 `FetchResult`\<`Record`\<`string`, `any`\>\>
 
+***
+
 ### request
 
 > **request**: `object`
 
-#### request.query
+Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L37)
+
+#### query
 
 > **query**: `DocumentNode`
 
-#### request.variables
+#### variables
 
 > **variables**: `object`
 
-#### request.variables.after?
+##### variables.after?
 
 > `optional` **after**: `string` \| `null`
 
-#### request.variables.before?
+##### variables.before?
 
 > `optional` **before**: `string` \| `null`
 
-#### request.variables.email?
+##### variables.email?
 
 > `optional` **email**: `string`
 
-#### request.variables.first?
+##### variables.first?
 
 > `optional` **first**: `number` \| `null`
 
-#### request.variables.firstName?
+##### variables.firstName?
 
 > `optional` **firstName**: `string`
 
-#### request.variables.firstName\_contains?
+##### variables.firstName\_contains?
 
 > `optional` **firstName\_contains**: `string`
 
-#### request.variables.firstNameContains?
+##### variables.firstNameContains?
 
 > `optional` **firstNameContains**: `string`
 
-#### request.variables.id?
+##### variables.id?
 
 > `optional` **id**: `string`
 
-#### request.variables.id\_not\_in?
+##### variables.id\_not\_in?
 
 > `optional` **id\_not\_in**: `string`[]
 
-#### request.variables.last?
+##### variables.last?
 
 > `optional` **last**: `number` \| `null`
 
-#### request.variables.lastName?
+##### variables.lastName?
 
 > `optional` **lastName**: `string`
 
-#### request.variables.lastName\_contains?
+##### variables.lastName\_contains?
 
 > `optional` **lastName\_contains**: `string`
 
-#### request.variables.lastNameContains?
+##### variables.lastNameContains?
 
 > `optional` **lastNameContains**: `string`
 
-#### request.variables.orgid?
+##### variables.orgid?
 
 > `optional` **orgid**: `string`
 
-#### request.variables.orgId?
+##### variables.orgId?
 
 > `optional` **orgId**: `string`
 
-#### request.variables.password?
+##### variables.password?
 
 > `optional` **password**: `string`
 
-#### request.variables.userid?
+##### variables.userid?
 
 > `optional` **userid**: `string`
 
-#### request.variables.where?
+##### variables.where?
 
 > `optional` **where**: `object`
 
-#### request.variables.where.role
+##### variables.where.role
 
 > **role**: `object`
 
-#### request.variables.where.role.equal
+##### variables.where.role.equal
 
 > **equal**: `"administrator"`
+
+***
 
 ### result?
 
 > `optional` **result**: `object`
 
-#### result.data
+Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L60)
+
+#### data
 
 > **data**: `object`
 
-#### result.data.allUsers?
+##### data.allUsers?
 
 > `optional` **allUsers**: `object`
 
-#### result.data.allUsers.edges
+##### data.allUsers.edges
 
 > **edges**: `object`[]
 
-#### result.data.allUsers.pageInfo
+##### data.allUsers.pageInfo
 
 > **pageInfo**: `object`
 
-#### result.data.allUsers.pageInfo.endCursor
+##### data.allUsers.pageInfo.endCursor
 
 > **endCursor**: `string`
 
-#### result.data.allUsers.pageInfo.hasNextPage
+##### data.allUsers.pageInfo.hasNextPage
 
 > **hasNextPage**: `boolean`
 
-#### result.data.allUsers.pageInfo.hasPreviousPage
+##### data.allUsers.pageInfo.hasPreviousPage
 
 > **hasPreviousPage**: `boolean`
 
-#### result.data.allUsers.pageInfo.startCursor
+##### data.allUsers.pageInfo.startCursor
 
 > **startCursor**: `string`
 
-#### result.data.createMember?
+##### data.createMember?
 
 > `optional` **createMember**: `object`
 
-#### result.data.createMember.id
+##### data.createMember.id
 
 > **id**: `string`
 
-#### result.data.organization?
+##### data.organization?
 
 > `optional` **organization**: `object`
 
-#### result.data.organization.members?
+##### data.organization.members?
 
 > `optional` **members**: `object`
 
-#### result.data.organization.members.edges
+##### data.organization.members.edges
 
 > **edges**: `object`[]
 
-#### result.data.organization.members.pageInfo
+##### data.organization.members.pageInfo
 
 > **pageInfo**: `object`
 
-#### result.data.organization.members.pageInfo.endCursor
+##### data.organization.members.pageInfo.endCursor
 
 > **endCursor**: `string`
 
-#### result.data.organization.members.pageInfo.hasNextPage
+##### data.organization.members.pageInfo.hasNextPage
 
 > **hasNextPage**: `boolean`
 
-#### result.data.organization.members.pageInfo.hasPreviousPage
+##### data.organization.members.pageInfo.hasPreviousPage
 
 > **hasPreviousPage**: `boolean`
 
-#### result.data.organization.members.pageInfo.startCursor
+##### data.organization.members.pageInfo.startCursor
 
 > **startCursor**: `string`
 
-#### result.data.organizations?
+##### data.organizations?
 
 > `optional` **organizations**: [`InterfaceQueryOrganizationsListObject`](../../../../utils/interfaces/interfaces/InterfaceQueryOrganizationsListObject.md)[]
 
-#### result.data.organizationsMemberConnection?
+##### data.organizationsMemberConnection?
 
 > `optional` **organizationsMemberConnection**: `object`
 
-#### result.data.organizationsMemberConnection.edges?
+##### data.organizationsMemberConnection.edges?
 
 > `optional` **edges**: `Edge`[]
 
-#### result.data.organizationsMemberConnection.user?
+##### data.organizationsMemberConnection.user?
 
 > `optional` **user**: `Edge`[]
 
-#### result.data.removeMember?
+##### data.removeMember?
 
 > `optional` **removeMember**: `object`
 
-#### result.data.removeMember.id
+##### data.removeMember.id
 
 > **id**: `string`
 
-#### result.data.signUp?
+##### data.signUp?
 
 > `optional` **signUp**: `object`
 
-#### result.data.signUp.accessToken?
+##### data.signUp.accessToken?
 
 > `optional` **accessToken**: `string`
 
-#### result.data.signUp.refreshToken?
+##### data.signUp.refreshToken?
 
 > `optional` **refreshToken**: `string`
 
-#### result.data.signUp.user?
+##### data.signUp.user?
 
 > `optional` **user**: `object`
 
-#### result.data.signUp.user.id
+##### data.signUp.user.id
 
 > **id**: `string`
 
-#### result.data.users?
+##### data.users?
 
 > `optional` **users**: `object`[]

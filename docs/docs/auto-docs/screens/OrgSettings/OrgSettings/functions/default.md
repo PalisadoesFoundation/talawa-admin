@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/OrgSettings/OrgSettings.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgSettings/OrgSettings.tsx#L28)
 
@@ -16,6 +16,6 @@ The component renders different settings sections based on the user's selection 
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component displaying the organization settings.

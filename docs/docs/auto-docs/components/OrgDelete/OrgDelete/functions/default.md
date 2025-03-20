@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/components/OrgDelete/OrgDelete.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgDelete/OrgDelete.tsx#L11)
 
@@ -14,6 +14,6 @@ This component renders a message related to deleting an organization.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element representing the organization deletion message

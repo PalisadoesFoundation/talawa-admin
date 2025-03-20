@@ -101,12 +101,12 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
    */
   async function withdrawMembershipRequest(): Promise<void> {
     const membershipRequest = props.membershipRequests.find(
-      (request) => request.user._id === userId,
+      (request) => request.user.id === userId,
     );
 
     await cancelMembershipRequest({
       variables: {
-        membershipRequestId: membershipRequest?._id,
+        membershipRequestId: membershipRequest?.id,
       },
     });
   }

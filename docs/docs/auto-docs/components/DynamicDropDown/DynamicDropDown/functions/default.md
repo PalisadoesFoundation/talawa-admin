@@ -15,7 +15,9 @@ opens a menu with options. When an option is selected, it updates the form state
 
 ## Type Parameters
 
-• **T** *extends* `Record`\<`string`, `unknown`\>
+### T
+
+`T` *extends* `Record`\<`string`, `unknown`\>
 
 ## Parameters
 

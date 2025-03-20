@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L46)
 
@@ -14,6 +14,6 @@ This component provides an overview of various statistics and information relate
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component.

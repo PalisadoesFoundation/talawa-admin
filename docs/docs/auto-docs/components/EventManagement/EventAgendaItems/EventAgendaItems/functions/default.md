@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/EventManagement/EventAgendaItems/EventAgendaItems.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAgendaItems/EventAgendaItems.tsx#L33)
 
@@ -22,6 +22,6 @@ The component props.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component.

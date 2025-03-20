@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`onToggle`): `JSX.Element`
+> **default**(`onToggle`): `Element`
 
 Defined in: [src/components/LoginPortalToggle/LoginPortalToggle.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L19)
 
@@ -20,6 +20,6 @@ Callback function to handle role changes ('admin' or 'user').
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX element for login portal toggle.

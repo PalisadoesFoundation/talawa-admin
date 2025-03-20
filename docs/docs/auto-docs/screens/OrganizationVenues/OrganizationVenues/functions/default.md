@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/OrganizationVenues/OrganizationVenues.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationVenues/OrganizationVenues.tsx#L21)
 
@@ -13,4 +13,4 @@ Handles searching, sorting, and CRUD operations for venues.
 
 ## Returns
 
-`JSX.Element`
+`Element`

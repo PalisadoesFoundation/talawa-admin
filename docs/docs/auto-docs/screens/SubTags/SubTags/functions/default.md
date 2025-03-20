@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/SubTags/SubTags.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/SubTags/SubTags.tsx#L61)
 
@@ -35,4 +35,4 @@ For more details on the reusable classes, refer to the global CSS file.
 
 ## Returns
 
-`JSX.Element`
+`Element`

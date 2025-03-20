@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/UserPortal/Volunteer/Actions/Actions.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Actions/Actions.tsx#L80)
 
@@ -14,7 +14,7 @@ This component allows users to view, filter, sort, and create action items. It a
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component.
 

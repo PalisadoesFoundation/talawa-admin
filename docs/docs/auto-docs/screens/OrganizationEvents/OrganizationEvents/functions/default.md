@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L75)
 
@@ -20,7 +20,7 @@ The component uses the EventCalendar component to display the events and EventHe
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element to display the Organization Events Page
 

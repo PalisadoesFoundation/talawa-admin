@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L86)
 
@@ -27,7 +27,7 @@ The properties passed to the component including post details, comments, and rel
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element representing a post card with interactive features.
 

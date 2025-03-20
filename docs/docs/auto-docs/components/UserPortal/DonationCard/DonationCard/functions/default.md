@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/DonationCard/DonationCard.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/DonationCard/DonationCard.tsx#L36)
 
@@ -23,7 +23,7 @@ The properties passed to the component.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered donation card component.
 

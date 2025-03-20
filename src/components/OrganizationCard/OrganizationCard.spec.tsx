@@ -17,11 +17,8 @@ import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/Queries';
 // Mock hooks
 const mockGetItem = vi.fn();
 vi.mock('utils/useLocalstorage', () => ({
-  __esModule: true,
-  default: () => ({
-    getItem: () => mockGetItem(),
-    setItem: vi.fn(),
-  }),
+  getItem: () => mockGetItem(),
+  setItem: vi.fn(),
 }));
 
 vi.mock('react-toastify', () => ({
@@ -56,11 +53,12 @@ i18n.init({
           orgJoined: 'Joined',
           AlreadyJoined: 'Already joined',
           errorOccured: 'error occurred',
+          UserIdNotFound: 'User ID not found',
           MembershipRequestNotFound: 'Request not found',
           MembershipRequestWithdrawn: 'Request withdrawn',
           visit: 'Visit',
           withdraw: 'Withdraw',
-          joinNow: 'Join Now',
+          joinNow: 'joinNow',
         },
       },
       common: {
@@ -85,10 +83,14 @@ const successMocks: MockedResponse[] = [
   {
     request: {
       query: JOIN_PUBLIC_ORGANIZATION,
-      variables: { organizationId: '123' },
+      variables: {
+        input: {
+          organizationId: '123',
+        },
+      },
     },
     result: {
-      data: { joinPublicOrganization: { success: true } },
+      data: { joinPublicOrganization: { organizationId: '123' } },
     },
   },
   {
@@ -103,7 +105,7 @@ const successMocks: MockedResponse[] = [
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: { id: 'mockUserId', first: 10 },
+      variables: { id: 'mockUserId', first: 5 },
     },
     result: {
       data: {
@@ -145,7 +147,11 @@ const errorMocks: MockedResponse[] = [
   {
     request: {
       query: JOIN_PUBLIC_ORGANIZATION,
-      variables: { organizationId: '123' },
+      variables: {
+        input: {
+          organizationId: '123',
+        },
+      },
     },
     error: new Error('Failed to join organization'),
   },
@@ -298,7 +304,7 @@ describe('OrganizationCard Component', () => {
       await fireEvent.click(joinButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
+        expect(toast.success).toHaveBeenCalledWith('Request sent');
       });
     });
 
@@ -317,7 +323,7 @@ describe('OrganizationCard Component', () => {
       await fireEvent.click(joinButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('orgJoined');
+        expect(toast.success).toHaveBeenCalledWith('Joined');
       });
     });
 
@@ -336,7 +342,7 @@ describe('OrganizationCard Component', () => {
       await fireEvent.click(joinButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('errorOccured');
+        expect(toast.error).toHaveBeenCalledWith('error occurred');
       });
     });
   });
@@ -345,7 +351,7 @@ describe('OrganizationCard Component', () => {
     const props = {
       ...defaultProps,
       membershipRequestStatus: 'pending',
-      membershipRequests: [{ _id: 'requestId', user: { _id: 'mockUserId' } }],
+      membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
     };
 
     render(
@@ -358,7 +364,7 @@ describe('OrganizationCard Component', () => {
     await fireEvent.click(withdrawButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('MembershipRequestWithdrawn');
+      expect(toast.success).toHaveBeenCalledWith('Request withdrawn');
     });
   });
 
@@ -375,7 +381,7 @@ describe('OrganizationCard Component', () => {
       ...defaultProps,
       userId: 'mockUserId',
       membershipRequestStatus: 'pending',
-      membershipRequests: [{ _id: 'requestId', user: { _id: 'mockUserId' } }],
+      membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
     };
 
     const errorMocks: MockedResponse[] = [
@@ -402,7 +408,7 @@ describe('OrganizationCard Component', () => {
         'Failed to withdraw membership request:',
         expect.any(Error),
       );
-      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+      expect(toast.error).toHaveBeenCalledWith('error occurred');
     });
 
     // Restore original environment
@@ -415,7 +421,11 @@ describe('OrganizationCard Component', () => {
       {
         request: {
           query: JOIN_PUBLIC_ORGANIZATION,
-          variables: { organizationId: '123' },
+          variables: {
+            input: {
+              organizationId: '123',
+            },
+          },
         },
         result: {
           errors: [
@@ -442,9 +452,10 @@ describe('OrganizationCard Component', () => {
     await fireEvent.click(joinButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('AlreadyJoined');
+      expect(toast.error).toHaveBeenCalledWith('Already joined');
     });
   });
+
   it('should handle membership request not found', async () => {
     // Mock getItem to return a userId that exists
     mockGetItem.mockReturnValue('testUserId');
@@ -472,9 +483,9 @@ describe('OrganizationCard Component', () => {
       membershipRequestStatus: 'pending',
       membershipRequests: [
         {
-          _id: 'requestId',
+          id: 'requestId',
           user: {
-            _id: 'differentUserId', // Different user ID to trigger not found case
+            id: 'differentUserId', // Different user ID to trigger not found case
           },
         },
       ],
@@ -490,7 +501,7 @@ describe('OrganizationCard Component', () => {
     await fireEvent.click(withdrawButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('MembershipRequestNotFound');
+      expect(toast.error).toHaveBeenCalledWith('Request not found');
     });
 
     // Verify the mutation was not called
@@ -522,7 +533,7 @@ describe('OrganizationCard Component', () => {
     const props = {
       ...defaultProps,
       membershipRequestStatus: 'pending',
-      membershipRequests: [{ _id: 'requestId', user: { _id: 'mockUserId' } }],
+      membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
     };
 
     render(
@@ -535,7 +546,7 @@ describe('OrganizationCard Component', () => {
     await fireEvent.click(withdrawButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('UserIdNotFound');
+      expect(toast.error).toHaveBeenCalledWith('User ID not found');
     });
 
     // Verify that the cancelMembershipRequest mutation was not called

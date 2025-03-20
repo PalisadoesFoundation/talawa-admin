@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L46)
 
@@ -23,6 +23,6 @@ The properties passed to the component.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered chat room component.

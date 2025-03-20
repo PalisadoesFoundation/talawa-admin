@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/UserPortal/Chat/Chat.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Chat/Chat.tsx#L57)
 
@@ -33,6 +33,6 @@ The component uses GraphQL to fetch and manage contact data, and React state to 
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered `chat` component.

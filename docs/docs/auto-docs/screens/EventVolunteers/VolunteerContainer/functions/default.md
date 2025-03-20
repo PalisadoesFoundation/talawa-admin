@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/screens/EventVolunteers/VolunteerContainer.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerContainer.tsx#L18)
 
@@ -14,6 +14,6 @@ This component allows users switch between Volunteers and VolunteerGroups.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component.

@@ -1,0 +1,44 @@
+[Admin Docs](/)
+
+***
+
+# Variable: default
+
+> `const` **default**: `React.FC`\<[`InterfaceDeleteVolunteerModal`](../interfaces/InterfaceDeleteVolunteerModal.md)\>
+
+Defined in: [src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/VolunteerDeleteModal.tsx#L42)
+
+A modal dialog for confirming the deletion of a volunteer.
+
+## Param
+
+Indicates whether the modal is open.
+
+## Param
+
+Function to close the modal.
+
+## Param
+
+The volunteer object to be deleted.
+
+## Param
+
+Function to refetch the volunteers after deletion.
+
+## Returns
+
+The rendered modal component.
+
+The `VolunteerDeleteModal` component displays a confirmation dialog when a user attempts to delete a volunteer.
+It allows the user to either confirm or cancel the deletion.
+On confirmation, the `deleteVolunteer` mutation is called to remove the pledge from the database,
+and the `refetchVolunteers` function is invoked to update the list of volunteers.
+A success or error toast notification is shown based on the result of the deletion operation.
+
+The modal includes:
+- A header with a title and a close button.
+- A body with a message asking for confirmation.
+- A footer with "Yes" and "No" buttons to confirm or cancel the deletion.
+
+The `deleteVolunteer` mutation is used to perform the deletion operation.

@@ -14,7 +14,9 @@ since the last time the debounced function was invoked.
 
 ## Type Parameters
 
-• **T** *extends* (...`args`) => `void`
+### T
+
+`T` *extends* (...`args`) => `void`
 
 ## Parameters
 

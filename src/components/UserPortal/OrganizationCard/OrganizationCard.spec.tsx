@@ -240,9 +240,9 @@ let props = {
   userRegistrationRequired: true,
   membershipRequests: [
     {
-      _id: '',
+      id: '',
       user: {
-        _id: '',
+        id: '',
       },
     },
   ],
@@ -443,9 +443,9 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
       membershipRequestStatus: 'pending',
       membershipRequests: [
         {
-          _id: '56gheqyr7deyfuiwfewifruy8',
+          id: '56gheqyr7deyfuiwfewifruy8',
           user: {
-            _id: getItem('userId') as string,
+            id: getItem('userId') as string,
           },
         },
       ],

@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L39)
 
@@ -21,7 +21,7 @@ Component properties
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component
 

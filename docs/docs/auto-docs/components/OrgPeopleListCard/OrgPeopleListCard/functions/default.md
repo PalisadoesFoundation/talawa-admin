@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/OrgPeopleListCard/OrgPeopleListCard.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPeopleListCard/OrgPeopleListCard.tsx#L23)
 
@@ -23,6 +23,6 @@ The properties passed to the component
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element representing the organization people list card modal

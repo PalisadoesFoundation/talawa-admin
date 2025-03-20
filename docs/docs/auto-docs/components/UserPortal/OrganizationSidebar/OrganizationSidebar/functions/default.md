@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationSidebar/OrganizationSidebar.tsx#L36)
 
@@ -22,6 +22,6 @@ The sidebar handles loading states and displays appropriate messages while data 
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element representing the organization sidebar.

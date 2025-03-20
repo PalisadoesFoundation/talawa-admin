@@ -99,10 +99,10 @@ describe('Testing Member Request Card', () => {
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
     try {
-      window.location = {
-        ...originalLocation,
-        reload: vi.fn(),
-      };
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        value: { ...originalLocation, reload: vi.fn() },
+      });
       render(
         <MockedProvider addTypename={false} link={link2}>
           <I18nextProvider i18n={i18nForTest}>
@@ -116,7 +116,7 @@ describe('Testing Member Request Card', () => {
       await wait(2100);
       expect(window.location.reload).toHaveBeenCalled();
     } finally {
-      window.location = originalLocation;
+      Object.assign(window.location, originalLocation);
     }
   });
 
@@ -132,10 +132,10 @@ describe('Testing Member Request Card', () => {
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
     try {
-      window.location = {
-        ...originalLocation,
-        reload: vi.fn(),
-      };
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        value: { ...originalLocation, reload: vi.fn() },
+      });
       render(
         <MockedProvider addTypename={false} link={link3}>
           <I18nextProvider i18n={i18nForTest}>
@@ -148,7 +148,7 @@ describe('Testing Member Request Card', () => {
       await wait(2100);
       expect(window.location.reload).not.toHaveBeenCalled();
     } finally {
-      window.location = originalLocation;
+      Object.assign(window.location, originalLocation);
     }
   });
 
@@ -156,10 +156,10 @@ describe('Testing Member Request Card', () => {
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
     try {
-      window.location = {
-        ...originalLocation,
-        reload: vi.fn(),
-      };
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        value: { ...originalLocation, reload: vi.fn() },
+      });
       vi.spyOn(window, 'confirm').mockReturnValue(true);
       render(
         <MockedProvider addTypename={false} link={link2}>
@@ -175,7 +175,7 @@ describe('Testing Member Request Card', () => {
       expect(window.confirm).toHaveBeenCalled();
       expect(window.location.reload).toHaveBeenCalled();
     } finally {
-      window.location = originalLocation;
+      Object.assign(window.location, originalLocation);
     }
   });
 
@@ -183,10 +183,10 @@ describe('Testing Member Request Card', () => {
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
     try {
-      window.location = {
-        ...originalLocation,
-        reload: vi.fn(),
-      };
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        value: { ...originalLocation, reload: vi.fn() },
+      });
       vi.spyOn(window, 'confirm').mockReturnValue(true);
       render(
         <MockedProvider addTypename={false} link={link3}>
@@ -202,7 +202,7 @@ describe('Testing Member Request Card', () => {
       expect(window.confirm).toHaveBeenCalled();
       expect(window.location.reload).not.toHaveBeenCalled();
     } finally {
-      window.location = originalLocation;
+      Object.assign(window.location, originalLocation);
     }
   });
 });
