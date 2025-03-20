@@ -106,19 +106,21 @@ describe('UserDetailsForm', () => {
   it('shows/hides action buttons based on isUpdated prop', () => {
     const { rerender } = render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
-        <UserDetailsForm {...defaultProps} isUpdated={false} />
+        <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
 
+    // When isUpdated is true, buttons should NOT be in the document
     expect(screen.queryByTestId('resetChangesBtn')).not.toBeInTheDocument();
     expect(screen.queryByTestId('updateUserBtn')).not.toBeInTheDocument();
 
     rerender(
       <MockedProvider mocks={MOCKS} addTypename={false}>
-        <UserDetailsForm {...defaultProps} isUpdated={true} />
+        <UserDetailsForm {...defaultProps} isUpdated={false} />
       </MockedProvider>,
     );
 
+    // When isUpdated is false, buttons should be in the document
     expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
     expect(screen.getByTestId('updateUserBtn')).toBeInTheDocument();
   });
@@ -126,7 +128,7 @@ describe('UserDetailsForm', () => {
   it('handles form submission correctly', async () => {
     render(
       <MockedProvider mocks={UPDATE_MOCK} addTypename={false}>
-        <UserDetailsForm {...defaultProps} />
+        <UserDetailsForm {...defaultProps} isUpdated={false} />
       </MockedProvider>,
     );
 
@@ -139,7 +141,7 @@ describe('UserDetailsForm', () => {
   it('handles reset changes correctly', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
-        <UserDetailsForm {...defaultProps} />
+        <UserDetailsForm {...defaultProps} isUpdated={false} />
       </MockedProvider>,
     );
 

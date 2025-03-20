@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import {
-  MEMBERSHIP_REQUEST,
-  ORGANIZATION_CONNECTION_LIST,
-} from 'GraphQl/Queries/Queries';
+import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import RequestsTableItem from 'components/RequestsTableItem/RequestsTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -74,20 +71,22 @@ const Requests = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
-  // Query to fetch the list of organizations
-  const { data: orgsData } = useQuery(ORGANIZATION_CONNECTION_LIST);
-  const [displayedRequests, setDisplayedRequests] = useState(
-    data?.organization[0]?.membershipRequests || [],
-  );
+  // Query to fetch the list of organization
+  const { data: orgsData } = useQuery(ORGANIZATION_LIST);
+  const [displayedRequests, setDisplayedRequests] = useState<
+    InterfaceRequestsListItem[]
+  >([]);
 
   // Manage loading more state
   useEffect(() => {
-    if (!data) {
+    if (!data?.organization?.[0]) {
+      setDisplayedRequests([]);
+      setHasMore(false);
       return;
     }
 
-    const membershipRequests = data.organization[0].membershipRequests;
-
+    const membershipRequests = data.organization[0].membershipRequests || [];
+    
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
     }
@@ -102,23 +101,24 @@ const Requests = (): JSX.Element => {
     };
   }, []);
 
-  // Show a warning if there are no organizations
+  // Show a warning if there are no organization
   useEffect(() => {
     if (!orgsData) {
       return;
     }
 
-    if (orgsData.organizationsConnection.length === 0) {
-      toast.warning(t('noOrgError') as string);
+    // Check if organizations array is empty
+    if (orgsData.organization?.length === 0) {
+      toast.warning(t('noOrgError'));
     }
-  }, [orgsData]);
+  }, [orgsData, t]);
 
   // Redirect to orgList page if the user is not an admin
   useEffect(() => {
     if (userRole != 'ADMIN' && userRole != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
-  }, []);
+  }, [userRole]);
 
   // Manage the loading state
   useEffect(() => {
@@ -127,7 +127,7 @@ const Requests = (): JSX.Element => {
     } else {
       setIsLoading(false);
     }
-  }, [loading]);
+  }, [loading, isLoadingMore]);
 
   /**
    * Handles the search input change and refetches the data based on the search value.
@@ -136,10 +136,13 @@ const Requests = (): JSX.Element => {
    */
   const handleSearch = (value: string): void => {
     setSearchByName(value);
+    if (!organizationId) return;
+
     if (value === '') {
       resetAndRefetch();
       return;
     }
+
     refetch({
       id: organizationId,
       firstName_contains: value,
@@ -151,7 +154,10 @@ const Requests = (): JSX.Element => {
    * Resets search and refetches the data.
    */
   const resetAndRefetch = (): void => {
+    if (!organizationId) return;
+
     refetch({
+      id: organizationId,
       first: perPageResult,
       skip: 0,
       firstName_contains: '',
@@ -168,7 +174,7 @@ const Requests = (): JSX.Element => {
     fetchMore({
       variables: {
         id: organizationId,
-        skip: data?.organizations?.[0]?.membershipRequests?.length || 0,
+        skip: data?.organization[0]?.membershipRequests?.length || 0,
         firstName_contains: searchByName,
       },
       updateQuery: (
@@ -182,7 +188,7 @@ const Requests = (): JSX.Element => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         const newMembershipRequests =
-          fetchMoreResult.organization[0].membershipRequests || [];
+          fetchMoreResult.organization[0]?.membershipRequests || [];
         if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
@@ -191,7 +197,7 @@ const Requests = (): JSX.Element => {
             {
               _id: organizationId,
               membershipRequests: [
-                ...(prev?.organization[0].membershipRequests || []),
+                ...(prev?.organization[0]?.membershipRequests || []),
                 ...newMembershipRequests,
               ],
             },
@@ -236,7 +242,7 @@ const Requests = (): JSX.Element => {
         </div>
       </div>
 
-      {!isLoading && orgsData?.organizationsConnection.length === 0 ? (
+      {!isLoading && orgsData?.organization[0]?.length === 0 ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

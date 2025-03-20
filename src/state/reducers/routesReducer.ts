@@ -23,29 +23,6 @@ const reducer = (
         targets: [...generateRoutes(components, action.payload)],
       });
     }
-    case 'UPDATE_P_TARGETS': {
-      const filteredTargets = state.targets.filter(
-        (target: TargetsType) => target.name === 'Plugins',
-      );
-
-      const oldTargets: SubTargetType[] = filteredTargets[0]?.subTargets || [];
-      return Object.assign({}, state, {
-        targets: [
-          ...state.targets.filter(
-            (target: TargetsType) => target.name !== 'Plugins',
-          ),
-          Object.assign(
-            {},
-            {
-              name: 'Plugins',
-              comp_id: null,
-              component: null,
-              subTargets: [...action.payload, ...oldTargets],
-            },
-          ),
-        ],
-      });
-    }
     default: {
       return state;
     }
@@ -82,19 +59,6 @@ const components: ComponentType[] = [
   { name: 'Advertisement', comp_id: 'orgads', component: 'Advertisements' },
   { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
   { name: 'Membership Requests', comp_id: 'requests', component: 'Requests' },
-  {
-    name: 'Plugins',
-    comp_id: null,
-    component: 'AddOnStore', // Default
-    subTargets: [
-      {
-        name: 'Plugin Store',
-        comp_id: 'orgstore',
-        component: 'AddOnStore',
-        icon: 'fa-store',
-      },
-    ],
-  },
   { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
   { name: '', comp_id: 'member', component: 'MemberDetail' },
 ];

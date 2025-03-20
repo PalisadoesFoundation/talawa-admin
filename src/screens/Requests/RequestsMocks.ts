@@ -1,16 +1,13 @@
-import {
-  MEMBERSHIP_REQUEST,
-  ORGANIZATION_CONNECTION_LIST,
-} from 'GraphQl/Queries/Queries';
+import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 export const EMPTY_REQUEST_MOCKS = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [
+        organization: [
           {
             _id: 'org1',
             image: null,
@@ -71,11 +68,11 @@ export const EMPTY_REQUEST_MOCKS = [
 export const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [
+        organization: [
           {
             _id: 'org1',
             image: null,
@@ -155,11 +152,11 @@ export const MOCKS = [
 export const MOCKS4 = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [
+        organization: [
           {
             _id: 'org1',
             image: null,
@@ -387,11 +384,11 @@ export const MOCKS4 = [
 export const MOCKS2 = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [
+        organization: [
           {
             _id: 'org1',
             image: null,
@@ -462,11 +459,11 @@ export const MOCKS2 = [
 export const MOCKS3 = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [
+        organization: [
           {
             _id: 'org1',
             image: null,
@@ -543,11 +540,11 @@ export const EMPTY_MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organization: [],
       },
     },
   },
@@ -567,7 +564,7 @@ export const MOCKS_WITH_ERROR = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
   },
 ];

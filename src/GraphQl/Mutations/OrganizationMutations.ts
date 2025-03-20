@@ -191,25 +191,6 @@ export const MESSAGE_SENT_TO_CHAT = gql`
   }
 `;
 
-//Plugin WebSocket listner
-
-/**
- * GraphQL subscription to listen for updates on plugins.
- *
- * @returns An object containing information about the updated plugin.
- */
-
-export const PLUGIN_SUBSCRIPTION = gql`
-  subscription onPluginUpdate {
-    onPluginUpdate {
-      pluginName
-      _id
-      pluginDesc
-      uninstalledOrgs
-    }
-  }
-`;
-
 /**
  * GraphQL mutation to toggle the pinned status of a post.
  *

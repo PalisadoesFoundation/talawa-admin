@@ -6,10 +6,10 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/OrganizationPeople/OrganizationPeople.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/OrganizationPeople.tsx#L32)
+Defined in: [src/screens/OrganizationPeople/OrganizationPeople.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/OrganizationPeople.tsx#L66)
 
 OrganizationPeople component is used to display the list of members, admins and users of the organization.
-It also provides the functionality to search the members, admins and users by their full name.
+It also provides the functionality to search the members, admins and users by their name.
 It also provides the functionality to remove the members and admins from the organization.
 
 ## Returns

@@ -10,7 +10,6 @@ import {
 } from '@apollo/client';
 import {
   ORGANIZATIONS_LIST,
-  PLUGIN_GET,
   ORGANIZATION_ADVERTISEMENT_LIST,
 } from '../../GraphQl/Queries/Queries';
 import { ADD_ADVERTISEMENT_MUTATION } from '../../GraphQl/Mutations/mutations';
@@ -127,32 +126,6 @@ export const ADVERTISEMENTS_LIST_MOCK: MockRequest[] = [
     createMock({ id: '1', first: 6, after: null, before: null, last: null }),
   ),
 ];
-
-export const PLUGIN_GET_MOCK = {
-  request: {
-    query: PLUGIN_GET,
-  },
-  result: {
-    data: {
-      getPlugins: [
-        {
-          _id: '6581be50e88e74003aab436c',
-          pluginName: 'Chats',
-          pluginCreatedBy: 'Talawa Team',
-          pluginDesc:
-            'User can share messages with other users in a chat user interface.',
-          uninstalledOrgs: [
-            '62ccfccd3eb7fd2a30f41601',
-            '62ccfccd3eb7fd2a30f41601',
-          ],
-          pluginInstallStatus: true,
-          __typename: 'Plugin',
-        },
-      ],
-    },
-    loading: false,
-  },
-};
 
 export const ADD_ADVERTISEMENT_MUTATION_MOCK = {
   request: {

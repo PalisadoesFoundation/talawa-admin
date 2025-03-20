@@ -285,7 +285,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           />
           <Col className={styles.sampleOrgSection}>
             <Button
-              className={styles.addButton}
+              className="addButton"
               type="submit"
               value="invite"
               data-testid="submitOrganizationForm"

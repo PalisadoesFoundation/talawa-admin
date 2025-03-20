@@ -6,15 +6,14 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/App.tsx:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L114)
+Defined in: [src/App.tsx:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L109)
 
 This is the main function for our application. It sets up all the routes and components,
 defining how the user can navigate through the app. The function uses React Router's `Routes`
-and `Route`  components to map different URL paths to corresponding screens and components.
+and `Route` components to map different URL paths to corresponding screens and components.
 
 ## Important Details
 - **UseEffect Hook**: This hook checks user authentication status using the `CHECK_AUTH` GraphQL query.
-- **Plugins**: It dynamically loads additional routes for any installed plugins.
 - **Routes**:
   - The root route ("/") takes the user to the `LoginPage`.
   - Protected routes are wrapped with the `SecuredRoute` component to ensure they are only accessible to authenticated users.

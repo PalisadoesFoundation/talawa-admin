@@ -36,19 +36,25 @@
  */
 
 :root {
-  --addButton-font: var(#555555);
+  --addButton-font: #555555;
   --addButton-border: #eaebef;
   --addButton-bg: #a8c7fa;
   --addButton-bg-hover: #1778f2;
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
+  --unblockButton-font: #555555;
+  --unblockButton-border: #eaebef;
+  --unblockButton-bg: #a8c7fa;
+  --unblockButton-bg-hover: #1778f2;
+  --unblockButton-border-hover: #1778f2;
+
   --removeButton-bg: #f8d6dc;
   --removeButton-color: #c8102e;
   --removeButton-bg-hover: #ff4d4f;
   --removeButton-border-hover: #ff4d4f;
   --removeButton-color-hover: #ffffff;
-  --removeButton-border: #dc3545;
+  --removeButton-border: #f8d6dc;
 
   --activeTab-bg: #eaebef;
   --activeTab-color: #808080;
@@ -74,12 +80,13 @@
   --searchButton-border-focus: #a8c7fa;
   --searchButton-bg-hover: #a8c7fa;
   --searchButton-bg-active: #a8c7fa;
-
   --hover-shadow:
     0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --modalHeader-color: #000000;
   --modalHeader-bg: #ffffff;
+
+  --modalTitle-color: #4b5563;
 
   --switch-bg-checked: #1778f2;
   --switch-border-checked: #1778f2;
@@ -193,8 +200,8 @@
   --signOut-container-bg: #d3e3fd;
   --signOutBtn-bg: #d3e3fd;
 
-  --profileContainer-bg: #ffffff;
-  --profileContainer-bg-focus: #f8f9fa;
+  --profile-container-bg: #ffffff;
+  --profile-container-bg-focus: #f8f9fa;
   --profileText-color: #6c757d;
 
   --chevronRightbtn-bg: #ffffff;
@@ -205,6 +212,7 @@
   --secondText-color: #9fa6b2;
 
   --leftDrawer-bg: #ffffff;
+  --leftDrawer-fixedModule-bg: #f6f8fc;
   --leftDrawer-scrollbar-color: #eaebef;
   --leftDrawer-optionList-bg: #ffffff;
   --LeftDrawer-org-profileContainer-bg: #e0e9ff;
@@ -213,11 +221,11 @@
   --leftDrawer-inactive-button-hover-bg: #eaebef;
   --leftDrawer-collapse-active-button-bg: #e0e5ec;
   --leftDrawer-inactive-button-bg: transparent;
-  --leftDrawer-active-button-bg: #d3e3fd;
+  --leftDrawer-active-button-bg: #eaebef;
 
   --activeItem-bg: #eaebef;
-  --activeItem-color: #000000;
-  --activeItem-color-hover: #000000;
+  --active-item-color: #000000;
+  --active-item-color-hover: #000000;
 
   --user-sidebar-org-item-bg: #eaebef;
 
@@ -328,8 +336,7 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-
-  --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
 
@@ -454,6 +461,10 @@
 
   --table-image-small-size: 25px;
 
+  --banIcon-color: #c8102e;
+  --banIcon-color-hover: #ffffff;
+  --unbanIcon-color: #555555;
+  --unbanIcon-color-hover: #ffffff;
   --containerAdvertisemens-bg: #ffffff;
   --orgCard-bg: #fff;
   --orgCard-bg: #fff;
@@ -552,6 +563,8 @@
 
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
+  --delete-button-color-hover: #ff4d4f;
+  --delete-button-border: #000;
   --delete-button-color-hover: #ff4d4f;
 
   --customDataTable-bg: #f2f2f2;
@@ -674,6 +687,39 @@
   --holidayCard-bg: #00000026;
 
   --spinner-border: #9ca3af;
+  --card-background-color: #1778f2;
+  --card-header-background-color: #1778f2;
+  --text-fields-color: #737373;
+
+  --settings-header-button-bg: #ffffff;
+  --settings-header-button-border: #808080;
+  --settings-header-button-color: #808080;
+
+  --settings-active-button-bg: #eaebef;
+  --settings-active-button-border: #555555;
+  --settings-active-button-color: #555555;
+
+  --bg-header: #ffffff;
+
+  --changelangauge-btn-bg: #ffffff;
+  --changelangauge-btn-color: #1778f2;
+  --changelangauge-btn-border: #1778f2;
+
+  --resetbtn-border: #1778f2;
+  --resetbtn-bg: #ffffff;
+  --resetbtn-color: #1778f2;
+
+  --modalClose-button-color: #c8102e;
+  --formLabel-color: #000000;
+  --inputField-text-color: #555555;
+  --inputField-placeholder-color: #707070;
+  --inputField-bg-focus: #f1f3f6;
+
+  --card-background-color: #1778f2;
+  --card-header-background-color: #1778f2;
+  --reset-border-color: #1778f2;
+  --reset-backgroundcolor-color: #ffffff;
+  --reset-btn-colour: #1778f2;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -683,12 +729,12 @@
 .addButton {
   margin-bottom: 10px;
   color: var(--addButton-font);
-  background-color: var(--addButton-bg);
-  border-color: var(--addButton-border);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
   --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:is(:hover, :active, :focus-visible) {
+.addButton:is(:hover, :active, :focus) {
   background-color: var(--addButton-bg-hover) !important;
   border-color: var(--addButton-border-hover);
 }
@@ -697,6 +743,49 @@
   margin-bottom: 10px;
   background-color: var(--disabled-btn);
   border-color: var(--addButton-bg);
+}
+
+/* Unblock Button */
+
+.unblockButton {
+  margin-bottom: 10px;
+  color: var(--unblockButton-font) !important;
+  background-color: var(--unblockButton-bg) !important;
+  border-color: var(--unblockButton-border);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.unblockButton:is(:hover, :active, :focus) {
+  background-color: var(--unblockButton-bg-hover) !important;
+  border-color: var(--unblockButton-border-hover);
+}
+
+/* Unban Icon */
+
+.unbanIcon {
+  color: var(--unbanIcon-color);
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 0.5px;
+  margin-right: 4px;
+}
+
+.unblockButton:hover .unbanIcon {
+  color: var(--unbanIcon-color-hover) !important;
+}
+
+/* Ban Icon*/
+
+.banIcon {
+  color: var(--banIcon-color);
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 0.5px;
+  margin-right: 4px;
+}
+
+.removeButton:hover .banIcon {
+  color: var(--banIcon-color-hover) !important;
 }
 
 /* Remove Button */
@@ -800,14 +889,58 @@
 
 .modalHeader {
   border: none;
-  padding-bottom: 0;
   background-color: var(--modalHeader-bg) !important;
-  padding: 1rem 1rem;
+  padding: 1rem;
   color: var(--modalHeader-color);
 }
 
-.modalHeader div {
-  color: var(--modalHeader-color) !important;
+/* Make sure the modal title is dark grey */
+.modalHeader div,
+.modalHeader .modal-title {
+  color: var(--modalTitle-color) !important;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* Close button styling */
+.modalHeader button.close,
+.modalHeader .btn-close {
+  color: var(--modalClose-button-color) !important;
+  opacity: 1;
+}
+
+/* Form Labels */
+.inputField label,
+form label,
+.form-label {
+  color: var(--formLabel-color) !important;
+  font-weight: normal;
+  padding-bottom: 0;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+/* Input Fields - Update the existing inputField class */
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Placeholder styling */
+.inputField::placeholder {
+  color: var(--inputField-placeholder-color) !important;
+  opacity: 1;
+}
+
+.inputField:focus {
+  border: 0.1px solid var(--inputField-border-focus) !important;
+  background-color: var(--inputField-bg-focus) !important;
+  box-shadow: var(--drop-shadow);
+  outline: none;
+  transition: box-shadow 0.2s ease;
 }
 
 /* Switch */
@@ -857,12 +990,35 @@
   border-color: var(--regularBtn-border-hover) !important;
 }
 
+.searchButtonOrgList {
+  background-color: var(--light-blue);
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  inset-inline-end: 0px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Table Header */
 
 .tableHeader {
-  background-color: var(--tableHeader-bg);
-  color: var(--tableHeader-color);
-  font-size: var(--font-size-header);
+  background-color: red;
+}
+
+.tableHeaders {
+  background-color: var(--bs-primary-text-emphasis);
+  color: var(--bs-white);
+  font-size: 1rem;
 }
 
 .tableHeader {
@@ -1009,6 +1165,20 @@
   }
 }
 
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.removeMemberCancel {
+  background-color: var(--removeMemberCancel-bg);
+  color: '#C8102E';
+  border: 1px solid var(--removeMemberCancel-border);
+}
+
 /* Dropdown */
 
 .dropdown {
@@ -1018,6 +1188,11 @@
   color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.customDropdown {
+  width: auto;
 }
 
 .dropdown:is(
@@ -1041,7 +1216,7 @@
 
 .createorgdropdown {
   background-color: var(--createorgdropdown-button-bg);
-  border-color: var(--createorgdropdown-button-border);
+  border: 1px solid var(--dropdown-border) !important;
   height: 3rem;
   margin-top: 0.7rem;
   color: var(--dropdown-button-fill);
@@ -1125,12 +1300,9 @@
   flex: 1;
   position: relative;
   margin-right: 10px;
-}
-
-.input {
-  flex: 1;
-  position: relative;
-  margin-right: 80px;
+  background-color: '#F2F7FF';
+  background-color: 'red';
+  margin-right: 180px;
   width: 425px;
 }
 
@@ -1342,6 +1514,9 @@
 
 /* -- AdvertisementEntry.tsx -- */
 
+.cardOtherSettings {
+  height: 350px;
+}
 .addCard {
   width: 28rem;
 }
@@ -1519,7 +1694,7 @@
 .orgCard {
   background-color: var(--orgCard-bg);
   margin: 0.5rem;
-  height: calc(120px + 2rem);
+  height: calc(170px + 2rem);
   padding: 1rem;
   border-radius: 8px;
   outline: 1px solid var(--orgCard-outline);
@@ -2001,7 +2176,40 @@
 /* -- Avatar.tsx -- */
 
 /* -- ChangeLanguageDropDown.tsx -- */
+.langBtn {
+  border-width: 2px;
+  border-color: var(--reset-border-color);
+  color: var(--reset-btn-colour) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: var(--reset-backgroundcolor-color);
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
 
+.langBtn:hover,
+.langBtn:focus {
+  border-width: 2px;
+  border-color: var(--reset-border-color);
+  color: var(--reset-btn-colour) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: var(--reset-backgroundcolor-color);
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+.langBtn:active {
+  background-color: var(--reset-backgroundcolor-color) !important;
+  border-color: var(--reset-border-color) !important;
+}
 /* -- TableRow.tsx -- */
 
 /* -- CheckInWrapper.tsx -- */
@@ -2455,7 +2663,7 @@
 .calendar__header_month div {
   font-weight: 400;
   color: var(--calendarHeaderMonthDiv-color);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
 }
 
 .buttonEventCalendar {
@@ -2471,7 +2679,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   background-color: var(--calendarWeekdays-bg);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
   height: 25px;
 }
 
@@ -3434,7 +3642,8 @@
 .cardItem {
   display: flex;
   flex-direction: row;
-  align-items: center; /* Ensures left alignment */
+  align-items: center;
+  /* Vertically centers the items */
   justify-content: flex-start;
   height: 6rem;
   padding: 0.75rem;
@@ -3449,7 +3658,7 @@
   background-color: #eaebef;
   height: 3.5rem;
   min-width: 3.5rem;
-  border: 3.25rem; /* Make sure to update this if you need border style & color */
+  border: 3.25rem solid transparent;
   border-radius: 8px;
 }
 
@@ -3652,8 +3861,8 @@
 /* -- OrgListCard.tsx -- */
 
 .manageBtn {
-  margin: 1rem 0 0;
-  margin-top: 15px;
+  margin: 0 0 0;
+  margin-top: 0px;
   border: 1px solid var(--manageBtn-border);
   box-shadow: 0 2px 2px var(--manageBtn-box-shadow);
   padding: 10px 10px;
@@ -4023,28 +4232,465 @@
 
 /* -- GeneralSettings.tsx -- */
 
+.userupdatediv {
+  padding: 25px 16px;
+  background: var(--white-color);
+}
+
+.textFields {
+  background-color: var(--inputColor-bg);
+  color: var(--text-fields-color);
+  margin-bottom: 1rem;
+  width: auto;
+}
+
+.descriptionTextField {
+  background-color: var(--inputColor-bg);
+  color: var(--text-fields-color);
+  margin-bottom: 1rem;
+  width: auto;
+  resize: none;
+  height: 100px;
+}
+
+/* Userprofile.tsx */
+
+.cardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader .cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.cardBody {
+  padding: 1.25rem 1rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardLabel {
+  font-weight: bold;
+  padding-bottom: 1px;
+  font-size: 14px;
+  color: #707070;
+  margin-bottom: 10px;
+}
+
+.cardControl {
+  margin-bottom: 20px;
+}
+
+.imgContianer {
+  margin: 0 2rem 0 0;
+}
+
+.imgContianer img {
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-left: 10%;
+}
+
+@media screen and (max-width: 1280px) and (min-width: 992px) {
+  .imgContianer {
+    margin: 1rem auto;
+  }
+  .profileContainer {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .profileContainer {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .imgContianer {
+    margin: 1rem auto;
+  }
+  .profileContainer {
+    flex-direction: column;
+  }
+}
+
+/* Settings.tsx */
+
+.resetChangesBtn {
+  border-width: 2px;
+  border-color: var(--reset-border-color);
+  color: var(--reset-btn-colour) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: var(--reset-backgroundcolor-color);
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.resetChangesBtn:hover,
+.resetChangesBtn:focus,
+.resetChangesBtn:active {
+  border-width: 2px;
+  border-color: var(--reset-border-color);
+  color: var(--reset-btn-colour) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: var(--reset-backgroundcolor-color);
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.syncIconStyle,
+.syncIconStyle:focus {
+  transform: rotate(135deg) scale(1.2);
+  width: 10px;
+  height: 10px;
+  stroke: var(--cardBackground-color);
+  stroke-width: 1;
+  fill: var(--cardBackground-color);
+}
+
+.saveChangesBtn {
+  color: white;
+  border: 0px;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  background-color: var(--card-background-color) !important;
+}
+
+.saveChangesBtn:hover {
+  background-color: var(--card-background-color) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.mainContainer {
+  flex-grow: 3;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.containerHeight {
+  padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
+  height: 100vh;
+}
+
+.expand {
+  padding-left: 4rem;
+  animation: moveLeft 0.9s ease-in-out;
+}
+
+.contract {
+  padding-left: calc(300px + 2rem + 1.5rem);
+  animation: moveRight 0.5s ease-in-out;
+}
+
+.cardHeader .cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.scrollableCardBody {
+  max-height: min(220px, 50vh);
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.cardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.otherSettingsCardBody {
+  padding: 1.25rem 1rem 1.5rem 1rem;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.userCardBody {
+  display: flex;
+  flex-direction: column !important;
+  overflow-y: scroll;
+}
+
+.cardLabel {
+  font-weight: bold;
+  padding-bottom: 1px;
+  font-size: 14px;
+  color: #707070;
+  margin-bottom: 10px;
+}
+
+.cardControl {
+  margin-bottom: 20px;
+}
+
+.cardButton {
+  width: fit-content;
+}
+
+.imgContianer {
+  margin: 0 2rem 0 0;
+}
+
+.imgContianer img {
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+}
+
+.SettingsprofileDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.collapseSidebarButton {
+  position: fixed;
+  height: 40px;
+  bottom: 0;
+  z-index: 9999;
+  width: calc(300px + 2rem);
+  background-color: rgba(245, 245, 245, 0.7);
+  color: black;
+  border: none;
+  border-radius: 0px;
+}
+
+.collapseSidebarButton:hover,
+.opendrawer:hover {
+  opacity: 1;
+  color: black !important;
+}
+.opendrawer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 100vh;
+  z-index: 9999;
+  background-color: rgba(245, 245, 245);
+  border: none;
+  border-radius: 0px;
+  margin-right: 20px;
+  color: black;
+}
+
+.opendrawer:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--bs-primary);
+}
+.collapseSidebarButton:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--bs-primary);
+}
+
+@media (max-width: 1120px) {
+  .collapseSidebarButton {
+    width: calc(250px);
+  }
+}
+
+@media (max-height: 650px) {
+  .collapseSidebarButton {
+    width: 250px;
+    height: 20px;
+  }
+  .opendrawer {
+    width: 30px;
+  }
+}
+
+/* For tablets */
+@media (max-width: 820px) {
+  .containerHeight {
+    height: 100vh;
+    padding: 2rem;
+  }
+
+  .scrollableCardBody {
+    max-height: 40vh;
+  }
+
+  .contract,
+  .expand {
+    animation: none;
+  }
+
+  .opendrawer {
+    width: 25px;
+  }
+
+  .collapseSidebarButton {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+
+@media screen and (max-width: 1280px) and (min-width: 992px) {
+  .imgContianer {
+    margin: 1rem auto;
+  }
+  .profileContainer {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .profileContainer {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .imgContianer {
+    margin: 1rem auto;
+  }
+  .profileContainer {
+    flex-direction: column;
+  }
+}
+
 /* -- DeleteOrg.tsx -- */
+
+.DeleteOrgCard {
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: none;
+  height: 280px !important;
+  width: 98% !important;
+}
 
 .settingsBody {
   margin: 2.5rem 0;
+  padding: 0;
+}
+
+.deleteCardHeader {
+  background-color: var(--activeTab-bg);
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.btnDelete {
+  background-color: var(--activeTab-bg);
+  border: 1px solid var(--active-item-color) !important;
+  color: var(--active-item-color);
+}
+
+.btnDelete:hover {
+  background-color: var(--activeTab-bg);
+  color: var(--active-item-color) !important;
+}
+
+.btnDelete:active {
+  background-color: var(--activeTab-bg) !important;
+  color: var(--active-item-color) !important;
 }
 
 .deleteButton {
-  background-color: var(--delete-button-bg);
-  color: var(--delete-button-color);
-  border: none;
-  padding: 5px 20px;
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  margin-right: auto;
-  margin-left: auto;
-  gap: 8px;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: 1px solid var(--removeButton-color);
+  padding: 8px 16px;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+  border-radius: 4px;
+  height: 42px;
+  text-align: center;
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 
-.deleteButton:is(:hover, :active) {
-  background-color: var(--delete-button-color) !important;
+.deleteButton:hover,
+.deleteButton:active,
+.deleteButton:focus {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  outline: none;
+}
+
+.btnConfirmDelete {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: 0px;
+}
+
+.customFileInput,
+.customFileInput:hover {
+  background-color: var(--inputColor-bg);
+}
+
+.customFileInput::file-selector-button {
+  background-color: var(--card-background-color) !important;
   color: white;
+}
+
+.customFileInput::file-selector-button:hover {
+  color: var(--card-background-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.btnConfirmDelete:hover {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color) !important;
+}
+
+.btnConfirmDelete:active {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  border: 0px;
+}
+
+.btnConfirmDelete:focus {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  border: 0px;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.modelHeaderDelete {
+  background-color: var(--card-header-background-color);
 }
 
 /* -- OrgProfileFieldSettings.tsx -- */
@@ -4077,12 +4723,74 @@ form {
 
 /* -- OrgUpdate.tsx -- */
 
-.userupdatediv {
-  border: 1px solid var(--userupdatediv-border);
-  box-shadow: 2px 1px var(--userupdatediv-box-shadow);
-  padding: 25px 16px;
-  border-radius: 5px;
-  background: var(--userupdatediv-bg);
+.orgCardSettings {
+  width: 95% !important;
+}
+
+.resetChangesBtn {
+  border-width: 2px;
+  border-color: var(--resetbtn-border);
+  color: var(--resetbtn-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.resetChangesBtn:hover,
+.resetChangesBtn:focus,
+.resetChangesBtn:active {
+  border-width: 2px;
+  border-color: var(--resetbtn-border) !important;
+  color: var(--resetbtn-color) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow) !important;
+}
+
+.syncIconStyle,
+.syncIconStyle:focus {
+  transform: rotate(135deg) scale(1.2);
+  width: 10px;
+  height: 10px;
+  stroke: var(--card-background-color);
+  stroke-width: 1;
+  fill: var(--card-background-color);
+}
+
+.saveChangesBtn {
+  color: white;
+  border: 0px;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  background-color: var(--card-background-color) !important;
+}
+
+.saveChangesBtn:hover {
+  background-color: var(--card-background-color) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+}
+
+.orgUpdateFormLables {
+  font-weight: normal !important;
+  color: var(--delete-button-border);
+}
+
+.btnStyle {
+  border-width: 2px !important;
+  border-color: var(--card-background-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  background-color: var(--card-background-color) !important;
+  font-size: 0.8rem;
 }
 
 /* -- OrganizationCard.tsx -- */
@@ -4113,12 +4821,12 @@ form {
   border-radius: 16px 0px 0px 16px;
   display: flex;
   align-items: center;
-  background-color: var(--profileContainer-bg) !important;
+  background-color: var(--profile-container-bg) !important;
 }
 
 .profileContainer:focus {
   outline: none;
-  background-color: var(--profileContainer-bg-focus);
+  background-color: var(--profile-container-bg-focus);
 }
 
 .imageContainer {
@@ -4178,6 +4886,7 @@ form {
   justify-content: center;
   gap: 15px;
 }
+
 .profileContainer .profileTextUserSidebarOrg {
   flex: 1;
   text-align: start;
@@ -4225,14 +4934,12 @@ form {
   font-weight: bold;
   color: var(--bs-emphasis-color, var(--primaryText-color));
   @extend .reusable-text-ellipsis;
-  /* Referencing the reusable class from the general section */
 }
 
 .secondaryText {
   font-size: 0.9rem;
   color: var(--secondText-color);
   @extend .reusable-text-ellipsis;
-  /* Referencing the reusable class from the general section */
 }
 
 /* -- ProfileDropdown.tsx -- */
@@ -4478,7 +5185,7 @@ form {
   display: flex;
   flex-direction: column;
   padding: 0.8rem 1rem 0 1rem;
-  background-color: var(--leftDrawer-bg) !important;
+  background-color: var(--leftDrawer-fixedModule-bg) !important;
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
 }
@@ -4498,6 +5205,10 @@ form {
   left: calc(-300px - 2rem);
   bottom: 0;
   animation: goToLeftBigScreen 0.5s ease-in-out;
+}
+
+.leftDrawer .sidebarcompheight {
+  flex-grow: 1;
 }
 
 .leftDrawer .brandingContainer {
@@ -4564,7 +5275,7 @@ form {
   width: 100%;
   text-align: start;
   margin-bottom: 0.8rem;
-  border-radius: 16px;
+  border-radius: 12px;
   font-size: 16px;
   padding: 0.6rem;
   padding-left: 0.8rem;
@@ -4658,6 +5369,7 @@ form {
 .leftDrawerActiveButton {
   background-color: var(--leftDrawer-active-button-bg);
   color: black;
+  font-weight: bold;
 }
 
 .leftDrawerActiveButton:hover .arrow-indicator {
@@ -5644,10 +6356,15 @@ form {
 }
 
 .cardBody {
-  padding: 1rem;
-  height: 8rem;
+  padding: 1rem 0rem;
   display: flex;
+  width: 100% !important;
+  justify-content: center;
   align-items: center;
+}
+
+.cardHeading {
+  padding-left: 0.3rem !important;
 }
 
 .cardBodymain {
@@ -5697,9 +6414,49 @@ form {
   height: auto;
   width: 100%;
 }
+
 .cardBody .textBox {
   margin: 0 0 3rem 0;
+  padding-bottom: 10px;
   color: var(--cardBody-color);
+}
+
+.textBox {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.changeLanguageBtn {
+  border-width: 2px;
+  background-color: var(--changelangauge-btn-bg);
+  color: var(--changelangauge-btn-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-color: var(--changelangauge-btn-border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.changeLanguageBtn:hover,
+.changeLanguageBtn:active,
+.changeLanguageBtn:focus {
+  border-width: 2px;
+  background-color: #ffff !important;
+  color: var(--changelangauge-btn-color) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-color: var(--changelangauge-btn-border) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
 }
 
 @media (max-width: 600px) {
@@ -5847,6 +6604,15 @@ form {
 
 .btnsContainerSearchBar .btnsBlockSearchBar {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainerSearchBar .btnsBlock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar button {
@@ -5961,6 +6727,83 @@ form {
   grid-template-columns: repeat(1, 1fr);
   row-gap: 1em;
   width: 100%;
+}
+
+/* orgsettings */
+
+.modalHeader {
+  border: none;
+  background-color: var(--primary-bg-color) !important;
+  padding: 1rem;
+  color: #000000;
+}
+
+.inputFields {
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--create-button-border);
+  color: var(--eventManagement-button-bg);
+  box-shadow: 0 1px 1px var(--brand-primary);
+  width: 375px;
+  padding-right: 40px;
+  border-radius: 8px;
+}
+
+.headerBtn {
+  background: var(--settings-header-button-bg);
+  border: 1px solid var(--settings-header-button-border);
+  border-radius: 8px;
+  height: auto;
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  color: var(--settings-header-button-color) !important;
+}
+
+.headerBtn:active {
+  background: var(--settings-header-button-bg) !important;
+  border: 1px solid var(--settings-header-button-border) !important;
+  border-radius: 8px;
+  height: auto;
+  width: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  color: var(--settings-header-button-color) !important;
+}
+
+.activeTabBtn {
+  background: var(--settings-active-button-bg);
+  border: 1px solid var(--settings-active-button-border);
+  border-radius: 8px;
+  color: var(--settings-active-button-color) !important;
+}
+
+.activeTabBtn:active {
+  background: var(--settings-active-button-bg) !important;
+  border: 1px solid var(--settings-active-button-border) !important;
+  color: var(--settings-active-button-color) !important;
+}
+
+.settingsTabs {
+  display: flex;
+  gap: 0.75rem;
+  background-color: var(--bg-header) !important;
+  padding: 20px 14.9px;
+  border-radius: 1rem;
+}
+
+.headerBtn:hover {
+  border: 1px solid var(--settings-header-button-border);
+  background: var(--settings-header-button-bg);
+  border-radius: 8px;
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
+  color: var(--settings-header-button-color) !important;
+}
+
+.activeTabBtn:hover {
+  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
+  background: var(--settings-active-button-bg);
+  border: 1px solid var(--settings-active-button-border);
+  color: var(--settings-active-button-color) !important;
 }
 
 /* -- OrgPost.tsx -- */
@@ -6097,8 +6940,6 @@ form {
   font-size: 16px;
 }
 
-/* -- OrgSettings.tsx -- */
-
 /* -- ItemDeleteModal.tsx -- */
 
 .itemModal {
@@ -6158,7 +6999,6 @@ form {
 
 .TableImage {
   object-fit: cover;
-  /* margin-top: px !important; */
   margin-right: 5px;
   width: var(--table-image-size) !important;
   height: var(--table-image-size) !important;
@@ -6823,7 +7663,6 @@ form {
 }
 
 /* -- LeaveOrganization.tsx -- */
-
 /* -- Organizations.tsx -- */
 
 .mainContainerOrganization {

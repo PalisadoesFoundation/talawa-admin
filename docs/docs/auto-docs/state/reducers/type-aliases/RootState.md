@@ -6,4 +6,4 @@
 
 > **RootState**: `ReturnType`\<*typeof* [`reducers`](../functions/reducers.md)\>
 
-Defined in: [src/state/reducers/index.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/index.ts#L12)
+Defined in: [src/state/reducers/index.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/index.ts#L10)
