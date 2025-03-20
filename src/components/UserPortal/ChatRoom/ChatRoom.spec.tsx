@@ -6126,8 +6126,8 @@ describe('ChatRoom Component', () => {
 });
 
 describe('handleImageChange function', () => {
-  let setAttachment: jest.Mock;
-  let setAttachmentObjectName: jest.Mock;
+  let setAttachment: ReturnType<typeof vi.fn>;
+  let setAttachmentObjectName: ReturnType<typeof vi.fn>;
   let handleImageChange: (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => Promise<void>;
