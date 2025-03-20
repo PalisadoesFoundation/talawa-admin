@@ -158,6 +158,51 @@ vi.mock('utils/MinioUpload', () => ({
 
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
+const sanitizeUrl = (url: string | null): string => {
+  if (!url) return '';
+
+  // For blob/data URIs - restrict to specific known safe patterns
+  if (url.startsWith('blob:')) {
+    // Only allow blob URLs from same origin
+    return url.startsWith('blob:' + window.location.origin) ? url : '';
+  }
+
+  if (url.startsWith('data:')) {
+    // Only allow image data URIs with proper format
+    if (
+      /^data:image\/(jpeg|jpg|png|gif|webp);base64,[A-Za-z0-9+/=]+$/.test(url)
+    ) {
+      return url;
+    }
+    return '';
+  }
+
+  try {
+    const parsed = new URL(url);
+    // Only allow http/https protocols from known domains
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      return '';
+    }
+    // Add domain whitelist if possible
+    return url;
+  } catch (e) {
+    return '';
+  }
+};
+
+// Add this function to the component
+const sanitizeText = (text: string): string => {
+  if (!text) return '';
+
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    .replace(/\//g, '&#x2F;');
+};
+
 const renderComponent = (post = mockPost) =>
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
