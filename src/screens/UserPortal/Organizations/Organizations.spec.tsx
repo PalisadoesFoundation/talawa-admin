@@ -1473,3 +1473,131 @@ test('should correctly map joined organizations data when mode is 1', async () =
   );
   expect(membershipStatus.getAttribute('data-status')).toBe('accepted');
 });
+
+test('should correctly map joined organizations data when mode is 1', async () => {
+  // Mock user ID
+  const TEST_USER_ID = 'test-user-123';
+  setItem('userId', TEST_USER_ID);
+
+  // Create GraphQL mocks with joined organizations data
+  const mocks = [
+    {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: TEST_USER_ID, first: 5, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              pageInfo: { hasNextPage: false },
+              edges: [
+                {
+                  node: {
+                    id: 'org-1',
+                    name: 'Test Organization',
+                    avatarURL: 'test.jpg',
+                    description: 'Test Description',
+                    addressLine1: '123 Test St',
+                    members: {
+                      edges: [
+                        {
+                          node: {
+                            id: TEST_USER_ID,
+                          },
+                        },
+                      ],
+                    },
+                    membershipRequests: [],
+                    userRegistrationRequired: false,
+                    address: {
+                      city: 'Test City',
+                      countryCode: 'TC',
+                      line1: '123 Test St',
+                      postalCode: '12345',
+                      state: 'TS',
+                    },
+                    admins: [],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: '' },
+      },
+      result: {
+        data: {
+          organizations: [],
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_CREATED_ORGANIZATIONS,
+        variables: { id: TEST_USER_ID, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            createdOrganizations: [],
+          },
+        },
+      },
+    },
+  ];
+
+  // Render the component
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for data to load
+  await waitFor(() => {
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  // Set mode to 1 (joined organizations)
+  const modeBtn = screen.getByTestId('modeChangeBtn');
+  fireEvent.click(modeBtn);
+
+  const joinedModeBtn = screen.getByTestId('modeBtn1');
+  fireEvent.click(joinedModeBtn);
+
+  // Wait for organization card to appear
+  await waitFor(() => {
+    const cards = screen.getAllByTestId('organization-card');
+    expect(cards.length).toBeGreaterThan(0);
+
+    // Get the specific card for Test Organization
+    const card = cards.find(
+      (card) =>
+        card.getAttribute('data-organization-name') === 'Test Organization',
+    );
+    expect(card).toBeDefined();
+
+    if (card) {
+      // Verify membership status is set to 'accepted'
+      expect(card.getAttribute('data-membership-status')).toBe('accepted');
+
+      // Also check the hidden membership status element
+      const statusElement = screen.getByTestId(
+        'membership-status-Test Organization',
+      );
+      expect(statusElement.getAttribute('data-status')).toBe('accepted');
+    }
+  });
+});
