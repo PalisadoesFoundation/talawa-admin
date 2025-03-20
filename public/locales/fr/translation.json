@@ -922,7 +922,7 @@
     "addressLine1": "Adresse ligne 1",
     "addressLine2": "Adresse ligne 2",
     "postalCode": "Code postal",
-    "naturalLanguageCode": "Choisir la langue",
+    "chooseLanguage": "Choisir la langue",
     "pluginCreationAllowed": "Création de plugin autorisée",
     "adminApproved": "Approuvé par l'administrateur",
     "profileDetailHeading": "Détails du profil",
