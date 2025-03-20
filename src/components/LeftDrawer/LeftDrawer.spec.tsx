@@ -6,6 +6,7 @@ import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
+import styles from '../../style/app-fixed.module.css';
 
 // Mock the local storage hook
 vi.mock('utils/useLocalstorage', () => ({
@@ -126,29 +127,15 @@ describe('LeftDrawer Component', () => {
     expect(defaultProps.setHideDrawer).toHaveBeenCalledWith(true);
   });
 
-  /*
-  
-    // Removed from left drawer
+  it('applies active styles to the current route button', () => {
+    renderComponent();
+    const organizationsButton = screen.getByTestId('organizationsBtn');
 
-    it('renders the profile dropdown', () => {
-      renderComponent();
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
-    });
-  
-  */
+    // Simulate active route
+    window.history.pushState({}, '', '/orglist');
 
-  // it('applies active styles to the current route button', () => {
-  //   renderComponent();
-  //   const organizationsButton = screen.getByTestId('organizationsBtn');
-
-  //   // Simulate active route
-  //   window.history.pushState({}, '', '/orglist');
-
-  //   expect(organizationsButton).toHaveStyle({
-  //     backgroundColor: 'var(--sidebar-option-bg)',
-  //     fontWeight: 'bold',
-  //   });
-  // });
+    expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
+  });
 
   it('applies hideElemByDefault style when hideDrawer is null', () => {
     const setHideDrawer = vi.fn();

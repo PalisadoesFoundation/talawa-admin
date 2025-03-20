@@ -58,6 +58,7 @@ const superAdminScreen = (): JSX.Element => {
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
       )} */}
+
       <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${styles.pageContainer} ${
@@ -72,7 +73,7 @@ const superAdminScreen = (): JSX.Element => {
         <div>
           <div className={`${styles.navContainer}`}>
             <h1>{t('title')}</h1>
-            <ProfileDropdown />
+              <ProfileDropdown />
           </div>
         </div>
         <Outlet />
