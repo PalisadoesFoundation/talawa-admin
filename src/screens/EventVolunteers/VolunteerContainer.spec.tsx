@@ -57,7 +57,7 @@ class TestErrorBoundary extends React.Component<{ children: React.ReactNode }> {
 
   render() {
     if (this.state.hasError) {
-      return <div>Error occurred: {this.state.error?.message}</div>;
+      return <div>Error occurred: {this.state.error}</div>;
     }
     return this.props.children;
   }

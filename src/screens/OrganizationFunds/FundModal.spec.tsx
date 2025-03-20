@@ -55,6 +55,9 @@ const fundProps: InterfaceFundModal[] = [
       organization: {
         name: 'Organization 1',
       },
+      updater: {
+        name: 'John Doe',
+      },
       edges: {
         node: {
           id: 'nodeId',
@@ -84,13 +87,13 @@ const fundProps: InterfaceFundModal[] = [
       createdAt: '2024-06-22',
       organizationId: 'orgId',
       creator: {
-        id: 'creatorId1',
-        firstName: 'John',
-        lastName: 'Doe',
+        name: 'John Doe',
       },
       organization: {
-        id: 'orgId',
         name: 'Organization 1',
+      },
+      updater: {
+        name: 'John Doe',
       },
       edges: {
         node: {
