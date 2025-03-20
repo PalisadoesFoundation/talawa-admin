@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom'; // Import useParams
+import { useParams } from 'react-router-dom';
 import AboutImg from 'assets/images/defaultImg.png';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app-fixed.module.css';
@@ -13,10 +13,11 @@ import {
   DELETE_POST_MUTATION,
   TOGGLE_PINNED_POST,
   UPDATE_POST_MUTATION,
-  PRESIGNED_URL, // Changed from GET_PRESIGNED_URL
+  PRESIGNED_URL,
 } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import { useMinioUpload } from 'utils/MinioUpload';
+import type { EffectCallback } from 'react';
 
 interface OrgPostCardProps {
   post: InterfacePost;
@@ -35,8 +36,8 @@ interface InterfacePostFormState {
 interface InterfacePostAttachment {
   id: string;
   postId: string;
-  name: string; // Original file name (unchanged)
-  objectName: string; // Add this for MinIO object name
+  name: string;
+  objectName: string;
   mimeType: string;
   createdAt: Date;
   updatedAt?: Date | null;
@@ -55,7 +56,7 @@ interface InterfacePost {
 }
 
 export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
-  const { orgId: currentOrg } = useParams<{ orgId: string }>(); // Get organization ID from URL
+  const { orgId: currentOrg } = useParams<{ orgId: string }>();
   const { uploadFileToMinio } = useMinioUpload();
 
   const [postFormState, setPostFormState] = useState<InterfacePostFormState>({
@@ -118,30 +119,24 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
       }
       return url;
     } catch (e) {
-      // If URL parsing fails, return empty string
       return '';
     }
   };
 
-  // Add a text sanitization function
   const sanitizeText = (text: string): string => {
     if (!text) return '';
 
     return text
-      .replace(/&/g, '&amp;') // Must be first!
+      .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;')
-      .replace(/\//g, '&#x2F;'); // Also escape slashes for additional safety
+      .replace(/\//g, '&#x2F;');
   };
 
-  // Add this ref to track component mounted state
   const isMounted = useRef<boolean>(true);
 
-  // URL cache already declared above
-
-  // Replace the cleanupExpiredUrls function with this optimized version
   const cleanupExpiredUrls = useCallback(() => {
     const now = Date.now();
     setUrlCache((prev) => {
@@ -155,14 +150,12 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         }
       });
 
-      // Only trigger a re-render if something was actually deleted
       return hasChanges ? newCache : prev;
     });
-  }, []); // No dependencies needed
+  }, []);
 
-  // Setup periodic cache cleanup
   useEffect(() => {
-    const cleanupInterval = setInterval(cleanupExpiredUrls, 60000); // Cleanup every minute
+    const cleanupInterval = setInterval(cleanupExpiredUrls, 60000);
 
     return () => {
       clearInterval(cleanupInterval);
@@ -170,17 +163,15 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     };
   }, [cleanupExpiredUrls]);
 
-  // Modified fetchPresignedUrl that checks cache first and handles errors better
   const fetchPresignedUrl = async (
     objectName: string,
   ): Promise<string | null> => {
     if (!objectName) return null;
 
-    // Check cache first
     const cached = urlCache[objectName];
     const now = Date.now();
     if (cached && cached.expiry > now) {
-      return cached.url; // Return cached URL if not expired
+      return cached.url;
     }
 
     try {
@@ -193,7 +184,6 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         },
       });
 
-      // Better error handling for null or incomplete data
       if (!data?.createPresignedUrl?.presignedUrl) {
         console.error('Received invalid presigned URL data', data);
         return null;
@@ -201,13 +191,12 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
 
       const url = data.createPresignedUrl.presignedUrl;
 
-      // Store in cache with 5-minute expiry (or match your server's expiry time)
       if (url && isMounted.current) {
         setUrlCache((prev) => ({
           ...prev,
           [objectName]: {
             url,
-            expiry: now + 5 * 60 * 1000, // 5 minutes
+            expiry: now + 5 * 60 * 1000,
           },
         }));
       }
@@ -222,18 +211,16 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     }
   };
 
-  // Add this new function to load media with CORS error handling
   const loadMediaWithCorsHandling = async (
     url: string,
     type: 'image' | 'video',
   ): Promise<void> => {
     try {
-      // Create a fetch request to test if the URL is accessible
       const response = await fetch(url, { method: 'HEAD', mode: 'cors' });
       if (!response.ok) {
         throw new Error(`Failed to access media: ${response.status}`);
       }
-      // URL is valid and accessible
+
       if (type === 'image') {
         setImagePresignedUrl(url);
       } else {
@@ -242,14 +229,13 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     } catch (error) {
       console.error('CORS or media access error:', error);
       if (error instanceof TypeError && error.message.includes('CORS')) {
-        // Specific handling for CORS errors
         toast.error(
           'Media cannot be loaded due to cross-origin restrictions. Please contact your administrator.',
         );
       } else {
         toast.error('Failed to load media. Please try again.');
       }
-      // Use the default image/video in case of error
+
       if (type === 'image') {
         setImagePresignedUrl(null);
       } else {
@@ -280,10 +266,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     }
   };
 
-  // Two useEffect hooks - one for early loading and one for immediate visibility
-  // Early loading (lower priority)
   useEffect(() => {
-    // Load URLs on component mount with a small delay to prioritize UI rendering
     const timer = setTimeout(() => {
       if (
         !modalVisible &&
@@ -297,23 +280,31 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     return () => clearTimeout(timer);
   }, [imageAttachment, videoAttachment]);
 
-  // Immediate loading for visible media (high priority)
   useEffect(() => {
     if (modalVisible || playing) {
       loadPresignedUrls();
     }
   }, [modalVisible, playing]);
 
-  // Add this state for preview URLs
   const [previewUrls, setPreviewUrls] = useState<Record<string, string>>({});
 
+  const useDeepCompareEffect = (effect: EffectCallback, deps: unknown[]) => {
+    const ref = useRef<unknown[]>();
+
+    if (deps !== ref.current) {
+      ref.current = deps;
+    }
+
+    useEffect(effect, [ref.current]);
+  };
+
   // Add this useEffect to load preview URLs when edit modal opens
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     if (showEditModal && postFormState.attachments.length > 0) {
       const loadPreviewUrls = async (): Promise<void> => {
         try {
-          const urlPromises = postFormState.attachments.map(
-            (a) => fetchPresignedUrl(a.objectName), // Changed from a.url
+          const urlPromises = postFormState.attachments.map((a) =>
+            fetchPresignedUrl(a.objectName),
           );
 
           const urls = await Promise.all(urlPromises);
@@ -333,7 +324,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
 
       loadPreviewUrls();
     }
-  }, [showEditModal, JSON.stringify(postFormState.attachments)]); // Better dependency tracking
+  }, [showEditModal, postFormState.attachments]);
 
   // Add this state for file previews (different from MinIO URLs)
   const [filePreviewUrls, setFilePreviewUrls] = useState<
@@ -343,8 +334,19 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
   // Add cleanup for object URLs on unmount
   useEffect(() => {
     return () => {
-      // Clean up any created object URLs when component unmounts
-      Object.values(filePreviewUrls).forEach(URL.revokeObjectURL);
+      // Safely clean up object URLs when component unmounts
+      if (filePreviewUrls) {
+        Object.values(filePreviewUrls).forEach((url) => {
+          if (typeof url === 'string') {
+            try {
+              URL.revokeObjectURL(url);
+            } catch (error) {
+              // Silently handle errors during cleanup
+              console.debug('Error revoking URL:', error);
+            }
+          }
+        });
+      }
     };
   }, [filePreviewUrls]);
 
@@ -423,11 +425,26 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
     }));
   };
 
+  // Add this constant at the top of your component or in a constants file
+  const MAX_FILE_SIZE_MB = 5; // 5MB limit
+
   const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
+      // File type validation
+      if (!file.type.startsWith('image/')) {
+        toast.error('Only image files allowed');
+        return;
+      }
+
+      // Add file size validation here
+      if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        toast.error(`File exceeds ${MAX_FILE_SIZE_MB}MB limit`);
+        return;
+      }
+
       try {
         // Generate a unique temporary ID for this upload to avoid race conditions
         const tempId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -460,6 +477,14 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
 
         // Early return if component unmounted
         if (!isMounted.current) {
+          // Clean up the preview URL before returning
+          if (filePreviewUrls[tempId]) {
+            try {
+              URL.revokeObjectURL(filePreviewUrls[tempId]);
+            } catch (error) {
+              console.debug('Error revoking URL:', error);
+            }
+          }
           return;
         }
 
@@ -501,12 +526,12 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
           }));
 
           if (filePreviewUrls[file.name]) {
-            URL.revokeObjectURL(filePreviewUrls[file.name]);
-            setFilePreviewUrls((prev) => {
-              const newUrls = { ...prev };
-              delete newUrls[file.name];
-              return newUrls;
-            });
+            try {
+              URL.revokeObjectURL(filePreviewUrls[file.name]);
+            } catch (error) {
+              console.debug('Error revoking URL:', error);
+            }
+            // Rest of your code...
           }
         }
       }
@@ -518,11 +543,19 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
+      // File type validation
       if (!file.type.startsWith('video/')) {
         toast.error('Please select a video file');
         return;
       }
-      // Generate a unique temporary ID for this upload - keep this for later reference
+
+      // Add file size validation here
+      if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        toast.error(`File exceeds ${MAX_FILE_SIZE_MB}MB limit`);
+        return;
+      }
+
+      // Generate a unique temporary ID for this upload to avoid race conditions
       const tempId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
       try {
@@ -556,7 +589,11 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         if (!isMounted.current) {
           // Clean up the preview URL before returning
           if (filePreviewUrls[tempId]) {
-            URL.revokeObjectURL(filePreviewUrls[tempId]);
+            try {
+              URL.revokeObjectURL(filePreviewUrls[tempId]);
+            } catch (error) {
+              console.debug('Error revoking URL:', error);
+            }
           }
           return;
         }
@@ -607,12 +644,20 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
 
             // Revoke object URL to prevent memory leaks
             if (filePreviewUrls[tempId]) {
-              URL.revokeObjectURL(filePreviewUrls[tempId]);
-              setFilePreviewUrls((prev) => {
-                const newUrls = { ...prev };
-                delete newUrls[tempId];
-                return newUrls;
-              });
+              if (filePreviewUrls[tempId]) {
+                try {
+                  URL.revokeObjectURL(filePreviewUrls[tempId]);
+                } catch (error) {
+                  console.debug('Error revoking URL:', error);
+                }
+
+                // Continue with state update after try/catch
+                setFilePreviewUrls((prev) => {
+                  const newUrls = { ...prev };
+                  delete newUrls[tempId];
+                  return newUrls;
+                });
+              }
             }
           }
         }
@@ -757,7 +802,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
         </div>
 
         {modalVisible && (
-          <div className={styles.modalOrgPostCard} data-testid="post-modal">
+          <div data-testid="post-modal">
             <div className={styles.modalContentOrgPostCard}>
               <div className={styles.modalImage}>
                 {videoAttachment ? (
@@ -834,7 +879,9 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
           <div className={styles.menuModal} data-testid="post-menu">
             <div className={styles.menuContent}>
               <ul className={styles.menuOptions}>
-                <li onClick={toggleShowEditModal}>{tCommon('edit')}</li>
+                <li onClick={toggleShowEditModal} data-testid="edit-option">
+                  {tCommon('edit')}
+                </li>
                 <li onClick={toggleShowDeleteModal} data-testid="delete-option">
                   {t('deletePost')}
                 </li>
@@ -893,7 +940,11 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                 {postFormState.attachments
                   .filter((a) => a.mimeType.startsWith('image/'))
                   .map((attachment, index) => (
-                    <div key={index} className={styles.previewOrgPostCard}>
+                    <div
+                      key={index}
+                      className={styles.previewOrgPostCard}
+                      data-testid="media-preview-image"
+                    >
                       <img
                         src={
                           sanitizeUrl(
@@ -910,19 +961,21 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                         type="button"
                         className={styles.closeButtonP}
                         onClick={() => {
+                          // Add safety check here
                           if (filePreviewUrls[attachment.objectName]) {
-                            URL.revokeObjectURL(
-                              filePreviewUrls[attachment.objectName],
-                            );
-                            setFilePreviewUrls((prev) => {
-                              const newUrls = { ...prev };
-                              delete newUrls[attachment.objectName];
-                              return newUrls;
-                            });
+                            try {
+                              URL.revokeObjectURL(
+                                filePreviewUrls[attachment.objectName],
+                              );
+                            } catch (error) {
+                              console.debug('Error revoking URL:', error);
+                            }
+                            // Rest of your code...
                           }
                           clearImage(attachment.objectName);
                         }}
                         disabled={attachment.isUploading}
+                        data-testid="remove-media-button" // Changed from "remove-image-button"
                       >
                         ×
                       </button>
@@ -944,7 +997,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                   .filter((a) => a.mimeType.startsWith('video/'))
                   .map((attachment, index) => (
                     <div key={index} className={styles.previewOrgPostCard}>
-                      <video controls data-testid="video-preview">
+                      <video controls data-testid="media-preview-video">
                         <source
                           src={
                             sanitizeUrl(
@@ -966,9 +1019,15 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                         className={styles.closeButtonP}
                         onClick={() => {
                           if (filePreviewUrls[attachment.objectName]) {
-                            URL.revokeObjectURL(
-                              filePreviewUrls[attachment.objectName],
-                            );
+                            try {
+                              URL.revokeObjectURL(
+                                filePreviewUrls[attachment.objectName],
+                              );
+                            } catch (error) {
+                              console.debug('Error revoking URL:', error);
+                            }
+
+                            // Continue with state update after try/catch
                             setFilePreviewUrls((prev) => {
                               const newUrls = { ...prev };
                               delete newUrls[attachment.objectName];
@@ -978,6 +1037,7 @@ export default function OrgPostCard({ post }: OrgPostCardProps): JSX.Element {
                           clearVideo(attachment.objectName);
                         }}
                         disabled={attachment.isUploading}
+                        data-testid="remove-media-button" // Changed from "remove-image-button"
                       >
                         ×
                       </button>
