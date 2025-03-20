@@ -73,9 +73,9 @@ interface InterfaceOrganizationCardProps {
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
   membershipRequests: {
-    _id: string;
+    id: string;
     user: {
-      _id: string;
+      id: string;
     };
   }[];
   isJoined: boolean;
@@ -86,7 +86,7 @@ interface InterfaceOrganizationCardProps {
  */
 interface InterfaceOrganization {
   isJoined: boolean;
-  _id: string;
+  id: string;
   name: string;
   image: string;
   description: string;
@@ -102,9 +102,9 @@ interface InterfaceOrganization {
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
   membershipRequests: {
-    _id: string;
+    id: string;
     user: {
-      _id: string;
+      id: string;
     };
   }[];
 }
@@ -222,13 +222,31 @@ export default function organizations(): JSX.Element {
     if (mode === 0) {
       // All
       if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map(
-          (org: InterfaceOrganization) => ({
-            ...org,
-            membershipRequestStatus: '',
-            isJoined: false,
-          }),
-        );
+        const orgs = allOrganizationsData.organizations.map((org: any) => {
+          const isMember =
+            org.members?.edges?.some(
+              (edge: { node: { id: string } }) => edge.node.id === userId,
+            ) || false;
+          return {
+            id: org.id,
+            name: org.name,
+            image: org.avatarURL,
+            description: org.description,
+            address: {
+              line1: org.addressLine1,
+              city: '',
+              countryCode: '',
+              postalCode: '',
+              state: '',
+            },
+            admins: [],
+            members: org.members?.edges?.map((edge: any) => edge.node) || [],
+            membershipRequestStatus: isMember ? 'accepted' : '',
+            userRegistrationRequired: false,
+            membershipRequests: [],
+            isJoined: isMember,
+          };
+        });
         setOrganizations(orgs);
       } else {
         setOrganizations([]);
@@ -240,26 +258,9 @@ export default function organizations(): JSX.Element {
           joinedOrganizationsData.user.organizationsWhereMember.edges.map(
             (edge: { node: InterfaceOrganization }) => {
               const organization = edge.node;
-              let membershipRequestStatus = '';
-
-              if (
-                Array.isArray(organization.members) &&
-                organization.members.some(
-                  (member: { _id: string }) => member._id === userId,
-                )
-              ) {
-                membershipRequestStatus = 'accepted';
-              } else if (
-                organization.membershipRequests?.some(
-                  (request: { _id: string; user: { _id: string } }) =>
-                    request.user._id === userId,
-                )
-              ) {
-                membershipRequestStatus = 'pending';
-              }
               return {
                 ...organization,
-                membershipRequestStatus,
+                membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
                 isJoined: true,
               };
             },
@@ -427,7 +428,7 @@ export default function organizations(): JSX.Element {
                         const cardProps: InterfaceOrganizationCardProps = {
                           name: organization.name,
                           image: organization.image,
-                          id: organization._id,
+                          id: organization.id,
                           description: organization.description,
                           admins: organization.admins,
                           members: organization.members,

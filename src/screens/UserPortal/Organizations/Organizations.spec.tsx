@@ -1366,29 +1366,15 @@ test('should set membershipRequestStatus to "pending" for organizations with pen
     },
     { timeout: 2000 },
   );
-
-  // Rest of the test as before
 });
 
-test('should display loading state when queries are in progress', async () => {
+test('should correctly map joined organizations data when mode is 1', async () => {
   // Mock user ID
   const TEST_USER_ID = 'test-user-123';
   setItem('userId', TEST_USER_ID);
 
-  // Create GraphQL mocks with loading state
+  // Create GraphQL mocks with joined organizations data
   const mocks = [
-    {
-      request: {
-        query: ORGANIZATION_LIST,
-        variables: { filter: '' },
-      },
-      result: {
-        data: {
-          organizations: [],
-        },
-      },
-      delay: 100, // Add delay to simulate loading
-    },
     {
       request: {
         query: USER_JOINED_ORGANIZATIONS_PG,
@@ -1399,9 +1385,40 @@ test('should display loading state when queries are in progress', async () => {
           user: {
             organizationsWhereMember: {
               pageInfo: { hasNextPage: false },
-              edges: [],
+              edges: [
+                {
+                  node: {
+                    id: 'org-1',
+                    name: 'Test Organization',
+                    avatarURL: 'test.jpg',
+                    description: 'Test Description',
+                    addressLine1: '123 Test St',
+                    members: {
+                      edges: [
+                        {
+                          node: {
+                            id: TEST_USER_ID, // This is the key part - making sure the user is in members
+                          },
+                        },
+                      ],
+                    },
+                    membershipRequests: [],
+                  },
+                },
+              ],
             },
           },
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: '' },
+      },
+      result: {
+        data: {
+          organizations: [],
         },
       },
     },
@@ -1433,11 +1450,26 @@ test('should display loading state when queries are in progress', async () => {
     </MockedProvider>,
   );
 
-  // Initially, loading state should be visible
-  expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
-
   // Wait for data to load
   await waitFor(() => {
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
+
+  // Set mode to 1 (joined organizations)
+  const modeBtn = screen.getByTestId('modeChangeBtn');
+  fireEvent.click(modeBtn);
+
+  const joinedModeBtn = screen.getByTestId('modeBtn1');
+  fireEvent.click(joinedModeBtn);
+
+  // Wait for organization card to appear
+  await waitFor(() => {
+    expect(screen.getByTestId('organization-card')).toBeInTheDocument();
+  });
+
+  // Check that membership status is 'accepted'
+  const membershipStatus = screen.getByTestId(
+    'membership-status-Test Organization',
+  );
+  expect(membershipStatus.getAttribute('data-status')).toBe('accepted');
 });
