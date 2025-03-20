@@ -300,19 +300,19 @@ const languageEnum = [
   },
   {
     value: 'hi',
-    label: 'hindi',
+    label: 'Hindi',
   },
   {
     value: 'sp',
-    label: 'spanish',
+    label: 'Spanish',
   },
   {
     value: 'zh',
-    label: 'chinese',
+    label: 'Chinese',
   },
   {
     value: 'fr',
-    label: 'french',
+    label: 'French',
   },
 ];
 

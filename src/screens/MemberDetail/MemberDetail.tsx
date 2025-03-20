@@ -569,11 +569,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               data-testid="tagsAssignedScrollableDiv"
               className={`${styles.cardBody} pe-0`}
             >
-              <h3>{formState.name}</h3>
-
-              <h3>{formState.city}</h3>
-
-              <h3>{formState.mobilePhoneNumber}</h3>
+              <div className={styles.profileDetailItem}>
+                <span>{tCommon('name')}:</span>
+                <span>{formState.name}</span>
+              </div>
+              <div>
+                <span>{tCommon('location')}:</span>
+                <span>{formState.city}</span>
+              </div>
+              <div>
+                <span>{tCommon('phone')}:</span>
+                <span>{formState.workPhoneNumber}</span>
+              </div>
             </Card.Body>
           </Card>
 
