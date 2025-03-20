@@ -478,7 +478,7 @@ describe('Testing Requests screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Wait for the component to finish loading and the effect to run

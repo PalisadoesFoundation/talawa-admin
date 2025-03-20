@@ -86,7 +86,7 @@ const Requests = (): JSX.Element => {
     }
 
     const membershipRequests = data.organization[0].membershipRequests || [];
-    
+
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
     }
