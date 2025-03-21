@@ -1124,7 +1124,7 @@ export interface InterfaceQueryUserListItem {
     }[];
     createdAt: string;
     registeredEvents: { _id: string }[];
-    membershipRequests: { _id: string }[];
+    membershipRequests: { id: string }[];
   };
   appUserProfile: {
     _id: string;

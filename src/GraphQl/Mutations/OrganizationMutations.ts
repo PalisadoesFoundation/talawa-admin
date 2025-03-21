@@ -235,9 +235,11 @@ export const SEND_MEMBERSHIP_REQUEST = gql`
 `;
 
 export const JOIN_PUBLIC_ORGANIZATION = gql`
-  mutation ($organizationId: ID!) {
-    joinPublicOrganization(organizationId: $organizationId) {
-      _id
+  mutation JoinPublicOrganization(
+    $input: MutationJoinPublicOrganizationInput!
+  ) {
+    joinPublicOrganization(input: $input) {
+      organizationId
     }
   }
 `;
