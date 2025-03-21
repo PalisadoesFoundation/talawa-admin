@@ -60,6 +60,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const currentId = location.state?.id || getItem('id') || id;
   const originalImageState = React.useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
+  const [deleteFlag, setDeleteFlag] = useState(false);
 
   document.title = t('title');
 
@@ -288,7 +289,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               style={{ margin: 'auto', fontSize: '1rem' }}
               className={`text-gray-100`}
             >
-              {t('navigationOrganisations')}
+              {t('navigationOrganizations')}
             </h3>
           </button>
         </Link>
@@ -669,12 +670,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   </label>
                   <Button
                     type="button"
-                    id="deleteUserButton"
+                    data-testid="deleteUserButton"
                     variant="outline-danger"
                     style={{
                       backgroundColor: '#F8D6DC',
                       width: 'fit-content',
                       gap: '0.5rem',
+                    }}
+                    onClick={(e) => {
+                      if (deleteFlag) {
+                        toast.success(tCommon('deletedSuccessfully') as string);
+                      } else {
+                        toast.success(tCommon('againClickToDelete') as string);
+                        setDeleteFlag(true);
+                      }
                     }}
                     className="d-flex align-items-center justify-content-center"
                   >

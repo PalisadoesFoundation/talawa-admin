@@ -82,6 +82,8 @@
   "Donate": "Faire un don",
   "addedSuccessfully": "{{item}} ajouté avec succès",
   "updatedSuccessfully": "{{item}} mis à jour avec succès",
+  "deletedSuccessfully": "Utilisateur supprimé avec succès",
+  "againClickToDelete": "Cliquez à nouveau pour supprimer le compte",
   "removedSuccessfully": "{{item}} supprimé avec succès",
   "successfullyUpdated": "Mis à jour avec succès",
   "sessionWarning": "Votre session expirera bientôt en raison de l'inactivité. Veuillez interagir avec la page pour prolonger votre session.",
