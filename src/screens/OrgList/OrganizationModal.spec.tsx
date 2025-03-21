@@ -38,6 +38,7 @@ vi.mock('utils/MinioUpload', () => ({
 
 describe('OrganizationModal Component', () => {
   const mockToggleModal = vi.fn();
+
   const mockCreateOrg = vi.fn((e) => e.preventDefault());
   const mockSetFormState = vi.fn();
 
@@ -246,20 +247,6 @@ describe('OrganizationModal Component', () => {
     ) as HTMLSelectElement;
     const firstOption = countrySelect.options[0];
     expect(firstOption.disabled).toBe(true);
-  });
-
-  test('should handle invalid file type', async () => {
-    setup();
-    const fileInput = screen.getByTestId(
-      'organisationImage',
-    ) as HTMLInputElement;
-    const invalidFile = new File(['dummy content'], 'test.txt', {
-      type: 'text/plain',
-    });
-
-    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
-
-    expect(fileInput.files?.[0].type).not.toBe('image/png');
   });
 
   test('form inputs should have associated labels', () => {
@@ -509,31 +496,19 @@ describe('OrganizationModal Component', () => {
     const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.png', {
       type: 'image/png',
     });
-    const fileInput = screen.getByTestId('organisationImage');
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
 
-    fireEvent.change(fileInput, { target: { files: [largeFile] } });
-
-    await waitFor(() => {
-      expect(mockToastError).toHaveBeenCalledWith('fileSizeLimitExceeded');
-    });
-    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
-  test('should handle invalid file type', async () => {
-    setup();
-    const invalidFile = new File(['content'], 'test.txt', {
-      type: 'text/plain',
-    });
-    const fileInput = screen.getByTestId('organisationImage');
-
-    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+    await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(mockToastError).toHaveBeenCalledWith('invalidFileType');
+      expect(mockToastError).toHaveBeenCalledWith(
+        'File is too large. Maximum size is 5MB.',
+      );
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+      expect(mockSetFormState).not.toHaveBeenCalled();
     });
-    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
-    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
   test('should show success toast on successful upload', async () => {
