@@ -93,14 +93,14 @@ const RequestsTableItem = (props: Props): JSX.Element => {
       <td className={styles.index}>{index + 1}.</td>
       <td
         className={styles.name}
-      >{`${request.user.firstName} ${request.user.lastName}`}</td>
+      >{`${request.user.name}`}</td>
       <td className={styles.email}>{request.user.email}</td>
       <td>
         <Button
           variant="success"
-          data-testid={`acceptMembershipRequestBtn${request.id}`}
+          data-testid={`acceptMembershipRequestBtn${request.membershipRequestId}`}
           onClick={async (): Promise<void> => {
-            await handleAcceptUser(request.id);
+            await handleAcceptUser(request.membershipRequestId);
           }}
           className={styles.acceptButton}
         >
@@ -110,9 +110,9 @@ const RequestsTableItem = (props: Props): JSX.Element => {
       <td>
         <Button
           variant="danger"
-          data-testid={`rejectMembershipRequestBtn${request.id}`}
+          data-testid={`rejectMembershipRequestBtn${request.membershipRequestId}`}
           onClick={async (): Promise<void> => {
-            await handleRejectUser(request.id);
+            await handleRejectUser(request.membershipRequestId);
           }}
           className={styles.rejectButton}
         >

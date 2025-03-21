@@ -22,10 +22,12 @@ import {
 } from '@mui/material';
 
 interface InterfaceRequestsListItem {
-  id: string;
+  membershipRequestId: string; // Changed from id
+  createdAt: string;
+  status: string;
   user: {
-    firstName: string;
-    lastName: string;
+    id: string;
+    name: string; // Changed from firstName/lastName
     email: string;
   };
 }
@@ -59,18 +61,21 @@ const Requests = (): JSX.Element => {
       : 'USER';
   const { orgId = '' } = useParams();
   const organizationId = orgId;
+  console.log(organizationId);
 
   // Query to fetch membership requests
   const { data, loading, fetchMore, refetch } = useQuery(MEMBERSHIP_REQUEST, {
     variables: {
-      id: organizationId,
-      first: perPageResult,
+      input: {
+      id: organizationId
+      },
+      first:perPageResult,
       skip: 0,
       firstName_contains: '',
     },
     notifyOnNetworkStatusChange: true,
   });
-
+  console.log(data);
   // Query to fetch the list of organizations
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
@@ -306,7 +311,7 @@ const Requests = (): JSX.Element => {
                         (request: InterfaceRequestsListItem, index: number) => {
                           return (
                             <RequestsTableItem
-                              key={request?.id}
+                              key={request?.membershipRequestId}
                               index={index}
                               resetAndRefetch={resetAndRefetch}
                               request={request}

@@ -8,10 +8,12 @@ export interface InterfaceMemberRequestCardProps {
 }
 
 export interface InterfaceRequestsListItem {
-  id: string;
+  membershipRequestId: string; // Changed from id
+  createdAt: string;
+  status: string;
   user: {
-    firstName: string;
-    lastName: string;
+    id: string;
+    name: string; // Changed from firstName/lastName
     email: string;
   };
 }
