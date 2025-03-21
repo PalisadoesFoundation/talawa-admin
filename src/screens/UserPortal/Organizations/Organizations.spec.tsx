@@ -1601,3 +1601,238 @@ test('should correctly map joined organizations data when mode is 1', async () =
     }
   });
 });
+
+test('should search organizations when pressing Enter key', async () => {
+  const TEST_USER_ID = 'test-user-123';
+  setItem('userId', TEST_USER_ID);
+
+  const mocks = [
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: '' },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              id: 'org-1',
+              name: 'Test Organization',
+              avatarURL: 'test.jpg',
+              description: 'Test Description',
+              addressLine1: '123 Test St',
+              members: {
+                edges: [
+                  {
+                    node: {
+                      id: TEST_USER_ID,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: 'Search Term' },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              id: 'org-2',
+              name: 'Search Term Organization',
+              avatarURL: 'search.jpg',
+              description: 'Search Term Description',
+              addressLine1: '456 Search St',
+              members: {
+                edges: [],
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: TEST_USER_ID, first: 5, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              pageInfo: { hasNextPage: false },
+              edges: [],
+            },
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_CREATED_ORGANIZATIONS,
+        variables: { id: TEST_USER_ID, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            createdOrganizations: [],
+          },
+        },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for initial data to load
+  await waitFor(() => {
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  // Find the search input and enter text
+  const searchInput = screen.getByTestId('searchInput');
+  fireEvent.change(searchInput, { target: { value: 'Search Term' } });
+
+  // Press Enter to trigger search (this tests line 228)
+  fireEvent.keyUp(searchInput, { key: 'Enter' });
+
+  // Wait for re-fetched data
+  await waitFor(() => {
+    const orgCards = screen.getAllByTestId('organization-card');
+    expect(orgCards.length).toBe(1);
+    expect(orgCards[0].getAttribute('data-organization-name')).toBe(
+      'Search Term Organization',
+    );
+  });
+});
+
+test('should search organizations when clicking search button', async () => {
+  const TEST_USER_ID = 'test-user-123';
+  setItem('userId', TEST_USER_ID);
+
+  const mocks = [
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: '' },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              id: 'org-1',
+              name: 'Test Organization',
+              avatarURL: 'test.jpg',
+              description: 'Test Description',
+              addressLine1: '123 Test St',
+              members: {
+                edges: [],
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: 'Button Search' },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              id: 'org-3',
+              name: 'Button Search Organization',
+              avatarURL: 'button.jpg',
+              description: 'Button Search Description',
+              addressLine1: '789 Button St',
+              members: {
+                edges: [],
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: TEST_USER_ID, first: 5, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              pageInfo: { hasNextPage: false },
+              edges: [],
+            },
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_CREATED_ORGANIZATIONS,
+        variables: { id: TEST_USER_ID, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            createdOrganizations: [],
+          },
+        },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for initial data to load
+  await waitFor(() => {
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  // Find the search input and enter text
+  const searchInput = screen.getByTestId('searchInput');
+  fireEvent.change(searchInput, { target: { value: 'Button Search' } });
+
+  // Click search button (this tests line 243)
+  const searchButton = screen.getByTestId('searchBtn');
+  fireEvent.click(searchButton);
+
+  // Wait for re-fetched data
+  await waitFor(() => {
+    const orgCards = screen.getAllByTestId('organization-card');
+    expect(orgCards.length).toBe(1);
+    expect(orgCards[0].getAttribute('data-organization-name')).toBe(
+      'Button Search Organization',
+    );
+  });
+});
