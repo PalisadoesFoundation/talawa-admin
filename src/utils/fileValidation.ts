@@ -32,9 +32,12 @@ export const validateFile = (
 
   // Check file type
   if (!allowedTypes.includes(file.type)) {
+    const allowedTypesList = allowedTypes
+      .map((type) => type.split('/')[1].toUpperCase())
+      .join(', ');
     return {
       isValid: false,
-      errorMessage: 'Invalid file type. Please upload a JPEG, PNG, or GIF.',
+      errorMessage: `Invalid file type. Please upload a file of type: ${allowedTypesList}.`,
     };
   }
 
