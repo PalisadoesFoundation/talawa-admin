@@ -1176,7 +1176,7 @@ test('Should change page when pagination control is clicked', async () => {
 
 await wait(500);
 
-test('should correctly map joined organizations data when mode is 1', async () => {
+test('should correctly map joined organizations data ', async () => {
   // Mock user ID
   const TEST_USER_ID = 'test-joined-orgs-user';
   setItem('userId', TEST_USER_ID);
@@ -1368,113 +1368,7 @@ test('should set membershipRequestStatus to "pending" for organizations with pen
   );
 });
 
-test('should correctly map joined organizations data when mode is 1', async () => {
-  // Mock user ID
-  const TEST_USER_ID = 'test-user-123';
-  setItem('userId', TEST_USER_ID);
-
-  // Create GraphQL mocks with joined organizations data
-  const mocks = [
-    {
-      request: {
-        query: USER_JOINED_ORGANIZATIONS_PG,
-        variables: { id: TEST_USER_ID, first: 5, filter: '' },
-      },
-      result: {
-        data: {
-          user: {
-            organizationsWhereMember: {
-              pageInfo: { hasNextPage: false },
-              edges: [
-                {
-                  node: {
-                    id: 'org-1',
-                    name: 'Test Organization',
-                    avatarURL: 'test.jpg',
-                    description: 'Test Description',
-                    addressLine1: '123 Test St',
-                    members: {
-                      edges: [
-                        {
-                          node: {
-                            id: TEST_USER_ID, // This is the key part - making sure the user is in members
-                          },
-                        },
-                      ],
-                    },
-                    membershipRequests: [],
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    },
-    {
-      request: {
-        query: ORGANIZATION_LIST,
-        variables: { filter: '' },
-      },
-      result: {
-        data: {
-          organizations: [],
-        },
-      },
-    },
-    {
-      request: {
-        query: USER_CREATED_ORGANIZATIONS,
-        variables: { id: TEST_USER_ID, filter: '' },
-      },
-      result: {
-        data: {
-          user: {
-            createdOrganizations: [],
-          },
-        },
-      },
-    },
-  ];
-
-  // Render the component
-  render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Wait for data to load
-  await waitFor(() => {
-    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-  });
-
-  // Set mode to 1 (joined organizations)
-  const modeBtn = screen.getByTestId('modeChangeBtn');
-  fireEvent.click(modeBtn);
-
-  const joinedModeBtn = screen.getByTestId('modeBtn1');
-  fireEvent.click(joinedModeBtn);
-
-  // Wait for organization card to appear
-  await waitFor(() => {
-    expect(screen.getByTestId('organization-card')).toBeInTheDocument();
-  });
-
-  // Check that membership status is 'accepted'
-  const membershipStatus = screen.getByTestId(
-    'membership-status-Test Organization',
-  );
-  expect(membershipStatus.getAttribute('data-status')).toBe('accepted');
-});
-
-test('should correctly map joined organizations data when mode is 1', async () => {
+test('correctly map joined organizations data when mode is 1', async () => {
   // Mock user ID
   const TEST_USER_ID = 'test-user-123';
   setItem('userId', TEST_USER_ID);

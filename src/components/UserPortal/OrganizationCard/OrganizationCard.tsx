@@ -136,7 +136,7 @@ function OrganizationCard({
       return;
     }
 
-    const membershipRequest = membershipRequests.find(
+    const membershipRequest = (membershipRequests ?? []).find(
       (request) => request.user.id === userId,
     );
 
