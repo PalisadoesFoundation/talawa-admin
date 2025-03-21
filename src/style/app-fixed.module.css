@@ -336,8 +336,7 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-
-  --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
 
@@ -730,8 +729,8 @@
 .addButton {
   margin-bottom: 10px;
   color: var(--addButton-font);
-  background-color: var(--addButton-bg);
-  border-color: var(--addButton-border);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
   --bs-btn-focus-box-shadow: none;
 }
 
@@ -925,9 +924,9 @@ form label,
 .inputField {
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: var(--inputField-bg) !important;
-  border: 1px solid var(--inputField-border);
-  color: var(--inputField-text-color) !important;
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Placeholder styling */
@@ -991,12 +990,35 @@ form label,
   border-color: var(--regularBtn-border-hover) !important;
 }
 
+.searchButtonOrgList {
+  background-color: var(--light-blue);
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  inset-inline-end: 0px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Table Header */
 
 .tableHeader {
-  background-color: var(--tableHeader-bg);
-  color: var(--tableHeader-color);
-  font-size: var(--font-size-header);
+  background-color: red;
+}
+
+.tableHeaders {
+  background-color: var(--bs-primary-text-emphasis);
+  color: var(--bs-white);
+  font-size: 1rem;
 }
 
 .tableHeader {
@@ -1143,6 +1165,20 @@ form label,
   }
 }
 
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.removeMemberCancel {
+  background-color: var(--removeMemberCancel-bg);
+  color: '#C8102E';
+  border: 1px solid var(--removeMemberCancel-border);
+}
+
 /* Dropdown */
 
 .dropdown {
@@ -1152,6 +1188,7 @@ form label,
   color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .customDropdown {
@@ -1263,12 +1300,9 @@ form label,
   flex: 1;
   position: relative;
   margin-right: 10px;
-}
-
-.input {
-  flex: 1;
-  position: relative;
-  margin-right: 80px;
+  background-color: '#F2F7FF';
+  background-color: 'red';
+  margin-right: 180px;
   width: 425px;
 }
 
