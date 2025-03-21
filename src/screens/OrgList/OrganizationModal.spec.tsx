@@ -1,21 +1,19 @@
 import React from 'react';
-import type { RenderResult } from '@testing-library/react';
 import {
   render,
   screen,
   fireEvent,
   waitFor,
-  // within,
+  RenderResult,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from 'state/store';
+import { store } from '../../state/store'; // Update path based on your project structure
 import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
-import i18nForTest from 'utils/i18nForTest';
-import userEvent from '@testing-library/user-event';
-import { toast } from 'react-toastify';
+import i18nForTest from '../../utils/i18nForTest'; // Update path based on your project structure
 
 // Mock toast
 const mockToastError = vi.fn();

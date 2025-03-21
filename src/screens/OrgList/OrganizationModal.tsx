@@ -6,6 +6,7 @@ import styles from '../../style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 import { toast } from 'react-toastify';
+import { validateFile } from 'utils/fileValidation';
 
 // import useLocalStorage from 'utils/useLocalstorage';
 
@@ -279,19 +280,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               const file = target.files && target.files[0];
 
               if (file) {
-                // Check file size (5MB limit)
-                const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+                const validation = validateFile(file);
 
-                const maxSize = MAX_FILE_SIZE;
-
-                if (file.size > maxSize) {
-                  toast.error(t('fileSizeLimitExceeded'));
-                  return;
-                }
-
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                  toast.error(t('invalidFileType'));
+                if (!validation.isValid) {
+                  toast.error(validation.errorMessage);
                   return;
                 }
 
