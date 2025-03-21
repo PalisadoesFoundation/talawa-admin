@@ -222,31 +222,44 @@ export default function organizations(): JSX.Element {
     if (mode === 0) {
       // All
       if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map((org: any) => {
-          const isMember =
-            org.members?.edges?.some(
-              (edge: { node: { id: string } }) => edge.node.id === userId,
-            ) || false;
-          return {
-            id: org.id,
-            name: org.name,
-            image: org.avatarURL,
-            description: org.description,
-            address: {
-              line1: org.addressLine1,
-              city: '',
-              countryCode: '',
-              postalCode: '',
-              state: '',
-            },
-            admins: [],
-            members: org.members?.edges?.map((edge: any) => edge.node) || [],
-            membershipRequestStatus: isMember ? 'accepted' : '',
-            userRegistrationRequired: false,
-            membershipRequests: [],
-            isJoined: isMember,
+        interface OrganizationData {
+          id: string;
+          name: string;
+          avatarURL?: string;
+          description?: string;
+          addressLine1?: string;
+          members?: {
+            edges?: Array<{ node: { id: string } }>;
           };
-        });
+        }
+
+        const orgs = allOrganizationsData.organizations.map(
+          (org: OrganizationData) => {
+            const isMember =
+              org.members?.edges?.some(
+                (edge: { node: { id: string } }) => edge.node.id === userId,
+              ) || false;
+            return {
+              id: org.id,
+              name: org.name,
+              image: org.avatarURL,
+              description: org.description,
+              address: {
+                line1: org.addressLine1,
+                city: '',
+                countryCode: '',
+                postalCode: '',
+                state: '',
+              },
+              admins: [],
+              members: org.members?.edges?.map((edge: any) => edge.node) || [],
+              membershipRequestStatus: isMember ? 'accepted' : '',
+              userRegistrationRequired: false,
+              membershipRequests: [],
+              isJoined: isMember,
+            };
+          },
+        );
         setOrganizations(orgs);
       } else {
         setOrganizations([]);
