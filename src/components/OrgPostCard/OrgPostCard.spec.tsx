@@ -701,6 +701,113 @@ describe('OrgPostCard Component', () => {
         ).not.toBeInTheDocument();
       });
     });
+
+    it('handles MinIO upload errors gracefully', async () => {
+      // Add console.error spy
+      const consoleErrorSpy = vi.spyOn(console, 'error');
+
+      // Mock upload failure
+      mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+
+      renderComponent();
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+      const editOption = screen.getByText(/edit/i);
+      await userEvent.click(editOption);
+
+      const fileInput = await screen.findByTestId('image-upload');
+
+      const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
+      await userEvent.upload(fileInput, file);
+
+      await waitFor(() => {
+        // Check both console.error and toast.error are called with correct messages
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Failed to upload image:',
+          expect.any(Error),
+        );
+        expect(toast.error).toHaveBeenCalledWith('Failed to upload image');
+      });
+
+      // Restore console.error
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('constructs correct media URLs using objectName for different media types', async () => {
+      // Test image URL construction
+      renderComponent();
+      const imageElement = screen.getByAltText('Post image');
+      expect(imageElement).toBeInTheDocument();
+      expect(imageElement.getAttribute('src')).toContain(
+        '/api/images/test-image-object',
+      );
+
+      // Test video URL construction
+      renderComponentVideo();
+      const videoElement = screen.getByTestId('video');
+      const sourceElement = videoElement.querySelector('source');
+      expect(sourceElement).toBeInTheDocument();
+      expect(sourceElement?.getAttribute('src')).toContain(
+        '/api/videos/test-video-object',
+      );
+    });
+
+    it('handles empty or undefined objectName in media URLs', () => {
+      // Post with missing objectName
+      const postWithMissingObjectName = {
+        ...mockPost,
+        attachments: [
+          {
+            ...mockPost.attachments[0],
+            objectName: undefined,
+          },
+        ],
+      };
+
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={postWithMissingObjectName} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Should fall back to using name property instead
+      const image = screen.getByAltText('Post image');
+      expect(image).toBeInTheDocument();
+      expect(image.getAttribute('src')).toBe('test-image.jpg');
+    });
+
+    it('handles video upload error gracefully', async () => {
+      // Mock upload failure specifically for video
+      mockUploadFileToMinio.mockRejectedValueOnce(
+        new Error('Video upload failed'),
+      );
+
+      renderComponent();
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+      const editOption = screen.getByText(/edit/i);
+      await userEvent.click(editOption);
+
+      // Use the video upload input instead of image upload
+      const videoInput = await screen.findByTestId('video-upload');
+      expect(videoInput).toBeInTheDocument();
+
+      const videoFile = new File(['test video content'], 'test-video.mp4', {
+        type: 'video/mp4',
+      });
+      await userEvent.upload(videoInput, videoFile);
+
+      // Check for video-specific error message
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Failed to upload video');
+      });
+    });
   });
 });
 
