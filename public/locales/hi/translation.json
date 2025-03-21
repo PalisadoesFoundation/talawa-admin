@@ -315,7 +315,8 @@
     "user": "उपयोगकर्ता",
     "profile": "प्रोफ़ाइल",
     "create": "बनाएं",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "createUser": "उपयोगकर्ता बनाएं"
   },
   "organizationTags": {
     "title": "संस्थान टैग",
