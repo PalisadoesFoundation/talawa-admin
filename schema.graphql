@@ -1877,7 +1877,7 @@ type Query {
   organization(
     id: ID
     orderBy: OrganizationOrderByInput
-    input: input
+    input: QueryOrganizationInput
   ): [Organization]
   organizationsConnection(
     first: Int
@@ -2965,4 +2965,12 @@ type FundraisingCampaign {
   refrenceNumber: String
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Plugin {
+  _id: ID!
+  pluginName: String!
+  pluginCreatedBy: String!
+  pluginDesc: String!
+  uninstalledOrgs: [Organization]
 }
