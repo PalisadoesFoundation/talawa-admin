@@ -98,17 +98,17 @@ Defined in: [src/types/Organization/interface.ts:9](https://github.com/Palisadoe
 
 Defined in: [src/types/Organization/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L21)
 
-#### \_id
+#### id
 
-> **\_id**: `string`
+> **id**: `string`
 
 #### user
 
 > **user**: `object`
 
-##### user.\_id
+##### user.id
 
-> **\_id**: `string`
+> **id**: `string`
 
 ***
 
