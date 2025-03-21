@@ -87,15 +87,16 @@ const Requests = (): JSX.Element => {
     if (!data) {
       return;
     }
-
-    const membershipRequests =
-      data.organizations?.[0]?.membershipRequests || [];
-
-    if (membershipRequests.length < perPageResult) {
+  
+    const allRequests = data.organization?.membershipRequests || [];
+    // Filter to only show pending requests
+    const pendingRequests = allRequests.filter((req: { status: string; }) => req.status === 'pending');
+  
+    if (pendingRequests.length < perPageResult) {
       setHasMore(false);
     }
-
-    setDisplayedRequests(membershipRequests);
+  
+    setDisplayedRequests(pendingRequests);
   }, [data]);
 
   // Clear the search field when the component is unmounted

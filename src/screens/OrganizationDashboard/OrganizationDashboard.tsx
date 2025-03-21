@@ -9,6 +9,7 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
+  MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 import AdminsIcon from 'assets/svgs/admin.svg?react';
 // import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
@@ -78,6 +79,20 @@ function OrganizationDashboard(): JSX.Element {
     loading: loadingOrgData,
   } = useQuery(GET_ORGANIZATION_MEMBERS_PG, {
     variables: { id: orgId },
+  });
+
+  const {
+    data: membershipRequestData,
+    loading: loadingMembershipRequests,
+  } = useQuery(MEMBERSHIP_REQUEST, {
+    variables: {
+      input: {
+      id: orgId
+      },
+      first: 8,
+      skip: 0,
+      firstName_contains: '',
+    },
   });
 
   const hasFetchedAllMembers = useRef(false);
@@ -330,7 +345,7 @@ function OrganizationDashboard(): JSX.Element {
                 }}
               >
                 <DashBoardCard
-                  count={data?.organizations[0].membershipRequests?.length}
+                  count={data?.organizations.membershipRequests.length}
                   title={tCommon('requests')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 />
@@ -449,11 +464,11 @@ function OrganizationDashboard(): JSX.Element {
                 className={styles.containerBody}
                 style={{ height: '150px' }}
               >
-                {loadingOrgData ? (
+                {loadingMembershipRequests ? (
                   [...Array(4)].map((_, index) => (
                     <CardItemLoading key={`requestsLoading_${index}`} />
                   ))
-                ) : data?.organizations[0].membershipRequests.length === 0 ? (
+                ) : membershipRequestData?.organization?.membershipRequests?.length === 0 ? (
                   <div
                     className={styles.emptyContainer}
                     style={{ height: '150px' }}
@@ -461,13 +476,13 @@ function OrganizationDashboard(): JSX.Element {
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
-                  data?.organizations[0]?.membershipRequests
+                  membershipRequestData?.organization?.membershipRequests
                     .slice(0, 8)
                     .map((request: any) => (
                       <CardItem
                         type="MembershipRequest"
-                        key={request._id}
-                        title={`${request.user.firstName} ${request.user.lastName}`}
+                        key={request.membershipRequestId}
+                        title={request.user.name}
                       />
                     ))
                 )}

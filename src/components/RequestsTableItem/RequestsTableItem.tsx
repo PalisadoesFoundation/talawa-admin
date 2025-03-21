@@ -74,11 +74,15 @@ const RequestsTableItem = (props: Props): JSX.Element => {
     membershipRequestId: string,
   ): Promise<void> => {
     try {
+      // Change this part to wrap the ID in an input object
       const { data } = await rejectUser({
         variables: {
-          id: membershipRequestId,
+          input: {
+            membershipRequestId: membershipRequestId, // Pass ID in the input object
+          },
         },
       });
+      
       if (data) {
         toast.success(t('rejectedSuccessfully') as string);
         resetAndRefetch();
