@@ -379,6 +379,24 @@ describe('OrganizationModal Component', () => {
     );
   });
 
+  test('should handle invalid file type', async () => {
+    setup();
+    const invalidFile = new File(['content'], 'test.txt', {
+      type: 'text/plain',
+    });
+    const fileInput = screen.getByTestId('organisationImage');
+
+    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+
+    await waitFor(() => {
+      expect(mockToastError).toHaveBeenCalledWith(
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+      );
+    });
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
   test('should handle null file selection', async () => {
     setup();
     const fileInput = screen.getByTestId('organisationImage');
