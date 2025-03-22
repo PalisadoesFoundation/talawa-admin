@@ -309,31 +309,36 @@ describe('Calendar Component', () => {
       {
         ...mockEventData[0],
         startDate: new Date(today.getFullYear(), 0, 15).toISOString(), // Jan 15
-        endDate: new Date(today.getFullYear(), 1, 15).toISOString(),   // Feb 15
+        endDate: new Date(today.getFullYear(), 1, 15).toISOString(), // Feb 15
       },
     ];
-  
+
     const { container } = renderWithRouter(
       <Calendar
         eventData={multiMonthEvents}
         refetchEvents={mockRefetchEvents}
       />,
     );
-  
+
     // Find the first expand button (e.g., for Jan or Feb)
     const expandButton = container.querySelector('._btn__more_d00707');
     expect(expandButton).toBeInTheDocument(); // Verify it exists
-  
+
     if (expandButton) {
       await act(async () => {
         fireEvent.click(expandButton);
       });
-  
+
       // Wait for the expanded list to appear
-      await waitFor(() => {
-        const expandedList = container.querySelector('._expand_event_list_d00707');
-        expect(expandedList).toBeInTheDocument();
-      }, { timeout: 5000 }); // 5s max wait
+      await waitFor(
+        () => {
+          const expandedList = container.querySelector(
+            '._expand_event_list_d00707',
+          );
+          expect(expandedList).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      ); // 5s max wait
     }
   });
 

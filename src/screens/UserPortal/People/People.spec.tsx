@@ -541,26 +541,26 @@ describe('People Component Mode Switch Coverage', () => {
 
   it('handles mode transitions correctly including edge cases', async () => {
     setupTest();
-  
+
     // Wait for initial render (members mode)
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
     });
-  
+
     // Switch to admin mode
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn1'));
-  
+
     // Verify admin view
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
       expect(screen.queryByText('Test User')).not.toBeInTheDocument();
     });
-  
+
     // Switch back to members mode
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn0'));
-  
+
     // Verify members view
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
