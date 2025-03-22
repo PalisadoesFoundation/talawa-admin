@@ -3415,7 +3415,7 @@ form label,
 
 .sidebarBtn:hover {
   background-color: var(--sidebar-option-bg-hover);
-  color: black;
+  color: var(--sidebar-option-text-active);
 }
 
 .sidebarBtnActive {

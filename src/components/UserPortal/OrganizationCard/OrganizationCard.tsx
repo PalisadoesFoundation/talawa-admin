@@ -116,7 +116,7 @@ function OrganizationCard({
       refetch();
     } catch (error: unknown) {
       const apolloError = error as ApolloError;
-      const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
+      const errorCode = apolloError?.graphQLErrors?.[0]?.extensions?.code;
       if (errorCode === 'ALREADY_MEMBER') {
         toast.error(t('AlreadyJoined') as string);
       } else {
