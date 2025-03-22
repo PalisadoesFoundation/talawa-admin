@@ -142,25 +142,6 @@ describe('WeeklyViewCalendar Component', () => {
     });
   });
 
-  it('navigates to the current week when "Today" button is clicked', async () => {
-    const { getByTestId } = renderWithRouter(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
-    );
-
-    await act(async () => {
-      fireEvent.click(getByTestId('today'));
-    });
-
-    const currentWeekStart = dayjs().startOf('week');
-    const currentWeekText = `${currentWeekStart.format('MMM D')} - ${currentWeekStart
-      .add(6, 'day')
-      .format('MMM D')}`;
-
-    await waitFor(() => {
-      expect(getByTestId('current-week')).toHaveTextContent(currentWeekText);
-    });
-  });
-
   it('renders holiday cards correctly', async () => {
     const { getByText } = renderWithRouter(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,

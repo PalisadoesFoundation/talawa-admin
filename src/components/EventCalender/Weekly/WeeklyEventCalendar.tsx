@@ -118,7 +118,11 @@ const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
     );
   };
 
-  const renderWeekDays = (): JSX.Element[] => {
+  const toggleExpand = (index: number): void => {
+    setExpanded(expanded === index ? -1 : index);
+  };
+
+  const renderWeekDays = (toggleExpand: (index: number) => void): JSX.Element[] => {
     const days = [];
     for (let i = 0; i < 7; i++) {
       const day = new Date(currentWeekStart);
@@ -127,15 +131,13 @@ const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
     }
 
     return days.map((date, index) => {
-      const toggleExpand = (index: number): void => {
-        setExpanded(expanded === index ? -1 : index);
-      };
-
       const allEventsList: JSX.Element[] =
         events
-          ?.filter(
-            (event) => event.startDate === dayjs(date).format('YYYY-MM-DD'),
-          )
+          ?.filter((event) => {
+            const eventDate = dayjs(event.startDate).format('YYYY-MM-DD');
+            const currentDay = dayjs(date).format('YYYY-MM-DD');
+            return eventDate === currentDay;
+          })
           .map((event: InterfaceEvent) => (
             <EventListCard
               refetchEvents={refetchEvents}
@@ -199,7 +201,7 @@ const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
   return (
     <div className={styles.calendar}>
       <div className={styles.calendar__header}>
-        <div className={styles.calender_week}>
+        <div className={styles.calendar__week}>
           <Button
             variant="outline-primary"
             className={styles.buttonEventCalendar}
@@ -246,7 +248,7 @@ const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
             </div>
           ))}
         </div>
-        <div className={styles.calendar__days}>{renderWeekDays()}</div>
+        <div className={styles.calendar__days}>{renderWeekDays(toggleExpand)}</div>
       </div>
     </div>
   );
