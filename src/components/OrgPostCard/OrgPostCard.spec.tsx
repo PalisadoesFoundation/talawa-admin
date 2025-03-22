@@ -370,14 +370,17 @@ describe('OrgPostCard Component', () => {
     });
 
     it('displays the correct image using MinIO objectName', () => {
+      const objectName = 'test-image-object';
+      const endpoint = 'images';
+      const expectedUrl = `/api/${endpoint}/${objectName}`;
+
       renderComponent();
 
       const image = screen.getByAltText('Post image');
       expect(image).toBeInTheDocument();
+
       // Should use the image URL with objectName
-      expect(image.getAttribute('src')).toContain(
-        '/api/images/test-image-object',
-      );
+      expect(image.getAttribute('src')).toContain(expectedUrl);
     });
 
     it('closes the modal and stops event propagation when the close button is clicked', async () => {
@@ -742,22 +745,33 @@ describe('OrgPostCard Component', () => {
     });
 
     it('constructs correct media URLs using objectName for different media types', async () => {
+      // Calculate expected URLs the same way the component does
+      const imageObjectName = 'test-image-object';
+      const imageType = 'image/jpeg';
+      const imageEndpoint = imageType.startsWith('image/')
+        ? 'images'
+        : 'videos';
+      const expectedImageUrl = `/api/${imageEndpoint}/${imageObjectName}`;
+
+      const videoObjectName = 'test-video-object';
+      const videoType = 'video/mp4';
+      const videoEndpoint = videoType.startsWith('image/')
+        ? 'images'
+        : 'videos';
+      const expectedVideoUrl = `/api/${videoEndpoint}/${videoObjectName}`;
+
       // Test image URL construction
       renderComponent();
       const imageElement = screen.getByAltText('Post image');
       expect(imageElement).toBeInTheDocument();
-      expect(imageElement.getAttribute('src')).toContain(
-        '/api/images/test-image-object',
-      );
+      expect(imageElement.getAttribute('src')).toContain(expectedImageUrl);
 
       // Test video URL construction
       renderComponentVideo();
       const videoElement = screen.getByTestId('video');
       const sourceElement = videoElement.querySelector('source');
       expect(sourceElement).toBeInTheDocument();
-      expect(sourceElement?.getAttribute('src')).toContain(
-        '/api/videos/test-video-object',
-      );
+      expect(sourceElement?.getAttribute('src')).toContain(expectedVideoUrl);
     });
 
     it('handles empty or undefined objectName in media URLs', () => {
@@ -1391,6 +1405,11 @@ describe('Video attachment conditional rendering', () => {
       ],
     };
 
+    const objectName = 'minio-object-name.mp4';
+    const type = 'video/mp4';
+    const endpoint = type.startsWith('image/') ? 'images' : 'videos';
+    const expectedUrl = `/api/${endpoint}/${objectName}`;
+
     render(
       <MockedProvider mocks={[]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
@@ -1409,10 +1428,7 @@ describe('Video attachment conditional rendering', () => {
 
     // Check that the source uses getMediaUrl with objectName
     const sourceElement = videoElement.querySelector('source');
-    expect(sourceElement).toHaveAttribute(
-      'src',
-      expect.stringContaining('/api/videos/minio-object-name.mp4'),
-    );
+    expect(sourceElement).toHaveAttribute('src', expectedUrl);
     expect(sourceElement).not.toHaveAttribute('src', 'fallback-name.mp4');
   });
 
