@@ -115,15 +115,14 @@ function OrganizationCard({
       }
       refetch();
     } catch (error: unknown) {
-      const apolloError = error as ApolloError;
-      const errorCode = apolloError?.graphQLErrors?.[0]?.extensions?.code;
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Failed to join organization:', error);
-      }
-      if (errorCode === 'ALREADY_MEMBER') {
-        toast.error(t('AlreadyJoined') as string);
-      } else {
-        toast.error(t('errorOccured') as string);
+      if (error instanceof Error) {
+        const apolloError = error as ApolloError;
+        const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
+        if (errorCode === 'ALREADY_MEMBER') {
+          toast.error(t('AlreadyJoined') as string);
+        } else {
+          toast.error(t('errorOccured') as string);
+        }
       }
     }
   }

@@ -552,4 +552,37 @@ describe('OrganizationCard Component', () => {
     // Verify that the cancelMembershipRequest mutation was not called
     expect(cancelRequestSpy).not.toHaveBeenCalled();
   });
+
+  it('should handle generic thrown error (non-GraphQL)', async () => {
+    const genericErrorMock: MockedResponse[] = [
+      {
+        request: {
+          query: JOIN_PUBLIC_ORGANIZATION,
+          variables: {
+            input: {
+              organizationId: '123',
+            },
+          },
+        },
+        error: new Error('Network error'),
+      },
+    ];
+
+    render(
+      <TestWrapper mocks={genericErrorMock}>
+        <OrganizationCard
+          {...defaultProps}
+          userRegistrationRequired={false}
+          isJoined={false}
+        />
+      </TestWrapper>,
+    );
+
+    const joinButton = screen.getByText('joinNow');
+    await fireEvent.click(joinButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('error occurred');
+    });
+  });
 });
