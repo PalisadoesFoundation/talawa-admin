@@ -43,11 +43,10 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
-  --sidebar-option-bg: #eaebef;
-  --sidebar-option-text-active: #000000;
   --sidebar-option-text-inactive: #000000;
-  /* --sidebar-icon-stroke-active: #000000;
-  --sidebar-icon-stroke-inactive: #808080; */
+  --sidebar-option-bg-hover: #eaebef;
+  --sidebar-option-bg: #d2d3d7;
+  --sidebar-option-text-active: #000000;
 
   --unblockButton-font: #555555;
   --unblockButton-border: #eaebef;
@@ -59,8 +58,8 @@
   --removeButton-color: #c8102e;
   --removeButton-bg-hover: #ff4d4f;
   --removeButton-border-hover: #ff4d4f;
-  --removeButton-color-hover: #ffffff;
   --removeButton-border: #f8d6dc;
+  --removeButton-color-hover: #ffffff;
 
   --activeTab-bg: #eaebef;
   --activeTab-color: #808080;
@@ -3415,7 +3414,8 @@ form label,
 }
 
 .sidebarBtn:hover {
-  color: var(--sidebar-option-text-hover);
+  background-color: var(--sidebar-option-bg-hover);
+  color: black;
 }
 
 .sidebarBtnActive {
