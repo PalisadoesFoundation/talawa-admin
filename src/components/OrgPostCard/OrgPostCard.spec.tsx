@@ -1,6 +1,12 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  cleanup,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import OrgPostCard from './OrgPostCard';
@@ -1345,5 +1351,127 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
     await waitFor(() => {
       expect(errorHandlerModule.errorHandler).toHaveBeenCalled();
     });
+  });
+});
+
+describe('Video attachment conditional rendering', () => {
+  // Use the same mockPost that's already defined in the file
+  const mockPost = {
+    id: '12',
+    caption: 'Test Caption',
+    createdAt: new Date('2024-02-22'),
+    updatedAt: new Date('2024-02-23'),
+    pinnedAt: null,
+    creatorId: '123',
+    attachments: [
+      {
+        id: '1',
+        postId: '12',
+        name: 'test-image.jpg',
+        objectName: 'test-image-object',
+        mimeType: 'image/jpeg',
+        createdAt: new Date(),
+      },
+    ],
+  };
+
+  it('renders video with objectName when both videoAttachment and objectName exist', async () => {
+    // Create a post with a video attachment that has an objectName
+    const postWithVideoObjectName = {
+      ...mockPost,
+      attachments: [
+        {
+          id: '123',
+          postId: '12',
+          name: 'fallback-name.mp4',
+          objectName: 'minio-object-name.mp4',
+          mimeType: 'video/mp4',
+          createdAt: new Date(),
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={postWithVideoObjectName} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Open the post modal to display the video
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    // Verify the video element exists
+    const videoElement = screen.getByTestId('video');
+    expect(videoElement).toBeInTheDocument();
+
+    // Check that the source uses getMediaUrl with objectName
+    const sourceElement = videoElement.querySelector('source');
+    expect(sourceElement).toHaveAttribute(
+      'src',
+      expect.stringContaining('/api/videos/minio-object-name.mp4'),
+    );
+    expect(sourceElement).not.toHaveAttribute('src', 'fallback-name.mp4');
+  });
+
+  it('renders video with name when videoAttachment exists but objectName is missing', async () => {
+    // Create a post with a video attachment that doesn't have an objectName
+    const postWithVideoNoObjectName = {
+      ...mockPost,
+      attachments: [
+        {
+          id: '123',
+          postId: '12',
+          name: 'fallback-name.mp4',
+          objectName: undefined,
+          mimeType: 'video/mp4',
+          createdAt: new Date(),
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={postWithVideoNoObjectName} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Open the post modal to display the video
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    // Verify the video element exists
+    const videoElement = screen.getByTestId('video');
+    expect(videoElement).toBeInTheDocument();
+
+    // Check that the source falls back to using name
+    const sourceElement = videoElement.querySelector('source');
+    expect(sourceElement).toHaveAttribute('src', 'fallback-name.mp4');
+  });
+
+  it('does not render video when no videoAttachment exists', async () => {
+    // Use the existing mockPost which already has an image attachment
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Open the post modal
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    // Check that there's no video element
+    expect(screen.queryByTestId('video')).not.toBeInTheDocument();
+
+    // But there should be an image
+    const imgElement = screen.getByAltText('Post content');
+    expect(imgElement).toBeInTheDocument();
   });
 });
