@@ -721,11 +721,13 @@ describe('WeeklyViewCalendar Component', () => {
 
     // Override the Date constructor to always return our fixed date
     global.Date = class extends RealDate {
-      constructor(...args) {
-        if (args.length === 0) {
+      constructor(value?: number | string | Date) {
+        if (arguments.length === 0) {
           super(mockChristmasEve);
+        } else if (value !== undefined) {
+          super(value);
         } else {
-          super(...args);
+          super();
         }
       }
 
