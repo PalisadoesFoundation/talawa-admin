@@ -830,34 +830,6 @@ describe('MemberDetail', () => {
     expect(maritialStatus).toHaveTextContent('Male');
   });
 
-  test('deleteUserButton handles confirmation and deletion correctly', async () => {
-    // Mock toast functions
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
-
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    // Find the delete user button
-    const deleteUserButton = screen.getByTestId('deleteUserButton');
-    expect(deleteUserButton).toBeInTheDocument();
-
-    // First click should show confirmation message
-    await userEvent.click(deleteUserButton);
-    expect(toastSuccessSpy).toHaveBeenCalledWith(
-      'Click again to Delete Account',
-    );
-
-    // Clear mock to test second click
-    toastSuccessSpy.mockClear();
-
-    // Second click should trigger deletion
-    await userEvent.click(deleteUserButton);
-    expect(toastSuccessSpy).toHaveBeenCalledWith('User removed Successfully');
-
-    // Verify the toast was called exactly once for each operation
-    expect(toastSuccessSpy).toHaveBeenCalledTimes(1);
-  });
-
   test('clicking and submission of profile picture', async () => {
     renderMemberDetailScreen(link1);
     await wait();

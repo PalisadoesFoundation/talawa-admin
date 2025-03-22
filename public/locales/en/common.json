@@ -82,7 +82,7 @@
   "addedSuccessfully": "{{item}} added Successfully",
   "updatedSuccessfully": "{{item}} updated Successfully",
   "removedSuccessfully": "{{item}} removed Successfully",
-  "deletedSuccessfully": "User removed Successfully",
+  "deletedSuccessfully": "{{item}} deleted Successfully",
   "againClickToDelete": "Click again to Delete Account",
   "successfullyUpdated": "Successfully Updated",
   "sessionWarning": "Your session will expire soon due to inactivity. Please interact with the page to extend your session.",

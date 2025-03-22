@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
@@ -34,7 +35,6 @@ import MemberOrganizationIcon from 'assets/svgs/memberOrganization.svg?react';
 import MemberEvents from 'assets/svgs/memberEvents.svg?react';
 import OverviewIcon from 'assets/svgs/overview.svg?react';
 import DeleteIcon from 'assets/svgs/delete.svg?react';
-import GlobalIcon from 'assets/svgs/global.svg?react';
 import ReloadIcon from 'assets/svgs/reload.svg?react';
 import SaveIcon from 'assets/svgs/save.svg?react';
 
@@ -60,7 +60,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const currentId = location.state?.id || getItem('id') || id;
   const originalImageState = React.useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
-  const [deleteFlag, setDeleteFlag] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const navigate = useNavigate();
 
   document.title = t('title');
 
@@ -86,8 +87,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     postalCode: '',
     state: '',
     workPhoneNumber: '',
-    adminApproved: '',
-    pluginCreationAllowed: '',
+    adminApproved: false,
+    pluginCreationAllowed: false,
   });
 
   // Mutation to update the user details
@@ -135,15 +136,23 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
 
+  // to handle deletion of user profile
+  const handleDeleteUser = (): void => {
+    navigate('/');
+  }
+
   // to handle the change in the form fields
-  const handleFieldChange = (fieldName: string, value: string): void => {
+  const handleFieldChange = (fieldName: string, value: string | Boolean): void => {
     // future birthdates are not possible to select.
 
-    // password validation
-    if (fieldName === 'password' && value) {
-      if (!validatePassword(value)) {
-        toast.error('Password must be at least 8 characters long.');
-        return;
+    // Check if value is a string
+    if(typeof value === 'string'){
+      // Password validation (only for string values)
+      if (fieldName === 'password' && value) {
+        if (!validatePassword(value)) {
+          toast.error('Password must be at least 8 characters long.');
+          return;
+        }
       }
     }
 
@@ -154,7 +163,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   // Function to handle the update of the user details
   const handleUserUpdate = async (): Promise<void> => {
     // Remove empty fields from the form state
-    function removeEmptyFields<T extends Record<string, string | File | null>>(
+    function removeEmptyFields<T extends Record<string, string | File | null | Boolean>>(
       obj: T,
     ): Partial<T> {
       return Object.fromEntries(
@@ -162,7 +171,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           ([, value]) =>
             value !== null &&
             value !== undefined &&
-            (typeof value !== 'string' || value.trim() !== ''),
+            (typeof value === 'boolean' || 
+            typeof value !== 'string' || value.trim() !== ''),
         ),
       ) as Partial<T>;
     }
@@ -330,7 +340,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             <Card.Header
               className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${styles.headerStyle}`}
             >
-              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
+              <h3 className="m-0">{t('personalInfoHeading')}</h3>
               <Button
                 type="button"
                 variant="light"
@@ -562,7 +572,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${styles.headerStyle}`}
             >
               <h3 className="m-0" data-testid="eventsAttended-title">
-                {t('profileDetailHeading')}
+                {t('personalDetailsHeading')}
               </h3>
             </Card.Header>
             <Card.Body
@@ -601,7 +611,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               <Row className="mb-3 gap-2">
                 <Col md={12} className="mb-3">
                   <Form.Check
-                    checked={formState.pluginCreationAllowed === 'true'}
+                    checked={!!formState.pluginCreationAllowed}
                     className="gap-3 d-flex align-items-center"
                     type="checkbox"
                     onChange={(e) => {
@@ -609,8 +619,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       setFormState((prevState) => ({
                         ...prevState,
                         pluginCreationAllowed: e.target.checked
-                          ? 'true'
-                          : 'false',
                       }));
                       setisUpdated(true);
                     }}
@@ -622,13 +630,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={12}>
                   <Form.Check
-                    checked={formState.adminApproved === 'true'}
+                    checked={!!formState.adminApproved}
                     className="gap-3 d-flex align-items-center"
                     onChange={(e) => {
                       console.log('Admin Approved');
                       setFormState((prevState) => ({
                         ...prevState,
-                        adminApproved: e.target.checked ? 'true' : 'false',
+                        adminApproved: e.target.checked
                       }));
                       setisUpdated(true);
                     }}
@@ -678,12 +686,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       gap: '0.5rem',
                     }}
                     onClick={(e) => {
-                      if (deleteFlag) {
-                        toast.success(tCommon('deletedSuccessfully') as string);
-                      } else {
-                        toast.success(tCommon('againClickToDelete') as string);
-                        setDeleteFlag(true);
-                      }
+                      setShowDeleteConfirm(true);
                     }}
                     className="d-flex align-items-center justify-content-center"
                   >
@@ -694,6 +697,25 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Row>
             </Card.Body>
           </Card>
+
+          
+            <Modal show={showDeleteConfirm} onHide={() => setShowDeleteConfirm(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>{t('confirmDeleteUser')}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {t('deleteUserConfirmationText')}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>
+                {tCommon('cancel')}
+              </Button>
+              <Button variant="danger" onClick={handleDeleteUser}>
+                {t('confirmDelete')}
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          
 
           {isUpdated && (
             <Row className="mt-4">
