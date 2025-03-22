@@ -808,6 +808,167 @@ describe('OrgPostCard Component', () => {
         expect(toast.error).toHaveBeenCalledWith('Failed to upload video');
       });
     });
+
+    it('handles undefined objectName in video src correctly', () => {
+      // Create a post with video attachment that has undefined objectName
+      const postWithMissingObjectName = {
+        ...mockPost,
+        attachments: [
+          {
+            id: 'v1',
+            postId: '12',
+            name: 'fallback-video.mp4',
+            objectName: undefined,
+            mimeType: 'video/mp4',
+            createdAt: new Date(),
+          },
+        ],
+      };
+
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={postWithMissingObjectName} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const videoElement = screen.getByTestId('video');
+      const sourceElement = videoElement.querySelector('source');
+
+      expect(sourceElement).toBeInTheDocument();
+      // Should fall back to the name property
+      expect(sourceElement?.getAttribute('src')).toBe('fallback-video.mp4');
+    });
+
+    it('uses orgId from useParams for MinIO uploads', async () => {
+      renderComponent();
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+      const editOption = screen.getByText(/edit/i);
+      await userEvent.click(editOption);
+
+      const fileInput = await screen.findByTestId('image-upload');
+      const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+      await userEvent.upload(fileInput, file);
+
+      // Verify the orgId is passed correctly
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'test-org');
+    });
+
+    it('uses orgId from useParams for both image and video MinIO uploads', async () => {
+      renderComponent();
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+      const editOption = screen.getByText(/edit/i);
+      await userEvent.click(editOption);
+
+      // Test with image upload
+      const imageInput = await screen.findByTestId('image-upload');
+      const imageFile = new File(['content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+      await userEvent.upload(imageInput, imageFile);
+
+      // Verify the orgId is passed correctly for image
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(imageFile, 'test-org');
+
+      // Clear mocks to isolate video upload test
+      mockUploadFileToMinio.mockClear();
+
+      // Test with video upload
+      const videoInput = await screen.findByTestId('video-upload');
+      const videoFile = new File(['video content'], 'test.mp4', {
+        type: 'video/mp4',
+      });
+      await userEvent.upload(videoInput, videoFile);
+
+      // Verify the orgId is passed correctly for video
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(videoFile, 'test-org');
+    });
+
+    it('handles empty file selection gracefully', async () => {
+      renderComponent();
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+      const moreOptionsButton = screen.getByTestId('more-options-button');
+      await userEvent.click(moreOptionsButton);
+      const editOption = screen.getByText(/edit/i);
+      await userEvent.click(editOption);
+
+      // Clear any previous calls
+      mockUploadFileToMinio.mockClear();
+
+      // Test empty image upload
+      const fileInput = await screen.findByTestId('image-upload');
+      fireEvent.change(fileInput, { target: { files: [] } });
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+
+      // Test empty video upload
+      const videoInput = await screen.findByTestId('video-upload');
+      fireEvent.change(videoInput, { target: { files: [] } });
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+
+      // Check that no attachments were added
+      expect(screen.queryByAltText('Preview')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('video-preview')).not.toBeInTheDocument();
+    });
+
+    it('handles empty objectName in getMediaUrl', async () => {
+      const postWithEmptyObjectName = {
+        ...mockPost,
+        attachments: [
+          {
+            ...mockPost.attachments[0],
+            objectName: '', // Empty string
+          },
+        ],
+      };
+
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={postWithEmptyObjectName} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+
+      const modalImage = screen.getByAltText('Post content');
+      expect(modalImage.getAttribute('src')).toBe('test-image.jpg');
+    });
+
+    it('handles undefined objectName in getMediaUrl', async () => {
+      const postWithUndefinedObjectName = {
+        ...mockPost,
+        attachments: [
+          {
+            ...mockPost.attachments[0],
+            objectName: undefined,
+          },
+        ],
+      };
+
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard post={postWithUndefinedObjectName} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const postItem = screen.getByTestId('post-item');
+      await userEvent.click(postItem);
+
+      const modalImage = screen.getByAltText('Post content');
+      expect(modalImage.getAttribute('src')).toBe('test-image.jpg');
+    });
   });
 });
 
