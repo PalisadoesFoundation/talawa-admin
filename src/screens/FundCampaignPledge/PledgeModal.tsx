@@ -176,7 +176,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         refetchPledge();
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        const errorMessage =
+          error instanceof Error ? error.message : t('errorUpdatingPledge');
+        toast.error(errorMessage);
       }
     },
     [formState, pledge],
@@ -209,7 +211,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        const errorMessage =
+          error instanceof Error ? error.message : t('errorCreatingPledge');
+        toast.error(errorMessage);
       }
     },
     [formState, campaignId],
