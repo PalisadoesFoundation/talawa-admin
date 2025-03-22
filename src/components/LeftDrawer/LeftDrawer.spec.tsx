@@ -261,6 +261,12 @@ describe('LeftDrawer Component', () => {
     expect(setHideDrawer).toHaveBeenCalledWith(true);
   });
 
+  it('verifies role button styles for super admin', () => {
+    renderComponent();
+    const rolesButton = screen.getByTestId('rolesBtn');
+    expect(rolesButton).toHaveClass(`${styles.sidebarBtnActive}`);
+  });
+
   it('verifies text content from translation keys', () => {
     renderComponent();
 
