@@ -123,7 +123,7 @@ function OrganizationCard({
       if (errorCode === 'ALREADY_MEMBER') {
         toast.error(t('AlreadyJoined') as string);
       } else {
-        toast.error(t('errorOccurred') as string);
+        toast.error(t('errorOccured') as string);
       }
     }
   }
