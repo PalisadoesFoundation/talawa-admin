@@ -541,51 +541,30 @@ describe('People Component Mode Switch Coverage', () => {
 
   it('handles mode transitions correctly including edge cases', async () => {
     setupTest();
-
-    // Wait for initial render
+  
+    // Wait for initial render (members mode)
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
     });
-
-    // Open dropdown and switch to admin mode
+  
+    // Switch to admin mode
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await waitFor(async () => {
-      await userEvent.click(screen.getByTestId('modeBtn1'));
-    });
-
+    await userEvent.click(screen.getByTestId('modeBtn1'));
+  
     // Verify admin view
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
       expect(screen.queryByText('Test User')).not.toBeInTheDocument();
     });
-
-    // Test mode transition with missing data
-    const modeSetter = vi.fn();
-    vi.spyOn(React, 'useState').mockImplementationOnce(() => [1, modeSetter]); // Mock mode state
-
-    // Force a re-render to trigger the useEffect with mocked state
-    setupTest();
-
-    // Verify the component handles the transition gracefully
+  
+    // Switch back to members mode
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn0'));
+  
+    // Verify members view
     await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
-  });
-
-  // Set up i18next mock for all tests in this describe block
-  beforeAll(() => {
-    vi.mock('react-i18next', async () => {
-      const actual = await vi.importActual('react-i18next');
-      return {
-        ...actual,
-        useTranslation: () => ({
-          t: (key: string) =>
-            key === 'nothingToShow' ? 'Nothing to show' : key,
-          i18n: {
-            changeLanguage: () => new Promise(() => {}),
-          },
-        }),
-      };
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.queryByText('Admin User')).not.toBeInTheDocument();
     });
   });
 
