@@ -122,7 +122,9 @@ const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
     setExpanded(expanded === index ? -1 : index);
   };
 
-  const renderWeekDays = (toggleExpand: (index: number) => void): JSX.Element[] => {
+  const renderWeekDays = (
+    toggleExpand: (index: number) => void,
+  ): JSX.Element[] => {
     const days = [];
     for (let i = 0; i < 7; i++) {
       const day = new Date(currentWeekStart);
@@ -248,7 +250,9 @@ const WeeklyEventCalendar: React.FC<InterfaceCalendarProps> = ({
             </div>
           ))}
         </div>
-        <div className={styles.calendar__days}>{renderWeekDays(toggleExpand)}</div>
+        <div className={styles.calendar__days}>
+          {renderWeekDays(toggleExpand)}
+        </div>
       </div>
     </div>
   );
