@@ -177,33 +177,33 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
         <Form.Label htmlFor="birthDate" className={styles.cardLabel}>
           {t('birthDate')}
         </Form.Label>
-          <DatePicker
-            format="DD/MM/YYYY"
-            value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
-            onChange={(date) =>
-              handleFieldChange(
-                'birthDate',
-                date ? date.toISOString().split('T')[0] : '',
-              )
-            }
-            sx={{
+        <DatePicker
+          format="DD/MM/YYYY"
+          value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
+          onChange={(date) =>
+            handleFieldChange(
+              'birthDate',
+              date ? date.toISOString().split('T')[0] : '',
+            )
+          }
+          sx={{
+            backgroundColor: '#f2f2f2',
+            width: '100%',
+            '& .MuiOutlinedInput-root': {
               backgroundColor: '#f2f2f2',
-              width: '100%',
-              '& .MuiOutlinedInput-root': {
-                backgroundColor: '#f2f2f2',
-                '& fieldset': {
-                  borderColor: '#ccc',
-                },
-                '&:hover fieldset': {
-                  borderColor: '#ccc',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#ccc !important',
-                },
+              '& fieldset': {
+                borderColor: '#ccc',
               },
-            }}
-            maxDate={dayjs()}
-          />
+              '&:hover fieldset': {
+                borderColor: '#ccc',
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: '#ccc !important',
+              },
+            },
+          }}
+          maxDate={dayjs()}
+        />
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="grade" className={styles.cardLabel}>
