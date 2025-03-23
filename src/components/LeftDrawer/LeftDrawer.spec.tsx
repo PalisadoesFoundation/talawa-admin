@@ -99,6 +99,21 @@ describe('LeftDrawer Component', () => {
     expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
   });
 
+  it('super admin: applies correct styles when on users route (rolesBTn)', () => {
+    vi.mocked(useLocalStorage).mockImplementation(() => ({
+      getItem: vi.fn(() => true),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      getStorageKey: vi.fn(() => ''),
+    }));
+
+    window.history.pushState({}, '', '/users');
+
+    renderComponent();
+    const element = screen.getByTestId('rolesBtn');
+    expect(element.className).toContain('sidebarBtnActive');
+  });
+
   it('applies correct styles when drawer is hidden', () => {
     renderComponent({ ...defaultProps, hideDrawer: true });
     const element = screen.getByTestId('leftDrawerContainer');
@@ -261,15 +276,8 @@ describe('LeftDrawer Component', () => {
     expect(setHideDrawer).toHaveBeenCalledWith(true);
   });
 
-  it('verifies role button styles for super admin', () => {
-    renderComponent();
-    const rolesButton = screen.getByTestId('rolesBtn');
-    expect(rolesButton).toHaveClass(`${styles.sidebarBtnActive}`);
-  });
-
   it('verifies text content from translation keys', () => {
     renderComponent();
-
     // Check organization button text content
     const orgButton = screen.getByTestId('organizationsBtn');
     expect(orgButton.textContent).toContain('my organizations');
