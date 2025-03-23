@@ -1,27 +1,44 @@
 import React from 'react';
-import type { RenderResult } from '@testing-library/react';
 import {
   render,
   screen,
   fireEvent,
   waitFor,
-  // within,
+  RenderResult,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from 'state/store';
+import { store } from '../../state/store'; // Update path based on your project structure
 import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
-import i18nForTest from 'utils/i18nForTest';
-import userEvent from '@testing-library/user-event';
+import i18nForTest from '../../utils/i18nForTest'; // Update path based on your project structure
 
-vi.mock('utils/convertToBase64', () => ({
-  default: vi.fn(() => Promise.resolve('mockBase64String')),
+// Mock toast
+const mockToastError = vi.fn();
+const mockToastSuccess = vi.fn();
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    error: (msg: string) => mockToastError(msg),
+    success: (msg: string) => mockToastSuccess(msg),
+  },
+}));
+
+const mockUploadFileToMinio = vi
+  .fn()
+  .mockResolvedValue({ objectName: 'mocked-object-name' });
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: mockUploadFileToMinio,
+  }),
 }));
 
 describe('OrganizationModal Component', () => {
   const mockToggleModal = vi.fn();
+
   const mockCreateOrg = vi.fn((e) => e.preventDefault());
   const mockSetFormState = vi.fn();
 
@@ -103,9 +120,32 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
     await waitFor(() =>
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mockBase64String' }),
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
       ),
     );
+    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
+  });
+
+  test('handles image upload error correctly', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+
+    setup();
+    const fileInput = screen.getByTestId('organisationImage');
+    const file = new File(['dummy content'], 'example.png', {
+      type: 'image/png',
+    });
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error uploading image:',
+        expect.any(Error),
+      );
+    });
+
+    expect(mockSetFormState).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 
   test('closes modal when close button is clicked', () => {
@@ -207,20 +247,6 @@ describe('OrganizationModal Component', () => {
     ) as HTMLSelectElement;
     const firstOption = countrySelect.options[0];
     expect(firstOption.disabled).toBe(true);
-  });
-
-  test('should handle invalid file type', async () => {
-    setup();
-    const fileInput = screen.getByTestId(
-      'organisationImage',
-    ) as HTMLInputElement;
-    const invalidFile = new File(['dummy content'], 'test.txt', {
-      type: 'text/plain',
-    });
-
-    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
-
-    expect(fileInput.files?.[0].type).not.toBe('image/png');
   });
 
   test('form inputs should have associated labels', () => {
@@ -348,9 +374,27 @@ describe('OrganizationModal Component', () => {
 
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({
-        avatar: 'mockBase64String',
+        avatar: 'mocked-object-name',
       }),
     );
+  });
+
+  test('should handle invalid file type', async () => {
+    setup();
+    const invalidFile = new File(['content'], 'test.txt', {
+      type: 'text/plain',
+    });
+    const fileInput = screen.getByTestId('organisationImage');
+
+    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+
+    await waitFor(() => {
+      expect(mockToastError).toHaveBeenCalledWith(
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+      );
+    });
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
   test('should handle null file selection', async () => {
@@ -463,5 +507,60 @@ describe('OrganizationModal Component', () => {
       await userEvent.click(screen.getByTestId('submitOrganizationForm'));
       expect(mockCreateOrg).toHaveBeenCalled();
     }
+  });
+
+  test('should handle file size exceeding 5MB', async () => {
+    setup();
+    const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.png', {
+      type: 'image/png',
+    });
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
+
+    await userEvent.upload(fileInput, largeFile);
+
+    await waitFor(() => {
+      expect(mockToastError).toHaveBeenCalledWith(
+        'File is too large. Maximum size is 5MB.',
+      );
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+      expect(mockSetFormState).not.toHaveBeenCalled();
+    });
+  });
+
+  test('should show success toast on successful upload', async () => {
+    setup();
+    const file = new File(['dummy content'], 'test.png', {
+      type: 'image/png',
+    });
+    const fileInput = screen.getByTestId('organisationImage');
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(mockToastSuccess).toHaveBeenCalledWith('imageUploadSuccess');
+    });
+    expect(mockSetFormState).toHaveBeenCalledWith(
+      expect.objectContaining({
+        avatar: 'mocked-object-name',
+      }),
+    );
+  });
+
+  test('should show error toast on upload failure', async () => {
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+    setup();
+    const file = new File(['dummy content'], 'test.png', {
+      type: 'image/png',
+    });
+    const fileInput = screen.getByTestId('organisationImage');
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(mockToastError).toHaveBeenCalledWith('imageUploadError');
+    });
+    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 });
