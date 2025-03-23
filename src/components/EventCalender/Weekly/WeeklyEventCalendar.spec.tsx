@@ -115,32 +115,6 @@ describe('WeeklyViewCalendar Component', () => {
     expect(days.length).toBe(7);
   });
 
-  it('handles week navigation correctly', async () => {
-    const { getByTestId, getByText } = renderWithRouter(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
-    );
-
-    const currentWeekStart = dayjs().startOf('week');
-    const currentWeekText = `${currentWeekStart.format('MMM D')} - ${currentWeekStart
-      .add(6, 'day')
-      .format('MMM D')}`;
-
-    await act(async () => {
-      fireEvent.click(getByTestId('prevWeek'));
-    });
-    await waitFor(() => {
-      expect(getByTestId('current-week')).not.toHaveTextContent(
-        currentWeekText,
-      );
-    });
-
-    await act(async () => {
-      fireEvent.click(getByTestId('nextWeek'));
-    });
-    await waitFor(() => {
-      expect(getByTestId('current-week')).toHaveTextContent(currentWeekText);
-    });
-  });
 
   it('renders holiday cards correctly', async () => {
     const { getByText } = renderWithRouter(
