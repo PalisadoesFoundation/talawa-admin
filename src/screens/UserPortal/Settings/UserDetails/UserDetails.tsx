@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import dayjs from 'dayjs';
 import styles from '../../../../style/app-fixed.module.css';
 import {
   educationGradeEnum,
@@ -11,6 +12,7 @@ import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFiel
 import sanitizeHtml from 'sanitize-html';
 import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
+import { DatePicker } from '@mui/x-date-pickers';
 
 interface InterfaceUserDetailsFormProps {
   userDetails: {
@@ -175,14 +177,33 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
         <Form.Label htmlFor="birthDate" className={styles.cardLabel}>
           {t('birthDate')}
         </Form.Label>
-        <Form.Control
-          type="date"
-          id="birthDate"
-          value={userDetails.birthDate || ''}
-          onChange={(e) => handleFieldChange('birthDate', e.target.value)}
-          className={styles.cardControl}
-          max={new Date().toISOString().split('T')[0]}
-        />
+          <DatePicker
+            format="DD/MM/YYYY"
+            value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
+            onChange={(date) =>
+              handleFieldChange(
+                'birthDate',
+                date ? date.toISOString().split('T')[0] : '',
+              )
+            }
+            sx={{
+              backgroundColor: '#f2f2f2',
+              width: '100%',
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: '#f2f2f2',
+                '& fieldset': {
+                  borderColor: '#ccc',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#ccc',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#ccc !important',
+                },
+              },
+            }}
+            maxDate={dayjs()}
+          />
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="grade" className={styles.cardLabel}>
