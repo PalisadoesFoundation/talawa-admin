@@ -101,7 +101,7 @@ describe('LeftDrawer Component', () => {
 
   it('super admin: applies correct styles when on users route (rolesBTn)', () => {
     vi.mocked(useLocalStorage).mockImplementation(() => ({
-      getItem: vi.fn(() => true),
+      getItem: vi.fn(() => 'true'),
       setItem: vi.fn(),
       removeItem: vi.fn(),
       getStorageKey: vi.fn(() => ''),

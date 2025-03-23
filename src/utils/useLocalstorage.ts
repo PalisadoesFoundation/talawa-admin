@@ -2,7 +2,7 @@
  * Helper interface for managing localStorage operations.
  */
 interface InterfaceStorageHelper {
-  getItem: <T>(key: string) => T | null | boolean;
+  getItem: <T>(key: string) => T | null | string;
   setItem: (key: string, value: unknown) => void;
   removeItem: (key: string) => void;
   getStorageKey: (key: string) => string;
