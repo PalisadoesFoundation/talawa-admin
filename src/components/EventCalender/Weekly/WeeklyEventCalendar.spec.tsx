@@ -115,7 +115,6 @@ describe('WeeklyViewCalendar Component', () => {
     expect(days.length).toBe(7);
   });
 
-
   it('renders holiday cards correctly', async () => {
     const { getByText } = renderWithRouter(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
