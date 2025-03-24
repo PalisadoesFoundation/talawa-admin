@@ -21,7 +21,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 const ProfileCard = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
-  const adminFor: string[] = getItem('AdminFor') || [];
+  const adminFor: string | string[] = getItem('AdminFor') || [];
   const userRole = superAdmin
     ? 'SuperAdmin'
     : adminFor?.length > 0

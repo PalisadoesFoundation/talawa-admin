@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 /**
  * The SuperAdminScreen component manages the layout for the Super Admin screen,
@@ -57,6 +58,7 @@ const superAdminScreen = (): JSX.Element => {
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
       )}
+
       <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${styles.pageContainer} ${
@@ -68,9 +70,10 @@ const superAdminScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
-            <h2>{t('title')}</h2>
+        <div>
+          <div className={`${styles.navContainer}`}>
+            <h1>{t('title')}</h1>
+            <ProfileDropdown />
           </div>
         </div>
         <Outlet />

@@ -81,7 +81,7 @@ const EventManagement = (): JSX.Element => {
 
   // Determine user role based on local storage
   const superAdmin = getItem('SuperAdmin');
-  const adminFor: string[] = getItem('AdminFor') || [];
+  const adminFor: string | string[] = getItem('AdminFor') || [];
   const userRole = superAdmin
     ? 'SUPERADMIN'
     : adminFor?.length > 0
