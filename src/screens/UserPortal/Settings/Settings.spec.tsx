@@ -16,7 +16,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import '../../../style/app.module.css';
 import { errorMock, MOCKS1, MOCKS2 } from './SettingsMocks';
 import { urlToFile } from 'utils/urlToFile';
-import dayjs from 'dayjs';
 
 vi.mock('react-toastify', () => ({
   toast: {

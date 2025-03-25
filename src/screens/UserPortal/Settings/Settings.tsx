@@ -169,7 +169,7 @@ export default function Settings(): JSX.Element {
 
   const handleFieldChange = (fieldName: string, value: string): void => {
     // check if the birth date is not in the future
-    if (fieldName === 'birthDate' && value) {
+    if (fieldName === 'birthDate') {
       const today = new Date();
       const selectedDate = new Date(value);
       if (selectedDate > today) {

@@ -188,29 +188,14 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
                 date ? date.format('YYYY-MM-DD') : '',
               )
             }
-            sx={{
-              backgroundColor: '#f2f2f2',
-              width: '100%',
-              '& .MuiOutlinedInput-root': {
-                backgroundColor: '#f2f2f2',
-                '& fieldset': {
-                  borderColor: '#ccc',
-                },
-                '&:hover fieldset': {
-                  borderColor: '#ccc',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#ccc !important',
-                },
-              },
-            }}
-            maxDate={dayjs().startOf('day')} // Ensures no future dates can be selected
+            className={`${styles.cardLabel} w-100`}
+            maxDate={dayjs().startOf('day')}
             slotProps={{
               textField: {
                 inputProps: {
                   'data-testid': 'birth-date-input',
                   'aria-label': t('birthDate'),
-                  max: dayjs().format('YYYY-MM-DD'), // Properly formatted max date for native input
+                  max: dayjs().format('YYYY-MM-DD'),
                 },
               },
             }}
