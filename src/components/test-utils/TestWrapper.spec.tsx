@@ -186,4 +186,81 @@ describe('TestWrapper', () => {
     // Updated state
     expect(screen.getByTestId('async-component')).toHaveTextContent('Loaded');
   });
+
+  it('allows error boundaries to catch errors from children', () => {
+    // Define types for the error boundary
+    interface ErrorBoundaryProps {
+      children: ReactNode;
+    }
+
+    interface ErrorBoundaryState {
+      hasError: boolean;
+      error: Error | null;
+    }
+
+    // Create a properly typed error boundary for testing
+    class TestErrorBoundary extends React.Component<
+      ErrorBoundaryProps,
+      ErrorBoundaryState
+    > {
+      constructor(props: ErrorBoundaryProps) {
+        super(props);
+        this.state = {
+          hasError: false,
+          error: null,
+        };
+      }
+
+      static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+        return {
+          hasError: true,
+          error,
+        };
+      }
+
+      render(): React.ReactNode {
+        if (this.state.hasError && this.state.error) {
+          return (
+            <div data-testid="error-message">{this.state.error.message}</div>
+          );
+        }
+        return this.props.children;
+      }
+    }
+
+    // Component that throws during render
+    const ErrorComponent = (): ReactNode => {
+      throw new Error('Test error');
+    };
+
+    // Suppress console errors during this test
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <TestWrapper>
+        <TestErrorBoundary>
+          <ErrorComponent />
+        </TestErrorBoundary>
+      </TestWrapper>,
+    );
+
+    // Verify error boundary caught the error
+    expect(screen.getByTestId('error-message')).toHaveTextContent('Test error');
+
+    // Restore console.error
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('passes the i18n instance to I18nextProvider', () => {
+    render(
+      <TestWrapper>
+        <div>i18n Test</div>
+      </TestWrapper>,
+    );
+
+    const i18nextProvider = screen.getByTestId('i18next-provider');
+    expect(i18nextProvider.getAttribute('data-i18n')).toBe('provided');
+  });
 });
