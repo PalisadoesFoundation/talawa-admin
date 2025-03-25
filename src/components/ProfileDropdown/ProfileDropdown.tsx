@@ -61,9 +61,9 @@ const profileDropdown = (): JSX.Element => {
             />
           ) : (
             <Avatar
+              avatarStyle={styles.avatarStyle}
               data-testid="display-img"
               size={45}
-              avatarStyle={styles.avatarStyle}
               name={name}
               alt={`dummy picture`}
             />
