@@ -867,7 +867,7 @@ export const MEMBERSHIP_REQUEST = gql`
       membershipRequests(
         skip: $skip
         first: $first
-        where: { user: { firstName_contains: $firstName_contains } }
+        where: { user: { name_contains: $firstName_contains } }
       ) {
         membershipRequestId
         createdAt
@@ -875,7 +875,7 @@ export const MEMBERSHIP_REQUEST = gql`
         user {
           id
           name
-          email
+          emailAddress
         }
       }
     }

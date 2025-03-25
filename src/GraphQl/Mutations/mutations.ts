@@ -29,9 +29,10 @@ export const REJECT_ORGANIZATION_REQUEST_MUTATION = gql`
 // to accept the organization request
 
 export const ACCEPT_ORGANIZATION_REQUEST_MUTATION = gql`
-  mutation AcceptMembershipRequest($id: ID!) {
-    acceptMembershipRequest(membershipRequestId: $id) {
-      id
+  mutation AcceptMembershipRequest($input: MutationAcceptMembershipRequestInput!) {
+    acceptMembershipRequest(input: $input) {
+      success
+      message
     }
   }
 `;

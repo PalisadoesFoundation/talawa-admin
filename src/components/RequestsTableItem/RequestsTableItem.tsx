@@ -50,9 +50,12 @@ const RequestsTableItem = (props: Props): JSX.Element => {
     try {
       const { data } = await acceptUser({
         variables: {
-          id: membershipRequestId,
+          input: {
+            membershipRequestId: membershipRequestId,
+          },
         },
       });
+      
       if (data) {
         toast.success(t('acceptedSuccessfully') as string);
         resetAndRefetch();
@@ -98,7 +101,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
       <td
         className={styles.name}
       >{`${request.user.name}`}</td>
-      <td className={styles.email}>{request.user.email}</td>
+      <td className={styles.email}>{request.user.emailAddress}</td>
       <td>
         <Button
           variant="success"

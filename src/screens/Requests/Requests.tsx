@@ -28,7 +28,7 @@ interface InterfaceRequestsListItem {
   user: {
     id: string;
     name: string; // Changed from firstName/lastName
-    email: string;
+    emailAddress: string;
   };
 }
 

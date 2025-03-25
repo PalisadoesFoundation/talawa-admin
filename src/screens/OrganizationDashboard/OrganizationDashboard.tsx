@@ -345,7 +345,7 @@ function OrganizationDashboard(): JSX.Element {
                 }}
               >
                 <DashBoardCard
-                  count={data?.organizations.membershipRequests.length}
+                  count={membershipRequestData?.organization?.membershipRequests?.length}
                   title={tCommon('requests')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 />
@@ -461,30 +461,33 @@ function OrganizationDashboard(): JSX.Element {
                 </Button>
               </div>
               <Card.Body
-                className={styles.containerBody}
+                className={styles.containerBody} 
                 style={{ height: '150px' }}
               >
                 {loadingMembershipRequests ? (
                   [...Array(4)].map((_, index) => (
-                    <CardItemLoading key={`requestsLoading_${index}`} />
+                  <CardItemLoading key={`requestsLoading_${index}`} />
                   ))
-                ) : membershipRequestData?.organization?.membershipRequests?.length === 0 ? (
+                ) : membershipRequestData?.organization?.membershipRequests?.filter(
+                  (request: any) => request.status === 'pending',
+                  ).length === 0 ? (
                   <div
-                    className={styles.emptyContainer}
-                    style={{ height: '150px' }}
+                  className={styles.emptyContainer}
+                  style={{ height: '150px' }}
                   >
-                    <h6>{t('noMembershipRequests')}</h6>
+                  <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
                   membershipRequestData?.organization?.membershipRequests
-                    .slice(0, 8)
-                    .map((request: any) => (
-                      <CardItem
-                        type="MembershipRequest"
-                        key={request.membershipRequestId}
-                        title={request.user.name}
-                      />
-                    ))
+                  .filter((request: any) => request.status === 'pending')
+                  .slice(0, 8)
+                  .map((request: any) => (
+                    <CardItem
+                    type="MembershipRequest"
+                    key={request.membershipRequestId}
+                    title={request.user.name}
+                    />
+                  ))
                 )}
               </Card.Body>
             </Card>
