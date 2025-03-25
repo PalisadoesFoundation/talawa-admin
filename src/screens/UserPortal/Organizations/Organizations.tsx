@@ -227,7 +227,6 @@ export default function organizations(): JSX.Element {
             image: org.avatarURL || '',
             description: org.description || '',
             membersCount: org.membersCount || 0,
-            members: org.members?.edges?.map((edge) => edge.node.id) || [],
             adminsCount: org.adminsCount || 0,
             address: {
               city: org.city || '',

@@ -1,4 +1,3 @@
-// Organizations.test.tsx
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
@@ -30,7 +29,10 @@ async function wait(ms = 100) {
 
 const mocks = [
   {
-    request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
+    request: {
+      query: ALL_ORGANIZATIONS,
+      variables: { filter: '' }, // Aligned with Organizations.tsx
+    },
     result: {
       data: {
         organizations: Array(10)
@@ -47,7 +49,8 @@ const mocks = [
             state: 'State',
             membersCount: i + 1,
             adminsCount: 1,
-            members: { edges: [{ node: { id: 'otherUserId' } }] },
+            isMember: i % 2 === 0, // Alternate membership for testing
+            __typename: 'Organization',
           })),
       },
     },
@@ -61,6 +64,7 @@ const mocks = [
       data: {
         user: {
           organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
             edges: [
               {
                 node: {
@@ -75,11 +79,18 @@ const mocks = [
                   state: 'State',
                   membersCount: 2,
                   adminsCount: 1,
-                  members: { edges: [{ node: { id: TEST_USER_ID } }] },
+                  members: {
+                    edges: [{ node: { id: TEST_USER_ID, __typename: 'User' } }],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
                 },
+                __typename: 'OrganizationEdge',
               },
             ],
+            __typename: 'OrganizationConnection',
           },
+          __typename: 'User',
         },
       },
     },
@@ -98,22 +109,22 @@ const mocks = [
               name: 'Created Org 1',
               description: 'Created Desc',
               avatarURL: null,
-              city: 'City',
-              countryCode: 'US',
-              addressLine1: '789 Road',
-              postalCode: '54321',
-              state: 'State',
               membersCount: 3,
               adminsCount: 1,
-              members: { edges: [{ node: { id: TEST_USER_ID } }] },
+              isMember: true,
+              __typename: 'Organization',
             },
           ],
+          __typename: 'User',
         },
       },
     },
   },
   {
-    request: { query: ALL_ORGANIZATIONS, variables: { filter: '2' } },
+    request: {
+      query: ALL_ORGANIZATIONS,
+      variables: { filter: '2' },
+    },
     result: {
       data: {
         organizations: [
@@ -129,7 +140,8 @@ const mocks = [
             state: 'State',
             membersCount: 3,
             adminsCount: 1,
-            members: { edges: [{ node: { id: 'otherUserId' } }] },
+            isMember: true,
+            __typename: 'Organization',
           },
         ],
       },
@@ -144,6 +156,7 @@ const mocks = [
       data: {
         user: {
           organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
             edges: [
               {
                 node: {
@@ -158,11 +171,18 @@ const mocks = [
                   state: 'State',
                   membersCount: 2,
                   adminsCount: 1,
-                  members: { edges: [{ node: { id: TEST_USER_ID } }] },
+                  members: {
+                    edges: [{ node: { id: TEST_USER_ID, __typename: 'User' } }],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
                 },
+                __typename: 'OrganizationEdge',
               },
             ],
+            __typename: 'OrganizationConnection',
           },
+          __typename: 'User',
         },
       },
     },
@@ -181,16 +201,13 @@ const mocks = [
               name: 'Created Org 2',
               description: 'Created Desc 2',
               avatarURL: null,
-              city: 'City',
-              countryCode: 'US',
-              addressLine1: '789 Road',
-              postalCode: '54321',
-              state: 'State',
               membersCount: 3,
               adminsCount: 1,
-              members: { edges: [{ node: { id: TEST_USER_ID } }] },
+              isMember: true,
+              __typename: 'Organization',
             },
           ],
+          __typename: 'User',
         },
       },
     },
@@ -215,17 +232,15 @@ const mocks = [
             state: 'State',
             membersCount: 1,
             adminsCount: 1,
-            members: { edges: [{ node: { id: 'otherUserId' } }] },
+            isMember: false,
+            __typename: 'Organization',
           },
         ],
       },
     },
   },
   {
-    request: {
-      query: GET_COMMUNITY_DATA,
-      variables: {},
-    },
+    request: { query: GET_COMMUNITY_DATA, variables: {} },
     result: {
       data: {
         community: {
@@ -243,6 +258,7 @@ describe('Organizations Component', () => {
     setItem('userId', TEST_USER_ID);
     vi.clearAllMocks();
   });
+
   it('displays a loading indicator while fetching', async () => {
     render(
       <MockedProvider mocks={mocks}>
@@ -276,7 +292,7 @@ describe('Organizations Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
       expect(screen.getByTestId('org-name-All Org 1')).toBeInTheDocument();
-      expect(screen.getAllByTestId('organization-card').length).toBe(5); // Default rowsPerPage = 5
+      expect(screen.getAllByTestId('organization-card').length).toBe(5);
     });
   });
 
@@ -396,10 +412,7 @@ describe('Organizations Component', () => {
     const testMocks = [
       ...mocks,
       {
-        request: {
-          query: GET_COMMUNITY_DATA,
-          variables: {},
-        },
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
         result: {
           data: {
             community: {
@@ -428,13 +441,12 @@ describe('Organizations Component', () => {
       { timeout: 2000 },
     );
 
-    // Switch to created organizations mode
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn2'));
-    await wait(500); // Ensure mode switch completes
+    await wait(500);
 
     const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, '2{enter}'); // Type '2' and press Enter
+    await userEvent.type(searchInput, '2{enter}');
 
     await waitFor(
       () => {
@@ -476,70 +488,22 @@ describe('Organizations Component', () => {
     vi.advanceTimersByTime(300);
 
     waitFor(() => {
-      expect(screen.getByText(/Debounced Search Org/i)).toBeInTheDocument();
+      expect(
+        screen.getByTestId('org-name-Debounced Search Org'),
+      ).toBeInTheDocument();
     });
 
     vi.useRealTimers();
   });
 
-  it('toggles the sidebar visibility', async () => {
-    vi.mock('utils/useLocalstorage', () => ({
-      default: () => ({
-        getItem: vi.fn(() => TEST_USER_ID),
-        setItem: vi.fn(),
-      }),
-    }));
-
-    // Mock desktop size (>820px) for consistent initial state
-    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
-
-    render(
-      <MockedProvider mocks={mocks} addTypename={true}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
-      { timeout: 2000 },
-    );
-
-    // Initial state: hideDrawer = false (>820px), closeMenu visible
-    expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
-    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
-
-    // Toggle from false to true (closeMenu -> openMenu)
-    await userEvent.click(screen.getByTestId('closeMenu'));
-    await waitFor(
-      () => expect(screen.getByTestId('openMenu')).toBeInTheDocument(),
-      { timeout: 2000 },
-    );
-    expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
-
-    // Toggle back from true to false (openMenu -> closeMenu)
-    await userEvent.click(screen.getByTestId('openMenu'));
-    await waitFor(
-      () => expect(screen.getByTestId('closeMenu')).toBeInTheDocument(),
-      { timeout: 2000 },
-    );
-    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
-
-    vi.restoreAllMocks();
-  });
-
   it('changes rows per page and resets pagination', async () => {
-    // Extend mocks to cover potential variable mismatches
     const extendedMocks = [
       ...mocks,
       {
-        request: { query: ALL_ORGANIZATIONS, variables: { filter: undefined } }, // Fallback for undefined filter
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: undefined, limit: 10, offset: 0 },
+        },
         result: {
           data: {
             organizations: Array(10)
@@ -556,10 +520,7 @@ describe('Organizations Component', () => {
                 state: 'State',
                 membersCount: i + 1,
                 adminsCount: 1,
-                members: {
-                  edges: [{ node: { id: 'otherUserId', __typename: 'User' } }],
-                  __typename: 'UserConnection',
-                },
+                isMember: i % 2 === 0,
                 __typename: 'Organization',
               })),
           },
@@ -579,15 +540,14 @@ describe('Organizations Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for data to render, not just spinner
     await waitFor(
       () => {
         expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         expect(
           screen.getAllByTestId('organization-card').length,
-        ).toBeGreaterThan(0); // Confirm cards render
+        ).toBeGreaterThan(0);
       },
-      { timeout: 3000 }, // Slightly longer timeout for safety
+      { timeout: 3000 },
     );
 
     expect(screen.getAllByTestId('organization-card').length).toBe(5);
@@ -607,8 +567,6 @@ describe('Organizations Component', () => {
     expect(screen.getByTestId('org-name-All Org 9')).toBeInTheDocument();
   });
 
-  // Test empty state across all modes
-
   it('shows no organizations message when data is empty', async () => {
     const emptyMocks = [
       ...mocks.filter(
@@ -618,7 +576,10 @@ describe('Organizations Component', () => {
           mock.request.query !== USER_CREATED_ORGANIZATIONS,
       ),
       {
-        request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: '', limit: 5, offset: 0 },
+        },
         result: { data: { organizations: [] } },
       },
       {
@@ -626,20 +587,30 @@ describe('Organizations Component', () => {
           query: USER_JOINED_ORGANIZATIONS_PG,
           variables: { id: TEST_USER_ID, first: 5, filter: '' },
         },
-        result: { data: { user: { organizationsWhereMember: { edges: [] } } } },
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                edges: [],
+                pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+                __typename: 'OrganizationConnection',
+              },
+              __typename: 'User',
+            },
+          },
+        },
       },
       {
         request: {
           query: USER_CREATED_ORGANIZATIONS,
           variables: { id: TEST_USER_ID, filter: '' },
         },
-        result: { data: { user: { createdOrganizations: [] } } },
+        result: {
+          data: { user: { createdOrganizations: [], __typename: 'User' } },
+        },
       },
       {
-        request: {
-          query: GET_COMMUNITY_DATA,
-          variables: {},
-        },
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
         result: {
           data: {
             community: {
@@ -673,12 +644,12 @@ describe('Organizations Component', () => {
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn1'));
-    await wait(1000); // Increase for mode switch
+    await wait(1000);
     expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn2'));
-    await wait(1000); // Increase for mode switch
+    await wait(1000);
     expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
   });
 
@@ -686,7 +657,7 @@ describe('Organizations Component', () => {
     const testMocks = [
       ...mocks.filter(
         (mock) => mock.request.query !== USER_JOINED_ORGANIZATIONS_PG,
-      ), // Remove original
+      ),
       {
         request: {
           query: USER_JOINED_ORGANIZATIONS_PG,
@@ -696,6 +667,7 @@ describe('Organizations Component', () => {
           data: {
             user: {
               organizationsWhereMember: {
+                pageInfo: { hasNextPage: true, __typename: 'PageInfo' },
                 edges: Array(6)
                   .fill(null)
                   .map((_, i) => ({
@@ -711,19 +683,25 @@ describe('Organizations Component', () => {
                       state: 'State',
                       membersCount: 2,
                       adminsCount: 1,
-                      members: { edges: [{ node: { id: TEST_USER_ID } }] },
+                      members: {
+                        edges: [
+                          { node: { id: TEST_USER_ID, __typename: 'User' } },
+                        ],
+                        __typename: 'UserConnection',
+                      },
+                      __typename: 'Organization',
                     },
+                    __typename: 'OrganizationEdge',
                   })),
+                __typename: 'OrganizationConnection',
               },
+              __typename: 'User',
             },
           },
         },
       },
       {
-        request: {
-          query: GET_COMMUNITY_DATA,
-          variables: {},
-        },
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
         result: {
           data: {
             community: {
@@ -755,7 +733,7 @@ describe('Organizations Component', () => {
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn1'));
-    await wait(1000); // Increase for mode switch
+    await wait(1000);
 
     expect(screen.getByTestId('org-name-Joined Org 0')).toBeInTheDocument();
     expect(screen.getByTestId('org-name-Joined Org 4')).toBeInTheDocument();
@@ -765,7 +743,7 @@ describe('Organizations Component', () => {
 
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
     await userEvent.click(nextPageButton);
-    await wait(1000); // Increase for pagination update
+    await wait(1000);
 
     expect(screen.getByTestId('org-name-Joined Org 5')).toBeInTheDocument();
     expect(
@@ -773,12 +751,11 @@ describe('Organizations Component', () => {
     ).not.toBeInTheDocument();
   });
 
-  // Test pagination in created organizations mode
   it('paginates through created organizations', async () => {
     const testMocks = [
       ...mocks.filter(
         (mock) => mock.request.query !== USER_CREATED_ORGANIZATIONS,
-      ), // Remove original
+      ),
       {
         request: {
           query: USER_CREATED_ORGANIZATIONS,
@@ -794,24 +771,18 @@ describe('Organizations Component', () => {
                   name: `Created Org ${i}`,
                   description: `Created Desc ${i}`,
                   avatarURL: null,
-                  city: 'City',
-                  countryCode: 'US',
-                  addressLine1: '789 Road',
-                  postalCode: '54321',
-                  state: 'State',
                   membersCount: 3,
                   adminsCount: 1,
-                  members: { edges: [{ node: { id: TEST_USER_ID } }] },
+                  isMember: true,
+                  __typename: 'Organization',
                 })),
+              __typename: 'User',
             },
           },
         },
       },
       {
-        request: {
-          query: GET_COMMUNITY_DATA,
-          variables: {},
-        },
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
         result: {
           data: {
             community: {
@@ -843,7 +814,7 @@ describe('Organizations Component', () => {
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn2'));
-    await wait(1000); // Increase for mode switch
+    await wait(1000);
 
     expect(screen.getByTestId('org-name-Created Org 0')).toBeInTheDocument();
     expect(screen.getByTestId('org-name-Created Org 4')).toBeInTheDocument();
@@ -853,7 +824,7 @@ describe('Organizations Component', () => {
 
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
     await userEvent.click(nextPageButton);
-    await wait(1000); // Increase for pagination update
+    await wait(1000);
 
     expect(screen.getByTestId('org-name-Created Org 5')).toBeInTheDocument();
     expect(
@@ -862,11 +833,13 @@ describe('Organizations Component', () => {
   });
 
   it('paginates through the list of organizations', async () => {
-    // Add a broader mock to catch any ALL_ORGANIZATIONS query
     const extendedMocks = [
       ...mocks,
       {
-        request: { query: ALL_ORGANIZATIONS, variables: { filter: undefined } }, // Catch cases where filter is undefined
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: undefined, limit: 10, offset: 0 },
+        },
         result: {
           data: {
             organizations: Array(10)
@@ -883,10 +856,7 @@ describe('Organizations Component', () => {
                 state: 'State',
                 membersCount: i + 1,
                 adminsCount: 1,
-                members: {
-                  edges: [{ node: { id: 'otherUserId', __typename: 'User' } }],
-                  __typename: 'UserConnection',
-                },
+                isMember: i % 2 === 0,
                 __typename: 'Organization',
               })),
           },
@@ -906,15 +876,14 @@ describe('Organizations Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for data to render, not just spinner
     await waitFor(
       () => {
         expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         expect(
           screen.getAllByTestId('organization-card').length,
-        ).toBeGreaterThan(0); // Ensure cards render
+        ).toBeGreaterThan(0);
       },
-      { timeout: 3000 }, // Increase timeout slightly for slower renders
+      { timeout: 3000 },
     );
 
     expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
@@ -935,7 +904,10 @@ describe('Organizations Component', () => {
     const errorMocks = [
       ...mocks.filter((mock) => mock.request.query !== ALL_ORGANIZATIONS),
       {
-        request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: '', limit: 5, offset: 0 },
+        },
         error: new Error('Failed to fetch organizations'),
       },
       {
@@ -971,8 +943,7 @@ describe('Organizations Component', () => {
     expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
   });
 
-  // Test Resize Event Handling
-  it('toggles drawer visibility on window resize', async () => {
+  it('toggles the sidebar visibility', async () => {
     vi.mock('utils/useLocalstorage', () => ({
       default: () => ({
         getItem: vi.fn(() => TEST_USER_ID),
@@ -980,7 +951,6 @@ describe('Organizations Component', () => {
       }),
     }));
 
-    // Start with desktop size (>820px)
     vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
 
     render(
@@ -1001,11 +971,57 @@ describe('Organizations Component', () => {
       { timeout: 2000 },
     );
 
-    // Initial state: hideDrawer = false (>820px), closeMenu visible
     expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
     expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
 
-    // Resize to <=820px, hideDrawer = true
+    await userEvent.click(screen.getByTestId('closeMenu'));
+    await waitFor(
+      () => expect(screen.getByTestId('openMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('openMenu'));
+    await waitFor(
+      () => expect(screen.getByTestId('closeMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+
+    vi.restoreAllMocks();
+  });
+
+  it('toggles drawer visibility on window resize', async () => {
+    vi.mock('utils/useLocalstorage', () => ({
+      default: () => ({
+        getItem: vi.fn(() => TEST_USER_ID),
+        setItem: vi.fn(),
+      }),
+    }));
+
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+
     vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(800);
     fireEvent(window, new Event('resize'));
     await waitFor(
@@ -1014,7 +1030,6 @@ describe('Organizations Component', () => {
     );
     expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
 
-    // Resize back to >820px, hideDrawer = false
     vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
     fireEvent(window, new Event('resize'));
     await waitFor(
@@ -1025,7 +1040,7 @@ describe('Organizations Component', () => {
 
     vi.restoreAllMocks();
   });
-  // Test OrganizationCard Props Mapping
+
   it('correctly maps organization data to card props', async () => {
     const testMocks = [
       ...mocks.filter(
@@ -1036,7 +1051,7 @@ describe('Organizations Component', () => {
       {
         request: {
           query: ALL_ORGANIZATIONS,
-          variables: { filter: '' }, // Match the current Organizations.tsx query
+          variables: { filter: '' }, // Consistent with mocks
         },
         result: {
           data: {
@@ -1053,8 +1068,8 @@ describe('Organizations Component', () => {
                 state: 'State',
                 membersCount: 1,
                 adminsCount: 1,
-                members: { edges: [{ node: { id: 'otherUserId' } }] },
                 isMember: false,
+                __typename: 'Organization',
               },
             ],
           },
@@ -1063,12 +1078,13 @@ describe('Organizations Component', () => {
       {
         request: {
           query: USER_JOINED_ORGANIZATIONS_PG,
-          variables: { id: TEST_USER_ID, first: 5, filter: '' }, // Match current query
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
         },
         result: {
           data: {
             user: {
               organizationsWhereMember: {
+                pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
                 edges: [
                   {
                     node: {
@@ -1083,11 +1099,20 @@ describe('Organizations Component', () => {
                       state: 'State',
                       membersCount: 2,
                       adminsCount: 1,
-                      members: { edges: [{ node: { id: TEST_USER_ID } }] },
+                      members: {
+                        edges: [
+                          { node: { id: TEST_USER_ID, __typename: 'User' } },
+                        ],
+                        __typename: 'UserConnection',
+                      },
+                      __typename: 'Organization',
                     },
+                    __typename: 'OrganizationEdge',
                   },
                 ],
+                __typename: 'OrganizationConnection',
               },
+              __typename: 'User',
             },
           },
         },
@@ -1106,7 +1131,7 @@ describe('Organizations Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={testMocks}>
+      <MockedProvider mocks={testMocks} addTypename={true}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1117,23 +1142,21 @@ describe('Organizations Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for the organizations to render
     await waitFor(
-      () =>
-        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument(),
-      { timeout: 2000 },
+      () => {
+        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
     );
 
-    // Check all organizations mode
     const allCard = screen.getByTestId('organization-card');
     expect(allCard).toHaveAttribute('data-organization-name', 'All Org 0');
-    expect(allCard).toHaveAttribute('data-membership-status', ''); // Not a member
+    expect(allCard).toHaveAttribute('data-membership-status', '');
     expect(screen.getByTestId('membership-status-All Org 0')).toHaveAttribute(
       'data-status',
       '',
     );
 
-    // Switch to joined mode
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn1'));
     await waitFor(
@@ -1151,5 +1174,359 @@ describe('Organizations Component', () => {
     expect(
       screen.getByTestId('membership-status-Joined Org 1'),
     ).toHaveAttribute('data-status', 'accepted');
+  });
+
+  // New Tests for Additional Coverage
+
+  it('displays membership status correctly in all organizations mode', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    expect(screen.getByTestId('membership-status-All Org 0')).toHaveAttribute(
+      'data-status',
+      'accepted', // isMember: true for i=0
+    );
+    expect(screen.getByTestId('membership-status-All Org 1')).toHaveAttribute(
+      'data-status',
+      '', // isMember: false for i=1
+    );
+  });
+
+  it('handles refetch on mode change with filter applied', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2{enter}');
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-All Org 2')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-Joined Org 2')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+    await waitFor(
+      () =>
+        expect(
+          screen.getByTestId('org-name-Created Org 2'),
+        ).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+  });
+
+  it('renders address fields in organization cards', async () => {
+    const testMocks = [
+      ...mocks.filter(
+        (mock) =>
+          mock.request.query !== ALL_ORGANIZATIONS &&
+          mock.request.query !== USER_JOINED_ORGANIZATIONS_PG,
+      ),
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'allOrgId0',
+                name: 'All Org 0',
+                description: 'Description 0',
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: 1,
+                adminsCount: 1,
+                isMember: false,
+                members: {
+                  edges: [
+                    {
+                      node: { id: 'memberId1', __typename: 'User' },
+                      __typename: 'MemberEdge',
+                    },
+                  ],
+                  __typename: 'UserConnection',
+                },
+                __typename: 'Organization',
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
+        },
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+                edges: [
+                  {
+                    node: {
+                      id: 'joinedOrgId1',
+                      name: 'Joined Org 1',
+                      description: 'Joined Desc',
+                      avatarURL: null,
+                      city: 'City',
+                      countryCode: 'US',
+                      addressLine1: '456 Avenue',
+                      postalCode: '67890',
+                      state: 'State',
+                      membersCount: 2,
+                      adminsCount: 1,
+                      members: {
+                        edges: [
+                          { node: { id: TEST_USER_ID, __typename: 'User' } },
+                        ],
+                        __typename: 'UserConnection',
+                      },
+                      __typename: 'Organization',
+                    },
+                    __typename: 'OrganizationEdge',
+                  },
+                ],
+                __typename: 'OrganizationConnection',
+              },
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={testMocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+        expect(screen.getByTestId('organization-card')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    const card = screen.getByTestId('organization-card');
+    expect(card).toHaveAttribute('data-organization-name', 'All Org 0');
+    expect(card.textContent).toMatch(/123 Street/);
+    expect(card.textContent).toMatch(/City/);
+    expect(card.textContent).toMatch(/US/);
+  });
+
+  it('handles all loading states simultaneously', async () => {
+    const slowMocks = [
+      {
+        request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
+        delay: 1000,
+        result: {
+          data: {
+            organizations: Array(10)
+              .fill(null)
+              .map((_, i) => ({
+                id: `allOrgId${i}`,
+                name: `All Org ${i}`,
+                description: `Description ${i}`,
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: i + 1,
+                adminsCount: 1,
+                isMember: i % 2 === 0,
+                members: {
+                  edges: [
+                    {
+                      node: { id: `memberId${i + 1}`, __typename: 'User' },
+                      __typename: 'MemberEdge',
+                    },
+                  ],
+                  __typename: 'UserConnection',
+                },
+                __typename: 'Organization',
+              })),
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
+        },
+        delay: 1000,
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+                edges: [
+                  {
+                    node: {
+                      id: 'joinedOrgId1',
+                      name: 'Joined Org 1',
+                      description: 'Joined Desc',
+                      avatarURL: null,
+                      city: 'City',
+                      countryCode: 'US',
+                      addressLine1: '456 Avenue',
+                      postalCode: '67890',
+                      state: 'State',
+                      membersCount: 2,
+                      adminsCount: 1,
+                      members: {
+                        edges: [
+                          { node: { id: TEST_USER_ID, __typename: 'User' } },
+                        ],
+                        __typename: 'UserConnection',
+                      },
+                      __typename: 'Organization',
+                    },
+                    __typename: 'OrganizationEdge',
+                  },
+                ],
+                __typename: 'OrganizationConnection',
+              },
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_CREATED_ORGANIZATIONS,
+          variables: { id: TEST_USER_ID, filter: '' },
+        },
+        delay: 1000,
+        result: {
+          data: {
+            user: {
+              createdOrganizations: [
+                {
+                  id: 'createdOrgId1',
+                  name: 'Created Org 1',
+                  description: 'Created Desc',
+                  avatarURL: null,
+                  membersCount: 3,
+                  adminsCount: 1,
+                  isMember: true,
+                  members: {
+                    edges: [
+                      {
+                        node: { id: TEST_USER_ID, __typename: 'User' },
+                        __typename: 'MemberEdge',
+                      },
+                      {
+                        node: { id: 'memberId2', __typename: 'User' },
+                        __typename: 'MemberEdge',
+                      },
+                    ],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
+                },
+              ],
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={slowMocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 3000 },
+    );
+    expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
   });
 });
