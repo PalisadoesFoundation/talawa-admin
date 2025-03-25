@@ -12,7 +12,8 @@ import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFiel
 import sanitizeHtml from 'sanitize-html';
 import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 interface InterfaceUserDetailsFormProps {
   userDetails: {
@@ -177,33 +178,44 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
         <Form.Label htmlFor="birthDate" className={styles.cardLabel}>
           {t('birthDate')}
         </Form.Label>
-        <DatePicker
-          format="DD/MM/YYYY"
-          value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
-          onChange={(date) =>
-            handleFieldChange(
-              'birthDate',
-              date ? date.toISOString().split('T')[0] : '',
-            )
-          }
-          sx={{
-            backgroundColor: '#f2f2f2',
-            width: '100%',
-            '& .MuiOutlinedInput-root': {
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            format="YYYY-MM-DD"
+            value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
+            onChange={(date) =>
+              handleFieldChange(
+                'birthDate',
+                date ? date.format('YYYY-MM-DD') : '',
+              )
+            }
+            sx={{
               backgroundColor: '#f2f2f2',
-              '& fieldset': {
-                borderColor: '#ccc',
+              width: '100%',
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: '#f2f2f2',
+                '& fieldset': {
+                  borderColor: '#ccc',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#ccc',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#ccc !important',
+                },
               },
-              '&:hover fieldset': {
-                borderColor: '#ccc',
+            }}
+            maxDate={dayjs().startOf('day')} // Ensures no future dates can be selected
+            slotProps={{
+              textField: {
+                inputProps: {
+                  'data-testid': 'birth-date-input',
+                  'aria-label': t('birthDate'),
+                  max: dayjs().format('YYYY-MM-DD'), // Properly formatted max date for native input
+                },
               },
-              '&.Mui-focused fieldset': {
-                borderColor: '#ccc !important',
-              },
-            },
-          }}
-          maxDate={dayjs()}
-        />
+            }}
+          />
+        </LocalizationProvider>
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="grade" className={styles.cardLabel}>

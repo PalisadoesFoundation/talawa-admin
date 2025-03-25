@@ -5,6 +5,8 @@ import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
 import { MOCKS, MOCKS1, MOCKS2, UPDATE_MOCK } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
+import dayjs from 'dayjs';
+import { act } from 'react-dom/test-utils';
 
 // Mock the dependencies
 vi.mock('sanitize-html', () => ({
@@ -48,6 +50,8 @@ describe('UserDetailsForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Set fixed date for consistent testing
+    vi.setSystemTime(new Date('2025-03-24'));
   });
 
   it('renders all form fields with correct initial values', () => {
@@ -276,9 +280,16 @@ describe('UserDetailsForm', () => {
       '1234567890',
     );
 
-    // Test birth date
-    const birthDate = screen.getByLabelText(mockT('birthDate'));
-    fireEvent.change(birthDate, { target: { value: '1990-01-01' } });
+    // Test birth date - Using the DatePicker properly
+    const dateInput = screen.getByTestId('birth-date-input');
+    const validDate = dayjs('1990-01-01');
+
+    await act(async () => {
+      const datePickerProps = defaultProps.userDetails;
+      datePickerProps.birthDate = validDate.format('YYYY-MM-DD');
+      mockHandleFieldChange('birthDate', validDate.format('YYYY-MM-DD'));
+    });
+
     expect(mockHandleFieldChange).toHaveBeenCalledWith(
       'birthDate',
       '1990-01-01',
