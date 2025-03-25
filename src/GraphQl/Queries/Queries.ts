@@ -861,7 +861,12 @@ export const ADMIN_LIST = gql`
 
 // to take the membership request
 export const MEMBERSHIP_REQUEST = gql`
-  query Organization($input: QueryOrganizationInput!, $skip: Int, $first: Int, $firstName_contains: String) {
+  query Organization(
+    $input: QueryOrganizationInput!
+    $skip: Int
+    $first: Int
+    $firstName_contains: String
+  ) {
     organization(input: $input) {
       id
       membershipRequests(

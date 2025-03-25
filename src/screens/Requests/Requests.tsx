@@ -67,9 +67,9 @@ const Requests = (): JSX.Element => {
   const { data, loading, fetchMore, refetch } = useQuery(MEMBERSHIP_REQUEST, {
     variables: {
       input: {
-      id: organizationId
+        id: organizationId,
       },
-      first:perPageResult,
+      first: perPageResult,
       skip: 0,
       firstName_contains: '',
     },
@@ -87,15 +87,17 @@ const Requests = (): JSX.Element => {
     if (!data) {
       return;
     }
-  
+
     const allRequests = data.organization?.membershipRequests || [];
     // Filter to only show pending requests
-    const pendingRequests = allRequests.filter((req: { status: string; }) => req.status === 'pending');
-  
+    const pendingRequests = allRequests.filter(
+      (req: { status: string }) => req.status === 'pending',
+    );
+
     if (pendingRequests.length < perPageResult) {
       setHasMore(false);
     }
-  
+
     setDisplayedRequests(pendingRequests);
   }, [data]);
 

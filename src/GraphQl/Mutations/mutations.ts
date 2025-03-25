@@ -18,7 +18,9 @@ export const UNBLOCK_USER_MUTATION_PG = gql`
 // to reject the organization request
 
 export const REJECT_ORGANIZATION_REQUEST_MUTATION = gql`
-  mutation RejectMembershipRequest($input: MutationRejectMembershipRequestInput!) {
+  mutation RejectMembershipRequest(
+    $input: MutationRejectMembershipRequestInput!
+  ) {
     rejectMembershipRequest(input: $input) {
       success
       message
@@ -29,7 +31,9 @@ export const REJECT_ORGANIZATION_REQUEST_MUTATION = gql`
 // to accept the organization request
 
 export const ACCEPT_ORGANIZATION_REQUEST_MUTATION = gql`
-  mutation AcceptMembershipRequest($input: MutationAcceptMembershipRequestInput!) {
+  mutation AcceptMembershipRequest(
+    $input: MutationAcceptMembershipRequestInput!
+  ) {
     acceptMembershipRequest(input: $input) {
       success
       message

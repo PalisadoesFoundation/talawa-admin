@@ -55,7 +55,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
           },
         },
       });
-      
+
       if (data) {
         toast.success(t('acceptedSuccessfully') as string);
         resetAndRefetch();
@@ -85,7 +85,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
           },
         },
       });
-      
+
       if (data) {
         toast.success(t('rejectedSuccessfully') as string);
         resetAndRefetch();
@@ -98,9 +98,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
   return (
     <tr className={styles.tableItem}>
       <td className={styles.index}>{index + 1}.</td>
-      <td
-        className={styles.name}
-      >{`${request.user.name}`}</td>
+      <td className={styles.name}>{`${request.user.name}`}</td>
       <td className={styles.email}>{request.user.emailAddress}</td>
       <td>
         <Button

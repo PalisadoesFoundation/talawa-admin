@@ -74,26 +74,24 @@ function OrganizationDashboard(): JSX.Element {
   /**
    * Query to fetch organization data.
    */
-  const {
-    data,
-    loading: loadingOrgData,
-  } = useQuery(GET_ORGANIZATION_MEMBERS_PG, {
-    variables: { id: orgId },
-  });
-
-  const {
-    data: membershipRequestData,
-    loading: loadingMembershipRequests,
-  } = useQuery(MEMBERSHIP_REQUEST, {
-    variables: {
-      input: {
-      id: orgId
-      },
-      first: 8,
-      skip: 0,
-      firstName_contains: '',
+  const { data, loading: loadingOrgData } = useQuery(
+    GET_ORGANIZATION_MEMBERS_PG,
+    {
+      variables: { id: orgId },
     },
-  });
+  );
+
+  const { data: membershipRequestData, loading: loadingMembershipRequests } =
+    useQuery(MEMBERSHIP_REQUEST, {
+      variables: {
+        input: {
+          id: orgId,
+        },
+        first: 8,
+        skip: 0,
+        firstName_contains: '',
+      },
+    });
 
   const hasFetchedAllMembers = useRef(false);
   const hasFetchedAllEvents = useRef(false);
@@ -345,7 +343,11 @@ function OrganizationDashboard(): JSX.Element {
                 }}
               >
                 <DashBoardCard
-                  count={membershipRequestData?.organization?.membershipRequests?.length}
+                  count={
+                    membershipRequestData?.organization?.membershipRequests?.filter(
+                      (request: any) => request.status === 'pending',
+                    )?.length
+                  }
                   title={tCommon('requests')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 />
@@ -454,40 +456,40 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllMembershipRequests"
                   onClick={(): void => {
-                    navigate(requestLink)
+                    navigate(requestLink);
                   }}
                 >
                   {t('viewAll')}
                 </Button>
               </div>
               <Card.Body
-                className={styles.containerBody} 
+                className={styles.containerBody}
                 style={{ height: '150px' }}
               >
                 {loadingMembershipRequests ? (
                   [...Array(4)].map((_, index) => (
-                  <CardItemLoading key={`requestsLoading_${index}`} />
+                    <CardItemLoading key={`requestsLoading_${index}`} />
                   ))
                 ) : membershipRequestData?.organization?.membershipRequests?.filter(
-                  (request: any) => request.status === 'pending',
+                    (request: any) => request.status === 'pending',
                   ).length === 0 ? (
                   <div
-                  className={styles.emptyContainer}
-                  style={{ height: '150px' }}
+                    className={styles.emptyContainer}
+                    style={{ height: '150px' }}
                   >
-                  <h6>{t('noMembershipRequests')}</h6>
+                    <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
                   membershipRequestData?.organization?.membershipRequests
-                  .filter((request: any) => request.status === 'pending')
-                  .slice(0, 8)
-                  .map((request: any) => (
-                    <CardItem
-                    type="MembershipRequest"
-                    key={request.membershipRequestId}
-                    title={request.user.name}
-                    />
-                  ))
+                    .filter((request: any) => request.status === 'pending')
+                    .slice(0, 8)
+                    .map((request: any) => (
+                      <CardItem
+                        type="MembershipRequest"
+                        key={request.membershipRequestId}
+                        title={request.user.name}
+                      />
+                    ))
                 )}
               </Card.Body>
             </Card>

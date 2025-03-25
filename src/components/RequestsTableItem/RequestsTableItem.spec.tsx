@@ -53,11 +53,13 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        _id: '123',
+        membershipRequestId: '123',     
+        createdAt: '2021-09-01T00:00:00.000Z',
+        status: 'pending',   
         user: {
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com',
+          id: '123',
+          name: 'John Doe',
+          emailAddress: 'john@example.com',
         },
       },
       index: 1,
@@ -87,11 +89,13 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        _id: '123',
+        membershipRequestId: '123',     
+        createdAt: '2021-09-01T00:00:00.000Z',
+        status: 'pending',   
         user: {
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com',
+          id: '123',
+          name: 'John Doe',
+          emailAddress: 'john@example.com',
         },
       },
       index: 1,
@@ -119,11 +123,13 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        _id: '1',
+        membershipRequestId: '123',     
+        createdAt: '2021-09-01T00:00:00.000Z',
+        status: 'pending',   
         user: {
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com',
+          id: '123',
+          name: 'John Doe',
+          emailAddress: 'john@example.com',
         },
       },
       index: 1,
@@ -141,7 +147,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn1'));
+    await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
   });
 
   it('Reject MembershipRequest Button works properly', async () => {
@@ -151,11 +157,13 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        _id: '123',
+        membershipRequestId: '123',     
+        createdAt: '2021-09-01T00:00:00.000Z',
+        status: 'pending',   
         user: {
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com',
+          id: '123',
+          name: 'John Doe',
+          emailAddress: 'john@example.com',
         },
       },
       index: 1,
@@ -183,11 +191,13 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        _id: '1',
+        membershipRequestId: '123',     
+        createdAt: '2021-09-01T00:00:00.000Z',
+        status: 'pending',   
         user: {
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com',
+          id: '123',
+          name: 'John Doe',
+          emailAddress: 'john@example.com',
         },
       },
       index: 1,
@@ -205,6 +215,6 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn1'));
+    await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
   });
 });
