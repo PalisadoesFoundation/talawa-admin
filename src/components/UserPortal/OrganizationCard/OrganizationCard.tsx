@@ -32,7 +32,7 @@ import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQuerie
  * @param description - A description of the organization.
  * @param admins - The list of admins with their IDs.
  * @param membersCount - organization members count
- * @param administratorCount - organization Admins count
+ * @param adminsCount - organization Admins count
  * @param address - The address of the organization including city, country code, line1, postal code, and state.
  * @param membershipRequestStatus - The status of the membership request (accepted, pending, or empty).
  * @param userRegistrationRequired - Indicates if user registration is required to join the organization.

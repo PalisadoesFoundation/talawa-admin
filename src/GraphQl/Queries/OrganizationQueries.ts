@@ -111,7 +111,14 @@ export const FILTERED_ORGANIZATION_POSTS = gql`
     }
   }
 `;
-// GraphQL query to retrieve all the Organizations user with filter by name pagination supported
+/**
+ * GraphQL query to retrieve all organizations with optional filtering and pagination.
+ *
+ * @param filter - Optional. Filter organizations by a name string.
+ * @param limit - Optional. Number of organizations to retrieve.
+ * @param offset - Optional. Number of organizations to skip before starting to collect the result set.
+ * @returns A list of organizations with metadata including membership status.
+ */
 export const ALL_ORGANIZATIONS = gql`
   query AllOrganizations($filter: String, $limit: Int, $offset: Int) {
     organizations(filter: $filter, limit: $limit, offset: $offset) {

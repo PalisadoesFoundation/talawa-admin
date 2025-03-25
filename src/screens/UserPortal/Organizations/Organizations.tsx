@@ -120,16 +120,16 @@ export default function organizations(): JSX.Element {
    */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+      setHideDrawer(false); // Show sidebar
+    } else {
+      setHideDrawer(true); // Hide sidebar
     }
   };
 
   useEffect(() => {
-    handleResize();
+    handleResize(); // Set initial state
     window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const [page, setPage] = React.useState(0);
@@ -190,7 +190,7 @@ export default function organizations(): JSX.Element {
     }
   }
 
-  const debouncedSearch = useDebounce(doSearch, 800);
+  const debouncedSearch = useDebounce(doSearch, 300);
 
   const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = e.target.value;
@@ -221,8 +221,6 @@ export default function organizations(): JSX.Element {
       const orgs = allOrganizationsData.organizations.map(
         (org: OrganizationRawData) => {
           const isMember = false || org.isMember;
-
-          // org.members?.edges?.some((edge) => edge.node.id === userId) ||
           return {
             id: org.id,
             name: org.name,

@@ -309,27 +309,6 @@ describe('OrganizationCard Component with New Interface', () => {
         `/user/organization/${defaultProps.id}`,
       );
     });
-
-    // it('should correctly translate all text elements', () => {
-    //   render(
-    //     <TestWrapper mocks={successMocks}>
-    //       <OrganizationCard {...defaultProps} />
-    //     </TestWrapper>,
-    //   );
-
-    //   // Custom matcher ensuring boolean return
-    //   const adminText = screen.getByText((content, element) => {
-    //     if (!element) return false;
-    //     return element.textContent?.toLowerCase().includes('admins') ?? false;
-    //   });
-    //   const memberText = screen.getByText((content, element) => {
-    //     if (!element) return false;
-    //     return element.textContent?.toLowerCase().includes('members') ?? false;
-    //   });
-
-    //   expect(adminText).toBeInTheDocument();
-    //   expect(memberText).toBeInTheDocument();
-    // });
   });
 
   // Mutation Tests
