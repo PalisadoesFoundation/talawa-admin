@@ -74,7 +74,9 @@ function orgList(): JSX.Element {
 
   const { getItem } = useLocalStorage();
   const role = getItem('role');
-  const adminFor: { _id: string; name: string; image: string | null }[] =
+  const adminFor:
+    | string
+    | { _id: string; name: string; image: string | null }[] =
     getItem('AdminFor') || [];
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
