@@ -120,9 +120,9 @@ export default function organizations(): JSX.Element {
    */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(false); // Show sidebar
+      setHideDrawer(true); // Show sidebar
     } else {
-      setHideDrawer(true); // Hide sidebar
+      setHideDrawer(false); // Hide sidebar
     }
   };
 

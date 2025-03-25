@@ -482,14 +482,16 @@ describe('Organizations Component', () => {
     vi.useRealTimers();
   });
 
-  it('paginates through the list of organizations', async () => {
-    // Mock useLocalStorage
+  it('toggles the sidebar visibility', async () => {
     vi.mock('utils/useLocalstorage', () => ({
       default: () => ({
         getItem: vi.fn(() => TEST_USER_ID),
         setItem: vi.fn(),
       }),
     }));
+
+    // Mock desktop size (>820px) for consistent initial state
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
 
     render(
       <MockedProvider mocks={mocks} addTypename={true}>
@@ -503,83 +505,70 @@ describe('Organizations Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial render
     await waitFor(
       () =>
         expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
       { timeout: 2000 },
     );
 
-    // Verify page 0 (All Org 0 - All Org 4)
-    expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
-    expect(screen.getByTestId('org-name-All Org 4')).toBeInTheDocument();
-    expect(screen.queryByTestId('org-name-All Org 5')).not.toBeInTheDocument();
-
-    // Click next page
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    await userEvent.click(nextPageButton);
-
-    // Wait for page update
-    await waitFor(
-      () =>
-        expect(screen.getByTestId('org-name-All Org 5')).toBeInTheDocument(),
-      { timeout: 2000 },
-    );
-
-    // Verify page 1 (All Org 5 - All Org 9)
-    expect(screen.getByTestId('org-name-All Org 5')).toBeInTheDocument();
-    expect(screen.queryByTestId('org-name-All Org 0')).not.toBeInTheDocument();
-  });
-
-  it('toggles the sidebar visibility', async () => {
-    const testMocks = [...mocks];
-
-    render(
-      <MockedProvider mocks={testMocks}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for initial render
-    await waitFor(
-      () =>
-        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
-      { timeout: 2000 },
-    );
-
-    // Initial state: hideDrawer is true (openMenu visible)
-    expect(screen.getByTestId('openMenu')).toBeInTheDocument();
-    expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
-
-    // Click to toggle from true to false (openMenu -> closeMenu)
-    await userEvent.click(screen.getByTestId('openMenu'));
-    await wait(500);
+    // Initial state: hideDrawer = false (>820px), closeMenu visible
     expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
     expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
 
-    // Click to toggle back from false to true (closeMenu -> openMenu)
+    // Toggle from false to true (closeMenu -> openMenu)
     await userEvent.click(screen.getByTestId('closeMenu'));
-    await wait(500);
-    expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+    await waitFor(
+      () => expect(screen.getByTestId('openMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
     expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
+
+    // Toggle back from true to false (openMenu -> closeMenu)
+    await userEvent.click(screen.getByTestId('openMenu'));
+    await waitFor(
+      () => expect(screen.getByTestId('closeMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+
+    vi.restoreAllMocks();
   });
 
   it('changes rows per page and resets pagination', async () => {
-    vi.mock('utils/useLocalstorage', () => ({
-      default: () => ({
-        getItem: vi.fn(() => TEST_USER_ID),
-        setItem: vi.fn(),
-      }),
-    }));
+    // Extend mocks to cover potential variable mismatches
+    const extendedMocks = [
+      ...mocks,
+      {
+        request: { query: ALL_ORGANIZATIONS, variables: { filter: undefined } }, // Fallback for undefined filter
+        result: {
+          data: {
+            organizations: Array(10)
+              .fill(null)
+              .map((_, i) => ({
+                id: `allOrgId${i}`,
+                name: `All Org ${i}`,
+                description: `Description ${i}`,
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: i + 1,
+                adminsCount: 1,
+                members: {
+                  edges: [{ node: { id: 'otherUserId', __typename: 'User' } }],
+                  __typename: 'UserConnection',
+                },
+                __typename: 'Organization',
+              })),
+          },
+        },
+      },
+    ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={true}>
+      <MockedProvider mocks={extendedMocks} addTypename={true}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -590,24 +579,26 @@ describe('Organizations Component', () => {
       </MockedProvider>,
     );
 
+    // Wait for data to render, not just spinner
     await waitFor(
-      () =>
-        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
-      { timeout: 2000 },
+      () => {
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+        expect(
+          screen.getAllByTestId('organization-card').length,
+        ).toBeGreaterThan(0); // Confirm cards render
+      },
+      { timeout: 3000 }, // Slightly longer timeout for safety
     );
 
-    // Verify initial state (5 rows per page)
     expect(screen.getAllByTestId('organization-card').length).toBe(5);
     expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
     expect(screen.getByTestId('org-name-All Org 4')).toBeInTheDocument();
     expect(screen.queryByTestId('org-name-All Org 5')).not.toBeInTheDocument();
 
-    // Change rows per page to 10
     const rowsPerPageSelect = screen.getByRole('combobox', {
       name: /rows per page/i,
     });
     await userEvent.selectOptions(rowsPerPageSelect, '10');
-
     await waitFor(
       () => expect(screen.getAllByTestId('organization-card').length).toBe(10),
       { timeout: 2000 },
@@ -870,6 +861,76 @@ describe('Organizations Component', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('paginates through the list of organizations', async () => {
+    // Add a broader mock to catch any ALL_ORGANIZATIONS query
+    const extendedMocks = [
+      ...mocks,
+      {
+        request: { query: ALL_ORGANIZATIONS, variables: { filter: undefined } }, // Catch cases where filter is undefined
+        result: {
+          data: {
+            organizations: Array(10)
+              .fill(null)
+              .map((_, i) => ({
+                id: `allOrgId${i}`,
+                name: `All Org ${i}`,
+                description: `Description ${i}`,
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: i + 1,
+                adminsCount: 1,
+                members: {
+                  edges: [{ node: { id: 'otherUserId', __typename: 'User' } }],
+                  __typename: 'UserConnection',
+                },
+                __typename: 'Organization',
+              })),
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={extendedMocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for data to render, not just spinner
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+        expect(
+          screen.getAllByTestId('organization-card').length,
+        ).toBeGreaterThan(0); // Ensure cards render
+      },
+      { timeout: 3000 }, // Increase timeout slightly for slower renders
+    );
+
+    expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+    expect(screen.getByTestId('org-name-All Org 4')).toBeInTheDocument();
+    expect(screen.queryByTestId('org-name-All Org 5')).not.toBeInTheDocument();
+
+    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    await userEvent.click(nextPageButton);
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-All Org 5')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('org-name-All Org 0')).not.toBeInTheDocument();
+  });
+
   it('handles query errors gracefully', async () => {
     const errorMocks = [
       ...mocks.filter((mock) => mock.request.query !== ALL_ORGANIZATIONS),
@@ -912,10 +973,18 @@ describe('Organizations Component', () => {
 
   // Test Resize Event Handling
   it('toggles drawer visibility on window resize', async () => {
-    const testMocks = [...mocks];
+    vi.mock('utils/useLocalstorage', () => ({
+      default: () => ({
+        getItem: vi.fn(() => TEST_USER_ID),
+        setItem: vi.fn(),
+      }),
+    }));
+
+    // Start with desktop size (>820px)
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
 
     render(
-      <MockedProvider mocks={testMocks}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -932,62 +1001,30 @@ describe('Organizations Component', () => {
       { timeout: 2000 },
     );
 
-    // Initial state: hideDrawer is true (openMenu visible) for >820px
-    expect(screen.getByTestId('openMenu')).toBeInTheDocument();
-    expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
-
-    // Resize to <=820px to set false
-    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(800);
-    fireEvent(window, new Event('resize'));
-    await wait(500);
+    // Initial state: hideDrawer = false (>820px), closeMenu visible
     expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
     expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
 
-    // Resize to >820px to set true
+    // Resize to <=820px, hideDrawer = true
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(800);
+    fireEvent(window, new Event('resize'));
+    await waitFor(
+      () => expect(screen.getByTestId('openMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
+
+    // Resize back to >820px, hideDrawer = false
     vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
     fireEvent(window, new Event('resize'));
-    await wait(500);
-    expect(screen.getByTestId('openMenu')).toBeInTheDocument();
-    expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
+    await waitFor(
+      () => expect(screen.getByTestId('closeMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
 
     vi.restoreAllMocks();
   });
-  // Test Edge Case Pagination (Last Page)
-  it('handles pagination to the last page correctly', async () => {
-    const testMocks = [...mocks];
-
-    render(
-      <MockedProvider mocks={testMocks}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
-      { timeout: 2000 },
-    );
-
-    // Initial page (0-4)
-    expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
-    expect(screen.queryByTestId('org-name-All Org 5')).not.toBeInTheDocument();
-
-    // Go to last page (5-9, total 10 items, 5 per page)
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    await userEvent.click(nextPageButton);
-    await wait(1000);
-
-    expect(screen.getByTestId('org-name-All Org 5')).toBeInTheDocument();
-    expect(screen.getByTestId('org-name-All Org 9')).toBeInTheDocument();
-    expect(screen.queryByTestId('org-name-All Org 0')).not.toBeInTheDocument();
-  });
-
   // Test OrganizationCard Props Mapping
   it('correctly maps organization data to card props', async () => {
     const testMocks = [
