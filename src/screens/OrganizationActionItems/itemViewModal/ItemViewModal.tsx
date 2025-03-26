@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
@@ -179,9 +179,7 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                     )}
                   </>
                 ),
-                style: {
-                  color: isCompleted ? 'green' : '#ed6c02',
-                },
+                style: { color: isCompleted ? 'green' : '#ed6c02' },
               }}
               inputProps={{
                 style: {

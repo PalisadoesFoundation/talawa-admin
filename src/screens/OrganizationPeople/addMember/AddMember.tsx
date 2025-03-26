@@ -26,7 +26,7 @@ import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import SortingButton from 'subComponents/SortingButton';
 import { TablePagination } from '@mui/material';
@@ -36,15 +36,11 @@ const StyledTableCell = styled(TableCell)(() => ({
     backgroundColor: 'var(--table-head-bg, blue)',
     color: 'var(--table-header-color, black)',
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  '&:last-child td, &:last-child th': { border: 0 },
 }));
 
 /**
@@ -128,12 +124,7 @@ function AddMember(): JSX.Element {
     fetchUsers,
     { loading: userLoading, error: userError, data: userData },
   ] = useLazyQuery(USER_LIST_FOR_TABLE, {
-    variables: {
-      first: PAGE_SIZE,
-      after: null,
-      last: null,
-      before: null,
-    },
+    variables: { first: PAGE_SIZE, after: null, last: null, before: null },
   });
 
   function openAddUserModal(): void {
@@ -187,13 +178,8 @@ function AddMember(): JSX.Element {
 
   const {
     data: organizationData,
-  }: {
-    data?: {
-      organization: InterfaceQueryOrganizationsListObject;
-    };
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: currentUrl },
-  });
+  }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
+    useQuery(ORGANIZATIONS_LIST, { variables: { id: currentUrl } });
 
   // const {
   //   data: allUsersData,
@@ -311,12 +297,7 @@ function AddMember(): JSX.Element {
   useEffect(() => {
     if (addUserModalisOpen) {
       fetchUsers({
-        variables: {
-          first: PAGE_SIZE,
-          after: null,
-          last: null,
-          before: null,
-        },
+        variables: { first: PAGE_SIZE, after: null, last: null, before: null },
       });
     }
   }, [currentUrl, addUserModalisOpen]);
@@ -494,9 +475,7 @@ function AddMember(): JSX.Element {
                           <StyledTableCell align="center">
                             <Link
                               className={`${styles.membername} ${styles.subtleBlueGrey}`}
-                              to={{
-                                pathname: `/member/${currentUrl}`,
-                              }}
+                              to={{ pathname: `/member/${currentUrl}` }}
                             >
                               {userDetails.name}
                               <br />

@@ -14,7 +14,7 @@ import {
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router-dom';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
@@ -173,10 +173,7 @@ const BlockUser = (): JSX.Element => {
     async (user: InterfaceUserPg): Promise<void> => {
       try {
         const { data } = await blockUser({
-          variables: {
-            userId: user.id,
-            organizationId: currentUrl,
-          },
+          variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data?.blockUser) {
           toast.success(t('blockedSuccessfully') as string);
@@ -196,10 +193,7 @@ const BlockUser = (): JSX.Element => {
     async (user: InterfaceUserPg): Promise<void> => {
       try {
         const { data } = await unBlockUser({
-          variables: {
-            userId: user.id,
-            organizationId: currentUrl,
-          },
+          variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data) {
           toast.success(t('Un-BlockedSuccessfully') as string);

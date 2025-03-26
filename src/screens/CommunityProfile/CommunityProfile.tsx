@@ -21,7 +21,7 @@ import {
   SlackLogo,
 } from 'assets/svgs/social-icons';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../components/UpdateSession/UpdateSession';
 
@@ -135,10 +135,7 @@ const CommunityProfile = (): JSX.Element => {
    * @param e - Change event for input elements
    */
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setProfileVariable({
-      ...profileVariable,
-      [e.target.name]: e.target.value,
-    });
+    setProfileVariable({ ...profileVariable, [e.target.name]: e.target.value });
   };
 
   /**
@@ -194,9 +191,7 @@ const CommunityProfile = (): JSX.Element => {
       });
 
       await resetPreLoginImagery({
-        variables: {
-          resetPreLoginImageryId: preLoginData?.id,
-        },
+        variables: { resetPreLoginImageryId: preLoginData?.id },
       });
       toast.success(t(`resetData`) as string);
     } catch (error: unknown) {

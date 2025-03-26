@@ -8,7 +8,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfo,
 } from 'utils/interfaces';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -96,9 +96,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   endDate,
   mode,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'pledges',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
@@ -167,10 +165,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       }
       try {
         await updatePledge({
-          variables: {
-            id: pledge?._id,
-            ...updatedFields,
-          },
+          variables: { id: pledge?._id, ...updatedFields },
         });
         toast.success(t('pledgeUpdated') as string);
         refetchPledge();
@@ -253,10 +248,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 `${member.firstName} ${member.lastName}`
               }
               onChange={(_, newPledgers): void => {
-                setFormState({
-                  ...formState,
-                  pledgeUsers: newPledgers,
-                });
+                setFormState({ ...formState, pledgeUsers: newPledgers });
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Pledgers" />
@@ -294,10 +286,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               value={dayjs(pledgeEndDate)}
               onChange={(date: Dayjs | null): void => {
                 if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeEndDate: date.toDate(),
-                  });
+                  setFormState({ ...formState, pledgeEndDate: date.toDate() });
                 }
               }}
               minDate={dayjs(pledgeStartDate)}

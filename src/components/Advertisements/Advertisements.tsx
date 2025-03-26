@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { Col, Row, Tab, Tabs } from 'react-bootstrap';

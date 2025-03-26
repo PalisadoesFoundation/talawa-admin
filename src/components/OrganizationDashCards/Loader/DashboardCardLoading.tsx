@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * Dashboard card loading component is a loading state for the dashboard card. It is used when the data is being fetched.
@@ -20,15 +20,11 @@ const DashBoardCardLoading = (): JSX.Element => {
           <Col sm={8} className={styles.textWrapper}>
             <span
               className={`${styles.primaryText} shimmer rounded w-75 mb-2`}
-              style={{
-                height: '1.75rem',
-              }}
+              style={{ height: '1.75rem' }}
             />
             <span
               className={`${styles.secondaryText} shimmer rounded`}
-              style={{
-                height: '1.25rem',
-              }}
+              style={{ height: '1.25rem' }}
             />
           </Col>
         </Row>

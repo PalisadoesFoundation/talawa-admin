@@ -7,7 +7,7 @@ import { InterfaceEditUserTagModalProps } from './EditUserTagModal';
 import type { TFunction } from 'i18next';
 
 // Mock the CSS module
-vi.mock('../../../style/app-fixed.module.css', () => ({
+vi.mock('style/app-fixed.module.css', () => ({
   default: {
     modalHeader: 'modalHeader-class',
     inputField: 'inputField-class',
@@ -98,10 +98,7 @@ describe('EditUserTagModal Component', () => {
   });
 
   it('does not call handleEditUserTag when form is submitted with empty input', async () => {
-    const propsWithEmptyTag = {
-      ...defaultProps,
-      newTagName: '',
-    };
+    const propsWithEmptyTag = { ...defaultProps, newTagName: '' };
 
     render(<EditUserTagModal {...propsWithEmptyTag} />);
 
@@ -114,10 +111,7 @@ describe('EditUserTagModal Component', () => {
   });
 
   it('does not call handleEditUserTag when form is submitted with whitespace-only input', async () => {
-    const propsWithWhitespaceTag = {
-      ...defaultProps,
-      newTagName: '   ',
-    };
+    const propsWithWhitespaceTag = { ...defaultProps, newTagName: '   ' };
 
     render(<EditUserTagModal {...propsWithWhitespaceTag} />);
 

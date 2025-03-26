@@ -1,5 +1,5 @@
 import { Button, Modal } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -45,20 +45,14 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
   pledge,
   refetchPledge,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'pledges',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
 
   const [deletePledge] = useMutation(DELETE_PLEDGE);
 
   const deleteHandler = async (): Promise<void> => {
     try {
-      await deletePledge({
-        variables: {
-          id: pledge?._id,
-        },
-      });
+      await deletePledge({ variables: { id: pledge?._id } });
       refetchPledge();
       hide();
       toast.success(t('pledgeDeleted') as string);

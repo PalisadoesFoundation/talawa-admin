@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -74,9 +74,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   orgId,
   mode,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'funds',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'funds' });
 
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: fund?.name ?? '',
@@ -158,12 +156,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       if (Object.keys(updatedFields).length === 0) {
         return;
       }
-      await updateFund({
-        variables: {
-          id: fund?._id,
-          ...updatedFields,
-        },
-      });
+      await updateFund({ variables: { id: fund?._id, ...updatedFields } });
       setFormState({
         fundName: '',
         fundRef: '',
@@ -210,10 +203,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   className={`${styles.noOutline} w-100`}
                   value={formState.fundName}
                   onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      fundName: e.target.value,
-                    })
+                    setFormState({ ...formState, fundName: e.target.value })
                   }
                 />
               </FormControl>
@@ -226,10 +216,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   className={`${styles.noOutline} w-100`}
                   value={formState.fundRef}
                   onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      fundRef: e.target.value,
-                    })
+                    setFormState({ ...formState, fundRef: e.target.value })
                   }
                 />
               </FormControl>

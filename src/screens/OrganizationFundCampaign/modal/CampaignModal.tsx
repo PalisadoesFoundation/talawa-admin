@@ -5,7 +5,7 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -67,9 +67,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   mode,
   campaign,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'fundCampaign',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState({
@@ -169,10 +167,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         );
       }
       await updateCampaign({
-        variables: {
-          id: campaign?._id,
-          ...updatedFields,
-        },
+        variables: { id: campaign?._id, ...updatedFields },
       });
       setFormState({
         campaignName: '',
@@ -220,10 +215,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                   className={`${styles.noOutline} w-100`}
                   value={campaignName}
                   onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      campaignName: e.target.value,
-                    })
+                    setFormState({ ...formState, campaignName: e.target.value })
                   }
                 />
               </FormControl>

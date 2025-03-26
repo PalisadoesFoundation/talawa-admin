@@ -18,7 +18,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
 import { vi, describe, beforeEach, afterEach, expect, it } from 'vitest';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 const link = new StaticMockLink(MOCKS, true);
 

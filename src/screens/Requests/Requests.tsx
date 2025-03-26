@@ -8,7 +8,7 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import RequestsTableItem from 'components/RequestsTableItem/RequestsTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryMembershipRequestsListItem } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router-dom';
 import SearchBar from 'subComponents/SearchBar';
@@ -23,11 +23,7 @@ import {
 
 interface InterfaceRequestsListItem {
   _id: string;
-  user: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
+  user: { firstName: string; lastName: string; email: string };
 }
 
 /**
@@ -150,11 +146,7 @@ const Requests = (): JSX.Element => {
    * Resets search and refetches the data.
    */
   const resetAndRefetch = (): void => {
-    refetch({
-      first: perPageResult,
-      skip: 0,
-      firstName_contains: '',
-    });
+    refetch({ first: perPageResult, skip: 0, firstName_contains: '' });
     setHasMore(true);
   };
 

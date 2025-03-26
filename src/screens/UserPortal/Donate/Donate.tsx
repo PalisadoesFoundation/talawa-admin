@@ -12,7 +12,7 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
@@ -68,9 +68,7 @@ import {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function donate(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'donate',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'donate' });
 
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');

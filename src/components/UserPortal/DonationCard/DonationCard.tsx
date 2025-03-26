@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { type InterfaceDonationCardProps } from 'types/Donation/interface';
 import { Button } from 'react-bootstrap';
 

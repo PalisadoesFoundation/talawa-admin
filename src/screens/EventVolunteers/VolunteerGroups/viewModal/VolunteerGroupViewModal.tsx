@@ -1,6 +1,6 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -43,9 +43,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
   hide,
   group,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
   const { leader, creator, name, volunteersRequired, description, volunteers } =

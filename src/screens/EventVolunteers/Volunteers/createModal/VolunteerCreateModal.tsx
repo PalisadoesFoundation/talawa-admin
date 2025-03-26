@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -52,9 +52,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   orgId,
   refetchVolunteers,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
 
   const [userId, setUserId] = useState<string>('');
   const [members, setMembers] = useState<InterfaceUserInfo[]>([]);
@@ -75,14 +73,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {
         e.preventDefault();
-        await addVolunteer({
-          variables: {
-            data: {
-              eventId,
-              userId,
-            },
-          },
-        });
+        await addVolunteer({ variables: { data: { eventId, userId } } });
 
         toast.success(t('volunteerAdded'));
         refetchVolunteers();

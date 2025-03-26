@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent, FC } from 'react';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -134,60 +134,36 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
    */
   const {
     data: actionItemCategoriesData,
-  }: {
-    data: InterfaceActionItemCategoryList | undefined;
-  } = useQuery(ACTION_ITEM_CATEGORY_LIST, {
-    variables: {
-      organizationId: orgId,
-      where: { is_disabled: false },
-    },
-  });
+  }: { data: InterfaceActionItemCategoryList | undefined } = useQuery(
+    ACTION_ITEM_CATEGORY_LIST,
+    { variables: { organizationId: orgId, where: { is_disabled: false } } },
+  );
 
   /**
    * Query to fetch event volunteers for the event.
    */
   const {
     data: volunteersData,
-  }: {
-    data?: {
-      getEventVolunteers: InterfaceEventVolunteerInfo[];
-    };
-  } = useQuery(EVENT_VOLUNTEER_LIST, {
-    variables: {
-      where: {
-        eventId: eventId,
-        hasAccepted: true,
-      },
-    },
-  });
+  }: { data?: { getEventVolunteers: InterfaceEventVolunteerInfo[] } } =
+    useQuery(EVENT_VOLUNTEER_LIST, {
+      variables: { where: { eventId: eventId, hasAccepted: true } },
+    });
 
   /**
    * Query to fetch the list of volunteer groups for the event.
    */
   const {
     data: groupsData,
-  }: {
-    data?: {
-      getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
-    };
-  } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
-    variables: {
-      where: {
-        eventId: eventId,
-      },
-    },
-  });
+  }: { data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] } } =
+    useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
+      variables: { where: { eventId: eventId } },
+    });
 
   /**
    * Query to fetch members of the organization.
    */
-  const {
-    data: membersData,
-  }: {
-    data: InterfaceMembersList | undefined;
-  } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
-  });
+  const { data: membersData }: { data: InterfaceMembersList | undefined } =
+    useQuery(MEMBERS_LIST, { variables: { id: orgId } });
 
   const members = useMemo(
     () => membersData?.organizations[0].members || [],

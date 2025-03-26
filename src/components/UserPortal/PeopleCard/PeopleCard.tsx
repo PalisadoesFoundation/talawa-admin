@@ -1,6 +1,6 @@
 import React from 'react';
 import aboutImg from 'assets/images/defaultImg.png';
-import styles from './../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * Props interface for the PeopleCard component.

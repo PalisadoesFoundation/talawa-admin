@@ -1,5 +1,5 @@
 import { Button, Modal } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -42,20 +42,14 @@ export interface InterfaceDeleteVolunteerGroupModal {
 const VolunteerGroupDeleteModal: React.FC<
   InterfaceDeleteVolunteerGroupModal
 > = ({ isOpen, hide, group, refetchGroups }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
   const [deleteVolunteerGroup] = useMutation(DELETE_VOLUNTEER_GROUP);
 
   const deleteHandler = async (): Promise<void> => {
     try {
-      await deleteVolunteerGroup({
-        variables: {
-          id: group?._id,
-        },
-      });
+      await deleteVolunteerGroup({ variables: { id: group?._id } });
       refetchGroups();
       hide();
       toast.success(t('volunteerGroupDeleted'));

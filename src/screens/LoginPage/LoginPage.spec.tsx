@@ -27,23 +27,17 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
-import '../../style/app.module.css';
+import 'style/app.module.css';
 const MOCKS = [
   {
     request: {
       query: SIGNIN_QUERY,
-      variables: {
-        email: 'johndoe@gmail.com',
-        password: 'johndoe',
-      },
+      variables: { email: 'johndoe@gmail.com', password: 'johndoe' },
     },
     result: {
       data: {
         signIn: {
-          user: {
-            id: '1',
-            role: 'administrator',
-          },
+          user: { id: '1', role: 'administrator' },
           authenticationToken: 'authenticationToken',
         },
       },
@@ -61,36 +55,19 @@ const MOCKS = [
     result: {
       data: {
         signUp: {
-          user: {
-            id: '1',
-          },
+          user: { id: '1' },
           authenticationToken: 'authenticationToken',
         },
       },
     },
   },
   {
-    request: {
-      query: RECAPTCHA_MUTATION,
-      variables: {
-        recaptchaToken: null,
-      },
-    },
-    result: {
-      data: {
-        recaptcha: true,
-      },
-    },
+    request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: null } },
+    result: { data: { recaptcha: true } },
   },
   {
-    request: {
-      query: GET_COMMUNITY_DATA_PG,
-    },
-    result: {
-      data: {
-        community: null,
-      },
-    },
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
   },
 ];
 
@@ -121,30 +98,17 @@ const MOCKS = [
 // ];
 const MOCKS3 = [
   {
-    request: {
-      query: ORGANIZATION_LIST,
-    },
+    request: { query: ORGANIZATION_LIST },
     result: {
       data: {
         organizations: [
           {
             _id: '6437904485008f171cf29924',
             image: null,
-            creator: {
-              firstName: 'Wilt',
-              lastName: 'Shepherd',
-            },
+            creator: { firstName: 'Wilt', lastName: 'Shepherd' },
             name: 'Unity Foundation',
-            members: [
-              {
-                _id: '64378abd85008f171cf2990d',
-              },
-            ],
-            admins: [
-              {
-                _id: '64378abd85008f171cf2990d',
-              },
-            ],
+            members: [{ _id: '64378abd85008f171cf2990d' }],
+            admins: [{ _id: '64378abd85008f171cf2990d' }],
             createdAt: '2023-04-13T05:16:52.827Z',
             address: {
               city: 'Bronx',
@@ -160,21 +124,10 @@ const MOCKS3 = [
           {
             _id: 'db1d5caad2ade57ab811e681',
             image: null,
-            creator: {
-              firstName: 'Sonya',
-              lastName: 'Jones',
-            },
+            creator: { firstName: 'Sonya', lastName: 'Jones' },
             name: 'Mills Group',
-            members: [
-              {
-                _id: '661b8410bd25a325da05e67c',
-              },
-            ],
-            admins: [
-              {
-                _id: '661b8410bd25a325da05e67c',
-              },
-            ],
+            members: [{ _id: '661b8410bd25a325da05e67c' }],
+            admins: [{ _id: '661b8410bd25a325da05e67c' }],
             createdAt: '2024-04-14T07:21:52.940Z',
             address: {
               city: 'Lake Martineside',
@@ -221,11 +174,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 
 vi.mock('Constant/constant.ts', async () => ({
@@ -253,9 +202,7 @@ vi.mock('react-google-recaptcha', async () => {
       const { onChange, ...otherProps } = props;
 
       Object.defineProperty(ref, 'current', {
-        value: {
-          reset: resetReCAPTCHA,
-        },
+        value: { reset: resetReCAPTCHA },
       });
 
       const handleChange = (
@@ -279,10 +226,7 @@ vi.mock('react-google-recaptcha', async () => {
       );
     },
   );
-  return {
-    __esModule: true,
-    default: recaptcha,
-  };
+  return { __esModule: true, default: recaptcha };
 });
 
 describe('Testing Login Page Screen', () => {
@@ -632,10 +576,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing login functionality', async () => {
-    const formData = {
-      email: 'johndoe@gmail.com',
-      password: 'johndoe',
-    };
+    const formData = { email: 'johndoe@gmail.com', password: 'johndoe' };
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -663,10 +604,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing wrong login functionality', async () => {
-    const formData = {
-      email: 'johndoe@gmail.com',
-      password: 'johndoe1',
-    };
+    const formData = { email: 'johndoe@gmail.com', password: 'johndoe1' };
 
     render(
       <MockedProvider addTypename={false} link={link4}>
@@ -878,9 +816,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
-    const password = {
-      password: '7',
-    };
+    const password = { password: '7' };
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -910,9 +846,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
-    const password = {
-      password: '12345678',
-    };
+    const password = { password: '12345678' };
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -942,9 +876,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
-    const password = {
-      password: '7',
-    };
+    const password = { password: '7' };
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -974,9 +906,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
-    const password = {
-      password: '12345678',
-    };
+    const password = { password: '12345678' };
 
     render(
       <MockedProvider addTypename={false} link={link}>

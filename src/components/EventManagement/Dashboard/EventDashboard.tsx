@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
@@ -26,9 +26,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
 
   const { data: eventData, loading: eventInfoLoading } = useQuery(
     EVENT_DETAILS,
-    {
-      variables: { id: eventId },
-    },
+    { variables: { id: eventId } },
   );
 
   /**

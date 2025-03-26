@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Button, Table, FormControl } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { useParams, Link } from 'react-router-dom';
@@ -26,9 +26,7 @@ import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
  * @returns JSX element containing the event attendance interface
  */
 function EventAttendance(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventAttendance',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
   const { eventId } = useParams<{ eventId: string }>();
   const { orgId: currentUrl } = useParams();
   const [filteredAttendees, setFilteredAttendees] = useState<InterfaceMember[]>(
@@ -108,9 +106,7 @@ function EventAttendance(): JSX.Element {
 
   const [getEventAttendees, { data: memberData, loading, error }] =
     useLazyQuery(EVENT_ATTENDEES, {
-      variables: {
-        id: eventId,
-      },
+      variables: { id: eventId },
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
       errorPolicy: 'all',
@@ -169,10 +165,7 @@ function EventAttendance(): JSX.Element {
           <SortingButton
             title="Filter"
             sortingOptions={[
-              {
-                label: FilterPeriod.ThisMonth,
-                value: FilterPeriod.ThisMonth,
-              },
+              { label: FilterPeriod.ThisMonth, value: FilterPeriod.ThisMonth },
               { label: FilterPeriod.ThisYear, value: FilterPeriod.ThisYear },
               { label: FilterPeriod.All, value: 'Filter: All' },
             ]}

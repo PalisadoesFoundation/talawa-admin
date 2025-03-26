@@ -16,7 +16,7 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 /**
@@ -35,9 +35,7 @@ import useLocalStorage from 'utils/useLocalstorage';
  */
 const ForgotPassword = (): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'forgotPassword',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'forgotPassword' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -84,11 +82,7 @@ const ForgotPassword = (): JSX.Element => {
     e.preventDefault();
 
     try {
-      const { data } = await otp({
-        variables: {
-          email: registeredEmail,
-        },
-      });
+      const { data } = await otp({ variables: { email: registeredEmail } });
 
       setItem('otpToken', data.otp.otpToken);
       toast.success(t('OTPsent'));
@@ -128,11 +122,7 @@ const ForgotPassword = (): JSX.Element => {
 
     try {
       const { data } = await forgotPassword({
-        variables: {
-          userOtp,
-          newPassword,
-          otpToken,
-        },
+        variables: { userOtp, newPassword, otpToken },
       });
 
       if (data) {

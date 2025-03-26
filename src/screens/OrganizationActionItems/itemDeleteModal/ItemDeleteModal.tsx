@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useMutation } from '@apollo/client';
 import { DELETE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
@@ -41,11 +41,7 @@ const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
    */
   const deleteActionItemHandler = async (): Promise<void> => {
     try {
-      await removeActionItem({
-        variables: {
-          actionItemId: actionItem?._id,
-        },
-      });
+      await removeActionItem({ variables: { actionItemId: actionItem?._id } });
 
       actionItemsRefetch();
       hide();

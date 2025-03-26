@@ -1,5 +1,5 @@
 import { Button, Modal } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -45,20 +45,14 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
   volunteer,
   refetchVolunteers,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
   const [deleteVolunteer] = useMutation(DELETE_VOLUNTEER);
 
   const deleteHandler = async (): Promise<void> => {
     try {
-      await deleteVolunteer({
-        variables: {
-          id: volunteer._id,
-        },
-      });
+      await deleteVolunteer({ variables: { id: volunteer._id } });
       refetchVolunteers();
       hide();
       toast.success(t('volunteerRemoved'));

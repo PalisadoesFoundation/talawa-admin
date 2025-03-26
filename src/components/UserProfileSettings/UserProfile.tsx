@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import type { InterfaceUser } from 'types/User/interface';
 
@@ -36,9 +36,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
   email,
   image,
 }): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'settings',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
 
   return (

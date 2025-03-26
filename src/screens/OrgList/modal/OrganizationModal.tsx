@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import { useMinioUpload } from 'utils/MinioUpload';
 import type { ChangeEvent } from 'react';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 import { toast } from 'react-toastify';
@@ -106,10 +106,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             onChange={(e): void => {
               const inputText = e.target.value;
               if (inputText.length < 50) {
-                setFormState({
-                  ...formState,
-                  name: e.target.value,
-                });
+                setFormState({ ...formState, name: e.target.value });
               }
             }}
           />
@@ -129,10 +126,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             onChange={(e): void => {
               const descriptionText = e.target.value;
               if (descriptionText.length < 200) {
-                setFormState({
-                  ...formState,
-                  description: e.target.value,
-                });
+                setFormState({ ...formState, description: e.target.value });
               }
             }}
           />
@@ -147,10 +141,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e): void => {
                   const inputText = e.target.value;
                   if (inputText.length < 50) {
-                    setFormState({
-                      ...formState,
-                      countryCode: e.target.value,
-                    });
+                    setFormState({ ...formState, countryCode: e.target.value });
                   }
                 }}
                 className={`mb-3 ${styles.inputField}`}
@@ -178,10 +169,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e): void => {
                   const inputText = e.target.value;
                   if (inputText.length < 50) {
-                    setFormState({
-                      ...formState,
-                      state: e.target.value,
-                    });
+                    setFormState({ ...formState, state: e.target.value });
                   }
                 }}
                 className={`mb-3 ${styles.inputField}`}
@@ -199,10 +187,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e): void => {
                   const inputText = e.target.value;
                   if (inputText.length < 50) {
-                    setFormState({
-                      ...formState,
-                      city: e.target.value,
-                    });
+                    setFormState({ ...formState, city: e.target.value });
                   }
                 }}
                 className={`mb-3 ${styles.inputField}`}
@@ -217,10 +202,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 onChange={(e): void => {
                   const inputText = e.target.value;
                   if (inputText.length < 50) {
-                    setFormState({
-                      ...formState,
-                      postalCode: e.target.value,
-                    });
+                    setFormState({ ...formState, postalCode: e.target.value });
                   }
                 }}
                 className={`mb-3 ${styles.inputField}`}
@@ -290,10 +272,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 try {
                   const { objectName: avatarobjectName } =
                     await uploadFileToMinio(file, 'organization');
-                  setFormState({
-                    ...formState,
-                    avatar: avatarobjectName,
-                  });
+                  setFormState({ ...formState, avatar: avatarobjectName });
                   toast.success(t('imageUploadSuccess'));
                 } catch (error) {
                   console.error('Error uploading image:', error);

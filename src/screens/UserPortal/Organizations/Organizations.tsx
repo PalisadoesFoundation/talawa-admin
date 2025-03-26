@@ -13,7 +13,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  *
@@ -72,12 +72,7 @@ interface InterfaceOrganizationCardProps {
   };
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
-  membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
-  }[];
+  membershipRequests: { id: string; user: { id: string } }[];
   isJoined: boolean;
 }
 
@@ -101,12 +96,7 @@ interface InterfaceOrganization {
   };
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
-  membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
-  }[];
+  membershipRequests: { id: string; user: { id: string } }[];
 }
 
 /**
@@ -160,9 +150,7 @@ export default function organizations(): JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-  } = useQuery(ORGANIZATION_LIST, {
-    variables: { filter: filterName },
-  });
+  } = useQuery(ORGANIZATION_LIST, { variables: { filter: filterName } });
 
   const {
     data: joinedOrganizationsData,
@@ -228,9 +216,7 @@ export default function organizations(): JSX.Element {
           avatarURL?: string;
           description?: string;
           addressLine1?: string;
-          members?: {
-            edges?: Array<{ node: { id: string } }>;
-          };
+          members?: { edges?: Array<{ node: { id: string } }> };
         }
 
         const orgs = allOrganizationsData.organizations.map(

@@ -13,7 +13,7 @@ import { Stack } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
