@@ -25,24 +25,12 @@ import convertToBase64 from 'utils/convertToBase64';
 import Carousel from 'react-multi-carousel';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import 'react-multi-carousel/lib/styles.css';
-
+import { PostComments, PostLikes, PostNode } from 'types/Post/type';
 const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 600 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 600, min: 0 },
-    items: 1,
-  },
+  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
+  tablet: { breakpoint: { max: 1024, min: 600 }, items: 2 },
+  mobile: { breakpoint: { max: 600, min: 0 }, items: 1 },
 };
 
 type Ad = {
@@ -52,54 +40,6 @@ type Ad = {
   mediaUrl: string;
   endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
   startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-};
-
-type InterfacePostComments = {
-  id: string;
-  creator: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-
-  likeCount: number;
-  likedBy: {
-    id: string;
-  }[];
-  text: string;
-}[];
-
-type InterfacePostLikes = {
-  firstName: string;
-  lastName: string;
-  id: string;
-}[];
-
-type InterfacePostNode = {
-  commentCount: number;
-  createdAt: string;
-  creator: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    _id: string;
-  };
-  imageUrl: string | null;
-  likeCount: number;
-  likedBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  }[];
-  pinned: boolean;
-  text: string;
-  title: string;
-  videoUrl: string | null;
-  _id: string;
-
-  comments: InterfacePostComments;
-  likes: InterfacePostLikes;
 };
 
 /**
@@ -152,24 +92,17 @@ export default function home(): JSX.Element {
   const {
     data: promotedPostsData,
   }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
-    };
+    data?: { organizations: InterfaceQueryOrganizationAdvertisementListItem[] };
     refetch: () => void;
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
-    variables: {
-      id: orgId,
-      first: 6,
-    },
+    variables: { id: orgId, first: 6 },
   });
 
   const {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: orgId, first: 10 },
-  });
+  } = useQuery(ORGANIZATION_POST_LIST, { variables: { id: orgId, first: 10 } });
 
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
@@ -204,7 +137,7 @@ export default function home(): JSX.Element {
 
   useEffect(() => {
     setPinnedPosts(
-      posts.filter(({ node }: { node: InterfacePostNode }) => {
+      posts.filter(({ node }: { node: PostNode }) => {
         return node.pinned;
       }),
     );
@@ -216,7 +149,7 @@ export default function home(): JSX.Element {
    * @param node - The post node to convert.
    * @returns The props for the `PostCard` component.
    */
-  const getCardProps = (node: InterfacePostNode): InterfacePostCard => {
+  const getCardProps = (node: PostNode): InterfacePostCard => {
     const {
       creator,
       _id,
@@ -230,13 +163,13 @@ export default function home(): JSX.Element {
       comments,
     } = node;
 
-    const allLikes: InterfacePostLikes = likedBy.map((value) => ({
+    const allLikes: PostLikes = likedBy.map((value) => ({
       firstName: value.firstName,
       lastName: value.lastName,
       id: value._id,
     }));
 
-    const postComments: InterfacePostComments = comments?.map((value) => ({
+    const postComments: PostComments = comments?.map((value) => ({
       id: value.id,
       creator: {
         firstName: value.creator?.firstName ?? '',
@@ -343,7 +276,7 @@ export default function home(): JSX.Element {
             <h2>{t('feed')}</h2>
             {pinnedPosts.length > 0 && (
               <Carousel responsive={responsive}>
-                {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
+                {pinnedPosts.map(({ node }: { node: PostNode }) => {
                   const cardProps = getCardProps(node);
                   return <PostCard key={node._id} {...cardProps} />;
                 })}
@@ -374,7 +307,7 @@ export default function home(): JSX.Element {
               <>
                 {posts.length > 0 ? (
                   <Row className="my-2">
-                    {posts.map(({ node }: { node: InterfacePostNode }) => {
+                    {posts.map(({ node }: { node: PostNode }) => {
                       const cardProps = getCardProps(node);
                       return <PostCard key={node._id} {...cardProps} />;
                     })}

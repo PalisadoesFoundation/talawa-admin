@@ -18,7 +18,7 @@ import styles from '../../style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 import { Button } from '@mui/material';
-import OrganizationModal from './OrganizationModal';
+import OrganizationModal from './modal/OrganizationModal';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
@@ -126,9 +126,7 @@ function orgList(): JSX.Element {
     error?: Error | undefined;
   } = useQuery(CURRENT_USER, {
     variables: { userId: getItem('id') },
-    context: {
-      headers: { authorization: `Bearer ${getItem('token')}` },
-    },
+    context: { headers: { authorization: `Bearer ${getItem('token')}` } },
   });
 
   const {
@@ -136,9 +134,7 @@ function orgList(): JSX.Element {
     loading,
     error: errorList,
     refetch: refetchOrgs,
-  } = useQuery(ALL_ORGANIZATIONS_PG, {
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useQuery(ALL_ORGANIZATIONS_PG, { notifyOnNetworkStatusChange: true });
 
   const orgsData = UsersOrgsData?.organizations;
 
@@ -316,10 +312,7 @@ function orgList(): JSX.Element {
 
   const handleSortChange = (value: string): void => {
     // Update the sorting state and refetch organizations based on the selected sorting option
-    setSortingState({
-      option: value,
-      selectedOption: t(value),
-    });
+    setSortingState({ option: value, selectedOption: t(value) });
     // const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
     // refetchOrgs({
     //   first: perPageResult,

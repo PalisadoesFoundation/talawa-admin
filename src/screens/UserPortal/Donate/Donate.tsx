@@ -19,24 +19,10 @@ import { errorHandler } from 'utils/errorHandler';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import SearchBar from 'subComponents/SearchBar';
-
-export interface InterfaceDonationCardProps {
-  id: string;
-  name: string;
-  amount: string;
-  userId: string;
-  payPalId: string;
-  updatedAt: string;
-}
-
-interface InterfaceDonation {
-  _id: string;
-  nameOfUser: string;
-  amount: string;
-  userId: string;
-  payPalId: string;
-  updatedAt: string;
-}
+import {
+  InterfaceDonation,
+  InterfaceDonationCardProps,
+} from 'types/Donation/interface';
 
 /**
  * `donate` component allows users to make donations to an organization and view their previous donations.
