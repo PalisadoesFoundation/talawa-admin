@@ -71,7 +71,7 @@ const Requests = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
-  // Query to fetch the list of organization
+  // Query to fetch the list of organizations
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
     InterfaceRequestsListItem[]
@@ -79,13 +79,11 @@ const Requests = (): JSX.Element => {
 
   // Manage loading more state
   useEffect(() => {
-    if (!data?.organization?.[0]) {
-      setDisplayedRequests([]);
-      setHasMore(false);
+    if (!data) {
       return;
     }
 
-    const membershipRequests = data.organization[0].membershipRequests || [];
+    const membershipRequests = data.organization[0]?.membershipRequests || [];
 
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
@@ -101,15 +99,15 @@ const Requests = (): JSX.Element => {
     };
   }, []);
 
-  // Show a warning if there are no organization
+  // Show a warning if there are no organizations
   useEffect(() => {
     if (!orgsData) {
       return;
     }
 
-    // Check if organizations array is empty
+    // Add null check before accessing organizations.length
     if (orgsData.organization?.length === 0) {
-      toast.warning(t('noOrgError'));
+      toast.warning(t('noOrgError') as string);
     }
   }, [orgsData, t]);
 
@@ -136,13 +134,10 @@ const Requests = (): JSX.Element => {
    */
   const handleSearch = (value: string): void => {
     setSearchByName(value);
-    if (!organizationId) return;
-
     if (value === '') {
       resetAndRefetch();
       return;
     }
-
     refetch({
       id: organizationId,
       firstName_contains: value,
@@ -154,10 +149,7 @@ const Requests = (): JSX.Element => {
    * Resets search and refetches the data.
    */
   const resetAndRefetch = (): void => {
-    if (!organizationId) return;
-
     refetch({
-      id: organizationId,
       first: perPageResult,
       skip: 0,
       firstName_contains: '',

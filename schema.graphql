@@ -781,13 +781,7 @@ type Mutation {
   ): Event!
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
-  createOrganization(data: QueryOrganizationInput, file: String): Organization!
-  createPlugin(
-    pluginCreatedBy: String!
-    pluginDesc: String!
-    pluginName: String!
-    uninstalledOrgs: [ID!]
-  ): Plugin!
+  createOrganization(data: OrganizationInput, file: String): Organization!
   createPost(data: PostInput!, file: String): Post
   createSampleOrganization: Boolean!
   createUserFamily(data: createUserFamilyInput!): UserFamily!
@@ -1649,7 +1643,7 @@ type AuthenticationPayload {
   authenticationToken: String
   user: User
 }
-input QueryOrganizationInput {
+input OrganizationInput {
   address: AddressInput!
   apiUrl: URL
   attendees: String
@@ -1874,17 +1868,7 @@ type Query {
   me: UserData!
   myLanguage: String
   fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
-  organization(
-    id: ID
-    orderBy: OrganizationOrderByInput
-    input: QueryOrganizationInput
-  ): [Organization]
-  organizationsConnection(
-    first: Int
-    orderBy: OrganizationOrderByInput
-    skip: Int
-    where: OrganizationWhereInput
-  ): [Organization]!
+  organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
   organizationsMemberConnection(
     first: Int
     orderBy: UserOrderByInput
@@ -2965,12 +2949,4 @@ type FundraisingCampaign {
   refrenceNumber: String
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-type Plugin {
-  _id: ID!
-  pluginName: String!
-  pluginCreatedBy: String!
-  pluginDesc: String!
-  uninstalledOrgs: [Organization]
 }
