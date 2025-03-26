@@ -54,14 +54,9 @@ const Requests = (): JSX.Element => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
-  const userRole = getItem('SuperAdmin')
-    ? 'SUPERADMIN'
-    : getItem('AdminFor')
-      ? 'ADMIN'
-      : 'USER';
+  const userRole = getItem('role') as string;
   const { orgId = '' } = useParams();
   const organizationId = orgId;
-  console.log(organizationId);
 
   // Query to fetch membership requests
   const { data, loading, fetchMore, refetch } = useQuery(MEMBERSHIP_REQUEST, {
@@ -126,6 +121,19 @@ const Requests = (): JSX.Element => {
   //     window.location.assign('/orglist');
   //   }
   // }, [userRole]);
+
+
+// new useEffect to check if user is authorized 
+useEffect(() => {
+  const isAuthorized = 
+  userRole?.toLowerCase() === 'administrator' || 
+  userRole?.toUpperCase() === 'ADMIN' || 
+  userRole?.toUpperCase() === 'SUPERADMIN';
+  if (!isAuthorized) {
+    window.location.assign('/orglist');
+  }
+}, []);
+
 
   // Manage the loading state
   useEffect(() => {
