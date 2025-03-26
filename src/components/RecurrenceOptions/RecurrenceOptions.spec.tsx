@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 
-import OrganizationEvents from '../../screens/OrganizationEvents/OrganizationEvents';
+import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
@@ -21,16 +21,10 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MOCKS } from '../../screens/OrganizationEvents/OrganizationEventsMocks';
+import { MOCKS } from 'screens/OrganizationEvents/OrganizationEventsMocks';
 import { describe, test, expect, vi } from 'vitest';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#31bb6b',
-    },
-  },
-});
+const theme = createTheme({ palette: { primary: { main: '#31bb6b' } } });
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -56,17 +50,11 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
     '@mui/x-date-pickers/DesktopDateTimePicker',
   );
-  return {
-    DateTimePicker: actual.DesktopDateTimePicker,
-  };
+  return { DateTimePicker: actual.DesktopDateTimePicker };
 });
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warning: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), warning: vi.fn(), error: vi.fn() },
 }));
 
 describe('Testing the creaction of recurring events through recurrence options', () => {
@@ -254,9 +242,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startDate },
     });
 
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(endDatePicker, { target: { value: formData.endDate } });
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
@@ -321,9 +307,7 @@ describe('Testing the creaction of recurring events through recurrence options',
     );
 
     // changing the startDate would change the weekDayOccurenceInMonth, if it is defined
-    fireEvent.change(startDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(startDatePicker, { target: { value: formData.endDate } });
 
     await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
@@ -401,9 +385,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startDate },
     });
 
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(endDatePicker, { target: { value: formData.endDate } });
 
     await userEvent.click(screen.getByTestId('alldayCheck'));
 
@@ -418,9 +400,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startTime },
     });
 
-    fireEvent.change(endTimePicker, {
-      target: { value: formData.endTime },
-    });
+    fireEvent.change(endTimePicker, { target: { value: formData.endTime } });
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
@@ -522,9 +502,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startDate },
     });
 
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(endDatePicker, { target: { value: formData.endDate } });
 
     await userEvent.click(screen.getByTestId('alldayCheck'));
 
@@ -539,9 +517,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startTime },
     });
 
-    fireEvent.change(endTimePicker, {
-      target: { value: formData.endTime },
-    });
+    fireEvent.change(endTimePicker, { target: { value: formData.endTime } });
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();

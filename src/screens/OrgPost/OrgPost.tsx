@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
-import { GET_POSTS_BY_ORG } from '../../GraphQl/Queries/Queries';
+import { GET_POSTS_BY_ORG } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { useParams } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
