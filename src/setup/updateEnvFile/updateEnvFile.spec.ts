@@ -77,27 +77,19 @@ describe('updateEnvFile', () => {
   });
 
   it('should log an error when file system operations fail', () => {
-    // Spy on console.error to verify error logging
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
+    // Use existing console.error spy for verification
+    const consoleErrorSpy = vi.spyOn(console, 'error');
     // Mock readFileSync to throw an error
     vi.spyOn(fs, 'readFileSync').mockImplementationOnce(() => {
       throw new Error('Simulated file system error');
     });
-
     // This call should trigger the catch block and log the error
     updateEnvFile('TEST_KEY', 'test_value');
-
     // Verify that the error was logged
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Error updating the .env file:',
       expect.any(Error),
     );
-
-    // Restore the original console.error
-    consoleErrorSpy.mockRestore();
   });
 
   it('should handle file system errors during append operation', () => {
@@ -115,13 +107,11 @@ describe('updateEnvFile', () => {
       throw new Error('Failed to append');
     });
 
-    const consoleErrorSpy = vi.spyOn(console, 'error');
-
     // Call the function
     updateEnvFile('TEST_KEY', 'test_value');
 
     // Verify error was logged
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
+    expect(console.error).toHaveBeenCalledWith(
       'Error updating the .env file:',
       expect.any(Error),
     );
