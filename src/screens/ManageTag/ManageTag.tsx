@@ -34,9 +34,9 @@ import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
 import TagActions from 'components/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import EditUserTagModal from './EditUserTagModal';
-import RemoveUserTagModal from './RemoveUserTagModal';
-import UnassignUserTagModal from './UnassignUserTagModal';
+import EditUserTagModal from './editModal/EditUserTagModal';
+import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
+import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
