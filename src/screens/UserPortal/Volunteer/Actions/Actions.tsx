@@ -17,9 +17,9 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
-import ItemViewModal from 'screens/OrganizationActionItems/ItemViewModal';
+import ItemViewModal from 'screens/OrganizationActionItems/itemViewModal/ItemViewModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ItemUpdateStatusModal';
+import ItemUpdateStatusModal from 'screens/OrganizationActionItems/itemUpdateModal/ItemUpdateStatusModal';
 import { ACTION_ITEMS_BY_USER } from 'GraphQl/Queries/ActionItemQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import SortingButton from 'subComponents/SortingButton';
@@ -37,18 +37,10 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 /**
@@ -103,10 +95,7 @@ function actions(): JSX.Element {
   const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.VIEW]: false,
-    [ModalState.STATUS]: false,
-  });
+  }>({ [ModalState.VIEW]: false, [ModalState.STATUS]: false });
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
@@ -136,9 +125,7 @@ function actions(): JSX.Element {
     error: actionItemsError,
     refetch: actionItemsRefetch,
   }: {
-    data?: {
-      actionItemsByUser: InterfaceActionItemInfo[];
-    };
+    data?: { actionItemsByUser: InterfaceActionItemInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;

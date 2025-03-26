@@ -21,11 +21,11 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
-import ItemViewModal from './ItemViewModal';
-import ItemModal from './ItemModal';
-import ItemDeleteModal from './ItemDeleteModal';
+import ItemViewModal from './itemViewModal/ItemViewModal';
+import ItemModal from './itemModal/ItemModal';
+import ItemDeleteModal from './itemDeleteModal/ItemDeleteModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from './ItemUpdateStatusModal';
+import ItemUpdateStatusModal from './itemUpdateModal/ItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
@@ -451,15 +451,9 @@ function organizationActionItems(): JSX.Element {
         sx={{
           backgroundColor: 'white',
           borderRadius: '16px',
-          '& .MuiDataGrid-columnHeaders': {
-            border: 'none',
-          },
-          '& .MuiDataGrid-cell': {
-            border: 'none',
-          },
-          '& .MuiDataGrid-columnSeparator': {
-            display: 'none',
-          },
+          '& .MuiDataGrid-columnHeaders': { border: 'none' },
+          '& .MuiDataGrid-cell': { border: 'none' },
+          '& .MuiDataGrid-columnSeparator': { display: 'none' },
         }}
         slots={{
           noRowsOverlay: () => (
