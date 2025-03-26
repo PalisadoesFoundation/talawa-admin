@@ -50,8 +50,6 @@ describe('UserDetailsForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Set fixed date for consistent testing
-    vi.setSystemTime(new Date('2025-03-24'));
   });
 
   it('renders all form fields with correct initial values', () => {
@@ -189,7 +187,8 @@ describe('UserDetailsForm', () => {
     );
 
     const birthDateInput = screen.getByLabelText(mockT('birthDate'));
-    const maxDate = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    const maxDate = new Intl.DateTimeFormat('en-CA').format(today);
 
     expect(birthDateInput).toHaveAttribute('max', maxDate);
   });
