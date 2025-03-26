@@ -57,9 +57,7 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
         },
       ],
       assignments: [],
-      event: {
-        _id: 'eventId',
-      },
+      event: { _id: 'eventId' },
     },
   },
   {
@@ -85,9 +83,7 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
       },
       volunteers: [],
       assignments: [],
-      event: {
-        _id: 'eventId',
-      },
+      event: { _id: 'eventId' },
     },
   },
 ];

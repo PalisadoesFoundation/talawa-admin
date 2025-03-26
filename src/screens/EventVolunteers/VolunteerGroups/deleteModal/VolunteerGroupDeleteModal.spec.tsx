@@ -10,7 +10,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
-import { MOCKS, MOCKS_ERROR } from './VolunteerGroups.mocks';
+import { MOCKS, MOCKS_ERROR } from '../modal/VolunteerGroups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceDeleteVolunteerGroupModal } from './VolunteerGroupDeleteModal';
@@ -25,10 +25,7 @@ import { vi } from 'vitest';
  */
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -78,9 +75,7 @@ const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
         },
       ],
       assignments: [],
-      event: {
-        _id: 'eventId',
-      },
+      event: { _id: 'eventId' },
     },
   },
 ];
