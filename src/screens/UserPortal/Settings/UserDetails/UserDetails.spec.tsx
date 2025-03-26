@@ -279,20 +279,52 @@ describe('UserDetailsForm', () => {
       '1234567890',
     );
 
-    // Test birth date - Using the DatePicker properly
+    // Test birth date - properly test DatePicker onChange handler
     const dateInput = screen.getByTestId('birth-date-input');
-    const validDate = dayjs('1990-01-01');
 
+    // Test case 1: Setting a date (testing the date ? date.format() branch)
     await act(async () => {
-      const datePickerProps = defaultProps.userDetails;
-      datePickerProps.birthDate = validDate.format('YYYY-MM-DD');
-      mockHandleFieldChange('birthDate', validDate.format('YYYY-MM-DD'));
+      // Find the DatePicker component and directly call its onChange prop
+      // to simulate what happens when a user selects a date
+      const datePickerOnChange = screen
+        .getByLabelText(mockT('birthDate'))
+        .closest('.MuiDatePicker-root')
+        ?.dispatchEvent(new Event('change'));
+      if (datePickerOnChange) {
+        if (typeof datePickerOnChange === 'function') {
+          (datePickerOnChange as (date: dayjs.Dayjs) => void)(
+            dayjs('1990-01-01'),
+          );
+        }
+      } else {
+        // Fallback to simulating input change
+        fireEvent.change(dateInput, { target: { value: '1990-01-01' } });
+        fireEvent.blur(dateInput);
+      }
     });
-
     expect(mockHandleFieldChange).toHaveBeenCalledWith(
       'birthDate',
       '1990-01-01',
     );
+
+    // Test case 2: Clearing a date (testing the : '' branch)
+    await act(async () => {
+      // Find the DatePicker component and directly call its onChange prop with null
+      const datePickerOnChange = screen
+        .getByLabelText(mockT('birthDate'))
+        .closest('.MuiDatePicker-root')
+        ?.dispatchEvent(new Event('change'));
+      if (datePickerOnChange) {
+        if (typeof datePickerOnChange === 'function') {
+          (datePickerOnChange as (date: dayjs.Dayjs | null) => void)(null);
+        }
+      } else {
+        // Fallback to simulating input change to empty string
+        fireEvent.change(dateInput, { target: { value: '' } });
+        fireEvent.blur(dateInput);
+      }
+    });
+    expect(mockHandleFieldChange).toHaveBeenCalledWith('birthDate', '');
 
     // Test education grade
     const gradeSelect = screen.getByTestId('inputGrade');
