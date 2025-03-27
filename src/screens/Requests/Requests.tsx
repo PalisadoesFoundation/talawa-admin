@@ -180,24 +180,23 @@ const Requests = (): JSX.Element => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        input: { id: organizationId }, // Changed from id: organizationId
-        skip: data?.organization?.membershipRequests?.length || 0, // Changed from data?.organizations?.[0]?.membershipRequests?.length
+        input: { id: organizationId },
+        skip: data?.organization?.membershipRequests?.length || 0,
         name_contains: searchByName,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         const newMembershipRequests =
-          fetchMoreResult.organization?.membershipRequests || []; // Changed from fetchMoreResult.organizations?.[0]?.membershipRequests
+          fetchMoreResult.organization?.membershipRequests || [];
         if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
         return {
           organization: {
-            // Changed from organizations: [{ ... }]
             id: organizationId,
             membershipRequests: [
-              ...(prev?.organization?.membershipRequests || []), // Changed from prev?.organizations?.[0]?.membershipRequests
+              ...(prev?.organization?.membershipRequests || []),
               ...newMembershipRequests,
             ],
           },
