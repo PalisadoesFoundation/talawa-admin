@@ -67,7 +67,7 @@ const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
           className={styles.closeButton}
           data-testid="modalCloseBtn"
         >
-          <i className="fa fa-times"></i>
+          <i className="fa fa-times" />
         </Button>
       </Modal.Header>
       <Modal.Body>

@@ -93,7 +93,9 @@ vi.mock('./ItemViewModal', () => ({
   }) =>
     isOpen ? (
       <div data-testid="ItemViewModal">
-        <button onClick={hide}>Close View</button>
+        <button type="button" onClick={hide}>
+          Close View
+        </button>
         <span>ItemView-{item.id}</span>
       </div>
     ) : null,
@@ -113,7 +115,9 @@ vi.mock('./ItemModal', () => ({
   }) =>
     isOpen ? (
       <div data-testid="ItemModal">
-        <button onClick={hide}>Close Modal</button>
+        <button type="button" onClick={hide}>
+          Close Modal
+        </button>
         <span>
           {actionItem ? `ItemModal-${actionItem.id}` : 'ItemModal-new'}{' '}
           {editMode ? 'edit' : 'create'}

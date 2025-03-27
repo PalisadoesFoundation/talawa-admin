@@ -76,7 +76,6 @@ function organizationActionItems(): JSX.Element {
   );
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  // const [filteredActionItems, setFilteredActionItems] = useState([]);
   const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
     null,
   );
@@ -125,24 +124,20 @@ function organizationActionItems(): JSX.Element {
       .map((item) => item.assigneeId)
       .filter((id): id is string => id !== null) || [];
 
-  const {
-    data: usersData,
-    loading: userLoading,
-    error: userError,
-  } = useQuery(GET_USERS_BY_IDS, {
+  const { data: usersData } = useQuery(GET_USERS_BY_IDS, {
     skip: assigneeIds.length === 0,
     variables: { input: { ids: assigneeIds } },
   });
 
-  useEffect(() => {
-    if (userLoading) {
-      // console.log("Loading users...");
-    }
+  // useEffect(() => {
+  //   if (userLoading) {
+  //     // console.log("Loading users...");
+  //   }
 
-    if (userError) {
-      // console.error("Error fetching users:", userError.message);
-    }
-  }, [userLoading, userError]);
+  //   if (userError) {
+  //     // console.error("Error fetching users:", userError.message);
+  //   }
+  // }, [userLoading, userError]);
 
   const getAssigneeName = (assigneeId: string | null): string => {
     if (!assigneeId) return 'Unassigned';
@@ -268,15 +263,14 @@ function organizationActionItems(): JSX.Element {
       // console.log('⏳ Loading action items...');
     }
 
-    if (actionItemsData) {
-      console.log(
-        ' Action Items Data:',
-        JSON.stringify(actionItemsData, null, 2),
-      );
-    }
+    // if (actionItemsData) {
+    //   console.log(
+    //     ' Action Items Data:',
+    //     JSON.stringify(actionItemsData, null, 2),
+    //   );
+    // }
 
     if (actionItemsError) {
-      // console.error(' Action Items Error:', actionItemsError);
     }
   }, [actionItemsLoading, actionItemsData, actionItemsError]);
 
@@ -284,7 +278,7 @@ function organizationActionItems(): JSX.Element {
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
-  console.log(searchTerm);
+  // console.log(searchTerm);
   useEffect(() => {
     actionItemsRefetch();
   }, [sortBy, status, actionItemsRefetch]);

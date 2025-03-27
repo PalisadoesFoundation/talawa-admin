@@ -194,23 +194,6 @@ describe('Additional Tests for OrgActionItemCategories', () => {
   });
 });
 
-function renderOrgCategories1(
-  link: ApolloLink,
-  orgId: string,
-): ReturnType<typeof render> {
-  return render(
-    <MockedProvider addTypename={false} link={link}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <OrgActionItemCategories orgId={orgId} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>
-    </MockedProvider>,
-  );
-}
-('');
 describe('Additional Tests for OrgActionItemCategories', () => {
   beforeEach(() => {
     // Reset any global mocks if needed.
@@ -218,7 +201,7 @@ describe('Additional Tests for OrgActionItemCategories', () => {
 
   it('renders no rows overlay when there are no categories', async () => {
     const emptyLink = new StaticMockLink(MOCKS_EMPTY);
-    renderOrgCategories1(emptyLink, 'orgId');
+    renderOrgCategories(emptyLink, 'orgId');
 
     await waitFor(() => {
       expect(screen.getByText(t.noActionItemCategories)).toBeInTheDocument();
@@ -227,7 +210,7 @@ describe('Additional Tests for OrgActionItemCategories', () => {
 
   it('updates the search term input value', async () => {
     const successLink = new StaticMockLink(MOCKS);
-    renderOrgCategories1(successLink, 'orgId');
+    renderOrgCategories(successLink, 'orgId');
 
     const searchInput = await screen.findByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
@@ -238,7 +221,7 @@ describe('Additional Tests for OrgActionItemCategories', () => {
 
   it('applies status filter and displays no rows overlay when no categories match', async () => {
     const successLink = new StaticMockLink(MOCKS);
-    renderOrgCategories1(successLink, 'orgId');
+    renderOrgCategories(successLink, 'orgId');
 
     const filterBtn = await screen.findByTestId('filter');
     expect(filterBtn).toBeInTheDocument();
@@ -251,7 +234,7 @@ describe('Additional Tests for OrgActionItemCategories', () => {
 
   it('opens create new category modal', async () => {
     const link = new StaticMockLink(MOCKS);
-    renderOrgCategories1(link, 'orgId');
+    renderOrgCategories(link, 'orgId');
 
     const createButton = await screen.findByTestId(
       'createActionItemCategoryBtn',

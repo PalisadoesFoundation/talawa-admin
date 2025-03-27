@@ -225,7 +225,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       renderCell: (params: GridCellParams) => {
         return (
           <span data-testid="creatorName">
-            {params.row.creator.firstName + ' ' + params.row.creator.lastName}
+            {`${params.row.creator.firstName} ${params.row.creator.lastName}`}
           </span>
         );
       },
