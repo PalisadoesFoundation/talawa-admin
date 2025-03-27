@@ -106,7 +106,7 @@ describe('UserDetailsForm', () => {
   it('shows/hides action buttons based on isUpdated prop', () => {
     const { rerender } = render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
-        <UserDetailsForm {...defaultProps} isUpdated={true} />
+        <UserDetailsForm {...defaultProps} isUpdated={false} />
       </MockedProvider>,
     );
 
@@ -116,7 +116,7 @@ describe('UserDetailsForm', () => {
 
     rerender(
       <MockedProvider mocks={MOCKS} addTypename={false}>
-        <UserDetailsForm {...defaultProps} isUpdated={false} />
+        <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
 
@@ -128,7 +128,7 @@ describe('UserDetailsForm', () => {
   it('handles form submission correctly', async () => {
     render(
       <MockedProvider mocks={UPDATE_MOCK} addTypename={false}>
-        <UserDetailsForm {...defaultProps} isUpdated={false} />
+        <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
 
@@ -141,7 +141,7 @@ describe('UserDetailsForm', () => {
   it('handles reset changes correctly', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
-        <UserDetailsForm {...defaultProps} isUpdated={false} />
+        <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
 
