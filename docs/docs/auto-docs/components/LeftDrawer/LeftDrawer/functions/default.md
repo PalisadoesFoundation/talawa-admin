@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L34)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L32)
 
 LeftDrawer component that displays the sidebar with navigation options.
 
