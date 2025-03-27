@@ -9,7 +9,6 @@ import { DELETE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutatio
 import { toast } from 'react-toastify';
 import type { InterfaceActionItem } from 'utils/interfaces';
 
-// Mock translations so that keys are returned as is.
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
