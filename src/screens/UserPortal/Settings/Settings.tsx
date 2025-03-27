@@ -166,16 +166,6 @@ export default function Settings(): JSX.Element {
   };
 
   const handleFieldChange = (fieldName: string, value: string): void => {
-    // check if the birth date is not in the future
-    if (fieldName === 'birthDate') {
-      const today = new Date();
-      const selectedDate = new Date(value);
-      if (selectedDate > today) {
-        toast.error('Future dates are not allowed for birth date.');
-        return;
-      }
-    }
-
     // check if the password is strong or not
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {

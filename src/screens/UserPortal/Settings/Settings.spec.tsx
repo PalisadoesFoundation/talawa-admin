@@ -193,17 +193,6 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    // Test future date
-    const futureDate = new Date();
-    futureDate.setFullYear(futureDate.getFullYear() + 1);
-    fireEvent.change(screen.getByLabelText('Birth Date'), {
-      target: { value: futureDate.toISOString().split('T')[0] },
-    });
-    await wait();
-    expect(toastSpy).toHaveBeenCalledWith(
-      'Future dates are not allowed for birth date.',
-    );
-
     // Test valid date
     fireEvent.change(screen.getByLabelText('Birth Date'), {
       target: { value: '2000-01-01' },
