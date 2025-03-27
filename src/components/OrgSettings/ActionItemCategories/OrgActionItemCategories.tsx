@@ -168,7 +168,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
+        return <div data-testid="rowId">{params.row.id}</div>;
       },
     },
     {
@@ -203,6 +203,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       renderCell: (params: GridCellParams) => {
         return (
           <Chip
+            data-testid="statusChip"
             icon={<Circle className={styles.chipIcon} />}
             label={params.row.isDisabled ? 'Disabled' : 'Active'}
             variant="outlined"
@@ -222,7 +223,11 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.creator.firstName + ' ' + params.row.creator.lastName;
+        return (
+          <span data-testid="creatorName">
+            {params.row.creator.firstName + ' ' + params.row.creator.lastName}
+          </span>
+        );
       },
     },
     {
