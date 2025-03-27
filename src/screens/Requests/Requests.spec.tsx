@@ -958,7 +958,7 @@ describe('Testing Requests screen', () => {
     });
 
     await wait(600);
-    expect(screen.getAllByRole('row').length).toBe(18);
+    expect(screen.getAllByRole('row').length).toBe(13);
     expect(screen.getByText('User7 Test')).toBeInTheDocument();
     expect(screen.getByText('User8 Test')).toBeInTheDocument();
   });

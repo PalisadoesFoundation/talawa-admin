@@ -180,35 +180,27 @@ const Requests = (): JSX.Element => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        id: organizationId,
-        skip: data?.organizations?.[0]?.membershipRequests?.length || 0,
+        input: { id: organizationId }, // Changed from id: organizationId
+        skip: data?.organization?.membershipRequests?.length || 0, // Changed from data?.organizations?.[0]?.membershipRequests?.length
         name_contains: searchByName,
       },
-      updateQuery: (
-        prev: InterfaceQueryMembershipRequestsListItem | undefined,
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult: InterfaceQueryMembershipRequestsListItem | undefined;
-        },
-      ): InterfaceQueryMembershipRequestsListItem | undefined => {
+      updateQuery: (prev, { fetchMoreResult }) => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         const newMembershipRequests =
-          fetchMoreResult.organizations?.[0]?.membershipRequests || [];
+          fetchMoreResult.organization?.membershipRequests || []; // Changed from fetchMoreResult.organizations?.[0]?.membershipRequests
         if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          organizations: [
-            {
-              id: organizationId,
-              membershipRequests: [
-                ...(prev?.organizations?.[0]?.membershipRequests || []),
-                ...newMembershipRequests,
-              ],
-            },
-          ],
+          organization: {
+            // Changed from organizations: [{ ... }]
+            id: organizationId,
+            membershipRequests: [
+              ...(prev?.organization?.membershipRequests || []), // Changed from prev?.organizations?.[0]?.membershipRequests
+              ...newMembershipRequests,
+            ],
+          },
         };
       },
     });
