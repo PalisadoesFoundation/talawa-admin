@@ -380,28 +380,72 @@ describe('VenueModal', () => {
     beforeEach(() => {
       vi.clearAllMocks();
       console.error = vi.fn();
+      // Reset the mock for each test to ensure isolation
+      mockUploadFileToMinio
+        .mockReset()
+        .mockResolvedValue({ objectName: 'test-image.png' });
     });
 
     test('displays image preview and clear button when an image is selected', async () => {
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
       const file = new File(['test'], 'test.png', { type: 'image/png' });
       const fileInput = screen.getByTestId('venueImgUrl');
-      await userEvent.upload(fileInput, file);
+
+      await act(async () => {
+        await userEvent.upload(fileInput, file);
+      });
+
       expect(mockUploadFileToMinio).toHaveBeenCalled();
 
       // Wait for the image to appear
-      const image = await screen.findByAltText('Venue Image Preview');
-      expect(image).toBeInTheDocument();
-      expect(screen.getByTestId('closeimage')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+        expect(screen.getByTestId('closeimage')).toBeInTheDocument();
+      });
+    });
+
+    test('shows error toast when image upload fails', async () => {
+      // Configure mock to reject for this test only
+      mockUploadFileToMinio
+        .mockReset()
+        .mockRejectedValueOnce(new Error('Upload failed'));
+
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+      const fileInput = screen.getByTestId('venueImgUrl');
+
+      await act(async () => {
+        await userEvent.upload(fileInput, file);
+      });
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Failed to upload image');
+      });
+
+      // Verify no image preview is shown after upload failure
+      expect(
+        screen.queryByAltText('Venue Image Preview'),
+      ).not.toBeInTheDocument();
     });
 
     test('removes image preview when clear button is clicked', async () => {
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
       const file = new File(['test'], 'test.png', { type: 'image/png' });
       const fileInput = screen.getByTestId('venueImgUrl');
-      await userEvent.upload(fileInput, file);
 
-      fireEvent.click(screen.getByTestId('closeimage'));
+      await act(async () => {
+        await userEvent.upload(fileInput, file);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('closeimage'));
+      });
+
       expect(
         screen.queryByAltText('Venue Image Preview'),
       ).not.toBeInTheDocument();
