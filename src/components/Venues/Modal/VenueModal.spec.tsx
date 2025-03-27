@@ -405,13 +405,21 @@ describe('VenueModal', () => {
 
   // Image Handling Tests
   describe('Image Handling', () => {
+    let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
     beforeEach(() => {
       vi.clearAllMocks();
-      console.error = vi.fn();
+      // Use a spy instead of overriding console.error
+      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       // Reset the mock for each test to ensure isolation
       mockUploadFileToMinio
         .mockReset()
         .mockResolvedValue({ objectName: 'test-image.png' });
+    });
+
+    afterEach(() => {
+      // Restore console.error after each test
+      consoleErrorSpy.mockRestore();
     });
 
     test('displays image preview and clear button when an image is selected', async () => {
