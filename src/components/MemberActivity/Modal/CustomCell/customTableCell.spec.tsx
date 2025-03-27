@@ -91,7 +91,7 @@ describe('CustomTableCell', () => {
     });
   });
 
-  it('displays no event found message', async () => {
+  it('displays no event found message with proper styling', async () => {
     const noEventMock = [
       {
         request: {
@@ -117,44 +117,18 @@ describe('CustomTableCell', () => {
     );
 
     await waitFor(() => {
+      // Test the text content
       expect(
         screen.getByText('Event not found or has been deleted'),
       ).toBeInTheDocument();
-    });
-  });
 
-  it('displays no event found message with correct styling', async () => {
-    const noEventMock = [
-      {
-        request: {
-          query: EVENT_DETAILS,
-          variables: { id: 'event123' },
-        },
-        result: {
-          data: {
-            event: null,
-          },
-        },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={noEventMock} addTypename={false}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
+      // Test the styling and structure
       const noEventRow = screen.getByTestId('no-event-state');
       expect(noEventRow).toBeInTheDocument();
 
       const tableCell = noEventRow.querySelector('td');
       expect(tableCell).toHaveAttribute('colspan', '4');
-      expect(tableCell).toHaveClass('MuiTableCell-alignCenter'); // Changed from toHaveAttribute
+      expect(tableCell).toHaveClass('MuiTableCell-alignCenter');
       expect(tableCell).toHaveTextContent(
         'Event not found or has been deleted',
       );
@@ -212,6 +186,7 @@ describe('CustomTableCell', () => {
     });
   });
 
+  // Update the non-recurring event test to also check for table cell alignment classes
   it('renders non-recurring event with no attendees correctly', async () => {
     // Test both recurring=false and without attendees
     const eventMock = {
@@ -253,6 +228,12 @@ describe('CustomTableCell', () => {
       // Check attendee count shows "0" when attendees is null
       const attendeeCount = screen.getByTitle('Number of attendees');
       expect(attendeeCount).toHaveTextContent('0');
+
+      // Verify all table cells have left alignment
+      const cells = screen.getAllByRole('cell');
+      cells.forEach((cell) => {
+        expect(cell).toHaveClass('MuiTableCell-alignLeft');
+      });
     });
   });
 });
