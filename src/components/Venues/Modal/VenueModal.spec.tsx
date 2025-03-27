@@ -357,6 +357,111 @@ describe('VenueModal', () => {
       );
     });
 
+    test('tests undefined description fallback to empty string', async () => {
+      // Create a mock with null description to test the || '' fallback
+      const mockWithNullDescription = [
+        {
+          request: {
+            query: CREATE_VENUE_MUTATION,
+            variables: {
+              name: 'Test Venue',
+              description: '', // This tests the '' fallback
+              capacity: 100,
+              organizationId: 'orgId',
+              file: '',
+            },
+          },
+          result: { data: { createVenue: { _id: 'newVenue' } } },
+        },
+      ];
+
+      // Create a component with undefined description
+      const { unmount } = render(
+        <MockedProvider mocks={mockWithNullDescription} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <VenueModal {...defaultProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Set name
+      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+        target: { value: 'Test Venue' },
+      });
+
+      // Leave description undefined/null by not setting it
+
+      // Set capacity
+      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+        target: { value: '100' },
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createVenueBtn'));
+      });
+
+      // Success toast should still be called with the empty string fallback
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'organizationVenues.venueCreated',
+        );
+      });
+
+      unmount();
+    });
+
+    test('tests empty file/objectName fallback', async () => {
+      // Create a mock that specifically tests empty file/objectName
+      const mockWithoutImage = [
+        {
+          request: {
+            query: CREATE_VENUE_MUTATION,
+            variables: {
+              name: 'Test No Image',
+              description: 'Test Description',
+              capacity: 100,
+              organizationId: 'orgId',
+              file: '', // This tests the || '' fallback for objectName
+            },
+          },
+          result: { data: { createVenue: { _id: 'newVenue' } } },
+        },
+      ];
+
+      // Create a component with undefined objectName
+      render(
+        <MockedProvider mocks={mockWithoutImage} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <VenueModal {...defaultProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Set all fields except image
+      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+        target: { value: 'Test No Image' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+        target: { value: 'Test Description' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+        target: { value: '100' },
+      });
+
+      // Don't upload an image to test the empty objectName fallback
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createVenueBtn'));
+      });
+
+      // Success toast should be called with the empty objectName
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'organizationVenues.venueCreated',
+        );
+      });
+    });
+
     test('trims whitespace from name and description before submission', async () => {
       // Create a mock with empty description to test fallback
       const emptyDescriptionMock = [
@@ -870,6 +975,60 @@ describe('VenueModal', () => {
         screen.getByDisplayValue('Updated description for venue 1'),
         { target: { value: 'Updated description' } },
       );
+      fireEvent.change(screen.getByDisplayValue('100'), {
+        target: { value: '200' },
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('updateVenueBtn'));
+      });
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'Venue details updated successfully',
+        );
+      });
+    });
+
+    test('tests description and objectName fallbacks in edit mode', async () => {
+      // Mock for edit with null description and empty file
+      const editMockWithFallbacks = [
+        {
+          request: {
+            query: UPDATE_VENUE_MUTATION,
+            variables: {
+              id: 'venue1',
+              name: 'Updated Venue',
+              capacity: 200,
+              description: '', // Test description fallback
+              file: '', // Test objectName fallback
+            },
+          },
+          result: { data: { editVenue: { _id: 'venue1' } } },
+        },
+      ];
+
+      // Create a custom editProps with null description and image
+      const customEditProps = {
+        ...editProps,
+        venueData: {
+          _id: 'venue1', // Keep the required fields
+          name: 'Venue 1',
+          capacity: '100',
+          description: null, // Set this to null to test the fallback
+          image: null, // Set this to null to test the objectName fallback
+        },
+      };
+
+      renderVenueModal(
+        customEditProps,
+        new StaticMockLink(editMockWithFallbacks, true),
+      );
+
+      fireEvent.change(screen.getByDisplayValue('Venue 1'), {
+        target: { value: 'Updated Venue' },
+      });
+      // Don't set a description value
       fireEvent.change(screen.getByDisplayValue('100'), {
         target: { value: '200' },
       });
