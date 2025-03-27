@@ -1080,7 +1080,20 @@ export const SIGNIN_QUERY = gql`
     }
   }
 `;
-
+export const GET_ORGANIZATION_EVENTS = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      events {
+        id
+        name
+        description
+        startAt
+        endAt
+      }
+    }
+  }
+`;
 export const GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG = gql`
   query getCommunityData {
     community {
@@ -1121,18 +1134,3 @@ export {
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from './OrganizationQueries';
-
-export const GET_ORGANIZATION_EVENTS = gql`
-  query Organization($input: QueryOrganizationInput!) {
-    organization(input: $input) {
-      id
-      events {
-        id
-        name
-        description
-        startAt
-        endAt
-      }
-    }
-  }
-`;

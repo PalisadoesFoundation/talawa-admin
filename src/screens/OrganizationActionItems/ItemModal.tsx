@@ -470,7 +470,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   value={
                     events.find(
                       (event: { id: string; name: string }) =>
-                        event.id === eventId,
+                        event.id === formState.eventId,
                     ) || null
                   }
                   isOptionEqualToValue={(
