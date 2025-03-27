@@ -66,7 +66,7 @@ const Requests = (): JSX.Element => {
       },
       first: perPageResult,
       skip: 0,
-      firstName_contains: '',
+      name_contains: '',
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -122,18 +122,16 @@ const Requests = (): JSX.Element => {
   //   }
   // }, [userRole]);
 
-
-// new useEffect to check if user is authorized 
-useEffect(() => {
-  const isAuthorized = 
-  userRole?.toLowerCase() === 'administrator' || 
-  userRole?.toUpperCase() === 'ADMIN' || 
-  userRole?.toUpperCase() === 'SUPERADMIN';
-  if (!isAuthorized) {
-    window.location.assign('/orglist');
-  }
-}, []);
-
+  // new useEffect to check if user is authorized
+  useEffect(() => {
+    const isAuthorized =
+      userRole?.toLowerCase() === 'administrator' ||
+      userRole?.toUpperCase() === 'ADMIN' ||
+      userRole?.toUpperCase() === 'SUPERADMIN';
+    if (!isAuthorized) {
+      window.location.assign('/orglist');
+    }
+  }, []);
 
   // Manage the loading state
   useEffect(() => {
@@ -157,7 +155,7 @@ useEffect(() => {
     }
     refetch({
       id: organizationId,
-      firstName_contains: value,
+      name_contains: value,
       // Later on we can add several search and filter options
     });
   };
@@ -169,7 +167,7 @@ useEffect(() => {
     refetch({
       first: perPageResult,
       skip: 0,
-      firstName_contains: '',
+      name_contains: '',
     });
     setHasMore(true);
   };
@@ -184,7 +182,7 @@ useEffect(() => {
       variables: {
         id: organizationId,
         skip: data?.organizations?.[0]?.membershipRequests?.length || 0,
-        firstName_contains: searchByName,
+        name_contains: searchByName,
       },
       updateQuery: (
         prev: InterfaceQueryMembershipRequestsListItem | undefined,
@@ -235,10 +233,7 @@ useEffect(() => {
         <div
           className={`${styles.input}`}
           style={{
-            display:
-              userRole === 'ADMIN' || userRole === 'SUPERADMIN'
-                ? 'block'
-                : 'none',
+            display: userRole === 'administrator' ? 'block' : 'none',
           }}
         >
           <SearchBar

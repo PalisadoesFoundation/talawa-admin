@@ -89,18 +89,15 @@ describe('OrganizationDashboard', () => {
     await waitFor(() => {
       expect(screen.getByText('noUpcomingEvents')).toBeInTheDocument();
       expect(screen.getByText('noPostsPresent')).toBeInTheDocument();
-
     });
-    const noRequestsElement = await screen.findByText((content) =>
-      content.includes('noMembershipRequests') ||
-      content.includes('membership') ||
-      content.includes('requests')
+    const noRequestsElement = await screen.findByText(
+      (content) =>
+        content.includes('noMembershipRequests') ||
+        content.includes('membership') ||
+        content.includes('requests'),
     );
     expect(noRequestsElement).toBeInTheDocument();
-
   });
-
-
 
   it('navigates to "/" and shows error toast when GraphQL errors occur', async () => {
     renderWithProviders({ mocks: ERROR_MOCKS });

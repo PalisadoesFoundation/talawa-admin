@@ -865,14 +865,14 @@ export const MEMBERSHIP_REQUEST = gql`
     $input: QueryOrganizationInput!
     $skip: Int
     $first: Int
-    $firstName_contains: String
+    $name_contains: String
   ) {
     organization(input: $input) {
       id
       membershipRequests(
         skip: $skip
         first: $first
-        where: { user: { name_contains: $firstName_contains } }
+        where: { user: { name_contains: $name_contains } }
       ) {
         membershipRequestId
         createdAt

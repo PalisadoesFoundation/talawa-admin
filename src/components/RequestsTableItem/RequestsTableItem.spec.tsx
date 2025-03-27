@@ -53,9 +53,9 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        membershipRequestId: '123',     
+        membershipRequestId: '123',
         createdAt: '2021-09-01T00:00:00.000Z',
-        status: 'pending',   
+        status: 'pending',
         user: {
           id: '123',
           name: 'John Doe',
@@ -89,9 +89,9 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        membershipRequestId: '123',     
+        membershipRequestId: '123',
         createdAt: '2021-09-01T00:00:00.000Z',
-        status: 'pending',   
+        status: 'pending',
         user: {
           id: '123',
           name: 'John Doe',
@@ -123,9 +123,9 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        membershipRequestId: '123',     
+        membershipRequestId: '123',
         createdAt: '2021-09-01T00:00:00.000Z',
-        status: 'pending',   
+        status: 'pending',
         user: {
           id: '123',
           name: 'John Doe',
@@ -157,9 +157,9 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        membershipRequestId: '123',     
+        membershipRequestId: '123',
         createdAt: '2021-09-01T00:00:00.000Z',
-        status: 'pending',   
+        status: 'pending',
         user: {
           id: '123',
           name: 'John Doe',
@@ -191,9 +191,9 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       request: {
-        membershipRequestId: '123',     
+        membershipRequestId: '123',
         createdAt: '2021-09-01T00:00:00.000Z',
-        status: 'pending',   
+        status: 'pending',
         user: {
           id: '123',
           name: 'John Doe',
