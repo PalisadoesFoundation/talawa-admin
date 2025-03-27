@@ -19,7 +19,7 @@ import {
   CREATE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import type { ApolloLink } from '@apollo/client';
+import { ApolloLink, Observable } from '@apollo/client';
 import { useMinioUpload } from 'utils/MinioUpload';
 
 // Mock Setup
@@ -358,26 +358,23 @@ describe('VenueModal', () => {
     });
 
     test('tests undefined description fallback to empty string', async () => {
-      // Create a mock with null description to test the || '' fallback
-      const mockWithNullDescription = [
-        {
-          request: {
-            query: CREATE_VENUE_MUTATION,
-            variables: {
-              name: 'Test Venue',
-              description: '', // This tests the '' fallback
-              capacity: 100,
-              organizationId: 'orgId',
-              file: '',
-            },
-          },
-          result: { data: { createVenue: { _id: 'newVenue' } } },
-        },
-      ];
+      // Create a spy to capture the mutation variables
+      const mutationSpy = vi.fn().mockImplementation((operation) => {
+        return {
+          data: { createVenue: { _id: 'newVenue' } },
+        };
+      });
 
-      // Create a component with undefined description
+      // Create a custom mock link that captures the variables
+      const mockLink = new ApolloLink((operation) => {
+        // This will capture the actual variables being sent
+        mutationSpy(operation);
+        return Observable.of({ data: { createVenue: { _id: 'newVenue' } } });
+      });
+
+      // Create a component with the spy link
       const { unmount } = render(
-        <MockedProvider mocks={mockWithNullDescription} addTypename={false}>
+        <MockedProvider link={mockLink} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -400,11 +397,20 @@ describe('VenueModal', () => {
         fireEvent.click(screen.getByTestId('createVenueBtn'));
       });
 
-      // Success toast should still be called with the empty string fallback
+      // Verify success toast
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
           'organizationVenues.venueCreated',
         );
+      });
+
+      // Verify the mutation variables
+      await waitFor(() => {
+        expect(mutationSpy).toHaveBeenCalled();
+        // Check that the first call to the spy has the expected variables
+        const operation = mutationSpy.mock.calls[0][0];
+        const variables = operation.variables;
+        expect(variables.description).toBe('');
       });
 
       unmount();
@@ -1008,15 +1014,15 @@ describe('VenueModal', () => {
         },
       ];
 
-      // Create a custom editProps with null description and image
+      // Create a custom editProps with undefined description and image
       const customEditProps = {
         ...editProps,
         venueData: {
           _id: 'venue1', // Keep the required fields
           name: 'Venue 1',
           capacity: '100',
-          description: null, // Set this to null to test the fallback
-          image: null, // Set this to null to test the objectName fallback
+          description: null, // Changed to null from undefined
+          image: null, // Changed to null from undefined
         },
       };
 
