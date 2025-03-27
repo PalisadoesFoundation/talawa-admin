@@ -28,11 +28,9 @@ async function wait(ms = 100) {
 }
 
 const mocks = [
+  // Mock for All Organizations (Happy Path)
   {
-    request: {
-      query: ALL_ORGANIZATIONS,
-      variables: { filter: '' }, // Aligned with Organizations.tsx
-    },
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
     result: {
       data: {
         organizations: Array(10)
@@ -49,12 +47,13 @@ const mocks = [
             state: 'State',
             membersCount: i + 1,
             adminsCount: 1,
-            isMember: i % 2 === 0, // Alternate membership for testing
+            isMember: i % 2 === 0,
             __typename: 'Organization',
           })),
       },
     },
   },
+  // Mock for Joined Organizations (Happy Path)
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
@@ -95,6 +94,7 @@ const mocks = [
       },
     },
   },
+  // Mock for Created Organizations (Happy Path)
   {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
@@ -120,11 +120,161 @@ const mocks = [
       },
     },
   },
+  // Mock for All Organizations with Missing Fields
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'missing' } },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: 'allOrgIdMissing',
+            name: 'Missing Org',
+            description: undefined,
+            avatarURL: null,
+            city: undefined,
+            countryCode: 'US',
+            addressLine1: undefined,
+            postalCode: '12345',
+            state: 'State',
+            membersCount: undefined,
+            adminsCount: undefined,
+            isMember: false,
+            __typename: 'Organization',
+          },
+        ],
+      },
+    },
+  },
+  // Mock for Joined Organizations with Missing Fields
   {
     request: {
-      query: ALL_ORGANIZATIONS,
-      variables: { filter: '2' },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: TEST_USER_ID, first: 5, filter: 'missing' },
     },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+            edges: [
+              {
+                node: {
+                  id: 'joinedOrgIdMissing',
+                  name: 'Joined Missing Org',
+                  description: undefined,
+                  avatarURL: null,
+                  city: undefined,
+                  countryCode: 'US',
+                  addressLine1: undefined,
+                  postalCode: '67890',
+                  state: 'State',
+                  membersCount: undefined,
+                  adminsCount: undefined,
+                  members: {
+                    edges: [{ node: { id: TEST_USER_ID, __typename: 'User' } }],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
+                },
+                __typename: 'OrganizationEdge',
+              },
+            ],
+            __typename: 'OrganizationConnection',
+          },
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for Created Organizations with Missing Fields
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: 'missing' },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [
+            {
+              id: 'createdOrgIdMissing',
+              name: 'Created Missing Org',
+              description: undefined,
+              avatarURL: null,
+              city: undefined,
+              countryCode: 'US',
+              addressLine1: undefined,
+              postalCode: '12345',
+              state: 'State',
+              membersCount: undefined,
+              adminsCount: undefined,
+              isMember: true,
+              __typename: 'Organization',
+            },
+          ],
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for Empty All Organizations
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'empty' } },
+    result: { data: { organizations: [] } },
+  },
+  // Mock for Empty Joined Organizations
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: TEST_USER_ID, first: 5, filter: 'empty' },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+            edges: [],
+            __typename: 'OrganizationConnection',
+          },
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for Empty Created Organizations
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: 'empty' },
+    },
+    result: {
+      data: { user: { createdOrganizations: [], __typename: 'User' } },
+    },
+  },
+  // Mock for Error in All Organizations
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'error' } },
+    error: new Error('Failed to fetch organizations'),
+  },
+  // Mock for Error in Joined Organizations
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: TEST_USER_ID, first: 5, filter: 'error' },
+    },
+    error: new Error('Failed to fetch joined organizations'),
+  },
+  // Mock for Error in Created Organizations
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: 'error' },
+    },
+    error: new Error('Failed to fetch created organizations'),
+  },
+  // Mock for Filtered Search
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: '2' } },
     result: {
       data: {
         organizations: [
@@ -215,21 +365,21 @@ const mocks = [
   {
     request: {
       query: ALL_ORGANIZATIONS,
-      variables: { filter: 'Debounced Search' },
+      variables: { filter: 'test' },
     },
     result: {
       data: {
         organizations: [
           {
-            id: 'debounceOrgId1',
-            name: 'Debounced Search Org',
-            description: 'Debounced Desc',
-            avatarURL: null,
-            city: 'City',
+            id: 'testOrgId',
+            name: 'Test Org',
+            city: 'Test City',
             countryCode: 'US',
-            addressLine1: '101 Debounce St',
-            postalCode: '11111',
-            state: 'State',
+            addressLine1: '789 Test St',
+            postalCode: '99999',
+            state: 'Test State',
+            description: 'Test Description',
+            avatarURL: null,
             membersCount: 1,
             adminsCount: 1,
             isMember: false,
@@ -239,6 +389,46 @@ const mocks = [
       },
     },
   },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: '01958985-600e-7cde-94a2-b3fc1ce66cf3',
+        first: 5,
+        filter: 'test',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+            edges: [],
+            __typename: 'OrganizationConnection',
+          },
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: {
+        id: '01958985-600e-7cde-94a2-b3fc1ce66cf3',
+        filter: 'test',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [],
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for Community Data
   {
     request: { query: GET_COMMUNITY_DATA, variables: {} },
     result: {
@@ -1176,8 +1366,6 @@ describe('Organizations Component', () => {
     ).toHaveAttribute('data-status', 'accepted');
   });
 
-  // New Tests for Additional Coverage
-
   it('displays membership status correctly in all organizations mode', async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={true}>
@@ -1199,11 +1387,11 @@ describe('Organizations Component', () => {
 
     expect(screen.getByTestId('membership-status-All Org 0')).toHaveAttribute(
       'data-status',
-      'accepted', // isMember: true for i=0
+      'accepted',
     );
     expect(screen.getByTestId('membership-status-All Org 1')).toHaveAttribute(
       'data-status',
-      '', // isMember: false for i=1
+      '',
     );
   });
 
@@ -1528,5 +1716,43 @@ describe('Organizations Component', () => {
       { timeout: 3000 },
     );
     expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+
+    // Switch to mode 2 to cover created organizations
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+    await waitFor(
+      () =>
+        expect(
+          screen.getByTestId('org-name-Created Org 1'),
+        ).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+  });
+
+  it('triggers immediate search on Enter key', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'test');
+    await userEvent.keyboard('{Enter}');
+
+    // Should update immediately without waiting for debounce
+    await waitFor(() => {
+      expect(screen.getByTestId('org-name-Test Org')).toBeInTheDocument();
+    });
   });
 });
