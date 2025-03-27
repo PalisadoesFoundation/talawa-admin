@@ -460,7 +460,7 @@ describe('VenueModal', () => {
     test('removes image preview when clear button is clicked and tests fileInputRef is null', async () => {
       // Create component with custom fileInputRef mock
       const originalUseRef = React.useRef;
-      let refValue = { current: document.createElement('input') };
+      const refValue = { current: document.createElement('input') };
 
       // Mock useRef to return our controlled ref
       vi.spyOn(React, 'useRef').mockImplementation((initialValue) => {
