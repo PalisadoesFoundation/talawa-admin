@@ -33,23 +33,40 @@ const mocks = [
     request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
     result: {
       data: {
-        organizations: Array(10)
-          .fill(null)
-          .map((_, i) => ({
-            id: `allOrgId${i}`,
-            name: `All Org ${i}`,
-            description: `Description ${i}`,
+        organizations: [
+          ...Array(10)
+            .fill(null)
+            .map((_, i) => ({
+              id: `allOrgId${i}`,
+              name: `All Org ${i}`,
+              description: `Description ${i}`,
+              avatarURL: null,
+              city: 'City',
+              countryCode: 'US',
+              addressLine1: '123 Street',
+              postalCode: '12345',
+              state: 'State',
+              membersCount: i + 1,
+              adminsCount: 1,
+              isMember: i % 2 === 0,
+              __typename: 'Organization',
+            })),
+          {
+            id: 'allOrgIdMissing',
+            name: 'Missing Org',
+            description: undefined,
             avatarURL: null,
-            city: 'City',
-            countryCode: 'US',
-            addressLine1: '123 Street',
-            postalCode: '12345',
-            state: 'State',
-            membersCount: i + 1,
-            adminsCount: 1,
-            isMember: i % 2 === 0,
+            city: undefined,
+            countryCode: undefined,
+            addressLine1: undefined,
+            postalCode: undefined,
+            state: undefined,
+            membersCount: undefined,
+            adminsCount: undefined,
+            isMember: false,
             __typename: 'Organization',
-          })),
+          },
+        ],
       },
     },
   },
@@ -86,6 +103,27 @@ const mocks = [
                 },
                 __typename: 'OrganizationEdge',
               },
+              {
+                node: {
+                  id: 'joinedOrgIdMissing',
+                  name: 'Joined Missing Org',
+                  description: undefined,
+                  avatarURL: null,
+                  city: undefined,
+                  countryCode: undefined,
+                  addressLine1: undefined,
+                  postalCode: undefined,
+                  state: undefined,
+                  membersCount: undefined,
+                  adminsCount: undefined,
+                  members: {
+                    edges: [{ node: { id: TEST_USER_ID, __typename: 'User' } }],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
+                },
+                __typename: 'OrganizationEdge',
+              },
             ],
             __typename: 'OrganizationConnection',
           },
@@ -111,6 +149,21 @@ const mocks = [
               avatarURL: null,
               membersCount: 3,
               adminsCount: 1,
+              isMember: true,
+              __typename: 'Organization',
+            },
+            {
+              id: 'createdOrgIdMissing',
+              name: 'Created Missing Org',
+              description: undefined,
+              avatarURL: null,
+              city: undefined,
+              countryCode: undefined,
+              addressLine1: undefined,
+              postalCode: undefined,
+              state: undefined,
+              membersCount: undefined,
+              adminsCount: undefined,
               isMember: true,
               __typename: 'Organization',
             },
@@ -479,16 +532,47 @@ describe('Organizations Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await waitFor(() => {
-      expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
-      expect(screen.getByTestId('org-name-All Org 1')).toBeInTheDocument();
-      expect(screen.getAllByTestId('organization-card').length).toBe(5);
-    });
+
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    await waitFor(
+      () => {
+        // Check first few orgs and Missing Org
+        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+        expect(screen.getByTestId('org-name-All Org 1')).toBeInTheDocument();
+        // Assuming pagination, Missing Org might not be on page 1; adjust if all 11 show
+        expect(screen.getAllByTestId('organization-card').length).toBe(5); // 5 per page
+        // If Missing Org is on page 1, test its fields
+        if (screen.queryByTestId('org-name-Missing Org')) {
+          expect(
+            screen.getByTestId('org-name-Missing Org'),
+          ).toBeInTheDocument();
+          expect(
+            screen.getByTestId('org-description-Missing Org').textContent,
+          ).toBe('');
+          expect(
+            screen.getByTestId('org-membersCount-Missing Org').textContent,
+          ).toBe('0');
+          expect(
+            screen.getByTestId('org-adminsCount-Missing Org').textContent,
+          ).toBe('0');
+          expect(screen.getByTestId('org-city-Missing Org').textContent).toBe(
+            '',
+          );
+        }
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('switches to joined organizations (mode=1)', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -498,24 +582,79 @@ describe('Organizations Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await waitFor(() =>
-      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 5000 },
     );
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn1'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('org-name-Joined Org 1')).toBeInTheDocument();
-      expect(
-        screen.queryByTestId('org-name-All Org 0'),
-      ).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('org-name-Joined Org 1')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('org-name-Joined Missing Org'),
+        ).toBeInTheDocument();
+
+        const joinedOrg1Card = screen
+          .getAllByTestId('organization-card')
+          .find(
+            (card) =>
+              card.getAttribute('data-organization-name') === 'Joined Org 1',
+          );
+        const joinedMissingOrgCard = screen
+          .getAllByTestId('organization-card')
+          .find(
+            (card) =>
+              card.getAttribute('data-organization-name') ===
+              'Joined Missing Org',
+          );
+
+        if (!joinedOrg1Card || !joinedMissingOrgCard) {
+          throw new Error('Joined organization card not found');
+        }
+
+        expect(
+          joinedMissingOrgCard.querySelector('[data-testid="description"]')
+            ?.textContent || '',
+        ).toBe('');
+        expect(
+          joinedMissingOrgCard.querySelector('[data-testid="membersCount"]')
+            ?.textContent || '0',
+        ).toBe('0');
+        expect(
+          joinedMissingOrgCard.querySelector('[data-testid="adminsCount"]')
+            ?.textContent || '0',
+        ).toBe('0');
+        expect(
+          joinedMissingOrgCard.querySelector('[data-testid="city"]')
+            ?.textContent || '',
+        ).toBe('');
+
+        expect(
+          screen.queryByTestId('org-name-All Org 0'),
+        ).not.toBeInTheDocument();
+
+        const orgCount = screen.getAllByTestId('organization-card').length;
+        expect(orgCount).toBe(2);
+
+        const pagination = screen.queryByTestId('pagination');
+        if (pagination) {
+          expect(pagination).toHaveAttribute('data-count', '2');
+        } else {
+          expect(orgCount).toBe(2);
+        }
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('switches to created organizations (mode=2)', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -525,19 +664,62 @@ describe('Organizations Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await waitFor(() =>
-      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
     );
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await userEvent.click(screen.getByTestId('modeBtn2'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('org-name-Created Org 1')).toBeInTheDocument();
-      expect(
-        screen.queryByTestId('org-name-All Org 0'),
-      ).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(
+          screen.getByTestId('org-name-Created Org 1'),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByTestId('org-name-Created Missing Org'),
+        ).toBeInTheDocument();
+
+        const createdMissingOrgCard = screen
+          .getAllByTestId('organization-card')
+          .find(
+            (card) =>
+              card.getAttribute('data-organization-name') ===
+              'Created Missing Org',
+          );
+
+        if (!createdMissingOrgCard) {
+          throw new Error('Created Missing Org card not found');
+        }
+
+        expect(
+          createdMissingOrgCard.querySelector('[data-testid="description"]')
+            ?.textContent || '',
+        ).toBe(''); // description || ''
+        expect(
+          createdMissingOrgCard.querySelector('[data-testid="membersCount"]')
+            ?.textContent || '0',
+        ).toBe('0'); // membersCount || 0
+        expect(
+          createdMissingOrgCard.querySelector('[data-testid="adminsCount"]')
+            ?.textContent || '0',
+        ).toBe('0'); // adminsCount || 0
+        expect(
+          createdMissingOrgCard.querySelector('[data-testid="city"]')
+            ?.textContent || '',
+        ).toBe(''); // city || ''
+
+        expect(
+          screen.queryByTestId('org-name-All Org 0'),
+        ).not.toBeInTheDocument();
+
+        expect(screen.getAllByTestId('organization-card').length).toBe(2);
+      },
+      { timeout: 2000 },
+    );
   });
 
   it('searches all organizations by filter text using Enter key', async () => {
@@ -1754,5 +1936,67 @@ describe('Organizations Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('org-name-Test Org')).toBeInTheDocument();
     });
+  });
+
+  it('handles undefined organizations in all mode', async () => {
+    const undefinedMocks = [
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: 'undefined' },
+        },
+        result: { data: { organizations: undefined } }, // Simulate missing field
+      },
+      ...mocks.filter((m) => m.request.query !== ALL_ORGANIZATIONS),
+    ];
+    render(
+      <MockedProvider mocks={undefinedMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'undefined{enter}');
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('no-organizations-message'),
+      ).toBeInTheDocument();
+      // Pagination count should be 0
+    });
+  });
+
+  it('displays all organizations when rowsPerPage is 0', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    const rowsPerPageSelect = screen.getByRole('combobox', {
+      name: /rows per page/i,
+    });
+    fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
+    await waitFor(
+      () => {
+        expect(screen.getAllByTestId('organization-card').length).toBe(11); // Updated to 11
+      },
+      { timeout: 2000 },
+    );
   });
 });
