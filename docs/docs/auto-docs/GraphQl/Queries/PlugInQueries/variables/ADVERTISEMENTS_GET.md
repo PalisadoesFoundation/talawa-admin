@@ -6,7 +6,7 @@
 
 > `const` **ADVERTISEMENTS\_GET**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L27)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L9)
 
 GraphQL query to retrieve a list of advertisements.
 

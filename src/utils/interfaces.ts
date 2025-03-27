@@ -476,7 +476,7 @@ export interface InterfaceOrgInfoTypePG {
 }
 
 export interface InterfaceQueryOrganizationsListObject {
-  _id: string;
+  id: string;
   image: string | null;
   creator: {
     firstName: string;
@@ -580,6 +580,16 @@ export interface InterfaceOrganizationAdvertisementsConnectionPg {
 export interface InterfaceOrganizationAdvertisementsConnectionEdgePg {
   cursor: string;
   node: InterfaceAdvertisementPg;
+}
+
+export interface InterfaceOrganizationBlockedUsersConnectionEdgePg {
+  cursor: string;
+  node: InterfaceUserPg;
+}
+
+export interface InterfaceOrganizationBlockedUsersConnectionPg {
+  edges: InterfaceOrganizationBlockedUsersConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
 }
 
 export interface InterfaceChatPg {
@@ -834,6 +844,8 @@ export interface InterfaceOrganizationPg {
     pinnedPostsCount: number;
 
     advertisements: InterfaceOrganizationAdvertisementsConnectionPg;
+
+    blockedUsers: InterfaceOrganizationBlockedUsersConnectionPg;
 
     chats: InterfaceOrganizationChatsConnectionPg;
 
@@ -1114,7 +1126,7 @@ export interface InterfaceQueryUserListItem {
     }[];
     createdAt: string;
     registeredEvents: { _id: string }[];
-    membershipRequests: { _id: string }[];
+    membershipRequests: { id: string }[];
   };
   appUserProfile: {
     _id: string;

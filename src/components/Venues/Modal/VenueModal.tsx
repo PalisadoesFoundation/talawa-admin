@@ -9,8 +9,8 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -67,13 +67,15 @@ const VenueModal = ({
   });
   const { t: tCommon } = useTranslation('common');
 
+  const { uploadFileToMinio } = useMinioUpload();
+
   // State to manage image preview and form data
-  const [venueImage, setVenueImage] = useState<boolean>(false);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [formState, setFormState] = useState({
     name: venueData?.name || '',
     description: venueData?.description || '',
     capacity: venueData?.capacity || '',
-    imageURL: venueData?.image || '',
+    objectName: venueData?.image || '',
   });
 
   // Reference for the file input element
@@ -108,16 +110,11 @@ const VenueModal = ({
         id: venueData._id,
         capacity: parseInt(formState.capacity, 10),
         description: formState.description?.trim() || '',
-        file: formState.imageURL || '',
+        file: formState.objectName || '',
         // Don't include name if it hasn't changed
       };
-
-      console.log('Sending update mutation without name:', variables);
-
       try {
-        const result = await mutate({
-          variables,
-        });
+        const result = await mutate({ variables });
 
         if (result?.data?.editVenue) {
           toast.success(t('venueUpdated'));
@@ -146,14 +143,10 @@ const VenueModal = ({
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
-          file: formState.imageURL || '',
+          file: formState.objectName || '',
         };
 
-        console.log('Sending update mutation with name:', variables);
-
-        const result = await mutate({
-          variables,
-        });
+        const result = await mutate({ variables });
 
         if (result?.data?.editVenue) {
           toast.success(t('venueUpdated'));
@@ -166,13 +159,11 @@ const VenueModal = ({
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
-          file: formState.imageURL || '',
+          file: formState.objectName || '',
           organizationId: orgId,
         };
 
-        const result = await mutate({
-          variables,
-        });
+        const result = await mutate({ variables });
 
         if (result?.data?.createVenue) {
           toast.success(t('venueCreated'));
@@ -198,8 +189,8 @@ const VenueModal = ({
    * This function also clears the file input field.
    */
   const clearImageInput = useCallback(() => {
-    setFormState((prevState) => ({ ...prevState, imageURL: '' }));
-    setVenueImage(false);
+    setFormState((prevState) => ({ ...prevState, objectName: '' }));
+    setImagePreviewUrl(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -211,12 +202,26 @@ const VenueModal = ({
       name: venueData?.name || '', // Prefill name or set as empty
       description: venueData?.description || '', // Prefill description
       capacity: venueData?.capacity?.toString() || '', // Prefill capacity as a string
-      imageURL: venueData?.image || '', // Prefill image
+      objectName: venueData?.image || '', // Prefill image
     });
-    setVenueImage(!!venueData?.image); // Set preview if image exists
+
+    if (venueData?.image) {
+      try {
+        const previewUrl = new URL(
+          `/api/images/${venueData.image}`,
+          window.location.origin,
+        ).toString();
+        setImagePreviewUrl(previewUrl);
+      } catch (error) {
+        toast.error('Error creating preview URL');
+        setImagePreviewUrl(null);
+      }
+    } else {
+      setImagePreviewUrl(null);
+    }
   }, [venueData]);
 
-  const { name, description, capacity, imageURL } = formState;
+  const { name, description, capacity } = formState;
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -242,10 +247,7 @@ const VenueModal = ({
             required
             value={name}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                name: e.target.value,
-              });
+              setFormState({ ...formState, name: e.target.value });
             }}
             className={styles.inputField}
           />
@@ -260,10 +262,7 @@ const VenueModal = ({
             maxLength={500}
             value={description}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                description: e.target.value,
-              });
+              setFormState({ ...formState, description: e.target.value });
             }}
             className={styles.inputField}
           />
@@ -276,10 +275,7 @@ const VenueModal = ({
             required
             value={capacity}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                capacity: e.target.value,
-              });
+              setFormState({ ...formState, capacity: e.target.value });
             }}
             className={styles.inputField}
           />
@@ -293,27 +289,41 @@ const VenueModal = ({
             placeholder={t('uploadVenueImage')}
             multiple={false}
             ref={fileInputRef}
-            onChange={async (
-              e: React.ChangeEvent<HTMLInputElement>,
-            ): Promise<void> => {
-              setFormState((prevPostFormState) => ({
-                ...prevPostFormState,
-                imageURL: '',
-              }));
-              setVenueImage(true);
-              const file = e.target.files?.[0];
+            onChange={async (e: React.ChangeEvent) => {
+              const target = e.target as HTMLInputElement;
+              const file = target.files?.[0];
+
               if (file) {
-                setFormState({
-                  ...formState,
-                  imageURL: await convertToBase64(file),
-                });
+                if (!file.size) {
+                  toast.error('Empty file selected');
+                  return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                  toast.error('File size exceeds the 5MB limit');
+                  return;
+                }
+                if (!file.type.startsWith('image/')) {
+                  toast.error('Only image files are allowed');
+                  return;
+                }
+                try {
+                  const { objectName } = await uploadFileToMinio(
+                    file,
+                    'organizations',
+                  );
+                  setFormState({ ...formState, objectName });
+                  const previewUrl = URL.createObjectURL(file);
+                  setImagePreviewUrl(previewUrl);
+                } catch (error) {
+                  toast.error('Failed to upload image');
+                }
               }
             }}
             className={styles.inputField}
           />
-          {venueImage && (
+          {imagePreviewUrl && (
             <div className={styles.previewVenueModal}>
-              <img src={imageURL} alt="Venue Image Preview" />
+              <img src={imagePreviewUrl} alt="Venue Image Preview" />
               <button
                 className={styles.closeButtonP}
                 onClick={clearImageInput}

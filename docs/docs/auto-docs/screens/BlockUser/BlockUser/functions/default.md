@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/BlockUser/BlockUser.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/BlockUser/BlockUser.tsx#L67)
+Defined in: [src/screens/BlockUser/BlockUser.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/BlockUser/BlockUser.tsx#L65)
 
 Requests component displays and manages a list of users that can be blocked or unblocked.
 

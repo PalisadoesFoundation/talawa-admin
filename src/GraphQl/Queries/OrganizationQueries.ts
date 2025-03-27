@@ -222,93 +222,6 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
  * @returns The list of organizations based on the applied filters.
  */
 
-export const USER_ORGANIZATION_CONNECTION = gql`
-  query organizationsConnection(
-    $first: Int
-    $skip: Int
-    $filter: String
-    $id: ID
-  ) {
-    organizationsConnection(
-      first: $first
-      skip: $skip
-      where: { name_contains: $filter, id: $id }
-      orderBy: name_ASC
-    ) {
-      _id
-      name
-      image
-      description
-      userRegistrationRequired
-      creator {
-        firstName
-        lastName
-      }
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
-      }
-      membershipRequests {
-        _id
-        user {
-          _id
-        }
-      }
-    }
-  }
-`;
-
-/**
- * GraphQL query to retrieve organizations joined by a user.
- *
- * @param id - The ID of the user for which joined organizations are being retrieved.
- * @returns The list of organizations joined by the user.
- */
-
-export const USER_JOINED_ORGANIZATIONS = gql`
-  query UserJoinedOrganizations($id: ID!) {
-    users(where: { id: $id }) {
-      user {
-        joinedOrganizations {
-          _id
-          name
-          description
-          image
-          members {
-            _id
-          }
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          admins {
-            _id
-          }
-        }
-      }
-    }
-  }
-`;
-
 /**
  * GraphQL query to retrieve organizations created by a user.
  *
@@ -317,31 +230,15 @@ export const USER_JOINED_ORGANIZATIONS = gql`
  */
 
 export const USER_CREATED_ORGANIZATIONS = gql`
-  query UserCreatedOrganizations($id: ID!) {
-    users(where: { id: $id }) {
-      appUserProfile {
-        createdOrganizations {
-          _id
-          name
-          description
-          image
-          members {
-            _id
-          }
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          admins {
-            _id
-          }
-        }
+  query UserCreatedOrganizations($id: String!, $filter: String) {
+    user(input: { id: $id }) {
+      id
+      createdOrganizations(filter: $filter) {
+        id
+        name
+        description
+        createdAt
+        avatarMimeType
       }
     }
   }

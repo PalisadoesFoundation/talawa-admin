@@ -1,194 +1,299 @@
+//OrganizationPeople.tsx
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useParams, Link } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
-import { Delete } from '@mui/icons-material';
 import {
-  ORGANIZATIONS_LIST,
+  DataGrid,
+  GridColDef,
+  GridCellParams,
+  GridPaginationModel,
+} from '@mui/x-data-grid';
+import { Stack } from '@mui/material';
+import { Delete } from '@mui/icons-material';
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+import styles from '../../style/app-fixed.module.css';
+import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import Loader from 'components/Loader/Loader';
-import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import { Row, Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
-import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import Row from 'react-bootstrap/Row';
-import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import AddMember from './AddMember';
-import styles from '../../style/app.module.css';
-import { DataGrid } from '@mui/x-data-grid';
-import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
-import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
+import SortingButton from 'subComponents/SortingButton';
+import Avatar from 'components/Avatar/Avatar';
+import AddMember from './AddMember';
+
+const PAGE_SIZE = 10;
+interface ProcessedRow {
+  _id: string;
+  name: string;
+  email: string;
+  image: string;
+  createdAt: string;
+  cursor: string;
+  rowNumber: number;
+}
+
+interface Edges {
+  cursor: string;
+  node: {
+    id: string;
+    name: string;
+    role: string;
+    avatarURL: string;
+    emailAddress: string;
+    createdAt: string;
+  };
+}
+
+interface QueryVariable {
+  orgId?: string | undefined;
+  first?: number | null;
+  after?: string | null;
+  last?: number | null;
+  before?: string | null;
+  where?: { role: { equal: 'administrator' | 'regular' } };
+}
 /**
  * OrganizationPeople component is used to display the list of members, admins and users of the organization.
- * It also provides the functionality to search the members, admins and users by their full name.
+ * It also provides the functionality to search the members, admins and users by their name.
  * It also provides the functionality to remove the members and admins from the organization.
  * @returns JSX.Element which contains the list of members, admins and users of the organization.
  */
-function organizationPeople(): JSX.Element {
+
+function OrganizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
   const { t: tCommon } = useTranslation('common');
-
-  document.title = t('title');
-
   const location = useLocation();
   const role = location?.state;
-
   const { orgId: currentUrl } = useParams();
 
+  // State
   const [state, setState] = useState(role?.role || 0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [selectedMemId, setSelectedMemId] = useState<string>();
 
-  const [filterData, setFilterData] = useState({
-    firstName_contains: '',
-    lastName_contains: '',
+  // Pagination state
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: PAGE_SIZE,
   });
-  const [adminFilteredData, setAdminFilteredData] = useState();
 
-  const [showRemoveModal, setShowRemoveModal] = React.useState(false);
-  const [selectedAdminId, setSelectedAdminId] = React.useState<
-    string | undefined
-  >();
-  const [selectedMemId, setSelectedMemId] = React.useState<
-    string | undefined
-  >();
+  // Cursor management - properly capturing startCursor and endCursor
+  const pageCursors = useRef<{
+    [page: number]: { startCursor: string; endCursor: string };
+  }>({});
+  const [currentRows, setCurrentRows] = useState<ProcessedRow[]>([]);
+  const [data, setData] = useState<any>();
 
-  const toggleRemoveModal = (): void => {
-    setShowRemoveModal((prev) => !prev);
-  };
-  const toggleRemoveMemberModal = (id: string): void => {
-    setSelectedMemId(id);
-    setSelectedAdminId(undefined);
-    toggleRemoveModal();
-  };
-  const toggleRemoveAdminModal = (id: string): void => {
-    setSelectedAdminId(id);
-    setSelectedMemId(undefined);
-    toggleRemoveModal();
-  };
+  // Pagination metadata
+  const [paginationMeta, setPaginationMeta] = useState<{
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  }>({
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
 
-  const {
-    data: memberData,
-    loading: memberLoading,
-    error: memberError,
-    refetch: memberRefetch,
-  } = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-      orgId: currentUrl,
+  // Query hooks
+  const [fetchMembers, { loading: memberLoading, error: memberError }] =
+    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
+      onCompleted: (data) => {
+        setData(data?.organization?.members);
+      },
+    });
+
+  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
+    USER_LIST_FOR_TABLE,
+    {
+      onCompleted: (data) => {
+        setData(data?.allUsers);
+      },
     },
-  })[1];
+  );
 
-  const {
-    data: adminData,
-    loading: adminLoading,
-    error: adminError,
-    refetch: adminRefetch,
-  } = useLazyQuery(ORGANIZATIONS_LIST, {
-    variables: {
-      id: currentUrl,
-    },
-  })[1];
-
-  const {
-    data: usersData,
-    loading: usersLoading,
-    error: usersError,
-    refetch: usersRefetch,
-  } = useLazyQuery(USER_LIST_FOR_TABLE, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
-  })[1];
-
+  // Handle data changes
   useEffect(() => {
-    if (state === 0) {
-      memberRefetch({
-        ...filterData,
-        orgId: currentUrl,
+    if (data) {
+      const { edges, pageInfo } = data;
+      const baseIndex = paginationModel.page * PAGE_SIZE;
+      const processedRows = edges.map(
+        (edge: Edges, index: number): ProcessedRow => ({
+          _id: edge.node.id,
+          name: edge.node.name,
+          email: edge.node.emailAddress,
+          image: edge.node.avatarURL,
+          createdAt: edge.node.createdAt || new Date().toISOString(),
+          cursor: edge.cursor,
+          rowNumber: baseIndex + index + 1,
+        }),
+      );
+
+      // Store both start and end cursors for the current page
+      if (pageInfo.startCursor && pageInfo.endCursor) {
+        pageCursors.current[paginationModel.page] = {
+          startCursor: pageInfo.startCursor,
+          endCursor: pageInfo.endCursor,
+        };
+      }
+
+      // Update pagination meta information
+      setPaginationMeta({
+        hasNextPage: pageInfo.hasNextPage,
+        hasPreviousPage: pageInfo.hasPreviousPage,
       });
-    } else if (state === 1) {
-      adminRefetch({
-        id: currentUrl,
-      });
-      setAdminFilteredData(adminData?.organizations[0].admins);
-    } else {
-      usersRefetch({
-        ...filterData,
-      });
+
+      setCurrentRows(processedRows);
     }
-  }, [state, adminData]);
+  }, [data, paginationModel.page]);
 
-  if (memberError || usersError || adminError) {
-    const error = memberError ?? usersError ?? adminError;
-    toast.error(error?.message);
-  }
-  if (memberLoading || usersLoading || adminLoading) {
-    return (
-      <div className={styles.mainpageright}>
-        <Loader />
-      </div>
-    );
-  }
+  // Handle tab changes (members, admins, users)
+  useEffect(() => {
+    // Reset pagination when tab changes
+    setPaginationModel({
+      page: 0,
+      pageSize: PAGE_SIZE,
+    });
+    pageCursors.current = {};
 
-  const handleFullNameSearchChange = (searchTerm: string): void => {
-    const [firstName, lastName] = searchTerm.split(' ');
-    const newFilterData = {
-      firstName_contains: firstName || '',
-      lastName_contains: lastName || '',
+    const variables: QueryVariable = {
+      first: PAGE_SIZE,
+      after: null,
+      last: null,
+      before: null,
+      orgId: currentUrl,
     };
 
-    setFilterData(newFilterData);
-
     if (state === 0) {
-      memberRefetch({
-        ...newFilterData,
-        orgId: currentUrl,
-      });
+      // All members
+      fetchMembers({ variables });
     } else if (state === 1) {
-      const filterData = adminData.organizations[0].admins.filter(
-        (value: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          createdAt: string;
-        }) => {
-          return (value.firstName + value.lastName)
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
+      // Administrators only
+      fetchMembers({
+        variables: {
+          ...variables,
+          where: { role: { equal: 'administrator' } },
         },
-      );
-      setAdminFilteredData(filterData);
-    } else {
-      usersRefetch({
-        ...newFilterData,
       });
+    } else if (state === 2) {
+      // Users
+      fetchUsers({ variables });
+    }
+  }, [state, currentUrl, fetchMembers, fetchUsers]);
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchMembers({
+      variables: {
+        orgId: currentUrl,
+        first: PAGE_SIZE,
+        after: null,
+        last: null,
+        before: null,
+      },
+    });
+  }, [currentUrl, fetchMembers]);
+
+  // Handle pagination changes
+  const handlePaginationModelChange = async (
+    newPaginationModel: GridPaginationModel,
+  ) => {
+    const isForwardNavigation = newPaginationModel.page > paginationModel.page;
+
+    // Check if navigation is allowed
+    if (isForwardNavigation && !paginationMeta.hasNextPage) {
+      return; // Prevent navigation if there's no next page
+    }
+    if (!isForwardNavigation && !paginationMeta.hasPreviousPage) {
+      return; // Prevent navigation if there's no previous page
+    }
+
+    const currentPage = paginationModel.page;
+    const currentPageCursors = pageCursors.current[currentPage];
+
+    const variables: QueryVariable = {
+      orgId: currentUrl,
+    };
+
+    if (isForwardNavigation) {
+      // Forward navigation uses "after" with the endCursor of the current page
+      variables.first = PAGE_SIZE;
+      variables.after = currentPageCursors?.startCursor || null;
+      variables.last = null;
+      variables.before = null;
+    } else {
+      // Backward navigation uses "before" with the startCursor of the current page
+      variables.last = PAGE_SIZE;
+      variables.before = currentPageCursors?.endCursor || null;
+      variables.first = null;
+      variables.after = null;
+    }
+
+    // Add role filter if on admin tab
+    if (state === 1) {
+      variables.where = { role: { equal: 'administrator' } };
+    }
+
+    setPaginationModel(newPaginationModel);
+
+    // Execute the appropriate query based on the current tab
+    if (state === 2) {
+      await fetchUsers({ variables });
+    } else {
+      await fetchMembers({ variables });
     }
   };
 
+  // Error handling
+  useEffect(() => {
+    if (memberError) {
+      toast.error(memberError.message);
+    }
+    if (userError) {
+      toast.error(userError.message);
+    }
+  }, [memberError, userError]);
+
+  // Local search implementation
+  const filteredRows = useMemo(() => {
+    if (!searchTerm) return currentRows;
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return currentRows.filter(
+      (row) =>
+        row.name.toLowerCase().includes(lowerSearchTerm) ||
+        row.email.toLowerCase().includes(lowerSearchTerm),
+    );
+  }, [currentRows, searchTerm]);
+
+  // Modal handlers
+  const toggleRemoveModal = () => setShowRemoveModal((prev) => !prev);
+
+  const toggleRemoveMemberModal = (id: string) => {
+    setSelectedMemId(id);
+    toggleRemoveModal();
+  };
+
+  const handleSortChange = (value: string): void => {
+    setState(value === 'users' ? 2 : value === 'members' ? 0 : 1);
+  };
+
+  // Column definitions
   const columns: GridColDef[] = [
     {
-      field: 'profile',
-      headerName: tCommon('profile'),
+      field: 'rowNumber',
+      headerName: tCommon('#'),
       flex: 1,
       minWidth: 50,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-
       renderCell: (params: GridCellParams) => {
-        // Fallback to a fixed width if computedWidth is unavailable
-        const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.6, 60); // Max size 40px, responsive scaling
-
         return (
           <div
             style={{
@@ -199,9 +304,37 @@ function organizationPeople(): JSX.Element {
               width: '100%',
             }}
           >
+            {params.row.rowNumber}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'profile',
+      headerName: tCommon('profile'),
+      flex: 1,
+      minWidth: 50,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        const columnWidth = params.colDef.computedWidth || 150;
+        const imageSize = Math.min(columnWidth * 0.4, 40);
+        return (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+          >
             {params.row?.image ? (
               <img
-                src={params.row?.image}
+                src={params.row.image}
                 alt="avatar"
                 style={{
                   width: `${imageSize}px`,
@@ -222,10 +355,9 @@ function organizationPeople(): JSX.Element {
                   borderRadius: '50%',
                   backgroundColor: '#ccc',
                 }}
+                data-testid="avatar"
               >
-                <Avatar
-                  name={`${params.row.firstName} ${params.row.lastName}`}
-                />
+                <Avatar name={params.row.name} />
               </div>
             )}
           </div>
@@ -246,9 +378,12 @@ function organizationPeople(): JSX.Element {
           <Link
             to={`/member/${currentUrl}`}
             state={{ id: params.row._id }}
+            style={{
+              fontSize: '15px',
+            }}
             className={`${styles.membername} ${styles.subtleBlueGrey}`}
           >
-            {params.row?.firstName + ' ' + params.row?.lastName}
+            {params.row.name}
           </Link>
         );
       },
@@ -265,16 +400,15 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'joined',
-      headerName: tCommon('joined'),
+      headerName: tCommon('joined on'),
       flex: 2,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.createdAt).format('DD/MM/YYYY');
-      },
+      renderCell: (params: GridCellParams) =>
+        dayjs(params.row.createdAt).format('DD/MM/YYYY'),
     },
     {
       field: 'action',
@@ -285,33 +419,19 @@ function organizationPeople(): JSX.Element {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return state === 1 ? (
-          <Button
-            onClick={() => toggleRemoveAdminModal(params.row._id)}
-            data-testid="removeAdminModalBtn"
-            aria-label="Remove admin"
-            className={styles.deleteButton}
-          >
-            <Delete />
-          </Button>
-        ) : (
-          <Button
-            onClick={() => toggleRemoveMemberModal(params.row._id)}
-            data-testid="removeMemberModalBtn"
-            aria-label="Remove member"
-            className={styles.deleteButton}
-          >
-            <Delete />
-          </Button>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <Button
+          className={`${styles.removeButton}`}
+          variant="danger"
+          onClick={() => toggleRemoveMemberModal(params.row._id)}
+          aria-label="Remove member"
+          data-testid="removeMemberModalBtn"
+        >
+          <Delete />
+        </Button>
+      ),
     },
   ];
-
-  const handleSortChange = (value: string): void => {
-    setState(value === 'users' ? 2 : value === 'members' ? 0 : 1);
-  };
 
   return (
     <>
@@ -320,7 +440,7 @@ function organizationPeople(): JSX.Element {
           <div className={styles.btnsContainer}>
             <SearchBar
               placeholder={t('searchFullName')}
-              onSearch={handleFullNameSearchChange}
+              onSearch={(term: string) => setSearchTerm(term)}
               buttonTestId="searchbtn"
             />
             <div className={styles.btnsBlock}>
@@ -328,16 +448,16 @@ function organizationPeople(): JSX.Element {
                 className={styles.dropdown}
                 title={tCommon('sort')}
                 sortingOptions={[
-                  { label: tCommon('users'), value: 'users' },
                   { label: tCommon('members'), value: 'members' },
-                  { label: tCommon('admins'), value: 'admins' },
+                  { label: tCommon('admin'), value: 'admin' },
+                  { label: tCommon('users'), value: 'users' },
                 ]}
                 selectedOption={
                   state === 2
                     ? tCommon('users')
-                    : state === 0
-                      ? tCommon('members')
-                      : tCommon('admins')
+                    : state === 1
+                      ? tCommon('admin')
+                      : tCommon('members')
                 }
                 onSortChange={handleSortChange}
                 dataTestIdPrefix="role"
@@ -349,73 +469,57 @@ function organizationPeople(): JSX.Element {
           </div>
         </div>
       </Row>
-      {((state == 0 && memberData) ||
-        (state == 1 && adminFilteredData) ||
-        (state == 2 && usersData)) && (
-        <div className="datatable">
-          <DataGrid
-            disableColumnMenu
-            columnBufferPx={5}
-            hideFooter={true}
-            getRowId={(row) => row._id}
-            slots={{
-              noRowsOverlay: () => (
-                <Stack
-                  height="100%"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  Nothing Found !!
-                </Stack>
-              ),
-            }}
-            sx={{
-              borderRadius: 'var(--table-head-radius)',
-              backgroundColor: 'var(--grey-bg-color)',
-              '& .MuiDataGrid-row': {
-                backgroundColor: 'var(--tablerow-bg-color)',
-                '&:focus-within': {
-                  outline: '2px solid #000',
-                  outlineOffset: '-2px',
-                },
-              },
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: 'var(--grey-bg-color)',
-                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiDataGrid-row.Mui-hovered': {
-                backgroundColor: 'var(--grey-bg-color)',
-                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiDataGrid-cell:focus': {
+      <div className="datatable">
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={5}
+          getRowId={(row) => row._id}
+          rows={filteredRows}
+          columns={columns}
+          rowCount={-1}
+          paginationMode="server"
+          paginationModel={paginationModel}
+          onPaginationModelChange={handlePaginationModelChange}
+          pageSizeOptions={[PAGE_SIZE]}
+          loading={memberLoading || userLoading}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('notFound')}
+              </Stack>
+            ),
+          }}
+          sx={{
+            borderRadius: 'var(--table-head-radius)',
+            backgroundColor: 'var(--grey-bg-color)',
+            '& .MuiDataGrid-row': {
+              backgroundColor: 'var(--tablerow-bg-color)',
+              '&:focus-within': {
                 outline: '2px solid #000',
                 outlineOffset: '-2px',
               },
-            }}
-            getRowClassName={() => `${styles.rowBackground}`}
-            autoHeight
-            rowHeight={70}
-            rows={
-              state === 0
-                ? memberData.organizationsMemberConnection.edges
-                : state === 1
-                  ? adminFilteredData
-                  : convertObject(usersData)
-            }
-            columns={columns}
-            isRowSelectable={() => false}
-          />
-        </div>
-      )}
+            },
+            '& .MuiDataGrid-row:hover': {
+              backgroundColor: 'var(--grey-bg-color)',
+              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+            },
+            '& .MuiDataGrid-row.Mui-hovered': {
+              backgroundColor: 'var(--grey-bg-color)',
+              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+            },
+            '& .MuiDataGrid-cell:focus': {
+              outline: '2px solid #000',
+              outlineOffset: '-2px',
+            },
+          }}
+          getRowClassName={() => `${styles.rowBackground}`}
+          rowHeight={70}
+          isRowSelectable={() => false}
+        />
+      </div>
       {showRemoveModal && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}
-          toggleRemoveModal={toggleRemoveModal}
-        />
-      )}
-      {showRemoveModal && selectedAdminId && (
-        <OrgAdminListCard
-          id={selectedAdminId}
           toggleRemoveModal={toggleRemoveModal}
         />
       )}
@@ -423,37 +527,4 @@ function organizationPeople(): JSX.Element {
   );
 }
 
-export default organizationPeople;
-
-// This code is used to remove 'user' object from the array index of userData and directly use store the properties at array index, this formatting is needed for DataGrid.
-
-interface InterfaceUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  image: string;
-  createdAt: string;
-}
-interface InterfaceOriginalObject {
-  users: { user: InterfaceUser }[];
-}
-interface InterfaceConvertedObject {
-  users: InterfaceUser[];
-}
-function convertObject(original: InterfaceOriginalObject): InterfaceUser[] {
-  const convertedObject: InterfaceConvertedObject = {
-    users: [],
-  };
-  original.users.forEach((item) => {
-    convertedObject.users.push({
-      firstName: item.user?.firstName,
-      lastName: item.user?.lastName,
-      email: item.user?.email,
-      image: item.user?.image,
-      createdAt: item.user?.createdAt,
-      _id: item.user?._id,
-    });
-  });
-  return convertedObject.users;
-}
+export default OrganizationPeople;

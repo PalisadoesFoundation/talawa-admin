@@ -118,7 +118,7 @@
   --sidebar-icon-stroke-active: #000000;
   --sidebar-icon-stroke-inactive: #808080;
   --sidebar-option-text-active: #000000;
-  --sidebar-option-text-inactive: #808080;
+  --sidebar-option-text-inactive: #000000;
   --forgot-password-fill: #555555;
   --input-field-border: var(--dimp-white);
   --input-field-bg: #fff;
@@ -388,9 +388,11 @@
 .cards > h2 {
   font-size: 19px;
 }
+
 .cards > h3 {
   font-size: 17px;
 }
+
 .cards > p {
   font-size: 14px;
   margin-top: -5px;
@@ -400,6 +402,7 @@
 .cards:hover {
   filter: brightness(0.8);
 }
+
 .cards:hover::before {
   opacity: 0.5;
 }
@@ -462,6 +465,7 @@
   margin: 0;
   height: 100%;
 }
+
 .sidebar:after {
   background-color: var(--grey-border-box-color);
   position: absolute;
@@ -471,10 +475,12 @@
   left: 94%;
   display: block;
 }
+
 .sidebarsticky {
   padding-left: 45px;
   margin-top: 7px;
 }
+
 .sidebarsticky > p {
   margin-top: -10px;
 }
@@ -1080,6 +1086,7 @@
   transform: scale(1.5);
   color: var(--bs-danger, var(--delete-button-color));
   margin-bottom: 1rem;
+
   /* Add error icon for non-color indication */
   &::before {
     content: '⚠️';
@@ -1281,6 +1288,7 @@ hr {
   position: relative;
   display: inline-block;
 }
+
 .pageNotFound h1.head span:before,
 .pageNotFound h1.head span:after {
   position: absolute;
@@ -1290,6 +1298,7 @@ hr {
   background: var(--white);
   content: '';
 }
+
 .pageNotFound h1.head span:before {
   left: -55%;
 }
@@ -1571,17 +1580,21 @@ hr {
 .card {
   width: fit-content;
 }
+
 .cardContainer {
   width: 300px;
 }
 
 .ratingFilled {
-  color: var(--rating-star-filled); /* Color for filled stars */
+  color: var(--rating-star-filled);
+  /* Color for filled stars */
 }
 
 .ratingHover {
-  color: var(--rating-star-hover); /* Color for star on hover */
+  color: var(--rating-star-hover);
+  /* Color for star on hover */
 }
+
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
@@ -1630,6 +1643,7 @@ hr {
   margin-bottom: 0;
   margin-top: 20px;
 }
+
 .ctacards {
   padding: 20px;
   width: 100%;
@@ -1641,6 +1655,7 @@ hr {
   border: 1px solid var(--create-button-border);
   border-radius: 8px;
 }
+
 .ctacards span {
   color: var(--dimp-white);
   font-size: small;
@@ -1830,9 +1845,11 @@ hr {
 .membername {
   color: var(--blue-color);
 }
+
 .actionBtn {
   background-color: var(--primary-bg-color) !important;
 }
+
 .actionBtn:hover,
 .actionBtn:focus,
 .actionBtn:active {
@@ -1923,6 +1940,7 @@ hr {
   font-size: medium;
   cursor: pointer;
 }
+
 .campaignNameInfo:hover {
   color: var(--blue-color);
   transform: translateY(-2px);
@@ -2052,20 +2070,25 @@ hr {
   .pageNotFound .brand h3 {
     font-size: 20px;
   }
+
   .pageNotFound h1.head {
     font-size: 130px;
     letter-spacing: 0;
   }
+
   .pageNotFound h1.head span:before,
   .pageNotFound h1.head span:after {
     width: 40%;
   }
+
   .pageNotFound h1.head span:before {
     left: -45%;
   }
+
   .pageNotFound h1.head span:after {
     right: -45%;
   }
+
   .pageNotFound p {
     font-size: 18px;
   }
@@ -2075,21 +2098,26 @@ hr {
   .pageNotFound .brand h3 {
     font-size: 16px;
   }
+
   .pageNotFound h1.head {
     font-size: 100px;
     letter-spacing: 0;
   }
+
   .pageNotFound h1.head span:before,
   .pageNotFound h1.head span:after {
     width: 25%;
   }
+
   .pageNotFound h1.head span:before {
     left: -30%;
   }
+
   .pageNotFound h1.head span:after {
     right: -30%;
   }
 }
+
 @media (max-width: 520px) {
   .btnsContainer {
     margin-bottom: 0;
@@ -2174,6 +2202,7 @@ hr {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -2185,11 +2214,13 @@ hr {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 .btnsContainer .input {
   flex: 1;
   position: relative;
@@ -2214,9 +2245,8 @@ hr {
 
 .modalHeader {
   border: none;
-  padding-bottom: 0;
   background-color: var(--primary-bg-color) !important;
-  padding: 1rem 1rem;
+  padding: 1rem;
   color: #000000;
 }
 
@@ -2264,7 +2294,8 @@ hr {
 .rowBackgrounds {
   background-color: var(--bs-white);
   max-height: 120px;
-  overflow-y: auto; /* Handle content overflow */
+  overflow-y: auto;
+  /* Handle content overflow */
 }
 
 .noBorderRow td {
@@ -2275,6 +2306,7 @@ hr {
   color: var(--blue-color);
   font-weight: 500;
   cursor: pointer;
+
   /* Prevent layout shift */
   &::after {
     display: block;
@@ -2289,6 +2321,7 @@ hr {
 .tagsBreadCrumbs {
   color: var(--bs-gray);
   cursor: pointer;
+
   /* Prevent layout shift */
   &::after {
     display: block;
@@ -2435,8 +2468,10 @@ input[type='radio']:checked + label:hover {
   color: var(--eventManagement-button-bg);
   box-shadow: 0 1px 1px var(--brand-primary);
   width: 375px;
-  padding-right: 40px; /* Make room for the button */
-  border-radius: 8px; /* Match the image's rounded corners */
+  padding-right: 40px;
+  /* Make room for the button */
+  border-radius: 8px;
+  /* Match the image's rounded corners */
 }
 
 .inputFields:focus {
@@ -2618,6 +2653,7 @@ input[type='radio']:checked + label:hover {
   transition: background-color 0.5s ease;
   background-color: var(--opendrawer-hover);
 }
+
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
   background-color: var(--collapseSidebarButton-hover);
@@ -2634,6 +2670,7 @@ input[type='radio']:checked + label:hover {
     width: 250px;
     height: 20px;
   }
+
   .opendrawer {
     width: 30px;
   }
@@ -2780,6 +2817,7 @@ input[type='radio']:checked + label:hover {
     margin-left: auto;
     display: block;
   }
+
   .joinBtn,
   .joinedBtn,
   .withdrawBtn {
@@ -2914,6 +2952,7 @@ input[type='radio']:checked + label:hover {
   border: 0;
   color: var(--startPostBtn-hover-color) !important;
 }
+
 .icons {
   width: 25px;
 }
@@ -3111,7 +3150,7 @@ input[type='radio']:checked + label:hover {
 
 .img {
   height: 100%;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   background-color: rgba(49, 187, 107, 12%);
 }
 
@@ -3154,6 +3193,7 @@ input[type='radio']:checked + label:hover {
   color: var(--pluginStore-color);
   border: 0.5px solid var(--pluginStoreBtn-border);
 }
+
 .searchButtonOrgList {
   background-color: var(--light-blue);
   position: absolute;
@@ -3255,6 +3295,7 @@ input[type='radio']:checked + label:hover {
   margin-top: 0.7rem;
   color: var(--dropdown-button-fill);
 }
+
 .createorgdropdown:active,
 .createorgdropdown:hover {
   background-color: var(--createorgdropdown-button-bg) !important;
@@ -3262,6 +3303,7 @@ input[type='radio']:checked + label:hover {
   color: var(--dropdown-button-fill) !important;
   box-shadow: var(--hover-shadow);
 }
+
 .notFound {
   flex: 1;
   display: flex;
@@ -3747,6 +3789,7 @@ input[type='radio']:checked + label:hover {
 .maxWidth40 {
   max-width: 40%;
 }
+
 .maxWidth50 {
   max-width: 50%;
 }
@@ -3773,7 +3816,8 @@ input[type='radio']:checked + label:hover {
 }
 
 .dateboxMemberDetail > div > input {
-  padding: 0.5rem 0 0.5rem 0.5rem !important; /* top, right, bottom, left */
+  padding: 0.5rem 0 0.5rem 0.5rem !important;
+  /* top, right, bottom, left */
   background-color: var(--input-area-color);
   border-radius: var(--bs-border-radius) !important;
   border: none !important;
@@ -3872,6 +3916,7 @@ input::file-selector-button {
     width: 100%;
   }
 }
+
 @media (max-width: 600px) {
   .cardBody {
     min-height: 120px;
@@ -4050,15 +4095,15 @@ form > input {
 }
 
 .selectOrgText {
-  :global(.MuiOutlinedInput-root.Mui-focused) fieldset {
+  .MuiOutlinedInput-root.Mui-focused fieldset {
     border-color: var(--primary-color);
   }
 
-  :global(.MuiInputLabel-root.Mui-focused) {
+  .MuiInputLabel-root.Mui-focused {
     color: var(--primary-color);
   }
 
-  :global(.MuiAutocomplete-option:hover) {
+  .MuiAutocomplete-option:hover {
     background-color: var(--primary-color);
     color: var(--text-color-light);
   }
@@ -4110,7 +4155,8 @@ form > input {
   padding: 0;
   color: var(--langChange-button-text);
   border-color: var(--langChange-button-bg);
-  background-color: transparent; /* Default transparent background */
+  background-color: transparent;
+  /* Default transparent background */
 }
 
 .langChangeBtnStyle:hover {
@@ -4124,6 +4170,7 @@ form > input {
   aspect-ratio: 1;
   display: block;
   margin: 1.5rem auto 1rem;
+
   @media (prefers-reduced-motion: no-preference) {
     -webkit-animation: zoomIn 0.3s ease-in-out;
     animation: zoomIn 0.3s ease-in-out;
@@ -4159,6 +4206,7 @@ form > input {
   align-items: center;
   color: var(--search-button-fill);
 }
+
 .email_button:hover {
   color: var(--search-button-fill) !important;
   box-shadow: var(--hover-shadow);
@@ -4204,6 +4252,7 @@ form > input {
   transition: background-color 0.2s ease;
   cursor: pointer;
 }
+
 .reg_btn:hover {
   color: var(--login-button-fill) !important;
   box-shadow: var(--hover-shadow);
@@ -4284,6 +4333,7 @@ form > input {
   width: 28px;
   height: 26px;
 }
+
 /* CSS Refactor for OrgPost */
 
 .btnsContainerOrgPost {
@@ -4322,14 +4372,17 @@ form > input {
   margin-top: 10px;
   justify-content: center;
 }
+
 .previewOrgPost img {
   width: 400px;
   height: auto;
 }
+
 .previewOrgPost video {
   width: 400px;
   height: auto;
 }
+
 .mainpagerightOrgPost > hr {
   margin-top: 20px;
   width: 100%;
@@ -4406,6 +4459,7 @@ form > input {
   .row .left_portion {
     padding: 0 2rem;
   }
+
   .row .left_portion .inner .palisadoes_logo {
     width: 100%;
   }
@@ -4415,18 +4469,22 @@ form > input {
   .row {
     flex-direction: column-reverse;
   }
+
   .row .right_portion,
   .row .left_portion {
     height: unset;
   }
+
   .row .right_portion {
     min-height: 100vh;
     overflow-y: unset;
   }
+
   .row .left_portion .inner {
     display: flex;
     justify-content: center;
   }
+
   .row .left_portion .inner .palisadoes_logo {
     height: 70px;
     width: unset;
@@ -4436,10 +4494,12 @@ form > input {
     right: 0;
     z-index: 100;
   }
+
   .row .left_portion .inner p {
     margin-bottom: 0;
     padding: 1rem;
   }
+
   .socialIcons {
     margin-bottom: 1rem;
   }
@@ -4449,19 +4509,23 @@ form > input {
   .row .right_portion {
     padding: 1rem 1rem 0 1rem;
   }
+
   .row .right_portion .langChangeBtn {
     position: absolute;
     margin: 1rem;
     left: 0;
     top: 0;
   }
+
   .marginTopForReg {
     margin-top: 4rem !important;
   }
+
   .row .right_portion .talawa_logo {
     height: 120px;
     margin: 0 auto 2rem auto;
   }
+
   .socialIcons {
     margin-bottom: 1rem;
   }
@@ -4483,6 +4547,7 @@ form > input {
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
   }
+
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
@@ -4496,6 +4561,7 @@ form > input {
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
   }
+
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
@@ -4509,6 +4575,7 @@ form > input {
     -webkit-transform: translateY(2rem);
     transform: translateY(2rem);
   }
+
   100% {
     opacity: 1;
     -webkit-transform: translateY(0);
@@ -4522,6 +4589,7 @@ form > input {
     -webkit-transform: translateY(2rem);
     transform: translateY(2rem);
   }
+
   100% {
     opacity: 1;
     -webkit-transform: translateY(0);
@@ -4556,11 +4624,13 @@ form > input {
     width: 100%;
   }
 }
+
 @media screen and (max-width: 575.5px) {
   .mainpagerightOrgPost {
     width: 98%;
   }
 }
+
 .addbtnOrgPost {
   border: 1px solid var(--grey-border-box-color);
   box-shadow: 0 2px 2px var(--grey-border-box-color);
@@ -4576,10 +4646,12 @@ form > input {
     transform 0.2s,
     box-shadow 0.2s;
 }
+
 .postinfo {
   height: 80px;
   margin-bottom: 20px;
 }
+
 .closeButtonOrgPost {
   position: absolute;
   top: 0px;
@@ -4592,15 +4664,18 @@ form > input {
   font-weight: 600;
   font-size: 16px;
 }
+
 button[data-testid='createPostBtn'] {
   display: block;
 }
+
 .loader,
 .loader:after {
   border-radius: 50%;
   width: var(--loader-size);
   height: var(--loader-size);
 }
+
 .loader {
   margin: 60px auto;
   margin-top: 35vh !important;
@@ -4617,21 +4692,25 @@ button[data-testid='createPostBtn'] {
   -webkit-animation: load8 1.1s infinite linear;
   animation: load8 1.1s infinite linear;
 }
+
 @-webkit-keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 @keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -4643,12 +4722,14 @@ button[data-testid='createPostBtn'] {
   overflow-y: auto;
   width: auto;
 }
+
 @media only screen and (max-width: 600px) {
   .form_wrapper {
     width: 90%;
     top: 45%;
   }
 }
+
 .cardItem {
   position: relative;
   display: flex;
@@ -4657,12 +4738,14 @@ button[data-testid='createPostBtn'] {
   border-radius: 8px;
   margin-top: 20px;
 }
+
 @-webkit-keyframes zoomIn {
   0% {
     opacity: 0;
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
   }
+
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
@@ -4676,6 +4759,7 @@ button[data-testid='createPostBtn'] {
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
   }
+
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
@@ -4708,9 +4792,11 @@ button[data-testid='createPostBtn'] {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; /* Fallback for browsers that don't support line-clamp */
+  white-space: nowrap;
+  /* Fallback for browsers that don't support line-clamp */
   margin-left: 3px;
 }
+
 /* Modern browsers - enable line clamping */
 @supports (-webkit-line-clamp: 1) {
   .cardItem .title,
@@ -4722,6 +4808,7 @@ button[data-testid='createPostBtn'] {
     white-space: initial;
   }
 }
+
 .cardItem .location {
   font-size: 0.9rem;
   color: var(--bs-primary);
@@ -4741,6 +4828,7 @@ button[data-testid='createPostBtn'] {
   font-size: 1rem;
   color: var(--bs-success, var(--green-color));
 }
+
 .rightCard {
   display: flex;
   gap: 7px;
@@ -4751,6 +4839,7 @@ button[data-testid='createPostBtn'] {
   overflow-x: hidden;
   width: 210px;
 }
+
 @keyframes zoomIn {
   0% {
     opacity: 0;
@@ -4768,6 +4857,7 @@ button[data-testid='createPostBtn'] {
 .buttonList {
   background-color: var(--buttonList-bg) !important;
 }
+
 /* AddOnEntry.tsx */
 
 .entrytoggle {
@@ -4938,6 +5028,7 @@ button[data-testid='createPostBtn'] {
 .leftDrawer .optionList button:hover {
   color: var(--leftDrawer-option-text) !important;
 }
+
 .leftDrawer .optionList button:active,
 .leftDrawer .optionList button:focus {
   .leftDrawer .optionList button:active,
@@ -4945,6 +5036,7 @@ button[data-testid='createPostBtn'] {
     font-weight: 500;
   }
 }
+
 .leftDrawer .optionList button:hover svg {
   stroke: var(--leftDrawer-option-text) !important;
 }
@@ -5076,6 +5168,7 @@ button[data-testid='createPostBtn'] {
     height: 100vh;
     padding: 2rem;
   }
+
   .opendrawer {
     width: 25px;
   }
@@ -5183,6 +5276,7 @@ button[data-testid='createPostBtn'] {
     opacity: 0;
     left: -1000px;
   }
+
   to {
     left: 0;
     opacity: 1;
@@ -5209,13 +5303,18 @@ button[data-testid='createPostBtn'] {
 
 /* LeftDrawer general styles */
 .leftDrawer {
-  height: 100vh; /* Ensure it spans the full height */
+  height: 100vh;
+  /* Ensure it spans the full height */
   background-color: var(--profile-bg);
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-y: auto;
+  /* Enable vertical scrolling */
   transition: transform 0.3s ease;
-  will-change: transform; /* NEW */
-  position: fixed; /* Ensure it's positioned properly */
-  padding-bottom: 1rem; /* Prevent last item clipping */
+  will-change: transform;
+  /* NEW */
+  position: fixed;
+  /* Ensure it's positioned properly */
+  padding-bottom: 1rem;
+  /* Prevent last item clipping */
   overscroll-behavior: contain;
   /* Improve scroll performance */
   -webkit-overflow-scrolling: touch;
@@ -5235,6 +5334,7 @@ button[data-testid='createPostBtn'] {
 
 .inactiveDrawer {
   transform: translateX(-100%);
+
   &[data-hidden='true'] {
     /* Specific styles for inactive drawers if needed */
   }
@@ -5242,6 +5342,7 @@ button[data-testid='createPostBtn'] {
 
 .activeDrawer {
   transform: translateX(0);
+
   &[data-hidden='false'] {
     /* Specific styles for active drawers if needed */
   }
@@ -5257,9 +5358,11 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
   /* Add focus styles for keyboard navigation */
   &:focus-within {
-    @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
+    @extend .reusable-focus-visible;
+    /* Referencing the reusable class from the general section */
   }
 }
 
@@ -5279,6 +5382,7 @@ button[data-testid='createPostBtn'] {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+
   /* Add alt text styles */
   &[alt] {
     font-size: 0.875rem;
@@ -5293,21 +5397,25 @@ button[data-testid='createPostBtn'] {
 .primaryText {
   font-weight: bold;
   color: var(--bs-emphasis-color, var(--black-color));
-  @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
+  @extend .reusable-text-ellipsis;
+  /* Referencing the reusable class from the general section */
 }
 
 .secondaryText {
   font-size: 0.9rem;
   color: var(--bs-secondary-text);
-  @extend .reusable-text-ellipsis; /* Referencing the reusable class from the general section */
+  @extend .reusable-text-ellipsis;
+  /* Referencing the reusable class from the general section */
 }
 
 /* Dropdown and options list */
 .titleHeader {
   font-size: 1.2rem;
   color: var(--bs-secondary);
-  line-height: 1.5; /* NEW */
-  margin: var(--spacing-md, 1rem) 0; /* NEW */
+  line-height: 1.5;
+  /* NEW */
+  margin: var(--spacing-md, 1rem) 0;
+  /* NEW */
 }
 
 /* Active and inactive buttons */
@@ -5321,7 +5429,8 @@ button[data-testid='createPostBtn'] {
   }
 
   &.focus-visible {
-    @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
+    @extend .reusable-focus-visible;
+    /* Referencing the reusable class from the general section */
   }
 }
 
@@ -5330,11 +5439,13 @@ button[data-testid='createPostBtn'] {
   color: black;
 
   &::before {
-    @extend .reusable-indicator; /* Referencing the reusable class from the general section */
+    @extend .reusable-indicator;
+    /* Referencing the reusable class from the general section */
   }
 
   &::after {
-    @extend .reusable-arrow-indicator; /* Referencing the reusable class from the general section */
+    @extend .reusable-arrow-indicator;
+    /* Referencing the reusable class from the general section */
   }
 }
 
@@ -5470,36 +5581,43 @@ button[data-testid='createPostBtn'] {
 .attendance-modal .borderRightGreen {
   border-right: 1px solid var(--light-dark-green);
 }
+
 .attendance-modal .positionedTopRight {
   top: 10px;
   right: 15px;
   z-index: 1;
 }
+
 .attendance-modal .topRightCorner {
   position: absolute;
   right: 0;
   top: 0;
   border-bottom-left-radius: 8px;
 }
+
 .attendance-modal .bottomRightCorner {
   position: absolute;
   right: 0;
   bottom: 0;
   border-top-left-radius: 12px;
 }
+
 .attendance-modal .topLeftCorner {
   position: absolute;
   left: 0;
   top: 0;
   border-bottom-right-radius: 8px;
 }
+
 .attendance-modal .largeBoldText {
   font-size: 80px;
   font-weight: 400;
 }
+
 .attendance-modal .paddingBottom30 {
   padding-bottom: 30px;
 }
+
 .attendance-modal .paddingBottom2Rem {
   padding-bottom: 2rem;
 }
@@ -5536,10 +5654,12 @@ button[data-testid='createPostBtn'] {
   gap: 0.5rem;
   align-items: center;
 }
+
 .creator p {
   margin-bottom: 0;
   font-weight: 500;
 }
+
 .creator svg {
   width: 1.5rem;
   height: 1.5rem;
@@ -5553,6 +5673,7 @@ button[data-testid='createPostBtn'] {
   --bs-btn-active-bg: transparent;
   --bs-btn-focus-box-shadow: none;
 }
+
 .customToggle svg {
   color: var(--bs-black);
 }
@@ -5560,12 +5681,14 @@ button[data-testid='createPostBtn'] {
 .customToggle::after {
   content: none;
 }
+
 .customToggle:hover,
 .customToggle:focus,
 .customToggle:active {
   background: none;
   border: none;
 }
+
 .cardBodyPostCard div {
   padding: 0.5rem;
 }
@@ -5600,14 +5723,17 @@ button[data-testid='createPostBtn'] {
   margin-top: 0.7rem !important;
   text-align: left;
 }
+
 .viewBtn {
   display: flex;
   justify-content: flex-end;
   margin: 0.5rem;
 }
+
 .viewBtn Button {
   padding-inline: 1rem;
 }
+
 .cardActions {
   display: flex;
   flex-direction: row;
@@ -5688,7 +5814,7 @@ button[data-testid='createPostBtn'] {
 
 .postImage {
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
 }
 
@@ -5749,6 +5875,7 @@ button[data-testid='createPostBtn'] {
 .selectType {
   border-radius: 10px;
 }
+
 .dropdown__item {
   text-overflow: ellipsis;
   overflow: hidden;
@@ -5770,6 +5897,7 @@ button[data-testid='createPostBtn'] {
   gap: 15px;
   flex-wrap: wrap;
 }
+
 .datePicker {
   border-radius: 10px;
   height: 2.5rem;
@@ -5797,6 +5925,7 @@ button[data-testid='createPostBtn'] {
   flex-wrap: wrap;
   margin-top: 20px;
 }
+
 .titlemodalEvents {
   color: var(--grey-bg-color-dark);
   font-weight: 600;
@@ -5830,6 +5959,7 @@ button[data-testid='createPostBtn'] {
 .checkboxdivEvents > label {
   margin-right: 50px;
 }
+
 .checkboxdivEvents > label > input {
   margin-left: 10px;
 }
@@ -5837,6 +5967,7 @@ button[data-testid='createPostBtn'] {
 .checkboxdivEvents {
   display: flex;
 }
+
 .checkboxdivEvents > div {
   width: 50%;
 }
@@ -5845,6 +5976,7 @@ button[data-testid='createPostBtn'] {
   display: flex;
   align-items: center;
 }
+
 .dispflexEvents > input {
   border: none;
   box-shadow: none;
@@ -5866,6 +5998,7 @@ button[data-testid='createPostBtn'] {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   width: 100%;
+
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 6px var(--grey-border-box-color);
@@ -5901,6 +6034,7 @@ button[data-testid='createPostBtn'] {
   justify-content: center;
   align-items: center;
 }
+
 .tableContainer {
   height: 400px;
   overflow-y: scroll;
@@ -5933,7 +6067,6 @@ button[data-testid='createPostBtn'] {
   gap: 1rem;
   margin: 0 auto;
   margin-bottom: 0.5rem;
-  role: 'status';
 }
 
 .statusIcon {
@@ -6209,7 +6342,8 @@ button[data-testid='createPostBtn'] {
   display: flex;
   position: relative;
   width: 100%;
-  overflow: hidden; /* Ensures content doesn't overflow the card */
+  overflow: hidden;
+  /* Ensures content doesn't overflow the card */
   justify-content: center;
   border: 1px solid #ccc;
 }
@@ -6217,15 +6351,18 @@ button[data-testid='createPostBtn'] {
 .previewVenueModal img {
   width: 400px;
   height: auto;
-  object-fit: cover; /* Ensures the image stays within the boundaries */
+  object-fit: cover;
+  /* Ensures the image stays within the boundaries */
 }
 
 .closeButtonP {
   position: absolute;
   top: 0px;
   right: 0px;
-  width: 32px; /* Make the button circular */
-  height: 32px; /* Make the button circular */
+  width: 32px;
+  /* Make the button circular */
+  height: 32px;
+  /* Make the button circular */
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
@@ -6240,8 +6377,10 @@ button[data-testid='createPostBtn'] {
 }
 
 .closeButtonP:hover {
-  transform: scale(1.1); /* Slightly enlarge on hover */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
+  transform: scale(1.1);
+  /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  /* Add a shadow on hover */
 }
 
 /* YearlyEventCalender.tsx */
@@ -6613,6 +6752,7 @@ button[data-testid='createPostBtn'] {
   .cardGridItem {
     width: 100%;
   }
+
   .justifyspAddOnStore {
     grid-template-columns: 1fr;
     justify-content: center;
@@ -6674,7 +6814,8 @@ button[data-testid='createPostBtn'] {
   position: relative;
   width: 100%;
   margin-top: 10px;
-  overflow: hidden; /* Ensures content doesn't overflow the card */
+  overflow: hidden;
+  /* Ensures content doesn't overflow the card */
   justify-content: center;
   border: 1px solid #ccc;
 }
@@ -6682,7 +6823,8 @@ button[data-testid='createPostBtn'] {
 .previewAdvertisementRegister img {
   width: 400px;
   height: auto;
-  object-fit: cover; /* Ensures the image stays within the boundaries */
+  object-fit: cover;
+  /* Ensures the image stays within the boundaries */
 }
 
 .previewAdvertisementRegister video {
@@ -6694,8 +6836,10 @@ button[data-testid='createPostBtn'] {
   position: absolute;
   top: 0px;
   right: 0px;
-  width: 32px; /* Make the button circular */
-  height: 32px; /* Make the button circular */
+  width: 32px;
+  /* Make the button circular */
+  height: 32px;
+  /* Make the button circular */
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
@@ -6710,8 +6854,10 @@ button[data-testid='createPostBtn'] {
 }
 
 .closeButtonAdvertisementRegister:hover {
-  transform: scale(1.1); /* Slightly enlarge on hover */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
+  transform: scale(1.1);
+  /* Slightly enlarge on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  /* Add a shadow on hover */
 }
 
 .buttonAdvertisementRegister {
@@ -6768,7 +6914,7 @@ button[data-testid='createPostBtn'] {
 .calendar__header_month div {
   font-weight: 400;
   color: var(--black-color);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
 }
 
 .buttonEventCalendar {
@@ -6784,7 +6930,7 @@ button[data-testid='createPostBtn'] {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   background-color: var(--black-color);
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
   height: 25px;
 }
 
@@ -7687,22 +7833,26 @@ button[data-testid='createPostBtn'] {
   .hideElemByDefault {
     display: none;
   }
+
   .leftDrawer {
     width: 100%;
     left: 0;
     right: 0;
   }
+
   .inactiveDrawer {
     opacity: 0;
     left: 0;
     z-index: -1;
     animation: closeDrawer 0.4s ease-in-out;
   }
+
   .activeDrawer {
     display: flex;
     z-index: 100;
     animation: openDrawer 0.6s ease-in-out;
   }
+
   .logout {
     margin-bottom: 2.5rem !important;
   }
@@ -7720,9 +7870,11 @@ button[data-testid='createPostBtn'] {
   background-color: var(--tablerow-bg-color) !important;
   justify-content: space-between;
   width: 100%;
+
   /* Add focus styles for keyboard navigation */
   &:focus-within {
-    @extend .reusable-focus-visible; /* Referencing the reusable class from the general section */
+    @extend .reusable-focus-visible;
+    /* Referencing the reusable class from the general section */
   }
 }
 
@@ -7734,34 +7886,40 @@ button[data-testid='createPostBtn'] {
   outline: none;
   background-color: var(--profileContainer-focus-bg);
 }
+
 .imageContainer {
   width: 56px;
   height: 56px;
   border-radius: 100%;
   margin-right: 10px;
 }
+
 .imageContainer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 100%;
 }
+
 .profileContainer .profileText {
   flex: 1;
   text-align: start;
   overflow: hidden;
   margin-right: 4px;
 }
+
 .profileContainer .profileText .primaryText {
   font-size: 1rem;
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2;
+  /* number of lines to show */
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
 }
+
 .profileContainer .profileText .secondaryText {
   font-size: 0.8rem;
   font-weight: 400;
@@ -7769,13 +7927,16 @@ button[data-testid='createPostBtn'] {
   display: block;
   text-transform: capitalize;
 }
+
 .profileDropdown {
   background-color: transparent !important;
 }
+
 .profileDropdown .dropdown-toggle .btn .btn-normal {
   display: none !important;
   background-color: transparent !important;
 }
+
 .dropdownToggle {
   background-image: url(../../../public/images/svg/angleDown.svg);
   background-repeat: no-repeat;
@@ -7797,6 +7958,7 @@ button[data-testid='createPostBtn'] {
   border-top: none !important;
   border-bottom: none !important;
 }
+
 .avatarStyle {
   border-radius: 100%;
 }
@@ -7843,6 +8005,7 @@ button[data-testid='createPostBtn'] {
   box-shadow: var(--hover-shadow);
   color: black !important;
 }
+
 .opendrawer {
   --bs-btn-active-color: var(--profile-bg);
   --bs-btn-active-bg: var(--profile-bg);
@@ -7867,6 +8030,7 @@ button[data-testid='createPostBtn'] {
   .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
   }
+
   .collapseSidebarButton {
     width: calc(250px + 2rem);
   }
@@ -7876,6 +8040,7 @@ button[data-testid='createPostBtn'] {
   .pageContainer {
     padding: 1rem 1.5rem 0 calc(300px + 2rem);
   }
+
   .collapseSidebarButton {
     height: 30px;
     width: calc(300px + 1rem);
@@ -7886,10 +8051,12 @@ button[data-testid='createPostBtn'] {
   .pageContainer {
     padding: 1rem 1.5rem 0 calc(270px);
   }
+
   .collapseSidebarButton {
     width: 250px;
     height: 20px;
   }
+
   .opendrawer {
     width: 30px;
   }
@@ -8021,6 +8188,7 @@ button[data-testid='createPostBtn'] {
     margin-left: auto;
     display: block;
   }
+
   .joinBtn,
   .joinedBtn,
   .withdrawBtn {
@@ -8059,6 +8227,7 @@ button[data-testid='createPostBtn'] {
   margin-bottom: 0.8rem;
   background-color: var(--orgCard-Image-bg);
 }
+
 .orgCard .innerContainer .content {
   flex: 1;
   margin-left: 1rem;
@@ -8209,6 +8378,7 @@ button[data-testid='createPostBtn'] {
   color: var(--organization-color) !important;
   --bs-btn-active-bg: var(--organization-bg);
 }
+
 .colorPrimary:hover,
 .colorPrimary:focus,
 .colorPrimary:active {
@@ -8253,6 +8423,7 @@ button[data-testid='createPostBtn'] {
     width: 250px;
     height: 20px;
   }
+
   .opendrawer {
     width: 30px;
   }
@@ -8264,6 +8435,7 @@ button[data-testid='createPostBtn'] {
     height: 100vh;
     padding: 2rem;
   }
+
   .opendrawer {
     width: 25px;
   }
@@ -8318,6 +8490,7 @@ button[data-testid='createPostBtn'] {
   border: 1px solid var(--LoginToggle-button-active);
   background-color: var(--LoginToggle-button-active);
 }
+
 /* people card */
 .personImage_peoplecard {
   border-radius: 50%;
@@ -8573,7 +8746,8 @@ button[data-testid='createPostBtn'] {
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2;
+  /* number of lines to show */
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
@@ -8641,62 +8815,77 @@ button[data-testid='createPostBtn'] {
   .leftDrawer {
     width: calc(300px + 1rem);
   }
+
   .leftDrawer .talawaLogo {
     width: 38px;
     height: 38px;
     margin-right: 0.4rem;
   }
+
   .leftDrawer .talawaText {
     font-size: 1rem;
   }
+
   .leftDrawer .organizationContainer button {
     margin: 0.6rem 0;
     padding: 2.2rem 0.1rem;
   }
+
   .leftDrawer .optionList button {
     margin-bottom: 0.05rem;
     font-size: 16px;
     padding-left: 0.8rem;
   }
+
   .leftDrawer .profileContainer .profileTextUserSidebarOrg .primaryText {
     font-size: 1rem;
   }
+
   .leftDrawer .profileContainer .profileTextUserSidebarOrg .secondaryText {
     font-size: 0.8rem;
   }
 }
+
 @media (max-height: 650px) {
   .leftDrawer {
     padding: 0.5rem 0.8rem 0 0.8rem;
     width: calc(250px);
   }
+
   .leftDrawer .talawaText {
     font-size: 0.8rem;
   }
+
   .leftDrawer .organizationContainer button {
     margin: 0.2rem 0;
     padding: 1.6rem 0rem;
   }
+
   .leftDrawer .titleHeader {
     font-size: 16px;
   }
+
   .leftDrawer .optionList button {
     margin-bottom: 0.05rem;
     font-size: 14px;
     padding: 0.4rem;
     padding-left: 0.8rem;
   }
+
   .leftDrawer .profileContainer .profileTextUserSidebarOrg .primaryText {
     font-size: 0.8rem;
   }
+
   .leftDrawer .profileContainer .profileTextUserSidebarOrg .secondaryText {
     font-size: 0.6rem;
   }
+
   .leftDrawer .imageContainer {
     width: 40px;
     margin-left: 5px;
     margin-right: 10px;
   }
+
   .leftDrawer .imageContainer img {
     width: 40px;
     height: 100%;
@@ -8841,10 +9030,12 @@ button[data-testid='createPostBtn'] {
   align-items: center;
   background-color: var(--tablerow-bg-color) !important;
 }
+
 .profileContainer:focus {
   outline: none;
   background-color: var(--bs-gray-100);
 }
+
 .imageContainer {
   width: 56px;
   height: 56px;
@@ -8852,28 +9043,32 @@ button[data-testid='createPostBtn'] {
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .imageContainer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 100%;
 }
+
 .profileContainer .profileTextUserSidebarOrg {
   flex: 1;
   text-align: start;
   overflow: hidden;
   margin-right: 4px;
 }
+
 .profileContainer .profileTextUserSidebarOrg .primaryText {
   font-size: 1rem;
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  /* number of lines to show */
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
 }
+
 .profileContainer .profileTextUserSidebarOrg .secondaryText {
   font-size: 0.8rem;
   font-weight: 400;
@@ -9128,6 +9323,7 @@ button[data-testid='createPostBtn'] {
   .section {
     margin-left: 50px;
   }
+
   .error {
     font-size: 1.1rem;
     font-style: oblique;

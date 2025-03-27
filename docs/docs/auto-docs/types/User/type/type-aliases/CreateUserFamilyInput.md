@@ -6,7 +6,7 @@
 
 > **CreateUserFamilyInput**: `object`
 
-Defined in: [src/types/User/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L55)
+Defined in: [src/types/User/type.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L54)
 
 ## Type declaration
 

@@ -14,7 +14,7 @@ import type {
   InterfaceOrgInfoTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 import { Button } from '@mui/material';
@@ -74,7 +74,9 @@ function orgList(): JSX.Element {
 
   const { getItem } = useLocalStorage();
   const role = getItem('role');
-  const adminFor: { _id: string; name: string; image: string | null }[] =
+  const adminFor:
+    | string
+    | { _id: string; name: string; image: string | null }[] =
     getItem('AdminFor') || [];
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
@@ -385,6 +387,7 @@ function orgList(): JSX.Element {
           {/* Infinite scroll can be added when query supports infinitescroll*/}
           {/* <InfiniteScroll
             dataLength={orgsData?.length ?? 0}
+
             next={loadMoreOrganizations}
             loader={
               <>

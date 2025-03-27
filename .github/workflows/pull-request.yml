@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -42,7 +44,27 @@ jobs:
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+
+          # Count all changed files
+          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l | tr -d ' ')
+          echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
+
+          # Check if any files changed
+          if [ "$ALL_CHANGED_FILES_COUNT" -gt 0 ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Set only_changed to false by default (adjust logic as needed)
+          echo "only_changed=false" >> $GITHUB_OUTPUT
 
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
@@ -89,64 +111,40 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
-        uses: tj-actions/changed-files@v45
-        with:
-          files: |
-            .flake8
-            .pydocstyle
-            pyproject.toml
-            .env*
-            vitest.config.js
-            src/App.tsx
-            .github/**
-            env.example
-            .node-version
-            .husky/**
-            scripts/**
-            src/style/** 
-            schema.graphql
-            package.json
-            package-lock.json
-            tsconfig.json
-            .gitignore
-            .eslintrc.json
-            .eslintignore
-            .prettierrc
-            .prettierignore
-            vite.config.ts
-            docker/docker-compose.prod.yaml
-            docker/docker-compose.dev.yaml
-            docker/Dockerfile.dev
-            docker/Dockerfile.prod
-            config/docker/setup/nginx.conf
-            config/docker/setup/nginx.prod.conf
-            CODEOWNERS
-            LICENSE
-            setup.ts
-            .coderabbit.yaml
-            CODE_OF_CONDUCT.md
-            CODE_STYLE.md
-            CONTRIBUTING.md
-            DOCUMENTATION.md
-            INSTALLATION.md
-            ISSUE_GUIDELINES.md
-            PR_GUIDELINES.md
-            README.md
-            *.pem
-            *.key
-            *.cert
-            *.password
-            *.secret
-            *.credentials
-            .nojekyll
-            yarn.lock
-            docs/docusaurus.config.ts
-            docs/sidebar*
-            CNAME
-            
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Define sensitive files pattern
+          SENSITIVE_FILES=".flake8 .pydocstyle pyproject.toml .env* vitest.config.js src/App.tsx .github/** env.example .node-version .husky/** scripts/** src/style/** schema.graphql package.json package-lock.json tsconfig.json .gitignore .eslintrc.json .eslintignore .prettierrc .prettierignore vite.config.ts docker/docker-compose.prod.yaml docker/docker-compose.dev.yaml docker/Dockerfile.dev docker/Dockerfile.prod config/docker/setup/nginx.conf config/docker/setup/nginx.prod.conf CODEOWNERS LICENSE setup.ts .coderabbit.yaml CODE_OF_CONDUCT.md CODE_STYLE.md CONTRIBUTING.md DOCUMENTATION.md INSTALLATION.md ISSUE_GUIDELINES.md PR_GUIDELINES.md README.md *.pem *.key *.cert *.password *.secret *.credentials .nojekyll yarn.lock docs/docusaurus.config.ts docs/sidebar* CNAME"
+
+          # Check for changes in sensitive files
+          CHANGED_UNAUTH_FILES=""
+          for pattern in $SENSITIVE_FILES; do
+            FILES=$(git diff --name-only --diff-filter=ACMRD $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E "$pattern" || true)
+            if [ ! -z "$FILES" ]; then
+              CHANGED_UNAUTH_FILES="$CHANGED_UNAUTH_FILES $FILES"
+            fi
+          done
+
+          # Trim and format output
+          CHANGED_UNAUTH_FILES=$(echo "$CHANGED_UNAUTH_FILES" | xargs)
+          echo "all_changed_files=$CHANGED_UNAUTH_FILES" >> $GITHUB_OUTPUT
+
+          # Check if any unauthorized files changed
+          if [ ! -z "$CHANGED_UNAUTH_FILES" ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+            echo "any_deleted=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+            echo "any_deleted=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
         env: 
@@ -165,10 +163,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Count all changed files
+          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l | tr -d ' ')
+          echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
 
       - name: Echo number of changed files
         env: 
@@ -193,10 +199,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -207,17 +221,24 @@ jobs:
         run: |
           python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
-
   Check-Code-Coverage-Disable:
     name: Check for code coverage disable
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -231,10 +252,12 @@ jobs:
   Test-Application:
     name: Test Application
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Check-ESlint-Disable,Check-Code-Coverage-Disable]
+    needs: [Code-Quality-Checks, Check-ESlint-Disable, Check-Code-Coverage-Disable]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -242,11 +265,33 @@ jobs:
           node-version: '22.x'
 
       - name: Install Dependencies
-        run: npm install
-      
+        run: npm ci
+
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Check if any files changed
+          ANY_CHANGED=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l)
+          if [ "$ANY_CHANGED" -gt 0 ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Get all changed files
+          ALL_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_files=$ALL_FILES" >> $GITHUB_OUTPUT
+
+          # Get TypeScript files specifically
+          TS_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.tsx?$' | tr '\n' ' ')
+          echo "ts_files=$TS_FILES" >> $GITHUB_OUTPUT
+
+      - name: TypeScript compilation
+        run: |
+          npx tsc --noEmit
 
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.any_changed == 'true'
@@ -255,7 +300,7 @@ jobs:
           NODE_OPTIONS: "--max-old-space-size=6144"
         run: |
           npm run test:coverage
-  
+
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
@@ -263,14 +308,6 @@ jobs:
           exclude: 'docs/'
           files: ./coverage/vitest/lcov.info
           fail_ci_if_error: true
-      
-      - name: TypeScript compilation for changed files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_files }}; do
-            if [[ "$file" == *.ts || "$file" == *.tsx ]]; then
-              npx tsc --noEmit "$file"
-            fi
-          done
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
@@ -305,7 +342,7 @@ jobs:
 
   #     - name: Validate Documents
   #       run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
-        
+
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
@@ -396,7 +433,7 @@ jobs:
           echo "Starting Docker container for production..."
           docker compose -f docker/docker-compose.prod.yaml up -d
           echo "Production Docker container started successfully"
-      
+
       - name: Check if Talawa Admin App is running (Production)
         run: |
           chmod +x .github/workflows/scripts/app_health_check.sh
@@ -425,7 +462,6 @@ jobs:
         run: |
           docker compose -f docker/docker-compose.dev.yaml down
           echo "Dev Docker containers stopped and removed"
-  
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
@@ -475,7 +511,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-
 
   Python-Compliance:
     name: Check Python Code Style
