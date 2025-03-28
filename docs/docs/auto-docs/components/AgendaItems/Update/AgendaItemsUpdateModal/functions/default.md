@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/AgendaItems/Update/AgendaItemsUpdateModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/Update/AgendaItemsUpdateModal.tsx#L55)
+Defined in: [src/components/AgendaItems/Update/AgendaItemsUpdateModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/Update/AgendaItemsUpdateModal.tsx#L53)
 
 ## Parameters
 

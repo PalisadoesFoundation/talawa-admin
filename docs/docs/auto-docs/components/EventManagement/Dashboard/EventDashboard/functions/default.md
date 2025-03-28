@@ -6,15 +6,11 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.tsx#L20)
-
-Component that displays event details.
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.tsx#L48)
 
 ## Parameters
 
 ### props
-
-The props for the EventDashboard component.
 
 #### eventId
 
@@ -23,5 +19,3 @@ The props for the EventDashboard component.
 ## Returns
 
 `Element`
-
-The rendered EventDashboard component.

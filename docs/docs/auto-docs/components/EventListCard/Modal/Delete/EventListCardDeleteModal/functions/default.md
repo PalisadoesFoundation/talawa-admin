@@ -6,9 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventListCard/Modal/Delete/EventListCardDeleteModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/Delete/EventListCardDeleteModal.tsx#L15)
-
-DeleteModal: A modal displaying events with the ability to delete.
+Defined in: [src/components/EventListCard/Modal/Delete/EventListCardDeleteModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/Delete/EventListCardDeleteModal.tsx#L52)
 
 ## Parameters
 

@@ -1,3 +1,48 @@
+/**
+ * UserNavbar Component
+ *
+ * This component renders a responsive navigation bar for the user portal.
+ * It includes branding, language selection, and user action options such as
+ * navigating to settings or logging out.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered UserNavbar component.
+ *
+ * @remarks
+ * - Utilizes `react-bootstrap` for layout and styling.
+ * - Supports internationalization using `i18next` and `react-i18next`.
+ * - Handles user logout by revoking the refresh token and clearing local storage.
+ *
+ * @dependencies
+ * - `react-bootstrap` for Navbar, Dropdown, and Container components.
+ * - `i18next` and `react-i18next` for language translation.
+ * - `@apollo/client` for GraphQL mutation to revoke refresh tokens.
+ * - `@mui/icons-material` for icons.
+ * - `js-cookie` for managing language preference cookies.
+ * - `react-router-dom` for navigation.
+ *
+ * @example
+ * ```tsx
+ * import UserNavbar from './UserNavbar';
+ *
+ * function App() {
+ *   return <UserNavbar />;
+ * }
+ * ```
+ *
+ * @hook
+ * - `useLocalStorage` for accessing local storage.
+ * - `useNavigate` for programmatic navigation.
+ * - `useTranslation` for translation and localization.
+ * - `useMutation` for executing GraphQL mutations.
+ *
+ * @state
+ * - `currentLanguageCode` (string): Tracks the currently selected language code.
+ *
+ * @function handleLogout
+ * - Revokes the refresh token, clears local storage, and redirects to the home page.
+ *
+ */
 import React from 'react';
 import styles from './UserNavbar.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
@@ -13,16 +58,6 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
-/**
- * Navbar component for user-specific actions and settings.
- *
- * This component provides:
- * - A branding image and name.
- * - A dropdown for language selection.
- * - A dropdown for user actions including profile settings and logout.
- *
- * @returns JSX.Element - The rendered Navbar component.
- */
 function userNavbar(): JSX.Element {
   // Hook for local storage operations
   const { getItem } = useLocalStorage();

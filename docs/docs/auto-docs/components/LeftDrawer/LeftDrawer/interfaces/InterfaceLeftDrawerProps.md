@@ -4,9 +4,7 @@
 
 # Interface: InterfaceLeftDrawerProps
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L14)
-
-Interface for LeftDrawer component props.
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L47)
 
 ## Properties
 
@@ -14,9 +12,7 @@ Interface for LeftDrawer component props.
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L18)
-
-Determines if the drawer should be hidden.
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L48)
 
 ***
 
@@ -24,6 +20,4 @@ Determines if the drawer should be hidden.
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L23)
-
-Function to set the hideDrawer state.
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L49)

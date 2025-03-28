@@ -6,9 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/OrgAdminListCard/OrgAdminListCard.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgAdminListCard/OrgAdminListCard.tsx#L19)
-
-Component to confirm and handle the removal of an admin.
+Defined in: [src/components/OrgAdminListCard/OrgAdminListCard.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgAdminListCard/OrgAdminListCard.tsx#L48)
 
 ## Parameters
 
@@ -19,5 +17,3 @@ Component to confirm and handle the removal of an admin.
 ## Returns
 
 `JSX.Element`
-
-JSX element for the removal confirmation modal.

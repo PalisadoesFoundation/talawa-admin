@@ -1,17 +1,42 @@
+/**
+ * Represents a card item component that displays information about an event, post, or membership request.
+ *
+ * @component
+ * @param props - The properties for the `CardItem` component.
+ *
+ * @property {'Event' | 'Post' | 'MembershipRequest'} type - The type of the card item. Determines the layout and displayed information.
+ * @property {string} title - The title of the card item. Displayed as the main heading, truncated to 25 characters if too long.
+ * @property {string} [time] - The timestamp for posts, formatted as "MMM D, YYYY". Used when `type` is 'Post'.
+ * @property {string} [startdate] - The start date of an event, formatted as "MMM D, YYYY". Used when `type` is 'Event'.
+ * @property {string} [enddate] - The end date of an event, formatted as "MMM D, YYYY". Used when `type` is 'Event'.
+ * @property {{ id: string | number; name: string }} [creator] - The creator of the card item. Displays the author's name if provided.
+ * @property {string} [location] - The location of the event. Displays an icon and the location name if provided.
+ *
+ * @returns {JSX.Element} A styled card item component displaying the provided information.
+ *
+ * @example
+ * ```tsx
+ * <CardItem
+ *   type="Event"
+ *   title="Community Meetup"
+ *   startdate="2023-10-01"
+ *   enddate="2023-10-02"
+ *   creator={{ id: 1, name: "John Doe" }}
+ *   location="Central Park"
+ * />
+ * ```
+ *
+ * @remarks
+ * - The component uses `dayjs` for date formatting.
+ * - Icons for location and date are imported as React components.
+ * - Styling is applied using CSS modules from `app-fixed.module.css`.
+ */
 import React from 'react';
-// import EventsIcon from 'assets/svgs/cardItemEvent.svg?react';
-// import PostsIcon from 'assets/svgs/post.svg?react';
 import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
-// import UserIcon from 'assets/svgs/user.svg?react';
 import dayjs from 'dayjs';
 import styles from 'style/app-fixed.module.css';
-// import { PersonAddAlt1Rounded } from '@mui/icons-material';
-// import { height } from '@mui/system';
 
-/**
- * Interface for the CardItem component's props.
- */
 export interface InterfaceCardItem {
   type: 'Event' | 'Post' | 'MembershipRequest';
   title: string;
@@ -21,13 +46,6 @@ export interface InterfaceCardItem {
   creator?: { id: string | number; name: string };
   location?: string;
 }
-
-/**
- * Component to display a card item with various types such as Event, Post, or MembershipRequest.
- *
- * @param props - Props for the CardItem component.
- * @returns JSX element representing the card item.
- */
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, time, enddate, location } = props;
