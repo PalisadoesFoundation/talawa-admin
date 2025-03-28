@@ -1,3 +1,38 @@
+/**
+ * LeftDrawer Component
+ *
+ * This component represents the left navigation drawer for the Talawa Admin Portal.
+ * It provides navigation options for different sections of the application, such as
+ * organizations, users, and community profile. The drawer's visibility can be toggled
+ * based on the screen size or user interaction.
+ *
+ * @component
+ * @param {InterfaceLeftDrawerProps} props - The props for the LeftDrawer component.
+ * @param {boolean | null} props.hideDrawer - Determines the visibility of the drawer.
+ *                                            `null` indicates the initial state.
+ * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer -
+ *                                            Function to update the visibility state of the drawer.
+ *
+ * @returns {JSX.Element} The rendered LeftDrawer component.
+ *
+ * @remarks
+ * - The component uses `useTranslation` for internationalization.
+ * - The drawer automatically hides on smaller screens (width <= 820px) when a link is clicked.
+ * - The `SuperAdmin` status is retrieved from local storage to conditionally render the "Users" section.
+ *
+ * @example
+ * ```tsx
+ * <LeftDrawer
+ *   hideDrawer={false}
+ *   setHideDrawer={setHideDrawerFunction}
+ * />
+ * ```
+ *
+ * @fileoverview
+ * - Contains navigation links for "My Organizations", "Users" (if SuperAdmin), and "Community Profile".
+ * - Uses SVG icons for visual representation of navigation options.
+ * - Applies dynamic styles based on the drawer's visibility state and active navigation link.
+ */
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
@@ -8,27 +43,11 @@ import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
-/**
- * Interface for LeftDrawer component props.
- */
 export interface InterfaceLeftDrawerProps {
-  /**
-   * Determines if the drawer should be hidden.
-   */
   hideDrawer: boolean | null;
-
-  /**
-   * Function to set the hideDrawer state.
-   */
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-/**
- * LeftDrawer component that displays the sidebar with navigation options.
- *
- * @param props - The props for the component.
- * @returns The rendered LeftDrawer component.
- */
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,

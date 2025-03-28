@@ -4,7 +4,7 @@
 
 # Interface: InterfaceViewModalProps
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L13)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L46)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L15)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L48)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L14)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L47)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx
 
 > **item**: [`InterfaceActionItemInfo`](../../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L16)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L49)

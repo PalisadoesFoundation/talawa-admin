@@ -1,3 +1,36 @@
+/**
+ * SecuredRoute Component
+ *  A React component that secures routes based on user authentication and role.
+ *  Redirects unauthorized users to the home page or displays a "Page Not Found" screen for non-administrator roles.
+ *  Also includes session timeout and inactivity handling.
+ * @component
+ * @returns {JSX.Element} - Renders the child route if the user is authenticated and has the "administrator" role.
+ * Redirects to the home page if the user is not logged in.
+ * Displays a "Page Not Found" screen for unauthorized roles.
+ *
+ * @remarks
+ * - Uses `useLocalStorage` utility to manage local storage items.
+ * - Implements session timeout and inactivity detection to enhance security.
+ * - Displays a toast notification when the session expires.
+ *
+ * @dependencies
+ * - `react-router-dom` for navigation (`Navigate`, `Outlet`).
+ * - `react-toastify` for toast notifications.
+ * - `useLocalStorage` custom hook for local storage operations.
+ *
+ * @example
+ * ```tsx
+ * <SecuredRoute />
+ * ```
+ *
+ * @event document#mousemove
+ * Updates the `lastActive` timestamp on mouse movement to track user activity.
+ *
+ * @function setInterval
+ * Periodically checks for user inactivity and logs out the user if the session has expired.
+ * Displays a warning toast and redirects to the home page upon session expiration.
+ */
+
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -5,14 +38,6 @@ import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
 const { getItem, setItem } = useLocalStorage();
 
-/**
- * A route guard that checks if the user is logged in and has the necessary permissions.
- *
- * If the user is logged in and has an admin role set, it renders the child routes.
- * Otherwise, it redirects to the home page or shows a 404 page if admin role is not set.
- *
- * @returns The JSX element representing the secured route.
- */
 const SecuredRoute = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
   const role = getItem('role');

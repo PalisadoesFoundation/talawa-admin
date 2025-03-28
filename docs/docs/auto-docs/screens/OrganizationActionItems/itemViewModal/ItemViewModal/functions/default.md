@@ -6,9 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L32)
-
-A modal dialog for viewing action item details.
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L52)
 
 ## Parameters
 
@@ -29,8 +27,3 @@ A modal dialog for viewing action item details.
 ## Returns
 
 `ReactNode`
-
-The rendered modal component.
-
-The `ItemViewModal` component displays all the fields of an action item in a modal dialog.
-It includes fields for assignee, assigner, category, pre and post completion notes, assignment date, due date, completion date, and event.

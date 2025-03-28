@@ -1,21 +1,36 @@
+/**
+ * AgendaItemsPreviewModal Component
+ *
+ * This component renders a modal to preview the details of an agenda item.
+ * It displays various properties of the agenda item, such as category, title,
+ * description, duration, creator, URLs, and attachments. It also provides
+ * options to update or delete the agenda item.
+ *
+ * @component
+ * @param {InterfaceAgendaItemsPreviewModalProps} props - The props for the component.
+ * @param {boolean} props.agendaItemPreviewModalIsOpen - Determines if the modal is open.
+ * @param {() => void} props.hidePreviewModal - Function to close the modal.
+ * @param {() => void} props.showUpdateModal - Function to open the update modal.
+ * @param {() => void} props.toggleDeleteModal - Function to toggle the delete modal.
+ * @param {object} props.formState - The state containing agenda item details.
+ * @param {string[]} props.formState.agendaItemCategoryNames - List of category names.
+ * @param {string} props.formState.title - Title of the agenda item.
+ * @param {string} props.formState.description - Description of the agenda item.
+ * @param {string} props.formState.duration - Duration of the agenda item.
+ * @param {object} props.formState.createdBy - Creator details of the agenda item.
+ * @param {string} props.formState.createdBy.firstName - First name of the creator.
+ * @param {string} props.formState.createdBy.lastName - Last name of the creator.
+ * @param {string[]} props.formState.urls - List of URLs associated with the agenda item.
+ * @param {string[]} props.formState.attachments - List of attachment URLs.
+ * @param {(key: string) => string} props.t - Translation function for localization.
+ *
+ * @returns {JSX.Element} A modal displaying the agenda item details.
+ */
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { FaLink } from 'react-icons/fa';
 import type { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interface';
-
-/**
- * Modal component for previewing details of an agenda item.
- * Displays the details of the selected agenda item, including its categories, title, description, duration, creator, URLs, and attachments.
- * Also provides options to update or delete the agenda item.
- *
- * @param agendaItemPreviewModalIsOpen - Boolean flag indicating if the preview modal is open.
- * @param hidePreviewModal - Function to hide the preview modal.
- * @param showUpdateModal - Function to show the update modal.
- * @param toggleDeleteModal - Function to toggle the delete modal.
- * @param formState - The current state of the form containing agenda item details.
- * @param t - Function for translating text based on keys.
- */
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
 > = ({

@@ -1,3 +1,39 @@
+/**
+ * UserAddressFields Component
+ *
+ * This component renders a form for capturing user address details. It includes
+ * fields for address line 1, address line 2, state, city, country, and postal code.
+ * Each field is tied to a `userDetails` object and updates its value via the
+ * `handleFieldChange` callback.
+ *
+ * @component
+ * @param {Object} props - Component properties.
+ * @param {(key: string) => string} props.t - Translation function for localizing labels and placeholders.
+ * @param {(field: string, value: string) => void} props.handleFieldChange - Callback to handle changes in form fields.
+ * @param {Object} props.userDetails - Object containing user address details.
+ * @param {string} props.userDetails.addressLine1 - First line of the user's address.
+ * @param {string} props.userDetails.addressLine2 - Second line of the user's address.
+ * @param {string} props.userDetails.state - State or region of the user's address.
+ * @param {string} props.userDetails.city - City of the user's address.
+ * @param {string} props.userDetails.countryCode - Country code of the user's address.
+ * @param {string} props.userDetails.postalCode - Postal or ZIP code of the user's address.
+ *
+ * @returns {JSX.Element} A form with input fields for user address details.
+ *
+ * @example
+ * <UserAddressFields
+ *   t={(key) => translations[key]}
+ *   handleFieldChange={(field, value) => updateUserDetails(field, value)}
+ *   userDetails={{
+ *     addressLine1: '',
+ *     addressLine2: '',
+ *     state: '',
+ *     city: '',
+ *     countryCode: '',
+ *     postalCode: '',
+ *   }}
+ * />
+ */
 import React from 'react';
 import { countryOptions } from 'utils/formEnumFields';
 import { Col, Form, Row } from 'react-bootstrap';
@@ -16,15 +52,6 @@ interface InterfaceUserAddressFieldsProps {
   };
 }
 
-/**
- * Form component containing address-related input fields for user profile.
- * Includes fields for address, city, state, and country.
- *
- * @param t - Translation function for component-specific strings
- * @param handleFieldChange - Callback for field value changes
- * @param userDetails - User's address information
- * @returns A form group with address input fields
- */
 export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
   t,
   handleFieldChange,

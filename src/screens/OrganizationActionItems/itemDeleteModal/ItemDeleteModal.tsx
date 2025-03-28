@@ -1,3 +1,35 @@
+/**
+ * ItemDeleteModal Component
+ *
+ * This component renders a modal for confirming the deletion of an action item.
+ * It provides a user-friendly interface to confirm or cancel the deletion process.
+ *
+ * @component
+ * @param {InterfaceItemDeleteModalProps} props - The props for the ItemDeleteModal component.
+ * @param {boolean} props.isOpen - Determines whether the modal is visible.
+ * @param {() => void} props.hide - Function to hide the modal.
+ * @param {InterfaceActionItemInfo | null} props.actionItem - The action item to be deleted.
+ * @param {() => void} props.actionItemsRefetch - Function to refetch the list of action items after deletion.
+ *
+ * @returns {React.FC} A React functional component rendering the delete confirmation modal.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for modal and button components.
+ * - Integrates with Apollo Client's `useMutation` for handling the deletion of the action item.
+ * - Displays success or error messages using `react-toastify`.
+ * - Supports internationalization with `react-i18next`.
+ *
+ * @example
+ * ```tsx
+ * <ItemDeleteModal
+ *   isOpen={true}
+ *   hide={() => setShowModal(false)}
+ *   actionItem={selectedActionItem}
+ *   actionItemsRefetch={refetchActionItems}
+ * />
+ * ```
+ *
+ */
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -7,9 +39,6 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
 
-/**
- * Props for the `ItemDeleteModal` component.
- */
 export interface InterfaceItemDeleteModalProps {
   isOpen: boolean;
   hide: () => void;
@@ -17,12 +46,6 @@ export interface InterfaceItemDeleteModalProps {
   actionItemsRefetch: () => void;
 }
 
-/**
- * A modal component for confirming the deletion of an action item.
- *
- * @param props - The properties passed to the component.
- * @returns The `ItemDeleteModal` component.
- */
 const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
   isOpen,
   hide,

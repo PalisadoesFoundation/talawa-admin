@@ -1,3 +1,33 @@
+/**
+ * @file Actions.tsx
+ * @description This component renders a table of action items assigned to a user within an organization.
+ * It provides functionalities for searching, sorting, and updating the status of action items.
+ * The component also includes modals for viewing and updating action item details.
+ *
+ * @module Actions
+ *
+ *
+ * @component
+ * @returns {JSX.Element} A React component that displays a searchable and sortable table of action items.
+ *
+ * @example
+ * // Usage
+ * import Actions from './Actions';
+ *
+ * function App() {
+ *   return <Actions />;
+ * }
+ *
+ * @remarks
+ * - The component fetches action items using GraphQL queries.
+ * - It uses Material-UI's DataGrid for displaying the table.
+ * - Modals are used for viewing and updating action item details.
+ * - Includes search and sorting functionalities for better user experience.
+ *
+ * @todo
+ * - Add pagination support for the DataGrid.
+ * - Improve error handling and user feedback mechanisms.
+ */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
@@ -43,32 +73,6 @@ const dataGridStyle = {
   '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Component for managing and displaying action items within an organization.
- *
- * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
- *
- * @returns The rendered component.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.editButton`
- * - `.switch`
- * - `.searchButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 function actions(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',

@@ -4,28 +4,7 @@
 
 # Interface: InterfaceRemoveUserTagModalProps
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L29)
-
-Remove UserTag Modal component for the Manage Tag screen.
-
-## CSS Strategy Explanation:
-
-To ensure consistency across the application and reduce duplication, common styles
-(such as button styles) have been moved to the global CSS file. Instead of using
-component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
-class (e.g., .addButton) is now applied.
-
-### Benefits:
-- **Reduces redundant CSS code.
-- **Improves maintainability by centralizing common styles.
-- **Ensures consistent styling across components.
-
-### Global CSS Classes used:
-- `.modalHeader`
-- `.removeButton`
-- `.addButton`
-
-For more details on the reusable classes, refer to the global CSS file.
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L38)
 
 ## Properties
 
@@ -33,7 +12,7 @@ For more details on the reusable classes, refer to the global CSS file.
 
 > **handleRemoveUserTag**: () => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L32)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L41)
 
 #### Returns
 
@@ -45,7 +24,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:32](https:
 
 > **removeUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L30)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L39)
 
 ***
 
@@ -53,7 +32,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:30](https:
 
 > **t**: `TFunction`\<`"manageTag"`\>
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L33)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L42)
 
 ***
 
@@ -61,7 +40,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:33](https:
 
 > **tCommon**: `TFunction`\<`"common"`\>
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L34)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L43)
 
 ***
 
@@ -69,7 +48,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:34](https:
 
 > **toggleRemoveUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L31)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L40)
 
 #### Returns
 
