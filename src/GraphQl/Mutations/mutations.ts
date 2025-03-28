@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import '../../style/app.module.css';
+import 'style/app.module.css';
 
 // to block the user
 

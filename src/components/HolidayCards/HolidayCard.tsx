@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 // Props for the HolidayCard component
 interface InterfaceHolidayList {

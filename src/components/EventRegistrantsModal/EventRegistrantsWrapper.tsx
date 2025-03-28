@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
-import style from '../../style/app-fixed.module.css';
+import style from 'style/app-fixed.module.css';
 
 // Props for the EventRegistrantsWrapper component
-type PropType = {
-  eventId: string;
-  orgId: string;
-  onUpdate?: () => void;
-};
+type PropType = { eventId: string; orgId: string; onUpdate?: () => void };
 
 /**
  * Wrapper component that displays a button to show the event registrants modal.

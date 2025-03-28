@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * A Loader for infinite scroll.

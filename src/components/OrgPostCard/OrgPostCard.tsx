@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
 import {
   DELETE_POST_MUTATION,
@@ -43,10 +43,7 @@ interface InterfaceOrgPostCardProps {
 
 interface InterfacePostFormState {
   caption: string;
-  attachments: {
-    url: string;
-    mimeType: string;
-  }[];
+  attachments: { url: string; mimeType: string }[];
 }
 
 export default function OrgPostCard({
@@ -123,11 +120,7 @@ export default function OrgPostCard({
   };
 
   const { data: userData, loading: userLoading } = useQuery(GET_USER_BY_ID, {
-    variables: {
-      input: {
-        id: post.creatorId || '',
-      },
-    },
+    variables: { input: { id: post.creatorId || '' } },
     skip: !post.creatorId,
   });
 
@@ -138,10 +131,7 @@ export default function OrgPostCard({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setPostFormState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setPostFormState((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageUpload = async (
@@ -154,10 +144,7 @@ export default function OrgPostCard({
         ...prev,
         attachments: [
           ...prev.attachments,
-          {
-            url: base64 as string,
-            mimeType: file.type,
-          },
+          { url: base64 as string, mimeType: file.type },
         ],
       }));
     }
@@ -173,10 +160,7 @@ export default function OrgPostCard({
         ...prev,
         attachments: [
           ...prev.attachments,
-          {
-            url: base64 as string,
-            mimeType: file.type,
-          },
+          { url: base64 as string, mimeType: file.type },
         ],
       }));
     }
@@ -199,9 +183,7 @@ export default function OrgPostCard({
   const deletePost = async (): Promise<void> => {
     try {
       const { data } = await deletePostMutation({
-        variables: {
-          input: { id: post.id },
-        },
+        variables: { input: { id: post.id } },
       });
 
       if (data?.deletePost?.id) {

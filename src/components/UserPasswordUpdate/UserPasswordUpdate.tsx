@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { toast } from 'react-toastify';
 import { Form } from 'react-bootstrap';
 
@@ -120,10 +120,7 @@ const UserUpdate: React.FC<
                 required
                 value={formState.newPassword}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    newPassword: e.target.value,
-                  });
+                  setFormState({ ...formState, newPassword: e.target.value });
                 }}
               />
             </div>

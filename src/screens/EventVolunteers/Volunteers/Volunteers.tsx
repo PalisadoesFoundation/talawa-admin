@@ -14,12 +14,12 @@ import {
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import VolunteerCreateModal from './VolunteerCreateModal';
-import VolunteerDeleteModal from './VolunteerDeleteModal';
-import VolunteerViewModal from './VolunteerViewModal';
+import VolunteerCreateModal from './createModal/VolunteerCreateModal';
+import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
+import VolunteerViewModal from './viewModal/VolunteerViewModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
@@ -38,33 +38,19 @@ enum ModalState {
 const dataGridStyle = {
   backgroundColor: 'white',
   borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-cell': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-columnSeparator': {
-    display: 'none',
-  },
+  '& .MuiDataGrid-columnHeaders': { border: 'none' },
+  '& .MuiDataGrid-cell': { border: 'none' },
+  '& .MuiDataGrid-columnSeparator': { display: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 /**
@@ -75,9 +61,7 @@ const dataGridStyle = {
  * @returns The rendered component.
  */
 function volunteers(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -131,9 +115,7 @@ function volunteers(): JSX.Element {
     error: volunteersError,
     refetch: refetchVolunteers,
   }: {
-    data?: {
-      getEventVolunteers: InterfaceEventVolunteerInfo[];
-    };
+    data?: { getEventVolunteers: InterfaceEventVolunteerInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -318,9 +300,7 @@ function volunteers(): JSX.Element {
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
         <SearchBar
-          placeholder={tCommon('searchBy', {
-            item: 'Name',
-          })}
+          placeholder={tCommon('searchBy', { item: 'Name' })}
           onSearch={debouncedSearch}
           inputTestId="searchBy"
           buttonTestId="searchBtn"

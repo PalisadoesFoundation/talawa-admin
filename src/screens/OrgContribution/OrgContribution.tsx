@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import ContriStats from 'components/ContriStats/ContriStats';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import { Form } from 'react-bootstrap';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * The `orgContribution` component displays the contributions to an organization.
@@ -15,9 +15,7 @@ import styles from '../../style/app-fixed.module.css';
  */
 function OrgContribution(): JSX.Element {
   // Hook to get translation functions and translation text
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgContribution',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgContribution' });
 
   // Set the document title based on the translated title for this page
   document.title = t('title');

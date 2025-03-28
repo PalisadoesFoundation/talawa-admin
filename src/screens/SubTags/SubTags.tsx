@@ -12,7 +12,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceOrganizationSubTagsQuery,
@@ -139,11 +139,7 @@ function SubTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: {
-          name: tagName,
-          organizationId: orgId,
-          parentTagId,
-        },
+        variables: { name: tagName, organizationId: orgId, parentTagId },
       });
 
       if (data) {
@@ -181,10 +177,7 @@ function SubTags(): JSX.Element {
   // used for the tag breadcrumbs
   const orgUserTagAncestors = [
     ...(subTagsData?.getChildTags.ancestorTags ?? []),
-    {
-      _id: parentTagId,
-      name: parentTagName,
-    },
+    { _id: parentTagId, name: parentTagName },
   ];
 
   const redirectToManageTag = (tagId: string): void => {

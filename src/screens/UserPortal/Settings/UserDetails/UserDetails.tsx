@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import styles from 'style/app-fixed.module.css';
 import dayjs from 'dayjs';
-import styles from '../../../../style/app-fixed.module.css';
 import {
   educationGradeEnum,
   employmentStatusEnum,

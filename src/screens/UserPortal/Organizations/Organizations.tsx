@@ -9,7 +9,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import {
   ALL_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS_PG,

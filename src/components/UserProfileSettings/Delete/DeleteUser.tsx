@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * DeleteUser component displays a card with a button to delete a user.
@@ -10,9 +10,7 @@ import styles from '../../../style/app-fixed.module.css';
  * @returns The JSX element for the delete user card.
  */
 const DeleteUser: React.FC = () => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'settings',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   return (
     <>
       <Card border="0" className="rounded-4 mb-4">

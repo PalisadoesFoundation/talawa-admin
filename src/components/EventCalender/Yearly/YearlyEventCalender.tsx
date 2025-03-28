@@ -2,7 +2,7 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   type InterfaceEvent,
@@ -172,9 +172,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           eventsForCurrentDate?.map((datas: InterfaceEvent) => {
             const attendees: Partial<User>[] = [];
             datas.attendees?.forEach((attendee) => {
-              const r = {
-                _id: attendee._id,
-              };
+              const r = { _id: attendee._id };
               attendees.push(r);
             });
 

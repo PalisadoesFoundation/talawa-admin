@@ -13,7 +13,7 @@ import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutation
 import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
 import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import SearchBar from 'subComponents/SearchBar';
 
@@ -59,12 +59,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     error?: unknown | undefined;
     refetch: () => void;
   } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
-    variables: {
-      organizationId: orgId,
-      where: {
-        name_contains: searchTerm,
-      },
-    },
+    variables: { organizationId: orgId, where: { name_contains: searchTerm } },
     notifyOnNetworkStatusChange: true,
   });
 

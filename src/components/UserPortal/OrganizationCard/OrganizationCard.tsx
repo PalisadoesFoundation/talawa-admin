@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -68,9 +68,7 @@ function OrganizationCard({
     }
   }, []);
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'users',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
 
@@ -96,19 +94,11 @@ function OrganizationCard({
   async function joinOrganization(): Promise<void> {
     try {
       if (userRegistrationRequired) {
-        await sendMembershipRequest({
-          variables: {
-            organizationId: id,
-          },
-        });
+        await sendMembershipRequest({ variables: { organizationId: id } });
         toast.success(t('MembershipRequestSent') as string);
       } else {
         await joinPublicOrganization({
-          variables: {
-            input: {
-              organizationId: id,
-            },
-          },
+          variables: { input: { organizationId: id } },
         });
         toast.success(t('orgJoined') as string);
       }
@@ -146,9 +136,7 @@ function OrganizationCard({
       }
 
       await cancelMembershipRequest({
-        variables: {
-          membershipRequestId: membershipRequest.id,
-        },
+        variables: { membershipRequestId: membershipRequest.id },
       });
 
       toast.success(t('MembershipRequestWithdrawn') as string);

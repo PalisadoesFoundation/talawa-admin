@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
-import { GET_POSTS_BY_ORG } from '../../GraphQl/Queries/Queries';
+import { GET_POSTS_BY_ORG } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { useParams } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import SortingButton from '../../subComponents/SortingButton';
 import PostsRenderer from './Posts';
 // import SearchingButton from 'subComponents/SearchingButton';
@@ -32,9 +32,7 @@ import type {
  */
 
 function OrgPost(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgPost',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgPost' });
   const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
@@ -71,11 +69,7 @@ function OrgPost(): JSX.Element {
     error,
     refetch: refetchPosts,
   } = useQuery(GET_POSTS_BY_ORG, {
-    variables: {
-      input: {
-        organizationId: currentUrl,
-      },
-    },
+    variables: { input: { organizationId: currentUrl } },
     fetchPolicy: 'network-only',
   });
 
@@ -139,14 +133,10 @@ function OrgPost(): JSX.Element {
       }
 
       const { data } = await create({
-        variables: {
-          input,
-        },
+        variables: { input },
         context: {
           // Ensure the file upload request includes the required header
-          headers: {
-            'Apollo-Require-Preflight': 'true',
-          },
+          headers: { 'Apollo-Require-Preflight': 'true' },
         },
       });
 
@@ -194,19 +184,13 @@ function OrgPost(): JSX.Element {
 
       try {
         const base64 = await convertToBase64(selectedFile);
-        setPostFormState((prev) => ({
-          ...prev,
-          addMedia: base64,
-        }));
+        setPostFormState((prev) => ({ ...prev, addMedia: base64 }));
       } catch {
         toast.error('Could not generate preview');
       }
     } else {
       setFile(null);
-      setPostFormState((prev) => ({
-        ...prev,
-        addMedia: '',
-      }));
+      setPostFormState((prev) => ({ ...prev, addMedia: '' }));
     }
   };
 
@@ -292,11 +276,7 @@ function OrgPost(): JSX.Element {
     if (option === 'None') {
       setDisplayPosts([]);
 
-      refetchPosts({
-        input: {
-          organizationId: currentUrl,
-        },
-      });
+      refetchPosts({ input: { organizationId: currentUrl } });
       return;
     }
     if (loading || error || !data?.postsByOrganization) {
@@ -561,10 +541,7 @@ function OrgPost(): JSX.Element {
                 <button
                   className={styles.closeButtonOrgPost}
                   onClick={(): void => {
-                    setPostFormState({
-                      ...postformState,
-                      addMedia: '',
-                    });
+                    setPostFormState({ ...postformState, addMedia: '' });
                     const fileInput = document.getElementById(
                       'addMedia',
                     ) as HTMLInputElement;

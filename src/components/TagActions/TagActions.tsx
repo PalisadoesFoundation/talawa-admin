@@ -7,7 +7,7 @@ import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
@@ -350,10 +350,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                 <div
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
-                  style={{
-                    height: 300,
-                    overflow: 'auto',
-                  }}
+                  style={{ height: 300, overflow: 'auto' }}
                 >
                   <InfiniteScroll
                     dataLength={userTagsList?.length ?? 0}

@@ -1,6 +1,6 @@
 import React, { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
 import { useMutation } from '@apollo/client';
@@ -85,11 +85,7 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     e.preventDefault();
     try {
       await createActionItemCategory({
-        variables: {
-          name,
-          isDisabled,
-          organizationId: orgId,
-        },
+        variables: { name, isDisabled, organizationId: orgId },
       });
 
       refetchCategories();
@@ -120,16 +116,10 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
         }
 
         await updateActionItemCategory({
-          variables: {
-            actionItemCategoryId: category?._id,
-            ...updatedFields,
-          },
+          variables: { actionItemCategoryId: category?._id, ...updatedFields },
         });
 
-        setFormState({
-          name: '',
-          isDisabled: false,
-        });
+        setFormState({ name: '', isDisabled: false });
         refetchCategories();
         hide();
         toast.success(t('successfulUpdation'));
@@ -181,10 +171,7 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
               data-testid="isDisabledSwitch"
               className="mt-2 ms-2"
               onChange={() =>
-                setFormState({
-                  ...formState,
-                  isDisabled: !isDisabled,
-                })
+                setFormState({ ...formState, isDisabled: !isDisabled })
               }
             />
           </Form.Group>

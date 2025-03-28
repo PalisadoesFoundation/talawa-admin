@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
@@ -72,9 +72,7 @@ function organizationVenues(): JSX.Element {
    */
   const handleDelete = async (venueId: string): Promise<void> => {
     try {
-      await deleteVenue({
-        variables: { id: venueId },
-      });
+      await deleteVenue({ variables: { id: venueId } });
       venueRefetch();
     } catch (error) {
       errorHandler(t, error);

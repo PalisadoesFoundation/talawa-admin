@@ -38,7 +38,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:20](http
 
 > `optional` **location**: `string`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L25)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L22)
 
 ***
 
