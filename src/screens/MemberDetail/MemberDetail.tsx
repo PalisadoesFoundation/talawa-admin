@@ -139,14 +139,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   // to handle deletion of user profile
   const handleDeleteUser = (): void => {
     navigate('/');
-  }
+  };
 
   // to handle the change in the form fields
-  const handleFieldChange = (fieldName: string, value: string | Boolean): void => {
+  const handleFieldChange = (
+    fieldName: string,
+    value: string | boolean,
+  ): void => {
     // future birthdates are not possible to select.
 
     // Check if value is a string
-    if(typeof value === 'string'){
+    if (typeof value === 'string') {
       // Password validation (only for string values)
       if (fieldName === 'password' && value) {
         if (!validatePassword(value)) {
@@ -163,16 +166,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   // Function to handle the update of the user details
   const handleUserUpdate = async (): Promise<void> => {
     // Remove empty fields from the form state
-    function removeEmptyFields<T extends Record<string, string | File | null | Boolean>>(
-      obj: T,
-    ): Partial<T> {
+    function removeEmptyFields<
+      T extends Record<string, string | File | null | boolean>,
+    >(obj: T): Partial<T> {
       return Object.fromEntries(
         Object.entries(obj).filter(
           ([, value]) =>
             value !== null &&
             value !== undefined &&
-            (typeof value === 'boolean' || 
-            typeof value !== 'string' || value.trim() !== ''),
+            (typeof value === 'boolean' ||
+              typeof value !== 'string' ||
+              value.trim() !== ''),
         ),
       ) as Partial<T>;
     }
@@ -394,7 +398,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           name={formState.name}
                           alt="User Image"
                           size={60}
-                          dataTestId="profile-picture"
                           radius={150}
                         />
                       </button>
@@ -615,10 +618,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     className="gap-3 d-flex align-items-center"
                     type="checkbox"
                     onChange={(e) => {
-                      console.log('Plugin creation allowed');
                       setFormState((prevState) => ({
                         ...prevState,
-                        pluginCreationAllowed: e.target.checked
+                        pluginCreationAllowed: e.target.checked,
                       }));
                       setisUpdated(true);
                     }}
@@ -633,10 +635,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     checked={!!formState.adminApproved}
                     className="gap-3 d-flex align-items-center"
                     onChange={(e) => {
-                      console.log('Admin Approved');
                       setFormState((prevState) => ({
                         ...prevState,
-                        adminApproved: e.target.checked
+                        adminApproved: e.target.checked,
                       }));
                       setisUpdated(true);
                     }}
@@ -698,16 +699,19 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             </Card.Body>
           </Card>
 
-          
-            <Modal show={showDeleteConfirm} onHide={() => setShowDeleteConfirm(false)}>
+          <Modal
+            show={showDeleteConfirm}
+            onHide={() => setShowDeleteConfirm(false)}
+          >
             <Modal.Header closeButton>
               <Modal.Title>{t('confirmDeleteUser')}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-              {t('deleteUserConfirmationText')}
-            </Modal.Body>
+            <Modal.Body>{t('deleteUserConfirmationText')}</Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>
+              <Button
+                variant="secondary"
+                onClick={() => setShowDeleteConfirm(false)}
+              >
                 {tCommon('cancel')}
               </Button>
               <Button variant="danger" onClick={handleDeleteUser}>
@@ -715,7 +719,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Button>
             </Modal.Footer>
           </Modal>
-          
 
           {isUpdated && (
             <Row className="mt-4">
@@ -953,7 +956,68 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               id="tagsAssignedScrollableDiv"
               data-testid="tagsAssignedScrollableDiv"
               className={`${styles.cardBody} pe-0`}
-            />
+            >
+              <Row className="p-5">
+                <Col md={6} className="mb-3">
+                  <div className="border rounded p-3 h-100">
+                    <h6 className="text-muted mb-2">Gender</h6>
+                    <p className="mb-0 fw-bold">
+                      {formState.natalSex || 'Not specified'}
+                    </p>
+                  </div>
+                </Col>
+                <Col md={6} className="mb-3">
+                  <div className="border rounded p-3 h-100">
+                    <h6 className="text-muted mb-2">Education Grade</h6>
+                    <p className="mb-0 fw-bold">
+                      {formState.educationGrade || 'Not specified'}
+                    </p>
+                  </div>
+                </Col>
+                <Col md={6} className="mb-3">
+                  <div className="border rounded p-3 h-100">
+                    <h6 className="text-muted mb-2">Employment Status</h6>
+                    <p className="mb-0 fw-bold">
+                      {formState.employmentStatus || 'Not specified'}
+                    </p>
+                  </div>
+                </Col>
+                <Col md={6} className="mb-3">
+                  <div className="border rounded p-3 h-100">
+                    <h6 className="text-muted mb-2">Marital Status</h6>
+                    <p className="mb-0 fw-bold">
+                      {formState.maritalStatus || 'Not specified'}
+                    </p>
+                  </div>
+                </Col>
+                <Col md={6} className="mb-3">
+                  <div className="border rounded p-3 h-100">
+                    <h6 className="text-muted mb-2">Primary Language</h6>
+                    <p className="mb-0 fw-bold">
+                      {formState.naturalLanguageCode || 'Not specified'}
+                    </p>
+                  </div>
+                </Col>
+                <Col md={6} className="mb-3">
+                  <div className="border rounded p-3 h-100">
+                    <h6 className="text-muted mb-2">Country</h6>
+                    <p className="mb-0 fw-bold">
+                      {formState.countryCode || 'Not specified'}
+                    </p>
+                  </div>
+                </Col>
+                <Col md={12} className="mb-3">
+                  <div className="border rounded p-3 h-100">
+                    <h6 className="text-muted mb-2">Birth Date</h6>
+                    <p className="mb-0 fw-bold">
+                      {formState.birthDate
+                        ? new Date(formState.birthDate).toLocaleDateString()
+                        : 'Not specified'}
+                    </p>
+                  </div>
+                </Col>
+              </Row>
+            </Card.Body>
           </Card>
         </Col>
       </Row>

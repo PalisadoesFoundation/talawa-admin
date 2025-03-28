@@ -293,7 +293,6 @@ const maritalStatusEnum = [
   },
 ];
 
-
 // Language options following ISO 639-1 standard language codes
 // Used for language selection in user profiles and system preferences
 
