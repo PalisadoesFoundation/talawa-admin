@@ -43,6 +43,11 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
+  --sidebar-option-text-inactive: #000000;
+  --sidebar-option-bg-hover: #eaebef;
+  --sidebar-option-bg: #d2d3d7;
+  --sidebar-option-text-active: #000000;
+
   --unblockButton-font: #555555;
   --unblockButton-border: #eaebef;
   --unblockButton-bg: #a8c7fa;
@@ -53,8 +58,8 @@
   --removeButton-color: #c8102e;
   --removeButton-bg-hover: #ff4d4f;
   --removeButton-border-hover: #ff4d4f;
-  --removeButton-color-hover: #ffffff;
   --removeButton-border: #f8d6dc;
+  --removeButton-color-hover: #ffffff;
 
   --activeTab-bg: #eaebef;
   --activeTab-color: #808080;
@@ -209,7 +214,7 @@
   --chevronIcon-bg: #ffffff;
 
   --primaryText-color: #000000;
-  --secondText-color: #9fa6b2;
+  --secondText-color: #555555;
 
   --leftDrawer-bg: #ffffff;
   --leftDrawer-fixedModule-bg: #f6f8fc;
@@ -3399,6 +3404,26 @@ form label,
   background-color: var(--LoginToggle-button-bg-active-hover);
 }
 
+/* -- Sidebar options -- */
+
+.sidebarBtn {
+  background-color: transparent;
+  color: var(--sidebar-option-text-inactive);
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.sidebarBtn:hover {
+  background-color: var(--sidebar-option-bg-hover);
+  color: var(--sidebar-option-text-active);
+}
+
+.sidebarBtnActive {
+  background-color: var(--sidebar-option-bg);
+  color: var(--sidebar-option-text-active);
+  font-weight: bold;
+}
+
 /* -- customTableCell.tsx -- */
 
 /* -- EventsAttendedByMember.tsx -- */
@@ -3822,6 +3847,18 @@ form label,
 /* -- DashboardCardLoading.tsx -- */
 
 /* -- OrganizationScreen.tsx -- */
+
+/* -- SuperAdminScreen.tsx -- */
+
+.navContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  padding-left: 35px;
+  padding-right: 35px;
+}
 
 /* -- OrgContriCards.tsx -- */
 
@@ -4859,16 +4896,16 @@ form {
   background-repeat: no-repeat;
   background-position: center;
   background-color: var(--tablerow-bg-color) !important;
-  border-left: none;
+  border: none;
   border-top-right-radius: 16px;
   border-bottom-right-radius: 16px;
   color: var(--eventManagement-button-text);
 }
 
-.dropdownToggle:hover {
+/* .dropdownToggle:hover {
   border: 1px solid var(--create-button-border);
   border-left: none;
-}
+} */
 
 .dropdownToggle::after {
   border-top: none !important;
@@ -5225,19 +5262,29 @@ form {
 }
 
 .leftDrawer .talawaLogo {
-  width: 50px;
-  height: 50px;
-  margin-right: 0.3rem;
+  width: 65px;
+  height: 60px;
+}
+
+.leftDrawer .talawaLogoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .leftDrawer .talawaText {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
 }
 
 .leftDrawer .titleHeader {
-  font-weight: 600;
-  margin: 0.6rem 0rem;
+  font-size: 23px;
+  line-height: normal;
+  font-weight: bolder;
+  padding: 10px;
+  /* padding-top: 20px;
+  padding-bottom: 10px;
+  padding-left: 5px; */
 }
 
 .leftDrawer .optionList {

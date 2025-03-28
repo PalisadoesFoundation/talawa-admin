@@ -85,3 +85,11 @@ Defined in: [src/types/User/interface.ts:10](https://github.com/PalisadoesFounda
 > `optional` **updatedAt**: `Date`
 
 Defined in: [src/types/User/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L13)
+
+***
+
+### userType?
+
+> `optional` **userType**: `string`
+
+Defined in: [src/types/User/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L14)

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -49,9 +49,7 @@ enum ItemFilter {
  */
 const Invitations = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userVolunteer',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -84,12 +82,7 @@ const Invitations = (): JSX.Element => {
     status: 'accepted' | 'rejected',
   ): Promise<void> => {
     try {
-      await updateMembership({
-        variables: {
-          id: id,
-          status: status,
-        },
-      });
+      await updateMembership({ variables: { id: id, status: status } });
       toast.success(
         t(
           status === 'accepted' ? 'invitationAccepted' : 'invitationRejected',
@@ -107,9 +100,7 @@ const Invitations = (): JSX.Element => {
     error: invitationError,
     refetch: refetchInvitations,
   }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
+    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;

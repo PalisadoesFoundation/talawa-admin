@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -65,9 +65,7 @@ import SearchBar from 'subComponents/SearchBar';
  */
 const UpcomingEvents = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userVolunteer',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -98,14 +96,7 @@ const UpcomingEvents = (): JSX.Element => {
   ): Promise<void> => {
     try {
       await createVolunteerMembership({
-        variables: {
-          data: {
-            event: eventId,
-            group,
-            status,
-            userId,
-          },
-        },
+        variables: { data: { event: eventId, group, status, userId } },
       });
       toast.success(t('volunteerSuccess'));
       refetchEvents();
@@ -121,9 +112,7 @@ const UpcomingEvents = (): JSX.Element => {
     error: eventsError,
     refetch: refetchEvents,
   }: {
-    data?: {
-      eventsByOrganizationConnection: InterfaceUserEvents[];
-    };
+    data?: { eventsByOrganizationConnection: InterfaceUserEvents[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -278,10 +267,7 @@ const UpcomingEvents = (): JSX.Element => {
                   <Form.Group>
                     <Form.Label
                       className="fw-lighter ms-2 mb-2 "
-                      style={{
-                        fontSize: '1rem',
-                        color: 'grey',
-                      }}
+                      style={{ fontSize: '1rem', color: 'grey' }}
                     >
                       Volunteer Groups:
                     </Form.Label>

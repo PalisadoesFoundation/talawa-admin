@@ -2,7 +2,7 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import React from 'react';
 import { Card, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * OtherSettings component displays a card with settings options such as changing the language.
@@ -11,9 +11,7 @@ import styles from '../../../style/app-fixed.module.css';
  * @returns The JSX element for the other settings card.
  */
 const OtherSettings: React.FC = () => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'settings',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   return (
     <Card border="0" className={styles.cardOtherSettings}>
       <div className={styles.cardHeader}>

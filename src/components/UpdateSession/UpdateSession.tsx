@@ -8,7 +8,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 
 /**
@@ -62,9 +62,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
   } = useQuery(GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG);
   const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT_PG);
 
-  type TimeoutDataType = {
-    inactivityTimeoutDuration: number;
-  };
+  type TimeoutDataType = { inactivityTimeoutDuration: number };
 
   /**
    * Effect that fetches the current session timeout from the server and sets the initial state.
@@ -128,9 +126,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     e.preventDefault();
     try {
       await uploadSessionTimeout({
-        variables: {
-          inactivityTimeoutDuration: timeout * 60,
-        },
+        variables: { inactivityTimeoutDuration: timeout * 60 },
       });
 
       toast.success(t('profileChangedMsg'));

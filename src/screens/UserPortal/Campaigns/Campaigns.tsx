@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
@@ -53,9 +53,7 @@ import SearchBar from 'subComponents/SearchBar';
  */
 const Campaigns = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userCampaigns',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -90,18 +88,13 @@ const Campaigns = (): JSX.Element => {
     error: campaignError,
     refetch: refetchCampaigns,
   }: {
-    data?: {
-      getFundraisingCampaigns: InterfaceUserCampaign[];
-    };
+    data?: { getFundraisingCampaigns: InterfaceUserCampaign[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(USER_FUND_CAMPAIGNS, {
     variables: {
-      where: {
-        organizationId: orgId,
-        name_contains: searchTerm,
-      },
+      where: { organizationId: orgId, name_contains: searchTerm },
       campaignOrderBy: sortBy,
     },
   });

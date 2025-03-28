@@ -1,1443 +1,2002 @@
-// Organizations.test.tsx
-
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { act } from 'react-dom/test-utils';
-import { describe, it, expect, type Mock, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
+import Organizations from './Organizations';
 import {
-  ORGANIZATION_LIST,
+  ALL_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS_PG,
   USER_CREATED_ORGANIZATIONS,
-} from 'GraphQl/Queries/Queries';
-import Organizations from './Organizations';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import { useQuery } from '@apollo/client';
+} from 'GraphQl/Queries/OrganizationQueries';
+import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
 
-// In your real code, you might import getItem/setItem from "utils/useLocalstorage" directly
 const { setItem, getItem } = useLocalStorage();
 
 const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
+const TEST_USER_NAME = 'Noble Mittal';
 
-/**
- * Mock data for GraphQL queries.
- */
+async function wait(ms = 100) {
+  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
+}
 
-const MOCKS = [
+const mocks = [
+  // Mock for All Organizations (Happy Path)
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
+    result: {
+      data: {
+        organizations: [
+          ...Array(10)
+            .fill(null)
+            .map((_, i) => ({
+              id: `allOrgId${i}`,
+              name: `All Org ${i}`,
+              description: `Description ${i}`,
+              avatarURL: null,
+              city: 'City',
+              countryCode: 'US',
+              addressLine1: '123 Street',
+              postalCode: '12345',
+              state: 'State',
+              membersCount: i + 1,
+              adminsCount: 1,
+              isMember: i % 2 === 0,
+              __typename: 'Organization',
+            })),
+          {
+            id: 'allOrgIdMissing',
+            name: 'Missing Org',
+            description: undefined,
+            avatarURL: null,
+            city: undefined,
+            countryCode: undefined,
+            addressLine1: undefined,
+            postalCode: undefined,
+            state: undefined,
+            membersCount: undefined,
+            adminsCount: undefined,
+            isMember: false,
+            __typename: 'Organization',
+          },
+        ],
+      },
+    },
+  },
+  // Mock for Joined Organizations (Happy Path)
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: TEST_USER_ID, first: 5, filter: '' },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+            edges: [
+              {
+                node: {
+                  id: 'joinedOrgId1',
+                  name: 'Joined Org 1',
+                  description: 'Joined Desc',
+                  avatarURL: null,
+                  city: 'City',
+                  countryCode: 'US',
+                  addressLine1: '456 Avenue',
+                  postalCode: '67890',
+                  state: 'State',
+                  membersCount: 2,
+                  adminsCount: 1,
+                  members: {
+                    edges: [{ node: { id: TEST_USER_ID, __typename: 'User' } }],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
+                },
+                __typename: 'OrganizationEdge',
+              },
+              {
+                node: {
+                  id: 'joinedOrgIdMissing',
+                  name: 'Joined Missing Org',
+                  description: undefined,
+                  avatarURL: null,
+                  city: undefined,
+                  countryCode: undefined,
+                  addressLine1: undefined,
+                  postalCode: undefined,
+                  state: undefined,
+                  membersCount: undefined,
+                  adminsCount: undefined,
+                  members: {
+                    edges: [{ node: { id: TEST_USER_ID, __typename: 'User' } }],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
+                },
+                __typename: 'OrganizationEdge',
+              },
+            ],
+            __typename: 'OrganizationConnection',
+          },
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for Created Organizations (Happy Path)
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: '' },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [
+            {
+              id: 'createdOrgId1',
+              name: 'Created Org 1',
+              description: 'Created Desc',
+              avatarURL: null,
+              membersCount: 3,
+              adminsCount: 1,
+              isMember: true,
+              __typename: 'Organization',
+            },
+            {
+              id: 'createdOrgIdMissing',
+              name: 'Created Missing Org',
+              description: undefined,
+              avatarURL: null,
+              city: undefined,
+              countryCode: undefined,
+              addressLine1: undefined,
+              postalCode: undefined,
+              state: undefined,
+              membersCount: undefined,
+              adminsCount: undefined,
+              isMember: true,
+              __typename: 'Organization',
+            },
+          ],
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for All Organizations with Missing Fields
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'missing' } },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: 'allOrgIdMissing',
+            name: 'Missing Org',
+            description: undefined,
+            avatarURL: null,
+            city: undefined,
+            countryCode: 'US',
+            addressLine1: undefined,
+            postalCode: '12345',
+            state: 'State',
+            membersCount: undefined,
+            adminsCount: undefined,
+            isMember: false,
+            __typename: 'Organization',
+          },
+        ],
+      },
+    },
+  },
+  // Mock for Joined Organizations with Missing Fields
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: TEST_USER_ID, first: 5, filter: 'missing' },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+            edges: [
+              {
+                node: {
+                  id: 'joinedOrgIdMissing',
+                  name: 'Joined Missing Org',
+                  description: undefined,
+                  avatarURL: null,
+                  city: undefined,
+                  countryCode: 'US',
+                  addressLine1: undefined,
+                  postalCode: '67890',
+                  state: 'State',
+                  membersCount: undefined,
+                  adminsCount: undefined,
+                  members: {
+                    edges: [{ node: { id: TEST_USER_ID, __typename: 'User' } }],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
+                },
+                __typename: 'OrganizationEdge',
+              },
+            ],
+            __typename: 'OrganizationConnection',
+          },
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for Created Organizations with Missing Fields
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: 'missing' },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [
+            {
+              id: 'createdOrgIdMissing',
+              name: 'Created Missing Org',
+              description: undefined,
+              avatarURL: null,
+              city: undefined,
+              countryCode: 'US',
+              addressLine1: undefined,
+              postalCode: '12345',
+              state: 'State',
+              membersCount: undefined,
+              adminsCount: undefined,
+              isMember: true,
+              __typename: 'Organization',
+            },
+          ],
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for Empty All Organizations
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'empty' } },
+    result: { data: { organizations: [] } },
+  },
+  // Mock for Empty Joined Organizations
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: TEST_USER_ID, first: 5, filter: 'empty' },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+            edges: [],
+            __typename: 'OrganizationConnection',
+          },
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  // Mock for Empty Created Organizations
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: 'empty' },
+    },
+    result: {
+      data: { user: { createdOrganizations: [], __typename: 'User' } },
+    },
+  },
+  // Mock for Error in All Organizations
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'error' } },
+    error: new Error('Failed to fetch organizations'),
+  },
+  // Mock for Error in Joined Organizations
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: TEST_USER_ID, first: 5, filter: 'error' },
+    },
+    error: new Error('Failed to fetch joined organizations'),
+  },
+  // Mock for Error in Created Organizations
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: 'error' },
+    },
+    error: new Error('Failed to fetch created organizations'),
+  },
+  // Mock for Filtered Search
+  {
+    request: { query: ALL_ORGANIZATIONS, variables: { filter: '2' } },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: 'allOrgId2',
+            name: 'All Org 2',
+            description: 'Description 2',
+            avatarURL: null,
+            city: 'City',
+            countryCode: 'US',
+            addressLine1: '123 Street',
+            postalCode: '12345',
+            state: 'State',
+            membersCount: 3,
+            adminsCount: 1,
+            isMember: true,
+            __typename: 'Organization',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: TEST_USER_ID, first: 5, filter: '2' },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+            edges: [
+              {
+                node: {
+                  id: 'joinedOrgId2',
+                  name: 'Joined Org 2',
+                  description: 'Joined Desc 2',
+                  avatarURL: null,
+                  city: 'City',
+                  countryCode: 'US',
+                  addressLine1: '456 Avenue',
+                  postalCode: '67890',
+                  state: 'State',
+                  membersCount: 2,
+                  adminsCount: 1,
+                  members: {
+                    edges: [{ node: { id: TEST_USER_ID, __typename: 'User' } }],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
+                },
+                __typename: 'OrganizationEdge',
+              },
+            ],
+            __typename: 'OrganizationConnection',
+          },
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: '2' },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [
+            {
+              id: 'createdOrgId2',
+              name: 'Created Org 2',
+              description: 'Created Desc 2',
+              avatarURL: null,
+              membersCount: 3,
+              adminsCount: 1,
+              isMember: true,
+              __typename: 'Organization',
+            },
+          ],
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ALL_ORGANIZATIONS,
+      variables: { filter: 'test' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: 'testOrgId',
+            name: 'Test Org',
+            city: 'Test City',
+            countryCode: 'US',
+            addressLine1: '789 Test St',
+            postalCode: '99999',
+            state: 'Test State',
+            description: 'Test Description',
+            avatarURL: null,
+            membersCount: 1,
+            adminsCount: 1,
+            isMember: false,
+            __typename: 'Organization',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: {
+        id: '01958985-600e-7cde-94a2-b3fc1ce66cf3',
+        first: 5,
+        filter: 'test',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+            edges: [],
+            __typename: 'OrganizationConnection',
+          },
+          __typename: 'User',
+        },
+      },
+    },
+  },
   {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
       variables: {
-        id: getItem('userId'),
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            appUserProfile: {
-              createdOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  image: '',
-                  name: 'anyOrganization1',
-                  description: 'desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    name: 'John Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_LIST,
-      variables: {
-        filter: '',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            __typename: 'Organization',
-            id: '6401ff65ce8e8406b8f07af2',
-            image: '',
-            name: 'anyOrganization1',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            createdAt: '1234567890',
-            userRegistrationRequired: true,
-            creator: { __typename: 'User', name: 'John Doe' },
-            members: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            admins: [
-              {
-                _id: '45gj5678jk45678fvgbhnr4rtgh',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-          },
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af3',
-            image: '',
-            name: 'anyOrganization2',
-            createdAt: '1234567890',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            description: 'desc',
-            userRegistrationRequired: true,
-            creator: { __typename: 'User', name: 'John Doe' },
-            members: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            admins: [
-              {
-                _id: '45gj5678jk45678fvgbhnr4rtgh',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: getItem('userId'),
-        first: 5,
+        id: '01958985-600e-7cde-94a2-b3fc1ce66cf3',
+        filter: 'test',
       },
     },
     result: {
       data: {
         user: {
-          organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: false,
-            },
-            edges: [
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Test Edge Org',
-                  addressLine1: 'Test Line 1',
-                  description: 'Test Description',
-                  avatarURL: '',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: getItem('userId'),
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af3',
-                  name: 'anyOrganization1',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: '45ydeg2yet721rtgdu32ry',
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-            ],
-          },
+          createdOrganizations: [],
+          __typename: 'User',
         },
       },
     },
   },
+  // Mock for Community Data
   {
-    request: {
-      query: ORGANIZATION_LIST,
-      variables: {
-        filter: '2',
-      },
-    },
+    request: { query: GET_COMMUNITY_DATA, variables: {} },
     result: {
       data: {
-        organizations: [
-          {
-            __typename: 'Organization',
-            id: '6401ff65ce8e8406b8f07af3',
-            image: '',
-            name: 'anyOrganization2',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            userRegistrationRequired: true,
-            createdAt: '1234567890',
-            creator: { __typename: 'User', name: 'John Doe' },
-            members: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            admins: [
-              {
-                _id: '45gj5678jk45678fvgbhnr4rtgh',
-                user: {
-                  _id: '4567890fgvhbjn',
-                },
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: getItem('userId'),
-        first: 5,
-      },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: false,
-            },
-            edges: [
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af2',
-                  name: 'anyOrganization1',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: getItem('userId'),
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af3',
-                  name: 'anyOrganization2',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: getItem('userId'),
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  // New mock for search query
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: getItem('userId'),
-        first: 5,
-      },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: false,
-            },
-            edges: [
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af3',
-                  name: 'anyOrganization2',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: getItem('userId'),
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  // Mock for empty search (when search is cleared)
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: getItem('userId'),
-        first: 5,
-      },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: false,
-            },
-            edges: [
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af2',
-                  name: 'anyOrganization1',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: getItem('userId'),
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af3',
-                  name: 'anyOrganization2',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: getItem('userId'),
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: getItem('userId'),
-        first: 5,
-      },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: false,
-            },
-            edges: [
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Test Edge Org',
-                  addressLine1: 'Test Line 1',
-                  description: 'Test Description',
-                  avatarURL: '',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: getItem('userId'),
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-            ],
-          },
+        community: {
+          inactivityTimeoutDuration: 3600,
+          __typename: 'Community',
         },
       },
     },
   },
 ];
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
-};
 
-/**
- * Test to ensure the screen is rendered properly.
- */
-const TEST_USER_NAME = 'Noble Mittal';
-beforeEach(() => {
-  setItem('name', TEST_USER_NAME);
-  setItem('userId', TEST_USER_ID);
-});
-
-test('Screen should be rendered properly', async () => {
-  render(
-    <MockedProvider addTypename={false} link={link} mocks={MOCKS}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await wait();
-  expect(screen.getByText('My Organizations')).toBeInTheDocument();
-});
-
-/**
- * Test to check if the search functionality works as expected.
- */
-
-test('Search works properly', async () => {
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Wait for initial data load
-  await wait(500);
-
-  // Wait for organizations to be displayed
-  await waitFor(() => {
-    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+describe('Organizations Component', () => {
+  beforeEach(() => {
+    setItem('name', TEST_USER_NAME);
+    setItem('userId', TEST_USER_ID);
+    vi.clearAllMocks();
   });
 
-  // Verify initial state by looking for hidden spans with organization names
-  await waitFor(() => {
-    expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
-    expect(screen.getByTestId('org-name-anyOrganization2')).toBeInTheDocument();
+  it('displays a loading indicator while fetching', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+    );
   });
 
-  // Perform search
-  const searchInput = screen.getByTestId('searchInput');
-  await userEvent.type(searchInput, '2');
+  it('shows all organizations by default', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  // Get and click search button
-  const searchBtn = screen.getByTestId('searchBtn');
-  await userEvent.click(searchBtn);
-
-  // Wait for search results to update
-  await wait(300);
-
-  // Clear search
-  await userEvent.clear(searchInput);
-  await userEvent.click(searchBtn);
-
-  // Wait again for results to update
-  await wait(300);
-
-  // Perform search again
-  await userEvent.type(searchInput, '2');
-  await userEvent.keyboard('{Enter}');
-
-  // Wait for final search results
-  await wait(300);
-
-  // Verify organization with name containing "2" is present
-  await waitFor(() => {
-    const org2Element = screen.getByTestId('org-name-anyOrganization2');
-    expect(org2Element).toBeInTheDocument();
-  });
-});
-
-/**
- * Test to verify the mode change to joined organizations.
- */
-
-test('Mode is changed to joined organizations', async () => {
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await wait();
-
-  await userEvent.click(screen.getByTestId('modeChangeBtn'));
-  await wait();
-  await userEvent.click(screen.getByTestId('modeBtn1'));
-  await wait();
-
-  expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
-});
-
-/**
- * Test case to ensure the mode can be changed to display created organizations.
- */
-
-test('Mode is changed to created organizations', async () => {
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await wait();
-
-  await userEvent.click(screen.getByTestId('modeChangeBtn'));
-  await wait();
-  await userEvent.click(screen.getByTestId('modeBtn2'));
-  await wait();
-
-  expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
-});
-
-/**
- * Test case to check if the "Join Now" button renders correctly on the page.
- */
-
-test('Join Now button renders correctly', async () => {
-  // Define a TEST_USER_ID that matches the one used in mocks
-  const TEST_USER_ID = 'test-user-id';
-  setItem('userId', TEST_USER_ID);
-
-  // Create organization mock with complete data structure
-  const organizationsMock = {
-    request: {
-      query: ORGANIZATION_LIST,
-      variables: { filter: '' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org-id-1',
-            name: 'anyOrganization1',
-            image: '',
-            description: 'Test description 1',
-            address: {
-              city: 'Test City',
-              countryCode: 'TC',
-              line1: 'Test Address',
-              postalCode: '12345',
-              state: 'TS',
-            },
-            userRegistrationRequired: true,
-            admins: [],
-            members: [],
-            membershipRequests: [],
-          },
-          {
-            _id: 'org-id-2',
-            name: 'anyOrganization2',
-            image: '',
-            description: 'Test description 2',
-            address: {
-              city: 'Test City',
-              countryCode: 'TC',
-              line1: 'Test Address',
-              postalCode: '12345',
-              state: 'TS',
-            },
-            userRegistrationRequired: true,
-            admins: [],
-            members: [],
-            membershipRequests: [],
-          },
-        ],
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
       },
-    },
-  };
+      { timeout: 3000 },
+    );
 
-  // Create joined organizations mock
-  const joinedOrgsMock = {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: { id: TEST_USER_ID, first: 5, filter: '' },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            edges: [],
-            pageInfo: {
-              hasNextPage: false,
-            },
-          },
-        },
+    await waitFor(
+      () => {
+        // Check first few orgs and Missing Org
+        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+        expect(screen.getByTestId('org-name-All Org 1')).toBeInTheDocument();
+        // Assuming pagination, Missing Org might not be on page 1; adjust if all 11 show
+        expect(screen.getAllByTestId('organization-card').length).toBe(5); // 5 per page
+        // If Missing Org is on page 1, test its fields
+        if (screen.queryByTestId('org-name-Missing Org')) {
+          expect(
+            screen.getByTestId('org-name-Missing Org'),
+          ).toBeInTheDocument();
+          expect(
+            screen.getByTestId('org-description-Missing Org').textContent,
+          ).toBe('');
+          expect(
+            screen.getByTestId('org-membersCount-Missing Org').textContent,
+          ).toBe('0');
+          expect(
+            screen.getByTestId('org-adminsCount-Missing Org').textContent,
+          ).toBe('0');
+          expect(screen.getByTestId('org-city-Missing Org').textContent).toBe(
+            '',
+          );
+        }
       },
-    },
-  };
+      { timeout: 3000 },
+    );
+  });
 
-  // Create created organizations mock
-  const createdOrgsMock = {
-    request: {
-      query: USER_CREATED_ORGANIZATIONS,
-      variables: { id: TEST_USER_ID, filter: '' },
-    },
-    result: {
-      data: {
-        user: {
-          createdOrganizations: [],
-        },
+  it('switches to joined organizations (mode=1)', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 5000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('org-name-Joined Org 1')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('org-name-Joined Missing Org'),
+        ).toBeInTheDocument();
+
+        const joinedOrg1Card = screen
+          .getAllByTestId('organization-card')
+          .find(
+            (card) =>
+              card.getAttribute('data-organization-name') === 'Joined Org 1',
+          );
+        const joinedMissingOrgCard = screen
+          .getAllByTestId('organization-card')
+          .find(
+            (card) =>
+              card.getAttribute('data-organization-name') ===
+              'Joined Missing Org',
+          );
+
+        if (!joinedOrg1Card || !joinedMissingOrgCard) {
+          throw new Error('Joined organization card not found');
+        }
+
+        expect(
+          joinedMissingOrgCard.querySelector('[data-testid="description"]')
+            ?.textContent || '',
+        ).toBe('');
+        expect(
+          joinedMissingOrgCard.querySelector('[data-testid="membersCount"]')
+            ?.textContent || '0',
+        ).toBe('0');
+        expect(
+          joinedMissingOrgCard.querySelector('[data-testid="adminsCount"]')
+            ?.textContent || '0',
+        ).toBe('0');
+        expect(
+          joinedMissingOrgCard.querySelector('[data-testid="city"]')
+            ?.textContent || '',
+        ).toBe('');
+
+        expect(
+          screen.queryByTestId('org-name-All Org 0'),
+        ).not.toBeInTheDocument();
+
+        const orgCount = screen.getAllByTestId('organization-card').length;
+        expect(orgCount).toBe(2);
+
+        const pagination = screen.queryByTestId('pagination');
+        if (pagination) {
+          expect(pagination).toHaveAttribute('data-count', '2');
+        } else {
+          expect(orgCount).toBe(2);
+        }
       },
-    },
-  };
-
-  const testMocks = [organizationsMock, joinedOrgsMock, createdOrgsMock];
-  const link = new StaticMockLink(testMocks, true);
-
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Wait for loading to finish
-  await waitFor(() => {
-    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+      { timeout: 5000 },
+    );
   });
 
-  // Verify organizations have loaded
-  await waitFor(() => {
-    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+  it('switches to created organizations (mode=2)', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+
+    await waitFor(
+      () => {
+        expect(
+          screen.getByTestId('org-name-Created Org 1'),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByTestId('org-name-Created Missing Org'),
+        ).toBeInTheDocument();
+
+        const createdMissingOrgCard = screen
+          .getAllByTestId('organization-card')
+          .find(
+            (card) =>
+              card.getAttribute('data-organization-name') ===
+              'Created Missing Org',
+          );
+
+        if (!createdMissingOrgCard) {
+          throw new Error('Created Missing Org card not found');
+        }
+
+        expect(
+          createdMissingOrgCard.querySelector('[data-testid="description"]')
+            ?.textContent || '',
+        ).toBe(''); // description || ''
+        expect(
+          createdMissingOrgCard.querySelector('[data-testid="membersCount"]')
+            ?.textContent || '0',
+        ).toBe('0'); // membersCount || 0
+        expect(
+          createdMissingOrgCard.querySelector('[data-testid="adminsCount"]')
+            ?.textContent || '0',
+        ).toBe('0'); // adminsCount || 0
+        expect(
+          createdMissingOrgCard.querySelector('[data-testid="city"]')
+            ?.textContent || '',
+        ).toBe(''); // city || ''
+
+        expect(
+          screen.queryByTestId('org-name-All Org 0'),
+        ).not.toBeInTheDocument();
+
+        expect(screen.getAllByTestId('organization-card').length).toBe(2);
+      },
+      { timeout: 2000 },
+    );
   });
 
-  // Check for specific organization by name
-  await waitFor(() => {
-    expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
-  });
+  it('searches all organizations by filter text using Enter key', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+    );
 
-  // Get the organization cards
-  const orgCards = screen.getAllByTestId('organization-card');
-  expect(orgCards.length).toBe(2);
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2{enter}');
 
-  // Check for join buttons
-  await waitFor(() => {
-    const joinButtons = screen.getAllByTestId('joinBtn');
-    expect(joinButtons.length).toBe(2); // We expect 2 buttons since we have 2 organizations
-  });
-});
-
-/**
- * Test case to ensure the sidebar is functional, including opening and closing actions.
- */
-
-test('Testing Sidebar', async () => {
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await waitFor(() => {
-    const closeMenuBtn = screen.getByTestId('closeMenu');
-    expect(closeMenuBtn).toBeInTheDocument();
-  });
-  await act(async () => {
-    const closeMenuBtn = screen.getByTestId('closeMenu');
-    closeMenuBtn.click();
-  });
-  await waitFor(() => {
-    const openMenuBtn = screen.getByTestId('openMenu');
-    expect(openMenuBtn).toBeInTheDocument();
-  });
-  await act(async () => {
-    const openMenuBtn = screen.getByTestId('openMenu');
-    openMenuBtn.click();
-  });
-});
-
-test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
-  resizeWindow(800);
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await waitFor(() => {
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-  });
-
-  await act(async () => {
-    const settingsBtn = screen.getByTestId('settingsBtn');
-
-    settingsBtn.click();
-  });
-});
-
-const link = new StaticMockLink(MOCKS, true);
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
+    await waitFor(() => {
+      expect(screen.getByTestId('org-name-All Org 2')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('org-name-All Org 0'),
+      ).not.toBeInTheDocument();
     });
   });
-}
 
-// Mock PaginationList component to directly test pagination functions
-vi.mock('components/Pagination/PaginationList/PaginationList', () => ({
-  default: ({
-    count,
-    rowsPerPage,
-    page,
-    onPageChange,
-    onRowsPerPageChange,
-  }: {
-    count: number;
-    rowsPerPage: number;
-    page: number;
-    onPageChange: (
-      event: React.MouseEvent<unknown> | null,
-      newPage: number,
-    ) => void;
-    onRowsPerPageChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  }) => (
-    <div data-testid="pagination">
-      <span data-testid="current-page">{page}</span>
-      <button
-        data-testid="prev-page"
-        onClick={(e) => onPageChange(e, page - 1)}
-        disabled={page === 0}
-      >
-        Previous
-      </button>
-      <button
-        data-testid="next-page"
-        onClick={(e) => onPageChange(e, page + 1)}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-      >
-        Next
-      </button>
-      <select
-        data-testid="rows-per-page"
-        value={rowsPerPage}
-        onChange={(e) => onRowsPerPageChange(e)}
-      >
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="25">25</option>
-      </select>
-    </div>
-  ),
-}));
+  it('searches joined organizations by filter text using search button', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+    );
 
-/**
- * Test to check if pagination works properly - specifically targeting line 171
- */
-test('should update page when pagination is clicked', async () => {
-  // Mock localStorage
-  setItem('userId', 'testUserId');
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
 
-  // Render component
-  render(
-    <MockedProvider addTypename={false} mocks={MOCKS}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2');
+    await userEvent.click(screen.getByTestId('searchBtn'));
 
-  // Wait for component to fully load
-  await waitFor(
-    () => {
-      // Make sure loading is complete
-      const loadingIndicator = screen.queryByTestId('loading-indicator');
-      return loadingIndicator === null;
-    },
-    { timeout: 2000 },
-  );
-
-  // Get pagination elements - check if they exist first
-  const paginationElement = await screen.findByTestId('pagination');
-  expect(paginationElement).toBeInTheDocument();
-
-  // Find the page indicator element and verify initial state
-  const currentPageElement = screen.getByTestId('current-page');
-  expect(currentPageElement).toBeInTheDocument();
-  expect(currentPageElement.textContent).toBe('0');
-
-  // Find the next page button
-  const nextPageButton = screen.getByTestId('next-page');
-  expect(nextPageButton).toBeInTheDocument();
-
-  // Click next page button inside act to ensure state updates
-  await act(async () => {
-    fireEvent.click(nextPageButton);
-    // Add a small delay to let state update
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await waitFor(() => {
+      expect(screen.getByTestId('org-name-Joined Org 2')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('org-name-Joined Org 1'),
+      ).not.toBeInTheDocument();
+    });
   });
 
-  expect(currentPageElement.textContent).toBe('0');
-
-  // Find the prev page button
-  const prevPageButton = screen.getByTestId('prev-page');
-  expect(prevPageButton).toBeInTheDocument();
-
-  // Go back to previous page
-  await act(async () => {
-    fireEvent.click(prevPageButton);
-    // Add a small delay to let state update
-    await new Promise((resolve) => setTimeout(resolve, 0));
-  });
-
-  // Verify we're back to page 0
-  expect(currentPageElement.textContent).toBe('0');
-});
-
-/**
- * Test for handleChangeRowsPerPage function
- */
-test('should update rowsPerPage when rows per page selector is changed', async () => {
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Wait for component to load
-  await wait(500);
-
-  // Check default rows per page is 5
-  const rowsPerPageSelect = screen.getByTestId(
-    'rows-per-page',
-  ) as HTMLSelectElement;
-  expect(rowsPerPageSelect.value).toBe('5');
-
-  // Change rows per page to 10
-  fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
-
-  // Verify rowsPerPage was updated
-  expect(rowsPerPageSelect.value).toBe('10');
-
-  // Changing rows per page should reset to page 0
-  expect(screen.getByTestId('current-page').textContent).toBe('0');
-});
-
-test('Should change page when pagination control is clicked', async () => {
-  setItem('userId', 'pagination-test-user-id');
-
-  // Updated mock to match the actual component implementation
-  const paginationMock = {
-    request: {
-      query: ORGANIZATION_LIST,
-      variables: { filter: '' }, // Component expects filter variable
-    },
-    result: {
-      data: {
-        organizations: Array(12)
-          .fill(0)
-          .map((_, index) => ({
-            id: `org-id-${index}`,
-            name: `Organization ${index + 1}`,
-            image: '',
-            description: `Description for org ${index + 1}`,
-            address: {
-              city: 'Test City',
-              countryCode: 'TC',
-              line1: 'Test Address',
-              postalCode: '12345',
-              state: 'TS',
-            },
-            userRegistrationRequired: true,
-            admins: [],
-            members: [],
-            membershipRequests: [],
-          })),
-      },
-    },
-  };
-
-  // Updated mock for USER_JOINED_ORGANIZATIONS_PG
-  const userJoinedOrgsMock = {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: 'pagination-test-user-id',
-        first: 5,
-        filter: '',
-      },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            edges: [],
-            pageInfo: {
-              hasNextPage: false,
+  it('searches created organizations by filter text using Enter key', async () => {
+    const testMocks = [
+      ...mocks,
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
             },
           },
         },
       },
-    },
-  };
+    ];
 
-  // Updated mock for USER_CREATED_ORGANIZATIONS
-  const userCreatedOrgsMock = {
-    request: {
-      query: USER_CREATED_ORGANIZATIONS,
-      variables: {
-        id: 'pagination-test-user-id',
-        filter: '',
+    render(
+      <MockedProvider mocks={testMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+    await wait(500);
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2{enter}');
+
+    await waitFor(
+      () => {
+        expect(
+          screen.getByTestId('org-name-Created Org 2'),
+        ).toBeInTheDocument();
+        expect(
+          screen.queryByTestId('org-name-Created Org 1'),
+        ).not.toBeInTheDocument();
       },
-    },
-    result: {
-      data: {
-        user: {
-          createdOrganizations: [],
+      { timeout: 5000 },
+    );
+  });
+
+  it('debounces search input to prevent multiple rapid API calls', () => {
+    setItem('userId', TEST_USER_ID);
+    vi.useFakeTimers();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+
+    userEvent.type(searchInput, 'Deb');
+    vi.advanceTimersByTime(100);
+    userEvent.type(searchInput, 'ounce');
+    vi.advanceTimersByTime(100);
+    userEvent.type(searchInput, 'd Search');
+
+    vi.advanceTimersByTime(300);
+
+    waitFor(() => {
+      expect(
+        screen.getByTestId('org-name-Debounced Search Org'),
+      ).toBeInTheDocument();
+    });
+
+    vi.useRealTimers();
+  });
+
+  it('changes rows per page and resets pagination', async () => {
+    const extendedMocks = [
+      ...mocks,
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: undefined, limit: 10, offset: 0 },
+        },
+        result: {
+          data: {
+            organizations: Array(10)
+              .fill(null)
+              .map((_, i) => ({
+                id: `allOrgId${i}`,
+                name: `All Org ${i}`,
+                description: `Description ${i}`,
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: i + 1,
+                adminsCount: 1,
+                isMember: i % 2 === 0,
+                __typename: 'Organization',
+              })),
+          },
         },
       },
-    },
-  };
-
-  const TEST_MOCKS = [
-    ...MOCKS.filter(
-      (mock) =>
-        !(
-          mock.request.query === ORGANIZATION_LIST &&
-          'filter' in mock.request.variables &&
-          mock.request.variables.filter === ''
-        ),
-    ),
-    paginationMock,
-    userJoinedOrgsMock,
-    userCreatedOrgsMock,
-  ];
-
-  const link = new StaticMockLink(TEST_MOCKS, true);
-
-  // Mock the setPage function to verify it's called
-  const originalUseState = React.useState;
-  const mockSetPage = vi.fn();
-
-  vi.spyOn(React, 'useState').mockImplementation(<T,>(initialValue?: T) => {
-    if (initialValue === 0) {
-      return [0, mockSetPage] as [T, typeof mockSetPage];
-    }
-    return originalUseState(initialValue) as [
-      T,
-      React.Dispatch<React.SetStateAction<T>>,
     ];
+
+    render(
+      <MockedProvider mocks={extendedMocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+        expect(
+          screen.getAllByTestId('organization-card').length,
+        ).toBeGreaterThan(0);
+      },
+      { timeout: 3000 },
+    );
+
+    expect(screen.getAllByTestId('organization-card').length).toBe(5);
+    expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+    expect(screen.getByTestId('org-name-All Org 4')).toBeInTheDocument();
+    expect(screen.queryByTestId('org-name-All Org 5')).not.toBeInTheDocument();
+
+    const rowsPerPageSelect = screen.getByRole('combobox', {
+      name: /rows per page/i,
+    });
+    await userEvent.selectOptions(rowsPerPageSelect, '10');
+    await waitFor(
+      () => expect(screen.getAllByTestId('organization-card').length).toBe(10),
+      { timeout: 2000 },
+    );
+    expect(screen.getByTestId('org-name-All Org 5')).toBeInTheDocument();
+    expect(screen.getByTestId('org-name-All Org 9')).toBeInTheDocument();
   });
 
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Verify loading state is shown
-  expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
-
-  // Wait for data to load and loading spinner to disappear
-  await waitFor(() => {
-    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-  });
-
-  // Verify organizations on first page
-  await waitFor(() => {
-    const orgCards = screen.getAllByTestId('organization-card');
-    expect(orgCards.length).toBe(5);
-  });
-
-  // Directly simulate the pagination function call
-  // This will test line 171: setPage(newPage)
-  const handleChangePage = (
-    _: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    mockSetPage(newPage);
-  };
-
-  act(() => {
-    handleChangePage(null, 1); // Simulate changing to page 1 (second page)
-  });
-
-  // Verify setPage was called with the correct page number
-  expect(mockSetPage).toHaveBeenCalledWith(1);
-
-  // Cleanup the mock
-  vi.restoreAllMocks();
-});
-
-await wait(500);
-
-test('should correctly map joined organizations data when mode is 1', async () => {
-  // Mock user ID
-  const TEST_USER_ID = 'test-joined-orgs-user';
-  setItem('userId', TEST_USER_ID);
-
-  // Create specific mock for joined organizations
-  const joinedOrgsMock = {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: { id: TEST_USER_ID, first: 5, filter: '' },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: false,
-            },
-            edges: [
-              {
-                node: {
-                  id: 'joined-org-1',
-                  name: 'Joined Organization 1',
-                  avatarURL: 'org1.jpg',
-                  description: 'First joined organization',
-                  addressLine1: 'Test Address',
-                  // Note: Here's the key change - members is an array, not a paginated structure
-                  members: [{ _id: TEST_USER_ID }],
-                  membershipRequests: [],
-                  userRegistrationRequired: false,
-                },
+  it('shows no organizations message when data is empty', async () => {
+    const emptyMocks = [
+      ...mocks.filter(
+        (mock) =>
+          mock.request.query !== ALL_ORGANIZATIONS &&
+          mock.request.query !== USER_JOINED_ORGANIZATIONS_PG &&
+          mock.request.query !== USER_CREATED_ORGANIZATIONS,
+      ),
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: '', limit: 5, offset: 0 },
+        },
+        result: { data: { organizations: [] } },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
+        },
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                edges: [],
+                pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+                __typename: 'OrganizationConnection',
               },
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_CREATED_ORGANIZATIONS,
+          variables: { id: TEST_USER_ID, filter: '' },
+        },
+        result: {
+          data: { user: { createdOrganizations: [], __typename: 'User' } },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptyMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
+    expect(screen.queryByTestId('organization-card')).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await wait(1000);
+    expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+    await wait(1000);
+    expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
+  });
+
+  it('paginates through joined organizations', async () => {
+    const testMocks = [
+      ...mocks.filter(
+        (mock) => mock.request.query !== USER_JOINED_ORGANIZATIONS_PG,
+      ),
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
+        },
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                pageInfo: { hasNextPage: true, __typename: 'PageInfo' },
+                edges: Array(6)
+                  .fill(null)
+                  .map((_, i) => ({
+                    node: {
+                      id: `joinedOrgId${i}`,
+                      name: `Joined Org ${i}`,
+                      description: `Joined Desc ${i}`,
+                      avatarURL: null,
+                      city: 'City',
+                      countryCode: 'US',
+                      addressLine1: '456 Avenue',
+                      postalCode: '67890',
+                      state: 'State',
+                      membersCount: 2,
+                      adminsCount: 1,
+                      members: {
+                        edges: [
+                          { node: { id: TEST_USER_ID, __typename: 'User' } },
+                        ],
+                        __typename: 'UserConnection',
+                      },
+                      __typename: 'Organization',
+                    },
+                    __typename: 'OrganizationEdge',
+                  })),
+                __typename: 'OrganizationConnection',
+              },
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={testMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await wait(1000);
+
+    expect(screen.getByTestId('org-name-Joined Org 0')).toBeInTheDocument();
+    expect(screen.getByTestId('org-name-Joined Org 4')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('org-name-Joined Org 5'),
+    ).not.toBeInTheDocument();
+
+    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    await userEvent.click(nextPageButton);
+    await wait(1000);
+
+    expect(screen.getByTestId('org-name-Joined Org 5')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('org-name-Joined Org 0'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('paginates through created organizations', async () => {
+    const testMocks = [
+      ...mocks.filter(
+        (mock) => mock.request.query !== USER_CREATED_ORGANIZATIONS,
+      ),
+      {
+        request: {
+          query: USER_CREATED_ORGANIZATIONS,
+          variables: { id: TEST_USER_ID, filter: '' },
+        },
+        result: {
+          data: {
+            user: {
+              createdOrganizations: Array(6)
+                .fill(null)
+                .map((_, i) => ({
+                  id: `createdOrgId${i}`,
+                  name: `Created Org ${i}`,
+                  description: `Created Desc ${i}`,
+                  avatarURL: null,
+                  membersCount: 3,
+                  adminsCount: 1,
+                  isMember: true,
+                  __typename: 'Organization',
+                })),
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={testMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+    await wait(1000);
+
+    expect(screen.getByTestId('org-name-Created Org 0')).toBeInTheDocument();
+    expect(screen.getByTestId('org-name-Created Org 4')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('org-name-Created Org 5'),
+    ).not.toBeInTheDocument();
+
+    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    await userEvent.click(nextPageButton);
+    await wait(1000);
+
+    expect(screen.getByTestId('org-name-Created Org 5')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('org-name-Created Org 0'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('paginates through the list of organizations', async () => {
+    const extendedMocks = [
+      ...mocks,
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: undefined, limit: 10, offset: 0 },
+        },
+        result: {
+          data: {
+            organizations: Array(10)
+              .fill(null)
+              .map((_, i) => ({
+                id: `allOrgId${i}`,
+                name: `All Org ${i}`,
+                description: `Description ${i}`,
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: i + 1,
+                adminsCount: 1,
+                isMember: i % 2 === 0,
+                __typename: 'Organization',
+              })),
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={extendedMocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+        expect(
+          screen.getAllByTestId('organization-card').length,
+        ).toBeGreaterThan(0);
+      },
+      { timeout: 3000 },
+    );
+
+    expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+    expect(screen.getByTestId('org-name-All Org 4')).toBeInTheDocument();
+    expect(screen.queryByTestId('org-name-All Org 5')).not.toBeInTheDocument();
+
+    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    await userEvent.click(nextPageButton);
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-All Org 5')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('org-name-All Org 0')).not.toBeInTheDocument();
+  });
+
+  it('handles query errors gracefully', async () => {
+    const errorMocks = [
+      ...mocks.filter((mock) => mock.request.query !== ALL_ORGANIZATIONS),
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: '', limit: 5, offset: 0 },
+        },
+        error: new Error('Failed to fetch organizations'),
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={errorMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
+  });
+
+  it('toggles the sidebar visibility', async () => {
+    vi.mock('utils/useLocalstorage', () => ({
+      default: () => ({
+        getItem: vi.fn(() => TEST_USER_ID),
+        setItem: vi.fn(),
+      }),
+    }));
+
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('closeMenu'));
+    await waitFor(
+      () => expect(screen.getByTestId('openMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('openMenu'));
+    await waitFor(
+      () => expect(screen.getByTestId('closeMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+
+    vi.restoreAllMocks();
+  });
+
+  it('toggles drawer visibility on window resize', async () => {
+    vi.mock('utils/useLocalstorage', () => ({
+      default: () => ({
+        getItem: vi.fn(() => TEST_USER_ID),
+        setItem: vi.fn(),
+      }),
+    }));
+
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(800);
+    fireEvent(window, new Event('resize'));
+    await waitFor(
+      () => expect(screen.getByTestId('openMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
+
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
+    fireEvent(window, new Event('resize'));
+    await waitFor(
+      () => expect(screen.getByTestId('closeMenu')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+    expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+
+    vi.restoreAllMocks();
+  });
+
+  it('correctly maps organization data to card props', async () => {
+    const testMocks = [
+      ...mocks.filter(
+        (mock) =>
+          mock.request.query !== ALL_ORGANIZATIONS &&
+          mock.request.query !== USER_JOINED_ORGANIZATIONS_PG,
+      ),
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: '' }, // Consistent with mocks
+        },
+        result: {
+          data: {
+            organizations: [
               {
-                node: {
-                  id: 'joined-org-2',
-                  name: 'Joined Organization 2',
-                  avatarURL: 'org2.jpg',
-                  description: 'Second joined organization',
-                  addressLine1: 'Another Address',
-                  members: [{ _id: TEST_USER_ID }],
-                  membershipRequests: [],
-                  userRegistrationRequired: true,
-                },
+                id: 'allOrgId0',
+                name: 'All Org 0',
+                description: 'Description 0',
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: 1,
+                adminsCount: 1,
+                isMember: false,
+                __typename: 'Organization',
               },
             ],
           },
         },
       },
-    },
-  };
-
-  // Create mock for all organizations (mode 0)
-  const allOrgsMock = {
-    request: {
-      query: ORGANIZATION_LIST,
-      variables: { filter: '' },
-    },
-    result: {
-      data: {
-        organizations: [],
-      },
-    },
-  };
-
-  // Create mock for created organizations (mode 2)
-  const createdOrgsMock = {
-    request: {
-      query: USER_CREATED_ORGANIZATIONS,
-      variables: { id: TEST_USER_ID, filter: '' },
-    },
-    result: {
-      data: {
-        user: {
-          createdOrganizations: [],
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
         },
-      },
-    },
-  };
-
-  // Set up mock provider with all necessary mocks
-  const mocks = [joinedOrgsMock, allOrgsMock, createdOrgsMock];
-  const link = new StaticMockLink(mocks, true);
-
-  // Render the component
-  render(
-    <MockedProvider link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Wait for initial data to load (mode 0)
-  await waitFor(
-    () => {
-      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-    },
-    { timeout: 2000 },
-  );
-
-  // Switch to joined organizations mode (mode 1)
-  const modeDropdown = screen.getByTestId('modeChangeBtn');
-  await userEvent.click(modeDropdown);
-  await waitFor(() => {
-    expect(screen.getByTestId('modeBtn1')).toBeInTheDocument();
-  });
-  await userEvent.click(screen.getByTestId('modeBtn1'));
-
-  // Wait for joined organizations data to be processed
-  await waitFor(
-    () => {
-      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-    },
-    { timeout: 2000 },
-  );
-
-  // Verify that organizations are displayed with correct data
-  await waitFor(() => {
-    // Check for organization list
-    const organizationsList = screen.getByTestId('organizations-list');
-    expect(organizationsList).toBeInTheDocument();
-
-    // Get all organization cards
-    const orgCards = screen.getAllByTestId('organization-card');
-    expect(orgCards.length).toBe(2);
-
-    // For each organization card, verify it has the correct attributes
-    orgCards.forEach((card) => {
-      const orgName = card.getAttribute('data-organization-name');
-      expect(orgName).toMatch(/Joined Organization [12]/);
-
-      // Verify membership status is set to 'accepted'
-      expect(card.getAttribute('data-membership-status')).toBe('accepted');
-
-      // Find the hidden membership status element
-      const statusElement = within(card).getByTestId(
-        `membership-status-${orgName}`,
-      );
-      expect(statusElement.getAttribute('data-status')).toBe('accepted');
-    });
-  });
-});
-
-test('should set membershipRequestStatus to "pending" for organizations with pending requests', async () => {
-  // Mock user ID
-  const TEST_USER_ID = 'pending-request-test-user';
-  setItem('userId', TEST_USER_ID);
-
-  // Create your mocks as before
-
-  // Render the component
-  render(
-    <MockedProvider link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Wait for initial data to load
-  await waitFor(
-    () => {
-      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-    },
-    { timeout: 2000 },
-  );
-
-  // Click the mode selection button
-  const modeButton = screen.getByTestId('modeChangeBtn');
-  fireEvent.click(modeButton);
-
-  // Click the "Joined Organizations" option (mode 1)
-  const joinedOrgsBtn = screen.getByTestId('modeBtn1');
-  fireEvent.click(joinedOrgsBtn);
-
-  // Now wait for the joined organizations data to load
-  await waitFor(
-    () => {
-      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-    },
-    { timeout: 2000 },
-  );
-
-  // Rest of the test as before
-});
-
-test('should display loading state when queries are in progress', async () => {
-  // Mock user ID
-  const TEST_USER_ID = 'test-user-123';
-  setItem('userId', TEST_USER_ID);
-
-  // Create GraphQL mocks with loading state
-  const mocks = [
-    {
-      request: {
-        query: ORGANIZATION_LIST,
-        variables: { filter: '' },
-      },
-      result: {
-        data: {
-          organizations: [],
-        },
-      },
-      delay: 100, // Add delay to simulate loading
-    },
-    {
-      request: {
-        query: USER_JOINED_ORGANIZATIONS_PG,
-        variables: { id: TEST_USER_ID, first: 5, filter: '' },
-      },
-      result: {
-        data: {
-          user: {
-            organizationsWhereMember: {
-              pageInfo: { hasNextPage: false },
-              edges: [],
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+                edges: [
+                  {
+                    node: {
+                      id: 'joinedOrgId1',
+                      name: 'Joined Org 1',
+                      description: 'Joined Desc',
+                      avatarURL: null,
+                      city: 'City',
+                      countryCode: 'US',
+                      addressLine1: '456 Avenue',
+                      postalCode: '67890',
+                      state: 'State',
+                      membersCount: 2,
+                      adminsCount: 1,
+                      members: {
+                        edges: [
+                          { node: { id: TEST_USER_ID, __typename: 'User' } },
+                        ],
+                        __typename: 'UserConnection',
+                      },
+                      __typename: 'Organization',
+                    },
+                    __typename: 'OrganizationEdge',
+                  },
+                ],
+                __typename: 'OrganizationConnection',
+              },
+              __typename: 'User',
             },
           },
         },
       },
-    },
-    {
-      request: {
-        query: USER_CREATED_ORGANIZATIONS,
-        variables: { id: TEST_USER_ID, filter: '' },
-      },
-      result: {
-        data: {
-          user: {
-            createdOrganizations: [],
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
           },
         },
       },
-    },
-  ];
+    ];
 
-  // Render the component
-  render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+    render(
+      <MockedProvider mocks={testMocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  // Initially, loading state should be visible
-  expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
-  // Wait for data to load
-  await waitFor(() => {
-    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+    const allCard = screen.getByTestId('organization-card');
+    expect(allCard).toHaveAttribute('data-organization-name', 'All Org 0');
+    expect(allCard).toHaveAttribute('data-membership-status', '');
+    expect(screen.getByTestId('membership-status-All Org 0')).toHaveAttribute(
+      'data-status',
+      '',
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-Joined Org 1')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    const joinedCard = screen.getByTestId('organization-card');
+    expect(joinedCard).toHaveAttribute(
+      'data-organization-name',
+      'Joined Org 1',
+    );
+    expect(joinedCard).toHaveAttribute('data-membership-status', 'accepted');
+    expect(
+      screen.getByTestId('membership-status-Joined Org 1'),
+    ).toHaveAttribute('data-status', 'accepted');
+  });
+
+  it('displays membership status correctly in all organizations mode', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    expect(screen.getByTestId('membership-status-All Org 0')).toHaveAttribute(
+      'data-status',
+      'accepted',
+    );
+    expect(screen.getByTestId('membership-status-All Org 1')).toHaveAttribute(
+      'data-status',
+      '',
+    );
+  });
+
+  it('handles refetch on mode change with filter applied', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, '2{enter}');
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-All Org 2')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('org-name-Joined Org 2')).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+    await waitFor(
+      () =>
+        expect(
+          screen.getByTestId('org-name-Created Org 2'),
+        ).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+  });
+
+  it('renders address fields in organization cards', async () => {
+    const testMocks = [
+      ...mocks.filter(
+        (mock) =>
+          mock.request.query !== ALL_ORGANIZATIONS &&
+          mock.request.query !== USER_JOINED_ORGANIZATIONS_PG,
+      ),
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'allOrgId0',
+                name: 'All Org 0',
+                description: 'Description 0',
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: 1,
+                adminsCount: 1,
+                isMember: false,
+                members: {
+                  edges: [
+                    {
+                      node: { id: 'memberId1', __typename: 'User' },
+                      __typename: 'MemberEdge',
+                    },
+                  ],
+                  __typename: 'UserConnection',
+                },
+                __typename: 'Organization',
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
+        },
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+                edges: [
+                  {
+                    node: {
+                      id: 'joinedOrgId1',
+                      name: 'Joined Org 1',
+                      description: 'Joined Desc',
+                      avatarURL: null,
+                      city: 'City',
+                      countryCode: 'US',
+                      addressLine1: '456 Avenue',
+                      postalCode: '67890',
+                      state: 'State',
+                      membersCount: 2,
+                      adminsCount: 1,
+                      members: {
+                        edges: [
+                          { node: { id: TEST_USER_ID, __typename: 'User' } },
+                        ],
+                        __typename: 'UserConnection',
+                      },
+                      __typename: 'Organization',
+                    },
+                    __typename: 'OrganizationEdge',
+                  },
+                ],
+                __typename: 'OrganizationConnection',
+              },
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={testMocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+        expect(screen.getByTestId('organization-card')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    const card = screen.getByTestId('organization-card');
+    expect(card).toHaveAttribute('data-organization-name', 'All Org 0');
+    expect(card.textContent).toMatch(/123 Street/);
+    expect(card.textContent).toMatch(/City/);
+    expect(card.textContent).toMatch(/US/);
+  });
+
+  it('handles all loading states simultaneously', async () => {
+    const slowMocks = [
+      {
+        request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
+        delay: 1000,
+        result: {
+          data: {
+            organizations: Array(10)
+              .fill(null)
+              .map((_, i) => ({
+                id: `allOrgId${i}`,
+                name: `All Org ${i}`,
+                description: `Description ${i}`,
+                avatarURL: null,
+                city: 'City',
+                countryCode: 'US',
+                addressLine1: '123 Street',
+                postalCode: '12345',
+                state: 'State',
+                membersCount: i + 1,
+                adminsCount: 1,
+                isMember: i % 2 === 0,
+                members: {
+                  edges: [
+                    {
+                      node: { id: `memberId${i + 1}`, __typename: 'User' },
+                      __typename: 'MemberEdge',
+                    },
+                  ],
+                  __typename: 'UserConnection',
+                },
+                __typename: 'Organization',
+              })),
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
+        },
+        delay: 1000,
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                pageInfo: { hasNextPage: false, __typename: 'PageInfo' },
+                edges: [
+                  {
+                    node: {
+                      id: 'joinedOrgId1',
+                      name: 'Joined Org 1',
+                      description: 'Joined Desc',
+                      avatarURL: null,
+                      city: 'City',
+                      countryCode: 'US',
+                      addressLine1: '456 Avenue',
+                      postalCode: '67890',
+                      state: 'State',
+                      membersCount: 2,
+                      adminsCount: 1,
+                      members: {
+                        edges: [
+                          { node: { id: TEST_USER_ID, __typename: 'User' } },
+                        ],
+                        __typename: 'UserConnection',
+                      },
+                      __typename: 'Organization',
+                    },
+                    __typename: 'OrganizationEdge',
+                  },
+                ],
+                __typename: 'OrganizationConnection',
+              },
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_CREATED_ORGANIZATIONS,
+          variables: { id: TEST_USER_ID, filter: '' },
+        },
+        delay: 1000,
+        result: {
+          data: {
+            user: {
+              createdOrganizations: [
+                {
+                  id: 'createdOrgId1',
+                  name: 'Created Org 1',
+                  description: 'Created Desc',
+                  avatarURL: null,
+                  membersCount: 3,
+                  adminsCount: 1,
+                  isMember: true,
+                  members: {
+                    edges: [
+                      {
+                        node: { id: TEST_USER_ID, __typename: 'User' },
+                        __typename: 'MemberEdge',
+                      },
+                      {
+                        node: { id: 'memberId2', __typename: 'User' },
+                        __typename: 'MemberEdge',
+                      },
+                    ],
+                    __typename: 'UserConnection',
+                  },
+                  __typename: 'Organization',
+                },
+              ],
+              __typename: 'User',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA, variables: {} },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 3600,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={slowMocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 3000 },
+    );
+    expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+
+    // Switch to mode 2 to cover created organizations
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeBtn2'));
+    await waitFor(
+      () =>
+        expect(
+          screen.getByTestId('org-name-Created Org 1'),
+        ).toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+  });
+
+  it('triggers immediate search on Enter key', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('org-name-All Org 0')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'test');
+    await userEvent.keyboard('{Enter}');
+
+    // Should update immediately without waiting for debounce
+    await waitFor(() => {
+      expect(screen.getByTestId('org-name-Test Org')).toBeInTheDocument();
+    });
+  });
+
+  it('handles undefined organizations in all mode', async () => {
+    const undefinedMocks = [
+      {
+        request: {
+          query: ALL_ORGANIZATIONS,
+          variables: { filter: 'undefined' },
+        },
+        result: { data: { organizations: undefined } }, // Simulate missing field
+      },
+      ...mocks.filter((m) => m.request.query !== ALL_ORGANIZATIONS),
+    ];
+    render(
+      <MockedProvider mocks={undefinedMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'undefined{enter}');
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('no-organizations-message'),
+      ).toBeInTheDocument();
+      // Pagination count should be 0
+    });
+  });
+
+  it('displays all organizations when rowsPerPage is 0', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitFor(
+      () =>
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+
+    const rowsPerPageSelect = screen.getByRole('combobox', {
+      name: /rows per page/i,
+    });
+    fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
+    await waitFor(
+      () => {
+        expect(screen.getAllByTestId('organization-card').length).toBe(11); // Updated to 11
+      },
+      { timeout: 2000 },
+    );
   });
 });

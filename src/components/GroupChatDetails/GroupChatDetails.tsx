@@ -1,7 +1,7 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ADD_USER_TO_GROUP_CHAT,
@@ -31,15 +31,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: ['#31bb6b', '!important'],
     color: theme.palette.common.white,
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  '&:last-child td, &:last-child th': { border: 0 },
 }));
 
 /**
@@ -58,9 +54,7 @@ export default function groupChatDetails({
   chat,
   chatRefetch,
 }: InterfaceGroupChatDetailsProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
 
   //storage
 
@@ -117,19 +111,11 @@ export default function groupChatDetails({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
+    variables: { firstName_contains: '', lastName_contains: '' },
   });
 
   const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({
-      variables: {
-        userId,
-        chatId: chat._id,
-      },
-    });
+    await addUser({ variables: { userId, chatId: chat._id } });
   };
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
@@ -141,9 +127,7 @@ export default function groupChatDetails({
       lastName_contains: lastName || '',
     };
 
-    allUsersRefetch({
-      ...newFilterData,
-    });
+    allUsersRefetch({ ...newFilterData });
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);

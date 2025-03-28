@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L86)
+Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L79)
 
 PostCard component displays an individual post, including its details, interactions, and comments.
 

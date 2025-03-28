@@ -5,7 +5,7 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
@@ -49,9 +49,9 @@ const UserScreen = (): JSX.Element => {
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
-  const userRoutes: {
-    targets: TargetsType[];
-  } = useSelector((state: RootState) => state.userRoutes);
+  const userRoutes: { targets: TargetsType[] } = useSelector(
+    (state: RootState) => state.userRoutes,
+  );
 
   const { targets } = userRoutes;
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);

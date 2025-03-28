@@ -9,11 +9,11 @@ import {
 import { useQuery } from '@apollo/client';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { FilterAltOutlined } from '@mui/icons-material';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router-dom';
-
+import { InterfaceUser } from 'types/User/interface';
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
@@ -21,15 +21,6 @@ interface InterfaceOrganizationCardProps {
   email: string;
   role: string;
   sno: string;
-}
-
-interface InterfaceMember {
-  firstName: string;
-  lastName: string;
-  image: string;
-  _id: string;
-  email: string;
-  userType: string;
 }
 
 /**
@@ -60,9 +51,7 @@ interface InterfaceMember {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function people(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'people',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'people' });
 
   const { t: tCommon } = useTranslation('common');
 
@@ -70,9 +59,9 @@ export default function people(): JSX.Element {
 
   // State for managing the number of rows per page in pagination
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-  const [members, setMembers] = useState<InterfaceMember[]>([]);
-  const [allMembers, setAllMembers] = useState<InterfaceMember[]>([]);
-  const [admins, setAdmins] = useState<InterfaceMember[]>([]);
+  const [members, setMembers] = useState<Partial<InterfaceUser>[]>([]);
+  const [allMembers, setAllMembers] = useState<Partial<InterfaceUser>[]>([]);
+  const [admins, setAdmins] = useState<Partial<InterfaceUser>[]>([]);
   const [mode, setMode] = useState<number>(0);
 
   // Extracting organization ID from URL parameters
@@ -84,12 +73,7 @@ export default function people(): JSX.Element {
   // Query to fetch list of members of the organization
   const { data, loading, refetch } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    {
-      variables: {
-        orgId: organizationId,
-        firstName_contains: '',
-      },
-    },
+    { variables: { orgId: organizationId, firstName_contains: '' } },
   );
   // Query to fetch list of admins of the organization
   const { data: data2 } = useQuery(ORGANIZATION_ADMINS_LIST, {
@@ -113,9 +97,7 @@ export default function people(): JSX.Element {
   };
 
   const handleSearch = (newFilter: string): void => {
-    refetch({
-      firstName_contains: newFilter,
-    });
+    refetch({ firstName_contains: newFilter });
   };
 
   const handleSearchByEnter = (
@@ -137,10 +119,7 @@ export default function people(): JSX.Element {
   useEffect(() => {
     if (data2?.organizations?.[0]?.admins) {
       const adminsList = data2.organizations[0].admins.map(
-        (admin: InterfaceMember) => ({
-          ...admin,
-          userType: 'Admin',
-        }),
+        (admin: Partial<InterfaceUser>) => ({ ...admin, userType: 'Admin' }),
       );
       setAdmins(adminsList);
     }
@@ -150,7 +129,7 @@ export default function people(): JSX.Element {
   useEffect(() => {
     if (data?.organizationsMemberConnection?.edges) {
       const membersList = data.organizationsMemberConnection.edges.map(
-        (memberData: InterfaceMember) => ({
+        (memberData: Partial<InterfaceUser>) => ({
           ...memberData,
           userType: admins?.some((admin) => admin._id === memberData._id)
             ? 'Admin'
@@ -245,15 +224,15 @@ export default function people(): JSX.Element {
                         page * rowsPerPage + rowsPerPage,
                       )
                     : members
-                  ).map((member: InterfaceMember, index) => {
+                  ).map((member: Partial<InterfaceUser>, index) => {
                     const name = `${member.firstName} ${member.lastName}`;
 
                     const cardProps: InterfaceOrganizationCardProps = {
                       name,
-                      image: member.image,
-                      id: member._id,
-                      email: member.email,
-                      role: member.userType,
+                      image: member.image ?? '',
+                      id: member._id ?? '',
+                      email: member.email ?? '',
+                      role: member.userType ?? '',
                       sno: (index + 1).toString(),
                     };
                     return <PeopleCard key={index} {...cardProps} />;

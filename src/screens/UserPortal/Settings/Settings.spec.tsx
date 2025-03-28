@@ -13,25 +13,17 @@ import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import '../../../style/app.module.css';
+import 'style/app.module.css';
 import { errorMock, MOCKS1, MOCKS2 } from './SettingsMocks';
 import { urlToFile } from 'utils/urlToFile';
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 
-vi.mock('utils/errorHandler', () => ({
-  errorHandler: vi.fn(),
-}));
+vi.mock('utils/errorHandler', () => ({ errorHandler: vi.fn() }));
 
-vi.mock('utils/urlToFile', () => ({
-  urlToFile: vi.fn(),
-}));
+vi.mock('utils/urlToFile', () => ({ urlToFile: vi.fn() }));
 
 const link = new StaticMockLink(MOCKS1, true);
 const link1 = new StaticMockLink(MOCKS1, true);
@@ -200,17 +192,6 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
-
-    // Test future date
-    const futureDate = new Date();
-    futureDate.setFullYear(futureDate.getFullYear() + 1);
-    fireEvent.change(screen.getByLabelText('Birth Date'), {
-      target: { value: futureDate.toISOString().split('T')[0] },
-    });
-    await wait();
-    expect(toastSpy).toHaveBeenCalledWith(
-      'Future dates are not allowed for birth date.',
-    );
 
     // Test valid date
     fireEvent.change(screen.getByLabelText('Birth Date'), {

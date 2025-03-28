@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -79,10 +79,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 : formState.title
             }
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                title: e.target.value,
-              });
+              setFormState({ ...formState, title: e.target.value });
             }}
             disabled={
               !(eventListCardProps.creator?._id === userId) &&
@@ -105,10 +102,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 : formState.eventdescrip
             }
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                eventdescrip: e.target.value,
-              });
+              setFormState({ ...formState, eventdescrip: e.target.value });
             }}
             disabled={
               !(eventListCardProps.creator?._id === userId) &&
@@ -127,10 +121,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             required
             value={formState.location}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                location: e.target.value,
-              });
+              setFormState({ ...formState, location: e.target.value });
             }}
             disabled={
               !(eventListCardProps.creator?._id === userId) &&

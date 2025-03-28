@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
@@ -29,9 +29,7 @@ import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 
-type MemberDetailProps = {
-  id?: string;
-};
+type MemberDetailProps = { id?: string };
 
 /**
  * MemberDetail component is used to display the details of a user.
@@ -42,9 +40,7 @@ type MemberDetailProps = {
  *
  */
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'memberDetail',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
@@ -121,10 +117,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       }
 
       // Update all states properly
-      setFormState((prevState) => ({
-        ...prevState,
-        avatar: file,
-      }));
+      setFormState((prevState) => ({ ...prevState, avatar: file }));
       setSelectedAvatar(file); // to show the image to the user before updating the avatar
       setisUpdated(true);
     }
@@ -143,10 +136,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
 
     setisUpdated(true);
-    setFormState((prevState) => ({
-      ...prevState,
-      [fieldName]: value,
-    }));
+    setFormState((prevState) => ({ ...prevState, [fieldName]: value }));
   };
 
   // Function to handle the update of the user details
@@ -205,9 +195,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
     // Update the user details
     try {
-      const { data: updateData } = await updateUser({
-        variables: { input },
-      });
+      const { data: updateData } = await updateUser({ variables: { input } });
 
       if (updateData) {
         toast.success(

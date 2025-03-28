@@ -13,7 +13,7 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
@@ -26,33 +26,19 @@ import SearchBar from 'subComponents/SearchBar';
 const dataGridStyle = {
   backgroundColor: 'white',
   borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-cell': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-columnSeparator': {
-    display: 'none',
-  },
+  '& .MuiDataGrid-columnHeaders': { border: 'none' },
+  '& .MuiDataGrid-cell': { border: 'none' },
+  '& .MuiDataGrid-columnSeparator': { display: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 /**
@@ -63,9 +49,7 @@ const dataGridStyle = {
  * @returns The rendered component.
  */
 function requests(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -93,12 +77,7 @@ function requests(): JSX.Element {
     status: 'accepted' | 'rejected',
   ): Promise<void> => {
     try {
-      await updateMembership({
-        variables: {
-          id: id,
-          status: status,
-        },
-      });
+      await updateMembership({ variables: { id: id, status: status } });
       toast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
@@ -119,9 +98,7 @@ function requests(): JSX.Element {
     error: requestsError,
     refetch: refetchRequests,
   }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
+    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -265,9 +242,7 @@ function requests(): JSX.Element {
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
         <SearchBar
-          placeholder={tCommon('searchBy', {
-            item: 'Name',
-          })}
+          placeholder={tCommon('searchBy', { item: 'Name' })}
           onSearch={debouncedSearch}
           inputTestId="searchBy"
           buttonTestId="searchBtn"

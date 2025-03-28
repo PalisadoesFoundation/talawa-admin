@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.tsx#L77)
+Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.tsx#L63)
 
 Component for managing and displaying event volunteers related to an event.
 
