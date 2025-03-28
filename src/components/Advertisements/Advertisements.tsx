@@ -107,7 +107,7 @@ export default function Advertisements(): JSX.Element {
             <Col className={styles.colAdvertisements}>
               <SearchBar
                 placeholder={'Search..'}
-                onSearch={(value) => console.log(value)}
+                onSearch={(value) => console.log(value)} // Replace with actual search handler
                 inputTestId="searchname"
                 buttonTestId="searchButton"
               />

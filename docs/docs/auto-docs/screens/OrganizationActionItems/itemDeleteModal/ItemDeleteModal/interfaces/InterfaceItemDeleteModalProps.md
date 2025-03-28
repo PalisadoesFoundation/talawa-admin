@@ -4,7 +4,7 @@
 
 # Interface: InterfaceItemDeleteModalProps
 
-Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L43)
+Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L42)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal
 
 > **actionItem**: [`InterfaceActionItemInfo`](../../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L46)
+Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L45)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L47)
+Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L46)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L45)
+Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L44)
 
 #### Returns
 
@@ -44,4 +44,4 @@ Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L44)
+Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L43)

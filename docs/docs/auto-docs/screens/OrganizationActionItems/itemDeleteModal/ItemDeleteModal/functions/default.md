@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L51)
+Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L49)
 
 ## Parameters
 
