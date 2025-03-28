@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from '../../../style/app.module.css';
-import { type InterfaceDonationCardProps } from 'screens/UserPortal/Donate/Donate';
+import styles from 'style/app.module.css';
+import { type InterfaceDonationCardProps } from 'types/Donation/interface';
 import { Button } from 'react-bootstrap';
 
 /**

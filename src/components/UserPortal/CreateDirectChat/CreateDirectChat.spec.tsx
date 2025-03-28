@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import type { GroupChat } from 'types/Chat/type';
-import ChatComp from '../../../screens/UserPortal/Chat/Chat';
+import ChatComp from 'screens/UserPortal/Chat/Chat';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { handleCreateDirectChat } from './CreateDirectChat';

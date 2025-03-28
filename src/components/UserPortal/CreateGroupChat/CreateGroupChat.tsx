@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -26,11 +26,7 @@ interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
   chatsListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
+    variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
 }
 
@@ -40,9 +36,7 @@ interface InterfaceCreateGroupChatProps {
 
 const StyledTableContainer = styled(TableContainer)<{
   component?: React.ElementType;
-}>(() => ({
-  borderRadius: 'var(--table-head-radius)',
-}));
+}>(() => ({ borderRadius: 'var(--table-head-radius)' }));
 
 /**
  * Styled table cell with custom styles.
@@ -54,9 +48,7 @@ const StyledTableCell = styled(TableCell)(() => ({
     color: 'var(--table-header-color)',
     fontSize: 'var(--font-size-header)',
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 'var(--font-size-table-body)',
-  },
+  [`&.${tableCellClasses.body}`]: { fontSize: 'var(--font-size-table-body)' },
 }));
 
 /**
@@ -64,9 +56,7 @@ const StyledTableCell = styled(TableCell)(() => ({
  */
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 'var(--table-row-border)',
-  },
+  '&:last-child td, &:last-child th': { border: 'var(--table-row-border)' },
 }));
 
 const { getItem } = useLocalStorage();
@@ -77,9 +67,7 @@ export default function CreateGroupChat({
   chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId');
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
 
   const [createChat] = useMutation(CREATE_CHAT);
 
@@ -132,10 +120,7 @@ export default function CreateGroupChat({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
+    variables: { firstName_contains: '', lastName_contains: '' },
   });
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {

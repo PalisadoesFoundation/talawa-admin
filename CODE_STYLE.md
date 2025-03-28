@@ -146,6 +146,8 @@ the code submitted must also be linted ESLint and formatted with Prettier.
 
 `state` - This houses all of the state management code for the project
 
+`types` - This houses all of the reusable types and interfaces for the project
+
 `utils` - This holds the utility functions that do not fall into any of the other categories
 
 

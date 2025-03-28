@@ -20,7 +20,7 @@ import type {
 import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
 
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 
 /**
@@ -33,9 +33,7 @@ import Loader from 'components/Loader/Loader';
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'agendaItems',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
 
   // Extract organization ID from URL
   const url: string = window.location.href;

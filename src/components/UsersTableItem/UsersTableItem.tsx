@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 
 /**
  * ## CSS Strategy Explanation:
@@ -56,11 +56,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     orgName: string;
     orgId: string;
     setShowOnCancel: 'JOINED' | 'BLOCKED' | '';
-  }>({
-    orgName: '',
-    orgId: '',
-    setShowOnCancel: '',
-  });
+  }>({ orgName: '', orgId: '', setShowOnCancel: '' });
   const [joinedOrgs, setJoinedOrgs] = useState(user.user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
     user.user.organizationsBlockedBy,
@@ -74,10 +70,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const confirmRemoveUser = async (): Promise<void> => {
     try {
       const { data } = await removeUser({
-        variables: {
-          userid: user.user._id,
-          orgid: removeUserProps.orgId,
-        },
+        variables: { userid: user.user._id, orgid: removeUserProps.orgId },
       });
       if (data) {
         toast.success(

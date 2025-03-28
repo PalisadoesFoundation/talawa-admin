@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 /**
  * Props for the DynamicDropDown component.
@@ -40,10 +40,7 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
   const handleFieldChange = (value: string): void => {
     if (handleChange) {
       const event = {
-        target: {
-          name: fieldName,
-          value: value,
-        },
+        target: { name: fieldName, value: value },
       } as React.ChangeEvent<HTMLSelectElement>;
       handleChange(event);
     } else {

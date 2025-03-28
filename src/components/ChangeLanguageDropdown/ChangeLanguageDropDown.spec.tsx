@@ -12,38 +12,19 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { urlToFile } from 'utils/urlToFile';
 
 // Mock dependencies
-vi.mock('react-toastify', () => ({
-  toast: {
-    error: vi.fn(),
-  },
-}));
+vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
 
-vi.mock('js-cookie', () => ({
-  default: {
-    get: vi.fn(),
-    set: vi.fn(),
-  },
-}));
+vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 
-vi.mock('i18next', () => ({
-  default: {
-    changeLanguage: vi.fn(),
-  },
-}));
+vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
 
-vi.mock('utils/useLocalstorage', () => ({
-  default: vi.fn(),
-}));
+vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
 
-vi.mock('utils/urlToFile', () => ({
-  urlToFile: vi.fn(),
-}));
+vi.mock('utils/urlToFile', () => ({ urlToFile: vi.fn() }));
 
 // Mock the CSS module
-vi.mock('../../style/app-fixed.module.css', () => ({
-  default: {
-    changeLanguageBtn: '_changeLanguageBtn_d00707',
-  },
+vi.mock('style/app-fixed.module.css', () => ({
+  default: { changeLanguageBtn: '_changeLanguageBtn_d00707' },
 }));
 
 describe('ChangeLanguageDropDown', () => {
@@ -55,20 +36,9 @@ describe('ChangeLanguageDropDown', () => {
     {
       request: {
         query: UPDATE_CURRENT_USER_MUTATION,
-        variables: {
-          input: {
-            naturalLanguageCode: 'es',
-            avatar: mockFile,
-          },
-        },
+        variables: { input: { naturalLanguageCode: 'es', avatar: mockFile } },
       },
-      result: {
-        data: {
-          updateUser: {
-            id: mockUserId,
-          },
-        },
-      },
+      result: { data: { updateUser: { id: mockUserId } } },
     },
   ];
 

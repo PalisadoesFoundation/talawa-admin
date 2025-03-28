@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * InterfaceAgendaCategoryDeleteModalProps is an object containing the props for AgendaCategoryDeleteModal component

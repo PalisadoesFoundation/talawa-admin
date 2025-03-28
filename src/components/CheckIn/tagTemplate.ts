@@ -1,5 +1,5 @@
 import { Template } from '@pdfme/common';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 
 export const tagTemplate: Template = {
   schemas: [

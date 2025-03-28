@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import './style/app.module.css';
+import 'style/app.module.css';
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
@@ -27,9 +27,7 @@ vi.mock('/src/assets/svgs/talawa.svg?react', () => ({
 
 const MOCKS = [
   {
-    request: {
-      query: CURRENT_USER,
-    },
+    request: { query: CURRENT_USER },
     result: {
       data: {
         currentUser: {
@@ -43,14 +41,8 @@ const MOCKS = [
           employmentStatus: 'EMPLOYED',
           gender: 'MALE',
           maritalStatus: 'SINGLE',
-          address: {
-            line1: 'line1',
-            state: 'state',
-            countryCode: 'IND',
-          },
-          phone: {
-            mobile: '+8912313112',
-          },
+          address: { line1: 'line1', state: 'state', countryCode: 'IND' },
+          phone: { mobile: '+8912313112' },
         },
       },
     },

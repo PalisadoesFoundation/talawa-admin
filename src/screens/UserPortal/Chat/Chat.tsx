@@ -7,7 +7,7 @@ import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import {
   CHATS_LIST,
   GROUP_CHAT_LIST,
@@ -55,9 +55,7 @@ interface InterfaceContactCardProps {
  */
 
 export default function chat(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
 
   const [chats, setChats] = useState<GroupChat[]>([]);
@@ -91,11 +89,7 @@ export default function chat(): JSX.Element {
     data: chatsListData,
     loading: chatsListLoading,
     refetch: chatsListRefetch,
-  } = useQuery(CHATS_LIST, {
-    variables: {
-      id: userId,
-    },
-  });
+  } = useQuery(CHATS_LIST, { variables: { id: userId } });
 
   const { data: groupChatListData, refetch: groupChatListRefetch } =
     useQuery(GROUP_CHAT_LIST);
@@ -104,10 +98,7 @@ export default function chat(): JSX.Element {
     useQuery(UNREAD_CHAT_LIST);
 
   const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
-    variables: {
-      chatId: selectedContact,
-      userId: userId,
-    },
+    variables: { chatId: selectedContact, userId: userId },
   });
 
   useEffect(() => {

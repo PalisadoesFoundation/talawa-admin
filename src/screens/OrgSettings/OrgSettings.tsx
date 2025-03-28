@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import OrgActionItemCategories from 'components/OrgSettings/ActionItemCategories/OrgActionItemCategories';
 import OrganizationAgendaCategory from 'components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
 import { Navigate, useParams } from 'react-router-dom';
@@ -26,9 +26,7 @@ const settingtabs: SettingType[] = [
  */
 
 function OrgSettings(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgSettings',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgSettings' });
 
   const [tab, setTab] = useState<SettingType>('general');
 

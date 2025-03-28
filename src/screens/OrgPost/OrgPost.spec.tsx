@@ -14,7 +14,7 @@ import OrgPost from './OrgPost';
 import {
   GET_POSTS_BY_ORG,
   ORGANIZATION_POST_LIST,
-} from '../../GraphQl/Queries/Queries';
+} from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ToastContainer, toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
@@ -29,18 +29,13 @@ const toastSuccessMock = toast.success as unknown as ReturnType<typeof vi.fn>;
 
 vi.mock('utils/convertToBase64');
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), error: vi.fn() },
   ToastContainer: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
 }));
 
-vi.mock('utils/errorHandler', () => ({
-  errorHandler: vi.fn(),
-}));
+vi.mock('utils/errorHandler', () => ({ errorHandler: vi.fn() }));
 
 vi.mock('utils/convertToBase64', () => ({
   __esModule: true,
@@ -49,10 +44,7 @@ vi.mock('utils/convertToBase64', () => ({
 
 vi.mock('react-i18next', () => ({
   // Include initReactI18next
-  initReactI18next: {
-    type: '3rdParty',
-    init: () => {},
-  },
+  initReactI18next: { type: '3rdParty', init: () => {} },
   useTranslation: () => ({
     t: (key: string) => {
       const translations: { [key: string]: string } = {
@@ -71,10 +63,7 @@ vi.mock('react-i18next', () => ({
       };
       return translations[key] || key;
     },
-    i18n: {
-      changeLanguage: () => new Promise(() => {}),
-      language: 'en',
-    },
+    i18n: { changeLanguage: () => new Promise(() => {}), language: 'en' },
   }),
   Trans: ({ children }: { children: React.ReactNode }) => children,
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
@@ -189,18 +178,9 @@ const orgPostListMock = {
             endCursor: 'cursor3',
           },
           edges: [
-            {
-              node: samplePosts[0],
-              cursor: 'cursor1',
-            },
-            {
-              node: samplePosts[1],
-              cursor: 'cursor2',
-            },
-            {
-              node: samplePosts[2],
-              cursor: 'cursor3',
-            },
+            { node: samplePosts[0], cursor: 'cursor1' },
+            { node: samplePosts[1], cursor: 'cursor2' },
+            { node: samplePosts[2], cursor: 'cursor3' },
           ],
         },
       },
@@ -211,34 +191,18 @@ const orgPostListMock = {
 const getPostsByOrgInitialMock = {
   request: {
     query: GET_POSTS_BY_ORG,
-    variables: {
-      input: {
-        organizationId: '123',
-      },
-    },
+    variables: { input: { organizationId: '123' } },
   },
-  result: {
-    data: {
-      postsByOrganization: samplePosts,
-    },
-  },
+  result: { data: { postsByOrganization: samplePosts } },
 };
 
 // Create mock for search query with "test" term
 const getPostsByOrgSearchMock = {
   request: {
     query: GET_POSTS_BY_ORG,
-    variables: {
-      input: {
-        organizationId: '123',
-      },
-    },
+    variables: { input: { organizationId: '123' } },
   },
-  result: {
-    data: {
-      postsByOrganization: samplePosts,
-    },
-  },
+  result: { data: { postsByOrganization: samplePosts } },
 };
 
 const orgListFirstPageMock: MockedResponse = {
@@ -408,11 +372,7 @@ const minimalMocks: MockedResponse[] = [
       query: GET_POSTS_BY_ORG,
       variables: { input: { organizationId: '123' } },
     },
-    result: {
-      data: {
-        postsByOrganization: [],
-      },
-    },
+    result: { data: { postsByOrganization: [] } },
   },
   {
     request: {
@@ -584,10 +544,7 @@ const createPostSuccessMock: MockedResponse = {
 };
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useParams: () => ({ orgId: '123' }),
-  };
+  return { ...actual, useParams: () => ({ orgId: '123' }) };
 });
 
 describe('OrgPost Component', () => {
@@ -1668,11 +1625,7 @@ describe('OrgPost component - Post Creation Tests', () => {
   const getPostsQueryMock = {
     request: {
       query: GET_POSTS_BY_ORG,
-      variables: {
-        input: {
-          organizationId: mockOrgId,
-        },
-      },
+      variables: { input: { organizationId: mockOrgId } },
     },
     result: {
       data: {

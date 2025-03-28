@@ -33,21 +33,14 @@ import {
 import CommentCard from '../CommentCard/CommentCard';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import UserDefault from '../../../assets/images/defaultImg.png';
 
 interface InterfaceCommentCardProps {
   id: string;
-  creator: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
+  creator: { id: string; firstName: string; lastName: string; email: string };
   likeCount: number;
-  likedBy: {
-    id: string;
-  }[];
+  likedBy: { id: string }[];
   text: string;
   handleLikeComment: (commentId: string) => void;
   handleDislikeComment: (commentId: string) => void;
@@ -84,9 +77,7 @@ interface InterfaceCommentCardProps {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function postCard(props: InterfacePostCard): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'postCard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
@@ -133,11 +124,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const handleToggleLike = async (): Promise<void> => {
     if (isLikedByUser) {
       try {
-        const { data } = await unLikePost({
-          variables: {
-            postId: props.id,
-          },
-        });
+        const { data } = await unLikePost({ variables: { postId: props.id } });
 
         if (data) {
           setLikes((likes) => likes - 1);
@@ -148,11 +135,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       }
     } else {
       try {
-        const { data } = await likePost({
-          variables: {
-            postId: props.id,
-          },
-        });
+        const { data } = await likePost({ variables: { postId: props.id } });
 
         if (data) {
           setLikes((likes) => likes + 1);
@@ -220,10 +203,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       }
 
       const { data: createEventData } = await create({
-        variables: {
-          postId: props.id,
-          comment: commentInput,
-        },
+        variables: { postId: props.id, comment: commentInput },
       });
 
       if (createEventData) {
@@ -270,10 +250,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const handleEditPost = async (): Promise<void> => {
     try {
       const { data: createEventData } = await editPost({
-        variables: {
-          id: props.id,
-          text: postContent,
-        },
+        variables: { id: props.id, text: postContent },
       });
 
       if (createEventData) {
@@ -292,9 +269,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const handleDeletePost = async (): Promise<void> => {
     try {
       const { data: createEventData } = await deletePost({
-        variables: {
-          id: props.id,
-        },
+        variables: { id: props.id },
       });
 
       if (createEventData) {

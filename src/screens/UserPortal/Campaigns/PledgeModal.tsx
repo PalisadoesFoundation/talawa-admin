@@ -8,7 +8,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfo,
 } from 'utils/interfaces';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -62,9 +62,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   mode,
 }) => {
   // Translation functions to support internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'pledges',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
 
   // State to manage the form inputs for the pledge
@@ -107,9 +105,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   // Query to get the user details based on the userId prop
   const { data: userData } = useQuery(USER_DETAILS, {
-    variables: {
-      id: userId,
-    },
+    variables: { id: userId },
   });
 
   // Effect to update the pledgers state when user data is fetched
@@ -161,10 +157,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       }
       try {
         await updatePledge({
-          variables: {
-            id: pledge?._id,
-            ...updatedFields,
-          },
+          variables: { id: pledge?._id, ...updatedFields },
         });
         toast.success(t('pledgeUpdated') as string);
         refetchPledge();
@@ -255,10 +248,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 `${member.firstName} ${member.lastName}`
               }
               onChange={(_, newPledgers): void => {
-                setFormState({
-                  ...formState,
-                  pledgeUsers: newPledgers,
-                });
+                setFormState({ ...formState, pledgeUsers: newPledgers });
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Pledgers" />
@@ -296,10 +286,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               value={dayjs(pledgeEndDate)}
               onChange={(date: Dayjs | null): void => {
                 if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeEndDate: date.toDate(),
-                  });
+                  setFormState({ ...formState, pledgeEndDate: date.toDate() });
                 }
               }}
               minDate={dayjs(pledgeStartDate)}

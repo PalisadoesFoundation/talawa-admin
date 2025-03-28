@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Card, Col, Row } from 'react-bootstrap';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
@@ -142,9 +142,7 @@ export default function Settings(): JSX.Element {
 
     // Update the user details
     try {
-      const { data: updateData } = await updateUser({
-        variables: { input },
-      });
+      const { data: updateData } = await updateUser({ variables: { input } });
 
       if (updateData) {
         toast.success(
@@ -168,16 +166,6 @@ export default function Settings(): JSX.Element {
   };
 
   const handleFieldChange = (fieldName: string, value: string): void => {
-    // check if the birth date is not in the future
-    if (fieldName === 'birthDate') {
-      const today = new Date();
-      const selectedDate = new Date(value);
-      if (selectedDate > today) {
-        toast.error('Future dates are not allowed for birth date.');
-        return;
-      }
-    }
-
     // check if the password is strong or not
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
@@ -187,10 +175,7 @@ export default function Settings(): JSX.Element {
     }
 
     setIsUpdated(true);
-    setUserDetails((prevState) => ({
-      ...prevState,
-      [fieldName]: value,
-    }));
+    setUserDetails((prevState) => ({ ...prevState, [fieldName]: value }));
   };
 
   // Handle avatar upload
@@ -212,10 +197,7 @@ export default function Settings(): JSX.Element {
       }
 
       // Update all states properly
-      setUserDetails((prevState) => ({
-        ...prevState,
-        avatar: file,
-      }));
+      setUserDetails((prevState) => ({ ...prevState, avatar: file }));
       setSelectedAvatar(file); // to show the image to the user before updating the avatar
       setIsUpdated(true);
     }

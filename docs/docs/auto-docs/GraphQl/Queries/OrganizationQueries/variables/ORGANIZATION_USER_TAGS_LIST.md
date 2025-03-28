@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_USER\_TAGS\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L126)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L186)
 
 GraphQL query to retrieve the list of user tags belonging to an organization.
 

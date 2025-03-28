@@ -13,7 +13,7 @@ import { Stack } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
@@ -23,7 +23,7 @@ import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import SearchBar from 'subComponents/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 import Avatar from 'components/Avatar/Avatar';
-import AddMember from './AddMember';
+import AddMember from './addMember/AddMember';
 
 const PAGE_SIZE = 10;
 interface ProcessedRow {
@@ -95,10 +95,7 @@ function OrganizationPeople(): JSX.Element {
   const [paginationMeta, setPaginationMeta] = useState<{
     hasNextPage: boolean;
     hasPreviousPage: boolean;
-  }>({
-    hasNextPage: false,
-    hasPreviousPage: false,
-  });
+  }>({ hasNextPage: false, hasPreviousPage: false });
 
   // Query hooks
   const [fetchMembers, { loading: memberLoading, error: memberError }] =
@@ -155,10 +152,7 @@ function OrganizationPeople(): JSX.Element {
   // Handle tab changes (members, admins, users)
   useEffect(() => {
     // Reset pagination when tab changes
-    setPaginationModel({
-      page: 0,
-      pageSize: PAGE_SIZE,
-    });
+    setPaginationModel({ page: 0, pageSize: PAGE_SIZE });
     pageCursors.current = {};
 
     const variables: QueryVariable = {
@@ -216,9 +210,7 @@ function OrganizationPeople(): JSX.Element {
     const currentPage = paginationModel.page;
     const currentPageCursors = pageCursors.current[currentPage];
 
-    const variables: QueryVariable = {
-      orgId: currentUrl,
-    };
+    const variables: QueryVariable = { orgId: currentUrl };
 
     if (isForwardNavigation) {
       // Forward navigation uses "after" with the endCursor of the current page
@@ -378,9 +370,7 @@ function OrganizationPeople(): JSX.Element {
           <Link
             to={`/member/${currentUrl}`}
             state={{ id: params.row._id }}
-            style={{
-              fontSize: '15px',
-            }}
+            style={{ fontSize: '15px' }}
             className={`${styles.membername} ${styles.subtleBlueGrey}`}
           >
             {params.row.name}

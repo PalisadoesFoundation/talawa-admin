@@ -2,7 +2,7 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';
@@ -209,9 +209,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         .map((datas: InterfaceEvent) => {
           const attendees: Partial<User>[] = [];
           datas.attendees?.forEach((attendee) => {
-            const r = {
-              _id: attendee._id,
-            };
+            const r = { _id: attendee._id };
             attendees.push(r);
           });
 
@@ -396,9 +394,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           .map((datas: InterfaceEvent) => {
             const attendees: Partial<User>[] = [];
             datas.attendees?.forEach((attendee) => {
-              const r = {
-                _id: attendee._id,
-              };
+              const r = { _id: attendee._id };
               attendees.push(r);
             });
 

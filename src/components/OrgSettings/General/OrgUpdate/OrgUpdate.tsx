@@ -13,7 +13,7 @@ import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
 
 interface InterfaceOrgUpdateProps {
@@ -70,10 +70,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const handleInputChange = (fieldName: string, value: string): void => {
     setFormState((prevState) => ({
       ...prevState,
-      address: {
-        ...prevState.address,
-        [fieldName]: value,
-      },
+      address: { ...prevState.address, [fieldName]: value },
     }));
   };
 
@@ -86,9 +83,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     { input: InterfaceMutationUpdateOrganizationInput }
   >(UPDATE_ORGANIZATION_MUTATION);
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgUpdate',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgUpdate' });
   const { t: tCommon } = useTranslation('common');
 
   interface InterfaceOrganization {
@@ -110,18 +105,12 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     refetch,
     error,
   }: {
-    data?: {
-      organization: InterfaceOrganization;
-    };
+    data?: { organization: InterfaceOrganization };
     loading: boolean;
     refetch: (variables: { input: { id: string } }) => void;
     error?: ApolloError;
   } = useQuery(ORGANIZATIONS_LIST, {
-    variables: {
-      input: {
-        id: orgId,
-      },
-    },
+    variables: { input: { id: orgId } },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -227,10 +216,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             required
             value={formState.orgName}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                orgName: e.target.value,
-              });
+              setFormState({ ...formState, orgName: e.target.value });
             }}
           />
           <Form.Label className={styles.orgUpdateFormLables}>
@@ -244,10 +230,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             required
             value={formState.orgDescrip}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                orgDescrip: e.target.value,
-              });
+              setFormState({ ...formState, orgDescrip: e.target.value });
             }}
           />
 

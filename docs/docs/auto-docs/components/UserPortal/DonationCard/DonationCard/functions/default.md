@@ -17,7 +17,7 @@ Includes a button to view more details about the donation.
 
 ### props
 
-[`InterfaceDonationCardProps`](../../../../../screens/UserPortal/Donate/Donate/interfaces/InterfaceDonationCardProps.md)
+[`InterfaceDonationCardProps`](../../../../../types/Donation/interface/interfaces/InterfaceDonationCardProps.md)
 
 The properties passed to the component.
 
