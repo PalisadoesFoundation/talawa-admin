@@ -126,7 +126,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   useEffect(() => {
     if (memberData) {
-      setPledgers(memberData.organizations[0].members);
+      setPledgers(memberData.organization[0].members);
     }
   }, [memberData]);
 
