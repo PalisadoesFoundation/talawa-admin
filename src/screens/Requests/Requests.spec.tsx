@@ -230,13 +230,13 @@ describe('Testing Requests screen', () => {
     // Clear previous state
     vi.clearAllMocks();
     localStorage.clear();
-    
+
     // Mock localStorage.getItem directly for this test
     localStorage.getItem = vi.fn((key) => {
       // Return null for all keys to simulate non-admin user
       return null;
     });
-    
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -915,22 +915,22 @@ describe('Testing Requests screen', () => {
 describe('Lines 55-57 Authentication Tests', () => {
   // Save original window.location.assign
   let originalAssign: any;
-  
+
   beforeEach(() => {
     // Store the original function and create a fresh mock
     originalAssign = window.location.assign;
     window.location.assign = vi.fn();
-    
+
     // Reset all mocks to ensure clean state
     vi.clearAllMocks();
     localStorage.clear();
   });
-  
+
   afterEach(() => {
     // Restore original function after each test
     window.location.assign = originalAssign;
   });
-  
+
   test('Component redirects when user is not admin or superadmin', async () => {
     // Mock localStorage for a regular user
     localStorage.getItem = vi.fn((key) => {
@@ -938,7 +938,7 @@ describe('Lines 55-57 Authentication Tests', () => {
       if (key === 'AdminFor') return null;
       return null;
     });
-    
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -946,7 +946,7 @@ describe('Lines 55-57 Authentication Tests', () => {
             <Requests />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Verify redirect happens
@@ -957,31 +957,35 @@ describe('Lines 55-57 Authentication Tests', () => {
 });
 
 describe('userRole Assignment Logic Tests (lines 55-57)', () => {
-  it.todo('SuperAdmin users should not be redirected - Already covered by "Component should be rendered properly when user is SuperAdmin" test');
+  it.todo(
+    'SuperAdmin users should not be redirected - Already covered by "Component should be rendered properly when user is SuperAdmin" test',
+  );
 
-  it.todo('Admin users should not be redirected - Already covered by "Component should be rendered properly when user is Admin" test');
-  
+  it.todo(
+    'Admin users should not be redirected - Already covered by "Component should be rendered properly when user is Admin" test',
+  );
+
   test('userRole should be USER when SuperAdmin is false and AdminFor is empty array', async () => {
     // Create a fresh window.location.assign mock
     const mockAssign = vi.fn();
     const originalAssign = window.location.assign;
     window.location.assign = mockAssign;
-    
+
     try {
       // Clear localStorage and re-setup for this specific test
       localStorage.clear();
       vi.clearAllMocks();
-      
+
       // Use direct localStorage mocks
       localStorage.getItem = vi.fn().mockImplementation((key) => {
         if (key === 'SuperAdmin') return 'false';
         if (key === 'AdminFor') return '[]'; // Empty JSON array
         return null;
       });
-      
+
       // Reset the hook to get fresh state from localStorage
       const freshHook = useLocalStorage();
-      
+
       render(
         <MockedProvider addTypename={false} link={link}>
           <BrowserRouter>
@@ -989,9 +993,9 @@ describe('userRole Assignment Logic Tests (lines 55-57)', () => {
               <Requests />
             </I18nextProvider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
-      
+
       // Verify redirect happens
       await waitFor(() => {
         expect(mockAssign).toHaveBeenCalledWith('/orglist');
@@ -1006,20 +1010,20 @@ describe('userRole Assignment Logic Tests (lines 55-57)', () => {
     const mockAssign = vi.fn();
     const originalAssign = window.location.assign;
     window.location.assign = mockAssign;
-    
+
     try {
       // Clear localStorage and re-setup for this specific test
       localStorage.clear();
       vi.clearAllMocks();
-      
+
       // Use direct localStorage mocks
       localStorage.getItem = vi.fn().mockImplementation((key) => {
         return null; // Everything returns null
       });
-      
+
       // Reset the hook to get fresh state from localStorage
       const freshHook = useLocalStorage();
-      
+
       render(
         <MockedProvider addTypename={false} link={link}>
           <BrowserRouter>
@@ -1027,9 +1031,9 @@ describe('userRole Assignment Logic Tests (lines 55-57)', () => {
               <Requests />
             </I18nextProvider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
-      
+
       // Verify redirect happens
       await waitFor(() => {
         expect(mockAssign).toHaveBeenCalledWith('/orglist');
