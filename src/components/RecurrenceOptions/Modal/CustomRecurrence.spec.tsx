@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 
-import OrganizationEvents from '../../../screens/OrganizationEvents/OrganizationEvents';
+import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
@@ -21,16 +21,10 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MOCKS } from '../../../screens/OrganizationEvents/OrganizationEventsMocks';
+import { MOCKS } from 'screens/OrganizationEvents/OrganizationEventsMocks';
 import { describe, test, expect, vi } from 'vitest';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#31bb6b',
-    },
-  },
-});
+const theme = createTheme({ palette: { primary: { main: '#31bb6b' } } });
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -52,17 +46,11 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
     '@mui/x-date-pickers/DesktopDateTimePicker',
   );
-  return {
-    DateTimePicker: actual.DesktopDateTimePicker,
-  };
+  return { DateTimePicker: actual.DesktopDateTimePicker };
 });
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warning: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), warning: vi.fn(), error: vi.fn() },
 }));
 
 describe('Testing the creaction of recurring events with custom recurrence patterns', () => {
@@ -296,9 +284,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
 
     const endDatePicker = screen.getByLabelText('End Date');
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(endDatePicker, { target: { value: formData.endDate } });
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
@@ -460,9 +446,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
 
     const recurrenceEndDatePicker = screen.getAllByLabelText('End Date')[1];
-    fireEvent.change(recurrenceEndDatePicker, {
-      target: { value: null },
-    });
+    fireEvent.change(recurrenceEndDatePicker, { target: { value: null } });
 
     await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     await waitFor(() => {
@@ -655,9 +639,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
 
     const recurrenceCount = screen.getByTestId('customRecurrenceIntervalInput');
-    fireEvent.change(recurrenceCount, {
-      target: { value: 2 },
-    });
+    fireEvent.change(recurrenceCount, { target: { value: 2 } });
 
     await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     await waitFor(() => {
@@ -735,9 +717,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
       target: { value: formData.startDate },
     });
 
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(endDatePicker, { target: { value: formData.endDate } });
 
     await userEvent.click(screen.getByTestId('recurringCheck'));
 
@@ -785,9 +765,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
 
     const recurrenceCount = screen.getByTestId('customRecurrenceCountInput');
-    fireEvent.change(recurrenceCount, {
-      target: { value: 100 },
-    });
+    fireEvent.change(recurrenceCount, { target: { value: 100 } });
 
     await waitFor(() => {
       expect(screen.getByTestId('customRecurrenceCountInput')).toHaveValue(100);

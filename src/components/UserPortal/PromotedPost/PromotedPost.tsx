@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 
 interface InterfacePostCardProps {

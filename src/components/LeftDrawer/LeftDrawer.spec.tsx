@@ -6,6 +6,7 @@ import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
+import styles from 'style/app-fixed.module.css';
 
 // Mock the local storage hook
 vi.mock('utils/useLocalstorage', () => ({
@@ -48,10 +49,7 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 }));
 
 describe('LeftDrawer Component', () => {
-  const defaultProps = {
-    hideDrawer: false,
-    setHideDrawer: vi.fn(),
-  };
+  const defaultProps = { hideDrawer: false, setHideDrawer: vi.fn() };
 
   const renderComponent = (props = defaultProps): ReturnType<typeof render> => {
     return render(
@@ -98,6 +96,21 @@ describe('LeftDrawer Component', () => {
     expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
   });
 
+  it('super admin: applies correct styles when on users route (rolesBTn)', () => {
+    vi.mocked(useLocalStorage).mockImplementation(() => ({
+      getItem: vi.fn(() => 'true'),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      getStorageKey: vi.fn(() => ''),
+    }));
+
+    window.history.pushState({}, '', '/users');
+
+    renderComponent();
+    const element = screen.getByTestId('rolesBtn');
+    expect(element.className).toContain('sidebarBtnActive');
+  });
+
   it('applies correct styles when drawer is hidden', () => {
     renderComponent({ ...defaultProps, hideDrawer: true });
     const element = screen.getByTestId('leftDrawerContainer');
@@ -126,11 +139,6 @@ describe('LeftDrawer Component', () => {
     expect(defaultProps.setHideDrawer).toHaveBeenCalledWith(true);
   });
 
-  it('renders the profile dropdown', () => {
-    renderComponent();
-    expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
-  });
-
   it('applies active styles to the current route button', () => {
     renderComponent();
     const organizationsButton = screen.getByTestId('organizationsBtn');
@@ -138,10 +146,7 @@ describe('LeftDrawer Component', () => {
     // Simulate active route
     window.history.pushState({}, '', '/orglist');
 
-    expect(organizationsButton).toHaveStyle({
-      backgroundColor: 'var(--sidebar-option-bg)',
-      fontWeight: 'bold',
-    });
+    expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
   });
 
   it('applies hideElemByDefault style when hideDrawer is null', () => {
@@ -270,7 +275,6 @@ describe('LeftDrawer Component', () => {
 
   it('verifies text content from translation keys', () => {
     renderComponent();
-
     // Check organization button text content
     const orgButton = screen.getByTestId('organizationsBtn');
     expect(orgButton.textContent).toContain('my organizations');

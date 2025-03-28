@@ -7,7 +7,7 @@ import {
   ADD_EVENT_ATTENDEE,
   REMOVE_EVENT_ATTENDEE,
 } from 'GraphQl/Mutations/mutations';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -54,9 +54,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     data: attendeesData,
     loading: attendeesLoading,
     refetch: attendeesRefetch,
-  } = useQuery(EVENT_ATTENDEES, {
-    variables: { id: eventId },
-  });
+  } = useQuery(EVENT_ATTENDEES, { variables: { id: eventId } });
 
   const { data: memberData, loading: memberLoading } = useQuery(MEMBERS_LIST, {
     variables: { id: orgId },
@@ -70,10 +68,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     }
     toast.warn('Adding the attendee...');
     addRegistrantMutation({
-      variables: {
-        userId: member._id,
-        eventId: eventId,
-      },
+      variables: { userId: member._id, eventId: eventId },
     })
       .then(() => {
         toast.success(
@@ -90,12 +85,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   // Function to remove a registrant from the event
   const deleteRegistrant = (userId: string): void => {
     toast.warn('Removing the attendee...');
-    removeRegistrantMutation({
-      variables: {
-        userId,
-        eventId: eventId,
-      },
-    })
+    removeRegistrantMutation({ variables: { userId, eventId: eventId } })
       .then(() => {
         toast.success(
           tCommon('removedSuccessfully', { item: 'Attendee' }) as string,

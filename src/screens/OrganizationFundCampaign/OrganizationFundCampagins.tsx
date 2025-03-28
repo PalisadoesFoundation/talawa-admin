@@ -12,9 +12,9 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
-import CampaignModal from './CampaignModal';
+import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfaceCampaignInfo,
@@ -28,22 +28,14 @@ const dataGridStyle = {
   backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
     backgroundColor: 'var(--row-background)',
-    '&:focus-within': {
-      outline: 'none',
-    },
+    '&:focus-within': { outline: 'none' },
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-background)',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
   '& .MuiDataGrid-row.Mui-hovered': {
     backgroundColor: 'var(--row-background)',
   },
-  '& .MuiDataGrid-cell:focus': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-cell:focus-within': {
-    outline: 'none',
-  },
+  '& .MuiDataGrid-cell:focus': { outline: 'none' },
+  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
 };
 
 /**
@@ -103,9 +95,7 @@ const dataGridStyle = {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 const orgFundCampaign = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'fundCampaign',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
 

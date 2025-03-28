@@ -12,9 +12,9 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
-import FundModal from './FundModal';
+import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
@@ -24,22 +24,14 @@ const dataGridStyle = {
   backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
     backgroundColor: 'var(--row-background)',
-    '&:focus-within': {
-      outline: 'none',
-    },
+    '&:focus-within': { outline: 'none' },
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-background)',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
   '& .MuiDataGrid-row.Mui-hovered': {
     backgroundColor: 'var(--row-background)',
   },
-  '& .MuiDataGrid-cell:focus': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-cell:focus-within': {
-    outline: 'none',
-  },
+  '& .MuiDataGrid-cell:focus': { outline: 'none' },
+  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
 };
 
 /**
@@ -100,9 +92,7 @@ const dataGridStyle = {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 const organizationFunds = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'funds',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'funds' });
   const { t: tCommon } = useTranslation('common');
 
   // Set the document title based on the translation

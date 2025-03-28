@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { useParams } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -28,9 +28,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userListCard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userListCard' });
 
   /**
    * Handles adding a user as an admin.
@@ -39,10 +37,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   const addAdmin = async (): Promise<void> => {
     try {
       const { data } = await adda({
-        variables: {
-          userid: props.id,
-          orgid: currentUrl,
-        },
+        variables: { userid: props.id, orgid: currentUrl },
       });
 
       if (data) {

@@ -10,7 +10,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import '../../style/app.module.css';
+import 'style/app.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   BACKEND_URL,
@@ -34,7 +34,7 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 // import styles from 'style/app.module.css';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
@@ -78,10 +78,7 @@ const loginPage = (): JSX.Element => {
     cPassword: '',
     signOrg: '',
   });
-  const [formState, setFormState] = useState({
-    email: '',
-    password: '',
-  });
+  const [formState, setFormState] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -172,11 +169,7 @@ const loginPage = (): JSX.Element => {
       if (REACT_APP_USE_RECAPTCHA !== 'yes') {
         return true;
       }
-      const { data } = await recaptcha({
-        variables: {
-          recaptchaToken,
-        },
-      });
+      const { data } = await recaptcha({ variables: { recaptchaToken } });
 
       return data.recaptcha;
     } catch {
@@ -280,10 +273,7 @@ const loginPage = (): JSX.Element => {
 
     try {
       const { data: signInData } = await signin({
-        variables: {
-          email: formState.email,
-          password: formState.password,
-        },
+        variables: { email: formState.email, password: formState.password },
       });
 
       if (signInData) {
@@ -421,10 +411,7 @@ const loginPage = (): JSX.Element => {
                       required
                       value={formState.email}
                       onChange={(e): void => {
-                        setFormState({
-                          ...formState,
-                          email: e.target.value,
-                        });
+                        setFormState({ ...formState, email: e.target.value });
                       }}
                       autoComplete="username"
                       data-testid="loginEmail"

@@ -11,7 +11,7 @@ import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
 import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * List of tabs for the volunteer dashboard.
@@ -37,10 +37,7 @@ import styles from '../../../style/app-fixed.module.css';
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-const volunteerDashboardTabs: {
-  value: TabOptions;
-  icon: JSX.Element;
-}[] = [
+const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
     value: 'upcomingEvents',
     icon: <TbCalendarEvent size={21} className="me-1" />,
@@ -49,14 +46,8 @@ const volunteerDashboardTabs: {
     value: 'invitations',
     icon: <FaRegEnvelopeOpen size={18} className="me-1" />,
   },
-  {
-    value: 'actions',
-    icon: <FaTasks size={18} className="me-2" />,
-  },
-  {
-    value: 'groups',
-    icon: <FaUserGroup size={18} className="me-2" />,
-  },
+  { value: 'actions', icon: <FaTasks size={18} className="me-2" /> },
+  { value: 'groups', icon: <FaUserGroup size={18} className="me-2" /> },
 ];
 
 /**
@@ -77,9 +68,7 @@ type TabOptions = 'upcomingEvents' | 'invitations' | 'actions' | 'groups';
  */
 const VolunteerManagement = (): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userVolunteer',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
 
   // Extract organization ID from URL parameters
   const { orgId } = useParams();

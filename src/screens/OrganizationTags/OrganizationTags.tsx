@@ -15,7 +15,7 @@ import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceOrganizationTagsQuery,
@@ -155,10 +155,7 @@ function OrganizationTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: {
-          name: tagName,
-          organizationId: orgId,
-        },
+        variables: { name: tagName, organizationId: orgId },
       });
       if (data) {
         toast.success(t('tagCreationSuccess'));

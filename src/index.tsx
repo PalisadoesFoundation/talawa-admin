@@ -32,7 +32,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
-import './style/app.module.css';
+import 'style/app.module.css';
 const theme = createTheme({
   palette: {
     primary: {
@@ -69,24 +69,18 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     console.log(`[Network error]: ${networkError}`);
     toast.error(
       'API server unavailable. Check your connection or try again later',
-      {
-        toastId: 'apiServer',
-      },
+      { toastId: 'apiServer' },
     );
   }
 });
 
 const uploadLink = createUploadLink({
   uri: BACKEND_URL,
-  headers: {
-    'Apollo-Require-Preflight': 'true',
-  },
+  headers: { 'Apollo-Require-Preflight': 'true' },
 });
 
 const wsLink = new GraphQLWsLink(
-  createClient({
-    url: REACT_APP_BACKEND_WEBSOCKET_URL,
-  }),
+  createClient({ url: REACT_APP_BACKEND_WEBSOCKET_URL }),
 );
 
 // const wsLink = new GraphQLWsLink(

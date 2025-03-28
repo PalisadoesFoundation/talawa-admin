@@ -7,7 +7,7 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
@@ -56,9 +56,9 @@ const EventDashboardScreen = (): JSX.Element => {
   }
 
   // Access targets from Redux store
-  const appRoutes: {
-    targets: TargetsType[];
-  } = useSelector((state: RootState) => state.appRoutes);
+  const appRoutes: { targets: TargetsType[] } = useSelector(
+    (state: RootState) => state.appRoutes,
+  );
   const { targets } = appRoutes;
 
   const dispatch = useAppDispatch();

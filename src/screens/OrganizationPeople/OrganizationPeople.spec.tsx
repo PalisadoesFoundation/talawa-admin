@@ -26,7 +26,7 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('./AddMember', () => ({
+vi.mock('./addMember/AddMember', () => ({
   default: () => (
     <button type="button" data-testid="add-member-button">
       Add Member

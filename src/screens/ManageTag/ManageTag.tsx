@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceTagAssignedMembersQuery,
@@ -34,9 +34,9 @@ import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
 import TagActions from 'components/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import EditUserTagModal from './EditUserTagModal';
-import RemoveUserTagModal from './RemoveUserTagModal';
-import UnassignUserTagModal from './UnassignUserTagModal';
+import EditUserTagModal from './editModal/EditUserTagModal';
+import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
+import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
@@ -63,9 +63,7 @@ import SearchBar from 'subComponents/SearchBar';
  */
 
 function ManageTag(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'manageTag',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const { t: tCommon } = useTranslation('common');
   const { orgId, tagId: currentTagId } = useParams();
   const navigate = useNavigate();
@@ -182,10 +180,7 @@ function ManageTag(): JSX.Element {
   const handleUnassignUserTag = async (): Promise<void> => {
     try {
       await unassignUserTag({
-        variables: {
-          tagId: currentTagId,
-          userId: unassignUserId,
-        },
+        variables: { tagId: currentTagId, userId: unassignUserId },
       });
 
       userTagAssignedMembersRefetch();
@@ -220,10 +215,7 @@ function ManageTag(): JSX.Element {
 
     try {
       const { data } = await edit({
-        variables: {
-          tagId: currentTagId,
-          name: newTagName,
-        },
+        variables: { tagId: currentTagId, name: newTagName },
       });
 
       if (data) {
@@ -241,11 +233,7 @@ function ManageTag(): JSX.Element {
   const [removeUserTag] = useMutation(REMOVE_USER_TAG);
   const handleRemoveUserTag = async (): Promise<void> => {
     try {
-      await removeUserTag({
-        variables: {
-          id: currentTagId,
-        },
-      });
+      await removeUserTag({ variables: { id: currentTagId } });
 
       navigate(`/orgtags/${orgId}`);
       toggleRemoveUserTagModal();
@@ -279,10 +267,7 @@ function ManageTag(): JSX.Element {
   // used for the tag breadcrumbs
   const orgUserTagAncestors = [
     ...(userTagAssignedMembersData?.getAssignedUsers.ancestorTags ?? []),
-    {
-      _id: currentTagId,
-      name: currentTagName,
-    },
+    { _id: currentTagId, name: currentTagName },
   ];
 
   const redirectToSubTags = (tagId: string): void => {

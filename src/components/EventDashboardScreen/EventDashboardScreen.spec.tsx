@@ -10,7 +10,7 @@ import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import '../../style/app.module.css';
+import 'style/app.module.css';
 import { MOCKS } from './EventDashboardScreenMocks';
 const { setItem } = useLocalStorage();
 
@@ -32,10 +32,7 @@ let mockID: string | undefined = '123';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useParams: () => ({ orgId: mockID }),
-  };
+  return { ...actual, useParams: () => ({ orgId: mockID }) };
 });
 
 const link = new StaticMockLink(MOCKS, true);

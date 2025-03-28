@@ -3,7 +3,7 @@ import TruncatedText from './TruncatedText';
 // import {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
@@ -44,9 +44,7 @@ function OrgListCard({
     navigate(url);
   }
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgListCard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgListCard' });
   const { t: tCommon } = useTranslation('common');
 
   return (

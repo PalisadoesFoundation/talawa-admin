@@ -11,7 +11,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 
 import {
   MOCKS,
@@ -21,10 +21,7 @@ import {
 import { vi } from 'vitest';
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {

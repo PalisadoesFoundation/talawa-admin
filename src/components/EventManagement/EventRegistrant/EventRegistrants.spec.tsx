@@ -13,7 +13,7 @@ import { REGISTRANTS_MOCKS } from './Registrations.mocks';
 import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/EventAttendanceMocks';
 import { vi } from 'vitest';
 import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 const COMBINED_MOCKS = [...REGISTRANTS_MOCKS, ...ATTENDEES_MOCKS];
 
@@ -87,24 +87,14 @@ describe('Event Registrants Component', () => {
           query: EVENT_REGISTRANTS,
           variables: { eventId: '660fdf7d2c1ef6c7db1649ad' },
         },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [],
-          },
-        },
+        result: { data: { getEventAttendeesByEventId: [] } },
       },
       {
         request: {
           query: EVENT_ATTENDEES,
           variables: { id: '660fdf7d2c1ef6c7db1649ad' },
         },
-        result: {
-          data: {
-            event: {
-              attendees: [],
-            },
-          },
-        },
+        result: { data: { event: { attendees: [] } } },
       },
     ];
 
@@ -147,10 +137,7 @@ describe('Event Registrants Component', () => {
         },
       },
       {
-        request: {
-          query: EVENT_ATTENDEES,
-          variables: { id: 'event123' },
-        },
+        request: { query: EVENT_ATTENDEES, variables: { id: 'event123' } },
         result: {
           data: {
             event: {
@@ -217,10 +204,7 @@ describe('Event Registrants Component', () => {
         },
       },
       {
-        request: {
-          query: EVENT_ATTENDEES,
-          variables: { id: 'event123' },
-        },
+        request: { query: EVENT_ATTENDEES, variables: { id: 'event123' } },
         result: {
           data: {
             event: {
@@ -301,9 +285,7 @@ describe('EventRegistrants CSS Tests', () => {
     renderEventRegistrants();
     const tableContainer = screen.getByRole('grid').closest('.MuiPaper-root');
     expect(tableContainer).toHaveClass('mt-3');
-    expect(tableContainer).toHaveStyle({
-      borderRadius: '16px',
-    });
+    expect(tableContainer).toHaveStyle({ borderRadius: '16px' });
   });
 
   it('should style table header cells with custom cell class', () => {

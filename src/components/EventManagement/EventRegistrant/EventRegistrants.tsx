@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Button, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES, EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
@@ -23,9 +23,7 @@ import type { InterfaceUserAttendee } from 'types/User/interface';
  * @returns JSX element containing the event attendance interface
  */
 function EventRegistrants(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventRegistrant',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
   const { orgId, eventId } = useParams<{ orgId: string; eventId: string }>();
   const [registrants, setRegistrants] = useState<InterfaceUserAttendee[]>([]);
   const [attendees, setAttendees] = useState<InterfaceMember[]>([]);

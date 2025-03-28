@@ -8,7 +8,7 @@ import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -36,18 +36,10 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 /**
@@ -60,9 +52,7 @@ const dataGridStyle = {
  * @returns The rendered component.
  */
 function leaderboard(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'leaderboard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'leaderboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -88,9 +78,7 @@ function leaderboard(): JSX.Element {
     loading: rankingsLoading,
     error: rankingsError,
   }: {
-    data?: {
-      getVolunteerRanks: InterfaceVolunteerRank[];
-    };
+    data?: { getVolunteerRanks: InterfaceVolunteerRank[] };
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(VOLUNTEER_RANKING, {
@@ -299,10 +287,7 @@ function leaderboard(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={rankings.map((ranking, index) => ({
-          id: index + 1,
-          ...ranking,
-        }))}
+        rows={rankings.map((ranking, index) => ({ id: index + 1, ...ranking }))}
         columns={columns}
         isRowSelectable={() => false}
       />

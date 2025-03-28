@@ -10,7 +10,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -26,9 +26,7 @@ import useLocalStorage from 'utils/useLocalstorage';
  */
 function deleteOrg(): JSX.Element {
   // Translation hook for localization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'deleteOrg',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'deleteOrg' });
   const { t: tCommon } = useTranslation('common');
 
   // Get the current organization ID from the URL
@@ -57,9 +55,7 @@ function deleteOrg(): JSX.Element {
 
   // Query to check if the organization is a sample organization
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
-    variables: {
-      id: currentUrl,
-    },
+    variables: { id: currentUrl },
   });
 
   /**
@@ -82,11 +78,7 @@ function deleteOrg(): JSX.Element {
     } else {
       // For regular organizations, use a different mutation
       try {
-        await del({
-          variables: {
-            input: { id: currentUrl || '' },
-          },
-        });
+        await del({ variables: { input: { id: currentUrl || '' } } });
         navigate('/orglist');
       } catch (error) {
         errorHandler(t, error);

@@ -24,7 +24,7 @@ import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
@@ -32,11 +32,7 @@ interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
   chatsListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
+    variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
   chats: GroupChat[];
 }
@@ -50,9 +46,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: ['#31bb6b', '!important'],
     color: theme.palette.common.white,
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
 }));
 
 /**
@@ -60,9 +54,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
  */
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  '&:last-child td, &:last-child th': { border: 0 },
 }));
 
 const { getItem } = useLocalStorage();
@@ -94,11 +86,7 @@ export const handleCreateDirectChat = async (
   userId: string | null,
   chatsListRefetch: {
     (
-      variables?:
-        | Partial<{
-            id: string;
-          }>
-        | undefined,
+      variables?: Partial<{ id: string }> | undefined,
     ): Promise<ApolloQueryResult<unknown>>;
     (): Promise<ApolloQueryResult<unknown>>;
   },
@@ -119,11 +107,7 @@ export const handleCreateDirectChat = async (
   } else {
     try {
       await createChat({
-        variables: {
-          organizationId,
-          userIds: [userId, id],
-          isGroup: false,
-        },
+        variables: { organizationId, userIds: [userId, id], isGroup: false },
       });
       await chatsListRefetch();
       toggleCreateDirectChatModal();
@@ -139,9 +123,7 @@ export default function createDirectChatModal({
   chatsListRefetch,
   chats,
 }: InterfaceCreateDirectChatProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { orgId: organizationId } = useParams();
 
   const userId: string | null = getItem('userId');
@@ -155,10 +137,7 @@ export default function createDirectChatModal({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
+    variables: { firstName_contains: '', lastName_contains: '' },
   });
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
@@ -170,9 +149,7 @@ export default function createDirectChatModal({
       lastName_contains: lastName || '',
     };
 
-    allUsersRefetch({
-      ...newFilterData,
-    });
+    allUsersRefetch({ ...newFilterData });
   };
 
   return (

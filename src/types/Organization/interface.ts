@@ -3,10 +3,7 @@ export interface InterfaceOrganizationCardProps {
   name: string;
   image: string;
   description: string;
-  admins: {
-    id: string;
-  }[];
-  members: {
+  members?: {
     id: string;
   }[];
   address: {
@@ -16,6 +13,8 @@ export interface InterfaceOrganizationCardProps {
     postalCode: string;
     state: string;
   };
+  membersCount: number;
+  adminsCount: number;
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
   membershipRequests: {

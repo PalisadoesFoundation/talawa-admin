@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { CircularProgress, TableCell, TableRow } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Link } from 'react-router-dom';
 /**
  * Custom table cell component to display event details
@@ -12,9 +12,7 @@ import { Link } from 'react-router-dom';
 
 export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   const { data, loading, error } = useQuery(EVENT_DETAILS, {
-    variables: {
-      id: eventId,
-    },
+    variables: { id: eventId },
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',

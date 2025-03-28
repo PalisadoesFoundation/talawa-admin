@@ -13,7 +13,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import VolunteerGroups from './VolunteerGroups';
 import type { ApolloLink } from '@apollo/client';
-import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './VolunteerGroups.mocks';
+import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './modal/VolunteerGroups.mocks';
 import { vi } from 'vitest';
 
 const link1 = new StaticMockLink(MOCKS);
@@ -68,10 +68,7 @@ describe('Testing VolunteerGroups Screen', () => {
   beforeAll(() => {
     vi.mock('react-router-dom', async () => {
       const actualDom = await vi.importActual('react-router-dom');
-      return {
-        ...actualDom,
-        useParams: vi.fn(),
-      };
+      return { ...actualDom, useParams: vi.fn() };
     });
   });
 

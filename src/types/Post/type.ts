@@ -79,3 +79,51 @@ export type PostWhereInput = {
   title_not_in?: string[];
   title_starts_with?: string;
 };
+
+export type PostComments = {
+  id: string;
+  creator: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+
+  likeCount: number;
+  likedBy: {
+    id: string;
+  }[];
+  text: string;
+}[];
+
+export type PostLikes = {
+  firstName: string;
+  lastName: string;
+  id: string;
+}[];
+
+export type PostNode = {
+  commentCount: number;
+  createdAt: string;
+  creator: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    _id: string;
+  };
+  imageUrl: string | null;
+  likeCount: number;
+  likedBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  }[];
+  pinned: boolean;
+  text: string;
+  title: string;
+  videoUrl: string | null;
+  _id: string;
+
+  comments: PostComments;
+  likes: PostLikes;
+};

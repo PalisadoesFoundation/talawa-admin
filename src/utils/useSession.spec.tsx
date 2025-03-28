@@ -509,14 +509,9 @@ test('should extend session when called directly', async () => {
 });
 
 test('should properly clean up on unmount', () => {
-  // Mock window event listeners
-  const windowRemoveEventListenerSpy = vi.spyOn(window, 'removeEventListener');
-
-  // Mock document event listeners
-  const documentRemoveEventListenerSpy = vi.spyOn(
-    document,
-    'removeEventListener',
-  );
+  // Mock window.removeEventListener
+  const windowRemoveEventListener = vi.spyOn(window, 'removeEventListener');
+  const documentRemoveEventListener = vi.spyOn(document, 'removeEventListener');
 
   const { result, unmount } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
