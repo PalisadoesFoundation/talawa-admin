@@ -1,3 +1,32 @@
+/**
+ * OrganizationDashboard Component
+ *
+ * This component renders the dashboard for an organization, displaying
+ * various statistics and information such as member count, admin count,
+ * posts, events, and upcoming events. It also provides navigation to
+ * related sections like posts and events.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered OrganizationDashboard component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` to fetch data for members, posts, and events.
+ * - Displays loading states and handles errors using `react-toastify`.
+ * - Utilizes `react-bootstrap` for layout and styling.
+ * - Integrates with `react-router-dom` for navigation.
+ * - Supports internationalization using `react-i18next`.
+ *
+ *
+ * @example
+ * ```tsx
+ * <OrganizationDashboard />
+ * ```
+ *
+ * @todo
+ * - Implement navigation for blocked users and membership requests.
+ * - Add volunteer rankings functionality.
+ *
+ */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Card } from 'react-bootstrap';
@@ -34,14 +63,6 @@ import type {
 } from 'utils/interfaces';
 import styles from 'style/app.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
-
-/**
- * Component for displaying the organization dashboard.
- *
- * This component provides an overview of various statistics and information related to an organization, including members, admins, posts, events, blocked users, and membership requests. It also displays upcoming events and latest posts.
- *
- * @returns The rendered component.
- */
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -123,9 +144,7 @@ function OrganizationDashboard(): JSX.Element {
     data: orgPostsData,
     loading: orgPostsLoading,
     error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
-    variables: { id: orgId },
-  });
+  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, { variables: { id: orgId } });
 
   const {
     data: orgEventsData,

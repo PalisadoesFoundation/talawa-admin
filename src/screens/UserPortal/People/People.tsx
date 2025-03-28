@@ -1,3 +1,39 @@
+/**
+ * The `people` component is responsible for rendering a list of members and admins
+ * of an organization. It provides functionality for searching, filtering, and paginating
+ * through the list of users. The component uses GraphQL queries to fetch data and
+ * displays it in a structured format with user details such as name, email, role, etc.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered People component.
+ *
+ * @remarks
+ * - This component uses Apollo Client's `useQuery` hook to fetch data from GraphQL endpoints.
+ * - It supports filtering between "All Members" and "Admins" using a dropdown menu.
+ * - Pagination is implemented to manage the display of users in chunks.
+ * - Users can search for members by their first name using the search bar.
+ *
+ * @requires `react`, `react-bootstrap`, `@apollo/client`, `@mui/icons-material`
+ * @requires `components/UserPortal/PeopleCard/PeopleCard`
+ * @requires `components/Pagination/PaginationList/PaginationList`
+ * @requires `GraphQl/Queries/Queries`
+ * @requires `style/app-fixed.module.css`
+ * @requires `types/User/interface`
+ *
+ * @param {number} page - The current page number for pagination.
+ * @param {number} rowsPerPage - The number of rows displayed per page.
+ * @param {Partial<InterfaceUser>[]} members - The list of members to display.
+ * @param {Partial<InterfaceUser>[]} allMembers - The complete list of members fetched.
+ * @param {Partial<InterfaceUser>[]} admins - The list of admins fetched.
+ * @param {number} mode - The current filter mode (0 for "All Members", 1 for "Admins").
+ * @param {string} organizationId - The ID of the organization extracted from URL parameters.
+ *
+ * @function handleChangePage - Handles the change of the current page in pagination.
+ * @function handleChangeRowsPerPage - Handles the change in the number of rows per page.
+ * @function handleSearch - Refetches the members list based on the search input.
+ * @function handleSearchByEnter - Triggers search when the Enter key is pressed.
+ * @function handleSearchByBtnClick - Triggers search when the search button is clicked.
+ */
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import { Dropdown, Form, Button } from 'react-bootstrap';
@@ -23,33 +59,6 @@ interface InterfaceOrganizationCardProps {
   sno: string;
 }
 
-/**
- * `People` component displays a list of people associated with an organization.
- * It allows users to filter between all members and admins, search for members by their first name,
- * and paginate through the list.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.btnsContainer`
- * - `.input`
- * - `.inputField`
- * - `.searchButton`
- * - `.btnsBlock`
- * - `.dropdown`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 export default function people(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'people' });
 

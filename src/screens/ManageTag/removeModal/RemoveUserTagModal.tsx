@@ -1,30 +1,39 @@
+/**
+ * A React functional component that renders a modal for confirming the removal of a user tag.
+ * This modal is designed to be used in the "Manage Tag" section of the application.
+ *
+ * @component
+ * @param {InterfaceRemoveUserTagModalProps} props - The props for the component.
+ * @param {boolean} props.removeUserTagModalIsOpen - Determines whether the modal is visible.
+ * @param {() => void} props.toggleRemoveUserTagModal - Function to toggle the visibility of the modal.
+ * @param {() => Promise<void>} props.handleRemoveUserTag - Async function to handle the removal of a user tag.
+ * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for the "manageTag" namespace.
+ * @param {TFunction<'common', undefined>} props.tCommon - Translation function for common terms.
+ *
+ * @returns {JSX.Element} The rendered modal component.
+ *
+ * @remarks
+ * - The modal uses `react-bootstrap` for styling and functionality.
+ * - The `t` and `tCommon` props are used for internationalization (i18n) support.
+ * - The modal includes two buttons:
+ *   - A "No" button to close the modal without performing any action.
+ *   - A "Yes" button to confirm the removal of the user tag.
+ *
+ * @example
+ * ```tsx
+ * <RemoveUserTagModal
+ *   removeUserTagModalIsOpen={true}
+ *   toggleRemoveUserTagModal={handleToggle}
+ *   handleRemoveUserTag={handleRemove}
+ *   t={tFunction}
+ *   tCommon={tCommonFunction}
+ * />
+ * ```
+ */
 import type { TFunction } from 'i18next';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-
-/**
- * Remove UserTag Modal component for the Manage Tag screen.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.modalHeader`
- * - `.removeButton`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
 export interface InterfaceRemoveUserTagModalProps {
   removeUserTagModalIsOpen: boolean;

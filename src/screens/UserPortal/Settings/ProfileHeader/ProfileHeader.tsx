@@ -1,44 +1,33 @@
+/**
+ * ProfileHeader Component
+ *
+ * This component renders a header section for the user profile settings page.
+ * It displays a title and a profile dropdown menu, providing a clean and
+ * responsive layout.
+ *
+ * @component
+ * @param {InterfaceProfileHeaderProps} props - The props for the ProfileHeader component.
+ * @param {string} props.title - The title to be displayed in the header.
+ *
+ * @returns {JSX.Element} A JSX element representing the profile header.
+ *
+ * @example
+ * // Example usage of ProfileHeader
+ * <ProfileHeader title="User Profile" />
+ *
+ * @remarks
+ * - The component uses Bootstrap classes for layout and styling.
+ * - The `ProfileDropdown` component is included for user-specific actions.
+ *
+ */
 import type { FC } from 'react';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import React from 'react';
 
-/**
- * Props interface for the ProfileHeader component
- */
 interface InterfaceProfileHeaderProps {
-  /**
-   * The title text to be displayed in the header
-   */
   title: string;
 }
 
-/**
- * A header component that displays a title and profile dropdown menu
- *
- * This component creates a header section that includes:
- * - A title on the left side
- * - A profile dropdown menu on the right side
- *
- * The layout uses flexbox for proper alignment and spacing between
- * the title and the dropdown menu.
- *
- * @remarks
- * The component uses Bootstrap classes for layout and styling:
- * - d-flex for flexbox layout
- * - justify-content-between for spacing
- * - align-items-center for vertical alignment
- *
- * @example
- * Basic usage:
- * ```tsx
- * <ProfileHeader title="Settings" />
- * ```
- *
- * Usage with translated text:
- * ```tsx
- * <ProfileHeader title={t('settings')} />
- * ```
- */
 const ProfileHeader: FC<InterfaceProfileHeaderProps> = ({
   title,
 }: InterfaceProfileHeaderProps): JSX.Element => (

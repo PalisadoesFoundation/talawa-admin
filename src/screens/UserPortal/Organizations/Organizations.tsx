@@ -1,3 +1,34 @@
+/**
+ * @file Organizations.tsx
+ * @description This file contains the `organizations` component, which is responsible for displaying
+ * and managing the organizations associated with a user. It provides functionality to view all
+ * organizations, joined organizations, and created organizations, along with search and pagination features.
+ *
+ * The component uses GraphQL queries to fetch data for organizations and manages the state for
+ * filtering, pagination, and UI responsiveness. It also includes a debounced search mechanism
+ * to optimize performance when filtering organizations.
+ *
+ * @component
+ * @remarks
+ * - The component dynamically adjusts its layout based on the screen size, toggling a sidebar for smaller screens.
+ * - It supports three modes: viewing all organizations, joined organizations, and created organizations.
+ * - The search functionality is debounced to reduce unnecessary GraphQL query calls.
+ * - Pagination is implemented to handle large datasets efficiently.
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL queries.
+ * - `@mui/icons-material` for icons.
+ * - `react-bootstrap` for UI components.
+ * - `react-i18next` for internationalization.
+ * - Custom components like `PaginationList`, `OrganizationCard`, and `UserSidebar`.
+ *
+ * @example
+ * ```tsx
+ * <Organizations />
+ * ```
+ *
+ */
+
 import { useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -16,30 +47,6 @@ import {
 } from 'GraphQl/Queries/OrganizationQueries';
 import { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 
-/**
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.btnsContainer`
- * - `.input`
- * - `.inputField`
- * - `.searchButton`
- * - `.btnsBlock`
- * - `.dropdown`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 const { getItem } = useLocalStorage();
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
@@ -56,7 +63,7 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
 
   return debouncedFn;
 }
-//For Raw Data received from Querying the Orgs
+
 interface OrganizationRawData {
   id: string;
   name: string;
@@ -76,9 +83,7 @@ interface OrganizationRawData {
 interface JoinedOrganizationEdge {
   node: OrganizationRawData;
 }
-/**
- * Interface defining the structure of organization properties.
- */
+
 interface InterfaceOrganization {
   isJoined: boolean;
   id: string;
@@ -97,12 +102,7 @@ interface InterfaceOrganization {
   };
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
-  membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
-  }[];
+  membershipRequests: { id: string; user: { id: string } }[];
 }
 
 /**
@@ -149,17 +149,12 @@ export default function organizations(): JSX.Element {
 
   const userId: string | null = getItem('userId');
 
-  /**
-   * Queries for all 3 modes
-   */
   const {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
     error,
-  } = useQuery(ALL_ORGANIZATIONS, {
-    variables: { filter: filterName },
-  });
+  } = useQuery(ALL_ORGANIZATIONS, { variables: { filter: filterName } });
 
   const {
     data: joinedOrganizationsData,

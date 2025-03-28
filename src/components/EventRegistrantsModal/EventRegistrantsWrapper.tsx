@@ -1,18 +1,39 @@
+/**
+ * A wrapper component for managing the visibility and functionality of the
+ * `EventRegistrantsModal` component. This component provides a button to
+ * open the modal and handles the modal's lifecycle, including invoking an
+ * optional callback when the modal is closed.
+ *
+ * @component
+ * @param {string} eventId - The unique identifier for the event.
+ * @param {string} orgId - The unique identifier for the organization.
+ * @param {() => void} [onUpdate] - Optional callback function to be executed
+ * after the modal is closed.
+ *
+ * @returns {JSX.Element} A button to open the modal and the modal itself
+ * when visible.
+ *
+ * @example
+ * ```tsx
+ * <EventRegistrantsWrapper
+ *   eventId="12345"
+ *   orgId="67890"
+ *   onUpdate={() => console.log('Modal closed')}
+ * />
+ * ```
+ *
+ * @remarks
+ * - The modal is displayed conditionally based on the `showModal` state.
+ * - The `onUpdate` callback is invoked after the modal is closed, if provided.
+ * - The button uses a custom style from `app-fixed.module.css`.
+ */
 import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
 import style from 'style/app-fixed.module.css';
 
-// Props for the EventRegistrantsWrapper component
 type PropType = { eventId: string; orgId: string; onUpdate?: () => void };
 
-/**
- * Wrapper component that displays a button to show the event registrants modal.
- *
- * @param eventId - The ID of the event.
- * @param orgId - The ID of the organization.
- * @returns JSX element representing the wrapper with a button to show the modal.
- */
 export const EventRegistrantsWrapper = ({
   eventId,
   orgId,

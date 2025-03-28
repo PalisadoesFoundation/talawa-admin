@@ -1,3 +1,32 @@
+/**
+ * PaginationList component renders a responsive pagination control
+ * using Material-UI's `TablePagination` component. It adapts its
+ * layout based on the screen size, providing a compact view for
+ * smaller screens and a detailed view for larger screens.
+ *
+ * @component
+ * @param {number} count - Total number of items to paginate.
+ * @param {number} rowsPerPage - Number of rows displayed per page.
+ * @param {number} page - Current page index (zero-based).
+ * @param {(event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void} onPageChange - Callback triggered when the page changes.
+ * @param {(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void} onRowsPerPageChange - Callback triggered when the rows per page value changes.
+ *
+ * @remarks
+ * - The component uses the `useTranslation` hook to support internationalization.
+ * - It conditionally renders different layouts for small and large screens using Material-UI's `Hidden` component.
+ * - The `Pagination` component is used as a custom `ActionsComponent` for navigation controls.
+ *
+ * @example
+ * ```tsx
+ * <PaginationList
+ *   count={100}
+ *   rowsPerPage={10}
+ *   page={0}
+ *   onPageChange={(event, newPage) => console.log(newPage)}
+ *   onRowsPerPageChange={(event) => console.log(event.target.value)}
+ * />
+ * ```
+ */
 import React from 'react';
 import { Hidden, TablePagination } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -17,16 +46,6 @@ interface InterfacePropsInterface {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
 }
-/**
- * A component that provides pagination controls for a table.
- * It uses different pagination styles based on screen size.
- *
- * @param count - The total number of rows in the table.
- * @param rowsPerPage - The number of rows displayed per page.
- * @param page - The current page number.
- * @param onPageChange - Callback function to handle page changes.
- * @param onRowsPerPageChange - Callback function to handle changes in rows per page.
- */
 
 const PaginationList = ({
   count,

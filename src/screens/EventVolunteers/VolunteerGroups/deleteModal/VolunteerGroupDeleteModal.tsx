@@ -1,3 +1,36 @@
+/**
+ * VolunteerGroupDeleteModal Component
+ *
+ * This component renders a modal for deleting a volunteer group. It provides
+ * confirmation options to either proceed with the deletion or cancel the action.
+ *
+ * @component
+ * @param {InterfaceDeleteVolunteerGroupModal} props - The props for the component.
+ * @param {boolean} props.isOpen - Determines whether the modal is visible.
+ * @param {() => void} props.hide - Function to close the modal.
+ * @param {InterfaceVolunteerGroupInfo | null} props.group - The volunteer group to be deleted.
+ * @param {() => void} props.refetchGroups - Function to refetch the list of volunteer groups after deletion.
+ *
+ * @returns {React.FC} A React functional component that renders the delete confirmation modal.
+ *
+ * @remarks
+ * - The modal uses `react-bootstrap` for styling and structure.
+ * - The `useMutation` hook from Apollo Client is used to perform the deletion operation.
+ * - Translations are handled using `react-i18next`.
+ * - Notifications for success or error are displayed using `react-toastify`.
+ *
+ * @example
+ * ```tsx
+ * <VolunteerGroupDeleteModal
+ *   isOpen={true}
+ *   hide={() => setShowModal(false)}
+ *   group={selectedGroup}
+ *   refetchGroups={fetchGroups}
+ * />
+ * ```
+ *
+ * @see {@link DELETE_VOLUNTEER_GROUP} for the GraphQL mutation used.
+ */
 import { Button, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React from 'react';
@@ -13,31 +46,6 @@ export interface InterfaceDeleteVolunteerGroupModal {
   group: InterfaceVolunteerGroupInfo | null;
   refetchGroups: () => void;
 }
-
-/**
- * A modal dialog for confirming the deletion of a volunteer group.
- *
- * @param isOpen - Indicates whether the modal is open.
- * @param hide - Function to close the modal.
- * @param group - The volunteer group to be deleted.
- * @param refetchGroups - Function to refetch the volunteer groups after deletion.
- *
- * @returns  The rendered modal component.
- *
- *
- * The `VolunteerGroupDeleteModal` component displays a confirmation dialog when a user attempts to delete a volunteer group.
- * It allows the user to either confirm or cancel the deletion.
- * On confirmation, the `deleteVolunteerGroup` mutation is called to remove the volunteer group from the database,
- * and the `refetchGroups` function is invoked to update the list of volunteer groups.
- * A success or error toast notification is shown based on the result of the deletion operation.
- *
- * The modal includes:
- * - A header with a title and a close button.
- * - A body with a message asking for confirmation.
- * - A footer with "Yes" and "No" buttons to confirm or cancel the deletion.
- *
- * The `deleteVolunteerGroup` mutation is used to perform the deletion operation.
- */
 
 const VolunteerGroupDeleteModal: React.FC<
   InterfaceDeleteVolunteerGroupModal
