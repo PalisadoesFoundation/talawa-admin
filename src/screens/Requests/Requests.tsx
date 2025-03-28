@@ -23,11 +23,7 @@ import {
 
 interface InterfaceRequestsListItem {
   _id: string;
-  user: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
+  user: { firstName: string; lastName: string; email: string };
 }
 
 /**
@@ -83,7 +79,8 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    const membershipRequests = data.organization[0]?.membershipRequests || [];
+    const membershipRequests =
+      data.organization?.[0]?.membershipRequests || [];
 
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
@@ -149,11 +146,7 @@ const Requests = (): JSX.Element => {
    * Resets search and refetches the data.
    */
   const resetAndRefetch = (): void => {
-    refetch({
-      first: perPageResult,
-      skip: 0,
-      firstName_contains: '',
-    });
+    refetch({ first: perPageResult, skip: 0, firstName_contains: '' });
     setHasMore(true);
   };
 
@@ -166,7 +159,7 @@ const Requests = (): JSX.Element => {
     fetchMore({
       variables: {
         id: organizationId,
-        skip: data?.organization[0]?.membershipRequests?.length || 0,
+        skip: data?.organization?.[0]?.membershipRequests?.length || 0,
         firstName_contains: searchByName,
       },
       updateQuery: (
@@ -180,7 +173,7 @@ const Requests = (): JSX.Element => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         const newMembershipRequests =
-          fetchMoreResult.organization[0]?.membershipRequests || [];
+          fetchMoreResult.organization?.[0]?.membershipRequests || [];
         if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
@@ -189,7 +182,7 @@ const Requests = (): JSX.Element => {
             {
               _id: organizationId,
               membershipRequests: [
-                ...(prev?.organization[0]?.membershipRequests || []),
+                ...(prev?.organization?.[0]?.membershipRequests || []),
                 ...newMembershipRequests,
               ],
             },
@@ -234,7 +227,7 @@ const Requests = (): JSX.Element => {
         </div>
       </div>
 
-      {!isLoading && orgsData?.organization[0]?.length === 0 ? (
+      {!isLoading && orgsData?.organization?.length === 0 ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

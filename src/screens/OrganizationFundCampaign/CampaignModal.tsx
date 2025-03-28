@@ -113,12 +113,12 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     try {
       await createCampaign({
         variables: {
-          fundId,
           name: formState.campaignName,
           currencyCode: formState.campaignCurrency,
           goalAmount: parseInt(formState.campaignGoal.toString()),
           startAt: dayjs(formState.campaignStartDate).toISOString(),
           endAt: dayjs(formState.campaignEndDate).toISOString(),
+          fundId,
         },
       });
       toast.success(t('createdCampaign') as string);
