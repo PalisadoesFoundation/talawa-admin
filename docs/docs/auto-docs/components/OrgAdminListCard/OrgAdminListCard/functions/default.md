@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/OrgAdminListCard/OrgAdminListCard.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgAdminListCard/OrgAdminListCard.tsx#L48)
+Defined in: [src/components/OrgAdminListCard/OrgAdminListCard.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgAdminListCard/OrgAdminListCard.tsx#L47)
 
 ## Parameters
 

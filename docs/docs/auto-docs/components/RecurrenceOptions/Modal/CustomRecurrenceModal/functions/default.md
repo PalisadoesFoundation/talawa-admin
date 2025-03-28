@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/RecurrenceOptions/Modal/CustomRecurrenceModal.tsx:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RecurrenceOptions/Modal/CustomRecurrenceModal.tsx#L78)
+Defined in: [src/components/RecurrenceOptions/Modal/CustomRecurrenceModal.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RecurrenceOptions/Modal/CustomRecurrenceModal.tsx#L77)
 
 ## Parameters
 

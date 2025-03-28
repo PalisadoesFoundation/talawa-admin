@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/OrgListCard/TruncatedText.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgListCard/TruncatedText.tsx#L40)
+Defined in: [src/components/OrgListCard/TruncatedText.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgListCard/TruncatedText.tsx#L39)
 
 ## Parameters
 

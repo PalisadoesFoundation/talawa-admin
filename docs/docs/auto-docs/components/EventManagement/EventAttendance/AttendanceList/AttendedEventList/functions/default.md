@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventManagement/EventAttendance/AttendanceList/AttendedEventList.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/AttendanceList/AttendedEventList.tsx#L43)
+Defined in: [src/components/EventManagement/EventAttendance/AttendanceList/AttendedEventList.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/AttendanceList/AttendedEventList.tsx#L42)
 
 ## Parameters
 

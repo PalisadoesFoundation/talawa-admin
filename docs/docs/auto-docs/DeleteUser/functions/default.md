@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/UserProfileSettings/Delete/DeleteUser.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserProfileSettings/Delete/DeleteUser.tsx#L45)
+Defined in: [src/components/UserProfileSettings/Delete/DeleteUser.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserProfileSettings/Delete/DeleteUser.tsx#L44)
 
 ## Parameters
 

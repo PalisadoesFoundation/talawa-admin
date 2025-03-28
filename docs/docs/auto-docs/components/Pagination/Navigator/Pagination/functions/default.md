@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Pagination/Navigator/Pagination.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Pagination/Navigator/Pagination.tsx#L53)
+Defined in: [src/components/Pagination/Navigator/Pagination.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Pagination/Navigator/Pagination.tsx#L52)
 
 ## Parameters
 
