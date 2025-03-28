@@ -77,11 +77,11 @@ interface InterfaceBaseFetchMoreOptions<T> {
 export interface InterfaceOrganizationTagsQuery
   extends InterfaceBaseQueryResult {
   data?: {
-    organizations: InterfaceQueryOrganizationUserTags[];
+    organization: InterfaceQueryOrganizationUserTags[];
   };
   fetchMore: (
     options: InterfaceBaseFetchMoreOptions<{
-      organizations: InterfaceQueryOrganizationUserTags[];
+      organization: InterfaceQueryOrganizationUserTags[];
     }>,
   ) => void;
 }

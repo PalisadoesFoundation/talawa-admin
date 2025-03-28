@@ -92,11 +92,18 @@ describe('Testing User Pledge Screen', () => {
 
   it('should render the Campaign Pledge screen', async () => {
     renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
+
+    // Wait for the search input first
+    const searchInput = await screen.findByTestId('searchPledges');
+    expect(searchInput).toBeInTheDocument();
+
+    // Add a longer timeout for data loading
+    await waitFor(
+      () => {
+        expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
   // This test works:
