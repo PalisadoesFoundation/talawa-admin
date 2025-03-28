@@ -734,4 +734,108 @@ describe('MinIO File Upload Handling', () => {
     // Check if success toast was shown
     expect(toast.success).toHaveBeenCalled();
   });
+
+  test('shows error toast when MinIO upload fails', async () => {
+    // Mock MinIO upload failure for this test only
+    communityProfileMockUpload.mockRejectedValueOnce(
+      new Error('Upload failed'),
+    );
+
+    render(
+      <MockedProvider addTypename={false} link={minioLink}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Create test file
+    const file = new File(['logo content'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Upload file (this should trigger the error)
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [file] } });
+    });
+
+    await wait(200);
+
+    // Verify error toast was shown
+    expect(toast.error).toHaveBeenCalled();
+
+    // Reset mock for subsequent tests
+    communityProfileMockUpload.mockResolvedValue({
+      objectName: 'test-image.png',
+    });
+  });
+
+  // Add this test to your MinIO File Upload Handling describe block
+  test('shows error toast when MinIO upload fails', async () => {
+    // Temporarily mock a rejection for this test only
+    communityProfileMockUpload.mockRejectedValueOnce(
+      new Error('Upload failed'),
+    );
+
+    render(
+      <MockedProvider addTypename={false} link={minioLink}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Create a file and trigger upload
+    const file = new File(['logo content'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Trigger the file upload that will fail
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [file] } });
+    });
+
+    // Wait for error handling to complete
+    await wait(200);
+
+    // Verify that error toast was shown
+    expect(toast.error).toHaveBeenCalledWith(
+      expect.stringContaining('logoUploadFailed'),
+    );
+
+    // Reset the mock for subsequent tests
+    communityProfileMockUpload.mockClear();
+    communityProfileMockUpload.mockResolvedValue({
+      objectName: 'test-image.png',
+    });
+  });
+
+  // Add this test to your MinIO File Upload Handling describe block
+  test('does not attempt MinIO upload when no file is selected', async () => {
+    render(
+      <MockedProvider addTypename={false} link={minioLink}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Get file input
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Trigger a change event with no files selected
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [] } });
+    });
+
+    // Wait for any async operations to complete
+    await wait(100);
+
+    // Verify the MinIO upload function was NOT called
+    expect(communityProfileMockUpload).not.toHaveBeenCalled();
+  });
 });

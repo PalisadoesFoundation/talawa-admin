@@ -297,8 +297,13 @@ const CommunityProfile = (): JSX.Element => {
                         logo: objectName,
                       }));
                     } catch (error) {
+                      // Show user-friendly error message
                       toast.error(t('logoUploadFailed') as string);
-                      console.error('Upload error:', error);
+
+                      // In production, we could use a structured logger instead
+                      if (process.env.NODE_ENV !== 'production') {
+                        console.error('Upload error:', error);
+                      }
                     }
                   }
                 }}
