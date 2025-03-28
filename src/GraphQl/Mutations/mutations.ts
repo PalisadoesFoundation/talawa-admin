@@ -4,13 +4,13 @@ import '../../style/app.module.css';
 // to block the user
 
 export const BLOCK_USER_MUTATION_PG = gql`
-  mutation BlockUser($organizationId: String!, $userId: String!) {
+  mutation BlockUser($organizationId: ID!, $userId: ID!) {
     blockUser(organizationId: $organizationId, userId: $userId)
   }
 `;
 
 export const UNBLOCK_USER_MUTATION_PG = gql`
-  mutation UnblockUser($organizationId: String!, $userId: String!) {
+  mutation UnblockUser($organizationId: ID!, $userId: ID!) {
     unblockUser(organizationId: $organizationId, userId: $userId)
   }
 `;

@@ -470,6 +470,25 @@ export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
   }
 `;
 
+export const IS_USER_BLOCKED = gql`
+  query IsUserBlockedInOrganization($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      blockedUsers(first: $first, after: $after) {
+        edges {
+          node {
+            id
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_EVENTS_PG = gql`
   query GetOrganizationEvents($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
