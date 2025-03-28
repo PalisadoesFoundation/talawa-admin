@@ -22,7 +22,7 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
-            
+
             // Filter reviews that have a user login containing "coderabbit" (case-insensitive)
             const codeRabbitReviews = reviews.filter(review => 
               review.user.login.toLowerCase().includes('coderabbit')
@@ -33,7 +33,7 @@ jobs:
               core.setFailed('ERROR: CodeRabbit has not reviewed this PR.');
               return;
             }
-            
+
             // Sort reviews by submitted_at date in descending order
             codeRabbitReviews.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
             const latestReview = codeRabbitReviews[0];
