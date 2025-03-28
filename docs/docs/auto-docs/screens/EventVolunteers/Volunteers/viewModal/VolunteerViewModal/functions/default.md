@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L71)
+Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L70)
 
 ## Parameters
 

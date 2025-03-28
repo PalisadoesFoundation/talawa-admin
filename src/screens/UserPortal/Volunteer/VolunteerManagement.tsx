@@ -1,3 +1,37 @@
+/**
+ * `VolunteerManagement` component provides a tabbed interface for managing various aspects
+ * of volunteer activities within an organization. It allows users to navigate between
+ * different sections such as upcoming events, invitations, actions, and groups.
+ *
+ * ## Features:
+ * - **Tabbed Navigation**: Users can switch between tabs to view and manage specific sections.
+ * - **Responsive Design**: Includes a dropdown for smaller screens and buttons for larger screens.
+ * - **Dynamic Content Rendering**: Displays content based on the selected tab.
+ * - **Internationalization**: Supports translations for tab labels and content.
+ *
+ * ## Tabs:
+ * - **Upcoming Events**: Displays a list of upcoming events for volunteers.
+ * - **Invitations**: Manages volunteer invitations.
+ * - **Actions**: Handles volunteer-related tasks and actions.
+ * - **Groups**: Manages volunteer groups.
+ *
+ * ## Props:
+ * - None
+ *
+ * ## State:
+ * - `tab` (`TabOptions`): Tracks the currently selected tab.
+ *
+ * ## Hooks:
+ * - `useTranslation`: For internationalization of tab labels and content.
+ * - `useParams`: Extracts the organization ID from the URL.
+ * - `useNavigate`: Enables navigation to other routes.
+ *
+ * ## Methods:
+ * - `renderButton`: Renders a button for each tab with the appropriate icon and label.
+ * - `handleBack`: Navigates back to the organization page.
+ *
+ * @returns JSX.Element - The rendered `VolunteerManagement` component.
+ */
 import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -13,30 +47,6 @@ import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
 import styles from 'style/app-fixed.module.css';
 
-/**
- * List of tabs for the volunteer dashboard.
- *
- * Each tab is associated with an icon and value.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.activeTab`
- * - `.inActiveTab`
- * - `.dropdown`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
     value: 'upcomingEvents',
