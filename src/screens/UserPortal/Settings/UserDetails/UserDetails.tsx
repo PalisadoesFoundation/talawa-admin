@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import dayjs from 'dayjs';
 import styles from '../../../../style/app-fixed.module.css';
 import {
   educationGradeEnum,
@@ -11,6 +12,8 @@ import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFiel
 import sanitizeHtml from 'sanitize-html';
 import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 interface InterfaceUserDetailsFormProps {
   userDetails: {
@@ -175,14 +178,29 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
         <Form.Label htmlFor="birthDate" className={styles.cardLabel}>
           {t('birthDate')}
         </Form.Label>
-        <Form.Control
-          type="date"
-          id="birthDate"
-          value={userDetails.birthDate || ''}
-          onChange={(e) => handleFieldChange('birthDate', e.target.value)}
-          className={styles.cardControl}
-          max={new Date().toISOString().split('T')[0]}
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            format="YYYY-MM-DD"
+            value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
+            onChange={(date) =>
+              handleFieldChange(
+                'birthDate',
+                date ? date.format('YYYY-MM-DD') : '',
+              )
+            }
+            className={`${styles.cardLabel} w-100`}
+            maxDate={dayjs().startOf('day')}
+            slotProps={{
+              textField: {
+                inputProps: {
+                  'data-testid': 'birth-date-input',
+                  'aria-label': t('birthDate'),
+                  max: dayjs().format('YYYY-MM-DD'),
+                },
+              },
+            }}
+          />
+        </LocalizationProvider>
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="grade" className={styles.cardLabel}>
