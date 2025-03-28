@@ -375,19 +375,19 @@ describe('CampaignModal', () => {
         endAt: new Date('2026-01-01T00:00:00.000Z'),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
-      }
+      },
     };
-    
+
     renderCampaignModal(nameOnlyMockLink, editProps);
-    
+
     // Only change the name field
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Updated Name' } });
-    
+
     // Submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
-    
+
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
@@ -406,30 +406,29 @@ describe('CampaignModal', () => {
         endAt: new Date('2026-01-01T00:00:00.000Z'),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
-      }
+      },
     };
-    
+
     renderCampaignModal(allFieldsMockLink, editProps);
-    
+
     // Change all fields
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Updated Name' } });
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '500' } });
-    
+
     const startDate = screen.getByLabelText('Start Date');
     fireEvent.change(startDate, { target: { value: '01/02/2024' } });
-    
+
     const endDate = screen.getByLabelText('End Date');
     fireEvent.change(endDate, { target: { value: '01/03/2024' } });
-    
+
     // Submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
-    
+
     // Wait for success message which indicates the mutation was called
-  
   });
 
   it('should not update any fields when nothing is changed', async () => {
@@ -444,15 +443,15 @@ describe('CampaignModal', () => {
         endAt: new Date('2027-01-01T00:00:00.000Z'),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
-      }
+      },
     };
-    
+
     renderCampaignModal(noFieldsMockLink, unchangedProps);
-    
+
     // Don't change any values, just submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
-    
+
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
@@ -471,19 +470,19 @@ describe('CampaignModal', () => {
         endAt: new Date('2025-02-01T00:00:00.000Z'),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
-      }
+      },
     };
-    
+
     renderCampaignModal(link1, autoUpdateDateProps);
-    
+
     // Verify initial dates
     expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2025');
     expect(screen.getByLabelText('End Date')).toHaveValue('01/02/2025');
-    
+
     // Change start date to a date AFTER the current end date
     const startDateInput = screen.getByLabelText('Start Date');
     fireEvent.change(startDateInput, { target: { value: '01/03/2025' } });
-    
+
     // Verify that end date was automatically updated to match the new start date
     await waitFor(() => {
       expect(screen.getByLabelText('End Date')).toHaveValue('01/03/2025');
@@ -502,19 +501,19 @@ describe('CampaignModal', () => {
         endAt: new Date('2025-04-01T00:00:00.000Z'),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
-      }
+      },
     };
-    
+
     renderCampaignModal(link1, keepEndDateProps);
-    
+
     // Verify initial dates
     expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2025');
     expect(screen.getByLabelText('End Date')).toHaveValue('01/04/2025');
-    
+
     // Change start date to a date that is still BEFORE the end date
     const startDateInput = screen.getByLabelText('Start Date');
     fireEvent.change(startDateInput, { target: { value: '15/02/2025' } });
-    
+
     // Verify that end date was NOT updated and remains the same
     await waitFor(() => {
       expect(screen.getByLabelText('Start Date')).toHaveValue('15/02/2025');
@@ -534,30 +533,30 @@ describe('CampaignModal', () => {
         endAt: new Date('2026-01-01T00:00:00.000Z'),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
-      }
+      },
     };
-    
+
     renderCampaignModal(currencyOnlyMockLink, editProps);
-    
+
     // For MUI Select components, we use a simpler approach:
-    // Find the Select component  
+    // Find the Select component
     const currencySelect = screen.getByTestId('currencySelect');
-    
+
     // Directly trigger the MUI Select onChange handler
     // This simulates selecting 'EUR' from the dropdown
     fireEvent.mouseDown(currencySelect);
-    
+
     // Rather than trying to find dropdown items, we can simulate the onChange event directly
     const selectInput = currencySelect.querySelector('input');
     if (selectInput) {
       // Dispatch a custom event that the MUI Select will recognize
       fireEvent.change(selectInput, { target: { value: 'EUR' } });
     }
-    
+
     // Submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
-    
+
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
