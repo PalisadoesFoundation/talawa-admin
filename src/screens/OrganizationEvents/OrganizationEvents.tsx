@@ -1,3 +1,54 @@
+/**
+ * OrganizationEvents Component
+ *
+ * This component is responsible for rendering and managing the organization events page.
+ * It includes functionalities for viewing events in different calendar views, creating new events,
+ * and managing event recurrence options.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered OrganizationEvents component.
+ *
+ * @remarks
+ * - Utilizes Apollo Client for GraphQL queries and mutations.
+ * - Integrates with `react-bootstrap` for UI components and `@mui/x-date-pickers` for date/time pickers.
+ * - Supports multilingual translations using `react-i18next`.
+ * - Handles event creation with recurrence options and validations.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationEvents />
+ * ```
+ *
+ * @dependencies
+ * - `EventCalendar`: Displays events in a calendar view.
+ * - `EventHeader`: Provides controls for changing calendar views and opening the event creation modal.
+ * - `RecurrenceOptions`: Manages recurrence rule configurations for events.
+ * - `Loader`: Displays a loading spinner during data fetching.
+ *
+ * @state
+ * - `createEventmodalisOpen` (boolean): Controls the visibility of the event creation modal.
+ * - `startDate`, `endDate` (Date): Start and end dates for the event.
+ * - `viewType` (ViewType): Current calendar view type (Day, Month, Year).
+ * - `formState` (object): Stores form input values for event creation.
+ * - `recurrenceRuleState` (InterfaceRecurrenceRuleState): Stores recurrence rule configurations.
+ *
+ * @queries
+ * - `ORGANIZATION_EVENT_CONNECTION_LIST`: Fetches events for the organization.
+ * - `ORGANIZATIONS_LIST`: Fetches organization details.
+ *
+ * @mutations
+ * - `CREATE_EVENT_MUTATION`: Creates a new event with the provided details.
+ *
+ * @hooks
+ * - `useQuery`: Fetches data for events and organization details.
+ * - `useMutation`: Handles event creation.
+ * - `useLocalStorage`: Retrieves user-related data from local storage.
+ * - `useParams`, `useNavigate`: Manages routing and navigation.
+ *
+ * @errorHandling
+ * - Displays toast notifications for validation errors and success messages.
+ * - Redirects to the organization list page if event data fetching fails.
+ */
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -40,38 +91,6 @@ export enum ViewType {
   YEAR = 'Year View',
 }
 
-/**
- * Organization Events Page Component to display the events of an organization
- * and create new events for the organization by the admin or superadmin user.
- * The component uses the EventCalendar component to display the events and EventHeader component
- *  to display the view type and create event button.
- *  The component uses the RecurrenceOptions component to display the recurrence options for the event.
- *  The component uses the CREATE_EVENT_MUTATION mutation to create a new event for the organization.
- *  The component uses the ORGANIZATION_EVENT_CONNECTION_LIST and ORGANIZATIONS_LIST queries to fetch the events
- *  and organization details.
- *  The component uses the useLocalStorage hook to get the user details from the local storage.
- *
- * @returns  JSX.Element to display the Organization Events Page
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.inputField`
- * - `.switch`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',

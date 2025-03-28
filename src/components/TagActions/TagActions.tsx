@@ -1,3 +1,35 @@
+/**
+ * Component for managing tag actions such as assigning or removing tags
+ * for users within an organization. It provides a modal interface for
+ * selecting tags, searching tags, and performing the desired action.
+ *
+ * @component
+ * @param {InterfaceTagActionsProps} props - The props for the component.
+ * @param {boolean} props.tagActionsModalIsOpen - Determines if the modal is open.
+ * @param {() => void} props.hideTagActionsModal - Function to close the modal.
+ * @param {TagActionType} props.tagActionType - The type of action to perform ('assignToTags' or 'removeFromTags').
+ * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for managing tags.
+ * @param {TFunction<'common', undefined>} props.tCommon - Common translation function.
+ *
+ * @returns {React.FC} A React functional component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and mutating data.
+ * - Implements infinite scrolling for loading tags.
+ * - Handles ancestor tags to ensure hierarchical consistency when selecting or deselecting tags.
+ *
+ * @example
+ * ```tsx
+ * <TagActions
+ *   tagActionsModalIsOpen={true}
+ *   hideTagActionsModal={() => setModalOpen(false)}
+ *   tagActionType="assignToTags"
+ *   t={t}
+ *   tCommon={tCommon}
+ * />
+ * ```
+ *
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -30,29 +62,6 @@ interface InterfaceUserTagsAncestorData {
   name: string;
 }
 
-/**
- * Props for the `AssignToTags` component.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.modalHeader`
- * - `.inputField`
- * - `.removeButton`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 export interface InterfaceTagActionsProps {
   tagActionsModalIsOpen: boolean;
   hideTagActionsModal: () => void;

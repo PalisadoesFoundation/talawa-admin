@@ -1,10 +1,39 @@
+/**
+ * AgendaCategoryDeleteModal Component
+ *
+ * This component renders a modal for confirming the deletion of an agenda category.
+ * It provides options to either confirm or cancel the deletion action.
+ *
+ * @component
+ * @param {InterfaceAgendaCategoryDeleteModalProps} props - The props for the component.
+ * @param {boolean} props.agendaCategoryDeleteModalIsOpen - Determines if the modal is open or closed.
+ * @param {() => void} props.toggleDeleteModal - Function to toggle the visibility of the modal.
+ * @param {() => Promise<void>} props.deleteAgendaCategoryHandler - Async function to handle the deletion of the agenda category.
+ * @param {(key: string) => string} props.t - Translation function for component-specific strings.
+ * @param {(key: string) => string} props.tCommon - Translation function for common strings.
+ *
+ * @returns {React.FC} A React functional component that renders the delete confirmation modal.
+ *
+ * @remarks
+ * - The modal uses `react-bootstrap` for styling and functionality.
+ * - The `t` and `tCommon` props are used for internationalization (i18n).
+ * - The modal is styled using a CSS module imported as `styles`.
+ *
+ * @example
+ * ```tsx
+ * <AgendaCategoryDeleteModal
+ *   agendaCategoryDeleteModalIsOpen={true}
+ *   toggleDeleteModal={handleToggle}
+ *   deleteAgendaCategoryHandler={handleDelete}
+ *   t={(key) => translations[key]}
+ *   tCommon={(key) => commonTranslations[key]}
+ * />
+ * ```
+ */
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 
-/**
- * InterfaceAgendaCategoryDeleteModalProps is an object containing the props for AgendaCategoryDeleteModal component
- */
 interface InterfaceAgendaCategoryDeleteModalProps {
   agendaCategoryDeleteModalIsOpen: boolean;
   toggleDeleteModal: () => void;
@@ -13,15 +42,6 @@ interface InterfaceAgendaCategoryDeleteModalProps {
   tCommon: (key: string) => string;
 }
 
-/**
- * AgendaCategoryDeleteModal component is used to delete the agenda category
- * @param  agendaCategoryDeleteModalIsOpen - boolean value to check if the modal is open or not
- * @param  toggleDeleteModal - function to toggle the modal
- * @param  deleteAgendaCategoryHandler - function to delete the agenda category
- * @param  t - i18n function to translate the text
- * @param  tCommon - i18n function to translate the text
- * @returns  returns the AgendaCategoryDeleteModal component
- */
 const AgendaCategoryDeleteModal: React.FC<
   InterfaceAgendaCategoryDeleteModalProps
 > = ({
