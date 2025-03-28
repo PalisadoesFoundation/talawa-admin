@@ -1,37 +1,37 @@
 /**
- * Advertisements component for displaying and managing advertisements
- * within an organization. It includes features such as infinite scrolling,
- * search functionality, and tab-based navigation for active and archived ads.
+ * Advertisements component for managing and displaying advertisements
+ * within an organization. This component includes features such as
+ * infinite scrolling, tabbed views for active and archived advertisements,
+ * and a search bar for filtering advertisements.
  *
  * @component
- * @returns {JSX.Element} The Advertisements component.
+ * @returns {JSX.Element} The rendered Advertisements component.
  *
  * @remarks
- * - Utilizes Apollo Client's `useQuery` to fetch advertisement data.
- * - Implements infinite scrolling using the `react-infinite-scroll-component`.
- * - Supports localization using `react-i18next`.
- * - Displays active and archived advertisements in separate tabs.
+ * - Utilizes Apollo Client's `useQuery` for fetching advertisement data.
+ * - Supports infinite scrolling for loading more advertisements.
+ * - Displays advertisements in two tabs: active and archived.
+ * - Includes a search bar and advertisement registration functionality.
  *
  * @dependencies
+ * - `react`, `react-bootstrap`, `react-router-dom`, `react-i18next`
  * - `@apollo/client` for GraphQL queries.
- * - `react-bootstrap` for UI components like Tabs and Rows.
- * - `react-infinite-scroll-component` for infinite scrolling.
- * - `react-i18next` for translations.
- * - `react-router-dom` for accessing route parameters.
+ * - `InfiniteScroll` for infinite scrolling functionality.
  *
  * @example
  * ```tsx
  * <Advertisements />
  * ```
  *
- * @fileoverview
- * This file defines the Advertisements component, which is responsible for
- * fetching, displaying, and managing advertisements for a specific organization.
+ * @remarks
+ * The component fetches advertisements using the `ORGANIZATION_ADVERTISEMENT_LIST`
+ * GraphQL query and organizes them into active and archived categories based on
+ * their `endDate`.
  *
- * @todo
- * - Add error handling for GraphQL queries.
- * - Enhance search functionality to filter advertisements dynamically.
+ * @see {@link AdvertisementEntry} for rendering individual advertisements.
+ * @see {@link AdvertisementRegister} for registering new advertisements.
  */
+
 import React, { useEffect, useState } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { useQuery } from '@apollo/client';
