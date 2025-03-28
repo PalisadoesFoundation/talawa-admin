@@ -178,8 +178,13 @@ function AddMember(): JSX.Element {
 
   const {
     data: organizationData,
-  }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
-    useQuery(ORGANIZATIONS_LIST, { variables: { id: currentUrl } });
+  }: {
+    data?: {
+      organization: InterfaceQueryOrganizationsListObject[];
+    };
+  } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: currentUrl },
+  });
 
   // const {
   //   data: allUsersData,
@@ -607,7 +612,7 @@ function AddMember(): JSX.Element {
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 className={styles.borderNone}
-                value={organizationData?.organization?.name}
+                value={organizationData?.organization[0]?.name}
                 data-testid="organizationName"
                 disabled
               />
