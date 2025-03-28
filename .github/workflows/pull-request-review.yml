@@ -7,7 +7,7 @@ on:
 jobs:
   Check-CodeRabbit-Approval:
     name: Check CodeRabbit Approval
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       pull-requests: read
     steps:
@@ -27,7 +27,7 @@ jobs:
             const codeRabbitReviews = reviews.filter(review => 
               review.user.login.toLowerCase().includes('coderabbit')
             );
-            
+
             // Fail if no CodeRabbit reviews are found
             if (codeRabbitReviews.length === 0) {
               core.setFailed('ERROR: CodeRabbit has not reviewed this PR.');
@@ -37,7 +37,7 @@ jobs:
             // Sort reviews by submitted_at date in descending order
             codeRabbitReviews.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
             const latestReview = codeRabbitReviews[0];
-            
+
             // Fail if the latest review from CodeRabbit is not "APPROVED"
             if (latestReview.state !== 'APPROVED') {
               core.setFailed('ERROR: CodeRabbit approval is required before merging this PR.');
