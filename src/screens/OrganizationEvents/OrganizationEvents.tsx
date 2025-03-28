@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import { TimePicker, DatePicker } from '@mui/x-date-pickers';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
   ORGANIZATIONS_LIST,
@@ -323,10 +323,7 @@ function organizationEvents(): JSX.Element {
               value={formState.title}
               className={styles.inputField}
               onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  title: e.target.value,
-                });
+                setFormState({ ...formState, title: e.target.value });
               }}
             />
             <label htmlFor="eventdescrip">{tCommon('description')}</label>
@@ -339,10 +336,7 @@ function organizationEvents(): JSX.Element {
               value={formState.eventdescrip}
               className={styles.inputField}
               onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  eventdescrip: e.target.value,
-                });
+                setFormState({ ...formState, eventdescrip: e.target.value });
               }}
             />
             <label htmlFor="eventLocation">{tCommon('enterLocation')}</label>
@@ -354,10 +348,7 @@ function organizationEvents(): JSX.Element {
               required
               value={formState.location}
               onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  location: e.target.value,
-                });
+                setFormState({ ...formState, location: e.target.value });
               }}
             />
             <div className={styles.datedivOrganizationEvents}>

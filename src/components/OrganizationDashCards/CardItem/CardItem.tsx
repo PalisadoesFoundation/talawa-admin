@@ -5,7 +5,7 @@ import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 // import UserIcon from 'assets/svgs/user.svg?react';
 import dayjs from 'dayjs';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 // import { PersonAddAlt1Rounded } from '@mui/icons-material';
 // import { height } from '@mui/system';
 
@@ -18,10 +18,7 @@ export interface InterfaceCardItem {
   time?: string;
   startdate?: string;
   enddate?: string;
-  creator?: {
-    id: string | number;
-    name: string;
-  };
+  creator?: { id: string | number; name: string };
   location?: string;
 }
 
@@ -54,12 +51,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
           )}
 
           {creator && (
-            <div
-              style={{
-                fontSize: '12px',
-                fontWeight: 'bold',
-              }}
-            >
+            <div style={{ fontSize: '12px', fontWeight: 'bold' }}>
               Author: {creator.name}
             </div>
           )}

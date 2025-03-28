@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CheckInModal } from './Modal/CheckInModal';
 import { Button } from 'react-bootstrap';
-import style from '../../style/app.module.css';
+import style from 'style/app.module.css';
 
 type PropType = {
   eventId: string;

@@ -6,7 +6,7 @@ import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 // Mock the local storage hook
 vi.mock('utils/useLocalstorage', () => ({
@@ -49,10 +49,7 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 }));
 
 describe('LeftDrawer Component', () => {
-  const defaultProps = {
-    hideDrawer: false,
-    setHideDrawer: vi.fn(),
-  };
+  const defaultProps = { hideDrawer: false, setHideDrawer: vi.fn() };
 
   const renderComponent = (props = defaultProps): ReturnType<typeof render> => {
     return render(

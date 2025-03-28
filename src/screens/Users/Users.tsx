@@ -9,7 +9,7 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import SortingButton from 'subComponents/SortingButton';
@@ -116,9 +116,7 @@ const Users = (): JSX.Element => {
       variables: Record<string, unknown>;
       updateQuery: (
         previousQueryResult: { users: InterfaceQueryUserListItem[] },
-        options: {
-          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
-        },
+        options: { fetchMoreResult?: { users: InterfaceQueryUserListItem[] } },
       ) => { users: InterfaceQueryUserListItem[] };
     }) => void;
     refetch: (variables?: Record<string, unknown>) => void;
@@ -235,9 +233,7 @@ const Users = (): JSX.Element => {
         prev: { users: InterfaceQueryUserListItem[] } | undefined,
         {
           fetchMoreResult,
-        }: {
-          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
-        },
+        }: { fetchMoreResult?: { users: InterfaceQueryUserListItem[] } },
       ) => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev || { users: [] };

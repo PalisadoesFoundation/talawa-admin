@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * CardItemLoading component is a loading state for the card item. It is used when the data is being fetched.
@@ -17,9 +17,7 @@ const CardItemLoading = (): JSX.Element => {
         </div>
         <span
           className={`${styles.title} shimmer rounded`}
-          style={{
-            height: '1.5rem',
-          }}
+          style={{ height: '1.5rem' }}
         >
           &nbsp;
         </span>

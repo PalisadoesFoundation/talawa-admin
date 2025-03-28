@@ -7,7 +7,7 @@ import type {
 } from 'utils/interfaces';
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -56,10 +56,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     error: subTagsError,
     fetchMore: fetchMoreSubTags,
   }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
-    variables: {
-      id: tag._id,
-      first: TAGS_QUERY_DATA_CHUNK_SIZE,
-    },
+    variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
     skip: !expanded,
   });
 
@@ -178,10 +175,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <div
             id={`subTagsScrollableDiv${tag._id}`}
             data-testid={`subTagsScrollableDiv${tag._id}`}
-            style={{
-              maxHeight: 300,
-              overflow: 'auto',
-            }}
+            style={{ maxHeight: 300, overflow: 'auto' }}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}

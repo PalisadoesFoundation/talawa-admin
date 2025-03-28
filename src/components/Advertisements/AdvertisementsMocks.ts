@@ -11,16 +11,14 @@ import {
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_ADVERTISEMENT_LIST,
-} from '../../GraphQl/Queries/Queries';
-import { ADD_ADVERTISEMENT_MUTATION } from '../../GraphQl/Mutations/mutations';
+} from 'GraphQl/Queries/Queries';
+import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const { getItem } = useLocalStorage();
 
 export const httpLink = new HttpLink({
   uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + getItem('token') || '',
-  },
+  headers: { authorization: 'Bearer ' + getItem('token') || '' },
 });
 
 export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -41,10 +39,7 @@ type VariablesType =
   | { id: string; first: number; after: null; before: null; last: null };
 
 type MockRequest = {
-  request: {
-    query: DocumentNode;
-    variables: VariablesType;
-  };
+  request: { query: DocumentNode; variables: VariablesType };
   result: {
     data: {
       organizations: {
@@ -74,10 +69,7 @@ type MockRequest = {
 };
 
 const createMock = (variables: VariablesType): MockRequest => ({
-  request: {
-    query: ORGANIZATION_ADVERTISEMENT_LIST,
-    variables,
-  },
+  request: { query: ORGANIZATION_ADVERTISEMENT_LIST, variables },
   result: {
     data: {
       organizations: [
@@ -151,12 +143,7 @@ export const ADD_ADVERTISEMENT_MUTATION_MOCK = {
 };
 
 export const ORGANIZATIONS_LIST_MOCK = {
-  request: {
-    query: ORGANIZATIONS_LIST,
-    variables: {
-      id: '1',
-    },
-  },
+  request: { query: ORGANIZATIONS_LIST, variables: { id: '1' } },
   result: {
     data: {
       organizations: [
@@ -241,11 +228,7 @@ export const REGISTER_MOCKS = [
   {
     request: {
       query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-      },
+      variables: { id: '1', first: 6, after: null },
     },
     result: {
       data: {

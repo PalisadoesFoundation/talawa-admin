@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { CustomTableCell } from './CustomCell/customTableCell';
 import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interface';
 /**
@@ -26,9 +26,7 @@ import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interf
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps
 > = ({ eventsAttended, setShow, show, eventsPerPage = 5 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'memberDetail',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const [page, setPage] = useState<number>(1);
 
   const handleClose = (): void => {

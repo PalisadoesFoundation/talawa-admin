@@ -9,7 +9,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './../../style/app-fixed.module.css'; // Import the global CSS file
+import styles from 'style/app-fixed.module.css'; // Import the global CSS file
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 

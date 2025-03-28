@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 /**
  * Converts a time string to a Dayjs object.
@@ -60,9 +60,7 @@ const timeToDayJs = (time: string): Dayjs => {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 export default function events(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userEvents',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
@@ -87,10 +85,7 @@ export default function events(): JSX.Element {
 
   // Query to fetch events for the organization
   const { data, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
-    variables: {
-      organization_id: organizationId,
-      title_contains: '',
-    },
+    variables: { organization_id: organizationId, title_contains: '' },
   });
 
   // Query to fetch organization details
