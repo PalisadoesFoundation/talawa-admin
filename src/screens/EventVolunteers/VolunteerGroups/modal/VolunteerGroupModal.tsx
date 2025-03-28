@@ -1,3 +1,42 @@
+/**
+ * VolunteerGroupModal Component
+ *
+ * This component renders a modal dialog for creating or editing a volunteer group.
+ * It provides a form with fields to input group details such as name, description,
+ * leader, volunteers, and the number of volunteers required.
+ *
+ * @component
+ * @param {boolean} isOpen - Indicates whether the modal is open.
+ * @param {() => void} hide - Function to close the modal.
+ * @param {string} eventId - The ID of the event associated with the volunteer group.
+ * @param {string} orgId - The ID of the organization associated with the volunteer group.
+ * @param {InterfaceVolunteerGroupInfo | null} group - The volunteer group object to be edited.
+ * @param {() => void} refetchGroups - Function to refetch the volunteer groups after creation or update.
+ * @param {'create' | 'edit'} mode - The mode of the modal (create or edit).
+ *
+ * @remarks
+ * - The modal includes fields for entering the group name, description, selecting a leader,
+ *   selecting volunteers, and specifying the number of volunteers required.
+ * - On form submission, it triggers either the `createVolunteerGroup` or `updateVolunteerGroup`
+ *   mutation based on the mode.
+ * - Displays success or error messages using toast notifications.
+ *
+ * @example
+ * <VolunteerGroupModal
+ *   isOpen={true}
+ *   hide={() => {}}
+ *   eventId="event123"
+ *   orgId="org456"
+ *   group={null}
+ *   refetchGroups={() => {}}
+ *   mode="create"
+ * />
+ *
+ * @dependencies
+ * - React, React-Bootstrap, Material-UI, Apollo Client, React-Toastify, i18next
+ * - GraphQL Queries: MEMBERS_LIST
+ * - GraphQL Mutations: CREATE_VOLUNTEER_GROUP, UPDATE_VOLUNTEER_GROUP
+ */
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type {

@@ -1,3 +1,35 @@
+/**
+ * VolunteerCreateModal Component
+ *
+ * This component renders a modal that allows administrators to add a volunteer
+ * to an event. It provides a form with a multi-select dropdown to choose a member
+ * from the organization and submit the selection to add the member as a volunteer.
+ *
+ * @param {boolean} isOpen - Determines whether the modal is visible.
+ * @param {() => void} hide - Function to close the modal.
+ * @param {string} eventId - The ID of the event to which the volunteer is being added.
+ * @param {string} orgId - The ID of the organization to fetch members from.
+ * @param {() => void} refetchVolunteers - Function to refetch the list of volunteers after adding a new one.
+ *
+ * @returns {React.FC<InterfaceVolunteerCreateModal>} A React functional component that renders the modal.
+ *
+ * @remarks
+ * - Uses `@apollo/client` for GraphQL queries and mutations.
+ * - Fetches the list of members from the organization using the `MEMBERS_LIST` query.
+ * - Adds a volunteer to the event using the `ADD_VOLUNTEER` mutation.
+ * - Displays success or error messages using `react-toastify`.
+ *
+ * @example
+ * ```tsx
+ * <VolunteerCreateModal
+ *   isOpen={true}
+ *   hide={() => setShowModal(false)}
+ *   eventId="event123"
+ *   orgId="org456"
+ *   refetchVolunteers={fetchVolunteers}
+ * />
+ * ```
+ */
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
@@ -18,32 +50,6 @@ export interface InterfaceVolunteerCreateModal {
   orgId: string;
   refetchVolunteers: () => void;
 }
-
-/**
- * A modal dialog for add a volunteer for an event.
- *
- * @param isOpen - Indicates whether the modal is open.
- * @param hide - Function to close the modal.
- * @param eventId - The ID of the event associated with volunteer.
- * @param orgId - The ID of the organization associated with volunteer.
- * @param refetchVolunteers - Function to refetch the volunteers after adding a volunteer.
- *
- * @returns The rendered modal component.
- *
- * The `VolunteerCreateModal` component displays a form within a modal dialog for adding a volunteer.
- * It includes fields for selecting user.
- *
- * The modal includes:
- * - A header with a title and a close button.
- * - A form with:
- * - A multi-select dropdown for selecting user be added as volunteer.
- * - A submit button to create or update the pledge.
- *
- * On form submission, the component:
- * - Calls `addVolunteer` mutation to add a new Volunteer.
- *
- * Success or error messages are displayed using toast notifications based on the result of the mutation.
- */
 
 const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   isOpen,
