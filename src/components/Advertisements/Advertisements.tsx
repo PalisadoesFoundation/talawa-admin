@@ -1,3 +1,37 @@
+/**
+ * Advertisements component for displaying and managing advertisements
+ * within an organization. It includes features such as infinite scrolling,
+ * search functionality, and tab-based navigation for active and archived ads.
+ *
+ * @component
+ * @returns {JSX.Element} The Advertisements component.
+ *
+ * @remarks
+ * - Utilizes Apollo Client's `useQuery` to fetch advertisement data.
+ * - Implements infinite scrolling using the `react-infinite-scroll-component`.
+ * - Supports localization using `react-i18next`.
+ * - Displays active and archived advertisements in separate tabs.
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL queries.
+ * - `react-bootstrap` for UI components like Tabs and Rows.
+ * - `react-infinite-scroll-component` for infinite scrolling.
+ * - `react-i18next` for translations.
+ * - `react-router-dom` for accessing route parameters.
+ *
+ * @example
+ * ```tsx
+ * <Advertisements />
+ * ```
+ *
+ * @fileoverview
+ * This file defines the Advertisements component, which is responsible for
+ * fetching, displaying, and managing advertisements for a specific organization.
+ *
+ * @todo
+ * - Add error handling for GraphQL queries.
+ * - Enhance search functionality to filter advertisements dynamically.
+ */
 import React, { useEffect, useState } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { useQuery } from '@apollo/client';
@@ -14,32 +48,23 @@ import type { Advertisement } from 'types/Advertisement/type';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
-  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
 
-  // Set the document title based on the translation
   document.title = t('title');
 
-  // State to manage pagination cursor for infinite scrolling
   const [after, setAfter] = useState<string | null | undefined>(null);
 
   const [advertisements, setAdvertisements] = useState<
     Partial<Advertisement>[]
   >([]);
 
-  // GraphQL query to fetch the list of advertisements
   const { data: orgAdvertisementListData, refetch } = useQuery<{
     organizations: InterfaceQueryOrganizationAdvertisementListItem[];
   }>(ORGANIZATION_ADVERTISEMENT_LIST, {
-    variables: {
-      id: currentOrgId,
-      after,
-      first: 6,
-    },
+    variables: { id: currentOrgId, after, first: 6 },
   });
 
-  // ✅ Update state when query data changes
   useEffect(() => {
     if (orgAdvertisementListData?.organizations?.[0]?.advertisements) {
       const ads =
@@ -48,13 +73,13 @@ export default function Advertisements(): JSX.Element {
             ...edge.node,
             mediaUrl: edge.node.mediaUrl
               ? new URL(edge.node.mediaUrl.toString())
-              : undefined, // ✅ Ensure correct URL type
+              : undefined,
             startDate: edge.node.startDate
               ? new Date(edge.node.startDate)
-              : undefined, // ✅ Ensure correct Date type
+              : undefined,
             endDate: edge.node.endDate
               ? new Date(edge.node.endDate)
-              : undefined, // ✅ Ensure correct Date type
+              : undefined,
           }),
         );
 
@@ -82,7 +107,7 @@ export default function Advertisements(): JSX.Element {
             <Col className={styles.colAdvertisements}>
               <SearchBar
                 placeholder={'Search..'}
-                onSearch={(value) => console.log(value)} // Replace with actual search handler
+                onSearch={(value) => console.log(value)}
                 inputTestId="searchname"
                 buttonTestId="searchButton"
               />
