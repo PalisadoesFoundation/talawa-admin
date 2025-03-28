@@ -289,6 +289,52 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+/**
+ * Helper to populate all form fields with test values
+ * @param {Object} values - Optional object with field values to override defaults
+ */
+function populateFormFields(values = {}) {
+  const defaults = {
+    name: 'Name',
+    websiteURL: 'https://website.com',
+    facebookURL: 'https://socialurl.com',
+    instagramURL: 'https://socialurl.com',
+    xURL: 'https://socialurl.com',
+    linkedInURL: 'https://socialurl.com',
+    githubURL: 'https://socialurl.com',
+    youtubeURL: 'https://socialurl.com',
+    redditURL: 'https://socialurl.com',
+    slackURL: 'https://socialurl.com',
+  };
+
+  const fieldValues = { ...defaults, ...values };
+
+  // Populate each field
+  fireEvent.change(screen.getByPlaceholderText('Community Name'), {
+    target: { value: fieldValues.name },
+  });
+
+  fireEvent.change(screen.getByPlaceholderText('Website Link'), {
+    target: { value: fieldValues.websiteURL },
+  });
+
+  // Populate social fields
+  Object.entries({
+    facebook: fieldValues.facebookURL,
+    instagram: fieldValues.instagramURL,
+    X: fieldValues.xURL,
+    linkedIn: fieldValues.linkedInURL,
+    github: fieldValues.githubURL,
+    youtube: fieldValues.youtubeURL,
+    reddit: fieldValues.redditURL,
+    slack: fieldValues.slackURL,
+  }).forEach(([testId, value]) => {
+    fireEvent.change(screen.getByTestId(testId), {
+      target: { value },
+    });
+  });
+}
+
 describe('Testing Community Profile Screen', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -560,9 +606,6 @@ describe('MinIO File Upload Handling', () => {
   });
 
   test('uploads logo to MinIO and includes objectName in mutation', async () => {
-    // Split this into two separate tests:
-
-    // Test 1: Just verify MinIO upload works
     render(
       <MockedProvider addTypename={false} link={minioLink}>
         <BrowserRouter>
@@ -573,23 +616,11 @@ describe('MinIO File Upload Handling', () => {
       </MockedProvider>,
     );
 
+    // One line replaces all those fireEvent.change calls
+    populateFormFields();
+
     const file = new File(['logo content'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('fileInput');
-
-    // Set required fields
-    fireEvent.change(screen.getByPlaceholderText('Community Name'), {
-      target: { value: 'Name' },
-    });
-
-    fireEvent.change(screen.getByPlaceholderText('Website Link'), {
-      target: { value: 'https://website.com' },
-    });
-
-    // Fill out ALL social fields to match mock
-    fireEvent.change(screen.getByTestId('facebook'), {
-      target: { value: 'https://socialurl.com' },
-    });
-    // Add all other social fields...
 
     // Upload file
     await act(async () => {
@@ -606,8 +637,6 @@ describe('MinIO File Upload Handling', () => {
       }),
       'community',
     );
-
-    // Don't test the save button in this test
   });
 
   // Test 2 (separate): Test the form submission with pre-filled state
@@ -762,51 +791,12 @@ describe('MinIO File Upload Handling', () => {
 
     await wait(200);
 
-    // Verify error toast was shown
-    expect(toast.error).toHaveBeenCalled();
-
-    // Reset mock for subsequent tests
-    communityProfileMockUpload.mockResolvedValue({
-      objectName: 'test-image.png',
-    });
-  });
-
-  // Add this test to your MinIO File Upload Handling describe block
-  test('shows error toast when MinIO upload fails', async () => {
-    // Temporarily mock a rejection for this test only
-    communityProfileMockUpload.mockRejectedValueOnce(
-      new Error('Upload failed'),
-    );
-
-    render(
-      <MockedProvider addTypename={false} link={minioLink}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CommunityProfile />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Create a file and trigger upload
-    const file = new File(['logo content'], 'test.png', { type: 'image/png' });
-    const fileInput = screen.getByTestId('fileInput');
-
-    // Trigger the file upload that will fail
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [file] } });
-    });
-
-    // Wait for error handling to complete
-    await wait(200);
-
-    // Verify that error toast was shown
+    // Verify error toast was shown with specific message
     expect(toast.error).toHaveBeenCalledWith(
       expect.stringContaining('logoUploadFailed'),
     );
 
-    // Reset the mock for subsequent tests
-    communityProfileMockUpload.mockClear();
+    // Reset mock for subsequent tests
     communityProfileMockUpload.mockResolvedValue({
       objectName: 'test-image.png',
     });
