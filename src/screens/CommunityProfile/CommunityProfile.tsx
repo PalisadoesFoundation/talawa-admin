@@ -20,7 +20,7 @@ import {
   RedditLogo,
   SlackLogo,
 } from 'assets/svgs/social-icons';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
 import styles from '../../style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../components/UpdateSession/UpdateSession';
@@ -65,6 +65,8 @@ const CommunityProfile = (): JSX.Element => {
     keyPrefix: 'communityProfile',
   });
   const { t: tCommon } = useTranslation('common');
+  // Add MinIO hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   document.title = t('title'); // Set document title
 
@@ -164,6 +166,8 @@ const CommunityProfile = (): JSX.Element => {
           youtubeURL: profileVariable.youtubeURL || undefined,
           redditURL: profileVariable.redditURL || undefined,
           slackURL: profileVariable.slackURL || undefined,
+          // Add logo to the mutation
+          logo: profileVariable.logo || undefined,
         },
       });
       toast.success(t('profileChangedMsg') as string);
@@ -275,20 +279,28 @@ const CommunityProfile = (): JSX.Element => {
                 id="logo"
                 name="logo"
                 data-testid="fileInput"
-                onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>,
-                ): Promise<void> => {
-                  setProfileVariable((prevInput) => ({
-                    ...prevInput,
-                    logo: '',
-                  }));
+                onChange={async (e: React.ChangeEvent) => {
                   const target = e.target as HTMLInputElement;
                   const file = target.files?.[0];
-                  const base64file = file && (await convertToBase64(file));
-                  setProfileVariable({
-                    ...profileVariable,
-                    logo: base64file ?? '',
-                  });
+
+                  if (file) {
+                    try {
+                      // Upload to MinIO instead of converting to base64
+                      const { objectName } = await uploadFileToMinio(
+                        file,
+                        'community',
+                      );
+
+                      // Use functional state update to ensure we have the latest state
+                      setProfileVariable((prevState) => ({
+                        ...prevState,
+                        logo: objectName,
+                      }));
+                    } catch (error) {
+                      toast.error(t('logoUploadFailed') as string);
+                      console.error('Upload error:', error);
+                    }
+                  }
                 }}
                 className={`mb-3 ${styles.inputField}`}
                 autoComplete="off"
