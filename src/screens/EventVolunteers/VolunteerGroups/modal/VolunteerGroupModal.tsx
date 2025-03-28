@@ -103,7 +103,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
 
   useEffect(() => {
     if (memberData) {
-      setMembers(memberData.organizations[0].members);
+      setMembers(memberData.organization[0].members);
     }
   }, [memberData]);
 

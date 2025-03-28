@@ -39,21 +39,30 @@ export const CURRENT_USER = gql`
 // Query to take the Organization list
 export const ORGANIZATION_LIST = gql`
   query {
-    organizations {
-      id
+    organization {
+      _id
+      image
+      creator {
+        firstName
+        lastName
+      }
       name
-      addressLine1
-      description
-      avatarURL
-      members(first: 32) {
-        edges {
-          node {
-            id
-          }
-        }
-        pageInfo {
-          hasNextPage
-        }
+      members {
+        _id
+      }
+      admins {
+        _id
+      }
+      createdAt
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
       }
     }
   }
@@ -89,7 +98,7 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
 
 export const ALL_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations {
-    organizations {
+    organization {
       id
       name
       addressLine1
@@ -560,7 +569,7 @@ export const ORGANIZATIONS_LIST = gql`
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
   query Organizations($id: ID!) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       members {
         _id
@@ -845,7 +854,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
 // to take the list of the admins of a particular
 export const ADMIN_LIST = gql`
   query Organizations($id: ID!) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       admins {
         _id
@@ -867,7 +876,7 @@ export const MEMBERSHIP_REQUEST = gql`
     $first: Int
     $firstName_contains: String
   ) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       membershipRequests(
         skip: $skip

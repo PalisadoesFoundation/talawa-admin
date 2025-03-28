@@ -166,7 +166,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     useQuery(MEMBERS_LIST, { variables: { id: orgId } });
 
   const members = useMemo(
-    () => membersData?.organizations[0].members || [],
+    () => membersData?.organization[0]?.members || [],
     [membersData],
   );
 

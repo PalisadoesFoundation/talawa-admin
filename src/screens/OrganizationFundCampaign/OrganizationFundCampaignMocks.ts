@@ -5,250 +5,128 @@ import {
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 
 export const MOCKS = [
+  // Base mock with no filters
   {
     request: {
       query: FUND_CAMPAIGN,
       variables: {
-        id: 'fundId',
-        orderBy: null,
-        where: { name_contains: '' },
+        input: { id: 'fundId' },
       },
     },
     result: {
       data: {
-        getFundById: {
+        fund: {
+          id: 'fundId',
           name: 'Fund 1',
-          isArchived: false,
-          campaigns: [
-            {
-              _id: 'campaignId1',
-              name: 'Campaign 1',
-              fundingGoal: 100,
-              startDate: '2024-01-01',
-              endDate: '2024-01-01',
-              currency: 'USD',
-            },
-            {
-              _id: '2',
-              name: 'Campaign 2',
-              fundingGoal: 200,
-              startDate: '2021-01-01',
-              endDate: '2021-01-01',
-              currency: 'USD',
-            },
-          ],
+          campaigns: {
+            edges: [
+              {
+                node: {
+                  id: 'campaignId1',
+                  name: 'Campaign 1',
+                  startAt: '2024-01-01T00:00:00.000Z',
+                  endAt: '2026-01-01T00:00:00.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                },
+              },
+              {
+                node: {
+                  id: '2',
+                  name: 'Campaign 2',
+                  startAt: '2021-01-01T00:00:00.000Z',
+                  endAt: '2026-01-01T00:00:00.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 200,
+                },
+              },
+            ],
+          },
         },
       },
     },
   },
+  // Sort by endDate DESC
   {
     request: {
       query: FUND_CAMPAIGN,
       variables: {
-        id: 'fundId',
-        orderBy: null,
-        where: { name_contains: '2' },
+        input: { id: 'fundId' },
       },
     },
     result: {
       data: {
-        getFundById: {
+        fund: {
+          id: 'fundId',
           name: 'Fund 1',
-          isArchived: false,
-          campaigns: [
-            {
-              _id: '2',
-              name: 'Campaign 2',
-              fundingGoal: 200,
-              startDate: '2021-01-01',
-              endDate: '2021-01-01',
-              currency: 'USD',
-            },
-          ],
+          campaigns: {
+            edges: [
+              {
+                node: {
+                  id: 'campaignId1',
+                  name: 'Campaign 1',
+                  startAt: '2024-01-01T00:00:00.000Z',
+                  endAt: '2026-01-01T00:00:00.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                },
+              },
+              {
+                node: {
+                  id: '2',
+                  name: 'Campaign 2',
+                  startAt: '2021-01-01T00:00:00.000Z',
+                  endAt: '2026-01-01T00:00:00.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 200,
+                },
+              },
+            ],
+          },
         },
       },
     },
   },
-  {
-    request: {
-      query: FUND_CAMPAIGN,
-      variables: {
-        id: 'fundId',
-        orderBy: 'endDate_DESC',
-        where: { name_contains: '' },
-      },
-    },
-    result: {
-      data: {
-        getFundById: {
-          name: 'Fund 1',
-          isArchived: false,
-          campaigns: [
-            {
-              _id: '1',
-              name: 'Campaign 1',
-              fundingGoal: 100,
-              startDate: '2024-01-01',
-              endDate: '2024-01-01',
-              currency: 'USD',
-            },
-            {
-              _id: '2',
-              name: 'Campaign 2',
-              fundingGoal: 200,
-              startDate: '2021-01-01',
-              endDate: '2021-01-01',
-              currency: 'USD',
-            },
-          ],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: FUND_CAMPAIGN,
-      variables: {
-        id: 'fundId',
-        orderBy: 'endDate_ASC',
-        where: { name_contains: '' },
-      },
-    },
-    result: {
-      data: {
-        getFundById: {
-          name: 'Fund 1',
-          isArchived: false,
-          campaigns: [
-            {
-              _id: '2',
-              name: 'Campaign 2',
-              fundingGoal: 200,
-              startDate: '2021-01-01',
-              endDate: '2021-01-01',
-              currency: 'USD',
-            },
-            {
-              _id: '1',
-              name: 'Campaign 1',
-              fundingGoal: 100,
-              startDate: '2024-01-01',
-              endDate: '2024-01-01',
-              currency: 'USD',
-            },
-          ],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: FUND_CAMPAIGN,
-      variables: {
-        id: 'fundId',
-        orderBy: 'fundingGoal_DESC',
-        where: { name_contains: '' },
-      },
-    },
-    result: {
-      data: {
-        getFundById: {
-          name: 'Fund 1',
-          isArchived: false,
-          campaigns: [
-            {
-              _id: '2',
-              name: 'Campaign 2',
-              fundingGoal: 200,
-              startDate: '2021-01-01',
-              endDate: '2021-01-01',
-              currency: 'USD',
-            },
-            {
-              _id: '1',
-              name: 'Campaign 1',
-              fundingGoal: 100,
-              startDate: '2024-01-01',
-              endDate: '2024-01-01',
-              currency: 'USD',
-            },
-          ],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: FUND_CAMPAIGN,
-      variables: {
-        id: 'fundId',
-        orderBy: 'fundingGoal_ASC',
-        where: { name_contains: '' },
-      },
-    },
-    result: {
-      data: {
-        getFundById: {
-          name: 'Fund 1',
-          isArchived: false,
-          campaigns: [
-            {
-              _id: '1',
-              name: 'Campaign 1',
-              fundingGoal: 100,
-              startDate: '2024-01-01',
-              endDate: '2024-01-01',
-              currency: 'USD',
-            },
-            {
-              _id: '2',
-              name: 'Campaign 2',
-              fundingGoal: 200,
-              startDate: '2021-01-01',
-              endDate: '2021-01-01',
-              currency: 'USD',
-            },
-          ],
-        },
-      },
-    },
-  },
+  // Create campaign mock
   {
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
       variables: {
         fundId: 'fundId',
-        organizationId: 'orgId',
         name: 'Campaign 2',
-        fundingGoal: 200,
-        startDate: '2024-01-02',
-        endDate: '2024-02-02',
-        currency: 'USD',
+        goalAmount: 200,
+        startAt: '2024-02-01T00:00:00.000Z',
+        endAt: '2024-12-31T00:00:00.000Z',
+        currencyCode: 'USD',
       },
     },
     result: {
       data: {
-        createFundraisingCampaign: {
-          _id: 'fundId',
+        createFundCampaign: {
+          id: '01958c3d-12a4-7056-91dc-24abc0c6ad37',
         },
       },
     },
   },
+
+  // Update campaign mock
   {
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
       variables: {
-        id: 'campaignId1',
-        name: 'Campaign 4',
-        fundingGoal: 400,
-        startDate: '2023-01-02',
-        endDate: '2023-02-02',
+        input: {
+          id: 'campaignId1',
+          name: 'Campaign 4',
+          goalAmount: 400,
+          startAt: '2024-02-01T00:00:00.000Z',
+          endAt: '2024-12-31T00:00:00.000Z',
+        },
       },
     },
     result: {
       data: {
-        updateFundraisingCampaign: {
-          _id: 'campaignId1',
+        updateFundCampaign: {
+          id: 'campaignId1',
         },
       },
     },
@@ -260,9 +138,7 @@ export const MOCK_ERROR = [
     request: {
       query: FUND_CAMPAIGN,
       variables: {
-        id: 'fundId',
-        orderBy: null,
-        where: { name_contains: '2' },
+        input: { id: 'fundId' },
       },
     },
     error: new Error('An error occurred'),
@@ -272,12 +148,11 @@ export const MOCK_ERROR = [
       query: CREATE_CAMPAIGN_MUTATION,
       variables: {
         fundId: 'fundId',
-        organizationId: 'orgId',
         name: 'Campaign 2',
-        fundingGoal: 200,
-        startDate: '2024-01-02',
-        endDate: '2024-02-02',
-        currency: 'USD',
+        goalAmount: 200,
+        startAt: '2024-02-01T00:00:00.000Z',
+        endAt: '2024-02-02T00:00:00.000Z',
+        currencyCode: 'USD',
       },
     },
     error: new Error('Mock graphql error'),
@@ -286,11 +161,13 @@ export const MOCK_ERROR = [
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
       variables: {
-        id: 'campaignId1',
-        name: 'Campaign 4',
-        fundingGoal: 400,
-        startDate: '2023-01-02',
-        endDate: '2023-02-02',
+        input: {
+          id: 'campaignId1',
+          name: 'Campaign 4',
+          goalAmount: 400,
+          startAt: '2024-02-01T00:00:00.000Z',
+          endAt: '2024-02-02T00:00:00.000Z',
+        },
       },
     },
     error: new Error('Mock graphql error'),
@@ -302,17 +179,17 @@ export const EMPTY_MOCKS = [
     request: {
       query: FUND_CAMPAIGN,
       variables: {
-        id: 'fundId',
-        orderBy: null,
-        where: { name_contains: '' },
+        input: { id: 'fundId' },
       },
     },
     result: {
       data: {
-        getFundById: {
+        fund: {
+          id: 'fundId',
           name: 'Fund 1',
-          isArchived: false,
-          campaigns: [],
+          campaigns: {
+            edges: [],
+          },
         },
       },
     },

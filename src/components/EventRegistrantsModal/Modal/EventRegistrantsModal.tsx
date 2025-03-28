@@ -158,7 +158,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 </span>
               </div>
             }
-            options={memberData.organizations[0].members}
+            options={memberData.organization[0].members}
             getOptionLabel={(member: InterfaceUser): string =>
               `${member.firstName} ${member.lastName}`
             }
