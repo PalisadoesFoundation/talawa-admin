@@ -1,14 +1,46 @@
+/**
+ * @file DeleteUser.tsx
+ * @description This component renders a user interface for deleting a user account.
+ * It includes a card layout with a title, a message, and a delete button styled using Bootstrap and custom CSS.
+ * The component utilizes internationalization (i18n) for text content.
+ *
+ * @module DeleteUser
+ *
+ * @component
+ * @returns {React.FC} A functional React component that displays the delete user section.
+ *
+ * @requires react
+ * @requires react-bootstrap/Button
+ * @requires react-bootstrap/Card
+ * @requires react-i18next/useTranslation
+ * @requires style/app-fixed.module.css
+ *
+ * @example
+ * // Example usage:
+ * import DeleteUser from './DeleteUser';
+ *
+ * function App() {
+ *   return (
+ *     <div>
+ *       <DeleteUser />
+ *     </div>
+ *   );
+ * }
+ *
+ * @remarks
+ * - The `useTranslation` hook is used to fetch localized strings with the key prefix `settings`.
+ * - The `styles` object is imported from a CSS module for custom styling.
+ * - The delete button is styled with the `danger` variant from Bootstrap.
+ *
+ * @translationKeys
+ * - `settings.deleteUser`: Title for the delete user section.
+ * - `settings.deleteUserMessage`: Message displayed to the user before deletion.
+ */
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 
-/**
- * DeleteUser component displays a card with a button to delete a user.
- * It includes a message and a button to trigger the delete action.
- *
- * @returns The JSX element for the delete user card.
- */
 const DeleteUser: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   return (

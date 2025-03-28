@@ -1,3 +1,26 @@
+/**
+ * @file Register.tsx
+ * @description This component provides a user registration form with fields for first name, last name, email,
+ * password, and confirm password. It includes validation, error handling, and integration with a GraphQL mutation
+ * for user registration. The component also allows switching to the login mode.
+ *
+ * @module Register
+ *
+ * @param {InterfaceRegisterProps} props - Props containing a function to change the current mode.
+ *
+ * @returns {JSX.Element} A registration form with input fields, validation, and a submit button.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for UI components and `@mui/icons-material` for icons.
+ * - Integrates with `react-toastify` for notifications and `@apollo/client` for GraphQL mutation.
+ * - Includes i18n support using `react-i18next`.
+ *
+ * @example
+ * ```tsx
+ * <Register setCurrentMode={setModeFunction} />
+ * ```
+ *
+ */
 import type { ChangeEvent, SetStateAction } from 'react';
 import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';

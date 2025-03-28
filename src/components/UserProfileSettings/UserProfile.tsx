@@ -1,3 +1,41 @@
+/**
+ * UserProfile component displays the profile details of a user.
+ *
+ * @remarks
+ * This component is designed to show user information such as name, email,
+ * profile picture, and the date the user joined. It uses React-Bootstrap for
+ * styling and Material-UI icons for visual elements. The component also
+ * supports tooltips for displaying additional information.
+ *
+ * @param props - Partial properties of the `InterfaceUser` type.
+ * @param props.firstName - The first name of the user.
+ * @param props.lastName - The last name of the user.
+ * @param props.createdAt - The date when the user joined.
+ * @param props.email - The email address of the user.
+ * @param props.image - The URL of the user's profile picture.
+ *
+ * @returns A JSX element displaying the user's profile details.
+ *
+ * @example
+ * ```tsx
+ * <UserProfile
+ *   firstName="John"
+ *   lastName="Doe"
+ *   createdAt="2023-01-01"
+ *   email="john.doe@example.com"
+ *   image="https://example.com/profile.jpg"
+ * />
+ * ```
+ *
+ * @dependencies
+ * - `react-bootstrap` for Card and Button components.
+ * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
+ * - `react-i18next` for translations.
+ * - `react-tooltip` for tooltips.
+ * - `Avatar` component for displaying a placeholder profile picture.
+ *
+ * @module UserProfile
+ */
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
@@ -18,17 +56,6 @@ const joinedDate = (param: string | Date): string => {
   return `${day} ${month} ${year}`;
 };
 
-/**
- * UserProfile component displays user profile details including an avatar or profile image, name, email, and join date.
- * It also provides a button to copy the profile link.
- *
- * @param  props - The properties to be passed into the component.
- * @param firstName - The first name of the user.
- * @param lastName - The last name of the user.
- * @param email - The email address of the user.
- * @param image - The URL of the user's profile image.
- * @returns The JSX element for the user profile card.
- */
 const UserProfile: React.FC<Partial<InterfaceUser>> = ({
   firstName,
   lastName,

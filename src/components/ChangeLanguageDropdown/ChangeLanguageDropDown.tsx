@@ -1,3 +1,35 @@
+/**
+ * Component: ChangeLanguageDropDown
+ *
+ * A React component that provides a dropdown menu for changing the application's language.
+ * It integrates with i18next for internationalization and updates the user's language preference
+ * on the server using a GraphQL mutation.
+ *
+ * @param props - The properties passed to the component.
+ * @param props.btnTextStyle - Optional CSS class for styling the button text.
+ *
+ * @returns A JSX.Element representing the language selection dropdown.
+ *
+ * @remarks
+ * - The component uses `react-bootstrap` for the dropdown UI.
+ * - The current language is determined using a cookie (`i18next`).
+ * - Updates the user's language preference on the server using the `UPDATE_CURRENT_USER_MUTATION`.
+ * - If a user avatar exists in localStorage, it is processed and included in the mutation.
+ * - Displays a toast notification if the user ID is not found.
+ *
+ * @example
+ * ```tsx
+ * <ChangeLanguageDropDown btnTextStyle="custom-style" />
+ * ```
+ *
+ * @dependencies
+ * - `react-bootstrap` for dropdown UI.
+ * - `i18next` for language management.
+ * - `js-cookie` for managing cookies.
+ * - `react-toastify` for displaying notifications.
+ * - `@apollo/client` for GraphQL mutation.
+ *
+ */
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import i18next from 'i18next';
@@ -11,31 +43,14 @@ import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 import { urlToFile } from 'utils/urlToFile';
 import { toast } from 'react-toastify';
 
-/**
- * A dropdown component that allows users to change the application's language.
- * It updates the user's language preference in the backend and stores the selection in cookies.
- *
- * @param props - The properties for customizing the dropdown component.
- * @param parentContainerStyle - Custom style for the dropdown container.
- * @param btnStyle - Custom style for the dropdown button.
- * @param btnTextStyle - Custom style for the button text.
- *
- * @returns JSX.Element - The rendered dropdown component for changing languages.
- */
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
   const { getItem } = useLocalStorage();
 
-  // Remove the extra prefix here. The hook already adds "Talawa-admin".
   const userId = getItem('id');
   const userImage = getItem('UserImage');
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
 
-  /**
-   * Changes the application's language and updates the user's language preference.
-   *
-   * @param languageCode - The code of the language to switch to.
-   */
   const changeLanguage = async (languageCode: string): Promise<void> => {
     if (!userId) {
       toast.error('User not found');

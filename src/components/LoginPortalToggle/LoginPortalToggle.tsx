@@ -1,3 +1,28 @@
+/**
+ * A React functional component that provides a toggle interface for switching
+ * between 'admin' and 'user' roles. It uses navigation links styled with
+ * conditional classes to indicate the active role.
+ *
+ * @remarks
+ * This component is designed to work with the `react-router-dom` library for
+ * navigation and `react-i18next` for internationalization. It also utilizes
+ * Bootstrap's grid system for layout and custom CSS modules for styling.
+ *
+ * @param props - The props for the component.
+ * @param props.onToggle - A callback function invoked when the active role is toggled.
+ *                         It receives the new role ('admin' or 'user') as an argument.
+ *
+ * @returns A JSX element containing the toggle interface.
+ *
+ * @example
+ * ```tsx
+ * <LoginPortalToggle onToggle={(role) => console.log(role)} />
+ * ```
+ *
+ * @component
+ * @category Components
+ * @module LoginPortalToggle
+ */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 // import styles from 'style/app.module.css';
@@ -7,15 +32,9 @@ import Row from 'react-bootstrap/Row';
 import { NavLink } from 'react-router-dom';
 
 interface InterfaceLoginPortalToggleProps {
-  onToggle: (role: 'admin' | 'user') => void; // Callback function for role change
+  onToggle: (role: 'admin' | 'user') => void;
 }
 
-/**
- * Component for toggling between admin and user login portals.
- *
- * @param onToggle - Callback function to handle role changes ('admin' or 'user').
- * @returns JSX element for login portal toggle.
- */
 function loginPortalToggle({
   onToggle,
 }: InterfaceLoginPortalToggleProps): JSX.Element {

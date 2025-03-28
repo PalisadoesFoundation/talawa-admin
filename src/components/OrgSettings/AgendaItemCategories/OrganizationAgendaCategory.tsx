@@ -1,3 +1,32 @@
+/**
+ * Component for managing and displaying agenda item categories for an organization.
+ *
+ * @component
+ * @param {InterfaceAgendaCategoryProps} props - The props for the component.
+ * @param {string} props.orgId - The ID of the organization.
+ *
+ * @remarks
+ * This component fetches, displays, and allows the creation of agenda item categories
+ * for a specific organization. It includes a search bar for filtering categories by name
+ * and a modal for creating new categories.
+ *
+ * @requires {@link useQuery} - For fetching agenda item categories.
+ * @requires {@link useMutation} - For creating new agenda item categories.
+ * @requires {@link useTranslation} - For internationalization.
+ * @requires {@link AgendaCategoryContainer} - For displaying the list of agenda categories.
+ * @requires {@link AgendaCategoryCreateModal} - For creating new agenda categories.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationAgendaCategory orgId="12345" />
+ * ```
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @throws {Error} If there is an error while fetching agenda item categories.
+ *
+ * @todo Add additional error handling and improve UI for error states.
+ */
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,13 +50,6 @@ interface InterfaceAgendaCategoryProps {
   orgId: string;
 }
 
-/**
- * Component for managing and displaying agenda item categories within an organization.
- *
- * This component allows users to view, create, and manage agenda item categories. It includes functionality for displaying categories, handling creation, and managing modal visibility.
- *
- * @returns The rendered component.
- */
 const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   orgId,
 }) => {

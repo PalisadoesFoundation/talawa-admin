@@ -1,3 +1,39 @@
+/**
+ * OrgContribution Component
+ *
+ * This component renders the "Organization Contribution" page, which includes:
+ * - A sidebar for filtering contributions by organization name and transaction ID.
+ * - A section displaying recent contribution statistics.
+ * - A main content area displaying a list of contribution cards.
+ *
+ * Features:
+ * - Utilizes the `react-i18next` library for internationalization and localization.
+ * - Dynamically sets the document title based on the translated page title.
+ * - Includes reusable components such as `ContriStats` and `OrgContriCards`.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered JSX for the OrgContribution page.
+ *
+ * @remarks
+ * - The sidebar includes input fields for filtering contributions and displays recent statistics.
+ * - The main content area lists contribution details such as user name, date, amount, transaction ID, and email.
+ *
+ * @dependencies
+ * - `react-bootstrap` for layout and form controls.
+ * - `react-i18next` for translation and localization.
+ * - `ContriStats` and `OrgContriCards` for displaying contribution-related data.
+ *
+ * @example
+ * // Example usage of OrgContribution component
+ * import OrgContribution from './OrgContribution';
+ *
+ * function App() {
+ *   return <OrgContribution />;
+ * }
+ *
+ * @file OrgContribution.tsx
+ * @module OrgContribution
+ */
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -7,12 +43,6 @@ import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import { Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 
-/**
- * The `orgContribution` component displays the contributions to an organization.
- * It includes a sidebar for filtering contributions by organization name and transaction ID.
- * Additionally, it shows recent contribution statistics and a list of contribution cards.
- *
- */
 function OrgContribution(): JSX.Element {
   // Hook to get translation functions and translation text
   const { t } = useTranslation('translation', { keyPrefix: 'orgContribution' });

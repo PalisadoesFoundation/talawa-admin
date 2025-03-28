@@ -6,9 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L38)
-
-Renders an icon based on the provided name.
+Defined in: [src/components/IconComponent/IconComponent.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L65)
 
 ## Parameters
 
@@ -16,10 +14,6 @@ Renders an icon based on the provided name.
 
 [`InterfaceIconComponent`](../interfaces/InterfaceIconComponent.md)
 
-Contains the name of the icon and optional styles (fill, height, width).
-
 ## Returns
 
 `Element`
-
-JSX element representing the icon.

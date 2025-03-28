@@ -6,10 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/Pagination/PaginationList/PaginationList.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Pagination/PaginationList/PaginationList.tsx#L31)
-
-A component that provides pagination controls for a table.
-It uses different pagination styles based on screen size.
+Defined in: [src/components/Pagination/PaginationList/PaginationList.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Pagination/PaginationList/PaginationList.tsx#L50)
 
 ## Parameters
 
