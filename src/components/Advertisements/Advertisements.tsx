@@ -60,15 +60,15 @@ export default function Advertisements(): JSX.Element {
   >([]);
 
   const { data: orgAdvertisementListData, refetch } = useQuery<{
-    organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+    organization: InterfaceQueryOrganizationAdvertisementListItem[];
   }>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: { id: currentOrgId, after, first: 6 },
   });
 
   useEffect(() => {
-    if (orgAdvertisementListData?.organizations?.[0]?.advertisements) {
+    if (orgAdvertisementListData?.organization[0]?.advertisements) {
       const ads =
-        orgAdvertisementListData.organizations[0].advertisements.edges.map(
+        orgAdvertisementListData.organization[0].advertisements.edges.map(
           (edge) => ({
             ...edge.node,
             mediaUrl: edge.node.mediaUrl
@@ -94,7 +94,7 @@ export default function Advertisements(): JSX.Element {
     await refetch();
 
     const newAfter =
-      orgAdvertisementListData?.organizations?.[0]?.advertisements?.pageInfo
+      orgAdvertisementListData?.organization[0]?.advertisements?.pageInfo
         ?.endCursor ?? null;
     setAfter(newAfter);
   }
@@ -143,7 +143,7 @@ export default function Advertisements(): JSX.Element {
                     </div>
                   ))}
                   hasMore={
-                    orgAdvertisementListData?.organizations?.[0]?.advertisements
+                    orgAdvertisementListData?.organization[0]?.advertisements
                       ?.pageInfo?.hasNextPage ?? false
                   }
                   className={styles.listBoxAdvertisements}
@@ -191,7 +191,7 @@ export default function Advertisements(): JSX.Element {
                   dataLength={advertisements.length}
                   next={loadMoreAdvertisements}
                   hasMore={
-                    orgAdvertisementListData?.organizations?.[0]?.advertisements
+                    orgAdvertisementListData?.organization[0]?.advertisements
                       ?.pageInfo?.hasNextPage ?? false
                   }
                   className={styles.listBoxAdvertisements}

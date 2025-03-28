@@ -64,7 +64,7 @@ const mocks = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: 'test-org-id',
             image: 'https://example.com/organization-image.png',
@@ -161,7 +161,7 @@ const mocks = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: 'org123',
             name: 'Tech Enthusiasts Club',
@@ -654,7 +654,7 @@ describe('LeaveOrganization Component', () => {
             },
             result: {
               data: {
-                organizations: [
+                organization: [
                   {
                     _id: 'test-org-id',
                     name: 'Test Organization',
@@ -713,7 +713,7 @@ describe('LeaveOrganization Component', () => {
       },
       result: {
         data: {
-          organizations: [],
+          organization: [],
         },
       },
     };
