@@ -10,15 +10,13 @@ import {
   SEND_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { useMutation, useQuery } from '@apollo/client';
-import {
-  ORGANIZATION_LIST,
-  USER_JOINED_ORGANIZATIONS_PG,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import type { ApolloError } from '@apollo/client';
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 import { getItem } from 'utils/useLocalstorage';
+import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 
 /**
  * Component to display an organization's card with its image and owner details.
@@ -33,7 +31,8 @@ import { getItem } from 'utils/useLocalstorage';
  * @param image - The URL of the organization's image.
  * @param description - A description of the organization.
  * @param admins - The list of admins with their IDs.
- * @param members - The list of members with their IDs.
+ * @param membersCount - organization members count
+ * @param adminsCount - organization Admins count
  * @param address - The address of the organization including city, country code, line1, postal code, and state.
  * @param membershipRequestStatus - The status of the membership request (accepted, pending, or empty).
  * @param userRegistrationRequired - Indicates if user registration is required to join the organization.
@@ -49,8 +48,8 @@ function OrganizationCard({
   name,
   image,
   description,
-  admins,
-  members,
+  adminsCount,
+  membersCount,
   address,
   membershipRequestStatus,
   userRegistrationRequired,
@@ -181,10 +180,10 @@ function OrganizationCard({
           )}
           <h6 className={styles.orgadmin}>
             <div>
-              {tCommon('admins')}: <span>{admins?.length}</span>
+              {tCommon('admins')}: <span>{adminsCount}</span>
             </div>
             <div>
-              {tCommon('members')}: <span>{members?.length}</span>
+              {tCommon('members')}: <span>{membersCount}</span>
             </div>
           </h6>
         </div>
