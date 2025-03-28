@@ -524,27 +524,21 @@ test('should properly clean up on unmount', () => {
   result.current.startSession();
   unmount();
 
-  // Verify window event listeners were removed
-  expect(windowRemoveEventListenerSpy).toHaveBeenCalledWith(
+  expect(window.removeEventListener).toHaveBeenCalledWith(
     'mousemove',
     expect.any(Function),
   );
-  expect(windowRemoveEventListenerSpy).toHaveBeenCalledWith(
+  expect(window.removeEventListener).toHaveBeenCalledWith(
     'keydown',
     expect.any(Function),
   );
-
-  // Verify document event listeners were removed
-  expect(documentRemoveEventListenerSpy).toHaveBeenCalledWith(
+  expect(documentRemoveEventListener).toHaveBeenCalledWith(
     'visibilitychange',
     expect.any(Function),
   );
 
-  // Clean up
-  windowRemoveEventListenerSpy.mockRestore();
-  documentRemoveEventListenerSpy.mockRestore();
+  documentRemoveEventListener.mockRestore();
 });
-
 test('should handle missing community data', async () => {
   vi.useFakeTimers();
   const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
