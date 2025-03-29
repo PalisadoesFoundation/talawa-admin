@@ -541,4 +541,73 @@ describe('Organisation Events Page', () => {
       ).not.toBeInTheDocument();
     });
   });
+
+  test('Testing Create event with error handling', async () => {
+    // Create a custom link that will throw a network error for the CREATE_EVENT_MUTATION
+    const errorLink = new StaticMockLink(MOCKS, true);
+
+    // Override the query method to throw an error for CREATE_EVENT_MUTATION
+    errorLink.query = vi.fn().mockImplementation((request) => {
+      if (request.query === CREATE_EVENT_MUTATION) {
+        return Promise.reject(new Error('Failed to create event'));
+      }
+      return StaticMockLink.prototype.query.call(errorLink, request);
+    });
+
+    render(
+      <MockedProvider addTypename={false} link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+    });
+
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Title/i),
+      formData.title,
+    );
+
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Description/i),
+      formData.description,
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText(/Location/i),
+      formData.location,
+    );
+
+    // Click the create event button to trigger the mutation
+    await userEvent.click(screen.getByTestId('createEventBtn'));
+
+    // Wait for the error handler to be called
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalled();
+    });
+
+    // Verify the error handler was called with any error object
+    expect(errorHandler).toHaveBeenCalledWith(
+      expect.anything(), // The t function
+      expect.any(Error), // Any error object, regardless of type
+    );
+  });
 });
