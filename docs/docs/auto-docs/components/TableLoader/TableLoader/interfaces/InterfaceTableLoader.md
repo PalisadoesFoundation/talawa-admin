@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTableLoader
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L5)
+Defined in: [src/components/TableLoader/TableLoader.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L35)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:5](https://github.com/Pa
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L9)
+Defined in: [src/components/TableLoader/TableLoader.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L39)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:9](https://github.com/Pa
 
 > `optional` **headerTitles**: `string`[]
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L7)
+Defined in: [src/components/TableLoader/TableLoader.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L37)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:7](https://github.com/Pa
 
 > `optional` **noOfCols**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L8)
+Defined in: [src/components/TableLoader/TableLoader.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L38)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:8](https://github.com/Pa
 
 > **noOfRows**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L6)
+Defined in: [src/components/TableLoader/TableLoader.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L36)

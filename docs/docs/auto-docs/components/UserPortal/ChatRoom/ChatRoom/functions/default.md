@@ -6,12 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L46)
-
-A chat room component that displays messages and a message input field.
-
-This component shows a list of messages between the user and a selected contact.
-If no contact is selected, it displays a placeholder with an icon and a message asking the user to select a contact.
+Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L67)
 
 ## Parameters
 
@@ -19,10 +14,6 @@ If no contact is selected, it displays a placeholder with an icon and a message 
 
 `InterfaceChatRoomProps`
 
-The properties passed to the component.
-
 ## Returns
 
 `JSX.Element`
-
-The rendered chat room component.

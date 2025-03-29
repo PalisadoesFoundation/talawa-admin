@@ -1,3 +1,54 @@
+/**
+ * OrganizationScreen Component
+ *
+ * This component serves as the main screen for managing an organization.
+ * It includes a side drawer for navigation, a header with a title and profile dropdown,
+ * and dynamically renders child routes using React Router's `Outlet`.
+ *
+ * @component
+ *
+ * @remarks
+ * - The component uses Redux for state management and Apollo Client for GraphQL queries.
+ * - It dynamically updates the page title and event name based on the current route.
+ * - The side drawer visibility is responsive to screen resizing.
+ *
+ * @returns {JSX.Element} The rendered OrganizationScreen component.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationScreen />
+ * ```
+ *
+ * @dependencies
+ * - `useLocation`, `useParams`, `useMatch`, `Navigate`, and `Outlet` from `react-router-dom`
+ * - `useSelector` and `useAppDispatch` for Redux state management
+ * - `useQuery` from `@apollo/client` for fetching organization events
+ * - `useTranslation` from `react-i18next` for internationalization
+ *
+ * @state
+ * - `hideDrawer` (`boolean | null`): Manages the visibility of the side drawer.
+ * - `eventName` (`string | null`): Stores the name of the currently selected event.
+ *
+ * @redux
+ * - `appRoutes.targets`: Contains the application routes for the organization.
+ * - Dispatches `updateTargets` action to update targets based on the organization ID.
+ *
+ * @graphql
+ * - Query: `ORGANIZATION_EVENT_LIST` to fetch events for the organization.
+ *
+ * @hooks
+ * - `useEffect`: Handles side drawer visibility, updates targets, and sets the event name.
+ * - `useQuery`: Fetches organization events data.
+ *
+ * @styles
+ * - Uses CSS modules for styling (`app-fixed.module.css`).
+ *
+ * @translation
+ * - Dynamically sets the page title using `useTranslation` and a mapping object.
+ *
+ * @events
+ * - Listens to window resize events to toggle the side drawer visibility.
+ */
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,16 +71,6 @@ import { useQuery } from '@apollo/client';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import type { InterfaceEvent } from 'types/Event/interface';
 
-/**
- * Component for the organization screen
- *
- * This component displays the organization screen and handles the layout
- * including a side drawer, header, and main content area. It adjusts
- * the layout based on the screen size and shows the appropriate content
- * based on the route.
- *
- * @returns JSX.Element representing the organization screen
- */
 const OrganizationScreen = (): JSX.Element => {
   // Get the current location to determine the translation key
   const location = useLocation();

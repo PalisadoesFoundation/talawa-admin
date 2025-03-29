@@ -1,10 +1,39 @@
+/**
+ * A React functional component that renders a loading placeholder
+ * for a card item. This component is used to indicate that the
+ * content of a card item is being loaded.
+ *
+ * @component
+ * @returns {JSX.Element} A JSX element representing the loading state
+ * of a card item.
+ *
+ * @remarks
+ * - The component uses CSS classes from `app-fixed.module.css` to
+ *   style the loading placeholder.
+ * - The `shimmer` and `rounded` classes are applied to create a
+ *   visual effect for the loading state.
+ * - The `themeOverlay` class is used to style the icon wrapper
+ *   during the loading state.
+ *
+ * @example
+ * ```tsx
+ * import CardItemLoading from './CardItemLoading';
+ *
+ * const App = () => (
+ *   <div>
+ *     <CardItemLoading />
+ *   </div>
+ * );
+ * ```
+ *
+ * @remarks
+ * This component is primarily used in the `OrganizationDashCards`
+ * section of the application to provide a consistent loading
+ * experience for users.
+ */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 
-/**
- * CardItemLoading component is a loading state for the card item. It is used when the data is being fetched.
- * @returns JSX.Element
- */
 const CardItemLoading = (): JSX.Element => {
   return (
     <>

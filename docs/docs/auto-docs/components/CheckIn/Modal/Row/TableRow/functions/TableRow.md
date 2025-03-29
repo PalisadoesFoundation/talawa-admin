@@ -6,10 +6,7 @@
 
 > **TableRow**(`__namedParameters`): `Element`
 
-Defined in: [src/components/CheckIn/Modal/Row/TableRow.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/Modal/Row/TableRow.tsx#L19)
-
-Component that represents a single row in the check-in table.
-Allows users to mark themselves as checked in and download a tag if they are already checked in.
+Defined in: [src/components/CheckIn/Modal/Row/TableRow.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/Modal/Row/TableRow.tsx#L47)
 
 ## Parameters
 
@@ -26,5 +23,3 @@ Allows users to mark themselves as checked in and download a tag if they are alr
 ## Returns
 
 `Element`
-
-JSX.Element - The rendered TableRow component.

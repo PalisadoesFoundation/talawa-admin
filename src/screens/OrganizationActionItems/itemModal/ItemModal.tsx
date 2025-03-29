@@ -1,3 +1,41 @@
+/**
+ * A modal component for creating and updating action items.
+ *
+ * This component provides a form to create or edit action items, allowing users
+ * to specify details such as due date, assignee, category, notes, and allotted hours.
+ * It supports assigning action items to individual volunteers, volunteer groups, or members.
+ *
+ * @component
+ * @param {InterfaceItemModalProps} props - The properties passed to the component.
+ * @param {boolean} props.isOpen - Determines if the modal is visible.
+ * @param {() => void} props.hide - Function to close the modal.
+ * @param {string} props.orgId - The ID of the organization.
+ * @param {string | undefined} props.eventId - The ID of the event (if applicable).
+ * @param {InterfaceActionItemInfo | null} props.actionItem - The action item being edited (if in edit mode).
+ * @param {boolean} props.editMode - Indicates whether the modal is in edit mode.
+ * @param {() => void} props.actionItemsRefetch - Function to refetch the action items list after changes.
+ *
+ * @returns {JSX.Element} The `ItemModal` component.
+ *
+ * @remarks
+ * - Uses Apollo Client for GraphQL queries and mutations.
+ * - Integrates with `react-bootstrap` for modal UI and `@mui/material` for form controls.
+ * - Handles both creation and updating of action items.
+ * - Displays appropriate fields based on the completion status of the action item.
+ *
+ * @example
+ * ```tsx
+ * <ItemModal
+ *   isOpen={true}
+ *   hide={() => setShowModal(false)}
+ *   orgId="org123"
+ *   eventId="event456"
+ *   actionItem={null}
+ *   editMode={false}
+ *   actionItemsRefetch={refetchActionItems}
+ * />
+ * ```
+ */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent, FC } from 'react';
