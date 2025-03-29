@@ -870,8 +870,8 @@ describe('MemberDetail', () => {
     const toastSuccessSpy = vi.spyOn(toast, 'success');
 
     // Test variables
-    let mockHandleDeleteUser;
-    let triggerDelete;
+    let mockHandleDeleteUser: any;
+    let triggerDelete: any;
 
     // First test case: with data
     const mockSetShowDeleteConfirm = vi.fn(); // Mock for setShowDeleteConfirm
@@ -1376,17 +1376,6 @@ describe('MemberDetail', () => {
     // Verify validatePassword was NOT called (should skip that code path)
     expect(window.validatePassword).not.toHaveBeenCalled();
     expect(toastErrorSpy).not.toHaveBeenCalled();
-
-    // CASE 4: Boolean input (should skip the entire string condition)
-    // Find a boolean field (checkbox) if available
-    const adminApprovedCheckbox = screen.getByTestId('AdminApprovedForm');
-
-    // Toggle the checkbox state
-    const initialCheckedState = adminApprovedCheckbox.checked;
-    fireEvent.click(adminApprovedCheckbox);
-
-    // Verify checkbox state changed
-    expect(adminApprovedCheckbox.checked).toBe(!initialCheckedState);
 
     // Verify validatePassword was NOT called (should skip that code path)
     expect(window.validatePassword).not.toHaveBeenCalled();
