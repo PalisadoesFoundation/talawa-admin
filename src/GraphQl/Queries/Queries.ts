@@ -494,6 +494,10 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
               id
               name
             }
+            updater {
+              id
+              name
+            }
           }
           cursor
         }
@@ -1093,6 +1097,100 @@ export const GET_ORGANIZATION_EVENTS = gql`
         description
         startAt
         endAt
+      }
+    }
+  }
+`;
+
+// Enhanced query to include more fields from the Event schema
+export const GET_EVENTS_BY_ORGANIZATION_PG = gql`
+  query GetEventsByOrganization($orgId: String!, $first: Int, $after: String) {
+    organization(input: { id: $orgId }) {
+      events(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            createdAt
+            updatedAt
+            creator {
+              id
+              name
+            }
+            updater {
+              id
+              name
+            }
+            venues(first: 1) {
+              edges {
+                node {
+                  id
+                  name
+                }
+              }
+            }
+            attachments {
+              url
+            }
+            organization {
+              id
+              name
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const GET_EVENT_BY_ID = gql`
+  query GetEvent($input: QueryEventInput!) {
+    event(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+      }
+      updater {
+        id
+        name
+      }
+      organization {
+        id
+        name
+      }
+      agendaFolders(first: 5) {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      attachments {
+        url
+      }
+      venues(first: 5) {
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
     }
   }

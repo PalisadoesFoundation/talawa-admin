@@ -60,7 +60,7 @@ import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import { TimePicker, DatePicker } from '@mui/x-date-pickers';
 import styles from 'style/app.module.css';
 import {
-  ORGANIZATION_EVENT_CONNECTION_LIST,
+  GET_EVENTS_BY_ORGANIZATION_PG,
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -150,12 +150,10 @@ function organizationEvents(): JSX.Element {
     loading,
     error: eventDataError,
     refetch: refetchEvents,
-  } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
+  } = useQuery(GET_EVENTS_BY_ORGANIZATION_PG, {
     variables: {
-      organization_id: currentUrl,
-      title_contains: '',
-      description_contains: '',
-      location_contains: '',
+      orgId: currentUrl,
+      first: 32,
     },
   });
 
@@ -196,40 +194,25 @@ function organizationEvents(): JSX.Element {
       formState.location.trim().length > 0
     ) {
       try {
+        // Format dates as ISO strings with proper time
+        const startDateTime = alldaychecked
+          ? `${dayjs(startDate).format('YYYY-MM-DD')}T00:00:00Z`
+          : `${dayjs(startDate).format('YYYY-MM-DD')}T${formState.startTime}Z`;
+
+        const endDateTime = alldaychecked
+          ? `${dayjs(endDate).format('YYYY-MM-DD')}T23:59:59Z`
+          : `${dayjs(endDate).format('YYYY-MM-DD')}T${formState.endTime}Z`;
+
+        // Use only the fields supported by the API schema
         const { data: createEventData } = await create({
           variables: {
-            title: formState.title,
-            description: formState.eventdescrip,
-            isPublic: publicchecked,
-            recurring: recurringchecked,
-            isRegisterable: registrablechecked,
-            organizationId: currentUrl,
-            startDate: dayjs(startDate).format('YYYY-MM-DD'),
-            endDate: dayjs(endDate).format('YYYY-MM-DD'),
-            allDay: alldaychecked,
-            location: formState.location,
-            startTime: !alldaychecked ? formState.startTime : undefined,
-            endTime: !alldaychecked ? formState.endTime : undefined,
-            recurrenceStartDate: recurringchecked
-              ? dayjs(recurrenceStartDate).format('YYYY-MM-DD')
-              : undefined,
-            recurrenceEndDate: recurringchecked
-              ? recurrenceEndDate
-                ? dayjs(recurrenceEndDate).format('YYYY-MM-DD')
-                : null
-              : undefined,
-            frequency: recurringchecked ? frequency : undefined,
-            weekDays:
-              recurringchecked &&
-              (frequency === Frequency.WEEKLY ||
-                (frequency === Frequency.MONTHLY && weekDayOccurenceInMonth))
-                ? weekDays
-                : undefined,
-            interval: recurringchecked ? interval : undefined,
-            count: recurringchecked ? count : undefined,
-            weekDayOccurenceInMonth: recurringchecked
-              ? weekDayOccurenceInMonth
-              : undefined,
+            input: {
+              name: formState.title,
+              description: formState.eventdescrip,
+              startAt: startDateTime,
+              endAt: endDateTime,
+              organizationId: currentUrl,
+            },
           },
         });
 
@@ -260,7 +243,6 @@ function organizationEvents(): JSX.Element {
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.log(error.message);
           errorHandler(t, error);
         }
       }
@@ -307,7 +289,23 @@ function organizationEvents(): JSX.Element {
         </div>
       </div>
       <EventCalendar
-        eventData={data?.eventsByOrganizationConnection}
+        eventData={
+          data?.organization?.events?.edges?.map((edge) => ({
+            _id: edge.node.id,
+            title: edge.node.name,
+            description: edge.node.description,
+            startDate: edge.node.startAt?.split('T')[0] || '', // Convert ISO to date string
+            endDate: edge.node.endAt?.split('T')[0] || '',
+            // Extract venue name from the venues connection or use empty string if not available
+            location: edge.node.venues?.edges?.node?.name || '',
+            // Provide default values for missing fields
+            allDay: true, // Default to true
+            isPublic: true, // Default to true
+            isRegisterable: false,
+            recurring: false,
+            attendees: [],
+          })) || []
+        }
         refetchEvents={refetchEvents}
         orgData={orgData}
         userRole={userRole}

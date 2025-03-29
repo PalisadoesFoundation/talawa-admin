@@ -22,7 +22,10 @@ import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MOCKS } from './OrganizationEventsMocks';
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { errorHandler } from 'utils/errorHandler';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -85,6 +88,10 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
 describe('Organisation Events Page', () => {
   const formData = {
     title: 'Dummy Org',
@@ -98,50 +105,86 @@ describe('Organisation Events Page', () => {
 
   global.alert = vi.fn();
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('It is necessary to query the correct mock data.', async () => {
-    const dataQuery1 = MOCKS[0]?.result?.data?.eventsByOrganizationConnection;
+    const dataQuery1 = MOCKS[0]?.result?.data?.organization?.events?.edges?.map(
+      (edge) => edge.node,
+    );
 
     expect(dataQuery1).toEqual([
       {
-        _id: 1,
-        title: 'Event',
+        id: '1',
+        name: 'Event',
         description: 'Event Test',
-        startDate: '',
-        endDate: '',
-        location: 'New Delhi',
-        startTime: '02:00',
-        endTime: '06:00',
-        allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
-        isPublic: true,
-        isRegisterable: true,
+        startAt: '2023-01-01T02:00:00Z',
+        endAt: '2023-01-01T06:00:00Z',
+        createdAt: '2023-01-01T00:00:00Z',
+        updatedAt: '2023-01-01T00:00:00Z',
+        creator: {
+          id: '1',
+          name: 'User Name',
+        },
+        updater: null,
+        venues: {
+          edges: [
+            {
+              node: {
+                id: '1',
+                name: 'New Delhi',
+              },
+            },
+          ],
+        },
+        attachments: [],
+        organization: {
+          id: '1',
+          name: 'Test Organization',
+        },
       },
     ]);
   });
+
   test('It is necessary to query the correct mock data for organization.', async () => {
-    const dataQuery1 = MOCKS[1]?.result?.data?.eventsByOrganizationConnection;
+    const dataQuery1 = MOCKS[1]?.result?.data?.organization?.events?.edges?.map(
+      (edge) => edge.node,
+    );
 
     expect(dataQuery1).toEqual([
       {
-        _id: '1',
-        title: 'Dummy Org',
+        id: '1',
+        name: 'Dummy Org',
         description: 'This is a dummy organization',
-        location: 'string',
-        startDate: '',
-        endDate: '',
-        startTime: '02:00',
-        endTime: '06:00',
-        allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
-        isPublic: true,
-        isRegisterable: true,
+        startAt: '2023-01-01T02:00:00Z',
+        endAt: '2023-01-01T06:00:00Z',
+        createdAt: '2023-01-01T00:00:00Z',
+        updatedAt: '2023-01-01T00:00:00Z',
+        creator: {
+          id: '1',
+          name: 'User Name',
+        },
+        updater: null,
+        venues: {
+          edges: [
+            {
+              node: {
+                id: '1',
+                name: 'New Delhi',
+              },
+            },
+          ],
+        },
+        attachments: [],
+        organization: {
+          id: '1',
+          name: 'Test Organization',
+        },
       },
     ]);
   });
+
   test('It is necessary to check correct render', async () => {
     window.location.assign('/orglist');
 

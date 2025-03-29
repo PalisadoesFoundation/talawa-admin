@@ -317,55 +317,23 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
 // to create the event by any organization
 
 export const CREATE_EVENT_MUTATION = gql`
-  mutation CreateEvent(
-    $title: String!
-    $description: String!
-    $recurring: Boolean!
-    $isPublic: Boolean!
-    $isRegisterable: Boolean!
-    $organizationId: ID!
-    $startDate: Date!
-    $endDate: Date!
-    $allDay: Boolean!
-    $startTime: Time
-    $endTime: Time
-    $location: String
-    $recurrenceStartDate: Date
-    $recurrenceEndDate: Date
-    $frequency: Frequency
-    $weekDays: [WeekDays]
-    $count: PositiveInt
-    $interval: PositiveInt
-    $weekDayOccurenceInMonth: Int
-    $createChat: Boolean!
-  ) {
-    createEvent(
-      data: {
-        title: $title
-        description: $description
-        recurring: $recurring
-        isPublic: $isPublic
-        isRegisterable: $isRegisterable
-        organizationId: $organizationId
-        startDate: $startDate
-        endDate: $endDate
-        allDay: $allDay
-        startTime: $startTime
-        endTime: $endTime
-        location: $location
-        createChat: $createChat
+  mutation CreateEvent($input: MutationCreateEventInput!) {
+    createEvent(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
       }
-      recurrenceRuleData: {
-        recurrenceStartDate: $recurrenceStartDate
-        recurrenceEndDate: $recurrenceEndDate
-        frequency: $frequency
-        weekDays: $weekDays
-        interval: $interval
-        count: $count
-        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      organization {
+        id
+        name
       }
-    ) {
-      _id
     }
   }
 `;

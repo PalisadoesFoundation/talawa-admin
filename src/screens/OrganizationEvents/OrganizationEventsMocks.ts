@@ -1,93 +1,113 @@
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { GET_EVENTS_BY_ORGANIZATION_PG } from 'GraphQl/Queries/Queries';
 
 export const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      query: GET_EVENTS_BY_ORGANIZATION_PG,
       variables: {
-        organization_id: undefined,
-        title_contains: '',
-        description_contains: '',
-        location_contains: '',
+        orgId: undefined,
+        first: 32,
       },
     },
     result: {
       data: {
-        eventsByOrganizationConnection: [
-          {
-            _id: 1,
-            title: 'Event',
-            description: 'Event Test',
-            startDate: '',
-            endDate: '',
-            location: 'New Delhi',
-            startTime: '02:00',
-            endTime: '06:00',
-            allDay: false,
-            recurring: false,
-            recurrenceRule: null,
-            isRecurringEventException: false,
-            isPublic: true,
-            isRegisterable: true,
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: '1',
+                  name: 'Event',
+                  description: 'Event Test',
+                  startAt: '2023-01-01T02:00:00Z',
+                  endAt: '2023-01-01T06:00:00Z',
+                  createdAt: '2023-01-01T00:00:00Z',
+                  updatedAt: '2023-01-01T00:00:00Z',
+                  creator: {
+                    id: '1',
+                    name: 'User Name',
+                  },
+                  updater: null,
+                  venues: {
+                    edges: [
+                      {
+                        node: {
+                          id: '1',
+                          name: 'New Delhi',
+                        },
+                      },
+                    ],
+                  },
+                  attachments: [],
+                  organization: {
+                    id: '1',
+                    name: 'Test Organization',
+                  },
+                },
+                cursor: 'cursor1',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor1',
+            },
           },
-        ],
+        },
       },
     },
   },
   {
     request: {
-      query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      query: GET_EVENTS_BY_ORGANIZATION_PG,
       variables: {
-        title_contains: '',
-        description_contains: '',
-        organization_id: undefined,
-        location_contains: '',
+        orgId: undefined,
+        first: 32,
       },
     },
     result: {
       data: {
-        eventsByOrganizationConnection: [
-          {
-            _id: '1',
-            title: 'Dummy Org',
-            description: 'This is a dummy organization',
-            location: 'string',
-            startDate: '',
-            endDate: '',
-            startTime: '02:00',
-            endTime: '06:00',
-            allDay: false,
-            recurring: false,
-            recurrenceRule: null,
-            isRecurringEventException: false,
-            isPublic: true,
-            isRegisterable: true,
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: '1',
+                  name: 'Dummy Org',
+                  description: 'This is a dummy organization',
+                  startAt: '2023-01-01T02:00:00Z',
+                  endAt: '2023-01-01T06:00:00Z',
+                  createdAt: '2023-01-01T00:00:00Z',
+                  updatedAt: '2023-01-01T00:00:00Z',
+                  creator: {
+                    id: '1',
+                    name: 'User Name',
+                  },
+                  updater: null,
+                  venues: {
+                    edges: [
+                      {
+                        node: {
+                          id: '1',
+                          name: 'New Delhi',
+                        },
+                      },
+                    ],
+                  },
+                  attachments: [],
+                  organization: {
+                    id: '1',
+                    name: 'Test Organization',
+                  },
+                },
+                cursor: 'cursor1',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor1',
+            },
           },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: CREATE_EVENT_MUTATION,
-      variables: {
-        title: 'Dummy Org',
-        location: 'New Delhi',
-        description: 'This is a dummy organization',
-        isPublic: false,
-        recurring: false,
-        isRegisterable: true,
-        organizationId: undefined,
-        startDate: '2022-03-28',
-        endDate: '2022-03-30',
-        allDay: true,
-      },
-    },
-    result: {
-      data: {
-        createEvent: {
-          _id: '1',
         },
       },
     },
@@ -96,24 +116,33 @@ export const MOCKS = [
     request: {
       query: CREATE_EVENT_MUTATION,
       variables: {
-        title: 'Dummy Org',
-        location: 'New Delhi',
-        description: 'This is a dummy organization',
-        isPublic: true,
-        recurring: false,
-        isRegisterable: false,
-        organizationId: undefined,
-        startDate: '2022-03-28',
-        endDate: '2022-03-30',
-        allDay: false,
-        startTime: '09:00:00',
-        endTime: '17:00:00',
+        input: {
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T00:00:00Z',
+          endAt: '2022-03-30T23:59:59Z',
+          organizationId: undefined,
+        },
       },
     },
     result: {
       data: {
         createEvent: {
-          _id: '1',
+          id: '1',
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T00:00:00Z',
+          endAt: '2022-03-30T23:59:59Z',
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+          creator: {
+            id: '1',
+            name: 'User Name',
+          },
+          organization: {
+            id: '1',
+            name: 'Test Organization',
+          },
         },
       },
     },
@@ -122,28 +151,33 @@ export const MOCKS = [
     request: {
       query: CREATE_EVENT_MUTATION,
       variables: {
-        title: 'Dummy Org',
-        location: 'New Delhi',
-        description: 'This is a dummy organization',
-        isPublic: true,
-        recurring: true,
-        isRegisterable: false,
-        organizationId: undefined,
-        startDate: '2022-03-28',
-        endDate: '2022-03-30',
-        allDay: false,
-        startTime: '09:00:00',
-        endTime: '17:00:00',
-        recurrenceStartDate: '2022-03-28',
-        recurrenceEndDate: null,
-        frequency: 'DAILY',
-        interval: 1,
+        input: {
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T09:00:00Z',
+          endAt: '2022-03-30T17:00:00Z',
+          organizationId: undefined,
+        },
       },
     },
     result: {
       data: {
         createEvent: {
-          _id: '1',
+          id: '1',
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T09:00:00Z',
+          endAt: '2022-03-30T17:00:00Z',
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+          creator: {
+            id: '1',
+            name: 'User Name',
+          },
+          organization: {
+            id: '1',
+            name: 'Test Organization',
+          },
         },
       },
     },
@@ -152,29 +186,33 @@ export const MOCKS = [
     request: {
       query: CREATE_EVENT_MUTATION,
       variables: {
-        title: 'Dummy Org',
-        location: 'New Delhi',
-        description: 'This is a dummy organization',
-        isPublic: true,
-        recurring: true,
-        isRegisterable: false,
-        organizationId: undefined,
-        startDate: '2022-03-28',
-        endDate: '2022-03-30',
-        allDay: false,
-        startTime: '09:00:00',
-        endTime: '17:00:00',
-        recurrenceStartDate: '2022-03-28',
-        recurrenceEndDate: null,
-        frequency: 'WEEKLY',
-        interval: 1,
-        weekDays: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
+        input: {
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T09:00:00Z',
+          endAt: '2022-03-30T17:00:00Z',
+          organizationId: undefined,
+        },
       },
     },
     result: {
       data: {
         createEvent: {
-          _id: '1',
+          id: '1',
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T09:00:00Z',
+          endAt: '2022-03-30T17:00:00Z',
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+          creator: {
+            id: '1',
+            name: 'User Name',
+          },
+          organization: {
+            id: '1',
+            name: 'Test Organization',
+          },
         },
       },
     },
@@ -183,28 +221,33 @@ export const MOCKS = [
     request: {
       query: CREATE_EVENT_MUTATION,
       variables: {
-        title: 'Dummy Org',
-        description: 'This is a dummy organization',
-        location: 'New Delhi',
-        organizationId: undefined,
-        isPublic: true,
-        recurring: true,
-        isRegisterable: false,
-        startDate: '2022-03-28',
-        endDate: '2022-03-30',
-        allDay: true,
-        recurrenceStartDate: '2022-03-28',
-        recurrenceEndDate: '2023-04-15',
-        frequency: 'MONTHLY',
-        weekDays: ['MONDAY'],
-        interval: 2,
-        weekDayOccurenceInMonth: 4,
+        input: {
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T09:00:00Z',
+          endAt: '2022-03-30T17:00:00Z',
+          organizationId: undefined,
+        },
       },
     },
     result: {
       data: {
         createEvent: {
-          _id: '1',
+          id: '1',
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T09:00:00Z',
+          endAt: '2022-03-30T17:00:00Z',
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+          creator: {
+            id: '1',
+            name: 'User Name',
+          },
+          organization: {
+            id: '1',
+            name: 'Test Organization',
+          },
         },
       },
     },
@@ -213,27 +256,68 @@ export const MOCKS = [
     request: {
       query: CREATE_EVENT_MUTATION,
       variables: {
-        title: 'Dummy Org',
-        location: 'New Delhi',
-        description: 'This is a dummy organization',
-        isPublic: true,
-        recurring: true,
-        isRegisterable: false,
-        organizationId: undefined,
-        startDate: '2022-03-28',
-        endDate: '2022-03-30',
-        allDay: true,
-        recurrenceStartDate: '2022-03-28',
-        recurrenceEndDate: null,
-        frequency: 'DAILY',
-        interval: 1,
-        count: 100,
+        input: {
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T00:00:00Z',
+          endAt: '2022-03-30T23:59:59Z',
+          organizationId: undefined,
+        },
       },
     },
     result: {
       data: {
         createEvent: {
-          _id: '1',
+          id: '1',
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T00:00:00Z',
+          endAt: '2022-03-30T23:59:59Z',
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+          creator: {
+            id: '1',
+            name: 'User Name',
+          },
+          organization: {
+            id: '1',
+            name: 'Test Organization',
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        input: {
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T00:00:00Z',
+          endAt: '2022-03-30T23:59:59Z',
+          organizationId: undefined,
+        },
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          id: '1',
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2022-03-28T00:00:00Z',
+          endAt: '2022-03-30T23:59:59Z',
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+          creator: {
+            id: '1',
+            name: 'User Name',
+          },
+          organization: {
+            id: '1',
+            name: 'Test Organization',
+          },
         },
       },
     },
