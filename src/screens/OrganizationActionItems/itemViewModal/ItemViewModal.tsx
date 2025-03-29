@@ -1,3 +1,36 @@
+/**
+ * ItemViewModal Component
+ *
+ * This component renders a modal to display detailed information about an action item.
+ * It is designed to be used in the context of organization action items, providing
+ * a read-only view of the item's properties such as category, assignee, assigner, status,
+ * due date, completion date, and notes.
+ *
+ * @component
+ * @param {InterfaceViewModalProps} props - The props for the ItemViewModal component.
+ * @param {boolean} props.isOpen - Determines whether the modal is visible.
+ * @param {() => void} props.hide - Function to close the modal.
+ * @param {InterfaceActionItemInfo} props.item - The action item data to display in the modal.
+ *
+ * @returns {JSX.Element} The rendered ItemViewModal component.
+ *
+ * @remarks
+ * - The modal uses `react-bootstrap` for layout and `@mui/material` for form controls.
+ * - The `DatePicker` component from `@mui/x-date-pickers` is used to display dates.
+ * - Assignee and assigner details include avatars or images if available.
+ * - The modal supports translations using the `react-i18next` library.
+ *
+ * @example
+ * ```tsx
+ * <ItemViewModal
+ *   isOpen={true}
+ *   hide={() => setShowModal(false)}
+ *   item={actionItem}
+ * />
+ * ```
+ *
+ * @see {@link InterfaceActionItemInfo} for the structure of the `item` prop.
+ */
 import { DatePicker } from '@mui/x-date-pickers';
 import React from 'react';
 import dayjs from 'dayjs';
@@ -15,19 +48,6 @@ export interface InterfaceViewModalProps {
   hide: () => void;
   item: InterfaceActionItemInfo;
 }
-
-/**
- * A modal dialog for viewing action item details.
- *
- * @param isOpen - Indicates whether the modal is open.
- * @param hide - Function to close the modal.
- * @param item - The action item object to be displayed.
- *
- * @returns The rendered modal component.
- *
- * The `ItemViewModal` component displays all the fields of an action item in a modal dialog.
- * It includes fields for assignee, assigner, category, pre and post completion notes, assignment date, due date, completion date, and event.
- */
 
 const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
   const { t } = useTranslation('translation', {

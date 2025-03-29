@@ -1,3 +1,49 @@
+/**
+ * The `events` component is responsible for managing and displaying events for a user portal.
+ * It includes functionality for creating, viewing, and managing events within an organization.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered events component.
+ *
+ * @remarks
+ * - Utilizes Apollo Client for GraphQL queries and mutations.
+ * - Integrates with `react-bootstrap` for UI components and modals.
+ * - Uses `dayjs` for date and time manipulation.
+ * - Includes localization support via `react-i18next`.
+ *
+ * @dependencies
+ * - `EventCalendar`: Displays events in a calendar view.
+ * - `EventHeader`: Provides controls for calendar view and event creation.
+ * - `DatePicker` and `TimePicker`: Used for selecting event dates and times.
+ *
+ * @state
+ * - `events`: List of events fetched from the server.
+ * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
+ * - `startDate`, `endDate`: Start and end dates for the event.
+ * - `startTime`, `endTime`: Start and end times for the event.
+ * - `isPublic`, `isRegisterable`, `isRecurring`, `isAllDay`: Event configuration flags.
+ * - `viewType`: Current calendar view type (e.g., month, week).
+ * - `createEventModal`: Controls visibility of the event creation modal.
+ * - `createChatCheck`: Determines if a chat should be created for the event.
+ *
+ * @methods
+ * - `createEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
+ * - `toggleCreateEventModal`: Toggles the visibility of the event creation modal.
+ * - `handleEventTitleChange`, `handleEventLocationChange`, `handleEventDescriptionChange`:
+ *   Update respective state variables when input fields change.
+ * - `handleChangeView`: Updates the calendar view type.
+ *
+ * @hooks
+ * - `useQuery`: Fetches events and organization details.
+ * - `useMutation`: Executes the event creation mutation.
+ * - `useLocalStorage`: Retrieves user details from local storage.
+ * - `useEffect`: Updates the event list when query data changes.
+ *
+ * @example
+ * ```tsx
+ * <Events />
+ * ```
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -21,44 +67,11 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 
-/**
- * Converts a time string to a Dayjs object.
- *
- * @param time - The time string to convert, in HH:mm:ss format.
- * @returns A Dayjs object representing the time.
- */
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
 
-/**
- * Component to manage and display events for an organization.
- *
- * This component allows users to view, create, and manage events within an organization.
- * It includes a calendar view, a form to create new events, and various filters and settings.
- *
- * @returns The JSX element for the events management interface.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.inputField`
- * - `.switch`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 export default function events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const { t: tCommon } = useTranslation('common');

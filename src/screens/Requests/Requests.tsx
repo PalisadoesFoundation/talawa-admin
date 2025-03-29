@@ -1,3 +1,53 @@
+/**
+ * @file Requests.tsx
+ * @description This file contains the implementation of the Requests component, which displays
+ *              a list of membership requests for an organization. It includes features like
+ *              infinite scrolling, search functionality, and role-based access control.
+ *
+ * @module Requests
+ *
+ * @requires react
+ * @requires @apollo/client
+ * @requires react-bootstrap
+ * @requires react-i18next
+ * @requires react-toastify
+ * @requires react-router-dom
+ * @requires @mui/material
+ * @requires GraphQl/Queries/Queries
+ * @requires components/TableLoader/TableLoader
+ * @requires components/RequestsTableItem/RequestsTableItem
+ * @requires subComponents/SearchBar
+ * @requires utils/interfaces
+ * @requires utils/useLocalstorage
+ * @requires style/app-fixed.module.css
+ *
+ *
+ * @typedef {Object} InterfaceRequestsListItem
+ * @property {string} _id - The unique identifier for the request.
+ * @property {Object} user - The user details associated with the request.
+ * @property {string} user.firstName - The first name of the user.
+ * @property {string} user.lastName - The last name of the user.
+ * @property {string} user.email - The email address of the user.
+ *
+ * @component
+ * @name Requests
+ * @description Displays a list of membership requests for an organization. Includes search,
+ *              infinite scrolling, and role-based access control. Redirects unauthorized users
+ *              to the organization list page.
+ *
+ * @returns {JSX.Element} The rendered Requests component.
+ *
+ * @example
+ * <Requests />
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` for fetching data.
+ * - Implements infinite scrolling using `react-infinite-scroll-component`.
+ * - Displays a search bar for filtering requests by user name.
+ * - Handles role-based access control for `ADMIN` and `SUPERADMIN` roles.
+ * - Displays appropriate messages when no data is available.
+ *
+ */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
@@ -26,11 +76,6 @@ interface InterfaceRequestsListItem {
   user: { firstName: string; lastName: string; email: string };
 }
 
-/**
- * The `Requests` component fetches and displays a paginated list of membership requests
- * for an organization, with functionality for searching, filtering, and infinite scrolling.
- *
- */
 const Requests = (): JSX.Element => {
   // Translation hooks for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -79,8 +124,7 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    const membershipRequests =
-      data.organizations?.[0]?.membershipRequests || [];
+    const membershipRequests = data.organization?.[0]?.membershipRequests || [];
 
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
@@ -103,7 +147,7 @@ const Requests = (): JSX.Element => {
     }
 
     // Add null check before accessing organizations.length
-    if (orgsData.organizations?.length === 0) {
+    if (orgsData.organization?.length === 0) {
       toast.warning(t('noOrgError') as string);
     }
   }, [orgsData, t]);
@@ -159,7 +203,7 @@ const Requests = (): JSX.Element => {
     fetchMore({
       variables: {
         id: organizationId,
-        skip: data?.organizations?.[0]?.membershipRequests?.length || 0,
+        skip: data?.organization?.[0]?.membershipRequests?.length || 0,
         firstName_contains: searchByName,
       },
       updateQuery: (
@@ -173,16 +217,16 @@ const Requests = (): JSX.Element => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         const newMembershipRequests =
-          fetchMoreResult.organizations?.[0]?.membershipRequests || [];
+          fetchMoreResult.organization?.[0]?.membershipRequests || [];
         if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          organizations: [
+          organization: [
             {
               _id: organizationId,
               membershipRequests: [
-                ...(prev?.organizations?.[0]?.membershipRequests || []),
+                ...(prev?.organization?.[0]?.membershipRequests || []),
                 ...newMembershipRequests,
               ],
             },
@@ -227,7 +271,7 @@ const Requests = (): JSX.Element => {
         </div>
       </div>
 
-      {!isLoading && orgsData?.organizations?.length === 0 ? (
+      {!isLoading && orgsData?.organization?.length === 0 ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

@@ -1,18 +1,44 @@
+/**
+ * EventAttendedCard Component
+ *
+ * This component renders a card displaying details of an event attended by a user.
+ * It includes the event's title, start date, location, and a link to the event's details.
+ *
+ * @component
+ * @param {InterfaceCardItem} props - The properties passed to the component.
+ * @param {string} props.title - The title of the event.
+ * @param {string} [props.time] - The time of the event (optional, not currently used).
+ * @param {string} [props.startdate] - The start date of the event in ISO format (optional).
+ * @param {string} [props.creator] - The creator of the event (optional, not currently used).
+ * @param {string} [props.location] - The location of the event (optional).
+ * @param {string} [props.eventId] - The unique identifier for the event (optional).
+ * @param {string} [props.orgId] - The unique identifier for the organization hosting the event (optional).
+ *
+ * @returns {JSX.Element} A styled card displaying event details.
+ *
+ * @remarks
+ * - If the `startdate` is provided and valid, it displays the month and day.
+ * - If the `startdate` is not provided or invalid, it displays "Date N/A".
+ * - The location is displayed with a location icon.
+ * - A chevron icon links to the event details page using `orgId` and `eventId`.
+ *
+ * @example
+ * ```tsx
+ * <EventAttendedCard
+ *   title="Community Meetup"
+ *   startdate="2023-10-01T10:00:00Z"
+ *   location="Central Park"
+ *   orgId="123"
+ *   eventId="456"
+ * />
+ * ```
+ */
 import React from 'react';
 import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-/**
- * Card component to display individual event attendance information
- * Shows event details including title, date, location and organization
- * @param orgId - Organization ID
- * @param eventId - Event ID
- * @param startdate - Event start date
- * @param title - Event title
- * @param location - Event location
- * @returns Card component with formatted event information
- */
+
 export interface InterfaceCardItem {
   title: string;
   time?: string;

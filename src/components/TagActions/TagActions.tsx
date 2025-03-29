@@ -1,3 +1,35 @@
+/**
+ * Component for managing tag actions such as assigning or removing tags
+ * for users within an organization. It provides a modal interface for
+ * selecting tags, searching tags, and performing the desired action.
+ *
+ * @component
+ * @param {InterfaceTagActionsProps} props - The props for the component.
+ * @param {boolean} props.tagActionsModalIsOpen - Determines if the modal is open.
+ * @param {() => void} props.hideTagActionsModal - Function to close the modal.
+ * @param {TagActionType} props.tagActionType - The type of action to perform ('assignToTags' or 'removeFromTags').
+ * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for managing tags.
+ * @param {TFunction<'common', undefined>} props.tCommon - Common translation function.
+ *
+ * @returns {React.FC} A React functional component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and mutating data.
+ * - Implements infinite scrolling for loading tags.
+ * - Handles ancestor tags to ensure hierarchical consistency when selecting or deselecting tags.
+ *
+ * @example
+ * ```tsx
+ * <TagActions
+ *   tagActionsModalIsOpen={true}
+ *   hideTagActionsModal={() => setModalOpen(false)}
+ *   tagActionType="assignToTags"
+ *   t={t}
+ *   tCommon={tCommon}
+ * />
+ * ```
+ *
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -30,29 +62,6 @@ interface InterfaceUserTagsAncestorData {
   name: string;
 }
 
-/**
- * Props for the `AssignToTags` component.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.modalHeader`
- * - `.inputField`
- * - `.removeButton`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 export interface InterfaceTagActionsProps {
   tagActionsModalIsOpen: boolean;
   hideTagActionsModal: () => void;
@@ -90,31 +99,31 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
+        after: orgUserTagsData?.organization[0].userTags.pageInfo.endCursor,
       },
       updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        prevResult: { organization: InterfaceQueryOrganizationUserTags[] },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
+            organization: InterfaceQueryOrganizationUserTags[];
           };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
 
         return {
-          organizations: [
+          organization: [
             {
-              ...prevResult.organizations[0],
+              ...prevResult.organization[0],
               userTags: {
-                ...prevResult.organizations[0].userTags,
+                ...prevResult.organization[0].userTags,
                 edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
+                  ...prevResult.organization[0].userTags.edges,
+                  ...fetchMoreResult.organization[0].userTags.edges,
                 ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
+                pageInfo: fetchMoreResult.organization[0].userTags.pageInfo,
               },
             },
           ],
@@ -124,9 +133,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   };
 
   const userTagsList =
-    orgUserTagsData?.organizations[0]?.userTags.edges.map(
-      (edge) => edge.node,
-    ) ?? [];
+    orgUserTagsData?.organization[0]?.userTags.edges.map((edge) => edge.node) ??
+    [];
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -356,7 +364,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     dataLength={userTagsList?.length ?? 0}
                     next={loadMoreUserTags}
                     hasMore={
-                      orgUserTagsData?.organizations[0].userTags.pageInfo
+                      orgUserTagsData?.organization[0].userTags.pageInfo
                         .hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}

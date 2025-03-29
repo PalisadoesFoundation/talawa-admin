@@ -1,3 +1,42 @@
+/**
+ * VolunteerGroupViewModal Component
+ *
+ * This component renders a modal to display detailed information about a volunteer group.
+ * It includes group details such as name, description, leader, creator, and a list of associated volunteers.
+ *
+ * @component
+ * @param {InterfaceVolunteerGroupViewModal} props - The props for the component.
+ * @param {boolean} props.isOpen - Determines whether the modal is open or closed.
+ * @param {() => void} props.hide - Function to close the modal.
+ * @param {InterfaceVolunteerGroupInfo} props.group - The volunteer group information to display.
+ *
+ * @returns {React.FC} A React functional component that renders the modal.
+ *
+ * @remarks
+ * - The modal uses `react-bootstrap` for layout and `@mui/material` for form controls.
+ * - The `useTranslation` hook is used for internationalization.
+ * - Displays leader and creator information with avatars or fallback initials.
+ * - Includes a table to list associated volunteers with their names.
+ *
+ * @example
+ * ```tsx
+ * <VolunteerGroupViewModal
+ *   isOpen={true}
+ *   hide={() => setShowModal(false)}
+ *   group={{
+ *     name: "Group A",
+ *     description: "This is a test group.",
+ *     leader: { firstName: "John", lastName: "Doe", image: null, _id: "1" },
+ *     creator: { firstName: "Jane", lastName: "Smith", image: null, _id: "2" },
+ *     volunteersRequired: 5,
+ *     volunteers: [
+ *       { user: { firstName: "Alice", lastName: "Brown" } },
+ *       { user: { firstName: "Bob", lastName: "White" } },
+ *     ],
+ *   }}
+ * />
+ * ```
+ */
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
@@ -21,22 +60,6 @@ export interface InterfaceVolunteerGroupViewModal {
   hide: () => void;
   group: InterfaceVolunteerGroupInfo;
 }
-
-/**
- * A modal dialog for viewing volunteer group information for an event.
- *
- * @param isOpen - Indicates whether the modal is open.
- * @param hide - Function to close the modal.
- * @param group - The volunteer group to display in the modal.
- *
- * @returns The rendered modal component.
- *
- * The `VolunteerGroupViewModal` component displays all the fields of a volunteer group in a modal dialog.
- *
- * The modal includes:
- * - A header with a title and a close button.
- * - fields for volunteer name, status, hours volunteered, groups, and assignments.
- */
 
 const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
   isOpen,

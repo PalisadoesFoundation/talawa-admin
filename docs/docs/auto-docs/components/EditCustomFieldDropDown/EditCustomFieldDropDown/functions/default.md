@@ -6,13 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EditCustomFieldDropDown/EditCustomFieldDropDown.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EditCustomFieldDropDown/EditCustomFieldDropDown.tsx#L30)
-
-A dropdown component for editing custom field types.
-
-This component displays a dropdown menu that allows users to select a custom field type.
-It shows the current type of the field and provides a list of available types to choose from.
-When a new type is selected, it updates the custom field data.
+Defined in: [src/components/EditCustomFieldDropDown/EditCustomFieldDropDown.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EditCustomFieldDropDown/EditCustomFieldDropDown.tsx#L45)
 
 ## Parameters
 
@@ -23,5 +17,3 @@ When a new type is selected, it updates the custom field data.
 ## Returns
 
 `Element`
-
-JSX.Element - The rendered dropdown component.

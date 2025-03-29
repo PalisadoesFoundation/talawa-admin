@@ -1,3 +1,45 @@
+/**
+ * Component: AddMember
+ *
+ * This component allows users to add members to an organization. It provides two options:
+ * 1. Adding an existing user from the user list.
+ * 2. Creating a new user and adding them to the organization.
+ *
+ * @Features
+ * - Fetches and displays a paginated list of users with search functionality.
+ * - Allows adding existing users to the organization.
+ * - Provides a modal for creating new users with validation for required fields.
+ * - Supports cursor-based pagination for user listing.
+ *
+ * @Hooks
+ * - `useLazyQuery`: Fetches users with pagination.
+ * - `useMutation`: Handles adding members and creating new users.
+ * - `useQuery`: Fetches organization details.
+ * - `useTranslation`: Provides translations for UI text.
+ *
+ * @StateManagement
+ * - `addUserModalisOpen`: Controls the visibility of the "Add Existing User" modal.
+ * - `createNewUserModalisOpen`: Controls the visibility of the "Create New User" modal.
+ * - `page`: Tracks the current page for pagination.
+ * - `paginationMeta`: Stores pagination metadata (e.g., hasNextPage, hasPreviousPage).
+ * - `createUserVariables`: Stores input values for creating a new user.
+ *
+ * @Props
+ * - None
+ *
+ * @Dependencies
+ * - Apollo Client for GraphQL queries and mutations.
+ * - React Bootstrap for modals and forms.
+ * - Material-UI for table and icons.
+ * - React Router for navigation.
+ * - React Toastify for notifications.
+ *
+ * @Usage
+ * - This component is used in the "Organization People" section of the application.
+ * - It allows administrators to manage members of an organization.
+ *
+ * @returns {JSX.Element} The rendered AddMember component.
+ */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Check, Close, Search } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -42,34 +84,6 @@ const StyledTableCell = styled(TableCell)(() => ({
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': { border: 0 },
 }));
-
-/**
- * AddMember component is used to add new members to the organization by selecting from
- * the existing users or creating a new user.
- * It uses the following queries and mutations:
- *  ORGANIZATIONS_LIST,
- *  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
- *  USERS_CONNECTION_LIST,
- *  ADD_MEMBER_MUTATION,SIGNUP_MUTATION.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.removeButton`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
 interface Edge {
   cursor: string;
@@ -178,8 +192,13 @@ function AddMember(): JSX.Element {
 
   const {
     data: organizationData,
-  }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
-    useQuery(ORGANIZATIONS_LIST, { variables: { id: currentUrl } });
+  }: {
+    data?: {
+      organization: InterfaceQueryOrganizationsListObject[];
+    };
+  } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: currentUrl },
+  });
 
   // const {
   //   data: allUsersData,
@@ -607,7 +626,7 @@ function AddMember(): JSX.Element {
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 className={styles.borderNone}
-                value={organizationData?.organization?.name}
+                value={organizationData?.organization[0]?.name}
                 data-testid="organizationName"
                 disabled
               />
