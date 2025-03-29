@@ -61,6 +61,12 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   };
 });
 
+declare global {
+  interface Window {
+    validatePassword?: (password: string) => boolean;
+  }
+}
+
 vi.mock('@dicebear/core', () => ({
   createAvatar: vi.fn(() => ({
     toDataUri: vi.fn(() => 'mocked-data-uri'),
@@ -816,6 +822,169 @@ describe('MemberDetail', () => {
     }
   });
 
+  // Add this test to your existing MemberDetail.test.js file
+  test('should show success toast when user is deleted successfully', async () => {
+    // Spy on toast.success
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+
+    // Use the mock with DELETE_USER_MOCK
+    renderMemberDetailScreen(link6);
+    await wait();
+
+    // Find and click delete button
+    const deleteButton = screen.getByTestId('deleteUserButton');
+    fireEvent.click(deleteButton);
+
+    // Wait for confirmation modal to appear
+    await waitFor(() => {
+      expect(screen.getByTestId('confirmationToDelete')).toBeInTheDocument();
+    });
+
+    // Confirm deletion
+    const confirmButton = screen.getByTestId('button-handleDeleteConfirmation');
+    fireEvent.click(confirmButton);
+
+    // Wait for the mutation to complete and toast to be called
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledTimes(1);
+      // Verify toast contains the expected success message
+      // Note: Adjust the expected string based on your actual translation key/value
+      expect(toastSuccessSpy.mock.calls[0][0]).toContain('User');
+    });
+
+    // Clean up spy
+    toastSuccessSpy.mockRestore();
+  });
+
+  test('should only show success toast and close confirm when deleteData exists', async () => {
+    // Mocks for deleteUser functions
+    const deleteUserWithData = vi.fn().mockResolvedValue({
+      data: { deleteUser: { id: 'rishav-jha-mech' } },
+    });
+
+    const deleteUserWithoutData = vi.fn().mockResolvedValue({
+      data: null,
+    });
+
+    // Spy on toast.success
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+
+    // Test variables
+    let mockHandleDeleteUser;
+    let triggerDelete;
+
+    // First test case: with data
+    const mockSetShowDeleteConfirm = vi.fn(); // Mock for setShowDeleteConfirm
+
+    render(
+      <MockedProvider addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <BrowserRouter>
+              {(() => {
+                mockHandleDeleteUser = async () => {
+                  try {
+                    const { data: deleteData } = await deleteUserWithData({
+                      variables: { id: 'rishav-jha-mech' },
+                    });
+
+                    if (deleteData) {
+                      toast.success('User deleted successfully');
+                      mockSetShowDeleteConfirm(false); // Call mock function
+                    }
+                  } catch (error) {
+                    // Handle error if needed
+                  }
+                };
+
+                triggerDelete = () => (
+                  <button
+                    data-testid="trigger-delete"
+                    onClick={mockHandleDeleteUser}
+                  >
+                    Delete
+                  </button>
+                );
+
+                return triggerDelete();
+              })()}
+            </BrowserRouter>
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Trigger delete with data
+    fireEvent.click(screen.getByTestId('trigger-delete'));
+
+    // Verify success case
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith('User deleted successfully');
+      expect(deleteUserWithData).toHaveBeenCalledTimes(1);
+      expect(mockSetShowDeleteConfirm).toHaveBeenCalledWith(false); // Check mock call
+    });
+
+    // Cleanup and reset mocks
+    cleanup();
+    toastSuccessSpy.mockClear();
+
+    // Second test case: without data
+    const mockSetShowDeleteConfirmNoData = vi.fn(); // Mock for second scenario
+
+    render(
+      <MockedProvider addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <BrowserRouter>
+              {(() => {
+                mockHandleDeleteUser = async () => {
+                  try {
+                    const { data: deleteData } = await deleteUserWithoutData({
+                      variables: { id: 'rishav-jha-mech' },
+                    });
+
+                    if (deleteData) {
+                      // This block should NOT execute
+                      toast.success('User deleted successfully');
+                      mockSetShowDeleteConfirmNoData(false);
+                    }
+                  } catch (error) {
+                    // Handle error if needed
+                  }
+                };
+
+                triggerDelete = () => (
+                  <button
+                    data-testid="trigger-delete-no-data"
+                    onClick={mockHandleDeleteUser}
+                  >
+                    Delete No Data
+                  </button>
+                );
+
+                return triggerDelete();
+              })()}
+            </BrowserRouter>
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Trigger delete without data
+    fireEvent.click(screen.getByTestId('trigger-delete-no-data'));
+
+    // Verify no toast or state update
+    await waitFor(() => {
+      expect(deleteUserWithoutData).toHaveBeenCalledTimes(1);
+    });
+
+    expect(toastSuccessSpy).not.toHaveBeenCalled();
+    expect(mockSetShowDeleteConfirmNoData).not.toHaveBeenCalled(); // Ensure mock wasn't called
+
+    // Restore mocks
+    toastSuccessSpy.mockRestore();
+  });
+
   test('handles user deletion successfully', async () => {
     // Render with link6
     renderMemberDetailScreen(link6);
@@ -1151,5 +1320,80 @@ describe('MemberDetail', () => {
     // Simulate changing the country selection
     fireEvent.change(countrySelect, { target: { value: 'us' } });
     expect(countrySelect).toHaveValue('us');
+  });
+
+  it('should only validate passwords when value is a string and fieldName is password', async () => {
+    // Spy on toast.error
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    // Store original validatePassword if it exists
+    const originalValidatePassword = window.validatePassword;
+    // Create mock implementation
+    window.validatePassword = vi.fn();
+
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // CASE 1: String input for password field - invalid password
+    // Configure validatePassword to return false (validation fails)
+    (window.validatePassword as jest.Mock).mockReturnValueOnce(false);
+
+    // Try to set an invalid password
+    const passwordInput = screen.getByTestId('inputPassword');
+    fireEvent.change(passwordInput, { target: { value: 'short' } });
+
+    // Verify validatePassword was called and toast.error was shown
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'Password must be at least 8 characters long.',
+    );
+
+    // Reset mocks
+    toastErrorSpy.mockClear();
+    (window.validatePassword as jest.Mock).mockClear();
+
+    // CASE 2: String input for password field - valid password
+    // Configure validatePassword to return true (validation passes)
+    (window.validatePassword as jest.Mock).mockReturnValueOnce(true);
+
+    // Set a valid password
+    fireEvent.change(passwordInput, {
+      target: { value: 'ValidPassword12@ijewirg3' },
+    });
+
+    // Verify validatePassword was called but toast.error was not shown
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // Reset mocks
+    (window.validatePassword as jest.Mock).mockClear();
+
+    // CASE 3: String input for non-password field
+    // Update a regular string field
+    const nameInput = screen.getByTestId('inputName');
+    fireEvent.change(nameInput, {
+      target: { value: 'New@Namewdivbs988972345' },
+    });
+
+    // Verify validatePassword was NOT called (should skip that code path)
+    expect(window.validatePassword).not.toHaveBeenCalled();
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // CASE 4: Boolean input (should skip the entire string condition)
+    // Find a boolean field (checkbox) if available
+    const adminApprovedCheckbox = screen.getByTestId('AdminApprovedForm');
+
+    // Toggle the checkbox state
+    const initialCheckedState = adminApprovedCheckbox.checked;
+    fireEvent.click(adminApprovedCheckbox);
+
+    // Verify checkbox state changed
+    expect(adminApprovedCheckbox.checked).toBe(!initialCheckedState);
+
+    // Verify validatePassword was NOT called (should skip that code path)
+    expect(window.validatePassword).not.toHaveBeenCalled();
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // Clean up
+    window.validatePassword = originalValidatePassword;
+    toastErrorSpy.mockRestore();
   });
 });

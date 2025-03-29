@@ -166,6 +166,30 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
 
+  // items for navigation at the top.
+  const navItems = [
+    {
+      to: '/member',
+      icon: <OverviewIcon />,
+      label: t('navigationOverview'),
+    },
+    {
+      to: '/orgList',
+      icon: <MemberOrganizationIcon />,
+      label: t('navigationOrganizations'),
+    },
+    {
+      to: '/orgevents',
+      icon: <MemberEvents />,
+      label: t('navigationEvents'),
+    },
+    {
+      to: '/orgtags',
+      icon: <TagIcon />,
+      label: t('navigationTags'),
+    },
+  ];
+
   // Function to handle the deletion of a user
   const handleDeleteUser = async (): Promise<void> => {
     try {
@@ -180,6 +204,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         toast.success(
           tCommon('deletedSuccessfully', { item: 'User' }) as string,
         );
+        setShowDeleteConfirm(false);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -323,65 +348,24 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         }}
         className={`bg-white gap-4 ${styles.allRound}`}
       >
-        <Link to="/member">
-          <button
-            type="button"
-            className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
-          >
-            <OverviewIcon />
-            <h3
-              style={{ margin: 'auto', fontSize: '1rem' }}
-              className={`text-gray-100`}
-            >
-              {t('navigationOverview')}
-            </h3>
-          </button>
-        </Link>
-
-        <Link to="/orgList">
-          <button
-            type="button"
-            className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
-          >
-            <MemberOrganizationIcon />
-            <h3
-              style={{ margin: 'auto', fontSize: '1rem' }}
-              className={`text-gray-100`}
-            >
-              {t('navigationOrganizations')}
-            </h3>
-          </button>
-        </Link>
-
-        <Link to="/orgevents">
-          <button
-            type="button"
-            className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
-          >
-            <MemberEvents />
-            <h3
-              style={{ margin: 'auto', fontSize: '1rem' }}
-              className={`text-gray-100`}
-            >
-              {t('navigationEvents')}
-            </h3>
-          </button>
-        </Link>
-
-        <Link to="/orgtags">
-          <button
-            type="button"
-            className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
-          >
-            <TagIcon />
-            <h3
-              style={{ margin: 'auto', fontSize: '1rem' }}
-              className={`text-gray-100`}
-            >
-              {t('navigationTags')}
-            </h3>
-          </button>
-        </Link>
+        <div className={`bg-white gap-4 ${styles.allRound}`}>
+          {navItems.map(({ to, icon, label }) => (
+            <Link to={to} key={to}>
+              <button
+                type="button"
+                className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}
+              >
+                {icon}
+                <h3
+                  style={{ margin: 'auto', fontSize: '1rem' }}
+                  className="text-gray-100"
+                >
+                  {label}
+                </h3>
+              </button>
+            </Link>
+          ))}
+        </div>
       </div>
       <Row className="g-4 mt-1">
         <Col md={8}>
