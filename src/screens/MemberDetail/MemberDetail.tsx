@@ -166,77 +166,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
 
-  // to handle deletion of user profile
   // Function to handle the deletion of a user
   const handleDeleteUser = async (): Promise<void> => {
-    function removeEmptyFields<
-      T extends Record<string, string | File | null | boolean>,
-    >(obj: T): Partial<T> {
-      return Object.fromEntries(
-        Object.entries(obj).filter(
-          ([, value]) =>
-            value !== null &&
-            value !== undefined &&
-            (typeof value === 'boolean' ||
-              typeof value !== 'string' ||
-              value.trim() !== ''),
-        ),
-      ) as Partial<T>;
-    }
-
-    // If no new avatar is selected but there's an avatar URL, convert it to File
-    let avatarFile: File | null = null;
-    if (!selectedAvatar && formState.avatarURL) {
-      try {
-        avatarFile = await urlToFile(formState.avatarURL);
-      } catch (error) {
-        console.log(error);
-        toast.error(
-          'Failed to process profile picture. Please try uploading again.',
-        );
-        return;
-      }
-    }
-
-    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
-      addressLine1: formState.addressLine1,
-      addressLine2: formState.addressLine2,
-      birthDate: formState.birthDate,
-      city: formState.city,
-      countryCode: formState.countryCode,
-      description: formState.description,
-      educationGrade: formState.educationGrade,
-      employmentStatus: formState.employmentStatus,
-      homePhoneNumber: formState.homePhoneNumber,
-      maritalStatus: formState.maritalStatus,
-      mobilePhoneNumber: formState.mobilePhoneNumber,
-      name: formState.name,
-      natalSex: formState.natalSex,
-      naturalLanguageCode: formState.naturalLanguageCode,
-      password: formState.password,
-      postalCode: formState.postalCode,
-      state: formState.state,
-      workPhoneNumber: formState.workPhoneNumber,
-      avatar: selectedAvatar ? selectedAvatar : avatarFile,
-      adminApproved: formState.adminApproved,
-      pluginCreationAllowed: formState.pluginCreationAllowed,
-    };
-
-    const input = removeEmptyFields(data);
-
     try {
-      const { data: deleteData } = await deleteUser({ variables: { input } });
+      // Call mutation with just the ID
+      const { data: deleteData } = await deleteUser({
+        variables: {
+          id: id,
+        },
+      });
 
       if (deleteData) {
         toast.success(
           tCommon('deletedSuccessfully', { item: 'User' }) as string,
         );
-
-        // Wait for the toast to complete
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        // Navigate to home page
-        navigate('/');
       }
     } catch (error: unknown) {
       errorHandler(t, error);
