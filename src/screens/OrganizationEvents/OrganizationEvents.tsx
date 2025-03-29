@@ -91,6 +91,7 @@ interface EventEdge {
     venues?: {
       edges?: Array<{
         node?: {
+          id?: string;
           name: string;
         };
       }>;

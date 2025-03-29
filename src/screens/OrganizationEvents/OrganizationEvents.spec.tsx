@@ -547,11 +547,11 @@ describe('Organisation Events Page', () => {
     const errorLink = new StaticMockLink(MOCKS, true);
 
     // Override the query method to throw an error for CREATE_EVENT_MUTATION
-    errorLink.query = vi.fn().mockImplementation((request) => {
-      if (request.query === CREATE_EVENT_MUTATION) {
+    errorLink.request = vi.fn().mockImplementation((operation) => {
+      if (operation.query === CREATE_EVENT_MUTATION) {
         return Promise.reject(new Error('Failed to create event'));
       }
-      return StaticMockLink.prototype.query.call(errorLink, request);
+      return StaticMockLink.prototype.request.call(errorLink, operation);
     });
 
     render(
