@@ -1,3 +1,34 @@
+/**
+ * Component: EditOrgCustomFieldDropDown
+ *
+ * A dropdown component for editing the type of a custom field in an organization profile.
+ * It allows users to select a field type from a predefined list of available field types.
+ *
+ * @param {InterfaceEditCustomFieldDropDownProps} props - The props for the component.
+ * @param {InterfaceCustomFieldData} props.customFieldData - The current custom field data object.
+ * @param {Dispatch<SetStateAction<InterfaceCustomFieldData>>} props.setCustomFieldData -
+ * A state setter function to update the custom field data.
+ * @param {string} [props.parentContainerStyle] - Optional CSS class for the parent container.
+ * @param {string} [props.btnStyle] - Optional CSS class for the dropdown button.
+ *
+ * @returns {JSX.Element} The rendered dropdown component.
+ *
+ * @remarks
+ * - The component uses `react-bootstrap` for the dropdown UI.
+ * - The `useTranslation` hook from `react-i18next` is used for internationalization.
+ * - The dropdown items are dynamically generated based on the `availableFieldTypes` array.
+ * - The currently selected field type is disabled in the dropdown to prevent re-selection.
+ *
+ * @example
+ * ```tsx
+ * <EditOrgCustomFieldDropDown
+ *   customFieldData={customFieldData}
+ *   setCustomFieldData={setCustomFieldData}
+ *   parentContainerStyle="custom-container"
+ *   btnStyle="custom-button"
+ * />
+ * ```
+ */
 import React from 'react';
 import type { SetStateAction, Dispatch } from 'react';
 import { Dropdown } from 'react-bootstrap';
@@ -5,28 +36,12 @@ import availableFieldTypes from 'utils/fieldTypes';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCustomFieldData } from 'utils/interfaces';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
-/**
- * Props for the EditOrgCustomFieldDropDown component.
- */
+
 interface InterfaceEditCustomFieldDropDownProps extends InterfaceDropDownProps {
   customFieldData: InterfaceCustomFieldData;
   setCustomFieldData: Dispatch<SetStateAction<InterfaceCustomFieldData>>;
 }
 
-/**
- * A dropdown component for editing custom field types.
- *
- * This component displays a dropdown menu that allows users to select a custom field type.
- * It shows the current type of the field and provides a list of available types to choose from.
- * When a new type is selected, it updates the custom field data.
- *
- * @param customFieldData - The current data of the custom field being edited.
- * @param setCustomFieldData - Function to update the custom field data with the new type.
- * @param parentContainerStyle - Optional CSS class to style the container of the dropdown.
- * @param btnStyle - Optional CSS class to style the dropdown button.
- * @param btnTextStyle - Optional CSS class to style the text inside the button.
- * @returns JSX.Element - The rendered dropdown component.
- */
 const EditOrgCustomFieldDropDown = ({
   customFieldData,
   setCustomFieldData,

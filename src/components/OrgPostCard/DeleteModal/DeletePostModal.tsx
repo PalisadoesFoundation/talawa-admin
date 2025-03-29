@@ -1,33 +1,39 @@
+/**
+ * DeletePostModal Component
+ *
+ * This component renders a modal dialog for confirming the deletion of a post.
+ * It provides options for the user to either confirm or cancel the deletion.
+ *
+ * @component
+ * @param {InterfaceDeletePostModalProps} props - The props for the DeletePostModal component.
+ * @param {boolean} props.show - Determines whether the modal is visible.
+ * @param {() => void} props.onHide - Callback function to close the modal.
+ * @param {() => void} props.onDelete - Callback function to handle the deletion of the post.
+ *
+ * @returns {JSX.Element} A modal dialog with delete confirmation options.
+ *
+ * @remarks
+ * - The modal uses `react-bootstrap` for styling and structure.
+ * - Translations are handled using the `react-i18next` library.
+ * - The modal includes two buttons: "Yes" to confirm deletion and "No" to cancel.
+ *
+ * @example
+ * ```tsx
+ * <DeletePostModal
+ *   show={isModalVisible}
+ *   onHide={handleCloseModal}
+ *   onDelete={handleDeletePost}
+ * />
+ * ```
+ *
+ * @fileoverview
+ * This file defines the DeletePostModal component, which is used in the
+ * Talawa Admin project to confirm post deletions within the organization post card.
+ */
 import React, { type FC } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app-fixed.module.css';
-
-/**
- * A modal component that confirms a post delete operation.
- *
- * @param show - Whether the modal is visible.
- * @param onHide - Callback invoked when the modal is dismissed.
- * @param onDelete - Callback invoked to actually delete the post.
- * @returns A rendered React Bootstrap Modal for post deletion.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
+import styles from 'style/app-fixed.module.css';
 
 interface InterfaceDeletePostModalProps {
   show: boolean;
@@ -40,9 +46,7 @@ const DeletePostModal: FC<InterfaceDeletePostModalProps> = ({
   onHide,
   onDelete,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgPostCard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgPostCard' });
   const { t: tCommon } = useTranslation('common');
 
   const handleConfirmDelete = (): void => {

@@ -4,9 +4,9 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import {
   CURRENT_USER,
-  ORGANIZATION_CONNECTION_LIST,
-  USER_JOINED_ORGANIZATIONS_PG,
+  ORGANIZATION_LIST,
   USER_ORGANIZATION_LIST,
+  ALL_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import type {
   InterfaceOrgInfoTypePG,
@@ -28,7 +28,7 @@ const adminUser: InterfaceUserType = {
   },
 };
 
-const organizations: InterfaceOrgInfoTypePG[] = [
+const organization: InterfaceOrgInfoTypePG[] = [
   {
     id: 'xyz',
     name: 'Dogs Care',
@@ -96,65 +96,50 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: '123',
-        first: 8,
-      },
+      query: ALL_ORGANIZATIONS_PG,
     },
     result: {
       data: {
-        user: {
-          organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: true,
+        organization: [
+          {
+            id: 'org1',
+            name: 'Organization 1',
+            avatarURL: 'image1.jpg',
+            addressLine1: 'Address 1',
+            description: 'Description 1',
+            members: {
+              edges: [
+                {
+                  node: {
+                    id: 'abc',
+                  },
+                },
+              ],
             },
-            edges: [
-              {
-                node: {
-                  id: 'org1',
-                  name: 'Organization 1',
-                  avatarURL: 'image1.jpg',
-                  addressLine1: 'Address 1',
-                  description: 'Description 1',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: 'abc',
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-              {
-                node: {
-                  id: 'org2',
-                  name: 'Organization 2',
-                  avatarURL: 'image2.jpg',
-                  addressLine1: 'Address 2',
-                  description: 'Description 2',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: 'def',
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-            ],
           },
-        },
+          {
+            id: 'org2',
+            name: 'Organization 2',
+            avatarURL: 'image2.jpg',
+            addressLine1: 'Address 2',
+            description: 'Description 2',
+            members: {
+              edges: [
+                {
+                  node: {
+                    id: 'def',
+                  },
+                },
+              ],
+            },
+          },
+        ],
       },
     },
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
+      query: ALL_ORGANIZATIONS_PG,
       variables: {
         id: '123',
         first: 8,
@@ -163,33 +148,24 @@ const MOCKS = [
     },
     result: {
       data: {
-        user: {
-          organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: false,
-            },
-            edges: [
-              {
-                node: {
-                  id: 'org3',
-                  name: 'Organization 3',
-                  avatarURL: 'image3.jpg',
-                  addressLine1: 'Address 3',
-                  description: 'Description 3',
-                  members: {
-                    edges: [
-                      {
-                        node: {
-                          id: 'def',
-                        },
-                      },
-                    ],
+        organization: [
+          {
+            id: 'org3',
+            name: 'Organization 3',
+            avatarURL: 'image3.jpg',
+            addressLine1: 'Address 3',
+            description: 'Description 3',
+            members: {
+              edges: [
+                {
+                  node: {
+                    id: 'def',
                   },
                 },
-              },
-            ],
+              ],
+            },
           },
-        },
+        ],
       },
     },
   },
@@ -197,7 +173,7 @@ const MOCKS = [
 const MOCKS_EMPTY = [
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
+      query: ALL_ORGANIZATIONS_PG,
       variables: {
         first: 8,
         skip: 0,
@@ -208,7 +184,7 @@ const MOCKS_EMPTY = [
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organization: [],
       },
     },
   },
@@ -225,7 +201,7 @@ const MOCKS_EMPTY = [
 const MOCKS_WITH_ERROR = [
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
+      query: ALL_ORGANIZATIONS_PG,
       variables: {
         first: 8,
         skip: 0,
@@ -236,7 +212,7 @@ const MOCKS_WITH_ERROR = [
     },
     result: {
       data: {
-        organizationsConnection: organizations,
+        organizationsConnection: organization,
       },
     },
   },
@@ -261,7 +237,7 @@ const MOCKS_WITH_ERROR = [
 const MOCKS_ADMIN = [
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
       variables: {
         first: 8,
         skip: 0,
@@ -272,7 +248,7 @@ const MOCKS_ADMIN = [
     },
     result: {
       data: {
-        organizationsConnection: organizations,
+        organizationsConnection: organization,
       },
     },
   },

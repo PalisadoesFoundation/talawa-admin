@@ -1,3 +1,39 @@
+/**
+ * @file Requests.tsx
+ * @description This component renders a table displaying volunteer membership requests for a specific event.
+ * It allows administrators to search, sort, and manage these requests by accepting or rejecting them.
+ *
+ * @module Requests
+ *
+ * @requires react
+ * @requires react-i18next
+ * @requires react-bootstrap
+ * @requires react-router-dom
+ * @requires @apollo/client
+ * @requires @mui/x-data-grid
+ * @requires dayjs
+ * @requires react-toastify
+ * @requires components/Loader/Loader
+ * @requires components/Avatar/Avatar
+ * @requires subComponents/SortingButton
+ * @requires subComponents/SearchBar
+ * @requires GraphQl/Queries/EventVolunteerQueries
+ * @requires GraphQl/Mutations/EventVolunteerMutation
+ * @requires utils/interfaces
+ *
+ * @function requests
+ * @returns {JSX.Element} A React component that displays a searchable and sortable table of volunteer membership requests.
+ *
+ * @remarks
+ * - Displays a loader while fetching data and handles errors gracefully.
+ * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
+ * - Provides search functionality with debouncing and sorting options.
+ * - Displays volunteer details, request date, and action buttons for accepting or rejecting requests.
+ * - Redirects to the home page if `orgId` or `eventId` is missing in the URL parameters.
+ *
+ * @example
+ * <Requests />
+ */
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
@@ -13,7 +49,7 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
@@ -26,46 +62,23 @@ import SearchBar from 'subComponents/SearchBar';
 const dataGridStyle = {
   backgroundColor: 'white',
   borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-cell': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-columnSeparator': {
-    display: 'none',
-  },
+  '& .MuiDataGrid-columnHeaders': { border: 'none' },
+  '& .MuiDataGrid-cell': { border: 'none' },
+  '& .MuiDataGrid-columnSeparator': { display: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Component for managing and displaying Volunteer Membership requests for an event.
- *
- * This component allows users to view, filter, sort, and create action items. It also allows users to accept or reject volunteer membership requests.
- *
- * @returns The rendered component.
- */
 function requests(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -93,12 +106,7 @@ function requests(): JSX.Element {
     status: 'accepted' | 'rejected',
   ): Promise<void> => {
     try {
-      await updateMembership({
-        variables: {
-          id: id,
-          status: status,
-        },
-      });
+      await updateMembership({ variables: { id: id, status: status } });
       toast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
@@ -119,9 +127,7 @@ function requests(): JSX.Element {
     error: requestsError,
     refetch: refetchRequests,
   }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
+    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -265,9 +271,7 @@ function requests(): JSX.Element {
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
         <SearchBar
-          placeholder={tCommon('searchBy', {
-            item: 'Name',
-          })}
+          placeholder={tCommon('searchBy', { item: 'Name' })}
           onSearch={debouncedSearch}
           inputTestId="searchBy"
           buttonTestId="searchBtn"

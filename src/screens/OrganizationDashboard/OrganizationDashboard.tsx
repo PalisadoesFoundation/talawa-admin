@@ -1,3 +1,32 @@
+/**
+ * OrganizationDashboard Component
+ *
+ * This component renders the dashboard for an organization, displaying
+ * various statistics and information such as member count, admin count,
+ * posts, events, and upcoming events. It also provides navigation to
+ * related sections like posts and events.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered OrganizationDashboard component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` to fetch data for members, posts, and events.
+ * - Displays loading states and handles errors using `react-toastify`.
+ * - Utilizes `react-bootstrap` for layout and styling.
+ * - Integrates with `react-router-dom` for navigation.
+ * - Supports internationalization using `react-i18next`.
+ *
+ *
+ * @example
+ * ```tsx
+ * <OrganizationDashboard />
+ * ```
+ *
+ * @todo
+ * - Implement navigation for blocked users and membership requests.
+ * - Add volunteer rankings functionality.
+ *
+ */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Card } from 'react-bootstrap';
@@ -34,14 +63,6 @@ import type {
 } from 'utils/interfaces';
 import styles from 'style/app.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
-
-/**
- * Component for displaying the organization dashboard.
- *
- * This component provides an overview of various statistics and information related to an organization, including members, admins, posts, events, blocked users, and membership requests. It also displays upcoming events and latest posts.
- *
- * @returns The rendered component.
- */
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -123,9 +144,7 @@ function OrganizationDashboard(): JSX.Element {
     data: orgPostsData,
     loading: orgPostsLoading,
     error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
-    variables: { id: orgId },
-  });
+  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, { variables: { id: orgId } });
 
   const {
     data: orgEventsData,
@@ -310,7 +329,7 @@ function OrganizationDashboard(): JSX.Element {
                 }}
               >
                 {/* <DashBoardCard
-                  count={data?.organizations[0].blockedUsers?.length}
+                  count={data?.organization[0].blockedUsers?.length}
                   title={t('blockedUsers')}
                   icon={<BlockedUsersIcon fill="var(--bs-primary)" />}
                 /> */}
@@ -325,7 +344,7 @@ function OrganizationDashboard(): JSX.Element {
                 // }}
               >
                 {/* <DashBoardCard
-                  count={data?.organizations[0].membershipRequests?.length}
+                  count={data?.organization[0].membershipRequests?.length}
                   title={tCommon('requests')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 /> */}
@@ -337,7 +356,12 @@ function OrganizationDashboard(): JSX.Element {
               <Card border="0" className="rounded-4 ">
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('upcomingEvents')}</div>
-                  <Button size="sm" variant="light" data-testid="viewAllEvents">
+                  <Button
+                    size="sm"
+                    variant="light"
+                    data-testid="viewAllEvents"
+                    onClick={(): void => navigate(eventsLink)}
+                  >
                     {t('viewAll')}
                   </Button>
                 </div>
@@ -377,7 +401,7 @@ function OrganizationDashboard(): JSX.Element {
                     variant="light"
                     data-testid="viewAllPosts"
                     className=""
-                    // onClick={(): void => navigate(postsLink)}
+                    onClick={(): void => navigate(postsLink)}
                   >
                     {t('viewAll')}
                   </Button>
@@ -429,7 +453,7 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllMembershipRequests"
                   onClick={(): void => {
-                    toast.success('Coming soon!');
+                    toast.success(t('comingSoon'));
                   }}
                 >
                   {t('viewAll')}
@@ -443,7 +467,7 @@ function OrganizationDashboard(): JSX.Element {
               {/* [...Array(4)].map((_, index) => { */}
               {/* return <CardItemLoading key={`requestsLoading_${index}`} />; */}
               {/* }) */}
-              {/* ) : data?.organizations[0].membershipRequests.length == 0 ? ( */}
+              {/* ) : data?.organization[0].membershipRequests.length == 0 ? ( */}
               <div
                 className={styles.emptyContainer}
                 style={{ height: '150px' }}
@@ -451,7 +475,7 @@ function OrganizationDashboard(): JSX.Element {
                 <h6>{t('noMembershipRequests')}</h6>
               </div>
               {/* ) : ( */}
-              {/* data?.organizations[0]?.membershipRequests */}
+              {/* data?.organization[0]?.membershipRequests */}
               {/* .slice(0, 8) */}
               {/* .map((request) => { */}
               {/* return ( */}
@@ -475,6 +499,9 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllLeadeboard"
                   // onClick={(): void => navigate(leaderboardLink)}
+                  onClick={(): void => {
+                    toast.success(t('comingSoon'));
+                  }}
                 >
                   {t('viewAll')}
                 </Button>

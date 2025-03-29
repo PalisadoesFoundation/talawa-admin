@@ -1,7 +1,4 @@
-import {
-  ORGANIZATION_CONNECTION_LIST,
-  USER_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 
 import { MOCK_USERS, MOCK_USERS2 } from './Organization.mocks';
 
@@ -24,11 +21,11 @@ export const EMPTY_MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
@@ -71,11 +68,11 @@ export const MOCKS_NEW_2 = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
@@ -101,11 +98,11 @@ export const MOCKS_NEW = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
@@ -131,11 +128,11 @@ export const MOCKS_NEW2 = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },
@@ -179,11 +176,11 @@ export const MOCKS_NEW3 = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [],
+        organizations: [],
       },
     },
   },

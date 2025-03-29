@@ -1,7 +1,51 @@
+/**
+ * Component for displaying and managing group chat details.
+ *
+ * @module GroupChatDetails
+ *
+ * @description
+ * This component provides a modal interface for viewing and editing group chat details,
+ * including the chat name, image, description, and members. It also allows adding new users
+ * to the group chat and updating chat information.
+ *
+ * @param {InterfaceGroupChatDetailsProps} props - The props for the component.
+ * @param {boolean} props.groupChatDetailsModalisOpen - Determines if the group chat details modal is open.
+ * @param {Function} props.toggleGroupChatDetailsModal - Function to toggle the visibility of the modal.
+ * @param {Object} props.chat - The chat object containing details like name, image, description, and users.
+ * @param {Function} props.chatRefetch - Function to refetch chat data after updates.
+ *
+ * @returns {JSX.Element} The rendered GroupChatDetails component.
+ *
+ * @remarks
+ * - Uses `@mui/material` for table and modal styling.
+ * - Integrates `react-bootstrap` for modal and form elements.
+ * - Utilizes GraphQL queries and mutations for fetching and updating chat data.
+ * - Includes localization support via `react-i18next`.
+ * - Displays a loader while fetching user data.
+ *
+ * @example
+ * ```tsx
+ * <GroupChatDetails
+ *   groupChatDetailsModalisOpen={true}
+ *   toggleGroupChatDetailsModal={handleToggle}
+ *   chat={chatData}
+ *   chatRefetch={refetchChatData}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - `@mui/material`
+ * - `react-bootstrap`
+ * - `@apollo/client`
+ * - `react-i18next`
+ * - `react-toastify`
+ * - `react-icons`
+ *
+ */
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ADD_USER_TO_GROUP_CHAT,
@@ -31,36 +75,20 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: ['#31bb6b', '!important'],
     color: theme.palette.common.white,
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  '&:last-child td, &:last-child th': { border: 0 },
 }));
 
-/**
- * Component for displaying and managing group chat details.
- *
- * @param props - The component props.
- * @param toggleGroupChatDetailsModal - Function to toggle the group chat details modal.
- * @param groupChatDetailsModalisOpen - Boolean indicating if the group chat details modal is open.
- * @param chat - The chat object containing details about the group chat.
- * @param chatRefetch - Function to refetch the chat data.
- * @returns The rendered component.
- */
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
   chat,
   chatRefetch,
 }: InterfaceGroupChatDetailsProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
 
   //storage
 
@@ -117,19 +145,11 @@ export default function groupChatDetails({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
+    variables: { firstName_contains: '', lastName_contains: '' },
   });
 
   const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({
-      variables: {
-        userId,
-        chatId: chat._id,
-      },
-    });
+    await addUser({ variables: { userId, chatId: chat._id } });
   };
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
@@ -141,9 +161,7 @@ export default function groupChatDetails({
       lastName_contains: lastName || '',
     };
 
-    allUsersRefetch({
-      ...newFilterData,
-    });
+    allUsersRefetch({ ...newFilterData });
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -1,6 +1,40 @@
+/**
+ * VenueModal Component
+ *
+ * This component renders a modal for creating or editing a venue. It includes
+ * form fields for venue details such as name, description, capacity, and an image.
+ * The component supports both creation and editing modes, determined by the `edit` prop.
+ *
+ * @param {boolean} show - Determines whether the modal is visible.
+ * @param {() => void} onHide - Callback to close the modal.
+ * @param {() => void} refetchVenues - Callback to refetch the list of venues after a successful operation.
+ * @param {string} orgId - The ID of the organization to which the venue belongs.
+ * @param {InterfaceQueryVenueListItem | null} [venueData] - Data of the venue being edited (if in edit mode).
+ * @param {boolean} edit - Indicates whether the modal is in edit mode.
+ *
+ * @returns {JSX.Element} The VenueModal component.
+ *
+ * @remarks
+ * - Uses GraphQL mutations for creating and updating venues.
+ * - Validates form inputs such as name, capacity, and image file.
+ * - Provides image preview functionality and handles image uploads to MinIO.
+ * - Displays success or error messages using `react-toastify`.
+ *
+ * @example
+ * ```tsx
+ * <VenueModal
+ *   show={true}
+ *   onHide={handleClose}
+ *   refetchVenues={fetchVenues}
+ *   orgId="12345"
+ *   venueData={venue}
+ *   edit={true}
+ * />
+ * ```
+ */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -9,8 +43,8 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -21,38 +55,6 @@ export interface InterfaceVenueModalProps {
   edit: boolean;
 }
 
-/**
- * A modal component for creating or updating venue information.
- *
- * This component displays a modal window where users can enter details for a venue, such as name, description, capacity, and an image.
- * It also handles submitting the form data to create or update a venue based on whether the edit prop is true or false.
- *
- * @param show - A flag indicating if the modal should be visible.
- * @param onHide - A function to call when the modal should be closed.
- * @param refetchVenues - A function to refetch the list of venues after a successful operation.
- * @param orgId - The ID of the organization to which the venue belongs.
- * @param venueData - Optional venue data to prefill the form for editing. If null, the form will be empty.
- * @param edit - A flag indicating if the modal is in edit mode. If true, the component will update an existing venue; if false, it will create a new one.
- *
- * @returns The rendered modal component.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.inputField`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 const VenueModal = ({
   show,
   onHide,
@@ -67,13 +69,15 @@ const VenueModal = ({
   });
   const { t: tCommon } = useTranslation('common');
 
+  const { uploadFileToMinio } = useMinioUpload();
+
   // State to manage image preview and form data
-  const [venueImage, setVenueImage] = useState<boolean>(false);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [formState, setFormState] = useState({
     name: venueData?.name || '',
     description: venueData?.description || '',
     capacity: venueData?.capacity || '',
-    imageURL: venueData?.image || '',
+    objectName: venueData?.image || '',
   });
 
   // Reference for the file input element
@@ -108,16 +112,11 @@ const VenueModal = ({
         id: venueData._id,
         capacity: parseInt(formState.capacity, 10),
         description: formState.description?.trim() || '',
-        file: formState.imageURL || '',
+        file: formState.objectName || '',
         // Don't include name if it hasn't changed
       };
-
-      console.log('Sending update mutation without name:', variables);
-
       try {
-        const result = await mutate({
-          variables,
-        });
+        const result = await mutate({ variables });
 
         if (result?.data?.editVenue) {
           toast.success(t('venueUpdated'));
@@ -146,14 +145,10 @@ const VenueModal = ({
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
-          file: formState.imageURL || '',
+          file: formState.objectName || '',
         };
 
-        console.log('Sending update mutation with name:', variables);
-
-        const result = await mutate({
-          variables,
-        });
+        const result = await mutate({ variables });
 
         if (result?.data?.editVenue) {
           toast.success(t('venueUpdated'));
@@ -166,13 +161,11 @@ const VenueModal = ({
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
-          file: formState.imageURL || '',
+          file: formState.objectName || '',
           organizationId: orgId,
         };
 
-        const result = await mutate({
-          variables,
-        });
+        const result = await mutate({ variables });
 
         if (result?.data?.createVenue) {
           toast.success(t('venueCreated'));
@@ -198,8 +191,8 @@ const VenueModal = ({
    * This function also clears the file input field.
    */
   const clearImageInput = useCallback(() => {
-    setFormState((prevState) => ({ ...prevState, imageURL: '' }));
-    setVenueImage(false);
+    setFormState((prevState) => ({ ...prevState, objectName: '' }));
+    setImagePreviewUrl(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -211,12 +204,26 @@ const VenueModal = ({
       name: venueData?.name || '', // Prefill name or set as empty
       description: venueData?.description || '', // Prefill description
       capacity: venueData?.capacity?.toString() || '', // Prefill capacity as a string
-      imageURL: venueData?.image || '', // Prefill image
+      objectName: venueData?.image || '', // Prefill image
     });
-    setVenueImage(!!venueData?.image); // Set preview if image exists
+
+    if (venueData?.image) {
+      try {
+        const previewUrl = new URL(
+          `/api/images/${venueData.image}`,
+          window.location.origin,
+        ).toString();
+        setImagePreviewUrl(previewUrl);
+      } catch (error) {
+        toast.error('Error creating preview URL');
+        setImagePreviewUrl(null);
+      }
+    } else {
+      setImagePreviewUrl(null);
+    }
   }, [venueData]);
 
-  const { name, description, capacity, imageURL } = formState;
+  const { name, description, capacity } = formState;
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -242,10 +249,7 @@ const VenueModal = ({
             required
             value={name}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                name: e.target.value,
-              });
+              setFormState({ ...formState, name: e.target.value });
             }}
             className={styles.inputField}
           />
@@ -260,10 +264,7 @@ const VenueModal = ({
             maxLength={500}
             value={description}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                description: e.target.value,
-              });
+              setFormState({ ...formState, description: e.target.value });
             }}
             className={styles.inputField}
           />
@@ -276,10 +277,7 @@ const VenueModal = ({
             required
             value={capacity}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                capacity: e.target.value,
-              });
+              setFormState({ ...formState, capacity: e.target.value });
             }}
             className={styles.inputField}
           />
@@ -293,27 +291,41 @@ const VenueModal = ({
             placeholder={t('uploadVenueImage')}
             multiple={false}
             ref={fileInputRef}
-            onChange={async (
-              e: React.ChangeEvent<HTMLInputElement>,
-            ): Promise<void> => {
-              setFormState((prevPostFormState) => ({
-                ...prevPostFormState,
-                imageURL: '',
-              }));
-              setVenueImage(true);
-              const file = e.target.files?.[0];
+            onChange={async (e: React.ChangeEvent) => {
+              const target = e.target as HTMLInputElement;
+              const file = target.files?.[0];
+
               if (file) {
-                setFormState({
-                  ...formState,
-                  imageURL: await convertToBase64(file),
-                });
+                if (!file.size) {
+                  toast.error('Empty file selected');
+                  return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                  toast.error('File size exceeds the 5MB limit');
+                  return;
+                }
+                if (!file.type.startsWith('image/')) {
+                  toast.error('Only image files are allowed');
+                  return;
+                }
+                try {
+                  const { objectName } = await uploadFileToMinio(
+                    file,
+                    'organizations',
+                  );
+                  setFormState({ ...formState, objectName });
+                  const previewUrl = URL.createObjectURL(file);
+                  setImagePreviewUrl(previewUrl);
+                } catch (error) {
+                  toast.error('Failed to upload image');
+                }
               }
             }}
             className={styles.inputField}
           />
-          {venueImage && (
+          {imagePreviewUrl && (
             <div className={styles.previewVenueModal}>
-              <img src={imageURL} alt="Venue Image Preview" />
+              <img src={imagePreviewUrl} alt="Venue Image Preview" />
               <button
                 className={styles.closeButtonP}
                 onClick={clearImageInput}

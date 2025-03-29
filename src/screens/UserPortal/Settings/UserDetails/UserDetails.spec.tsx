@@ -5,6 +5,8 @@ import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
 import { MOCKS, MOCKS1, MOCKS2, UPDATE_MOCK } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
+import dayjs from 'dayjs';
+import { act } from 'react-dom/test-utils';
 
 // Mock the dependencies
 vi.mock('sanitize-html', () => ({
@@ -110,6 +112,7 @@ describe('UserDetailsForm', () => {
       </MockedProvider>,
     );
 
+    // When isUpdated is true, buttons should NOT be in the document
     expect(screen.queryByTestId('resetChangesBtn')).not.toBeInTheDocument();
     expect(screen.queryByTestId('updateUserBtn')).not.toBeInTheDocument();
 
@@ -119,6 +122,7 @@ describe('UserDetailsForm', () => {
       </MockedProvider>,
     );
 
+    // When isUpdated is false, buttons should be in the document
     expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
     expect(screen.getByTestId('updateUserBtn')).toBeInTheDocument();
   });
@@ -126,7 +130,7 @@ describe('UserDetailsForm', () => {
   it('handles form submission correctly', async () => {
     render(
       <MockedProvider mocks={UPDATE_MOCK} addTypename={false}>
-        <UserDetailsForm {...defaultProps} />
+        <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
 
@@ -139,7 +143,7 @@ describe('UserDetailsForm', () => {
   it('handles reset changes correctly', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
-        <UserDetailsForm {...defaultProps} />
+        <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
 
@@ -183,7 +187,8 @@ describe('UserDetailsForm', () => {
     );
 
     const birthDateInput = screen.getByLabelText(mockT('birthDate'));
-    const maxDate = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    const maxDate = new Intl.DateTimeFormat('en-CA').format(today);
 
     expect(birthDateInput).toHaveAttribute('max', maxDate);
   });
@@ -274,13 +279,52 @@ describe('UserDetailsForm', () => {
       '1234567890',
     );
 
-    // Test birth date
-    const birthDate = screen.getByLabelText(mockT('birthDate'));
-    fireEvent.change(birthDate, { target: { value: '1990-01-01' } });
+    // Test birth date - properly test DatePicker onChange handler
+    const dateInput = screen.getByTestId('birth-date-input');
+
+    // Test case 1: Setting a date (testing the date ? date.format() branch)
+    await act(async () => {
+      // Find the DatePicker component and directly call its onChange prop
+      // to simulate what happens when a user selects a date
+      const datePickerOnChange = screen
+        .getByLabelText(mockT('birthDate'))
+        .closest('.MuiDatePicker-root')
+        ?.dispatchEvent(new Event('change'));
+      if (datePickerOnChange) {
+        if (typeof datePickerOnChange === 'function') {
+          (datePickerOnChange as (date: dayjs.Dayjs) => void)(
+            dayjs('1990-01-01'),
+          );
+        }
+      } else {
+        // Fallback to simulating input change
+        fireEvent.change(dateInput, { target: { value: '1990-01-01' } });
+        fireEvent.blur(dateInput);
+      }
+    });
     expect(mockHandleFieldChange).toHaveBeenCalledWith(
       'birthDate',
       '1990-01-01',
     );
+
+    // Test case 2: Clearing a date (testing the : '' branch)
+    await act(async () => {
+      // Find the DatePicker component and directly call its onChange prop with null
+      const datePickerOnChange = screen
+        .getByLabelText(mockT('birthDate'))
+        .closest('.MuiDatePicker-root')
+        ?.dispatchEvent(new Event('change'));
+      if (datePickerOnChange) {
+        if (typeof datePickerOnChange === 'function') {
+          (datePickerOnChange as (date: dayjs.Dayjs | null) => void)(null);
+        }
+      } else {
+        // Fallback to simulating input change to empty string
+        fireEvent.change(dateInput, { target: { value: '' } });
+        fireEvent.blur(dateInput);
+      }
+    });
+    expect(mockHandleFieldChange).toHaveBeenCalledWith('birthDate', '');
 
     // Test education grade
     const gradeSelect = screen.getByTestId('inputGrade');

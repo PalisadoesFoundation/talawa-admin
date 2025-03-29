@@ -47,16 +47,6 @@ const props: InterfaceLeftDrawerProps = {
       url: '/blockuser/123',
     },
     {
-      name: 'Plugins',
-      subTargets: [
-        {
-          name: 'Plugin Store',
-          url: '/orgstore/123',
-          icon: 'fa-store',
-        },
-      ],
-    },
-    {
       name: 'Settings',
       url: '/orgsetting/123',
     },
@@ -87,7 +77,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '123',
             image: null,
@@ -150,7 +140,7 @@ const MOCKS_WITH_IMAGE = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '123',
             image:
@@ -214,7 +204,7 @@ const MOCKS_WITH_IMAGE = [
 //     },
 //     result: {
 //       data: {
-//         organizations: [],
+//        organization: [],
 //       },
 //     },
 //   },
@@ -228,7 +218,7 @@ const MOCKS_EMPTY_ORGID = [
     },
     result: {
       data: {
-        organizations: [],
+        organization: [],
       },
     },
   },
@@ -240,7 +230,6 @@ const defaultScreens = [
   'Events',
   'Posts',
   'Block/Unblock',
-  'Plugins',
   'Settings',
   'All Organizations',
 ];

@@ -393,7 +393,7 @@ export interface InterfaceActionItemList {
 }
 
 export interface InterfaceMembersList {
-  organizations: {
+  organization: {
     _id: string;
     members: InterfaceMemberInfo[];
   }[];
@@ -430,45 +430,31 @@ export interface InterfaceOrgConnectionInfoType {
   address: InterfaceAddress;
 }
 
+// export interface InterfaceOrgConnectionType {
+//   organizationsConnection: InterfaceOrgConnectionInfoType[];
+// }
+
 export interface InterfaceOrgConnectionInfoTypePG {
-  node: InterfaceOrgInfoTypePG;
+  organization: InterfaceOrgInfoTypePG[];
 }
 
 export interface InterfaceOrgInfoTypePG {
   id: string;
-  avatarURL: string | null;
   name: string;
+  addressLine1: string;
+  description: string;
+  avatarURL: string | null;
   members: {
     edges: {
       node: {
         id: string;
-        name: string;
-        addressLine1: string;
-        description: string;
-        avatarURL: string;
-        members: {
-          edges: {
-            node: {
-              id: string;
-            };
-          }[];
-        };
       };
     }[];
   };
-  description: string;
-  addressLine1: string;
-}
-export interface InterfaceOrgConnectionType {
-  organizationsConnection: InterfaceOrgConnectionInfoType[];
-}
-
-export interface InterfaceOrgConnectionTypePG {
-  organizationsConnection: InterfaceOrgInfoTypePG[];
 }
 
 export interface InterfaceQueryOrganizationsListObject {
-  _id: string;
+  id: string;
   image: string | null;
   creator: {
     firstName: string;
@@ -572,6 +558,16 @@ export interface InterfaceOrganizationAdvertisementsConnectionPg {
 export interface InterfaceOrganizationAdvertisementsConnectionEdgePg {
   cursor: string;
   node: InterfaceAdvertisementPg;
+}
+
+export interface InterfaceOrganizationBlockedUsersConnectionEdgePg {
+  cursor: string;
+  node: InterfaceUserPg;
+}
+
+export interface InterfaceOrganizationBlockedUsersConnectionPg {
+  edges: InterfaceOrganizationBlockedUsersConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
 }
 
 export interface InterfaceChatPg {
@@ -827,6 +823,8 @@ export interface InterfaceOrganizationPg {
 
     advertisements: InterfaceOrganizationAdvertisementsConnectionPg;
 
+    blockedUsers: InterfaceOrganizationBlockedUsersConnectionPg;
+
     chats: InterfaceOrganizationChatsConnectionPg;
 
     events: InterfaceOrganizationEventsConnectionPg;
@@ -993,18 +991,23 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 }
 
 export interface InterfaceQueryOrganizationFundCampaigns {
+  id: string;
   name: string;
   isArchived: boolean;
   campaigns: {
-    _id: string;
-    name: string;
-    fundingGoal: number;
-    startDate: Date;
-    endDate: Date;
-    createdAt: string;
-    currency: string;
-  }[];
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        startAt: string;
+        endAt: string;
+        currencyCode: string;
+        goalAmount: number;
+      };
+    }[];
+  };
 }
+
 export interface InterfaceUserCampaign {
   _id: string;
   name: string;
@@ -1025,24 +1028,39 @@ export interface InterfaceQueryFundCampaignsPledges {
   pledges: InterfacePledgeInfo[];
 }
 export interface InterfaceFundInfo {
-  _id: string;
+  id: string;
   name: string;
   refrenceNumber: string;
-  taxDeductible: boolean;
+  isTaxDeductible: boolean;
   isArchived: boolean;
   isDefault: boolean;
   createdAt: string;
   organizationId: string;
-  creator: { _id: string; firstName: string; lastName: string };
+  creator: { name: string };
+  organization: { name: string };
+  updater: {
+    name: string;
+  };
+  edges: {
+    node: {
+      id: string;
+      name: string;
+      fundingGoal: number;
+      startDate: string;
+      endDate: string;
+      currency: string;
+      createdAt: string;
+    };
+  };
 }
 export interface InterfaceCampaignInfo {
-  _id: string;
+  id: string;
   name: string;
-  fundingGoal: number;
-  startDate: Date;
-  endDate: Date;
+  goalAmount: number;
+  startAt: Date;
+  endAt: Date;
   createdAt: string;
-  currency: string;
+  currencyCode: string;
 }
 export interface InterfacePledgeInfo {
   _id: string;
@@ -1106,7 +1124,7 @@ export interface InterfaceQueryUserListItem {
     }[];
     createdAt: string;
     registeredEvents: { _id: string }[];
-    membershipRequests: { _id: string }[];
+    membershipRequests: { id: string }[];
   };
   appUserProfile: {
     _id: string;
@@ -1141,7 +1159,7 @@ export interface InterfaceCreateFund {
   fundRef: string;
   isDefault: boolean;
   isArchived: boolean;
-  taxDeductible: boolean;
+  isTaxDeductible: boolean;
 }
 
 export interface InterfacePostCard {
@@ -1190,7 +1208,7 @@ export interface InterfaceCreatePledge {
 }
 
 export interface InterfaceQueryMembershipRequestsListItem {
-  organizations: {
+  organization: {
     _id: string;
     membershipRequests: {
       _id: string;

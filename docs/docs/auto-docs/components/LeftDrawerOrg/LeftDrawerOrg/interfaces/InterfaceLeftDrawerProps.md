@@ -4,7 +4,7 @@
 
 # Interface: InterfaceLeftDrawerProps
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L17)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L52)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:17](https://github.c
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L20)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L55)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:20](https://github.c
 
 > **orgId**: `string`
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L18)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L53)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:18](https://github.c
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L21)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L56)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:21](https://github.c
 
 > **targets**: [`TargetsType`](../../../../state/reducers/routesReducer/type-aliases/TargetsType.md)[]
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L19)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L54)

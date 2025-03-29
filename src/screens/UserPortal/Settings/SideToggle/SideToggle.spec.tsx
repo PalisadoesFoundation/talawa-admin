@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SidebarToggle from './SideToggle';
-import styles from '../Settings.module.css';
+import styles from 'style/app-fixed.module.css';
 
 describe('SidebarToggle', () => {
   const mockSetHideDrawer = vi.fn();

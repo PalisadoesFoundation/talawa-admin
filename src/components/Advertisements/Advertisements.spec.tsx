@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ORGANIZATION_ADVERTISEMENT_LIST } from '../../GraphQl/Queries/Queries';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -17,7 +17,6 @@ import {
   client,
   ORGANIZATIONS_LIST_MOCK,
   ADD_ADVERTISEMENT_MUTATION_MOCK,
-  PLUGIN_GET_MOCK,
   ADVERTISEMENTS_LIST_MOCK,
 } from './AdvertisementsMocks';
 
@@ -32,10 +31,7 @@ let mockID: string | undefined = '1';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useParams: () => ({ orgId: mockID }),
-  };
+  return { ...actual, useParams: () => ({ orgId: mockID }) };
 });
 
 const today = new Date();
@@ -46,7 +42,6 @@ describe('Testing Advertisement Component', () => {
   test('for creating new Advertisements', async () => {
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,
-      PLUGIN_GET_MOCK,
       ADD_ADVERTISEMENT_MUTATION_MOCK,
       ...ADVERTISEMENTS_LIST_MOCK,
     ];
@@ -76,11 +71,7 @@ describe('Testing Advertisement Component', () => {
     });
 
     const mediaInput = screen.getByTestId('advertisementMedia');
-    fireEvent.change(mediaInput, {
-      target: {
-        files: [mediaFile],
-      },
-    });
+    fireEvent.change(mediaInput, { target: { files: [mediaFile] } });
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText('Select type of Advertisement'), {
@@ -184,7 +175,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 _id: '1',
                 advertisements: {
@@ -276,7 +267,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 _id: '1',
                 advertisements: {
@@ -318,15 +309,11 @@ describe('Testing Advertisement Component', () => {
       {
         request: {
           query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: 'cursor2',
-          },
+          variables: { id: '1', first: 6, after: 'cursor2' },
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 _id: '1',
                 advertisements: {

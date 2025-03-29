@@ -1,3 +1,32 @@
+/**
+ * Component representing a single row in the membership requests table.
+ *
+ * This component displays the details of a membership request, including the user's name,
+ * email, and actions to accept or reject the request. It uses GraphQL mutations to handle
+ * the acceptance or rejection of requests and provides feedback to the user via toast notifications.
+ *
+ * @component
+ * @param props - The props for the component.
+ * @param props.request - The membership request data.
+ * @param props.index - The index of the request in the list.
+ * @param props.resetAndRefetch - A function to reset the state and refetch the data after an action.
+ *
+ * @remarks
+ * - Uses `useMutation` from Apollo Client for GraphQL mutations.
+ * - Displays success messages using `react-toastify`.
+ * - Handles errors using a custom `errorHandler` utility.
+ *
+ * @example
+ * ```tsx
+ * <RequestsTableItem
+ *   request={request}
+ *   index={0}
+ *   resetAndRefetch={refetchFunction}
+ * />
+ * ```
+ *
+ * @returns A JSX element representing a table row with membership request details and actions.
+ */
 import { useMutation } from '@apollo/client';
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
@@ -10,9 +39,6 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './RequestsTableItem.module.css';
 import type { InterfaceRequestsListItem } from 'types/Member/interface';
-/**
- * Represents a membership request in the requests table.
- */
 
 type Props = {
   request: InterfaceRequestsListItem;
@@ -20,16 +46,6 @@ type Props = {
   resetAndRefetch: () => void;
 };
 
-/**
- * Renders a table row item for a membership request.
- *
- * This component displays user details and provides buttons to accept or reject
- * the membership request. It also handles showing success or error messages using
- * toast notifications.
- *
- * @param props - The props object containing request details, index, and state reset function.
- * @returns The JSX element representing the RequestsTableItem.
- */
 const RequestsTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
   const { request, index, resetAndRefetch } = props;

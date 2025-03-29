@@ -1,3 +1,40 @@
+/**
+ * Component for adding an attendee on the spot via a modal form.
+ *
+ * This component provides a modal interface to add attendees to an event
+ * by collecting their details such as name, email, phone number, and gender.
+ * It validates the form inputs, submits the data to the server using a GraphQL
+ * mutation, and handles success or error responses appropriately.
+ *
+ * @component
+ * @param {InterfaceAddOnSpotAttendeeProps} props - The props for the component.
+ * @param {boolean} props.show - Determines whether the modal is visible.
+ * @param {() => void} props.handleClose - Function to close the modal.
+ * @param {() => void} props.reloadMembers - Function to reload the list of members.
+ *
+ * @returns {JSX.Element} The rendered AddOnSpotAttendee component.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for modal and form styling.
+ * - Utilizes `react-toastify` for displaying success and error messages.
+ * - Integrates `react-i18next` for translations.
+ * - Includes form validation to ensure required fields are filled.
+ *
+ * @example
+ * ```tsx
+ * <AddOnSpotAttendee
+ *   show={true}
+ *   handleClose={() => setShow(false)}
+ *   reloadMembers={fetchMembers}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL mutation.
+ * - `react-bootstrap` for UI components.
+ * - `react-toastify` for notifications.
+ * - `react-i18next` for translations.
+ */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
 import { Modal, Form, Button, Spinner } from 'react-bootstrap';
@@ -10,13 +47,7 @@ import type {
 } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-/**
- * Modal component for adding on-spot attendees to an event
- * @param show - Boolean to control modal visibility
- * @param handleClose - Function to handle modal close
- * @param reloadMembers - Function to refresh member list after adding attendee
- * @returns Modal component with form for adding new attendee
- */
+
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
   handleClose,

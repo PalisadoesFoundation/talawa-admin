@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -11,7 +11,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 
 import {
   MOCKS,
@@ -21,10 +21,7 @@ import {
 import { vi } from 'vitest';
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
@@ -389,6 +386,12 @@ describe('Testing Organization Action Items Screen', () => {
       </MockedProvider>,
     );
 
+    // Wait for loading to complete
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    });
+
+    // Wait for data to be rendered
     const viewItemBtn = await screen.findByTestId('viewItemBtn1');
     expect(viewItemBtn).toBeInTheDocument();
     await userEvent.click(viewItemBtn);

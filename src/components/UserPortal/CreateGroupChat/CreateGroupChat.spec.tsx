@@ -1,4 +1,6 @@
 import React from 'react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import * as MinioUploadHook from 'utils/MinioUpload';
 import {
   act,
   fireEvent,
@@ -11,13 +13,13 @@ import { I18nextProvider } from 'react-i18next';
 
 import {
   USERS_CONNECTION_LIST,
-  USER_JOINED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import Chat from '../../../screens/UserPortal/Chat/Chat';
+import Chat from 'screens/UserPortal/Chat/Chat';
 import CreateGroupChat from './CreateGroupChat';
 import {
   CREATE_CHAT,
@@ -52,13 +54,19 @@ import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
+const mockUploadFileToMinio = vi
+  .fn()
+  .mockResolvedValue({ fileUrl: 'https://minio-test.com/test-image.jpg' });
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: vi.fn(() => ({ uploadFileToMinio: mockUploadFileToMinio })),
+}));
+
 const USER_JOINED_ORG_MOCK = [
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: '1',
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: '1', first: 10 },
     },
     result: {
       data: {
@@ -92,25 +100,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -140,25 +142,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -188,25 +184,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -236,25 +226,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -267,10 +251,8 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: '1',
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: '1', first: 10 },
     },
     result: {
       data: {
@@ -304,25 +286,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -352,25 +328,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -383,10 +353,8 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: '1',
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: '1', first: 10 },
     },
     result: {
       data: {
@@ -420,25 +388,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -468,25 +430,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -499,10 +455,8 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: null,
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: null, first: 10 },
     },
     result: {
       data: {
@@ -536,25 +490,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -584,25 +532,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -615,10 +557,8 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: null,
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: null, first: 10 },
     },
     result: {
       data: {
@@ -652,25 +592,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -700,25 +634,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -731,10 +659,8 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: null,
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: null, first: 10 },
     },
     result: {
       data: {
@@ -768,25 +694,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -816,25 +736,19 @@ const USER_JOINED_ORG_MOCK = [
                   members: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   admins: [
                     {
                       _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                   membershipRequests: [
                     {
                       _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
+                      user: { _id: '45ydeg2yet721rtgdu32ry' },
                     },
                   ],
                 },
@@ -851,10 +765,7 @@ const UserConnectionListMock = [
   {
     request: {
       query: USERS_CONNECTION_LIST,
-      variables: {
-        firstName_contains: '',
-        lastName_contains: '',
-      },
+      variables: { firstName_contains: '', lastName_contains: '' },
     },
     result: {
       data: {
@@ -998,10 +909,7 @@ const UserConnectionListMock = [
   {
     request: {
       query: USERS_CONNECTION_LIST,
-      variables: {
-        firstName_contains: '',
-        lastName_contains: '',
-      },
+      variables: { firstName_contains: '', lastName_contains: '' },
     },
     result: {
       data: {
@@ -1017,12 +925,8 @@ const UserConnectionListMock = [
               appUserProfile: {
                 _id: '12',
                 isSuperAdmin: 'false',
-                createdOrganizations: {
-                  _id: '345678',
-                },
-                createdEvents: {
-                  _id: '34567890',
-                },
+                createdOrganizations: { _id: '345678' },
+                createdEvents: { _id: '34567890' },
               },
               organizationsBlockedBy: [],
               joinedOrganizations: [],
@@ -1037,12 +941,8 @@ const UserConnectionListMock = [
               appUserProfile: {
                 _id: '12',
                 isSuperAdmin: 'false',
-                createdOrganizations: {
-                  _id: '345678',
-                },
-                createdEvents: {
-                  _id: '34567890',
-                },
+                createdOrganizations: { _id: '345678' },
+                createdEvents: { _id: '34567890' },
               },
               organizationsBlockedBy: [],
               joinedOrganizations: [],
@@ -1057,12 +957,8 @@ const UserConnectionListMock = [
               appUserProfile: {
                 _id: '12',
                 isSuperAdmin: 'false',
-                createdOrganizations: {
-                  _id: '345678',
-                },
-                createdEvents: {
-                  _id: '34567890',
-                },
+                createdOrganizations: { _id: '345678' },
+                createdEvents: { _id: '34567890' },
               },
               organizationsBlockedBy: [],
               joinedOrganizations: [],
@@ -1075,10 +971,7 @@ const UserConnectionListMock = [
   {
     request: {
       query: USERS_CONNECTION_LIST,
-      variables: {
-        firstName_contains: 'Disha',
-        lastName_contains: '',
-      },
+      variables: { firstName_contains: 'Disha', lastName_contains: '' },
     },
     result: {
       data: {
@@ -1223,19 +1116,12 @@ const UserConnectionListMock = [
 
 const MESSAGE_SENT_TO_CHAT_MOCK = [
   {
-    request: {
-      query: MESSAGE_SENT_TO_CHAT,
-      variables: {
-        userId: null,
-      },
-    },
+    request: { query: MESSAGE_SENT_TO_CHAT, variables: { userId: null } },
     result: {
       data: {
         messageSentToChat: {
           _id: '668ec1f1364e03ac47a151',
-          chatMessageBelongsTo: {
-            _id: '1',
-          },
+          chatMessageBelongsTo: { _id: '1' },
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
           type: 'STRING',
@@ -1252,19 +1138,12 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
     },
   },
   {
-    request: {
-      query: MESSAGE_SENT_TO_CHAT,
-      variables: {
-        userId: '2',
-      },
-    },
+    request: { query: MESSAGE_SENT_TO_CHAT, variables: { userId: '2' } },
     result: {
       data: {
         messageSentToChat: {
           _id: '668ec1f1df364e03ac47a151',
-          chatMessageBelongsTo: {
-            _id: '1',
-          },
+          chatMessageBelongsTo: { _id: '1' },
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
           replyTo: null,
@@ -1281,19 +1160,12 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
     },
   },
   {
-    request: {
-      query: MESSAGE_SENT_TO_CHAT,
-      variables: {
-        userId: '1',
-      },
-    },
+    request: { query: MESSAGE_SENT_TO_CHAT, variables: { userId: '1' } },
     result: {
       data: {
         messageSentToChat: {
           _id: '668ec1f13603ac4697a151',
-          chatMessageBelongsTo: {
-            _id: '1',
-          },
+          chatMessageBelongsTo: { _id: '1' },
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
           replyTo: null,
@@ -1313,12 +1185,7 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
 
 const CHAT_BY_ID_QUERY_MOCK = [
   {
-    request: {
-      query: CHAT_BY_ID,
-      variables: {
-        id: '1',
-      },
-    },
+    request: { query: CHAT_BY_ID, variables: { id: '1' } },
     result: {
       data: {
         chatById: {
@@ -1378,21 +1245,13 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
-          unseenMessagesByUsers: JSON.stringify({
-            '1': 1,
-            '2': 1,
-          }),
+          unseenMessagesByUsers: JSON.stringify({ '1': 1, '2': 1 }),
         },
       },
     },
   },
   {
-    request: {
-      query: CHAT_BY_ID,
-      variables: {
-        id: '1',
-      },
-    },
+    request: { query: CHAT_BY_ID, variables: { id: '1' } },
     result: {
       data: {
         chatById: {
@@ -1452,21 +1311,13 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
-          unseenMessagesByUsers: JSON.stringify({
-            '1': 1,
-            '2': 1,
-          }),
+          unseenMessagesByUsers: JSON.stringify({ '1': 1, '2': 1 }),
         },
       },
     },
   },
   {
-    request: {
-      query: CHAT_BY_ID,
-      variables: {
-        id: '',
-      },
-    },
+    request: { query: CHAT_BY_ID, variables: { id: '' } },
     result: {
       data: {
         chatById: {
@@ -1526,10 +1377,7 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
-          unseenMessagesByUsers: JSON.stringify({
-            '1': 1,
-            '2': 1,
-          }),
+          unseenMessagesByUsers: JSON.stringify({ '1': 1, '2': 1 }),
         },
       },
     },
@@ -1538,12 +1386,7 @@ const CHAT_BY_ID_QUERY_MOCK = [
 
 const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: { id: null } },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -1560,10 +1403,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -1634,12 +1474,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: { id: null } },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -1656,10 +1491,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -1730,12 +1562,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: { id: null } },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -1752,10 +1579,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -1826,12 +1650,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: { id: null } },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -1848,10 +1667,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -1922,12 +1738,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: { id: null } },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -1944,10 +1755,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2018,12 +1826,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {
-        id: '1',
-      },
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: { id: '1' } },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -2040,10 +1843,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2114,12 +1914,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {
-        id: '1',
-      },
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: { id: '1' } },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -2136,10 +1931,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2210,12 +2002,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {
-        id: '1',
-      },
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: { id: '1' } },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -2232,10 +2019,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2306,10 +2090,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {},
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: {} },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -2326,10 +2107,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2400,10 +2178,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {},
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: {} },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -2420,10 +2195,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2494,10 +2266,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {},
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: {} },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -2514,10 +2283,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2588,10 +2354,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {},
-    },
+    request: { query: UNREAD_CHAT_LIST, variables: {} },
     result: {
       data: {
         getUnreadChatsByUserId: [
@@ -2608,10 +2371,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2685,12 +2445,7 @@ const UNREAD_CHAT_BY_USER_ID_QUERY_MOCK = [
 
 const CHATS_LIST_MOCK = [
   {
-    request: {
-      query: CHATS_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: CHATS_LIST, variables: { id: null } },
     result: {
       data: {
         chatsByUserId: [
@@ -2707,10 +2462,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2789,10 +2541,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2863,12 +2612,7 @@ const CHATS_LIST_MOCK = [
     },
   },
   {
-    request: {
-      query: CHATS_LIST,
-      variables: {
-        id: '',
-      },
-    },
+    request: { query: CHATS_LIST, variables: { id: '' } },
     result: {
       data: {
         chatsByUserId: [
@@ -2885,10 +2629,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -2967,10 +2708,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3041,12 +2779,7 @@ const CHATS_LIST_MOCK = [
     },
   },
   {
-    request: {
-      query: CHATS_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: CHATS_LIST, variables: { id: null } },
     result: {
       data: {
         chatsByUserId: [
@@ -3063,10 +2796,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3145,10 +2875,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3219,12 +2946,7 @@ const CHATS_LIST_MOCK = [
     },
   },
   {
-    request: {
-      query: CHATS_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: CHATS_LIST, variables: { id: null } },
     result: {
       data: {
         chatsByUserId: [
@@ -3241,10 +2963,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3323,10 +3042,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3397,12 +3113,7 @@ const CHATS_LIST_MOCK = [
     },
   },
   {
-    request: {
-      query: CHATS_LIST,
-      variables: {
-        id: '',
-      },
-    },
+    request: { query: CHATS_LIST, variables: { id: '' } },
     result: {
       data: {
         chatsByUserId: [
@@ -3419,10 +3130,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3501,10 +3209,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3575,12 +3280,7 @@ const CHATS_LIST_MOCK = [
     },
   },
   {
-    request: {
-      query: CHATS_LIST,
-      variables: {
-        id: '1',
-      },
-    },
+    request: { query: CHATS_LIST, variables: { id: '1' } },
     result: {
       data: {
         chatsByUserId: [
@@ -3597,10 +3297,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3679,10 +3376,7 @@ const CHATS_LIST_MOCK = [
               createdAt: '2023-04-13T04:53:17.742Z',
               __typename: 'User',
             },
-            organization: {
-              _id: 'pw3ertyuiophgfre45678',
-              name: 'rtyu',
-            },
+            organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
             createdAt: '2345678903456',
             name: 'Test Group Chat',
             messages: [
@@ -3756,12 +3450,7 @@ const CHATS_LIST_MOCK = [
 
 const GROUP_CHAT_LIST_QUERY_MOCK = [
   {
-    request: {
-      query: GROUP_CHAT_LIST,
-      variables: {
-        id: '',
-      },
-    },
+    request: { query: GROUP_CHAT_LIST, variables: { id: '' } },
     result: {
       data: {
         getGroupChatsByUserId: {
@@ -3777,10 +3466,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -3850,10 +3536,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: GROUP_CHAT_LIST,
-      variables: {},
-    },
+    request: { query: GROUP_CHAT_LIST, variables: {} },
     result: {
       data: {
         getGroupChatsByUserId: {
@@ -3869,10 +3552,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -3942,10 +3622,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: GROUP_CHAT_LIST,
-      variables: {},
-    },
+    request: { query: GROUP_CHAT_LIST, variables: {} },
     result: {
       data: {
         getGroupChatsByUserId: {
@@ -3961,10 +3638,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4034,10 +3708,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: GROUP_CHAT_LIST,
-      variables: {},
-    },
+    request: { query: GROUP_CHAT_LIST, variables: {} },
     result: {
       data: {
         getGroupChatsByUserId: {
@@ -4053,10 +3724,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4126,10 +3794,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: GROUP_CHAT_LIST,
-      variables: {},
-    },
+    request: { query: GROUP_CHAT_LIST, variables: {} },
     result: {
       data: {
         getGroupChatsByUserId: {
@@ -4145,10 +3810,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4218,12 +3880,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: GROUP_CHAT_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: GROUP_CHAT_LIST, variables: { id: null } },
     result: {
       data: {
         getGroupChatsByUserId: {
@@ -4239,10 +3896,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4312,12 +3966,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: GROUP_CHAT_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: GROUP_CHAT_LIST, variables: { id: null } },
     result: {
       data: {
         getGroupChatsByUserId: {
@@ -4333,10 +3982,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4406,12 +4052,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
     },
   },
   {
-    request: {
-      query: GROUP_CHAT_LIST,
-      variables: {
-        id: null,
-      },
-    },
+    request: { query: GROUP_CHAT_LIST, variables: { id: null } },
     result: {
       data: {
         getGroupChatsByUserId: {
@@ -4427,10 +4068,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4503,12 +4141,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
 
 const GROUP_CHAT_BY_ID_QUERY_MOCK = [
   {
-    request: {
-      query: CHAT_BY_ID,
-      variables: {
-        id: '',
-      },
-    },
+    request: { query: CHAT_BY_ID, variables: { id: '' } },
     result: {
       data: {
         chatById: {
@@ -4524,10 +4157,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4633,10 +4263,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4731,10 +4358,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4829,10 +4453,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -4927,10 +4548,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -5024,10 +4642,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -5121,10 +4736,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -5218,10 +4830,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -5315,10 +4924,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -5413,10 +5019,7 @@ const CREATE_CHAT_MUTATION = [
             createdAt: '2023-04-13T04:53:17.742Z',
             __typename: 'User',
           },
-          organization: {
-            _id: 'pw3ertyuiophgfre45678',
-            name: 'rtyu',
-          },
+          organization: { _id: 'pw3ertyuiophgfre45678', name: 'rtyu' },
           createdAt: '2345678903456',
           name: 'Test Group Chat',
           messages: [
@@ -5491,82 +5094,37 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
   {
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: null,
-        chatId: '',
-      },
+      variables: { userId: null, chatId: '' },
     },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
+    result: { data: { markChatMessagesAsRead: { _id: '1' } } },
   },
   {
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: null,
-        chatId: '',
-      },
+      variables: { userId: null, chatId: '' },
     },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
+    result: { data: { markChatMessagesAsRead: { _id: '1' } } },
   },
   {
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '1',
-        chatId: '',
-      },
+      variables: { userId: '1', chatId: '' },
     },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
+    result: { data: { markChatMessagesAsRead: { _id: '1' } } },
   },
   {
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '1',
-        chatId: '',
-      },
+      variables: { userId: '1', chatId: '' },
     },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
+    result: { data: { markChatMessagesAsRead: { _id: '1' } } },
   },
   {
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '1',
-        chatId: '',
-      },
+      variables: { userId: '1', chatId: '' },
     },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
+    result: { data: { markChatMessagesAsRead: { _id: '1' } } },
   },
 ];
 
@@ -6191,11 +5749,7 @@ describe('CreateGroupChat Additional Tests', () => {
         variables: { firstName_contains: '', lastName_contains: '' },
       },
       loading: true,
-      result: {
-        data: {
-          users: [],
-        },
-      },
+      result: { data: { users: [] } },
     };
 
     render(
@@ -6234,11 +5788,7 @@ describe('CreateGroupChat Additional Tests', () => {
         query: USERS_CONNECTION_LIST,
         variables: { firstName_contains: '', lastName_contains: '' },
       },
-      result: {
-        data: {
-          users: [],
-        },
-      },
+      result: { data: { users: [] } },
     };
 
     render(
@@ -6323,5 +5873,271 @@ describe('CreateGroupChat Additional Tests', () => {
     // Clicking edit button should trigger file input
     fireEvent.click(editBtn);
     expect(fileInput).toBeInTheDocument();
+  });
+});
+
+describe('CreateGroupChat - handleImageChange', () => {
+  const mockToggleCreateGroupChatModal = vi.fn();
+  const mockChatsListRefetch = vi.fn().mockResolvedValue({});
+
+  const mockUserData = {
+    users: [
+      {
+        user: {
+          _id: 'user1',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+        },
+      },
+    ],
+  };
+
+  const mocks = [
+    {
+      request: {
+        query: USERS_CONNECTION_LIST,
+        variables: { firstName_contains: '', lastName_contains: '' },
+      },
+      result: { data: mockUserData },
+    },
+  ];
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test('should upload file to MinIO and set the image URL on successful upload', async () => {
+    // Mock the return value of useMinioUpload
+    const mockUploadFileToMinio = vi.fn().mockResolvedValue({
+      objectName: 'https://minio.example.com/test-image.jpg',
+      fileHash: 'dummyFileHash',
+    });
+    vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/organizations/test-org-id']}>
+          <Routes>
+            <Route
+              path="/organizations/:orgId"
+              element={
+                <CreateGroupChat
+                  toggleCreateGroupChatModal={mockToggleCreateGroupChatModal}
+                  createGroupChatModalisOpen={true}
+                  chatsListRefetch={mockChatsListRefetch}
+                />
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('createGroupChatModal')).toBeInTheDocument();
+    });
+
+    // Create a test file
+    const testFile = new File(['test image content'], 'test-image.jpg', {
+      type: 'image/jpeg',
+    });
+
+    // Get the file input
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Simulate file selection
+    fireEvent.change(fileInput, { target: { files: [testFile] } });
+
+    // Check if uploadFileToMinio was called with the correct arguments
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(
+        testFile,
+        'test-org-id',
+      );
+    });
+
+    // Verify that the image URL was set correctly
+    await waitFor(() => {
+      // If the image is visible, we should see the image element with the correct src
+      const img = screen.getByAltText('');
+      expect(img).toHaveAttribute(
+        'src',
+        'https://minio.example.com/test-image.jpg',
+      );
+    });
+  });
+
+  test('should handle errors when uploading file to MinIO', async () => {
+    // Spy on console.error
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    // Mock the return value of useMinioUpload to throw an error
+    const mockUploadFileToMinio = vi
+      .fn()
+      .mockRejectedValue(new Error('Upload failed'));
+    vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/organizations/test-org-id']}>
+          <Routes>
+            <Route
+              path="/organizations/:orgId"
+              element={
+                <CreateGroupChat
+                  toggleCreateGroupChatModal={mockToggleCreateGroupChatModal}
+                  createGroupChatModalisOpen={true}
+                  chatsListRefetch={mockChatsListRefetch}
+                />
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('createGroupChatModal')).toBeInTheDocument();
+    });
+
+    // Create a test file
+    const testFile = new File(['test image content'], 'test-image.jpg', {
+      type: 'image/jpeg',
+    });
+
+    // Get the file input
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Simulate file selection
+    fireEvent.change(fileInput, { target: { files: [testFile] } });
+
+    // Check if uploadFileToMinio was called with the correct arguments
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(
+        testFile,
+        'test-org-id',
+      );
+    });
+
+    // Verify that console.error was called with the correct error message
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error uploading image to MinIO:',
+        expect.any(Error),
+      );
+    });
+
+    // Verify that the image was not set (should still show the Avatar component)
+    await waitFor(() => {
+      const avatar = screen.getByTestId('editImageBtn');
+      expect(avatar).toBeInTheDocument();
+    });
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  test('should not call uploadFileToMinio when no file is selected', async () => {
+    // Mock the return value of useMinioUpload
+    const mockUploadFileToMinio = vi.fn();
+    vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/organizations/test-org-id']}>
+          <Routes>
+            <Route
+              path="/organizations/:orgId"
+              element={
+                <CreateGroupChat
+                  toggleCreateGroupChatModal={mockToggleCreateGroupChatModal}
+                  createGroupChatModalisOpen={true}
+                  chatsListRefetch={mockChatsListRefetch}
+                />
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('createGroupChatModal')).toBeInTheDocument();
+    });
+
+    // Get the file input
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Simulate an empty file selection
+    fireEvent.change(fileInput, { target: { files: [] } });
+
+    // Verify that uploadFileToMinio was not called
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+  });
+
+  test('should trigger handleImageChange when edit button is clicked', async () => {
+    // Mock the return value of useMinioUpload
+    const mockUploadFileToMinio = vi.fn();
+    vi.mocked(MinioUploadHook.useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/organizations/test-org-id']}>
+          <Routes>
+            <Route
+              path="/organizations/:orgId"
+              element={
+                <CreateGroupChat
+                  toggleCreateGroupChatModal={mockToggleCreateGroupChatModal}
+                  createGroupChatModalisOpen={true}
+                  chatsListRefetch={mockChatsListRefetch}
+                />
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('createGroupChatModal')).toBeInTheDocument();
+    });
+
+    // Find the edit button
+    const editButton = screen.getByTestId('editImageBtn');
+
+    // Create a mock click function for the file input
+    const mockClick = vi.fn();
+
+    // Get the file input and mock its click method
+    const fileInput = screen.getByTestId('fileInput');
+    Object.defineProperty(fileInput, 'click', {
+      value: mockClick,
+      configurable: true,
+    });
+
+    // Click the edit button
+    fireEvent.click(editButton);
+
+    // Verify that the file input's click method was called
+    expect(mockClick).toHaveBeenCalled();
   });
 });

@@ -1,20 +1,50 @@
+/**
+ * A collapsible dropdown component that displays a list of sub-targets
+ * and allows navigation between them. The dropdown's visibility is
+ * controlled by the `showDropdown` state, and it automatically toggles
+ * based on the current route.
+ *
+ * @component
+ * @param {InterfaceCollapsibleDropdown} props - The props for the component.
+ * @param {object} props.target - The target object containing the dropdown's name and sub-targets.
+ * @param {boolean} props.showDropdown - A boolean indicating whether the dropdown is currently visible.
+ * @param {React.Dispatch<React.SetStateAction<boolean>>} props.setShowDropdown - A function to toggle the dropdown's visibility.
+ *
+ * @returns {JSX.Element} The collapsible dropdown component.
+ *
+ * @remarks
+ * - The dropdown automatically opens if the current route includes 'orgstore'.
+ * - Sub-targets are rendered as buttons inside the dropdown, and clicking them navigates to their respective URLs.
+ *
+ * @example
+ * ```tsx
+ * <CollapsibleDropdown
+ *   target={{
+ *     name: 'example',
+ *     subTargets: [
+ *       { name: 'Sub 1', icon: 'fa-icon-1', url: '/sub1' },
+ *       { name: 'Sub 2', icon: 'fa-icon-2', url: '/sub2' },
+ *     ],
+ *   }}
+ *   showDropdown={true}
+ *   setShowDropdown={setShowDropdown}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - `react-bootstrap/Collapse` for dropdown animation.
+ * - `react-router-dom` for navigation and route handling.
+ * - `react-i18next` for internationalization support.
+ * - `IconComponent` for rendering icons dynamically.
+ */
 import React, { useEffect } from 'react';
-import { Button, Collapse } from 'react-bootstrap';
-import styles from '../../style/app-fixed.module.css';
+import { Collapse } from 'react-bootstrap';
+import styles from 'style/app-fixed.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
 
-/**
- * A collapsible dropdown component that toggles visibility of sub-targets.
- *
- * @param showDropdown - Boolean indicating whether the dropdown is visible or not.
- * @param target - Object containing the target information, including the name and sub-targets.
- * @param setShowDropdown - Function to toggle the visibility of the dropdown.
- *
- * @returns JSX.Element - The rendered CollapsibleDropdown component.
- */
 const collapsibleDropdown = ({
   target,
   showDropdown,
@@ -35,9 +65,12 @@ const collapsibleDropdown = ({
 
   return (
     <>
-      <Button
-        variant={showDropdown ? 'success' : ''}
-        className={showDropdown ? 'text-white' : 'text-secondary'}
+      <button
+        className={
+          showDropdown
+            ? styles.leftDrawerActiveButton
+            : styles.leftDrawerInactiveButton
+        }
         onClick={(): void => setShowDropdown(!showDropdown)}
         aria-expanded={showDropdown}
         data-testid="collapsible-dropdown"
@@ -45,7 +78,7 @@ const collapsibleDropdown = ({
         <div className={styles.collapsibleDropdownIconWrapper}>
           <IconComponent
             name={name}
-            fill={showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
+            fill={showDropdown ? 'var(--bs-black)' : 'var(--bs-secondary)'}
           />
         </div>
         {tCommon(name)}
@@ -55,7 +88,7 @@ const collapsibleDropdown = ({
           ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
           `}
         />
-      </Button>
+      </button>
       <Collapse in={showDropdown}>
         <div className="ps-4">
           {subTargets &&
@@ -63,13 +96,13 @@ const collapsibleDropdown = ({
               return (
                 <NavLink to={url} key={name}>
                   {({ isActive }) => (
-                    <Button
+                    <button
                       key={name}
-                      variant={isActive === true ? 'success' : 'light'}
-                      size="sm"
-                      className={`${styles.collapsibleDropdownCollapseBtn} ${
-                        isActive === true ? 'text-white' : 'text-secondary'
-                      }`}
+                      className={
+                        isActive
+                          ? styles.leftDrawerCollapseActiveButton
+                          : styles.leftDrawerInactiveButton
+                      }
                       onClick={(): void => {
                         navigate(url);
                       }}
@@ -86,7 +119,7 @@ const collapsibleDropdown = ({
                           }`}
                         />
                       </div>
-                    </Button>
+                    </button>
                   )}
                 </NavLink>
               );

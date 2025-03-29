@@ -1,47 +1,3 @@
-import { useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
-import { Stack } from '@mui/material';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
-import { Button } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import React, { useCallback, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
-import Loader from 'components/Loader/Loader';
-import FundModal from './FundModal';
-import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import styles from '../../style/app-fixed.module.css';
-import type { InterfaceFundInfo } from 'utils/interfaces';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
-
-const dataGridStyle = {
-  borderRadius: 'var(--table-head-radius)',
-  backgroundColor: 'var(--row-background)',
-  '& .MuiDataGrid-row': {
-    backgroundColor: 'var(--row-background)',
-    '&:focus-within': {
-      outline: 'none',
-    },
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-background)',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-background)',
-  },
-  '& .MuiDataGrid-cell:focus': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-cell:focus-within': {
-    outline: 'none',
-  },
-};
-
 /**
  * `organizationFunds` component displays a list of funds for a specific organization,
  * allowing users to search, sort, view and edit funds.
@@ -57,20 +13,20 @@ const dataGridStyle = {
  * - A table to display the list of funds with columns for fund details and actions.
  * - Modals for creating and editing funds.
  *
- * ### GraphQL Queries
+ * @GraphQL Queries
  * - `FUND_LIST`: Fetches a list of funds for the given organization, filtered and sorted based on the provided parameters.
  *
- * ### Props
+ * @Props
  * - `orgId`: The ID of the organization whose funds are being managed.
  *
- * ### State
+ * @State
  * - `fund`: The currently selected fund for editing or deletion.
  * - `searchTerm`: The current search term used for filtering funds.
  * - `sortBy`: The current sorting order for funds.
  * - `modalState`: The state of the modals (edit/create).
  * - `fundModalMode`: The mode of the fund modal (edit or create).
  *
- * ### Methods
+ * @Methods
  * - `handleOpenModal(fund: InterfaceFundInfo | null, mode: 'edit' | 'create')`: Opens the fund modal with the given fund and mode.
  * - `handleClick(fundId: string)`: Navigates to the campaign page for the specified fund.
  *
@@ -83,12 +39,12 @@ const dataGridStyle = {
  * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
  * class (e.g., .addButton) is now applied.
  *
- * ### Benefits:
+ * @Benefits:
  * - **Reduces redundant CSS code.
  * - **Improves maintainability by centralizing common styles.
  * - **Ensures consistent styling across components.
  *
- * ### Global CSS Classes used:
+ * @Global CSS Classes used:
  * - `.tableHeader`
  * - `.subtleBlueGrey`
  * - `.head`
@@ -99,10 +55,44 @@ const dataGridStyle = {
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
+import { useQuery } from '@apollo/client';
+import { WarningAmberRounded } from '@mui/icons-material';
+import { Stack } from '@mui/material';
+import {
+  DataGrid,
+  type GridCellParams,
+  type GridColDef,
+} from '@mui/x-data-grid';
+import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
+import Loader from 'components/Loader/Loader';
+import FundModal from './modal/FundModal';
+import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
+import styles from 'style/app-fixed.module.css';
+import type { InterfaceFundInfo } from 'utils/interfaces';
+import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+
+const dataGridStyle = {
+  borderRadius: 'var(--table-head-radius)',
+  backgroundColor: 'var(--row-background)',
+  '& .MuiDataGrid-row': {
+    backgroundColor: 'var(--row-background)',
+    '&:focus-within': { outline: 'none' },
+  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
+  '& .MuiDataGrid-row.Mui-hovered': {
+    backgroundColor: 'var(--row-background)',
+  },
+  '& .MuiDataGrid-cell:focus': { outline: 'none' },
+  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
+};
+
 const organizationFunds = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'funds',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'funds' });
   const { t: tCommon } = useTranslation('common');
 
   // Set the document title based on the translation
@@ -116,7 +106,7 @@ const organizationFunds = (): JSX.Element => {
   }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  // const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
@@ -125,6 +115,8 @@ const organizationFunds = (): JSX.Element => {
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
+
+  const [searchText, setSearchText] = useState('');
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -142,20 +134,50 @@ const organizationFunds = (): JSX.Element => {
     refetch: refetchFunds,
   }: {
     data?: {
-      fundsByOrganization: InterfaceFundInfo[];
+      organization: {
+        funds: {
+          edges: { node: InterfaceFundInfo }[];
+        };
+      };
     };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(FUND_LIST, {
     variables: {
-      organizationId: orgId,
-      filter: searchTerm,
-      orderBy: sortBy,
+      input: {
+        id: orgId,
+      },
     },
   });
 
-  const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
+  const funds = useMemo(() => {
+    return (
+      fundData?.organization?.funds?.edges.map(
+        (edge: { node: InterfaceFundInfo }) => edge.node,
+      ) ?? []
+    );
+  }, [fundData]);
+
+  const filteredAndSortedFunds = useMemo(() => {
+    let result = [...funds];
+
+    // Apply search filter
+    if (searchText) {
+      result = result.filter((fund) =>
+        fund.name.toLowerCase().includes(searchText.toLowerCase()),
+      );
+    }
+
+    // Apply sorting with strict timestamp comparison
+    return result.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+
+      const sortMultiplier = sortBy === 'createdAt_DESC' ? -1 : 1;
+      return (dateA - dateB) * sortMultiplier;
+    });
+  }, [funds, searchText, sortBy]);
 
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);
@@ -207,7 +229,7 @@ const organizationFunds = (): JSX.Element => {
           <div
             className={styles.hyperlinkText}
             data-testid="fundName"
-            onClick={() => handleClick(params.row._id as string)}
+            onClick={() => handleClick(params.row.id as string)}
           >
             {params.row.name}
           </div>
@@ -224,7 +246,7 @@ const organizationFunds = (): JSX.Element => {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.creator.firstName + ' ' + params.row.creator.lastName;
+        return params.row.creator.name;
       },
     },
     {
@@ -299,7 +321,7 @@ const organizationFunds = (): JSX.Element => {
           <Button
             size="sm"
             className={styles.editButton}
-            onClick={() => handleClick(params.row._id as string)}
+            onClick={() => handleClick(params.row.id as string)}
             data-testid="viewBtn"
           >
             <i className="fa fa-eye me-1" />
@@ -316,9 +338,9 @@ const organizationFunds = (): JSX.Element => {
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
           <SearchBar
             placeholder={tCommon('searchByName')}
-            onSearch={setSearchTerm}
             inputTestId="searchByName"
             buttonTestId="searchBtn"
+            onSearch={(text) => setSearchText(text)}
           />
           <div className="d-flex gap-4 mb-1">
             <SortingButton
@@ -357,7 +379,7 @@ const organizationFunds = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -369,10 +391,7 @@ const organizationFunds = (): JSX.Element => {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={funds.map((fund, index) => ({
-          id: index + 1,
-          ...fund,
-        }))}
+        rows={filteredAndSortedFunds}
         columns={columns}
         isRowSelectable={() => false}
       />

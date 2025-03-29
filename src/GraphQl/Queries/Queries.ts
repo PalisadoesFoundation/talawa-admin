@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import '../../style/app.module.css';
+import 'style/app.module.css';
 //Query List
 // Check Auth
 
@@ -39,7 +39,7 @@ export const CURRENT_USER = gql`
 // Query to take the Organization list
 export const ORGANIZATION_LIST = gql`
   query {
-    organizations {
+    organization {
       _id
       image
       creator {
@@ -69,7 +69,7 @@ export const ORGANIZATION_LIST = gql`
 `;
 
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
-  query UserJoinedOrganizations($id: String!, $first: Int) {
+  query UserJoinedOrganizations($id: String!, $first: Int!) {
     user(input: { id: $id }) {
       organizationsWhereMember(first: $first) {
         pageInfo {
@@ -96,43 +96,20 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
   }
 `;
 
-// Query to take the Organization list with filter  and sort option
-export const ORGANIZATION_CONNECTION_LIST = gql`
-  query OrganizationsConnection(
-    $filter: String
-    $first: Int
-    $skip: Int
-    $orderBy: OrganizationOrderByInput
-  ) {
-    organizationsConnection(
-      where: { name_contains: $filter }
-      first: $first
-      skip: $skip
-      orderBy: $order
-    ) {
-      _id
-      image
-      creator {
-        firstName
-        lastName
-      }
+export const ALL_ORGANIZATIONS_PG = gql`
+  query UserJoinedOrganizations {
+    organization {
+      id
       name
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
+      addressLine1
+      description
+      avatarURL
+      members(first: 32) {
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -236,20 +213,35 @@ export const USER_LIST = gql`
   }
 `;
 export const USER_LIST_FOR_TABLE = gql`
-  query Users($firstName_contains: String, $lastName_contains: String) {
-    users(
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
+  query allUsers(
+    $first: Int
+    $after: String
+    $last: Int
+    $before: String
+    $where: QueryAllUsersWhereInput
+  ) {
+    allUsers(
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      where: $where
     ) {
-      user {
-        _id
-        firstName
-        lastName
-        email
-        image
-        createdAt
+      pageInfo {
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+          role
+          avatarURL
+          emailAddress
+        }
       }
     }
   }
@@ -450,6 +442,30 @@ export const GET_ORGANIZATION_MEMBERS_PG = gql`
         edges {
           node {
             id
+            name
+            emailAddress
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
+  query GetOrganizationBlockedUsers($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      blockedUsers(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            emailAddress
             role
           }
           cursor
@@ -522,8 +538,8 @@ export const GET_ORGANIZATION_DATA_PG = gql`
 `;
 
 export const ORGANIZATIONS_LIST = gql`
-  query getOrganization($input: QueryOrganizationInput!) {
-    organization(input: $input) {
+  query getOrganization($id: String!) {
+    organization(input: { id: $id }) {
       id
       name
       description
@@ -553,7 +569,7 @@ export const ORGANIZATIONS_LIST = gql`
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
   query Organizations($id: ID!) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       members {
         _id
@@ -599,28 +615,38 @@ export const BLOCK_PAGE_MEMBER_LIST = gql`
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
-    $orgId: ID!
-    $firstName_contains: String
-    $lastName_contains: String
+    $orgId: String!
     $first: Int
-    $skip: Int
+    $after: String
+    $last: Int
+    $before: String
+    $where: MembersWhereInput
   ) {
-    organizationsMemberConnection(
-      orgId: $orgId
-      first: $first
-      skip: $skip
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
-    ) {
-      edges {
-        _id
-        firstName
-        lastName
-        image
-        email
-        createdAt
+    organization(input: { id: $orgId }) {
+      members(
+        first: $first
+        after: $after
+        last: $last
+        before: $before
+        where: $where
+      ) {
+        pageInfo {
+          endCursor
+          hasPreviousPage
+          hasNextPage
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            name
+            role
+            avatarURL
+            emailAddress
+            createdAt
+          }
+        }
       }
     }
   }
@@ -714,7 +740,6 @@ export const USER_DETAILS = gql`
         }
         isSuperAdmin
         appLanguageCode
-        pluginCreationAllowed
         createdOrganizations {
           _id
         }
@@ -829,7 +854,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
 // to take the list of the admins of a particular
 export const ADMIN_LIST = gql`
   query Organizations($id: ID!) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       admins {
         _id
@@ -851,7 +876,7 @@ export const MEMBERSHIP_REQUEST = gql`
     $first: Int
     $firstName_contains: String
   ) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       membershipRequests(
         skip: $skip
@@ -1045,7 +1070,6 @@ export {
   ADVERTISEMENTS_GET,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_EVENTS_CONNECTION,
-  PLUGIN_GET,
 } from './PlugInQueries';
 
 // display posts
@@ -1057,8 +1081,6 @@ export {
 export {
   ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
 } from './OrganizationQueries';
 
 export const GET_ORGANIZATION_EVENTS = gql`

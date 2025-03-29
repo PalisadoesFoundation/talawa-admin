@@ -11,7 +11,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '1',
           },
@@ -29,7 +29,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '2',
           },
@@ -49,7 +49,7 @@ export const MOCKS2 = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '1',
           },
@@ -67,7 +67,7 @@ export const MOCKS2 = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '1',
           },
@@ -87,7 +87,7 @@ export const MOCKS3 = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '1',
           },
@@ -105,7 +105,7 @@ export const MOCKS3 = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '1',
           },

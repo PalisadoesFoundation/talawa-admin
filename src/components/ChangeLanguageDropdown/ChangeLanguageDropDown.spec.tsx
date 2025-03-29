@@ -12,31 +12,19 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { urlToFile } from 'utils/urlToFile';
 
 // Mock dependencies
-vi.mock('react-toastify', () => ({
-  toast: {
-    error: vi.fn(),
-  },
-}));
+vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
 
-vi.mock('js-cookie', () => ({
-  default: {
-    get: vi.fn(),
-    set: vi.fn(),
-  },
-}));
+vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 
-vi.mock('i18next', () => ({
-  default: {
-    changeLanguage: vi.fn(),
-  },
-}));
+vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
 
-vi.mock('utils/useLocalstorage', () => ({
-  default: vi.fn(),
-}));
+vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
 
-vi.mock('utils/urlToFile', () => ({
-  urlToFile: vi.fn(),
+vi.mock('utils/urlToFile', () => ({ urlToFile: vi.fn() }));
+
+// Mock the CSS module
+vi.mock('style/app-fixed.module.css', () => ({
+  default: { changeLanguageBtn: '_changeLanguageBtn_d00707' },
 }));
 
 describe('ChangeLanguageDropDown', () => {
@@ -48,20 +36,9 @@ describe('ChangeLanguageDropDown', () => {
     {
       request: {
         query: UPDATE_CURRENT_USER_MUTATION,
-        variables: {
-          input: {
-            naturalLanguageCode: 'es',
-            avatar: mockFile,
-          },
-        },
+        variables: { input: { naturalLanguageCode: 'es', avatar: mockFile } },
       },
-      result: {
-        data: {
-          updateUser: {
-            id: mockUserId,
-          },
-        },
-      },
+      result: { data: { updateUser: { id: mockUserId } } },
     },
   ];
 
@@ -95,27 +72,6 @@ describe('ChangeLanguageDropDown', () => {
 
     const englishOption = screen.getByText('English');
     expect(englishOption).toBeInTheDocument();
-  });
-
-  it('applies custom styles from props', () => {
-    const customStyles = {
-      parentContainerStyle: 'custom-container',
-      btnStyle: 'custom-button',
-      btnTextStyle: 'custom-text',
-    };
-
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <ChangeLanguageDropDown {...customStyles} />
-      </MockedProvider>,
-    );
-
-    expect(screen.getByTestId('language-dropdown-container')).toHaveClass(
-      'custom-container',
-    );
-    expect(screen.getByTestId('language-dropdown-btn')).toHaveClass(
-      'custom-button',
-    );
   });
 
   it('shows error toast when userId is not found', async () => {

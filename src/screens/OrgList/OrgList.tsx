@@ -1,57 +1,74 @@
+/**
+ * The `orgList` component is responsible for rendering a list of organizations
+ * and providing functionality for searching, sorting, and creating new organizations.
+ * It also includes modals for creating organizations and managing features after creation.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered organization list component.
+ *
+ * @remarks
+ * - Utilizes GraphQL queries and mutations for fetching and managing organization data.
+ * - Includes search and sorting functionality for better user experience.
+ * - Displays loading states and handles errors gracefully.
+ *
+ * @dependencies
+ * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
+ * - `useTranslation` from `react-i18next` for localization.
+ * - `useLocalStorage` for accessing local storage data.
+ * - `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal` for UI components.
+ * - `react-toastify` for notifications.
+ * - `react-bootstrap` and `@mui/material` for modal and button components.
+ *
+ * @state
+ * - `dialogModalisOpen` - Controls the visibility of the plugin notification modal.
+ * - `dialogRedirectOrgId` - Stores the ID of the organization to redirect after creation.
+ * - `isLoading` - Indicates whether the organization data is loading.
+ * - `sortingState` - Manages the sorting option and its label.
+ * - `searchByName` - Stores the search query for filtering organizations.
+ * - `showModal` - Controls the visibility of the organization creation modal.
+ * - `formState` - Manages the state of the organization creation form.
+ *
+ * @methods
+ * - `openDialogModal(redirectOrgId: string): void` - Opens the plugin notification modal.
+ * - `closeDialogModal(): void` - Closes the plugin notification modal.
+ * - `toggleDialogModal(): void` - Toggles the plugin notification modal visibility.
+ * - `createOrg(e: ChangeEvent<HTMLFormElement>): Promise<void>` - Handles organization creation.
+ * - `handleSearch(value: string): void` - Filters organizations based on the search query.
+ * - `handleSortChange(value: string): void` - Updates sorting state and refetches organizations.
+ *
+ * @errorHandling
+ * - Handles errors from GraphQL queries and mutations using `errorHandler`.
+ * - Clears local storage and redirects to the home page on critical errors.
+ *
+ * @modals
+ * - `OrganizationModal` - For creating new organizations.
+ * - `Modal` - For managing features after organization creation.
+ */
 import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import {
-  USER_JOINED_ORGANIZATIONS_PG,
-  CURRENT_USER,
-} from 'GraphQl/Queries/Queries';
+import { ALL_ORGANIZATIONS_PG, CURRENT_USER } from 'GraphQl/Queries/Queries';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import { useTranslation } from 'react-i18next';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { errorHandler } from 'utils/errorHandler';
 import type {
-  InterfaceOrgConnectionInfoTypePG,
   InterfaceCurrentUserTypePG,
+  InterfaceOrgInfoTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 import { Button } from '@mui/material';
-import OrganizationModal from './OrganizationModal';
+import OrganizationModal from './modal/OrganizationModal';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
-
-/**
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.inputField`
- * - `.searchButton`
- * - `.btnsContainer`
- * - `.input`
- * - `.btnsBlock`
- * - `.dropdown`
- * - `.modalHeader`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -78,7 +95,9 @@ function orgList(): JSX.Element {
 
   const { getItem } = useLocalStorage();
   const role = getItem('role');
-  const adminFor: { _id: string; name: string; image: string | null }[] =
+  const adminFor:
+    | string
+    | { _id: string; name: string; image: string | null }[] =
     getItem('AdminFor') || [];
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
@@ -96,8 +115,8 @@ function orgList(): JSX.Element {
     selectedOption: t('sort'),
   });
 
-  const [hasMore, sethasMore] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  // const [hasMore, sethasMore] = useState(true);
+  // const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -128,9 +147,7 @@ function orgList(): JSX.Element {
     error?: Error | undefined;
   } = useQuery(CURRENT_USER, {
     variables: { userId: getItem('id') },
-    context: {
-      headers: { authorization: `Bearer ${getItem('token')}` },
-    },
+    context: { headers: { authorization: `Bearer ${getItem('token')}` } },
   });
 
   const {
@@ -138,16 +155,9 @@ function orgList(): JSX.Element {
     loading,
     error: errorList,
     refetch: refetchOrgs,
-    fetchMore,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
-    variables: {
-      id: getItem('id'),
-      first: perPageResult,
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useQuery(ALL_ORGANIZATIONS_PG, { notifyOnNetworkStatusChange: true });
 
-  const orgsData = UsersOrgsData?.user.organizationsWhereMember;
+  const orgsData = UsersOrgsData?.organization;
 
   // To clear the search field and form fields on unmount
   // useEffect(() => {
@@ -174,7 +184,7 @@ function orgList(): JSX.Element {
   // }, []);
 
   useEffect(() => {
-    setIsLoading(loading && isLoadingMore);
+    setIsLoading(loading);
   }, [loading]);
 
   // const isAdminForCurrentOrg = (
@@ -271,69 +281,66 @@ function orgList(): JSX.Element {
     window.location.assign('/');
   }
 
-  const resetAllParams = (): void => {
-    refetchOrgs({
-      filter: '',
-      first: perPageResult,
-      skip: 0,
-      orderBy:
-        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
-    });
-    sethasMore(true);
-  };
+  // const resetAllParams = (): void => {
+  //   refetchOrgs({
+  //     filter: '',
+  //     first: perPageResult,
+  //     skip: 0,
+  //     orderBy:
+  //       sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
+  //   });
+  //   sethasMore(true);
+  // };
 
   const handleSearch = (value: string): void => {
     setSearchByName(value);
-    if (value === '') {
-      resetAllParams();
-      return;
-    }
-    refetchOrgs({
-      filter: value,
-    });
+    // if (value == '') {
+    //    resetAllParams();
+    //   return;
+    // }
+    // refetchOrgs({
+    //   filter: value,
+    // });
   };
 
-  const loadMoreOrganizations = (): void => {
-    if (!isLoadingMore || hasMore) setIsLoadingMore(true);
-    fetchMore({
-      variables: {
-        skip: orgsData?.edges?.length || 0,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        setIsLoadingMore(false);
+  // const loadMoreOrganizations = (): void => {
+  //   if (!isLoadingMore || hasMore) setIsLoadingMore(true);
+  //   fetchMore({
+  //     variables: {
+  //       skip: orgsData?.length || 0,
+  //     },
+  //     updateQuery: (prev, { fetchMoreResult }) => {
+  //       setIsLoadingMore(false);
 
-        if (!fetchMoreResult || !fetchMoreResult.user) {
-          return prev; // Prevents breaking the UI
-        }
+  //       if (!fetchMoreResult || !fetchMoreResult.user) {
+  //         return prev; // Prevents breaking the UI
+  //       }
 
-        return {
-          user: {
-            organizationsWhereMember: {
-              pageInfo: fetchMoreResult.user.organizationsWhereMember.pageInfo,
-              edges: [
-                ...(prev?.user.organizationsWhereMember.edges || []),
-                ...fetchMoreResult.user.organizationsWhereMember.edges,
-              ],
-            },
-          },
-        };
-      },
-    });
-  };
+  //       return {
+  //         user: {
+  //           organizationsWhereMember: {
+  //             pageInfo: fetchMoreResult.user.organizationsWhereMember.pageInfo,
+  //             edges: [
+  //               ...(prev?.user.organizationsWhereMember.edges || []),
+  //               ...fetchMoreResult.user.organizationsWhereMember.edges,
+  //             ],
+  //           },
+  //         },
+  //       };
+  //     },
+  //   });
+  // };
 
   const handleSortChange = (value: string): void => {
     // Update the sorting state and refetch organizations based on the selected sorting option
-    setSortingState({
-      option: value,
-      selectedOption: t(value),
-    });
-    const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
-    refetchOrgs({
-      first: perPageResult,
-      skip: 0,
-      filter: searchByName,
-      orderBy,
-    });
+    setSortingState({ option: value, selectedOption: t(value) });
+    // const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
+    // refetchOrgs({
+    //   first: perPageResult,
+    //   skip: 0,
+    //   filter: searchByName,
+    //   orderBy,
+    // });
   };
 
   return (
@@ -376,16 +383,14 @@ function orgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-      (!orgsData?.edges || orgsData.edges.length === 0) &&
+      (!orgsData || orgsData.length === 0) &&
       searchByName.length === 0 &&
       (!userData || adminFor.length === 0) ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
         </div>
-      ) : !isLoading &&
-        orgsData?.edges.length == 0 &&
-        searchByName.length > 0 ? (
+      ) : !isLoading && orgsData.length == 0 && searchByName.length > 0 ? (
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
@@ -393,8 +398,10 @@ function orgList(): JSX.Element {
         </div>
       ) : (
         <>
-          <InfiniteScroll
-            dataLength={orgsData?.organizationsConnection?.length ?? 0}
+          {/* Infinite scroll can be added when query supports infinitescroll*/}
+          {/* <InfiniteScroll
+            dataLength={orgsData?.length ?? 0}
+
             next={loadMoreOrganizations}
             loader={
               <>
@@ -427,36 +434,19 @@ function orgList(): JSX.Element {
               </div>
             }
           >
-            {userData && role === 'administrator'
-              ? orgsData?.edges.map(
-                  (item: InterfaceOrgConnectionInfoTypePG) => {
+            {orgsData?.map(
+                  (item: any) => {
                     return (
                       <div
-                        key={item.node.id}
+                        key={item.id}
                         className={styles.itemCardOrgList}
                       >
-                        <OrgListCard data={item.node} />
+                        <OrgListCard data={item} />
                       </div>
                     );
-                  },
-                )
-              : // userData &&
-                // adminFor.length > 0 &&
-                orgsData?.edges.map(
-                  (item: InterfaceOrgConnectionInfoTypePG) => {
-                    // if (isAdminForCurrentOrg(item)) {
-                    return (
-                      <div
-                        key={item.node.id}
-                        className={styles.itemCardOrgList}
-                      >
-                        <OrgListCard data={item.node} />
-                      </div>
-                    );
-                    // }
                   },
                 )}
-          </InfiniteScroll>
+          </InfiniteScroll> */}
           {isLoading && (
             <>
               {[...Array(perPageResult)].map((_, index) => (
@@ -480,6 +470,21 @@ function orgList(): JSX.Element {
               ))}
             </>
           )}
+          <div className={`${styles.listBoxOrgList}`}>
+            {orgsData
+              ?.filter((org: InterfaceOrgInfoTypePG) =>
+                searchByName
+                  ? org.name.toLowerCase().includes(searchByName.toLowerCase())
+                  : org,
+              )
+              .map((item: InterfaceOrgInfoTypePG) => {
+                return (
+                  <div key={item.id} className={styles.itemCardOrgList}>
+                    <OrgListCard data={item} />
+                  </div>
+                );
+              })}
+          </div>
         </>
       )}
       {/* Create Organization Modal */}

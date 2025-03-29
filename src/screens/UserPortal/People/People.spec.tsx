@@ -51,7 +51,7 @@ type MockData = {
           createdAt: string;
         }[];
       };
-      organizations?: {
+      organization?: {
         __typename?: string;
         _id: string;
         admins: {
@@ -111,7 +111,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             __typename: 'Organization',
             _id: '6401ff65ce8e8406b8f07af2',
@@ -150,7 +150,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: 'org-1',
             admins: [],
@@ -363,7 +363,7 @@ describe('Testing People Screen Pagination [User Portal]', () => {
       },
       result: {
         data: {
-          organizations: [
+          organization: [
             {
               __typename: 'Organization',
               _id: 'org1',
@@ -507,7 +507,7 @@ describe('People Component Mode Switch Coverage', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 admins: [
                   {
@@ -611,7 +611,7 @@ describe('People Component Mode Switch Coverage', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 admins: [
                   {
@@ -760,7 +760,7 @@ describe('People Additional Flow Tests', () => {
         },
         result: {
           data: {
-            organizations: [{ _id: 'org-1', admins: [] }],
+            organization: [{ _id: 'org-1', admins: [] }],
           },
         },
       },
@@ -941,7 +941,7 @@ describe('People Component Additional Coverage Tests', () => {
       },
       result: {
         data: {
-          organizations: [
+          organization: [
             {
               _id: 'testOrg',
               admins: [
@@ -1023,7 +1023,7 @@ describe('People Component Pagination Tests', () => {
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             __typename: 'Organization',
             _id: 'org-1',

@@ -1,16 +1,51 @@
+/**
+ * EventListCardDeleteModal Component
+ *
+ * This component renders a modal for confirming the deletion of an event.
+ * It supports both single and recurring events, providing options for handling
+ * recurring event deletions.
+ *
+ * @component
+ * @param {InterfaceDeleteEventModalProps} props - The props for the component.
+ * @param {object} props.eventListCardProps - The properties of the event to be deleted.
+ * @param {boolean} props.eventDeleteModalIsOpen - Determines if the modal is open.
+ * @param {() => void} props.toggleDeleteModal - Function to toggle the modal visibility.
+ * @param {(key: string) => string} props.t - Translation function for event-specific strings.
+ * @param {(key: string) => string} props.tCommon - Translation function for common strings.
+ * @param {RecurringEventMutationType} props.recurringEventDeleteType - The selected option for recurring event deletion.
+ * @param {(type: RecurringEventMutationType) => void} props.setRecurringEventDeleteType - Function to set the recurring event deletion type.
+ * @param {() => void} props.deleteEventHandler - Function to handle the event deletion.
+ *
+ * @returns {JSX.Element} A modal component for confirming event deletion.
+ *
+ * @remarks
+ * - For recurring events, radio buttons are displayed to select the deletion type.
+ * - The modal is styled using `app-fixed.module.css`.
+ * - The modal is centered and has a static backdrop to prevent accidental closure.
+ *
+ * @example
+ * ```tsx
+ * <EventListCardDeleteModal
+ *   eventListCardProps={event}
+ *   eventDeleteModalIsOpen={isModalOpen}
+ *   toggleDeleteModal={toggleModal}
+ *   t={translate}
+ *   tCommon={translateCommon}
+ *   recurringEventDeleteType="ALL"
+ *   setRecurringEventDeleteType={setDeleteType}
+ *   deleteEventHandler={handleDelete}
+ * />
+ * ```
+ */
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import {
   type RecurringEventMutationType,
   recurringEventMutationOptions,
 } from 'utils/recurrenceUtils';
 
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
-
-/**
- * DeleteModal: A modal displaying events with the ability to delete.
- */
 
 const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   eventListCardProps,

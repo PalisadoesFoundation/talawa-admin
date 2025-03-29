@@ -1,36 +1,53 @@
+/**
+ * LeftDrawer Component
+ *
+ * This component represents the left navigation drawer for the Talawa Admin Portal.
+ * It provides navigation options for different sections of the application, such as
+ * organizations, users, and community profile. The drawer's visibility can be toggled
+ * based on the screen size or user interaction.
+ *
+ * @component
+ * @param {InterfaceLeftDrawerProps} props - The props for the LeftDrawer component.
+ * @param {boolean | null} props.hideDrawer - Determines the visibility of the drawer.
+ *                                            `null` indicates the initial state.
+ * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer -
+ *                                            Function to update the visibility state of the drawer.
+ *
+ * @returns {JSX.Element} The rendered LeftDrawer component.
+ *
+ * @remarks
+ * - The component uses `useTranslation` for internationalization.
+ * - The drawer automatically hides on smaller screens (width <= 820px) when a link is clicked.
+ * - The `SuperAdmin` status is retrieved from local storage to conditionally render the "Users" section.
+ *
+ * @example
+ * ```tsx
+ * <LeftDrawer
+ *   hideDrawer={false}
+ *   setHideDrawer={setHideDrawerFunction}
+ * />
+ * ```
+ *
+ * @fileoverview
+ * - Contains navigation links for "My Organizations", "Users" (if SuperAdmin), and "Community Profile".
+ * - Uses SVG icons for visual representation of navigation options.
+ * - Applies dynamic styles based on the drawer's visibility state and active navigation link.
+ */
 import React, { useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import RolesIcon from 'assets/svgs/roles.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
-/**
- * Interface for LeftDrawer component props.
- */
 export interface InterfaceLeftDrawerProps {
-  /**
-   * Determines if the drawer should be hidden.
-   */
   hideDrawer: boolean | null;
-
-  /**
-   * Function to set the hideDrawer state.
-   */
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-/**
- * LeftDrawer component that displays the sidebar with navigation options.
- *
- * @param props - The props for the component.
- * @returns The rendered LeftDrawer component.
- */
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
@@ -64,31 +81,27 @@ const leftDrawer = ({
       }`}
       data-testid="leftDrawerContainer"
     >
-      <TalawaLogo className={styles.talawaLogo} />
-      <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
-      <h5 className={`${styles.titleHeader} text-secondary`}>
-        {tCommon('menu')}
-      </h5>
+      <div className={styles.talawaLogoContainer}>
+        <TalawaLogo className={styles.talawaLogo} />
+        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
+      </div>
+
+      <h5 className={`${styles.titleHeader}`}>{tCommon('menu')}</h5>
+
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         <div className={styles.optionList}>
           <NavLink to={'/orglist'} onClick={handleLinkClick}>
             {({ isActive }) => (
-              <Button
-                variant={isActive ? 'success' : undefined}
-                style={{
-                  backgroundColor: isActive
-                    ? 'var(--sidebar-option-bg)'
-                    : undefined,
-                  fontWeight: isActive ? 'bold' : 'normal',
-                  color: isActive
-                    ? 'var(--sidebar-option-text-active)'
-                    : 'var(--sidebar-option-text-inactive)',
-                }}
+              <button
+                className={`${
+                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                }`}
                 data-testid="organizationsBtn"
               >
                 <div className={styles.iconWrapper}>
                   <OrganizationsIcon
                     fill="none"
+                    fontSize={25}
                     stroke={
                       isActive
                         ? 'var(--sidebar-icon-stroke-active)'
@@ -97,23 +110,17 @@ const leftDrawer = ({
                   />
                 </div>
                 {t('my organizations')}
-              </Button>
+              </button>
             )}
           </NavLink>
+
           {superAdmin && (
             <NavLink to={'/users'} onClick={handleLinkClick}>
               {({ isActive }) => (
-                <Button
-                  variant={isActive ? 'success' : undefined}
-                  style={{
-                    backgroundColor: isActive
-                      ? 'var(--sidebar-option-bg)'
-                      : undefined,
-                    fontWeight: isActive ? 'bold' : 'normal',
-                    color: isActive
-                      ? 'var(--sidebar-option-text-active)'
-                      : 'var(--sidebar-option-text-inactive)',
-                  }}
+                <button
+                  className={`${
+                    isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                  }`}
                   data-testid="rolesBtn"
                 >
                   <div className={styles.iconWrapper}>
@@ -127,28 +134,23 @@ const leftDrawer = ({
                     />
                   </div>
                   {t('users')}
-                </Button>
+                </button>
               )}
             </NavLink>
           )}
+
           <NavLink to={'/CommunityProfile'} onClick={handleLinkClick}>
             {({ isActive }) => (
-              <Button
-                variant={isActive ? 'success' : undefined}
-                style={{
-                  backgroundColor: isActive
-                    ? 'var(--sidebar-option-bg)'
-                    : undefined,
-                  fontWeight: isActive ? 'bold' : 'normal',
-                  color: isActive
-                    ? 'var(--sidebar-option-text-active)'
-                    : 'var(--sidebar-option-text-inactive)',
-                }}
+              <button
+                className={`${
+                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                }`}
                 data-testid="communityProfileBtn"
               >
                 <div className={styles.iconWrapper}>
                   <SettingsIcon
                     fill="none"
+                    fontSize={25}
                     stroke={
                       isActive
                         ? 'var(--sidebar-icon-stroke-active)'
@@ -157,12 +159,9 @@ const leftDrawer = ({
                   />
                 </div>
                 {t('communityProfile')}
-              </Button>
+              </button>
             )}
           </NavLink>
-        </div>
-        <div className="mt-auto">
-          <ProfileDropdown />
         </div>
       </div>
     </div>

@@ -1,3 +1,21 @@
+/**
+ * Component for managing volunteer groups within an event.
+ *
+ * This component provides functionality to:
+ * - View, filter, and sort volunteer groups.
+ * - Create, edit, and delete volunteer groups using modals.
+ * - Display volunteer group details such as group name, leader,
+ *   number of volunteers, and completed actions.
+ *
+ * Features:
+ * - Search functionality to filter groups by leader or group name.
+ * - Sorting options for volunteer count (ascending/descending).
+ * - Integration with GraphQL to fetch and manage volunteer group data.
+ * - Customizable modals for creating, editing, viewing, and deleting groups.
+ * - Error handling and loading states with appropriate UI feedback.
+ *
+ * @returns The rendered volunteer groups management component.
+ */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
@@ -16,11 +34,11 @@ import {
 } from '@mui/x-data-grid';
 import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
-import VolunteerGroupModal from './VolunteerGroupModal';
-import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
-import VolunteerGroupViewModal from './VolunteerGroupViewModal';
+import VolunteerGroupModal from './modal/VolunteerGroupModal';
+import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
+import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
@@ -33,33 +51,19 @@ enum ModalState {
 const dataGridStyle = {
   backgroundColor: 'white',
   borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-cell': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-columnSeparator': {
-    display: 'none',
-  },
+  '& .MuiDataGrid-columnHeaders': { border: 'none' },
+  '& .MuiDataGrid-cell': { border: 'none' },
+  '& .MuiDataGrid-columnSeparator': { display: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 /**
@@ -68,9 +72,7 @@ const dataGridStyle = {
  * @returns The rendered component.
  */
 function volunteerGroups(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -105,9 +107,7 @@ function volunteerGroups(): JSX.Element {
     error: groupsError,
     refetch: refetchGroups,
   }: {
-    data?: {
-      getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
-    };
+    data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -372,10 +372,7 @@ function volunteerGroups(): JSX.Element {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={groups.map((group, index) => ({
-          id: index + 1,
-          ...group,
-        }))}
+        rows={groups.map((group, index) => ({ id: index + 1, ...group }))}
         columns={columns}
         isRowSelectable={() => false}
       />

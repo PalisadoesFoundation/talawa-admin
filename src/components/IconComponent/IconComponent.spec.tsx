@@ -44,10 +44,6 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Block/Unblock',
     testId: 'Block/Icon-Component-UnblockIcon',
   },
-  Plugins: {
-    name: 'Plugins',
-    testId: 'Icon-Component-PluginsIcon',
-  },
   Settings: {
     name: 'Settings',
     testId: 'Icon-Component-SettingsIcon',

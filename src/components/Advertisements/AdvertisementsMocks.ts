@@ -10,18 +10,15 @@ import {
 } from '@apollo/client';
 import {
   ORGANIZATIONS_LIST,
-  PLUGIN_GET,
   ORGANIZATION_ADVERTISEMENT_LIST,
-} from '../../GraphQl/Queries/Queries';
-import { ADD_ADVERTISEMENT_MUTATION } from '../../GraphQl/Mutations/mutations';
+} from 'GraphQl/Queries/Queries';
+import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const { getItem } = useLocalStorage();
 
 export const httpLink = new HttpLink({
   uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + getItem('token') || '',
-  },
+  headers: { authorization: 'Bearer ' + getItem('token') || '' },
 });
 
 export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -42,13 +39,10 @@ type VariablesType =
   | { id: string; first: number; after: null; before: null; last: null };
 
 type MockRequest = {
-  request: {
-    query: DocumentNode;
-    variables: VariablesType;
-  };
+  request: { query: DocumentNode; variables: VariablesType };
   result: {
     data: {
-      organizations: {
+      organization: {
         _id: string;
         advertisements: {
           edges: {
@@ -75,13 +69,10 @@ type MockRequest = {
 };
 
 const createMock = (variables: VariablesType): MockRequest => ({
-  request: {
-    query: ORGANIZATION_ADVERTISEMENT_LIST,
-    variables,
-  },
+  request: { query: ORGANIZATION_ADVERTISEMENT_LIST, variables },
   result: {
     data: {
-      organizations: [
+      organization: [
         {
           _id: '1',
           advertisements: {
@@ -128,32 +119,6 @@ export const ADVERTISEMENTS_LIST_MOCK: MockRequest[] = [
   ),
 ];
 
-export const PLUGIN_GET_MOCK = {
-  request: {
-    query: PLUGIN_GET,
-  },
-  result: {
-    data: {
-      getPlugins: [
-        {
-          _id: '6581be50e88e74003aab436c',
-          pluginName: 'Chats',
-          pluginCreatedBy: 'Talawa Team',
-          pluginDesc:
-            'User can share messages with other users in a chat user interface.',
-          uninstalledOrgs: [
-            '62ccfccd3eb7fd2a30f41601',
-            '62ccfccd3eb7fd2a30f41601',
-          ],
-          pluginInstallStatus: true,
-          __typename: 'Plugin',
-        },
-      ],
-    },
-    loading: false,
-  },
-};
-
 export const ADD_ADVERTISEMENT_MUTATION_MOCK = {
   request: {
     query: ADD_ADVERTISEMENT_MUTATION,
@@ -178,15 +143,10 @@ export const ADD_ADVERTISEMENT_MUTATION_MOCK = {
 };
 
 export const ORGANIZATIONS_LIST_MOCK = {
-  request: {
-    query: ORGANIZATIONS_LIST,
-    variables: {
-      id: '1',
-    },
-  },
+  request: { query: ORGANIZATIONS_LIST, variables: { id: '1' } },
   result: {
     data: {
-      organizations: [
+      organization: [
         {
           _id: '1',
           image: '',
@@ -268,15 +228,11 @@ export const REGISTER_MOCKS = [
   {
     request: {
       query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 6,
-        after: null,
-      },
+      variables: { id: '1', first: 6, after: null },
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '1',
             advertisements: {

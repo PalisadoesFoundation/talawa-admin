@@ -1,6 +1,48 @@
+/**
+ * UserDetailsForm component provides a form interface for updating user details.
+ *
+ * @remarks
+ * This component is designed to handle user profile updates, including personal
+ * information, contact details, and address. It supports localization through
+ * translation functions and ensures proper input handling with validation and
+ * sanitization where necessary.
+ *
+ * @param props - The properties required by the component.
+ * @param props.userDetails - The current user details to populate the form fields.
+ * @param props.handleFieldChange - Callback function to handle changes in form fields.
+ * @param props.isUpdated - A flag indicating if the user details have been modified.
+ * @param props.handleResetChanges - Function to reset any unsaved changes in the form.
+ * @param props.handleUpdateUserDetails - Function to save the updated user details.
+ * @param props.t - Translation function for localized strings specific to the form.
+ * @param props.tCommon - Translation function for common localized strings.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <UserDetailsForm
+ *   userDetails={userDetails}
+ *   handleFieldChange={handleFieldChange}
+ *   isUpdated={isUpdated}
+ *   handleResetChanges={handleResetChanges}
+ *   handleUpdateUserDetails={handleUpdateUserDetails}
+ *   t={t}
+ *   tCommon={tCommon}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - React
+ * - react-bootstrap for UI components
+ * - @mui/x-date-pickers for date selection
+ * - dayjs for date manipulation
+ * - sanitize-html for sanitizing user input
+ *
+ * @returns A React functional component rendering the user details form.
+ */
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import styles from '../Settings.module.css';
+import styles from 'style/app-fixed.module.css';
+import dayjs from 'dayjs';
 import {
   educationGradeEnum,
   employmentStatusEnum,
@@ -9,6 +51,10 @@ import {
 } from 'utils/formEnumFields';
 import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 import sanitizeHtml from 'sanitize-html';
+import SyncIcon from '@mui/icons-material/Sync';
+import SaveIcon from '@mui/icons-material/Save';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 interface InterfaceUserDetailsFormProps {
   userDetails: {
@@ -39,18 +85,6 @@ interface InterfaceUserDetailsFormProps {
   tCommon: (key: string) => string;
 }
 
-/**
- * UserDetailsForm component renders a form for updating user details.
- *
- * @param userDetails - The current user details.
- * @param handleFieldChange - Function to handle changes in form fields.
- * @param isUpdated - Flag indicating if the user details have been updated.
- * @param handleResetChanges - Function to reset changes made to the user details.
- * @param handleUpdateUserDetails - Function to update the user details.
- * @param t - Translation function for localized strings.
- * @param tCommon - Translation function for common localized strings.
- * @returns The UserDetailsForm component.
- */
 const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
   userDetails,
   handleFieldChange,
@@ -62,7 +96,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
 }) => (
   <Form>
     <Row className="mb-1">
-      <Col lg={4}>
+      <Col lg={12}>
         <Form.Label htmlFor="inputName" className={styles.cardLabel}>
           {tCommon('name')}
         </Form.Label>
@@ -173,14 +207,29 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
         <Form.Label htmlFor="birthDate" className={styles.cardLabel}>
           {t('birthDate')}
         </Form.Label>
-        <Form.Control
-          type="date"
-          id="birthDate"
-          value={userDetails.birthDate || ''}
-          onChange={(e) => handleFieldChange('birthDate', e.target.value)}
-          className={styles.cardControl}
-          max={new Date().toISOString().split('T')[0]}
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            format="YYYY-MM-DD"
+            value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
+            onChange={(date) =>
+              handleFieldChange(
+                'birthDate',
+                date ? date.format('YYYY-MM-DD') : '',
+              )
+            }
+            className={`${styles.cardLabel} w-100`}
+            maxDate={dayjs().startOf('day')}
+            slotProps={{
+              textField: {
+                inputProps: {
+                  'data-testid': 'birth-date-input',
+                  'aria-label': t('birthDate'),
+                  max: dayjs().format('YYYY-MM-DD'),
+                },
+              },
+            }}
+          />
+        </LocalizationProvider>
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="grade" className={styles.cardLabel}>
@@ -281,16 +330,20 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
       <div className="d-flex justify-content-between mt-4">
         <Button
           onClick={handleResetChanges}
-          variant="outline-success"
+          className={styles.resetChangesBtn}
           data-testid="resetChangesBtn"
         >
-          {t('resetChanges')}
+          <SyncIcon className={styles.syncIconStyle} />
+          {tCommon('resetChanges')}
         </Button>
+
         <Button
-          onClick={handleUpdateUserDetails}
+          className={styles.saveChangesBtn}
+          value="savechanges"
           data-testid="updateUserBtn"
-          className={styles.cardButton}
+          onClick={handleUpdateUserDetails}
         >
+          <SaveIcon className="me-1" />
           {tCommon('saveChanges')}
         </Button>
       </div>
