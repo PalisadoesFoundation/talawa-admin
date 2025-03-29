@@ -783,7 +783,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             onHide={() => setShowDeleteConfirm(false)}
           >
             <Modal.Header closeButton>
-              <Modal.Title>{t('confirmDeleteUser')}</Modal.Title>
+              <Modal.Title>{t('deleteUser')}</Modal.Title>
             </Modal.Header>
             <Modal.Body>{t('deleteUserConfirmationText')}</Modal.Body>
             <Modal.Footer>
