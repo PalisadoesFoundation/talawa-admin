@@ -80,6 +80,24 @@ import {
 import type { InterfaceRecurrenceRuleState } from 'utils/recurrenceUtils';
 import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
 
+// Define interface for event edge
+interface EventEdge {
+  node: {
+    id: string;
+    name: string;
+    description: string;
+    startAt?: string;
+    endAt?: string;
+    venues?: {
+      edges?: Array<{
+        node?: {
+          name: string;
+        };
+      }>;
+    };
+  };
+}
+
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
@@ -290,14 +308,14 @@ function organizationEvents(): JSX.Element {
       </div>
       <EventCalendar
         eventData={
-          data?.organization?.events?.edges?.map((edge) => ({
+          data?.organization?.events?.edges?.map((edge: EventEdge) => ({
             _id: edge.node.id,
             title: edge.node.name,
             description: edge.node.description,
             startDate: edge.node.startAt?.split('T')[0] || '', // Convert ISO to date string
             endDate: edge.node.endAt?.split('T')[0] || '',
             // Extract venue name from the venues connection or use empty string if not available
-            location: edge.node.venues?.edges?.node?.name || '',
+            location: edge.node.venues?.edges?.[0]?.node?.name || '',
             // Provide default values for missing fields
             allDay: true, // Default to true
             isPublic: true, // Default to true
