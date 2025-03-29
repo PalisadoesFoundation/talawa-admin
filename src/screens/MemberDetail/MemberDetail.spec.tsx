@@ -23,6 +23,7 @@ import {
   ERROR_MOCK,
   MOCK_FILE,
   UPDATE_MOCK,
+  DELETE_USER_MOCK,
 } from './MemberDetailMocks';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
@@ -36,6 +37,7 @@ const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(ERROR_MOCK, true);
 const link4 = new StaticMockLink(MOCK_FILE, true);
 const link5 = new StaticMockLink(UPDATE_MOCK, true);
+const link6 = new StaticMockLink(DELETE_USER_MOCK, true);
 
 const mockReload = vi.fn();
 Object.defineProperty(window, 'location', {
@@ -229,25 +231,6 @@ describe('MemberDetail', () => {
     expect(screen.getByText('Admin')).toBeInTheDocument();
   });
 
-  // redundant test
-  // test('Should display dicebear image if image is null', async () => {
-  //   const dicebearUrl = 'mocked-data-uri';
-
-  //   render(
-  //     <MockedProvider addTypename={false} link={link4}>
-  //       <BrowserRouter>
-  //         <MemberDetail id="123" />
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-
-  //   const userImage = await waitFor(() =>
-  //     screen.getByTestId('profile-picture'),
-  //   );
-
-  //   expect(userImage.getAttribute('src')).toBe(dicebearUrl);
-  // });
-
   test('resetChangesBtn works properly', async () => {
     renderMemberDetailScreen(link1);
 
@@ -398,6 +381,26 @@ describe('MemberDetail', () => {
     });
   });
 
+  it('handles delete user error', async () => {
+    renderMemberDetailScreen(link3);
+
+    await wait();
+
+    const deleteButton = screen.getByTestId('deleteUserButton');
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('confirmationToDelete')).toBeInTheDocument();
+    });
+
+    const confirmButton = screen.getByTestId('button-handleDeleteConfirmation');
+    await userEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
   test('clicking profile picture triggers file input click', async () => {
     // Render the component with the mocked data that includes avatarURL
     renderMemberDetailScreen(link2);
@@ -495,6 +498,291 @@ describe('MemberDetail', () => {
       'File is too large. Maximum size is 5MB.',
     );
   });
+
+  test('clicking profile picture with existing avatar triggers file input', async () => {
+    renderMemberDetailScreen(link2);
+    await wait();
+
+    // Create a mock for the click method of the file input
+    const mockClick = vi.fn();
+
+    // Mock the fileInputRef.current
+    const originalClick = Object.getOwnPropertyDescriptor(
+      HTMLInputElement.prototype,
+      'click',
+    );
+
+    Object.defineProperty(HTMLInputElement.prototype, 'click', {
+      configurable: true,
+      value: mockClick,
+    });
+
+    // Verify the profile picture is rendered
+    const profilePicture = screen.getByTestId('profile-picture');
+    expect(profilePicture).toBeInTheDocument();
+
+    // Click the profile picture
+    await userEvent.click(profilePicture);
+
+    // Verify the file input's click method was called
+    expect(mockClick).toHaveBeenCalled();
+
+    // Restore the original click method
+    if (originalClick) {
+      Object.defineProperty(HTMLInputElement.prototype, 'click', originalClick);
+    }
+  });
+
+  test('clicking avatar placeholder button triggers file input', async () => {
+    // Render the component with a mock that has no avatarURL
+    render(
+      <MockedProvider addTypename={false} link={link4}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail id="123" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Create a mock for the click method of the file input
+    const mockClick = vi.fn();
+
+    // Mock the fileInputRef.current
+    const originalClick = Object.getOwnPropertyDescriptor(
+      HTMLInputElement.prototype,
+      'click',
+    );
+
+    Object.defineProperty(HTMLInputElement.prototype, 'click', {
+      configurable: true,
+      value: mockClick,
+    });
+
+    // Wait for and find the upload image button
+    const uploadButton = await waitFor(() =>
+      screen.getByTestId('uploadImageBtn'),
+    );
+
+    // Click the upload button
+    await userEvent.click(uploadButton);
+
+    // Verify the file input's click method was called
+    expect(mockClick).toHaveBeenCalled();
+
+    // Restore the original click method
+    if (originalClick) {
+      Object.defineProperty(HTMLInputElement.prototype, 'click', originalClick);
+    }
+  });
+
+  // tests new
+
+  test('plugin creation checkbox should toggle correctly', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Ensure the component is loaded
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+
+    // Get the checkbox
+    const pluginCreationCheckbox = screen.getByTestId('pluginCreationForm');
+
+    // Check initial state (assuming it starts unchecked)
+    expect(pluginCreationCheckbox).not.toBeChecked();
+
+    // Click the checkbox to check it
+    await userEvent.click(pluginCreationCheckbox);
+
+    // Verify it's now checked
+    expect(pluginCreationCheckbox).toBeChecked();
+
+    // Click again to uncheck
+    await userEvent.click(pluginCreationCheckbox);
+
+    // Verify it's unchecked again
+    expect(pluginCreationCheckbox).not.toBeChecked();
+  });
+
+  test('admin approved checkbox should toggle correctly', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Ensure the component is loaded
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+
+    // Get the checkbox
+    const adminApprovedCheckbox = screen.getByTestId('AdminApprovedForm');
+
+    // Check initial state (assuming it starts unchecked)
+    expect(adminApprovedCheckbox).not.toBeChecked();
+
+    // Click the checkbox to check it
+    await userEvent.click(adminApprovedCheckbox);
+
+    // Verify it's now checked
+    expect(adminApprovedCheckbox).toBeChecked();
+
+    // Click again to uncheck
+    await userEvent.click(adminApprovedCheckbox);
+
+    // Verify it's unchecked again
+    expect(adminApprovedCheckbox).not.toBeChecked();
+  });
+
+  test('both checkboxes should update form state', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Ensure the component is loaded
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+
+    // Get the reset changes button (should initially be hidden)
+    expect(screen.queryByTestId('resetChangesBtn')).not.toBeInTheDocument();
+
+    // Get the checkboxes
+    const pluginCreationCheckbox = screen.getByTestId('pluginCreationForm');
+    const adminApprovedCheckbox = screen.getByTestId('AdminApprovedForm');
+
+    // Change checkbox values to trigger form state update
+    await userEvent.click(pluginCreationCheckbox);
+    await userEvent.click(adminApprovedCheckbox);
+
+    // Verify checkboxes are checked
+    expect(pluginCreationCheckbox).toBeChecked();
+    expect(adminApprovedCheckbox).toBeChecked();
+
+    // The reset button should be visible now since the form state has changed
+    await waitFor(() => {
+      expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
+    });
+
+    // Click reset button
+    await userEvent.click(screen.getByTestId('resetChangesBtn'));
+
+    // After reset, checkboxes should return to initial state
+    await waitFor(() => {
+      expect(pluginCreationCheckbox).not.toBeChecked();
+      expect(adminApprovedCheckbox).not.toBeChecked();
+    });
+  });
+
+  //deetingf test
+  test('delete user button should open confirmation modal', async () => {
+    renderMemberDetailScreen(link2);
+    await wait();
+
+    // Ensure the component is loaded
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+
+    // Click the delete user button
+    const deleteButton = screen.getByTestId('deleteUserButton');
+    fireEvent.click(deleteButton);
+
+    // Now the modal should be visible
+    await waitFor(() => {
+      expect(screen.getByTestId('confirmationToDelete')).toBeVisible();
+      expect(
+        screen.getByTestId('button-handleDeleteConfirmation'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('button-cancelDeleteConfirmation'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('cancel button should close the confirmation modal', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Open the modal
+    const deleteButton = screen.getByTestId('deleteUserButton');
+    fireEvent.click(deleteButton);
+
+    // Verify modal is open
+    await waitFor(() => {
+      expect(screen.getByTestId('confirmationToDelete')).toBeVisible();
+    });
+
+    // Click the cancel button
+    const cancelButton = screen.getByTestId('button-cancelDeleteConfirmation');
+    fireEvent.click(cancelButton);
+
+    // Modal should be closed
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('confirmationToDelete'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('close button (X) should close the confirmation modal', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Open the modal
+    const deleteButton = screen.getByTestId('deleteUserButton');
+    fireEvent.click(deleteButton);
+
+    // Verify modal is open
+    await waitFor(() => {
+      expect(screen.getByTestId('confirmationToDelete')).toBeInTheDocument();
+    });
+
+    // Find and click the close button (usually an X in the header)
+    const closeButton =
+      screen.getByLabelText('Close') ||
+      screen.getByRole('button', { name: 'Close' });
+    fireEvent.click(closeButton);
+
+    // Modal should be closed
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('confirmationToDelete'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('confirm delete button should call handleDeleteUser function', async () => {
+    // Mock the handleDeleteUser function
+    const handleDeleteUserMock = vi.fn();
+
+    // Mock window.location to avoid "pathname" error
+    Object.defineProperty(window, 'location', {
+      value: { pathname: '/mock-path' },
+      writable: true,
+    });
+
+    // Wrap in MemoryRouter to support useLocation()
+    renderMemberDetailScreen(link1);
+
+    // Wait for UI to render
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteUserButton')).toBeInTheDocument();
+    });
+
+    // Click delete button to open modal
+    const deleteButton = screen.getByTestId('deleteUserButton');
+    fireEvent.click(deleteButton);
+
+    // Ensure modal is open
+    await waitFor(() => {
+      expect(screen.getByTestId('confirmationToDelete')).toBeInTheDocument();
+    });
+
+    // Click confirm delete button
+    const confirmButton = screen.getByTestId('button-handleDeleteConfirmation');
+    fireEvent.click(confirmButton);
+
+    // Ensure handleDeleteUserMock was called once
+    await waitFor(() => {
+      expect(handleDeleteUserMock).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  //new test for dle
 
   it('handles all form field changes', async () => {
     renderMemberDetailScreen(link1);

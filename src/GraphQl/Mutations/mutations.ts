@@ -370,6 +370,16 @@ export const CREATE_EVENT_MUTATION = gql`
   }
 `;
 
+// To delete your account
+
+export const DELETE_USER_MUTATION = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id) {
+      _id
+    }
+  }
+`;
+
 // to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`

@@ -1,4 +1,7 @@
-import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  UPDATE_CURRENT_USER_MUTATION,
+  DELETE_USER_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 
@@ -257,6 +260,49 @@ export const MOCK_FILE = [
       data: {
         unassignUserTag: {
           _id: '1',
+        },
+      },
+    },
+  },
+];
+
+export const DELETE_USER_MOCK = [
+  {
+    request: {
+      query: DELETE_USER_MUTATION,
+      variables: {
+        id: 'rishav-jha-mech',
+      },
+    },
+    result: {
+      data: {
+        currentUser: {
+          addressLine1: '',
+          addressLine2: '',
+          avatarMimeType: null,
+          avatarURL: null,
+          birthDate: '',
+          city: '',
+          countryCode: '',
+          createdAt: '',
+          description: '',
+          educationGrade: '',
+          emailAddress: '',
+          employmentStatus: '',
+          homePhoneNumber: '',
+          id: '',
+          isEmailAddressVerified: false,
+          maritalStatus: '',
+          mobilePhoneNumber: '',
+          name: '',
+          natalSex: '',
+          naturalLanguageCode: '',
+          postalCode: '',
+          role: '',
+          state: '',
+          updatedAt: '',
+          workPhoneNumber: '',
+          __typename: '',
         },
       },
     },

@@ -5,7 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  UPDATE_CURRENT_USER_MUTATION,
+  DELETE_USER_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { languages } from 'utils/languages';
@@ -91,6 +94,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     pluginCreationAllowed: false,
   });
 
+  // Mutation to delete the user
+  const [deleteUser] = useMutation(DELETE_USER_MUTATION);
+
   // Mutation to update the user details
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
   const { data: userData, loading } = useQuery(CURRENT_USER, {
@@ -137,8 +143,80 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   };
 
   // to handle deletion of user profile
-  const handleDeleteUser = (): void => {
-    navigate('/');
+  // Function to handle the deletion of a user
+  const handleDeleteUser = async (): Promise<void> => {
+    function removeEmptyFields<
+      T extends Record<string, string | File | null | boolean>,
+    >(obj: T): Partial<T> {
+      return Object.fromEntries(
+        Object.entries(obj).filter(
+          ([, value]) =>
+            value !== null &&
+            value !== undefined &&
+            (typeof value === 'boolean' ||
+              typeof value !== 'string' ||
+              value.trim() !== ''),
+        ),
+      ) as Partial<T>;
+    }
+
+    // If no new avatar is selected but there's an avatar URL, convert it to File
+    let avatarFile: File | null = null;
+    if (!selectedAvatar && formState.avatarURL) {
+      try {
+        avatarFile = await urlToFile(formState.avatarURL);
+      } catch (error) {
+        console.log(error);
+        toast.error(
+          'Failed to process profile picture. Please try uploading again.',
+        );
+        return;
+      }
+    }
+
+    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
+      addressLine1: formState.addressLine1,
+      addressLine2: formState.addressLine2,
+      birthDate: formState.birthDate,
+      city: formState.city,
+      countryCode: formState.countryCode,
+      description: formState.description,
+      educationGrade: formState.educationGrade,
+      employmentStatus: formState.employmentStatus,
+      homePhoneNumber: formState.homePhoneNumber,
+      maritalStatus: formState.maritalStatus,
+      mobilePhoneNumber: formState.mobilePhoneNumber,
+      name: formState.name,
+      natalSex: formState.natalSex,
+      naturalLanguageCode: formState.naturalLanguageCode,
+      password: formState.password,
+      postalCode: formState.postalCode,
+      state: formState.state,
+      workPhoneNumber: formState.workPhoneNumber,
+      avatar: selectedAvatar ? selectedAvatar : avatarFile,
+      adminApproved: formState.adminApproved,
+      pluginCreationAllowed: formState.pluginCreationAllowed,
+    };
+
+    const input = removeEmptyFields(data);
+
+    try {
+      const { data: deleteData } = await deleteUser({ variables: { input } });
+
+      if (deleteData) {
+        toast.success(
+          tCommon('deletedSuccessfully', { item: 'User' }) as string,
+        );
+
+        // Wait for the toast to complete
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // Navigate to home page
+        navigate('/');
+      }
+    } catch (error: unknown) {
+      errorHandler(t, error);
+    }
   };
 
   // to handle the change in the form fields
@@ -627,7 +705,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     id="pluginCreationAllowed"
                     label={t('pluginCreationAllowed')}
                     style={{ color: '#495057' }}
-                    data-testid="pluginCreationFrom"
+                    data-testid="pluginCreationForm"
                   />
                 </Col>
                 <Col md={12}>
@@ -700,6 +778,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Card>
 
           <Modal
+            data-testid="confirmationToDelete"
             show={showDeleteConfirm}
             onHide={() => setShowDeleteConfirm(false)}
           >
@@ -709,12 +788,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             <Modal.Body>{t('deleteUserConfirmationText')}</Modal.Body>
             <Modal.Footer>
               <Button
+                data-testid="button-cancelDeleteConfirmation"
                 variant="secondary"
                 onClick={() => setShowDeleteConfirm(false)}
               >
                 {tCommon('cancel')}
               </Button>
-              <Button variant="danger" onClick={handleDeleteUser}>
+              <Button
+                data-testid="button-handleDeleteConfirmation"
+                variant="danger"
+                onClick={handleDeleteUser}
+              >
                 {t('confirmDelete')}
               </Button>
             </Modal.Footer>
