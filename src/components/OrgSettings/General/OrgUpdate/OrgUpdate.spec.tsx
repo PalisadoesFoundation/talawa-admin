@@ -282,7 +282,6 @@ describe('OrgUpdate Component', () => {
 
     expect(fileInput.files).toHaveLength(1);
     expect(fileInput.files?.[0]).toBe(file);
-
     expect(convertToBase64).toHaveBeenCalledWith(file);
 
     await waitFor(() => {
@@ -500,6 +499,44 @@ describe('OrgUpdate Component', () => {
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
           i18n.t('orgUpdate.successfulUpdated'),
+        );
+      });
+    });
+    it('shows error toast when name or description is missing', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      fireEvent.change(screen.getByDisplayValue('Test Org'), {
+        target: { value: '' },
+      });
+
+      const saveButton = screen.getByTestId('save-org-changes-btn');
+      fireEvent.click(saveButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Name and description are required',
+        );
+      });
+
+      fireEvent.change(screen.getByDisplayValue('Test Description'), {
+        target: { value: '' },
+      });
+
+      fireEvent.click(saveButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Name and description are required',
         );
       });
     });
