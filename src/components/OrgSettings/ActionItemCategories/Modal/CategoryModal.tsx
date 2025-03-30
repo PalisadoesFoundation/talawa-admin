@@ -1,3 +1,39 @@
+/**
+ * CategoryModal Component
+ *
+ * This component renders a modal for creating or editing action item categories.
+ * It provides a form with fields for category name and a toggle switch for enabling/disabling the category.
+ * The modal supports two modes: 'create' and 'edit', and handles the respective GraphQL mutations.
+ *
+ * @component
+ * @param {InterfaceActionItemCategoryModal} props - The props for the component.
+ * @param {boolean} props.isOpen - Determines whether the modal is visible.
+ * @param {() => void} props.hide - Function to close the modal.
+ * @param {() => void} props.refetchCategories - Function to refetch the list of categories after a mutation.
+ * @param {string} props.orgId - The ID of the organization to which the category belongs.
+ * @param {InterfaceActionItemCategoryInfo | null} props.category - The category data for editing, or null for creating a new category.
+ * @param {'create' | 'edit'} props.mode - The mode of the modal, either 'create' or 'edit'.
+ *
+ * @returns {JSX.Element} The rendered CategoryModal component.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for modal and form styling.
+ * - Integrates with `@apollo/client` for GraphQL mutations.
+ * - Displays success and error messages using `react-toastify`.
+ * - Translations are handled using `react-i18next`.
+ *
+ * @example
+ * ```tsx
+ * <CategoryModal
+ *   isOpen={true}
+ *   hide={() => setShowModal(false)}
+ *   refetchCategories={fetchCategories}
+ *   orgId="12345"
+ *   category={selectedCategory}
+ *   mode="edit"
+ * />
+ * ```
+ */
 import React, { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -11,18 +47,6 @@ import {
 import { toast } from 'react-toastify';
 import { FormControl, TextField } from '@mui/material';
 
-/**
- * Props for the `CategoryModal` component.
- *
- *
- * isOpen - The state of the modal.
- * hide - The function to hide the modal.
- * refetchCategories - The function to refetch the categories.
- * orgId - The organization ID.
- * category - The category to be edited.
- * mode - The mode of the modal.
- * @returns The `CategoryModal` component.
- */
 export interface InterfaceActionItemCategoryModal {
   isOpen: boolean;
   hide: () => void;
@@ -32,12 +56,6 @@ export interface InterfaceActionItemCategoryModal {
   mode: 'create' | 'edit';
 }
 
-/**
- * A modal component for creating and editing action item categories.
- *
- * @param props - The properties passed to the component.
- * @returns The `CategoryModal` component.
- */
 const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
   category,
   hide,

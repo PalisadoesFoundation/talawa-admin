@@ -1,3 +1,40 @@
+/**
+ * RecurrenceOptions Component
+ *
+ * This component provides a dropdown menu for selecting recurrence options
+ * for scheduling events. It supports various recurrence frequencies such as
+ * daily, weekly, monthly, and yearly, along with custom recurrence options.
+ *
+ * @component
+ * @param {InterfaceRecurrenceOptionsProps} props - The props for the component.
+ * @param {InterfaceRecurrenceRuleState} props.recurrenceRuleState - The current state of the recurrence rule.
+ * @param {string} props.recurrenceRuleText - The textual representation of the recurrence rule.
+ * @param {(state: React.SetStateAction<InterfaceRecurrenceRuleState>) => void} props.setRecurrenceRuleState -
+ * A function to update the recurrence rule state.
+ * @param {JSX.Element} props.popover - A popover element for displaying additional information.
+ * @param {(key: string) => string} props.t - Translation function for localized strings.
+ * @param {(key: string) => string} props.tCommon - Common translation function for shared localized strings.
+ *
+ * @returns {JSX.Element} The rendered RecurrenceOptions component.
+ *
+ * @remarks
+ * - The dropdown menu includes predefined recurrence options such as daily, weekly, monthly, and yearly.
+ * - It also supports custom recurrence rules through a modal dialog.
+ * - The component uses utility functions like `getRecurrenceRuleText`, `getWeekDayOccurenceInMonth`,
+ *   and `isLastOccurenceOfWeekDay` to determine recurrence details.
+ *
+ * @example
+ * ```tsx
+ * <RecurrenceOptions
+ *   recurrenceRuleState={recurrenceRuleState}
+ *   recurrenceRuleText={recurrenceRuleText}
+ *   setRecurrenceRuleState={setRecurrenceRuleState}
+ *   popover={<PopoverContent />}
+ *   t={translate}
+ *   tCommon={commonTranslate}
+ * />
+ * ```
+ */
 import React, { useState } from 'react';
 import { Dropdown, OverlayTrigger } from 'react-bootstrap';
 import {
@@ -21,31 +58,7 @@ interface InterfaceRecurrenceOptionsProps {
   t: (key: string) => string;
   tCommon: (key: string) => string;
 }
-/**
- * Renders a dropdown menu for selecting recurrence options.
- *
- * This component allows users to choose various recurrence rules (daily, weekly, monthly, yearly) for a given event.
- * It displays the current recurrence rule text and provides options to modify it, including a custom recurrence modal.
- *
- * The dropdown menu includes options for:
- * - Daily recurrence
- * - Weekly recurrence (including a specific day of the week or Monday to Friday)
- * - Monthly recurrence (on a specific day or occurrence)
- * - Yearly recurrence
- * - Custom recurrence (opens a modal for advanced settings)
- *
- * The displayed recurrence rule text is truncated if it exceeds a specified length, with an overlay showing the full text on hover.
- *
- * @param  props - The properties to configure the recurrence options dropdown.
- * @param  recurrenceRuleState - The current state of the recurrence rule.
- * @param  recurrenceRuleText - The text describing the current recurrence rule.
- * @param  setRecurrenceRuleState - A function to update the recurrence rule state.
- * @param popover - A JSX element used for displaying additional information on hover.
- * @param  t - A function for translating text.
- * @param  tCommon - A function for translating common text.
- *
- * @returns JSX.Element - The recurrence options dropdown and the custom recurrence modal.
- */
+
 const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
   recurrenceRuleState,
   recurrenceRuleText,

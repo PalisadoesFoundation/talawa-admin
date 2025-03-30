@@ -6,10 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/AgendaItems/Delete/AgendaItemsDeleteModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/Delete/AgendaItemsDeleteModal.tsx#L16)
-
-Modal component for confirming the deletion of an agenda item.
-Displays a confirmation dialog when a user attempts to delete an agenda item.
+Defined in: [src/components/AgendaItems/Delete/AgendaItemsDeleteModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/Delete/AgendaItemsDeleteModal.tsx#L37)
 
 ## Parameters
 

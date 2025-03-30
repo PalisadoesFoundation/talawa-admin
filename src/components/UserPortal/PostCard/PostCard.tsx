@@ -1,3 +1,31 @@
+/**
+ * Component representing a post card in the user portal.
+ *
+ * This component displays a post with its details such as title, content, creator,
+ * likes, comments, and associated actions like editing, deleting, liking, and commenting.
+ * It also includes modals for viewing the post in detail and editing the post content.
+ *
+ * @param props - The properties of the post card.
+ * @param props.id - Unique identifier for the post.
+ * @param props.creator - Object containing the creator's details (id, firstName, lastName, email).
+ * @param props.title - Title of the post.
+ * @param props.text - Content of the post.
+ * @param props.image - URL of the post's image.
+ * @param props.postedAt - Date when the post was created.
+ * @param props.likeCount - Number of likes on the post.
+ * @param props.likedBy - Array of users who liked the post.
+ * @param props.comments - Array of comments on the post.
+ * @param props.commentCount - Total number of comments on the post.
+ * @param props.fetchPosts - Function to refresh the list of posts.
+ *
+ * @returns A JSX.Element representing the post card.
+ *
+ * @remarks
+ * - Includes GraphQL mutations for liking, unliking, commenting, editing, and deleting posts.
+ * - Uses `react-bootstrap` for UI components and `@apollo/client` for GraphQL operations.
+ * - Handles state for likes, comments, and modals using React hooks.
+ * - Displays error messages and success notifications using `react-toastify`.
+ */
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -46,36 +74,6 @@ interface InterfaceCommentCardProps {
   handleDislikeComment: (commentId: string) => void;
 }
 
-/**
- * PostCard component displays an individual post, including its details, interactions, and comments.
- *
- * The component allows users to:
- * - View the post's details in a modal.
- * - Edit or delete the post.
- * - Like or unlike the post.
- * - Add comments to the post.
- * - Like or dislike individual comments.
- *
- * @param props - The properties passed to the component including post details, comments, and related actions.
- * @returns JSX.Element representing a post card with interactive features.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 export default function postCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
