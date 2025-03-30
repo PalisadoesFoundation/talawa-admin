@@ -42,7 +42,7 @@ type MockRequest = {
   request: { query: DocumentNode; variables: VariablesType };
   result: {
     data: {
-      organization: {
+      organizations: {
         _id: string;
         advertisements: {
           edges: {
@@ -72,7 +72,7 @@ const createMock = (variables: VariablesType): MockRequest => ({
   request: { query: ORGANIZATION_ADVERTISEMENT_LIST, variables },
   result: {
     data: {
-      organization: [
+      organizations: [
         {
           _id: '1',
           advertisements: {
@@ -146,7 +146,7 @@ export const ORGANIZATIONS_LIST_MOCK = {
   request: { query: ORGANIZATIONS_LIST, variables: { id: '1' } },
   result: {
     data: {
-      organization: [
+      organizations: [
         {
           _id: '1',
           image: '',
@@ -232,7 +232,7 @@ export const REGISTER_MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: '1',
             advertisements: {

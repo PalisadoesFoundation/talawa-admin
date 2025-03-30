@@ -79,7 +79,8 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    const membershipRequests = data.organization?.[0]?.membershipRequests || [];
+    const membershipRequests =
+      data.organizations?.[0]?.membershipRequests || [];
 
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
@@ -102,7 +103,7 @@ const Requests = (): JSX.Element => {
     }
 
     // Add null check before accessing organizations.length
-    if (orgsData.organization?.length === 0) {
+    if (orgsData.organizations?.length === 0) {
       toast.warning(t('noOrgError') as string);
     }
   }, [orgsData, t]);
@@ -158,7 +159,7 @@ const Requests = (): JSX.Element => {
     fetchMore({
       variables: {
         id: organizationId,
-        skip: data?.organization?.[0]?.membershipRequests?.length || 0,
+        skip: data?.organizations?.[0]?.membershipRequests?.length || 0,
         firstName_contains: searchByName,
       },
       updateQuery: (
@@ -172,16 +173,16 @@ const Requests = (): JSX.Element => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         const newMembershipRequests =
-          fetchMoreResult.organization?.[0]?.membershipRequests || [];
+          fetchMoreResult.organizations?.[0]?.membershipRequests || [];
         if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          organization: [
+          organizations: [
             {
               _id: organizationId,
               membershipRequests: [
-                ...(prev?.organization?.[0]?.membershipRequests || []),
+                ...(prev?.organizations?.[0]?.membershipRequests || []),
                 ...newMembershipRequests,
               ],
             },
@@ -226,7 +227,7 @@ const Requests = (): JSX.Element => {
         </div>
       </div>
 
-      {!isLoading && orgsData?.organization?.length === 0 ? (
+      {!isLoading && orgsData?.organizations?.length === 0 ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

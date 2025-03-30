@@ -393,7 +393,7 @@ export interface InterfaceActionItemList {
 }
 
 export interface InterfaceMembersList {
-  organization: {
+  organizations: {
     _id: string;
     members: InterfaceMemberInfo[];
   }[];
@@ -435,7 +435,7 @@ export interface InterfaceOrgConnectionInfoType {
 // }
 
 export interface InterfaceOrgConnectionInfoTypePG {
-  organization: InterfaceOrgInfoTypePG[];
+  organizations: InterfaceOrgInfoTypePG[];
 }
 
 export interface InterfaceOrgInfoTypePG {
@@ -991,23 +991,18 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 }
 
 export interface InterfaceQueryOrganizationFundCampaigns {
-  id: string;
   name: string;
   isArchived: boolean;
   campaigns: {
-    edges: {
-      node: {
-        id: string;
-        name: string;
-        startAt: string;
-        endAt: string;
-        currencyCode: string;
-        goalAmount: number;
-      };
-    }[];
-  };
+    _id: string;
+    name: string;
+    fundingGoal: number;
+    startDate: Date;
+    endDate: Date;
+    createdAt: string;
+    currency: string;
+  }[];
 }
-
 export interface InterfaceUserCampaign {
   _id: string;
   name: string;
@@ -1028,39 +1023,24 @@ export interface InterfaceQueryFundCampaignsPledges {
   pledges: InterfacePledgeInfo[];
 }
 export interface InterfaceFundInfo {
-  id: string;
+  _id: string;
   name: string;
   refrenceNumber: string;
-  isTaxDeductible: boolean;
+  taxDeductible: boolean;
   isArchived: boolean;
   isDefault: boolean;
   createdAt: string;
   organizationId: string;
-  creator: { name: string };
-  organization: { name: string };
-  updater: {
-    name: string;
-  };
-  edges: {
-    node: {
-      id: string;
-      name: string;
-      fundingGoal: number;
-      startDate: string;
-      endDate: string;
-      currency: string;
-      createdAt: string;
-    };
-  };
+  creator: { _id: string; firstName: string; lastName: string };
 }
 export interface InterfaceCampaignInfo {
-  id: string;
+  _id: string;
   name: string;
-  goalAmount: number;
-  startAt: Date;
-  endAt: Date;
+  fundingGoal: number;
+  startDate: Date;
+  endDate: Date;
   createdAt: string;
-  currencyCode: string;
+  currency: string;
 }
 export interface InterfacePledgeInfo {
   _id: string;
@@ -1159,7 +1139,7 @@ export interface InterfaceCreateFund {
   fundRef: string;
   isDefault: boolean;
   isArchived: boolean;
-  isTaxDeductible: boolean;
+  taxDeductible: boolean;
 }
 
 export interface InterfacePostCard {
@@ -1208,7 +1188,7 @@ export interface InterfaceCreatePledge {
 }
 
 export interface InterfaceQueryMembershipRequestsListItem {
-  organization: {
+  organizations: {
     _id: string;
     membershipRequests: {
       _id: string;

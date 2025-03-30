@@ -13,7 +13,6 @@ import { MOCKS } from './Volunteers/Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-import { act } from 'react-dom/test-utils';
 
 /**
  * Unit tests for the `VolunteerContainer` component.
@@ -47,42 +46,20 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-class TestErrorBoundary extends React.Component<{ children: React.ReactNode }> {
-  state = { hasError: false, error: null };
-
-  componentDidCatch(error: any) {
-    console.error('Error caught by boundary:', error);
-    this.setState({ hasError: true, error });
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <div>Error occurred: {this.state.error}</div>;
-    }
-    return this.props.children;
-  }
-}
-
-const renderVolunteerContainer = async (): Promise<RenderResult> => {
-  let result: RenderResult;
-  await act(async () => {
-    result = render(
-      <TestErrorBoundary>
-        <MockedProvider mocks={MOCKS} addTypename={false}>
-          <MemoryRouter initialEntries={['/event/orgId/eventId']}>
-            <Provider store={store}>
-              <LocalizationProvider>
-                <I18nextProvider i18n={i18n}>
-                  <VolunteerContainer />
-                </I18nextProvider>
-              </LocalizationProvider>
-            </Provider>
-          </MemoryRouter>
-        </MockedProvider>
-      </TestErrorBoundary>,
-    );
-  });
-  return result!;
+const renderVolunteerContainer = (): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={new StaticMockLink(MOCKS)}>
+      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+        <Provider store={store}>
+          <LocalizationProvider>
+            <I18nextProvider i18n={i18n}>
+              <VolunteerContainer />
+            </I18nextProvider>
+          </LocalizationProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
 };
 
 describe('Testing Volunteer Container', () => {
@@ -92,7 +69,8 @@ describe('Testing Volunteer Container', () => {
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     mockedUseParams.mockReturnValue({});
-    await renderVolunteerContainer();
+    renderVolunteerContainer();
+
     const errorElement = await screen.findByTestId('paramsError');
     expect(errorElement).toBeInTheDocument();
   });
@@ -100,39 +78,17 @@ describe('Testing Volunteer Container', () => {
   it('Testing Volunteer Container Screen -> Toggle screens', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
 
-    await act(async () => {
-      await renderVolunteerContainer();
-      // Wait for Apollo cache to be updated
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
+    renderVolunteerContainer();
 
-    try {
-      const individualLabel = await screen.findByTestId(
-        'individualRadio',
-        {},
-        { timeout: 2000 },
-      );
-      expect(individualLabel).toBeInTheDocument();
+    const individualLabel = await screen.findByTestId('individualRadio');
+    const groupsLabel = await screen.findByTestId('groupsRadio');
+    const requestsLabel = await screen.findByTestId('requestsRadio');
 
-      await act(async () => {
-        await userEvent.click(individualLabel);
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-
-      await act(async () => {
-        const groupsLabel = await screen.findByTestId('groupsRadio');
-        await userEvent.click(groupsLabel);
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-
-      await act(async () => {
-        const requestsLabel = await screen.findByTestId('requestsRadio');
-        await userEvent.click(requestsLabel);
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    } catch (error) {
-      console.error('Test failed:', error);
-      throw error;
-    }
+    expect(await screen.findByTestId('individualRadio')).toBeInTheDocument();
+    await userEvent.click(groupsLabel);
+    expect(await screen.findByTestId('groupsRadio')).toBeInTheDocument();
+    await userEvent.click(requestsLabel);
+    expect(await screen.findByTestId('requestsRadio')).toBeInTheDocument();
+    await userEvent.click(individualLabel);
   });
 });
