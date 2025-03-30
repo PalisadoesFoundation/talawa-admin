@@ -1,40 +1,3 @@
-/**
- * @file Invitations.tsx
- * @description This component renders the Invitations screen for the user portal,
- * allowing users to view, search, sort, and manage their volunteer invitations.
- * It integrates with GraphQL queries and mutations to fetch and update invitation data.
- *
- * @module Invitations
- *
- * @enum ItemFilter
- * @description Enum for filtering invitations by type.
- * @property {string} Group - Represents group invitations.
- * @property {string} Individual - Represents individual invitations.
- *
- * @function Invitations
- * @description Renders the Invitations screen, displaying a list of volunteer invitations
- * with options to search, sort, filter, and accept/reject invitations.
- *
- * @returns {JSX.Element} The Invitations component.
- *
- * @remarks
- * - Redirects to the homepage if `orgId` or `userId` is missing.
- * - Displays a loader while fetching data and handles errors gracefully.
- * - Uses `useQuery` to fetch invitations and `useMutation` to update invitation status.
- * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components.
- *
- * @dependencies
- * - `react`, `react-router-dom`, `react-bootstrap`, `react-toastify`
- * - `@apollo/client` for GraphQL queries and mutations
- * - `@mui/icons-material`, `react-icons` for icons
- * - Custom hooks: `useLocalStorage`
- * - Custom components: `Loader`, `SearchBar`, `SortingButton`
- *
- * @example
- * ```tsx
- * <Invitations />
- * ```
- */
 import React, { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -61,6 +24,29 @@ enum ItemFilter {
   Individual = 'individual',
 }
 
+/**
+ * The `Invitations` component displays list of invites for the user to volunteer.
+ * It allows the user to search, sort, and accept/reject invites.
+ *
+ * @returns The rendered component displaying the upcoming events.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.searchButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 const Invitations = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
   const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });

@@ -1,39 +1,3 @@
-/**
- * TableRow component for rendering a row in the Check-In table.
- *
- * This component provides functionality to:
- * - Mark a user as checked in for an event.
- * - Generate and download a PDF tag for the user.
- *
- * @param data - The data object containing user and event details.
- * @param data.userId - The unique identifier for the user.
- * @param data.eventId - The unique identifier for the event.
- * @param data.name - The name of the user.
- * @param data.checkIn - The check-in status of the user.
- * @param refetch - A function to refetch the data after a mutation.
- *
- * @returns A JSX element that displays buttons for checking in or downloading a tag.
- *
- * @remarks
- * - If the user is already checked in, the "Checked In" button is disabled, and a "Download Tag" button is displayed.
- * - If the user is not checked in, a "Check In" button is displayed.
- * - The component uses Apollo Client's `useMutation` hook to perform the check-in operation.
- * - The `generate` function from `@pdfme/generator` is used to create the PDF tag.
- * - Notifications are displayed using `react-toastify` for success, error, and pending states.
- *
- * @example
- * ```tsx
- * <TableRow
- *   data={{
- *     userId: '123',
- *     eventId: '456',
- *     name: 'John Doe',
- *     checkIn: null,
- *   }}
- *   refetch={() => fetchData()}
- * />
- * ```
- */
 import React from 'react';
 import type { InterfaceTableCheckIn } from 'types/CheckIn/interface';
 import Button from '@mui/material/Button';
@@ -43,7 +7,15 @@ import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from '../../tagTemplate';
 import { useTranslation } from 'react-i18next';
-
+/**
+ * Component that represents a single row in the check-in table.
+ * Allows users to mark themselves as checked in and download a tag if they are already checked in.
+ *
+ * @param data - The data for the current row, including user and event information.
+ * @param refetch - Function to refetch the check-in data after marking a check-in.
+ *
+ * @returns JSX.Element - The rendered TableRow component.
+ */
 export const TableRow = ({
   data,
   refetch,
@@ -54,9 +26,17 @@ export const TableRow = ({
   const [checkInMutation] = useMutation(MARK_CHECKIN);
   const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
 
+  /**
+   * Marks the user as checked in for the event.
+   * Displays success or error messages based on the result of the mutation.
+   */
   const markCheckIn = (): void => {
+    // as we do not want to clutter the UI currently with the same (only provide the most basic of operations)
     checkInMutation({
-      variables: { userId: data.userId, eventId: data.eventId },
+      variables: {
+        userId: data.userId,
+        eventId: data.eventId,
+      },
     })
       .then(() => {
         toast.success(t('checkedInSuccessfully') as string);

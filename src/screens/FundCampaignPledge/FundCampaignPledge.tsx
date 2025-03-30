@@ -1,40 +1,3 @@
-/**
- * @file FundCampaignPledge.tsx
- * @description This component renders the Fund Campaign Pledge screen, allowing users to view, search, sort,
- *              and manage pledges for a specific fundraising campaign. It includes features like progress tracking,
- *              pledge management, and user interaction with modals for editing or deleting pledges.
- *
- * @module FundCampaignPledge
- *
- * @requires react
- * @requires react-router-dom
- * @requires @apollo/client
- * @requires @mui/material
- * @requires @mui/x-data-grid
- * @requires react-bootstrap
- * @requires dayjs
- * @requires components/Loader/Loader
- * @requires components/Avatar/Avatar
- * @requires subComponents/SortingButton
- * @requires subComponents/SearchBar
- * @requires utils/currency
- * @requires utils/interfaces
- * @requires style/app-fixed.module.css
- *
- * @typedef {InterfaceCampaignInfo} InterfaceCampaignInfo - Represents the campaign details including name, goal, dates, and currency.
- * @typedef {InterfacePledgeInfo} InterfacePledgeInfo - Represents the pledge details including users, amount, and dates.
- * @typedef {InterfaceUserInfo} InterfaceUserInfo - Represents user details like name and image.
- *
- * @component
- * @description
- * - Displays a breadcrumb navigation for campaign context.
- * - Shows campaign progress with a toggle between pledged and raised amounts.
- * - Provides a searchable and sortable table of pledges with actions to edit or delete.
- * - Includes modals for adding/editing and deleting pledges.
- * - Handles error and loading states for data fetching.
- *
- * @returns {JSX.Element} The Fund Campaign Pledge screen.
- */
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
@@ -61,6 +24,29 @@ import type {
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.dropdown`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 interface InterfaceCampaignInfo {
   name: string;

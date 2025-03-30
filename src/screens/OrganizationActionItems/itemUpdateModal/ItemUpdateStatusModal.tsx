@@ -1,36 +1,3 @@
-/**
- * A modal component for updating the status of an action item.
- *
- * @remarks
- * This component allows users to update the completion status of an action item.
- * It provides a form to add post-completion notes when marking an item as completed.
- * The modal uses Apollo Client's `useMutation` hook to perform the update operation
- * and displays success or error messages using `react-toastify`.
- *
- * @param props - The props for the `ItemUpdateStatusModal` component.
- * @param props.isOpen - A boolean indicating whether the modal is open.
- * @param props.hide - A function to close the modal.
- * @param props.actionItemsRefetch - A function to refetch the list of action items.
- * @param props.actionItem - The action item object containing details to be updated.
- *
- * @returns A React component that renders the modal for updating an action item's status.
- *
- * @example
- * ```tsx
- * <ItemUpdateStatusModal
- *   isOpen={true}
- *   hide={() => setModalOpen(false)}
- *   actionItemsRefetch={refetchActionItems}
- *   actionItem={selectedActionItem}
- * />
- * ```
- *
- * @component
- * @category OrganizationActionItems
- * @requires `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
- * @requires `style/app-fixed.module.css`
- * @requires `GraphQl/Mutations/ActionItemMutations`
- */
 import React, { type FC, type FormEvent, useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -40,6 +7,26 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 export interface InterfaceItemUpdateStatusModalProps {
   isOpen: boolean;

@@ -6,7 +6,9 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx#L51)
+Defined in: [src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx#L20)
+
+Modal component for adding on-spot attendees to an event
 
 ## Parameters
 
@@ -27,3 +29,5 @@ Defined in: [src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAtten
 ## Returns
 
 `ReactNode`
+
+Modal component with form for adding new attendee

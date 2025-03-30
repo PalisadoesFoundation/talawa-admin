@@ -6,7 +6,13 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/Pagination/Navigator/Pagination.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Pagination/Navigator/Pagination.tsx#L52)
+Defined in: [src/components/Pagination/Navigator/Pagination.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Pagination/Navigator/Pagination.tsx#L30)
+
+Pagination component for navigating between pages in a table.
+
+This component provides buttons to navigate to the first page, previous page,
+next page, and last page of a table. The visibility and functionality of the
+buttons are controlled based on the current page and the total number of items.
 
 ## Parameters
 
@@ -14,6 +20,10 @@ Defined in: [src/components/Pagination/Navigator/Pagination.tsx:52](https://gith
 
 `InterfaceTablePaginationActionsProps`
 
+Component properties.
+
 ## Returns
 
 `JSX.Element`
+
+The rendered component.

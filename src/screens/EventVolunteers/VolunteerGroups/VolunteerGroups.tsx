@@ -1,21 +1,3 @@
-/**
- * Component for managing volunteer groups within an event.
- *
- * This component provides functionality to:
- * - View, filter, and sort volunteer groups.
- * - Create, edit, and delete volunteer groups using modals.
- * - Display volunteer group details such as group name, leader,
- *   number of volunteers, and completed actions.
- *
- * Features:
- * - Search functionality to filter groups by leader or group name.
- * - Sorting options for volunteer count (ascending/descending).
- * - Integration with GraphQL to fetch and manage volunteer group data.
- * - Customizable modals for creating, editing, viewing, and deleting groups.
- * - Error handling and loading states with appropriate UI feedback.
- *
- * @returns The rendered volunteer groups management component.
- */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';

@@ -1,34 +1,3 @@
-/**
- * Component: EventListCardModals
- *
- * This component manages the modals for event list cards, including preview, update, and delete modals.
- * It handles event updates, deletions, and user registration for events, with support for recurring events.
- *
- * @param eventListCardProps - The properties of the event card, including event details and refetch function.
- * @param eventModalIsOpen - Boolean indicating whether the event modal is open.
- * @param hideViewModal - Function to hide the view modal.
- * @param t - Translation function for localized strings.
- * @param tCommon - Translation function for common localized strings.
- *
- * @returns JSX.Element - The rendered modals for event list card actions.
- *
- * @remarks
- * - Handles recurring event updates with options for "this instance," "this and following instances," or "all instances."
- * - Manages state for event properties such as all-day, recurring, public, and registrable flags.
- * - Provides functionality to register for events and navigate to the event dashboard.
- * - Uses Apollo Client mutations for updating and deleting events.
- * - Displays recurrence rule text in a popover for recurring events.
- *
- *
- * @example
- * <EventListCardModals
- *   eventListCardProps={eventProps}
- *   eventModalIsOpen={true}
- *   hideViewModal={() => {}}
- *   t={(key) => key}
- *   tCommon={(key) => key}
- * />
- */
 import React, { useEffect, useState } from 'react';
 import { Popover } from 'react-bootstrap';
 import dayjs from 'dayjs';
@@ -65,6 +34,41 @@ interface InterfaceEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 
+/**
+ * Converts a time string to a Dayjs object representing the current date with the specified time.
+ * @param time - A string representing the time in 'HH:mm:ss' format.
+ * @returns A Dayjs object with the current date and specified time.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.switch`
+ * - `.addButton`
+ * - `.removeButton`
+ * - `.modalHeader`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
+
+/**
+ * Properties for the `EventListCardModals` component.
+ * eventListCardProps - The properties of the event list card.
+ * eventModalIsOpen - Boolean indicating if the event modal is open.
+ * hideViewModal - Function to hide the event modal.
+ * t - Function for translation of text.
+ * tCommon - Function for translation of common text.
+ */
 interface InterfaceEventListCardModalProps {
   eventListCardProps: InterfaceEventListCard;
   eventModalIsOpen: boolean;
@@ -73,6 +77,12 @@ interface InterfaceEventListCardModalProps {
   tCommon: (key: string) => string;
 }
 
+/**
+ * The `EventListCardModals` component displays the modals related to events, such as viewing,
+ * updating, and deleting events.
+ * @param props - The properties for the component.
+ * @returns A JSX element containing the event modals.
+ */
 function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
@@ -352,7 +362,9 @@ function EventListCardModals({
     if (!isRegistered) {
       try {
         const { data } = await registerEventMutation({
-          variables: { eventId: eventListCardProps._id },
+          variables: {
+            eventId: eventListCardProps._id,
+          },
         });
 
         if (data) {

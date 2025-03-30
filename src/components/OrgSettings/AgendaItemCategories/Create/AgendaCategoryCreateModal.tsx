@@ -1,44 +1,19 @@
-/**
- * AgendaCategoryCreateModal Component
- *
- * This component renders a modal for creating a new agenda category.
- * It includes a form with fields for the category name and description,
- * and handles form submission through a provided handler function.
- *
- * @component
- * @param {InterfaceAgendaCategoryCreateModalProps} props - The props for the component.
- * @param {boolean} props.agendaCategoryCreateModalIsOpen - Determines if the modal is visible.
- * @param {() => void} props.hideCreateModal - Function to close the modal.
- * @param {InterfaceFormStateType} props.formState - The current state of the form fields.
- * @param {(state: React.SetStateAction<InterfaceFormStateType>) => void} props.setFormState - Function to update the form state.
- * @param {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} props.createAgendaCategoryHandler - Handler for form submission.
- * @param {(key: string) => string} props.t - Translation function for internationalization.
- *
- * @interface InterfaceFormStateType
- * @property {string} name - The name of the agenda category.
- * @property {string} description - The description of the agenda category.
- * @property {string} createdBy - The creator of the agenda category.
- *
- * @interface InterfaceAgendaCategoryCreateModalProps
- * @property {boolean} agendaCategoryCreateModalIsOpen - Modal visibility state.
- * @property {() => void} hideCreateModal - Function to hide the modal.
- * @property {InterfaceFormStateType} formState - Form state object.
- * @property {(state: React.SetStateAction<InterfaceFormStateType>) => void} setFormState - State updater for the form.
- * @property {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} createAgendaCategoryHandler - Form submission handler.
- * @property {(key: string) => string} t - Translation function.
- *
- * @returns {JSX.Element} The rendered modal component.
- */
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
-
+/**
+ * InterfaceFormStateType is an object containing the form state
+ */
 interface InterfaceFormStateType {
   name: string;
   description: string;
   createdBy: string;
 }
+
+/**
+ * InterfaceAgendaCategoryCreateModalProps is an object containing the props for AgendaCategoryCreateModal component
+ */
 interface InterfaceAgendaCategoryCreateModalProps {
   agendaCategoryCreateModalIsOpen: boolean;
   hideCreateModal: () => void;
@@ -50,6 +25,16 @@ interface InterfaceAgendaCategoryCreateModalProps {
   t: (key: string) => string;
 }
 
+/**
+ * AgendaCategoryCreateModal component is used to create the agenda category details like name, description
+ * @param  agendaCategoryCreateModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hideCreateModal - function to hide the modal
+ * @param  formState - object containing the form state
+ * @param  setFormState - function to set the form state
+ * @param  createAgendaCategoryHandler - function to create the agenda category
+ * @param  t - i18n function to translate the text
+ * @returns  returns the AgendaCategoryCreateModal component
+ */
 const AgendaCategoryCreateModal: React.FC<
   InterfaceAgendaCategoryCreateModalProps
 > = ({

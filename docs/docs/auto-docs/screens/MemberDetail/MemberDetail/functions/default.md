@@ -6,7 +6,11 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/MemberDetail/MemberDetail.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetail.tsx#L66)
+Defined in: [src/screens/MemberDetail/MemberDetail.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetail.tsx#L42)
+
+MemberDetail component is used to display the details of a user.
+It also allows the user to update the details. It uses the UPDATE_CURRENT_USER_MUTATION to update the user details.
+It uses the CURRENT_USER query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
 
 ## Parameters
 
@@ -27,3 +31,5 @@ Defined in: [src/screens/MemberDetail/MemberDetail.tsx:66](https://github.com/Pa
 ## Returns
 
 `ReactNode`
+
+React component

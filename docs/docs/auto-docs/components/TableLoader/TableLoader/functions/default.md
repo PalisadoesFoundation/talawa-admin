@@ -6,7 +6,11 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L42)
+Defined in: [src/components/TableLoader/TableLoader.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L25)
+
+The TableLoader component displays a loading skeleton for tables.
+It shows a specified number of rows and columns as placeholders
+with a shimmering effect to indicate loading content.
 
 ## Parameters
 
@@ -14,6 +18,10 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:42](https://github.com/P
 
 [`InterfaceTableLoader`](../interfaces/InterfaceTableLoader.md)
 
+The properties for the TableLoader component.
+
 ## Returns
 
 `Element`
+
+The JSX element representing the table loader.

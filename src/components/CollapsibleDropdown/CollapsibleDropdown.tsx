@@ -1,42 +1,3 @@
-/**
- * A collapsible dropdown component that displays a list of sub-targets
- * and allows navigation between them. The dropdown's visibility is
- * controlled by the `showDropdown` state, and it automatically toggles
- * based on the current route.
- *
- * @component
- * @param {InterfaceCollapsibleDropdown} props - The props for the component.
- * @param {object} props.target - The target object containing the dropdown's name and sub-targets.
- * @param {boolean} props.showDropdown - A boolean indicating whether the dropdown is currently visible.
- * @param {React.Dispatch<React.SetStateAction<boolean>>} props.setShowDropdown - A function to toggle the dropdown's visibility.
- *
- * @returns {JSX.Element} The collapsible dropdown component.
- *
- * @remarks
- * - The dropdown automatically opens if the current route includes 'orgstore'.
- * - Sub-targets are rendered as buttons inside the dropdown, and clicking them navigates to their respective URLs.
- *
- * @example
- * ```tsx
- * <CollapsibleDropdown
- *   target={{
- *     name: 'example',
- *     subTargets: [
- *       { name: 'Sub 1', icon: 'fa-icon-1', url: '/sub1' },
- *       { name: 'Sub 2', icon: 'fa-icon-2', url: '/sub2' },
- *     ],
- *   }}
- *   showDropdown={true}
- *   setShowDropdown={setShowDropdown}
- * />
- * ```
- *
- * @dependencies
- * - `react-bootstrap/Collapse` for dropdown animation.
- * - `react-router-dom` for navigation and route handling.
- * - `react-i18next` for internationalization support.
- * - `IconComponent` for rendering icons dynamically.
- */
 import React, { useEffect } from 'react';
 import { Collapse } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -45,6 +6,15 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
 
+/**
+ * A collapsible dropdown component that toggles visibility of sub-targets.
+ *
+ * @param showDropdown - Boolean indicating whether the dropdown is visible or not.
+ * @param target - Object containing the target information, including the name and sub-targets.
+ * @param setShowDropdown - Function to toggle the visibility of the dropdown.
+ *
+ * @returns JSX.Element - The rendered CollapsibleDropdown component.
+ */
 const collapsibleDropdown = ({
   target,
   showDropdown,

@@ -6,7 +6,9 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L59)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L33)
+
+LeftDrawerOrg component for displaying organization details and  options.
 
 ## Parameters
 
@@ -17,3 +19,5 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:59](https://github.c
 ## Returns
 
 `Element`
+
+JSX element for the left navigation drawer with organization details.

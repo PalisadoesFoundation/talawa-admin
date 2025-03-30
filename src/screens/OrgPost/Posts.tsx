@@ -1,45 +1,28 @@
-/**
- * A React functional component that renders a list of posts based on the provided props.
- * Handles loading, error states, filtering, and sorting of posts.
- *
- * @component
- * @param {InterfacePostsRenderer} props - The props for the component.
- * @param {boolean} props.loading - Indicates whether the data is still loading.
- * @param {ApolloError | undefined} props.error - The error object from Apollo Client, if any.
- * @param {InterfaceOrganizationData} props.data - The data containing posts and organization details.
- * @param {boolean} props.isFiltering - Indicates whether the posts are being filtered.
- * @param {string} props.searchTerm - The search term used for filtering posts.
- * @param {string} props.sortingOption - The sorting option applied to the posts.
- * @param {InterfacePost[]} props.displayPosts - The list of posts to display when sorting is applied.
- *
- * @returns {JSX.Element | null} A JSX element rendering the posts or appropriate fallback UI.
- *
- * @remarks
- * - Displays a loader when `loading` is true.
- * - Shows an error message if `error` is present.
- * - Filters posts based on `searchTerm` when `isFiltering` is true.
- * - Sorts and displays posts based on `sortingOption` when applicable.
- * - Renders a "Not Found" component if no posts are available after filtering or sorting.
- *
- * @example
- * ```tsx
- * <PostsRenderer
- *   loading={false}
- *   error={undefined}
- *   data={data}
- *   isFiltering={true}
- *   searchTerm="example"
- *   sortingOption="Date"
- *   displayPosts={[]}
- * />
- * ```
- */
 import React from 'react';
 import type { ApolloError } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
-import type { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
+import type {
+  InterfacePost,
+  InterfacePostEdge,
+} from '../../types/Post/interface';
+
+/**
+ * PostsRenderer component renders a list of posts based on various conditions.
+ *
+ * Props:
+ * - loading: boolean - Indicates if the data is currently loading.
+ * - error: ApolloError | undefined - Error object if the data fetching failed.
+ * - data: InterfaceOrganizationData - The data containing posts information.
+ * - isFiltering: boolean - Indicates if a filter is applied to the posts.
+ * - searchTerm: string - The term used to filter the posts by caption.
+ * - sortingOption: string - The sorting option applied to the posts.
+ * - displayPosts: InterfacePost[] - The list of posts to display after sorting/filtering.
+ *
+ * Returns:
+ * - JSX.Element | null - The rendered posts or appropriate messages based on conditions.
+ */
 
 interface InterfaceOrganizationData {
   organization?: {

@@ -1,35 +1,3 @@
-/**
- * A React functional component that renders a promoted post card.
- * This component is used to display promoted content with a title,
- * optional image, and a header indicating that the content is promoted.
- *
- * @component
- * @param props - The properties passed to the component.
- * @param props.id - A unique identifier for the promoted post.
- * @param props.image - The URL of the image associated with the promoted post.
- *                       If no image is provided, the image section will not be rendered.
- * @param props.title - The title of the promoted post, displayed in the card header and body.
- *
- * @returns A JSX element representing the promoted post card.
- *
- * @remarks
- * - The component uses `react-bootstrap` for styling the card layout.
- * - The `StarPurple500Icon` from Material-UI is used to indicate promoted content.
- * - Custom styles are applied using CSS modules from `style/app.module.css`.
- *
- * @example
- * ```tsx
- * <PromotedPost
- *   id="12345"
- *   image="https://example.com/image.jpg"
- *   title="Exciting Promoted Post"
- * />
- * ```
- *
- * @fileoverview
- * This file defines the `PromotedPost` component, which is part of the
- * `UserPortal` feature in the Talawa Admin project.
- */
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from 'style/app.module.css';
@@ -41,6 +9,35 @@ interface InterfacePostCardProps {
   title: string;
 }
 
+/**
+ * PromotedPost component displays a card representing promoted content.
+ *
+ * This component includes:
+ * - A header with a star icon indicating the content is promoted.
+ * - A title and description of the promoted content.
+ * - An optional image associated with the promoted content.
+ *
+ * @param props - Properties passed to the component including an image, title, and ID.
+ * @returns JSX.Element representing a card with promoted content.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.cardHeaderPromotedPost`
+ * - `.imageContainerPromotedPost`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 export default function promotedPost(
   props: InterfacePostCardProps,
 ): JSX.Element {

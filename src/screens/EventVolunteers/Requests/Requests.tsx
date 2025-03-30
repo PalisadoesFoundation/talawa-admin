@@ -1,39 +1,3 @@
-/**
- * @file Requests.tsx
- * @description This component renders a table displaying volunteer membership requests for a specific event.
- * It allows administrators to search, sort, and manage these requests by accepting or rejecting them.
- *
- * @module Requests
- *
- * @requires react
- * @requires react-i18next
- * @requires react-bootstrap
- * @requires react-router-dom
- * @requires @apollo/client
- * @requires @mui/x-data-grid
- * @requires dayjs
- * @requires react-toastify
- * @requires components/Loader/Loader
- * @requires components/Avatar/Avatar
- * @requires subComponents/SortingButton
- * @requires subComponents/SearchBar
- * @requires GraphQl/Queries/EventVolunteerQueries
- * @requires GraphQl/Mutations/EventVolunteerMutation
- * @requires utils/interfaces
- *
- * @function requests
- * @returns {JSX.Element} A React component that displays a searchable and sortable table of volunteer membership requests.
- *
- * @remarks
- * - Displays a loader while fetching data and handles errors gracefully.
- * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
- * - Provides search functionality with debouncing and sorting options.
- * - Displays volunteer details, request date, and action buttons for accepting or rejecting requests.
- * - Redirects to the home page if `orgId` or `eventId` is missing in the URL parameters.
- *
- * @example
- * <Requests />
- */
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
@@ -77,6 +41,13 @@ const dataGridStyle = {
   '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
+/**
+ * Component for managing and displaying Volunteer Membership requests for an event.
+ *
+ * This component allows users to view, filter, sort, and create action items. It also allows users to accept or reject volunteer membership requests.
+ *
+ * @returns The rendered component.
+ */
 function requests(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');

@@ -1,32 +1,3 @@
-/**
- * A modal component for creating a new post in the user portal.
- *
- * @remarks
- * This component allows users to create a new post by entering text content
- * and optionally attaching an image. It uses Apollo Client's `useMutation` hook
- * to handle the post creation process and displays toast notifications for feedback.
- *
- * @param show - A boolean indicating whether the modal is visible.
- * @param onHide - A callback function to hide the modal.
- * @param fetchPosts - A function to refresh the list of posts after a new post is created.
- * @param userData - The data of the currently logged-in user, including their name and image.
- * @param organizationId - The ID of the organization where the post will be created.
- * @param img - An optional image to attach to the post.
- *
- * @returns A JSX element representing the modal for creating a new post.
- *
- * @example
- * ```tsx
- * <StartPostModal
- *   show={isModalVisible}
- *   onHide={handleCloseModal}
- *   fetchPosts={refreshPosts}
- *   userData={currentUser}
- *   organizationId="org123"
- *   img={selectedImage}
- * />
- * ```
- */
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Image, Modal } from 'react-bootstrap';
@@ -49,6 +20,42 @@ interface InterfaceStartPostModalProps {
   img: string | null;
 }
 
+/**
+ * A modal component for creating a new post.
+ *
+ * This modal includes:
+ * - A form where users can input the content of the post.
+ * - A preview of the image if provided.
+ * - User's profile image and name displayed in the modal header.
+ *
+ * @param show - Whether the modal is visible.
+ * @param onHide - Function to call when the modal is hidden.
+ * @param fetchPosts - Function to refresh the posts after creating a new one.
+ * @param userData - User data to display in the modal header.
+ * @param organizationId - The ID of the organization for the post.
+ * @param img - The URL of the image to be included in the post.
+ *
+ * @returns JSX.Element - The rendered modal component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 const startPostModal = ({
   show,
   onHide,

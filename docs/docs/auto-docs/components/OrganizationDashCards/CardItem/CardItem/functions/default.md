@@ -6,7 +6,9 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L50)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L32)
+
+Component to display a card item with various types such as Event, Post, or MembershipRequest.
 
 ## Parameters
 
@@ -14,6 +16,10 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:50](http
 
 [`InterfaceCardItem`](../interfaces/InterfaceCardItem.md)
 
+Props for the CardItem component.
+
 ## Returns
 
 `Element`
+
+JSX element representing the card item.

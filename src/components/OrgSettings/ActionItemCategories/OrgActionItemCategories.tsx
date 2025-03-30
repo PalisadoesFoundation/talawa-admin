@@ -1,27 +1,3 @@
-/**
- * @file OrgActionItemCategories.tsx
- * @description This file contains the `OrgActionItemCategories` component, which is responsible for managing
- *              action item categories within an organization. It provides functionality to create, update,
- *              enable, disable, and search for action item categories.
- *
- * @module OrgActionItemCategories
- *
- *
- * @typedef {InterfaceActionItemCategoryProps} InterfaceActionItemCategoryProps - Props for the component.
- * @typedef {InterfaceActionItemCategoryInfo} InterfaceActionItemCategoryInfo - Interface for category data.
- *
- * @component
- * @param {InterfaceActionItemCategoryProps} props - Component props containing the organization ID.
- *
- * @description
- * - Displays a table of action item categories with options to sort, filter, and search.
- * - Allows creating and editing categories via a modal.
- * - Fetches data using GraphQL queries and handles loading and error states.
- * - Provides a user-friendly interface with Material-UI components and Bootstrap styling.
- *
- * @example
- * <OrgActionItemCategories orgId="12345" />
- */
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';

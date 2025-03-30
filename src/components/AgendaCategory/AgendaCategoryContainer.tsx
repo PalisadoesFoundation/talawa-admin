@@ -1,35 +1,3 @@
-/**
- * AgendaCategoryContainer component is responsible for rendering and managing
- * the agenda categories for an organization. It provides functionalities to
- * preview, update, and delete agenda categories using modals and GraphQL mutations.
- *
- * @param props - Component props.
- * @param props.agendaCategoryConnection - Specifies the connection type, e.g., 'Organization'.
- * @param props.agendaCategoryData - Array of agenda category data to display.
- * @param props.agendaCategoryRefetch - Function to refetch agenda category data after updates.
- *
- * @returns A JSX element that displays a list of agenda categories with options
- *          to preview, edit, and delete each category.
- *
- * @remarks
- * - Uses `useState` for managing modal visibility and form state.
- * - Integrates `useMutation` from Apollo Client for GraphQL operations.
- * - Displays success and error messages using `react-toastify`.
- * - Includes three modals: Preview, Update, and Delete.
- *
- * @example
- * ```tsx
- * <AgendaCategoryContainer
- *   agendaCategoryConnection="Organization"
- *   agendaCategoryData={agendaCategories}
- *   agendaCategoryRefetch={refetchAgendaCategories}
- * />
- * ```
- *
- * @component
- * @category Components
- */
-
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
@@ -48,6 +16,21 @@ import AgendaCategoryDeleteModal from 'components/OrgSettings/AgendaItemCategori
 import AgendaCategoryPreviewModal from 'components/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';
 import AgendaCategoryUpdateModal from 'components/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal';
 
+/**
+ * Component for displaying and managing agenda item categories.
+ *
+ * @param props - Contains agenda category data and functions for data management.
+ * @returns A JSX element that renders agenda item categories with options to preview, edit, and delete.
+ *
+ * @example
+ * ```tsx
+ * <AgendaCategoryContainer
+ *   agendaCategoryConnection="Organization"
+ *   agendaCategoryData={data}
+ *   agendaCategoryRefetch={refetch}
+ * />
+ * ```
+ */
 function agendaCategoryContainer({
   agendaCategoryConnection,
   agendaCategoryData,
@@ -137,7 +120,10 @@ function agendaCategoryContainer({
       await updateAgendaCategory({
         variables: {
           updateAgendaCategoryId: agendaCategoryId,
-          input: { name: formState.name, description: formState.description },
+          input: {
+            name: formState.name,
+            description: formState.description,
+          },
         },
       });
 
@@ -161,7 +147,9 @@ function agendaCategoryContainer({
   const deleteAgendaCategoryHandler = async (): Promise<void> => {
     try {
       await deleteAgendaCategory({
-        variables: { deleteAgendaCategoryId: agendaCategoryId },
+        variables: {
+          deleteAgendaCategoryId: agendaCategoryId,
+        },
       });
       agendaCategoryRefetch();
       toggleDeleteModal();

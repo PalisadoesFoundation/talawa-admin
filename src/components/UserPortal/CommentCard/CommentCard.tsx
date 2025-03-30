@@ -1,39 +1,3 @@
-/**
- * CommentCard Component
- *
- * This component represents a card displaying a comment with the ability to like or unlike it.
- * It shows the comment creator's details, the comment text, and the like count.
- *
- * @component
- * @param props - The properties required by the CommentCard component.
- * @param props.id - The unique identifier of the comment.
- * @param props.creator - The creator of the comment, including their ID, first name, last name, and email.
- * @param props.likeCount - The initial number of likes on the comment.
- * @param props.likedBy - An array of users who have liked the comment.
- * @param props.text - The text content of the comment.
- * @param props.handleLikeComment - Callback function triggered when the comment is liked.
- * @param props.handleDislikeComment - Callback function triggered when the comment is unliked.
- *
- * @returns A JSX element representing the comment card.
- *
- * @remarks
- * - The component uses Apollo Client's `useMutation` hook to handle like and unlike operations.
- * - The `useLocalStorage` hook is used to retrieve the current user's ID from local storage.
- * - The like/unlike button displays a loading spinner while the mutation is in progress.
- *
- * @example
- * ```tsx
- * <CommentCard
- *   id="comment123"
- *   creator={{ id: "user1", firstName: "John", lastName: "Doe", email: "john.doe@example.com" }}
- *   likeCount={10}
- *   likedBy={[{ id: "user2" }]}
- *   text="This is a sample comment."
- *   handleLikeComment={(id) => console.log(`Liked comment with ID: ${id}`)}
- *   handleDislikeComment={(id) => console.log(`Disliked comment with ID: ${id}`)}
- * />
- * ```
- */
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import styles from './CommentCard.module.css';
@@ -63,6 +27,27 @@ interface InterfaceCommentCardProps {
   handleDislikeComment: (commentId: string) => void;
 }
 
+/**
+ * Displays a card for a single comment with options to like or dislike the comment.
+ *
+ * Shows the commenter's name, the comment text, and the number of likes.
+ * Allows the user to like or dislike the comment. The button icon changes based on whether the comment is liked by the user.
+ *
+ * @param  props - The properties passed to the component.
+ * @param  id - The unique identifier of the comment.
+ * @param  creator - Information about the creator of the comment.
+ * @param  id - The unique identifier of the creator.
+ * @param  firstName - The first name of the creator.
+ * @param  lastName - The last name of the creator.
+ * @param  email - The email address of the creator.
+ * @param  likeCount - The current number of likes for the comment.
+ * @param  likedBy - An array of users who have liked the comment.
+ * @param  text - The text content of the comment.
+ * @param  handleLikeComment - Function to call when the user likes the comment.
+ * @param  handleDislikeComment - Function to call when the user dislikes the comment.
+ *
+ * @returns The rendered comment card component.
+ */
 function commentCard(props: InterfaceCommentCardProps): JSX.Element {
   // Full name of the comment creator
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
