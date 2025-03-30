@@ -1,26 +1,52 @@
+/**
+ * AgendaItemsCreateModal Component
+ *
+ * This component renders a modal for creating agenda items. It includes
+ * form fields for entering details such as title, duration, description,
+ * categories, URLs, and attachments. The modal also provides functionality
+ * for validating URLs, managing attachments, and submitting the form.
+ *
+ * @component
+ * @param {InterfaceAgendaItemsCreateModalProps} props - The props for the component.
+ * @param {boolean} props.agendaItemCreateModalIsOpen - Determines if the modal is open.
+ * @param {() => void} props.hideCreateModal - Function to close the modal.
+ * @param {object} props.formState - The current state of the form.
+ * @param {React.Dispatch<React.SetStateAction<object>>} props.setFormState - Function to update the form state.
+ * @param {() => void} props.createAgendaItemHandler - Function to handle form submission.
+ * @param {(key: string) => string} props.t - Translation function for localization.
+ * @param {InterfaceAgendaItemCategoryInfo[]} props.agendaItemCategories - List of available agenda item categories.
+ *
+ * @returns {JSX.Element} The rendered modal component.
+ *
+ * @remarks
+ * - The component uses `react-bootstrap` for modal and form styling.
+ * - `@mui/material` is used for the Autocomplete component.
+ * - Attachments are converted to base64 format before being added to the form state.
+ * - URLs are validated using a regular expression before being added.
+ *
+ * @example
+ * ```tsx
+ * <AgendaItemsCreateModal
+ *   agendaItemCreateModalIsOpen={true}
+ *   hideCreateModal={handleClose}
+ *   formState={formState}
+ *   setFormState={setFormState}
+ *   createAgendaItemHandler={handleSubmit}
+ *   t={translate}
+ *   agendaItemCategories={categories}
+ * />
+ * ```
+ */
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
-
-/**
- * Component for creating a new agenda item.
- * Displays a modal form where users can input details for a new agenda item, including title, description, duration, categories, URLs, and attachments.
- *
- * @param agendaItemCreateModalIsOpen - Boolean flag indicating if the modal is open.
- * @param hideCreateModal - Function to close the modal.
- * @param formState - Current state of the form fields.
- * @param setFormState - Function to update the form state.
- * @param createAgendaItemHandler - Function to handle form submission.
- * @param t - Function for translating text based on keys.
- * @param agendaItemCategories - List of agenda item categories for selection.
- */
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({

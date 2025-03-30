@@ -1,3 +1,41 @@
+/**
+ * AttendanceStatisticsModal Component
+ *
+ * This component displays attendance statistics for events, including trends and demographic data.
+ * It supports both recurring and non-recurring events, providing a detailed view of attendee data.
+ *
+ * Features:
+ * - Displays attendance trends using a line chart for recurring events.
+ * - Shows demographic distribution (Gender or Age) using a bar chart.
+ * - Supports pagination for navigating through recurring events.
+ * - Allows exporting data (Trends and Demographics) to CSV format.
+ * - Highlights the current event in the trends chart.
+ *
+ * Props:
+ * @param {boolean} show - Determines whether the modal is visible.
+ * @param {() => void} handleClose - Callback to close the modal.
+ * @param {object} statistics - Contains overall statistics for non-recurring events.
+ * @param {Array} memberData - List of members with demographic details.
+ * @param {Function} t - Translation function for localized strings.
+ *
+ * Hooks:
+ * - `useParams` to retrieve organization and event IDs from the URL.
+ * - `useLazyQuery` to fetch event details and recurring event data using GraphQL queries.
+ * - `useMemo` and `useCallback` for optimized calculations and event handlers.
+ *
+ * Charts:
+ * - Line chart for attendance trends (recurring events).
+ * - Bar chart for demographic distribution (Gender or Age).
+ *
+ * Export:
+ * - Provides options to export trends and demographic data as CSV files.
+ *
+ * Accessibility:
+ * - Includes navigation buttons for pagination with tooltips for better usability.
+ *
+ * Dependencies:
+ * - React, React-Bootstrap, React-ChartJS-2, Apollo Client, and utility functions.
+ */
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   Modal,
@@ -30,7 +68,7 @@ import type {
   InterfaceEvent,
   InterfaceRecurringEvent,
 } from 'types/Event/interface';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -41,11 +79,6 @@ ChartJS.register(
   ChartToolTip,
   Legend,
 );
-/**
- * Component to display statistical information about event attendance
- * Shows metrics like total attendees, filtering options, and attendance trends
- * @returns JSX element with event statistics dashboard
- */
 
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps

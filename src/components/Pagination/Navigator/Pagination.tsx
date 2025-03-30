@@ -1,3 +1,35 @@
+/**
+ * A functional React component that provides pagination controls for navigating
+ * through a table or list of items. It includes buttons for navigating to the
+ * first, previous, next, and last pages.
+ *
+ * @param props - The properties required for the pagination component.
+ * @param props.count - The total number of items in the dataset.
+ * @param props.page - The current page index (zero-based).
+ * @param props.rowsPerPage - The number of rows displayed per page.
+ * @param props.onPageChange - A callback function triggered when the page changes.
+ * It receives the click event and the new page index as arguments.
+ *
+ * @returns A JSX element containing the pagination controls.
+ *
+ * @remarks
+ * - The component uses Material-UI's `IconButton` for the navigation buttons.
+ * - The `useTheme` hook is used to determine the text direction (LTR or RTL),
+ * which affects the icon orientation.
+ *
+ * @example
+ * ```tsx
+ * <Pagination
+ *   count={100}
+ *   page={2}
+ *   rowsPerPage={10}
+ *   onPageChange={(event, newPage) => console.log(newPage)}
+ * />
+ * ```
+ *
+ * @component
+ * @category Pagination
+ */
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -8,25 +40,15 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
 interface InterfaceTablePaginationActionsProps {
-  count: number; // Total number of items
-  page: number; // Current page index
-  rowsPerPage: number; // Number of items per page
+  count: number;
+  page: number;
+  rowsPerPage: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number, // New page index to navigate to
-  ) => void; // Callback function for page changes
+    newPage: number,
+  ) => void;
 }
 
-/**
- * Pagination component for navigating between pages in a table.
- *
- * This component provides buttons to navigate to the first page, previous page,
- * next page, and last page of a table. The visibility and functionality of the
- * buttons are controlled based on the current page and the total number of items.
- *
- * @param  props - Component properties.
- * @returns The rendered component.
- */
 function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;

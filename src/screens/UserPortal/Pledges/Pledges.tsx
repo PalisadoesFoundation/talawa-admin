@@ -1,54 +1,3 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, ProgressBar } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
-import { useTranslation } from 'react-i18next';
-import { WarningAmberRounded } from '@mui/icons-material';
-import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfacePledgeInfo, InterfaceUserInfo } from 'utils/interfaces';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import { type ApolloQueryResult, useQuery } from '@apollo/client';
-import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
-import Loader from 'components/Loader/Loader';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
-import dayjs from 'dayjs';
-import { currencySymbols } from 'utils/currency';
-import PledgeDeleteModal from 'screens/FundCampaignPledge/PledgeDeleteModal';
-import { Navigate, useParams } from 'react-router-dom';
-import PledgeModal from '../Campaigns/PledgeModal';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
-};
-
-enum ModalState {
-  UPDATE = 'update',
-  DELETE = 'delete',
-}
 /**
  * The `Pledges` component is responsible for rendering a user's pledges within a campaign.
  * It fetches pledges data using Apollo Client's `useQuery` hook and displays the data
@@ -86,11 +35,52 @@ enum ModalState {
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, ProgressBar } from 'react-bootstrap';
+import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
+import { WarningAmberRounded } from '@mui/icons-material';
+import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfacePledgeInfo, InterfaceUserInfo } from 'utils/interfaces';
+import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { type ApolloQueryResult, useQuery } from '@apollo/client';
+import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
+import Loader from 'components/Loader/Loader';
+import {
+  DataGrid,
+  type GridCellParams,
+  type GridColDef,
+} from '@mui/x-data-grid';
+import { Stack } from '@mui/material';
+import Avatar from 'components/Avatar/Avatar';
+import dayjs from 'dayjs';
+import { currencySymbols } from 'utils/currency';
+import PledgeDeleteModal from 'screens/FundCampaignPledge/deleteModal/PledgeDeleteModal';
+import { Navigate, useParams } from 'react-router-dom';
+import PledgeModal from '../Campaigns/PledgeModal';
+import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+
+const dataGridStyle = {
+  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+    outline: 'none !important',
+  },
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+    outline: 'none',
+  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
+};
+
+enum ModalState {
+  UPDATE = 'update',
+  DELETE = 'delete',
+}
 
 const Pledges = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userCampaigns',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -115,10 +105,7 @@ const Pledges = (): JSX.Element => {
   >('endDate_DESC');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.UPDATE]: false,
-    [ModalState.DELETE]: false,
-  });
+  }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
   const open = Boolean(anchor);
   const id = open ? 'simple-popup' : undefined;
@@ -129,15 +116,11 @@ const Pledges = (): JSX.Element => {
     error: pledgeError,
     refetch: refetchPledge,
   }: {
-    data?: {
-      getPledgesByUserId: InterfacePledgeInfo[];
-    };
+    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
-      ApolloQueryResult<{
-        getPledgesByUserId: InterfacePledgeInfo[];
-      }>
+      ApolloQueryResult<{ getPledgesByUserId: InterfacePledgeInfo[] }>
     >;
   } = useQuery(USER_PLEDGES, {
     variables: {

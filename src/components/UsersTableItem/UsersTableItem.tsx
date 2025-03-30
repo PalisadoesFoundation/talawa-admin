@@ -1,3 +1,42 @@
+/**
+ * UsersTableItem Component
+ *
+ * This component renders a table row representing a user in the users table.
+ * It provides functionality to view the organizations a user has joined,
+ * organizations that have blocked the user, and allows role management
+ * within organizations. It also supports removing a user from an organization.
+ *
+ * @component
+ * @param {Props} props - The props for the component.
+ * @param {InterfaceQueryUserListItem} props.user - The user data to display.
+ * @param {number} props.index - The index of the user in the table.
+ * @param {string} props.loggedInUserId - The ID of the logged-in user.
+ * @param {() => void} props.resetAndRefetch - Function to reset and refetch data.
+ *
+ * @returns {JSX.Element} The rendered UsersTableItem component.
+ *
+ * @remarks
+ * - Uses `@apollo/client` for GraphQL mutations.
+ * - Integrates `react-bootstrap` for UI components and modals.
+ * - Includes search functionality for filtering organizations.
+ * - Provides role management and user removal features.
+ *
+ * @dependencies
+ * - `@mui/icons-material` for icons.
+ * - `dayjs` for date formatting.
+ * - `react-toastify` for toast notifications.
+ * - `react-router-dom` for navigation.
+ *
+ * @example
+ * ```tsx
+ * <UsersTableItem
+ *   user={user}
+ *   index={0}
+ *   loggedInUserId="12345"
+ *   resetAndRefetch={fetchData}
+ * />
+ * ```
+ */
 import { useMutation } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import {
@@ -13,30 +52,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
-
-/**
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.editButton`
- * - `.removeButton`
- * - `.modalHeader`
- * - `.inputField`
- * - `.searchButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
+import styles from 'style/app.module.css';
 
 type Props = {
   user: InterfaceQueryUserListItem;
@@ -56,11 +72,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     orgName: string;
     orgId: string;
     setShowOnCancel: 'JOINED' | 'BLOCKED' | '';
-  }>({
-    orgName: '',
-    orgId: '',
-    setShowOnCancel: '',
-  });
+  }>({ orgName: '', orgId: '', setShowOnCancel: '' });
   const [joinedOrgs, setJoinedOrgs] = useState(user.user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
     user.user.organizationsBlockedBy,
@@ -74,10 +86,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const confirmRemoveUser = async (): Promise<void> => {
     try {
       const { data } = await removeUser({
-        variables: {
-          userid: user.user._id,
-          orgid: removeUserProps.orgId,
-        },
+        variables: { userid: user.user._id, orgid: removeUserProps.orgId },
       });
       if (data) {
         toast.success(

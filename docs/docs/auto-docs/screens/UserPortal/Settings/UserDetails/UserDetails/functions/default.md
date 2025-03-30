@@ -6,9 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/UserPortal/Settings/UserDetails/UserDetails.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/UserDetails/UserDetails.tsx#L56)
-
-UserDetailsForm component renders a form for updating user details.
+Defined in: [src/screens/UserPortal/Settings/UserDetails/UserDetails.tsx:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/UserDetails/UserDetails.tsx#L88)
 
 ## Parameters
 
@@ -29,5 +27,3 @@ UserDetailsForm component renders a form for updating user details.
 ## Returns
 
 `ReactNode`
-
-The UserDetailsForm component.

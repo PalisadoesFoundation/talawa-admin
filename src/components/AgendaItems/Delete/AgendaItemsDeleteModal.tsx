@@ -1,18 +1,39 @@
+/**
+ * AgendaItemsDeleteModal Component
+ *
+ * This component renders a modal dialog for confirming the deletion of an agenda item.
+ * It provides a user-friendly interface to either confirm or cancel the deletion action.
+ *
+ * @component
+ * @param {InterfaceAgendaItemsDeleteModalProps} props - The props for the component.
+ * @param {boolean} props.agendaItemDeleteModalIsOpen - Determines whether the modal is open or closed.
+ * @param {() => void} props.toggleDeleteModal - Function to toggle the visibility of the modal.
+ * @param {() => void} props.deleteAgendaItemHandler - Function to handle the deletion of the agenda item.
+ * @param {(key: string) => string} props.t - Translation function for agenda-specific text.
+ * @param {(key: string) => string} props.tCommon - Translation function for common text (e.g., "yes", "no").
+ *
+ * @returns {JSX.Element} A modal dialog with options to confirm or cancel the deletion of an agenda item.
+ *
+ * @remarks
+ * - The modal uses `react-bootstrap` for styling and functionality.
+ * - The `t` and `tCommon` props are used for internationalization (i18n).
+ * - The modal is styled using a CSS module (`app-fixed.module.css`).
+ *
+ * @example
+ * ```tsx
+ * <AgendaItemsDeleteModal
+ *   agendaItemDeleteModalIsOpen={true}
+ *   toggleDeleteModal={handleToggleModal}
+ *   deleteAgendaItemHandler={handleDeleteAgendaItem}
+ *   t={(key) => translations[key]}
+ *   tCommon={(key) => commonTranslations[key]}
+ * />
+ * ```
+ */
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
-
-/**
- * Modal component for confirming the deletion of an agenda item.
- * Displays a confirmation dialog when a user attempts to delete an agenda item.
- *
- * @param agendaItemDeleteModalIsOpen - Boolean flag indicating if the modal is open.
- * @param toggleDeleteModal - Function to toggle the visibility of the modal.
- * @param deleteAgendaItemHandler - Function to handle the deletion of the agenda item.
- * @param t - Function for translating text based on keys.
- * @param tCommon - Function for translating common text keys.
- */
 const AgendaItemsDeleteModal: React.FC<
   InterfaceAgendaItemsDeleteModalProps
 > = ({

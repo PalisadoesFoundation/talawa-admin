@@ -104,7 +104,7 @@ const INFINITE_SCROLL_MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             id: 'org1',
             name: 'Test Organization',
@@ -680,7 +680,7 @@ describe('Testing Requests screen', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 id: 'org1',
                 name: 'Test Organization',
@@ -838,7 +838,7 @@ describe('Testing Requests screen', () => {
         },
         result: {
           data: {
-            organizations: [
+            organization: [
               {
                 id: 'org1',
                 name: 'Test Organization',

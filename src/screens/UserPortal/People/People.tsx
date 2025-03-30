@@ -1,3 +1,39 @@
+/**
+ * The `people` component is responsible for rendering a list of members and admins
+ * of an organization. It provides functionality for searching, filtering, and paginating
+ * through the list of users. The component uses GraphQL queries to fetch data and
+ * displays it in a structured format with user details such as name, email, role, etc.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered People component.
+ *
+ * @remarks
+ * - This component uses Apollo Client's `useQuery` hook to fetch data from GraphQL endpoints.
+ * - It supports filtering between "All Members" and "Admins" using a dropdown menu.
+ * - Pagination is implemented to manage the display of users in chunks.
+ * - Users can search for members by their first name using the search bar.
+ *
+ * @requires `react`, `react-bootstrap`, `@apollo/client`, `@mui/icons-material`
+ * @requires `components/UserPortal/PeopleCard/PeopleCard`
+ * @requires `components/Pagination/PaginationList/PaginationList`
+ * @requires `GraphQl/Queries/Queries`
+ * @requires `style/app-fixed.module.css`
+ * @requires `types/User/interface`
+ *
+ * @param {number} page - The current page number for pagination.
+ * @param {number} rowsPerPage - The number of rows displayed per page.
+ * @param {Partial<InterfaceUser>[]} members - The list of members to display.
+ * @param {Partial<InterfaceUser>[]} allMembers - The complete list of members fetched.
+ * @param {Partial<InterfaceUser>[]} admins - The list of admins fetched.
+ * @param {number} mode - The current filter mode (0 for "All Members", 1 for "Admins").
+ * @param {string} organizationId - The ID of the organization extracted from URL parameters.
+ *
+ * @function handleChangePage - Handles the change of the current page in pagination.
+ * @function handleChangeRowsPerPage - Handles the change in the number of rows per page.
+ * @function handleSearch - Refetches the members list based on the search input.
+ * @function handleSearchByEnter - Triggers search when the Enter key is pressed.
+ * @function handleSearchByBtnClick - Triggers search when the search button is clicked.
+ */
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import { Dropdown, Form, Button } from 'react-bootstrap';
@@ -9,11 +45,11 @@ import {
 import { useQuery } from '@apollo/client';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { FilterAltOutlined } from '@mui/icons-material';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router-dom';
-
+import { InterfaceUser } from 'types/User/interface';
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
@@ -23,46 +59,8 @@ interface InterfaceOrganizationCardProps {
   sno: string;
 }
 
-interface InterfaceMember {
-  firstName: string;
-  lastName: string;
-  image: string;
-  _id: string;
-  email: string;
-  userType: string;
-}
-
-/**
- * `People` component displays a list of people associated with an organization.
- * It allows users to filter between all members and admins, search for members by their first name,
- * and paginate through the list.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.btnsContainer`
- * - `.input`
- * - `.inputField`
- * - `.searchButton`
- * - `.btnsBlock`
- * - `.dropdown`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 export default function people(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'people',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'people' });
 
   const { t: tCommon } = useTranslation('common');
 
@@ -70,9 +68,9 @@ export default function people(): JSX.Element {
 
   // State for managing the number of rows per page in pagination
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-  const [members, setMembers] = useState<InterfaceMember[]>([]);
-  const [allMembers, setAllMembers] = useState<InterfaceMember[]>([]);
-  const [admins, setAdmins] = useState<InterfaceMember[]>([]);
+  const [members, setMembers] = useState<Partial<InterfaceUser>[]>([]);
+  const [allMembers, setAllMembers] = useState<Partial<InterfaceUser>[]>([]);
+  const [admins, setAdmins] = useState<Partial<InterfaceUser>[]>([]);
   const [mode, setMode] = useState<number>(0);
 
   // Extracting organization ID from URL parameters
@@ -84,12 +82,7 @@ export default function people(): JSX.Element {
   // Query to fetch list of members of the organization
   const { data, loading, refetch } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    {
-      variables: {
-        orgId: organizationId,
-        firstName_contains: '',
-      },
-    },
+    { variables: { orgId: organizationId, firstName_contains: '' } },
   );
   // Query to fetch list of admins of the organization
   const { data: data2 } = useQuery(ORGANIZATION_ADMINS_LIST, {
@@ -113,9 +106,7 @@ export default function people(): JSX.Element {
   };
 
   const handleSearch = (newFilter: string): void => {
-    refetch({
-      firstName_contains: newFilter,
-    });
+    refetch({ firstName_contains: newFilter });
   };
 
   const handleSearchByEnter = (
@@ -135,12 +126,9 @@ export default function people(): JSX.Element {
   };
 
   useEffect(() => {
-    if (data2?.organizations?.[0]?.admins) {
-      const adminsList = data2.organizations[0].admins.map(
-        (admin: InterfaceMember) => ({
-          ...admin,
-          userType: 'Admin',
-        }),
+    if (data2?.organization?.[0]?.admins) {
+      const adminsList = data2.organization[0].admins.map(
+        (admin: Partial<InterfaceUser>) => ({ ...admin, userType: 'Admin' }),
       );
       setAdmins(adminsList);
     }
@@ -150,7 +138,7 @@ export default function people(): JSX.Element {
   useEffect(() => {
     if (data?.organizationsMemberConnection?.edges) {
       const membersList = data.organizationsMemberConnection.edges.map(
-        (memberData: InterfaceMember) => ({
+        (memberData: Partial<InterfaceUser>) => ({
           ...memberData,
           userType: admins?.some((admin) => admin._id === memberData._id)
             ? 'Admin'
@@ -245,15 +233,15 @@ export default function people(): JSX.Element {
                         page * rowsPerPage + rowsPerPage,
                       )
                     : members
-                  ).map((member: InterfaceMember, index) => {
+                  ).map((member: Partial<InterfaceUser>, index) => {
                     const name = `${member.firstName} ${member.lastName}`;
 
                     const cardProps: InterfaceOrganizationCardProps = {
                       name,
-                      image: member.image,
-                      id: member._id,
-                      email: member.email,
-                      role: member.userType,
+                      image: member.image ?? '',
+                      id: member._id ?? '',
+                      email: member.email ?? '',
+                      role: member.userType ?? '',
                       sno: (index + 1).toString(),
                     };
                     return <PeopleCard key={index} {...cardProps} />;

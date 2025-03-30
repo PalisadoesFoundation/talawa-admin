@@ -1,7 +1,53 @@
+/**
+ * Component for creating a new group chat.
+ *
+ * This component provides a modal interface for creating a group chat,
+ * allowing users to set a title, description, and add members to the group.
+ * It also supports uploading a group image and integrates with GraphQL
+ * mutations and queries for managing chat data.
+ *
+ * @component
+ * @param {InterfaceCreateGroupChatProps} props - Component props.
+ * @param {() => void} props.toggleCreateGroupChatModal - Function to toggle the visibility of the create group chat modal.
+ * @param {boolean} props.createGroupChatModalisOpen - Boolean indicating whether the create group chat modal is open.
+ * @param {(variables?: Partial<{ id: string }> | undefined) => Promise<ApolloQueryResult<unknown>>} props.chatsListRefetch - Function to refetch the chat list.
+ *
+ * @returns {JSX.Element} The rendered CreateGroupChat component.
+ *
+ * @remarks
+ * - Uses `useMutation` to create a new chat via the `CREATE_CHAT` GraphQL mutation.
+ * - Fetches user data using the `USERS_CONNECTION_LIST` GraphQL query.
+ * - Allows users to search for and add members to the group.
+ * - Supports image upload functionality using MinIO.
+ *
+ * @example
+ * ```tsx
+ * <CreateGroupChat
+ *   toggleCreateGroupChatModal={toggleModal}
+ *   createGroupChatModalisOpen={isModalOpen}
+ *   chatsListRefetch={refetchChats}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - React
+ * - @apollo/client
+ * - @mui/material
+ * - react-bootstrap
+ * - react-router-dom
+ * - utils/useLocalstorage
+ * - utils/MinioUpload
+ * - components/Loader
+ * - components/Avatar
+ *
+ * @fileoverview
+ * This file defines the `CreateGroupChat` component, which is used in the
+ * user portal for creating group chats within an organization.
+ */
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -26,11 +72,7 @@ interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
   chatsListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
+    variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
 }
 
@@ -40,9 +82,7 @@ interface InterfaceCreateGroupChatProps {
 
 const StyledTableContainer = styled(TableContainer)<{
   component?: React.ElementType;
-}>(() => ({
-  borderRadius: 'var(--table-head-radius)',
-}));
+}>(() => ({ borderRadius: 'var(--table-head-radius)' }));
 
 /**
  * Styled table cell with custom styles.
@@ -54,9 +94,7 @@ const StyledTableCell = styled(TableCell)(() => ({
     color: 'var(--table-header-color)',
     fontSize: 'var(--font-size-header)',
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 'var(--font-size-table-body)',
-  },
+  [`&.${tableCellClasses.body}`]: { fontSize: 'var(--font-size-table-body)' },
 }));
 
 /**
@@ -64,9 +102,7 @@ const StyledTableCell = styled(TableCell)(() => ({
  */
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 'var(--table-row-border)',
-  },
+  '&:last-child td, &:last-child th': { border: 'var(--table-row-border)' },
 }));
 
 const { getItem } = useLocalStorage();
@@ -77,9 +113,7 @@ export default function CreateGroupChat({
   chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId');
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
 
   const [createChat] = useMutation(CREATE_CHAT);
 
@@ -132,10 +166,7 @@ export default function CreateGroupChat({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
+    variables: { firstName_contains: '', lastName_contains: '' },
   });
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {

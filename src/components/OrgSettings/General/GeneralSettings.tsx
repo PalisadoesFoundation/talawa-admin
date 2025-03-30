@@ -1,6 +1,6 @@
 import React, { type FC } from 'react';
 import { Card, Col, Form, Row } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import DeleteOrg from './DeleteOrg/DeleteOrg';
 import OrgUpdate from './OrgUpdate/OrgUpdate';
 import { useTranslation } from 'react-i18next';
@@ -21,9 +21,7 @@ interface InterfaceGeneralSettingsProps {
  */
 
 const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgSettings',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgSettings' });
 
   return (
     <Row className={`${styles.settingsBody} mt-3`}>

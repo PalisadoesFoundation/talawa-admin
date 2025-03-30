@@ -10,7 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
-import '../../style/app.module.css';
+import 'style/app.module.css';
 
 const { setItem } = useLocalStorage();
 
@@ -19,44 +19,23 @@ const mockNavigate = vi.fn();
 // Mock useNavigate hook
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
+  return { ...actual, useNavigate: () => mockNavigate };
 });
 
 const MOCKS = [
   {
-    request: {
-      query: REVOKE_REFRESH_TOKEN,
-    },
-    result: {
-      data: {
-        revokeRefreshTokenForUser: true,
-      },
-    },
+    request: { query: REVOKE_REFRESH_TOKEN },
+    result: { data: { revokeRefreshTokenForUser: true } },
   },
   {
-    request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
-    },
-    result: {
-      data: {
-        community: {
-          inactivityTimeoutDuration: 1800,
-        },
-      },
-    },
+    request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
+    result: { data: { community: { inactivityTimeoutDuration: 1800 } } },
     delay: 1000,
   },
 ];
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
   clear: vi.fn(),
 }));
 

@@ -111,6 +111,66 @@ export const FILTERED_ORGANIZATION_POSTS = gql`
     }
   }
 `;
+/**
+ * GraphQL query to retrieve all organizations with optional filtering and pagination.
+ *
+ * @param filter - Optional. Filter organizations by a name string.
+ * @param limit - Optional. Number of organizations to retrieve.
+ * @param offset - Optional. Number of organizations to skip before starting to collect the result set.
+ * @returns A list of organizations with metadata including membership status.
+ */
+export const ALL_ORGANIZATIONS = gql`
+  query AllOrganizations($filter: String, $limit: Int, $offset: Int) {
+    organizations(filter: $filter, limit: $limit, offset: $offset) {
+      id
+      name
+      city
+      countryCode
+      addressLine1
+      postalCode
+      state
+      description
+      avatarURL
+      membersCount
+      adminsCount
+      isMember
+    }
+  }
+`;
+// GraphQL query to retrieve all the Organizations user is Part of with filter by name
+export const USER_JOINED_ORGANIZATIONS_PG = gql`
+  query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
+    user(input: { id: $id }) {
+      organizationsWhereMember(first: $first, filter: $filter) {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            name
+            city
+            countryCode
+            addressLine1
+            postalCode
+            state
+            description
+            avatarURL
+            membersCount
+            adminsCount
+            members(first: $first) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 /**
  * GraphQL query to retrieve the list of user tags belonging to an organization.
@@ -133,7 +193,7 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
     $where: UserTagWhereInput
     $sortedBy: UserTagSortedByInput
   ) {
-    organizations(id: $id) {
+    organization(id: $id) {
       userTags(
         after: $after
         before: $before
@@ -182,7 +242,7 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
     $first: Int
     $last: Int
   ) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       advertisements(
         after: $after
@@ -239,6 +299,9 @@ export const USER_CREATED_ORGANIZATIONS = gql`
         description
         createdAt
         avatarMimeType
+        isMember
+        membersCount
+        adminsCount
       }
     }
   }
@@ -253,7 +316,7 @@ export const USER_CREATED_ORGANIZATIONS = gql`
 
 export const ORGANIZATION_ADMINS_LIST = gql`
   query Organizations($id: ID!) {
-    organizations(id: $id) {
+    organization(id: $id) {
       _id
       admins {
         _id
@@ -274,7 +337,7 @@ export const ORGANIZATION_ADMINS_LIST = gql`
  */
 export const ORGANIZATION_FUNDS = gql`
   query Organizations($id: ID!) {
-    organizations(id: $id) {
+    organization(id: $id) {
       funds {
         _id
         name

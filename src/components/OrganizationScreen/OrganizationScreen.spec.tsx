@@ -9,9 +9,9 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { vi } from 'vitest';
-import '../../style/app.module.css';
+import 'style/app.module.css';
 import { setItem } from 'utils/useLocalstorage';
 
 // Create mocks for the router hooks
@@ -35,10 +35,7 @@ vi.mock('react-router-dom', async () => {
 
 const MOCKS = [
   {
-    request: {
-      query: ORGANIZATION_EVENT_LIST,
-      variables: { id: '123' },
-    },
+    request: { query: ORGANIZATION_EVENT_LIST, variables: { id: '123' } },
     result: {
       data: {
         eventsByOrganization: [
@@ -118,10 +115,7 @@ describe('Testing OrganizationScreen', () => {
 
     // Verify Navigate was called with correct props
     expect(mockNavigate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        to: '/',
-        replace: true,
-      }),
+      expect.objectContaining({ to: '/', replace: true }),
     );
   });
 

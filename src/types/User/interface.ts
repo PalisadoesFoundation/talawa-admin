@@ -11,6 +11,7 @@ export interface InterfaceUser {
   gender?: string;
   image?: string;
   updatedAt?: Date;
+  userType?: string;
 }
 
 export interface InterfaceUserAttendee {

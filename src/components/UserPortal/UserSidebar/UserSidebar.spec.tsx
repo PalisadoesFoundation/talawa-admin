@@ -3,7 +3,7 @@ import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import {
   USER_DETAILS,
   USER_JOINED_ORGANIZATIONS_PG,
@@ -44,19 +44,11 @@ const resizeWindow = (width: number): void => {
   });
 };
 
-const props = {
-  hideDrawer: true,
-  setHideDrawer: vi.fn(),
-};
+const props = { hideDrawer: true, setHideDrawer: vi.fn() };
 
 const MOCKS = [
   {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: 'properId',
-      },
-    },
+    request: { query: USER_DETAILS, variables: { id: 'properId' } },
     result: {
       data: {
         user: {
@@ -75,15 +67,8 @@ const MOCKS = [
             educationGrade: '',
             employmentStatus: '',
             maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
+            address: { line1: '', countryCode: '', city: '', state: '' },
+            phone: { mobile: '' },
           },
           appUserProfile: {
             _id: 'properId',
@@ -101,18 +86,13 @@ const MOCKS = [
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: 'properId',
-        first: 10,
-      },
+      variables: { id: 'properId', first: 10 },
     },
     result: {
       data: {
         user: {
           organizationsWhereMember: {
-            pageInfo: {
-              hasNextPage: false,
-            },
+            pageInfo: { hasNextPage: false },
             edges: [
               {
                 node: {
@@ -122,13 +102,7 @@ const MOCKS = [
                   description: 'New Desc',
                   avatarURL: '',
                   members: {
-                    edges: [
-                      {
-                        node: {
-                          id: '45ydeg2yet721rtgdu32ry',
-                        },
-                      },
-                    ],
+                    edges: [{ node: { id: '45ydeg2yet721rtgdu32ry' } }],
                   },
                 },
               },
@@ -139,12 +113,7 @@ const MOCKS = [
     },
   },
   {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: 'imagePresent',
-      },
-    },
+    request: { query: USER_DETAILS, variables: { id: 'imagePresent' } },
     result: {
       data: {
         user: {
@@ -163,15 +132,8 @@ const MOCKS = [
             educationGrade: '',
             employmentStatus: '',
             maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
+            address: { line1: '', countryCode: '', city: '', state: '' },
+            phone: { mobile: '' },
           },
           appUserProfile: {
             _id: '2',
@@ -189,10 +151,7 @@ const MOCKS = [
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: 'imagePresent',
-        first: 10,
-      },
+      variables: { id: 'imagePresent', first: 10 },
     },
     result: {
       data: {
@@ -207,33 +166,20 @@ const MOCKS = [
                   description: 'New Desc',
                   avatarURL: 'dadsa',
                   members: {
-                    edges: [
-                      {
-                        node: {
-                          id: '45ydeg2yet721rtgdu32ry',
-                        },
-                      },
-                    ],
+                    edges: [{ node: { id: '45ydeg2yet721rtgdu32ry' } }],
                   },
                 },
                 cursor: 'cursor-1', // Optional but recommended for pagination mocks
               },
             ],
-            pageInfo: {
-              hasNextPage: false,
-            },
+            pageInfo: { hasNextPage: false },
           },
         },
       },
     },
   },
   {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: 'orgEmpty',
-      },
-    },
+    request: { query: USER_DETAILS, variables: { id: 'orgEmpty' } },
     result: {
       data: {
         user: {
@@ -251,15 +197,8 @@ const MOCKS = [
             educationGrade: '',
             employmentStatus: '',
             maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
+            address: { line1: '', countryCode: '', city: '', state: '' },
+            phone: { mobile: '' },
           },
           appUserProfile: {
             _id: 'orgEmpty',
@@ -277,19 +216,14 @@ const MOCKS = [
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: 'orgEmpty',
-        first: 10,
-      },
+      variables: { id: 'orgEmpty', first: 10 },
     },
     result: {
       data: {
         user: {
           organizationsWhereMember: {
             edges: [],
-            pageInfo: {
-              hasNextPage: false,
-            },
+            pageInfo: { hasNextPage: false },
           },
         },
       },

@@ -1,3 +1,39 @@
+/**
+ * OrganizationTags Component
+ *
+ * This component is responsible for managing and displaying organization tags.
+ * It provides functionalities such as searching, sorting, creating, and managing tags.
+ * The component integrates with GraphQL queries and mutations to fetch and update data.
+ *
+ * @component
+ *
+ * @remarks
+ * - Utilizes Apollo Client's `useQuery` and `useMutation` hooks for data fetching and mutations.
+ * - Implements infinite scrolling for loading tags in chunks.
+ * - Uses Material-UI's `DataGrid` for displaying tags in a tabular format.
+ * - Includes a modal for creating new tags.
+ *
+ *
+ * @example
+ * ```tsx
+ * <OrganizationTags />
+ * ```
+ *
+ * @returns {JSX.Element} The rendered OrganizationTags component.
+ *
+ * @property {boolean} createTagModalIsOpen - State to control the visibility of the create tag modal.
+ * @property {string} tagSearchName - State to store the search term for filtering tags.
+ * @property {SortedByType} tagSortOrder - State to store the sorting order of tags.
+ * @property {string} tagName - State to store the name of the tag being created.
+ *
+ * @function showCreateTagModal - Opens the create tag modal.
+ * @function hideCreateTagModal - Closes the create tag modal.
+ * @function createTag - Handles the creation of a new tag.
+ * @function loadMoreUserTags - Fetches more tags for infinite scrolling.
+ * @function redirectToManageTag - Navigates to the manage tag page for a specific tag.
+ * @function redirectToSubTags - Navigates to the sub-tags page for a specific tag.
+ * @function handleSortChange - Updates the sorting order of tags.
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
@@ -15,7 +51,7 @@ import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceOrganizationTagsQuery,
@@ -30,32 +66,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
-
-/**
- * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
- *
- * This component does not accept any props and is responsible for displaying
- * the content associated with the corresponding route.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.editButton`
- * - `.inputField`
- * - `.removeButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -102,16 +112,16 @@ function OrganizationTags(): JSX.Element {
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
-          orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
+          orgUserTagsData?.organization[0]?.userTags?.pageInfo?.endCursor ??
           null,
       },
       updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        prevResult: { organization: InterfaceQueryOrganizationUserTags[] },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
+            organization: InterfaceQueryOrganizationUserTags[];
           };
         },
       ) => {
@@ -120,16 +130,16 @@ function OrganizationTags(): JSX.Element {
         }
 
         return {
-          organizations: [
+          organization: [
             {
-              ...prevResult.organizations[0],
+              ...prevResult.organization[0],
               userTags: {
-                ...prevResult.organizations[0].userTags,
+                ...prevResult.organization[0].userTags,
                 edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
+                  ...prevResult.organization[0].userTags.edges,
+                  ...fetchMoreResult.organization[0].userTags.edges,
                 ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
+                pageInfo: fetchMoreResult.organization[0].userTags.pageInfo,
               },
             },
           ],
@@ -155,10 +165,7 @@ function OrganizationTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: {
-          name: tagName,
-          organizationId: orgId,
-        },
+        variables: { name: tagName, organizationId: orgId },
       });
       if (data) {
         toast.success(t('tagCreationSuccess'));
@@ -189,7 +196,7 @@ function OrganizationTags(): JSX.Element {
   }
 
   const userTagsList =
-    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
+    orgUserTagsData?.organization[0]?.userTags?.edges?.map(
       (edge) => edge.node,
     ) || [];
 
@@ -380,7 +387,7 @@ function OrganizationTags(): JSX.Element {
                   dataLength={userTagsList?.length}
                   next={loadMoreUserTags}
                   hasMore={
-                    orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
+                    orgUserTagsData?.organization[0]?.userTags?.pageInfo
                       ?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}

@@ -1,3 +1,49 @@
+/**
+ * Leaderboard component for displaying volunteer rankings within an organization.
+ *
+ * This component fetches and displays a leaderboard of volunteers based on their
+ * hours volunteered. It includes features such as search, sorting, and filtering
+ * by time frame. The leaderboard is displayed in a table format using the MUI DataGrid.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered leaderboard component.
+ *
+ * @remarks
+ * - Redirects to the home page if `orgId` is not present in the URL parameters.
+ * - Displays a loader while fetching data and an error message if the query fails.
+ * - Uses Apollo Client's `useQuery` to fetch volunteer rankings from the GraphQL API.
+ * - Supports debounced search functionality to filter volunteers by name.
+ *
+ * @example
+ * ```tsx
+ * <Leaderboard />
+ * ```
+ *
+ * @dependencies
+ * - `@mui/x-data-grid` for table rendering.
+ * - `@apollo/client` for GraphQL queries.
+ * - `react-router-dom` for navigation and URL parameter handling.
+ * - `@mui/material` for UI components like `Stack`.
+ * - Custom components: `Loader`, `Avatar`, `SortingButton`, `SearchBar`.
+ *
+ * @enum {TimeFrame}
+ * - `All`: All-time rankings.
+ * - `Weekly`: Rankings for the past week.
+ * - `Monthly`: Rankings for the past month.
+ * - `Yearly`: Rankings for the past year.
+ *
+ * @query
+ * - `VOLUNTEER_RANKING`: Fetches volunteer rankings based on organization ID, sort order,
+ *   time frame, and search term.
+ *
+ * @state
+ * - `searchTerm` (`string`): The current search term for filtering volunteers.
+ * - `sortBy` (`'hours_ASC' | 'hours_DESC'`): The current sorting order.
+ * - `timeFrame` (`TimeFrame`): The selected time frame for filtering rankings.
+ *
+ * @styles
+ * - Custom styles are applied using `styles` imported from `app-fixed.module.css`.
+ */
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -8,7 +54,7 @@ import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -36,33 +82,14 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Component to display the leaderboard of volunteers.
- *
- * This component shows a leaderboard of volunteers ranked by hours contributed,
- * with features for filtering by time frame and sorting by hours. It displays
- * volunteer details including rank, name, email, and hours volunteered.
- *
- * @returns The rendered component.
- */
 function leaderboard(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'leaderboard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'leaderboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -88,9 +115,7 @@ function leaderboard(): JSX.Element {
     loading: rankingsLoading,
     error: rankingsError,
   }: {
-    data?: {
-      getVolunteerRanks: InterfaceVolunteerRank[];
-    };
+    data?: { getVolunteerRanks: InterfaceVolunteerRank[] };
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(VOLUNTEER_RANKING, {
@@ -299,10 +324,7 @@ function leaderboard(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={rankings.map((ranking, index) => ({
-          id: index + 1,
-          ...ranking,
-        }))}
+        rows={rankings.map((ranking, index) => ({ id: index + 1, ...ranking }))}
         columns={columns}
         isRowSelectable={() => false}
       />

@@ -1,3 +1,44 @@
+/**
+ * ForgotPassword Component
+ *
+ * This component provides a user interface for the "Forgot Password" functionality.
+ * It allows users to request an OTP (One-Time Password) to reset their password
+ * and subsequently update their password using the OTP.
+ *
+ * Features:
+ * - Displays a form to enter a registered email address to request an OTP.
+ * - Displays a form to enter the OTP and reset the password.
+ * - Validates password confirmation to ensure the new password matches.
+ * - Provides feedback to the user via toast notifications for success or error states.
+ * - Redirects logged-in users to the organization list page.
+ *
+ * Hooks:
+ * - `useTranslation`: For internationalization and localization of text.
+ * - `useLocalStorage`: Custom hook for managing local storage operations.
+ * - `useMutation`: For executing GraphQL mutations to generate OTP and reset password.
+ * - `useEffect`: To handle redirection for logged-in users and cleanup on unmount.
+ *
+ * State:
+ * - `showEnterEmail`: Toggles between the email input form and the OTP/password reset form.
+ * - `registeredEmail`: Stores the email address entered by the user.
+ * - `forgotPassFormData`: Stores the OTP, new password, and confirmation password entered by the user.
+ *
+ * GraphQL Mutations:
+ * - `GENERATE_OTP_MUTATION`: Sends an OTP to the user's registered email.
+ * - `FORGOT_PASSWORD_MUTATION`: Resets the user's password using the OTP and new password.
+ *
+ * UI Components:
+ * - `Form` and `Button` from React Bootstrap for form handling and submission.
+ * - `Loader`: Displays a loading spinner during mutation operations.
+ * - `KeyLogo`: SVG logo for visual representation.
+ * - `Link`: For navigation back to the login page.
+ *
+ * Error Handling:
+ * - Displays appropriate toast notifications for errors such as user not found,
+ *   API unavailability, or email not registered.
+ *
+ * @returns {JSX.Element} The ForgotPassword component.
+ */
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -16,28 +57,12 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
-/**
- * `ForgotPassword` component allows users to reset their password.
- *
- * It provides two stages:
- * 1. Entering the registered email to receive an OTP.
- * 2. Entering the OTP and new password to reset the password.
- *
- * @returns JSX.Element - The `ForgotPassword` component.
- *
- * @example
- * ```tsx
- * <ForgotPassword />
- * ```
- */
 const ForgotPassword = (): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'forgotPassword',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'forgotPassword' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -84,11 +109,7 @@ const ForgotPassword = (): JSX.Element => {
     e.preventDefault();
 
     try {
-      const { data } = await otp({
-        variables: {
-          email: registeredEmail,
-        },
-      });
+      const { data } = await otp({ variables: { email: registeredEmail } });
 
       setItem('otpToken', data.otp.otpToken);
       toast.success(t('OTPsent'));
@@ -128,11 +149,7 @@ const ForgotPassword = (): JSX.Element => {
 
     try {
       const { data } = await forgotPassword({
-        variables: {
-          userOtp,
-          newPassword,
-          otpToken,
-        },
+        variables: { userOtp, newPassword, otpToken },
       });
 
       if (data) {

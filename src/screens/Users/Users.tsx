@@ -1,20 +1,3 @@
-import { useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-
-import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
-import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
-import useLocalStorage from 'utils/useLocalstorage';
-import type { ApolloError } from '@apollo/client';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
-
 /**
  * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
  * It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL
@@ -77,6 +60,23 @@ import SearchBar from 'subComponents/SearchBar';
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
+import { useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+
+import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+import TableLoader from 'components/TableLoader/TableLoader';
+import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import styles from 'style/app-fixed.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
+import type { ApolloError } from '@apollo/client';
+import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
@@ -116,9 +116,7 @@ const Users = (): JSX.Element => {
       variables: Record<string, unknown>;
       updateQuery: (
         previousQueryResult: { users: InterfaceQueryUserListItem[] },
-        options: {
-          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
-        },
+        options: { fetchMoreResult?: { users: InterfaceQueryUserListItem[] } },
       ) => { users: InterfaceQueryUserListItem[] };
     }) => void;
     refetch: (variables?: Record<string, unknown>) => void;
@@ -235,9 +233,7 @@ const Users = (): JSX.Element => {
         prev: { users: InterfaceQueryUserListItem[] } | undefined,
         {
           fetchMoreResult,
-        }: {
-          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
-        },
+        }: { fetchMoreResult?: { users: InterfaceQueryUserListItem[] } },
       ) => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev || { users: [] };

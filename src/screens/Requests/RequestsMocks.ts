@@ -7,7 +7,7 @@ export const EMPTY_REQUEST_MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             id: 'org1',
             name: 'Palisadoes',
@@ -59,7 +59,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             id: 'org1',
             name: 'Palisadoes',
@@ -132,7 +132,7 @@ export const MOCKS4 = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             id: 'org1',
             name: 'Palisadoes',
@@ -372,7 +372,7 @@ export const UPDATED_MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '',
             membershipRequests: Array(8).fill({
@@ -402,7 +402,7 @@ export const UPDATED_MOCKS = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             _id: '',
             membershipRequests: null,
@@ -420,7 +420,7 @@ export const MOCKS2 = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             id: 'org1',
             name: 'Palisadoes',
@@ -483,7 +483,7 @@ export const MOCKS3 = [
     },
     result: {
       data: {
-        organizations: [
+        organization: [
           {
             id: 'org1',
             name: 'Palisadoes',
@@ -551,7 +551,7 @@ export const EMPTY_MOCKS = [
     },
     result: {
       data: {
-        organizations: [],
+        organization: [],
       },
     },
   },
