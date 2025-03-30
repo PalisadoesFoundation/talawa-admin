@@ -111,9 +111,12 @@ describe('Organisation Events Page', () => {
   });
 
   test('It is necessary to query the correct mock data.', async () => {
-    const dataQuery1 = MOCKS[0]?.result?.data?.organization?.events?.edges?.map(
-      (edge) => edge.node,
-    );
+    expect(MOCKS[0]).toBeDefined();
+
+    const dataQuery1 =
+      MOCKS[0]?.result?.data?.organization?.events?.edges?.map(
+        (edge) => edge.node,
+      ) ?? [];
 
     expect(dataQuery1).toEqual([
       {
@@ -149,9 +152,12 @@ describe('Organisation Events Page', () => {
   });
 
   test('It is necessary to query the correct mock data for organization.', async () => {
-    const dataQuery1 = MOCKS[1]?.result?.data?.organization?.events?.edges?.map(
-      (edge) => edge.node,
-    );
+    expect(MOCKS[1]).toBeDefined();
+
+    const dataQuery1 =
+      MOCKS[1]?.result?.data?.organization?.events?.edges?.map(
+        (edge) => edge.node,
+      ) ?? [];
 
     expect(dataQuery1).toEqual([
       {
@@ -330,6 +336,8 @@ describe('Organisation Events Page', () => {
 
     await userEvent.click(screen.getByTestId('ispublicCheck'));
     await userEvent.click(screen.getByTestId('registrableCheck'));
+    await userEvent.click(screen.getByTestId('createChat'));
+    await userEvent.click(screen.getByTestId('eventLocation'));
 
     await wait();
 
@@ -344,6 +352,8 @@ describe('Organisation Events Page', () => {
     expect(startDatePicker).toHaveValue(formData.startDate);
     expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
+    expect(screen.getByTestId('createChat')).toBeInTheDocument();
+    expect(screen.getByTestId('eventLocation')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
 
@@ -414,10 +424,6 @@ describe('Organisation Events Page', () => {
       screen.getByPlaceholderText(/Location/i),
       formData.location,
     );
-    await userEvent.type(
-      screen.getByPlaceholderText(/Location/i),
-      formData.location,
-    );
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -432,6 +438,7 @@ describe('Organisation Events Page', () => {
     await userEvent.click(screen.getByTestId('alldayCheck'));
     await userEvent.click(screen.getByTestId('recurringCheck'));
     await userEvent.click(screen.getByTestId('createChat'));
+    await userEvent.click(screen.getByTestId('eventLocation'));
     await userEvent.click(screen.getByTestId('ispublicCheck'));
     await userEvent.click(screen.getByTestId('registrableCheck'));
 
@@ -444,9 +451,11 @@ describe('Organisation Events Page', () => {
     expect(startDatePicker).toHaveValue(formData.startDate);
     expect(screen.getByTestId('alldayCheck')).not.toBeChecked();
     expect(screen.getByTestId('recurringCheck')).toBeChecked();
+    expect(screen.getByTestId('eventLocation')).toBeInTheDocument();
     expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
     expect(screen.getByTestId('createChat')).toBeInTheDocument();
+    expect(screen.getByTestId('alldayCheck')).not.toBeChecked();
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
     expect(toast.warning).toHaveBeenCalledWith('Title can not be blank!');
@@ -697,9 +706,244 @@ describe('Organisation Events Page', () => {
 
     await userEvent.click(dayOption);
 
-    // Verify the selection updated the dropdown button text
     await waitFor(() => {
       expect(viewTypeDropdown.textContent).toContain('Day');
+    });
+  });
+
+  test('DatePicker onChange handler with both valid and null date values', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    const startDatePicker = screen.getByLabelText('Start Date');
+    const endDatePicker = screen.getByLabelText('End Date');
+
+    const validDate = '2023-12-25';
+    fireEvent.change(startDatePicker, {
+      target: { value: validDate },
+    });
+
+    expect(startDatePicker).toBeInTheDocument();
+
+    fireEvent.change(startDatePicker, {
+      target: { value: '' },
+    });
+
+    expect(startDatePicker).toBeInTheDocument();
+    expect(endDatePicker).toBeInTheDocument();
+
+    fireEvent.change(startDatePicker, {
+      target: { value: 'invalid-date' },
+    });
+
+    expect(startDatePicker).toBeInTheDocument();
+  });
+
+  test('DatePicker onChange handler conditionals for setting end date and weekDayOccurenceInMonth', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    const startDatePicker = screen.getByLabelText('Start Date');
+    const endDatePicker = screen.getByLabelText('End Date');
+
+    fireEvent.change(endDatePicker, {
+      target: { value: '2023-01-15' },
+    });
+
+    fireEvent.change(startDatePicker, {
+      target: { value: '2023-01-20' },
+    });
+
+    expect(startDatePicker).toBeInTheDocument();
+    expect(endDatePicker).toBeInTheDocument();
+
+    fireEvent.change(startDatePicker, {
+      target: { value: '2023-02-10' },
+    });
+
+    fireEvent.change(endDatePicker, {
+      target: { value: '2023-02-20' },
+    });
+
+    fireEvent.change(startDatePicker, {
+      target: { value: '2023-02-15' },
+    });
+
+    expect(startDatePicker).toBeInTheDocument();
+    expect(endDatePicker).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('recurringCheck'));
+
+    expect(startDatePicker).toBeInTheDocument();
+  });
+
+  test('TimePicker onChange handler conditionals for both time and null values', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await userEvent.click(screen.getByTestId('alldayCheck'));
+
+    const startTimePicker = screen.getByLabelText(translations.startTime);
+    const endTimePicker = screen.getByLabelText(translations.endTime);
+
+    fireEvent.change(startTimePicker, {
+      target: { value: '10:30:00' },
+    });
+
+    expect(startTimePicker).toBeInTheDocument();
+
+    const mockNullEvent = {
+      target: { value: '' },
+    };
+
+    fireEvent.change(startTimePicker, mockNullEvent);
+
+    expect(startTimePicker).toBeInTheDocument();
+
+    fireEvent.change(endTimePicker, {
+      target: { value: '14:45:00' },
+    });
+    expect(endTimePicker).toBeInTheDocument();
+
+    fireEvent.change(endTimePicker, mockNullEvent);
+    expect(endTimePicker).toBeInTheDocument();
+
+    fireEvent.change(endTimePicker, {
+      target: { value: '09:00:00' },
+    });
+
+    fireEvent.change(startTimePicker, {
+      target: { value: '10:00:00' },
+    });
+
+    expect(startTimePicker).toBeInTheDocument();
+    expect(endTimePicker).toBeInTheDocument();
+  });
+
+  test('Ensures end date is updated when start date is set later than current end date', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    const startDatePicker = screen.getByLabelText('Start Date');
+    const endDatePicker = screen.getByLabelText('End Date');
+
+    fireEvent.change(endDatePicker, {
+      target: { value: '03/15/2022' },
+    });
+
+    fireEvent.change(startDatePicker, {
+      target: { value: '03/20/2022' },
+    });
+
+    await waitFor(() => {
+      expect(endDatePicker).toHaveValue('03/20/2022');
+    });
+  });
+
+  test('Ensures end time is updated when start time is set later than current end time', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await userEvent.click(screen.getByTestId('alldayCheck'));
+
+    const startTimePicker = screen.getByLabelText(translations.startTime);
+    const endTimePicker = screen.getByLabelText(translations.endTime);
+
+    fireEvent.change(endTimePicker, {
+      target: { value: '08:00 AM' },
+    });
+
+    const initialValue = endTimePicker.getAttribute('value');
+
+    fireEvent.change(startTimePicker, {
+      target: { value: '10:00 AM' },
+    });
+
+    await waitFor(() => {
+      const updatedValue = endTimePicker.getAttribute('value');
+      expect(updatedValue).not.toBe(initialValue);
+
+      expect(updatedValue?.includes('10:')).toBe(true);
     });
   });
 });

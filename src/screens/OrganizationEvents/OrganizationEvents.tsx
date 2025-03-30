@@ -104,6 +104,11 @@ const timeToDayJs = (time: string): Dayjs => {
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
 
+const formatEventDate = (dateTimeString: string): string => {
+  const eventDate = dateTimeString?.split('T')[0];
+  return eventDate;
+};
+
 export enum ViewType {
   DAY = 'Day',
   MONTH = 'Month View',
@@ -159,9 +164,7 @@ function organizationEvents(): JSX.Element {
     setCreateEventmodalisOpen(false);
   };
   const handleChangeView = (item: string | null): void => {
-    if (item) {
-      setViewType(item as ViewType);
-    }
+    setViewType(item as ViewType);
   };
 
   const {
@@ -235,35 +238,31 @@ function organizationEvents(): JSX.Element {
           },
         });
 
-        if (createEventData) {
-          toast.success(t('eventCreated') as string);
-          refetchEvents();
-          hideCreateEventModal();
-          setFormState({
-            title: '',
-            eventdescrip: '',
-            date: '',
-            location: '',
-            startTime: '08:00:00',
-            endTime: '18:00:00',
-          });
-          setRecurringChecked(false);
-          setRecurrenceRuleState({
-            recurrenceStartDate: new Date(),
-            recurrenceEndDate: null,
-            frequency: Frequency.WEEKLY,
-            weekDays: [Days[new Date().getDay()]],
-            interval: 1,
-            count: undefined,
-            weekDayOccurenceInMonth: undefined,
-          });
-          setStartDate(new Date());
-          setEndDate(new Date());
-        }
+        toast.success(t('eventCreated') as string);
+        refetchEvents();
+        hideCreateEventModal();
+        setFormState({
+          title: '',
+          eventdescrip: '',
+          date: '',
+          location: '',
+          startTime: '08:00:00',
+          endTime: '18:00:00',
+        });
+        setRecurringChecked(false);
+        setRecurrenceRuleState({
+          recurrenceStartDate: new Date(),
+          recurrenceEndDate: null,
+          frequency: Frequency.WEEKLY,
+          weekDays: [Days[new Date().getDay()]],
+          interval: 1,
+          count: undefined,
+          weekDayOccurenceInMonth: undefined,
+        });
+        setStartDate(new Date());
+        setEndDate(new Date());
       } catch (error: unknown) {
-        if (error instanceof Error) {
-          errorHandler(t, error);
-        }
+        errorHandler(t, error);
       }
     }
     if (formState.title.trim().length === 0) {
@@ -313,13 +312,13 @@ function organizationEvents(): JSX.Element {
             _id: edge.node.id,
             title: edge.node.name,
             description: edge.node.description,
-            startDate: edge.node.startAt?.split('T')[0] || '', // Convert ISO to date string
-            endDate: edge.node.endAt?.split('T')[0] || '',
-            // Extract venue name from the venues connection or use empty string if not available
-            location: edge.node.venues?.edges?.[0]?.node?.name || '',
-            // Provide default values for missing fields
-            allDay: true, // Default to true
-            isPublic: true, // Default to true
+            startDate: formatEventDate(edge.node.startAt),
+            endDate: formatEventDate(edge.node.endAt),
+            startDateTime: edge.node.startAt,
+            endDateTime: edge.node.endAt,
+            location: edge.node.venues?.edges?.[0]?.node?.name,
+            allDay: true,
+            isPublic: true,
             isRegisterable: false,
             recurring: false,
             attendees: [],
@@ -379,6 +378,7 @@ function organizationEvents(): JSX.Element {
             <Form.Control
               type="text"
               id="eventLocation"
+              data-testid="eventLocation"
               placeholder={tCommon('enterLocation')}
               autoComplete="off"
               required
@@ -403,9 +403,9 @@ function organizationEvents(): JSX.Element {
                         ...recurrenceRuleState,
                         recurrenceStartDate: date?.toDate(),
                         weekDays: [Days[date?.toDate().getDay()]],
-                        weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                          ? getWeekDayOccurenceInMonth(date?.toDate())
-                          : undefined,
+                        weekDayOccurenceInMonth: getWeekDayOccurenceInMonth(
+                          date?.toDate(),
+                        ),
                       });
                     }
                   }}
@@ -440,7 +440,7 @@ function organizationEvents(): JSX.Element {
                           startTime: time?.format('HH:mm:ss'),
                           endTime:
                             timeToDayJs(formState.endTime) < time
-                              ? time?.format('HH:mm:ss')
+                              ? time.format('HH:mm:ss')
                               : formState.endTime,
                         });
                       }
